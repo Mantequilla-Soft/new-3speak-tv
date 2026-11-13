@@ -2312,6 +2312,7 @@ app.post('/api/announcements/read-signature', signChallengeLimiter, async (req, 
 // lockstep with the checker and src/lib/podcasts.js.
 const PODCAST_VOUCH_PAYLOAD = {
   subscribe: /^[0-9a-f]{64}$/,          // sha256 of the URLs, one per line
+  resolve: /^[0-9a-f]{64}$/,            // sha256 of one feed URL a playlist owner adds (no follow)
   unsubscribe: /^[0-9a-f]{24}$/,        // feed id
   notify: /^[0-9a-f]{24}:(?:on|off)$/,  // feed id + switch
   progress: /^session$/,                // listening progress, reused for up to a day

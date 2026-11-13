@@ -28,7 +28,8 @@ describe('audioQueueIfPlaying', () => {
     expect(s.get().audioQueueIfPlaying(tr('a'))).toBe(false)
     s.get().audioPlay(tr('a'))
     expect(s.get().audioQueueIfPlaying(tr('b'))).toBe(false) // loaded, not playing
-    expect(s.get().audioQueue).toEqual([])
+    // The playing track is always in the queue (owner 2026-11-12); b is not.
+    expect(s.get().audioQueue.map((i) => i._id)).toEqual(['a'])
   })
 
   it('puts the playing item first when the queue is empty, then the new one', () => {
@@ -95,5 +96,50 @@ describe('listened 3Speak tracks', () => {
     p.recordProgress('alice', 't3', 300, 300)
     expect(p.isListened('alice', 't3')).toBe(true)
     expect(p.isListened('bob', 't3')).toBe(false)
+  })
+})
+
+// The queue always holds the playing track (owner 2026-11-12); an empty queue
+// closes the player (GlobalAudioPlayer).
+describe('the playing track is in the queue', () => {
+  beforeEach(() => localStorage.clear())
+
+  it('a track played on its own is the queue', () => {
+    const s = makeStore()
+    s.get().audioPlay(tr('a'))
+    expect(ids(s.get().audioQueue)).toEqual(['a'])
+    expect(JSON.parse(localStorage.getItem('audio-queue')).map((i) => i._id)).toEqual(['a'])
+  })
+
+  it('a new track goes in right after the playing one, an already queued one stays put', () => {
+    const s = makeStore()
+    s.get().audioPlay(tr('a'))
+    s.get().audioAddToQueue(tr('c'))
+    s.get().audioPlay(tr('b'))
+    expect(ids(s.get().audioQueue)).toEqual(['a', 'b', 'c'])
+    s.get().audioPlay(s.get().audioQueue[0])
+    expect(ids(s.get().audioQueue)).toEqual(['a', 'b', 'c'])
+  })
+
+  it('loading a track paused puts it in the queue too', () => {
+    const s = makeStore()
+    s.get().audioLoadPaused(tr('a'), 30)
+    expect(ids(s.get().audioQueue)).toEqual(['a'])
+  })
+
+  it('closing the player takes its track out and keeps the rest', () => {
+    const s = makeStore()
+    s.get().audioPlay(tr('a'))
+    s.get().audioAddToQueue(tr('b'))
+    s.get().audioStop()
+    expect(s.get().audioCurrent).toBeNull()
+    expect(ids(s.get().audioQueue)).toEqual(['b'])
+  })
+
+  it('a queue saved by an older build gets the restored track in front', () => {
+    localStorage.setItem('audio-now-playing', JSON.stringify(tr('a')))
+    localStorage.setItem('audio-queue', JSON.stringify([tr('b')]))
+    const s = makeStore()
+    expect(ids(s.get().audioQueue)).toEqual(['a', 'b'])
   })
 })

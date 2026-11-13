@@ -1,47 +1,53 @@
-@use "../../../mixins.scss" as mix;
+@use "../../../styles/v2" as v2;
 
-/* Emoji + GIF picker for comment composers. Mirrors the chat composer tools
-   (see components/Chat/chat.scss) but self-contained so it works anywhere. */
+/* Emoji + GIF picker for comment composers (design 19e): two tool tiles that
+   open one picker card with an Emoji / GIF segmented head. On phones the card
+   is a bottom sheet that rides above the keyboard. */
 
-.egp-spin { animation: egp-spin 0.8s linear infinite; }
-@keyframes egp-spin { to { transform: rotate(360deg); } }
+.egp-spin { animation: v2-spin 1s linear infinite; }
 
 .egp-tools {
   display: inline-flex;
   align-items: center;
-  gap: 2px;
+  gap: 4px;
   position: relative;
   flex: 0 0 auto;
 }
 
+// Composer tool tile: 32 square, radius 12, surface-2 (CommentImageButton
+// shares this look).
 .egp-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 32px;
+  display: inline-grid;
+  place-items: center;
+  width: 32px;
   height: 32px;
-  padding: 0 6px;
-  border: none;
-  background: transparent;
-  border-radius: 8px;
-  color: var(--text-secondary);
+  padding: 0;
+  border: 0;
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+  color: var(--muted);
   cursor: pointer;
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: 0.3px;
-  transition: color 0.12s ease, background 0.12s ease;
-  &:hover { background: var(--bg-hover); color: var(--text-primary); }
-  &.active { color: var(--accent-primary); }
+  flex: none;
+  transition: color var(--t-fast) var(--ease), background var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
+
+  &:hover { background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); color: var(--text); }
+  &:active { transform: scale(.98); }
+  &.active { background: var(--cyan-tint); color: var(--cyan); }
+  &:disabled { opacity: .45; cursor: not-allowed; }
+
+  @include v2.mobile {
+    position: relative;
+    &::after { content: ""; position: absolute; inset: -6px -2px; }
+  }
 }
 
 .egp-popover {
   position: absolute;
-  z-index: 1000;
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-light);
-  border-radius: 12px;
-  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.28);
+  z-index: 1100;
+  @include v2.menu;
+  border-radius: var(--r-2xl);
   padding: 8px;
+  color: var(--text);
 
   &.egp-open-up { bottom: calc(100% + 8px); }
   &.egp-open-down { top: calc(100% + 8px); }
@@ -49,19 +55,27 @@
   &.egp-right { right: 0; }
 
   // On phones every popup is a bottom sheet (app-wide convention).
-  @include mix.respond(phone) {
-    position: fixed;
-    left: 8px;
-    right: 8px;
-    bottom: calc(12px + env(safe-area-inset-bottom, 0px));
-    top: auto;
+  // (The direction modifiers are listed so the sheet's anchors beat them.)
+  @include v2.mobile {
+    &, &.egp-open-up, &.egp-open-down, &.egp-left, &.egp-right {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      top: auto;
+    }
     z-index: 3000;
+    border-radius: var(--r-3xl) var(--r-3xl) 0 0;
+    border-bottom: 0;
+    padding: 8px 8px calc(8px + env(safe-area-inset-bottom, 0px));
+    box-shadow: var(--shadow-sheet);
+    animation: v2-up var(--t-slow) var(--ease);
     // --egp-vh / --egp-kb come from the visual viewport (EmojiGifPicker.jsx), so
     // the sheet rides on top of the on-screen keyboard and never runs under it.
     max-height: calc(var(--egp-vh, 100dvh) - 24px);
     overflow-y: auto;
     overscroll-behavior: contain;
-    &.egp-above-kb { bottom: calc(var(--egp-kb) + 8px); }
+    &.egp-above-kb, &.egp-above-kb.egp-open-up, &.egp-above-kb.egp-open-down { bottom: var(--egp-kb); }
   }
 }
 
@@ -73,67 +87,112 @@
   overflow-y: auto;
   overscroll-behavior: contain;
   // The inline style gives the side it opens on; drop the in-wrapper anchors.
-  @media (min-width: 768px) { top: auto; bottom: auto; left: auto; right: auto; }
+  @include v2.tablet-up { top: auto; bottom: auto; left: auto; right: auto; }
 }
 
-// emoji-picker-react brings its own chrome (search, tabs, scroll) — strip our frame.
+.egp-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 0 8px;
+}
+
+// emoji-picker-react keeps its own search and categories; its colours come
+// from our tokens so it sits inside the card in both themes.
 .egp-emoji-popover {
-  width: 340px;
-  padding: 0;
-  border: none;
-  background: transparent;
-  box-shadow: none;
-  @include mix.respond(phone) { width: auto; }
-  .EmojiPickerReact { width: 100% !important; }
+  width: 352px;
+  @include v2.mobile { width: auto; }
+
+  // (0,3,0) so these beat the library's own .EmojiPickerReact.epr-dark-theme.
+  &.egp-popover .EmojiPickerReact {
+    width: 100% !important;
+    --epr-bg-color: var(--surface);
+    --epr-dark-bg-color: var(--surface);
+    --epr-category-label-bg-color: var(--surface);
+    --epr-dark-category-label-bg-color: var(--surface);
+    --epr-picker-border-color: transparent;
+    --epr-dark-picker-border-color: transparent;
+    --epr-picker-border-radius: 16px;
+    --epr-text-color: var(--text);
+    --epr-dark-text-color: var(--text);
+    --epr-hover-bg-color: var(--surface-2);
+    --epr-dark-hover-bg-color: var(--surface-2);
+    --epr-focus-bg-color: var(--surface-2);
+    --epr-dark-focus-bg-color: var(--surface-2);
+    --epr-highlight-color: var(--accent);
+    --epr-dark-highlight-color: var(--accent);
+    --epr-search-input-bg-color: var(--bg);
+    --epr-dark-search-input-bg-color: var(--bg);
+    --epr-search-input-bg-color-active: var(--bg);
+    --epr-dark-search-input-bg-color-active: var(--bg);
+    --epr-search-input-text-color: var(--text);
+    --epr-dark-search-input-text-color: var(--text);
+    --epr-search-input-placeholder-color: var(--muted);
+    --epr-dark-search-input-placeholder-color: var(--muted);
+    --epr-search-input-border-radius: 12px;
+    --epr-search-border-color: var(--accent);
+    --epr-dark-search-border-color: var(--accent);
+    --epr-category-icon-active-color: var(--accent);
+    --epr-dark-category-icon-active-color: var(--accent);
+    border: 0;
+  }
 }
 
 .egp-gif-popover {
-  width: 360px;
-  @include mix.respond(phone) { width: auto; }
+  width: 372px;
+  @include v2.mobile { width: auto; }
 }
+
 .egp-gif-search {
+  @include v2.field(40);
   width: 100%;
-  background: var(--bg-tertiary);
-  border: 1px solid var(--border-light);
-  border-radius: 8px;
-  padding: 8px 10px;
-  color: var(--text-primary);
-  font-size: 13.5px;
-  outline: none;
   margin-bottom: 8px;
-  &:focus { border-color: var(--accent-primary); }
+  @include v2.mobile { font-size: 16px; }
 }
+
 .egp-gif-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 6px;
-  max-height: 300px;
-  overflow-y: auto;
+  height: 300px;
+  @include v2.scroll-y;
+  align-content: start;
+  // A fixed-height grid shrinks auto rows to their minimum (0 for the clipped
+  // tiles), so size the rows to the tiles and let the grid scroll.
+  grid-auto-rows: max-content;
   // Room left for the grid once the search field and attribution are in.
-  @include mix.respond(phone) {
+  @include v2.mobile {
     grid-template-columns: repeat(3, 1fr);
     gap: 4px;
-    max-height: min(44vh, calc(var(--egp-vh, 100dvh) - 130px));
+    height: min(44vh, calc(var(--egp-vh, 100dvh) - 170px));
   }
 }
+
 .egp-gif-item {
-  border: none;
+  border: 0;
   padding: 0;
-  background: var(--bg-tertiary);
-  border-radius: 8px;
+  @include v2.thumb-placeholder(6px);
+  border-radius: var(--r-sm);
   overflow: hidden;
   cursor: pointer;
   width: 100%;
-  img { width: 100%; height: auto; display: block; border-radius: 8px; }
-  &:hover { outline: 2px solid var(--accent-primary); }
+  // Each GIF keeps its own shape, like the chat picker (.chat-gif-item).
+  img { width: 100%; height: auto; display: block; }
+  &:hover, &:focus-visible { outline: 2px solid var(--accent); outline-offset: 0; }
 }
+
 .egp-gif-loading, .egp-gif-empty {
   grid-column: 1 / -1;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 24px;
-  color: var(--text-muted);
-  font-size: 13px;
+  color: var(--muted);
+  @include v2.text(body-sm);
 }
-.egp-gif-attribution { text-align: center; font-size: 10px; color: var(--text-muted); margin-top: 6px; letter-spacing: 0.5px; }
+
+.egp-gif-attribution {
+  margin-top: 6px;
+  @include v2.text(eyebrow);
+  color: var(--muted);
+}

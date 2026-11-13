@@ -17,7 +17,8 @@
     "loginFailed": "Kuingia kumeshindwa: {{error}}",
     "logoAlt": "Nembo ya 3Speak",
     "title": "Ingia kwa jina lako la mtumiaji",
-    "usernamePlaceholder": "Jina la mtumiaji"
+    "usernamePlaceholder": "Jina la mtumiaji",
+    "continueWith": "Endelea na {{method}}"
   },
   "socialLink": {
     "hashCopied": "Hash imenakiliwa",
@@ -54,8 +55,8 @@
     "verify": "Thibitisha"
   },
   "auth": {
-    "title": "Idhinisha 3Speak!",
-    "text": "Ili kupakia video kwenye 3Speak tunahitaji mamlaka yako ya posting. Hii inaturuhusu kuchapisha video ulizopakia kwenye Hive. Unahitaji kutupa mamlaka ya posting mara moja tu.",
+    "title": "Idhinisha 3Speak",
+    "text": "Ili kupakia tunahitaji mamlaka yako ya posting, ili tuchapishe video zako kwenye Hive. Unaitoa mara moja tu.",
     "authorize": "Idhinisha"
   },
   "beneficiary": {
@@ -69,20 +70,25 @@
       "duplicate": "Akaunti hii tayari imeongezwa kwenye orodha.",
       "invalidAccount": "Jina la mtumiaji au kitambulisho cha jumuiya si sahihi.",
       "cannotIncrease": "Haiwezi kuongezeka zaidi ya {{percent}}% iliyobaki",
-      "pendingRow": "@{{account}} bado haijaongezwa — bofya + ili kuiongeza, au futa sehemu hiyo.",
+      "pendingRow": "@{{account}} bado haijaongezwa. Bofya + ili kuiongeza, au futa sehemu hiyo.",
       "atLeastOne": "Asilimia ya zawadi lazima iwe angalau 1%",
       "maxCount": "Hive inaruhusu wanufaika wasiozidi {{max}} kwa kila chapisho."
     },
     "title": "Wanufaika",
+    "shareRewards": "Gawana zawadi",
+    "you": "wewe",
+    "toYou": "kwako",
+    "addCollaborator": "Ongeza mshirika",
+    "saveSplit": "Hifadhi mgawanyo",
     "intro": "Ongeza mtumiaji unayetaka apokee kiotomatiki sehemu ya zawadi za chapisho hili.",
     "minPercent": "% (angalau {{percent}}%)",
     "usernamePlaceholder": "Weka jina la mtumiaji",
     "minimumReward": "Zawadi ya chini ni <strong>1%</strong>",
     "checking": "Inakagua <strong>@{{account}}</strong> kwenye Hive…",
-    "notExisting": "⚠️ <strong>@{{account}}</strong> si akaunti iliyopo ya Hive.",
-    "notAdded": "⚠️ <strong>@{{account}}</strong> bado haijaongezwa — bofya <strong>+</strong> ili kuiongeza, au futa sehemu hiyo.",
-    "infrastructure": "10% === Miundombinu",
-    "videoEncoding": "Usimbaji wa video === 1%",
+    "notExisting": "<strong>@{{account}}</strong> si akaunti iliyopo ya Hive.",
+    "notAdded": "<strong>@{{account}}</strong> bado haijaongezwa. Bofya <strong>+</strong> ili kuiongeza, au futa sehemu hiyo.",
+    "infrastructure": "Miundombinu: 10%",
+    "videoEncoding": "Usimbaji wa video: 1%",
     "defaults": "Wanufaika chaguo-msingi ({{count}})"
   },
   "qr": {
@@ -100,7 +106,7 @@
   },
   "verifyAuth": {
     "title": "Inathibitisha uidhinishaji",
-    "text": "Tafadhali subiri tunapothibitisha kwamba uidhinishaji ulitolewa..."
+    "text": "Inakagua kwamba ulitolewa…"
   },
   "editor": {
     "confirmLeave": "Kihariri bado kiko wazi. Kuondoka kwenye ukurasa huu kutafunga kihariri na mabadiliko ambayo hayajahifadhiwa yatapotea.\n\nSawa = Funga kihariri na uondoke\nGhairi = Baki kwenye ukurasa huu",
@@ -176,7 +182,9 @@
     "details": "Maelezo zaidi (si lazima)",
     "detailsPlaceholder": "Toa maelezo zaidi...",
     "submitting": "Inawasilisha...",
-    "submit": "Wasilisha ripoti"
+    "submit": "Wasilisha ripoti",
+    "intro": "Ripoti zinaenda kwa timu ya 3Speak. Mtayarishaji hataona aliyeripoti.",
+    "nextDetails": "Inayofuata: ongeza maelezo"
   },
   "upload": {
     "missingInfo": "Taarifa za video au picha ndogo zinakosekana.",

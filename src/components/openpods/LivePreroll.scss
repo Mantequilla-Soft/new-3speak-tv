@@ -1,11 +1,12 @@
-/* A live stream's pre-roll (LivePreroll.jsx): covers the player box the stream
-   fills, above the stream's own overlays (the crop guide is 40), until the spot
-   ends. The page's own chrome outside the box is untouched. */
+/* A live stream's pre-roll (LivePreroll.jsx), 22d: covers the player box the
+   stream fills, above the stream's own overlays (the crop guide is 40), until
+   the spot ends. The page's own chrome outside the box is untouched. Over
+   video, so media tokens in both themes. */
 .live-preroll {
   position: absolute;
   inset: 0;
   z-index: 45;
-  background: #000;
+  background: var(--media-black);
   overflow: hidden;
 }
 
@@ -15,7 +16,7 @@
   width: 100%;
   height: 100%;
   object-fit: contain;
-  background: #000;
+  background: var(--media-black);
 }
 
 /* The disclosure, top-right (below a phone's back button row), clear of the
@@ -28,7 +29,7 @@
 }
 
 /* "Tap for sound" when the browser only allowed a muted start. Bottom-left,
-   opposite the skip button. */
+   opposite the skip button: a media scrim button. */
 .live-preroll__sound {
   position: absolute;
   left: 12px;
@@ -37,17 +38,16 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 6px 12px;
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  border-radius: 999px;
-  background: rgba(0, 0, 0, 0.66);
-  backdrop-filter: blur(6px);
-  color: #fff;
+  height: 36px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: var(--r-md);
+  background: var(--media-scrim-strong);
+  color: var(--on-media);
+  font: inherit;
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
-
-  svg { width: 16px; height: 16px; }
 }
 
 /* While the spot's first segment loads. */
@@ -59,23 +59,18 @@
   justify-content: center;
 
   i {
-    width: 34px;
-    height: 34px;
+    width: 32px;
+    height: 32px;
+    box-sizing: border-box;
     border-radius: 50%;
-    border: 3px solid rgba(255, 255, 255, 0.25);
-    border-top-color: #fff;
-    animation: live-preroll-spin 0.9s linear infinite;
+    border: 3px solid color-mix(in srgb, var(--on-media) 25%, transparent);
+    border-top-color: var(--on-media);
+    animation: v2-spin 1s linear infinite;
   }
 }
-
-@keyframes live-preroll-spin { to { transform: rotate(360deg); } }
 
 /* Phones: the shorts-style stream page has its back button row at the top. */
 @media (max-width: 767px) {
   .live-preroll__brand { top: calc(56px + env(safe-area-inset-top, 0px)); }
   .live-preroll__sound { bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .live-preroll__loading i { animation-duration: 2.4s; }
 }

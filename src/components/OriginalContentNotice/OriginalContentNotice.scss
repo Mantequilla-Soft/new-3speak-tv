@@ -1,0 +1,23 @@
+@use "../../styles/v2" as v2;
+
+// A v2 warn banner at body size: the one notice on an upload screen that has
+// to be read, so 14px text, more room, the action centred beside it.
+.v2-banner.original-notice {
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  font-size: 14px;
+
+  .v2-banner__icon { align-self: flex-start; margin-top: 1px; }
+  .original-notice__btn, .original-notice__done { flex: none; }
+
+  @include v2.mobile {
+    flex-wrap: wrap;
+    .v2-banner__body { flex-basis: calc(100% - 40px); }
+    .original-notice__btn { margin-left: 30px; }
+    .original-notice__done { margin-left: 30px; }
+  }
+}
+
+// The studio start: room before the stepper and the picker under it.
+.studio-original-notice { margin-bottom: 16px; }

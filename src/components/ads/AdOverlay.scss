@@ -1,14 +1,7 @@
-/* The ad disclosure, drawn over the top-left of the player while a spot plays. */
+/* The ad disclosure, drawn over the top-left of the player while a spot plays
+   (designs 25b, 47d). White on the media scrim, in both themes. Tokens only. */
+@use "../../styles/v2" as v2;
 
-/* What keeps white text readable on any frame without a dark box behind it: a tight
-   outline first (stacked, so it reads as a solid edge even on white or on the ad's
-   own lettering), then a soft wider glow. */
-$brandmark-halo:
-  0 0 1px #000,
-  0 0 2px #000,
-  0 0 2px #000,
-  0 1px 4px rgba(0, 0, 0, 0.85),
-  0 0 8px rgba(0, 0, 0, 0.5);
 .brandmark {
   display: flex;
   flex-direction: column;
@@ -16,44 +9,40 @@ $brandmark-halo:
   /* A plain length, never a percentage. In the player this sits inside an
      absolutely positioned wrapper whose own width is shrink-to-fit, so a `%`
      max-width resolved against that wrapper instead of against the video and
-     collapsed the overlay to a sliver. The wrapper carries the responsive cap. */
-  /* Smaller than it was. This is a required disclosure sitting on somebody's video,
-     not a second piece of content: at 340px with a 57px logo it covered a fifth of
-     the frame. It has to be readable, not prominent. */
-  max-width: 240px;
-  padding: 8px 12px 10px;
-  border-radius: 10px;
-  /* A light tint and NO backdrop blur. The overlay sits on the advertiser's own
-     spot, and whatever they put in that corner (a URL, a price, a face) has to stay
-     visible through it: a 62% ground plus a 6px backdrop blur turned the corner into
-     a smudge. Readability comes from the text halo instead, which carries on any
-     background, white included, without hiding what is behind. */
-  background: rgba(0, 0, 0, 0.32);
+     collapsed the overlay to a sliver. The wrapper carries the responsive cap.
+     It has to be readable, not prominent: a required disclosure on somebody's video. */
+  max-width: 260px;
+  padding: 8px 14px 8px 8px;
+  border-radius: var(--r-lg);
+  /* The strong media scrim (25b), no backdrop blur: whatever the advertiser put in
+     that corner (a URL, a price, a face) stays visible through it. */
+  background: var(--media-scrim-strong);
   /* Anchors the open icon on the link variant. */
   position: relative;
-  color: #fff;
-  text-shadow: $brandmark-halo;
+  color: var(--on-media);
   pointer-events: none;
 }
 
 .brandmark-from {
+  padding-left: 6px;
   font-size: 11px;
   line-height: 1.3;
-  letter-spacing: 0.02em;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--on-media);
+  opacity: .9;
 
-  strong { color: #fff; font-weight: 600; }
+  strong { font-weight: 700; opacity: 1; }
 }
 
 /* When the content comes back. Sits under the brand block so the eye reads who the
    ad is from first and the wait second. */
 .brandmark-resume {
-  font-size: 10.5px;
+  padding-left: 6px;
+  font-size: 11px;
   line-height: 1.3;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--on-media);
   font-variant-numeric: tabular-nums;
 
-  strong { color: #fff; font-weight: 700; }
+  strong { font-family: var(--font-mono); font-weight: 700; }
 }
 
 .brandmark-body {
@@ -65,13 +54,11 @@ $brandmark-halo:
 
 .brandmark-logo {
   flex: none;
-  /* 1.5x the original 38px. The logo is the one part a viewer recognises at a
-     glance, so it earns the space more than the text beside it does. */
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--r-md);
   object-fit: cover;
-  background: rgba(255, 255, 255, 0.12);
+  background: var(--on-media);
 }
 
 /* No logo yet: hold the space so the text column does not jump when one is added. */
@@ -84,118 +71,84 @@ $brandmark-halo:
   min-width: 0;
 }
 
-/* 🚨 `overflow: hidden` (for the ellipsis / line clamp) clips the text halo at the
-   element's box, which drew a hard dark rectangle around the name. Padding gives
-   the glow room inside the clip, and the matching negative margin keeps the
-   layout exactly where it was. */
-$brandmark-halo-room: 8px;
-
 .brandmark-name {
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 700;
   line-height: 1.25;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  padding: $brandmark-halo-room;
-  margin: -$brandmark-halo-room;
 }
 
 .brandmark-slogan {
-  font-size: 12px;
+  font-size: 11px;
   line-height: 1.3;
-  color: rgba(255, 255, 255, 0.94);
+  opacity: .7;
   /* Two lines, hard. A long slogan must not grow the overlay over the video. */
   display: -webkit-box;
   -webkit-line-clamp: 2;
   line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  /* Sideways room only: vertical padding would let the top of a clamped-off line
-     show through. Two lines of glow above and below is what the line height gives. */
-  padding-inline: $brandmark-halo-room;
-  margin-inline: -$brandmark-halo-room;
 }
 
 /* On /advertise it is a sample, not an overlay: no absolute placement, and it keeps
    its dark ground so it reads the way it will on a video. */
 .brandmark-preview {
   max-width: 300px;
-
-  background: rgba(0, 0, 0, 0.62);
+  background: var(--media-scrim-strong);
   pointer-events: auto;
 }
 
 /* As a link it must accept the tap the placement wrapper otherwise blocks, and it
-   should not look like body text. */
+   should not look like body text. Room on the right for the open icon. */
 .brandmark-link {
   pointer-events: auto;
   cursor: pointer;
   text-decoration: none;
-  color: #fff;
-  transition: background-color 120ms ease;
-  /* Room for the open icon (anchored by .brandmark's own position): without the
-     extra right padding a long product name would run underneath the glyph instead
-     of ellipsising before it. Only on the link variant, so the plain disclosure
-     keeps its tighter box. */
+  color: var(--on-media);
+  transition: background-color var(--t-fast) var(--ease);
   padding-right: 34px;
 
   &:hover,
-  &:focus-visible { background: rgba(0, 0, 0, 0.48); }
-  &:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
-
-  &:hover .brandmark-open,
-  &:focus-visible .brandmark-open { color: #fff; }
+  &:focus-visible { background: var(--media-scrim-strong); color: var(--on-media); }
+  &:focus-visible { outline: 2px solid var(--on-media); outline-offset: 2px; }
 }
 
-/* Centred on the overlay's right edge rather than parked in a corner: the overlay is
-   one or two rows tall depending on what the advertiser filled in, and the middle is
-   the one spot that reads as "this whole thing opens" in both cases. */
+/* Centred on the overlay's right edge: the overlay is one or two rows tall
+   depending on what the advertiser filled in, and the middle reads as "this whole
+   thing opens" in both cases. */
 .brandmark-open {
   position: absolute;
-  right: 11px;
+  right: 10px;
   top: 50%;
   transform: translateY(-50%);
-  width: 16px;
-  height: 16px;
-  color: rgba(255, 255, 255, 0.85);
-  filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.95)) drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8));
-  transition: color 120ms ease;
+  color: var(--on-media);
+  opacity: .85;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .brandmark-link,
-  .brandmark-open { transition: none; }
+  .brandmark-link { transition: none; }
 }
 
-/* On a phone the overlay was covering a third of the video — the disclosure has to
-   be legible, not dominant. Everything shrinks together so it stays readable: a
-   smaller logo, tighter type, one line of slogan instead of two. */
+/* On a phone the overlay was covering a third of the video. Everything shrinks
+   together so it stays readable: a smaller logo, tighter type, one slogan line. */
 @media (max-width: 640px) {
   .brandmark {
-    gap: 3px;
-    padding: 5px 8px 6px;
-    border-radius: 8px;
-    max-width: 240px;
+    gap: 4px;
+    padding: 6px 8px;
+    border-radius: var(--r-sm);
   }
-
-  /* Shrinks with everything else — at 16px the glyph was competing with the logo
-     on a 240px overlay. Padding tracks it so the text still stops short of it. */
-  .brandmark-link { padding-right: 24px; }
-  .brandmark-open { right: 7px; width: 13px; height: 13px; }
-
-  .brandmark-from { font-size: 9px; line-height: 1.25; }
-  .brandmark-body { gap: 7px; }
-  .brandmark-logo { width: 30px; height: 30px; }
+  .brandmark-link { padding-right: 26px; }
+  .brandmark-open { right: 6px; font-size: 14px !important; }
+  .brandmark-from { font-size: 10px; line-height: 1.25; }
+  .brandmark-body { gap: 8px; }
+  .brandmark-logo { width: 28px; height: 28px; border-radius: var(--r-sm); }
   .brandmark-name { font-size: 11px; line-height: 1.2; }
-
   .brandmark-slogan {
     font-size: 10px;
     line-height: 1.25;
-    /* One line on a phone. Two lines of slogan plus the logo is what made this
-       overlay the size of the picture. */
     -webkit-line-clamp: 1;
     line-clamp: 1;
   }
 }
-

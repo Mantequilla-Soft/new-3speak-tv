@@ -7,7 +7,8 @@
     "feeds": "피드",
     "groups": "그룹",
     "audio": "오디오",
-    "login": "로그인"
+    "login": "로그인",
+    "you": "나"
   },
   "installApp": "앱 설치",
   "iosInstallHint": "<b>공유</b>를 누른 다음 <b>홈 화면에 추가</b>를 누르세요",
@@ -28,7 +29,9 @@
     "shortsTooltip": "연속으로 이어지는 짧은 세로 동영상",
     "audioTooltip": "3Speak에 게시된 팟캐스트, 음악 및 기타 오디오",
     "groupsTooltip": "가입할 수 있는 커뮤니티와 수여받는 배지",
-    "rankingsTooltip": "지금 가장 많이 벌고 가장 많이 시청되는 크리에이터"
+    "rankingsTooltip": "지금 가장 많이 벌고 가장 많이 시청되는 크리에이터",
+    "live": "라이브",
+    "liveTooltip": "지금 라이브 중인 방송과 방"
   },
   "aboutLink": "3Speak 소개",
   "faqLink": "FAQ",
@@ -38,6 +41,8 @@
     "myChannelAria": "내 채널",
     "vpTooltip": "보팅 파워: 다음 투표가 가지는 영향력",
     "rcTooltip": "리소스 크레딧: Hive에서 하는 활동의 비용",
+    "votingPower": "보팅 파워",
+    "resourceCredits": "리소스 크레딧",
     "myChannel": "내 채널",
     "publishBacklog": "미게시 동영상 게시",
     "analytics": "분석",
@@ -47,14 +52,20 @@
     "logout": "로그아웃",
     "onDiscord": "Discord의 3Speak",
     "onX": "X의 3Speak",
-    "onTelegram": "Telegram의 3Speak"
+    "onTelegram": "Telegram의 3Speak",
+    "switch": "전환",
+    "tiles": {
+      "channel": "채널",
+      "history": "기록"
+    },
+    "darkTheme": "다크 테마"
   },
   "notifications": {
     "pushOff": "이 기기의 알림을 껐어요",
-    "pushOn": "팔로우하는 크리에이터가 게시하면 알려드릴게요",
+    "pushOn": "팔로우하는 크리에이터가 게시하면 알려드릴게요.",
     "pushFailed": "알림 설정을 변경하지 못했어요",
     "ariaUnread": "알림(읽지 않음 {{count}}개)",
-    "pushBlocked": "브라우저 설정에서 이 사이트의 알림이 차단되어 있어요",
+    "pushBlocked": "브라우저 설정에서 이 사이트의 알림이 차단되어 있어요.",
     "pushNoWorker": "이 빌드에는 서비스 워커가 없어서 여기서 알림을 등록할 수 없어요",
     "pushStop": "이 기기에서 알림 받지 않기",
     "pushStart": "팔로우하는 크리에이터가 게시하면 알림 받기",
@@ -87,6 +98,13 @@
       "heading": "팔로우하는 팟캐스트의 새 에피소드",
       "newEpisode": "{{show}}의 새 에피소드",
       "type": "팟캐스트"
+    },
+    "tabs": {
+      "all": "전체",
+      "mentions": "멘션",
+      "follows": "팔로우",
+      "uploads": "업로드",
+      "pods": "Pods"
     }
   },
   "search": {
@@ -121,6 +139,17 @@
     "views_other": "조회수 {{formatted}}회",
     "tags": "태그",
     "titles": "제목",
-    "placeholder": "검색..."
-  }
+    "placeholder": "검색...",
+    "recent": "최근",
+    "allResultsFor": "“{{term}}” 전체 결과",
+    "kinds": {
+      "creator": "크리에이터",
+      "community": "커뮤니티",
+      "video": "동영상",
+      "short": "쇼츠",
+      "audio": "오디오",
+      "playlist": "재생목록"
+    }
+  },
+  "create": "만들기"
 }

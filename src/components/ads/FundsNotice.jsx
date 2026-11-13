@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { FaWallet, FaExternalLinkAlt } from 'react-icons/fa';
 import { useTranslation, Trans } from 'react-i18next';
 import { fetchBalances } from '../../hive-api/api';
 
@@ -42,7 +41,7 @@ export default function FundsNotice({ user, hbdPerHive = null }) {
 
   return (
     <section className="mkt-panel mkt-funds" aria-labelledby="mkt-funds-title">
-      <h2 id="mkt-funds-title"><FaWallet aria-hidden="true" /> {t('ads.funds.title')}</h2>
+      <h2 id="mkt-funds-title">{t('ads.funds.title')}</h2>
       <p>
         <Trans i18nKey="ads.funds.empty" values={{ user }} components={{ b: <strong /> }} />
       </p>
@@ -56,11 +55,13 @@ export default function FundsNotice({ user, hbdPerHive = null }) {
       </p>
 
       <h3>{t('ads.funds.buyTitle')}</h3>
+      {/* 47c: one chip per exchange, the name (and the market only where it is not
+          the usual HIVE/USDT). They open the exchange in a new tab. */}
       <div className="mkt-funds-exchanges">
         {EXCHANGES.map((x) => (
-          <a key={x.name} className="mkt-funds-btn" href={x.url} target="_blank" rel="noopener noreferrer">
-            <strong>{x.name} <FaExternalLinkAlt aria-hidden="true" /></strong>
-            <span>{x.noteKey ? t(x.noteKey) : x.note}</span>
+          <a key={x.name} className="mkt-funds-btn" href={x.url} target="_blank" rel="noopener noreferrer"
+            title={x.noteKey ? t(x.noteKey) : x.note}>
+            {x.name}{x.noteKey ? ` · ${t(x.noteKey)}` : ''}
           </a>
         ))}
       </div>

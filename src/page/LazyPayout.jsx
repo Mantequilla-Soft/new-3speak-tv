@@ -33,7 +33,8 @@ function LazyPayout({ author, permlink, setVotersNum, setHasVoted1 }) {
 
   return (
     <div ref={ref}>
-      <p>$ {payout ?? "…"}</p>
+      {/* Money: accent + Roboto Mono (the global .money class) */}
+      <span className="money">${payout ?? "…"}</span>
       {/* <p>Voters: {voters ?? "…"}</p> */}
     </div>
   );

@@ -128,9 +128,9 @@ describe('the notifications page', () => {
   it('a group unfolds to show each notification in it', async () => {
     const { user } = mount()
     const group = screen.getByText('@follower-a and @follower-b followed you').closest('li')
-    expect(within(group).getByText('▸ expand')).toBeInTheDocument()
+    expect(within(group).getByText('expand')).toBeInTheDocument()
     await user.click(group)
-    expect(within(group).getByText('▾ collapse')).toBeInTheDocument()
+    expect(within(group).getByText('collapse')).toBeInTheDocument()
     expect(screen.getByText('@follower-b followed you')).toBeInTheDocument()
     expect(screen.getByTestId('location')).toHaveTextContent('/notifications')
   })

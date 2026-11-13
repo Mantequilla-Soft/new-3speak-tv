@@ -1,0 +1,301 @@
+@use "../../styles/v2" as v2;
+
+// The activity panel beside the Home feed (20a): a surface card (radius 20,
+// 1px border, padding 6) with a segmented track on the ground (radius 16,
+// padding 4, 12/700; the current option 32 tall on surface-2, radius 12), a
+// fixed-height list of rows that scrolls inside, and a cyan "See all".
+.home-activity {
+  display: flex;
+  flex-direction: column;
+  padding: 6px;
+  border-radius: var(--r-xl);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+
+.home-activity__tabs {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  border-radius: var(--r-lg);
+  background: var(--bg);
+  flex: none;
+}
+
+.home-activity__tab {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 32px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: var(--r-md);
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
+
+  &:hover { color: var(--text); }
+  &.is-on { background: var(--surface-2); color: var(--text); }
+}
+
+// How many streams are live: a small brand-red pill after "Live".
+.home-activity__count {
+  display: inline-grid;
+  place-items: center;
+  min-width: 18px;
+  height: 18px;
+  margin-left: 6px;
+  padding: 0 5px;
+  border-radius: 9px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+// Fixed height (never set by what is loaded); the rows scroll inside. The
+// panel is sticky beside the feed, so the list takes the window height left
+// under the nav (16px gap above and below) minus the panel's own chrome
+// (2 border + 12 padding + 40 tabs + 44 "See all" = 98), never under 360px
+// (owner 2026-11-12: show more entries).
+.home-activity__list {
+  height: max(360px, calc(100dvh - var(--nav-height, 78px) - 32px - 98px));
+  @include v2.scroll-y;
+}
+
+// One row: a 36px rounded avatar (live rows: a 20px accent badge at its
+// corner), the "who did what · when" line (12, muted, the name in ink) and the
+// body (14, 1.4).
+.home-activity__row {
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr);
+  gap: 10px;
+  padding: 12px 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.home-activity__avatar {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--r-md);
+  background: var(--avatar);
+
+  img {
+    width: 100%;
+    height: 100%;
+    border-radius: var(--r-md);
+    object-fit: cover;
+    display: block;
+  }
+}
+
+.home-activity__kind {
+  position: absolute;
+  right: -4px;
+  bottom: -4px;
+  width: 20px;
+  height: 20px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--r-sm);
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.home-activity__text { min-width: 0; }
+
+.home-activity__line {
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  b { color: var(--text); font-weight: 700; }
+}
+
+.home-activity__body {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+  margin-top: 4px;
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--text);
+  overflow-wrap: anywhere;
+  text-decoration: none;
+
+  &:hover { color: var(--text); text-decoration: underline; }
+  &:empty { display: none; }
+}
+
+.home-activity__watching {
+  display: block;
+  margin-top: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+// An audio row's inline player: play (28, radius 8, accent), the waveform
+// (16 tall, muted at 50%), the length in mono.
+.home-activity__audio {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  padding: 6px;
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+}
+
+.home-activity__play {
+  flex: none;
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: var(--r-sm);
+  background: var(--accent);
+  color: var(--on-accent);
+  cursor: pointer;
+  transition: background var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
+
+  &:hover { background: var(--accent-hover); }
+  &:active { transform: scale(.98); }
+}
+
+.home-activity__wave {
+  flex: 1;
+  min-width: 0;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  gap: 1px;
+  opacity: .5;
+
+  i { flex: 1; min-width: 1px; max-width: 2px; border-radius: 1px; background: var(--muted); }
+
+  &.is-flat { background: repeating-linear-gradient(90deg, var(--muted) 0 2px, transparent 2px 5px); }
+}
+
+.home-activity__len {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.home-activity__empty {
+  margin: 0;
+  padding: 16px 10px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.home-activity__all {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 44px;
+  padding: 12px 10px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--cyan);
+  text-decoration: none;
+  flex: none;
+
+  &:hover { color: var(--cyan); text-decoration: underline; }
+  &.is-blank { pointer-events: none; }
+}
+
+// The Warm-up tab (warm-up accounts): their goals, compact. Title and count,
+// the bar, then a row per goal (status icon, name, amount, hint); each row
+// goes to the full panel on /profile.
+.home-activity__warmup {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px 10px;
+}
+
+.home-activity__warmup-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+
+  b { font-size: 14px; font-weight: 700; }
+  .num { @include v2.mono(12, 700); color: var(--accent); white-space: nowrap; }
+}
+
+.home-activity__goals {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.home-activity__goal {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 8px;
+  border-radius: var(--r-md);
+  color: var(--text);
+  text-decoration: none;
+  transition: background var(--t-fast) var(--ease);
+
+  &:hover { background: var(--bg-hover); color: var(--text); }
+
+  .home-activity__goal-icon { flex: none; color: var(--muted); margin-top: 1px; }
+  &.is-done .home-activity__goal-icon { color: var(--cyan); }
+}
+
+.home-activity__goal-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1; }
+
+.home-activity__goal-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+
+  b { font-size: 13px; font-weight: 700; }
+  .num { @include v2.mono(11, 700); color: var(--muted); white-space: nowrap; }
+}
+
+.home-activity__goal-hint {
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--muted);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+.home-activity__warmup-note { margin: 0; font-size: 12px; line-height: 1.45; color: var(--muted); }
+
+.home-activity__warmup-cta {
+  align-self: flex-start;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--cyan);
+  text-decoration: none;
+  &:hover { text-decoration: underline; color: var(--cyan); }
+}

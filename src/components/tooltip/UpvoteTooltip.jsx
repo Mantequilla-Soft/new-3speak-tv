@@ -2,13 +2,9 @@ import React, { useEffect, useState, useRef } from 'react';
 import './UpvoteTooltip.scss';
 import { useTranslation } from 'react-i18next';
 import { useAppStore } from '../../lib/store';
-import { IoChevronUpCircleOutline } from 'react-icons/io5';
 import { toastIn } from '../../utils/toast';
 import { estimate, getUersContent, getVotePower } from '../../utils/hiveUtils';
-import { TailChase } from 'ldrs/react';
-import 'ldrs/react/TailChase.css';
-import { Orbit } from 'ldrs/react';
-import 'ldrs/react/Orbit.css';
+import VoteWeightPanel from './VoteWeightPanel';
 import { voteWithAioha, tagVideoWithAioha, isLoggedIn } from '../../hive-api/aioha';
 import { recordViewerTag, VIEWER_TAG_OPTIONS } from '../../utils/viewerTag';
 
@@ -172,68 +168,35 @@ const UpvoteTooltip = ({
     }
   };
 
+  // Design 17b: a floating v2 card over the vote button.
   return (
-    <div 
-      className="upvote-tooltip-wrap" 
-      ref={tooltipRef} 
-      onClick={(e) => e.preventDefault()}
-    >
+    <div className="upvote-tooltip-wrap" ref={tooltipRef} onClick={(e) => e.preventDefault()}>
       {showTooltip && (
-        <div className="tooltip-box">
-          <p>{t('engagement.vote.weight', { weight })}</p>
-
-          {/* Optional: tag the video's topic. Highest combined vote weight wins. */}
-          <label className="viewer-tag-select" onClick={(e) => e.stopPropagation()}>
-            <span>{t('engagement.vote.tagThisVideo')}</span>
-            <select
-              value={viewerTag}
-              onChange={(e) => setViewerTag(e.target.value)}
-              disabled={isLoading}
-            >
-              <option value="">{t('engagement.vote.tagOptional')}</option>
-              {VIEWER_TAG_OPTIONS.map((opt) => (
-                <option key={opt.id} value={opt.id}>
-                  {opt.emoji ? `${opt.emoji} ` : ''}{t(opt.labelKey)}
-                </option>
-              ))}
-            </select>
-          </label>
-
-          <div className="wrap">
-            {isLoading ? (
-              <div className='wrap-circle'>
-                <TailChase 
-                  className="loader-circle" 
-                  size="15" 
-                  speed="1.5" 
-                  color="red" 
-                />
-              </div>
-            ) : (
-              <IoChevronUpCircleOutline 
-                size={30} 
-                onClick={handleVote} 
-                className='circle-vote-btn'
-                style={{ cursor: 'pointer' }}
-              />
-            )}
-            
-            <input
-              type="range"
-              min="1"
-              max="100"
-              value={weight}
-              onChange={(e) => setWeight(Number(e.target.value))}
-              disabled={isLoading}
-            />
-            <p>
-              {isCalculating ? (
-                <Orbit size="30" speed="1.5" color="red" />
-              ) : (
-                `$${voteValue}`
-              )}
-            </p>
-          </div>
+        <div className="tooltip-box" role="dialog" aria-label={t('engagement.vote.weight', { weight })}>
+          <VoteWeightPanel
+            weight={weight}
+            setWeight={setWeight}
+            voteValue={voteValue}
+            isCalculating={isCalculating}
+            isLoading={isLoading}
+            onVote={handleVote}
+          >
+            {/* Optional: tag the video's topic. Highest combined vote weight wins. */}
+            <label className="viewer-tag-select v2-field" onClick={(e) => e.stopPropagation()}>
+              <span className="v2-eyebrow">{t('engagement.vote.tagThisVideo')}</span>
+              <select
+                className="v2-input is-select"
+                value={viewerTag}
+                onChange={(e) => setViewerTag(e.target.value)}
+                disabled={isLoading}
+              >
+                <option value="">{t('engagement.vote.tagOptional')}</option>
+                {VIEWER_TAG_OPTIONS.map((opt) => (
+                  <option key={opt.id} value={opt.id}>{t(opt.labelKey)}</option>
+                ))}
+              </select>
+            </label>
+          </VoteWeightPanel>
         </div>
       )}
     </div>

@@ -1,8 +1,8 @@
 {
   "leaderboard": {
     "windows": {
-      "7d": "7 dias",
-      "30d": "30 dias",
+      "7d": "Semana",
+      "30d": "Mês",
       "365d": "Ano",
       "all": "Todo o período"
     },
@@ -155,9 +155,9 @@
     "audioFull": "Com título",
     "audioCompact": "Compacto",
     "audioMinimal": "Mínimo",
-    "heightSub": "Largura total, {{height}} px de altura",
+    "heightSub": "Largura total, {{height}} px de altura · Responsivo",
     "podcastTitle": "Incorporar este podcast",
-    "podcastHint": "Cole isto em qualquer site ou post de blog. Ele toca todos os episódios do programa, inclusive os novos assim que saírem."
+    "podcastHint": "Toca todos os episódios do programa, inclusive os novos assim que saírem."
   },
   "incubation": {
     "requestFailed": "A solicitação falhou ({{status}})",
@@ -169,9 +169,9 @@
   },
   "routeError": {
     "title": "Esta página não carregou",
-    "body": "Parte do app não foi baixada. Normalmente isso significa que uma nova versão saiu enquanto esta aba estava aberta. Recarregar resolve.",
+    "body": "Uma parte do app não pôde ser baixada. Geralmente uma nova versão saiu enquanto esta aba estava aberta. Recarregar resolve.",
     "brokenTitle": "Algo deu errado nesta página",
-    "brokenBody": "Uma parte desta página encontrou um erro. Recarregar costuma resolver, e os detalhes abaixo nos ajudam a encontrar a causa.",
+    "brokenBody": "Uma parte desta página deu erro. Recarregar costuma resolver, e os detalhes nos ajudam a achar a causa.",
     "reload": "Recarregar",
     "goHome": "Ir para o início",
     "details": "Detalhes"
@@ -203,13 +203,13 @@
       "regularVideo": "Vídeo clássico para o seu canal",
       "verticalShort": "Clipe vertical para o feed de Shorts",
       "shortsEditor": "Grave e edite um short no navegador",
-      "story": "Clipe curto que fica no ar por 24 horas",
+      "story": "Fica no ar por 24 horas",
       "musicAudio": "Músicas, podcasts e outros áudios",
-      "audioEditor": "Corte, limpe e nivele podcasts e música",
+      "audioEditor": "Corte, limpe e nivele",
       "groupChat": "Sala ao vivo que você apresenta com convidados",
       "goLiveNow": "Transmita ao vivo para seus seguidores",
       "communitySnap": "Post rápido na sua aba de comunidade",
-      "playlist": "Junte vídeos numa lista para compartilhar"
+      "playlist": "Junte vídeos em uma lista para compartilhar"
     }
   },
   "chat": {
@@ -220,7 +220,7 @@
   "hiveAuth": {
     "waiting": "Aguardando aprovação no HiveAuth...",
     "title": "Aprovação do HiveAuth necessária",
-    "hint": "Abra seu app HiveAuth para aprovar esta transação"
+    "hint": "Confira seu app HiveAuth para aprovar esta transação."
   },
   "hiveApi": {
     "keychainNotSigned": "O Keychain não assinou a transação",
@@ -233,7 +233,7 @@
     "announceFailed": "O OpenPod começou, mas não foi possível publicar o anúncio na Hive."
   },
   "appUpdate": {
-    "updating": "Atualizando para a versão mais recente ({{version}})…",
+    "updating": "Atualizando para {{version}}…",
     "reloadingForUpload": "Recarregando para que seu envio rode na versão mais nova."
   },
   "auth": {
@@ -251,7 +251,9 @@
   },
   "followFeed": {
     "title": "Feed de quem você segue",
-    "error": "Erro ao carregar os vídeos"
+    "error": "Erro ao carregar os vídeos",
+    "emptyTitle": "Ninguém por aqui ainda",
+    "emptyBody": "Siga criadores e os envios, Snaps e lives deles aparecem aqui primeiro."
   },
   "groups": {
     "title": "Grupos",
@@ -303,6 +305,17 @@
     "moreTag": "Mais #{{tag}}",
     "moreVideos": "Mais vídeos",
     "hideControls": "Ocultar controlos",
-    "showControls": "Mostrar controlos"
+    "showControls": "Mostrar controlos",
+    "watching": "{{count}} assistindo",
+    "startedAgo": "Começou {{when}}",
+    "topSupporters": "Maiores apoiadores",
+    "noSupporters": "Ainda sem boosts",
+    "full": "Tela cheia",
+    "loginToChat": "Entre para conversar"
+  },
+  "pullToRefresh": {
+    "pull": "Puxe para atualizar",
+    "release": "Solte para atualizar",
+    "refreshing": "Atualizando…"
   }
 }

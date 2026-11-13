@@ -208,7 +208,7 @@
       "imageUploadFailed": "이미지 업로드 실패: {{error}}",
       "tryAgain": "다시 시도해 주세요",
       "styleApplied": "모든 {{type}} 블록에 스타일을 적용했어요",
-      "templateApplied": "“{{name}}” 적용됨 — 수정하거나 실행 취소하세요",
+      "templateApplied": "“{{name}}” 적용됨. 다듬거나 실행 취소하세요.",
       "reverted": "이전 디자인으로 되돌렸어요",
       "saved": "스포트라이트를 Hive 프로필에 저장했어요",
       "saveFailed": "저장하지 못했어요",
@@ -263,7 +263,7 @@
       "showPosts_other": "게시물 {{count}}개 표시",
       "perRow": "한 줄에 {{value}}개",
       "hiveRecentHint": "최근 최상위 게시물(리블로그나 크로스포스트 제외)이에요. 자동으로 업데이트돼요.",
-      "linkPlaceholder": "아무 링크나 붙여넣으세요 — Hive 게시물, Instagram, X, YouTube, 기사…",
+      "linkPlaceholder": "아무 링크나 붙여넣으세요: Hive 게시물, Instagram, X, YouTube, 기사…",
       "fetching": "미리보기 가져오는 중…",
       "noPreview": "미리보기를 찾지 못했어요. 링크 카드로는 표시돼요.",
       "pasteHint": "링크를 붙여넣으면 제목, 설명, 이미지를 가져와요."
@@ -294,8 +294,8 @@
     "openPage": "페이지 열기",
     "templates": {
       "title": "템플릿",
-      "hint": "디자인을 고르면 모든 항목이 채워져요. 소개는 유지되며 실행 취소할 수 있어요.",
-      "undo": "템플릿 실행 취소 — 내 디자인으로 돌아가기"
+      "hint": "디자인을 고르면 모든 항목이 채워져요. 소개는 그대로 유지되고, 실행 취소할 수 있어요.",
+      "undo": "템플릿 실행 취소, 내 디자인으로 돌아가기"
     },
     "profile": {
       "title": "프로필",

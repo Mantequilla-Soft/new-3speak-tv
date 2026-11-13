@@ -7,7 +7,8 @@
     "feeds": "Feed",
     "groups": "Grup",
     "audio": "Audio",
-    "login": "Masuk"
+    "login": "Masuk",
+    "you": "Kamu"
   },
   "installApp": "Instal Aplikasi",
   "iosInstallHint": "Ketuk <b>Bagikan</b> lalu <b>Tambahkan ke Layar Utama</b>",
@@ -28,7 +29,9 @@
     "shortsTooltip": "Video vertikal pendek, satu demi satu",
     "audioTooltip": "Podcast, musik, dan audio lain yang diterbitkan di 3Speak",
     "groupsTooltip": "Komunitas yang bisa kamu ikuti, dan lencana yang dianugerahkan ke orang-orang",
-    "rankingsTooltip": "Kreator yang paling banyak menghasilkan dan ditonton saat ini"
+    "rankingsTooltip": "Kreator yang paling banyak menghasilkan dan ditonton saat ini",
+    "live": "Live",
+    "liveTooltip": "Siaran dan ruang yang sedang live saat ini"
   },
   "aboutLink": "Tentang 3Speak",
   "faqLink": "FAQ",
@@ -38,6 +41,8 @@
     "myChannelAria": "Channel-ku",
     "vpTooltip": "Voting Power: seberapa besar bobot vote-mu berikutnya",
     "rcTooltip": "Resource Credits: biaya aksi-aksimu di Hive",
+    "votingPower": "Voting Power",
+    "resourceCredits": "Resource Credits",
     "myChannel": "Channel-ku",
     "publishBacklog": "Terbitkan antrean",
     "analytics": "Analitik",
@@ -47,14 +52,20 @@
     "logout": "Keluar",
     "onDiscord": "3Speak di Discord",
     "onX": "3Speak di X",
-    "onTelegram": "3Speak di Telegram"
+    "onTelegram": "3Speak di Telegram",
+    "switch": "Ganti",
+    "tiles": {
+      "channel": "Channel",
+      "history": "Riwayat"
+    },
+    "darkTheme": "Tema gelap"
   },
   "notifications": {
     "pushOff": "Notifikasi dimatikan untuk perangkat ini",
-    "pushOn": "Kamu akan diberi tahu saat kreator yang kamu ikuti memposting",
+    "pushOn": "Kamu akan diberi tahu saat kreator yang kamu ikuti memposting.",
     "pushFailed": "Pengaturan notifikasi tidak dapat diubah",
     "ariaUnread": "Notifikasi ({{count}} belum dibaca)",
-    "pushBlocked": "Notifikasi untuk situs ini diblokir di pengaturan browsermu",
+    "pushBlocked": "Notifikasi untuk situs ini diblokir di pengaturan browsermu.",
     "pushNoWorker": "Build ini tidak punya service worker, jadi notifikasi tidak bisa didaftarkan di sini",
     "pushStop": "Berhenti memberi notifikasi ke perangkat ini",
     "pushStart": "Dapatkan notifikasi saat kreator yang kamu ikuti memposting",
@@ -87,6 +98,13 @@
       "heading": "Episode baru dari podcast yang kamu ikuti",
       "newEpisode": "Episode baru {{show}}",
       "type": "Podcast"
+    },
+    "tabs": {
+      "all": "Semua",
+      "mentions": "Sebutan",
+      "follows": "Pengikut",
+      "uploads": "Unggahan",
+      "pods": "Podcast"
     }
   },
   "search": {
@@ -121,6 +139,17 @@
     "views_other": "{{formatted}} tayangan",
     "tags": "Tag",
     "titles": "Judul",
-    "placeholder": "Cari..."
-  }
+    "placeholder": "Cari...",
+    "recent": "Terbaru",
+    "allResultsFor": "Semua hasil untuk “{{term}}”",
+    "kinds": {
+      "creator": "Kreator",
+      "community": "Komunitas",
+      "video": "Video",
+      "short": "Short",
+      "audio": "Audio",
+      "playlist": "Playlist"
+    }
+  },
+  "create": "Buat"
 }

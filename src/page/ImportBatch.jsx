@@ -1,14 +1,12 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation, Trans } from "react-i18next";
-import { FaCheck } from "react-icons/fa";
-import { IoIosArrowDropdownCircle } from "react-icons/io";
+import { Button, Icon, SettingRow, Toggle } from "../components/v2/ui";
+import { cx } from "../components/v2/helpers";
 import CommunityModal from "../components/modal/Community_modal";
 import Beneficiary_modal from "../components/modal/Beneficiary_modal";
 import SettingInfo, { SettingSheet } from "../components/embed-studio/SettingInfo";
 import { createImportBatch, cancelImportBatch, fmtDuration } from "../lib/youtubeImport";
-import { StepProgress } from "../components/legacy-studio/StepProgress";
-import StepActions from "../components/embed-studio/StepActions";
 import { addThreespeakToPostingAuth, waitForThreespeakPostingAuth } from "../utils/postingAuthority";
 import { getCurrentProvider, Providers } from "../hive-api/aioha";
 import AccountImg from "../components/HiveAvatar/AccountImg";
@@ -19,8 +17,7 @@ import { readAddToBlog, writeAddToBlog } from "../utils/addToBlog";
 import {
   LOCKED_FUND_ACCOUNT, LOCKED_FUND_PERCENT, LOCKED_ENCODER_ACCOUNT, LOCKED_ENCODER_PERCENT, chargesEncoder,
 } from "../utils/beneficiaries";
-// The settings tiles are the upload wizard's own (EmbedDetails), styles included.
-import "../components/embed-studio/EmbedDetails.scss";
+// Styles: YoutubeImportPage.scss (.yt-batch-*), loaded by the page.
 
 // ▶️ Batch import UI: the one-time form for up to 5 picked videos, and the status
 // of the creator's batches. The server does everything else (import-batch.cjs).
@@ -28,18 +25,36 @@ import "../components/embed-studio/EmbedDetails.scss";
 const DEFAULT_COMMUNITY = 'hive-181335';
 const PAYOUTS = ['default', 'powerup', 'decline'];
 
-/** One on/off tile, the same markup as the wizard's. */
+/** One on/off setting: a SettingRow with a Toggle (STYLE_GUIDE §11). */
 function ToggleTile({ label, info, hint, checked, onChange, disabled }) {
   return (
-    <div className="beneficiary-wrap" onClick={() => { if (!disabled) onChange(!checked); }}>
-      <div className="wrap">
-        <span>{label}<SettingInfo title={label}>{info}</SettingInfo></span>
+    <SettingRow
+      className="yt-batch-setting"
+      title={<>{label}<SettingInfo title={label}>{info}</SettingInfo></>}
+      sub={hint}
+      control={<Toggle checked={!!checked} onChange={onChange} disabled={disabled} label={label} />}
+    />
+  );
+}
+
+/** A setting that opens a picker: title, hint and the current value. */
+function PickTile({ label, info, hint, value, onOpen, disabled, className }) {
+  const open = () => { if (!disabled) onOpen(); };
+  return (
+    <div
+      className={cx('yt-batch-pick', disabled && 'is-disabled', className)}
+      role="button"
+      tabIndex={disabled ? -1 : 0}
+      aria-disabled={disabled || undefined}
+      onClick={open}
+      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); } }}
+    >
+      <div className="yt-batch-pick__body">
+        <b>{label}<SettingInfo title={label}>{info}</SettingInfo></b>
         <span>{hint}</span>
       </div>
-      <label className={`toggle-switch${disabled ? ' disabled' : ''}`} onClick={(e) => e.stopPropagation()}>
-        <input type="checkbox" checked={!!checked} disabled={disabled} onChange={(e) => onChange(e.target.checked)} />
-        <span className="toggle-track"><span className="toggle-thumb" /></span>
-      </label>
+      <span className="yt-batch-pick__value">{value}</span>
+      <Icon name="chevron_right" size={18} className="yt-batch-pick__go" />
     </div>
   );
 }
@@ -154,8 +169,18 @@ export function BatchForm({ user, videos, spacingMin, granted, onGranted, onClos
     <div className="yt-batch-modal" role="dialog" aria-modal="true" aria-label={t('ytimport.batch.formTitle', { count: videos.length })}>
       <div className="yt-batch-modal__overlay" onClick={busy || granting ? undefined : onClose} />
       <div className="yt-batch-modal__sheet">
+        <div className="v2-dialog__grab" aria-hidden="true" />
         <ModalHeader title={t('ytimport.batch.formTitle', { count: videos.length })} onClose={busy || granting ? undefined : onClose} />
-        <StepProgress step={step} labels={[t('ytimport.batch.steps.content'), t('ytimport.batch.steps.settings')]} />
+        {/* 4px step bar with the labels under it (§11 multi-step pattern). */}
+        <ol className="yt-batch-steps" aria-label={t('ytimport.batch.formTitle', { count: videos.length })}>
+          {[t('ytimport.batch.steps.content'), t('ytimport.batch.steps.settings')].map((label, i) => (
+            <li key={label} className={cx(i + 1 <= step && 'is-on')} aria-current={i + 1 === step ? 'step' : undefined}>
+              <span className="yt-batch-steps__bar" />
+              <span className="yt-batch-steps__label">{label}</span>
+            </li>
+          ))}
+        </ol>
+        <div className="yt-batch-modal__body">
 
         {step === 1 && (
           <>
@@ -163,7 +188,7 @@ export function BatchForm({ user, videos, spacingMin, granted, onGranted, onClos
             <ul className="yt-batch-modal__picked">
               {videos.map((v) => (
                 <li key={v.id}>
-                  <img src={v.thumbnail} alt="" />
+                  <span className="yt-batch-modal__thumb v2-thumb r8">{v.thumbnail && <img src={v.thumbnail} alt="" />}</span>
                   <div>
                     <span className="yt-batch-modal__picked-title">{v.title}</span>
                     <span className="yt-import__muted">
@@ -179,34 +204,35 @@ export function BatchForm({ user, videos, spacingMin, granted, onGranted, onClos
         {step === 2 && (
           <>
             <p className="yt-import__note">{t('ytimport.batch.settingsIntro')}</p>
-            <div className={`advance-option yt-batch-modal__tiles${busy ? ' is-busy' : ''}`}>
-              <div className="beneficiary-wrap community-tile is-clickable" onClick={() => { if (!busy) setCommunityOpen(true); }}>
-                <div className="wrap">
-                  <span>{t('upload.details.community.label')}<SettingInfo title={t('upload.details.community.label')}>{t('upload.details.community.info')}</SettingInfo></span>
-                  <span>{t('upload.details.community.hint')}</span>
-                </div>
-                <div className="tile-value community-value">
-                  <div className="wrap"><AccountImg account={communityName} alt="" /><span>{communityTitle}</span></div>
-                  <IoIosArrowDropdownCircle size={16} />
-                </div>
-              </div>
-              <div className="beneficiary-wrap is-clickable" onClick={() => { if (!busy) setRewardsOpen(true); }}>
-                <div className="wrap">
-                  <span>{t('upload.details.rewards.label')}<SettingInfo title={t('upload.details.rewards.label')}>{t('upload.details.rewards.info')}</SettingInfo></span>
-                  <span>{t('upload.details.rewards.hint')}</span>
-                </div>
-                <div className="tile-value">{t(`upload.details.rewards.${payout}`)}</div>
-              </div>
+            <div className={cx('yt-batch-modal__tiles', busy && 'is-busy')}>
+              <PickTile
+                className="community-tile"
+                label={t('upload.details.community.label')}
+                info={t('upload.details.community.info')}
+                hint={t('upload.details.community.hint')}
+                value={<span className="community-value"><AccountImg account={communityName} alt="" /><span>{communityTitle}</span></span>}
+                onOpen={() => setCommunityOpen(true)}
+                disabled={busy}
+              />
+              <PickTile
+                label={t('upload.details.rewards.label')}
+                info={t('upload.details.rewards.info')}
+                hint={t('upload.details.rewards.hint')}
+                value={t(`upload.details.rewards.${payout}`)}
+                onOpen={() => setRewardsOpen(true)}
+                disabled={busy}
+              />
               {payout !== 'decline' && (
-                <div className="beneficiary-wrap is-clickable" onClick={() => { if (!busy) setBenesOpen(true); }}>
-                  <div className="wrap">
-                    <span>{t('upload.details.beneficiaries.label')}<SettingInfo title={t('upload.details.beneficiaries.label')}>{t('upload.details.beneficiaries.info')}</SettingInfo></span>
-                    <span>{t('upload.details.beneficiaries.hint')}</span>
-                  </div>
-                  <div className="tile-value">{list.length > 0
+                <PickTile
+                  label={t('upload.details.beneficiaries.label')}
+                  info={t('upload.details.beneficiaries.info')}
+                  hint={t('upload.details.beneficiaries.hint')}
+                  value={list.length > 0
                     ? t('upload.details.beneficiaries.accounts', { count: list.length })
-                    : t('upload.details.beneficiaries.none')}</div>
-                </div>
+                    : t('upload.details.beneficiaries.none')}
+                  onOpen={() => setBenesOpen(true)}
+                  disabled={busy}
+                />
               )}
               <ToggleTile label={t('upload.details.remix.label')} info={t('upload.details.remix.info')} hint={t('upload.details.remix.hint')}
                 checked={reusable} onChange={setReusable} disabled={busy} />
@@ -224,8 +250,8 @@ export function BatchForm({ user, videos, spacingMin, granted, onGranted, onClos
               )}
             </div>
 
-            {hasShorts && <p className="yt-import__note yt-batch-modal__small">{t('ytimport.batch.shortsNote')}</p>}
-            <p className="yt-import__note yt-batch-modal__small">{t('ytimport.batch.spacing', { minutes: spacingMin })}</p>
+            {hasShorts && <p className="yt-batch-modal__small"><Icon name="view_day" size={14} />{t('ytimport.batch.shortsNote')}</p>}
+            <p className="yt-batch-modal__small"><Icon name="schedule" size={14} />{t('ytimport.batch.spacing', { minutes: spacingMin })}</p>
 
             <SettingSheet title={t('upload.details.rewards.label')} open={rewardsOpen} onClose={() => setRewardsOpen(false)}>
               <div className="option-sheet">
@@ -243,10 +269,12 @@ export function BatchForm({ user, videos, spacingMin, granted, onGranted, onClos
               </div>
             </SettingSheet>
 
+            {/* 49b: a cyan wash with the permission ask and its action inline. */}
             {!granted && (
               <div className="yt-batch-modal__grant">
-                <p>{t('ytimport.batch.grantNeeded')}</p>
-                <button type="button" className="yt-import__btn" onClick={grant} disabled={granting}>
+                <span>{t('ytimport.batch.grantNeeded')}</span>{' '}
+                <button type="button" className="yt-batch-modal__grant-btn" onClick={grant} disabled={granting} aria-busy={granting || undefined}>
+                  {granting && <Icon name="progress_activity" size={14} className="v2-spin" />}
                   {granting ? t('ytimport.batch.granting') : t('ytimport.batch.grantButton')}
                 </button>
               </div>
@@ -254,24 +282,25 @@ export function BatchForm({ user, videos, spacingMin, granted, onGranted, onClos
           </>
         )}
 
-        {error && <p className="yt-import__error">{error}</p>}
+        {error && <p className="yt-import__error" role="alert">{error}</p>}
+        </div>
 
-        {step === 1 ? (
-          <StepActions
-            secondary={[{ key: 'cancel', label: t('ytimport.cancel'), onClick: onClose }]}
-            primary={[{ key: 'next', label: t('common.actions.next'), onClick: () => setStep(2) }]}
-          />
-        ) : (
-          <StepActions
-            back={{ label: t('common.actions.back'), onClick: () => setStep(1), disabled: busy || granting }}
-            primary={[{
-              key: 'start',
-              label: busy ? t('ytimport.batch.starting') : t('ytimport.batch.start'),
-              onClick: start,
-              disabled: !granted || busy || granting,
-            }]}
-          />
-        )}
+        {/* 49b: Cancel and Next share the row; then Back and a wide Start import. */}
+        <div className="yt-batch-modal__foot">
+          {step === 1 ? (
+            <>
+              <Button variant="secondary" size={44} center className="is-half" onClick={onClose}>{t('ytimport.cancel')}</Button>
+              <Button variant="primary" size={44} center className="is-half" onClick={() => setStep(2)}>{t('common.actions.next')}</Button>
+            </>
+          ) : (
+            <>
+              <Button variant="secondary" size={44} onClick={() => setStep(1)} disabled={busy || granting}>{t('common.actions.back')}</Button>
+              <Button variant="primary" size={44} center className="is-wide" onClick={start} disabled={!granted || busy || granting} loading={busy}>
+                {busy ? t('ytimport.batch.starting') : t('ytimport.batch.start')}
+              </Button>
+            </>
+          )}
+        </div>
       </div>
       {communityOpen && (
         <CommunityModal isOpen={communityOpen} data={[]} close={() => setCommunityOpen(false)} setCommunity={setCommunity} selected={communityName} />
@@ -294,6 +323,18 @@ export function BatchForm({ user, videos, spacingMin, granted, onGranted, onClos
 }
 
 const RUNNING = new Set(['queued', 'downloading', 'uploading', 'scheduling']);
+// One Material Symbol per row state (posted = cyan check, failed = accent).
+const STATE_ICON = {
+  queued: 'schedule',
+  downloading: 'progress_activity',
+  uploading: 'progress_activity',
+  scheduling: 'progress_activity',
+  scheduled: 'event',
+  posted: 'check_circle',
+  failed: 'error',
+  publish_failed: 'error',
+  cancelled: 'block',
+};
 
 /** The creator's newest batch: one row per video with its state. */
 export function BatchStatus({ batch, user, onChange }) {
@@ -309,6 +350,7 @@ export function BatchStatus({ batch, user, onChange }) {
   }, []);
   if (!batch) return null;
   const stoppable = batch.items.some((it) => RUNNING.has(it.status) || it.status === 'scheduled');
+  const doneCount = batch.items.filter((it) => it.status === 'posted').length;
 
   const stop = async () => {
     setStopping(true);
@@ -330,52 +372,55 @@ export function BatchStatus({ batch, user, onChange }) {
   return (
     <section className="yt-batch-status" aria-live="polite">
       <div className="yt-batch-status__head">
+        <span className="yt-batch-status__bar" aria-hidden="true" />
         <h3 className="yt-import__section">{t('ytimport.batch.statusTitle')}</h3>
-        {stoppable && !confirming && (
-          <button type="button" className="yt-import__btn yt-import__btn--outline" onClick={() => setConfirming(true)}>
-            {t('ytimport.batch.stop')}
-          </button>
-        )}
+        <span className="yt-batch-status__count num">{t('ytimport.batch.countOf', { done: doneCount, total: batch.items.length })}</span>
       </div>
       {stoppable && confirming && (
         <div className="yt-batch-status__confirm" role="alert">
           <p>{t('ytimport.batch.stopConfirm')}</p>
           <div className="yt-import__actions">
-            <button type="button" className="yt-import__btn" onClick={stop} disabled={stopping}>
+            <Button variant="primary" size={36} icon="stop_circle" loading={stopping} onClick={stop} disabled={stopping}>
               {t('ytimport.batch.stopYes')}
-            </button>
-            <button type="button" className="yt-import__btn yt-import__btn--outline" onClick={() => setConfirming(false)} disabled={stopping}>
+            </Button>
+            <Button variant="secondary" size={36} onClick={() => setConfirming(false)} disabled={stopping}>
               {t('ytimport.batch.stopKeep')}
-            </button>
+            </Button>
           </div>
         </div>
       )}
       {/* Everything happens on the server (import-batch.cjs), so say so: people
           otherwise keep the tab open for hours. */}
       {stoppable && (
-        <p className="yt-batch-status__leave"><FaCheck aria-hidden="true" /> {t('ytimport.batch.canLeave')}</p>
+        <p className="yt-batch-status__leave"><Icon name="check" size={16} /> {t('ytimport.batch.canLeave')}</p>
       )}
       <ul>
         {batch.items.map((it) => (
           <li key={it.sourceId} className={`yt-batch-status__item is-${it.status}`}>
-            {it.thumbnail ? <img src={it.thumbnail} alt="" /> : <span className="yt-batch-status__noimg" />}
+            <span className="yt-batch-status__thumb v2-thumb r8">{it.thumbnail && <img src={it.thumbnail} alt="" />}</span>
             <div className="yt-batch-status__body">
               <span className="yt-import__title">{it.title}</span>
-              <span className="yt-import__muted">
-                {it.status === 'posted' && <FaCheck />} {label(it)}
+              <span className={cx('yt-batch-status__state', `is-${it.status}`)}>
+                {STATE_ICON[it.status] && <Icon name={STATE_ICON[it.status]} size={14} className={RUNNING.has(it.status) && it.status !== 'queued' ? 'v2-spin' : ''} />}
+                {label(it)}
                 {it.isShort && <> · {t('ytimport.batch.short')}</>}
                 {it.status === 'posted' && it.permlink && (
                   <> · <Link to={it.isShort ? `/shorts?v=${user}/${it.permlink}` : `/@${user}/${it.permlink}`}>{t('ytimport.viewPost')}</Link></>
                 )}
               </span>
               {RUNNING.has(it.status) && it.status !== 'queued' && (
-                <div className="yt-import__bar"><span style={{ width: `${it.progress}%` }} /></div>
+                <div className="v2-progress is-thin"><span className="is-cyan" style={{ width: `${it.progress}%` }} /></div>
               )}
               {it.error && (it.status === 'failed' || it.status === 'publish_failed') && <span className="yt-import__error">{it.error}</span>}
             </div>
           </li>
         ))}
       </ul>
+      {stoppable && !confirming && (
+        <Button variant="danger" size={48} trailing="stop_circle" className="is-next yt-batch-status__stop" onClick={() => setConfirming(true)}>
+          {t('ytimport.batch.stop')}
+        </Button>
+      )}
     </section>
   );
 }

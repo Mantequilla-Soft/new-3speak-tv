@@ -1,0 +1,63 @@
+@use "../../styles/v2" as v2;
+@import "../LanguageSelector/translate-common";
+
+// The admin's block note (support popup + banner), 44a: an accent-washed card
+// with "Message from the 3Speak team" as an accent eyebrow over the note.
+.block-note {
+  padding: 12px;
+  text-align: left;
+  border-radius: var(--r-lg);
+  background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+  min-width: 0;
+}
+
+.block-note-label {
+  display: block;
+  margin-bottom: 4px;
+  @include v2.text(eyebrow);
+  letter-spacing: .06em;
+  color: var(--accent);
+}
+
+.block-note-text {
+  margin: 0;
+  @include v2.text(body);
+  line-height: 1.5;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.block-note-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+// "Translated to X · Show original"
+.block-note-translated {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  @include v2.text(meta);
+  color: var(--muted);
+
+  button {
+    padding: 0;
+    border: none;
+    background: none;
+    font: inherit;
+    font-weight: 700;
+    color: var(--cyan);
+    cursor: pointer;
+    &:hover { text-decoration: underline; }
+  }
+}
+
+.block-note-error {
+  margin: 6px 0 0;
+  @include v2.text(meta);
+  color: var(--accent);
+}

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { MdClose } from 'react-icons/md';
+import { Icon } from '../v2/Icon';
+import { Button } from '../v2/ui';
 import { commentWithAioha } from '../../hive-api/aioha';
 import useEmojiShortcodes from '../../hooks/useEmojiShortcodes';
 import EmojiGifPicker from '../common/EmojiGifPicker/EmojiGifPicker';
@@ -79,7 +80,7 @@ export default function AudioCommentPanel({ author, permlink, title, at, onClose
       }}
     >
       <div className="audio-np-comment-head">
-        <span className="audio-np-comment-label">{t('comments.section.commentTab')}</span>
+        <span className="v2-eyebrow audio-np-comment-label">{t('comments.section.commentTab')}</span>
         {title && <span className="audio-np-comment-on" title={title}>{title}</span>}
         <button
           type="button"
@@ -88,7 +89,7 @@ export default function AudioCommentPanel({ author, permlink, title, at, onClose
           disabled={busy}
           aria-label={t('common.actions.close')}
           title={t('common.actions.close')}
-        ><MdClose size={16} /></button>
+        ><Icon name="close" size={18} /></button>
       </div>
       <textarea
         ref={inputRef}
@@ -112,15 +113,16 @@ export default function AudioCommentPanel({ author, permlink, title, at, onClose
             onPickGif={(url) => insertAtCursor(inputRef.current, text, gifMarkdown(url), setText)}
           />
           {atSec > 0 && (
-            <label className="audio-np-comment-at">
+            <label className={`audio-np-comment-at${withTime ? ' is-on' : ''}`}>
               <input type="checkbox" checked={withTime} onChange={(e) => setWithTime(e.target.checked)} disabled={busy} />
+              <Icon name="schedule" size={16} />
               <span>{t('comments.section.atTime', { time: fmt(atSec) })}</span>
             </label>
           )}
         </div>
-        <button type="button" className="audio-np-comment-post" onClick={post} disabled={busy || !text.trim()}>
+        <Button variant="primary" size={40} className="audio-np-comment-post" onClick={post} disabled={busy || !text.trim()} loading={busy} trailing="send">
           {busy ? t('comments.section.saving') : t('comments.section.commentButton')}
-        </button>
+        </Button>
       </div>
     </section>
   );

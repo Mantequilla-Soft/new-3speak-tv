@@ -1,13 +1,15 @@
-@use "../../mixins.scss" as mix;
+@use "../../styles/v2" as v2;
 
-// Timeline editor (upload Timeline step + Edit video dialog).
-// Buttons follow the house rule: no red fills, accent = outline (text + border).
+// Timeline editor (upload Timeline step + Edit video dialog), design 35e:
+// the preview, then the track in a bg well (chapters as surface-2 segments,
+// the selected one cyan; links as accent bars), then the two lists as cards.
+// The link form is a v2 dialog (DialogShell), a bottom sheet on phones.
 
 .tle {
   display: flex;
   flex-direction: column;
-  gap: 18px;
-  color: var(--text-primary);
+  gap: 16px;
+  color: var(--text);
   min-width: 0;
 }
 
@@ -21,7 +23,7 @@
 // ── preview ────────────────────────────────────────────────────────────────
 .tle-preview {
   width: 100%;
-  max-width: 720px;
+  max-width: 760px;
   margin: 0 auto;
 }
 .tle--compact .tle-preview { max-width: 100%; }
@@ -30,8 +32,8 @@
   position: relative;
   width: 100%;
   aspect-ratio: 16 / 9;
-  background: #000;
-  border-radius: 10px;
+  background: var(--media-black);
+  border-radius: var(--r-xl);
   overflow: hidden;
 
   video {
@@ -40,7 +42,7 @@
     width: 100%;
     height: 100%;
     object-fit: contain;
-    background: #000;
+    background: var(--media-black);
   }
 }
 
@@ -54,28 +56,29 @@
   gap: 8px;
   padding: 20px;
   text-align: center;
-  color: #ccc;
-  font-size: 13px;
+  color: var(--on-media);
+  @include v2.text(body-sm);
   line-height: 1.45;
+  @include v2.thumb-placeholder(10px);
 
-  p { margin: 0; max-width: 420px; }
+  .material-symbols-rounded { color: var(--muted); }
+  p { margin: 0; max-width: 420px; color: var(--muted); }
 }
 
 .tle-now {
   display: flex;
   align-items: baseline;
   gap: 10px;
-  margin-top: 6px;
-  font-size: 13px;
+  margin-top: 8px;
   min-width: 0;
 }
 .tle-now__time {
-  font-variant-numeric: tabular-nums;
-  color: var(--text-secondary);
+  @include v2.mono(12, 700);
+  color: var(--muted);
   flex-shrink: 0;
 }
 .tle-now__chapter {
-  font-weight: 600;
+  @include v2.text(label);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -84,17 +87,17 @@
 // ── track ──────────────────────────────────────────────────────────────────
 .tle-trackwrap {
   width: 100%;
-  max-width: 720px;
-  margin: 0 auto;
+  min-width: 0;
+  padding: 10px;
+  box-sizing: border-box;
+  @include v2.card;
 }
-.tle--compact .tle-trackwrap { max-width: 100%; }
 
 .tle-track {
   position: relative;
-  padding: 4px 0;
-  border-radius: 8px;
-  background: var(--bg-tertiary, #eff4f5);
-  border: 1px solid var(--border-light, #e0e0e0);
+  padding: 8px 0;
+  border-radius: var(--r-lg);
+  background: var(--bg);
   cursor: pointer;
   touch-action: none;
   user-select: none;
@@ -103,8 +106,8 @@
 
 .tle-track__chapters {
   position: relative;
-  height: 30px;
-  margin: 0 0 4px;
+  height: 32px;
+  margin: 0 8px 8px;
 }
 
 .tle-seg {
@@ -112,25 +115,26 @@
   top: 0;
   bottom: 0;
   margin-left: 1px;
-  border-radius: 5px;
-  background: var(--bg-secondary, #fff);
-  border: 1px solid var(--border-color, #ccc);
+  border-radius: var(--r-sm);
+  background: var(--surface-2);
+  border: 2px solid transparent;
+  box-sizing: border-box;
   display: flex;
   align-items: center;
-  padding: 0 6px;
+  padding: 0 8px;
   overflow: hidden;
   min-width: 2px;
 
-  &.is-live { border-color: var(--text-secondary, #5a5a5a); }
+  &.is-live { border-color: color-mix(in srgb, var(--text) 25%, transparent); }
   &.is-selected {
-    border-color: var(--accent-primary, #e53935);
-    box-shadow: inset 0 0 0 1px var(--accent-primary, #e53935);
+    border-color: var(--cyan);
+    background: var(--cyan-tint);
   }
-  &.is-invalid { border-style: dashed; border-color: var(--accent-primary, #e53935); }
+  &.is-invalid { border-style: dashed; border-color: var(--accent); }
 }
 .tle-seg__label {
+  @include v2.text(label);
   font-size: 11px;
-  font-weight: 600;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -155,47 +159,59 @@
     bottom: 4px;
     width: 4px;
     border-radius: 2px;
-    background: var(--text-secondary, #5a5a5a);
+    background: var(--muted);
   }
   &:hover::after,
-  &:focus-visible::after { background: var(--accent-primary, #e53935); }
+  &:focus-visible::after { background: var(--accent); }
   &:focus-visible { outline: none; }
 }
 
 .tle-track__links {
   position: relative;
-  min-height: 22px;
+  min-height: 24px;
+  margin: 0 8px;
 }
 
+// Every link is an accent bar; the icon says what it points at.
 .tle-mark {
   position: absolute;
-  height: 18px;
-  min-width: 22px; // room for the end handle plus something to grab
-  border-radius: 4px;
-  background: rgba(59, 130, 246, 0.22);
-  border: 1px solid rgba(59, 130, 246, 0.8);
-  color: var(--text-primary);
+  height: 22px;
+  min-width: 24px; // room for the end handle plus something to grab
+  border-radius: var(--r-sm);
+  background: color-mix(in srgb, var(--accent) 22%, transparent);
+  border: 2px solid var(--accent);
+  box-sizing: border-box;
+  color: var(--text);
   display: flex;
   align-items: center;
-  padding: 0 3px;
+  padding: 0 4px;
   cursor: grab;
   overflow: hidden;
   z-index: 1;
 
-  &--profile { background: rgba(16, 185, 129, 0.2); border-color: rgba(16, 185, 129, 0.85); }
-  &--url { background: rgba(245, 158, 11, 0.2); border-color: rgba(245, 158, 11, 0.85); }
-  &.is-live { box-shadow: 0 0 0 1px var(--text-secondary, #5a5a5a); }
+  gap: 4px;
+  padding-right: 10px;
+  &.is-live { box-shadow: 0 0 0 2px color-mix(in srgb, var(--text) 25%, transparent); }
   &.is-selected {
-    border-color: var(--accent-primary, #e53935);
-    box-shadow: 0 0 0 2px var(--accent-primary, #e53935);
+    box-shadow: 0 0 0 2px var(--surface), 0 0 0 4px var(--accent);
     z-index: 3;
   }
   &:active { cursor: grabbing; }
-  &:focus-visible { outline: 2px solid var(--accent-primary, #e53935); outline-offset: 1px; }
+  &:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
-  svg, .tle-mark__at { flex-shrink: 0; pointer-events: none; }
+  .material-symbols-rounded, .tle-mark__at { flex-shrink: 0; pointer-events: none; }
 }
-.tle-mark__at { font-size: 11px; font-weight: 700; line-height: 1; }
+.tle-mark__at { @include v2.mono(11, 700); line-height: 1; }
+.tle-mark__label {
+  min-width: 0;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  pointer-events: none;
+}
 
 // Drag (or arrow keys) to change how long the link shows.
 .tle-mark__end {
@@ -203,7 +219,7 @@
   top: 0;
   right: 0;
   bottom: 0;
-  width: 9px;
+  width: 10px;
   cursor: ew-resize;
 
   &::after {
@@ -218,7 +234,7 @@
     opacity: 0.4;
   }
   &:hover::after,
-  &:focus-visible::after { opacity: 1; background: var(--accent-primary, #e53935); }
+  &:focus-visible::after { opacity: 1; background: var(--accent); }
   &:focus-visible { outline: none; }
 }
 .tle-mark.is-selected .tle-mark__end::after { opacity: 0.8; }
@@ -229,7 +245,7 @@
   bottom: 0;
   width: 2px;
   margin-left: -1px;
-  background: var(--accent-primary, #e53935);
+  background: var(--accent);
   pointer-events: none;
   z-index: 4;
 
@@ -241,7 +257,7 @@
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    background: var(--accent-primary, #e53935);
+    background: var(--accent);
   }
 }
 .tle-track.is-playing .tle-playhead { transition: left 0.25s linear; }
@@ -250,11 +266,10 @@
 // it is also where a zoomed track scrolls sideways (the track itself drags).
 .tle-ruler {
   position: relative;
-  height: 20px;
-  margin-top: 2px;
-  font-size: 11px;
-  color: var(--text-secondary);
-  font-variant-numeric: tabular-nums;
+  height: 22px;
+  margin: 2px 8px 0;
+  @include v2.mono(11, 500);
+  color: var(--muted);
   cursor: pointer;
   touch-action: pan-x;
   user-select: none;
@@ -263,7 +278,7 @@
 .tle-tick {
   position: absolute;
   top: 0;
-  padding-top: 5px;
+  padding-top: 6px;
   transform: translateX(-50%);
   white-space: nowrap;
   pointer-events: none;
@@ -275,29 +290,39 @@
     left: 50%;
     width: 1px;
     height: 4px;
-    background: var(--text-secondary, #5a5a5a);
+    background: var(--muted);
     opacity: 0.6;
   }
   &--first { transform: none; }
   &--first::before { left: 0; }
 }
 
-// ── zoom ───────────────────────────────────────────────────────────────────
+// ── zoom: 40px icon tiles (35e) ────────────────────────────────────────────
 .tle-zoombar {
   display: flex;
   align-items: center;
-  gap: 6px;
-  margin-bottom: 6px;
+  gap: 4px;
+  margin-bottom: 10px;
   min-width: 0;
+
+  > .tle-icon-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: v2.radius-for(40);
+    background: var(--surface-2);
+    color: var(--text);
+    &:disabled { opacity: .45; cursor: not-allowed; }
+  }
 }
 .tle-zoombar__range {
-  width: 110px;
+  width: 120px;
   min-width: 60px;
-  flex: 0 1 110px;
-  accent-color: var(--accent-primary, #e53935);
+  flex: 0 1 120px;
+  margin: 0 6px;
+  accent-color: var(--accent);
   cursor: pointer;
 
-  &:disabled { opacity: 0.4; cursor: default; }
+  &:disabled { opacity: 0.45; cursor: default; }
 }
 .tle-zoombar__spacer { flex: 1 1 auto; }
 
@@ -320,14 +345,13 @@
   inset: 0;
   z-index: 1150;
   overflow-y: auto;
-  padding: 12px 20px 28px;
+  padding: 16px 24px 32px;
   gap: 14px;
-  background: var(--bg-primary, var(--card-bg, #fff));
+  background: var(--bg);
 
   // A smaller picture, so the track and both lists fit around it.
   .tle-preview { max-width: min(100%, calc(42vh * 16 / 9)); }
-  .tle-trackwrap { max-width: none; }
-  .tle-track__chapters { height: 38px; }
+  .tle-track__chapters { height: 40px; }
   .tle-seg__label { font-size: 12px; }
 }
 .tle-xhead {
@@ -336,7 +360,8 @@
   justify-content: space-between;
   gap: 12px;
 
-  h3 { margin: 0; font-size: 17px; }
+  h3 { margin: 0; @include v2.text(title); }
+  .tle-icon-btn { background: var(--surface-2); width: 40px; height: 40px; border-radius: v2.radius-for(40); }
 }
 body.tle-expanded-open {
   overflow: hidden;
@@ -350,7 +375,7 @@ body.tle-expanded-open {
 .tle-lists {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 18px;
+  gap: 14px;
   min-width: 0;
 
   @media (max-width: 900px) { grid-template-columns: 1fr; }
@@ -359,12 +384,10 @@ body.tle-expanded-open {
 
 .tle-section {
   min-width: 0;
-  border: 1px solid var(--border-light, #e0e0e0);
-  border-radius: 12px;
-  padding: 14px;
-  background: var(--card-bg, #fff);
+  @include v2.card;
+  padding: 16px;
 }
-.tle--compact .tle-section { padding: 12px 10px; }
+.tle--compact .tle-section { padding: 12px; }
 
 .tle-section__head {
   display: flex;
@@ -376,31 +399,42 @@ body.tle-expanded-open {
 
   h3 {
     margin: 0;
-    font-size: 16px;
-    font-weight: 700;
+    @include v2.text(title-sm);
     display: inline-flex;
     align-items: baseline;
     gap: 8px;
   }
 }
-.tle-count { font-size: 12px; font-weight: 500; color: var(--text-secondary); }
+.tle-count { @include v2.mono(12, 700); color: var(--muted); }
 
 .tle-hint {
   margin: 0 0 8px;
-  font-size: 12.5px;
+  @include v2.text(meta);
   line-height: 1.45;
-  color: var(--text-secondary);
+  color: var(--muted);
+  text-wrap: pretty;
 }
+// Chapter and link errors: an accent wash row with the icon (35e).
 .tle-issue {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
   margin: 0 0 6px;
-  font-size: 12.5px;
+  padding: 10px 12px;
+  border-radius: var(--r-lg);
+  background: var(--accent-tint);
+  @include v2.text(meta);
   line-height: 1.4;
-  color: var(--accent-primary, #e53935);
+  color: var(--text);
+  .material-symbols-rounded { color: var(--accent); }
 }
 .tle-empty {
   margin: 8px 0 2px;
-  font-size: 13px;
-  color: var(--text-muted, #64748b);
+  padding: 12px;
+  border-radius: var(--r-lg);
+  border: 2px dashed var(--border);
+  @include v2.text(body-sm);
+  color: var(--muted);
 }
 
 .tle-list {
@@ -417,17 +451,19 @@ body.tle-expanded-open {
   align-items: center;
   gap: 6px;
   padding: 6px;
-  border-radius: 9px;
-  border: 1px solid transparent;
-  background: var(--bg-tertiary, #eff4f5);
+  border-radius: var(--r-md);
+  border: 2px solid transparent;
+  background: var(--bg);
   cursor: pointer;
   min-width: 0;
 
-  // Playing now: a bar on the left edge; selected: the accent outline.
-  &.is-live { box-shadow: inset 3px 0 0 var(--text-secondary, #5a5a5a); }
-  &.is-selected { border-color: var(--accent-primary, #e53935); }
+  // Playing now: a bar on the left edge; selected: the cyan outline.
+  &.is-live { box-shadow: inset 3px 0 0 var(--muted); }
+  &.is-selected { border-color: var(--cyan); }
   &.is-invalid .tle-time,
-  &.is-invalid .tle-row__title:placeholder-shown { border-color: var(--accent-primary, #e53935); }
+  &.is-invalid .tle-row__title:placeholder-shown { border-color: var(--accent); }
+
+  .tle-input, .tle-time { background: var(--surface); }
 }
 
 .tle-row--link {
@@ -442,83 +478,69 @@ body.tle-expanded-open {
 
 .tle-input,
 .tle-time {
-  height: 34px;
-  padding: 0 9px;
-  border-radius: 7px;
-  border: 1px solid var(--input-border, #ccc);
-  background: var(--input-bg, #fff);
-  color: var(--text-primary);
-  font-size: 14px;
+  @include v2.field(36);
   min-width: 0;
+  box-sizing: border-box;
 
-  &:focus { outline: none; border-color: var(--accent-primary, #e53935); box-shadow: 0 0 0 2px var(--input-focus, rgba(229, 57, 53, 0.2)); }
-  &.is-invalid { border-color: var(--accent-primary, #e53935); }
+  &.is-invalid { border-color: var(--accent); }
 }
 .tle-time {
-  width: 74px;
+  width: 76px;
   flex-shrink: 0;
+  padding: 0 8px;
   text-align: center;
-  font-variant-numeric: tabular-nums;
+  @include v2.mono(13, 700);
 }
-.tle-input--dur { width: 68px; text-align: center; }
-.tle-unit { font-size: 12.5px; color: var(--text-secondary); white-space: nowrap; }
+.tle-input--dur { width: 72px; text-align: center; font-family: var(--font-mono); }
+.tle-unit { @include v2.text(meta); color: var(--muted); white-space: nowrap; }
 
 .tle-icon-btn {
   flex-shrink: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 7px;
+  width: 36px;
+  height: 36px;
+  border-radius: v2.radius-for(36);
   border: 0;
-  background: none;
-  color: var(--text-secondary);
+  background: transparent;
+  color: var(--muted);
   cursor: pointer;
+  transition: background var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
 
-  &:hover { background: var(--bg-hover, rgba(0, 0, 0, 0.05)); color: var(--text-primary); }
-  &--danger:hover { color: var(--accent-primary, #e53935); }
+  &:hover { background: var(--bg-hover); color: var(--text); }
+  &--danger:hover { color: var(--accent); background: var(--accent-tint); }
 }
 
+// Buttons inside the editor: secondary, 36 tall; the "add" ones a cyan tint
+// (21c: "Add chapters"), so the page keeps one accent button (Next).
 .tle-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-  padding: 9px 16px;
-  border-radius: 10px;
-  font-size: 14px;
-  font-weight: 700;
-  cursor: pointer;
-  background: transparent;
-  border: 1px solid var(--border-color, #ccc);
-  color: var(--text-primary);
+  @include v2.btn(secondary, 36);
   white-space: nowrap;
 
-  &--sm { padding: 6px 11px; font-size: 13px; border-radius: 8px; }
+  &--sm { @include v2.btn(secondary, 32); }
   &--primary {
-    border-color: var(--accent-primary, #e53935);
-    color: var(--accent-primary, #e53935);
-    &:hover:not(:disabled) { background: var(--accent-light, rgba(229, 57, 53, 0.1)); }
+    background: var(--cyan-tint-strong);
+    color: var(--cyan);
+    &:hover:not(:disabled) { background: color-mix(in srgb, var(--cyan) 24%, transparent); color: var(--cyan); }
   }
-  &--secondary:hover:not(:disabled) { background: var(--bg-hover, rgba(0, 0, 0, 0.05)); }
-  &:disabled { opacity: 0.5; cursor: not-allowed; }
 }
 
 // A link target: picture + two lines.
 .tle-link-sum {
   display: flex;
   align-items: center;
-  gap: 9px;
+  gap: 10px;
   min-width: 0;
 }
 .tle-link-sum__thumb {
   flex-shrink: 0;
-  width: 56px;
-  height: 32px;
-  border-radius: 5px;
+  width: 64px;
+  aspect-ratio: 16 / 9;
+  height: auto;
+  border-radius: var(--r-sm);
   object-fit: cover;
-  background: #222;
+  @include v2.thumb-placeholder(5px);
 }
 .tle-link-sum__avatar {
   flex-shrink: 0;
@@ -526,19 +548,18 @@ body.tle-expanded-open {
   height: 32px;
   border-radius: 50%;
   object-fit: cover;
-  background: var(--bg-tertiary);
+  background: var(--avatar);
 }
 .tle-link-sum__icon {
   flex-shrink: 0;
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
+  width: 36px;
+  height: 36px;
+  border-radius: v2.radius-for(36);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: var(--bg-secondary, #fff);
-  border: 1px solid var(--border-light, #e0e0e0);
-  color: var(--text-secondary);
+  background: var(--surface-2);
+  color: var(--muted);
 }
 .tle-link-sum__text {
   min-width: 0;
@@ -547,94 +568,29 @@ body.tle-expanded-open {
   line-height: 1.25;
 }
 .tle-link-sum__title {
-  font-size: 13.5px;
-  font-weight: 600;
+  @include v2.text(label);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 .tle-link-sum__sub {
-  font-size: 12px;
-  color: var(--text-secondary);
+  @include v2.text(meta);
+  color: var(--muted);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-// ── link form: a dialog, a bottom sheet on phones ──────────────────────────
-.tle-sheet-backdrop {
-  position: fixed;
-  inset: 0;
-  z-index: 1200;   // above the Edit video dialog (1100)
-  background: var(--overlay-bg, rgba(0, 0, 0, 0.6));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-
-  @include mix.respond(phone) {
-    align-items: flex-end;
-    padding: 0;
-  }
-}
-
-.tle-sheet {
-  width: 480px;
-  max-width: 100%;
-  max-height: 88vh;
-  overflow-y: auto;
-  background: var(--card-bg, #fff);
-  color: var(--text-primary);
-  border-radius: 14px;
-  padding: 18px;
-  box-shadow: var(--shadow-lg);
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-
-  @include mix.respond(phone) {
-    width: 100%;
-    max-height: 90vh;
-    border-radius: 16px 16px 0 0;
-    padding: 16px;
-    padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
-    animation: tle-sheet-up 0.22s ease-out;
-  }
-}
-
-// The sheet's flex gap already spaces the shared header from the tabs.
-.tle-sheet .tle-sheet__head { margin-bottom: 0; }
-
-.tle-tabs {
-  display: flex;
-  gap: 4px;
-  padding: 3px;
-  border-radius: 10px;
-  background: var(--bg-tertiary, #eff4f5);
-}
-.tle-tab {
-  flex: 1;
-  padding: 7px 6px;
-  border: 1px solid transparent;
-  border-radius: 8px;
-  background: none;
-  color: var(--text-secondary);
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-
-  &.is-active {
-    background: var(--card-bg, #fff);
-    color: var(--text-primary);
-    border-color: var(--border-light, #e0e0e0);
-  }
-}
+// ── link form (DialogShell) ────────────────────────────────────────────────
+.tle-sheet__body { gap: 12px; }
+.tle-sheet__count { @include v2.mono(12, 700); color: var(--muted); flex: none; }
+.tle-sheet .v2-dialog__foot { border-top: 0; padding-top: 4px; }
 
 .tle-field {
   display: flex;
   flex-direction: column;
   gap: 6px;
-  .tle-input { width: 100%; }
+  .tle-input { width: 100%; height: 44px; border-radius: v2.radius-for(44); }
   .tle-hint { margin: 0; }
 }
 
@@ -642,82 +598,86 @@ body.tle-expanded-open {
   position: relative;
   display: flex;
   align-items: center;
-  svg { position: absolute; left: 10px; color: var(--text-secondary); pointer-events: none; }
-  .tle-input { padding-left: 32px; }
+  > .material-symbols-rounded { position: absolute; left: 12px; color: var(--muted); pointer-events: none; }
+  .tle-input { padding-left: 38px; }
 }
 
 .tle-results {
   list-style: none;
   margin: 0;
-  padding: 0;
+  padding: 4px;
   max-height: 240px;
   overflow-y: auto;
-  border: 1px solid var(--border-light, #e0e0e0);
-  border-radius: 9px;
+  border-radius: var(--r-lg);
+  background: var(--bg);
 }
-.tle-results__note { padding: 10px 12px; font-size: 13px; color: var(--text-secondary); }
+.tle-results__note { padding: 10px 12px; @include v2.text(body-sm); color: var(--muted); }
 .tle-result {
   width: 100%;
   display: flex;
   align-items: center;
-  gap: 9px;
-  padding: 7px 10px;
+  gap: 10px;
+  padding: 6px 8px;
   border: 0;
+  border-radius: var(--r-md);
   background: none;
   color: inherit;
   text-align: left;
   cursor: pointer;
   min-width: 0;
-  &:hover, &:focus-visible { background: var(--bg-hover, rgba(0, 0, 0, 0.05)); outline: none; }
+  &:hover, &:focus-visible { background: var(--bg-hover); outline: none; }
 }
 
+// The chosen target: the accent pick (35e).
 .tle-picked {
-  padding: 9px 10px;
-  border-radius: 10px;
-  border: 1px solid var(--accent-primary, #e53935);
+  padding: 6px;
+  border-radius: var(--r-lg);
+  border: 2px solid var(--accent);
+  background: var(--accent-wash);
   min-width: 0;
 }
 
 .tle-sheet__times {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
 }
 .tle-labelled {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  font-size: 12.5px;
-  font-weight: 600;
-  color: var(--text-secondary);
+  gap: 6px;
+  padding: 10px;
+  border-radius: var(--r-md);
+  background: var(--bg);
+  min-width: 0;
+
+  // 35e: "Shows at" 11 muted over the value.
+  > span:first-child { @include v2.text(meta-sm); color: var(--muted); }
+  .tle-input, .tle-time { background: var(--surface); }
 }
-.tle-inline { display: inline-flex; align-items: center; gap: 6px; }
+.tle-inline { display: inline-flex; align-items: center; gap: 6px; min-width: 0; }
 
 .tle-sheet__actions {
   display: flex;
   justify-content: flex-end;
-  gap: 10px;
-  margin-top: 4px;
+  gap: 8px;
+  width: 100%;
 
-  @include mix.respond(phone) {
-    .tle-btn { flex: 1; }
+  @include v2.mobile {
+    .v2-btn { flex: 1; }
   }
 }
 
-@keyframes tle-sheet-up {
-  from { transform: translateY(100%); }
-  to { transform: translateY(0); }
-}
-
 // ── phones ─────────────────────────────────────────────────────────────────
-@include mix.respond(phone) {
-  .tle { gap: 14px; }
-  .tle-section { padding: 12px 10px; }
+@include v2.mobile {
+  .tle { gap: 12px; }
+  .tle-section { padding: 12px; border-radius: var(--r-xl); }
   .tle-row { flex-wrap: wrap; }
   .tle-row__title { flex: 1 1 140px; }
-  .tle-track__chapters { height: 34px; }
-  .tle-mark { height: 20px; min-width: 28px; }
+  .tle-track__chapters { height: 36px; }
+  .tle-mark { height: 24px; min-width: 28px; }
   .tle-zoombar__range { display: none; }   // the buttons are easier with a thumb
-  .tle--expanded { padding: 10px 12px 24px; }
-  .tle-mark__end { width: 13px; }
+  .tle--expanded { padding: 12px 12px 24px; }
+  .tle-mark__end { width: 14px; }
+  .tle-sheet__times { grid-template-columns: 1fr; }
 }

@@ -6,25 +6,23 @@
   right: 10px;
   bottom: 10px;
   z-index: 40;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
+  display: inline-grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
   padding: 0;
-  border: 1px solid rgba(255, 255, 255, 0.22);
-  border-radius: 8px;
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(6px);
-  color: #fff;
+  border: 0;
+  border-radius: var(--r-md);
+  background: var(--media-scrim);
+  color: var(--on-media);
   cursor: pointer;
-  opacity: 0.85;
-  transition: opacity 0.2s ease, background-color 0.2s ease;
+  opacity: .85;
+  transition: opacity var(--t-fast) var(--ease), background-color var(--t-fast) var(--ease);
 
   &:hover,
   &:focus-visible {
     opacity: 1;
-    background: rgba(0, 0, 0, 0.8);
+    background: var(--media-scrim-strong);
   }
 }
 
@@ -34,7 +32,7 @@
 .live-stream-player:fullscreen {
   border-radius: 0;
   aspect-ratio: auto;
-  background: #000;
+  background: var(--media-black);
 }
 
 /* The watch page's live player also has the boost chip and "Ask to join" in

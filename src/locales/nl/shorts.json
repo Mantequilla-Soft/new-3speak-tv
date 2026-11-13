@@ -17,7 +17,8 @@
       "rep": "Rep {{rep}}",
       "repTitle": "Hive-reputatie",
       "viewProfile": "Profiel bekijken"
-    }
+    },
+    "replyTo": "Reageer op {{user}}…"
   },
   "errors": {
     "votingUnavailable": "Voten is niet mogelijk voor deze post",
@@ -31,7 +32,7 @@
     "interestsTitle": "Alleen Shorts die passen bij je interesses",
     "pickInterestsFirst": "Kies eerst een paar interesses",
     "noInterests": "Je hebt nog geen interesses gekozen — kies ze in Instellingen",
-    "interestsExhausted": "Dat waren alle Shorts voor je interesses — we tonen nu Ontdekken",
+    "interestsExhausted": "Dat waren alle Shorts voor je interesses. We tonen nu Ontdekken.",
     "noInterestMatches": "Er zijn nu geen Shorts die passen bij je interesses.",
     "switchToDiscover": "Naar Ontdekken",
     "empty": "Geen Shorts beschikbaar",
@@ -40,12 +41,18 @@
   "glow": {
     "subtle": "Sfeerverlichting: subtiel",
     "vivid": "Sfeerverlichting: fel",
-    "off": "Sfeerverlichting: uit"
+    "off": "Sfeerverlichting: uit",
+    "label": "Sfeerverlichting",
+    "offShort": "Uit",
+    "subtleShort": "Subtiel",
+    "vividShort": "Fel"
   },
   "playbackMode": {
     "autoReplay": "Automatisch herhalen",
     "autoSwipe": "Automatisch swipen",
-    "manual": "Handmatig"
+    "manual": "Handmatig",
+    "label": "Afspelen",
+    "options": "Afspeelopties"
   },
   "subtitles": {
     "off": "Uit"
@@ -83,7 +90,7 @@
     "noUrl": "Video-URL voor de remix kon niet worden gevonden",
     "loadFailed": "Video laden voor remix mislukt",
     "chainFull": "Deze video bouwt al voort op {{max}} eerdere video's en kan niet meer geremixt worden.",
-    "chainNoSlots": "Deze remixketen betaalt al zoveel makers dat er op Hive geen plek meer is voor nog een remix. Met 3Speak Pro kun je hem nog wel remixen."
+    "chainNoSlots": "Deze keten betaalt al zoveel makers dat er voor een remix geen ruimte meer is op Hive. Met 3Speak Pro kun je hem toch remixen."
   },
   "watchLater": {
     "loginRequired": "Log in om Shorts op te slaan",
@@ -100,7 +107,7 @@
     "postRemoved": "De Hive-post achter deze short is verwijderd, dus er kunnen geen reacties of votes meer bij.",
     "beFirst": "Reageer als eerste!",
     "unavailable": "Reacties zijn niet beschikbaar voor deze post",
-    "addPlaceholder": "Voeg een reactie toe...",
+    "addPlaceholder": "Doe mee aan de discussie…",
     "addPlaceholderBar": "Voeg een reactie toe…",
     "loginPlaceholder": "Log in om te reageren",
     "send": "Reactie versturen",
@@ -130,7 +137,7 @@
     "seenNote": "Ingelogde kijkers die hun kijkgeschiedenis aan hebben staan.",
     "seenEmpty": "Nog niemand heeft hem gezien.",
     "keep": "Bewaren als Short",
-    "keepHint": "Blijft na de 24 uur op je kanaal",
+    "keepHint": "Hij blijft na de 24 uur op je kanaal.",
     "keepConfirm": "Voorgoed bewaren?",
     "keepYes": "Bewaren",
     "keeping": "Bewaren…",
@@ -141,5 +148,9 @@
   "audiogram": {
     "fullEpisode": "Hele aflevering",
     "listen": "Luister naar de hele aflevering: {{title}}"
+  },
+  "panel": {
+    "discussion": "Discussie",
+    "upNext": "Hierna"
   }
 }

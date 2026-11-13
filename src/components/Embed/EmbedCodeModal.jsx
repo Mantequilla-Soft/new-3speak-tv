@@ -1,14 +1,14 @@
 import { useRef, useState, useSyncExternalStore } from 'react'
-import { createPortal } from 'react-dom'
-import { Copy } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import ModalHeader from '../ModalHeader/ModalHeader'
-import useDialog from '../../hooks/useDialog'
+import DialogShell from '../modal/DialogShell'
+import { Button } from '../v2/ui'
+import { Icon } from '../v2/Icon'
+import { cx } from '../v2/helpers'
 import { toastIn } from '../../utils/toast'
 import {
   AUDIO_EMBED_SIZES, PLAYLIST_EMBED_SIZES, buildAudioEmbedHtml, buildPlaylistEmbedHtml, buildPodcastEmbedHtml,
 } from '../../utils/embedCode'
-import '../Chat/shareChooser.scss'
+import './EmbedCodeModal.scss'
 
 const toast = toastIn('Audio')
 
@@ -51,7 +51,6 @@ function EmbedCodeModal({ target, onClose }) {
   const sizes = isList ? PLAYLIST_EMBED_SIZES : AUDIO_EMBED_SIZES
   const [size, setSize] = useState(sizes[0].id)
   const codeRef = useRef(null)
-  const dialog = useDialog(onClose)
   const spec = sizes.find((s) => s.id === size) || sizes[0]
   const build = { playlist: buildPlaylistEmbedHtml, podcast: buildPodcastEmbedHtml }[target.kind] || buildAudioEmbedHtml
   const code = build(target.id, { size, title: target.title })
@@ -70,54 +69,55 @@ function EmbedCodeModal({ target, onClose }) {
     }
   }
 
-  return createPortal(
-    <div className="share-chooser-overlay" onClick={onClose}>
-      <div
-        className="share-chooser"
-        {...dialog.props}
-        onClick={(e) => e.stopPropagation()}
-      >
-        <ModalHeader
-          className="share-chooser-header"
-          title={t(heading)}
-          titleId={dialog.titleId}
-          onClose={onClose}
-        />
-        <p className="share-embed-hint">
-          {t(hint)}
-        </p>
-        <div className="share-embed-sizes" role="group" aria-label={t('chat.share.embedSize')}>
-          {sizes.map((s) => (
-            <button
-              key={s.id}
-              type="button"
-              className={`share-embed-size${size === s.id ? ' active' : ''}`}
-              aria-pressed={size === s.id}
-              onClick={() => setSize(s.id)}
-            >
-              {s.labelKey ? t(s.labelKey) : s.label}
-            </button>
-          ))}
-        </div>
-        <textarea
-          ref={codeRef}
-          className="share-embed-code"
-          readOnly
-          rows={5}
-          spellCheck={false}
-          value={code}
-          onFocus={(e) => e.target.select()}
-          aria-label={t('chat.share.embedCode')}
-        />
-        <button type="button" className="share-chooser-opt share-embed-copy" onClick={copy}>
-          <Copy size={20} />
-          <span>
-            <span className="share-chooser-opt-title">{t('chat.share.copyEmbed')}</span>
-            <span className="share-chooser-opt-sub">{t('misc.embed.heightSub', { height: spec.height })}</span>
-          </span>
-        </button>
+  // Design 44c: hint, the sizes on a 28px segmented track, a strip that sketches
+  // the player at that size, its size line, the snippet in a mono well, and one
+  // primary Copy button.
+  return (
+    <DialogShell
+      onClose={onClose}
+      title={t(heading)}
+      width={480}
+      zIndex={1300}
+      className="embed-code-dialog"
+      footer={(
+        <Button variant="primary" icon="content_copy" onClick={copy}>{t('chat.share.copyEmbed')}</Button>
+      )}
+    >
+      <p className="embed-code-hint">{t(hint)}</p>
+      <div className="v2-seg is-block embed-code-sizes" role="group" aria-label={t('chat.share.embedSize')}>
+        {sizes.map((s) => (
+          <button
+            key={s.id}
+            type="button"
+            className={cx('v2-seg__opt', 'h28', size === s.id && 'is-on')}
+            aria-pressed={size === s.id}
+            onClick={() => setSize(s.id)}
+          >
+            {s.labelKey ? t(s.labelKey) : s.label}
+          </button>
+        ))}
       </div>
-    </div>,
-    document.body
+      {/* A sketch of the embedded player (cover, play, progress), not the live
+          embed: "minimal" drops the cover, "with title" adds the title line. */}
+      <div className={cx('embed-code-strip', `is-${size}`)} aria-hidden="true">
+        {size !== 'minimal' && <span className="embed-code-strip__art" />}
+        <Icon name="play_circle" size={20} />
+        <span className="embed-code-strip__main">
+          {size === 'full' && target.title && <span className="embed-code-strip__title">{target.title}</span>}
+          <span className="embed-code-strip__bar" />
+        </span>
+      </div>
+      <p className="embed-code-size">{t('misc.embed.heightSub', { height: spec.height })}</p>
+      <textarea
+        ref={codeRef}
+        className="embed-code-text"
+        readOnly
+        rows={5}
+        spellCheck={false}
+        value={code}
+        onFocus={(e) => e.target.select()}
+        aria-label={t('chat.share.embedCode')}
+      />
+    </DialogShell>
   )
 }

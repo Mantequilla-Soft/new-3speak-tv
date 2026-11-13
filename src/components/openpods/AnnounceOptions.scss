@@ -1,128 +1,124 @@
+@use "../../styles/v2" as v2;
+
+/* The Hive announcement controls (community, payout, beneficiaries), shown in
+   the Stream Studio create form, the studio's post tab and the template editor.
+   v2 fields; the locked 10% split reads as a well with a lock (39a). */
 .hh-announce-opts {
   display: flex;
   flex-direction: column;
-  gap: 0.6rem;
+  gap: 10px;
+  color: var(--text);
 
+  // "Share this stream on Hive…" (studio only): a setting row with a toggle.
   &__toggle {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    cursor: pointer;
-    font-size: 0.82rem;
-    font-weight: 600;
-    color: var(--hh-text, #1a1a1a);
+    gap: 10px;
+    font-size: 14px;
+    font-weight: 700;
 
-    input {
-      width: 16px;
-      height: 16px;
-      accent-color: var(--hh-primary, #e31337);
-      flex-shrink: 0;
-    }
+    > span { flex: 1; min-width: 0; text-align: start; }
   }
+  &__toggle-icon { color: var(--muted); }
 
   &__row {
     display: flex;
-    gap: 0.6rem;
+    gap: 10px;
 
-    @media (max-width: 560px) {
-      flex-direction: column;
-    }
+    @include v2.mobile { flex-direction: column; }
   }
 
   &__field {
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 0.28rem;
+    gap: 4px;
     min-width: 0;
-
-    label {
-      font-size: 0.72rem;
-      font-weight: 600;
-      color: var(--hh-text-secondary, #666);
-    }
   }
 
+  // Community picker: looks like a select field and opens the community sheet.
   &__selector {
     display: flex;
     align-items: center;
-    gap: 0.4rem;
-    padding: 0.5rem 0.6rem;
-    border: 1px solid var(--hh-border, #e0e0e0);
-    border-radius: 8px;
-    background: var(--hh-bg, #fff);
-    color: var(--hh-text, #1a1a1a);
-    font-size: 0.82rem;
+    gap: 8px;
+    height: 40px;
+    padding: 0 10px 0 12px;
+    box-sizing: border-box;
+    border: 2px solid transparent;
+    border-radius: var(--r-md);
+    background: var(--bg);
+    color: var(--text);
+    font: inherit;
+    font-size: 14px;
     cursor: pointer;
     text-align: left;
 
-    span { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    > span:not(.material-symbols-rounded) { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    &:hover { background: color-mix(in srgb, var(--text) 4%, var(--bg)); }
+    &:focus-visible { outline: none; border-color: var(--accent); }
   }
 
-  &__avatar { width: 20px; height: 20px; border-radius: 50%; }
-  &__chevron { flex-shrink: 0; opacity: 0.6; }
+  &__avatar { width: 20px; height: 20px; border-radius: 50%; object-fit: cover; }
+  &__chevron { color: var(--muted); }
 
-  &__select {
-    padding: 0.5rem 0.6rem;
-    border: 1px solid var(--hh-border, #e0e0e0);
-    border-radius: 8px;
-    background: var(--hh-bg, #fff);
-    color: var(--hh-text, #1a1a1a);
-    font-size: 0.82rem;
-    cursor: pointer;
-  }
+  &__select.v2-input { height: 40px; }
 
-  // "Add to my blog": the toggle row with its hint underneath.
+  // "Add to my blog" with its hint underneath.
   &__blog {
     align-items: flex-start;
 
-    span { display: flex; flex-direction: column; gap: 0.1rem; }
-    small { font-size: 0.68rem; font-weight: 400; color: var(--hh-text-muted, #999); }
+    > span { display: flex; flex-direction: column; gap: 2px; font-weight: 700; }
+    small { @include v2.text(meta-sm); color: var(--muted); }
   }
 
+  // Beneficiaries: a well with the lock (or the Pro note) and the edit button.
   &__bene {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 0.6rem;
-    padding: 0.55rem 0.65rem;
-    border: 1px solid var(--hh-border, #e0e0e0);
-    border-radius: 8px;
-    background: var(--hh-bg, #fff);
+    gap: 10px;
+    padding: 10px 10px 10px 12px;
+    border-radius: var(--r-md);
+    background: var(--bg);
   }
 
-  &__bene-info { display: flex; flex-direction: column; gap: 0.15rem; min-width: 0; }
-  &__bene-title { font-size: 0.8rem; font-weight: 600; color: var(--hh-text, #1a1a1a); }
-  &__bene-sub { font-size: 0.68rem; color: var(--hh-text-muted, #999); }
+  &__bene-icon { color: var(--muted); }
+  &__bene-info { flex: 1; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+  &__bene-title { font-size: 13px; font-weight: 700; }
+  &__bene-sub { @include v2.text(meta-sm); color: var(--muted); }
 
   &__bene-btn {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
+    @include v2.btn(secondary, 36);
     flex-shrink: 0;
-    padding: 0.45rem 0.7rem;
-    border: 1px solid var(--hh-border, #e0e0e0);
-    border-radius: 8px;
-    background: var(--hh-bg-secondary, #f5f5f5);
-    color: var(--hh-text, #1a1a1a);
-    font-size: 0.78rem;
-    font-weight: 600;
-    cursor: pointer;
   }
 
   &__bene-count {
-    position: absolute;
-    top: -7px;
-    right: -7px;
-    min-width: 17px;
-    height: 17px;
-    padding: 0 4px;
-    border-radius: 9px;
-    background: var(--hh-primary, #e31337);
-    color: #fff;
-    font-size: 0.62rem;
-    line-height: 17px;
-    text-align: center;
+    display: inline-grid;
+    place-items: center;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    box-sizing: border-box;
+    border-radius: 7px;
+    background: var(--accent-tint-strong);
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 900;
   }
+}
+
+// Inside a surface (dialog, card) the fields are bg fills; inside a bg well
+// (the SDK's announce box) they step up to the surface.
+.hh-cd__announce .hh-announce-opts {
+  .hh-announce-opts__selector,
+  .hh-announce-opts__select.v2-input,
+  .hh-announce-opts__bene { background-color: var(--surface); }
+}
+
+// The shared `.v2-dialog__panel .v2-input { background }` shorthand drops the
+// select chevron inside dialogs; keep it.
+.hh-announce-opts .hh-announce-opts__select.v2-input {
+  background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%), linear-gradient(135deg, var(--muted) 50%, transparent 50%);
+  background-position: calc(100% - 18px) 50%, calc(100% - 13px) 50%;
+  background-size: 5px 5px;
+  background-repeat: no-repeat;
 }

@@ -7,6 +7,9 @@ import { formatNumber, formatTimeAgo } from '../../i18n';
 import { profilePath } from '../../utils/urls';
 import { usePortalDoc } from '../../utils/portalDocument';
 import { hiveProfileQuery, profileCountsQuery, audioCountQuery, newestShortQuery } from '../../lib/creatorCard';
+import { STREAK_MIN } from '../../lib/stories';
+import HiveAvatar from '../HiveAvatar/HiveAvatar';
+import { Icon } from '../v2/Icon';
 import './StoryCreatorCard.scss';
 
 const CARD_WIDTH = 280;
@@ -67,28 +70,36 @@ export default function StoryCreatorCard({ username, story, anchor, now, leaving
       onPointerEnter={onPointerEnter}
       onPointerLeave={onPointerLeave}
     >
-      {lastAt && (
-        <div className={`story-creator-card__when${story ? ' story-creator-card__when--story' : ''}`}>
-          <span>{t(story ? 'shorts.stories.card.storyPosted' : 'shorts.stories.card.lastShort', { time: formatTimeAgo(lastAt) })}</span>
-          {story && hoursLeft > 0 && (
-            <span className="story-creator-card__left">{t('nav.notifications.stories.hoursLeft', { count: hoursLeft })}</span>
-          )}
-        </div>
-      )}
-
+      {/* 45b: the ringed avatar, "<name>'s story" and the streak, then one line
+          of when and reputation. */}
       <div className="story-creator-card__head">
+        <span className={`story-creator-card__ring${story ? ' is-story' : ''}`}>
+          <HiveAvatar username={username} size={null} alt="" imgClassName="story-creator-card__avatar" />
+        </span>
         <div className="story-creator-card__names">
-          {profile?.name && profile.name !== username && (
-            <span className="story-creator-card__name">{profile.name}</span>
-          )}
-          <span className="story-creator-card__handle">@{username}</span>
-        </div>
-        {profile?.reputation != null && (
-          <span className="story-creator-card__rep" title={t('shorts.stories.card.repTitle')}>
-            {t('shorts.stories.card.rep', { rep: profile.reputation })}
+          <span className="story-creator-card__name">
+            {story ? t('shorts.stories.storyTitle', { user: username }) : (profile?.name && profile.name !== username ? profile.name : `@${username}`)}
           </span>
-        )}
+          {story && story.streak >= STREAK_MIN ? (
+            <span className="story-creator-card__streak">
+              <Icon name="local_fire_department" size={12} fill />
+              {t('shorts.stories.streakTitle', { count: story.streak })}
+            </span>
+          ) : (!story && profile?.name && profile.name !== username && (
+            <span className="story-creator-card__handle">@{username}</span>
+          ))}
+        </div>
       </div>
+
+      {(lastAt || profile?.reputation != null) && (
+        <p className="story-creator-card__when">
+          {[
+            lastAt && t(story ? 'shorts.stories.card.storyPosted' : 'shorts.stories.card.lastShort', { time: formatTimeAgo(lastAt) }),
+            story && hoursLeft > 0 && t('nav.notifications.stories.hoursLeft', { count: hoursLeft }),
+            profile?.reputation != null && t('shorts.stories.card.rep', { rep: profile.reputation }),
+          ].filter(Boolean).join(' · ')}
+        </p>
+      )}
 
       {profile?.about && <p className="story-creator-card__bio">{profile.about}</p>}
 

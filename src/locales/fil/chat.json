@@ -4,6 +4,7 @@
   },
   "tools": {
     "emoji": "Emoji",
+    "image": "Magdagdag ng larawan",
     "searchEmoji": "Maghanap ng emoji",
     "searchGifs": "Maghanap ng GIF…",
     "noGifs": "Walang nahanap na GIF.",
@@ -18,6 +19,7 @@
     "communityWithSubscribers_one": "Komunidad · {{formatted}} subscriber",
     "communityWithSubscribers_other": "Komunidad · {{formatted}} subscribers",
     "commentFallback": "(comment)",
+    "videoKind": "3Speak · Video",
     "play": "I-play ang {{title}}"
   },
   "share": {
@@ -31,22 +33,29 @@
     "responsiveSub": "Umaangkop sa laki ng page na kinalalagyan nito",
     "fixedSub": "Iframe na fixed ang laki",
     "sendInChat": "Ipadala sa 3Speak Chat",
-    "sendInChatSub": "I-message ito sa isang tao sa 3Speak",
+    "sendInChatSub": "I-message ito sa isang tao",
     "embedOnWebsite": "I-embed sa website",
-    "embedOnWebsiteSub": "Kopyahin ang HTML para sa sarili mong site o blog",
+    "embedOnWebsiteSub": "Responsive o fixed na laki",
     "forHivePost": "Para sa Hive post",
+    "forHivePostSub": "Kopyahin ang link para i-paste",
     "hivePostCopied": "Nakopya ang link. I-paste ito sa iyong Hive post.",
-    "generalShare": "I-share / kopyahin ang link",
-    "generalShareSub": "Ibang app, o kopyahin ang link"
+    "generalShare": "I-share o kopyahin ang link",
+    "generalShareSub": "Ibang app",
+    "embed": "I-embed",
+    "chat": "Chat",
+    "more": "Iba pa",
+    "startAt": "Simula sa",
+    "toFollowers_one": "Sa {{n}} follower mo",
+    "toFollowers_other": "Sa {{n}} follower mo"
   },
   "gate": {
     "connectTitle": "Kumonekta sa 3Speak Chat",
-    "connectBody": "Pinapagana ng Snapie ang chat. Sa pagkonekta, magsa-sign ka ng isang beses na login challenge gamit ang Hive posting key mo — walang transaksyon, walang bayad.",
+    "connectBody": "Pinapagana ng Snapie ang chat. Sa pagkonekta, magsa-sign ka ng isang beses na login challenge gamit ang posting key mo. Walang transaksyon, walang bayad.",
     "connecting": "Kumokonekta…",
     "connectButton": "Ikonekta ang chat",
     "cannotSign": "Hindi kayang i-sign ng kasalukuyang login mo ang chat challenge. Gamitin ang Keychain, HiveAuth, PeakVault o Ledger.",
-    "needsAccountTitle": "Kailangan ng Hive account para sa chat",
-    "needsAccountBody": "Sina-sign ang mga mensahe gamit ang sarili mong account keys, kaya mabubuksan ang chat kasabay ng lahat ng iba pa kapag handa na ang account mo. Tapusin ang mga goal sa profile mo at tutulungan ka ng team na makarating doon.",
+    "needsAccountTitle": "Kailangan ng Hive account para sa chat.",
+    "needsAccountBody": "Mabubuksan ito kasabay ng lahat ng iba pa kapag naka-graduate ka na.",
     "loginTitle": "Mag-log in para gamitin ang chat",
     "loginBody": "Mag-sign in gamit ang Hive account mo para magpadala at tumanggap ng mensahe.",
     "connectingToChat": "Kumokonekta sa chat…"
@@ -94,8 +103,8 @@
     "serverRejectedServerMap_other": "Tinanggihan ng server lahat ng {{count}} request (mga id mula sa sariling unread map ng server)",
     "failed": "Hindi mamarkahan lahat bilang nabasa",
     "marking": "Minamarkahan bilang nabasa…",
-    "button": "Markahan lahat bilang nabasa",
-    "buttonCount": "Markahan lahat bilang nabasa ({{count}})"
+    "button": "Markahan lahat na nabasa",
+    "buttonCount": "Markahan lahat na nabasa ({{count}})"
   },
   "list": {
     "chooseTarget": "Pumili ng chat na padadalhan",
@@ -117,7 +126,7 @@
     "deleteError": "Hindi mabura ang mensahe.",
     "back": "Bumalik sa mga conversation",
     "loading": "Naglo-load ng mga mensahe…",
-    "empty": "Wala pang mensahe — mag-hi ka 👋",
+    "empty": "Wala pang mensahe. Mag-hi ka 👋",
     "editedSuffix": " · na-edit",
     "messageActions": "Mga aksyon sa mensahe",
     "quote": "I-quote",
@@ -129,7 +138,8 @@
     "quoting": "Kino-quote si @{{user}}",
     "cancelQuote": "Kanselahin ang quote",
     "removeImage": "Alisin ang larawan",
-    "placeholder": "Mag-type ng mensahe…"
+    "placeholder": "Mag-type ng mensahe…",
+    "placeholderTo": "Mag-message sa {{name}}"
   },
   "page": {
     "chooseTarget": "Pumili ng chat na padadalhan.",

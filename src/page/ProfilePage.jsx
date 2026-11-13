@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, useCallback, useMemo } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { toastIn } from '../utils/toast';
@@ -19,16 +19,10 @@ import { useWatchHistory } from "../hooks/useWatchHistory";
 import useViewCounts from "../hooks/useViewCounts";
 import { fetchUserShortsWithDetails } from "../hive-api/hiveApi";
 
-import { FaVideo, FaPlus } from "react-icons/fa";
-import { IoMdShare, IoMdAdd } from "react-icons/io";
-import { IoPlanetOutline } from "react-icons/io5";
 import useGalaxyFits from "../hooks/useGalaxyFits";
-import { MdLock, MdPublic, MdClose, MdRssFeed } from "react-icons/md";
 import SocialLinks from "../components/Userprofilepage/SocialLinks";
 import LeaderboardBadges from "../components/LeaderboardBadges/LeaderboardBadges";
-import SupportersBadges from "../components/Supporters/SupportersBadges";
 import SupportersList from "../components/Supporters/SupportersList";
-import { useSupporters } from "../lib/supports";
 import HiveBadges from "../components/HiveBadges/HiveBadges";
 import ProfileStreams, { ProfileLiveNow } from "../components/Userprofilepage/ProfileStreams";
 import AddSocialLink_modal, { SOCIAL_LINKS_CHANGED } from "../components/modal/AddSocialLink_modal";
@@ -40,7 +34,6 @@ import "ldrs/react/Quantum.css";
 
 import { UPLOAD_TOKEN, UPLOAD_URL } from "../utils/config";
 import "./ProfilePage.scss";
-import checker from "../../public/images/checker.png";
 import { useMyPlaylists } from "../hooks/useMyPlaylists";
 import { useWatchedVideosCount } from "../hooks/useWatchedVideos";
 import PlaylistCard from "../components/Cards/PlaylistCard";
@@ -54,9 +47,10 @@ import ProfileHeader from "../components/ProfileHeader/ProfileHeader";
 import ProfileStats from "../components/ProfileHeader/ProfileStats";
 import ProfileOverview from "../components/Userprofilepage/ProfileOverview";
 import ProfileEmptyState from "../components/Userprofilepage/ProfileEmptyState";
-import ModalHeader from "../components/ModalHeader/ModalHeader";
 import ProfileEditModal from "../components/WelcomePrompt/ProfileEditModal";
-import { FiEdit2, FiLayout } from "react-icons/fi";
+import { Button, Dialog, Field, Segmented, Progress } from "../components/v2/ui";
+import { Icon } from "../components/v2/Icon";
+import { ProfileTile, ProfileMoreMenu, ProfileTabs, ProfileSearch, ProfileSearchResults } from "../components/Userprofilepage/ProfileActions";
 import { requestLayoutEdit } from "../lib/profileLayout";
 import { useTranslation } from "react-i18next";
 
@@ -71,12 +65,14 @@ function ProfilePage() {
   const { t } = useTranslation();
   const galaxyFits = useGalaxyFits(); // the galaxy is desktop only
 
-  const { user, authenticated } = useAppStore();
+  const { user } = useAppStore();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [searchParams] = useSearchParams();
 
   const [follower, setFollower] = useState(null);
+  // "Search this channel" (20b): filters the uploads this page has loaded.
+  const [channelQuery, setChannelQuery] = useState('');
   const [show, setShow] = useState(() => {
     // Initialize show based on URL tab parameter
     const tab = searchParams.get('tab');
@@ -87,6 +83,7 @@ function ProfilePage() {
     if (tab === 'supports' || tab === 'supporters') return 'supports';
     if (tab === 'audio') return 'audio';
     if (tab === 'community') return 'community';
+    if (tab === 'streams') return 'streams';
     if (tab === 'links') return 'links';
     if (tab === 'stats') return 'stats';
     if (tab === 'video') return 'video';
@@ -102,6 +99,7 @@ function ProfilePage() {
     else if (tab === 'supports' || tab === 'supporters') setShow('supports');
     else if (tab === 'audio') setShow('audio');
     else if (tab === 'community') setShow('community');
+    else if (tab === 'streams') setShow('streams');
     else if (tab === 'links') setShow('links');
     else if (tab === 'stats') setShow('stats');
     else if (tab === 'video') setShow('video');
@@ -115,6 +113,7 @@ function ProfilePage() {
   // — see ProfileOverview's openCommunityTab and SnapCard's onOpenTab.
   const selectTab = useCallback((tab, permlink, opts) => {
     setShow(tab);
+    setChannelQuery((q) => (q ? '' : q));
     const params = new URLSearchParams();
     if (tab && tab !== 'overview') params.set('tab', tab);
     if (permlink) params.set('snap', permlink);
@@ -379,16 +378,6 @@ function ProfilePage() {
   });
   const snapCount = snapCountData?.total || 0;
 
-  // Video/shorts counts for their tab headers — SAME query key ProfileStats
-  // uses for the "50 videos / 14 shorts" stat line, so this is a cache hit,
-  // not a second request.
-  const { data: profileCounts } = useQuery({
-    queryKey: ["profile-counts", user],
-    queryFn: async () => (await axios.get(`${CHECKER_URL}/user/${encodeURIComponent(user)}/counts`)).data,
-    enabled: !!user,
-    staleTime: 5 * 60 * 1000,
-    retry: 1,
-  });
   // 🔐 Members-only shelf. Public and unfiltered by entitlement on purpose:
   // it exists to show non-subscribers what they are missing. The tab is hidden
   // entirely when the creator has none, so nobody sees an empty paywall pitch.
@@ -403,24 +392,10 @@ function ProfilePage() {
   const gatedVideos = gatedData?.videos || [];
   const hasGated = gatedVideos.length > 0;
 
-  // Tips on your videos. Always a tab here: this page is
-  // only ever your own profile, so it's where you find out the feature exists.
-  const { data: supportersData } = useSupporters(user);
-  const supporterCount = supportersData?.total || 0;
+  // Tips on your videos: always a tab here (this page is only ever your own
+  // profile, so it's where you find out the feature exists).
 
-  const videoCount = profileCounts?.videos || 0;
-  const shortsCount = profileCounts?.shorts || 0;
 
-  // Audio count for its tab header — the /audio endpoint already returns a
-  // `total` alongside the page of items; limit=1 keeps this a count-only call.
-  const { data: audioCountData } = useQuery({
-    queryKey: ["audio-count", user],
-    queryFn: async () => (await axios.get(`${CHECKER_URL}/audio?owner=${encodeURIComponent(user)}&limit=1`)).data,
-    enabled: !!user,
-    staleTime: 5 * 60 * 1000,
-    retry: 1,
-  });
-  const audioCount = audioCountData?.total || 0;
 
   // Streams tab only exists when there's something to show — a running
   // OpenPods session, or the VOD of a finished one. Counts both.
@@ -498,7 +473,7 @@ function ProfilePage() {
     // The Overview's Shorts section reads this same list. Gated on the Shorts
     // tab alone, the Overview only showed shorts after that tab had been
     // opened in the same visit, and the section vanished again on reload.
-    enabled: !!user && (show === 'shorts' || show === 'overview'),
+    enabled: !!user && (show === 'shorts' || show === 'overview' || !!channelQuery.trim()),
   });
 
   const shortsVideos = useMemo(() => (
@@ -540,19 +515,63 @@ function ProfilePage() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [show, isFetchingNextPage, hasNextPage, fetchNextPage, isFetchingNextShortsPage, hasNextShortsPage, fetchNextShortsPage]);
 
-  /* ===============================
-     NAVIGATION
-  =============================== */
-  const handleUploadNavigate = () => {
-    if (!authenticated) {
-      toast.error(t('profile.page.loginToUpload'));
-    } else {
-      navigate("/embed-studio");
+  const profileUrl = `${window.location.origin}/@${user}`;
+  const shareProfile = async () => {
+    const shareData = { title: t('profile.page.onThreeSpeak', { user }), url: profileUrl };
+    try {
+      if (navigator.share && navigator.canShare?.(shareData)) {
+        await navigator.share(shareData);
+      } else {
+        await navigator.clipboard.writeText(profileUrl);
+        toast.success(t('profile.page.linkCopied'));
+      }
+    } catch (err) {
+      if (err.name !== 'AbortError') {
+        await navigator.clipboard.writeText(profileUrl);
+        toast.success(t('profile.page.linkCopied'));
+      }
     }
   };
+  const copyProfileLink = async () => {
+    try {
+      await navigator.clipboard.writeText(profileUrl);
+      toast.success(t('profile.page.linkCopied'));
+    } catch { /* clipboard blocked: nothing to do */ }
+  };
+
+  // The order of the boards (37a), no counts on the tabs (20b).
+  const tabs = [
+    { value: 'overview', label: t('profile.tabs.overview') },
+    { value: 'video', label: t('profile.tabs.videos') },
+    { value: 'shorts', label: t('profile.tabs.shorts') },
+    { value: 'audio', label: t('profile.tabs.audio') },
+    { value: 'playlists', label: t('profile.tabs.playlists') },
+    { value: 'community', label: t('profile.tabs.community') },
+    streamCount > 0 && { value: 'streams', label: t('profile.tabs.streams') },
+    { value: 'supports', label: t('profile.tabs.supporters') },
+    hasGated && { value: 'members', label: t('profile.tabs.members') },
+    { value: 'links', label: t('profile.tabs.links') },
+    { value: 'stats', label: t('profile.tabs.analytics') },
+  ].filter(Boolean);
+
+  const uploads = inProgress?.count > 0 ? inProgress.videos : [];
+  const newestUploadMin = uploads.length
+    ? Math.min(...uploads.map((v) => Number(v.elapsed_minutes) || 0))
+    : 0;
 
   return (
     <div className="profile-page-container">
+      {/* Podcast / RSS feed for the channel, the same feed public profiles
+          (UserProfilePage) advertise. Hive accounts only: an off-chain account
+          has no feed. */}
+      {user && (
+        <link
+          rel="alternate"
+          type="application/rss+xml"
+          title={t('profile.page.onThreeSpeak', { user })}
+          href={`${window.location.origin}/rss/${user}.xml`}
+        />
+      )}
       {/* ================= PROFILE HEADER ================= */}
       <ProfileHeader
         username={user}
@@ -571,11 +590,10 @@ function ProfilePage() {
             <div className="own-badges">
               <LeaderboardBadges username={user} />
             </div>
-            <SupportersBadges username={user} onOpen={() => selectTab('supports')} />
           </>
         }
         aside={
-          // Linked channels, with "link a profile" as a round + at the end.
+          // Linked channels, with "link a profile" as a + tile at the end.
           <div className="social-links-aside">
             <SocialLinks
               hiveUsername={user}
@@ -591,171 +609,105 @@ function ProfilePage() {
               title={`${t('profile.page.addProfile')}: ${t('profile.page.linkExternalTitle')}`}
               aria-label={t('profile.page.addProfile')}
             >
-              <FaPlus />
+              <Icon name="add_link" size={18} />
             </button>
           </div>
         }
-        actions={
+        nameActions={
           <>
-            <button
-              className="btn btn-secondary"
-              onClick={() => setEditProfileOpen(true)}
-              title={t('profile.page.editTitle')}
-            >
-              <FiEdit2 className="icon" /> {t('common.actions.edit')}
-            </button>
-            {/* Edit mode for the Overview's layout (ProfileOverview). */}
-            <button
-              className="btn btn-secondary"
+            {/* Edit mode for the Overview's layout (ProfileOverview): the big
+                button on your own channel. Secondary, so the red stays free for
+                the empty tabs' upload buttons on the same screen. */}
+            <Button
+              variant="secondary"
+              size={64}
+              className="ph-follow"
               onClick={() => { selectTab('overview'); requestLayoutEdit(); }}
               title={t('profile.layout.customize')}
+              trailing={<Icon name="dashboard_customize" size={24} />}
             >
-              <FiLayout className="icon" /> {t('profile.layout.customize')}
-            </button>
-
-            {/* Follower pill removed — the count in the stat line under the bio
-                opens this list instead. */}
-            {/* Podcast / RSS feed for the channel, the same button public profiles
-                (UserProfilePage) have. Hive accounts only: an off-chain account
-                has no feed. */}
-            {user && (
-              <>
-                {/* Your Hive galaxy, same button as on public profiles (UserProfilePage). */}
-                {galaxyFits && (
-                  <Link
-                    className="btn btn-secondary"
-                    to={`/galaxy/${user}`}
-                    title={t('galaxy.profileButton', { user })}
-                    aria-label={t('galaxy.profileButton', { user })}
-                  >
-                    <IoPlanetOutline />
-                  </Link>
-                )}
-                <link
-                  rel="alternate"
-                  type="application/rss+xml"
-                  title={t('profile.page.onThreeSpeak', { user })}
-                  href={`${window.location.origin}/rss/${user}.xml`}
-                />
-                <a
-                  className="btn btn-secondary"
-                  href={`/rss/${user}.xml`}
-                  target="_blank"
-                  rel="noreferrer"
-                  title={t('profile.page.podcastFeedTitle', { user })}
-                >
-                  <MdRssFeed />
-                </a>
-              </>
-            )}
-            <button
-              className="btn btn-secondary"
-              onClick={async () => {
-                const profileUrl = `${window.location.origin}/@${user}`;
-                const shareData = { title: t('profile.page.onThreeSpeak', { user }), url: profileUrl };
-                try {
-                  if (navigator.share && navigator.canShare?.(shareData)) {
-                    await navigator.share(shareData);
-                  } else {
-                    await navigator.clipboard.writeText(profileUrl);
-                    toast.success(t('profile.page.linkCopied'));
-                  }
-                } catch (err) {
-                  if (err.name !== 'AbortError') {
-                    await navigator.clipboard.writeText(profileUrl);
-                    toast.success(t('profile.page.linkCopied'));
-                  }
-                }
-              }}
-            >
-              <IoMdShare />
-            </button>
+              {t('profile.layout.customize')}
+            </Button>
+            <ProfileTile
+              icon="edit"
+              label={t('common.actions.edit')}
+              title={t('profile.page.editTitle')}
+              onClick={() => setEditProfileOpen(true)}
+            />
+            <ProfileTile icon="ios_share" label={t('common.actions.share')} onClick={shareProfile} />
+            <ProfileMoreMenu
+              title={t('profile.page.more')}
+              items={[
+                { icon: 'link', label: t('profile.page.copyProfileLink'), onClick: copyProfileLink },
+                // Wallet left the tab row for "Search this channel" (20b).
+                { icon: 'account_balance_wallet', label: t('common.nav.wallet'), onClick: () => navigate(`/wallet/${user}`) },
+                { icon: 'rss_feed', label: t('profile.page.podcastFeed'), href: `/rss/${user}.xml`, external: true, title: t('profile.page.podcastFeedTitle', { user }), hidden: !user },
+                { icon: 'add_link', label: t('profile.page.linkExternalTitle'), onClick: () => setShowSocialLinkModal(true) },
+                // Your Hive galaxy, same entry as on public profiles (UserProfilePage).
+                { icon: 'hub', label: t('galaxy.profileButton', { user }), href: `/galaxy/${user}`, hidden: !galaxyFits || !user },
+              ]}
+            />
           </>
         }
       />
 
-      {/* ================= TOGGLE ================= */}
-      <div className="toggle-wrap">
-        <div className="wrap">
-          <span className={show === "overview" ? "active" : ""} onClick={() => selectTab("overview")}>{t('profile.tabs.overview')}</span>
-          <span className={show === "video" ? "active" : ""} onClick={() => selectTab("video")}>
-            {t('profile.tabs.videos')} {videoCount > 0 && `(${videoCount})`}
-          </span>
-          <span className={show === "shorts" ? "active" : ""} onClick={() => selectTab("shorts")}>
-            {t('profile.tabs.shorts')} {shortsCount > 0 && `(${shortsCount})`}
-          </span>
-          <span className={show === "audio" ? "active" : ""} onClick={() => selectTab("audio")}>
-            {t('profile.tabs.audio')} {audioCount > 0 && `(${audioCount})`}
-          </span>
-          {hasGated && (
-            <span className={show === "members" ? "active" : ""} onClick={() => selectTab("members")}>
-              🔒 {t('profile.tabs.members')} ({gatedVideos.length})
-            </span>
-          )}
-          <span className={show === "supports" ? "active" : ""} onClick={() => selectTab("supports")}>
-            {t('profile.tabs.supporters')} {supporterCount > 0 && `(${supporterCount})`}
-          </span>
-          {streamCount > 0 && (
-            <span className={show === "streams" ? "active" : ""} onClick={() => selectTab("streams")}>
-              {t('profile.tabs.streams')} ({streamCount})
-            </span>
-          )}
-          <span className={show === "community" ? "active" : ""} onClick={() => selectTab("community")}>
-            {t('profile.tabs.community')} {snapCount > 0 && `(${snapCount})`}
-          </span>
-          <span className={show === "playlists" ? "active" : ""} onClick={() => selectTab("playlists")}>
-            {t('profile.tabs.playlists')}
-          </span>
-          <span className={show === "links" ? "active" : ""} onClick={() => selectTab("links")}>{t('profile.tabs.links')}</span>
-          <span className={show === "stats" ? "active" : ""} onClick={() => selectTab("stats")}>{t('profile.tabs.analytics')}</span>
-        </div>
+      {/* ================= TABS ================= */}
+      <ProfileTabs
+        tabs={tabs}
+        value={show}
+        onChange={(v) => selectTab(v)}
+        label={t('profile.layout.title')}
+        search={<ProfileSearch value={channelQuery} onChange={setChannelQuery} />}
+      />
 
-        <div className="wrap-in">
-          <span onClick={() => navigate(`/wallet/${user}`)}>{t('common.nav.wallet')}</span>
-        </div>
-      </div>
-
-    {inProgress?.count > 0 && (
-      <div className="active-renders">
-        {inProgress.videos.map(video => { 
-          const progress = Number(video.progress_percent).toFixed(2);
-
-          return (
-          <div key={video.video_id} className="render-card">
-          <div className="left">
-            <div className="icon">▶</div>
-            <div className="info">
-              <h3>{video.title}</h3>
-              <p className="sub">🎬 {t('profile.uploads.processing')}</p>
-              <div className="meta">
-                <span className="status">{video.status_label}</span>
-                <span className="time">{t('profile.uploads.minAgo', { count: video.elapsed_minutes })}</span>
-              </div>
+      {/* Uploads still encoding (37a): one card, a cyan spinner and a bar each. */}
+      {uploads.length > 0 && (
+        <div className="active-renders v2-card r20 is-dense" role="status">
+          <div className="active-renders__head">
+            <Icon name="progress_activity" size={24} className="v2-spin active-renders__spin" />
+            <div>
+              <b>{t('profile.uploads.processing')}</b>
+              <span>{t('profile.uploads.minAgo', { count: newestUploadMin })}</span>
             </div>
           </div>
-
-         <div className="wrap-progress">
-          <div className="right">
-            <div className="percent">{progress}%</div>
-          </div>
-          <div className="progress">
-            <div className="bar" style={{ width: `${progress}%` }}></div>
-          </div>
+          {uploads.map(video => {
+            const progress = Number(video.progress_percent).toFixed(2);
+            return (
+              <div key={video.video_id} className="render-card">
+                <div className="render-card__line">
+                  <b className="render-card__title">{video.title}</b>
+                  <span className="render-card__pct">{progress}%</span>
+                </div>
+                <Progress value={Number(progress)} tone="cyan" thin label={video.title} />
+                <div className="render-card__meta">
+                  <span className="status">{video.status_label}</span>
+                  <span>{t('profile.uploads.minAgo', { count: video.elapsed_minutes })}</span>
+                </div>
+              </div>
+            );
+          })}
         </div>
-        </div>
-      )})}
-      </div>
       )}
-
-
-      
-
-
-      
 
       {/* ================= VIDEO LIST / PLAYLISTS ================= */}
       <div className="container-video">
-        {show === "overview" ? (
+        {channelQuery.trim() ? (
+          <ProfileSearchResults
+            query={channelQuery}
+            videos={videoListItems}
+            shorts={shortsVideos}
+            hasMore={!!hasNextPage || !!hasNextShortsPage}
+            loadingMore={isFetchingNextPage || isFetchingNextShortsPage}
+            onMore={() => {
+              if (hasNextPage) fetchNextPage();
+              if (hasNextShortsPage) fetchNextShortsPage();
+            }}
+            getContentForVideo={getContentForVideo}
+            isWatched={isWatched}
+            getViewCount={getViewCount}
+            username={user}
+          />
+        ) : show === "overview" ? (
           <ProfileOverview
             username={user}
             /* /profile IS the signed-in user's own profile, and /p/<self>
@@ -782,7 +734,7 @@ function ProfilePage() {
             ) : videoListItems.length === 0 ? (
               <ProfileEmptyState kind="video" isOwnProfile username={user} />
             ) : (
-              <Card3 windowed videos={videoListItems} loading={isFetchingNextPage} getContentForVideo={getContentForVideo} isWatched={isWatched} getViewCount={getViewCount} />
+              <Card3 windowed videos={videoListItems} loading={isFetchingNextPage} getContentForVideo={getContentForVideo} isWatched={isWatched} getViewCount={getViewCount} hideAuthor />
             )}
           </>
         ) : show === "shorts" ? (
@@ -797,7 +749,7 @@ function ProfilePage() {
           isGatedLoading ? (
             <BarLoader />
           ) : (
-            <Card3 videos={gatedVideos} getViewCount={getViewCount} />
+            <Card3 videos={gatedVideos} getViewCount={getViewCount} hideAuthor />
           )
         ) : show === "audio" ? (
           <UserAudioList user={user} isOwnProfile />
@@ -813,28 +765,16 @@ function ProfilePage() {
           <CreatorStats user={user} />
         ) : show === "playlists" ? (
           <>
-            <button className="create-playlist-btn" onClick={() => setShowCreateModal(true)}>
-              <IoMdAdd /> {t('profile.playlists.create')}
-            </button>
+            <div className="profile-tab-actions">
+              <Button variant="secondary" icon="playlist_add" onClick={() => setShowCreateModal(true)}>
+                {t('profile.playlists.create')}
+              </Button>
+            </div>
             {playlistsLoading && watchedCountLoading ? (
               <BarLoader />
             ) : (
               <>
-                {/* Special playlists row: Watch Later and Watched */}
-                <div className="special-playlists-row">
-                  {/* Watch Later playlist */}
-                  {playlists.find(p => p.name === WATCH_LATER_NAME) && (
-                    <WatchLaterPlaylistCard
-                      playlist={playlists.find(p => p.name === WATCH_LATER_NAME)}
-                      username={user}
-                    />
-                  )}
-                  {/* Watched Videos pseudo-playlist */}
-                  {watchedCount > 0 && (
-                    <WatchedPlaylistCard count={watchedCount} username={user} />
-                  )}
-                </div>
-                {/* Regular playlists (excluding Watch Later) */}
+                {/* Watch Later and Watched lead the same grid as the rest (28d). */}
                 {playlists.filter(p => p.name !== WATCH_LATER_NAME).length === 0 && watchedCount === 0 && !playlists.find(p => p.name === WATCH_LATER_NAME) ? (
                   <ProfileEmptyState
                     kind="playlists"
@@ -843,7 +783,24 @@ function ProfilePage() {
                     onAction={() => setShowCreateModal(true)}
                   />
                 ) : (
-                  <PlaylistCard playlists={playlists.filter(p => p.name !== WATCH_LATER_NAME)} loading={playlistsLoading} showPrivacyBadge={true} />
+                  <PlaylistCard
+                    playlists={playlists.filter(p => p.name !== WATCH_LATER_NAME)}
+                    loading={playlistsLoading}
+                    showPrivacyBadge={true}
+                    leading={(
+                      <>
+                        {playlists.find(p => p.name === WATCH_LATER_NAME) && (
+                          <WatchLaterPlaylistCard
+                            playlist={playlists.find(p => p.name === WATCH_LATER_NAME)}
+                            username={user}
+                          />
+                        )}
+                        {watchedCount > 0 && (
+                          <WatchedPlaylistCard count={watchedCount} username={user} />
+                        )}
+                      </>
+                    )}
+                  />
                 )}
               </>
             )}
@@ -853,85 +810,82 @@ function ProfilePage() {
         )}
       </div>
 
-      {/* Create Playlist Modal */}
-      {showCreateModal && (
-        <div className="create-playlist-modal-overlay" onClick={() => setShowCreateModal(false)}>
-          <div className="create-playlist-modal" onClick={(e) => e.stopPropagation()}>
-            <ModalHeader title={t('profile.playlists.modalTitle')} onClose={isCreating ? undefined : () => setShowCreateModal(false)} />
-            <div className="form-group">
-              <label>{t('profile.playlists.nameLabel')}</label>
-              <input
-                type="text"
-                value={newPlaylistName}
-                onChange={(e) => setNewPlaylistName(e.target.value)}
-                placeholder={t('profile.playlists.namePlaceholder')}
-                autoFocus
-              />
-            </div>
-            <div className="form-group">
-              <label>{t('profile.playlists.visibility')}</label>
-              <div className="privacy-buttons">
-                <button
-                  type="button"
-                  className={`privacy-btn ${newPlaylistAccess === 'public' ? 'active' : ''}`}
-                  onClick={() => setNewPlaylistAccess('public')}
-                >
-                  <MdPublic /> {t('profile.playlists.public')}
-                </button>
-                <button
-                  type="button"
-                  className={`privacy-btn ${newPlaylistAccess === 'private' ? 'active' : ''}`}
-                  onClick={() => setNewPlaylistAccess('private')}
-                >
-                  <MdLock /> {t('profile.playlists.private')}
-                </button>
-              </div>
-            </div>
-            <PlaylistTypePicker type={newPlaylistType.type} kind={newPlaylistType.kind} onChange={setNewPlaylistType} disabled={isCreating} />
-            <div className="form-group">
-              <label>{t('profile.playlists.tags')}</label>
-              <div className="tags-input-wrap">
-                <div className="tags-list">
-                  {newPlaylistTags.map((tag) => (
-                    <span key={tag} className="tag-chip">
-                      {tag}
-                      <button type="button" onClick={() => setNewPlaylistTags(prev => prev.filter(x => x !== tag))}>
-                        <MdClose />
-                      </button>
-                    </span>
-                  ))}
-                </div>
-                <input
-                  type="text"
-                  value={tagInput}
-                  onChange={(e) => setTagInput(e.target.value)}
-                  onKeyDown={(e) => {
-                    if ((e.key === 'Enter' || e.key === ',' || e.key === ' ') && tagInput.trim()) {
-                      e.preventDefault();
-                      const tag = tagInput.trim().toLowerCase().replace(/,/g, '');
-                      if (tag && !newPlaylistTags.includes(tag)) {
-                        setNewPlaylistTags(prev => [...prev, tag]);
-                      }
-                      setTagInput('');
-                    } else if (e.key === 'Backspace' && !tagInput && newPlaylistTags.length > 0) {
-                      setNewPlaylistTags(prev => prev.slice(0, -1));
-                    }
-                  }}
-                  placeholder={newPlaylistTags.length === 0 ? t('profile.playlists.tagPlaceholder') : t('profile.playlists.tagMore')}
-                />
-              </div>
-            </div>
-            <div className="modal-actions">
-              <button className="btn-cancel" onClick={() => setShowCreateModal(false)} disabled={isCreating}>
-                {t('common.actions.cancel')}
-              </button>
-              <button className="btn-create" onClick={handleCreatePlaylist} disabled={isCreating}>
-                {isCreating ? t('profile.playlists.creating') : t('profile.playlists.create')}
-              </button>
-            </div>
-          </div>
+      {/* Create playlist: the shared v2 dialog (a bottom sheet on phones). */}
+      <Dialog
+        open={showCreateModal}
+        onClose={() => setShowCreateModal(false)}
+        dismissible={!isCreating}
+        title={t('profile.playlists.modalTitle')}
+        closeLabel={t('common.actions.close')}
+        className="create-playlist-dialog"
+        footer={
+          <>
+            <Button variant="secondary" onClick={() => setShowCreateModal(false)} disabled={isCreating}>
+              {t('common.actions.cancel')}
+            </Button>
+            <Button variant="primary" onClick={handleCreatePlaylist} disabled={isCreating} loading={isCreating} trailing="check">
+              {isCreating ? t('profile.playlists.creating') : t('profile.playlists.create')}
+            </Button>
+          </>
+        }
+      >
+        <Field
+          label={t('profile.playlists.nameLabel')}
+          value={newPlaylistName}
+          onChange={(e) => setNewPlaylistName(e.target.value)}
+          placeholder={t('profile.playlists.namePlaceholder')}
+          autoFocus
+        />
+        <div className="v2-field">
+          <span className="v2-eyebrow">{t('profile.playlists.visibility')}</span>
+          <Segmented
+            options={[
+              { value: 'public', label: t('profile.playlists.public'), icon: 'public' },
+              { value: 'private', label: t('profile.playlists.private'), icon: 'lock' },
+            ]}
+            value={newPlaylistAccess}
+            onChange={setNewPlaylistAccess}
+            label={t('profile.playlists.visibility')}
+          />
         </div>
-      )}
+        <PlaylistTypePicker groupClass="v2-seg is-block pl-type-seg" btnClass="v2-seg__opt h32" labelClass="v2-eyebrow" iconSize={16} type={newPlaylistType.type} kind={newPlaylistType.kind} onChange={setNewPlaylistType} disabled={isCreating} />
+        <Field label={t('profile.playlists.tags')} id="create-playlist-tags">
+          <div className="pl-tags v2-input">
+            {newPlaylistTags.map((tag) => (
+              <span key={tag} className="v2-chip h28 pl-tags__chip">
+                {tag}
+                <button
+                  type="button"
+                  className="pl-tags__x"
+                  aria-label={`${t('common.actions.remove')} ${tag}`}
+                  onClick={() => setNewPlaylistTags(prev => prev.filter(x => x !== tag))}
+                >
+                  <Icon name="close" size={14} />
+                </button>
+              </span>
+            ))}
+            <input
+              id="create-playlist-tags"
+              type="text"
+              value={tagInput}
+              onChange={(e) => setTagInput(e.target.value)}
+              onKeyDown={(e) => {
+                if ((e.key === 'Enter' || e.key === ',' || e.key === ' ') && tagInput.trim()) {
+                  e.preventDefault();
+                  const tag = tagInput.trim().toLowerCase().replace(/,/g, '');
+                  if (tag && !newPlaylistTags.includes(tag)) {
+                    setNewPlaylistTags(prev => [...prev, tag]);
+                  }
+                  setTagInput('');
+                } else if (e.key === 'Backspace' && !tagInput && newPlaylistTags.length > 0) {
+                  setNewPlaylistTags(prev => prev.slice(0, -1));
+                }
+              }}
+              placeholder={newPlaylistTags.length === 0 ? t('profile.playlists.tagPlaceholder') : t('profile.playlists.tagMore')}
+            />
+          </div>
+        </Field>
+      </Dialog>
 
       <AddSocialLink_modal
         isOpen={showSocialLinkModal}

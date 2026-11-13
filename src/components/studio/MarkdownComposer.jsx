@@ -1,12 +1,6 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
-import { 
-  FaBold, FaItalic, FaUnderline, FaStrikethrough, 
-  FaHeading, FaListUl, FaListOl, FaQuoteLeft, 
-  FaCode, FaLink, FaImage, FaTable, FaEyeSlash,
-  FaEye, FaEdit, FaColumns, FaSmile
-} from 'react-icons/fa';
-import { MdFormatClear } from 'react-icons/md';
-import EmojiPicker from 'emoji-picker-react';
+import { Icon } from '../v2/Icon';
+import EmojiPicker from '../common/LazyEmojiPicker';
 import { uploadImageToHive } from '../Editor/uploadImageToHiv';
 import { toastIn } from '../../utils/toast';
 import './MarkdownComposer.scss';
@@ -30,37 +24,46 @@ const PREVIEW_RENDERERS = {
   snap: getHiveRenderer,
 };
 
-const MarkdownComposer = ({ value, onChange, placeholder, show, previewContext = 'post-body' }) => {
+// One 28px toolbar button: a 16px icon, its name as the tooltip and label.
+function Tool({ icon, title, onClick, ...rest }) {
+  return (
+    <button type="button" onClick={onClick} title={title} aria-label={title} {...rest}>
+      <Icon name={icon} size={16} />
+    </button>
+  );
+}
+
+const MarkdownComposer = ({ value, onChange, placeholder, previewContext = 'post-body' }) => {
   const { t } = useTranslation();
   const { theme } = useAppStore()
   const textareaRef = useRef(null);
   const [viewMode, setViewMode] = useState('editor'); // 'editor' | 'preview' | 'split'
-  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
-  const [showGifPicker, setShowGifPicker] = useState(false);
+  // The emoji / GIF picker (44c): one panel under the editor with Emoji and
+  // GIFs tabs, opened from the toolbar's mood button. null = closed.
+  const [pickerTab, setPickerTab] = useState(null); // null | 'emoji' | 'gifs'
   const [showHeaderMenu, setShowHeaderMenu] = useState(false);
-  const { query: gifQuery, setQuery: setGifQuery, gifs, loading: gifLoading } = useGiphySearch(showGifPicker);
+  const { query: gifQuery, setQuery: setGifQuery, gifs, loading: gifLoading } = useGiphySearch(pickerTab === 'gifs');
   const [isUploading, setIsUploading] = useState(false);
   const [isDragOver, setIsDragOver] = useState(false);
   const [renderedContent, setRenderedContent] = useState('');
 
-  // Auto-resize textarea to fit content, capped by parent max-height
+  // Auto-resize textarea to fit content, capped by the composer's max-height
+  // (set by the parent) minus the toolbar, the mode switch and the picker.
   const autoResize = useCallback(() => {
     const textarea = textareaRef.current;
     if (!textarea) return;
-    textarea.style.height = 'auto';
     const composer = textarea.closest('.markdown-composer');
     const maxH = composer ? parseFloat(getComputedStyle(composer).maxHeight) : Infinity;
+    const chrome = composer ? composer.offsetHeight - textarea.offsetHeight : 0;
+    textarea.style.height = 'auto';
     const desired = textarea.scrollHeight;
-    if (Number.isFinite(maxH) && desired > maxH) {
-      textarea.style.height = maxH + 'px';
-    } else {
-      textarea.style.height = desired + 'px';
-    }
+    const cap = Number.isFinite(maxH) ? Math.max(110, maxH - chrome) : Infinity;
+    textarea.style.height = Math.min(desired, cap) + 'px';
   }, []);
 
   useEffect(() => {
     autoResize();
-  }, [value, viewMode, autoResize]);
+  }, [value, viewMode, pickerTab, autoResize]);
 
   // Render preview when content or viewMode changes
   useEffect(() => {
@@ -194,18 +197,17 @@ const MarkdownComposer = ({ value, onChange, placeholder, show, previewContext =
   // Emoji handler
   const handleEmojiSelect = (emojiData) => {
     insertText(emojiData.emoji);
-    setShowEmojiPicker(false);
+    setPickerTab(null);
   };
 
   // GIF handler — insert as inline markdown image so the Hive renderer embeds it.
   const handleGifSelect = (g) => {
     const url = normalizeGifUrl(g);
     if (url) insertText(gifMarkdown(url));
-    setShowGifPicker(false);
+    setPickerTab(null);
   };
 
-  const toggleEmojiPicker = () => { setShowGifPicker(false); setShowEmojiPicker((v) => !v); };
-  const toggleGifPicker = () => { setShowEmojiPicker(false); setShowGifPicker((v) => !v); };
+  const togglePicker = () => setPickerTab((v) => (v ? null : 'emoji'));
 
   // Image upload
   const handleImageUpload = async (file) => {
@@ -276,182 +278,65 @@ const MarkdownComposer = ({ value, onChange, placeholder, show, previewContext =
     }
   };
 
+  const MODES = [
+    { id: 'editor', label: t('studio.composer.editorOnly') },
+    { id: 'split', label: t('studio.composer.splitView') },
+    { id: 'preview', label: t('studio.composer.previewOnly') },
+  ];
+
   return (
     <div className="markdown-composer">
-      {/* Toolbar */}
-      <div className="composer-toolbar">
-        <div className="toolbar-group">
-          <button type="button" onClick={handleBold} title={t('studio.composer.bold')}>
-            <FaBold />
-          </button>
-          <button type="button" onClick={handleItalic} title={t('studio.composer.italic')}>
-            <FaItalic />
-          </button>
-          <button type="button" onClick={handleUnderline} title={t('studio.composer.underline')}>
-            <FaUnderline />
-          </button>
-          <button type="button" onClick={handleStrikethrough} title={t('studio.composer.strikethrough')}>
-            <FaStrikethrough />
-          </button>
+      <div className="composer-toolbar" role="toolbar">
+        <Tool icon="format_bold" title={t('studio.composer.bold')} onClick={handleBold} />
+        <Tool icon="format_italic" title={t('studio.composer.italic')} onClick={handleItalic} />
+        <Tool icon="format_underlined" title={t('studio.composer.underline')} onClick={handleUnderline} />
+        <Tool icon="strikethrough_s" title={t('studio.composer.strikethrough')} onClick={handleStrikethrough} />
+        <div className="dropdown-wrapper">
+          <Tool icon="title" title={t('studio.composer.headers')} onClick={() => setShowHeaderMenu(!showHeaderMenu)} className={showHeaderMenu ? 'active' : ''} aria-expanded={showHeaderMenu} />
+          {showHeaderMenu && (
+            <div className="dropdown-menu">
+              {[1, 2, 3, 4, 5, 6].map(level => (
+                <button
+                  key={level}
+                  type="button"
+                  onClick={() => handleHeader(level)}
+                >
+                  H{level}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
-
-        <div className="toolbar-divider" />
-
-        <div className="toolbar-group">
-          <div className="dropdown-wrapper">
-            <button 
-              type="button" 
-              onClick={() => setShowHeaderMenu(!showHeaderMenu)} 
-              title={t('studio.composer.headers')}
-              className={showHeaderMenu ? 'active' : ''}
-            >
-              <FaHeading />
-            </button>
-            {showHeaderMenu && (
-              <div className="dropdown-menu">
-                {[1, 2, 3, 4, 5, 6].map(level => (
-                  <button 
-                    key={level} 
-                    type="button"
-                    onClick={() => handleHeader(level)}
-                  >
-                    H{level}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-          <button type="button" onClick={handleBulletList} title={t('studio.composer.bulletList')}>
-            <FaListUl />
-          </button>
-          <button type="button" onClick={handleNumberedList} title={t('studio.composer.numberedList')}>
-            <FaListOl />
-          </button>
-          <button type="button" onClick={handleQuote} title={t('studio.composer.quote')}>
-            <FaQuoteLeft />
-          </button>
-        </div>
-
-        <div className="toolbar-divider" />
-
-        <div className="toolbar-group">
-          <button type="button" onClick={handleCodeBlock} title={t('studio.composer.codeBlock')}>
-            <FaCode />
-          </button>
-          <button type="button" onClick={handleLink} title={t('studio.composer.insertLink')}>
-            <FaLink />
-          </button>
-          <button 
-            type="button" 
-            onClick={handleImageClick} 
-            title={t('studio.composer.uploadImage')}
-            disabled={isUploading}
-          >
-            <FaImage />
-          </button>
-          <button type="button" onClick={handleTable} title={t('studio.composer.insertTable')}>
-            <FaTable />
-          </button>
-          <button type="button" onClick={handleSpoiler} title={t('studio.composer.spoiler')}>
-            <FaEyeSlash />
-          </button>
-        </div>
-
-        <div className="toolbar-divider" />
-
-        <div className="toolbar-group">
-          <div className="dropdown-wrapper">
-            <button
-              type="button"
-              onClick={toggleEmojiPicker}
-              title={t('studio.composer.emoji')}
-              className={showEmojiPicker ? 'active' : ''}
-            >
-              <FaSmile />
-            </button>
-            {showEmojiPicker && (
-              <div className="emoji-picker-container">
-                <EmojiPicker
-                  onEmojiClick={handleEmojiSelect}
-                  theme={theme === 'light' ? 'light' : 'dark'}
-                  lazyLoadEmojis
-                  width={340}
-                  height={380}
-                  previewConfig={{ showPreview: false }}
-                  searchPlaceholder={t('studio.composer.searchEmoji')}
-                />
-              </div>
-            )}
-          </div>
-          <div className="dropdown-wrapper">
-            <button
-              type="button"
-              onClick={toggleGifPicker}
-              title="GIF"
-              className={`gif-toggle-btn${showGifPicker ? ' active' : ''}`}
-            >
-              GIF
-            </button>
-            {showGifPicker && (
-              <div className="gif-picker-container">
-                <input
-                  className="gif-picker-search"
-                  type="text"
-                  placeholder={t('studio.composer.searchGifs')}
-                  value={gifQuery}
-                  onChange={(e) => setGifQuery(e.target.value)}
-                  autoFocus
-                />
-                <div className="gif-picker-grid">
-                  {gifLoading && <div className="gif-picker-status">{t('common.status.loading')}</div>}
-                  {!gifLoading && gifs.length === 0 && <div className="gif-picker-status">{t('studio.composer.noGifs')}</div>}
-                  {!gifLoading && gifs.map((g) => (
-                    <button key={g.id} type="button" className="gif-picker-item" onClick={() => handleGifSelect(g)}>
-                      <img src={g.images?.fixed_height?.url || g.images?.fixed_height_small?.url} alt={g.title || 'gif'} loading="lazy" />
-                    </button>
-                  ))}
-                </div>
-                <div className="gif-picker-attribution">{t('studio.composer.poweredByGiphy')}</div>
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* View mode toggle - right side */}
-        <div className="toolbar-spacer" />
-          <div className={`toolbar-group view-toggle ${show ? 'show' : ''}`}>
-          <button 
-            type="button" 
-            onClick={() => setViewMode('editor')} 
-            title={t('studio.composer.editorOnly')}
-            className={viewMode === 'editor' ? 'active' : ''}
-          >
-            <FaEdit />
-          </button>
-          <button 
-            type="button" 
-            onClick={() => setViewMode('split')} 
-            title={t('studio.composer.splitView')}
-            className={`show ${viewMode === 'split' ? 'active' : ''}`}
-          >
-            <FaColumns />
-          </button>
-          <button 
-            type="button" 
-            onClick={() => setViewMode('preview')} 
-            title={t('studio.composer.previewOnly')}
-            className={viewMode === 'preview' ? 'active' : ''}
-          >
-            <FaEye />
-          </button>
-        </div>
+        <Tool icon="format_list_bulleted" title={t('studio.composer.bulletList')} onClick={handleBulletList} />
+        <Tool icon="format_list_numbered" title={t('studio.composer.numberedList')} onClick={handleNumberedList} />
+        <Tool icon="format_quote" title={t('studio.composer.quote')} onClick={handleQuote} />
+        <Tool icon="code" title={t('studio.composer.codeBlock')} onClick={handleCodeBlock} />
+        <Tool icon="link" title={t('studio.composer.insertLink')} onClick={handleLink} />
+        <Tool icon="image" title={t('studio.composer.uploadImage')} onClick={handleImageClick} disabled={isUploading} />
+        <Tool icon="table" title={t('studio.composer.insertTable')} onClick={handleTable} />
+        <Tool icon="visibility_off" title={t('studio.composer.spoiler')} onClick={handleSpoiler} />
+        <Tool icon="mood" title={t('studio.composer.emoji')} onClick={togglePicker} className={pickerTab ? 'active' : ''} aria-expanded={!!pickerTab} />
       </div>
 
-      {/* Editor / Preview Area */}
+      {/* Editor Only | Split View | Preview Only: a 28px segmented track. */}
+      <div className="v2-seg is-block composer-modes" role="group">
+        {MODES.map((m) => (
+          <button
+            key={m.id}
+            type="button"
+            className={`v2-seg__opt h28${viewMode === m.id ? ' is-on' : ''}`}
+            aria-pressed={viewMode === m.id}
+            onClick={() => setViewMode(m.id)}
+          >
+            {m.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Editor / Preview: one bg well each, side by side in Split View. */}
       <div className={`composer-content ${viewMode}`}>
-        {/* Editor Panel */}
         {(viewMode === 'editor' || viewMode === 'split') && (
-          <div 
+          <div
             className={`editor-panel ${isDragOver ? 'drag-over' : ''}`}
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
@@ -467,19 +352,19 @@ const MarkdownComposer = ({ value, onChange, placeholder, show, previewContext =
             />
             {isDragOver && (
               <div className="drag-overlay">
-                <FaImage size={48} />
+                <Icon name="add_photo_alternate" size={28} />
                 <span>{t('studio.composer.dropImage')}</span>
               </div>
             )}
             {isUploading && (
-              <div className="upload-overlay">
+              <div className="upload-overlay" role="status">
+                <Icon name="progress_activity" size={20} className="v2-spin" />
                 <span>{t('studio.composer.uploadingImage')}</span>
               </div>
             )}
           </div>
         )}
 
-        {/* Preview Panel */}
         {(viewMode === 'preview' || viewMode === 'split') && (
           <div className="preview-panel">
             {renderedContent ? (
@@ -495,6 +380,65 @@ const MarkdownComposer = ({ value, onChange, placeholder, show, previewContext =
           </div>
         )}
       </div>
+
+      {/* Emoji and GIFs (44c): a bg well under the editor with two tabs over a
+          fixed-height body, so switching tabs never moves the form. */}
+      {pickerTab && (
+        <div className="composer-picker">
+          <div className="composer-picker__tabs" role="tablist">
+            {[
+              { id: 'emoji', label: t('studio.composer.emoji') },
+              { id: 'gifs', label: t('studio.composer.gifs') },
+            ].map((tab) => (
+              <button
+                key={tab.id}
+                type="button"
+                role="tab"
+                aria-selected={pickerTab === tab.id}
+                className={pickerTab === tab.id ? 'is-on' : ''}
+                onClick={() => setPickerTab(tab.id)}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
+          {pickerTab === 'emoji' ? (
+            <div className="composer-picker__body emoji-picker-container">
+              <EmojiPicker
+                onEmojiClick={handleEmojiSelect}
+                theme={theme === 'light' ? 'light' : 'dark'}
+                lazyLoadEmojis
+                width="100%"
+                height={260}
+                previewConfig={{ showPreview: false }}
+                searchPlaceholder={t('studio.composer.searchEmoji')}
+              />
+            </div>
+          ) : (
+            <div className="composer-picker__body gif-picker-container">
+              <input
+                className="gif-picker-search"
+                type="text"
+                placeholder={t('studio.composer.searchGifs')}
+                aria-label={t('studio.composer.searchGifs')}
+                value={gifQuery}
+                onChange={(e) => setGifQuery(e.target.value)}
+                autoFocus
+              />
+              <div className="gif-picker-grid">
+                {gifLoading && <div className="gif-picker-status">{t('common.status.loading')}</div>}
+                {!gifLoading && gifs.length === 0 && <div className="gif-picker-status">{t('studio.composer.noGifs')}</div>}
+                {!gifLoading && gifs.map((g) => (
+                  <button key={g.id} type="button" className="gif-picker-item" onClick={() => handleGifSelect(g)}>
+                    <img src={g.images?.fixed_height_small?.url || g.images?.fixed_height?.url} alt={g.title || 'gif'} loading="lazy" />
+                  </button>
+                ))}
+              </div>
+              <div className="gif-picker-attribution">{t('studio.composer.poweredByGiphy')}</div>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };

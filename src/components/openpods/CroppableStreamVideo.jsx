@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { StreamVideo } from '@snapie/hangouts-react';
+import { Icon } from '../v2/ui';
 import './CroppableStreamVideo.scss';
 
 // A stream counts as landscape above this width/height ratio. A little over 1 so
@@ -174,7 +175,7 @@ export default function CroppableStreamVideo({ vertical = false, onOrientation, 
       <StreamVideo showLiveBadge={showLiveBadge} />
       {active && (
         <div className={`ws-crop__guide${showGuide ? ' is-visible' : ''}`} aria-hidden="true">
-          <span className="ws-crop__hint">{t('misc.watchStream.dragToPan')}</span>
+          <span className="ws-crop__hint"><Icon name="pan_tool" size={16} />{t('misc.watchStream.dragToPan')}</span>
           <span className="ws-crop__track">
             <span
               className="ws-crop__thumb"

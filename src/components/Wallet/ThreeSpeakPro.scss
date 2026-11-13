@@ -1,8 +1,8 @@
 @use "../../mixins.scss" as mix;
 
 .tsp-container {
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-light);
+  background: var(--surface);
+  border: 1px solid var(--border);
   border-radius: 14px;
   padding: 24px;
   margin-top: 16px;
@@ -29,18 +29,18 @@
 .tsp-title {
   font-size: 20px;
   font-weight: 700;
-  color: var(--text-primary);
+  color: var(--text);
   margin: 0 0 4px;
   display: flex;
   align-items: center;
   gap: 8px;
 
-  i { color: #f59e0b; }
+  i { color: var(--accent); }
 }
 
 .tsp-subtitle {
   font-size: 13px;
-  color: var(--text-secondary);
+  color: var(--muted);
   margin: 0;
 }
 
@@ -51,14 +51,14 @@
   padding: 5px 12px;
   border-radius: 999px;
   background: #22c55e20;
-  color: #16a34a;
+  color: var(--cyan);
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 700;
   white-space: nowrap;
 
   [data-theme="dark"] & {
     background: #22c55e15;
-    color: #4ade80;
+    color: var(--cyan);
   }
 }
 
@@ -69,8 +69,8 @@
   gap: 8px;
   padding: 10px 14px;
   border-radius: 8px;
-  background: var(--bg-primary);
-  border: 1px solid var(--border-light);
+  background: var(--bg);
+  border: 1px solid var(--border);
   margin-bottom: 16px;
   font-size: 13px;
   flex-wrap: wrap;
@@ -78,17 +78,17 @@
 
 .tsp-l2-label {
   font-weight: 500;
-  color: var(--text-secondary);
+  color: var(--muted);
 }
 
 .tsp-l2-amount {
-  font-weight: 600;
-  color: var(--text-primary);
+  font-weight: 700;
+  color: var(--text);
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
 .tsp-l2-sep {
-  color: var(--text-secondary);
+  color: var(--muted);
   opacity: 0.5;
 }
 
@@ -96,8 +96,8 @@
 .tsp-onetime-active {
   padding: 14px 16px;
   border-radius: 10px;
-  background: color-mix(in srgb, var(--accent-primary, #e53935) 6%, transparent);
-  border: 1px solid color-mix(in srgb, var(--accent-primary, #e53935) 20%, transparent);
+  background: color-mix(in srgb, var(--accent) 6%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 20%, transparent);
   margin-bottom: 16px;
 }
 
@@ -105,9 +105,9 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--accent-primary, #e53935);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--accent);
   margin-bottom: 8px;
 }
 
@@ -122,13 +122,13 @@
   align-items: center;
   gap: 6px;
   font-size: 14px;
-  font-weight: 600;
-  color: var(--text-primary);
+  font-weight: 700;
+  color: var(--text);
 }
 
 .tsp-onetime-expires {
   font-size: 12px;
-  color: var(--text-secondary);
+  color: var(--muted);
 }
 
 .tsp-onetime-expired {
@@ -137,10 +137,10 @@
   gap: 8px;
   padding: 10px 14px;
   border-radius: 8px;
-  background: var(--bg-primary);
-  border: 1px solid var(--border-light);
+  background: var(--bg);
+  border: 1px solid var(--border);
   font-size: 12px;
-  color: var(--text-secondary);
+  color: var(--muted);
   font-style: italic;
 }
 
@@ -154,7 +154,7 @@
 .tsp-skeleton {
   height: 48px;
   border-radius: 8px;
-  background: var(--bg-tertiary);
+  background: var(--surface-2);
   animation: tsp-pulse 1.2s ease-in-out infinite;
 
   &.tsp-skeleton-sm { height: 32px; width: 60%; }
@@ -169,7 +169,7 @@
   text-align: center;
   padding: 24px;
   font-size: 14px;
-  color: var(--text-secondary);
+  color: var(--muted);
 }
 
 // ─── Benefits list ─────
@@ -177,8 +177,8 @@
   list-style: none;
   margin: 0 0 16px;
   padding: 14px 16px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--text-tint);
+  border: 1px solid var(--border);
   border-radius: 10px;
   display: flex;
   flex-direction: column;
@@ -190,11 +190,11 @@
   align-items: flex-start;
   gap: 10px;
   font-size: 14px;
-  color: var(--text-primary);
+  color: var(--text);
   line-height: 1.4;
 
   i {
-    color: #22c55e;
+    color: var(--cyan);
     margin-top: 2px;
     flex-shrink: 0;
   }
@@ -207,14 +207,14 @@
   gap: 10px;
   padding: 10px 14px;
   margin-bottom: 14px;
-  background: rgba(252, 211, 77, 0.1);
-  border: 1px solid rgba(252, 211, 77, 0.25);
+  background: var(--accent-tint);
+  border: 1px solid color-mix(in srgb, var(--accent) 25%, transparent);
   border-radius: 8px;
   font-size: 13px;
-  color: var(--text-secondary);
+  color: var(--muted);
 
   i {
-    color: #fcd34d;
+    color: var(--accent);
   }
 }
 
@@ -242,38 +242,38 @@
   gap: 3px;
   padding: 12px;
   border-radius: 8px;
-  background: var(--bg-primary);
-  border: 1px solid var(--border-light);
+  background: var(--bg);
+  border: 1px solid var(--border);
 }
 
 .tsp-status-label {
   font-size: 11px;
   font-weight: 500;
-  color: var(--text-secondary);
+  color: var(--muted);
   text-transform: uppercase;
   letter-spacing: 0.3px;
 }
 
 .tsp-status-value {
   font-size: 16px;
-  font-weight: 600;
-  color: var(--text-primary);
+  font-weight: 700;
+  color: var(--text);
 }
 
 .tsp-balance {
-  color: var(--accent-primary, #e53935);
+  color: var(--accent);
 }
 
 // ─── Top up ─────────────
 .tsp-topup {
   padding-top: 8px;
-  border-top: 1px solid var(--border-light);
+  border-top: 1px solid var(--border);
 }
 
 .tsp-topup-label {
   font-size: 12px;
   font-weight: 500;
-  color: var(--text-secondary);
+  color: var(--muted);
   margin-bottom: 8px;
   display: block;
 }
@@ -287,15 +287,15 @@
   flex: 1;
   padding: 10px 12px;
   border-radius: 8px;
-  border: 1px solid var(--border-light);
-  background: var(--input-bg, #f9f9f9);
-  color: var(--text-primary);
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
   font-size: 14px;
   font-family: inherit;
 
   &:focus {
     outline: none;
-    border-color: var(--accent-primary, #e53935);
+    border-color: var(--accent);
   }
 
   &::-webkit-inner-spin-button,
@@ -312,11 +312,11 @@
   gap: 6px;
   padding: 10px 16px;
   border-radius: 8px;
-  border: 1px solid var(--accent-primary, #e53935);
+  border: 1px solid var(--accent);
   background: transparent;
-  color: var(--accent-primary, #e53935);
+  color: var(--accent);
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
   white-space: nowrap;
   transition: opacity 0.15s ease;
@@ -333,17 +333,17 @@
   gap: 6px;
   padding: 10px 16px;
   border-radius: 8px;
-  border: 1px solid var(--border-light);
+  border: 1px solid var(--border);
   background: transparent;
-  color: var(--text-secondary);
+  color: var(--muted);
   font-size: 13px;
   cursor: pointer;
   transition: all 0.15s ease;
   align-self: flex-start;
 
   &:hover:not(:disabled) {
-    border-color: #ef4444;
-    color: #ef4444;
+    border-color: var(--accent);
+    color: var(--accent);
   }
 
   &:disabled { opacity: 0.5; cursor: not-allowed; }
@@ -365,7 +365,7 @@
 .tsp-plans-label {
   font-size: 13px;
   font-weight: 500;
-  color: var(--text-secondary);
+  color: var(--muted);
   margin: 0;
 }
 
@@ -380,8 +380,8 @@
   min-width: 120px;
   padding: 16px 14px;
   border-radius: 10px;
-  border: 2px solid var(--border-light);
-  background: var(--bg-primary);
+  border: 2px solid var(--border);
+  background: var(--bg);
   cursor: pointer;
   text-align: center;
   transition: all 0.2s ease;
@@ -391,12 +391,12 @@
   gap: 4px;
 
   &:hover {
-    border-color: var(--text-muted, #888);
+    border-color: var(--muted);
     transform: scale(1.02);
   }
 
   &.selected {
-    border-color: var(--text-primary);
+    border-color: var(--text);
   }
 }
 
@@ -407,35 +407,35 @@
   letter-spacing: 0.5px;
   padding: 2px 8px;
   border-radius: 999px;
-  background: var(--bg-tertiary);
-  color: var(--text-secondary);
+  background: var(--surface-2);
+  color: var(--muted);
 }
 
 .tsp-plan-onetime.selected {
-  border-color: #f59e0b;
-  background: color-mix(in srgb, #f59e0b 8%, transparent);
+  border-color: var(--accent);
+  background: var(--accent-tint);
 }
 
 .tsp-plan-name {
   font-size: 14px;
-  font-weight: 600;
-  color: var(--text-primary);
+  font-weight: 700;
+  color: var(--text);
 }
 
 .tsp-plan-price {
   font-size: 20px;
   font-weight: 700;
-  color: var(--text-primary);
+  color: var(--text);
 }
 
 .tsp-plan-duration {
   font-size: 11px;
-  color: var(--text-secondary);
+  color: var(--muted);
 }
 
 .tsp-plan-desc {
   font-size: 11px;
-  color: var(--text-secondary);
+  color: var(--muted);
   line-height: 1.3;
   margin-top: 2px;
 }
@@ -447,11 +447,11 @@
   gap: 8px;
   padding: 12px 24px;
   border-radius: 10px;
-  border: 1px solid var(--accent-primary, #e53935);
-  background: var(--card-bg);
-  color: var(--text-primary);
-  font-size: 15px;
-  font-weight: 600;
+  border: 1px solid var(--accent);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 700;
   cursor: pointer;
   transition: opacity 0.15s ease;
   align-self: center;
@@ -476,25 +476,25 @@
 
   &.tsp-tx-broadcasting {
     background: #3b82f610;
-    color: #3b82f6;
+    color: var(--cyan);
     border: 1px solid #3b82f630;
   }
 
   &.tsp-tx-polling {
     background: #f59e0b10;
-    color: #f59e0b;
+    color: var(--accent);
     border: 1px solid #f59e0b30;
   }
 
   &.tsp-tx-done {
     background: #22c55e10;
-    color: #16a34a;
+    color: var(--cyan);
     border: 1px solid #22c55e30;
   }
 
   &.tsp-tx-error {
     background: #ef444410;
-    color: #ef4444;
+    color: var(--accent);
     border: 1px solid #ef444430;
   }
 }
@@ -519,18 +519,18 @@
   padding: 0.8rem 1rem;
   margin: 0;
   border-radius: 12px;
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-light);
+  background: var(--surface);
+  border: 1px solid var(--border);
 }
 
 .tsp-trial-btn {
   padding: 0.55rem 1.4rem;
   border-radius: 999px;
-  border: 1px solid var(--accent-primary, #e53935);
-  background: var(--card-bg);
-  color: var(--text-primary);
-  font-size: 0.95rem;
-  font-weight: 600;
+  border: 1px solid var(--accent);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 700;
   cursor: pointer;
   transition: transform 0.12s ease, opacity 0.12s ease;
 
@@ -544,8 +544,8 @@
 }
 
 .tsp-trial-note {
-  font-size: 0.78rem;
-  color: var(--text-secondary, #94a3b8);
+  font-size: 12px;
+  color: var(--muted);
   text-align: center;
 }
 
@@ -559,21 +559,21 @@
   padding: 0.8rem 1rem;
   margin: 0.75rem 0 1rem;
   border-radius: 12px;
-  background: linear-gradient(135deg, rgba(229, 57, 53, 0.18), rgba(229, 57, 53, 0.04));
-  border: 1px solid rgba(229, 57, 53, 0.5);
-  font-size: 0.92rem;
-  color: var(--text-primary, #f1f5f9);
+  background: var(--accent-tint-strong);
+  border: 1px solid var(--accent);
+  font-size: 14px;
+  color: var(--text);
 
   &--expired {
-    background: linear-gradient(135deg, rgba(148, 163, 184, 0.18), rgba(148, 163, 184, 0.04));
-    border-color: rgba(148, 163, 184, 0.4);
+    background: var(--surface-2);
+    border-color: var(--border);
   }
 
   strong { font-weight: 700; }
 }
 
 .tsp-trial-active-icon {
-  font-size: 1.15rem;
+  font-size: 18px;
   flex-shrink: 0;
 }
 

@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation, Trans } from 'react-i18next';
 import { useHangout } from '../../context/HangoutContext';
 import { useAppStore } from '../../lib/store';
-import { MdMic } from 'react-icons/md';
+import { Icon, StatusPill } from '../v2/ui';
 import HiveAvatar from '../HiveAvatar/HiveAvatar';
 import './OpenPodsLiveStrip.scss';
 
@@ -47,10 +47,11 @@ export default function OpenPodsLiveStrip() {
   return (
     <div className="openpods-live-strip">
       <div className="strip-header">
-        <MdMic className="strip-mic-icon" />
+        <span className="strip-mic-icon" aria-hidden="true"><Icon name="podcasts" size={18} /></span>
         <span className="strip-label">
-          <Trans i18nKey="live.strip.liveNow" count={rooms.length} components={{ n: <span className="strip-count" /> }} />
+          <Trans i18nKey="live.strip.liveNow" count={rooms.length} components={{ n: <span className="strip-count num" /> }} />
         </span>
+        <StatusPill tone="live">{t('feeds.live.badge')}</StatusPill>
         <Link to="/openpods" className="strip-view-all">{t('live.strip.viewAll')}</Link>
       </div>
 
@@ -75,7 +76,7 @@ export default function OpenPodsLiveStrip() {
               <span className="strip-card-host">@{room.host}</span>
             </div>
             {room.numParticipants > 0 && (
-              <span className="strip-card-listeners">{room.numParticipants}</span>
+              <span className="strip-card-listeners"><Icon name="headphones" size={14} /><span className="num">{room.numParticipants}</span></span>
             )}
           </button>
         ))}

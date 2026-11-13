@@ -21,7 +21,7 @@
 .live-ads--preroll {
   z-index: 45;
 }
-.live-ads--hold { background: #000; }
+.live-ads--hold { background: var(--media-black); }
 .live-ads--preroll { pointer-events: auto; }
 
 /* The ticker runs along the top like on the watch page, pushed down by

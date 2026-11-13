@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { MdOpenInNew } from 'react-icons/md';
+import { Icon } from '../v2/Icon';
 import { useTranslation, Trans } from 'react-i18next';
 import './AdOverlay.scss';
 
@@ -94,7 +94,7 @@ export default function AdOverlay({
           it never promises a destination that isn't there — which is also why the
           /advertise preview has none: it is passed no click URL. aria-hidden, since
           the anchor's own label already says what happens. */}
-      <MdOpenInNew className="brandmark-open" aria-hidden="true" />
+      <Icon name="open_in_new" size={16} className="brandmark-open" />
     </a>
   );
 }

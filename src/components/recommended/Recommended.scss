@@ -1,39 +1,46 @@
-@use "../../mixins.scss" as mix;
+@use "../../styles/v2" as v2;
 
+// A list of related videos as row cards: the thumbnail on the left, title,
+// creator, time and the stats on the right (the 21a result row, small).
 .recommended {
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 
   .side-video-link {
-    text-decoration: none;
     display: block;
+    color: var(--text);
+    text-decoration: none;
+    border-radius: var(--r-lg);
+    &:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   }
 
   .side-video-list {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 12px;
-    padding: 4px;
-    background-color: var(--card-bg);
-    border-radius: 10px;
-    box-shadow: var(--card-shadow);
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 10px;
+    padding: 6px;
+    border-radius: var(--r-lg);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    transition: border-color var(--t-fast) var(--ease);
 
-    &:hover {
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    }
+    &:hover { border-color: var(--cyan); }
 
     .wrap-img {
-      flex-basis: 49%;
-      width: 50%;
-      aspect-ratio: 16 / 9; // 16:9 aspect ratio
       position: relative;
+      aspect-ratio: 16 / 9;
+      border-radius: var(--r-md);
+      overflow: hidden;
+      @include v2.thumb-placeholder;
 
       img {
         width: 100%;
         height: 100%;
-        border-radius: 7px;
         object-fit: cover;
         object-position: center;
+        display: block;
       }
 
       // Show add-to-playlist button on hover
@@ -44,63 +51,57 @@
     }
 
     .vid-info {
-      flex-basis: 49%;
       display: flex;
       flex-direction: column;
-      justify-content: space-between; // Push bottom-info to bottom
+      gap: 4px;
+      min-width: 0;
 
       h4 {
-        font-size: 14px;
-        margin-bottom: 7px;
-        color: var(--text-primary);
+        margin: 0;
+        @include v2.text(body-sm);
+        font-weight: 700;
         line-height: 1.3;
+        color: var(--text);
         display: -webkit-box;
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
         overflow: hidden;
       }
 
-      .author-badge {
-        align-self: flex-start;
-      }
+      .author-badge { align-self: flex-start; }
 
       .time-ago {
-        font-size: 12px;
-        color: var(--text-secondary);
+        @include v2.text(meta);
+        color: var(--muted);
         margin-top: auto;
       }
 
       .bottom-info {
         display: flex;
         align-items: center;
+        flex-wrap: wrap;
         gap: 8px;
-        font-size: 12px;
-        color: var(--text-secondary);
 
-        .payout-amount-badge {
-          margin-left: auto;
-        }
+        .payout-amount-badge { margin-left: auto; }
       }
     }
   }
 }
 
-.recommended .wrap-img {
-  position: relative;
-
-  .promoted-badge {
-    position: absolute;
-    top: 6px;
-    left: 6px;
-    z-index: 2;
-    background: rgba(229, 57, 53, 0.95);
-    color: #fff;
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.02em;
-    text-transform: uppercase;
-    padding: 3px 7px;
-    border-radius: 5px;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
-  }
+.recommended .wrap-img .promoted-badge {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 6px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .04em;
+  text-transform: uppercase;
 }

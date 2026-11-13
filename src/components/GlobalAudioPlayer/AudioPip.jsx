@@ -7,8 +7,8 @@ import { useEffect } from 'react';
 // the phone's Player tab); the <audio> element stays in the page, so playback
 // never stops when the window opens or closes.
 
-const W = 420;
-const H = 760;
+const W = 320;
+const H = 440;
 
 // The window starts with an empty document: the page's styles are copied in
 // (rules where they can be read, a link to the sheet where they can't).

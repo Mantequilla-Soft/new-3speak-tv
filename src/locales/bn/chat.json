@@ -4,6 +4,7 @@
   },
   "tools": {
     "emoji": "ইমোজি",
+    "image": "ছবি যোগ করুন",
     "searchEmoji": "ইমোজি খুঁজুন",
     "searchGifs": "GIF খুঁজুন…",
     "noGifs": "কোনো GIF পাওয়া যায়নি।",
@@ -18,6 +19,7 @@
     "communityWithSubscribers_one": "কমিউনিটি · {{formatted}} জন সাবস্ক্রাইবার",
     "communityWithSubscribers_other": "কমিউনিটি · {{formatted}} জন সাবস্ক্রাইবার",
     "commentFallback": "(কমেন্ট)",
+    "videoKind": "3Speak · ভিডিও",
     "play": "{{title}} চালান"
   },
   "share": {
@@ -31,22 +33,29 @@
     "responsiveSub": "যে পেজে থাকে সেই অনুযায়ী মানিয়ে নেয়",
     "fixedSub": "নির্দিষ্ট সাইজের iframe",
     "sendInChat": "3Speak চ্যাটে পাঠান",
-    "sendInChatSub": "3Speak-এ কাউকে মেসেজ করে পাঠান",
+    "sendInChatSub": "কাউকে মেসেজে পাঠান",
     "embedOnWebsite": "ওয়েবসাইটে এমবেড করুন",
-    "embedOnWebsiteSub": "আপনার নিজের সাইট বা ব্লগের জন্য HTML কপি করুন",
+    "embedOnWebsiteSub": "রেসপন্সিভ বা নির্দিষ্ট সাইজ",
     "forHivePost": "Hive পোস্টের জন্য",
+    "forHivePostSub": "পেস্ট করতে লিংক কপি করুন",
     "hivePostCopied": "লিংক কপি হয়েছে। এটি আপনার Hive পোস্টে পেস্ট করুন।",
-    "generalShare": "শেয়ার / লিংক কপি",
-    "generalShareSub": "অন্য অ্যাপ, অথবা লিংক কপি করুন"
+    "generalShare": "শেয়ার বা লিংক কপি",
+    "generalShareSub": "অন্যান্য অ্যাপ",
+    "embed": "এম্বেড",
+    "chat": "চ্যাট",
+    "more": "আরও",
+    "startAt": "শুরুর সময়",
+    "toFollowers_one": "আপনার {{n}} জন ফলোয়ারকে",
+    "toFollowers_other": "আপনার {{n}} জন ফলোয়ারকে"
   },
   "gate": {
     "connectTitle": "3Speak চ্যাটে কানেক্ট করুন",
-    "connectBody": "চ্যাট চলে Snapie দিয়ে। কানেক্ট করলে আপনার Hive posting key দিয়ে একবারের একটি লগইন চ্যালেঞ্জ সাইন করা হয় — কোনো ট্রানজ্যাকশন নয়, কোনো খরচ নেই।",
+    "connectBody": "চ্যাট চলে Snapie দিয়ে। কানেক্ট করলে আপনার posting key দিয়ে একবারের একটি লগইন চ্যালেঞ্জ সাইন হয়। কোনো লেনদেন নেই, কোনো খরচ নেই।",
     "connecting": "কানেক্ট হচ্ছে…",
     "connectButton": "চ্যাট কানেক্ট করুন",
     "cannotSign": "আপনার বর্তমান লগইন চ্যাট চ্যালেঞ্জ সাইন করতে পারে না। Keychain, HiveAuth, PeakVault বা Ledger ব্যবহার করুন।",
-    "needsAccountTitle": "চ্যাটের জন্য একটি Hive অ্যাকাউন্ট লাগবে",
-    "needsAccountBody": "মেসেজগুলো আপনার নিজের অ্যাকাউন্টের কী দিয়ে সাইন করা হয়, তাই আপনার অ্যাকাউন্ট প্রস্তুত হলে বাকি সবকিছুর সাথে চ্যাটও চালু হবে। আপনার প্রোফাইলের লক্ষ্যগুলো পূরণ করুন, টিম আপনাকে সেখানে পৌঁছে দেবে।",
+    "needsAccountTitle": "চ্যাটের জন্য Hive অ্যাকাউন্ট লাগবে।",
+    "needsAccountBody": "ওয়ার্ম-আপ শেষ হলে বাকি সবকিছুর সাথে এটিও চালু হবে।",
     "loginTitle": "চ্যাট ব্যবহার করতে লগ ইন করুন",
     "loginBody": "মেসেজ পাঠাতে ও পেতে আপনার Hive অ্যাকাউন্ট দিয়ে সাইন ইন করুন।",
     "connectingToChat": "চ্যাটে কানেক্ট হচ্ছে…"
@@ -94,8 +103,8 @@
     "serverRejectedServerMap_other": "সার্ভার {{count}}টি রিকোয়েস্টের সবগুলোই প্রত্যাখ্যান করেছে (সার্ভারের নিজস্ব অপঠিত তালিকার id)",
     "failed": "সবকিছু পড়া হয়েছে হিসেবে চিহ্নিত করা যায়নি",
     "marking": "পড়া হয়েছে হিসেবে চিহ্নিত হচ্ছে…",
-    "button": "সব পড়া হয়েছে হিসেবে চিহ্নিত করুন",
-    "buttonCount": "সব পড়া হয়েছে হিসেবে চিহ্নিত করুন ({{count}})"
+    "button": "সব পড়া হয়েছে",
+    "buttonCount": "সব পড়া হয়েছে ({{count}})"
   },
   "list": {
     "chooseTarget": "কোন চ্যাটে পাঠাবেন বেছে নিন",
@@ -117,7 +126,7 @@
     "deleteError": "মেসেজটি মোছা যায়নি।",
     "back": "কথোপকথনে ফিরে যান",
     "loading": "মেসেজ লোড হচ্ছে…",
-    "empty": "এখনো কোনো মেসেজ নেই — হাই বলুন 👋",
+    "empty": "এখনো কোনো মেসেজ নেই। হাই বলুন 👋",
     "editedSuffix": " · এডিট করা",
     "messageActions": "মেসেজ অপশন",
     "quote": "উদ্ধৃত করুন",
@@ -129,7 +138,8 @@
     "quoting": "@{{user}}-কে উদ্ধৃত করা হচ্ছে",
     "cancelQuote": "উদ্ধৃতি বাতিল",
     "removeImage": "ছবি সরান",
-    "placeholder": "একটি মেসেজ লিখুন…"
+    "placeholder": "একটি মেসেজ লিখুন…",
+    "placeholderTo": "{{name}}-কে মেসেজ"
   },
   "page": {
     "chooseTarget": "কোন চ্যাটে পাঠাবেন বেছে নিন।",

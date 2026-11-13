@@ -1,10 +1,7 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useSearchParams, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { FaYoutube, FaTiktok, FaInstagram, FaFileImport, FaCheck, FaPlayCircle, FaCrown, FaRegClock, FaSyncAlt } from "react-icons/fa";
-import { SiRumble } from "react-icons/si";
-import { TailChase } from "ldrs/react";
-import "ldrs/react/TailChase.css";
+import { Banner, Button, Icon, Progress, Segmented } from "../components/v2/ui";
 import { useAppStore } from "../lib/store";
 import { toastIn } from "../utils/toast";
 import { BatchForm, BatchStatus } from "./ImportBatch";
@@ -19,12 +16,13 @@ const toast = toastIn('Upload');
 
 // Tab order. Each maps to one of YouTube's per-type upload playlists (server side).
 const TYPES = ['videos', 'shorts', 'live'];
+// Material Symbols per platform (33c): no brand logos, one icon set.
 const PLATFORM_TABS = [
-  { key: 'youtube', Icon: FaYoutube },
-  { key: 'tiktok', Icon: FaTiktok },
-  { key: 'instagram', Icon: FaInstagram },
-  { key: 'rumble', Icon: SiRumble },
-  { key: 'bitchute', Icon: FaPlayCircle },
+  { key: 'youtube', icon: 'smart_display' },
+  { key: 'tiktok', icon: 'music_note' },
+  { key: 'instagram', icon: 'photo_camera' },
+  { key: 'bitchute', icon: 'play_circle' },
+  { key: 'rumble', icon: 'live_tv' },
 ];
 // Everything but YouTube: a grid plus a paste-a-link box. TikTok / Instagram list
 // only their newest few; BitChute / Rumble page through the whole channel.
@@ -427,8 +425,8 @@ export default function YoutubeImportPage() {
   if (!authenticated || !user) {
     return (
       <div className="yt-import">
-        <Header t={t} />
-        <p className="yt-import__note">{t('ytimport.errors.signIn')}</p>
+        <Header t={t} sub />
+        <Banner tone="info" className="yt-import__signin">{t('ytimport.errors.signIn')}</Banner>
       </div>
     );
   }
@@ -436,11 +434,53 @@ export default function YoutubeImportPage() {
   const busy = ['starting', 'server', 'transfer', 'handoff'].includes(phase);
   const group = groups[activeType];
 
+  // Couldn't fetch it: what went wrong, the manual-download steps and the file
+  // pick (33c). Inside the opened tile, and on wide screens as its own card in
+  // the side column (CSS shows one of the two).
+  const renderFallback = (v, card = false) => (
+    <div className={card ? 'yt-import__fallback yt-import__fallback--card' : 'yt-import__fallback'}>
+      {card && <h3 className="yt-import__fallback-title">{t('ytimport.fallback.title')}</h3>}
+      <p className="yt-import__error" role={card ? undefined : 'alert'}>
+        {failure?.code === 'bot_check' ? t('ytimport.errors.blocked')
+          : failure?.code === 'proxy_paused' ? t('ytimport.errors.proxyPaused')
+            : failure?.message}
+      </p>
+      <p className="yt-import__muted">{t('ytimport.fallback.intro')}</p>
+      {v.platform !== 'youtube' ? (
+        <ol className="yt-import__steps">
+          <li><span className="num">1</span><span>{t(`ytimport.${v.platform}.fallbackStep1`)}</span></li>
+          <li><span className="num">2</span><span>{t(`ytimport.${v.platform}.fallbackStep2`)}</span></li>
+          <li><span className="num">3</span><span>{t('ytimport.fallback.step3')}</span></li>
+        </ol>
+      ) : (
+        <ol className="yt-import__steps">
+          <li>
+            <span className="num">1</span>
+            <span>
+              {t('ytimport.fallback.step1')}{' '}
+              <a href={youtubeStudioUrl(v.id)} target="_blank" rel="noopener noreferrer">YouTube Studio</a>
+            </span>
+          </li>
+          <li><span className="num">2</span><span>{t('ytimport.fallback.step2')}</span></li>
+          <li><span className="num">3</span><span>{t('ytimport.fallback.step3')}</span></li>
+        </ol>
+      )}
+      <div className="yt-import__actions">
+        <Button variant="inverse" size={48} trailing="upload_file" className="is-next" onClick={() => fileInputRef.current?.click()}>
+          {t('ytimport.fallback.pickFile')}
+        </Button>
+        <Button variant="secondary" size={48} icon="refresh" onClick={() => startImport(v)}>
+          {t('ytimport.retry')}
+        </Button>
+      </div>
+    </div>
+  );
+
   // The import controls of the picked video; they live inside its tile.
   const renderPanel = (v) => (
     <div className="yt-import__card-panel">
       <p className="yt-import__muted">
-        {v.duration > 0 && <>{fmtDuration(v.duration)} · </>}
+        {v.duration > 0 && <><span className="num">{fmtDuration(v.duration)}</span> · </>}
         {v.publishedAt && <>{new Date(v.publishedAt).toLocaleDateString()} · </>}
         {v.platform !== 'youtube' ? (
           <a href={v.sourceUrl} target="_blank" rel="noopener noreferrer">{t(`ytimport.${v.platform}.openOn`)}</a>
@@ -450,78 +490,50 @@ export default function YoutubeImportPage() {
       </p>
       {importedMap[v.id] && (
         <p className="yt-import__on-site">
-          <FaCheck /> {t('ytimport.onSite')} ·{' '}
+          <Icon name="check_circle" size={16} /> {t('ytimport.onSite')} ·{' '}
           <Link to={`/@${user}/${importedMap[v.id]}`}>{t('ytimport.viewPost')}</Link>
         </p>
       )}
       {!importedMap[v.id] && inBatch[v.id] && (
-        <p className="yt-import__on-site yt-import__on-site--waiting"><FaRegClock /> {t('ytimport.inBatch')}</p>
+        <p className="yt-import__on-site yt-import__on-site--waiting"><Icon name="schedule" size={16} /> {t('ytimport.inBatch')}</p>
       )}
 
       {phase === 'idle' && (
         <div className="yt-import__actions">
-          <button type="button" className="yt-import__btn" onClick={() => startImport(v)} disabled={v.enriching}>
+          <Button variant="primary" size={44} trailing="download" className="is-next" onClick={() => startImport(v)} disabled={v.enriching}>
             {t('ytimport.import')}
-          </button>
-          <button type="button" className="yt-import__btn yt-import__btn--outline" onClick={() => fileInputRef.current?.click()}>
+          </Button>
+          <Button variant="secondary" size={44} icon="upload_file" onClick={() => fileInputRef.current?.click()}>
             {t('ytimport.useOwnFile')}
-          </button>
+          </Button>
         </div>
       )}
 
       {busy && (
         <div className="yt-import__progress">
-          <div className="yt-import__bar">
-            <span style={{ width: `${phase === 'transfer' ? Math.round(transfer * 100) : phase === 'handoff' ? 100 : serverPct}%` }} />
-          </div>
-          <p className="yt-import__muted">
+          <Progress
+            tone="cyan"
+            label={t('ytimport.import')}
+            value={phase === 'transfer' ? Math.round(transfer * 100) : phase === 'handoff' ? 100 : serverPct}
+          />
+          <p className="yt-import__muted yt-import__progress-line">
+            <Icon name="progress_activity" size={16} className="v2-spin" />
             {phase === 'starting' && t('ytimport.progress.starting')}
             {phase === 'server' && t('ytimport.progress.server', { pct: serverPct })}
             {phase === 'transfer' && t('ytimport.progress.transfer', { pct: Math.round(transfer * 100) })}
             {phase === 'handoff' && t('ytimport.progress.handoff')}
           </p>
           {(phase === 'server' || phase === 'starting') && (
-            <button type="button" className="yt-import__btn yt-import__btn--outline" onClick={cancel}>
-              {t('ytimport.cancel')}
-            </button>
+            <div className="yt-import__actions">
+              <Button variant="secondary" size={40} icon="close" onClick={cancel}>
+                {t('ytimport.cancel')}
+              </Button>
+            </div>
           )}
         </div>
       )}
 
-      {phase === 'failed' && (
-        <div className="yt-import__fallback">
-          <p className="yt-import__error">
-            {failure?.code === 'bot_check' ? t('ytimport.errors.blocked')
-              : failure?.code === 'proxy_paused' ? t('ytimport.errors.proxyPaused')
-                : failure?.message}
-          </p>
-          <p>{t('ytimport.fallback.intro')}</p>
-          {v.platform !== 'youtube' ? (
-            <ol>
-              <li>{t(`ytimport.${v.platform}.fallbackStep1`)}</li>
-              <li>{t(`ytimport.${v.platform}.fallbackStep2`)}</li>
-              <li>{t('ytimport.fallback.step3')}</li>
-            </ol>
-          ) : (
-            <ol>
-              <li>
-                {t('ytimport.fallback.step1')}{' '}
-                <a href={youtubeStudioUrl(v.id)} target="_blank" rel="noopener noreferrer">YouTube Studio</a>
-              </li>
-              <li>{t('ytimport.fallback.step2')}</li>
-              <li>{t('ytimport.fallback.step3')}</li>
-            </ol>
-          )}
-          <div className="yt-import__actions">
-            <button type="button" className="yt-import__btn" onClick={() => fileInputRef.current?.click()}>
-              {t('ytimport.fallback.pickFile')}
-            </button>
-            <button type="button" className="yt-import__btn yt-import__btn--outline" onClick={() => startImport(v)}>
-              {t('ytimport.retry')}
-            </button>
-          </div>
-        </div>
-      )}
+      {phase === 'failed' && renderFallback(v)}
     </div>
   );
 
@@ -537,11 +549,16 @@ export default function YoutubeImportPage() {
     const isPicked = picked.some((x) => x.id === v.id);
     // The selected copy can be fresher (details looked up after the pick).
     const shown = isSelected ? { ...v, ...selected } : v;
+    // 33c: a tile that cannot go in a batch says why in a chip under its title.
+    const tag = onSite ? t('ytimport.onSite')
+      : blocked ? t('ytimport.tooLong', { minutes: blocked })
+        : waiting ? t('ytimport.inBatch')
+          : null;
     return (
       <div
         key={v.id}
         id={`yt-import-card-${v.id}`}
-        className={`yt-import__card${isSelected ? ' yt-import__card--selected' : ''}${blocked ? ' yt-import__card--too-long' : ''}${isPicked ? ' yt-import__card--picked' : ''}`}
+        className={`yt-import__card${isSelected ? ' yt-import__card--selected' : ''}${blocked ? ' yt-import__card--too-long' : ''}${isPicked ? ' yt-import__card--picked' : ''}${tag && !isSelected ? ' yt-import__card--tagged' : ''}`}
       >
         <button
           type="button"
@@ -551,23 +568,12 @@ export default function YoutubeImportPage() {
           title={blocked ? t('ytimport.tooLong', { minutes: blocked }) : undefined}
         >
           <div className="yt-import__thumb">
-            {/* A cover that cannot be loaded leaves the tile's grey, not a broken image. */}
+            {/* A cover that cannot be loaded leaves the striped tile, not a broken image. */}
             <img src={shown.thumbnail} alt="" loading="lazy" onError={(e) => { e.currentTarget.style.visibility = 'hidden'; }} />
-            {shown.duration > 0 && <span className="yt-import__dur">{fmtDuration(shown.duration)}</span>}
-            {blocked && <span className="yt-import__too-long">{t('ytimport.tooLong', { minutes: blocked })}</span>}
-            {onSite && (
-              <span className="yt-import__done" title={t('ytimport.onSite')} aria-label={t('ytimport.onSite')}>
-                <FaCheck />
-              </span>
-            )}
-            {waiting && (
-              <span className="yt-import__done yt-import__done--waiting" title={t('ytimport.inBatch')} aria-label={t('ytimport.inBatch')}>
-                <FaRegClock />
-              </span>
-            )}
+            {shown.duration > 0 && <span className="yt-import__dur num">{fmtDuration(shown.duration)}</span>}
           </div>
           <span className="yt-import__title">{shown.title}</span>
-          {shown.publishedAt && <span className="yt-import__muted">{new Date(shown.publishedAt).toLocaleDateString()}</span>}
+          {tag && <span className={`yt-import__tag${onSite ? ' is-done' : ''}`}>{tag}</span>}
         </button>
         {!blocked && !tickBlocked && (
           <button
@@ -579,7 +585,7 @@ export default function YoutubeImportPage() {
             aria-label={t('ytimport.batch.select')}
             title={!isPicked && picked.length >= batchMax ? t('ytimport.batch.maxReached', { max: batchMax }) : t('ytimport.batch.select')}
           >
-            {isPicked && <FaCheck />}
+            {isPicked && <Icon name="check" size={16} />}
           </button>
         )}
         {isSelected && renderPanel(shown)}
@@ -588,150 +594,213 @@ export default function YoutubeImportPage() {
   };
   const limitMinutes = status?.limits ? Math.round(status.limits.maxDurationS / 60) : null;
   const serverPct = Math.round(job?.progress || 0);
+  const spinner = (
+    <div className="yt-import__center" role="status" aria-label={t('common.status.loading')}>
+      <Icon name="progress_activity" size={28} className="v2-spin" />
+    </div>
+  );
+  // A failed import also shows its way out in the side column (33c).
+  const fallbackAside = phase === 'failed' && !!selected;
+  // A platform is "linked" when the creator has an account on it to list from.
+  const isLinked = (key) => (key === 'youtube' ? !!status?.channels?.length : !!status?.links?.[key]?.length);
 
   return (
-    <div className="yt-import">
-      <Header t={t} />
+    <div className={`yt-import${latestBatch || fallbackAside ? ' has-batch' : ''}${fallbackAside ? ' has-fallback' : ''}`}>
+      <div className="yt-import__main">
+        <Header
+          t={t}
+          action={status && (
+            <Button
+              variant="secondary"
+              icon="refresh"
+              className={`yt-import__refresh${refreshing ? ' is-busy' : ''}`}
+              onClick={refreshLists}
+              disabled={refreshing || busy}
+              title={t('ytimport.refreshHint')}
+            >
+              {refreshing ? t('ytimport.refreshing') : t('ytimport.refresh')}
+            </Button>
+          )}
+        />
 
-      {status?.limits && (
-        <p className="yt-import__limits">
-          {t('ytimport.limits', { minutes: limitMinutes, height: status.limits.maxHeight })}
-          {!status.premium && status.limits.premiumHeight > status.limits.maxHeight && (
+        {statusError && <p className="yt-import__error" role="alert">{statusError}</p>}
+        {!status && !statusError && spinner}
+
+        {status && platformTabs.length > 1 && (
+          <div className="yt-import__platforms" role="tablist">
+            {platformTabs.map(({ key, icon }) => (
+              <button
+                type="button"
+                role="tab"
+                key={key}
+                aria-selected={platform === key}
+                className={`yt-import__platform${platform === key ? ' yt-import__platform--active' : ''}`}
+                onClick={() => switchPlatform(key)}
+              >
+                <span className="yt-import__platform-icon"><Icon name={icon} size={18} /></span>
+                {t(`ytimport.platforms.${key}`)}
+                {isLinked(key) && <Icon name="check_circle" size={16} className="yt-import__platform-linked" />}
+              </button>
+            ))}
+          </div>
+        )}
+        {refreshNote && <p className="yt-import__note yt-import__refresh-note">{refreshNote}</p>}
+
+        {status && isLinkPlatform && (
+          !hasLinkAccount ? (
+            <div className="yt-import__empty v2-empty">
+              <Icon name="link_off" size={28} />
+              <p>{t(`ytimport.${platform}.noLink`)}</p>
+              <Button as={Link} to="/profile" variant="secondary" icon="add_link">{t('ytimport.linkChannel')}</Button>
+            </div>
+          ) : (
             <>
-              {' '}{t('ytimport.premiumHint', { height: status.limits.premiumHeight })}
-              {ENABLE_SUBS && user && (
-                <Link to={`/wallet/${user}#pro`} className="yt-import__btn yt-import__btn--outline yt-import__pro">
-                  <FaCrown aria-hidden="true" /> {t('ytimport.getPro')}
-                </Link>
-              )}
-            </>
-          )}
-        </p>
-      )}
-      {statusError && <p className="yt-import__error">{statusError}</p>}
-      {latestBatch && <BatchStatus batch={latestBatch} user={user} onChange={showBatch} />}
-      {!status && !statusError && <div className="yt-import__center"><TailChase size="30" speed="1.75" color="red" /></div>}
-
-      {status && (
-        <div className="yt-import__toolbar">
-          {platformTabs.length > 1 && (
-            <div className="yt-import__platforms" role="tablist">
-              {platformTabs.map(({ key, Icon }) => (
-                <button
-                  type="button"
-                  role="tab"
-                  key={key}
-                  aria-selected={platform === key}
-                  className={`yt-import__platform${platform === key ? ' yt-import__platform--active' : ''}`}
-                  onClick={() => switchPlatform(key)}
-                >
-                  <Icon /> {t(`ytimport.platforms.${key}`)}
+            <form className="yt-import__paste yt-import__paste--card" onSubmit={findTikTok}>
+              <label className="v2-eyebrow" htmlFor="yt-import-tt">{t(`ytimport.${platform}.pasteLabel`)}</label>
+              <div className="yt-import__paste-row">
+                <div className="yt-import__paste-field">
+                  <Icon name="link" size={18} />
+                  <input
+                    id="yt-import-tt"
+                    type="url"
+                    inputMode="url"
+                    autoComplete="off"
+                    value={ttUrl}
+                    onChange={(e) => setTtUrl(e.target.value)}
+                    placeholder={t(`ytimport.${platform}.placeholder`)}
+                    disabled={busy || ttBusy}
+                  />
+                </div>
+                <Button type="submit" variant="cyan" size={48} trailing="search" loading={ttBusy} disabled={!ttUrl.trim() || busy || ttBusy}>
+                  {ttBusy ? t(`ytimport.${platform}.finding`) : t(`ytimport.${platform}.find`)}
+                </Button>
+              </div>
+              <p className="v2-field__hint">{t(`ytimport.${platform}.pasteHint`)}</p>
+              {ttError && <p className="yt-import__error" role="alert">{ttError}</p>}
+            </form>
+            <h3 className="yt-import__section">{t(`ytimport.${platform}.latest`)}</h3>
+            {ttList.error && <p className="yt-import__error" role="alert">{ttList.error}</p>}
+            {ttList.loaded && !ttList.loading && ttList.items.length === 0 && !ttList.error && (
+              <p className="yt-import__note">{t(`ytimport.${platform}.empty`)}</p>
+            )}
+            <div className={`yt-import__grid${ttList.items.every((v) => v.type === 'shorts') ? ' yt-import__grid--shorts' : ''}`}>
+              {ttList.items.map(renderCard)}
+            </div>
+            {ttList.loading && spinner}
+            {ttList.hasMore && !ttList.loading && (
+              <div className="yt-import__center">
+                <Button variant="secondary" icon="expand_more" onClick={loadMoreLink}>{t('ytimport.loadMore')}</Button>
+              </div>
+            )}
+            {ttList.items.length > 0 && (
+              <p className="yt-import__note yt-import__more-hint">
+                {t(`ytimport.${platform}.olderHint`)}{' '}
+                <button type="button" className="yt-import__linkbtn" onClick={() => document.getElementById('yt-import-tt')?.focus()}>
+                  {t(`ytimport.${platform}.olderHintAction`)}
                 </button>
-              ))}
-            </div>
-          )}
-          <button
-            type="button"
-            className={`yt-import__btn yt-import__btn--outline yt-import__refresh${refreshing ? ' is-busy' : ''}`}
-            onClick={refreshLists}
-            disabled={refreshing || busy}
-            title={t('ytimport.refreshHint')}
-          >
-            <FaSyncAlt aria-hidden="true" /> {refreshing ? t('ytimport.refreshing') : t('ytimport.refresh')}
-          </button>
-        </div>
-      )}
-      {refreshNote && <p className="yt-import__note yt-import__refresh-note">{refreshNote}</p>}
+              </p>
+            )}
+            </>
+          )
+        )}
 
-      {status && isLinkPlatform && (
-        !hasLinkAccount ? (
-          <div className="yt-import__empty">
-            <p>{t(`ytimport.${platform}.noLink`)}</p>
-            <Link to="/profile" className="yt-import__btn">{t('ytimport.linkChannel')}</Link>
+        {/* Out of proxy traffic: the server refuses YouTube downloads until a top-up. */}
+        {status?.proxyPaused && platform === 'youtube' && (
+          <Banner tone="warn" className="yt-import__paused">{t('ytimport.errors.proxyPaused')}</Banner>
+        )}
+
+        {status && platform === 'youtube' && status.channels.length === 0 && (
+          <div className="yt-import__empty v2-empty">
+            <Icon name="link_off" size={28} />
+            <p>{t('ytimport.noChannel')}</p>
+            <Button as={Link} to="/profile" variant="secondary" icon="add_link">{t('ytimport.linkChannel')}</Button>
           </div>
-        ) : (
+        )}
+
+        {status && platform === 'youtube' && status.channels.length > 1 && (
+          <label className="yt-import__channel v2-field">
+            <span className="v2-eyebrow">{t('ytimport.channel')}</span>
+            <select className="v2-input is-select" value={channel} onChange={(e) => setChannel(e.target.value)} disabled={busy}>
+              {status.channels.map((c) => <option key={c} value={c}>{c}</option>)}
+            </select>
+          </label>
+        )}
+
+        <input ref={fileInputRef} type="file" accept="video/*" hidden onChange={pickOwnFile} />
+
+        {platform === 'youtube' && channel && (
           <>
-          <form className="yt-import__paste yt-import__paste--card" onSubmit={findTikTok}>
-            <label htmlFor="yt-import-tt">{t(`ytimport.${platform}.pasteLabel`)}</label>
-            <p className="yt-import__note">{t(`ytimport.${platform}.pasteHint`)}</p>
-            <div className="yt-import__paste-row">
-              <input
-                id="yt-import-tt"
-                type="url"
-                inputMode="url"
-                autoComplete="off"
-                value={ttUrl}
-                onChange={(e) => setTtUrl(e.target.value)}
-                placeholder={t(`ytimport.${platform}.placeholder`)}
-                disabled={busy || ttBusy}
-              />
-              <button type="submit" className="yt-import__btn" disabled={!ttUrl.trim() || busy || ttBusy}>
-                {ttBusy ? t(`ytimport.${platform}.finding`) : t(`ytimport.${platform}.find`)}
-              </button>
+            <Segmented
+              className="yt-import__tabs"
+              block={false}
+              scroll
+              value={activeType}
+              onChange={setActiveType}
+              options={types.map((type) => ({
+                value: type,
+                label: t(`ytimport.types.${type}`),
+                count: groups[type].total != null ? groups[type].total : undefined,
+              }))}
+            />
+
+            {group.error && <p className="yt-import__error" role="alert">{group.error}</p>}
+            {group.loaded && !group.loading && group.items.length === 0 && !group.error && (
+              <p className="yt-import__note">{t(`ytimport.empty.${activeType}`)}</p>
+            )}
+            <div className={`yt-import__grid${activeType === 'shorts' ? ' yt-import__grid--shorts' : ''}`}>
+              {group.items.map(renderCard)}
             </div>
-            {ttError && <p className="yt-import__error">{ttError}</p>}
-          </form>
-          <h3 className="yt-import__section">{t(`ytimport.${platform}.latest`)}</h3>
-          {ttList.error && <p className="yt-import__error">{ttList.error}</p>}
-          {ttList.loaded && !ttList.loading && ttList.items.length === 0 && !ttList.error && (
-            <p className="yt-import__note">{t(`ytimport.${platform}.empty`)}</p>
-          )}
-          <div className={`yt-import__grid${ttList.items.every((v) => v.type === 'shorts') ? ' yt-import__grid--shorts' : ''}`}>
-            {ttList.items.map(renderCard)}
-          </div>
-          {ttList.loading && <div className="yt-import__center"><TailChase size="30" speed="1.75" color="red" /></div>}
-          {ttList.hasMore && !ttList.loading && (
-            <div className="yt-import__center">
-              <button type="button" className="yt-import__btn yt-import__btn--outline" onClick={loadMoreLink}>{t('ytimport.loadMore')}</button>
-            </div>
-          )}
-          {ttList.items.length > 0 && (
-            <p className="yt-import__note yt-import__more-hint">
-              {t(`ytimport.${platform}.olderHint`)}{' '}
-              <button type="button" className="yt-import__linkbtn" onClick={() => document.getElementById('yt-import-tt')?.focus()}>
-                {t(`ytimport.${platform}.olderHintAction`)}
-              </button>
-            </p>
-          )}
+            {(group.loading || !group.loaded) && spinner}
+            {group.next && !group.loading && (
+              <div className="yt-import__center">
+                <Button variant="secondary" icon="expand_more" onClick={() => loadGroup(activeType, group.next)}>
+                  {t('ytimport.loadMore')}
+                </Button>
+              </div>
+            )}
           </>
-        )
-      )}
+        )}
 
-      {/* Out of proxy traffic: the server refuses YouTube downloads until a top-up. */}
-      {status?.proxyPaused && platform === 'youtube' && (
-        <p className="yt-import__paused" role="status">{t('ytimport.errors.proxyPaused')}</p>
-      )}
-
-      {status && platform === 'youtube' && status.channels.length === 0 && (
-        <div className="yt-import__empty">
-          <p>{t('ytimport.noChannel')}</p>
-          <Link to="/profile" className="yt-import__btn">{t('ytimport.linkChannel')}</Link>
-        </div>
-      )}
-
-      {status && platform === 'youtube' && status.channels.length > 1 && (
-        <label className="yt-import__channel">
-          {t('ytimport.channel')}
-          <select value={channel} onChange={(e) => setChannel(e.target.value)} disabled={busy}>
-            {status.channels.map((c) => <option key={c} value={c}>{c}</option>)}
-          </select>
-        </label>
-      )}
-
-      <input ref={fileInputRef} type="file" accept="video/*" hidden onChange={pickOwnFile} />
-
-      {picked.length > 0 && (
-        <div className="yt-batch-bar" role="region" aria-label={t('ytimport.batch.selectedCount', { count: picked.length })}>
-          <span>{t('ytimport.batch.selectedCount', { count: picked.length })} · {t('ytimport.batch.maxHint', { max: batchMax })}</span>
-          <div className="yt-batch-bar__actions">
-            <button type="button" className="yt-import__btn yt-import__btn--outline" onClick={() => setPicked([])}>{t('ytimport.batch.clear')}</button>
-            <button type="button" className="yt-import__btn" onClick={() => setBatchFormOpen(true)} disabled={batchRunning}
-              title={batchRunning ? t('ytimport.batch.busy') : undefined}>
-              {t('ytimport.batch.importSelected', { count: picked.length })}
-            </button>
+        {status?.limits && (
+          <div className="yt-import__limits">
+            <Icon name="info" size={20} />
+            <span>
+              {t('ytimport.limits', { minutes: limitMinutes, height: status.limits.maxHeight })}
+              {!status.premium && status.limits.premiumHeight > status.limits.maxHeight && (
+                <>{' '}{t('ytimport.premiumHint', { height: status.limits.premiumHeight })}</>
+              )}
+            </span>
+            {!status.premium && status.limits.premiumHeight > status.limits.maxHeight && ENABLE_SUBS && user && (
+              <Link to={`/wallet/${user}#pro`} className="yt-import__pro">
+                {t('ytimport.getPro')}
+              </Link>
+            )}
           </div>
-        </div>
+        )}
+
+        {picked.length > 0 && (
+          <div className="yt-batch-bar" role="region" aria-label={t('ytimport.batch.selectedCount', { count: picked.length })}>
+            <span className="yt-batch-bar__count">
+              <b className="num">{t('ytimport.batch.selectedCount', { count: picked.length })}</b> · {t('ytimport.batch.maxHint', { max: batchMax })}
+            </span>
+            <div className="yt-batch-bar__actions">
+              <Button variant="ghost" size={40} onClick={() => setPicked([])}>{t('ytimport.batch.clear')}</Button>
+              <Button variant="cyan" size={40} trailing="download" onClick={() => setBatchFormOpen(true)} disabled={batchRunning}
+                title={batchRunning ? t('ytimport.batch.busy') : undefined}>
+                {t('ytimport.batch.importSelected', { count: picked.length })}
+              </Button>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {(latestBatch || fallbackAside) && (
+        <aside className={`yt-import__aside${latestBatch ? '' : ' is-fallback-only'}`}>
+          {latestBatch && <BatchStatus batch={latestBatch} user={user} onChange={showBatch} />}
+          {fallbackAside && renderFallback(selected, true)}
+        </aside>
       )}
+
       {batchFormOpen && (
         <BatchForm
           user={user}
@@ -743,51 +812,20 @@ export default function YoutubeImportPage() {
           onStarted={(b) => { showBatch(b); setPicked([]); setBatchFormOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
         />
       )}
-
-      {platform === 'youtube' && channel && (
-        <>
-          <div className="yt-import__tabs" role="tablist">
-            {types.map((type) => (
-              <button
-                type="button"
-                role="tab"
-                key={type}
-                aria-selected={activeType === type}
-                className={`yt-import__tab${activeType === type ? ' yt-import__tab--active' : ''}`}
-                onClick={() => setActiveType(type)}
-              >
-                {t(`ytimport.types.${type}`)}
-                {groups[type].total != null && <span className="yt-import__count">{groups[type].total}</span>}
-              </button>
-            ))}
-          </div>
-
-          {group.error && <p className="yt-import__error">{group.error}</p>}
-          {group.loaded && !group.loading && group.items.length === 0 && !group.error && (
-            <p className="yt-import__note">{t(`ytimport.empty.${activeType}`)}</p>
-          )}
-          <div className={`yt-import__grid${activeType === 'shorts' ? ' yt-import__grid--shorts' : ''}`}>
-            {group.items.map(renderCard)}
-          </div>
-          {(group.loading || !group.loaded) && <div className="yt-import__center"><TailChase size="30" speed="1.75" color="red" /></div>}
-          {group.next && !group.loading && (
-            <div className="yt-import__center">
-              <button type="button" className="yt-import__btn yt-import__btn--outline" onClick={() => loadGroup(activeType, group.next)}>
-                {t('ytimport.loadMore')}
-              </button>
-            </div>
-          )}
-        </>
-      )}
     </div>
   );
 }
 
-function Header({ t }) {
+// 33c: the title and Refresh lists; the line under the title only for the
+// signed-out view, where it is all there is.
+function Header({ t, action = null, sub = false }) {
   return (
     <div className="yt-import__header">
-      <h1><FaFileImport className="yt-import__logo" /> {t('ytimport.title')}</h1>
-      <p className="yt-import__muted">{t('ytimport.subtitle')}</p>
+      <div className="yt-import__header-text">
+        <h1>{t('ytimport.title')}</h1>
+        {sub && <p className="yt-import__muted">{t('ytimport.subtitle')}</p>}
+      </div>
+      {action}
     </div>
   );
 }

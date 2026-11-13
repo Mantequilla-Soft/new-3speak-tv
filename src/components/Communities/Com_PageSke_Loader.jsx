@@ -1,35 +1,21 @@
-import React from 'react'
 import "./Com_PageSke_Loader.scss"
 
+// A community page while it loads: the header card, the KPI row and the grid,
+// as striped placeholders in the same places (design 20c).
 function Com_PageSke_Loader() {
   return (
-    <div className='community-page-wrap'>
-      <div className="com-profile-img-wrap-skeleton">
-        <div className="skeleton cover-skeleton"></div>
-        <div className="wrap">
-          <div className="skeleton avatar-skeleton"></div>
-          <div className="skeleton title-skeleton"></div>
-        </div>
+    <div className="community-page-wrap com-skeleton" aria-hidden="true">
+      <div className="v2-skeleton com-skeleton-hero" />
+      <div className="com-skeleton-kpis">
+        {Array.from({ length: 5 }, (_, i) => <div key={i} className="v2-skeleton com-skeleton-kpi" />)}
       </div>
-      
-      <div className="title-wrap">
-        <div className="skeleton line-skeleton mb-10"></div>
-        <div className="skeleton line-skeleton"></div>
-      </div>
-      
-      <hr className="skeleton-hr" />
-      
-      <div className="search-tren-wrapper-skeleton">
-        <div className="skeleton search-skeleton"></div>
-        <div className="skeleton button-group-skeleton"></div>
-      </div>
-      
-      <div className="feed-wrap-skeleton">
-        {[...Array(50)].map((i) => (
-          <div key={i} className="skeleton-card">
-            <div className="skeleton video-thumbnail-skeleton"></div>
-            <div className="skeleton line-skeleton"></div>
-            <div className="skeleton line-skeleton"></div>
+      <div className="v2-skeleton com-skeleton-tabs" />
+      <div className="com-skeleton-grid">
+        {Array.from({ length: 9 }, (_, i) => (
+          <div key={i} className="com-skeleton-card">
+            <div className="v2-skeleton com-skeleton-thumb" />
+            <div className="v2-skeleton is-line" />
+            <div className="v2-skeleton is-line com-skeleton-short" />
           </div>
         ))}
       </div>

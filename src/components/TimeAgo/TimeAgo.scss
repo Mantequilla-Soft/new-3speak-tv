@@ -1,16 +1,13 @@
-@use "../../mixins.scss" as *;
+@use "../../styles/v2" as v2;
 
+// Relative time: the long form on desktop, the numbers-only form on a phone.
 .time-ago-wrap {
-  .time-short {
-    display: none;
-  }
+  white-space: nowrap;
 
-  @include respond(phone) {
-    .time-long {
-      display: none;
-    }
-    .time-short {
-      display: inline;
-    }
+  .time-short { display: none; }
+
+  @include v2.mobile {
+    .time-long { display: none; }
+    .time-short { display: inline; }
   }
 }

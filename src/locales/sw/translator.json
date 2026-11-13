@@ -8,7 +8,7 @@
     "contribute": "Jinsi ya kuchangia tafsiri"
   },
   "verify": {
-    "body": "Thibitisha akaunti yako ya Hive ili kufungua kihariri. Pochi yako itakuomba uidhinishe kuingia.",
+    "body": "Umealikwa? Thibitisha akaunti yako ya Hive ili kufungua kihariri.",
     "button": "Thibitisha akaunti",
     "failed": "Imeshindwa kuthibitisha akaunti yako."
   },
@@ -51,9 +51,9 @@
   "add": {
     "title": "Ongeza lugha",
     "code": "Msimbo wa lugha",
-    "codeHint": "Herufi ndogo mbili au tatu (ISO 639), ikiwezekana pamoja na eneo: nl, fil, pt-BR",
+    "codeHint": "Herufi ndogo mbili au tatu (ISO 639), ikiwezekana pamoja na eneo",
     "native": "Jina katika lugha yenyewe",
-    "nativeHint": "Hili ndilo watu wanaloona kwenye menyu ya lugha, k.m. Nederlands",
+    "nativeHint": "Kile watu wanachoona kwenye menyu ya lugha",
     "english": "Jina kwa Kiingereza",
     "rtl": "Huandikwa kutoka kulia kwenda kushoto (Kiarabu, Kiebrania, Kiajemi, Kiurdu…)",
     "submit": "Ongeza lugha",
@@ -67,6 +67,7 @@
     "checkboxFor": "Weka alama kuwa {{key}} imehakikiwa",
     "checkedBy": "Imehakikiwa na @{{user}}, {{when}}",
     "notChecked": "Weka tiki ukishahakiki tafsiri hii",
+    "notCheckedShort": "Haijakaguliwa",
     "noText": "Hakuna cha kuhakiki: maandishi haya bado hayana tafsiri",
     "saveFirst": "Hifadhi uhariri wako kwanza. Kuhifadhi kunaweka alama kuwa maandishi yamehakikiwa.",
     "changed": "imebadilika tangu ihakikiwe",

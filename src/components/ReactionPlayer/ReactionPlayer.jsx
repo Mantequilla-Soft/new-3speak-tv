@@ -2,10 +2,9 @@ import MarkdownView from '../common/MarkdownView';
 import { Fragment, useRef, useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { getHiveClient } from '../../utils/hiveNode';
-import { MdChevronLeft, MdChevronRight, MdClose, MdAspectRatio, MdVideocam, MdComment, MdKeyboardArrowDown, MdKeyboardArrowUp, MdTranslate, MdFlag } from 'react-icons/md';
+import { Icon } from '../v2/Icon';
+import { Segmented, StatusPill } from '../v2/ui';
 import ReportModal, { isReported } from '../modal/ReportModal';
-import { FaPlay, FaPause, FaExpand, FaCompress, FaVolumeUp, FaVolumeMute } from 'react-icons/fa';
-import { TbRewindBackward10, TbRewindForward10 } from 'react-icons/tb';
 import { Client } from '@hiveio/dhive';
 import { HIVE_API_NODES } from '../../utils/config';
 import './ReactionPlayer.scss';
@@ -19,6 +18,8 @@ const hiveClient = getHiveClient();
 
 const SIZE_LABEL_KEYS = { small: 'player.reactions.sizes.small', medium: 'player.reactions.sizes.medium', standard: 'player.reactions.sizes.standard', big: 'player.reactions.sizes.big', cinema: 'player.reactions.sizes.cinema' };
 const SIZE_NAME_KEYS = { small: 'player.reactions.sizeNames.small', medium: 'player.reactions.sizeNames.medium', standard: 'player.reactions.sizeNames.standard', big: 'player.reactions.sizeNames.big', cinema: 'player.reactions.sizeNames.cinema' };
+// The player sizes the reactions panel offers (48b), smallest player first.
+const REACTION_SIZE_ORDER = ['small', 'medium', 'standard', 'big', 'cinema'];
 
 function stripRepliedTo(html) {
   if (!html) return '';
@@ -61,10 +62,18 @@ function CommentNode({ comment, depth, collapsible = true }) {
   if (collapsible && collapsed) {
     return (
       <div className="rct-thread-comment" style={depth > 0 ? { marginLeft: `${Math.min(depth, 4) * 16}px` } : undefined}>
-        <div className="comment-collapsed-bar" onClick={() => setCollapsed(false)}>
+        <div
+          className="comment-collapsed-bar"
+          role="button"
+          tabIndex={0}
+          aria-expanded="false"
+          aria-label={t('comments.section.showComment', { user: comment.author })}
+          onClick={() => setCollapsed(false)}
+          onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setCollapsed(false); } }}
+        >
           <img className="comment-collapsed-avatar" src={comment.avatar} alt="" />
-          <span className="comment-collapsed-name">@{comment.author}</span>
-          <MdKeyboardArrowUp size={18} className="comment-collapsed-chevron" />
+          <span className="comment-collapsed-name">{comment.author}</span>
+          <Icon name="expand_more" size={18} className="comment-collapsed-chevron" />
         </div>
       </div>
     );
@@ -74,16 +83,20 @@ function CommentNode({ comment, depth, collapsible = true }) {
     <div className="rct-thread-comment" style={depth > 0 ? { marginLeft: `${Math.min(depth, 4) * 16}px` } : undefined}>
       <div className="rct-thread-header">
         <img className="rct-thread-avatar" src={comment.avatar} alt="" />
-        <span className="rct-thread-author">@{comment.author}</span>
-        {collapsible && <span className="comment-collapse-chevron" onClick={() => setCollapsed(true)}><MdKeyboardArrowUp size={18} /></span>}
+        <span className="rct-thread-author">{comment.author}</span>
+        {collapsible && (
+          <button type="button" className="comment-collapse-chevron" aria-expanded="true" aria-label={t('comments.section.hideComment')} title={t('comments.section.hideComment')} onClick={() => setCollapsed(true)}>
+            <Icon name="expand_less" size={18} />
+          </button>
+        )}
       </div>
       <MarkdownView className="rct-thread-body" html={bodyHtml} />
       {translatedText && (
         <div className="comment-translation">
           <div className="comment-translation-header">
-            <MdTranslate size={12} />
+            <Icon name="translate" size={14} />
             <span>{t('player.reactions.translation')}</span>
-            <button className="comment-translation-dismiss" onClick={() => setTranslatedText(null)}>&times;</button>
+            <button type="button" className="comment-translation-dismiss" onClick={() => setTranslatedText(null)} aria-label={t('common.actions.close')}><Icon name="close" size={16} /></button>
           </div>
           <p>{translatedText}</p>
         </div>
@@ -95,8 +108,9 @@ function CommentNode({ comment, depth, collapsible = true }) {
           className={`rct-report-btn${comment.permlink && isReported('comment', `${comment.author}/${comment.permlink}`) ? ' reported' : ''}`}
           onClick={() => setIsReportOpen(true)}
           title={t('common.actions.report')}
+          aria-label={t('common.actions.report')}
         >
-          <MdFlag size={14} />
+          <Icon name="flag" size={16} />
         </button>
         <TranslateButton onTranslate={handleTranslate} isTranslating={isTranslating} compact />
       </div>
@@ -133,7 +147,7 @@ function ReactionPlayer({
   onClose,
   mobile,
   size,
-  onCycleSize,
+  onSetSize,
   currentTime: mainCurrentTime,
   duration: mainDuration,
   mainIsPlaying,
@@ -160,7 +174,7 @@ function ReactionPlayer({
   const hideTimerRef = useRef(null);
 
   // Mobile collapse — respect manual override from localStorage
-  const [mobileCollapsed, setMobileCollapsed] = useState(() => {
+  const [mobileCollapsed] = useState(() => {
     const stored = localStorage.getItem('rct-collapsed');
     if (stored !== null) return stored === '1';
     // Auto-collapse if only comments without timestamps
@@ -169,7 +183,6 @@ function ReactionPlayer({
     const hasTimestamped = reactions.some(r => r.pct !== null);
     return !hasVideo && !hasTimestamped;
   });
-  const userToggledRef = useRef(false);
 
   // Dynamic height for scroll area on mobile
   const [belowMaxHeight, setBelowMaxHeight] = useState(null);
@@ -249,11 +262,11 @@ function ReactionPlayer({
           if (depth > 3) return [];
           const replies = await hiveClient.call('condenser_api', 'get_content_replies', [author, permlink]);
           return Promise.all(replies.map(async (c) => {
-            let bodyHtml = '';
+            let bodyHtml;
             if (render && c.body) {
               // Strip timestamp-linked 3speak URLs so renderer doesn't embed them
               const cleaned = c.body.replace(/\[(\d{1,2}:\d{2}(?::\d{2})?)\]\((https?:\/\/(?:3speak\.tv|play\.3speak\.tv)[^)]*)\)/g, '$1');
-              try { bodyHtml = render(cleaned); } catch (_) { bodyHtml = c.body; }
+              try { bodyHtml = render(cleaned); } catch { bodyHtml = c.body; }
             } else {
               bodyHtml = c.body || '';
             }
@@ -467,54 +480,46 @@ function ReactionPlayer({
   // Only video-type reactions get iframes
   const videoReactions = reactions.filter(r => r.type === 'video');
 
+  // The thread under a reaction: the reaction itself, then its replies.
+  const thread = (
+    <div className="rct-comment-thread">
+      <CommentNode comment={{ author: current.author, avatar: current.avatar, body: current.body, isLowReputation: current.isLowReputation, isHidden: current.isHidden, children: [] }} depth={0} collapsible={false} />
+      {loadingComments && <div className="rct-thread-loading">{t('player.reactions.loadingReplies')}</div>}
+      {nestedComments.map((reply, i) => (
+        <CommentNode key={i} comment={reply} depth={1} />
+      ))}
+    </div>
+  );
+
+  // Design 48b: "Reactions" with the player sizes (S / M / Std / Big / Cin) and
+  // Hide in the head, the reaction in its media frame with a "Video Reaction"
+  // pill, then "Previous" and "Next" under it. The reactors follow as a strip.
   return (
     <div className={`reaction-player${mobile ? ' reaction-player--mobile' : ''}`} ref={playerRef}>
-      {/* Header - top on mobile */}
       <div className="reaction-player-header">
-        <div className="reaction-info">
-          <img className="reactor-avatar" src={current.avatar} alt="" />
-          <div className="reactor-text">
-            <span className="reactor-name">@{current.author}</span>
-            <span className="reaction-label">{isVideo ? t('player.reactions.videoReaction') : t('player.reactions.comment')}</span>
-          </div>
-        </div>
-        <div className="reaction-controls">
-          <button
-            className="nav-btn"
-            onClick={() => handleItemClick(idx - 1)}
-            disabled={!hasPrev}
-            title={t('player.reactions.previous')}
-          >
-            <MdChevronLeft />
-          </button>
-          <span className="reaction-count">{idx + 1}/{reactions.length}</span>
-          <button
-            className="nav-btn"
-            onClick={() => handleItemClick(idx + 1)}
-            disabled={!hasNext}
-            title={t('player.reactions.next')}
-          >
-            <MdChevronRight />
-          </button>
-          <button
-            className="mobile-rct-toggle nav-btn"
-            onClick={() => onClose?.()}
-            title={t('player.reactions.hide')}
-          >
-            <MdKeyboardArrowUp />
-          </button>
-          <button className="close-btn" onClick={onClose} title={t('player.reactions.hideShort')}>
-            <MdKeyboardArrowDown />
-          </button>
-        </div>
+        <b className="rct-title">{t('comments.tabs.reactions')}</b>
+        {onSetSize && (
+          <Segmented
+            className="rct-sizes"
+            size={28}
+            block={false}
+            label={t('player.reactions.sizeTitle', { size: t(SIZE_NAME_KEYS[size] || SIZE_NAME_KEYS.standard) })}
+            value={size}
+            onChange={onSetSize}
+            options={REACTION_SIZE_ORDER.map((s) => ({ value: s, label: <span title={t(SIZE_NAME_KEYS[s])}>{t(SIZE_LABEL_KEYS[s])}</span> }))}
+          />
+        )}
+        <button type="button" className="rct-hide" onClick={() => onClose?.()} aria-label={t('player.reactions.hide')} title={t('player.reactions.hide')}>
+          {t('player.reactions.hideShort')}
+        </button>
       </div>
 
       <div className={`rct-collapsible${mobileCollapsed ? ' collapsed' : ''}`}>
       {/* Scrollable area: video + comments scroll together on mobile */}
       <div className="rct-scroll-area" style={belowMaxHeight != null ? { height: `${belowMaxHeight}px` } : undefined}>
-      {/* Content area — same 16:9 size for both video and comment */}
+      {/* Content area: the same 16:9 frame for a video and a comment */}
       <div
-        className="reaction-video-wrap"
+        className={`reaction-video-wrap${isVideo ? ' is-video' : ' is-comment'}`}
         onMouseMove={isVideo ? showControlsTemporarily : undefined}
         onMouseLeave={isVideo ? () => setControlsVisible(false) : undefined}
       >
@@ -536,41 +541,17 @@ function ReactionPlayer({
         {/* Comment display with nested reply tree */}
         {!isVideo && (
           <div className="rct-comment-panel">
-            <div className="rct-comment-thread">
-              <CommentNode comment={{ author: current.author, avatar: current.avatar, body: current.body, isLowReputation: current.isLowReputation, isHidden: current.isHidden, children: [] }} depth={0} collapsible={false} />
-              {loadingComments && <div className="rct-thread-loading">{t('player.reactions.loadingReplies')}</div>}
-              {nestedComments.map((reply, i) => (
-                <CommentNode key={i} comment={reply} depth={1} />
-              ))}
-            </div>
+            {thread}
           </div>
         )}
 
         {/* Invisible overlay for video items to capture mouse events */}
         {isVideo && <div className="rct-interact-overlay" onClick={handleTogglePlay} />}
 
-        {/* Overlay buttons (top-right) */}
-        <div className="overlay-buttons">
-          {/* Mobile-only prev/next nav + count */}
-          <div className="mobile-overlay-nav">
-            <button className="size-overlay-btn size-overlay-btn--nav" onClick={() => handleItemClick(idx - 1)} disabled={!hasPrev} title={t('player.reactions.previous')}>
-              <MdChevronLeft />
-            </button>
-            <span className="overlay-count">{idx + 1}/{reactions.length}</span>
-            <button className="size-overlay-btn size-overlay-btn--nav" onClick={() => handleItemClick(idx + 1)} disabled={!hasNext} title={t('player.reactions.next')}>
-              <MdChevronRight />
-            </button>
-          </div>
-          {onCycleSize && (
-            <button className="size-overlay-btn size-overlay-btn--resize" onClick={onCycleSize} title={t('player.reactions.sizeTitle', { size: t(SIZE_NAME_KEYS[size] || SIZE_NAME_KEYS.small) })}>
-              <MdAspectRatio />
-              <span>{t(SIZE_LABEL_KEYS[size] || SIZE_LABEL_KEYS.small)}</span>
-            </button>
-          )}
-          <button className="size-overlay-btn size-overlay-btn--close" onClick={onClose} title={t('player.reactions.hide')}>
-            <MdKeyboardArrowUp />
-          </button>
-        </div>
+        {/* What this is, top-left on the media (48b) */}
+        <StatusPill tone={isVideo ? 'live' : 'cyan'} caps={false} className="rct-type-pill">
+          {isVideo ? t('player.reactions.videoReaction') : t('player.reactions.comment')}
+        </StatusPill>
 
         {/* Custom player controls (video only) */}
         {isVideo && (
@@ -587,13 +568,13 @@ function ReactionPlayer({
             <div className="rct-controls-row">
               <div className="rct-controls-left">
                 <button className="rct-btn" onClick={handleSeekBackward} title={t('player.controls.rewind10')}>
-                  <TbRewindBackward10 size={14} />
+                  <Icon name="replay_10" size={18} />
                 </button>
                 <button className="rct-btn rct-btn--play" onClick={handleTogglePlay} title={rctPlaying ? t('common.actions.pause') : t('common.actions.play')}>
-                  {rctPlaying ? <FaPause size={10} /> : <FaPlay size={10} />}
+                  <Icon name={rctPlaying ? 'pause' : 'play_arrow'} size={20} fill />
                 </button>
                 <button className="rct-btn" onClick={handleSeekForward} title={t('player.controls.forward10')}>
-                  <TbRewindForward10 size={14} />
+                  <Icon name="forward_10" size={18} />
                 </button>
                 <div className="rct-time">
                   {formatTime(rctTime)} / {formatTime(rctDuration)}
@@ -601,10 +582,10 @@ function ReactionPlayer({
               </div>
               <div className="rct-controls-right">
                 <button className="rct-btn" onClick={handleToggleMute} title={rctMuted ? t('player.controls.unmute') : t('player.controls.mute')}>
-                  {rctMuted ? <FaVolumeMute size={10} /> : <FaVolumeUp size={10} />}
+                  <Icon name={rctMuted ? 'volume_off' : 'volume_up'} size={18} />
                 </button>
                 <button className="rct-btn" onClick={handleToggleFullscreen} title={rctFullscreen ? t('player.controls.exitFullscreen') : t('player.controls.fullscreen')}>
-                  {rctFullscreen ? <FaCompress size={10} /> : <FaExpand size={10} />}
+                  <Icon name={rctFullscreen ? 'fullscreen_exit' : 'fullscreen'} size={18} />
                 </button>
               </div>
             </div>
@@ -612,16 +593,20 @@ function ReactionPlayer({
         )}
       </div>
 
+      {/* Previous and next under the media (48b) */}
+      <div className="rct-nav">
+        <button type="button" className="rct-nav-btn" onClick={() => handleItemClick(idx - 1)} disabled={!hasPrev} aria-label={t('player.reactions.previous')}>
+          <Icon name="arrow_back" size={16} />{t('player.reactions.previous')}
+        </button>
+        <button type="button" className="rct-nav-btn is-next" onClick={() => handleItemClick(idx + 1)} disabled={!hasNext} aria-label={t('player.reactions.next')}>
+          {t('player.reactions.next')}<Icon name="arrow_forward" size={16} />
+        </button>
+      </div>
+
       {/* Comment thread below video reactions */}
       {isVideo && current.permlink && (
         <div className="rct-comment-panel rct-comment-panel--below">
-          <div className="rct-comment-thread">
-            <CommentNode comment={{ author: current.author, avatar: current.avatar, body: current.body, isLowReputation: current.isLowReputation, isHidden: current.isHidden, children: [] }} depth={0} collapsible={false} />
-            {loadingComments && <div className="rct-thread-loading">{t('player.reactions.loadingReplies')}</div>}
-            {nestedComments.map((reply, i) => (
-              <CommentNode key={i} comment={reply} depth={1} />
-            ))}
-          </div>
+          {thread}
         </div>
       )}
       </div>{/* end rct-scroll-area */}
@@ -641,10 +626,10 @@ function ReactionPlayer({
                 ref={el => { itemRefs.current[i] = el; }}
               >
                 <div className="reaction-item-type-badge">
-                  {reaction.type === 'video' ? <MdVideocam size={10} /> : <MdComment size={10} />}
+                  <Icon name={reaction.type === 'video' ? 'videocam' : 'chat_bubble'} size={12} fill />
                 </div>
                 <img className="reaction-item-avatar" src={reaction.avatar} alt="" />
-                <span className="reaction-item-name">@{reaction.author}</span>
+                <span className="reaction-item-name">{reaction.author}</span>
                 {reaction.replyCount > 0 && (
                   <span className="reaction-item-count">{reaction.replyCount}</span>
                 )}

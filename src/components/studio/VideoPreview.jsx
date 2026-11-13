@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { FileVideo } from "lucide-react";
-import { useTranslation } from "react-i18next";
+import { useTranslation, Trans } from "react-i18next";
+import { Banner } from "../v2/ui";
+import "./Select.scss";
 
- const VideoPreview = ({ file }) => {
-  const { t } = useTranslation();
+const VideoPreview = ({ file }) => {
+  useTranslation();
   const [objectUrl, setObjectUrl] = useState(null);
   const [previewError, setPreviewError] = useState(false);
 
@@ -22,12 +23,9 @@ import { useTranslation } from "react-i18next";
   // inline preview, even though the file uploads and is transcoded fine.
   if (previewError) {
     return (
-      <div className="video-preview-fallback" style={{ marginTop: "1rem" }}>
-        <FileVideo className="video-preview-fallback-icon" />
-        <p>
-          {t('studio.preview.cannotPreview')}
-        </p>
-      </div>
+      <Banner tone="neutral" icon="movie_off" className="video-preview-fallback studio-preview-note">
+        <Trans i18nKey="studio.preview.cannotPreview" components={{ b: <b /> }} />
+      </Banner>
     );
   }
 
@@ -36,7 +34,7 @@ import { useTranslation } from "react-i18next";
       src={objectUrl}
       controls
       width="100%"
-      style={{ marginTop: "1rem", borderRadius: "10px" }}
+      className="studio-preview"
       onError={() => setPreviewError(true)}
     />
   );

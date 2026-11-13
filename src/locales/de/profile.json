@@ -21,6 +21,7 @@
     "followers_one": "{{num}} Follower",
     "followers_other": "{{num}} Follower",
     "popularTitle": "Beliebte Creator",
+    "suggestedTitle": "Creator zum Folgen",
     "scrollLeft": "Nach links scrollen",
     "scrollRight": "Nach rechts scrollen",
     "mostlyPosts": "Postet vor allem {{topic}}"
@@ -66,7 +67,8 @@
     "tapForSound": "Tippen für Ton",
     "views_one": "{{num}} Aufruf",
     "views_other": "{{num}} Aufrufe",
-    "readMore": "Weiterlesen"
+    "readMore": "Weiterlesen",
+    "label": "Trailer"
   },
   "snaps": {
     "readMore": "Weiterlesen",
@@ -167,7 +169,8 @@
       "text": "Fasse deine Videos in einer Playlist zusammen, die man der Reihe nach ansehen kann.",
       "cta": "Erste Playlist erstellen",
       "visitor": "@{{user}} hat keine öffentlichen Playlists."
-    }
+    },
+    "visitorPreview": "Besucher sehen: „{{text}}“"
   },
   "links": {
     "button": "Links",
@@ -186,7 +189,8 @@
     "shorts": "Shorts",
     "audio": "Audio",
     "community": "Community",
-    "playlists": "Playlists"
+    "playlists": "Playlists",
+    "latestSnap": "Neuester Snap"
   },
   "streams": {
     "loading": "Streams werden geladen…",
@@ -217,6 +221,7 @@
     "messageTitle": "@{{user}} eine Nachricht schreiben",
     "messageLogin": "Bitte melde dich an, um eine Nachricht zu senden",
     "message": "Nachricht",
+    "messageShort": "DM",
     "unhideTitle": "Videos von @{{user}} wieder in deinen Feeds anzeigen",
     "hideTitle": "Videos von @{{user}} in allen deinen Feeds ausblenden",
     "unhide": "Einblenden",
@@ -230,7 +235,11 @@
     "loginToUpload": "Melde dich an, um ein Video hochzuladen",
     "linkExternalTitle": "Externes Profil verknüpfen",
     "addProfile": "Profil hinzufügen",
-    "editTitle": "Bild, Name, Bio und Standort bearbeiten"
+    "editTitle": "Bild, Name, Bio und Standort bearbeiten",
+    "more": "Mehr",
+    "moreActions": "Weitere Aktionen für @{{user}}",
+    "copyProfileLink": "Profillink kopieren",
+    "podcastFeed": "Podcast-Feed (RSS)"
   },
   "tabs": {
     "overview": "Übersicht",
@@ -265,11 +274,7 @@
     "tip": "Trinkgeld",
     "tipCreator": "Creator Trinkgeld geben",
     "latestVideo": "Neuestes Video",
-    "watchLatestVideo": "Neuestes Video ansehen",
-    "latestShort": "Neuester Short",
-    "watchLatestShort": "Neuesten Short ansehen",
-    "closeMenu": "Menü schließen",
-    "openActions": "Aktionen öffnen"
+    "latestShort": "Neuester Short"
   },
   "uploads": {
     "processing": "Deine Videos werden verarbeitet",
@@ -296,7 +301,10 @@
     "hiddenToast": "Tipp in deinem Profil ausgeblendet",
     "unhiddenToast": "Tipp wird in deinem Profil wieder angezeigt",
     "hideFailed": "Dieser Tipp konnte nicht geändert werden. Bitte versuch es nochmal.",
-    "hideWalletPrompt": "Signiere, um zu ändern, welche Tipps in deinem Profil erscheinen"
+    "hideWalletPrompt": "Signiere, um zu ändern, welche Tipps in deinem Profil erscheinen",
+    "whoTitle": "@{{user}} unterstützt",
+    "tipped_one": "{{count}}× Trinkgeld",
+    "tipped_other": "{{count}}× Trinkgeld"
   },
   "layout": {
     "customize": "Profil anpassen",
@@ -409,5 +417,13 @@
   },
   "audioTab": {
     "files": "Audiodateien"
+  },
+  "search": {
+    "placeholder": "Diesen Kanal durchsuchen",
+    "clear": "Suche löschen",
+    "results_one": "{{count}} Ergebnis für „{{query}}“",
+    "results_other": "{{count}} Ergebnisse für „{{query}}“",
+    "empty": "Nichts auf diesem Kanal passt zu „{{query}}“.",
+    "older": "Ältere Uploads durchsuchen"
   }
 }

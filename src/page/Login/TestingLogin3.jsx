@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import './KeyChainLogin.scss';
+import './Login.scss';
 import axios from "axios";
 import logo from '../../assets/image/3S_logo.svg';
 import keychainImg from '../../assets/image/keychain.png';
@@ -7,7 +7,7 @@ import hiveauthImg from '../../../public/images/hiveauth.jpeg';
 import { useNavigate } from 'react-router-dom';
 import { LOCAL_STORAGE_ACCESS_TOKEN_KEY, LOCAL_STORAGE_USER_ID_KEY } from '../../hooks/localStorageKeys';
 import { useAppStore } from '../../lib/store';
-import { LuLogOut } from 'react-icons/lu';
+import { Icon } from '../../components/v2/ui';
 import { toastIn } from '../../utils/toast';
 import {QRCodeSVG} from 'qrcode.react';
 import HAS from 'hive-auth-wrapper'
@@ -330,7 +330,7 @@ function TestingLogin3() {
                   <div key={idx} className='wrap' onClick={() => handleSwitchAccount(list.username)}>
                     <img src={`/img/u/${list.username}/avatar/small`} alt={list.username} />
                     <span>{list.username}</span>
-                    <LuLogOut size={12} onClick={(e) => { e.stopPropagation(); removeAccount(list.username); }} />
+                    <Icon name="close" size={14} onClick={(e) => { e.stopPropagation(); removeAccount(list.username); }} />
                   </div>
                 ))}
               </div>

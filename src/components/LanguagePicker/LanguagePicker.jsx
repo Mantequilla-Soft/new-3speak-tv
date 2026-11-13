@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { setLanguage, getAllLanguages, subscribeLanguages } from '../../i18n';
 import { fetchTranslatorStatus } from '../../lib/translatorApi';
+import { Icon } from '../v2/Icon';
 import './LanguagePicker.scss';
 
 
@@ -32,26 +33,30 @@ export default function LanguagePicker({ compact = false, onNavigate }) {
     return () => { alive = false; };
   }, [compact]);
 
+  // In Settings the card around it is titled "Language" (29b), so the picker is
+  // the hint and the select as one field, with the translator link under it.
   return (
     <div className={`language-picker${compact ? ' language-picker--compact' : ''}`}>
-      <div className="language-picker-text">
-        <label className="settings-row-title" htmlFor="language-picker-select">
-          🌐 {t('common.language.label')}
-        </label>
-        {!compact && <span className="settings-row-desc">{t('common.language.hint')}</span>}
+      <label className="language-picker-label" htmlFor="language-picker-select">
+        {t('common.language.label')}
+      </label>
+      {!compact && <p className="language-picker-hint">{t('common.language.hint')}</p>}
+      <div className="language-picker-field">
+        <Icon name="translate" size={18} className="language-picker-icon" />
+        <select
+          id="language-picker-select"
+          className="language-picker-select"
+          value={current}
+          onChange={(e) => setLanguage(e.target.value)}
+        >
+          {languages.map((l) => (
+            <option key={l.code} value={l.code} lang={l.code}>
+              {l.native}{l.native !== l.english ? ` (${l.english})` : ''}
+            </option>
+          ))}
+        </select>
+        <Icon name="expand_more" size={18} className="language-picker-chev" />
       </div>
-      <select
-        id="language-picker-select"
-        className="language-picker-select"
-        value={current}
-        onChange={(e) => setLanguage(e.target.value)}
-      >
-        {languages.map((l) => (
-          <option key={l.code} value={l.code} lang={l.code}>
-            {l.native}{l.native !== l.english ? ` (${l.english})` : ''}
-          </option>
-        ))}
-      </select>
       {!compact && isTranslator && (
         <Link className="language-picker-contribute" to="/translate" onClick={onNavigate}>
           {t('translator.title')}

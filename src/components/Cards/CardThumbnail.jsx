@@ -18,15 +18,14 @@ const THUMB_TIMEOUT_MS = 10000;
 const DECODE_POLL_MS = 120;
 
 /**
- * Thumbnail <img> with a non-destructive fallback + loading spinner.
+ * Thumbnail <img> with a non-destructive fallback over the striped placeholder.
  *  - The real image ALWAYS loads (its src is never swapped away) and fades in the
  *    moment it decodes — even after the placeholder has been shown — so a slow
  *    thumbnail appears on its own without needing a hover.
  *  - onError shows the branded fallback immediately.
  *  - A watchdog shows the fallback BEHIND the (still-loading) image if nothing has
  *    decoded after THUMB_TIMEOUT_MS, so a hung host can't leave the card blank.
- *  - A spinner overlays the card during the initial wait, before either the image
- *    or the placeholder appears.
+ *  - During the initial wait the wrapper's striped placeholder shows (v2).
  * Off-screen lazy images don't arm the watchdog, so they never fall back or spin
  * before they even try to load.
  */
@@ -84,7 +83,7 @@ function CardThumbnail({ src, fallback, alt, eager = false, className, ...rest }
         src={src}
         alt={alt ?? t("cards.thumbnailAlt")}
         className={className}
-        style={{ position: "relative", zIndex: 1, opacity: loaded && !failed ? 1 : 0, transition: "opacity 0.2s ease" }}
+        style={{ position: "relative", zIndex: 1, opacity: loaded && !failed ? 1 : 0, transition: "opacity var(--t-base) var(--ease)" }}
         onLoad={() => { done(); setLoaded(true); }}
         onError={() => { done(); setFailed(true); }}
         loading={eager ? "eager" : "lazy"}
@@ -103,8 +102,8 @@ function CardThumbnail({ src, fallback, alt, eager = false, className, ...rest }
           style={{ position: "absolute", inset: 0, zIndex: 0, width: "100%", height: "100%" }}
         />
       )}
-      {/* Spinner only during the initial wait, before image or placeholder. */}
-      {!loaded && !failed && !slow && <span className="card-thumb-spinner" aria-hidden="true" />}
+      {/* No spinner: during the initial wait the striped placeholder of the
+          wrapper (.img-wrap, v2 thumb-placeholder) shows through. */}
     </>
   );
 }

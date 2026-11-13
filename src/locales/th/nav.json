@@ -7,7 +7,8 @@
     "feeds": "ฟีด",
     "groups": "กลุ่ม",
     "audio": "เสียง",
-    "login": "เข้าสู่ระบบ"
+    "login": "เข้าสู่ระบบ",
+    "you": "คุณ"
   },
   "installApp": "ติดตั้งแอป",
   "iosInstallHint": "แตะ <b>แชร์</b> แล้วเลือก <b>เพิ่มไปยังหน้าจอโฮม</b>",
@@ -28,7 +29,9 @@
     "shortsTooltip": "วิดีโอสั้นแนวตั้ง เล่นต่อกันไปเรื่อยๆ",
     "audioTooltip": "พอดแคสต์ เพลง และเสียงอื่นๆ ที่เผยแพร่บน 3Speak",
     "groupsTooltip": "ชุมชนที่คุณเข้าร่วมได้ และตราสัญลักษณ์ที่ผู้คนได้รับ",
-    "rankingsTooltip": "ครีเอเตอร์ที่มีรายได้และยอดดูสูงสุดในตอนนี้"
+    "rankingsTooltip": "ครีเอเตอร์ที่มีรายได้และยอดดูสูงสุดในตอนนี้",
+    "live": "ไลฟ์",
+    "liveTooltip": "สตรีมและห้องที่กำลังไลฟ์อยู่ตอนนี้"
   },
   "aboutLink": "เกี่ยวกับ 3Speak",
   "faqLink": "คำถามที่พบบ่อย",
@@ -38,6 +41,8 @@
     "myChannelAria": "ช่องของฉัน",
     "vpTooltip": "Voting Power: น้ำหนักของโหวตครั้งถัดไปของคุณ",
     "rcTooltip": "Resource Credits: ต้นทุนของการดำเนินการของคุณบน Hive",
+    "votingPower": "Voting Power",
+    "resourceCredits": "Resource Credits",
     "myChannel": "ช่องของฉัน",
     "publishBacklog": "เผยแพร่รายการค้าง",
     "analytics": "การวิเคราะห์",
@@ -47,7 +52,13 @@
     "logout": "ออกจากระบบ",
     "onDiscord": "3Speak บน Discord",
     "onX": "3Speak บน X",
-    "onTelegram": "3Speak บน Telegram"
+    "onTelegram": "3Speak บน Telegram",
+    "switch": "สลับ",
+    "tiles": {
+      "channel": "ช่อง",
+      "history": "ประวัติ"
+    },
+    "darkTheme": "ธีมมืด"
   },
   "notifications": {
     "pushOff": "ปิดการแจ้งเตือนสำหรับอุปกรณ์นี้แล้ว",
@@ -87,6 +98,13 @@
       "heading": "ตอนใหม่ของพอดแคสต์ที่คุณติดตาม",
       "newEpisode": "ตอนใหม่ของ {{show}}",
       "type": "พอดแคสต์"
+    },
+    "tabs": {
+      "all": "ทั้งหมด",
+      "mentions": "การกล่าวถึง",
+      "follows": "การติดตาม",
+      "uploads": "การอัปโหลด",
+      "pods": "Pods"
     }
   },
   "search": {
@@ -121,6 +139,17 @@
     "views_other": "การดู {{formatted}} ครั้ง",
     "tags": "แท็ก",
     "titles": "ชื่อเรื่อง",
-    "placeholder": "ค้นหา..."
-  }
+    "placeholder": "ค้นหา...",
+    "recent": "ล่าสุด",
+    "allResultsFor": "ผลลัพธ์ทั้งหมดสำหรับ “{{term}}”",
+    "kinds": {
+      "creator": "ครีเอเตอร์",
+      "community": "ชุมชน",
+      "video": "วิดีโอ",
+      "short": "Short",
+      "audio": "เสียง",
+      "playlist": "เพลย์ลิสต์"
+    }
+  },
+  "create": "สร้าง"
 }

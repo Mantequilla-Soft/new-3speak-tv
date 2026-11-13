@@ -1,0 +1,264 @@
+@use "../../styles/v2" as v2;
+
+/* The vote dialog (CommentVoteTooltip): videos, comments, shorts, audio.
+   Design 17b / 28a: a big accent percentage, "adds about $0.06", a 10px track
+   with a white 24px thumb, 10 / 25 / 50 / 100 presets, one primary Vote button.
+   ModalHeader marks the box as a v2 dialog (surface, radius 28, border, sheet
+   on phones; see components/modal/_modal-base.scss), so only the inside is here. */
+
+.cvt-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: var(--overlay);
+
+  @include v2.mobile { place-items: end stretch; padding: 0; }
+}
+
+.cvt-dialog {
+  position: relative;
+  // Wide enough for the 4-across topic tiles (TagsV2Picker) on a video vote.
+  width: min(480px, 100%);
+  max-height: calc(100dvh - 48px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 18px 20px 20px;
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--r-3xl);
+  box-shadow: var(--shadow-sheet);
+
+  @include v2.mobile {
+    width: 100%;
+    border-radius: var(--r-3xl) var(--r-3xl) 0 0;
+    padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .cvt-header { margin: 0; }
+}
+
+.cvt-weight {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+// The weight, big: 48/900 accent (money and votes are accent), the estimate under it.
+.cvt-big {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  min-height: 76px;
+}
+
+.cvt-pct {
+  font-size: 48px;
+  font-weight: 900;
+  letter-spacing: -.04em;
+  line-height: 1;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.cvt-value {
+  @include v2.text(meta);
+  color: var(--muted);
+  min-height: 17px;
+}
+
+.cvt-spinner { color: var(--cyan); }
+.cvt-loading { display: flex; justify-content: flex-start; padding: 8px 0; }
+
+// The drawn slider (built in CommentVoteTooltip.jsx): 10px track on surface-2,
+// accent fill, white 24px thumb at radius 8 (design 28a).
+.cvt-slider { padding: 0 12px; }
+
+.cvt-track {
+  position: relative;
+  height: 10px;
+  border-radius: var(--r-xs);
+  background: var(--surface-2);
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+
+  &:active { cursor: grabbing; }
+
+  // The thumb is bigger than the track and ignores the pointer, so the track
+  // gets a padded hit area: taller than the thumb, and past both ends so the
+  // handle can be dragged at 1% and 100%.
+  &::before {
+    content: "";
+    position: absolute;
+    left: -14px;
+    right: -14px;
+    top: 50%;
+    height: 40px;
+    transform: translateY(-50%);
+  }
+}
+
+.cvt-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: var(--r-xs);
+  background: var(--accent);
+  pointer-events: none;
+}
+
+.cvt-thumb {
+  position: absolute;
+  top: 50%;
+  width: 24px;
+  height: 24px;
+  border-radius: var(--r-sm);
+  background: var(--on-media);
+  box-shadow: 0 0 0 1px var(--border);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+
+  &:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+}
+
+.cvt-presets {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+
+.cvt-preset {
+  height: 44px;
+  border-radius: var(--r-lg);
+  border: 2px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  @include v2.mono(13, 900);
+  cursor: pointer;
+  transition: border-color var(--t-fast) var(--ease), background var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
+
+  &:hover { background: var(--bg-hover); }
+  &:active { transform: scale(.98); }
+  &.is-on { border-color: var(--accent); background: var(--accent-tint-strong); }
+  &:disabled { opacity: .45; cursor: not-allowed; }
+}
+
+// Vote with a topic (40a): a 16/700 title, a muted line, then the chips.
+.cvt-tag {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: left;
+
+  &__title { @include v2.text(title-sm); color: var(--text); }
+  &__sub { @include v2.text(meta); color: var(--muted); margin-bottom: 2px; }
+}
+
+
+.cvt-note {
+  margin: 0;
+  @include v2.text(body-sm);
+  line-height: 1.5;
+  color: var(--text);
+  b { text-transform: capitalize; }
+}
+
+.cvt-submit { margin-top: 2px; }
+
+// Compact (the watch page and shorts): tighter on wide screens.
+.cvt-dialog.is-compact {
+  @include v2.tablet-up {
+    gap: 12px;
+    padding: 16px 18px 18px;
+    .cvt-pct { font-size: 40px; }
+    .cvt-big { min-height: 64px; }
+  }
+}
+
+/* The video vote (17b): a side sheet from the right on a wide screen (a bottom
+   sheet on a phone), a 40px weight, 36px presets, the voting power in a well
+   above the button. No card of the video on top (owner 2026-11-12: it made
+   phones scroll to reach Vote). */
+
+.cvt-vp {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: var(--r-lg);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  @include v2.text(body-sm);
+
+  .material-symbols-rounded { color: var(--cyan); }
+  span:not(.material-symbols-rounded) { flex: 1; }
+  b { font-weight: 700; }
+}
+
+.cvt-dialog.is-post {
+  .cvt-thumb { border-radius: 50%; } // 17b: a round white thumb (28a keeps radius 8)
+  // Compact enough that Vote fits on a phone without scrolling (owner
+  // 2026-11-12): a 40px weight with the estimate beside it, 36px presets.
+  .cvt-pct { font-size: 40px; }
+  .cvt-big { flex-direction: row; align-items: baseline; flex-wrap: wrap; gap: 4px 10px; min-height: 40px; }
+  .cvt-preset { height: 36px; border-radius: var(--r-md); font-family: var(--font-sans); font-weight: 900; font-size: 13px; }
+}
+
+// 17b head: the accent bar, a 20/900 "Vote" and a round 36 close on surface-2.
+.cvt-dialog.is-post .cvt-header {
+  gap: 10px;
+  .app-modal-header-title { font-size: 20px; font-weight: 900; letter-spacing: -.01em; line-height: 1.2; }
+  .app-modal-header-close {
+    width: 36px;
+    height: 36px;
+    margin: 0;
+    background: var(--surface-2);
+    .material-symbols-rounded { font-size: 20px !important; }
+    &:hover { background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); }
+    &::after { inset: -4px; }
+  }
+}
+
+@include v2.tablet-up {
+  .cvt-overlay:has(> .cvt-dialog.is-post) {
+    place-items: stretch end;
+    padding: 0;
+  }
+  .cvt-dialog.is-post {
+    width: 420px;
+    height: 100%;
+    max-height: 100dvh;
+    padding: 22px;
+    gap: 16px;
+    border-right: 0;
+    border-radius: var(--r-3xl) 0 0 var(--r-3xl);
+    animation: cvt-sheet-in var(--t-slow) var(--ease);
+
+    // The buttons sit at the foot of the sheet.
+    .cvt-actions { margin-top: auto; }
+    > .cvt-submit { margin-top: auto; flex: none; }
+  }
+}
+
+@keyframes cvt-sheet-in { from { transform: translateX(24px); opacity: 0; } }
+
+// Vote, or "Just tag" beside "Vote and tag" once a topic is picked (40a).
+.cvt-actions {
+  display: flex;
+  flex: none;
+
+  &.is-split {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 8px;
+  }
+  .cvt-submit { margin-top: 0; }
+}

@@ -4,6 +4,7 @@
   },
   "tools": {
     "emoji": "Emoji",
+    "image": "Tambah gambar",
     "searchEmoji": "Cari emoji",
     "searchGifs": "Cari GIF…",
     "noGifs": "GIF tidak ditemukan.",
@@ -17,6 +18,7 @@
     "community": "Komunitas",
     "communityWithSubscribers_other": "Komunitas · {{formatted}} anggota",
     "commentFallback": "(komentar)",
+    "videoKind": "3Speak · Video",
     "play": "Putar {{title}}"
   },
   "share": {
@@ -30,22 +32,28 @@
     "responsiveSub": "Menyesuaikan ukuran halaman tempatnya berada",
     "fixedSub": "Iframe berukuran tetap",
     "sendInChat": "Kirim di 3Speak Chat",
-    "sendInChatSub": "Kirim sebagai pesan ke seseorang di 3Speak",
+    "sendInChatSub": "Kirim sebagai pesan ke seseorang",
     "embedOnWebsite": "Sematkan di situs web",
-    "embedOnWebsiteSub": "Salin HTML untuk situs atau blogmu sendiri",
+    "embedOnWebsiteSub": "Ukuran responsif atau tetap",
     "forHivePost": "Untuk postingan Hive",
+    "forHivePostSub": "Salin tautan untuk ditempel",
     "hivePostCopied": "Tautan disalin. Tempelkan ke postingan Hive kamu.",
-    "generalShare": "Bagikan / salin tautan",
-    "generalShareSub": "Aplikasi lain, atau salin tautannya"
+    "generalShare": "Bagikan atau salin tautan",
+    "generalShareSub": "Aplikasi lain",
+    "embed": "Sematkan",
+    "chat": "Chat",
+    "more": "Lainnya",
+    "startAt": "Mulai pada",
+    "toFollowers_other": "Ke {{n}} pengikutmu"
   },
   "gate": {
     "connectTitle": "Hubungkan ke 3Speak Chat",
-    "connectBody": "Chat didukung oleh Snapie. Menghubungkan berarti menandatangani tantangan login satu kali dengan posting key Hive-mu — bukan transaksi, tanpa biaya.",
+    "connectBody": "Chat didukung oleh Snapie. Menghubungkan berarti menandatangani tantangan login satu kali dengan posting key-mu. Tanpa transaksi, tanpa biaya.",
     "connecting": "Menghubungkan…",
     "connectButton": "Hubungkan chat",
     "cannotSign": "Login-mu saat ini tidak bisa menandatangani tantangan chat. Gunakan Keychain, HiveAuth, PeakVault, atau Ledger.",
-    "needsAccountTitle": "Chat butuh akun Hive",
-    "needsAccountBody": "Pesan ditandatangani dengan key akunmu sendiri, jadi chat terbuka bersama fitur lainnya begitu akunmu siap. Selesaikan target di profilmu dan tim akan membantumu sampai ke sana.",
+    "needsAccountTitle": "Chat butuh akun Hive.",
+    "needsAccountBody": "Chat terbuka bersama fitur lainnya begitu kamu lulus dari masa pemanasan.",
     "loginTitle": "Masuk untuk memakai chat",
     "loginBody": "Masuk dengan akun Hive-mu untuk mengirim dan menerima pesan.",
     "connectingToChat": "Menghubungkan ke chat…"
@@ -89,8 +97,8 @@
     "serverRejectedServerMap_other": "Server menolak semua {{count}} permintaan (ID dari peta belum-dibaca milik server sendiri)",
     "failed": "Tidak dapat menandai semua sebagai dibaca",
     "marking": "Menandai sebagai dibaca…",
-    "button": "Tandai semua sudah dibaca",
-    "buttonCount": "Tandai semua sudah dibaca ({{count}})"
+    "button": "Tandai semua dibaca",
+    "buttonCount": "Tandai semua dibaca ({{count}})"
   },
   "list": {
     "chooseTarget": "Pilih chat tujuan",
@@ -112,7 +120,7 @@
     "deleteError": "Pesan tidak dapat dihapus.",
     "back": "Kembali ke percakapan",
     "loading": "Memuat pesan…",
-    "empty": "Belum ada pesan — sapa dulu 👋",
+    "empty": "Belum ada pesan. Sapa dulu 👋",
     "editedSuffix": " · diedit",
     "messageActions": "Aksi pesan",
     "quote": "Kutip",
@@ -123,7 +131,8 @@
     "quoting": "Mengutip @{{user}}",
     "cancelQuote": "Batalkan kutipan",
     "removeImage": "Hapus gambar",
-    "placeholder": "Ketik pesan…"
+    "placeholder": "Ketik pesan…",
+    "placeholderTo": "Kirim pesan ke {{name}}"
   },
   "page": {
     "chooseTarget": "Pilih chat tujuan.",

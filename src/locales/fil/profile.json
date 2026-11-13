@@ -10,8 +10,8 @@
     "unknownError": "Hindi kilalang error"
   },
   "authorBadge": {
-    "followers_one": "{{count}} Follower",
-    "followers_other": "{{count}} Followers"
+    "followers_one": "{{count}} follower",
+    "followers_other": "{{count}} follower"
   },
   "creators": {
     "loginRequired": "Mag-log in para mag-follow ng mga creator",
@@ -21,6 +21,7 @@
     "followers_one": "{{num}} follower",
     "followers_other": "{{num}} followers",
     "popularTitle": "Mga sikat na creator",
+    "suggestedTitle": "Mga creator na puwedeng i-follow",
     "scrollLeft": "Mag-scroll pakaliwa",
     "scrollRight": "Mag-scroll pakanan",
     "mostlyPosts": "Madalas mag-post tungkol sa {{topic}}"
@@ -66,7 +67,8 @@
     "tapForSound": "I-tap para may tunog",
     "views_one": "{{num}} view",
     "views_other": "{{num}} views",
-    "readMore": "Magbasa pa"
+    "readMore": "Magbasa pa",
+    "label": "Trailer"
   },
   "snaps": {
     "readMore": "Magbasa pa",
@@ -167,7 +169,8 @@
       "text": "Pagsama-samahin ang mga video mo sa isang playlist na mapapanood nang sunud-sunod.",
       "cta": "Gawin ang una mong playlist",
       "visitor": "Walang public na playlist si @{{user}}."
-    }
+    },
+    "visitorPreview": "Makikita ng mga bisita: “{{text}}”"
   },
   "links": {
     "button": "Links",
@@ -186,7 +189,8 @@
     "shorts": "Shorts",
     "audio": "Audio",
     "community": "Komunidad",
-    "playlists": "Mga Playlist"
+    "playlists": "Mga Playlist",
+    "latestSnap": "Pinakabagong snap"
   },
   "streams": {
     "loading": "Naglo-load ng streams…",
@@ -217,6 +221,7 @@
     "messageTitle": "I-message si @{{user}}",
     "messageLogin": "Mag-log in para magpadala ng mensahe",
     "message": "Mensahe",
+    "messageShort": "DM",
     "unhideTitle": "Ipakita ulit sa feeds mo ang mga video ni @{{user}}",
     "hideTitle": "Itago sa lahat ng feeds mo ang mga video ni @{{user}}",
     "unhide": "Ipakita ulit",
@@ -230,7 +235,11 @@
     "loginToUpload": "Mag-log in para mag-upload ng video",
     "linkExternalTitle": "Mag-link ng external profile",
     "addProfile": "Magdagdag ng profile",
-    "editTitle": "I-edit ang larawan, pangalan, bio at lokasyon mo"
+    "editTitle": "I-edit ang larawan, pangalan, bio at lokasyon mo",
+    "more": "Iba pa",
+    "moreActions": "Iba pang aksyon para kay @{{user}}",
+    "copyProfileLink": "Kopyahin ang link ng profile",
+    "podcastFeed": "Podcast feed (RSS)"
   },
   "tabs": {
     "overview": "Overview",
@@ -265,11 +274,7 @@
     "tip": "Tip",
     "tipCreator": "I-tip ang creator",
     "latestVideo": "Pinakabagong Video",
-    "watchLatestVideo": "Panoorin ang pinakabagong video",
-    "latestShort": "Pinakabagong Short",
-    "watchLatestShort": "Panoorin ang pinakabagong short",
-    "closeMenu": "Isara ang menu",
-    "openActions": "Buksan ang mga aksyon"
+    "latestShort": "Pinakabagong Short"
   },
   "uploads": {
     "processing": "Pinoproseso ang mga video mo",
@@ -296,7 +301,10 @@
     "hiddenToast": "Naitago ang tip sa profile mo",
     "unhiddenToast": "Muling ipinapakita ang tip sa profile mo",
     "hideFailed": "Hindi mabago ang tip na ito. Pakisubukan ulit.",
-    "hideWalletPrompt": "Mag-sign para baguhin kung aling mga tip ang lalabas sa profile mo"
+    "hideWalletPrompt": "Mag-sign para baguhin kung aling mga tip ang lalabas sa profile mo",
+    "whoTitle": "Sinusuportahan ni @{{user}}",
+    "tipped_one": "Nag-tip nang {{count}}×",
+    "tipped_other": "Nag-tip nang {{count}}×"
   },
   "layout": {
     "customize": "I-customize ang profile",
@@ -409,5 +417,13 @@
   },
   "audioTab": {
     "files": "Mga audio file"
+  },
+  "search": {
+    "placeholder": "Maghanap sa channel na ito",
+    "clear": "I-clear ang search",
+    "results_one": "{{count}} resulta para sa “{{query}}”",
+    "results_other": "{{count}} resulta para sa “{{query}}”",
+    "empty": "Walang tumutugma sa “{{query}}” sa channel na ito.",
+    "older": "Maghanap sa mas lumang upload"
   }
 }

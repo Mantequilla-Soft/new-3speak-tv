@@ -28,11 +28,22 @@
   },
   "newFromFollowing": {
     "aria": "Mpya kutoka kwa watayarishaji unaowafuata",
+    "summary_one": "Video mpya {{count}}",
+    "summary_other": "Video mpya {{count}}",
+    "fromFollowing": "kutoka kwa watu unaowafuata",
     "shorts_one": "short {{count}}",
-    "shorts_other": "Shorts {{count}}"
+    "shorts_other": "Shorts {{count}}",
+    "show": "Onyesha",
+    "hide": "Ficha",
+    "markSeen": "Weka zote kuwa zimeonekana"
+  },
+  "tagMeta": {
+    "videos_one": "video {{num}}",
+    "videos_other": "video {{num}}",
+    "thisWeek": "{{num}} wiki hii"
   },
   "firstUploads": {
-    "title": "Upakiaji wa kwanza"
+    "title": "Upakiaji wa Kwanza"
   },
   "newVideos": {
     "title": "Video mpya"
@@ -48,8 +59,16 @@
     "empty": "Bado hakuna cha kuonyesha hapa.",
     "viewAll": "Tazama zote",
     "dragToReorder": "Buruta ili kupanga upya",
+    "customize": "Badilisha",
+    "customizeTitle": "Badilisha ukurasa wa Nyumbani",
+    "customizeHint": "Buruta ili kupanga upya. Zima sehemu usizotaka.",
     "surfTitle": "Kuvinjari chaneli: chagua mada na uitazame kama TV",
-    "zapping": "Inabadilisha"
+    "zapping": "Inabadilisha",
+    "hero": {
+      "spotlightIn": "Kivutio katika {{community}}",
+      "slide": "Kivutio {{index}} kati ya {{count}}"
+    },
+    "tabFollowing": "Unaowafuata"
   },
   "surf": {
     "pageTitle": "Kuvinjari chaneli",
@@ -75,9 +94,10 @@
     "nextVideoKey": "Video inayofuata (→)",
     "zap": "Zap",
     "findingNext": "Inatafuta inayofuata…",
-    "stop": "Acha kuvinjari",
+    "stop": "Acha",
     "stopTitle": "Acha kuvinjari (video hii itaendelea kucheza)",
-    "guide": "Mwongozo wa chaneli"
+    "guide": "Mwongozo wa chaneli",
+    "guideShort": "Mwongozo"
   },
   "discover": {
     "searchPlaceholder": "Tafuta video, Shorts, sauti, jumuiya...",
@@ -118,6 +138,33 @@
     "authors_one": "mwandishi {{count}}",
     "authors_other": "waandishi {{count}}",
     "views_one": "mtazamo {{views}}",
-    "views_other": "mitazamo {{views}}"
+    "views_other": "mitazamo {{views}}",
+    "topCreator": "Mtayarishaji bora",
+    "creators": "Watayarishaji",
+    "relatedTags": "Lebo zinazohusiana",
+    "trendingTags": "Lebo zinazovuma",
+    "topCreators": "Watayarishaji bora",
+    "categories": "Kategoria",
+    "show": "Onyesha",
+    "boostRecentHint": "Pendelea video mpya zaidi kwenye matokeo",
+    "showResults_one": "Onyesha tokeo {{count}}",
+    "showResults_other": "Onyesha matokeo {{count}}",
+    "resultTypes": "Aina za matokeo"
+  },
+  "activity": {
+    "warmup": "Maandalizi",
+    "aria": "Shughuli kwenye 3Speak",
+    "community": "Jumuiya",
+    "verbs": {
+      "snap": "snap",
+      "audio": "sauti mpya",
+      "playlist": "orodha ya kucheza",
+      "live": "yuko mubashara",
+      "group_one": "video mpya {{count}} wiki hii",
+      "group_other": "video mpya {{count}} wiki hii"
+    },
+    "emptyCommunity": "Hakuna jipya kutoka kwa jumuiya katika siku chache zilizopita.",
+    "emptyLive": "Hakuna aliye mubashara sasa hivi.",
+    "emptyGroups": "Bado hakuna shughuli za vikundi wiki hii."
   }
 }

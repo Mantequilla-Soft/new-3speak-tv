@@ -43,12 +43,12 @@ beforeEach(() => {
 describe('saving a video to a playlist', () => {
   it('renders nothing while closed', () => {
     mount({ isOpen: false })
-    expect(screen.queryByRole('heading', { name: 'Save to Playlist' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('heading', { name: 'Save' })).not.toBeInTheDocument()
   })
 
   it('lists Watch Later first, then the member\'s playlists, marking where the video already is', () => {
     mount()
-    expect(screen.getByRole('heading', { name: 'Save to Playlist' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Save' })).toBeInTheDocument()
     const buttons = screen.getAllByRole('button').filter((b) => /Watch Later|Trips|Lakes/.test(b.textContent))
     expect(buttons.map((b) => b.textContent.match(/Watch Later|Trips|Lakes/)[0])).toEqual(['Watch Later', 'Trips', 'Lakes'])
     expect(within(buttons[1]).getByText('1 video')).toBeInTheDocument()
@@ -56,11 +56,15 @@ describe('saving a video to a playlist', () => {
     expect(within(buttons[1]).queryByText('Added')).not.toBeInTheDocument()
   })
 
-  it('adds the video to a playlist, confirms and closes', async () => {
+  it('adds the video to a playlist, confirms, marks it saved and stays open for more; Done closes', async () => {
     const { user, onClose } = mount()
     await user.click(screen.getByRole('button', { name: /Trips/ }))
     expect(m.add).toHaveBeenCalledWith('p1', 'badadib', 'lake-day', 0)
     expect(toastMessages(toast.success)).toEqual(['Added to "Trips"'])
+    expect(within(screen.getByRole('button', { name: /Trips/ })).getByText('Added')).toBeInTheDocument()
+    expect(screen.getByText('Saved to 2 playlists')).toBeInTheDocument()
+    expect(onClose).not.toHaveBeenCalled()
+    await user.click(screen.getByRole('button', { name: 'Done' }))
     expect(onClose).toHaveBeenCalled()
   })
 
@@ -111,7 +115,7 @@ describe('saving a video to a playlist', () => {
 
   it('creates a new playlist with tags and the video in it', async () => {
     const { user, onClose } = mount()
-    await user.click(screen.getByRole('button', { name: /Create new playlist/ }))
+    await user.click(screen.getByRole('button', { name: /New playlist/ }))
     const create = screen.getByRole('button', { name: 'Create & Add' })
     expect(create).toBeDisabled()
     await user.type(screen.getByPlaceholderText('My awesome playlist'), '  Summer  ')
@@ -130,7 +134,7 @@ describe('saving a video to a playlist', () => {
 
   it('removes a tag with Backspace in an empty box', async () => {
     const { user } = mount()
-    await user.click(screen.getByRole('button', { name: /Create new playlist/ }))
+    await user.click(screen.getByRole('button', { name: /New playlist/ }))
     await user.type(screen.getByPlaceholderText('Type a tag and press Enter'), 'one{Enter}')
     await user.type(screen.getByPlaceholderText('Add more...'), '{Backspace}')
     expect(screen.queryByText('one')).not.toBeInTheDocument()
@@ -142,13 +146,13 @@ describe('saving a video to a playlist', () => {
     expect(screen.getByText("You don't have any other playlists yet")).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: /Create a playlist/ }))
     expect(screen.getByPlaceholderText('My awesome playlist')).toBeInTheDocument()
-    await user.click(screen.getByRole('button', { name: 'Cancel' }))
+    await user.click(screen.getByRole('button', { name: 'Back' }))
     expect(screen.queryByPlaceholderText('My awesome playlist')).not.toBeInTheDocument()
   })
 
   it('closes from its X and from the backdrop, but not from a click inside', async () => {
     const { user, onClose } = mount()
-    await user.click(screen.getByRole('heading', { name: 'Save to Playlist' }))
+    await user.click(screen.getByRole('heading', { name: 'Save' }))
     expect(onClose).not.toHaveBeenCalled()
     await user.click(screen.getByRole('button', { name: 'Close' }))
     await user.click(document.querySelector('.add-to-playlist-overlay'))
@@ -160,8 +164,8 @@ describe('saving a video to a playlist', () => {
   // tied to their fields (:248, :259, :278).
   it('BUG: is a dialog Escape closes, with labelled fields', async () => {
     const { user, onClose } = mount()
-    expect(screen.getByRole('dialog', { name: 'Save to Playlist' })).toBeInTheDocument()
-    await user.click(screen.getByRole('button', { name: /Create new playlist/ }))
+    expect(screen.getByRole('dialog', { name: 'Save' })).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: /New playlist/ }))
     expect(screen.getByRole('textbox', { name: 'Name' })).toBeInTheDocument()
     await user.keyboard('{Escape}')
     expect(onClose).toHaveBeenCalled()

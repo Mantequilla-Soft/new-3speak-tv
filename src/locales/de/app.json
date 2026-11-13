@@ -5,11 +5,11 @@
   "supportBlock": {
     "banned": {
       "title": "Dein Konto ist gesperrt",
-      "body": "Dein 3Speak-Konto wurde gesperrt, daher kannst du nicht angemeldet werden. Wenn du glaubst, dass das ein Fehler ist, wende dich bitte an den 3Speak-Support."
+      "body": "Dein 3Speak-Konto wurde gesperrt, daher kannst du nicht angemeldet werden. Wenn du glaubst, dass das ein Fehler ist, wende dich an den 3Speak-Support."
     },
     "upload": {
       "title": "Hochladen ist für dein Konto deaktiviert",
-      "body": "Dein 3Speak-Konto darf gerade nichts hochladen. Wenn du glaubst, dass das ein Fehler ist, wende dich bitte an den 3Speak-Support."
+      "body": "Dein Konto darf gerade nichts hochladen. Wenn du glaubst, dass das ein Fehler ist, wende dich an den 3Speak-Support."
     }
   },
   "uploadBlock": {
@@ -18,7 +18,7 @@
   },
   "emergency": {
     "title": "Wir haben gerade Probleme mit der Infrastruktur",
-    "body": "Unser Team kümmert sich darum und arbeitet daran, 3Speak so schnell wie möglich wieder ans Laufen zu bringen. Tritt unserem Discord bei, um uns zu erreichen und Live-Updates zu bekommen – danke für deine Geduld.",
+    "body": "Unser Team arbeitet gerade daran, 3Speak wieder ans Laufen zu bringen. Tritt unserem Discord bei, um Live-Updates zu bekommen.",
     "joinDiscord": "Unserem Discord beitreten"
   },
   "changelog": {
@@ -74,7 +74,7 @@
     "about": "Über uns",
     "faq": "FAQ",
     "login": "Anmelden",
-    "brandFallback": "3Speak – Dezentrale Videoplattform"
+    "brandFallback": "3Speak - Dezentrale Videoplattform"
   },
   "invite": {
     "title": "<who>@{{referrer}}</who> hat dich zu 3Speak eingeladen",
@@ -87,7 +87,7 @@
     "lookAround": "Ich will mich erst mal umsehen"
   },
   "interests": {
-    "saved": "Interessen gespeichert – du kannst sie jederzeit in den Einstellungen ändern",
+    "saved": "Interessen gespeichert. Du kannst sie jederzeit in den Einstellungen ändern",
     "saveFailed": "Interessen konnten nicht gespeichert werden",
     "title": "Was interessiert dich?",
     "body": "Wähle ein paar Themen, die dir gefallen, und wir zeigen dir mehr von den Inhalten, die du magst. Du kannst sie jederzeit in den <b>Einstellungen</b> ändern.",
@@ -105,27 +105,27 @@
     "things": {
       "postVideos": {
         "title": "Videos posten",
-        "text": "Lade lange Videos hoch, die dir gehören – auf einer Chain, von der sie niemand heimlich löschen kann."
+        "text": "Lange Videos, die dir gehören"
       },
       "filmShorts": {
         "title": "Shorts drehen",
-        "text": "Etwas Schnelles im Hochformat, das sich leicht teilen lässt. Ideal, um deine ersten Zuschauer zu finden."
+        "text": "Kurz, im Hochformat, leicht zu teilen"
       },
       "goLive": {
         "title": "Live gehen",
-        "text": "Streame für deine Leute, hol Gäste auf die Bühne und behalte die Aufnahme danach."
+        "text": "Hol Gäste auf die Bühne, behalte die Aufnahme"
       },
       "buildCommunity": {
         "title": "Eine Community aufbauen",
-        "text": "Gründe einen Ort rund um das, was dir wichtig ist, oder tritt einem bei, in dem schon was los ist."
+        "text": "Gründe einen Ort oder tritt einem bei"
       },
       "makeFriends": {
         "title": "Echte Freunde finden",
-        "text": "Kommentiere, chatte und arbeite mit echten Menschen zusammen, die füreinander da sind."
+        "text": "Kommentiere, chatte und arbeite zusammen"
       },
       "getInspired": {
         "title": "Lass dich inspirieren, mach mit",
-        "text": "Entdecke Creator, unterstütze die, die du magst, und verdiene dabei selbst etwas."
+        "text": "Unterstütze Creator und verdiene selbst"
       }
     },
     "advertiserThings": {
@@ -174,7 +174,10 @@
     "uploading": "Wird hochgeladen…",
     "interestsHint": "Damit wählen wir aus, was auf deiner Startseite erscheint. Wähle so viele, wie du willst, oder gar keine, und ändere sie, wann immer du möchtest.",
     "interestsFineprint": "Wird auf deinem Hive-Konto gespeichert, sodass jede Hive-App dasselbe Profil und dieselben Interessen anzeigt.",
-    "saveAndExplore": "Speichern und loslegen"
+    "saveAndExplore": "Speichern und loslegen",
+    "eyebrow": "Willkommen",
+    "stepOf": "Schritt {{n}} von {{total}}",
+    "profileFineprint": "Wird in deinem Hive-Konto gespeichert, damit jede Hive-App dasselbe Profil zeigt."
   },
   "profileEdit": {
     "updated": "Profil aktualisiert",
@@ -193,7 +196,7 @@
     "uploadBanner": "Profilbanner hochladen",
     "changeBanner": "Banner ändern",
     "addBanner": "Banner hinzufügen",
-    "bannerHint": "Am besten <b>2800 × 684</b> px (oder ein beliebiges 4:1-Bild). Halte das Wichtigste in der Mitte: An den Seiten wird auf schmalen Bildschirmen abgeschnitten, und dein Name liegt unten links darüber.",
+    "bannerHint": "Halte das Wichtigste in der Mitte: An den Seiten wird auf schmalen Bildschirmen abgeschnitten, und dein Name liegt unten links darüber.",
     "uploadPicture": "Profilbild hochladen",
     "pictureLabel": "Profilbild",
     "pictureHint": "Ein Gesicht oder ein Logo funktioniert am besten. Quadratisch, mindestens 400 × 400 px. Bis zu 8 MB.",
@@ -201,7 +204,7 @@
     "namePlaceholderUser": "Wie sollen wir dich nennen? (@{{username}})",
     "namePlaceholder": "Wie sollen wir dich nennen?",
     "shortBio": "Kurze Bio",
-    "bioPlaceholder": "Was machst du, und was können Leute von dir erwarten?",
+    "bioPlaceholder": "Was machst du, und was können Leute erwarten?",
     "location": "Standort",
     "optional": "optional",
     "locationPlaceholder": "Wo auf der Welt bist du?"

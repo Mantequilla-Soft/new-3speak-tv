@@ -77,6 +77,11 @@
     }
   },
   "reactionUpload": {
+    "title": "वीडियो रिएक्शन पोस्ट करें",
+    "rec": "REC {{time}}",
+    "mic": "माइक",
+    "camera": "कैमरा",
+    "restart": "फिर से शुरू करें",
     "authorized": "@threespeak को अनुमति मिल गई — अब आप अपना रिएक्शन पोस्ट कर सकते हैं",
     "authFailed": "अनुमति नहीं मिल सकी। कृपया फिर से कोशिश करें।",
     "webcamDenied": "वेबकैम तक पहुँच नहीं हो सकी",
@@ -90,7 +95,7 @@
     "uploadVideo": "वीडियो अपलोड करें",
     "recordVideo": "वीडियो रिकॉर्ड करें",
     "startRecording": "रिकॉर्डिंग शुरू करें",
-    "stopRecording": "रिकॉर्डिंग रोकें",
+    "stopRecording": "रोकें और देखें",
     "recordedVideo": "रिकॉर्ड किया गया वीडियो",
     "descriptionPlaceholder": "अपने वीडियो रिएक्शन के लिए विवरण जोड़ें...",
     "showInShorts": "3Speak शॉर्ट्स में दिखाएँ",

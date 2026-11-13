@@ -6,6 +6,7 @@ import {
 } from '../../lib/incubation';
 import { batchGetContent } from '../../utils/hiveUtils';
 import { useTranslation } from 'react-i18next';
+import { EmptyState } from '../v2/ui';
 import './IncubatingActivity.scss';
 import '../Userprofilepage/Follower.scss';
 
@@ -19,6 +20,8 @@ const LOADERS = {
 // did not know a parent. One request each, so this is the ceiling on the second
 // pass; a page of replies is realistically two or three people.
 const MAX_OFFCHAIN_AUTHORS = 6;
+
+const EMPTY_ICON = { comments: 'chat_bubble', followers: 'group', following: 'person_add' };
 
 const EMPTY_KEY = {
   comments: 'incubation.activity.empty.comments',
@@ -153,9 +156,9 @@ export default function IncubatingActivity({ handle, tab, onCount }) {
     return () => { alive = false; };
   }, [tab, items]);
 
-  if (loading) return <p className="desc">{t('common.status.loading')}</p>;
-  if (error) return <p className="desc">{error}</p>;
-  if (items.length === 0) return <p className="desc">{t(EMPTY_KEY[tab])}</p>;
+  if (loading) return <p className="inc-activity-state">{t('common.status.loading')}</p>;
+  if (error) return <p className="inc-activity-state is-error" role="alert">{error}</p>;
+  if (items.length === 0) return <EmptyState icon={EMPTY_ICON[tab]} title={t(EMPTY_KEY[tab])} className="inc-activity-empty" />;
 
   if (tab === 'comments') {
     return (

@@ -23,6 +23,9 @@
     "noOtherPlaylists": "Je hebt nog geen andere playlists",
     "createFirst": "Playlist maken",
     "createNew": "Nieuwe playlist maken",
+    "newPlaylist": "Nieuwe playlist",
+    "savedTo_one": "Opgeslagen in {{count}} playlist",
+    "savedTo_other": "Opgeslagen in {{count}} playlists",
     "name": "Naam",
     "namePlaceholder": "Mijn toffe playlist",
     "privacy": "Privacy",
@@ -55,6 +58,7 @@
     "items_other": "{{count}} items",
     "created": "Aangemaakt {{when}}",
     "podcastFeed": "Podcastfeed",
+    "playAll": "Alles afspelen",
     "podcastFeedTitle": "Volg {{name}} in elke podcastapp (RSS-feed)",
     "album": {
       "genre": "<strong>Genre:</strong> {{value}}",
@@ -95,12 +99,15 @@
     "description": "Beschrijving",
     "descriptionPlaceholder": "Over dit album (optioneel)",
     "filterCount_one": "{{shown}} van {{count}} item",
-    "filterCount_other": "{{shown}} van {{count}} items"
+    "filterCount_other": "{{shown}} van {{count}} items",
+    "shuffle": "Shuffle"
   },
   "type": {
     "label": "Soort",
     "video": "Video",
     "audio": "Audio",
+    "videoSub": "Lange video's",
+    "audioSub": "Tracks en podcasts",
     "kindLabel": "Wat voor audio?",
     "kinds": {
       "podcast": "Podcast",
@@ -108,5 +115,31 @@
       "voice": "Spraakberichten",
       "sounds": "Andere geluiden"
     }
+  },
+  "feeds": {
+    "button": "Externe shows",
+    "title": "Externe shows",
+    "intro": "Voeg hele podcastshows van overal toe. Hun afleveringen verschijnen in deze afspeellijst naast de jouwe, nieuwste eerst, en nieuwe komen er vanzelf bij.",
+    "searchLabel": "Zoek shows of plak een feedlink",
+    "searchPlaceholder": "Naam van de show, RSS-feed of Apple Podcasts-link",
+    "add": "Toevoegen",
+    "checking": "Controleren...",
+    "searching": "Zoeken...",
+    "noResults": "Geen shows gevonden.",
+    "inList": "In de afspeellijst",
+    "inPlaylist": "In deze afspeellijst",
+    "none": "Nog geen externe shows.",
+    "remove": "{{title}} verwijderen",
+    "already": "Die show staat al in deze afspeellijst.",
+    "limit": "Een afspeellijst kan maximaal {{max}} externe shows bevatten.",
+    "ownFeed": "Dat is de eigen feed van deze afspeellijst.",
+    "privateFeed": "Feeds met een wachtwoord kunnen niet in een afspeellijst, want afspeellijsten zijn openbaar.",
+    "tooBig": "Dat is meer dan een afspeellijst kan bevatten. Verwijder eerst een show.",
+    "saved": "Externe shows opgeslagen. De afspeellijst wordt over een paar seconden bijgewerkt.",
+    "saveFailed": "Opslaan mislukt: {{error}}",
+    "fromShows": "Uit andere shows:",
+    "video": "Video",
+    "pending_one": "{{count}} show wordt nog ingelezen. De afleveringen verschijnen binnen een paar minuten.",
+    "pending_other": "{{count}} shows worden nog ingelezen. De afleveringen verschijnen binnen een paar minuten."
   }
 }

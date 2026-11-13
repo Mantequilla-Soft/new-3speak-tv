@@ -8,7 +8,7 @@
     "contribute": "Çevirilere nasıl katkı sağlanır"
   },
   "verify": {
-    "body": "Düzenleyiciyi açmak için Hive hesabını doğrula. Cüzdanın senden bir girişi onaylamanı isteyecek.",
+    "body": "Davet mi edildin? Düzenleyiciyi açmak için Hive hesabını doğrula.",
     "button": "Hesabı doğrula",
     "failed": "Hesabın doğrulanamadı."
   },
@@ -51,9 +51,9 @@
   "add": {
     "title": "Dil ekle",
     "code": "Dil kodu",
-    "codeHint": "İki veya üç küçük harf (ISO 639), isteğe bağlı olarak bölgeyle: nl, fil, pt-BR",
+    "codeHint": "İki veya üç küçük harf (ISO 639), isteğe bağlı olarak bölgeyle",
     "native": "Dilin kendi dilindeki adı",
-    "nativeHint": "Dil menüsünde insanların göreceği ad budur, ör. Nederlands",
+    "nativeHint": "Dil menüsünde insanların gördüğü ad",
     "english": "İngilizce adı",
     "rtl": "Sağdan sola yazılır (Arapça, İbranice, Farsça, Urduca…)",
     "submit": "Dili ekle",
@@ -67,6 +67,7 @@
     "checkboxFor": "{{key}} anahtarını kontrol edildi olarak işaretle",
     "checkedBy": "@{{user}} kontrol etti, {{when}}",
     "notChecked": "Bu çeviriyi kontrol ettikten sonra işaretle",
+    "notCheckedShort": "Kontrol edilmedi",
     "noText": "Kontrol edilecek bir şey yok: bu metnin henüz çevirisi yok",
     "saveFirst": "Önce düzenlemeni kaydet. Kaydetmek onu kontrol edildi olarak işaretler.",
     "changed": "kontrolden sonra değişti",

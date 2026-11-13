@@ -1,30 +1,49 @@
-/* The celebration, and ONLY the celebration.
-   The dialog's shape, spacing and colours stay in AdsPrompt.scss, which every
-   app-root prompt shares; this file adds one class that the graduation prompt
-   alone carries, so nothing here can leak into the ads or consent dialogs. */
+@use "../../styles/v2" as v2;
 
-.graduation-prompt {
-  /* A short arrival: up, past the resting point, and settle. This is the one
-     moment in the whole incubation flow that is unambiguously good news, and
-     the dialog was appearing with exactly as much ceremony as a cookie notice. */
-  animation: graduation-pop 380ms cubic-bezier(0.2, 0.9, 0.3, 1.35) both;
+/* The warm-up prompts on the shared v2 Dialog (designs 23b, 46c, 46d):
+   graduation, name taken, publish the backlog, reconnect. The dialog's shape
+   comes from design-system.scss; these are only the pieces inside it. */
+
+.inc-prompt-lede {
+  margin: 0;
+  @include v2.text(body);
+  line-height: 1.5;
+  color: var(--muted);
+
+  strong { color: var(--text); font-weight: 700; }
 }
 
-@keyframes graduation-pop {
-  from {
-    opacity: 0;
-    transform: translateY(14px) scale(0.96);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
+.inc-prompt-text {
+  margin: 0;
+  @include v2.text(body-sm);
+  line-height: 1.5;
+  color: var(--muted);
 }
 
-/* Someone who has asked their system for less motion has asked for less motion.
-   The dialog still appears, it simply appears. */
-@media (prefers-reduced-motion: reduce) {
-  .graduation-prompt {
-    animation: none;
-  }
+// The fine print that matters (what comes across, why it is slow): plain
+// muted text with the counts in bold (46c).
+.inc-prompt-note {
+  margin: 0;
+  @include v2.text(meta);
+  line-height: 1.5;
+  color: var(--muted);
+
+  strong { color: var(--text); font-weight: 700; }
+}
+
+// 46c / 46d: the actions close the card with no divider above them; the
+// primary takes the free width of the row, its label flush left.
+.inc-prompt .v2-dialog__foot {
+  border-top: 0;
+  padding-top: 4px;
+
+  .v2-btn.is-next { justify-content: flex-start; }
+  .v2-btn.is-next > .material-symbols-rounded:last-child { display: none; }
+}
+.v2-dialog__foot .inc-prompt-primary.v2-btn { flex: 1; }
+
+/* The one moment in the warm-up that is unambiguously good news: the §11
+   success card's accent hero tint at the top of the dialog. */
+.inc-prompt--celebrate.v2-dialog__panel {
+  background: linear-gradient(160deg, color-mix(in srgb, var(--accent) 22%, var(--surface)), var(--surface) 70%);
 }

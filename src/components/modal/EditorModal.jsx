@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
-import { X, Loader2 } from 'lucide-react';
+import { Button, Progress, StepList } from '../v2/ui';
+import { Icon } from '../v2/Icon';
 import { generateVideoThumbnailsAt } from '../../utils/videoThumbnails';
-import { getEditorUrl, STT_WS_URL, EMBED_API_KEY, cameraRecordEnabledFor, storiesEnabledFor, PLAYLISTS_READ_URL } from '../../utils/config';
+import { getEditorUrl, STT_WS_URL, EMBED_API_KEY, sttEnabledFor, storiesEnabledFor, PLAYLISTS_READ_URL } from '../../utils/config';
 import { useAppStore } from '../../lib/store';
 import { useEmbedUpload } from '../../context/EmbedUploadContext';
 import { usePremiumStatus } from '../../hooks/usePremiumStatus';
@@ -336,15 +337,15 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
 
     // The editor's teleprompter asks for the STT server + a short-lived token.
     // It runs on another origin, so it can't call /api/stt-token itself; we mint
-    // the token here and send it to the editor's origin only. Same audience as
-    // our own camera teleprompter (cameraRecordEnabledFor); everyone else gets an
-    // empty url, and the editor falls back to browser speech or timed scroll.
+    // the token here and send it to the editor's origin only. Everyone gets it
+    // where a server is set (sttEnabledFor); without one the url is empty and the
+    // editor falls back to browser speech or timed scroll.
     const replySttConfig = async (requestId) => {
       if (typeof requestId !== 'string') return;
       let url = '';
       let token = '';
       let models = [];
-      if (STT_WS_URL && cameraRecordEnabledFor(userRef.current)) {
+      if (sttEnabledFor(userRef.current)) {
         const [tok, langs] = await Promise.all([
           fetch('/api/stt-token', {
             credentials: 'include',
@@ -684,7 +685,7 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
           {/* Loading overlay — resolving URL or waiting for editor ready */}
           {(resolving || (!editorReady && !resolveError)) && (
             <div className="editor-loading-overlay">
-              <Loader2 size={40} className="spinner" />
+              <Icon name="progress_activity" size={40} className="spinner" />
               <span>{resolving ? t('modals.editor.finding') : t('modals.editor.loading')}</span>
             </div>
           )}
@@ -693,9 +694,9 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
           {resolveError && (
             <div className="editor-loading-overlay">
               <span>{t('modals.editor.unavailable')}</span>
-              <button className="render-btn" onClick={handleClose} style={{ marginTop: 16 }}>
+              <Button variant="secondary" className="render-btn" onClick={handleClose}>
                 {t('common.actions.close')}
-              </button>
+              </Button>
             </div>
           )}
 
@@ -712,66 +713,84 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
           {/* Render status overlay */}
           {renderStatus && (
             <div className="render-overlay">
-              {renderStatus === 'sending' && (
-                <div className="render-status">
-                  <Loader2 size={32} className="spinner" />
-                  <span>{t('modals.editor.sending')}</span>
-                </div>
-              )}
-              {renderStatus === 'rendering' && (
-                <div className="render-status">
-                  <div className="render-progress-bar">
-                    <div className="render-progress-fill" style={{ width: `${renderProgress}%` }} />
+              {['sending', 'rendering', 'complete', 'preparing'].includes(renderStatus) && (() => {
+                // 43b: the render flow as one card: the step list (done in muted,
+                // the current step in cyan with a spinner, the next ones as rings),
+                // the progress bar, and Use Video once the render is done.
+                const order = ['finding', 'sending', 'rendering', 'preparing'];
+                const at = renderStatus === 'complete' ? 3 : order.indexOf(renderStatus);
+                const pct = Math.round(renderProgress);
+                const label = {
+                  finding: t('modals.editor.finding'),
+                  sending: t('modals.editor.sending'),
+                  rendering: renderStatus === 'complete' ? t('modals.editor.complete') : t('modals.editor.rendering', { percent: pct }),
+                  preparing: t(audioMode ? 'modals.editor.preparingAudio' : 'modals.editor.preparing'),
+                };
+                const items = order.map((k, i) => ({
+                  label: label[k],
+                  state: i < at || (renderStatus === 'complete' && k === 'rendering') ? 'done' : i === at && renderStatus !== 'complete' ? 'current' : 'next',
+                }));
+                const value = renderStatus === 'sending' ? 0 : renderStatus === 'rendering' ? renderProgress : 100;
+                return (
+                  <div className="render-status render-flow">
+                    <b className="render-flow__title">{t(audioMode ? 'modals.editor.iframeTitleAudio' : 'modals.editor.iframeTitle')}</b>
+                    <StepList items={items} />
+                    <div className="render-progress-bar">
+                      <Progress value={value} tone="accent" label={label[order[Math.min(at, 3)]]} />
+                    </div>
+                    {renderStatus === 'complete' && (
+                      <div className="render-actions render-flow__actions">
+                        <Button variant="secondary" size={44} className="render-btn" onClick={() => setRenderStatus(null)}>
+                          {t('modals.editor.backToEditor')}
+                        </Button>
+                        <Button variant="primary" size={44} className="render-btn" onClick={handleUseRenderedVideo}>
+                          {t('modals.editor.useVideo')}
+                        </Button>
+                      </div>
+                    )}
                   </div>
-                  <span>{t('modals.editor.rendering', { percent: Math.round(renderProgress) })}</span>
-                </div>
-              )}
-              {renderStatus === 'complete' && (
-                <div className="render-status">
-                  <span>{t('modals.editor.complete')}</span>
-                  <button className="render-btn" onClick={handleUseRenderedVideo}>
-                    {t('modals.editor.useVideo')}
-                  </button>
-                </div>
-              )}
+                );
+              })()}
               {renderStatus === 'choose-target' && pendingPost && (
                 <div className="render-status">
                   <span>{t('modals.editor.postAs')}</span>
                   <div className="post-target">
-                    <button className="post-target__btn" onClick={() => handlePostTo3Speak(pendingPost.outputUrl, pendingPost.musicCredits, true, pendingPost.remixSource)}>
-                      <strong>{t('modals.editor.postAsStory')}</strong>
-                      <small>{t('modals.editor.postAsStoryHint')}</small>
+                    <button type="button" className="v2-choice post-target__btn" onClick={() => handlePostTo3Speak(pendingPost.outputUrl, pendingPost.musicCredits, true, pendingPost.remixSource)}>
+                      <Icon name="auto_stories" size={20} className="v2-choice__icon" />
+                      <span className="v2-choice__body"><b>{t('modals.editor.postAsStory')}</b><span>{t('modals.editor.postAsStoryHint')}</span></span>
                     </button>
-                    <button className="post-target__btn" onClick={() => handlePostTo3Speak(pendingPost.outputUrl, pendingPost.musicCredits, false, pendingPost.remixSource)}>
-                      <strong>{t('modals.editor.postAsShort')}</strong>
-                      <small>{t('modals.editor.postAsShortHint')}</small>
+                    <button type="button" className="v2-choice post-target__btn" onClick={() => handlePostTo3Speak(pendingPost.outputUrl, pendingPost.musicCredits, false, pendingPost.remixSource)}>
+                      <Icon name="smart_display" size={20} className="v2-choice__icon" />
+                      <span className="v2-choice__body"><b>{t('modals.editor.postAsShort')}</b><span>{t('modals.editor.postAsShortHint')}</span></span>
                     </button>
                   </div>
-                  <button className="post-target__back" onClick={() => { setPendingPost(null); setRenderStatus(null); }}>
-                    {t('modals.editor.backToEditor')}
-                  </button>
-                </div>
-              )}
-              {renderStatus === 'preparing' && (
-                <div className="render-status">
-                  <Loader2 size={32} className="spinner" />
-                  <span>{t(audioMode ? 'modals.editor.preparingAudio' : 'modals.editor.preparing')}</span>
+                  <div className="render-actions">
+                    <Button variant="secondary" className="post-target__back" onClick={() => { setPendingPost(null); setRenderStatus(null); }}>
+                      {t('modals.editor.backToEditor')}
+                    </Button>
+                  </div>
                 </div>
               )}
               {renderStatus === 'error' && (
                 <div className="render-status render-error">
+                  <Icon name="error" size={24} className="render-error__icon" />
                   <span>{t('modals.editor.renderUnavailable')}</span>
-                  <button className="render-btn" onClick={() => setRenderStatus(null)}>
-                    {t('modals.editor.backToEditor')}
-                  </button>
+                  <div className="render-actions">
+                    <Button variant="secondary" className="render-btn" onClick={() => setRenderStatus(null)}>
+                      {t('modals.editor.backToEditor')}
+                    </Button>
+                  </div>
                 </div>
               )}
               {renderStatus === 'post-error' && (
                 <div className="render-status render-error">
+                  <Icon name="error" size={24} className="render-error__icon" />
                   <span>{t(audioMode ? 'modals.editor.postErrorAudio' : 'modals.editor.postError')}</span>
-                  <button className="render-btn" onClick={() => setRenderStatus(null)}>
-                    {t('modals.editor.backToEditor')}
-                  </button>
+                  <div className="render-actions">
+                    <Button variant="secondary" className="render-btn" onClick={() => setRenderStatus(null)}>
+                      {t('modals.editor.backToEditor')}
+                    </Button>
+                  </div>
                 </div>
               )}
             </div>

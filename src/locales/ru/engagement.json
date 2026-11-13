@@ -11,6 +11,8 @@
       "transferFailed": "Перевод не удался: {{message}}"
     },
     "heading": "Чаевые для @{{recipient}}",
+    "pageTitle": "Чаевые для @{{recipient}}",
+    "pageSub": "Открыто из оверлея трансляции или по ссылке",
     "methodHive": "HIVE / HBD",
     "methodLightning": "Lightning",
     "methodMore": "Другие способы",
@@ -22,6 +24,17 @@
     "memoPlaceholder": "напр. Спасибо за отличный контент!",
     "memoLinkNote": "Эта ссылка добавляется в мемо: {{link}}",
     "send": "Отправить чаевые",
+    "sendAmount": "Отправить {{amount}} {{currency}}",
+    "paidIn": "Выплата в {{currency}} · без комиссий",
+    "forTitle": "за «{{title}}»",
+    "presets": {
+      "coffee": "На кофе",
+      "popular": "Популярное",
+      "thanks": "Большое спасибо",
+      "superFan": "Суперфанат"
+    },
+    "sentEyebrow": "Чаевые отправлены",
+    "sentTo": "{{amount}} для @{{recipient}}",
     "lightning": {
       "amountLabel": "Сумма (sats):",
       "messageLabel": "Сообщение (необязательно):",
@@ -65,6 +78,8 @@
     "monthly": {
       "label": "Как часто",
       "once": "Один раз",
+      "oneTime": "Разово",
+      "monthly": "Ежемесячно",
       "until": "Каждый месяц, до {{date}}",
       "note": "Hive сам отправляет платёж каждые 30 дней, первый уходит сразу. Остановить можно в любой момент.",
       "replaces": "Это заменит ежемесячную поддержку, которую вы уже отправляете @{{recipient}}.",
@@ -79,7 +94,7 @@
   },
   "cardMenu": {
     "loginToPersonalize": "Войдите, чтобы настроить ленту под себя",
-    "notInterestedToast": "Не интересно — мы скроем это видео",
+    "notInterestedToast": "Не интересно. Мы скроем это видео",
     "undo": "Отменить",
     "cantHideOwn": "Нельзя скрыть свои собственные видео",
     "hidingCreatorToast": "Скрываем видео от @{{author}}",
@@ -89,7 +104,8 @@
     "addToPlaylist": "Добавить в плейлист",
     "addTag": "Добавить тег",
     "notInterested": "Не интересно",
-    "dontShowCreator": "Не показывать @{{author}}"
+    "dontShowCreator": "Не показывать @{{author}}",
+    "saveToPlaylist": "Сохранить в плейлист"
   },
   "guestList": {
     "loadFailed": "Не удалось загрузить текущий список гостей",
@@ -136,26 +152,34 @@
     "tagged": "Тег «{{tag}}» добавлен.",
     "vote": "Голосовать",
     "tagThisVideo": "Добавить тег к видео",
-    "tagOptional": "— необязательно —",
+    "tagOptional": "Необязательно",
     "pickTopicFirst": "Сначала выберите тему",
     "taggedNoDot": "Тег «{{tag}}» добавлен",
     "tagFailed": "Не удалось добавить тег: {{message}}",
-    "taggedAlreadyVoted": "Тег «{{tag}}» добавлен — ваш голос {{weight}}% уже был учтён.",
-    "votingClosed": "Голосование закрыто — добавьте тег к видео",
+    "taggedAlreadyVoted": "Тег «{{tag}}» добавлен. Ваш голос {{weight}}% уже был учтён.",
+    "votingClosed": "Голосование закрыто: добавьте тег к видео",
     "youTagged": "Вы отметили это как <b>{{tag}}</b>.",
-    "pickTopic": "Выберите тему (считается как голос 100%)",
+    "pickTopic": "Выбор темы считается голосом 100%.",
     "submitTag": "Отправить тег",
     "tagThisVideoFull": "Добавить тег к видео (считается как голос 100%)",
-    "justTag": "Не голосовать — только тег"
+    "justTag": "Не голосовать, только тег",
+    "justTagShort": "Только тег",
+    "voteAndTag": "Голос и тег",
+    "addsAbout": "добавит около {{value}}",
+    "postSoFar_one": "Пока {{value}} · {{count}} голос",
+    "postSoFar_few": "Пока {{value}} · {{count}} голоса",
+    "postSoFar_many": "Пока {{value}} · {{count}} голосов",
+    "postSoFar_other": "Пока {{value}} · {{count}} голоса"
   },
   "tagsPicker": {
     "autoTagged": "Теги добавлены автоматически: {{tags}}",
     "searchPlaceholder": "Поиск тем…",
     "searchAria": "Поиск тем",
     "noMatches": "Нет тем по запросу «{{query}}».",
-    "allSelected": "Выбрана вся категория «{{category}}». Добавляйте отдельные темы, только чтобы сузить выбор:",
+    "allSelected": "Выбрано всё в «{{category}}». Нажмите на тему, чтобы убрать её.",
     "orPickTopics": "Или выберите отдельные темы:",
-    "goodEnough": "Этого достаточно — или уточните (необязательно):",
+    "clear": "Очистить",
+    "goodEnough": "Этого достаточно, или уточните (необязательно)",
     "moreSpecific": "Точнее:"
   }
 }

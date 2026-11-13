@@ -28,8 +28,19 @@
   },
   "newFromFollowing": {
     "aria": "Nieuw van makers die je volgt",
+    "summary_one": "{{count}} nieuwe video",
+    "summary_other": "{{count}} nieuwe video's",
+    "fromFollowing": "van mensen die je volgt",
     "shorts_one": "{{count}} short",
-    "shorts_other": "{{count}} Shorts"
+    "shorts_other": "{{count}} Shorts",
+    "show": "Tonen",
+    "hide": "Verbergen",
+    "markSeen": "Alles als gezien markeren"
+  },
+  "tagMeta": {
+    "videos_one": "{{num}} video",
+    "videos_other": "{{num}} video's",
+    "thisWeek": "{{num}} deze week"
   },
   "firstUploads": {
     "title": "Eerste uploads"
@@ -48,8 +59,16 @@
     "empty": "Hier is nog niets te zien.",
     "viewAll": "Alles bekijken",
     "dragToReorder": "Sleep om de volgorde te wijzigen",
+    "customize": "Aanpassen",
+    "customizeTitle": "Startpagina aanpassen",
+    "customizeHint": "Sleep om de volgorde te wijzigen. Zet de onderdelen uit die je niet wilt.",
     "surfTitle": "Zappen: kies een onderwerp en kijk zoals naar tv",
-    "zapping": "Zappen"
+    "zapping": "Zappen",
+    "hero": {
+      "spotlightIn": "In de kijker in {{community}}",
+      "slide": "In de kijker {{index}} van {{count}}"
+    },
+    "tabFollowing": "Volgend"
   },
   "surf": {
     "pageTitle": "Zappen",
@@ -75,9 +94,10 @@
     "nextVideoKey": "Volgende video (→)",
     "zap": "Zap",
     "findingNext": "Volgende zoeken…",
-    "stop": "Stoppen met zappen",
+    "stop": "Stoppen",
     "stopTitle": "Stoppen met zappen (deze video blijft spelen)",
-    "guide": "Zendergids"
+    "guide": "Zendergids",
+    "guideShort": "Gids"
   },
   "discover": {
     "searchPlaceholder": "Zoek video's, Shorts, audio, community's...",
@@ -118,6 +138,33 @@
     "authors_one": "{{count}} auteur",
     "authors_other": "{{count}} auteurs",
     "views_one": "{{views}} weergave",
-    "views_other": "{{views}} weergaven"
+    "views_other": "{{views}} weergaven",
+    "topCreator": "Topmaker",
+    "creators": "Makers",
+    "relatedTags": "Gerelateerde tags",
+    "trendingTags": "Trending tags",
+    "topCreators": "Topmakers",
+    "categories": "Categorieën",
+    "show": "Tonen",
+    "boostRecentHint": "Nieuwere video's voorrang geven in resultaten",
+    "showResults_one": "{{count}} resultaat tonen",
+    "showResults_other": "{{count}} resultaten tonen",
+    "resultTypes": "Soorten resultaten"
+  },
+  "activity": {
+    "warmup": "Warming-up",
+    "aria": "Activiteit op 3Speak",
+    "community": "Community",
+    "verbs": {
+      "snap": "snap",
+      "audio": "nieuwe audio",
+      "playlist": "playlist",
+      "live": "is live",
+      "group_one": "{{count}} nieuwe video deze week",
+      "group_other": "{{count}} nieuwe video's deze week"
+    },
+    "emptyCommunity": "Niets nieuws uit de community de afgelopen dagen.",
+    "emptyLive": "Er is nu niemand live.",
+    "emptyGroups": "Nog geen groepsactiviteit deze week."
   }
 }

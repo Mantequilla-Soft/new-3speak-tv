@@ -8,7 +8,7 @@
     "contribute": "Jak współtworzyć tłumaczenia"
   },
   "verify": {
-    "body": "Potwierdź swoje konto Hive, aby otworzyć edytor. Portfel poprosi cię o zatwierdzenie logowania.",
+    "body": "Masz zaproszenie? Potwierdź konto Hive, aby otworzyć edytor.",
     "button": "Potwierdź konto",
     "failed": "Nie udało się potwierdzić konta."
   },
@@ -55,9 +55,9 @@
   "add": {
     "title": "Dodaj język",
     "code": "Kod języka",
-    "codeHint": "Dwie lub trzy małe litery (ISO 639), opcjonalnie z regionem: nl, fil, pt-BR",
+    "codeHint": "Dwie lub trzy małe litery (ISO 639), opcjonalnie z regionem",
     "native": "Nazwa w tym języku",
-    "nativeHint": "Tę nazwę ludzie zobaczą w menu języków, np. Nederlands",
+    "nativeHint": "To, co ludzie widzą w menu języków",
     "english": "Nazwa po angielsku",
     "rtl": "Pisany od prawej do lewej (arabski, hebrajski, perski, urdu…)",
     "submit": "Dodaj język",
@@ -71,6 +71,7 @@
     "checkboxFor": "Oznacz {{key}} jako sprawdzone",
     "checkedBy": "Sprawdzone przez @{{user}}, {{when}}",
     "notChecked": "Zaznacz, gdy sprawdzisz to tłumaczenie",
+    "notCheckedShort": "Niesprawdzone",
     "noText": "Nie ma czego sprawdzać: ten tekst nie ma jeszcze tłumaczenia",
     "saveFirst": "Najpierw zapisz zmianę. Zapisanie oznacza ją jako sprawdzoną.",
     "changed": "zmienione po sprawdzeniu",

@@ -11,6 +11,8 @@
       "transferFailed": "Échec du transfert : {{message}}"
     },
     "heading": "Envoyer un pourboire à @{{recipient}}",
+    "pageTitle": "Pourboire pour @{{recipient}}",
+    "pageSub": "Ouvert depuis un overlay de live ou un lien",
     "methodHive": "HIVE / HBD",
     "methodLightning": "Lightning",
     "methodMore": "Plus de façons",
@@ -22,6 +24,17 @@
     "memoPlaceholder": "ex. Merci pour ce super contenu !",
     "memoLinkNote": "Ce lien est ajouté au mémo : {{link}}",
     "send": "Envoyer le pourboire",
+    "sendAmount": "Envoyer {{amount}} {{currency}}",
+    "paidIn": "Payé en {{currency}} · sans frais",
+    "forTitle": "pour « {{title}} »",
+    "presets": {
+      "coffee": "Un café",
+      "popular": "Le plus populaire",
+      "thanks": "Un grand merci",
+      "superFan": "Super fan"
+    },
+    "sentEyebrow": "Pourboire envoyé",
+    "sentTo": "{{amount}} à @{{recipient}}",
     "lightning": {
       "amountLabel": "Montant (sats) :",
       "messageLabel": "Message (facultatif) :",
@@ -65,6 +78,8 @@
     "monthly": {
       "label": "À quelle fréquence",
       "once": "Une fois",
+      "oneTime": "Une fois",
+      "monthly": "Mensuel",
       "until": "Chaque mois, jusqu'à {{date}}",
       "note": "Hive l'envoie tout seul tous les 30 jours, le premier tout de suite. Tu peux l'arrêter à tout moment.",
       "replaces": "Ceci remplace le soutien mensuel que tu envoies déjà à @{{recipient}}.",
@@ -79,7 +94,7 @@
   },
   "cardMenu": {
     "loginToPersonalize": "Connectez-vous pour personnaliser votre fil",
-    "notInterestedToast": "Pas intéressé — nous masquerons cette vidéo",
+    "notInterestedToast": "Pas intéressé. Nous masquerons cette vidéo",
     "undo": "Annuler",
     "cantHideOwn": "Vous ne pouvez pas masquer vos propres vidéos",
     "hidingCreatorToast": "Vidéos de @{{author}} masquées",
@@ -89,7 +104,8 @@
     "addToPlaylist": "Ajouter à une playlist",
     "addTag": "Ajouter un tag",
     "notInterested": "Pas intéressé",
-    "dontShowCreator": "Ne plus afficher @{{author}}"
+    "dontShowCreator": "Ne plus afficher @{{author}}",
+    "saveToPlaylist": "Enregistrer dans une playlist"
   },
   "guestList": {
     "loadFailed": "Impossible de charger la liste d'invités actuelle",
@@ -134,26 +150,33 @@
     "tagged": "Tagué « {{tag}} ».",
     "vote": "Voter",
     "tagThisVideo": "Taguer cette vidéo",
-    "tagOptional": "— facultatif —",
+    "tagOptional": "Facultatif",
     "pickTopicFirst": "Choisissez d'abord un sujet",
     "taggedNoDot": "Tagué « {{tag}} »",
     "tagFailed": "Échec du tag : {{message}}",
-    "taggedAlreadyVoted": "Tagué « {{tag}} » — votre vote à {{weight}} % était déjà enregistré.",
-    "votingClosed": "Votes clos — taguez cette vidéo",
+    "taggedAlreadyVoted": "Tagué « {{tag}} ». Votre vote à {{weight}} % était déjà enregistré.",
+    "votingClosed": "Votes clos : taguez cette vidéo",
     "youTagged": "Vous avez tagué cette vidéo <b>{{tag}}</b>.",
-    "pickTopic": "Choisissez un sujet (compte comme un vote à 100 %)",
+    "pickTopic": "Choisir un sujet compte comme un vote à 100 %.",
     "submitTag": "Valider le tag",
     "tagThisVideoFull": "Taguer cette vidéo (compte comme un vote à 100 %)",
-    "justTag": "Ne pas voter — juste taguer"
+    "justTag": "Ne pas voter, juste taguer",
+    "justTagShort": "Juste taguer",
+    "voteAndTag": "Voter et taguer",
+    "addsAbout": "ajoute environ {{value}}",
+    "postSoFar_one": "{{value}} pour l'instant · {{count}} vote",
+    "postSoFar_many": "{{value}} pour l'instant · {{count}} votes",
+    "postSoFar_other": "{{value}} pour l'instant · {{count}} votes"
   },
   "tagsPicker": {
     "autoTagged": "Tags automatiques : {{tags}}",
     "searchPlaceholder": "Rechercher des sujets…",
     "searchAria": "Rechercher des sujets",
     "noMatches": "Aucun sujet ne correspond à « {{query}} ».",
-    "allSelected": "Toute la catégorie {{category}} est sélectionnée. Ajoutez des sujets individuels seulement pour affiner :",
+    "allSelected": "Tout {{category}} est choisi. Touche un sujet pour l’exclure.",
     "orPickTopics": "Ou choisissez des sujets individuels :",
-    "goodEnough": "C'est suffisant — ou soyez plus précis (facultatif) :",
+    "clear": "Effacer",
+    "goodEnough": "C'est suffisant, ou soyez plus précis (facultatif)",
     "moreSpecific": "Plus précis :"
   }
 }

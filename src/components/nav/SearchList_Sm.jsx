@@ -4,8 +4,7 @@ import "./SearchList.scss"
 import { Client } from "@hiveio/dhive";
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { TailChase } from 'ldrs/react'
-import 'ldrs/react/TailChase.css'
+import { Icon } from '../v2/Icon';
 import { HIVE_API_NODES } from '../../utils/config';
 import AccountImg from '../HiveAvatar/AccountImg';
 
@@ -175,7 +174,7 @@ function SearchList_Sm({searchTerm, setSearchTerm, handleNav, setIsDropdownOpens
 
   return (
     <>
-    {isDropdownOpensm && isSearching && <div className="search-list-sm center"><TailChase size="10" speed="1.75" color="red" /></div>}
+    {isDropdownOpensm && isSearching && <div className="search-list-sm center"><Icon name="progress_activity" size={20} className="v2-spin" /></div>}
     {isDropdownOpensm &&hasResults() && (<div className='search-list-sm' ref={tooltipRef}>
         <div className="search-results">
           {searchResults.users.length > 0 && (

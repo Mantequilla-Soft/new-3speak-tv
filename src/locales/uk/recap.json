@@ -125,7 +125,7 @@
       "tips": "Чайові"
     },
     "legendOurs": "на 3Speak",
-    "legendOther": "деінде на Hive",
+    "legendOther": "деінде",
     "segments": {
       "ours": "Нагороди за пости на 3Speak",
       "other": "Нагороди за пости деінде на Hive",
@@ -156,7 +156,8 @@
     "communities": "Зазираємо у твої спільноти…",
     "followers": "Перевіряємо, хто на тебе підписався…",
     "watched": "Переглядаємо історію переглядів…",
-    "thumbnails": "Завантажуємо мініатюри… {{done}} з {{total}}"
+    "thumbnails": "Завантажуємо мініатюри… {{done}} з {{total}}",
+    "thumbnailsWaiting": "Завантажуємо ваші мініатюри…"
   },
   "tips": {
     "label": "Порада:",

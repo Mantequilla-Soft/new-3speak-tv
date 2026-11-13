@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import {
-  MdClose, MdContentCopy, MdEdit, MdKeyboardArrowDown, MdKeyboardArrowUp, MdSchedule, MdSearch,
-} from 'react-icons/md';
+import { Icon } from '../v2/Icon';
+import { Button, IconButton } from '../v2/ui';
+import { cx } from '../v2/helpers';
 import {
   listSubtitleLanguages,
   loadSubtitleCues,
@@ -228,7 +228,7 @@ export default function Transcript({ author, permlink, currentTime = 0, onSeek, 
     el?.scrollIntoView({ block: 'center' });
   }, [matches]);
 
-  useEffect(() => { if (searchOpen) searchRef.current?.focus(); }, [searchOpen]);
+  useEffect(() => { if (searchOpen && !embedded) searchRef.current?.focus(); }, [searchOpen, embedded]);
   // A new video starts with no search.
   useEffect(() => { setSearchOpen(false); setQuery(''); setDraft(null); }, [author, permlink]);
 
@@ -302,118 +302,153 @@ export default function Transcript({ author, permlink, currentTime = 0, onSeek, 
 
   if (!cues.length) return null;
 
+  const copyLabel = copied
+    ? t('common.actions.copied')
+    : (withTimes ? t('comments.transcript.copyWithTimes') : t('comments.transcript.copyText'));
+
+  // In the side panel (22a) the search is a field that is always there, with the
+  // language at its end; the copy format, copy and edit sit on one row under it.
+  const searchShown = embedded ? !editing : searchOpen;
+  const langSelect = languages.length > 1 && (
+    <select
+      className={cx('v2-input is-select transcript-lang', embedded && 'is-inline')}
+      value={lang || ''}
+      disabled={editing}
+      onChange={(e) => { userPickedRef.current = true; setLang(e.target.value); }}
+      aria-label={t('comments.transcript.languageAria')}
+    >
+      {languages.map((l) => (
+        <option key={l.lang} value={l.lang}>
+          {embedded ? String(l.lang).toUpperCase() : (l.label || languageName(l.lang, i18n.language))}
+        </option>
+      ))}
+    </select>
+  );
+  const timesToggle = !editing && (expanded || embedded) && (
+    <button
+      type="button"
+      className={cx('transcript-times', withTimes && 'active')}
+      onClick={toggleTimes}
+      aria-pressed={withTimes}
+      title={withTimes ? t('comments.transcript.copyingWithTimes') : t('comments.transcript.copyingTextOnly')}
+    >
+      <Icon name={withTimes ? 'toggle_on' : 'toggle_off'} size={24} fill={withTimes} className="transcript-times-switch" />
+      <span className="transcript-times-label">{t('comments.transcript.timecodes')}</span>
+      <span className="transcript-times-state">
+        {withTimes ? t('comments.transcript.copyingWithTimes') : t('comments.transcript.copyingTextOnly')}
+      </span>
+    </button>
+  );
+  const searchField = searchShown && (
+    <div className="transcript-search">
+      <Icon name="search" size={embedded ? 18 : 16} className="transcript-search-icon" />
+      <input
+        ref={searchRef}
+        type="search"
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === 'Escape') { if (embedded) setQuery(''); else closeSearch(); }
+          if (e.key === 'Enter' && matches?.length) pick(matches[0]);
+        }}
+        placeholder={embedded ? t('comments.transcript.search') : t('comments.transcript.searchPlaceholder')}
+        aria-label={t('comments.transcript.search')}
+      />
+      {matches && (
+        <span className="transcript-search-count" aria-live="polite">
+          {t('comments.transcript.searchResults', { count: matches.length })}
+        </span>
+      )}
+      {embedded ? langSelect : (
+        <IconButton
+          icon="close"
+          size={28}
+          variant="ghost"
+          className="transcript-search-close"
+          onClick={closeSearch}
+          label={t('comments.transcript.closeSearch')}
+        />
+      )}
+    </div>
+  );
+
   return (
-    <section className={`transcript${expanded ? ' expanded' : ''}${embedded ? ' embedded' : ''}`}>
+    <section className={cx('transcript', expanded && 'expanded', embedded && 'embedded', editing && 'is-editing')}>
+      {embedded && searchField}
       <div className="transcript-head">
-        {embedded ? null : <h3>{t('comments.transcript.title')}</h3>}
+        {embedded ? timesToggle : <h3>{t('comments.transcript.title')}</h3>}
         <div className="transcript-actions">
-          {canEdit && !editing && (
-            <button
-              type="button"
-              className="transcript-search-btn"
-              onClick={startEdit}
-              aria-label={t('comments.transcript.edit.button')}
-              title={t('comments.transcript.edit.button')}
-            >
-              <MdEdit size={16} />
-            </button>
-          )}
-          <button
-            type="button"
-            disabled={editing}
-            className={`transcript-search-btn${searchOpen ? ' active' : ''}`}
-            onClick={() => (searchOpen ? closeSearch() : (setSearchOpen(true), setExpanded(true)))}
-            aria-pressed={searchOpen}
-            aria-label={t('comments.transcript.search')}
-            title={t('comments.transcript.search')}
-          >
-            <MdSearch size={16} />
-          </button>
-          {languages.length > 1 && (
+          {embedded ? (editing && langSelect) : languages.length > 1 && (
             <select
-              className="transcript-lang"
+              className="v2-input is-select transcript-lang"
               value={lang || ''}
               disabled={editing}
               onChange={(e) => { userPickedRef.current = true; setLang(e.target.value); }}
               aria-label={t('comments.transcript.languageAria')}
             >
-              {languages.map((l) => <option key={l.lang} value={l.lang}>{l.label || l.lang}</option>)}
+              {languages.map((l) => <option key={l.lang} value={l.lang}>{l.label || languageName(l.lang, i18n.language)}</option>)}
             </select>
           )}
-          <button
-            type="button"
-            className={`transcript-times${withTimes ? ' active' : ''}`}
-            onClick={toggleTimes}
-            aria-pressed={withTimes}
-            title={withTimes ? t('comments.transcript.copyingWithTimes') : t('comments.transcript.copyingTextOnly')}
-          >
-            <MdSchedule size={15} /> <span className="transcript-times-label">{t('comments.transcript.timecodes')}</span>
-          </button>
-          <button
-            type="button"
-            className="transcript-copy"
+          {!embedded && <IconButton
+            icon="search"
+            size={32}
+            variant={searchOpen ? 'secondary' : 'ghost'}
+            disabled={editing}
+            className={cx('transcript-search-btn', searchOpen && 'active')}
+            onClick={() => (searchOpen ? closeSearch() : (setSearchOpen(true), setExpanded(true)))}
+            aria-pressed={searchOpen}
+            label={t('comments.transcript.search')}
+          />}
+          <IconButton
+            icon={copied ? 'check' : 'content_copy'}
+            size={32}
+            variant="ghost"
+            className={cx('transcript-copy', copied && 'is-done')}
             onClick={copy}
-            title={withTimes ? t('comments.transcript.copyWithTimes') : t('comments.transcript.copyText')}
-          >
-            <MdContentCopy size={15} /> {copied ? t('common.actions.copied') : t('common.actions.copy')}
-          </button>
+            label={copyLabel}
+          />
+          {canEdit && !editing && (
+            <IconButton
+              icon="edit"
+              size={32}
+              variant="ghost"
+              className="transcript-edit-btn"
+              onClick={startEdit}
+              label={t('comments.transcript.edit.button')}
+            />
+          )}
         </div>
       </div>
 
-      {searchOpen && (
-        <div className="transcript-search">
-          <MdSearch size={16} className="transcript-search-icon" aria-hidden="true" />
-          <input
-            ref={searchRef}
-            type="search"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === 'Escape') closeSearch();
-              if (e.key === 'Enter' && matches?.length) pick(matches[0]);
-            }}
-            placeholder={t('comments.transcript.searchPlaceholder')}
-            aria-label={t('comments.transcript.search')}
-          />
-          {matches && (
-            <span className="transcript-search-count" aria-live="polite">
-              {t('comments.transcript.searchResults', { count: matches.length })}
-            </span>
-          )}
-          <button
-            type="button"
-            className="transcript-search-close"
-            onClick={closeSearch}
-            aria-label={t('comments.transcript.closeSearch')}
-            title={t('comments.transcript.closeSearch')}
-          >
-            <MdClose size={16} />
-          </button>
-        </div>
-      )}
+      {/* Copy format: a switch that says what the copy will carry, before the paste. */}
+      {!embedded && timesToggle}
+
+      {!embedded && searchField}
 
       {editing && (
         <div className="transcript-edit-bar">
+          <b className="transcript-edit-title">{t('comments.transcript.edit.button')}</b>
           <span className="transcript-edit-hint">
             {t('comments.transcript.edit.hint', { language: languageName(lang, i18n.language) })}
           </span>
           <div className="transcript-edit-actions">
-            <button type="button" className="transcript-edit-cancel" onClick={cancelEdit} disabled={savingEdit}>
+            <Button variant="secondary" size={32} className="transcript-edit-cancel" onClick={cancelEdit} disabled={savingEdit}>
               {t('common.actions.cancel')}
-            </button>
-            <button type="button" className="transcript-edit-save" onClick={saveEdit} disabled={!dirty || savingEdit}>
+            </Button>
+            <Button variant="primary" size={32} className="transcript-edit-save" onClick={saveEdit} disabled={!dirty || savingEdit} loading={savingEdit}>
               {savingEdit ? t('comments.transcript.edit.saving') : t('common.actions.save')}
-            </button>
+            </Button>
           </div>
         </div>
       )}
 
       {loadFailed && (
-        <div className="transcript-load-failed" role="status">
-          <span>{t('comments.transcript.languageLoadFailed')}</span>
-          <button type="button" onClick={() => setRetryKey((k) => k + 1)}>
+        <div className="v2-banner is-warn transcript-load-failed" role="status">
+          <Icon name="warning" size={18} className="v2-banner__icon" />
+          <span className="v2-banner__body">{t('comments.transcript.languageLoadFailed')}</span>
+          <Button variant="ghost" size={28} onClick={() => setRetryKey((k) => k + 1)}>
             {t('common.actions.retry')}
-          </button>
+          </Button>
         </div>
       )}
 
@@ -467,10 +502,11 @@ export default function Transcript({ author, permlink, currentTime = 0, onSeek, 
       </div>
 
       {embedded ? null : (
-        <button type="button" className="transcript-toggle" onClick={() => setExpanded((v) => !v)}>
+        <button type="button" className="transcript-toggle" onClick={() => setExpanded((v) => !v)} aria-expanded={expanded}>
+          <Icon name={expanded ? 'expand_less' : 'expand_more'} size={18} />
           {expanded
-            ? <><MdKeyboardArrowUp size={18} /> {t('comments.transcript.hide')}</>
-            : <><MdKeyboardArrowDown size={18} /> {cues.length ? t('comments.transcript.showWithCount', { count: cues.length }) : t('comments.transcript.show')}</>}
+            ? t('comments.transcript.hide')
+            : (cues.length ? t('comments.transcript.showWithCount', { count: cues.length }) : t('comments.transcript.show'))}
         </button>
       )}
     </section>

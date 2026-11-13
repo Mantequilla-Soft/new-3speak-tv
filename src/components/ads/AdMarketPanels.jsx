@@ -18,7 +18,7 @@ import {
   LONG_EXAMPLE_DAYS,
   flightPrice,
   hiveEquivalent,
-  suppliesFor,
+  youSupply,
   formatTabOf,
   specFor,
   savingAt,
@@ -26,6 +26,7 @@ import {
 } from '../../lib/adMarket';
 import '../../page/Advertise.scss';
 import { useTranslation, Trans } from 'react-i18next';
+import { Segmented } from '../v2/ui';
 
 function StatTile({ value, label, note }) {
   return (
@@ -40,22 +41,17 @@ function StatTile({ value, label, note }) {
 export function FormatTabs({ tabs, value, onChange }) {
   const { t } = useTranslation();
   if (tabs.length < 2) return null;
+  // The v2 segmented track: the only tab style (STYLE_GUIDE §6).
   return (
-    <div className="mkt-ftabs" role="tablist" aria-label={t('ads.rateCard.tabs.label')}>
-      {tabs.map(({ id, label, Icon }) => (
-        <button
-          key={id}
-          type="button"
-          role="tab"
-          aria-selected={value === id}
-          className={`mkt-ftab${value === id ? ' selected' : ''}`}
-          onClick={() => onChange(id)}
-        >
-          <Icon aria-hidden="true" />
-          {t(label)}
-        </button>
-      ))}
-    </div>
+    <Segmented
+      className="mkt-ftabs"
+      block={false}
+      size={36}
+      label={t('ads.rateCard.tabs.label')}
+      value={value}
+      onChange={onChange}
+      options={tabs.map(({ id, label, icon }) => ({ value: id, label: t(label), icon }))}
+    />
   );
 }
 
@@ -146,7 +142,9 @@ function UploadAudience({ u, windowDays }) {
   );
 }
 
-export function InventoryPanel({ data, isLoading, error, tab = 'video' }) {
+/* `withAudio`: add the audio player's first position to the video table as one more
+ * row (design 47a), for a page that can book the audio spot. */
+export function InventoryPanel({ data, isLoading, error, tab = 'video', withAudio = false }) {
   const { t } = useTranslation();
   if (isLoading) return <div className="mkt-panel mkt-panel-muted">{t('ads.inventory.loading')}</div>;
 
@@ -183,6 +181,9 @@ export function InventoryPanel({ data, isLoading, error, tab = 'video' }) {
   // would not lead, but a table of positions that is not in position order reads as
   // broken.
   const ordered = [...(slots || [])].sort((a, b) => a.percent - b.percent);
+  const audioFirst = withAudio
+    ? [...(data.audio?.slots || [])].sort((a, b) => a.percent - b.percent)[0] || null
+    : null;
   const topCountries = (audience?.countries || []).slice(0, 6);
 
   return (
@@ -216,6 +217,14 @@ export function InventoryPanel({ data, isLoading, error, tab = 'video' }) {
                   <td className="num">{s.reachPct}%</td>
                 </tr>
               ))}
+              {audioFirst ? (
+                <tr key="audio">
+                  <td>{t('ads.inventory.audioRow', { label: slotLabel({ ...audioFirst, audio: true }) })}</td>
+                  <td className="num">{formatCount(audioFirst.perDay)}</td>
+                  <td className="num">{formatCount(audioFirst.perMonth)}</td>
+                  <td className="num">{audioFirst.reachPct}%</td>
+                </tr>
+              ) : null}
             </tbody>
           </table>
         </div>
@@ -268,16 +277,29 @@ export function InventoryPanel({ data, isLoading, error, tab = 'video' }) {
  * per-second-per-day rate is a number nobody can price a campaign from in their head.
  */
 /* `tab`: only that tab's formats (see FormatTabs). Without it, every format. */
+// The order the groups are drawn in on 47a: the two inside a video, then the upload,
+// then the audio player. Anything unplaced keeps its place at the end.
+const GROUP_ORDER = ['screen', 'overlay', 'creators', 'audio', 'more'];
+const groupRank = (id) => { const i = GROUP_ORDER.indexOf(id); return i < 0 ? GROUP_ORDER.length : i; };
+// 47a quotes every rate to the same three places (0.070, 0.125) so the column reads
+// as one list; a rate with more precision keeps it.
+const fmtRate = (r) => {
+  const n = Number(r);
+  if (!Number.isFinite(n)) return String(r);
+  return Math.abs(n * 1000 - Math.round(n * 1000)) < 1e-9 ? n.toFixed(3) : String(n);
+};
+
 export function RateCard({ pricing, tab = null }) {
   const { t } = useTranslation();
   const all = pricing?.formats || [];
   if (!all.length) return null;
   const days = Math.max(EXAMPLE_DAYS, pricing?.minDays || 0) || null;
   const formats = tab ? all.filter((f) => formatTabOf(f) === tab) : all;
+  const groups = groupByFormat(formats, (f) => f.key).sort((a, b) => groupRank(a.id) - groupRank(b.id));
 
   return (
-    <div className="mkt-format-groups">
-    {groupByFormat(formats, (f) => f.key).map((g) => (
+    <div className="mkt-format-groups" style={{ '--mkt-groups': groups.length }}>
+    {groups.map((g) => (
     <section key={g.id} className="mkt-format-group" aria-label={t(g.title)}>
       <h3 className="mkt-group-title">{t(g.title)}</h3>
       {g.note ? <p className="mkt-group-note">{t(g.note)}</p> : null}
@@ -311,12 +333,17 @@ export function RateCard({ pricing, tab = null }) {
             <div className="mkt-rc-head">
               <h3>{f.label}</h3>
               <span className="mkt-rc-rate">
-                {f.ratePerSecondDayHbd} HBD
+                {fmtRate(f.ratePerSecondDayHbd)}
                 <span className="mkt-rc-unit">{t('ads.rateCard.perSecDay')}</span>
               </span>
             </div>
 
-            <p className="mkt-rc-blurb">{f.blurb}</p>
+            {/* One line under the name (47a): what you hand over. The pitch, the facts
+                and the worked prices are folded into Details below it. */}
+            <p className="mkt-rc-supply">
+              {youSupply(f)}
+              {f.maxSeconds ? t('ads.rateCard.upToSeconds', { seconds: f.maxSeconds }) : null}
+            </p>
 
             {/* Name, rate and one line by default; the facts and the worked prices on
                 request. Five tiles in full were a wall of numbers before anyone had
@@ -324,6 +351,7 @@ export function RateCard({ pricing, tab = null }) {
                 keyboard and is announced without any state of ours. */}
             <details className="mkt-rc-more">
             <summary>{t('ads.rateCard.details')}</summary>
+            <p className="mkt-rc-blurb">{f.blurb}</p>
             <dl className="mkt-rc-facts">
               <div>
                 <dt>{t('ads.rateCard.whereRuns')}</dt>
@@ -335,13 +363,6 @@ export function RateCard({ pricing, tab = null }) {
                   <dd>{t('ads.rateCard.siteOnly')}</dd>
                 </div>
               ) : null}
-              <div>
-                <dt>{t('ads.rateCard.youSupply')}</dt>
-                <dd>
-                  {suppliesFor(f)}
-                  {f.maxSeconds ? t('ads.rateCard.upToSeconds', { seconds: f.maxSeconds }) : null}
-                </dd>
-              </div>
               {specFor(f).rows.map((r) => (
                 <div key={r.label}>
                   <dt>{r.label}</dt>

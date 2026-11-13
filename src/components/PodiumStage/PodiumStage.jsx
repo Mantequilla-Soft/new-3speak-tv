@@ -1,12 +1,26 @@
 import { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import {
-  loadThree, hasWebGL, prefersReducedMotion, createRenderer, disposeTree, isDarkTheme,
+  loadThree, hasWebGL, prefersReducedMotion, createRenderer, disposeTree,
 } from '../../lib/three3d';
 import './PodiumStage.scss';
 
-// Medal colours the leaderboard already uses for ranks 1-3 (Leaderboard.scss).
-const MEDAL = { 1: '#e6b800', 2: '#a8b3bd', 3: '#c8834d' };
+// The steps take their colours from the design tokens (design-system.scss), so
+// they follow the theme: the winner's step is the accent, like its card; the
+// other two are the quiet surface tones. Read at build time, so a theme switch
+// (which rebuilds the scene) recolours them.
+function tokenColors() {
+  const css = getComputedStyle(document.documentElement);
+  const tok = (name) => css.getPropertyValue(name).trim();
+  const accent = tok('--accent');
+  const muted = tok('--muted');
+  return {
+    top: { 1: accent, 2: tok('--surface-2'), 3: tok('--surface-2') },
+    numeral: { 1: accent, 2: muted, 3: muted },
+    body: tok('--surface'),
+    side: tok('--border'),
+  };
+}
 // Step heights in CSS px (phones get 75%). The winner stands tallest.
 const STEP = { 1: 72, 2: 50, 3: 34 };
 const DEPTH = 70;
@@ -21,8 +35,8 @@ const easeOutBack = (k) => {
   return 1 + (c + 1) * (k - 1) ** 3 + c * (k - 1) ** 2;
 };
 
-// Front of a step: its body colour with the rank in its medal colour.
-function frontTexture(THREE, rank, w, h, body) {
+// Front of a step: its body colour with the rank numeral in its tone.
+function frontTexture(THREE, rank, w, h, body, numeral) {
   const scale = 2;
   const canvas = document.createElement('canvas');
   canvas.width = Math.max(2, Math.round(w * scale));
@@ -30,8 +44,8 @@ function frontTexture(THREE, rank, w, h, body) {
   const ctx = canvas.getContext('2d');
   ctx.fillStyle = body;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
-  ctx.fillStyle = MEDAL[rank];
-  ctx.font = `800 ${Math.round(canvas.height * 0.62)}px system-ui, -apple-system, "Segoe UI", Roboto, sans-serif`;
+  ctx.fillStyle = numeral;
+  ctx.font = `900 ${Math.round(canvas.height * 0.62)}px "Roboto Mono", Roboto, system-ui, sans-serif`;
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
   ctx.fillText(String(rank), canvas.width / 2, canvas.height / 2 + canvas.height * 0.04);
@@ -92,9 +106,9 @@ function PodiumStage({ podiumRef, onSteps, riseKey }) {
         built = [];
         const width = podium.clientWidth;
         const phone = width < 520;
-        const dark = isDarkTheme();
-        const body = dark ? '#262626' : '#e9e9e9';
-        const side = dark ? 0x1b1b1b : 0xd6d6d6;
+        const colors = tokenColors();
+        const body = colors.body;
+        const side = new THREE.Color(colors.side);
         const heights = {};
 
         podium.querySelectorAll('.lb-podium-slot').forEach((slot) => {
@@ -104,11 +118,11 @@ function PodiumStage({ podiumRef, onSteps, riseKey }) {
           const w = slot.offsetWidth;
           const x = slot.offsetLeft + w / 2;
           heights[rank] = h;
-          const front = frontTexture(THREE, rank, w, h, body);
+          const front = frontTexture(THREE, rank, w, h, body, colors.numeral[rank]);
           const mats = [
             new THREE.MeshStandardMaterial({ color: side, roughness: 0.8 }), // +x
             new THREE.MeshStandardMaterial({ color: side, roughness: 0.8 }), // -x
-            new THREE.MeshStandardMaterial({ color: new THREE.Color(MEDAL[rank]), roughness: 0.7 }), // top
+            new THREE.MeshStandardMaterial({ color: new THREE.Color(colors.top[rank]), roughness: 0.7 }), // top
             new THREE.MeshStandardMaterial({ color: side, roughness: 0.8 }), // bottom
             new THREE.MeshStandardMaterial({ map: front, roughness: 0.85 }), // front
             new THREE.MeshStandardMaterial({ color: side, roughness: 0.8 }), // back

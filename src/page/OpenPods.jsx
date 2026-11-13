@@ -17,6 +17,7 @@ import MarkdownComposer from '../components/studio/MarkdownComposer';
 import { StreamTemplatesPanel, SaveAsTemplate, TemplatePicker } from '../components/openpods/StreamTemplates';
 import { applyTemplateToSetup } from '../utils/streamTemplates';
 import { toastIn } from '../utils/toast';
+import { Button, Icon, IconButton, Segmented } from '../components/v2/ui';
 import './OpenPods.scss';
 
 // Strip any trailing slash — useHangoutsRoom builds `${apiBaseUrl}/rooms` with a
@@ -246,28 +247,24 @@ export default function OpenPods() {
   };
 
   return (
-    <div className="openpods-page" data-hh-theme={hhTheme}>
+    <div
+      className={`openpods-page${tab === 'templates' ? ' openpods-page--templates' : ''}${studioTabs && tab === 'new' ? ' openpods-page--studio' : ''}`}
+      data-hh-theme={hhTheme}
+    >
       {studioTabs && (
-        <div className="openpods-studio-tabs" role="tablist" aria-label={t('live.obs.tabs.label')}>
-          <button
-            type="button"
-            role="tab"
-            aria-selected={tab === 'new'}
-            className={tab === 'new' ? 'is-active' : ''}
-            onClick={() => tab !== 'new' && setTab('new')}
-          >
-            {t('live.obs.tabs.newStream')}
-          </button>
-          <button
-            type="button"
-            role="tab"
-            aria-selected={tab === 'templates'}
-            className={tab === 'templates' ? 'is-active' : ''}
-            onClick={() => tab !== 'templates' && setTab('templates')}
-          >
-            {t('live.obs.tabs.templates')}
-          </button>
-        </div>
+        <header className="openpods-studio-head">
+          <h1>{t('live.obs.tabs.label')}</h1>
+          <Segmented
+            block={false}
+            label={t('live.obs.tabs.label')}
+            value={tab}
+            onChange={(next) => next !== tab && setTab(next)}
+            options={[
+              { value: 'new', label: t('live.obs.tabs.newStream') },
+              { value: 'templates', label: t('live.obs.tabs.templates') },
+            ]}
+          />
+        </header>
       )}
 
       {tab === 'templates' ? (
@@ -372,29 +369,47 @@ export default function OpenPods() {
       {!sessionToken && (
         <div className="openpods-guest-cta">
           {sessionLoading ? (
-            <span className="openpods-connecting__action">{providerSignPrompt(provider)}</span>
+            <div className="openpods-guest-cta__card" role="status">
+              <Icon name="progress_activity" size={20} className="v2-spin openpods-guest-cta__spin" />
+              <span className="openpods-connecting__action">{providerSignPrompt(provider)}</span>
+            </div>
           ) : canHandover ? (
-            <>
-              <button
+            // 39c: the mic, what it unlocks and what it needs, then the action.
+            <div className="openpods-guest-cta__card">
+              <Icon name="mic" size={24} className="openpods-guest-cta__icon" />
+              <div className="openpods-guest-cta__body">
+                <b>{t('live.lobby.enableHosting')}</b>
+                <span className="openpods-guest-cta__sub">{t('live.lobby.enableHostingHint')}</span>
+                {handoverFailed && (
+                  <p className="openpods-guest-cta__hint">
+                    {t('live.lobby.handoverFailed')}
+                  </p>
+                )}
+              </div>
+              <IconButton
+                icon="arrow_forward"
+                variant="cyan"
+                size={40}
+                round
                 className="openpods-login-btn"
+                label={t('live.lobby.enableHosting')}
                 onClick={() => {
                   handoverTriedRef.current = null;
                   setHandoverFailed(false);
                   retryLogin(handoverUser);
                 }}
-              >
-                {t('live.lobby.enableHosting')}
-              </button>
-              {handoverFailed && (
-                <p className="openpods-guest-cta__hint">
-                  {t('live.lobby.handoverFailed')}
-                </p>
-              )}
-            </>
+              />
+            </div>
           ) : (
-            <button className="openpods-login-btn" onClick={() => navigate('/login')}>
-              {t('live.lobby.signInToHost')}
-            </button>
+            <div className="openpods-guest-cta__card">
+              <Icon name="mic" size={24} className="openpods-guest-cta__icon" />
+              <div className="openpods-guest-cta__body">
+                <b>{t('live.lobby.signInToHost')}</b>
+              </div>
+              <Button variant="primary" icon="login" className="openpods-login-btn" onClick={() => navigate('/login')}>
+                {t('common.actions.login')}
+              </Button>
+            </div>
           )}
         </div>
       )}

@@ -1,7 +1,16 @@
-.networkloader-container{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 1005;
+.networkloader-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 60vh;
+}
+
+.networkloader-icon { color: var(--cyan); }
+
+.networkloader-text {
+  font-size: 13px;
+  color: var(--muted);
 }

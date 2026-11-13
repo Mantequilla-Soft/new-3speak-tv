@@ -25,6 +25,7 @@
     "followers_many": "{{num}} obserwujących",
     "followers_other": "{{num}} obserwującego",
     "popularTitle": "Popularni twórcy",
+    "suggestedTitle": "Twórcy do obserwowania",
     "scrollLeft": "Przewiń w lewo",
     "scrollRight": "Przewiń w prawo",
     "mostlyPosts": "Publikuje głównie: {{topic}}"
@@ -94,7 +95,8 @@
     "views_few": "{{num}} wyświetlenia",
     "views_many": "{{num}} wyświetleń",
     "views_other": "{{num}} wyświetlenia",
-    "readMore": "Czytaj więcej"
+    "readMore": "Czytaj więcej",
+    "label": "Zwiastun"
   },
   "snaps": {
     "readMore": "Czytaj więcej",
@@ -203,7 +205,8 @@
       "text": "Zgrupuj swoje filmy w playlistę, którą ludzie mogą oglądać po kolei.",
       "cta": "Utwórz pierwszą playlistę",
       "visitor": "@{{user}} nie ma publicznych playlist."
-    }
+    },
+    "visitorPreview": "Odwiedzający widzą: „{{text}}”"
   },
   "links": {
     "button": "Linki",
@@ -222,7 +225,8 @@
     "shorts": "Shorts",
     "audio": "Audio",
     "community": "Społeczność",
-    "playlists": "Playlisty"
+    "playlists": "Playlisty",
+    "latestSnap": "Najnowszy snap"
   },
   "streams": {
     "loading": "Wczytywanie transmisji…",
@@ -253,6 +257,7 @@
     "messageTitle": "Napisz do @{{user}}",
     "messageLogin": "Zaloguj się, aby wysłać wiadomość",
     "message": "Wiadomość",
+    "messageShort": "DM",
     "unhideTitle": "Pokazuj znów filmy @{{user}} w twoich kanałach",
     "hideTitle": "Ukryj filmy @{{user}} we wszystkich twoich kanałach",
     "unhide": "Odkryj",
@@ -266,7 +271,11 @@
     "loginToUpload": "Zaloguj się, aby przesłać film",
     "linkExternalTitle": "Połącz profil zewnętrzny",
     "addProfile": "Dodaj profil",
-    "editTitle": "Edytuj zdjęcie, nazwę, opis i lokalizację"
+    "editTitle": "Edytuj zdjęcie, nazwę, opis i lokalizację",
+    "more": "Więcej",
+    "moreActions": "Więcej działań dla @{{user}}",
+    "copyProfileLink": "Kopiuj link do profilu",
+    "podcastFeed": "Kanał podcastu (RSS)"
   },
   "tabs": {
     "overview": "Przegląd",
@@ -301,11 +310,7 @@
     "tip": "Napiwek",
     "tipCreator": "Daj napiwek twórcy",
     "latestVideo": "Najnowszy film",
-    "watchLatestVideo": "Obejrzyj najnowszy film",
-    "latestShort": "Najnowszy short",
-    "watchLatestShort": "Obejrzyj najnowszego shorta",
-    "closeMenu": "Zamknij menu",
-    "openActions": "Otwórz akcje"
+    "latestShort": "Najnowszy short"
   },
   "uploads": {
     "processing": "Przetwarzanie twoich filmów",
@@ -334,7 +339,12 @@
     "hiddenToast": "Napiwek ukryty w twoim profilu",
     "unhiddenToast": "Napiwek znów widoczny w twoim profilu",
     "hideFailed": "Nie udało się zmienić tego napiwku. Spróbuj ponownie.",
-    "hideWalletPrompt": "Podpisz, aby zmienić, które napiwki są widoczne w twoim profilu"
+    "hideWalletPrompt": "Podpisz, aby zmienić, które napiwki są widoczne w twoim profilu",
+    "whoTitle": "@{{user}} wspiera",
+    "tipped_one": "{{count}} napiwek",
+    "tipped_few": "{{count}} napiwki",
+    "tipped_many": "{{count}} napiwków",
+    "tipped_other": "{{count}} napiwku"
   },
   "layout": {
     "customize": "Dostosuj profil",
@@ -451,5 +461,15 @@
   },
   "audioTab": {
     "files": "Pliki audio"
+  },
+  "search": {
+    "placeholder": "Szukaj na tym kanale",
+    "clear": "Wyczyść wyszukiwanie",
+    "results_one": "{{count}} wynik dla „{{query}}”",
+    "results_few": "{{count}} wyniki dla „{{query}}”",
+    "results_many": "{{count}} wyników dla „{{query}}”",
+    "results_other": "{{count}} wyniku dla „{{query}}”",
+    "empty": "Nic na tym kanale nie pasuje do „{{query}}”.",
+    "older": "Szukaj w starszych filmach"
   }
 }

@@ -26,7 +26,15 @@ function mount(props = {}) {
   )
   return { ...r, onClose }
 }
-const reasonBox = () => screen.getByRole('combobox')
+// The reasons are radio tiles (design 07c/43b) in a group named "Reason".
+const reasonGroup = () => screen.getByRole('radiogroup', { name: 'Reason' })
+const reasonNames = () => within(reasonGroup()).getAllByRole('radio').map((o) => o.querySelector('b').textContent)
+// 07c: step 1 picks the reason, "Next: add details" opens step 2 with the
+// details box and the send button.
+const pick = async (user, name) => {
+  await user.click(within(reasonGroup()).getByRole('radio', { name }))
+  await user.click(screen.getByRole('button', { name: 'Next: add details' }))
+}
 const submit = () => screen.getByRole('button', { name: 'Submit Report' })
 
 beforeEach(() => {
@@ -46,8 +54,7 @@ describe('the report window', () => {
     mount()
     expect(screen.getByRole('heading', { name: 'Report Video' })).toBeInTheDocument()
     expect(screen.getByText('@badadib / lake-day')).toBeInTheDocument()
-    const options = within(reasonBox()).getAllByRole('option').map((o) => o.textContent)
-    expect(options).toEqual(['Select a reason...', 'Spam or misleading', 'Harassment or bullying', 'Hate speech', 'Violent or graphic content', 'Sexual content', 'Copyright infringement', 'Scam or fraud', 'Other'])
+    expect(reasonNames()).toEqual(['Spam or misleading', 'Harassment or bullying', 'Hate speech', 'Violent or graphic content', 'Sexual content', 'Copyright infringement', 'Scam or fraud', 'Other'])
   })
 
   it.each([
@@ -56,17 +63,18 @@ describe('the report window', () => {
   ])('a %s gets its own title and reasons', (type, title, reasons) => {
     mount({ type })
     expect(screen.getByRole('heading', { name: title })).toBeInTheDocument()
-    expect(within(reasonBox()).getAllByRole('option').slice(1).map((o) => o.textContent)).toEqual(reasons)
+    expect(reasonNames()).toEqual(reasons)
   })
 
-  it('cannot be sent without a reason', () => {
+  it('cannot go on to the details without a reason', () => {
     mount()
-    expect(submit()).toBeDisabled()
+    expect(screen.getByRole('button', { name: 'Next: add details' })).toBeDisabled()
+    expect(screen.queryByRole('button', { name: 'Submit Report' })).not.toBeInTheDocument()
   })
 
   it('sends the report with its details, remembers it, confirms and closes', async () => {
     const { user, onClose } = mount()
-    await user.selectOptions(reasonBox(), 'copyright')
+    await pick(user, 'Copyright infringement')
     await user.type(screen.getByPlaceholderText('Provide more context...'), '  My song, used without asking  ')
     await user.click(submit())
     const [url, init] = fetchMock.mock.calls[0]
@@ -82,7 +90,7 @@ describe('the report window', () => {
   it('reports an account by its name alone, without empty details', async () => {
     const { user } = mount({ type: 'user', target: { author: 'badadib' } })
     expect(screen.getByText('@badadib')).toBeInTheDocument()
-    await user.selectOptions(reasonBox(), 'impersonation')
+    await pick(user, 'Impersonation')
     await user.click(submit())
     expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toEqual({ object_id: 'badadib', object_type: 'user', reason: 'impersonation' })
     await waitFor(() => expect(isReported('user', 'badadib')).toBe(true))
@@ -91,7 +99,7 @@ describe('the report window', () => {
   it('asks a visitor to log in instead of sending anything', async () => {
     act(() => useAppStore.setState({ user: null }))
     const { user, onClose } = mount()
-    await user.selectOptions(reasonBox(), 'spam')
+    await pick(user, 'Spam or misleading')
     await user.click(submit())
     expect(toastMessages(toast.error)).toEqual(['You must be logged in to report'])
     expect(fetchMock).not.toHaveBeenCalled()
@@ -102,7 +110,7 @@ describe('the report window', () => {
     fetchMock.mockResolvedValueOnce({ ok: false, status: 429, json: async () => ({ error: 'Too many reports' }) })
     vi.spyOn(console, 'error').mockImplementation(() => {})
     const { user, onClose } = mount()
-    await user.selectOptions(reasonBox(), 'spam')
+    await pick(user, 'Spam or misleading')
     await user.click(submit())
     await waitFor(() => expect(toastMessages(toast.error)).toEqual(['Failed to submit report']))
     expect(onClose).not.toHaveBeenCalled()
@@ -114,7 +122,7 @@ describe('the report window', () => {
     let finish
     fetchMock.mockReturnValueOnce(new Promise((r) => { finish = r }))
     const { user } = mount()
-    await user.selectOptions(reasonBox(), 'spam')
+    await pick(user, 'Spam or misleading')
     await user.click(submit())
     expect(screen.getByRole('button', { name: 'Submitting...' })).toBeDisabled()
     await act(async () => finish({ ok: true, json: async () => ({}) }))
@@ -122,10 +130,11 @@ describe('the report window', () => {
 
   it('closing forgets the half-filled form', async () => {
     const { user, onClose } = mount()
-    await user.selectOptions(reasonBox(), 'spam')
+    await user.click(within(reasonGroup()).getByRole('radio', { name: 'Spam or misleading' }))
+    expect(within(reasonGroup()).getByRole('radio', { name: 'Spam or misleading' })).toHaveAttribute('aria-checked', 'true')
     await user.click(screen.getByRole('button', { name: 'Close' }))
     expect(onClose).toHaveBeenCalledTimes(1)
-    expect(reasonBox()).toHaveValue('')
+    expect(within(reasonGroup()).getAllByRole('radio').filter((r) => r.getAttribute('aria-checked') === 'true')).toEqual([])
   })
 
   it('closes from a click on the backdrop, not from one inside', async () => {
@@ -142,7 +151,8 @@ describe('the report window', () => {
   // role="dialog" and no Escape key (:145-146).
   it('BUG: the fields are labelled and the window is a dialog Escape closes', async () => {
     const { user, onClose } = mount()
-    expect(screen.getByRole('combobox', { name: 'Reason' })).toBeInTheDocument()
+    expect(reasonGroup()).toBeInTheDocument()
+    await pick(user, 'Other')
     expect(screen.getByRole('textbox', { name: 'Additional details (optional)' })).toBeInTheDocument()
     expect(screen.getByRole('dialog', { name: 'Report Video' })).toBeInTheDocument()
     await user.keyboard('{Escape}')

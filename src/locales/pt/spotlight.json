@@ -208,7 +208,7 @@
       "imageUploadFailed": "Falha no envio da imagem: {{error}}",
       "tryAgain": "tente de novo",
       "styleApplied": "Estilo aplicado a todos os blocos de {{type}}",
-      "templateApplied": "“{{name}}” aplicado — ajuste ou desfaça",
+      "templateApplied": "“{{name}}” aplicado. Ajuste ou desfaça.",
       "reverted": "Seu design anterior foi restaurado",
       "saved": "Spotlight salvo no seu perfil da Hive",
       "saveFailed": "Não foi possível salvar",
@@ -224,7 +224,7 @@
       "phone": "Telefone",
       "platformGroup": "Plataforma",
       "yourname": "seunome",
-      "platformIconHint": "O ícone é o logo do {{platform}} — mude para “Site / URL” para escolher um ícone personalizado.",
+      "platformIconHint": "O ícone é o logo do {{platform}}. Mude para “Site / URL” para escolher um ícone personalizado.",
       "icon": "Ícone",
       "iconColor": "Cor do ícone",
       "iconBg": "Fundo do ícone"
@@ -265,9 +265,9 @@
       "showPosts_other": "Mostrar {{count}} posts",
       "perRow": "{{value}} por linha",
       "hiveRecentHint": "Seus posts principais mais recentes (sem reblogs nem cross-posts). Atualiza automaticamente.",
-      "linkPlaceholder": "Cole qualquer link — post da Hive, Instagram, X, YouTube, artigo…",
+      "linkPlaceholder": "Cole qualquer link: post da Hive, Instagram, X, YouTube, artigo…",
       "fetching": "Carregando prévia…",
-      "noPreview": "Nenhuma prévia encontrada — ainda vai aparecer como um card de link.",
+      "noPreview": "Nenhuma prévia encontrada. Ainda vai aparecer como um card de link.",
       "pasteHint": "Cole um link e nós puxamos o título, a descrição e a imagem."
     },
     "style": {
@@ -296,8 +296,8 @@
     "openPage": "Abrir página",
     "templates": {
       "title": "Modelos",
-      "hint": "Escolha um design para preencher tudo — sua bio é mantida, e você pode desfazer.",
-      "undo": "Desfazer modelo — voltar ao meu design"
+      "hint": "Escolha um design para preencher tudo. Sua bio é mantida, e você pode desfazer.",
+      "undo": "Desfazer modelo e voltar ao meu design"
     },
     "profile": {
       "title": "Perfil",

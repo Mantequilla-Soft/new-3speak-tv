@@ -1,15 +1,17 @@
 import { useRef, useState, useEffect, useMemo, useCallback } from "react";
 import { useQuery, useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
+import UploadBlockNotice from "../components/UploadBlockNotice/UploadBlockNotice";
+import { spotlightAllowed } from "../utils/spotlightRules";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import "./HomeGrouped.scss";
-import { SkeletonCard, SpotlightSkeleton } from "../components/Cards/GridSkeleton";
+import { SkeletonCard } from "../components/Cards/GridSkeleton";
 import Card3 from "../components/Cards/Card3";
 import { FEED_URL, TRENDING_SORTED_URL, FOLLOW_FEED_URL, DISCOVER_FEED_URL, INTERESTS_FEED_URL, NEW_CONTENT_URL, CHECKER_URL, appendNsfw, warmupRailEnabledFor } from "../utils/config";
 import { useContentBatch } from "../hooks/useContentBatch";
 import { useWatchHistory } from "../hooks/useWatchHistory";
 import { batchCheckWatched } from "../utils/watchHistory";
-import { getHidden, withViewer } from "../utils/userFilters";
+import { getHidden, withViewer, useDismissals, isDismissed } from "../utils/userFilters";
 import { aiKey, isAiFlagged, loadAiFlags } from "../utils/aiFlags";
 import useViewCounts from "../hooks/useViewCounts";
 import { useAppStore } from "../lib/store";
@@ -31,9 +33,15 @@ import PlaylistFeedCard from "../components/Cards/PlaylistFeedCard";
 import AudioTile from "../components/AudioTile/AudioTile";
 import { audioItemPath } from "../components/AudioItem/AudioItemView";
 import { SHORTS_API_URL } from "../utils/config";
-import { Rocket, Compass, Users, Tags, Clock, GripVertical, Tv } from "lucide-react";
+import { Icon } from "../components/v2/Icon";
+import { Button, Dialog, EmptyState, IconButton, Toggle } from "../components/v2/ui";
+import { cx } from "../components/v2/helpers";
 import { useTranslation } from "react-i18next";
 import useCardSize from "../hooks/useCardSize";
+import HomeHero from "../components/HomeHero/HomeHero";
+import HomeActivity from "../components/HomeActivity/HomeActivity";
+import { fetchFeaturedPages } from "../lib/featuredPages";
+import { spreadIn } from "../lib/spreadIn";
 
 // Extra feed params for the logged-in user: interests (checker weights the feed
 // toward them), currentuser (needed for BOTH the always-on dismissals and
@@ -47,7 +55,6 @@ const feedParams = () => {
     p += `&currentuser=${encodeURIComponent(st.user)}`;
     p += `&hidewatched=${st.hideWatched ? '1' : '0'}`;
   }
-  if (st.simpleFeed) p += '&chrono=1'; // algo off → newest-first
   // Pin the shuffle to THIS page load. Without a seed the checker falls back to a
   // 5-minute time bucket, which reshuffled the feed under the user every 5 minutes
   // even if they never navigated or refreshed. One seed per page load means the
@@ -104,25 +111,30 @@ const FEATURED_TOP = 20;
 const FEATURED_MIN_REWARD = 1;
 const FEATURED_PAGE = 100;
 const FEATURED_MAX_PAGES = 3;
+
 const fetchFeatured = async (viewer, hideAi) => {
   const since = Date.now() - FEATURED_WINDOW_MS;
   const createdAt = (v) => new Date(v.created || v.created_at).getTime();
   const rewardOf = (v) => Number(v.stats?.total_hive_reward || 0);
-  // Newest first, until a page reaches back past the window (one is usually 60h+)
-  const all = [];
-  for (let page = 1; page <= FEATURED_MAX_PAGES; page++) {
-    const res = await axios.get(appendNsfw(
+  // Newest first, until a page reaches back past the window. Pages 1 and 2 at
+  // once, page 1 usually already asked for by index.html (lib/featuredPages.js).
+  // 🚨 index.html's early script builds the same URL: keep both in step.
+  const showNsfw = useAppStore.getState().showNsfw;
+  const all = await fetchFeaturedPages({
+    getPage: (page) => axios.get(appendNsfw(
       `${TRENDING_SORTED_URL}?page=${page}&limit=${FEATURED_PAGE}&chrono=1`,
-      useAppStore.getState().showNsfw,
-    ));
-    const vids = res.data?.videos || [];
-    all.push(...vids);
-    if (vids.length < FEATURED_PAGE || createdAt(vids[vids.length - 1]) < since) break;
-  }
+      showNsfw,
+    )).then((res) => res.data),
+    showNsfw,
+    since,
+    pageSize: FEATURED_PAGE,
+    maxPages: FEATURED_MAX_PAGES,
+    createdAt,
+  });
   const authorOf = (v) => v.author?.username || v.author || v.owner;
   // The watched lookup takes 50 at most, and a pool that deep is plenty.
   const recent = all
-    .filter((v) => createdAt(v) >= since && rewardOf(v) >= FEATURED_MIN_REWARD)
+    .filter((v) => createdAt(v) >= since && rewardOf(v) >= FEATURED_MIN_REWARD && spotlightAllowed(v))
     .sort((a, b) => rewardOf(b) - rewardOf(a))
     .slice(0, 50);
   const norm = (x) => String(x || '').toLowerCase();
@@ -164,11 +176,28 @@ const fetchFeatured = async (viewer, hideAi) => {
   })));
 };
 
+// The last Spotlight pool for this viewer and these filters, so a returning
+// visitor's hero shows at once while the fresh pool loads (owner 2026-11-12:
+// the landing page should load faster). Shown as placeholder data only: the
+// real fetch always runs, and HomeHero keeps its slide when the order changes.
+const FEATURED_CACHE = "featured-pool-v1";
+const readFeaturedCache = (key) => {
+  try {
+    const c = JSON.parse(localStorage.getItem(FEATURED_CACHE) || "null");
+    // The rule above applies to a pool cached before it existed, too.
+    const pool = c && c.key === key && Array.isArray(c.pool) ? c.pool.filter(spotlightAllowed) : [];
+    return pool.length ? pool : undefined;
+  } catch { return undefined; }
+};
+const writeFeaturedCache = (key, pool) => {
+  try { localStorage.setItem(FEATURED_CACHE, JSON.stringify({ key, at: Date.now(), pool: (pool || []).slice(0, 30) })); } catch { /* full or blocked */ }
+};
+
 // The top FEATURED_TOP in a random order fixed for the page load: each candidate's
 // place comes from hashing the session seed with its key, so a reload (new seed)
 // shuffles again, while watching the featured video (it leaves the pool) hands
 // over to the one that was already next, instead of reshuffling the rest. The
-// first is featured; the arrows and the strip under it step through the others.
+// hero (HomeHero) starts on the first and slides through the others.
 const featuredKeyOf = (v) => `${v.author?.username || v.author || v.owner}/${v.permlink}`;
 const seededRank = (seed, key) => {
   let h = 2166136261 ^ seed; // FNV-1a
@@ -181,25 +210,20 @@ const orderFeatured = (pool, seed) => (pool || [])
   .sort((a, b) => a.r - b.r)
   .map(({ v }) => v);
 
-// Phones get no featured card at all: their feed stays exactly as it was. Same
-// breakpoint as the `respond(phone)` mixin.
-const PHONE_QUERY = "(max-width: 767px)";
-const useIsPhone = () => {
-  const [isPhone, setIsPhone] = useState(() => typeof window !== "undefined" && !!window.matchMedia?.(PHONE_QUERY).matches);
+// From 1280px up the activity panel sits beside the feed (20a) and takes over
+// the community posts the feed otherwise mixes in (v2.wide).
+const WIDE_QUERY = "(min-width: 1280px)";
+const useMedia = (query) => {
+  const [on, setOn] = useState(() => typeof window !== "undefined" && !!window.matchMedia?.(query).matches);
   useEffect(() => {
-    const mq = window.matchMedia?.(PHONE_QUERY);
+    const mq = window.matchMedia?.(query);
     if (!mq) return undefined;
-    const onChange = () => setIsPhone(mq.matches);
+    const onChange = () => setOn(mq.matches);
     mq.addEventListener("change", onChange);
     return () => mq.removeEventListener("change", onChange);
-  }, []);
-  return isPhone;
+  }, [query]);
+  return on;
 };
-
-const EMPTY_FEATURED = [];
-// Spotlight sizes, in toggle order: cards wide. A saved size that is no longer
-// here (there was a 4-wide 'large') falls back to small.
-const SPOTLIGHT_SPANS = { small: 2, medium: 3 };
 
 // "Interests" row: ONLY videos whose winning topic is in the user's interests,
 // re-ranked by retention with older ones sprinkled in. Empty with no interests.
@@ -237,7 +261,7 @@ const shortsParams = (mode, sectionKey) => {
     p += `&hidewatched=${st.hideWatched ? '1' : '0'}`;
     if (mode === 'follow') p += `&followedby=${encodeURIComponent(st.user)}`;
   }
-  if (mode === 'chrono' || st.simpleFeed) p += '&chrono=1';
+  if (mode === 'chrono') p += '&chrono=1';
   return p;
 };
 
@@ -285,7 +309,6 @@ const fetchNewContent = async (page = 1) => {
   return res.data?.videos || [];
 };
 
-const EMPTY_VIDEOS = [];
 
 // New 3Speak audio for the Discover community rows: the last 3 days, newest
 // first (the checker reads `from=3` as "3 days ago").
@@ -373,14 +396,14 @@ const deduplicateVideos = (videos) => {
   });
 };
 
-// Section icons shown in the tab bar.
+// Section icons (Material Symbols) shown in the tab bar and the Customize dialog (34b).
 const iconsByTitle = {
-  "Home Feed": <Users size={16} />,
-  "Follow Feed": <Users size={16} />,
-  "New Content": <Clock size={16} />,
-  "Promoted": <Rocket size={16} />,
-  "Discover": <Compass size={16} />,
-  "Interests": <Tags size={16} />,
+  "Home Feed": "home",
+  "Follow Feed": "subscriptions",
+  "New Content": "schedule",
+  "Promoted": "rocket_launch",
+  "Discover": "explore",
+  "Interests": "interests",
 };
 
 // ── Persisted custom tab order (array of section keys) in localStorage ──
@@ -406,6 +429,18 @@ const saveActiveTab = (key) => {
   try { localStorage.setItem(ACTIVE_TAB_KEY, key); } catch { /* ignore */ }
 };
 
+// ── Sections the viewer turned off in Customize Home (array of keys) ──
+const HIDDEN_TABS_KEY = "3speak_home_hidden_tabs";
+const loadHiddenTabs = () => {
+  try {
+    const arr = JSON.parse(localStorage.getItem(HIDDEN_TABS_KEY) || "null");
+    return Array.isArray(arr) ? arr.filter((k) => typeof k === "string") : [];
+  } catch { return []; }
+};
+const saveHiddenTabs = (keys) => {
+  try { localStorage.setItem(HIDDEN_TABS_KEY, JSON.stringify(keys)); } catch { /* ignore */ }
+};
+
 // Reorder sections by the saved order; new/unknown keys keep their natural spot.
 const applyTabOrder = (sections, order) => {
   if (!order || !order.length) return sections;
@@ -415,6 +450,114 @@ const applyTabOrder = (sections, order) => {
   for (const s of sections) if (bySection.has(s.key)) out.push(s);
   return out;
 };
+
+// Customize Home (34b): drag the sections by their grip (or move them with the
+// arrows, which show on keyboard focus), and turn off the ones you don't want.
+// Below the feeds, two switches for what the feeds mix in: the Shorts rails
+// (the same setting as in Settings) and live streams. Mounted only while open,
+// so it starts from the saved layout. At least one feed always stays on.
+function CustomizeHomeDialog({ sections, hidden, onClose, onSave }) {
+  const { t } = useTranslation();
+  const inlineShorts = useAppStore((st) => st.inlineShorts);
+  const setInlineShorts = useAppStore((st) => st.setInlineShorts);
+  const byKey = useMemo(() => new Map(sections.map((s) => [s.key, s])), [sections]);
+  const [order, setOrder] = useState(() => sections.map((s) => s.key));
+  const [off, setOff] = useState(() => new Set(hidden));
+  const [shortsOn, setShortsOn] = useState(inlineShorts !== false);
+  const [dragKey, setDragKey] = useState(null);
+  const listRef = useRef(null);
+  const onCount = order.filter((k) => !off.has(k)).length;
+  const move = (i, dir) => setOrder((prev) => {
+    const j = i + dir;
+    if (j < 0 || j >= prev.length) return prev;
+    const next = [...prev];
+    [next[i], next[j]] = [next[j], next[i]];
+    return next;
+  });
+  const toggle = (key, on) => setOff((prev) => {
+    const next = new Set(prev);
+    if (on) next.delete(key); else next.add(key);
+    return next;
+  });
+  // Drag by the grip: the row under the pointer's height takes the dragged one.
+  const onGripDown = (key) => (e) => {
+    if (e.button != null && e.button !== 0) return;
+    e.preventDefault();
+    e.currentTarget.setPointerCapture?.(e.pointerId);
+    setDragKey(key);
+  };
+  const onGripMove = (e) => {
+    if (!dragKey || !listRef.current) return;
+    const rows = [...listRef.current.querySelectorAll('[data-section-key]')];
+    const over = rows.find((r) => {
+      const b = r.getBoundingClientRect();
+      return e.clientY >= b.top && e.clientY <= b.bottom;
+    });
+    const target = over?.dataset.sectionKey;
+    if (!target || target === dragKey) return;
+    setOrder((prev) => {
+      const next = prev.filter((k) => k !== dragKey);
+      next.splice(prev.indexOf(target), 0, dragKey);
+      return next;
+    });
+  };
+  const onGripUp = () => setDragKey(null);
+  const save = () => {
+    if (shortsOn !== (inlineShorts !== false)) setInlineShorts(shortsOn);
+    onSave(order, [...off].filter((k) => byKey.has(k) || k === 'live'));
+  };
+  const row = ({ key, icon, label, on, onChange, canDisable = true, grip = true, i }) => (
+    <div key={key} data-section-key={grip ? key : undefined} className={cx('home-customize-row', !on && 'is-off', dragKey === key && 'is-dragging')}>
+      {grip ? (
+        <span className="home-customize-grip" aria-hidden="true" title={t('feeds.home.dragToReorder')}
+          onPointerDown={onGripDown(key)} onPointerMove={onGripMove} onPointerUp={onGripUp} onPointerCancel={onGripUp}>
+          <Icon name="drag_indicator" size={20} />
+        </span>
+      ) : <span className="home-customize-grip is-blank" aria-hidden="true" />}
+      <span className="home-customize-icon"><Icon name={icon} size={20} /></span>
+      <b className="home-customize-label">{label}</b>
+      {grip && (
+        <span className="home-customize-moves">
+          <IconButton icon="arrow_upward" label={t('profile.layout.moveUp')} size={32} variant="ghost" disabled={i === 0} onClick={() => move(i, -1)} />
+          <IconButton icon="arrow_downward" label={t('profile.layout.moveDown')} size={32} variant="ghost" disabled={i === order.length - 1} onClick={() => move(i, 1)} />
+        </span>
+      )}
+      <Toggle
+        checked={on}
+        label={on ? t('profile.layout.hide') : t('profile.layout.show')}
+        disabled={on && !canDisable}
+        onChange={onChange}
+      />
+    </div>
+  );
+  return (
+    <Dialog
+      open
+      onClose={onClose}
+      title={t('feeds.home.customizeTitle')}
+      width={460}
+      className="home-customize-dialog"
+      closeLabel={t('common.actions.close')}
+      footer={(
+        <Button variant="primary" size={48} block trailing="check" className="home-customize-save" onClick={save}>
+          {t('profile.layout.save')}
+        </Button>
+      )}
+    >
+      <p className="home-customize-hint">{t('feeds.home.customizeHint')}</p>
+      <div className="home-customize-list" ref={listRef}>
+        {order.map((key, i) => {
+          const s = byKey.get(key);
+          if (!s) return null;
+          const on = !off.has(key);
+          return row({ key, icon: iconsByTitle[s.title] || 'view_day', label: s.label, on, i, canDisable: onCount > 1, onChange: (v) => toggle(key, v) });
+        })}
+        {row({ key: 'shorts', icon: 'view_day', label: t('feeds.tabs.shorts'), on: shortsOn, grip: false, onChange: setShortsOn })}
+        {row({ key: 'live', icon: 'sensors', label: t('feeds.live.title'), on: !off.has('live'), grip: false, onChange: (v) => toggle('live', v) })}
+      </div>
+    </Dialog>
+  );
+}
 
 // Bottom-of-list sentinel — fires onLoadMore when it scrolls into view (600px
 // early) so the next page is fetched before the user hits the actual end.
@@ -465,11 +608,9 @@ function useVisibleKeys(rootRef, sig, count) {
 
 const HomeGrouped = () => {
   const { t } = useTranslation();
-  const { authenticated, user, showNsfw, hideWatched, hideAi, interests, simpleFeed } = useAppStore();
+  const { authenticated, user, showNsfw, hideWatched, hideAi, interests } = useAppStore();
   const navigate = useNavigate();
   const homeCardSize = useCardSize(); // large only on mobile, see hooks/useCardSize
-  const spotlightSize = useAppStore((st) => st.spotlightSize);
-  const setSpotlightSize = useAppStore((st) => st.setSpotlightSize);
   // Who is looking, for feature gates that are keyed on a name. A warm-up user
   // has a handle and no Hive username, so `user` alone is null for them.
   const incubationHandle = useAppStore((st) => st.incubationHandle);
@@ -478,16 +619,6 @@ const HomeGrouped = () => {
   const hasInterests = Array.isArray(interests) && interests.length > 0;
   const interestsKey = hasInterests ? interests.join(',') : '';
 
-  // On mobile/tablet the stacked section rows become tabs (one section at a time).
-  const [isMobile, setIsMobile] = useState(
-    typeof window !== 'undefined' && window.matchMedia('(max-width: 1024px)').matches,
-  );
-  useEffect(() => {
-    const mq = window.matchMedia('(max-width: 1024px)');
-    const onChange = (e) => setIsMobile(e.matches);
-    mq.addEventListener('change', onChange);
-    return () => mq.removeEventListener('change', onChange);
-  }, []);
   // Null = the first tab. A saved tab that is not on offer (Interests before they
   // have loaded, or after logging out) falls back to the first one without being
   // forgotten, so it comes back once it is there again.
@@ -497,20 +628,18 @@ const HomeGrouped = () => {
     saveActiveTab(key);
   };
 
-  // Persisted custom tab order + live drag state (pointer-based so it works on
-  // both mouse and touch). `dragKey` = the tab being dragged, `overKey` = the tab
-  // currently under the pointer (its drop position).
+  // Persisted custom tab order (set in Customize Home).
   const [tabOrder, setTabOrder] = useState(loadTabOrder);
-  const [drag, setDrag] = useState(null); // { key, overKey } | null
-  const dragRef = useRef(null);           // { key, startX, startY, mode, moved }
-  const tabBarRef = useRef(null);
+  // Sections turned off in Customize Home, and whether that dialog is open.
+  const [hiddenTabs, setHiddenTabs] = useState(loadHiddenTabs);
+  const [customizeOpen, setCustomizeOpen] = useState(false);
 
   // Each content feed is an INFINITE query — pages load as the user reaches the
   // end of the active tab's grid (see the sentinel in renderPanel).
   const INF = { staleTime: 5 * 60 * 1000, gcTime: 10 * 60 * 1000, initialPageParam: 1 };
 
   const homeQ = useInfiniteQuery({
-    queryKey: authenticated ? ["follow-feed", user, showNsfw, hideWatched, simpleFeed] : ["home-grouped", showNsfw, hideWatched, user, simpleFeed],
+    queryKey: authenticated ? ["follow-feed", user, showNsfw, hideWatched] : ["home-grouped", showNsfw, hideWatched, user],
     queryFn: authenticated ? ({ pageParam }) => fetchFollowFeed(user, pageParam) : ({ pageParam }) => fetchHome(pageParam),
     getNextPageParam: nextPage(),
     ...INF,
@@ -518,7 +647,7 @@ const HomeGrouped = () => {
   const homeData = useMemo(() => deduplicateVideos(homeQ.data?.pages.flat() || []), [homeQ.data]);
 
   const discoverQ = useInfiniteQuery({
-    queryKey: ["discover-grouped", showNsfw, hideWatched, user, simpleFeed],
+    queryKey: ["discover-grouped", showNsfw, hideWatched, user],
     queryFn: ({ pageParam }) => fetchDiscover(pageParam),
     getNextPageParam: nextPage(),
     ...INF,
@@ -531,7 +660,7 @@ const HomeGrouped = () => {
   );
 
   const interestsQ = useInfiniteQuery({
-    queryKey: ["interests-grouped", showNsfw, hideWatched, user, interestsKey, simpleFeed],
+    queryKey: ["interests-grouped", showNsfw, hideWatched, user, interestsKey],
     queryFn: ({ pageParam }) => fetchInterestsFeed(pageParam),
     getNextPageParam: nextPage(),
     enabled: authenticated && hasInterests,
@@ -584,9 +713,11 @@ const HomeGrouped = () => {
   });
 
   // Recent videos from warm-up users (on 3Speak, not on Hive yet). They go in as
-  // ordinary cards right AFTER the promoted ones, in a fixed slot: they have no
-  // votes or views to rank on, and Card3 marks them with a leaf so they read as
-  // new people rather than as something the ranking picked.
+  // ordinary cards: by date in the newest-first feeds (placeByDate), spread
+  // through the ranked ones (spreadIn: after about two rows, then every ~6
+  // cards; owner 2026-11-12, "not at the top"). They have no votes or views to
+  // rank on, and Card3 marks them with a leaf so they read as new people rather
+  // than as something the ranking picked.
   //
   // Gated to the warm-up testers while the feature is still being worked on:
   // everything else here has been through ranking and moderation, so giving
@@ -605,83 +736,71 @@ const HomeGrouped = () => {
   const followedWarmupVideos = useFollowedWarmupVideos(warmupVideos, authenticated ? gateViewer : null);
 
   // Promoted videos LEAD EVERY FEED — they no longer get a tab of their own. Each
-  // section is prefixed with them (then, unless the feed places them by date
-  // itself, the warm-up videos) and deduped, so a promoted video that also shows
-  // up organically further down that feed isn't rendered twice.
+  // section is prefixed with them and deduped, so a promoted video that also
+  // shows up organically further down that feed isn't rendered twice. The
+  // warm-up videos are mixed in by the caller (placeByDate / mixWarmup).
   const leadWithPromoted = useCallback(
-    (videos, warmup = warmupVideos) => {
-      const lead = [...(promotedData || []), ...warmup];
+    (videos) => {
+      const lead = promotedData || [];
       return lead.length ? deduplicateVideos([...lead, ...(videos || [])]) : (videos || []);
     },
-    [promotedData, warmupVideos],
+    [promotedData],
   );
+  // Warm-up videos spread through a ranked feed (lib/spreadIn.js), at spots
+  // that stay put while the page is open (the feed's session seed).
+  const warmupSeed = getFeedSeed();
+  const mixWarmup = (videos, complete) => spreadIn(videos, warmupVideos, { seed: warmupSeed, complete });
 
-  // The featured video (see fetchFeatured / orderFeatured), leading the Discover tab.
-  const isPhone = useIsPhone();
+  // The featured video (see fetchFeatured / orderFeatured): the Spotlight hero
+  // at the top of Home (20a), on every width.
+  const isWide = useMedia(WIDE_QUERY);
+  const featuredCacheKey = JSON.stringify([showNsfw, gateViewer || null, hideAi]);
+  const featuredCached = useMemo(() => readFeaturedCache(featuredCacheKey), [featuredCacheKey]);
   const { data: featuredPool, isLoading: featuredLoading } = useQuery({
     queryKey: ["featured", showNsfw, gateViewer || null, hideAi],
-    queryFn: () => fetchFeatured(gateViewer, hideAi),
-    enabled: !isPhone,
+    queryFn: async () => {
+      const pool = await fetchFeatured(gateViewer, hideAi);
+      writeFeaturedCache(featuredCacheKey, pool);
+      return pool;
+    },
+    placeholderData: featuredCached,
     staleTime: 5 * 60 * 1000,
     gcTime: 10 * 60 * 1000,
   });
   // The seed is read at render, so pull-to-refresh (which draws a new one) reshuffles.
   const feedSeed = getFeedSeed();
-  const featuredItems = useMemo(
-    () => (isPhone ? EMPTY_FEATURED : orderFeatured(featuredPool, feedSeed)),
-    [isPhone, featuredPool, feedSeed],
+  // The hero slides through all of them (owner 2026-11-12), in this order.
+  // Minus anything the viewer dismissed during this visit (issue #565): the pool
+  // is cached, so a "Not interested" here would otherwise come back as a slide.
+  const dismissalsVersion = useDismissals(user);
+  const spotlight = useMemo(
+    () => orderFeatured((featuredPool || []).filter((v) => !isDismissed(v)), feedSeed),
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- dismissalsVersion: the shared list changed
+    [featuredPool, feedSeed, dismissalsVersion],
   );
-  // Which of them the arrows / strip have selected. Kept as a position, so when the
-  // featured video is watched and leaves the list, the next one moves into it.
-  const [featuredIndex, setFeaturedIndex] = useState(0);
-  const featuredAt = featuredItems.length ? featuredIndex % featuredItems.length : 0;
-  const featured = featuredItems[featuredAt] || null;
-  const featuredKey = featured ? featuredKeyOf(featured) : null;
-  // Still on its way: the grid holds its block with a skeleton, so the Spotlight
-  // drops into place instead of shoving the first rows aside when it arrives.
-  const spotlightPending = !isPhone && featuredLoading;
-  // The size toggle on the card: small <-> medium. Hidden in
-  // large-card mode, where the width is fixed.
-  const featuredNav = useMemo(() => ({
-    items: featuredItems,
-    index: featuredAt,
-    onSelect: setFeaturedIndex,
-    size: homeCardSize === 'large' ? null : (SPOTLIGHT_SPANS[spotlightSize] ? spotlightSize : 'small'),
-    onCycleSize: () => {
-      const order = Object.keys(SPOTLIGHT_SPANS);
-      const at = order.indexOf(spotlightSize);
-      setSpotlightSize(order[(at + 1) % order.length]);
-    },
-  }), [featuredItems, featuredAt, homeCardSize, spotlightSize, setSpotlightSize]);
-  // The rest of the feed leaves out EVERY video in the line-up, not just the one
-  // that is big right now: browsing the Spotlight then only swaps the first card,
-  // and nothing below it moves (the shown one used to drop out of its place and
-  // the previous one come back into its own, shifting every card after them).
-  const featuredKeys = useMemo(
-    () => new Set(featuredItems.map((v) => featuredKeyOf(v).toLowerCase())),
-    [featuredItems],
-  );
-  const withFeatured = (vids) => (featured
-    ? [featured, ...vids.filter((v) => !featuredKeys.has(featuredKeyOf(v).toLowerCase()))]
+  // The hero's videos are not repeated in the grid below it.
+  const spotlightKeys = useMemo(() => new Set(spotlight.map((v) => featuredKeyOf(v).toLowerCase())), [spotlight]);
+  const withFeatured = (vids) => (spotlightKeys.size
+    ? vids.filter((v) => !spotlightKeys.has(featuredKeyOf(v).toLowerCase()))
     : vids);
 
   // Live OpenPods streams, prepended into the grids as regular cards. "all"
   // for public feeds; "following" for the follow feed / personalised tabs.
   const liveAll = useLiveStreams();
   const liveFollowing = useLiveStreams({ following: true });
-  const withLive = (live, vids) => (live.length ? [...live, ...vids] : vids);
+  // "Live now" switched off in Customize Home (34b) keeps live tiles out.
+  const liveOff = hiddenTabs.includes('live');
+  const withLive = (live, vids) => (!liveOff && live.length ? [...live, ...vids] : vids);
 
   // ── Build the section list (natural order), then apply the user's saved order ──
   const baseSections = [
-    { key: 'discover', title: 'Discover', label: t('feeds.home.sections.discover'), videos: withFeatured(withLive(liveAll, leadWithPromoted(discoverData))), isLoading: discoverLoading, priority: true },
-    { key: 'home', title: authenticated ? 'Follow Feed' : 'Home Feed', label: authenticated ? t('feeds.home.sections.follow') : t('feeds.home.sections.home'), videos: withLive(authenticated ? liveFollowing : liveAll, authenticated ? leadWithPromoted(placeByDate(homeData, followedWarmupVideos, homeQ.hasNextPage === false), EMPTY_VIDEOS) : leadWithPromoted(homeData)), linkTo: authenticated ? '/follow-feed' : '/home-feed', isLoading: homeLoading, priority: true },
-    { key: 'new', title: 'New Content', label: t('feeds.home.sections.new'), videos: withLive(liveAll, leadWithPromoted(placeByDate(newContentData, warmupVideos, newQ.hasNextPage === false), EMPTY_VIDEOS)), linkTo: '/new', isLoading: newContentLoading },
+    { key: 'discover', title: 'Discover', label: t('feeds.home.sections.discover'), tab: t('feeds.home.sections.discover'), videos: withFeatured(withLive(liveAll, leadWithPromoted(mixWarmup(discoverData, discoverQ.hasNextPage === false)))), isLoading: discoverLoading, priority: true },
+    { key: 'home', title: authenticated ? 'Follow Feed' : 'Home Feed', label: authenticated ? t('feeds.home.sections.follow') : t('feeds.home.sections.home'), tab: authenticated ? t('feeds.home.tabFollowing') : t('common.nav.trending'), videos: withLive(authenticated ? liveFollowing : liveAll, authenticated ? leadWithPromoted(placeByDate(homeData, followedWarmupVideos, homeQ.hasNextPage === false)) : leadWithPromoted(mixWarmup(homeData, homeQ.hasNextPage === false))), linkTo: authenticated ? '/follow-feed' : '/home-feed', isLoading: homeLoading, priority: true },
+    { key: 'new', title: 'New Content', label: t('feeds.home.sections.new'), tab: t('common.nav.new'), videos: withLive(liveAll, leadWithPromoted(placeByDate(newContentData, warmupVideos, newQ.hasNextPage === false))), linkTo: '/new', isLoading: newContentLoading },
   ];
   // Interests row (logged-in + has interests): between the follow feed and New.
   if (authenticated && hasInterests) {
-    baseSections.splice(2, 0, { key: 'interests', title: 'Interests', label: t('feeds.home.sections.interests'), videos: withLive(liveFollowing, leadWithPromoted(interestsData)), isLoading: interestsLoading, priority: true });
-  }
-  if (authenticated) {
+    baseSections.splice(2, 0, { key: 'interests', title: 'Interests', label: t('feeds.home.sections.interests'), tab: t('feeds.home.sections.interests'), videos: withLive(liveFollowing, leadWithPromoted(mixWarmup(interestsData, interestsQ.hasNextPage === false))), isLoading: interestsLoading, priority: true });
   }
   // A saved tabOrder may still list the retired 'promoted' key — applyTabOrder skips
   // keys with no matching section, so old orders degrade cleanly.
@@ -690,8 +809,11 @@ const HomeGrouped = () => {
   // grow as pages load, and memoising on keys alone would freeze the feed at
   // page 1 (the sentinel then stays in view and loops). applyTabOrder is cheap.
   const tabSections = applyTabOrder(naturalSections, tabOrder);
+  // What the tab bar offers: everything not turned off (never nothing at all).
+  const shownSections = tabSections.filter((s) => !hiddenTabs.includes(s.key));
+  const visibleSections = shownSections.length ? shownSections : tabSections;
 
-  const activeSection = tabSections.find((s) => s.key === activeKey) || tabSections[0] || null;
+  const activeSection = visibleSections.find((s) => s.key === activeKey) || visibleSections[0] || null;
   const activeVideos = activeSection?.videos || [];
 
   // ── Metadata (payout/votes/views/watch) is fetched only for cards near the
@@ -750,24 +872,6 @@ const HomeGrouped = () => {
 
   // Live column count of the card grid — drives "a shorts rail every 2 rows".
   const gridCols = useGridColumns(panelRef, `${activeSection?.key}:${activeVideos.length}`);
-  // How big the featured card is: several columns by two rows, or a full-width
-  // single row on a two-column grid. The thumbnail is always 16:9; at three columns
-  // it is taller than two normal rows hold, so those rows grow to fit it. `weight` is how many normal cards it counts as for the rails: so
-  // little that its block (it plus the cards beside it) counts as NOTHING. The
-  // rails then start counting below the block, and the feed under it looks like a
-  // feed without it: a row, the follow suggestions, a row, the first shorts rail.
-  // No rail can land inside the block either, which would leave holes in the grid.
-  // Width: the viewer's Spotlight size (2 or 3 cards, toggled on the card), or
-  // always two in large-card mode (its tiles are already big), and always at least
-  // one column left beside it.
-  const featuredLayout = useMemo(() => {
-    if (gridCols < 2) return null;
-    if (gridCols === 2) return { span: 2, rows: 1, weight: 0 };
-    const wanted = homeCardSize === 'large' ? 2 : (SPOTLIGHT_SPANS[spotlightSize] || 2);
-    const span = Math.min(wanted, gridCols - 1);
-    // The block is two full rows; minus what the cards beside it fill, it counts as nothing
-    return { span, rows: 2, weight: 2 * span - 2 * gridCols };
-  }, [gridCols, homeCardSize, spotlightSize]);
   // How many narrow creator tiles fit across the grid — the "follow these" rail uses
   // this to fill its row exactly on desktop (no horizontal scroll). Mobile ignores it
   // (that rail stays a scroller); it's only >0 once the grid is measured, which also
@@ -793,11 +897,13 @@ const HomeGrouped = () => {
   // Discover + New → any fresh community post; Interests + Follow → only from people
   // you follow. null = none for this section.
   const communityMode = useMemo(() => {
+    // From 1280px up the activity panel beside the feed shows these instead.
+    if (isWide) return null;
     const k = activeSection?.key;
     if (k === 'discover' || k === 'new') return 'all';
     if ((k === 'interests' || k === 'home') && authenticated && user) return 'following';
     return null;
-  }, [activeSection?.key, authenticated, user]);
+  }, [activeSection?.key, authenticated, user, isWide]);
 
   // Discover is a browse surface, so it gets a TIGHTER freshness window than the
   // other sections: community posts from the last 3 days, playlist changes from
@@ -980,87 +1086,17 @@ const HomeGrouped = () => {
     await refreshHomeFeeds(queryClient, { authenticated, user });
   }, [queryClient, authenticated, user]);
 
-  // ── Drag-to-reorder the tabs (pointer events → works for mouse + touch) ──
-  // DESKTOP (mouse): only the grip handle drags — the tab body just selects, and
-  // the grab cursor lives on the handle. TOUCH: no hover, so a drag anywhere on
-  // the tab (after a few px) reorders. During the drag we PREVIEW the new order
-  // live, hit-testing against the tabs' ORIGINAL midpoints (captured at drag
-  // start) so the reordering DOM can't cause the pointer test to flicker.
-  const rectsRef = useRef([]);
-  const startDrag = (key) => {
-    const bar = tabBarRef.current;
-    rectsRef.current = bar
-      ? [...bar.querySelectorAll('.home-tab')].map((b) => {
-          const r = b.getBoundingClientRect();
-          return { key: b.dataset.tabKey, mid: r.left + r.width / 2 };
-        })
-      : [];
-    setDrag({ key, order: rectsRef.current.map((r) => r.key) });
-  };
+  // The tabs only select (owner 2026-11-12): dragging them to reorder got in
+  // the way of scrolling on phones. The order is set in Customize (the tune
+  // button next to them), which keeps its own drag handles and arrows.
 
-  const previewOrder = (draggedKey, clientX) => {
-    const others = rectsRef.current.filter((r) => r.key !== draggedKey);
-    let idx = others.length;
-    for (let i = 0; i < others.length; i++) { if (clientX < others[i].mid) { idx = i; break; } }
-    const order = others.map((r) => r.key);
-    order.splice(idx, 0, draggedKey);
-    return order;
+  const saveCustomLayout = (order, hidden) => {
+    setTabOrder(order);
+    saveTabOrder(order);
+    setHiddenTabs(hidden);
+    saveHiddenTabs(hidden);
+    setCustomizeOpen(false);
   };
-
-  const onTabPointerDown = (key) => (e) => {
-    if (e.button != null && e.button !== 0) return;
-    const onHandle = !!e.target.closest?.('.home-tab-handle');
-    const isTouch = e.pointerType === 'touch';
-    // handle → drag now; touch body → drag after a small move; mouse body → select only.
-    const mode = onHandle ? 'immediate' : (isTouch ? 'threshold' : 'select');
-    dragRef.current = { key, startX: e.clientX, startY: e.clientY, mode, moved: false };
-    if (mode === 'immediate') { startDrag(key); e.preventDefault(); }
-  };
-  const onTabPointerMove = (e) => {
-    const d = dragRef.current;
-    if (!d || d.mode === 'select') return;
-    if (!d.moved) {
-      if (Math.hypot(e.clientX - d.startX, e.clientY - d.startY) < 8) return;
-      d.moved = true;
-      if (d.mode === 'threshold') startDrag(d.key);
-    }
-    const order = previewOrder(d.key, e.clientX);
-    setDrag((s) => (s ? { ...s, order } : s));
-  };
-  const onTabPointerUp = () => {
-    const d = dragRef.current;
-    dragRef.current = null;
-    if (!d) return;
-    if (drag?.order && (d.moved || d.mode === 'immediate')) {
-      const order = drag.order;
-      setTabOrder(order);
-      saveTabOrder(order);
-      // The active tab is held by key, so it stays selected wherever it moved to.
-      setDrag(null);
-      return;
-    }
-    setDrag(null);
-    // No real drag → treat as a tab select.
-    if (tabSections.some((s) => s.key === d.key)) selectTab(d.key);
-  };
-  // Global listeners while a pointer is down on a tab.
-  useEffect(() => {
-    window.addEventListener('pointermove', onTabPointerMove);
-    window.addEventListener('pointerup', onTabPointerUp);
-    return () => {
-      window.removeEventListener('pointermove', onTabPointerMove);
-      window.removeEventListener('pointerup', onTabPointerUp);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [drag, tabSections, activeSection]);
-
-  // Live-previewed tab order during a drag (falls back to the committed order).
-  const displaySections = useMemo(() => {
-    if (!drag?.order) return tabSections;
-    const byKey = new Map(tabSections.map((s) => [s.key, s]));
-    const out = drag.order.map((k) => byKey.get(k)).filter(Boolean);
-    return out.length === tabSections.length ? out : tabSections;
-  }, [tabSections, drag]);
 
   // Infinite query backing each paginated section (promoted isn't paginated).
   const queryByKey = { home: homeQ, discover: discoverQ, interests: interestsQ, new: newQ };
@@ -1085,7 +1121,8 @@ const HomeGrouped = () => {
     // Still filling: don't paint a partial rail we're about to have more shorts for.
     if (slice.length < shortsPerRow && (shortsQ.hasNextPage || shortsQ.isFetchingNextPage)) return null;
     if (slice.length < Math.min(shortsPerRow, MIN_RAIL_SHORTS)) return null;
-    return <ShortsRow shorts={slice} columns={shortsPerRow} />;
+    // No heading inside the grid (owner 2026-11-12); the watch page keeps its own.
+    return <ShortsRow shorts={slice} columns={shortsPerRow} heading={false} />;
   }, [feedShorts, shortsPerRow, shortsQ.hasNextPage, shortsQ.isFetchingNextPage]);
 
   const renderPanel = (s) => {
@@ -1098,18 +1135,15 @@ const HomeGrouped = () => {
       && s.key === activeSection?.key
       && shortsQ.isLoading;
     if (waitingForShorts || (s.isLoading && (!s.videos || s.videos.length === 0))) {
-      // Skeleton cards in the real card grid (same columns as what follows, and
-      // measurable for featuredLayout), the Spotlight's block reserved on Discover
-      const withSpotlight = s.key === 'discover' && !isPhone && !!featuredLayout && (spotlightPending || !!featured);
+      // Skeleton cards in the real card grid (same columns as what follows)
       return (
         <div className="card-container">
-          {withSpotlight && <SpotlightSkeleton layout={featuredLayout} />}
           {Array.from({ length: 12 }).map((_, i) => <SkeletonCard key={i} />)}
         </div>
       );
     }
     if (!s.videos || s.videos.length === 0) {
-      return <div className="home-tab-empty">{t('feeds.home.empty')}</div>;
+      return <EmptyState className="home-tab-empty" icon="video_library" title={t('feeds.home.empty')} />;
     }
     const q = queryByKey[s.key];
     // Only interest-having users get the "follow these" rail (it's interest-matched).
@@ -1127,10 +1161,6 @@ const HomeGrouped = () => {
           watchedVersion={watchedVersion}
           getViewCount={getViewCount}
           priority={s.priority}
-          featuredKey={s.key === 'discover' ? featuredKey : null}
-          featuredLayout={featuredLayout}
-          featuredNav={featuredNav}
-          featuredPending={s.key === 'discover' && spotlightPending}
           /* A shorts rail after every 2 REAL rows of videos, on any feed that has a
              shorts source (see shortsMode). `gridCols` is measured from the live
              grid, so this lands on a row boundary at every breakpoint (2 cols on
@@ -1155,7 +1185,9 @@ const HomeGrouped = () => {
           />
         )}
         {(!q || !q.hasNextPage) && s.linkTo && (
-          <div className="home-tab-viewall"><Link to={s.linkTo} className="view-all">{t('feeds.home.viewAll')}</Link></div>
+          <div className="home-tab-viewall">
+            <Button as={Link} to={s.linkTo} variant="secondary" size={40} next className="view-all">{t('feeds.home.viewAll')}</Button>
+          </div>
         )}
       </>
     );
@@ -1166,38 +1198,66 @@ const HomeGrouped = () => {
     <div className="home-grouped-container home-tabbed" data-card-size={homeCardSize || 'small'}>
       {/* Logged-out first visits only. */}
       <WelcomeBanner />
-      <ShortsStories />
+      {/* The Spotlight (20a): the featured videos, full width under the bar. */}
+      <HomeHero videos={spotlight} pending={featuredLoading && !spotlight.length} />
+      <ShortsStories tiles />
       {/* Logged-in only, and renders nothing when there's nothing unwatched. */}
       <NewFromFollowing />
+      {/* A creator blocked from uploading: the banner sits here on Home, under
+          the Spotlight and over the feed tabs (the app-level copy hides it). */}
+      <UploadBlockNotice inline />
 
-      <div className={`home-tabs home-tabs--bar${drag ? ' is-dragging' : ''}`} role="tablist" ref={tabBarRef}>
-        {displaySections.map((s) => (
-          <button
-            key={s.key}
-            type="button"
-            role="tab"
-            data-tab-key={s.key}
-            aria-selected={s.key === activeSection?.key}
-            className={`home-tab${s.key === activeSection?.key ? ' active' : ''}${drag?.key === s.key ? ' dragging' : ''}`}
-            aria-label={s.label}
-            title={s.label}
-            onPointerDown={onTabPointerDown(s.key)}
-          >
-            <span className="home-tab-handle" aria-hidden="true" title={t('feeds.home.dragToReorder')}><GripVertical size={14} /></span>
-            <span className="home-tab-icon">{iconsByTitle[s.title]}</span>
-            <span className="home-tab-label">{s.label}</span>
-          </button>
-        ))}
-        {/* Channel Surfing lives here rather than in the top menu. A link, not a
-            tab: it leaves the page, and the reorder drag only hit-tests
-            `.home-tab`, so it can never be dragged in among the feeds. */}
-        <Link to="/surf" className="home-tab-surf" title={t('feeds.home.surfTitle')}>
-          <Tv size={16} aria-hidden="true" /> <span>{t('feeds.home.zapping')}</span>
-        </Link>
-      </div>
+      {/* The feed and, from 1280px up, the activity panel beside it (20a:
+          minmax(0,1fr) 340px, gap 32). */}
+      <div className="home-layout">
+        <div className="home-main">
+          <div className="home-tabs-row">
+            <div className="home-tabs home-tabs--bar" role="tablist">
+              {visibleSections.map((s) => (
+                <button
+                  key={s.key}
+                  type="button"
+                  role="tab"
+                  data-tab-key={s.key}
+                  aria-selected={s.key === activeSection?.key}
+                  className={`home-tab${s.key === activeSection?.key ? ' active' : ''}`}
+                  title={s.label}
+                  onClick={() => selectTab(s.key)}
+                >
+                  <span className="home-tab-label">{s.tab || s.label}</span>
+                </button>
+              ))}
+            </div>
+            <div className="home-tabs-tools">
+              {/* Channel Surfing lives here rather than in the top menu. A link, not a
+                  tab: it leaves the page. */}
+              <Link to="/surf" className="home-tab-tool home-tab-surf" title={t('feeds.home.surfTitle')}>
+                <Icon name="live_tv" size={18} /> <span>{t('feeds.home.zapping')}</span>
+              </Link>
+              <button type="button" className="home-tab-tool home-tab-customize" onClick={() => setCustomizeOpen(true)} title={t('feeds.home.customizeTitle')}>
+                <Icon name="tune" size={18} /> <span>{t('feeds.home.customize')}</span>
+              </button>
+            </div>
+          </div>
 
-      <div className="home-tab-panel" role="tabpanel" ref={panelRef}>
-        {renderPanel(activeSection)}
+          {customizeOpen && (
+            <CustomizeHomeDialog
+              sections={tabSections}
+              hidden={hiddenTabs}
+              onClose={() => setCustomizeOpen(false)}
+              onSave={saveCustomLayout}
+            />
+          )}
+
+          <div className="home-tab-panel" role="tabpanel" ref={panelRef}>
+            {renderPanel(activeSection)}
+          </div>
+        </div>
+        {isWide && (
+          <aside className="home-aside">
+            <HomeActivity />
+          </aside>
+        )}
       </div>
     </div>
     </PullToRefresh>

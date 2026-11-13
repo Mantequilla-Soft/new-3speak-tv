@@ -1,157 +1,134 @@
-@use "../../mixins.scss" as *;
+@use "../../styles/v2" as v2;
 
+// Author chip (30c, 02): a surface-2 pill with the round avatar, @name in bold,
+// the follower count muted, and a small secondary Follow pill at the end. It
+// sits on tiles and rows, often several per page, so it is never a solid red
+// fill (one accent fill per view); a page that makes Follow its primary
+// action (the creator chip on the player) restyles it there.
 .author-badge {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 1px 1px 1px 1px;
-
-  &:not(:has(.follow-btn)) {
-    padding-right: 4px;
-  }
-
-  background: var(--bg-tertiary);
-  border: 1px solid var(--border-light);
-  border-radius: 20px;
-  transition: all 0.2s ease;
   max-width: 100%;
+  min-height: 36px;
+  padding: 4px;
+  border-radius: var(--r-lg);
+  background: var(--surface-2);
+  transition: background var(--t-fast) var(--ease);
 
-  &:hover {
-    background: var(--bg-hover);
-    border-color: var(--border-color);
-  }
+  &:not(:has(.follow-btn)) { padding-right: 10px; }
+
+  &:hover { background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); }
 
   &.compact {
     background: transparent;
-    border-color: transparent;
 
-    &:hover {
-      background: var(--bg-tertiary);
-      border-color: var(--border-light);
-    }
+    &:hover { background: var(--surface-2); }
 
-    .author-name {
-      font-weight: 400;
-    }
+    .author-name { font-weight: 500; }
   }
 
   .author-badge-link {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
+    min-width: 0;
     text-decoration: none;
     cursor: pointer;
-    min-width: 0;
   }
 
   img {
-    width: 30px;
-    height: 30px;
+    width: 28px;
+    height: 28px;
+    flex: none;
     border-radius: 50%;
     object-fit: cover;
-    flex-shrink: 0;
-    @include respond(phone) {
-      width: 22px;
-      height: 22px;
-    }
+    background: var(--avatar);
+
+    @include v2.mobile { width: 24px; height: 24px; }
   }
 
-  // The HiveAvatar wrapper keeps the same footprint as the bare <img>
-  // so flex-row layout (avatar + name column) doesn't shift.
-  .author-badge-avatar {
-    flex-shrink: 0;
-  }
+  // The HiveAvatar wrapper keeps the same footprint as the bare <img>.
+  .author-badge-avatar { flex: none; }
 
   .author-text {
     display: flex;
     flex-direction: column;
-    line-height: 1.2;
     min-width: 0;
+    line-height: 1.2;
   }
 
-  // Wraps the truncating name + the premium badge so the badge sits
-  // OUTSIDE the ellipsis calculation — name shrinks with "…" but the
-  // rocket stays full-size at the end.
+  // The name truncates; the Pro mark sits outside the ellipsis.
   .author-name-row {
     display: inline-flex;
     align-items: center;
-    gap: 0.25rem;
+    gap: 4px;
     min-width: 0;
     max-width: 100%;
   }
 
   .author-name {
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--text-primary);
+    flex: 0 1 auto;
+    min-width: 0;
+    @include v2.text(body-sm);
+    font-weight: 700;
+    color: var(--text);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    min-width: 0;
-    flex: 0 1 auto;
   }
 
-  .author-name-row .hh-premium-badge {
-    flex-shrink: 0;
-    margin-left: 0; // gap on the row already provides spacing
-  }
+  .author-name-row .hh-premium-badge { margin-left: 0; }
 
   .followers-count {
-    font-size: 12px;
-    font-weight: 400;
-    color: var(--text-secondary);
+    @include v2.text(meta-sm);
+    color: var(--muted);
     white-space: nowrap;
   }
 
+  // Follow: a small secondary pill (28 tall, radius 8). On the surface-2 chip
+  // it is drawn in surface so it still reads as a button.
   .follow-btn {
-    margin-left: 4px;
-    padding: 0 14px;
-    align-self: stretch;
-    background: var(--text-secondary);
-    color: var(--text-inverse);
-    border: none;
-    border-radius: 14px;
-    font-size: 13px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s ease;
+    flex: none;
+    align-self: center;
+    height: 28px;
+    margin-left: 2px;
+    padding: 0 10px;
+    border: 0;
+    border-radius: var(--r-sm);
+    background: var(--surface);
+    color: var(--text);
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 700;
     white-space: nowrap;
-    animation: followBtnBreathe 11.2s ease-in-out infinite;
+    cursor: pointer;
+    transition: background var(--t-fast) var(--ease), color var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
 
-    &:hover {
-      opacity: 0.85;
-      animation: none;
-    }
+    &:hover { background: color-mix(in srgb, var(--text) 10%, var(--surface)); }
+    &:active { transform: scale(.98); }
 
+    // Already following: quiet muted text, and a red hint on hover (unfollow).
     &.following {
-      animation: none;
       background: transparent;
-      border: 1px solid var(--border-color);
-      color: var(--text-primary);
+      color: var(--muted);
 
-      &:hover {
-        border-color: #ef4444;
-        color: #ef4444;
-        opacity: 1;
-      }
+      &:hover { background: var(--accent-tint); color: var(--accent); }
     }
-  }
-}
 
-@keyframes followBtnBreathe {
-  0%, 11%, 100% {
-    transform: scale(1);
-    opacity: 1;
+    &:disabled { opacity: .45; cursor: not-allowed; }
   }
-  5.5% {
-    transform: scale(1.08);
-    opacity: 0.85;
+
+  // The compact chip has no fill of its own, so Follow takes surface-2.
+  &.compact .follow-btn:not(.following) {
+    background: var(--surface-2);
+    &:hover { background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); }
   }
 }
 
 // Follow disabled because the target has no Hive account to follow. Keyed on
 // aria-disabled so the button still receives hover and can show its tooltip.
 .follow-btn[aria-disabled="true"] {
-  opacity: 0.45;
+  opacity: .45;
   cursor: not-allowed;
 }

@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react';
-import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import { fetchProfile } from '../../utils/profileMeta';
 import { reconcileAvatarOverride } from '../../utils/avatarCache';
 import ProfileFields, { useProfileEditor } from './ProfileFields';
-import ModalHeader from '../ModalHeader/ModalHeader';
+import { Button, Dialog } from '../v2/ui';
 import './WelcomePrompt.scss';
 
 /**
@@ -48,13 +47,6 @@ export default function ProfileEditModal({
     return () => { alive = false; };
   }, [open, username, seed, loadProfile]);
 
-  useEffect(() => {
-    if (!open) return;
-    const onKey = (e) => { if (e.key === 'Escape' && !saving) onClose && onClose(); };
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  }, [open, saving, onClose]);
-
   if (!open) return null;
 
   const submit = async () => {
@@ -65,53 +57,49 @@ export default function ProfileEditModal({
     }
   };
 
-  return createPortal(
-    <div
-      className="welcome-overlay"
-      role="dialog"
-      aria-modal="true"
-      aria-label={t('app.profileEdit.title')}
-      onClick={() => { if (!saving && onClose) onClose(); }}
-    >
-      <div className="welcome-modal" onClick={(e) => e.stopPropagation()}>
-        <ModalHeader closeOnEscape={false} title={t('app.profileEdit.title')} onClose={saving || !onClose ? undefined : onClose} />
-
-        <div className="welcome-head">
-          <p>
-            {t('app.profileEdit.subtitle')}
-          </p>
-        </div>
-
-        {loading ? (
-          <p className="welcome-loading">{t('app.profileEdit.loading')}</p>
-        ) : (
-          <ProfileFields
-            username={username}
-            form={form}
-            setField={setField}
-            pickImage={pickImage}
-            uploading={uploading}
-            saving={saving}
-          />
-        )}
-
-        <p className="welcome-fineprint">{fineprint ?? t('app.profileEdit.fineprint')}</p>
-
-        <div className="welcome-actions">
-          <button type="button" className="welcome-skip" onClick={() => onClose && onClose()} disabled={saving}>
+  // The shared v2 dialog: Escape, the X and a click outside all close it,
+  // except while a save is on its way.
+  return (
+    <Dialog
+      open
+      onClose={onClose}
+      dismissible={!saving && !!onClose}
+      title={t('app.profileEdit.title')}
+      sub={t('app.profileEdit.subtitle')}
+      closeLabel={t('common.actions.close')}
+      width={560}
+      className="welcome-modal profile-edit-modal"
+      footer={(
+        <>
+          <Button variant="secondary" className="welcome-skip" onClick={() => onClose && onClose()} disabled={saving}>
             {t('common.actions.cancel')}
-          </button>
-          <button
-            type="button"
+          </Button>
+          <Button
+            variant="primary"
             className="welcome-primary"
             onClick={submit}
             disabled={saving || uploading || loading}
+            loading={saving}
           >
             {saving ? t('common.actions.saving') : t('app.profileEdit.saveChanges')}
-          </button>
-        </div>
-      </div>
-    </div>,
-    document.body,
+          </Button>
+        </>
+      )}
+    >
+      {loading ? (
+        <p className="welcome-loading">{t('app.profileEdit.loading')}</p>
+      ) : (
+        <ProfileFields
+          username={username}
+          form={form}
+          setField={setField}
+          pickImage={pickImage}
+          uploading={uploading}
+          saving={saving}
+        />
+      )}
+
+      <p className="welcome-fineprint">{fineprint ?? t('app.profileEdit.fineprint')}</p>
+    </Dialog>
   );
 }

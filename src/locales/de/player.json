@@ -77,6 +77,11 @@
     }
   },
   "reactionUpload": {
+    "title": "Videoreaktion posten",
+    "rec": "REC {{time}}",
+    "mic": "Mikro",
+    "camera": "Kamera",
+    "restart": "Neu starten",
     "authorized": "@threespeak autorisiert – du kannst jetzt deine Reaktion posten",
     "authFailed": "Autorisierung fehlgeschlagen. Bitte versuch es nochmal.",
     "webcamDenied": "Kein Zugriff auf die Webcam",
@@ -90,7 +95,7 @@
     "uploadVideo": "Video hochladen",
     "recordVideo": "Video aufnehmen",
     "startRecording": "Aufnahme starten",
-    "stopRecording": "Aufnahme stoppen",
+    "stopRecording": "Stoppen und ansehen",
     "recordedVideo": "Aufgenommenes Video",
     "descriptionPlaceholder": "Füg eine Beschreibung für deine Videoreaktion hinzu...",
     "showInShorts": "In 3Speak Shorts anzeigen",

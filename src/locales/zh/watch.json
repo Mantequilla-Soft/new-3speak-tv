@@ -16,7 +16,9 @@
     "translatedTo": "已翻译为{{language}}",
     "showLanguage": "显示{{language}}",
     "showOriginal": "显示原文",
-    "buttonTitle": "这个视频的 AI 摘要"
+    "buttonTitle": "这个视频的 AI 摘要",
+    "jumpTo": "跳转到",
+    "disclaimer": "根据文字稿生成，可能存在错误。"
   },
   "errors": {
     "notAvailable": "该视频不可用。",
@@ -29,7 +31,8 @@
   "gated": {
     "title": "仅限会员",
     "checkFailed": "暂时无法确认你的订阅，请稍后再试。",
-    "preview": "你正在观看免费预览。3Speak Pro 可解锁完整视频。",
+    "preview": "你正在观看免费预览",
+    "previewSub": "3Speak Pro 可解锁完整视频。",
     "subscribersOnly": "此视频仅向 3Speak Pro 订阅者开放。",
     "cta": "获取 3Speak Pro"
   },
@@ -38,7 +41,19 @@
     "add": "添加回应"
   },
   "liveChat": "直播聊天",
+  "side": {
+    "label": "视频面板"
+  },
+  "voters": {
+    "title": "点赞者",
+    "cardLabel": "支持者和点赞者",
+    "voter": "点赞者",
+    "weight": "权重",
+    "value": "价值"
+  },
   "moreVideos": "更多视频",
+  "nextIn": "{{name}} 中的下一个",
+  "fromCommunity": "来自 {{name}}",
   "vote": {
     "saveFailed": "无法保存你的点赞"
   },
@@ -74,7 +89,7 @@
     "setEnd": "设为终点",
     "createClip": "创建片段",
     "barStart": "拖到片段的起点",
-    "barEnd": "起点：{{start}}——现在拖到终点",
+    "barEnd": "起点 {{start}} · 现在拖到终点",
     "barDone": "片段：{{start}} – {{end}}"
   },
   "share": {
@@ -92,18 +107,21 @@
   },
   "media": {
     "unavailableTitle": "该视频已不可用",
-    "unavailableBody": "在网络上找不到这个较早上传视频的媒体文件。帖子仍然存在于区块链上，但视频已无法播放。",
+    "unavailableBody": "找不到这个较早上传视频的媒体文件。帖子仍然存在于 Hive 上。",
     "scheduledTitle": "此帖子已预定发布",
     "scheduledBody": "将于 {{date}} 发布，届时即可观看视频。",
     "blockedTitle": "暂时无法加载视频",
-    "blockedBody": "我们的一台视频服务器没有响应。视频本身没有问题，请重试。"
+    "blockedBody": "我们的一台视频服务器没有响应。视频本身没有问题。"
   },
   "tipNudge": {
     "text": "喜欢吗？<hide>给 <b>@{{author}}</b> 打个赏吧！</hide>",
     "dismiss": "关闭"
   },
   "community": {
-    "members_other": "{{count}} 位成员"
+    "members_other": "{{count}} 位成员",
+    "postedIn": "发布于",
+    "partOf": "所属",
+    "position": "{{current}} / {{total}}"
   },
   "tags": {
     "curated": "精选"
@@ -118,7 +136,8 @@
     "openTagFeed": "打开标签信息流"
   },
   "scheduled": {
-    "notice": "定时于 <b>{{date}}</b> 发布——尚未发布。",
+    "notice": "定时于 <b>{{date}}</b> 发布",
+    "notPublished": "尚未发布。",
     "futureDate": "未来某个日期",
     "edit": "编辑、改期或取消",
     "editTitle": "编辑定时帖子（详情、日期或取消）"
@@ -145,7 +164,8 @@
     "toggleDetails": "展开/收起详情",
     "followCreator": "关注创作者",
     "closeMenu": "关闭菜单",
-    "openActions": "打开操作"
+    "openActions": "打开操作",
+    "support": "支持 {{name}}"
   },
   "description": {
     "hide": "隐藏简介",
@@ -181,26 +201,27 @@
     "markdownHint": "支持 Markdown。",
     "listed": "公开",
     "unlistedLabel": "不公开",
-    "listedHint": "显示在信息流、搜索和你的个人主页中。",
-    "unlistedHint": "不会出现在信息流和搜索中——仍可通过链接直接播放，并保留在你的个人主页上（带标记）。",
-    "allowRemix": "允许二创/剪辑",
-    "remixOn": "其他人可以进行二创或剪辑；你会被署名为原作者。",
+    "listedHint": "显示在信息流、搜索和你的个人主页中",
+    "unlistedHint": "仅通过直接链接访问，在你的个人主页上带标记",
+    "allowRemix": "允许二创和剪辑",
+    "remixOn": "你会被署名为原作者",
     "remixOff": "其他人不能二创或剪辑这个视频。",
     "adsOnVideo": "此视频的广告",
     "adsOnHint": "此视频可能会播放广告。",
     "adsOffHint": "此视频不显示广告。",
     "rollsOnVideo": "视频插播广告",
     "rollsOnHint": "可能出现插播广告、横幅和滚动字幕。",
-    "rollsOffHint": "此视频只显示横幅和滚动字幕。",
+    "rollsOffHint": "否则只显示横幅和滚动字幕",
     "trailer": "频道预告片",
     "trailerOn": "在你个人主页“概览”标签页顶部自动播放，并替换你之前设置的预告片。",
-    "trailerOff": "把这个视频设为在你个人主页“概览”标签页顶部自动播放的视频。",
+    "trailerOff": "在你的个人主页顶部自动播放",
     "nsfw": "成人 / NSFW",
     "notNsfw": "非成人内容",
     "nsfwHint": "除非观众开启了 NSFW，否则不会出现在信息流和搜索中；在 Hive 上标记 nsfw 标签。",
     "notNsfwHint": "普通内容，所有人可见。",
+    "nsfwOffHint": "除非观众开启了 NSFW，否则隐藏",
     "promoted": "推广中",
-    "promote": "推广视频",
+    "promote": "推广",
     "saveChanges": "保存更改",
     "noChanges": "没有需要保存的更改。",
     "thumbUploaded": "缩略图已上传。",
@@ -245,7 +266,8 @@
       "visibility": "可见性",
       "content": "内容",
       "ads": "广告",
-      "promotion": "推广"
+      "promotion": "推广",
+      "contentAds": "内容、广告和推广"
     },
     "chaptersNoteAll": "保存时会把章节列表写入描述。",
     "editChapters": "编辑章节",

@@ -1,255 +1,193 @@
-@use "../../mixins.scss" as mix;
-.bene-content-wrap {
-  .list-top-wrap {
-    display: flex;
-    align-items: center;
-    border-bottom: 1px solid var(--border-light, grey);
-    justify-content: space-around;
-    padding-bottom: 3px;
-    font-size: 14px;
-    margin-top: 8px;
-    font-weight: 500;
-  }
-  .user-wrap {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background-color: var(--bg-tertiary, #eaecf4);
-    border: 1px solid var(--border-light, #d1d3e2);
-    padding: 10px 6px;
-    border-radius: 6px;
-    color: var(--text-primary, #000);
+@use "../../styles/v2" as v2;
+
+// Share rewards / beneficiaries (design 17e) on the v2 side sheet: the split
+// as a ring with what stays with you in the middle, every share as a tile
+// (accent bar = you, cyan = a collaborator, muted + lock = a platform split),
+// "Add a collaborator" as a dashed button that opens the add row, then the
+// platform defaults. "Save split" is pinned at the bottom.
+.bene-dialog {
+  .bene-text {
+    margin: 0;
+    @include v2.text(meta);
+    color: var(--muted);
   }
 
+  .bene-ring {
+    position: relative;
+    align-self: center;
+    width: 172px;
+    height: 172px;
+    border-radius: 50%;
+    flex: none;
+    display: grid;
+    place-items: center;
+    margin: 4px 0 6px;
+  }
+  .bene-ring__hole {
+    width: 116px;
+    height: 116px;
+    border-radius: 50%;
+    background: var(--surface);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    b { font-family: var(--font-sans); font-size: 32px; font-weight: 900; letter-spacing: -.02em; line-height: 1; }
+    span { @include v2.text(meta-sm); color: var(--muted); }
+  }
+
+  .bene-tiles {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .bene-tile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 56px;
+    padding: 8px 8px 8px 12px;
+    border-radius: var(--r-lg);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    min-width: 0;
+
+    .bene-tile__bar { width: 6px; height: 32px; border-radius: 3px; background: var(--cyan); flex: none; }
+    &.is-you .bene-tile__bar { background: var(--accent); }
+    &.is-locked .bene-tile__bar { background: var(--muted); }
+
+    .bene-tile__body { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+    .bene-tile__who { @include v2.text(meta); font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .bene-tile__pct { font-family: var(--font-sans); font-size: 16px; font-weight: 900; line-height: 1.2; }
+    .bene-tile__edit {
+      display: flex;
+      align-items: baseline;
+      font-size: 16px;
+      font-weight: 900;
+      input {
+        min-width: 1.5ch;
+        padding: 0;
+        border: 0;
+        border-bottom: 2px solid transparent;
+        background: transparent;
+        color: var(--text);
+        font-family: var(--font-sans);
+        font-size: 16px;
+        font-weight: 900;
+        outline: none;
+        -moz-appearance: textfield;
+        &::-webkit-inner-spin-button, &::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+        &:focus { border-bottom-color: var(--accent); }
+      }
+    }
+    .bene-tile__lock { color: var(--muted); margin-right: 4px; }
+  }
+
+  .bene-addbtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 48px;
+    border: 2px dashed var(--border);
+    border-radius: var(--r-lg);
+    background: transparent;
+    color: var(--muted);
+    @include v2.text(label);
+    cursor: pointer;
+    transition: color var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease);
+    &:hover { color: var(--text); border-color: var(--muted); }
+  }
+
+  // Add a collaborator: account field, percent field, add button.
   .reward-main {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    height: 35px;
-    margin-top: 5px;
-    @include mix.respond(phone) {
-      gap: 3px;
-      height: 30px;
-    }
-    .wrap {
-      display: flex;
-      align-items: center;
-      gap: 3px;
-      margin-top: 7px;
-      height: 100%;
-      padding: 0px 4px;
-      background-color: var(--bg-tertiary, #eaecf4);
-      border: 1px solid var(--border-light, #d1d3e2);
-      border-radius: 6px;
-      color: var(--text-primary, #000);
-      input {
-        width: 200px;
-        height: 100%;
-        border: none;
-        outline: none;
-        background-color: var(--bg-tertiary, #eaecf4);
-        color: var(--text-primary, #000);
-        padding: 1px 4px;
-        @include mix.respond(phone) {
-          width: 150px;
-          font-size: 16px;
-        }
-      }
-    }
-    .num-wrap {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      margin-top: 7px;
-      height: 100%;
-      label {
-        font-size: 14px;
-        color: var(--text-primary, #000);
-      }
-      input {
-        width: 62px; // fits 3 digits (e.g. 100) plus the number spinner
-        height: 100%;
-        border: none;
-        outline: none;
-        padding: 1px 4px;
-        border-radius: 6px;
-        -webkit-appearance: none;
-        -moz-appearance: textfield;
-        appearance: none;
-        background-color: var(--bg-tertiary, #eaecf4);
-        border: 1px solid var(--border-light, #d1d3e2);
-        color: var(--text-primary, #000);
-        @include mix.respond(phone) {
-          width: 54px;
-          font-size: 16px;
-        }
-      }
-      button {
-        padding: 10px 20px;
-        border-radius: 6px;
-        border: 1px solid var(--accent-primary, #e53935);
-        background-color: transparent;
-        color: var(--accent-primary, #e53935);
-        height: 100%;
-        text-align: center;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        cursor: pointer;
-        @include mix.respond(phone) {
-          padding: 10px 15px;
-        }
-      }
-    }
-  }
-  .beneficiary-list {
-    margin-top: 10px;
-    .wrap {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background-color: var(--bg-tertiary, #eaecf4);
-      border-bottom: 1px solid var(--border-light, #e0e0e0);
-      padding: 10px 6px;
-      border-radius: 7px;
-      margin-bottom: 5px;
-      color: var(--text-primary, #000);
-
-      span {
-        font-size: 14px;
-      }
-      input {
-        background-color: var(--bg-secondary, #fff);
-        border: 1px solid var(--border-light, #d1d3e2);
-        border-radius: 4px;
-        color: var(--text-primary, #000);
-      }
-      .delete-icon {
-        color: #e74a3b;
-        font-size: 20px;
-        cursor: pointer;
-        transition: transform 0.2s ease;
-
-        &:hover {
-          transform: scale(1.2);
-        }
-      }
-    }
+    gap: 6px;
   }
 
-  .last-btn-wrap {
+  .bene-add__user,
+  .bene-add__pct {
     display: flex;
-    justify-content: center;
-    align-self: center;
-    margin-top: 13px;
-    gap: 7px;
-    button {
-      padding: 8px 20px;
-      border-radius: 6px;
-      border: 1px solid var(--accent-primary, #e53935);
-      color: var(--accent-primary, #e53935);
-      background-color: transparent;
-      cursor: pointer;
+    align-items: center;
+    gap: 4px;
+    height: 40px;
+    padding: 0 10px;
+    border: 2px solid transparent;
+    border-radius: var(--r-md);
+    background: var(--bg);
+    color: var(--muted);
 
-      &:hover {
-        opacity: 0.9;
-      }
-    }
-  }
-  .default-bene-wrap {
-    margin-top: 10px;
-    border: 1px solid var(--border-light, rgba(128, 128, 128, 0.308));
-    background-color: var(--bg-tertiary, #f5f5f5);
-    border-radius: 4px;
-    padding: 5px;
-    color: var(--text-primary, #000);
-    p {
+    &:focus-within { border-color: var(--accent); }
+
+    input {
+      min-width: 0;
+      height: 100%;
+      border: 0;
+      background: transparent;
+      color: var(--text);
+      font: inherit;
       font-size: 14px;
-      font-weight: 600;
-    }
-    .wrap {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 13.35px;
-      gap: 4px;
+      outline: none;
+
+      &::placeholder { color: var(--muted); }
     }
   }
-}
-.bene-text {
-  text-align: center;
-  font-size: 14.25px;
-  color: var(--text-secondary, #5a5a5a);
-  font-weight: 400;
-  margin: 10px 0px;
-  @include mix.respond(phone) {
-    font-size: 12.25px;
-    margin: 6px 0px;
+
+  .bene-add__user { flex: 1; min-width: 0; input { flex: 1; } }
+  .bene-add__pct { width: 88px; flex: none; input { width: 100%; font-family: var(--font-mono); } }
+
+  .bene-hint {
+    margin: -4px 0 0;
+    @include v2.text(meta-sm);
+    color: var(--accent);
+
+    strong { font-weight: 700; }
+  }
+
+  .bene-error {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    @include v2.text(meta);
+    color: var(--accent);
+  }
+
+  // A row typed but never added with the button, plus the live "does this Hive
+  // account exist?" result. Hidden while the row is empty.
+  .bene-pending {
+    padding: 8px 12px;
+    border-radius: var(--r-md);
+    background: var(--cyan-wash);
+    @include v2.text(meta);
+    color: var(--muted);
+
+    strong { font-weight: 700; color: var(--text); }
+
+    &--bad { background: var(--accent-wash); color: var(--accent); strong { color: var(--accent); } }
+  }
+
+  .default-bene-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding-top: 8px;
+    border-top: 1px solid var(--border);
+  }
+
+  .bene-default {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    @include v2.text(meta);
+    color: var(--muted);
   }
 }
+
+// Kept global: other forms on the same pages use the plain error line.
 .error {
-  color: red;
+  color: var(--accent);
   font-size: 12px;
-  animation: shake 0.1s ease-in-out;
-}
-
-.input-tooltip-wrap {
-  position: relative;
-  height: 100%;
-
-  .tooltip {
-    position: absolute;
-    left: 0;
-    background: #ff4d4f;
-    color: white;
-    padding: 5px 8px;
-    border-radius: 5px;
-    font-size: 12px;
-    white-space: nowrap;
-    z-index: 20;
-    animation: fadeIn 0.2s ease-in-out;
-
-    &::after {
-      content: "";
-      position: absolute;
-      bottom: -5px;
-      left: 10px;
-      border-width: 5px;
-      border-style: solid;
-      border-color: #ff4d4f transparent transparent transparent;
-    }
-  }
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(3px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-// Warning for a row that was typed but never committed with "+", plus the
-// live "does this Hive account exist?" result. Hidden while the row is empty.
-.bene-pending {
-  margin: 8px 0 0;
-  padding: 7px 10px;
-  border-radius: 6px;
-  border: 1px solid rgba(224, 168, 82, 0.45);
-  background: rgba(224, 168, 82, 0.10);
-  color: #e0a852;
-  font-size: 12.5px;
-  line-height: 1.45;
-
-  strong { font-weight: 700; }
-
-  &--bad {
-    border-color: rgba(224, 82, 82, 0.5);
-    background: rgba(224, 82, 82, 0.10);
-    color: #e05252;
-  }
 }

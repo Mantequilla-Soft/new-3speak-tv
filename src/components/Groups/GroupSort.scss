@@ -1,145 +1,137 @@
-// The bar above both Groups lists. Lives with the sort control rather than in
-// either page's stylesheet, because BOTH tabs use it and scoping it to one of
-// them left the other unstyled.
-//
-// Search on the left at a readable width, sort and create on the right. Not a
-// full-width search: the field is a filter over a grid, and stretching it to
-// 1300px made it read as the page's main input.
-.communities-bar {
+@use "../../styles/v2" as v2;
+
+// The bar above both Groups lists (communities and badges). It lives with the
+// sort control because BOTH tabs use it.
+
+// Intro sentence above the bar (the Badges tab, 41c).
+.groups-intro {
+  margin: 0 0 14px;
+  max-width: 680px;
+  @include v2.text(body);
+  color: var(--muted);
+  b, strong { color: var(--text); font-weight: 700; }
+}
+
+// 19d: one wrapping row of 36px controls: the sorts, a divider, the topics,
+// and the search at the end.
+.groups-filters {
   display: flex;
   align-items: center;
-  gap: 12px;
   flex-wrap: wrap;
-  margin-bottom: 18px;
+  gap: 8px;
+  margin-bottom: 24px;
 
-  .search-wrapper {
-    flex: 0 1 320px;
-    min-width: 0;
-    margin: 0;
+  .group-sort { margin: 0; }
 
-    input {
-      width: 100%;
-      height: 38px;
-      padding: 0 12px;
-      border-radius: 10px;
-      border: 1px solid var(--border-color);
-      background: var(--bg-secondary);
-      color: var(--text-primary);
-      font: inherit;
-      font-size: 13.5px;
+  &__sep { align-self: stretch; width: 1px; min-height: 36px; margin: 0 4px; background: var(--border); }
 
-      &::placeholder { color: var(--text-muted); }
-
-      &:focus-visible {
-        outline: 2px solid var(--accent-primary);
-        outline-offset: 1px;
-      }
-    }
+  @include v2.mobile {
+    flex-wrap: nowrap;
+    @include v2.scroll-x;
+    margin-bottom: 16px;
+    .groups-search { order: -1; }
+    // One scroller for the whole row: the sorts inside it do not scroll again.
+    .group-sort, .group-sort-chips { flex: none; overflow: visible; }
   }
 }
 
-.communities-bar-actions {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-left: auto;
-  flex-wrap: wrap;
-}
+.groups-topics { display: flex; flex-wrap: wrap; gap: 8px; @include v2.mobile { flex-wrap: nowrap; } }
 
-// Outline, not fill: red is an outline on this site, never a background.
-.group-create-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  height: 38px;
-  padding: 0 16px;
-  border-radius: 10px;
-  border: 1px solid var(--accent-primary);
+.groups-topic {
+  height: 36px;
+  padding: 0 12px;
+  border-radius: var(--r-md);
+  border: 1px solid var(--border);
   background: transparent;
-  color: var(--accent-primary);
+  color: var(--text);
   font: inherit;
-  font-size: 13.5px;
-  font-weight: 700;
+  font-size: 13px;
   white-space: nowrap;
   cursor: pointer;
-
-  &:hover { background: color-mix(in srgb, var(--accent-primary) 10%, transparent); }
+  flex: none;
+  transition: background var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease);
+  &:hover { background: var(--bg-hover); }
+  &:active { transform: scale(.98); }
+  &.is-on { border-color: var(--cyan); background: var(--cyan-tint); color: var(--cyan); font-weight: 700; }
 }
 
+// Search, the last control of the row (and the first of the Badges bar).
+.groups-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+
+  @include v2.mobile { flex-wrap: wrap; }
+}
+
+.groups-search {
+  flex: 0 1 240px;
+  margin-left: auto;
+  min-width: 0;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 12px;
+  border-radius: var(--r-md);
+  background: var(--surface);
+  border: 2px solid transparent;
+  color: var(--muted);
+  transition: border-color var(--t-fast) var(--ease);
+
+  &:focus-within { border-color: var(--accent); }
+
+  input {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    border: 0;
+    background: transparent;
+    color: var(--text);
+    font: inherit;
+    font-size: 13px;
+    outline: none;
+    &::placeholder { color: var(--muted); }
+  }
+
+  @include v2.mobile { flex: 0 0 200px; margin-left: 0; }
+}
+
+// Sort: a chip per field (36 tall, 13px bold, 19d), then the direction.
 .group-sort {
   display: flex;
   align-items: center;
   gap: 8px;
-  flex-shrink: 0;
+  margin-bottom: 16px;
+  min-width: 0;
+
+  .v2-chip { height: 36px; border-radius: var(--r-md); padding: 0 14px; font-size: 13px; }
+  .group-sort-dir { width: 36px; height: 36px; border-radius: var(--r-md); }
 }
 
-.group-sort-label {
-  font-size: 12.5px;
-  color: var(--text-muted);
-  white-space: nowrap;
-}
+.group-sort-chips { flex: 0 1 auto; min-width: 0; gap: 8px; }
 
-.group-sort-select {
-  height: 38px;
-  padding: 0 10px;
-  border-radius: 10px;
-  border: 1px solid var(--border-color);
-  background: var(--bg-secondary);
-  color: var(--text-primary);
-  font: inherit;
-  font-size: 13.5px;
-  cursor: pointer;
-
-  &:focus-visible {
-    outline: 2px solid var(--accent-primary);
-    outline-offset: 1px;
-  }
-}
-
-.group-sort-dir {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 38px;
-  height: 38px;
-  flex-shrink: 0;
-  border-radius: 10px;
-  border: 1px solid var(--border-color);
-  background: var(--bg-secondary);
-  color: var(--text-primary);
-  cursor: pointer;
-
-  &:hover {
-    border-color: var(--accent-primary);
-    color: var(--accent-primary);
-  }
-}
-
-// A locked create button. aria-disabled rather than `disabled`, so it can still
-// be hovered and explain itself -- a disabled button fires no mouse events and
-// its title never appears.
-.group-create-btn.is-locked {
-  opacity: 0.55;
-  cursor: not-allowed;
-  border-color: var(--border-color);
-  color: var(--text-muted);
-
-  &:hover { background: transparent; }
-}
+.group-sort-dir { flex: none; }
 
 // "Joined" / "Held" beside a title, marking the entries pinned to the top.
 .blog-mine,
 .badge-mine {
-  display: inline-block;
   margin-left: 6px;
-  padding: 1px 7px;
-  border-radius: 999px;
-  border: 1px solid color-mix(in srgb, #2e9c4a 45%, transparent);
-  background: color-mix(in srgb, #2e9c4a 12%, transparent);
-  color: #46b364;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.02em;
   vertical-align: middle;
-  white-space: nowrap;
+}
+
+// Grid of group cards, shared by both tabs.
+.groups-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+
+  @include v2.mobile { grid-template-columns: minmax(0, 1fr); gap: 10px; }
+}
+
+// Loading placeholders in the same grid.
+.groups-skeleton {
+  height: 220px;
+  border-radius: var(--r-2xl);
 }

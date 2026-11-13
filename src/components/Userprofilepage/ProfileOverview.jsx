@@ -21,6 +21,7 @@ import {
 } from '../../lib/profileLayout';
 import { toastIn } from '../../utils/toast';
 import { useTranslation } from 'react-i18next';
+import { Button } from '../v2/ui';
 import './ProfileOverview.scss';
 
 const toast = toastIn('Profile');
@@ -46,19 +47,23 @@ const toast = toastIn('Profile');
  * this (ProfileLinksPanel); phones and tablets keep the single column.
  */
 
-function Section({ title, count, view = 'row', className = '', onViewMore, children }) {
+// `bare`: no heading row. The default Overview (20b) draws its video grid
+// straight under the trailer, so the grid carries an accessible name instead.
+function Section({ title, count, view = 'row', className = '', onViewMore, bare = false, children }) {
   const { t } = useTranslation();
   if (!count) return null;
   return (
-    <section className={`pov-section pov-section--${view} ${className}`}>
-      <div className="pov-head">
-        <h3>{title}</h3>
-        {onViewMore ? (
-          <button type="button" className="pov-more" onClick={onViewMore}>
-            {t('profile.overview.viewMore')}
-          </button>
-        ) : null}
-      </div>
+    <section className={`pov-section pov-section--${view} ${className}`} aria-label={bare ? title : undefined}>
+      {bare ? null : (
+        <div className="pov-head">
+          <h3>{title}</h3>
+          {onViewMore ? (
+            <Button variant="ghost" size={32} trailing="arrow_forward" className="pov-more" onClick={onViewMore}>
+              {t('profile.overview.viewMore')}
+            </Button>
+          ) : null}
+        </div>
+      )}
       {children}
     </section>
   );
@@ -110,6 +115,8 @@ export default function ProfileOverview({
   // failed read falls back to the default.
   const { data: stored, isLoading: layoutLoading } = useProfileLayout(username);
   const saved = useMemo(() => normalizeLayout(stored?.sections), [stored]);
+  // Never arranged by the creator: the channel as drawn in 20b.
+  const isDefaultLayout = !Array.isArray(stored?.sections);
   // The phone layout as stored (null = phones follow the desktop layout).
   const savedMobile = stored?.mobile || null;
   // Non-null = edit mode: { user, sections, mobile }. Tied to the profile it
@@ -352,9 +359,18 @@ export default function ProfileOverview({
         return <ProfileLiveNow user={username} />;
       case 'videos': {
         const list = videos.slice(0, s.count);
+        // The channel's own videos (20b): no creator line on the cards, and on
+        // the default Overview no heading either.
         return (
-          <Section title={heading(s)} count={list.length} view={s.view} onViewMore={() => onOpenTab('video')}>
-            <Card3 videos={list} getContentForVideo={getContentForVideo} isWatched={isWatched} getViewCount={getViewCount} />
+          <Section
+            title={heading(s)}
+            count={list.length}
+            view={s.view}
+            className="pov-section--channel"
+            bare={isDefaultLayout && !editing}
+            onViewMore={() => onOpenTab('video')}
+          >
+            <Card3 videos={list} getContentForVideo={getContentForVideo} isWatched={isWatched} getViewCount={getViewCount} hideAuthor />
           </Section>
         );
       }
@@ -450,17 +466,17 @@ export default function ProfileOverview({
               saving={saving}
               onSave={saveDraft}
               onCancel={stopEditing}
-              onReset={() => (editDevice === 'mobile'
-                ? commit((c) => ({ ...c, mobile: null }))   // phones follow the desktop again
-                : updateDraft(() => normalizeLayout(DEFAULT_SECTIONS)))}
+              // The standard page again, on phones as well.
+              onReset={() => commit(() => ({ sections: normalizeLayout(DEFAULT_SECTIONS), mobile: null }))}
+              // Phones follow the desktop layout again (37c "devices").
+              onMatchDesktop={() => commit((c) => ({ ...c, mobile: null }))}
+              canMatchDesktop={!!edit?.mobile}
               canUndo={!!edit?.past.length}
               canRedo={!!edit?.future.length}
               onUndo={undo}
               onRedo={redo}
               device={editDevice}
               onDevice={isPhoneWidth ? null : setDevice}
-              addablePlaylists={addablePlaylists}
-              onAddPlaylist={addPlaylistSection}
               onTour={() => setTourOpen(true)}
             />
             {tourOpen ? <ProfileLayoutTour onClose={() => setTourOpen(false)} /> : null}
@@ -526,6 +542,8 @@ export default function ProfileOverview({
               sections={draft.filter((s) => s.hidden && !isSideColumn(s))}
               labelFor={editLabel}
               onShow={(id) => patchSection(id, { hidden: false })}
+              addablePlaylists={addablePlaylists}
+              onAddPlaylist={addPlaylistSection}
             />
             </>
             )}

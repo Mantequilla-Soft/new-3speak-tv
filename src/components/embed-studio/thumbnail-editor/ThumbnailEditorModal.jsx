@@ -1,7 +1,7 @@
 import React, { useEffect, useId } from 'react';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
-import { Check, Download } from 'lucide-react';
+import { Button, IconButton } from '../../v2/ui';
 import ModalHeader from '../../ModalHeader/ModalHeader';
 import { usePortalDoc } from '../../../utils/portalDocument';
 import ThumbnailCanvas from './ThumbnailCanvas';
@@ -60,7 +60,20 @@ export default function ThumbnailEditorModal({
         aria-modal="true"
         aria-labelledby={titleId}
       >
-        <ModalHeader closeOnEscape={false} title={title || t('upload.thumbnail.editor.title')} onClose={onClose} titleId={titleId} className="thumb-modal__header" />
+        {/* 23c: an accent bar and the title; Download and Reset as icon tiles
+            beside the close. */}
+        <ModalHeader closeOnEscape={false} title={title || t('upload.thumbnail.editor.title')} onClose={onClose} titleId={titleId} className="thumb-modal__header" tone="accent">
+          <IconButton
+            icon="download"
+            size={40}
+            variant="secondary"
+            className="thumb-modal__headbtn"
+            label={t('upload.thumbnail.editor.downloadHint')}
+            onClick={onDownload}
+            disabled={!image}
+          />
+          <ResetButton onReset={onReset} disabled={!canReset} compact />
+        </ModalHeader>
 
         <div className="thumb-modal__body">
           <div className="thumb-modal__stage">
@@ -118,17 +131,11 @@ export default function ThumbnailEditorModal({
         </div>
 
         <div className="thumb-modal__footer">
-          {/* Saves the exact image that gets uploaded. */}
-          <button type="button" className="thumb-btn" onClick={onDownload} disabled={!image} title={t('upload.thumbnail.editor.downloadHint')}>
-            <Download size={15} aria-hidden="true" />
-            {t('upload.thumbnail.editor.download')}
-          </button>
-          <ResetButton onReset={onReset} disabled={!canReset} />
-          <span className="thumb-tool-row__spacer" />
-          <button type="button" className="thumb-btn thumb-btn--primary" onClick={onDone || onClose} disabled={doneBusy}>
-            <Check size={15} aria-hidden="true" />
-            {doneBusy ? t('audio.upload.thumb.uploading') : t('upload.thumbnail.editor.done')}
-          </button>
+          {/* 23c: one full-width primary. The video thumbnail is used as is;
+              a host with its own Done (the audio cover) keeps "Done". */}
+          <Button variant="primary" size={56} block trailing="check" className="thumb-btn thumb-btn--primary is-next" onClick={onDone || onClose} disabled={doneBusy} loading={doneBusy}>
+            {doneBusy ? t('audio.upload.thumb.uploading') : onDone ? t('upload.thumbnail.editor.done') : t('upload.thumbnail.editor.useThumbnail')}
+          </Button>
         </div>
       </div>
     </div>,

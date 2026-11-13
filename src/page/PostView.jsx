@@ -6,7 +6,6 @@ import { toastIn } from '../utils/toast';
 import { useAppStore } from '../lib/store';
 import BlogContent from '../components/playVideo/BlogContent';
 import CommentSection from '../components/playVideo/CommentSection';
-import UpvoteCount from '../components/UpvoteCount/UpvoteCount';
 import CommentVoteTooltip from '../components/tooltip/CommentVoteTooltip';
 import BarLoader from '../components/Loader/BarLoader';
 import AuthorBadge from '../components/AuthorBadge/AuthorBadge';
@@ -17,10 +16,10 @@ import { HIVE_API_URL } from '../utils/config';
 import { resolveRootPost, ensure3SpeakStatus } from '../utils/threeSpeakDetection';
 import { recordReshare, getResharesForVideo } from '../utils/reshares';
 import { isLoggedIn } from '../hive-api/aioha';
-import { LuTimer } from 'react-icons/lu';
-import { Flame, Repeat2 } from 'lucide-react';
 import useReblog from '../hooks/useReblog';
-import { MdAttachMoney, MdComment, MdFlag, MdShare } from 'react-icons/md';
+import { Button, DockTile, EmptyState } from '../components/v2/ui';
+import { cx } from '../components/v2/helpers';
+import AccountImg from '../components/HiveAvatar/AccountImg';
 import { useTranslation } from 'react-i18next';
 import { formatTimeAgo } from '../i18n';
 import './PostView.scss';
@@ -365,8 +364,11 @@ function PostView({ author: authorProp, permlink: permlinkProp }) {
     return (
       <div className="post-view-page">
         <div className="post-view-error">
-          <p>{t('posts.view.loadFailed')}</p>
-          <Link to="/notifications">{t('posts.view.backToNotifications')}</Link>
+          <EmptyState
+            icon="article"
+            title={t('posts.view.loadFailed')}
+            action={<Button as={Link} to="/notifications" variant="secondary" next>{t('posts.view.backToNotifications')}</Button>}
+          />
         </div>
       </div>
     );
@@ -383,177 +385,171 @@ function PostView({ author: authorProp, permlink: permlinkProp }) {
   const tags = videoDetails?.tags?.slice(0, 7) || [];
   const resolvedThumbnail = thumbnailUrl || parsedMeta.image?.[0] || null;
 
+  const compact = (n) => {
+    try { return new Intl.NumberFormat(undefined, { notation: 'compact', maximumFractionDigits: 1 }).format(n || 0); } catch { return String(n || 0); }
+  };
+  const isOwnPost = currentUser === post.author;
+  const reported = isReported('post', `${author}/${permlink}`);
+
+  // The action dock (19b): a column of tiles beside the text on a wide screen,
+  // a row under it on a phone. Same handlers as before.
+  // "6 min read" in the strip (19b): about 200 words a minute.
+  const readMinutes = (() => {
+    const words = String(post?.body || post?._prefilledBody || '').replace(/<[^>]+>|!\[[^\]]*\]\([^)]*\)|[#*_>`~-]/g, ' ').split(/\s+/).filter(Boolean).length;
+    return words > 0 ? Math.max(1, Math.round(words / 200)) : 0;
+  })();
+
+  const dock = [
+    {
+      id: 'vote', icon: 'arrow_upward', label: voteCount > 0 ? compact(voteCount) : t('watch.actions.vote'),
+      active: isVoted, title: isVoted ? t('posts.view.adjustVote') : t('posts.view.upvote'), onClick: toggleVoteTooltip,
+    },
+    {
+      id: 'reply', icon: 'chat_bubble', label: videoDetails.stats.num_comments > 0 ? compact(videoDetails.stats.num_comments) : t('common.actions.reply'),
+      title: t('common.actions.reply'), onClick: handleReply,
+    },
+    reblog.canReblog && {
+      id: 'reblog', icon: 'repeat', label: reblog.armed ? reblog.label : t('common.reblog.reblog'),
+      active: reblog.reblogged || reblog.armed, tone: reblog.armed ? 'cyan' : 'accent', disabled: reblog.busy,
+      title: reblog.reblogged ? t('common.reblog.reblogged') : t('common.reblog.title'), onClick: reblog.press,
+    },
+    authenticated && !isOwnPost && {
+      id: 'tip', icon: 'volunteer_activism', label: t('watch.actions.tip'), title: t('posts.view.tipCreator'), onClick: handleTip,
+    },
+    {
+      // isLoggedIn() is the wallet check, which an incubating user never
+      // passes. The reshare itself does not need one.
+      id: 'hype', icon: 'local_fire_department', label: reshareCount > 0 ? compact(reshareCount) : t('common.hype.hype'),
+      active: hasReshared, disabled: !authenticated || (!isLoggedIn() && !incubationHandle),
+      title: !authenticated ? t('common.hype.loginRequired') : hasReshared ? t('common.hype.hyped') : t('common.hype.title'), onClick: handleReshare,
+    },
+    { id: 'share', icon: 'share', label: t('common.actions.share'), title: t('common.actions.share'), onClick: handleShare },
+    {
+      id: 'report', icon: 'flag', label: t('common.actions.report'), title: t('posts.view.reportPost'),
+      active: reported, onClick: () => setIsReportOpen(true),
+    },
+  ].filter(Boolean);
+
   return (
     <div className="post-view-page">
-      {resolvedThumbnail && (
-        <img src={resolvedThumbnail} alt={post.title} className="post-view-thumbnail" />
-      )}
-
       {isComment && (
         <div className="post-view-nav-buttons">
           {resolvingRoot && (
-            <span className="post-view-nav-btn post-view-nav-btn-secondary">
-              <i className="fa-solid fa-spinner fa-spin" /> {t('posts.view.resolving')}
-            </span>
+            <Button variant="secondary" size={36} loading disabled>{t('posts.view.resolving')}</Button>
           )}
           {!resolvingRoot && rootPost && (
             rootPost.is3Speak ? (
-              <Link to={`/@${rootPost.author}/${rootPost.permlink}`} className="post-view-nav-btn">
-                <i className="fa-solid fa-play" /> {t('posts.view.showVideo')}
-              </Link>
+              <Button as={Link} to={`/@${rootPost.author}/${rootPost.permlink}`} variant="primary" size={36} icon="play_arrow">
+                {t('posts.view.showVideo')}
+              </Button>
             ) : (
-              <Link to={`/post/${rootPost.author}/${rootPost.permlink}`} className="post-view-nav-btn">
-                <i className="fa-solid fa-file-lines" /> {t('posts.view.showPost')}
-              </Link>
+              <Button as={Link} to={`/post/${rootPost.author}/${rootPost.permlink}`} variant="primary" size={36} icon="article">
+                {t('posts.view.showPost')}
+              </Button>
             )
           )}
           {!resolvingRoot && rootPost && post.parent_author && !(post.parent_author === rootPost.author && post.parent_permlink === rootPost.permlink) && (
-            <Link
-              to={`/post/${post.parent_author}/${post.parent_permlink}`}
-              className="post-view-nav-btn post-view-nav-btn-secondary"
-            >
-              <i className="fa-solid fa-reply" /> {t('posts.view.showParent')}
-            </Link>
+            <Button as={Link} to={`/post/${post.parent_author}/${post.parent_permlink}`} variant="secondary" size={36} icon="reply">
+              {t('posts.view.showParent')}
+            </Button>
           )}
         </div>
       )}
 
-      <div className="post-view-inner">
-        <h1 className="post-view-title">{post.title || t('posts.view.untitledReply')}</h1>
+      {videoDetails.community && (
+        <Link to={`/c/${videoDetails.community._id}`} className="post-view-community">
+          <span className="post-view-community__mark" aria-hidden="true">
+            {String(videoDetails.community.title || '').slice(0, 1).toUpperCase()}
+            <AccountImg account={videoDetails.community._id} alt="" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
+          </span>
+          <span className="post-view-community__text">
+            <span className="is-muted">{t('watch.community.postedIn')}</span> <b>{videoDetails.community.title}</b>
+          </span>
+          {readMinutes > 0 && <span className="post-view-community__read">{t('posts.view.readTime', { count: readMinutes })}</span>}
+        </Link>
+      )}
 
-        <div className="post-view-author-row">
-          <AuthorBadge author={post.author} showFollow />
-          {videoDetails.community && (
-            <Link to={`/c/${videoDetails.community._id}`} className="post-view-community">
-              {t('posts.view.inCommunity', { community: videoDetails.community.title })}
-            </Link>
+      <div className="post-view-grid">
+        <article className="post-view-main">
+          <h1 className="post-view-title">{post.title || t('posts.view.untitledReply')}</h1>
+
+          <div className="post-view-byline">
+            <AuthorBadge author={post.author} showFollow />
+            <span className="post-view-byline__meta">
+              <span>{formatRelativeTime(post.created)}</span>
+              <span aria-hidden="true">·</span>
+              <PayoutAmount amount={videoDetails.stats.total_hive_reward} size={13} />
+            </span>
+          </div>
+
+          {resolvedThumbnail && (
+            <img src={resolvedThumbnail} alt={post.title} className="post-view-hero" />
           )}
-        </div>
 
-        <div className="post-view-meta-row">
-          <span className="post-view-meta-item">
-            <LuTimer /> {formatRelativeTime(post.created)}
-          </span>
-          <span className="post-view-meta-item">
-            <PayoutAmount amount={videoDetails.stats.total_hive_reward} size={13} />
-          </span>
-          <span className="post-view-meta-item">
-            {t('common.units.votes', { count: videoDetails.stats.num_votes })}
-          </span>
-          <span className="post-view-meta-item">
-            {t('common.units.comments', { count: videoDetails.stats.num_comments })}
-          </span>
-        </div>
-
-        {tags.length > 0 && (
-          <div className="post-view-tags">
-            {tags.map((tag) => (
-              <Link key={tag} to={`/t/${tag}`} className="post-view-tag">#{tag}</Link>
-            ))}
-          </div>
-        )}
-
-        <div className="post-view-body">
-          {post._prefilledBody
-            ? <BlogContent description={post._prefilledBody} alwaysExpanded />
-            : <BlogContent author={author} permlink={permlink} alwaysExpanded />
-          }
-        </div>
-
-        <div className="post-view-actions">
-          <div className="post-view-actions-primary">
-            <button
-              type="button"
-              className={`post-action-btn post-action-btn-vote${isVoted ? ' active' : ''}`}
-              onClick={toggleVoteTooltip}
-              title={isVoted ? t('posts.view.adjustVote') : t('posts.view.upvote')}
-            >
-              <UpvoteCount
-                count={voteCount}
-                voted={isVoted}
-                size={15}
-              />
-            </button>
-            <button type="button" className="post-action-btn" onClick={handleReply} title={t('common.actions.reply')}>
-              <MdComment size={17} />
-              <span>{t('common.actions.reply')}</span>
-            </button>
+          <div className="post-view-body">
+            {post._prefilledBody
+              ? <BlogContent description={post._prefilledBody} alwaysExpanded />
+              : <BlogContent author={author} permlink={permlink} alwaysExpanded />
+            }
           </div>
 
-          <div className="post-view-actions-secondary">
-            <button type="button" className="post-icon-action" onClick={handleShare} title={t('common.actions.share')}>
-              <MdShare size={17} />
-            </button>
-            <button
-              type="button"
-              className={`post-icon-action post-reshare-action${hasReshared ? ' active' : ''}`}
-              onClick={handleReshare}
-              // isLoggedIn() is the wallet check, which an incubating user
-              // never passes. The reshare itself does not need one.
-              disabled={!authenticated || (!isLoggedIn() && !incubationHandle)}
-              title={!authenticated ? t('common.hype.loginRequired') : hasReshared ? t('common.hype.hyped') : t('common.hype.title')}
-            >
-              <Flame size={16} />
-              {reshareCount > 0 && <span>{reshareCount}</span>}
-            </button>
-            {reblog.canReblog && (
-              <button
-                type="button"
-                className={`post-icon-action post-reblog-action${reblog.reblogged ? ' active' : ''}${reblog.armed ? ' armed' : ''}`}
-                onClick={reblog.press}
-                disabled={reblog.busy}
-                title={reblog.reblogged ? t('common.reblog.reblogged') : t('common.reblog.title')}
-              >
-                <Repeat2 size={16} />
-                {/* Icon-only like its neighbours, except while armed: the second tap needs saying. */}
-                {reblog.armed && <span>{reblog.label}</span>}
-              </button>
-            )}
-            {authenticated && currentUser !== post.author && (
-              <button type="button" className="post-icon-action post-tip-action" onClick={handleTip} title={t('posts.view.tipCreator')}>
-                <MdAttachMoney size={17} />
-              </button>
-            )}
-            <button
-              type="button"
-              className={`post-icon-action post-report-action${isReported('post', `${author}/${permlink}`) ? ' reported' : ''}`}
-              onClick={() => setIsReportOpen(true)}
-              title={t('posts.view.reportPost')}
-            >
-              <MdFlag size={17} />
-            </button>
-          </div>
+          {tags.length > 0 && (
+            <div className="post-view-tags">
+              {tags.map((tag) => (
+                <Link key={tag} to={`/t/${tag}`} className="post-view-tag">#{tag}</Link>
+              ))}
+            </div>
+          )}
+        </article>
 
-          {authenticated && showTooltip && (
-            <CommentVoteTooltip
-              showTooltip={showTooltip}
-              setShowTooltip={setShowTooltip}
-              author={post.author}
-              permlink={post.permlink}
-              weight={weight}
-              setWeight={setWeight}
-              voteValue={voteValue}
-              setVoteValue={setVoteValue}
-              accountData={accountData}
-              setAccountData={setAccountData}
-              compact
-              onVoteSuccess={(a, p, isNewVote) => {
-                setIsVoted(true);
-                if (isNewVote) setVoteCount(c => c + 1);
-                setShowTooltip(false);
-              }}
+        <aside className="post-view-dock" aria-label={t('watch.side.label')}>
+          {dock.map((d) => (
+            <DockTile
+              key={d.id}
+              icon={d.icon}
+              iconSize={24}
+              label={d.label}
+              active={!!d.active}
+              tone={d.tone}
+              title={d.title}
+              aria-label={d.title}
+              disabled={d.disabled}
+              // Vote is the dock's primary: the accent tint at rest (19b).
+              className={cx(`post-view-dock__${d.id}`, d.id === 'vote' && 'is-on is-accent', d.id === 'report' && d.active && 'is-reported')}
+              onClick={d.onClick}
             />
-          )}
-        </div>
+          ))}
+        </aside>
+      </div>
 
-        <div className="post-view-comments">
-          <CommentSection
-            videoDetails={videoDetails}
-            author={author}
-            permlink={permlink}
-            setIsVoted={() => {}}
-          />
-        </div>
+      {authenticated && showTooltip && (
+        <CommentVoteTooltip
+          showTooltip={showTooltip}
+          setShowTooltip={setShowTooltip}
+          author={post.author}
+          permlink={post.permlink}
+          weight={weight}
+          setWeight={setWeight}
+          voteValue={voteValue}
+          setVoteValue={setVoteValue}
+          accountData={accountData}
+          setAccountData={setAccountData}
+          compact
+          onVoteSuccess={(a, p, isNewVote) => {
+            setIsVoted(true);
+            if (isNewVote) setVoteCount(c => c + 1);
+            setShowTooltip(false);
+          }}
+        />
+      )}
+
+      <div className="post-view-comments">
+        <CommentSection
+          videoDetails={videoDetails}
+          author={author}
+          permlink={permlink}
+          setIsVoted={() => {}}
+        />
       </div>
 
       {isTipModalOpen && (

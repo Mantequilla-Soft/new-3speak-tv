@@ -1,274 +1,149 @@
-@use "../../mixins.scss" as *;
+@use "../../styles/v2" as v2;
 
-.review-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(4px);
+// Feedback (designs 17i, 43c) on the v2 Dialog: contextual title, five star
+// tiles, what it is about as chips, would you recommend as two choice tiles,
+// and the optional note. Footer: Not now / Send feedback.
+.review-portal-guard { display: contents; }
+
+.review-body {
+  gap: 14px;
+}
+
+.review-rating {
   display: flex;
   align-items: center;
-  justify-content: center;
-  z-index: 1100; // match the app's other modal overlays; clears nav (1000)
-  padding: 20px;
+  gap: 6px;
+}
 
-  @include respond(phone) {
-    align-items: flex-end;
+// 43c: five filled stars, accent up to the rating and surface-2 after it.
+.review-stars {
+  display: flex;
+  gap: 4px;
+
+  .star {
+    width: 36px;
+    height: 36px;
     padding: 0;
+    border: 0;
+    border-radius: var(--r-md);
+    background: none;
+    color: var(--surface-2);
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    transition: color var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
+
+    &:hover { color: color-mix(in srgb, var(--accent) 60%, var(--surface-2)); }
+    &:active { transform: scale(.96); }
+    &.on { color: var(--accent); }
+
+    @include v2.mobile { width: 44px; height: 44px; }
   }
 }
 
-.review-modal {
-  background: var(--card-bg, #1a1a2e);
-  border: 1px solid var(--border-light, #333);
-  border-radius: 16px;
-  box-sizing: border-box;
-  width: 100%;
-  max-width: 440px;
-  max-height: 88vh;
+.star-label {
+  @include v2.text(meta);
+  font-weight: 700;
+  color: var(--text);
+}
+
+// "What's this about?": outlined 28 chips, the picked ones in cyan (43c).
+.review-chips {
+  gap: 4px;
+
+  .v2-chip {
+    height: 28px;
+    border-radius: var(--r-sm);
+    padding: 0 8px;
+    border: 2px solid var(--border);
+    background: transparent;
+    font-size: 11px;
+
+    &:hover { background: var(--bg-hover); }
+    &.is-on { border-color: var(--cyan); background: var(--cyan-tint-strong); color: var(--text); }
+
+    @include v2.mobile { height: 36px; }
+  }
+}
+
+// No divider above the two buttons; they share the row equally (43c).
+.review-modal .v2-dialog__foot {
+  border-top: 0;
+  padding-top: 4px;
+
+  .v2-btn { flex: 1; }
+}
+
+.review-field {
   display: flex;
   flex-direction: column;
-  overflow: hidden;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  gap: 8px;
 
-  @include respond(phone) {
-    max-width: 100%;
-    border-radius: 16px 16px 0 0;
-    max-height: 90vh;
-    padding-bottom: env(safe-area-inset-bottom, 0px);
-    animation: review-slide-up 0.28s ease forwards;
-  }
+  > label { display: block; }
+}
 
-  // The box has no side padding, so the shared header brings its own.
-  .review-header {
-    flex-shrink: 0;
-    padding: 18px 20px 12px;
-    margin-bottom: 0;
-  }
+.review-recommend {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
 
-  .review-subtitle {
-    margin: 4px 0 12px;
-    font-size: 13px;
-    color: var(--text-secondary, #aaa);
-  }
+  .rec {
+    @include v2.control(44);
+    @include v2.text(label);
+    border: 2px solid var(--border);
+    background: transparent;
+    color: var(--text);
 
-  .review-body {
-    // basis auto (NOT 0): with a fixed header + footer in a content-height flex
-    // column, `flex:1 1 0` collapses the body to zero height. Size to content,
-    // shrink + scroll only if the modal hits its max-height.
-    flex: 0 1 auto;
-    min-height: 0;
-    overflow-y: auto;
-    padding: 8px 20px 4px;
-
-    scrollbar-width: thin;
-    scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
-  }
-
-  .review-stars {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
-    margin: 4px 0 20px;
-
-    // Keep the stars dead-centre AND stop them shifting as the rating word
-    // (Poor…Amazing) changes width: a fixed-width label on the right, balanced
-    // by an equal-width empty spacer on the left.
-    &::before {
-      content: "";
-      flex: 0 0 64px;
-    }
-
-    .star {
-      display: flex;
-      padding: 2px;
-      border: none;
-      background: none;
-      cursor: pointer;
-      color: var(--text-muted, #555);
-      transition: transform 0.1s ease, color 0.15s ease;
-
-      svg { font-size: 34px; }
-      &:hover { transform: scale(1.12); }
-      &.on { color: #ffc531; }
-    }
-
-    .star-label {
-      flex: 0 0 64px; // fixed width (matches the ::before spacer) so text length never moves the stars
-      font-size: 14px;
-      font-weight: 400; // regular, not bold
-      color: var(--text-secondary, #888); // regular text, not red
-      white-space: nowrap;
-      min-height: 18px;
-    }
-  }
-
-  .review-field {
-    margin-bottom: 18px;
-
-    > label {
-      display: block;
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text-primary, #eee);
-      margin-bottom: 10px;
-
-      span { font-weight: 400; color: var(--text-secondary, #888); }
-    }
-
-    textarea {
-      width: 100%;
-      box-sizing: border-box;
-      padding: 12px;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid var(--border-light, #444);
-      border-radius: 10px;
-      color: var(--text-primary, #fff);
-      font-size: 14px;
-      font-family: inherit;
-      resize: vertical;
-      min-height: 80px;
-
-      &::placeholder { color: var(--text-muted, #666); }
-      &:focus { outline: none; border-color: var(--accent-primary, #e53935); }
-    }
-  }
-
-  .review-chips {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-
-    .chip {
-      padding: 8px 14px;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid var(--border-light, #444);
-      border-radius: 999px;
-      color: var(--text-secondary, #bbb);
-      font-size: 13px;
-      cursor: pointer;
-      transition: all 0.15s ease;
-
-      &:hover { background: rgba(255, 255, 255, 0.1); }
-      &.on {
-        background: rgba(229, 57, 53, 0.15);
-        border-color: var(--accent-primary, #e53935);
-        color: var(--accent-primary, #e53935);
-      }
-    }
-  }
-
-  .review-recommend {
-    display: flex;
-    gap: 10px;
-
-    .rec {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      padding: 10px;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid var(--border-light, #444);
-      border-radius: 10px;
-      color: var(--text-secondary, #bbb);
-      font-size: 14px;
-      cursor: pointer;
-      transition: all 0.15s ease;
-
-      svg { font-size: 18px; }
-      &:hover { background: rgba(255, 255, 255, 0.1); }
-      &.on.yes { background: rgba(76, 175, 80, 0.15); border-color: #4caf50; color: #6cc070; }
-      &.on.no { background: rgba(229, 57, 53, 0.15); border-color: #e53935; color: #ef6b66; }
-    }
-  }
-
-  .review-actions {
-    display: flex;
-    gap: 12px;
-    padding: 14px 20px 18px;
-    border-top: 1px solid var(--border-light, #333);
-    flex-shrink: 0;
-
-    button {
-      flex: 1;
-      padding: 12px;
-      border: none;
-      border-radius: 10px;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s ease;
-
-      &:disabled { opacity: 0.5; cursor: not-allowed; }
-    }
-
-    .review-cancel {
-      flex: 0 0 auto;
-      padding: 12px 18px;
-      background: rgba(255, 255, 255, 0.08);
-      color: var(--text-secondary, #aaa);
-      &:hover:not(:disabled) { background: rgba(255, 255, 255, 0.16); }
-    }
-
-    .review-submit {
-      background: transparent;
-      border: 1px solid var(--accent-primary, #e53935);
-      color: var(--accent-primary, #e53935);
-      &:hover:not(:disabled) { background: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent); border-color: var(--accent-primary, #e53935); color: var(--accent-primary, #e53935); }
-    }
+    &:hover { background: var(--bg-hover); }
+    &.on.yes { border-color: var(--cyan); background: var(--cyan-tint); color: var(--cyan); }
+    &.on.no { border-color: var(--accent); background: var(--accent-tint); color: var(--accent); }
   }
 }
 
-@keyframes review-slide-up {
-  from { transform: translateY(100%); }
-  to { transform: translateY(0); }
-}
-
-// Placeholder GLOBAL trigger (area:'global'). Replaced later by the one-time
-// "initial review" auto-prompt — see ReviewFab.jsx.
+// The floating "Feedback" button on the home page: a surface pill that floats
+// (shadow), the icon in the accent. Not a red fill: the page has its own one.
 .review-fab {
   position: fixed;
   right: 18px;
   z-index: 900;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 11px 16px;
-  border: none;
-  border-radius: 999px;
-  background: var(--accent-primary, #e53935);
-  color: #fff;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
-  transition: transform 0.15s ease, background 0.2s ease, bottom 0.2s ease;
+  @include v2.control(44);
+  @include v2.text(label);
+  padding: 0 16px 0 12px;
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-float);
+  transition: transform var(--t-fast) var(--ease), bottom var(--t-base) var(--ease), background var(--t-fast) var(--ease);
 
-  svg { font-size: 20px; }
-  &:hover { transform: translateY(-2px); background: #c62828; }
+  // The icon in the regular text colour like the label (owner 2026-11-12), not red.
+  .material-symbols-rounded { color: inherit; }
+  &:hover { background: var(--surface-2); }
 
-  // The global audio player publishes its top edge as --audio-np-clearance
-  // (GlobalAudioPlayer.jsx, tracks expand/collapse), so stay 12px above it.
-  // On desktop the open queue sits above the player and publishes its own top
-  // edge as --audio-queue-clearance; that one wins while it's set.
-  bottom: max(18px, calc(var(--audio-queue-clearance, var(--audio-np-clearance, 0px)) + 12px));
+  // The audio player bar is centred (at most 620px wide), so on a wide screen
+  // it never reaches this corner and the button stays down (owner 2026-11-12).
+  // The open queue does sit in this corner on a desktop: it publishes its top
+  // edge as --audio-queue-clearance (GlobalAudioPlayer.jsx), stay 12px above.
+  bottom: max(18px, calc(var(--audio-queue-clearance, 0px) + 12px));
 
-  // Lift above the bottom nav wherever it's shown. The nav renders on BOTH the
-  // phone and tab breakpoints, so both need the offset — otherwise on tablets
-  // the FAB stays at bottom:18px and covers the Profile tab.
-  @include respond(tab) {
-    bottom: max(76px, calc(var(--audio-np-clearance, 0px) + 12px)); // clear the bottom nav (shown on tablet too)
-    // The mini-player bar is 56px tall and sits on top of the nav — lift past it.
+  // Lift above the bottom bar wherever it is shown (below 1025px).
+  @media (max-width: 1024px) {
+    bottom: calc(var(--bottom-bar-clearance) + 16px);
+    &.review-fab--mini { bottom: 132px; }
+  }
+  // Narrow enough that the centred bar reaches under the button (620px bar +
+  // this button's ~140px): climb above the player, whose top edge is
+  // --audio-np-clearance.
+  @media (max-width: 960px) {
+    bottom: max(calc(var(--bottom-bar-clearance) + 16px), calc(var(--audio-np-clearance, 0px) + 12px));
     &.review-fab--mini { bottom: max(132px, calc(var(--audio-np-clearance, 0px) + 12px)); }
   }
 
-  @include respond(phone) {
-    bottom: max(76px, calc(var(--audio-np-clearance, 0px) + 12px)); // clear the mobile bottom nav
-    right: 14px;
-    padding: 12px;
-    span { display: none; } // icon-only on phones
-    &.review-fab--mini { bottom: max(132px, calc(var(--audio-np-clearance, 0px) + 12px)); } // clear the mini-player bar too
+  // Phones: icon only, a 44 square.
+  @include v2.mobile {
+    right: 16px;
+    width: 44px;
+    padding: 0;
+    justify-content: center;
+    span:not(.material-symbols-rounded) { display: none; }
   }
 }

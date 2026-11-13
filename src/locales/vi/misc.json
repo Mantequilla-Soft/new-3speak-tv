@@ -1,8 +1,8 @@
 {
   "leaderboard": {
     "windows": {
-      "7d": "7 ngày",
-      "30d": "30 ngày",
+      "7d": "Tuần",
+      "30d": "Tháng",
       "365d": "Năm",
       "all": "Mọi lúc"
     },
@@ -155,9 +155,9 @@
     "audioFull": "Có tiêu đề",
     "audioCompact": "Gọn",
     "audioMinimal": "Tối giản",
-    "heightSub": "Toàn chiều rộng, cao {{height}} px",
+    "heightSub": "Toàn chiều rộng, cao {{height}} px · Tự co giãn",
     "podcastTitle": "Nhúng podcast này",
-    "podcastHint": "Dán đoạn này vào bất kỳ trang web hoặc bài blog nào. Nó phát mọi tập của chương trình, kể cả các tập mới ngay khi ra mắt."
+    "podcastHint": "Phát mọi tập của chương trình, kể cả các tập mới ngay khi ra mắt."
   },
   "incubation": {
     "requestFailed": "Yêu cầu thất bại ({{status}})",
@@ -169,9 +169,9 @@
   },
   "routeError": {
     "title": "Trang này không tải được",
-    "body": "Một phần của ứng dụng không tải xuống được. Điều này thường do có phiên bản mới được phát hành trong lúc tab này đang mở. Tải lại trang sẽ cập nhật phiên bản mới.",
+    "body": "Một phần của ứng dụng không tải xuống được. Thường là do có phiên bản mới phát hành trong lúc tab này đang mở. Tải lại trang sẽ cập nhật.",
     "brokenTitle": "Đã xảy ra sự cố trên trang này",
-    "brokenBody": "Một phần của trang này gặp lỗi. Tải lại thường sẽ khắc phục được, và thông tin chi tiết bên dưới giúp chúng tôi tìm ra nguyên nhân.",
+    "brokenBody": "Một phần của trang này gặp lỗi. Tải lại thường sẽ khắc phục, và thông tin chi tiết giúp chúng tôi tìm ra nguyên nhân.",
     "reload": "Tải lại",
     "goHome": "Về trang chủ",
     "details": "Chi tiết"
@@ -203,9 +203,9 @@
       "regularVideo": "Video truyền thống cho kênh của bạn",
       "verticalShort": "Clip dọc cho bảng tin Shorts",
       "shortsEditor": "Quay và chỉnh sửa short ngay trên trình duyệt",
-      "story": "Clip ngắn hiển thị trong 24 giờ",
+      "story": "Hiển thị trong 24 giờ",
       "musicAudio": "Bài hát, podcast và âm thanh khác",
-      "audioEditor": "Cắt, làm sạch và cân bằng âm lượng podcast và nhạc",
+      "audioEditor": "Cắt, làm sạch và cân bằng âm lượng",
       "groupChat": "Phòng trực tiếp bạn dẫn cùng khách mời",
       "goLiveNow": "Phát trực tiếp cho người theo dõi",
       "communitySnap": "Bài đăng nhanh trên tab cộng đồng",
@@ -220,7 +220,7 @@
   "hiveAuth": {
     "waiting": "Đang chờ chấp thuận trên HiveAuth...",
     "title": "Cần chấp thuận qua HiveAuth",
-    "hint": "Vui lòng kiểm tra ứng dụng HiveAuth để chấp thuận giao dịch này"
+    "hint": "Kiểm tra ứng dụng HiveAuth để chấp thuận giao dịch này."
   },
   "hiveApi": {
     "keychainNotSigned": "Keychain đã không ký giao dịch",
@@ -233,7 +233,7 @@
     "announceFailed": "OpenPod đã bắt đầu, nhưng không thể đăng thông báo lên Hive."
   },
   "appUpdate": {
-    "updating": "Đang cập nhật lên phiên bản mới nhất ({{version}})…",
+    "updating": "Đang cập nhật lên {{version}}…",
     "reloadingForUpload": "Đang tải lại để lượt tải lên của bạn chạy trên bản dựng mới nhất."
   },
   "auth": {
@@ -251,7 +251,9 @@
   },
   "followFeed": {
     "title": "Bảng tin theo dõi",
-    "error": "Lỗi khi tải video"
+    "error": "Lỗi khi tải video",
+    "emptyTitle": "Chưa có ai ở đây",
+    "emptyBody": "Theo dõi các nhà sáng tạo để video, Snaps và buổi phát trực tiếp của họ hiện ở đây đầu tiên."
   },
   "groups": {
     "title": "Nhóm",
@@ -301,6 +303,17 @@
     "moreTag": "Thêm #{{tag}}",
     "moreVideos": "Thêm video",
     "hideControls": "Ẩn điều khiển",
-    "showControls": "Hiện điều khiển"
+    "showControls": "Hiện điều khiển",
+    "watching": "{{count}} người đang xem",
+    "startedAgo": "Bắt đầu {{when}}",
+    "topSupporters": "Người ủng hộ hàng đầu",
+    "noSupporters": "Chưa có boost nào",
+    "full": "Toàn màn hình",
+    "loginToChat": "Đăng nhập để chat"
+  },
+  "pullToRefresh": {
+    "pull": "Kéo để làm mới",
+    "release": "Thả để làm mới",
+    "refreshing": "Đang làm mới…"
   }
 }

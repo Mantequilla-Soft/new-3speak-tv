@@ -1,8 +1,9 @@
 import { useState, useRef, useEffect, useLayoutEffect } from 'react'
 import { createPortal } from 'react-dom'
-import { Smile, Loader2 } from 'lucide-react'
+import { Icon } from '../../v2/Icon'
+import { Segmented } from '../../v2/ui'
 import { useTranslation } from 'react-i18next'
-import EmojiPicker from 'emoji-picker-react'
+import EmojiPicker from '../LazyEmojiPicker'
 import { useAppStore } from '../../../lib/store'
 import useGiphySearch, { normalizeGifUrl } from '../../../hooks/useGiphySearch'
 import { usePortalDoc } from '../../../utils/portalDocument'
@@ -130,12 +131,26 @@ export default function EmojiGifPicker({
       ? { left: anchor.left, top: anchor.top, bottom: anchor.bottom, maxHeight: anchor.maxHeight }
       : { left: -9999, top: 0, visibility: 'hidden' }) // measured first, then placed
       : undefined
+  // Room for the picker under the 48px Emoji / GIF head and the frame's padding.
   const emojiHeight = viewport
-    ? Math.max(200, Math.min(380, viewport.h - 24))
-    : anchor ? Math.max(200, Math.min(380, anchor.maxHeight - 4)) : 380
+    ? Math.max(200, Math.min(340, viewport.h - 80))
+    : anchor ? Math.max(200, Math.min(340, anchor.maxHeight - 64)) : 340
   // Portal mode: the popover goes into the body of the document the composer is
   // in (the page, or the audio player's pop-out window).
   const place = (node) => (portal ? createPortal(node, doc.body) : node)
+  // Emoji / GIF as one picker with a segmented head (design 19e): either button
+  // opens it on its own kind, the head switches between them.
+  const head = (
+    <div className="egp-head">
+      <Segmented
+        size={32}
+        block={false}
+        value={open}
+        onChange={(k) => setOpen(k)}
+        options={[{ value: 'emoji', label: t('app.emojiGif.emoji') }, { value: 'gif', label: 'GIF' }]}
+      />
+    </div>
+  )
 
   return (
     <div className={`egp-tools ${className}`} ref={wrapRef}>
@@ -146,7 +161,7 @@ export default function EmojiGifPicker({
         aria-label={t('app.emojiGif.emoji')}
         title={t('app.emojiGif.emoji')}
       >
-        <Smile size={18} />
+        <Icon name="mood" size={20} />
       </button>
       <button
         type="button"
@@ -155,11 +170,12 @@ export default function EmojiGifPicker({
         aria-label="GIF"
         title="GIF"
       >
-        GIF
+        <Icon name="gif_box" size={20} />
       </button>
 
       {open === 'emoji' && place(
         <div ref={popRef} className={`${popClass} egp-emoji-popover`} style={popStyle}>
+          {head}
           <EmojiPicker
             onEmojiClick={(d) => onPickEmoji?.(d.emoji)}
             theme={appTheme === 'light' ? 'light' : 'dark'}
@@ -174,6 +190,7 @@ export default function EmojiGifPicker({
 
       {open === 'gif' && place(
         <div ref={popRef} className={`${popClass} egp-gif-popover`} style={popStyle}>
+          {head}
           <input
             className="egp-gif-search"
             type="text"
@@ -183,7 +200,7 @@ export default function EmojiGifPicker({
             autoFocus
           />
           <div className="egp-gif-grid">
-            {loading && <div className="egp-gif-loading"><Loader2 size={20} className="egp-spin" /></div>}
+            {loading && <div className="egp-gif-loading"><Icon name="progress_activity" size={20} className="v2-spin" /></div>}
             {!loading && gifs.length === 0 && <div className="egp-gif-empty">{t('app.emojiGif.noGifs')}</div>}
             {!loading && gifs.map((g) => (
               <button key={g.id} type="button" className="egp-gif-item" onClick={() => pickGif(g)}>

@@ -1,612 +1,105 @@
-@use "../mixins.scss" as mix;
+@use "../styles/v2" as v2;
 
-$primary: #18c1ad;
-$text-dark: #0f172a;
-$text-muted: #64748b;
-$border: #e5e7eb;
-$bg: #ffffff;
+// Your own profile (/profile). The header lives in ProfileHeader.scss, the tab
+// track and the classes both profile pages share in ProfileActions.scss.
 
-// Pill styling so the "Add profile" button blends into the badge row it sits
-// in, rather than reading as a form control.
-.add-social-link-btn {
-  display: inline-flex;
-  align-items: center;
-  border: 1px solid #1e293b;
-  background: rgba(15, 23, 42, 0.8);
-  color: #94a3b8;
-  border-radius: 9999px;
-  padding: 0.25rem 0.6rem;
-  font-size: 0.75rem;
-  line-height: 1;
-  cursor: pointer;
-  transition: color 0.15s ease, border-color 0.15s ease;
-
-  svg {
-    width: 9px;
-    height: 9px;
-    margin-right: 6px;
-  }
-
-  &:hover {
-    color: #fff;
-    border-color: #334155;
-  }
-}
-
-// Create Playlist Button
-.create-playlist-btn {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 20px;
-  margin-bottom: 16px;
-  background: transparent;
-  color: var(--accent-primary, #e53935);
-  border: 1px solid var(--accent-primary, #e53935);
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(229, 57, 53, 0.4);
-  }
-
-  svg {
-    font-size: 18px;
-  }
-}
-
-.create-playlist-btn-empty {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 12px 24px;
-  margin-top: 16px;
-  background: transparent;
-  color: var(--accent-primary, #e53935);
-  border: 1px solid var(--accent-primary, #e53935);
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(229, 57, 53, 0.4);
-  }
-
-  svg {
-    font-size: 18px;
-  }
-}
-
-// Special playlists row (Watch Later + Watched)
-.special-playlists-row {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 16px;
-  margin-bottom: 24px;
-
-  @include mix.respond(phone) {
-    grid-template-columns: 1fr;
-  }
-
-  // Override the container styles for child cards to fit in the grid
-  > div {
-    display: contents;
-  }
-}
-
-// Create Playlist Modal
-.create-playlist-modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.7);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  backdrop-filter: blur(4px);
-}
-
-.create-playlist-modal {
-  background: var(--card-bg, #1a1a2e);
-  border: 1px solid var(--border-light, #333);
-  border-radius: 16px;
-  padding: 24px;
-  width: 90%;
-  max-width: 400px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-
-  .form-group {
-    margin-bottom: 16px;
-
-    label,
-    .form-label {
-      display: block;
-      margin-bottom: 8px;
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--text-secondary, #aaa);
-    }
-
-    input, select {
-      width: 100%;
-      padding: 12px;
-      border: 1px solid var(--border-light, #333);
-      border-radius: 8px;
-      background: var(--input-bg, #0f0f1a);
-      color: var(--text-primary, #fff);
-      font-size: 14px;
-      box-sizing: border-box;
-      transition: border-color 0.2s ease;
-
-      &:focus {
-        outline: none;
-        border-color: var(--accent-primary, #e53935);
-      }
-    }
-
-    .tags-input-wrap {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 6px;
-      padding: 8px;
-      background: var(--input-bg, #0f0f1a);
-      border: 1px solid var(--border-light, #333);
-      border-radius: 8px;
-      min-height: 42px;
-
-      &:focus-within {
-        border-color: var(--accent-primary, #e53935);
-      }
-
-      .tags-list {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 6px;
-
-        .tag-chip {
-          display: inline-flex;
-          align-items: center;
-          gap: 4px;
-          padding: 4px 8px;
-          background: rgba(229, 57, 53, 0.2);
-          border: 1px solid rgba(229, 57, 53, 0.4);
-          border-radius: 6px;
-          font-size: 12px;
-          color: var(--text-primary, #fff);
-
-          button {
-            display: flex;
-            align-items: center;
-            background: none;
-            border: none;
-            color: var(--text-secondary, #aaa);
-            cursor: pointer;
-            padding: 0;
-            font-size: 14px;
-
-            &:hover {
-              color: #e53935;
-            }
-          }
-        }
-      }
-
-      input {
-        flex: 1;
-        min-width: 80px;
-        padding: 4px;
-        background: transparent !important;
-        border: none !important;
-        color: var(--text-primary, #fff);
-        font-size: 13px;
-
-        &::placeholder {
-          color: var(--text-muted, #666);
-        }
-
-        &:focus {
-          outline: none;
-        }
-      }
-    }
-
-    .privacy-buttons {
-      display: flex;
-      gap: 10px;
-
-      .privacy-btn {
-        flex: 1;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        padding: 12px;
-        border: 1px solid var(--border-light, #333);
-        border-radius: 8px;
-        background: var(--input-bg, #0f0f1a);
-        color: var(--text-secondary, #aaa);
-        font-size: 14px;
-        cursor: pointer;
-        transition: all 0.2s ease;
-
-        &:hover {
-          border-color: var(--text-secondary, #666);
-        }
-
-        &.active {
-          border-color: var(--accent-primary, #e53935);
-          background: rgba(229, 57, 53, 0.1);
-          color: var(--accent-primary, #e53935);
-        }
-
-        svg {
-          font-size: 18px;
-        }
-      }
-    }
-  }
-
-  .modal-actions {
-    display: flex;
-    gap: 12px;
-    margin-top: 24px;
-
-    button {
-      flex: 1;
-      padding: 12px;
-      border-radius: 8px;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s ease;
-
-      &:disabled {
-        opacity: 0.6;
-        cursor: not-allowed;
-      }
-    }
-
-    .btn-cancel {
-      background: transparent;
-      border: 1px solid var(--border-light, #333);
-      color: var(--text-secondary, #aaa);
-
-      &:hover:not(:disabled) {
-        background: rgba(255, 255, 255, 0.05);
-      }
-    }
-
-    .btn-create {
-      background: transparent;
-      border: 1px solid var(--accent-primary, #e53935);
-      color: var(--accent-primary, #e53935);
-
-      &:hover:not(:disabled) {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(229, 57, 53, 0.4);
-      }
-    }
-  }
-}
-
-.profile-page-container {
-  .com-profile-img-wrap {
-    position: relative;
-    img {
-      width: 100%; /* Make the image take up 100% of its container's width */
-      height: auto; /* Maintain aspect ratio */
-      border-radius: 20px; /* Rounded corners */
-      object-fit: cover; /* Ensure the image covers the entire area without stretching */
-      display: block; /* Remove any extra space below the image */
-      @include mix.respond(phone) {
-        height: 100px;
-      }
-    }
-    .wrap {
-      position: absolute;
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      bottom: 10%;
-      left: 10px;
-      img {
-        width: 30%;
-        @include mix.respond(phone) {
-          width: 40px;
-          height: 40px;
-          border-radius: 50%;
-        }
-      }
-      span {
-        font-size: 28px;
-        font-weight: bold;
-        color: #fff;
-        text-transform: uppercase;
-        letter-spacing: 2px;
-        -webkit-text-stroke-width: 1px;
-        -webkit-text-fill-color: transparent;
-        @include mix.respond(phone) {
-          font-size: 20px;
-        }
-      }
-    }
-  }
-  .toggle-wrap {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: 10px 0px;
-    border-bottom: 1px solid grey;
-    padding: 0px 10px;
-    padding-bottom: 7px;
-    @include mix.respond(phone) {
-      padding: 0px 5px;
-      padding-bottom: 7px;
-    }
-    .wrap {
-      display: flex;
-      align-items: center;
-      gap: 22px;
-      flex-wrap: wrap;
-      @include mix.respond(phone) {
-        gap: 16px;
-      }
-    }
-    .wrap-in {
-      display: flex;
-      align-items: center;
-      gap: 22px;
-      @include mix.respond(phone) {
-        gap: 16px;
-      }
-    }
-
-    // Tabs (Videos / Shorts / Audio / Playlists / Edit Video / Wallet)
-    .wrap span,
-    .wrap-in span {
-      position: relative;
-      box-sizing: border-box;
-      padding: 4px 2px;
-      font-size: 14px;
-      font-weight: 500;
-      line-height: 1.2;
-      cursor: pointer;
-      user-select: none;
-      background: none;
-      border: none;
-      box-shadow: none;
-      color: var(--text-secondary, #64748b);
-      transition: color 0.18s ease;
-
-      // red underline for the active tab
-      &::after {
-        content: "";
-        position: absolute;
-        left: 0;
-        right: 0;
-        bottom: -8px;
-        height: 2px;
-        border-radius: 2px;
-        background: var(--accent-primary, #e53935);
-        opacity: 0;
-        transition: opacity 0.18s ease;
-      }
-
-      &:hover {
-        color: var(--text-primary, #0f172a);
-      }
-
-      &.active {
-        color: var(--accent-primary, #e53935);
-        font-weight: 600;
-
-        &::after {
-          opacity: 1;
-        }
-      }
-
-      @include mix.respond(phone) {
-        font-size: 13px;
-        &::after {
-          bottom: -8px;
-        }
-      }
-    }
-
-    .followers {
-      padding: 5px 15px;
-      border-radius: 7px;
-      box-shadow: 0px 1px 7px 0px #00000040;
-      font-size: 13.5px;
-      cursor: pointer;
-    }
-  }
-}
-
-.processing-card {
-  background: #fff;
-  border: 1px solid #ddd;
-  border-radius: 12px;
-  padding: 1rem;
-  margin-bottom: 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  width: fit-content;
-
-  .video-thumbnail-skeleton {
-    width: 120px;
-    height: 70px;
-    margin-bottom: 10px;
-    border-radius: 8px;
-  }
-
-  .details {
-    display: flex;
-    flex-direction: column;
-    .wrap {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-
-    .title {
-      font-weight: bold;
-      font-size: 1rem;
-    }
-
-    .subtitle {
-      font-size: 0.875rem;
-      color: #777;
-    }
-  }
-}
-
-@keyframes shimmer {
-  0% {
-    background-position: -1000px 0;
-  }
-  100% {
-    background-position: 1000px 0;
-  }
-}
-
-.skeleton {
-  animation: shimmer 2s infinite linear;
-  background: linear-gradient(to right, #f0f0f0 4%, #e0e0e0 25%, #f0f0f0 36%);
-  background-size: 1000px 100%;
-  border-radius: 4px;
-}
-
-
+// Uploads still encoding (37a "Processing your videos").
 .active-renders {
-  max-width: 900px;
-  // margin: 2rem auto;
-  font-family: Inter, system-ui, sans-serif;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 560px;
+  margin-bottom: 16px;
+
+  .active-renders__head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    > div { display: flex; flex-direction: column; min-width: 0; }
+    b { @include v2.text(body-sm); font-weight: 700; }
+    span { @include v2.text(meta-sm); color: var(--muted); }
+  }
+
+  .active-renders__spin { color: var(--cyan); }
 
   .render-card {
-    background: $bg;
-    border: 1px solid $border;
-    border-radius: 12px;
-    padding: 1.2rem 1.4rem;
-    margin-bottom: 1.2rem;
+    @include v2.well;
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
 
-    .left {
-      display: flex;
-      gap: 1rem;
+  .render-card__line {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
 
-      .icon {
-        width: 40px;
-        height: 40px;
-        border-radius: 10px;
-        background: rgba($primary, 0.1);
-        color: $primary;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 0.9rem;
-      }
+  .render-card__title {
+    flex: 1;
+    min-width: 0;
+    @include v2.text(body-sm);
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 
-      .info {
-        h3 {
-          font-size: 1rem;
-          font-weight: 600;
-          color: $text-dark;
-        }
+  .render-card__pct { @include v2.mono(12, 700); color: var(--cyan); }
 
-        .sub {
-          font-size: 0.85rem;
-          color: $text-muted;
-          margin: 0.2rem 0 0.4rem;
-        }
+  .render-card__meta {
+    display: flex;
+    gap: 12px;
+    @include v2.text(meta-sm);
+    color: var(--muted);
 
-        .meta {
-          display: flex;
-          gap: 1rem;
-          font-size: 0.8rem;
-
-          .status {
-            color: $primary;
-            font-weight: 500;
-          }
-
-          .time {
-            color: $text-muted;
-          }
-        }
-      }
-    }
-
-    .wrap-progress {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .right {
-      float: right;
-      text-align: right;
-
-      .percent {
-        font-size: 1.4rem;
-        font-weight: 700;
-        color: $text-dark;
-      }
-
-      .complete {
-        font-size: 0.8rem;
-        color: $text-muted;
-      }
-    }
-
-    .progress {
-      margin: 1rem 0 0.6rem;
-      height: 6px;
-      background: #e6f7f5;
-      border-radius: 999px;
-      overflow: hidden;
-      width: 100%;
-
-      .bar {
-        height: 100%;
-        background: $primary;
-        border-radius: inherit;
-        background-color: red;
-      }
-    }
-
-    .footer {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.8rem;
-      color: $text-muted;
-
-      a {
-        color: $primary;
-        text-decoration: none;
-        font-weight: 500;
-      }
-    }
+    .status { color: var(--cyan); font-weight: 700; }
   }
 }
 
-// Dark mode: outlined style — card-bg bg, red (--accent-primary) outline + text.
-[data-theme="dark"] {
-  .create-playlist-btn {
-    background: var(--card-bg) !important;
-    color: var(--accent-primary) !important;
-    border: 1px solid var(--accent-primary) !important;
+// Tags in the create-playlist dialog: chips and the input in one field.
+.pl-tags.v2-input {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  height: auto;
+  min-height: 40px;
+  padding: 4px 8px;
+  cursor: text;
+
+  &:focus-within { border-color: var(--accent); }
+
+  .pl-tags__chip { gap: 2px; padding: 0 4px 0 10px; cursor: default; }
+
+  .pl-tags__x {
+    display: grid;
+    place-items: center;
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    border: 0;
+    border-radius: var(--r-sm);
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+
+    &:hover { color: var(--accent); }
+  }
+
+  input {
+    flex: 1;
+    min-width: 96px;
+    height: 28px;
+    border: 0;
+    background: transparent;
+    color: var(--text);
+    font: inherit;
+    font-size: 14px;
+
+    &::placeholder { color: var(--muted); }
+    &:focus { outline: none; }
   }
 }

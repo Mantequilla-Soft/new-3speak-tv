@@ -22,46 +22,8 @@ import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react'
 import { createPortal } from 'react-dom';
 import { useQueryClient } from '@tanstack/react-query';
 import "./Short.scss";
-import {
-  Heart,
-  MessageSquare,
-  Share2,
-  Music2,
-  ArrowUp,
-  ArrowDown,
-  SlidersHorizontal,
-  Loader2,
-  Play,
-  Pause,
-  Send,
-  ChevronUp,
-  ChevronDown,
-  ArrowLeft,
-  Bookmark,
-  ExternalLink,
-  Video,
-  MessageSquareText,
-  Camera,
-  Volume2,
-  VolumeX,
-  Repeat,
-  ChevronsUp,
-  Square,
-  RotateCcw,
-  Flame,
-  WandSparkles,
-  Pencil,
-  Moon,
-  Lightbulb,
-  Sun,
-  Film,
-  Music,
-} from 'lucide-react';
-import { GiTwoCoins } from 'react-icons/gi';
-import { MdTranslate, MdClosedCaption, MdClosedCaptionOff, MdFlag, MdPushPin } from 'react-icons/md';
 import mantequillaLogo from '../assets/mantequilla-logo.png';
 import ReportModal, { isReported } from '../components/modal/ReportModal';
-import { Flag, Megaphone, Gift } from 'lucide-react';
 import ShareChooserModal from '../components/Chat/ShareChooserModal';
 import { useMyPlaylists, isVideoInPlaylist } from '../hooks/useMyPlaylists';
 import { addToPlaylist, removeFromPlaylist, createPlaylistAndAdd } from '../utils/playlistOperations';
@@ -116,7 +78,6 @@ import { Player, ThreeSpeakApi } from '@mantequilla-soft/3speak-player';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { fixVideoThumbnail, fallbackImg } from '../utils/fixThumbnails';
 import AuthorBadge from '../components/AuthorBadge/AuthorBadge';
-import ShortsIcon from '../components/icons/ShortsIcon';
 import ShortsLoadingScreen from '../components/ShortsLoadingScreen/ShortsLoadingScreen';
 import { markByReputation } from '../utils/reputation';
 import { markByHidden } from '../utils/hiddenCreators';
@@ -138,6 +99,10 @@ import HiveAvatar from '../components/HiveAvatar/HiveAvatar';
 import { markStorySeen, useInvalidateStories, useStoryClock } from '../lib/stories';
 import StoryOwnerTools from '../components/StoryOwnerTools/StoryOwnerTools';
 import ModalHeader from '../components/ModalHeader/ModalHeader';
+import { Icon } from '../components/v2/Icon';
+import { Button, IconButton, EmptyState, MenuRow, Segmented } from '../components/v2/ui';
+import useReblog from '../hooks/useReblog';
+import useLayoutMediaQuery from '../hooks/useLayoutMediaQuery';
 
 import { soundLabel } from '../utils/soundCredits';
 // Every toast from this module is headed "Shorts"; the message becomes the
@@ -154,6 +119,17 @@ const PREFETCH_GRACE_MS = 4000;
 // the player: the expired screen stands in for it, so this does not depend on the
 // embed player's own expired clip being deployed.
 const isExpiredStory = (v) => !!v?.storyExpiresAt && new Date(v.storyExpiresAt).getTime() <= Date.now();
+
+// A comment's body as one plain line (the phone discussion bar): no images,
+// link text only, no markup.
+const plainCommentText = (body = '') => String(body)
+  .replace(/!\[[^\]]*\]\([^)]*\)/g, '')
+  .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
+  .replace(/<[^>]+>/g, ' ')
+  .replace(/^\s*(#+|>)\s*/gm, '')
+  .replace(/\*\*|__|`/g, '')
+  .replace(/\s+/g, ' ')
+  .trim();
 
 // The Watch Later playlist is identified by NAME — same convention as the watch
 // page and the add-to-playlist modal. Private, and created on first save.
@@ -418,6 +394,13 @@ const VideoShort = () => {
 
   // Ambient glow
   const { glowMode, toggleGlow } = useAmbientGlow();
+  // Pick an ambient-light mode directly: the hook only steps through
+  // off → page → vivid, so step as many times as it takes to get there.
+  const setGlowTo = useCallback((mode) => {
+    const modes = ['off', 'page', 'vivid'];
+    const steps = (modes.indexOf(mode) - modes.indexOf(glowMode) + modes.length) % modes.length;
+    for (let i = 0; i < steps; i += 1) toggleGlow();
+  }, [glowMode, toggleGlow]);
 
   // Player state
   const [isPlaying, setIsPlaying] = useState(false);
@@ -752,10 +735,9 @@ const VideoShort = () => {
     muteIconTimeoutRef.current = setTimeout(() => setShowMuteIcon(false), 600);
   }, [isMuted, unmutePending, sendCommand]);
 
-  // Cycle playback mode: auto-replay → auto-swipe → none → auto-replay
-  const cyclePlaybackMode = useCallback(() => {
-    const modes = ['auto-replay', 'auto-swipe', 'none'];
-    const nextMode = modes[(modes.indexOf(playbackMode) + 1) % modes.length];
+  // Switch to one playback mode: auto-replay (loop), auto-swipe (next near the end)
+  // or none (stop + replay). Picked in the playback options menu.
+  const applyPlaybackMode = useCallback((nextMode) => {
     setPlaybackMode(nextMode);
     playbackModeRef.current = nextMode;
     document.cookie = `shorts_playback_mode=${nextMode}; path=/; max-age=${365 * 24 * 3600}`;
@@ -770,7 +752,7 @@ const VideoShort = () => {
     setShowModeIndicator(true);
     if (modeIndicatorTimeoutRef.current) clearTimeout(modeIndicatorTimeoutRef.current);
     modeIndicatorTimeoutRef.current = setTimeout(() => setShowModeIndicator(false), 1500);
-  }, [playbackMode, videos, currentIndex]);
+  }, []);
 
   // Pause video while vote popup is open, resume when it closes (only if was playing)
   useEffect(() => {
@@ -2101,6 +2083,43 @@ const VideoShort = () => {
     prefetchVideoTagsV2(currentVideo?.author, currentVideo?.hivePermlink);
   }, [currentVideo?.author, currentVideo?.hivePermlink]);
 
+  // The Hive reblog tile of the dock (18a), the same two-tap button as the watch
+  // page's dock (hooks/useReblog.js). Not the 3Speak hype, which keeps its tile.
+  const reblog = useReblog(
+    currentVideo?.author,
+    currentVideo && !currentVideo.hivePostMissing ? currentVideo.hivePermlink : null,
+    toast,
+  );
+
+  // Desktop (18a) draws the creator as a chip on the player and the feed switch
+  // in the strip above it; phones keep both on the video. Same 768 split as the
+  // rest of this page.
+  const isDeskLayout = useLayoutMediaQuery('(min-width: 769px)');
+  // The side panel's tabs (18a): the discussion, or the shorts coming up next.
+  const [sideTab, setSideTab] = useState('discussion');
+  // A note on the video for a moment (45b): "That's all the shorts for your
+  // interests. Showing Discover.", or why this short can't be remixed.
+  // { text, icon?, tone?: 'accent' | 'cyan' }
+  const [feedNote, setFeedNote] = useState(null);
+  useEffect(() => {
+    if (!feedNote) return undefined;
+    const id = setTimeout(() => setFeedNote(null), 6000);
+    return () => clearTimeout(id);
+  }, [feedNote]);
+  // Phones (18a): with the sheet closed, a bar at the foot of the short shows its
+  // newest comment, so the discussion stays in view. Not with the optional quick
+  // comment bar (Settings), which takes that spot.
+  const showPeek = !isDeskLayout && !showComments && !shortsCommentBar && !storyMode;
+  // Watching a 24h story on a phone (30a, 24d): segments and the creator across
+  // the top with pause and close, and a reply bar (or, on your own story, its
+  // tools) at the foot instead of the dock.
+  const isStoryView = storyMode && !isDeskLayout;
+  useEffect(() => {
+    if (showPeek && videos[currentIndex] && !videos[currentIndex].commentsLoaded) {
+      fetchComments();
+    }
+  }, [showPeek, currentIndex, videos, fetchComments]);
+
   /* ---------- COMMENT SORT, PINS, IMAGES (shared with the watch page) ---------- */
   const [commentSort, setCommentSort] = useState(readCommentSort);
   const changeCommentSort = (v) => { setCommentSort(v); saveCommentSort(v); };
@@ -2172,6 +2191,42 @@ const VideoShort = () => {
       if (!prev && subtitleMenuRef.current) {
         const rect = subtitleMenuRef.current.getBoundingClientRect();
         setSubtitleMenuPos({ top: rect.bottom + 6, right: window.innerWidth - rect.right });
+      }
+      return !prev;
+    });
+  }, []);
+
+  // Playback options menu (playback mode + ambient light), same mechanics as the
+  // subtitle menu: a portal under its button, closed by a tap outside or Escape.
+  const [tuneMenuOpen, setTuneMenuOpen] = useState(false);
+  const [tuneMenuPos, setTuneMenuPos] = useState(null);
+  const tuneBtnRef = useRef(null);
+  const tuneMenuRef = useRef(null);
+  useEffect(() => {
+    if (!tuneMenuOpen) return;
+    const handler = (e) => {
+      if (
+        tuneBtnRef.current && !tuneBtnRef.current.contains(e.target) &&
+        (!tuneMenuRef.current || !tuneMenuRef.current.contains(e.target))
+      ) {
+        setTuneMenuOpen(false);
+      }
+    };
+    const onKey = (e) => { if (e.key === 'Escape') setTuneMenuOpen(false); };
+    document.addEventListener('mousedown', handler);
+    document.addEventListener('touchstart', handler);
+    document.addEventListener('keydown', onKey);
+    return () => {
+      document.removeEventListener('mousedown', handler);
+      document.removeEventListener('touchstart', handler);
+      document.removeEventListener('keydown', onKey);
+    };
+  }, [tuneMenuOpen]);
+  const openTuneMenu = useCallback(() => {
+    setTuneMenuOpen(prev => {
+      if (!prev && tuneBtnRef.current) {
+        const rect = tuneBtnRef.current.getBoundingClientRect();
+        setTuneMenuPos({ top: rect.bottom + 6, right: window.innerWidth - rect.right });
       }
       return !prev;
     });
@@ -2471,7 +2526,13 @@ const VideoShort = () => {
         { user, isPremium },
       );
       if (blocked) {
-        toast.info(remixBlockedMessage(blocked, t));
+        // Said on the video (45b): no room left in the chain, or no room for
+        // one more creator to be paid.
+        setFeedNote({
+          text: remixBlockedMessage(blocked, t),
+          icon: blocked === 'full' ? 'link_off' : 'workspace_premium',
+          tone: blocked === 'full' ? 'accent' : 'cyan',
+        });
         return;
       }
 
@@ -2671,7 +2732,7 @@ const VideoShort = () => {
       // the last one. Guarded on interestsMode, which flips false the moment we
       // switch, so this can't fire twice.
       if (interestsMode && !feedUser && !hasMore && !loadingMoreRef.current) {
-        toast.info(t('shorts.feed.interestsExhausted'));
+        setFeedNote({ text: t('shorts.feed.interestsExhausted') });
         switchFeedMode('discover');
       }
       return;
@@ -2687,6 +2748,16 @@ const VideoShort = () => {
     }
   };
   handleNextRef.current = handleNext;
+
+  // Straight to a short further down the feed (the side panel's Up next list).
+  const jumpTo = (idx) => {
+    if (idx === currentIndex || idx < 0 || idx >= videos.length) return;
+    endAdForNavigation();
+    shortHistoryRef.current = [];
+    triggerSwipeAnimation(idx > currentIndex ? 'up' : 'down');
+    setCurrentIndex(idx);
+    if (idx >= videos.length - 7 && hasMore) loadMoreVideos();
+  };
 
   // Keyboard navigation: ArrowUp = previous, ArrowDown = next
   useEffect(() => {
@@ -3239,8 +3310,15 @@ const VideoShort = () => {
     return (
       <main className="short-main no-bottom-bar">
         <div className="errorState">
-          <p>{t('shorts.feed.loadError', { error })}</p>
-          <button onClick={() => window.location.reload()}>{t('common.actions.retry')}</button>
+          <EmptyState
+            icon="error"
+            title={t('shorts.feed.loadError', { error })}
+            action={(
+              <Button variant="inverse" icon="refresh" onClick={() => window.location.reload()}>
+                {t('common.actions.retry')}
+              </Button>
+            )}
+          />
         </div>
       </main>
     );
@@ -3248,15 +3326,20 @@ const VideoShort = () => {
 
   if (!currentVideo) {
     // "My interests" can legitimately come back empty (nothing recent matches the
-    // user's topics) — say so and offer a way back, rather than a bare dead end.
+    // user's topics), so say so and offer a way back, rather than a bare dead end.
     if (interestsMode && !feedUser) {
       return (
         <main className="short-main no-bottom-bar">
           <div className="emptyState shortsInterestsEmpty">
-            <p>{t('shorts.feed.noInterestMatches')}</p>
-            <button type="button" onClick={() => switchFeedMode('discover')}>
-              {t('shorts.feed.switchToDiscover')}
-            </button>
+            <EmptyState
+              icon="interests"
+              title={t('shorts.feed.noInterestMatches')}
+              action={(
+                <Button variant="inverse" next onClick={() => switchFeedMode('discover')}>
+                  {t('shorts.feed.switchToDiscover')}
+                </Button>
+              )}
+            />
           </div>
         </main>
       );
@@ -3264,15 +3347,83 @@ const VideoShort = () => {
     return (
       <main className="short-main no-bottom-bar">
         <div className="emptyState">
-          <p>{t('shorts.feed.empty')}</p>
+          <EmptyState icon="smart_display" title={t('shorts.feed.empty')} />
         </div>
       </main>
     );
   }
 
+  const isOwnShort = !!(user && currentVideo.author && user.toLowerCase() === currentVideo.author.toLowerCase());
+  const prevVideo = currentIndex > 0 ? videos[currentIndex - 1] : null;
+  const isReportedShort = isReported('short', `${currentVideo.author}/${currentVideo.permlink}`);
+  const openReport = (e) => {
+    e.stopPropagation();
+    setReportTarget({ type: 'short', author: currentVideo.author, permlink: currentVideo.permlink });
+    setIsReportOpen(true);
+  };
+  const playbackModeIcon = playbackMode === 'auto-replay' ? 'replay' : playbackMode === 'auto-swipe' ? 'swipe_up' : 'touch_app';
+  const formatDuration = (sec) => `${Math.floor(sec / 60)}:${Math.floor(sec % 60).toString().padStart(2, '0')}`;
+
+  // Discover / My interests. Touch events are stopped so tapping it never
+  // registers as a swipe.
+  const feedSwitch = !feedUser && !isStoriesMode ? (
+    <div
+      className="shortsFeedSwitch"
+      role="tablist"
+      aria-label={t('shorts.feed.ariaLabel')}
+      onTouchStart={(e) => e.stopPropagation()}
+      onTouchMove={(e) => e.stopPropagation()}
+      onTouchEnd={(e) => e.stopPropagation()}
+      onMouseDown={(e) => e.stopPropagation()}
+    >
+      <button
+        type="button"
+        role="tab"
+        aria-selected={shortsFeedMode !== 'interests'}
+        className={shortsFeedMode !== 'interests' ? 'active' : ''}
+        onClick={(e) => { e.stopPropagation(); switchFeedMode('discover'); }}
+      >
+        {t('shorts.feed.discover')}
+      </button>
+      <button
+        type="button"
+        role="tab"
+        aria-selected={shortsFeedMode === 'interests'}
+        className={shortsFeedMode === 'interests' ? 'active' : ''}
+        onClick={(e) => {
+          e.stopPropagation();
+          if (!hasInterests) {
+            toast.error(t('shorts.feed.noInterests'));
+            return;
+          }
+          switchFeedMode('interests');
+        }}
+        title={hasInterests ? t('shorts.feed.interestsTitle') : t('shorts.feed.pickInterestsFirst')}
+      >
+        {t('shorts.feed.myInterests')}
+      </button>
+    </div>
+  ) : null;
+
+  // The scrubbable progress line (refs: updated straight from the player).
+  const progressBar = (
+    <div
+      className="videoProgressBar"
+      ref={progressBarRef}
+      onMouseDown={handleProgressMouseDown}
+      onClick={(e) => e.stopPropagation()}
+      onTouchStart={(e) => { e.stopPropagation(); setIsScrubbing(true); isScrubbingRef.current = true; handleProgressBarInteraction(e.touches[0]); }}
+      onTouchMove={(e) => { e.stopPropagation(); if (isScrubbingRef.current) handleProgressBarInteraction(e.touches[0]); }}
+      onTouchEnd={(e) => { e.stopPropagation(); e.preventDefault(); setIsScrubbing(false); isScrubbingRef.current = false; }}
+    >
+      <div className="videoProgressFill" ref={progressFillRef} style={{ width: '0%' }} />
+      <div className="videoProgressHandle" ref={progressHandleRef} style={{ left: '0%' }} />
+    </div>
+  );
+
   return (
     <>
-    <main className={`short-main${shortsCommentBar ? '' : ' no-bottom-bar'}${adPlaying ? ' ad-playing' : ''}`}>
+    <main className={`short-main${shortsCommentBar ? '' : ' no-bottom-bar'}${adPlaying ? ' ad-playing' : ''}${commentsVisible ? ' with-comments' : ''}${showPeek ? ' has-peek' : ''}${isStoryView ? ' is-story-view' : ''}`}>
       <div className="landscape-block"
         onClick={(e) => { e.stopPropagation(); e.preventDefault(); }}
         onTouchStart={(e) => { e.stopPropagation(); e.preventDefault(); }}
@@ -3280,7 +3431,7 @@ const VideoShort = () => {
         onTouchEnd={(e) => { e.stopPropagation(); e.preventDefault(); }}
         onMouseDown={(e) => { e.stopPropagation(); e.preventDefault(); }}
       >
-        <RotateCcw size={48} />
+        <Icon name="screen_rotation" size={28} />
         <p>{t('shorts.rotateDevice')}</p>
       </div>
       <AmbientGlow getVideoEl={() => videoElRef.current} glowMode={glowMode} />
@@ -3304,7 +3455,56 @@ const VideoShort = () => {
         className="keyboard-capture"
         aria-hidden="true"
       />
+      {/* Desktop row over the player (18a): no bar of its own any more (owner
+          2026-11-12), just whose shorts these are (a creator's feed) and the
+          feed switch on the right. The stories view has its own bar instead. */}
+      {isDeskLayout && !isStoriesMode && (
+        <div className="shortsStrip">
+          {feedUser && (
+            <Link to={`/@${feedUser}`} className="shortsStrip__who">
+              <HiveAvatar username={feedUser} size={null} alt="" imgClassName="shortsStrip__avatar" />
+              <span><b>@{feedUser}</b> <span className="shortsStrip__muted">· {t('common.nav.shorts')}</span></span>
+            </Link>
+          )}
+          <span className="shortsStrip__space" />
+          {feedSwitch}
+        </div>
+      )}
       <div className={`videoWrapper ${commentsVisible ? 'with-comments' : ''}`}>
+
+        {/* NAVIGATION (desktop): the previous short as a small tile, then up / down.
+            Left of the player, as in the v2 Shorts layout (18a). Hidden on phones,
+            where you swipe. */}
+        <div className="navigationArrows">
+          {prevVideo && (
+            <button type="button" className="shortsPrevTile" onClick={handlePrevious} aria-label={t('player.playlist.previous')}>
+              <span className="shortsPrevTile__thumb">
+                {prevVideo.thumbnailUrl && <img src={prevVideo.thumbnailUrl} alt="" loading="lazy" onError={(e) => { e.currentTarget.style.display = 'none'; }} />}
+              </span>
+              <span className="shortsPrevTile__label">{t('player.reactions.previous')}</span>
+            </button>
+          )}
+          <IconButton
+            className="navButton"
+            icon="keyboard_arrow_up"
+            label={t('player.playlist.previous')}
+            size={44}
+            round
+            onClick={handlePrevious}
+            disabled={currentIndex === 0}
+          />
+          <IconButton
+            className="navButton"
+            icon={loading && currentIndex === videos.length - 1
+              ? <Icon name="progress_activity" size={20} className="v2-spin" />
+              : 'keyboard_arrow_down'}
+            label={t('player.playlist.next')}
+            size={44}
+            round
+            onClick={handleNext}
+            disabled={currentIndex === videos.length - 1 && !hasMore}
+          />
+        </div>
 
         {/* VIDEO */}
         <div
@@ -3312,7 +3512,7 @@ const VideoShort = () => {
           ref={videoContainerRef}
           style={swipeDragY && !swipeDirection ? { transform: `translateY(${swipeDragY * 0.6}px)`, transition: 'none' } : undefined}
         >
-          {/* Single SDK video player — only the current video gets a <video> element.
+          {/* Single SDK video player: only the current video gets a <video> element.
               Upcoming videos are prefetched (API + manifest) so they load fast on swipe.
               iOS only allows one active <video> at a time. */}
           {SHORTS_ADS_ENABLED && shortsAd && (
@@ -3334,7 +3534,7 @@ const VideoShort = () => {
               //
               // FIRST LOAD ONLY. Once a player has been ready once, the element keeps
               // showing the previous short until the next one decodes, and a poster
-              // turns that into a visible thumbnail flash on every swipe -- a change
+              // turns that into a visible thumbnail flash on every swipe: a change
               // to the swipe feel that this was never meant to make.
               poster={!firstPlayerReady ? (currentVideo.thumbnailUrl || undefined) : undefined}
               autoPlay
@@ -3350,7 +3550,7 @@ const VideoShort = () => {
                 objectFit: 'contain',
                 pointerEvents: 'none',
                 zIndex: 2,
-                background: '#000',
+                background: 'var(--media-black)',
               }}
             />
           )}
@@ -3358,6 +3558,7 @@ const VideoShort = () => {
           {/* Tap-to-play fallback when iOS blocks autoplay (Low Power Mode, etc.) */}
           {autoplayBlocked && currentVideo && (
             <div
+              className="autoplayBlocked"
               onClick={(e) => {
                 e.stopPropagation();
                 const player = playerRef.current;
@@ -3370,31 +3571,10 @@ const VideoShort = () => {
                   }).catch(() => {});
                 }
               }}
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '100%',
-                height: '100%',
-                zIndex: 10,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: 'pointer',
-                background: 'rgba(0,0,0,0.3)',
-              }}
             >
-              <div style={{
-                width: 72,
-                height: 72,
-                borderRadius: '50%',
-                background: 'rgba(255,255,255,0.9)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>
-                <Play size={36} fill="#000" color="#000" style={{ marginLeft: 4 }} />
-              </div>
+              <span className="autoplayBlocked__btn">
+                <Icon name="play_arrow" size={40} fill />
+              </span>
             </div>
           )}
 
@@ -3411,14 +3591,17 @@ const VideoShort = () => {
               to the next short still works. */}
           {storyExpired && (
             <div className="storyExpiredScreen">
-              <div className="storyExpiredRing" aria-hidden="true">0<small>h</small></div>
-              <p className="storyExpiredTitle">{t('shorts.storyExpired.title')}</p>
-              <p className="storyExpiredBody">{t('shorts.storyExpired.body')}</p>
-              {(currentIndex < videos.length - 1 || hasMore) && (
-                <button type="button" className="storyExpiredNext" onClick={(e) => { e.stopPropagation(); handleNext(); }}>
-                  {t('shorts.storyExpired.next')}
-                </button>
-              )}
+              <div className="storyExpiredCard">
+                <Icon name="hourglass_bottom" size={28} className="storyExpiredIcon" />
+                <p className="storyExpiredTitle">{t('shorts.storyExpired.title')}</p>
+                <p className="storyExpiredBody">{t('shorts.storyExpired.body')}</p>
+                {(currentIndex < videos.length - 1 || hasMore) && (
+                  <button type="button" className="storyExpiredNext" onClick={(e) => { e.stopPropagation(); handleNext(); }}>
+                    <span>{t('shorts.storyExpired.next')}</span>
+                    <Icon name="arrow_forward" size={16} />
+                  </button>
+                )}
+              </div>
             </div>
           )}
 
@@ -3436,91 +3619,80 @@ const VideoShort = () => {
           >
             {/* Play/Pause icon (long press feedback) */}
             <div className={`playPauseIcon ${showPlayPauseIcon ? 'visible' : ''}`}>
-              {isPlaying ? <Pause size={48} /> : <Play size={48} />}
+              <Icon name={isPlaying ? 'pause' : 'play_arrow'} size={44} fill />
             </div>
             {/* Mute/Unmute icon (single tap feedback) */}
             <div className={`playPauseIcon ${showMuteIcon ? 'visible' : ''}`}>
-              {(isMuted || unmutePending) ? <VolumeX size={48} /> : <Volume2 size={48} />}
+              <Icon name={(isMuted || unmutePending) ? 'volume_off' : 'volume_up'} size={44} fill />
             </div>
             {/* Heart animation (double tap feedback) */}
             <div className={`heartAnimation ${showHeartAnimation ? 'visible' : ''}`}>
-              <Heart size={80} fill="#ff2d55" color="#ff2d55" />
+              <Icon name="favorite" size={80} fill />
             </div>
 
-            {/* Feed switcher — sits ON the video (top-left), inside the overlay like the
-                other on-video controls, so it lines up with the player instead of the
-                full-width page. Main feed only: a creator's shorts (?user=…) and the
-                stories view keep their own feeds, so it's hidden there.
-                Touch events are stopped so tapping it never registers as a swipe. */}
-            {!feedUser && !isStoriesMode && (
-              <div
-                className="shortsFeedSwitch"
-                role="tablist"
-                aria-label={t('shorts.feed.ariaLabel')}
-                onTouchStart={(e) => e.stopPropagation()}
-                onTouchMove={(e) => e.stopPropagation()}
-                onTouchEnd={(e) => e.stopPropagation()}
-                onMouseDown={(e) => e.stopPropagation()}
-              >
+            {/* Feed switcher (Discover / My interests): on the video on phones; on
+                desktop it sits in the strip above the player (18a). Main feed only:
+                a creator's shorts (?user=…) and the stories view keep their own feeds. */}
+            {!isDeskLayout && feedSwitch}
+            {feedNote && (
+              <div className={`shortsFeedNote${feedNote.icon ? ` has-icon is-${feedNote.tone || 'muted'}` : ''}`} role="status">
+                {feedNote.icon && <Icon name={feedNote.icon} size={18} />}
+                <span>{feedNote.text}</span>
+              </div>
+            )}
+
+            {/* Top-right controls on the video: subtitles, playback options
+                (playback mode and ambient light, 45b), mute. Touch events stop here so
+                a tap never registers as a swipe; touchend opens/toggles directly
+                (and preventDefault stops the click that would follow). */}
+            {!isStoryView && (
+              <div className={`shortsTopControls${isStoriesMode ? ' stories-mode' : ''}`}>
+                {subtitleLanguages && subtitleLanguages.length > 0 && (
+                  <button
+                    type="button"
+                    className={`shortsTopBtn subtitleIndicator${selectedSubtitleLang ? ' active' : ''}`}
+                    ref={subtitleMenuRef}
+                    aria-label={t('player.subtitles.title')}
+                    title={t('player.subtitles.title')}
+                    aria-haspopup="menu"
+                    aria-expanded={subtitleMenuOpen}
+                    onClick={(e) => { e.stopPropagation(); openSubtitleMenu(); }}
+                    onTouchStart={(e) => e.stopPropagation()}
+                    onTouchEnd={(e) => { e.stopPropagation(); e.preventDefault(); openSubtitleMenu(); }}
+                  >
+                    <Icon name={selectedSubtitleLang ? 'closed_caption' : 'closed_caption_disabled'} size={20} fill={!!selectedSubtitleLang} />
+                  </button>
+                )}
                 <button
                   type="button"
-                  role="tab"
-                  aria-selected={shortsFeedMode !== 'interests'}
-                  className={shortsFeedMode !== 'interests' ? 'active' : ''}
-                  onClick={(e) => { e.stopPropagation(); switchFeedMode('discover'); }}
+                  className={`shortsTopBtn playbackModeIndicator${tuneMenuOpen ? ' active' : ''}`}
+                  ref={tuneBtnRef}
+                  aria-label={t('shorts.playbackMode.options')}
+                  title={t('shorts.playbackMode.options')}
+                  aria-haspopup="menu"
+                  aria-expanded={tuneMenuOpen}
+                  onClick={(e) => { e.stopPropagation(); openTuneMenu(); }}
+                  onTouchStart={(e) => e.stopPropagation()}
+                  onTouchEnd={(e) => { e.stopPropagation(); e.preventDefault(); openTuneMenu(); }}
                 >
-                  {t('shorts.feed.discover')}
+                  <Icon name={playbackModeIcon} size={20} />
                 </button>
                 <button
                   type="button"
-                  role="tab"
-                  aria-selected={shortsFeedMode === 'interests'}
-                  className={shortsFeedMode === 'interests' ? 'active' : ''}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    if (!hasInterests) {
-                      toast.error(t('shorts.feed.noInterests'));
-                      return;
-                    }
-                    switchFeedMode('interests');
-                  }}
-                  title={hasInterests ? t('shorts.feed.interestsTitle') : t('shorts.feed.pickInterestsFirst')}
+                  className="shortsTopBtn muteIndicator"
+                  aria-label={(isMuted || unmutePending) ? t('player.controls.unmute') : t('player.controls.mute')}
+                  title={(isMuted || unmutePending) ? t('player.controls.unmute') : t('player.controls.mute')}
+                  onClick={(e) => { e.stopPropagation(); toggleMute(); }}
+                  onTouchStart={(e) => e.stopPropagation()}
+                  onTouchEnd={(e) => { e.stopPropagation(); e.preventDefault(); toggleMute(); }}
                 >
-                  {t('shorts.feed.myInterests')}
+                  <Icon name={(isMuted || unmutePending) ? 'volume_off' : 'volume_up'} size={20} />
                 </button>
               </div>
             )}
-            {/* Ambient glow toggle */}
-            <div className={`glowIndicator${glowMode !== 'off' ? ' active' : ''}`}
-              onClick={(e) => { e.stopPropagation(); toggleGlow(); }}
-              onTouchStart={(e) => e.stopPropagation()}
-              onTouchEnd={(e) => { e.stopPropagation(); e.preventDefault(); toggleGlow(); }}
-              title={glowMode === 'off' ? t('shorts.glow.subtle') : glowMode === 'page' ? t('shorts.glow.vivid') : t('shorts.glow.off')}
-            >
-              {glowMode === 'off' && <Moon size={16} />}
-              {glowMode === 'page' && <Lightbulb size={16} />}
-              {glowMode === 'vivid' && <Sun size={16} />}
-            </div>
-            {/* Playback mode toggle button */}
-            <div className="playbackModeIndicator"
-              onClick={(e) => { e.stopPropagation(); cyclePlaybackMode(); }}
-              onTouchStart={(e) => e.stopPropagation()}
-              onTouchEnd={(e) => { e.stopPropagation(); e.preventDefault(); cyclePlaybackMode(); }}
-            >
-              {playbackMode === 'auto-replay' ? <Repeat size={16} /> :
-               playbackMode === 'auto-swipe' ? <ChevronsUp size={18} /> :
-               <Square size={14} />}
-            </div>
-            {/* Mute/unmute toggle button */}
-            <div className="muteIndicator"
-              onClick={(e) => { e.stopPropagation(); toggleMute(); }}
-              onTouchStart={(e) => e.stopPropagation()}
-              onTouchEnd={(e) => { e.stopPropagation(); e.preventDefault(); toggleMute(); }}
-            >
-              {(isMuted || unmutePending) ? <VolumeX size={18} /> : <Volume2 size={18} />}
-            </div>
             {/* Playback mode fading text indicator */}
             <div className={`modeIndicatorText ${showModeIndicator ? 'visible' : ''}`}>
+              <Icon name={playbackModeIcon} size={16} />
               {playbackMode === 'auto-replay' ? t('shorts.playbackMode.autoReplay') :
                playbackMode === 'auto-swipe' ? t('shorts.playbackMode.autoSwipe') :
                t('shorts.playbackMode.manual')}
@@ -3542,82 +3714,143 @@ const VideoShort = () => {
                   setTimeout(() => sendCommand('play'), 100);
                 }}
               >
-                <RotateCcw size={56} />
+                <span className="replayOverlay__btn"><Icon name="replay" size={36} /></span>
               </div>
             )}
           </div>
 
-          {/* Progress bar */}
-          <div
-            className="videoProgressBar"
-            ref={progressBarRef}
-            onMouseDown={handleProgressMouseDown}
-            onClick={(e) => e.stopPropagation()}
-            onTouchStart={(e) => { e.stopPropagation(); setIsScrubbing(true); isScrubbingRef.current = true; handleProgressBarInteraction(e.touches[0]); }}
-            onTouchMove={(e) => { e.stopPropagation(); if (isScrubbingRef.current) handleProgressBarInteraction(e.touches[0]); }}
-            onTouchEnd={(e) => { e.stopPropagation(); e.preventDefault(); setIsScrubbing(false); isScrubbingRef.current = false; }}
-          >
-            <div className="videoProgressFill" ref={progressFillRef} style={{ width: '0%' }} />
-            <div className="videoProgressHandle" ref={progressHandleRef} style={{ left: '0%' }} />
-          </div>
+          {/* Phones (18a): the discussion at the foot of the short, its newest
+              comment and the count. Tap for the sheet. */}
+          {showPeek && (() => {
+            const latest = sortedComments[0];
+            const latestAuthor = latest ? (typeof latest.author === 'string' ? latest.author : latest.author?.username || '') : '';
+            const latestText = latest ? plainCommentText(latest.body) : '';
+            return (
+              <button
+                type="button"
+                className="shortsPeek"
+                onClick={(e) => { e.stopPropagation(); handleToggleComments(); }}
+                onTouchStart={(e) => e.stopPropagation()}
+                onTouchEnd={(e) => e.stopPropagation()}
+                aria-label={t('shorts.comments.title')}
+              >
+                <Icon name="chat_bubble" size={20} />
+                <span className="shortsPeek__text">
+                  {latest && latestText ? (
+                    <>
+                      <span className="shortsPeek__meta">{latestAuthor.replace(/^@/, '')}{latest.timeAgo ? ` · ${latest.timeAgo}` : ''}</span>
+                      <span className="shortsPeek__line">{latestText}</span>
+                    </>
+                  ) : (
+                    <span className="shortsPeek__line">
+                      {currentVideo.hivePostMissing ? t('shorts.comments.unavailable') : t('shorts.comments.addPlaceholder')}
+                    </span>
+                  )}
+                </span>
+                <span className="shortsPeek__count">{formatNumber(currentVideo.stats.comments || 0)}</span>
+              </button>
+            );
+          })()}
+
+          {/* Progress bar. Watching a story on a phone (30a), it is the current one of
+              the story segments across the top, under the creator. */}
+          {isStoryView ? (
+            <div
+              className="storyHead"
+              onClick={(e) => e.stopPropagation()}
+              onTouchStart={(e) => e.stopPropagation()}
+              onTouchEnd={(e) => e.stopPropagation()}
+            >
+              <div className="storyHead__segs">
+                {videos.map((v, i) => (i === currentIndex
+                  ? <div key={v.id || i} className="storyHead__seg is-current">{progressBar}</div>
+                  : <span key={v.id || i} className={`storyHead__seg${i < currentIndex ? ' is-done' : ''}`} />))}
+              </div>
+              <div className="storyHead__row">
+                <Link to={`/@${currentVideo.author}`} className="storyHead__who">
+                  <HiveAvatar username={currentVideo.author} size={null} alt="" imgClassName="storyHead__avatar" />
+                  <span className="storyHead__names">
+                    <b>{isOwnShort ? t('shorts.stories.you') : currentVideo.author}</b>
+                    {currentVideo.timeAgo && !String(currentVideo.timeAgo).includes('NaN') && <span>{currentVideo.timeAgo}</span>}
+                  </span>
+                </Link>
+                <button type="button" className="storyHead__btn" onClick={togglePlayPause} aria-label={isPlaying ? t('common.actions.pause') : t('common.actions.play')}>
+                  <Icon name={isPlaying ? 'pause' : 'play_arrow'} size={20} fill />
+                </button>
+                <button type="button" className="storyHead__btn" onClick={() => navigate(-1)} aria-label={t('common.actions.close')}>
+                  <Icon name="close" size={20} />
+                </button>
+              </div>
+            </div>
+          ) : progressBar}
 
           {/* Loading overlay for short navigation */}
           {shortNavLoading && (
             <div className="shortNavLoadingOverlay" onClick={(e) => e.stopPropagation()}>
-              <Loader2 size={28} className="spinner" />
+              <Icon name="progress_activity" size={28} className="v2-spin" />
             </div>
           )}
 
-          {/* Mobile back button (left of mute button) */}
-          {shortHistoryRef.current.length === 0 && (
-            <button className="shortBackBtn mobileOnly" onClick={(e) => { e.stopPropagation(); navigate(-1); }}>
-              <ArrowLeft size={18} />
-            </button>
-          )}
-
-          {/* Stories mode button (next to back button on mobile) — only in stories mode */}
-          {isStoriesMode && (
-            <button className="shortStoriesBtn mobileOnly" onClick={(e) => { e.stopPropagation(); navigate('/shorts'); }}>
-              <ShortsIcon size={18} />
-            </button>
-          )}
-
-          {/* Subtitle/CC toggle (outside videoOverlay; dropdown via portal to escape stacking contexts) */}
-          {subtitleLanguages && subtitleLanguages.length > 0 && (
-            <div className={`subtitleIndicator${selectedSubtitleLang ? ' active' : ''}${isStoriesMode ? ' stories-mode' : ''}`}
-              ref={subtitleMenuRef}
-              onClick={(e) => { e.stopPropagation(); openSubtitleMenu(); }}
-              onTouchStart={(e) => e.stopPropagation()}
-              onTouchEnd={(e) => { e.stopPropagation(); e.preventDefault(); openSubtitleMenu(); }}
+          {/* Mobile back button (left of the feed switch) */}
+          {shortHistoryRef.current.length === 0 && !isStoryView && (
+            <button
+              type="button"
+              className="shortBackBtn mobileOnly"
+              aria-label={t('common.actions.back')}
+              onClick={(e) => { e.stopPropagation(); navigate(-1); }}
             >
-              {selectedSubtitleLang ? <MdClosedCaption size={18} /> : <MdClosedCaptionOff size={18} />}
-            </div>
+              <Icon name="arrow_back" size={20} />
+            </button>
           )}
+
+          {/* Stories mode button (next to back button on mobile): only in stories mode */}
+          {isStoriesMode && !isStoryView && (
+            <button
+              type="button"
+              className="shortStoriesBtn mobileOnly"
+              aria-label={t('nav.search.types.shorts')}
+              onClick={(e) => { e.stopPropagation(); navigate('/shorts'); }}
+            >
+              <Icon name="smart_display" size={20} />
+            </button>
+          )}
+
+          {/* Subtitle menu (portal: escapes the video's stacking context) */}
           {subtitleMenuOpen && subtitleMenuPos && createPortal(
-            <div className="shortsSubtitleMenu"
+            <div className="v2-menu shortsSubtitleMenu"
+              role="menu"
               ref={subtitleDropdownRef}
               onClick={(e) => e.stopPropagation()}
               onTouchStart={(e) => e.stopPropagation()}
               onTouchEnd={(e) => e.stopPropagation()}
               style={{ position: 'fixed', top: subtitleMenuPos.top, right: subtitleMenuPos.right, zIndex: 99999 }}
             >
+              <div className="v2-menu__label">{t('player.subtitles.title')}</div>
               <button
-                className={`shortsSubtitleItem${!selectedSubtitleLang ? ' active' : ''}`}
+                type="button"
+                role="menuitemradio"
+                aria-checked={!selectedSubtitleLang}
+                className={`v2-menu__row shortsSubtitleItem${!selectedSubtitleLang ? ' is-on active' : ''}`}
                 onClick={() => { selectSubtitleLang(null); setSubtitleMenuOpen(false); }}
               >
-                {t('shorts.subtitles.off')}
+                <Icon name="closed_caption_disabled" size={18} />
+                <span>{t('shorts.subtitles.off')}</span>
               </button>
               {subtitleLanguages.map((sub) => {
                 const langInfo = SUPPORTED_LANGUAGES.find(l => l.code === sub.lang);
                 const label = langInfo ? langInfo.native : sub.lang;
+                const on = selectedSubtitleLang === sub.lang;
                 return (
                   <button
+                    type="button"
+                    role="menuitemradio"
+                    aria-checked={on}
                     key={sub.lang}
-                    className={`shortsSubtitleItem${selectedSubtitleLang === sub.lang ? ' active' : ''}`}
+                    className={`v2-menu__row shortsSubtitleItem${on ? ' is-on active' : ''}`}
                     onClick={() => { selectSubtitleLang(sub.lang); setSubtitleMenuOpen(false); }}
                   >
-                    {label}
-                    {subtitleLoading && selectedSubtitleLang === sub.lang && ' ...'}
+                    <Icon name={subtitleLoading && on ? 'progress_activity' : 'language'} size={18} className={subtitleLoading && on ? 'v2-spin' : ''} />
+                    <span>{label}</span>
                   </button>
                 );
               })}
@@ -3625,12 +3858,86 @@ const VideoShort = () => {
             document.body
           )}
 
-          {/* Back button (visible after navigating to a parent short) */}
-          {shortHistoryRef.current.length > 0 && (
-            <button className="shortBackBtn" onClick={(e) => { e.stopPropagation(); handleShortBack(); }}>
-              <ArrowLeft size={18} />
+          {/* Playback options menu: playback mode, and ambient light on desktop (45b). */}
+          {tuneMenuOpen && tuneMenuPos && createPortal(
+            <div className="v2-menu shortsTuneMenu"
+              role="menu"
+              aria-label={t('shorts.playbackMode.options')}
+              ref={tuneMenuRef}
+              onClick={(e) => e.stopPropagation()}
+              onTouchStart={(e) => e.stopPropagation()}
+              onTouchEnd={(e) => e.stopPropagation()}
+              style={{ position: 'fixed', top: tuneMenuPos.top, right: tuneMenuPos.right, zIndex: 99999 }}
+            >
+              <div className="v2-menu__label">{t('shorts.playbackMode.label')}</div>
+              {[
+                ['auto-replay', 'replay', 'autoReplay'],
+                ['auto-swipe', 'swipe_up', 'autoSwipe'],
+                ['none', 'touch_app', 'manual'],
+              ].map(([mode, icon, key]) => (
+                <MenuRow
+                  key={mode}
+                  role="menuitemradio"
+                  aria-checked={playbackMode === mode}
+                  icon={icon}
+                  on={playbackMode === mode}
+                  onClick={() => applyPlaybackMode(mode)}
+                >
+                  {t(`shorts.playbackMode.${key}`)}
+                </MenuRow>
+              ))}
+              <div className="shortsTuneMenu__glow">
+                <div className="v2-menu__label">{t('shorts.glow.label')}</div>
+                <Segmented
+                  size={28}
+                  label={t('shorts.glow.label')}
+                  value={glowMode}
+                  onChange={setGlowTo}
+                  options={[
+                    { value: 'off', label: t('shorts.glow.offShort') },
+                    { value: 'page', label: t('shorts.glow.subtleShort') },
+                    { value: 'vivid', label: t('shorts.glow.vividShort') },
+                  ]}
+                />
+              </div>
+            </div>,
+            document.body
+          )}
+
+          {/* Back button (visible after navigating to a parent short). On desktop it
+              leads the creator chip in the top-left group below. */}
+          {shortHistoryRef.current.length > 0 && !isDeskLayout && (
+            <button type="button" className="shortBackBtn" onClick={(e) => { e.stopPropagation(); handleShortBack(); }}>
+              <Icon name="arrow_back" size={18} />
               <span>{t('common.actions.back')}</span>
             </button>
+          )}
+
+          {/* Desktop (18a): the creator as a chip at the top-left of the player,
+              avatar, name and Follow on the media scrim. Phones keep the creator
+              above the caption (.userRow). */}
+          {isDeskLayout && (
+            <div className="shortsTopLeft" onClick={(e) => e.stopPropagation()}>
+              {shortHistoryRef.current.length > 0 && (
+                <button type="button" className="shortBackBtn is-inline" onClick={(e) => { e.stopPropagation(); handleShortBack(); }}>
+                  <Icon name="arrow_back" size={18} />
+                  <span>{t('common.actions.back')}</span>
+                </button>
+              )}
+              <div className="shortsCreatorChip">
+                <AuthorBadge
+                  author={currentVideo.author}
+                  showFollow
+                  color="var(--on-media)"
+                />
+                <AiBadge
+                  key={`${currentVideo.author}/${currentVideo.permlink}`}
+                  author={currentVideo.author}
+                  permlink={currentVideo.permlink}
+                  className="ai-badge--on-video"
+                />
+              </div>
+            </div>
           )}
 
           {/* Reaction chain overlay (for reactions and remixes) */}
@@ -3641,7 +3948,7 @@ const VideoShort = () => {
             /* The origin is not always a full video any more: a reaction to a SNAP
                starts at that snap, because the container above it was dropped as
                plumbing (see isSnapsContainer in hiveApi). So the card's link and icon
-               follow what the origin IS — a short opens in shorts, a snap opens as a
+               follow what the origin IS: a short opens in shorts, a snap opens as a
                post, a video plays at its timestamp. */
             const rootIsVideo = !rootStep || rootStep.type === 'video';
             const rootUrl = !rootStep
@@ -3651,11 +3958,12 @@ const VideoShort = () => {
                 : (rootIsVideo
                   ? `/@${rootStep.author}/${rootStep.permlink}${currentVideo.parentTimestamp != null ? `?t=${currentVideo.parentTimestamp}` : ''}`
                   : `/post/${rootStep.author}/${rootStep.permlink}`));
+            const chainCount = childSteps.length + (rootStep ? 1 : 0) + 1 + (currentVideo.childReactions?.length || 0);
             return (
               <div className={`reactionChainOverlay${parentCardVisible ? '' : ' collapsed'}${shortHistoryRef.current.length > 0 ? ' has-back' : ''}`} onClick={(e) => e.stopPropagation()}>
                 {parentCardVisible && (
                   <div className="reactionChainBreadcrumb">
-                    {/* Root / origin card — 50% wide, thumb left + info right */}
+                    {/* Root / origin card: thumb left + info right */}
                     {rootStep && (
                       <div className="chainRoot">
                         {rootStep.thumbnail && (
@@ -3683,19 +3991,18 @@ const VideoShort = () => {
                           className="chainActionBtn"
                           onClick={(e) => e.stopPropagation()}
                           title={rootStep.shortPermlink ? t('shorts.chain.openShort') : (rootIsVideo ? t('shorts.chain.watch') : t('shorts.chain.openSnap'))}
+                          aria-label={rootStep.shortPermlink ? t('shorts.chain.openShort') : (rootIsVideo ? t('shorts.chain.watch') : t('shorts.chain.openSnap'))}
                         >
-                          {rootStep.shortPermlink
-                            ? <Camera size={14} />
-                            : (rootIsVideo ? <Video size={14} /> : <MessageSquare size={14} />)}
+                          <Icon name={rootStep.shortPermlink ? 'smart_display' : (rootIsVideo ? 'play_arrow' : 'chat_bubble')} size={16} fill={!rootStep.shortPermlink && rootIsVideo} />
                         </Link>
                       </div>
                     )}
 
-                    {/* Child steps — horizontal scroll row */}
+                    {/* Child steps: horizontal scroll row */}
                     {/* `rootStep` is in the condition because the row also holds the
                         CURRENT card. Without it a two-step chain (an origin and this
                         short, nothing in between) drew the origin alone and left the
-                        viewer out of their own chain — which is what promoting the
+                        viewer out of their own chain, which is what promoting the
                         snap to origin turned every snap reaction into. */}
                     {(childSteps.length > 0 || currentVideo.childReactions?.length > 0 || rootStep) && (
                       <div
@@ -3721,7 +4028,7 @@ const VideoShort = () => {
                           const isExpanded = expandedChainCard === i;
                           return (
                             <React.Fragment key={i}>
-                              {i > 0 && <span className="chainDash">&mdash;</span>}
+                              {i > 0 && <span className="chainDash" aria-hidden="true" />}
                               <div
                                 className={`chainChild${isExpanded ? ' chainChild--expanded' : ''}${step.type === 'video' ? ' chainChild--video' : ' chainChild--comment'}`}
                                 onClick={() => setExpandedChainCard(isExpanded ? null : i)}
@@ -3730,12 +4037,12 @@ const VideoShort = () => {
                                   <AuthorBadge author={step.author} compact noLink />
                                   {step.type === 'video' && (
                                     step.shortPermlink ? (
-                                      <Link to={`/shorts?v=${step.author}/${step.shortPermlink}`} className="chainActionBtn chainActionBtn--sm" onClick={(e) => e.stopPropagation()} title={t('shorts.chain.openShort')}>
-                                        <Camera size={11} />
+                                      <Link to={`/shorts?v=${step.author}/${step.shortPermlink}`} className="chainActionBtn chainActionBtn--sm" onClick={(e) => e.stopPropagation()} title={t('shorts.chain.openShort')} aria-label={t('shorts.chain.openShort')}>
+                                        <Icon name="smart_display" size={14} />
                                       </Link>
                                     ) : (
-                                      <Link to={`/@${step.author}/${step.permlink}`} className="chainActionBtn chainActionBtn--sm" onClick={(e) => e.stopPropagation()} title={t('shorts.chain.watch')}>
-                                        <Video size={11} />
+                                      <Link to={`/@${step.author}/${step.permlink}`} className="chainActionBtn chainActionBtn--sm" onClick={(e) => e.stopPropagation()} title={t('shorts.chain.watch')} aria-label={t('shorts.chain.watch')}>
+                                        <Icon name="play_arrow" size={14} fill />
                                       </Link>
                                     )
                                   )}
@@ -3747,15 +4054,13 @@ const VideoShort = () => {
                                   <p className="chainChildText">{step.body}</p>
                                 )}
                                 {step.duration > 0 && (
-                                  <span className="chainChildDuration">
-                                    {Math.floor(step.duration / 60)}:{Math.floor(step.duration % 60).toString().padStart(2, '0')}
-                                  </span>
+                                  <span className="chainChildDuration">{formatDuration(step.duration)}</span>
                                 )}
                               </div>
                             </React.Fragment>
                           );
                         })}
-                        {childSteps.length > 0 && <span className="chainDash">&mdash;</span>}
+                        {childSteps.length > 0 && <span className="chainDash" aria-hidden="true" />}
                         {(() => {
                           const currentIdx = childSteps.length;
                           const isCurExpanded = expandedChainCard === currentIdx;
@@ -3776,21 +4081,19 @@ const VideoShort = () => {
                         {/* Child reactions (downstream from current short) */}
                         {currentVideo.childReactions?.map((child, ci) => (
                           <React.Fragment key={`child-${ci}`}>
-                            <span className="chainDash">&mdash;</span>
+                            <span className="chainDash" aria-hidden="true" />
                             <div className="chainChild chainChild--video chainChild--downstream">
                               <div className="chainChildHeader">
                                 <AuthorBadge author={child.author} compact noLink />
-                                <Link to={`/shorts?v=${child.shortAuthor || child.author}/${child.shortPermlink}`} className="chainActionBtn chainActionBtn--sm" onClick={(e) => e.stopPropagation()} title={t('shorts.chain.openShort')}>
-                                  <Camera size={11} />
+                                <Link to={`/shorts?v=${child.shortAuthor || child.author}/${child.shortPermlink}`} className="chainActionBtn chainActionBtn--sm" onClick={(e) => e.stopPropagation()} title={t('shorts.chain.openShort')} aria-label={t('shorts.chain.openShort')}>
+                                  <Icon name="smart_display" size={14} />
                                 </Link>
                               </div>
                               <span className="chainChildTitle">
                                 {child.title || t('shorts.chain.remix')}
                               </span>
                               {child.duration > 0 && (
-                                <span className="chainChildDuration">
-                                  {Math.floor(child.duration / 60)}:{Math.floor(child.duration % 60).toString().padStart(2, '0')}
-                                </span>
+                                <span className="chainChildDuration">{formatDuration(child.duration)}</span>
                               )}
                             </div>
                           </React.Fragment>
@@ -3799,20 +4102,28 @@ const VideoShort = () => {
                     )}
                   </div>
                 )}
-                <button className="chainToggleBtn" onClick={(e) => { e.stopPropagation(); setParentCardVisible(prev => { const next = !prev; localStorage.setItem('3speak-chain-visible', next ? '1' : '0'); return next; }); }}>
+                <button
+                  type="button"
+                  className="chainToggleBtn"
+                  aria-expanded={parentCardVisible}
+                  aria-label={t('shorts.chain.show')}
+                  onClick={(e) => { e.stopPropagation(); setParentCardVisible(prev => { const next = !prev; localStorage.setItem('3speak-chain-visible', next ? '1' : '0'); return next; }); }}
+                >
+                  <Icon name="link" size={16} />
                   {!parentCardVisible && <span className="chainToggleLabel">{t('shorts.chain.show')}</span>}
-                  {parentCardVisible ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                  {!parentCardVisible && <span className="chainToggleCount">{chainCount}</span>}
+                  <Icon name={parentCardVisible ? 'expand_less' : 'expand_more'} size={16} />
                 </button>
               </div>
             );
           })()}
 
           <div className="bottomOverlay">
-            {/* Subtitle overlay — anchored above user badge, moves with bottomOverlay */}
+            {/* Subtitle overlay: anchored above user badge, moves with bottomOverlay */}
             {subtitleCues.length > 0 && (
               <ShortsSubtitleOverlay timeRef={currentTimeRef} cues={subtitleCues} style={subtitleStyle} />
             )}
-            {/* Reshare avatars — users who reshared (except ourselves) */}
+            {/* Reshare avatars: users who reshared (except ourselves) */}
             {reshareUsers.filter(r => r.username !== user).length > 0 && (
               <div className="reshareAvatars" onClick={(e) => e.stopPropagation()}>
                 {reshareUsers
@@ -3832,7 +4143,7 @@ const VideoShort = () => {
                         imgClassName="reshareAvatar"
                         badgeSize={9}
                       />
-                      <Flame size={14} className="reshareBadge" />
+                      <span className="reshareBadge"><Icon name="local_fire_department" size={12} fill /></span>
                     </div>
                   ))}
                 {reshareUsers.filter(r => r.username !== user).length > 5 && (
@@ -3840,48 +4151,47 @@ const VideoShort = () => {
                 )}
               </div>
             )}
-            <div className="userRow" onClick={(e) => e.stopPropagation()}>
-              <AuthorBadge
-                author={currentVideo.author}
-                showFollow
-                followersCount={currentVideo.user.followersCount}
-                reputation={currentVideo.user.reputation}
-                color="#fff"
-              />
-              {/* Sits here rather than in the caption row because the caption
-                  collapses and this should not depend on it being open.
-                  The ASSET permlink, not the hive one: subtitles-tags is keyed by
-                  owner + asset id, so this is the direct hit, and it still works
-                  for a short that has no Hive post to resolve through. */}
-              <AiBadge
-                key={`${currentVideo.author}/${currentVideo.permlink}`}
-                author={currentVideo.author}
-                permlink={currentVideo.permlink}
-                className="ai-badge--on-video"
-              />
-            </div>
+            {!isDeskLayout && !isStoryView && (
+              <div className="userRow" onClick={(e) => e.stopPropagation()}>
+                <AuthorBadge
+                  author={currentVideo.author}
+                  showFollow
+                  color="var(--on-media)"
+                />
+                {/* Sits here rather than in the caption row because the caption
+                    collapses and this should not depend on it being open.
+                    The ASSET permlink, not the hive one: subtitles-tags is keyed by
+                    owner + asset id, so this is the direct hit, and it still works
+                    for a short that has no Hive post to resolve through. */}
+                <AiBadge
+                  key={`${currentVideo.author}/${currentVideo.permlink}`}
+                  author={currentVideo.author}
+                  permlink={currentVideo.permlink}
+                  className="ai-badge--on-video"
+                />
+              </div>
+            )}
             <div className={`caption${captionExpanded ? ' caption--expanded' : ''}`} onClick={(e) => { e.stopPropagation(); setCaptionExpanded(prev => !prev); }}>
               {!captionExpanded && !currentVideo.caption?.trim() && (
                 <button
-                  className={`captionReportBtn${currentVideo && isReported('short', `${currentVideo.author}/${currentVideo.permlink}`) ? ' reported' : ''}`}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setReportTarget({ type: 'short', author: currentVideo.author, permlink: currentVideo.permlink });
-                    setIsReportOpen(true);
-                  }}
+                  type="button"
+                  className={`captionReportBtn${isReportedShort ? ' reported' : ''}`}
+                  onClick={openReport}
                   title={t('common.actions.report')}
+                  aria-label={t('common.actions.report')}
                 >
-                  <MdFlag size={14} />
+                  <Icon name="flag" size={14} fill={isReportedShort} />
                 </button>
               )}
               {/* A live 24h story: what it is and how long it stays. */}
               {storyHoursLeft > 0 && (
                 <span className="shortsStoryBadge">
+                  <span className="shortsStoryBadge__dot" aria-hidden="true" />
                   {t('nav.notifications.stories.type')} · {t('nav.notifications.stories.hoursLeft', { count: storyHoursLeft })}
                 </span>
               )}
               {/* The poster's own live story: who saw it, and keeping it as a short. */}
-              {storyHoursLeft > 0 && user && currentVideo.author === user && currentVideo.hivePermlink && (
+              {storyHoursLeft > 0 && user && currentVideo.author === user && currentVideo.hivePermlink && !isStoryView && (
                 <StoryOwnerTools
                   author={currentVideo.author}
                   hivePermlink={currentVideo.hivePermlink}
@@ -3911,14 +4221,14 @@ const VideoShort = () => {
                   </span>
                 )}
               </p>
-              {/* Date + payout — the payout is info, not an action, so it reads better
+              {/* Date + payout: the payout is info, not an action, so it reads better
                   here than as a button in the action rail. */}
               {((currentVideo.timeAgo && !currentVideo.timeAgo.includes('NaN')) || currentVideo.stats?.payout != null) && (
                 <span className="captionDate">
                   {currentVideo.timeAgo && !currentVideo.timeAgo.includes('NaN') && currentVideo.timeAgo}
                   {currentVideo.stats?.payout != null && (
                     <span className="captionPayout">
-                      <HiveIcon size={11} />
+                      <HiveIcon size={12} />
                       {formatPayout(currentVideo.stats.payout)}
                     </span>
                   )}
@@ -3927,19 +4237,17 @@ const VideoShort = () => {
               {captionExpanded && (
                 <div className="captionActions" onClick={(e) => e.stopPropagation()}>
                   <button
-                    className={`captionReportBtn${currentVideo && isReported('short', `${currentVideo.author}/${currentVideo.permlink}`) ? ' reported' : ''}`}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setReportTarget({ type: 'short', author: currentVideo.author, permlink: currentVideo.permlink });
-                      setIsReportOpen(true);
-                    }}
+                    type="button"
+                    className={`captionReportBtn${isReportedShort ? ' reported' : ''}`}
+                    onClick={openReport}
                     title={t('common.actions.report')}
+                    aria-label={t('common.actions.report')}
                   >
-                    <MdFlag size={14} />
+                    <Icon name="flag" size={14} fill={isReportedShort} />
                   </button>
                   {translatedCaption ? (
-                    <button className="captionDismissTranslation" onClick={() => setTranslatedCaption(null)}>
-                      <MdTranslate size={12} />
+                    <button type="button" className="captionDismissTranslation" onClick={() => setTranslatedCaption(null)}>
+                      <Icon name="undo" size={14} />
                       <span>{t('shorts.caption.showOriginal')}</span>
                     </button>
                   ) : (
@@ -3968,125 +4276,249 @@ const VideoShort = () => {
                 <span className="captionMore">{t('shorts.caption.more')}</span>
               )}
             </div>
-            <div className="audioMarquee">
-              <Music2 size={12} />
-              <div className="audioText">
-                <p>{currentVideo.audio}</p>
-              </div>
+            {/* Chips under the caption (18a): the first tags, then the sound. With the
+                caption open, every tag is listed in it instead. */}
+            <div className="shortsChips">
+              {!captionExpanded && (currentVideo.tags || []).slice(0, 2).map((tag) => (
+                <Link key={tag} to={`/t/${tag}`} className="shortsChip" onClick={(e) => e.stopPropagation()}>#{tag}</Link>
+              ))}
+              <span className="shortsChip audioMarquee">
+                <Icon name="music_note" size={14} />
+                <span className="audioText">{currentVideo.audio}</span>
+              </span>
             </div>
           </div>
         </div>
 
-        {/* SIDEBAR */}
+        {/* DOCK: the v2 action tiles (18a). A column beside the player on desktop,
+            on the video itself on phones. */}
         <div className="actionSidebar" onClick={(e) => e.stopPropagation()}>
-          <div className={`actionItem${user && currentVideo.author && user.toLowerCase() === currentVideo.author.toLowerCase() ? ' disabled' : ''}`} onClick={(e) => { e.stopPropagation(); if (user && currentVideo.author && user.toLowerCase() === currentVideo.author.toLowerCase()) return; if (currentVideo.hivePostMissing) { toast.error(t('shorts.errors.votingUnavailable')); return; } toggleVoteTooltip(currentVideo.author, currentVideo.hivePermlink); }}>
-            <div className={`actionButton ${currentVideo.isLiked ? 'liked' : ''}`}>
-              <Heart size={24} fill={currentVideo.isLiked ? '#ff2d55' : 'none'} />
-            </div>
+          <button
+            type="button"
+            className={`actionItem actionItem--vote${currentVideo.isLiked ? ' liked' : ''}${isOwnShort ? ' disabled' : ''}`}
+            aria-disabled={isOwnShort || undefined}
+            aria-pressed={!!currentVideo.isLiked}
+            aria-label={t('watch.actions.vote')}
+            onClick={(e) => {
+              e.stopPropagation();
+              if (isOwnShort) return;
+              if (currentVideo.hivePostMissing) { toast.error(t('shorts.errors.votingUnavailable')); return; }
+              toggleVoteTooltip(currentVideo.author, currentVideo.hivePermlink);
+            }}
+          >
+            <Icon name="arrow_upward" size={24} fill />
             <span className="actionLabel">{formatNumber(currentVideo.stats.likes)}</span>
-            <CommentVoteTooltip
-              voteKind="short"
-              author={currentVideo.author}
-              permlink={currentVideo.hivePermlink}
-              showTooltip={showTooltip && activeTooltipPermlink === currentVideo.hivePermlink}
-              setShowTooltip={setShowTooltip}
-              setCommentList={setCommentList}
-              setActiveTooltipPermlink={setActiveTooltipPermlink}
-              weight={weight}
-              setWeight={setWeight}
-              voteValue={voteValue}
-              setVoteValue={setVoteValue}
-              accountData={accountData}
-              setAccountData={setAccountData}
-              onVoteSuccess={handlePostVoteSuccess}
-              cachedDynamicProps={cachedDynamicPropsRef.current}
-              onVoteDataRefresh={fetchVoteData}
-              compact
-              enableViewerTag
-              postCreatedAt={currentVideo.createdAt || currentVideo.created}
-            />
-          </div>
+          </button>
+          {/* The vote popup is a portal; rendered beside the tile, not inside it,
+              so a click in its backdrop never reaches the tile again. */}
+          <CommentVoteTooltip
+            voteKind="short"
+            author={currentVideo.author}
+            permlink={currentVideo.hivePermlink}
+            showTooltip={showTooltip && activeTooltipPermlink === currentVideo.hivePermlink}
+            setShowTooltip={setShowTooltip}
+            setCommentList={setCommentList}
+            setActiveTooltipPermlink={setActiveTooltipPermlink}
+            weight={weight}
+            setWeight={setWeight}
+            voteValue={voteValue}
+            setVoteValue={setVoteValue}
+            accountData={accountData}
+            setAccountData={setAccountData}
+            onVoteSuccess={handlePostVoteSuccess}
+            cachedDynamicProps={cachedDynamicPropsRef.current}
+            onVoteDataRefresh={fetchVoteData}
+            compact
+            enableViewerTag
+            postCreatedAt={currentVideo.createdAt || currentVideo.created}
+          />
 
-          <div className="actionItem" onClick={(e) => { e.stopPropagation(); handleToggleComments(); }}>
-            <div className={`actionButton ${showComments ? 'active' : ''}`}>
-              <MessageSquare size={24} />
-            </div>
+          {/* Phones show the discussion in the bar at the foot of the short instead. */}
+          {!showPeek && (
+          <button
+            type="button"
+            className={`actionItem${showComments ? ' active' : ''}`}
+            aria-pressed={!!showComments}
+            aria-label={t('shorts.comments.title')}
+            onClick={(e) => { e.stopPropagation(); handleToggleComments(); }}
+          >
+            <Icon name="chat_bubble" size={24} fill={!!showComments} />
             <span className="actionLabel">{currentVideo.stats.comments}</span>
-          </div>
+          </button>
+          )}
 
-          <div className="actionItem" onClick={(e) => { e.stopPropagation(); handleReshare(); }}>
-            <div
-              className={`actionButton ${hasReshared ? 'reshared' : ''}`}
-              title={hasReshared ? t('common.hype.hyped') : t('common.hype.title')}
+          {/* Reblog onto the viewer's Hive blog: two taps, like the watch page's
+              dock (hooks/useReblog.js). Not for a signed-out viewer or their own short. */}
+          {reblog.canReblog && (
+            <button
+              type="button"
+              className={`actionItem${reblog.reblogged ? ' reshared' : ''}${reblog.armed ? ' armed' : ''}`}
+              aria-pressed={!!reblog.reblogged}
+              disabled={reblog.busy}
+              title={reblog.reblogged ? t('common.reblog.reblogged') : t('common.reblog.title')}
+              onClick={(e) => { e.stopPropagation(); reblog.press(); }}
             >
-              <Flame size={24} />
-            </div>
-            <span className="actionLabel">{reshareCount || 0}</span>
-          </div>
+              <Icon name="repeat" size={24} />
+              <span className="actionLabel">{reblog.label}</span>
+            </button>
+          )}
 
-          {/* Tip — not on your own short, and only with a Hive post: a warm-up
+          {/* Watch Later: one tap adds/removes this short from the playlist. */}
+          <button
+            type="button"
+            className={`actionItem${isInWatchLater ? ' saved' : ''}`}
+            aria-pressed={!!isInWatchLater}
+            onClick={(e) => { e.stopPropagation(); toggleWatchLater(); }}
+          >
+            <Icon name="bookmark" size={24} fill={!!isInWatchLater} />
+            <span className="actionLabel">{isInWatchLater ? t('common.actions.saved') : t('common.actions.save')}</span>
+          </button>
+
+          {/* Tip: not on your own short, and only with a Hive post: a warm-up
               creator has no Hive account to receive it. Signed out, the tip window
               opens on Lightning, which needs no Hive account. */}
           {user !== currentVideo.author && !currentVideo.hivePostMissing && (
-            <div className="actionItem" onClick={(e) => { e.stopPropagation(); try { playerRef.current?.pause?.(); } catch { /* not fatal */ } setIsTipOpen(true); }}>
-              <div className="actionButton">
-                <Gift size={24} />
-              </div>
+            <button
+              type="button"
+              className="actionItem"
+              onClick={(e) => { e.stopPropagation(); try { playerRef.current?.pause?.(); } catch { /* not fatal */ } setIsTipOpen(true); }}
+            >
+              <Icon name="volunteer_activism" size={24} />
               <span className="actionLabel">{t('watch.actions.tip')}</span>
-            </div>
+            </button>
           )}
 
-          {/* Watch Later — one tap adds/removes this short from the playlist. */}
-          <div className="actionItem" onClick={(e) => { e.stopPropagation(); toggleWatchLater(); }}>
-            <div className={`actionButton ${isInWatchLater ? 'saved' : ''}`}>
-              <Bookmark size={24} fill={isInWatchLater ? 'currentColor' : 'none'} />
-            </div>
-            <span className="actionLabel">{isInWatchLater ? t('common.actions.saved') : t('common.actions.save')}</span>
-          </div>
-
-          <div className="actionItem" onClick={(e) => { e.stopPropagation(); setShareChooserOpen(true); }}>
-            <div className="actionButton">
-              <Share2 size={24} />
-            </div>
+          <button
+            type="button"
+            className="actionItem"
+            onClick={(e) => { e.stopPropagation(); setShareChooserOpen(true); }}
+          >
+            <Icon name="ios_share" size={24} />
             <span className="actionLabel">{t('common.actions.share')}</span>
-          </div>
+          </button>
+
+          {/* Hype (3Speak only, not a Hive reblog) */}
+          <button
+            type="button"
+            className={`actionItem${hasReshared ? ' reshared' : ''}`}
+            aria-pressed={!!hasReshared}
+            title={hasReshared ? t('common.hype.hyped') : t('common.hype.title')}
+            aria-label={hasReshared ? t('common.hype.hyped') : t('common.hype.title')}
+            onClick={(e) => { e.stopPropagation(); handleReshare(); }}
+          >
+            <Icon name="local_fire_department" size={24} fill={!!hasReshared} />
+            <span className="actionLabel">{reshareCount || 0}</span>
+          </button>
 
           {FEATURE_EDITOR && authenticated && (() => {
             const vid = videos[currentIndex];
             return vid?.reusable === true ? (
-              <div className="actionItem" onClick={(e) => { e.stopPropagation(); handleRemix('video'); }}>
-                <div className="actionButton">
-                  <WandSparkles size={24} />
-                </div>
+              <button type="button" className="actionItem" onClick={(e) => { e.stopPropagation(); handleRemix('video'); }}>
+                <Icon name="movie_edit" size={24} />
                 <span className="actionLabel">{t('shorts.actions.remix')}</span>
-              </div>
+              </button>
             ) : null;
           })()}
 
-          {/* Promote — own shorts only, same rule as Edit. Boosting somebody else's
+          {/* Promote: own shorts only, same rule as Edit. Boosting somebody else's
               short is allowed elsewhere, but the rail is narrow and the thing people
               come here to do is promote their own. Needs a Hive post: both the boost
               and the ad point at one. */}
           {authenticated && user === currentVideo.author && !currentVideo.hivePostMissing && (
-            <div className="actionItem" onClick={(e) => { e.stopPropagation(); try { playerRef.current?.pause?.(); } catch { /* not fatal */ } setIsPromoteOpen(true); }}>
-              <div className="actionButton">
-                <Megaphone size={24} />
-              </div>
+            <button
+              type="button"
+              className="actionItem"
+              onClick={(e) => { e.stopPropagation(); try { playerRef.current?.pause?.(); } catch { /* not fatal */ } setIsPromoteOpen(true); }}
+            >
+              <Icon name="campaign" size={24} />
               <span className="actionLabel">{t('shorts.actions.promote')}</span>
-            </div>
+            </button>
           )}
 
-          {/* Edit — own shorts only, and only when there's a Hive post to edit. */}
+          {/* Edit: own shorts only, and only when there's a Hive post to edit. */}
           {authenticated && user === currentVideo.author && !currentVideo.hivePostMissing && (
-            <div className="actionItem" onClick={(e) => { e.stopPropagation(); try { playerRef.current?.pause?.(); } catch {} setIsEditShortOpen(true); }}>
-              <div className="actionButton">
-                <Pencil size={24} />
-              </div>
+            <button
+              type="button"
+              className="actionItem"
+              onClick={(e) => { e.stopPropagation(); try { playerRef.current?.pause?.(); } catch { /* not fatal */ } setIsEditShortOpen(true); }}
+            >
+              <Icon name="edit" size={24} />
               <span className="actionLabel">{t('common.actions.edit')}</span>
-            </div>
+            </button>
           )}
 
         </div>
+
+        {/* The foot of a story on a phone. Your own live story: who saw it, keep
+            it, share it (24d). Somebody else's: reply, vote, send (30a). */}
+        {isStoryView && !adPlaying && (
+          isOwnShort ? (
+            storyHoursLeft > 0 && currentVideo.hivePermlink && (
+              <div className="storyFoot" onClick={(e) => e.stopPropagation()} onTouchStart={(e) => e.stopPropagation()} onTouchEnd={(e) => e.stopPropagation()}>
+                <StoryOwnerTools
+                  variant="panel"
+                  author={currentVideo.author}
+                  hivePermlink={currentVideo.hivePermlink}
+                  onShare={() => setShareChooserOpen(true)}
+                  onKept={() => {
+                    const kept = currentVideo;
+                    setVideos((list) => list.map((v) => (v === kept ? { ...v, storyExpiresAt: null } : v)));
+                  }}
+                />
+              </div>
+            )
+          ) : (
+            <div className="storyFoot storyReply" onClick={(e) => e.stopPropagation()} onTouchStart={(e) => e.stopPropagation()} onTouchEnd={(e) => e.stopPropagation()}>
+              <CommentDropZone
+                className="storyReply__box"
+                images={bottomCommentImages}
+                value={newComment}
+                setValue={setNewComment}
+                disabled={!(user || incubationHandle) || currentVideo.hivePostMissing}
+              >
+                <textarea
+                  ref={bottomCommentRef}
+                  rows={1}
+                  placeholder={
+                    currentVideo.hivePostMissing
+                      ? t('shorts.comments.unavailable')
+                      : (user || incubationHandle) ? t('shorts.stories.replyTo', { user: currentVideo.author }) : t('shorts.comments.loginPlaceholder')
+                  }
+                  value={newComment}
+                  onChange={(e) => {
+                    setNewComment(bottomCommentEmoji.change(e));
+                    e.target.style.height = 'auto';
+                    e.target.style.height = e.target.scrollHeight + 'px';
+                  }}
+                  onKeyDown={bottomCommentEmoji.keyDown}
+                  onBlur={bottomCommentEmoji.blur}
+                  disabled={!(user || incubationHandle) || currentVideo.hivePostMissing}
+                  onPaste={bottomCommentImages.onPaste}
+                />
+                {bottomCommentEmoji.popup}
+              </CommentDropZone>
+              <button
+                type="button"
+                className={`storyReply__btn is-heart${currentVideo.isLiked ? ' is-on' : ''}`}
+                aria-pressed={!!currentVideo.isLiked}
+                aria-label={t('watch.actions.vote')}
+                disabled={currentVideo.hivePostMissing}
+                onClick={() => toggleVoteTooltip(currentVideo.author, currentVideo.hivePermlink)}
+              >
+                <Icon name="favorite" size={24} fill />
+              </button>
+              <button
+                type="button"
+                className="storyReply__btn"
+                onClick={() => handlePostComment(currentVideo.author, currentVideo.hivePermlink || currentVideo.permlink, newComment, false, !!currentVideo._incubation)}
+                disabled={!(user || incubationHandle) || !newComment.trim() || postingComment || currentVideo.hivePostMissing}
+                aria-label={t('shorts.comments.send')}
+              >
+                {postingComment ? <Icon name="progress_activity" size={24} className="v2-spin" /> : <Icon name="send" size={24} fill />}
+              </button>
+            </div>
+          )
+        )}
 
         <ShareChooserModal
           open={shareChooserOpen}
@@ -4129,25 +4561,10 @@ const VideoShort = () => {
 
       </div>
 
-      {/* NAVIGATION — kept OUTSIDE .videoWrapper so its position:fixed anchors to
-          the viewport. The wrapper gets a transform when comments open, which
-          would otherwise become the containing block and mis-place the arrows. */}
-      <div className="navigationArrows">
-        <button className="navButton" onClick={handlePrevious} disabled={currentIndex === 0}>
-          <ArrowUp size={24} />
-        </button>
-        <button className="navButton" onClick={handleNext} disabled={currentIndex === videos.length - 1 && !hasMore}>
-          {loading && currentIndex === videos.length - 1 ? (
-            <Loader2 size={24} className="spinner" />
-          ) : (
-            <ArrowDown size={24} />
-          )}
-        </button>
-      </div>
-
-      {/* Mobile Comments Overlay + Panel — portaled to body so it renders above nav */}
+      {/* Discussion: a fixed side panel on desktop (open by default, 18a), a bottom
+          sheet on phones. Portaled to body so it renders above the nav. */}
       {createPortal(
-      <div className="short-main shorts-comments-portal">
+      <div className="shorts-comments-portal">
       <div
         className={`commentsOverlay ${commentsVisible ? 'visible' : ''}`}
         onClick={handleToggleComments}
@@ -4163,28 +4580,74 @@ const VideoShort = () => {
           onTouchEnd={handleCommentsDragEnd}
         />
 
-        <ModalHeader className="commentsHeader" title={t('shorts.comments.title')} onClose={handleToggleComments}>
-          <span className="commentsCount">{currentVideo.stats.comments}</span>
-          <select
-            className="commentsSort"
-            value={commentSort}
-            onChange={(e) => changeCommentSort(e.target.value)}
-            aria-label={t('comments.section.sortBy')}
-          >
-            <option value="newest">{t('comments.section.sortNewest')}</option>
-            <option value="oldest">{t('comments.section.sortOldest')}</option>
-            <option value="popular">{t('comments.section.sortPopular')}</option>
-          </select>
-        </ModalHeader>
+        {/* Phones: a sheet with its title bar (27d style); you swipe to the next
+            short there, so no Up next. Desktop's panel is always there (18a): no
+            title or close, only its tabs. */}
+        {isDeskLayout ? (
+          <Segmented
+            className="shortsSideTabs"
+            size={36}
+            label={t('shorts.comments.title')}
+            value={sideTab}
+            onChange={setSideTab}
+            options={[
+              { value: 'discussion', label: t('shorts.panel.discussion'), count: currentVideo.stats.comments || undefined },
+              { value: 'next', label: t('shorts.panel.upNext') },
+            ]}
+          />
+        ) : (
+          <ModalHeader className="commentsHeader" tone="cyan" title={t('shorts.comments.title')} onClose={handleToggleComments}>
+            <span className="commentsCount">{currentVideo.stats.comments}</span>
+          </ModalHeader>
+        )}
 
+        {sideTab === 'next' && isDeskLayout ? (
+          <div className="shortsUpNext">
+            {videos.slice(currentIndex + 1, currentIndex + 13).map((v, k) => (
+              <button
+                key={v.id || `${v.author}/${v.permlink}`}
+                type="button"
+                className="shortsUpNext__row"
+                onClick={() => jumpTo(currentIndex + 1 + k)}
+              >
+                <span className="shortsUpNext__thumb">
+                  {v.thumbnailUrl && <img src={v.thumbnailUrl} alt="" loading="lazy" onError={(e) => { e.currentTarget.style.display = 'none'; }} />}
+                </span>
+                <span className="shortsUpNext__text">
+                  <b>{v.heading || v.caption || v.title || t('shorts.chain.thisVideo')}</b>
+                  <span>@{v.author}{v.timeAgo && !String(v.timeAgo).includes('NaN') ? ` · ${v.timeAgo}` : ''}</span>
+                </span>
+              </button>
+            ))}
+            {videos.length - 1 <= currentIndex && (
+              <p className="shortsUpNext__empty">{hasMore ? t('shorts.loading') : t('shorts.feed.empty')}</p>
+            )}
+          </div>
+        ) : (
+        <>
         <div className="commentsList">
+          {currentVideo.comments?.length > 1 && (
+            <div className="commentsListHead">
+              <select
+                className="commentsSort v2-input is-select h32"
+                value={commentSort}
+                onChange={(e) => changeCommentSort(e.target.value)}
+                aria-label={t('comments.section.sortBy')}
+              >
+                <option value="newest">{t('comments.section.sortNewest')}</option>
+                <option value="oldest">{t('comments.section.sortOldest')}</option>
+                <option value="popular">{t('comments.section.sortPopular')}</option>
+              </select>
+            </div>
+          )}
           {commentsLoading ? (
             <div className="commentsLoading">
-              <Loader2 className="spinner" size={24} />
+              <Icon name="progress_activity" size={24} className="v2-spin" />
               <span>{t('shorts.comments.loading')}</span>
             </div>
           ) : currentVideo.comments?.length === 0 ? (
             <div className="noComments">
+              <Icon name={currentVideo.hivePostMissing ? 'comments_disabled' : 'chat_bubble'} size={28} />
               <p>{currentVideo.hivePostMissing ? t('shorts.comments.closed') : t('shorts.comments.none')}</p>
               <span>
                 {currentVideo.hivePostMissing
@@ -4234,17 +4697,16 @@ const VideoShort = () => {
         </div>
 
         {/* Comment Input */}
+        {/* One row (18a): the box, then send. Write / Preview only once there is
+            something to preview. */}
         <div className="commentInput">
-          <div className="commentInputAvatar">
-            <HiveAvatar username={user || incubationHandle || 'guest'} srcOverride={!user && incubationHandle ? handleAvatar(incubationHandle) : undefined} size={null} alt="" badgeSize={11} />
-          </div>
           <CommentDropZone
             className="commentInputBox"
             images={mainCommentImages}
             value={newComment}
             setValue={setNewComment}
             disabled={!(user || incubationHandle) || postingComment || currentVideo.hivePostMissing}
-            toHtml={shortsCommentPreviewHtml}
+            toHtml={newComment ? shortsCommentPreviewHtml : null}
             previewMarkdownClass="commentText"
           >
           <textarea
@@ -4274,7 +4736,7 @@ const VideoShort = () => {
           {mainCommentEmoji.popup}
           </CommentDropZone>
           {(user || incubationHandle) && !currentVideo.hivePostMissing && (
-            <>
+            <span className={`commentInputTools${newComment ? ' is-shown' : ''}`}>
               <EmojiGifPicker
                 align="right"
                 openDirection="up"
@@ -4282,16 +4744,20 @@ const VideoShort = () => {
                 onPickGif={(url) => insertAtCursor(mainCommentRef.current, newComment, gifMarkdown(url), setNewComment)}
               />
               <CommentImageButton uploading={mainCommentImages.uploading} onFiles={mainCommentImages.upload} />
-            </>
+            </span>
           )}
           <button
+            type="button"
             className="sendCommentBtn"
             onClick={() => handlePostComment(currentVideo.author, currentVideo.hivePermlink || currentVideo.permlink, newComment, false, !!currentVideo._incubation)}
             disabled={!(user || incubationHandle) || !newComment.trim() || postingComment || currentVideo.hivePostMissing}
+            aria-label={t('shorts.comments.send')}
           >
-            {postingComment ? <Loader2 size={18} className="spinner" /> : <Send size={18} />}
+            {postingComment ? <Icon name="progress_activity" size={20} className="v2-spin" /> : <Icon name="send" size={20} />}
           </button>
         </div>
+        </>
+        )}
       </div>
       </div>,
       document.body
@@ -4311,8 +4777,8 @@ const VideoShort = () => {
 
       {/* Mobile-only quick comment bar at the bottom (replaces the app nav bar
           on the shorts view). Hidden while the full comments panel is open, and
-          OFF by default — enable it in Settings ("Comment bar on shorts"). */}
-      {!showComments && shortsCommentBar && (
+          OFF by default: enable it in Settings ("Comment bar on shorts"). */}
+      {!showComments && shortsCommentBar && !isStoryView && (
         <div className="shortsBottomComment">
           <CommentDropZone
             className="commentInputBox"
@@ -4354,12 +4820,13 @@ const VideoShort = () => {
             </>
           )}
           <button
+            type="button"
             className="sendCommentBtn"
             onClick={() => handlePostComment(currentVideo.author, currentVideo.hivePermlink || currentVideo.permlink, newComment, false, !!currentVideo._incubation)}
             disabled={!(user || incubationHandle) || !newComment.trim() || postingComment || currentVideo.hivePostMissing}
             aria-label={t('shorts.comments.send')}
           >
-            {postingComment ? <Loader2 size={18} className="spinner" /> : <Send size={18} />}
+            {postingComment ? <Icon name="progress_activity" size={20} className="v2-spin" /> : <Icon name="send" size={20} />}
           </button>
         </div>
       )}
@@ -4459,7 +4926,7 @@ const CommentItem = ({
         <div className="comment-collapsed-bar" onClick={() => setCollapsed(false)}>
           <img className="comment-collapsed-avatar" src={authorAvatar} alt="" />
           <span className="comment-collapsed-name">@{authorName}</span>
-          <ChevronUp size={16} className="comment-collapsed-chevron" />
+          <Icon name="expand_more" size={18} className="comment-collapsed-chevron" />
         </div>
       </div>
     );
@@ -4483,23 +4950,23 @@ const CommentItem = ({
         <div className="commentContent">
           <div className="commentMeta">
             {authorName ? (
-              <Link to={`/@${authorName}`} className="commentUsername" onClick={(e) => e.stopPropagation()}>@{authorName}</Link>
+              <Link to={`/@${authorName}`} className="commentUsername" onClick={(e) => e.stopPropagation()}>{authorName}</Link>
             ) : (
               <span className="commentUsername">{comment.user?.username}</span>
             )}
-            <span className="commentTime">{comment.timeAgo}</span>
+            {comment.timeAgo && <span className="commentTime">· {comment.timeAgo}</span>}
             {isPinned && (
-              <span className="commentPinned"><MdPushPin size={12} />{t('comments.section.pinnedByCreator')}</span>
+              <span className="commentPinned"><Icon name="push_pin" size={12} fill />{t('comments.section.pinnedByCreator')}</span>
             )}
-            <span className="comment-collapse-chevron" onClick={() => setCollapsed(true)}><ChevronUp size={16} /></span>
+            <button type="button" className="comment-collapse-chevron" onClick={() => setCollapsed(true)} aria-label={t('common.actions.showLess')}><Icon name="expand_less" size={18} /></button>
           </div>
           <div className="commentText markdown-view" dangerouslySetInnerHTML={{ __html: getCommentHtml() }} />
           {translatedText && (
             <div className="comment-translation">
               <div className="comment-translation-header">
-                <MdTranslate size={12} />
+                <Icon name="translate" size={14} />
                 <span>{t('shorts.comments.translation')}</span>
-                <button className="comment-translation-dismiss" onClick={() => { setTranslatedText(null); clearTranslation?.(comment.permlink); }}>&times;</button>
+                <button type="button" className="comment-translation-dismiss" aria-label={t('common.actions.close')} onClick={() => { setTranslatedText(null); clearTranslation?.(comment.permlink); }}><Icon name="close" size={14} /></button>
               </div>
               <p>{translatedText}</p>
             </div>
@@ -4507,25 +4974,18 @@ const CommentItem = ({
           {translateError && <div className="comment-translation comment-translation--error"><p>{t('shorts.comments.translationFailed')}</p></div>}
           <div className="commentActions">
             <button
+              type="button"
               className={`comment-report-btn${isReported('comment', `${comment.author}/${comment.permlink}`) ? ' reported' : ''}`}
               onClick={() => setIsReportOpen(true)}
               title={t('shorts.comments.reportComment')}
+              aria-label={t('shorts.comments.reportComment')}
             >
-              <MdFlag size={14} />
+              <Icon name="flag" size={16} fill={isReported('comment', `${comment.author}/${comment.permlink}`)} />
             </button>
             <TranslateButton onTranslate={handleTranslate} isTranslating={!!translating?.[comment.permlink]} compact />
+            <span className="commentReward">{rewardLabel(comment.stats?.total_hive_reward ?? 0)}</span>
             <button
-              className={`commentActionBtn ${comment.has_voted ? 'liked' : ''}`}
-              onClick={() => toggleVoteTooltip(comment.author, comment.permlink)}
-            >
-              <Heart size={14} fill={comment.has_voted ? '#ff2d55' : 'none'} />
-              <span>{comment.stats?.num_likes ?? 0}</span>
-            </button>
-            <div className="commentReward">
-              <GiTwoCoins size={14} />
-              <span>{rewardLabel(comment.stats?.total_hive_reward ?? 0)}</span>
-            </div>
-            <button
+              type="button"
               className="replyBtn"
               onClick={() => {
                 setActiveReply(comment.permlink);
@@ -4535,7 +4995,7 @@ const CommentItem = ({
               {t('common.actions.reply')}
             </button>
             {onTogglePin && depth === 0 && (
-              <button className="replyBtn" onClick={() => onTogglePin(comment)} disabled={pinBusy}>
+              <button type="button" className="replyBtn" onClick={() => onTogglePin(comment)} disabled={pinBusy}>
                 {isPinned ? t('comments.section.unpin') : t('comments.section.pin')}
               </button>
             )}
@@ -4596,13 +5056,14 @@ const CommentItem = ({
                   <CommentImageButton uploading={replyImages.uploading} onFiles={replyImages.upload} />
                 </div>
                 <div className="replyActions">
-                  <button onClick={() => setActiveReply(null)}>{t('common.actions.cancel')}</button>
+                  <button type="button" onClick={() => setActiveReply(null)}>{t('common.actions.cancel')}</button>
                   <button
+                    type="button"
                     className="submitReply"
                     onClick={() => handlePostComment(authorName, comment.permlink, replyText, true, comment.onChain === false)}
                     disabled={!replyText.trim() || postingComment}
                   >
-                    {postingComment ? <Loader2 size={14} className="spinner" /> : t('common.actions.reply')}
+                    {postingComment ? <Icon name="progress_activity" size={16} className="v2-spin" /> : t('common.actions.reply')}
                   </button>
                 </div>
               </div>
@@ -4612,14 +5073,27 @@ const CommentItem = ({
           {/* Show replies toggle */}
           {hasChildren && (
             <button
+              type="button"
               className="viewRepliesBtn"
               onClick={() => setShowReplies(!showReplies)}
+              aria-expanded={showReplies}
             >
               {showReplies ? t('shorts.comments.hideReplies', { count: comment.children.length }) : t('shorts.comments.viewReplies', { count: comment.children.length })}
-              <ArrowDown size={14} style={{ transform: showReplies ? 'rotate(180deg)' : 'none' }} />
+              <Icon name={showReplies ? 'expand_less' : 'expand_more'} size={16} />
             </button>
           )}
         </div>
+        {/* The vote, in its own column on the right (18a) */}
+        <button
+          type="button"
+          className={`commentVote${comment.has_voted ? ' liked' : ''}`}
+          onClick={() => toggleVoteTooltip(comment.author, comment.permlink)}
+          aria-pressed={!!comment.has_voted}
+          aria-label={t('watch.actions.vote')}
+        >
+          <Icon name="arrow_upward" size={18} fill={!!comment.has_voted} />
+          <span>{comment.stats?.num_likes ?? 0}</span>
+        </button>
       </div>
 
       {/* Nested replies — outside the flex row, with thread line */}

@@ -9,7 +9,7 @@
     },
     "upload": {
       "title": "Uploaden is uitgeschakeld voor je account",
-      "body": "Je 3Speak-account mag op dit moment niet uploaden. Denk je dat dit een vergissing is? Neem dan contact op met 3Speak-support."
+      "body": "Je account mag op dit moment niet uploaden. Denk je dat dit een vergissing is? Neem dan contact op met 3Speak-support."
     }
   },
   "uploadBlock": {
@@ -18,7 +18,7 @@
   },
   "emergency": {
     "title": "We hebben wat problemen met onze infrastructuur",
-    "body": "Ons team is ermee bezig en werkt er nu aan om 3Speak weer online te krijgen. Kom naar onze Discord om ons te bereiken en live updates te krijgen — bedankt voor je geduld.",
+    "body": "Ons team werkt er nu aan om 3Speak weer online te krijgen. Kom naar onze Discord voor live updates.",
     "joinDiscord": "Naar onze Discord"
   },
   "changelog": {
@@ -87,7 +87,7 @@
     "lookAround": "Ik wil alleen even rondkijken"
   },
   "interests": {
-    "saved": "Interesses opgeslagen — je kunt ze altijd wijzigen in Instellingen",
+    "saved": "Interesses opgeslagen. Je kunt ze altijd wijzigen in Instellingen",
     "saveFailed": "Interesses konden niet worden opgeslagen",
     "title": "Waar hou je van?",
     "body": "Kies een paar onderwerpen die je leuk vindt en we laten je meer content zien die bij je past. Je kunt ze altijd wijzigen in <b>Instellingen</b>.",
@@ -105,27 +105,27 @@
     "things": {
       "postVideos": {
         "title": "Video's plaatsen",
-        "text": "Upload lange video's die van jou blijven, op een chain waar niemand ze stilletjes van kan verwijderen."
+        "text": "Lange video's die van jou blijven"
       },
       "filmShorts": {
         "title": "Shorts filmen",
-        "text": "Iets snels, verticaals en makkelijk te delen. Ideaal om je eerste kijkers te vinden."
+        "text": "Snel, verticaal, makkelijk te delen"
       },
       "goLive": {
         "title": "Live gaan",
-        "text": "Stream naar je mensen, haal gasten op het podium en bewaar de opname achteraf."
+        "text": "Haal gasten op het podium, bewaar de opname"
       },
       "buildCommunity": {
         "title": "Bouw een community",
-        "text": "Begin een plek rond iets waar je om geeft, of word lid van een die al bruist."
+        "text": "Begin een plek of word lid van een"
       },
       "makeFriends": {
         "title": "Maak echte vrienden",
-        "text": "Reageer, chat en werk samen met echte mensen die er voor elkaar zijn."
+        "text": "Reageer, chat en werk samen"
       },
       "getInspired": {
         "title": "Laat je inspireren, doe mee",
-        "text": "Ontdek makers, steun degenen van wie je houdt, en verdien er ondertussen aan."
+        "text": "Steun makers en verdien zelf ook"
       }
     },
     "advertiserThings": {
@@ -174,7 +174,10 @@
     "uploading": "Uploaden…",
     "interestsHint": "Hiermee kiezen we wat er op je startpagina verschijnt. Kies er zoveel als je wilt, of geen, en wijzig ze wanneer je wilt.",
     "interestsFineprint": "Opgeslagen op je Hive-account, zodat elke Hive-app hetzelfde profiel en dezelfde interesses toont.",
-    "saveAndExplore": "Opslaan en gaan ontdekken"
+    "saveAndExplore": "Opslaan en gaan ontdekken",
+    "eyebrow": "Welkom",
+    "stepOf": "Stap {{n}} van {{total}}",
+    "profileFineprint": "Opgeslagen in je Hive-account, zodat elke Hive-app hetzelfde profiel toont."
   },
   "profileEdit": {
     "updated": "Profiel bijgewerkt",
@@ -193,7 +196,7 @@
     "uploadBanner": "Profielbanner uploaden",
     "changeBanner": "Banner wijzigen",
     "addBanner": "Banner toevoegen",
-    "bannerHint": "Het mooist op <b>2800 × 684</b> px (of een andere 4:1-afbeelding). Houd het belangrijkste in het midden: de zijkanten vallen weg op smalle schermen en je naam staat linksonder.",
+    "bannerHint": "Houd het belangrijkste in het midden: de zijkanten vallen weg op smalle schermen en je naam staat linksonder.",
     "uploadPicture": "Profielfoto uploaden",
     "pictureLabel": "Profielfoto",
     "pictureHint": "Een gezicht of logo werkt het best. Vierkant, 400 × 400 px of groter. Maximaal 8 MB.",
@@ -201,7 +204,7 @@
     "namePlaceholderUser": "Hoe mogen we je noemen? (@{{username}})",
     "namePlaceholder": "Hoe mogen we je noemen?",
     "shortBio": "Korte bio",
-    "bioPlaceholder": "Wat maak je, en wat kunnen mensen van je verwachten?",
+    "bioPlaceholder": "Wat maak je, en wat kunnen mensen verwachten?",
     "location": "Locatie",
     "optional": "optioneel",
     "locationPlaceholder": "Waar ter wereld ben je?"

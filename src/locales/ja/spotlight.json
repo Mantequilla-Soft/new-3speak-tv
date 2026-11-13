@@ -208,7 +208,7 @@
       "imageUploadFailed": "画像のアップロードに失敗しました: {{error}}",
       "tryAgain": "もう一度お試しください",
       "styleApplied": "すべての{{type}}ブロックにスタイルを適用しました",
-      "templateApplied": "「{{name}}」を適用しました。調整するか、元に戻せます",
+      "templateApplied": "「{{name}}」を適用しました。調整するか、元に戻せます。",
       "reverted": "以前のデザインに戻しました",
       "saved": "スポットライトを Hive プロフィールに保存しました",
       "saveFailed": "保存できませんでした",
@@ -263,9 +263,9 @@
       "showPosts_other": "{{count}} 件の投稿を表示",
       "perRow": "1 行に {{value}} 件",
       "hiveRecentHint": "最新のトップレベルの投稿（リブログやクロスポストは除く）。自動で更新されます。",
-      "linkPlaceholder": "Hive の投稿、Instagram、X、YouTube、記事など、どんなリンクでも貼り付け…",
+      "linkPlaceholder": "リンクを貼り付け: Hive の投稿、Instagram、X、YouTube、記事…",
       "fetching": "プレビューを取得中…",
-      "noPreview": "プレビューが見つかりません。リンクカードとして表示されます。",
+      "noPreview": "プレビューが見つかりません。リンクカードとしては表示されます。",
       "pasteHint": "リンクを貼り付けると、タイトル、説明、画像を取り込みます。"
     },
     "style": {
@@ -294,8 +294,8 @@
     "openPage": "ページを開く",
     "templates": {
       "title": "テンプレート",
-      "hint": "デザインを選ぶとすべてが設定されます。自己紹介は残り、元に戻すこともできます。",
-      "undo": "テンプレートを元に戻す — 自分のデザインに戻る"
+      "hint": "デザインを選ぶとすべてが設定されます。自己紹介はそのまま残り、元に戻すこともできます。",
+      "undo": "テンプレートを取り消して自分のデザインに戻す"
     },
     "profile": {
       "title": "プロフィール",

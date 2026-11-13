@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
+import { Icon } from '../v2/Icon';
 import './ShortsAdOverlay.scss';
 
 /**
@@ -59,6 +60,7 @@ export default function ShortsAdOverlay({ brand, secondsLeft, loading }) {
           <strong>{brand.productName || brand.account}</strong>
           {brand.slogan && <span className="mkt-shortad-slogan">{brand.slogan}</span>}
         </span>
+        {brand.clickUrl && <Icon name="open_in_new" size={18} className="mkt-shortad-open" />}
       </a>
     </div>
   );

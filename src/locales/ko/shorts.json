@@ -16,7 +16,8 @@
       "rep": "평판 {{rep}}",
       "repTitle": "Hive 평판",
       "viewProfile": "프로필 보기"
-    }
+    },
+    "replyTo": "{{user}}님에게 답장…"
   },
   "errors": {
     "votingUnavailable": "이 게시물에는 투표할 수 없어요",
@@ -30,7 +31,7 @@
     "interestsTitle": "내 관심사에 맞는 쇼츠만",
     "pickInterestsFirst": "먼저 관심사를 선택하세요",
     "noInterests": "아직 관심사를 선택하지 않았어요. 설정에서 선택하세요",
-    "interestsExhausted": "관심사에 맞는 쇼츠를 모두 봤어요. 탐색을 표시할게요",
+    "interestsExhausted": "관심사에 맞는 쇼츠를 모두 봤어요. 탐색을 표시할게요.",
     "noInterestMatches": "지금은 관심사에 맞는 쇼츠가 없어요.",
     "switchToDiscover": "탐색으로 전환",
     "empty": "볼 수 있는 쇼츠가 없어요",
@@ -39,12 +40,18 @@
   "glow": {
     "subtle": "앰비언트 조명: 은은하게",
     "vivid": "앰비언트 조명: 선명하게",
-    "off": "앰비언트 조명: 꺼짐"
+    "off": "앰비언트 조명: 꺼짐",
+    "label": "앰비언트 조명",
+    "offShort": "끄기",
+    "subtleShort": "은은하게",
+    "vividShort": "선명하게"
   },
   "playbackMode": {
     "autoReplay": "자동 반복",
     "autoSwipe": "자동 넘기기",
-    "manual": "수동"
+    "manual": "수동",
+    "label": "재생",
+    "options": "재생 옵션"
   },
   "subtitles": {
     "off": "끄기"
@@ -82,7 +89,7 @@
     "noUrl": "리믹스할 동영상 URL을 확인하지 못했어요",
     "loadFailed": "리믹스할 동영상을 불러오지 못했어요",
     "chainFull": "이 동영상은 이미 이전 동영상 {{max}}개를 바탕으로 만들어져서 더는 리믹스할 수 없어요.",
-    "chainNoSlots": "이 리믹스 체인은 이미 많은 크리에이터에게 보상을 나누고 있어서 Hive에 리믹스를 더 넣을 자리가 없어요. 3Speak Pro로는 계속 리믹스할 수 있어요."
+    "chainNoSlots": "이 체인은 이미 많은 크리에이터에게 보상을 나누고 있어서 리믹스하면 Hive에 자리가 남지 않아요. 3Speak Pro로는 계속 리믹스할 수 있어요."
   },
   "watchLater": {
     "loginRequired": "쇼츠를 저장하려면 로그인하세요",
@@ -99,7 +106,7 @@
     "postRemoved": "이 쇼츠의 Hive 게시물이 삭제되어 더 이상 댓글이나 투표를 받을 수 없어요.",
     "beFirst": "첫 댓글을 남겨 보세요!",
     "unavailable": "이 게시물에는 댓글을 달 수 없어요",
-    "addPlaceholder": "댓글 추가...",
+    "addPlaceholder": "토론에 참여하세요…",
     "addPlaceholderBar": "댓글 추가…",
     "loginPlaceholder": "댓글을 달려면 로그인하세요",
     "send": "댓글 보내기",
@@ -126,7 +133,7 @@
     "seenNote": "로그인했고 시청 기록을 켜 둔 시청자예요.",
     "seenEmpty": "아직 아무도 보지 않았어요.",
     "keep": "쇼츠로 남기기",
-    "keepHint": "24시간이 지나도 채널에 남아요",
+    "keepHint": "24시간이 지나도 채널에 남아요.",
     "keepConfirm": "계속 남겨 둘까요?",
     "keepYes": "남기기",
     "keeping": "남기는 중…",
@@ -137,5 +144,9 @@
   "audiogram": {
     "fullEpisode": "전체 에피소드",
     "listen": "전체 에피소드 듣기: {{title}}"
+  },
+  "panel": {
+    "discussion": "토론",
+    "upNext": "다음 재생"
   }
 }

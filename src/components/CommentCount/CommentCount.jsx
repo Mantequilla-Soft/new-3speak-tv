@@ -1,6 +1,6 @@
-import { FaRegComment } from 'react-icons/fa';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
+import { Icon } from '../v2/Icon';
 import './CommentCount.scss';
 
 /**
@@ -11,7 +11,7 @@ import './CommentCount.scss';
 function CommentCount({ count, size, title }) {
   const { t } = useTranslation();
   if (count == null) return null;
-  const iconSize = size ? Math.round(size * 1.02) : undefined;
+  const iconSize = size ? Math.round(size * 1.1) : 13;
 
   return (
     <div
@@ -19,7 +19,7 @@ function CommentCount({ count, size, title }) {
       style={size ? { fontSize: size } : undefined}
       title={title ?? t('common.units.comments', { count })}
     >
-      <FaRegComment className="comment-count-icon" size={iconSize || undefined} />
+      <Icon name="chat_bubble" size={iconSize} className="comment-count-icon" />
       <span>{count}</span>
     </div>
   );

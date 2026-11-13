@@ -5,11 +5,11 @@
   "supportBlock": {
     "banned": {
       "title": "Twoje konto jest zablokowane",
-      "body": "Twoje konto 3Speak zostało zablokowane, więc nie możesz się zalogować. Jeśli uważasz, że to pomyłka, skontaktuj się z pomocą techniczną 3Speak."
+      "body": "Twoje konto 3Speak zostało zablokowane, więc nie możesz się zalogować. Jeśli uważasz, że to pomyłka, skontaktuj się z pomocą 3Speak."
     },
     "upload": {
       "title": "Przesyłanie jest wyłączone dla twojego konta",
-      "body": "Twoje konto 3Speak nie może teraz przesyłać filmów. Jeśli uważasz, że to pomyłka, skontaktuj się z pomocą techniczną 3Speak."
+      "body": "Twoje konto nie może teraz przesyłać treści. Jeśli uważasz, że to pomyłka, skontaktuj się z pomocą 3Speak."
     }
   },
   "uploadBlock": {
@@ -18,7 +18,7 @@
   },
   "emergency": {
     "title": "Mamy problemy z infrastrukturą",
-    "body": "Nasz zespół już nad tym pracuje i stara się jak najszybciej przywrócić 3Speak. Dołącz do naszego Discorda, aby się z nami skontaktować i otrzymywać bieżące informacje — dziękujemy za cierpliwość.",
+    "body": "Nasz zespół właśnie pracuje nad przywróceniem 3Speak. Dołącz do naszego Discorda, aby otrzymywać bieżące informacje.",
     "joinDiscord": "Dołącz do naszego Discorda"
   },
   "changelog": {
@@ -87,7 +87,7 @@
     "lookAround": "Chcę się tylko rozejrzeć"
   },
   "interests": {
-    "saved": "Zainteresowania zapisane — możesz je zmienić w każdej chwili w Ustawieniach",
+    "saved": "Zainteresowania zapisane. Możesz je zmienić w każdej chwili w Ustawieniach",
     "saveFailed": "Nie udało się zapisać zainteresowań",
     "title": "Co cię interesuje?",
     "body": "Wybierz kilka ulubionych tematów, a pokażemy ci więcej treści, które lubisz. Możesz je zmienić w każdej chwili w <b>Ustawieniach</b>.",
@@ -105,27 +105,27 @@
     "things": {
       "postVideos": {
         "title": "Publikuj filmy",
-        "text": "Przesyłaj długie filmy, które pozostają twoje, na blockchainie, z którego nikt nie może ich po cichu usunąć."
+        "text": "Długie filmy, które pozostają twoje"
       },
       "filmShorts": {
         "title": "Nagrywaj Shorts",
-        "text": "Coś krótkiego, pionowego i łatwego do udostępnienia. Świetny sposób na zdobycie pierwszych widzów."
+        "text": "Krótkie, pionowe, łatwe do udostępnienia"
       },
       "goLive": {
         "title": "Nadawaj na żywo",
-        "text": "Transmituj dla swoich ludzi, zapraszaj gości na scenę i zachowaj nagranie na później."
+        "text": "Zapraszaj gości na scenę, zachowaj nagranie"
       },
       "buildCommunity": {
         "title": "Zbuduj społeczność",
-        "text": "Stwórz miejsce wokół tego, co jest dla ciebie ważne, albo dołącz do takiego, które już tętni życiem."
+        "text": "Stwórz miejsce albo dołącz do istniejącego"
       },
       "makeFriends": {
         "title": "Poznaj prawdziwych przyjaciół",
-        "text": "Komentuj, czatuj i współpracuj z prawdziwymi ludźmi, którzy się wzajemnie wspierają."
+        "text": "Komentuj, czatuj i współpracuj"
       },
       "getInspired": {
         "title": "Zainspiruj się, zaangażuj się",
-        "text": "Odkrywaj twórców, wspieraj tych, których lubisz, i zarabiaj przy okazji."
+        "text": "Wspieraj twórców i zarabiaj przy okazji"
       }
     },
     "advertiserThings": {
@@ -174,7 +174,10 @@
     "uploading": "Przesyłanie…",
     "interestsHint": "Na tej podstawie wybieramy, co pojawia się na twojej stronie głównej. Wybierz dowolnie wiele albo nic i zmieniaj, kiedy chcesz.",
     "interestsFineprint": "Zapisane na twoim koncie Hive, więc każda aplikacja Hive pokazuje ten sam profil i te same zainteresowania.",
-    "saveAndExplore": "Zapisz i zacznij odkrywać"
+    "saveAndExplore": "Zapisz i zacznij odkrywać",
+    "eyebrow": "Witaj",
+    "stepOf": "Krok {{n}} z {{total}}",
+    "profileFineprint": "Zapisane na twoim koncie Hive, więc każda aplikacja Hive pokaże ten sam profil."
   },
   "profileEdit": {
     "updated": "Profil zaktualizowany",
@@ -193,7 +196,7 @@
     "uploadBanner": "Prześlij baner profilu",
     "changeBanner": "Zmień baner",
     "addBanner": "Dodaj baner",
-    "bannerHint": "Najlepiej <b>2800 × 684</b> px (lub dowolny obraz 4:1). Najważniejsze elementy umieść na środku: boki są przycinane na wąskich ekranach, a twoja nazwa wyświetla się w lewym dolnym rogu.",
+    "bannerHint": "Najważniejsze elementy umieść na środku: boki są przycinane na wąskich ekranach, a twoja nazwa wyświetla się w lewym dolnym rogu.",
     "uploadPicture": "Prześlij zdjęcie profilowe",
     "pictureLabel": "Zdjęcie profilowe",
     "pictureHint": "Najlepiej sprawdza się twarz lub logo. Kwadrat, 400 × 400 px lub większy. Do 8MB.",
@@ -201,7 +204,7 @@
     "namePlaceholderUser": "Jak mamy się do ciebie zwracać? (@{{username}})",
     "namePlaceholder": "Jak mamy się do ciebie zwracać?",
     "shortBio": "Krótki opis",
-    "bioPlaceholder": "Co tworzysz i czego ludzie mogą się po tobie spodziewać?",
+    "bioPlaceholder": "Co tworzysz i czego ludzie mogą się spodziewać?",
     "location": "Lokalizacja",
     "optional": "opcjonalnie",
     "locationPlaceholder": "W jakim miejscu świata jesteś?"

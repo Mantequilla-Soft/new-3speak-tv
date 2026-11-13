@@ -48,7 +48,7 @@
     "curated": "Seçildi",
     "noCues": "İşaret yok.",
     "clearQueue": "Sırayı temizle",
-    "clearAll": "Tümünü temizle",
+    "clearAll": "Temizle",
     "queueMoveUp": "{{title}} yukarı taşı",
     "queueMoveDown": "{{title}} aşağı taşı",
     "queueRemove": "{{title}} sıradan kaldır",
@@ -59,7 +59,7 @@
     "collapse": "Oynatıcıyı daralt",
     "skipBack": "{{seconds}} saniye geri",
     "skipForward": "{{seconds}} saniye ileri",
-    "speed": "Oynatma hızı",
+    "speed": "Hız",
     "speedValue": "Oynatma hızı: {{speed}}",
     "sleep": "Uyku zamanlayıcısı",
     "sleepOff": "Kapalı",
@@ -76,8 +76,8 @@
     "effectsChecking": "Bu bölümün destekleyip desteklemediği kontrol ediliyor…",
     "timeSaved": "Kazanılan süre: {{time}}",
     "cast": "Başka bir cihazda oynat",
-    "download": "Çevrimdışı için kaydet",
-    "downloading": "Kaydediliyor: %{{pct}}",
+    "download": "İndir",
+    "downloading": "Çevrimdışı için kaydediliyor: %{{pct}}",
     "downloaded": "Çevrimdışı için kaydedildi",
     "downloadDone": "Çevrimdışı dinlemek için kaydedildi",
     "downloadFailed": "Bu bölüm kaydedilemedi",
@@ -101,8 +101,17 @@
     "nextChapter": "Sonraki kısım",
     "chapterLink": "Kısım bağlantısı",
     "upNext": "Sıradaki",
-    "hideIdle": "Gizle (sıran kalır)",
-    "continueAt": "{{time}} noktasından devam et"
+    "hideIdle": "Gizle · sıra kalır",
+    "continueAt": "{{time}} noktasından devam et",
+    "position": "{{current}} / {{total}}",
+    "playingFrom": "{{name}} üzerinden çalıyor",
+    "atThisMoment": "Bu anda",
+    "goTo": "{{name}} sayfasına git",
+    "shuffle": "Karıştır",
+    "repeat": "Bu parçayı tekrarla",
+    "sleepMinutesShort": "{{minutes}} dk",
+    "swipeUp": "Oynatıcı için yukarı kaydır",
+    "commentAt": "{{time}} anında yorum yap…"
   },
   "share": {
     "failed": "Başarısız",
@@ -112,7 +121,16 @@
     "copied3speak": "3Speak bağlantısı kopyalandı!",
     "copyAudioPlayer": "Ses oynatıcı bağlantısını kopyala",
     "copiedAudioPlayer": "Ses oynatıcı bağlantısı kopyalandı!",
-    "searchingHive": "Hive'da aranıyor…"
+    "searchingHive": "Hive'da aranıyor…",
+    "title": "Parçayı paylaş",
+    "atTime": "{{time}} anından",
+    "peakd": "PeakD",
+    "player": "Oynatıcı bağlantısı",
+    "x": "X",
+    "telegram": "Telegram",
+    "email": "E-posta",
+    "qr": "QR",
+    "episode": "Bölüm bağlantısı"
   },
   "post": {
     "notFound": "Gönderi bulunamadı",
@@ -126,12 +144,14 @@
     "vote": "Oy ver",
     "signInToTip": "Bahşiş göndermek için giriş yap",
     "tip": "Bahşiş",
+    "albumLabel": "Albüm",
+    "notes": "Notlar",
     "stillIndexing": "Bu gönderinin sesi hâlâ dizinleniyor; birkaç dakika sonra tekrar dene."
   },
   "page": {
     "sections": {
       "popular": "Popüler",
-      "recent": "Yeni Çıkanlar",
+      "recent": "Yeni çıkanlar",
       "podcasts": "Podcast'ler",
       "songs": "Şarkılar",
       "audiobooks": "Sesli Kitaplar",
@@ -158,7 +178,7 @@
     "tracks_other": "{{count}} parça",
     "noTracks": "Parça bulunamadı.",
     "creators": "İçerik üreticileri",
-    "albumsPlaylists": "Albümler ve Oynatma Listeleri",
+    "albumsPlaylists": "Ses oynatma listeleri",
     "noAudioForFilters": "Bu filtrelerle ses bulunamadı.",
     "tabsLabel": "Ses görünümleri",
     "tabExplore": "Göz at",
@@ -171,6 +191,25 @@
   "upload": {
     "title": "Ses yükle",
     "publishing": "Yayınlanıyor…",
+    "nextTo": "Sonraki: {{step}}",
+    "publishAlbum_one": "Albümü yayınla · {{count}} parça",
+    "publishAlbum_other": "Albümü yayınla · {{count}} parça",
+    "publishWithShorts_one": "Ses + {{count}} Short yayınla",
+    "publishWithShorts_other": "Ses + {{count}} Shorts yayınla",
+    "side": {
+      "publishTo": "Yayınlanacak yer",
+      "shortsTitle": "Audiogram Shorts",
+      "clips_one": "{{count}} klip",
+      "clips_other": "{{count}} klip",
+      "tracks_one": "{{count}} parça",
+      "tracks_other": "{{count}} parça",
+      "audio": "Ses",
+      "shorts": "Shorts",
+      "snaps": "Snaps",
+      "community": "Topluluk",
+      "rss": "RSS akışı",
+      "clipLabel": "Short {{n}} küçük resmi: {{title}}"
+    },
     "failed": "Başarısız",
     "unknown": "bilinmiyor",
     "unknownError": "bilinmeyen hata",
@@ -191,7 +230,7 @@
       "review": "Gözden geçir"
     },
     "trackTypes": {
-      "voiceSnap": "Ses / Snap"
+      "voiceSnap": "Sesli not"
     },
     "toasts": {
       "pickImage": "Bir görsel dosyası seç",
@@ -232,13 +271,14 @@
       "discard": "Vazgeç"
     },
     "source": {
-      "dropHere": "Ses dosyalarını buraya bırak ya da göz atmak için tıkla",
-      "formats": "MP3, WAV, OGG, WEBM, M4A, FLAC, AAC; birden fazla dosya olabilir",
+      "dropHere": "Ses dosyalarını bırak ya da göz at",
+      "formats": "MP3, WAV, OGG, WEBM, M4A, FLAC, AAC · birden fazla olabilir",
       "stop": "Durdur",
       "orRecord": "Ya da canlı kaydet",
       "recordLimit": "Kayıt başına en fazla {{minutes}} dk",
       "record": "Kaydet",
-      "added": "Eklenenler ({{count}})"
+      "added": "Eklenenler ({{count}})",
+      "filesTitle": "Ses dosyaları"
     },
     "titles": {
       "help": "Her parçaya bir başlık ver ve bir tür seç. Müzik parçalarında tür + BPM alanları olur."
@@ -247,7 +287,10 @@
       "trackTitle": "Parça başlığı",
       "genre": "Tür",
       "bpm": "BPM",
-      "descriptionOptional": "Açıklama (isteğe bağlı)"
+      "descriptionOptional": "Açıklama (isteğe bağlı)",
+      "track": "Parça",
+      "category": "Kategori",
+      "musicGenre": "Müzik türü"
     },
     "playlist": {
       "helpRequired": "Zorunlu: bir oynatma listesi seç veya oluştur. Albüm gönderileri bir oynatma listesinin içinde durur, böylece parçaları bir 3Speak albümünde gruplanmış kalır. Bu, daha fazla görünürlük ve ses sayfasında daha öne çıkan bir yer sağlar.",
@@ -261,6 +304,7 @@
       "items_one": "{{count}} öğe",
       "items_other": "{{count}} öğe",
       "newPlaylist": "Yeni ses oynatma listesi",
+      "newAlbum": "Yeni albüm",
       "namePlaceholder": "Oynatma listesi adı",
       "public": "Herkese açık",
       "private": "Gizli",
@@ -268,6 +312,9 @@
       "creditsPlaceholder": "Emeği geçenler (isteğe bağlı)",
       "yearPlaceholder": "Yıl",
       "labelPlaceholder": "Plak şirketi (isteğe bağlı)",
+      "fieldYear": "Yıl",
+      "fieldLabel": "Plak şirketi",
+      "fieldCredits": "Emeği geçenler",
       "thumbAlt": "Albüm küçük resmi",
       "removeThumb": "Küçük resmi kaldır",
       "creating": "Oluşturuluyor…",
@@ -291,20 +338,21 @@
       "help_other": "{{count}} parça eklendi. Nasıl yayınlanacaklarını seç.",
       "howPublished": "Bu nasıl yayınlansın?",
       "snapsTitle": "Snap yorumları",
-      "snapsDesc": "Her ses, en son peak.snaps kapsayıcısının altında bir yanıt olarak paylaşılır ve Snaps akışında görünür (varsayılan).",
+      "snapsDesc": "Her ses, en son snaps dizisinin altında bir yanıt olur. Snaps akışında görünür.",
       "singleTitle": "Bağımsız gönderi",
       "singleTitleSingleOnly": "Bağımsız gönderi (yalnızca tek dosya)",
-      "singleDesc": "Başlık, topluluk, etiketler ve kapakla kendi üst düzey Hive gönderisinde tek bir ses.",
+      "singleDesc": "Başlık, topluluk, etiketler ve kapakla kendi gönderisinde tek bir ses.",
       "albumTitle": "Albüm gönderisi",
       "albumTitleNeeds2": "Albüm gönderisi (2+ dosya gerekir)",
-      "albumDesc": "Açılış sayfası görevi gören bir ana gönderi (ses yok); her parça kendi kapağı, açıklaması, ödemesi ve lehtarlarıyla bir yorum yanıtı olarak yayınlanır.",
-      "howEarn": "Bu ses nasıl kazansın?",
-      "postRewardsTitle": "Gönderi ödülleri (tek seferlik)",
-      "postRewardsDesc": "Normal Hive yazar ödemesini alırsın; yayınlandıktan yaklaşık 7 gün sonra bir kez ödenir.",
-      "pplTitle": "Dinleme başına ödeme (ömür boyu)",
-      "pplDesc": "Tüm ses gönderisi ödülleri @{{account}} hesabına gider. Tek bir ödeme yerine, bir 3Speak programı parçanın ömrü boyunca sana dinleme başına ödeme yapar.",
+      "albumDesc": "Bir ana açılış gönderisi; her parça kendi kapağı ve ödemesiyle bir yanıt olarak.",
+      "howEarn": "Nasıl kazansın?",
+      "postRewardsTitle": "Gönderi ödülleri",
+      "postRewardsDesc": "Normal Hive ödemesi, bir kez, yayından yaklaşık 7 gün sonra",
+      "pplTitle": "Dinleme başına ödeme",
+      "pplDesc": "Bir 3Speak programı parçanın ömrü boyunca sana dinleme başına ödeme yapar. Gönderi ödülleri @{{account}} hesabına gider.",
       "adsTitle": "Bu seste reklamlar",
-      "adsHint": "Bu sesin sırasında kısa, seslendirilmiş bir sponsor mesajı çalabilir ve sen bir pay alırsın. Hesap ayarınla başlar; burada yalnızca bu yükleme için değiştir."
+      "adsHint": "Bu sesin sırasında kısa, seslendirilmiş bir sponsor mesajı çalabilir ve sen bir pay alırsın. Hesap ayarınla başlar; burada yalnızca bu yükleme için değiştir.",
+      "adsSpoken": "Bu seste seslendirilmiş sponsor mesajı"
     },
     "reward": {
       "distribution": "Ödül dağılımı",
@@ -330,6 +378,8 @@
       "helpAlbum": "Her parça ana gönderinin altında bir yorum olarak yayınlanır. Ortak değerleri bir kez ayarlayıp hepsine uygula, sonra parça bazında değiştir.",
       "helpSnaps": "Her parça kendi snap'i olarak yayınlanır. Ortak değerleri bir kez ayarlayıp hepsine uygula, sonra parça bazında değiştir.",
       "applyToAllHeading": "Tüm parçalara uygula",
+      "applyNote_one": "<b>{{count}} parçanın tümüne uygula:</b> ortak açıklama ve kapak, sonra istediğin parçayı ayrıca değiştir.",
+      "applyNote_other": "<b>{{count}} parçanın tümüne uygula:</b> ortak açıklama ve kapak, sonra istediğin parçayı ayrıca değiştir.",
       "sharedDescription": "Ortak açıklama (isteğe bağlı)",
       "sharedCover": "Ortak kapak görseli",
       "applyToAll_one": "{{count}} parçanın tümüne uygula",
@@ -400,11 +450,37 @@
       "couldNotLoad": "Audiogram yüklenemedi: {{error}}",
       "rowTitle": "Short: {{title}}",
       "withAudio": "Bu sesle birlikte paylaşılır"
+    },
+    "transcript": {
+      "make": "Döküm oluştur",
+      "again": "Dökümü yeniden oluştur",
+      "hint": "Söylenenleri ({{language}}) yazar ve metninin altına ekler, orada hâlâ değiştirebilirsin.",
+      "reading": "Ses okunuyor...",
+      "writing": "Yazılıyor... %{{percent}}",
+      "added": "Döküm metninin altına eklendi. Bir göz at: bazı kelimeler yanlış olabilir.",
+      "shortened": "Döküm eklendi, bir gönderiye sığması için kısaltıldı.",
+      "empty": "Bu seste konuşma bulunamadı.",
+      "failed": "Döküm oluşturulamadı. Lütfen tekrar dene.",
+      "heading": "Döküm",
+      "language": "Sesin dili",
+      "waitPublish": "Bir döküm hâlâ oluşturuluyor. Bitmesini bekle ya da önce iptal et."
+    },
+    "teleprompter": {
+      "title": "Teleprompter",
+      "subtitle": "Söyleyeceklerini yaz ve kayıt sırasında oku",
+      "placeholder": "Söyleyeceklerini yaz ya da yapıştır. Kayıt sırasında büyük görünür.",
+      "followsVoice": "Sesini takip eder",
+      "steady": "Sabit hızla ilerler",
+      "voiceStopped": "Ses takibi durdu, sabit hızla ilerliyor",
+      "wpm": "Dakikada {{n}} kelime",
+      "slower": "Daha yavaş",
+      "faster": "Daha hızlı"
     }
   },
   "podcasts": {
     "chip": "Harici",
     "chipHint": "3Speak dışından, herhangi bir RSS akışından podcast'ler",
+    "on3speak": "3Speak'te",
     "follow": "Takip et",
     "following": "Takip ediliyor",
     "unfollow": "Takibi bırak",
@@ -432,6 +508,7 @@
     "allPodcasts": "Tüm podcast'ler",
     "openShow": "Podcast'i aç",
     "play": "Bölümü oynat",
+    "playTrack": "Parçayı oynat",
     "pause": "Duraklat",
     "episodePage": "Bölüm sayfası",
     "website": "Web sitesi",
@@ -450,6 +527,7 @@
     "notifyOnDone": "Yeni bölümlerden haberdar edileceksin",
     "notifyOffDone": "Bu podcast için artık bildirim yok",
     "notifyHint": "Yeni bölüm çıktığında bildirim al",
+    "notifyLabel": "Yeni bölümleri bildir",
     "search": {
       "button": "Ara",
       "results_one": "{{count}} podcast bulundu",
@@ -470,8 +548,8 @@
       "export": "OPML dışa aktar",
       "invalid": "Bu bir OPML dosyası değil.",
       "empty": "Bu dosyada podcast akışı bulunamadı.",
-      "imported_one": "{{count}} podcast takip edildi, eklenemeyen: {{failed}}. Yeni akışlar önümüzdeki dakikalarda yüklenir.",
-      "imported_other": "{{count}} podcast takip edildi, eklenemeyen: {{failed}}. Yeni akışlar önümüzdeki dakikalarda yüklenir."
+      "imported_one": "{{count}} podcast takip edildi, {{failed}} tanesi eklenemedi. Yeni akışlar önümüzdeki birkaç dakikada yüklenir.",
+      "imported_other": "{{count}} podcast takip edildi, {{failed}} tanesi eklenemedi. Yeni akışlar önümüzdeki birkaç dakikada yüklenir."
     },
     "errors": {
       "signIn": "Podcast takip etmek için giriş yap.",
@@ -485,14 +563,15 @@
       "internal": "Bu bir 3Speak kanalı: onu diğer ses türlerinin altında bulabilirsin.",
       "disabled": "Harici podcast'ler şu anda kapalı.",
       "generic": "Bir şeyler ters gitti. Lütfen tekrar dene.",
-      "closedPlatform": "{{platform}} programlarının beslemelerini paylaşmıyor. Programı adıyla ara.",
+      "closedPlatform": "{{platform}} programlarının akışlarını paylaşmıyor. Bunun yerine programı adıyla ara.",
       "appleOnly": "Bu program yalnızca Apple Podcasts’te var.",
       "directoryNotFound": "Bu programın beslemesini bulamadık. RSS beslemesini dene veya adıyla ara.",
       "directoryDown": "Bu podcast dizini şu anda yanıt vermiyor. Lütfen tekrar dene."
     },
     "tip": {
       "button": "Bu podcast'i destekle",
-      "heading": "Destekle: {{show}}",
+      "heading": "{{show}} için bahşiş",
+      "support": "Destekle: {{show}}",
       "hive": "@{{account}} kullanıcısına Hive bahşişi",
       "messageLabel": "Podcast yapımcısına mesaj (isteğe bağlı):",
       "messagePlaceholder": "Harika bölüm!",
@@ -590,7 +669,7 @@
     "downloads": {
       "title": "İndirilenler",
       "download": "Çevrimdışı dinlemek için indir",
-      "short": "İndir",
+      "short": "Kaydet",
       "downloading": "İndiriliyor %{{pct}}",
       "cancel": "İndirmeyi iptal et",
       "saved": "Çevrimdışı kaydedildi",
@@ -599,7 +678,7 @@
       "removed": "İndirilen kaldırıldı",
       "done": "Çevrimdışı dinlemek için kaydedildi",
       "total": "{{size}} kaydedildi",
-      "storage": "bu site bu tarayıcıda {{quota}} alanın {{used}} kadarını kullanıyor",
+      "storage": "bu tarayıcıda {{quota}} alanın {{used}} kadarı kullanılıyor",
       "perBrowser": "İndirilenler, kim giriş yapmış olursa olsun bu tarayıcıda kalır.",
       "errors": {
         "tooLarge": "Bu bölüm kaydedilemeyecek kadar büyük.",
@@ -611,7 +690,7 @@
     },
     "autoQueue": {
       "label": "Yeni bölümleri sıraya otomatik ekle",
-      "hint": "Bu programın yeni bölümleri çıktıklarında sıranın sonuna eklenir",
+      "hint": "Sıranın sonuna eklenirler",
       "onDone": "Bu programın yeni bölümleri sırana eklenecek",
       "offDone": "Bu programın yeni bölümleri artık sırana eklenmeyecek",
       "added_one": "{{count}} yeni bölüm sırana eklendi",
@@ -649,6 +728,7 @@
       "startsAt": "Başlangıç: {{time}}"
     },
     "private": {
+      "title": "Özel akış ekle",
       "toggle": "Bu gizli bir akış (giriş gerektirir)",
       "username": "Kullanıcı adı",
       "password": "Şifre",
@@ -685,7 +765,7 @@
       "hide": "Videoyu gizle"
     },
     "signInToFollow": "Podcast takip etmek için giriş yap",
-    "addExternal": "Harici podcast ekle",
+    "addExternal": "Harici RSS akışı ekle",
     "continue": {
       "title": "Dinlemeye devam et",
       "left": "{{minutes}} dk kaldı",

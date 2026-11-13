@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Loader2 } from 'lucide-react';
+import { Icon } from '../v2/Icon';
 import { useAppStore } from '../../lib/store';
 import { getEditorUrl } from '../../utils/config';
 import { mintDraftSession } from '../../utils/editorDraftSession';
@@ -54,6 +54,6 @@ export default function AdWizardFrame({ format = null, maxSeconds = null, brand 
     return () => window.removeEventListener('message', onMsg);
   }, [src, getEffectiveTheme]);
 
-  if (!src) return <div style={{ display: 'grid', placeItems: 'center', height: '100%' }}><Loader2 className="animate-spin" /></div>;
+  if (!src) return <div style={{ display: 'grid', placeItems: 'center', height: '100%', color: 'var(--cyan)' }}><Icon name="progress_activity" size={28} className="v2-spin" /></div>;
   return <iframe ref={frameRef} title="Ad Wizard" src={src} allow="autoplay; clipboard-read; clipboard-write" style={{ width: '100%', height: '100%', border: 0 }} />;
 }

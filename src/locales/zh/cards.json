@@ -4,10 +4,12 @@
   "thumbnailAlt": "缩略图",
   "topicTitle": "话题：{{topic}}",
   "watchingNow_other": "{{count}} 人正在观看",
+  "previewMuted": "预览 · 静音",
   "badges": {
-    "gatedTitle": "仅限会员。3Speak Pro 可解锁完整视频",
+    "gatedTitle": "仅限会员",
     "pro": "PRO",
     "new": "新",
+    "first": "首发",
     "live": "● 直播中",
     "liveChat": "● 直播聊天",
     "spotlight": "焦点"
@@ -17,22 +19,26 @@
     "mobile": "手机",
     "mobileTitle": "通过手机 App 上传",
     "processing": "处理中",
-    "processingTitle": "视频正在处理中",
+    "processingTitle": "正在处理",
     "draft": "草稿",
-    "draftTitle": "草稿 - 尚未发布",
+    "draftTitle": "尚未发布",
     "deleted": "已删除",
-    "deletedTitle": "该视频已被删除",
+    "deletedTitle": "已被删除",
     "failed": "失败",
-    "failedTitle": "视频处理失败",
+    "failedTitle": "处理失败",
     "unlisted": "不公开",
-    "unlistedTitle": "不公开 — 不会出现在信息流和搜索中，只能通过链接直接访问"
+    "unlistedTitle": "仅限直接链接"
   },
   "playlist": {
     "loading": "正在加载播放列表...",
     "items_other": "{{count}} 项",
     "openAria": "打开播放列表 {{name}}",
     "tag": "播放列表",
-    "updated": "更新于 {{when}}"
+    "updated": "更新于 {{when}}",
+    "public": "公开",
+    "private": "私密",
+    "history": "历史",
+    "audio": "音频"
   },
   "watchLater": {
     "title": "稍后观看",
@@ -46,5 +52,12 @@
     "label": "更改大小",
     "small": "小",
     "medium": "中"
+  },
+  "payout": {
+    "title": "收益",
+    "author": "作者",
+    "curators": "策展人",
+    "paysOutIn": "距发放还有",
+    "days_other": "{{count}} 天"
   }
 }

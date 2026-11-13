@@ -5,8 +5,8 @@
  */
 import React, { useState, useRef, useCallback, useEffect, useMemo } from 'react';
 import { useTranslation as useI18n } from 'react-i18next';
-import { ImSpinner9 } from 'react-icons/im';
-import { MdImage, MdClose } from 'react-icons/md';
+import { Icon } from '../v2/Icon';
+import { Segmented } from '../v2/ui';
 import { toastIn } from '../../utils/toast';
 import { insertAtCursor } from '../../utils/composerInsert';
 import { uploadThumbnail } from '../../utils/uploadThumbnail';
@@ -139,7 +139,7 @@ export function CommentImageButton({ uploading, onFiles }) {
         aria-label={t('comments.section.addImage')}
         title={t('comments.section.addImage')}
       >
-        {uploading ? <ImSpinner9 className="egp-spin" size={15} /> : <MdImage size={18} />}
+        {uploading ? <Icon name="progress_activity" size={18} className="v2-spin" /> : <Icon name="image" size={18} />}
       </button>
       <input
         ref={fileRef}
@@ -199,6 +199,9 @@ const carriesFiles = (e) => [...(e.dataTransfer?.types || [])].includes('Files')
 export function CommentDropZone({
   images, value, setValue, disabled = false, className = '', children,
   toHtml = null, previewClassName = '', previewMarkdownClass = '', onPreviewClick,
+  // Optional controls shown at the start of the Write / Preview row (the watch
+  // page puts its Comment / React switch there, so both share one row).
+  tabsLead = null,
 }) {
   const { t } = useI18n();
   const [over, setOver] = useState(false);
@@ -259,26 +262,22 @@ export function CommentDropZone({
 
   return (
     <div className={`comment-drop-zone${over ? ' is-drag-over' : ''}${className ? ` ${className}` : ''}`} {...dragProps}>
-      {toHtml && !disabled && (
-        <div className="comment-write-tabs" role="tablist">
-          <button
-            type="button"
-            role="tab"
-            aria-selected={!previewing}
-            className={`comment-write-tab${!previewing ? ' active' : ''}`}
-            onClick={() => setMode('write')}
-          >
-            {t('comments.section.write')}
-          </button>
-          <button
-            type="button"
-            role="tab"
-            aria-selected={previewing}
-            className={`comment-write-tab${previewing ? ' active' : ''}`}
-            onClick={() => setMode('preview')}
-          >
-            {t('comments.section.preview')}
-          </button>
+      {(tabsLead || (toHtml && !disabled)) && (
+        <div className={`comment-write-tabs${tabsLead ? ' has-lead' : ''}`}>
+          {tabsLead}
+          {toHtml && !disabled && (
+            <Segmented
+              size={28}
+              block={false}
+              className="comment-write-seg"
+              value={previewing ? 'preview' : 'write'}
+              onChange={setMode}
+              options={[
+                { value: 'write', label: t('comments.section.write') },
+                { value: 'preview', label: t('comments.section.preview') },
+              ]}
+            />
+          )}
         </div>
       )}
       {/* Kept mounted while previewing: the caret, the textarea's size and the
@@ -306,22 +305,22 @@ export function CommentDropZone({
                   aria-label={t('comments.section.removeImage')}
                   title={t('comments.section.removeImage')}
                 >
-                  <MdClose size={12} />
+                  <Icon name="close" size={14} />
                 </button>
               )}
             </div>
           ))}
           {pending.map((p) => (
-            <div key={p.id} className="comment-image-preview is-uploading" title={t('comments.section.uploadingImage')}>
+            <div key={p.id} className="comment-image-preview is-uploading" title={t('comments.section.uploadingImage')} role="status" aria-label={t('comments.section.uploadingImage')}>
               <img src={p.url} alt="" />
-              <ImSpinner9 className="egp-spin comment-image-spinner" size={16} aria-label={t('comments.section.uploadingImage')} />
+              <Icon name="progress_activity" size={18} className="v2-spin comment-image-spinner" />
             </div>
           ))}
         </div>
       )}
       {over && (
         <div className="comment-drop-hint" aria-hidden="true">
-          <MdImage size={18} />
+          <Icon name="add_photo_alternate" size={18} />
           <span>{t('comments.section.dropImage')}</span>
         </div>
       )}

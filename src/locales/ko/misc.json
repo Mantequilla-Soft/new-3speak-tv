@@ -1,8 +1,8 @@
 {
   "leaderboard": {
     "windows": {
-      "7d": "7일",
-      "30d": "30일",
+      "7d": "주간",
+      "30d": "월간",
       "365d": "1년",
       "all": "전체 기간"
     },
@@ -155,9 +155,9 @@
     "audioFull": "제목 포함",
     "audioCompact": "컴팩트",
     "audioMinimal": "최소",
-    "heightSub": "전체 너비, 높이 {{height}} px",
+    "heightSub": "전체 너비, 높이 {{height}} px · 반응형",
     "podcastTitle": "이 팟캐스트 임베드",
-    "podcastHint": "웹사이트나 블로그 글에 붙여 넣으세요. 새 에피소드가 나오는 대로 포함해 프로그램의 모든 에피소드를 재생합니다."
+    "podcastHint": "새 에피소드가 나오는 대로 포함해 프로그램의 모든 에피소드를 재생해요."
   },
   "incubation": {
     "requestFailed": "요청 실패({{status}})",
@@ -171,7 +171,7 @@
     "title": "페이지를 불러오지 못했어요",
     "body": "앱의 일부를 다운로드하지 못했어요. 보통 이 탭을 열어 둔 동안 새 버전이 출시되었기 때문이에요. 새로고침하면 적용돼요.",
     "brokenTitle": "이 페이지에서 문제가 발생했어요",
-    "brokenBody": "페이지 일부에서 오류가 발생했어요. 새로고침하면 대부분 해결되며, 아래 세부 정보는 원인을 찾는 데 도움이 돼요.",
+    "brokenBody": "이 페이지 일부에서 오류가 발생했어요. 새로고침하면 대부분 해결되며, 세부 정보는 원인을 찾는 데 도움이 돼요.",
     "reload": "새로고침",
     "goHome": "홈으로",
     "details": "세부 정보"
@@ -203,9 +203,9 @@
       "regularVideo": "채널용 일반 동영상",
       "verticalShort": "쇼츠 피드용 세로 클립",
       "shortsEditor": "브라우저에서 쇼츠 녹화 및 편집",
-      "story": "24시간 동안 공개되는 짧은 클립",
+      "story": "24시간 동안 공개",
       "musicAudio": "노래, 팟캐스트 및 기타 오디오",
-      "audioEditor": "팟캐스트와 음악을 자르고 다듬고 음량을 맞추세요",
+      "audioEditor": "자르고, 다듬고, 음량 맞추기",
       "groupChat": "게스트와 함께 진행하는 라이브 룸",
       "goLiveNow": "팔로워에게 라이브 방송",
       "communitySnap": "커뮤니티 탭에 간단히 게시",
@@ -220,7 +220,7 @@
   "hiveAuth": {
     "waiting": "HiveAuth에서 승인을 기다리는 중...",
     "title": "HiveAuth 승인 필요",
-    "hint": "HiveAuth 앱에서 이 트랜잭션을 승인해 주세요"
+    "hint": "HiveAuth 앱에서 이 트랜잭션을 승인해 주세요."
   },
   "hiveApi": {
     "keychainNotSigned": "Keychain이 트랜잭션에 서명하지 않았어요",
@@ -233,7 +233,7 @@
     "announceFailed": "OpenPod은 시작되었지만 Hive 공지를 게시하지 못했어요."
   },
   "appUpdate": {
-    "updating": "최신 버전({{version}})으로 업데이트하는 중…",
+    "updating": "{{version}}(으)로 업데이트하는 중…",
     "reloadingForUpload": "최신 빌드에서 업로드되도록 새로고침하는 중이에요."
   },
   "auth": {
@@ -251,7 +251,9 @@
   },
   "followFeed": {
     "title": "팔로우 피드",
-    "error": "동영상을 불러오는 중 오류가 발생했어요"
+    "error": "동영상을 불러오는 중 오류가 발생했어요",
+    "emptyTitle": "아직 아무것도 없어요",
+    "emptyBody": "크리에이터를 팔로우하면 그들의 업로드, Snaps, 라이브가 여기에 가장 먼저 표시돼요."
   },
   "groups": {
     "title": "그룹",
@@ -301,6 +303,17 @@
     "moreTag": "#{{tag}} 더보기",
     "moreVideos": "동영상 더보기",
     "hideControls": "컨트롤 숨기기",
-    "showControls": "컨트롤 표시"
+    "showControls": "컨트롤 표시",
+    "watching": "{{count}}명 시청 중",
+    "startedAgo": "{{when}} 시작",
+    "topSupporters": "최고 후원자",
+    "noSupporters": "아직 부스트가 없어요",
+    "full": "전체 화면",
+    "loginToChat": "로그인하고 채팅하기"
+  },
+  "pullToRefresh": {
+    "pull": "당겨서 새로고침",
+    "release": "놓아서 새로고침",
+    "refreshing": "새로고침 중…"
   }
 }

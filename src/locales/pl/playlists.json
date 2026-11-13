@@ -25,6 +25,11 @@
     "noOtherPlaylists": "Nie masz jeszcze innych playlist",
     "createFirst": "Utwórz playlistę",
     "createNew": "Utwórz nową playlistę",
+    "newPlaylist": "Nowa playlista",
+    "savedTo_one": "Zapisano na {{count}} playliście",
+    "savedTo_few": "Zapisano na {{count}} playlistach",
+    "savedTo_many": "Zapisano na {{count}} playlistach",
+    "savedTo_other": "Zapisano na {{count}} playlisty",
     "name": "Nazwa",
     "namePlaceholder": "Moja świetna playlista",
     "privacy": "Prywatność",
@@ -61,6 +66,7 @@
     "items_other": "{{count}} elementu",
     "created": "Utworzono {{when}}",
     "podcastFeed": "Kanał podcastu",
+    "playAll": "Odtwórz wszystko",
     "podcastFeedTitle": "Obserwuj {{name}} w dowolnej aplikacji do podcastów (kanał RSS)",
     "album": {
       "genre": "<strong>Gatunek:</strong> {{value}}",
@@ -105,12 +111,15 @@
     "filterCount_one": "{{shown}} z {{count}} elementu",
     "filterCount_few": "{{shown}} z {{count}} elementów",
     "filterCount_many": "{{shown}} z {{count}} elementów",
-    "filterCount_other": "{{shown}} z {{count}} elementu"
+    "filterCount_other": "{{shown}} z {{count}} elementu",
+    "shuffle": "Losowo"
   },
   "type": {
     "label": "Rodzaj",
     "video": "Wideo",
     "audio": "Audio",
+    "videoSub": "Długie formy",
+    "audioSub": "Utwory i podcasty",
     "kindLabel": "Jakie to audio?",
     "kinds": {
       "podcast": "Podcast",
@@ -118,5 +127,33 @@
       "voice": "Notatki głosowe",
       "sounds": "Inne dźwięki"
     }
+  },
+  "feeds": {
+    "button": "Programy zewnętrzne",
+    "title": "Programy zewnętrzne",
+    "intro": "Dodaj całe podcasty z dowolnego miejsca. Ich odcinki pojawią się na tej playliście obok twoich, od najnowszych, a nowe dojdą same.",
+    "searchLabel": "Szukaj programów lub wklej link do kanału",
+    "searchPlaceholder": "Nazwa programu, kanał RSS lub link do Apple Podcasts",
+    "add": "Dodaj",
+    "checking": "Sprawdzanie...",
+    "searching": "Szukanie...",
+    "noResults": "Nie znaleziono programów.",
+    "inList": "Na playliście",
+    "inPlaylist": "Na tej playliście",
+    "none": "Brak programów zewnętrznych.",
+    "remove": "Usuń {{title}}",
+    "already": "Ten program jest już na tej playliście.",
+    "limit": "Playlista może zawierać do {{max}} programów zewnętrznych.",
+    "ownFeed": "To kanał tej samej playlisty.",
+    "privateFeed": "Kanały wymagające hasła nie mogą trafić na playlistę, bo playlisty są publiczne.",
+    "tooBig": "To więcej, niż zmieści playlista. Najpierw usuń jakiś program.",
+    "saved": "Zapisano programy zewnętrzne. Playlista odświeży się za kilka sekund.",
+    "saveFailed": "Nie udało się zapisać: {{error}}",
+    "fromShows": "Z innych programów:",
+    "video": "Wideo",
+    "pending_one": "{{count}} program jest jeszcze wczytywany. Jego odcinki pojawią się za kilka minut.",
+    "pending_few": "{{count}} programy są jeszcze wczytywane. Ich odcinki pojawią się za kilka minut.",
+    "pending_many": "{{count}} programów jest jeszcze wczytywanych. Ich odcinki pojawią się za kilka minut.",
+    "pending_other": "{{count}} programu jest jeszcze wczytywane. Ich odcinki pojawią się za kilka minut."
   }
 }

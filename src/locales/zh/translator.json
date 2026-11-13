@@ -8,7 +8,7 @@
     "contribute": "如何贡献翻译"
   },
   "verify": {
-    "body": "确认你的 Hive 账号以打开编辑器。你的钱包会请求你批准一次登录。",
+    "body": "受到邀请？确认你的 Hive 账号即可打开编辑器。",
     "button": "确认账号",
     "failed": "无法确认你的账号。"
   },
@@ -49,9 +49,9 @@
   "add": {
     "title": "添加语言",
     "code": "语言代码",
-    "codeHint": "两到三个小写字母（ISO 639），可附加地区：nl、fil、pt-BR",
+    "codeHint": "两到三个小写字母（ISO 639），可附加地区",
     "native": "该语言中的名称",
-    "nativeHint": "这是用户在语言菜单中看到的名称，例如 Nederlands",
+    "nativeHint": "用户在语言菜单中看到的名称",
     "english": "英文名称",
     "rtl": "从右向左书写（阿拉伯语、希伯来语、波斯语、乌尔都语…）",
     "submit": "添加语言",
@@ -65,6 +65,7 @@
     "checkboxFor": "将 {{key}} 标记为已校对",
     "checkedBy": "由 @{{user}} 校对，{{when}}",
     "notChecked": "检查完这条翻译后请勾选",
+    "notCheckedShort": "未校对",
     "noText": "无需校对：这条文本还没有翻译",
     "saveFirst": "请先保存你的修改。保存后会自动标记为已校对。",
     "changed": "校对后已更改",

@@ -1,150 +1,230 @@
-// Two-step tag picker for v2-tagged videos: 7 broad categories, then optional
-// topic refinement. Visually consistent with .viewer-tag-tiles (the v1 picker).
+@use "../../styles/v2" as v2;
+
+// Two-step topic picker (7 categories, then an optional topic): chips with a
+// 2px border that wrap flush left, text only (38, 40a, 43b). A pick is a
+// secondary selection, so it is cyan: a cyan border on a 16% cyan tint, the
+// label stays in text. The open category keeps a muted border so the path
+// stays visible.
 .tagsv2-picker {
-  margin-top: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 
   .tagsv2-suggested {
-    margin: 0 0 6px;
-    font-size: 11px;
-    line-height: 1.3;
-    color: var(--text-secondary, #666);
+    margin: 0;
+    @include v2.text(meta-sm);
+    color: var(--muted);
   }
 
   .tagsv2-search {
+    @include v2.field(40);
     width: 100%;
     box-sizing: border-box;
-    margin-bottom: 8px;
-    padding: 8px 10px;
-    border-radius: 8px;
-    border: 1px solid var(--border-color, rgba(150, 150, 150, 0.4));
-    background: var(--bg-primary, #fff);
-    color: var(--text-primary, #111);
-    font-size: 13px;
-    &::placeholder { color: var(--text-secondary, #888); }
-    &:focus { outline: none; border-color: var(--accent-primary, #e53935); }
   }
 
   .tagsv2-hint {
-    margin: 8px 0 4px;
-    font-size: 11px;
-    color: var(--text-secondary, #666);
+    margin: 4px 0 0;
+    @include v2.text(meta-sm);
+    color: var(--muted);
   }
 
-  // Flex (not grid) so a partial last row CENTERS: 7 categories lay out 4 + 3,
-  // with the 3 centred under the 4. Basis is a hard quarter minus the gaps.
   .tagsv2-row {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
     gap: 6px;
-    padding: 2px;
   }
 
-  .tagsv2-loading {
-    display: flex;
-    justify-content: center;
-    padding: 18px 0;
-  }
-
-  // Shared tile look — categories and topics differ only in emphasis.
-  .tagsv2-cat,
-  .tagsv2-topic {
-    position: relative;
-    // Exactly 4 per row: quarter of the width minus the 3 gaps between them.
-    flex: 0 0 calc((100% - 18px) / 4);
-    max-width: calc((100% - 18px) / 4);
-
-    // On phones the sheet is too narrow for 4 tiles to hold "Entertainment" /
-    // "Cryptocurrency" unbroken, so drop to 3 across (still centred).
-    @media screen and (max-width: 767px) {
-      flex: 0 0 calc((100% - 12px) / 3);
-      max-width: calc((100% - 12px) / 3);
-    }
+  .tagsv2-topics {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 3px;
-    min-height: 58px;
-    padding: 8px 4px;
-    border-radius: 10px;
-    border: 1px solid var(--border-color, rgba(150, 150, 150, 0.4));
-    background: var(--bg-primary, #fff);
-    color: var(--text-primary, #111);
-    text-align: center;
-    cursor: pointer;
-    transition: border-color 0.12s ease, background 0.12s ease, color 0.12s ease;
+    gap: 6px;
+  }
 
-    .tagsv2-emoji { font-size: 19px; line-height: 1; }
-    .tagsv2-label {
-      font-size: 11.5px;
-      font-weight: 500;
-      line-height: 1.15;
-      // Last-resort guard: a long single word breaks rather than spilling out.
-      overflow-wrap: anywhere;
-    }
+  // One chip: categories and topics share the look (32 tall, radius 12, 12/700).
+  .tagsv2-cat,
+  .tagsv2-topic {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 32px;
+    padding: 0 10px;
+    border: 2px solid var(--border);
+    border-radius: var(--r-md);
+    background: transparent;
+    color: var(--text);
+    font: inherit;
+    @include v2.text(label);
+    font-size: 12px;
+    text-align: left;
+    cursor: pointer;
+    transition: border-color var(--t-fast) var(--ease), background var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
+
+    .tagsv2-label { overflow-wrap: anywhere; }
 
     .tagsv2-pct {
-      position: absolute;
-      top: 3px;
-      right: 4px;
-      font-weight: 700;
-      font-size: 10px;
-      padding: 1px 5px;
-      border-radius: 999px;
-      background: var(--bg-hover, rgba(0, 0, 0, 0.08));
-      color: var(--text-secondary, #666);
+      @include v2.mono(10, 700);
+      color: var(--muted);
     }
 
-    &:hover:not(:disabled) {
-      border-color: var(--accent-primary, #e53935);
-      background: var(--bg-hover, rgba(0, 0, 0, 0.04));
-    }
+    &:hover:not(:disabled):not(.selected) { background: var(--bg-hover); }
 
-    // The chosen tag (category or topic): red OUTLINE + red text, never a red
-    // fill — matches the app-wide convention for red controls.
     &.selected {
-      background: transparent;
-      border-color: var(--accent-primary, #e53935);
-      // Inset ring instead of a thicker border, so nothing shifts on select.
-      box-shadow: inset 0 0 0 1px var(--accent-primary, #e53935);
-      color: var(--accent-primary, #e53935);
-      font-weight: 700;
-      .tagsv2-pct {
-        background: var(--bg-hover, rgba(0, 0, 0, 0.08));
-        color: var(--accent-primary, #e53935);
-      }
+      border-color: var(--cyan);
+      background: var(--cyan-tint-strong);
+      color: var(--text);
+
+      .tagsv2-pct { color: var(--cyan); }
     }
 
-    &:disabled { opacity: 0.6; cursor: default; }
+    &:disabled { opacity: .45; cursor: not-allowed; }
   }
 
-  // Drilled-into category that isn't itself the selection: a plain accent border
-  // (no ring) so the path stays visible but reads weaker than the selection.
-  .tagsv2-cat.open:not(.selected) {
-    border-color: var(--accent-primary, #e53935);
+  // Drilled-into category that isn't itself the pick, or (multi mode) one that
+  // holds picked topics while collapsed.
+  .tagsv2-cat.open:not(.selected),
+  .tagsv2-cat.has-selected:not(.selected) {
+    border-color: var(--muted);
   }
 
-  // Multi mode: a category holding selected topics gets a subtle accent border
-  // even while collapsed, plus a count badge (top-left, mirroring .tagsv2-pct).
-  .tagsv2-cat.has-selected:not(.open):not(.selected) {
-    border-color: var(--accent-primary, #e53935);
+  // Picking one tag (40a): the category of the picked topic is part of the
+  // pick, so it is cyan too ("Nature" › "Wildlife").
+  &:not(.is-multi) .tagsv2-cat.open {
+    border-color: var(--cyan);
+    background: var(--cyan-tint-strong);
   }
+
   .tagsv2-count {
-    position: absolute;
-    top: 3px;
-    left: 4px;
-    font-weight: 700;
-    font-size: 10px;
-    padding: 1px 6px;
-    border-radius: 999px;
-    background: var(--accent-primary, #e53935);
-    color: #fff;
+    display: inline-grid;
+    place-items: center;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    border-radius: 9px;
+    background: var(--cyan);
+    color: var(--bg);
+    @include v2.mono(10, 700);
+  }
+}
+
+// 43b "tag this video" (layout="groups"): every category as an eyebrow over
+// its topics as small 28px chips; the pick is cyan (a topic, not a payout).
+.tagsv2-picker.is-groups {
+  gap: 14px;
+
+  .tagsv2-group { display: flex; flex-direction: column; gap: 6px; }
+  .tagsv2-group__head {
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    @include v2.text(eyebrow);
+    color: var(--muted);
+    cursor: pointer;
+    &:hover:not(:disabled) { color: var(--text); }
+    &.selected { color: var(--cyan); .tagsv2-pct { color: var(--cyan); } }
+  }
+  .tagsv2-topic {
+    min-height: 28px;
+    padding: 0 10px;
+    border-radius: var(--r-sm);
+    font-size: 11px;
+    .tagsv2-icon { display: none; }
+    &.selected {
+      border-color: var(--cyan);
+      background: var(--cyan-tint);
+      color: var(--text);
+      .tagsv2-pct { color: var(--cyan); }
+    }
+  }
+}
+
+// 23a interests (layout="tiles"): a 2-column grid of tiles, padding 12,
+// radius 20, a 2px border, a cyan 24 icon over the 14/700 name. A pick is a
+// cyan border on a 16% cyan tint.
+.tagsv2-picker.is-tiles {
+  gap: 10px;
+
+  .tagsv2-tiles {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
   }
 
-  // Topics read as a refinement of the category above them.
-  .tagsv2-topic {
-    min-height: 50px;
-    .tagsv2-emoji { font-size: 16px; }
+  .tagsv2-tile {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    min-height: 84px;
+    padding: 12px;
+    border: 2px solid var(--border);
+    border-radius: var(--r-xl);
+    background: transparent;
+    color: var(--text);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition: border-color var(--t-fast) var(--ease), background var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
+
+    .tagsv2-icon { color: var(--cyan); }
+    .tagsv2-label { margin-top: auto; @include v2.text(body); font-weight: 700; overflow-wrap: anywhere; }
+    .tagsv2-count { position: absolute; top: 10px; right: 10px; }
+
+    &:hover:not(:disabled):not(.selected) { background: var(--bg-hover); }
+    &:active:not(:disabled) { transform: scale(.98); }
+    &.open:not(.selected), &.has-selected:not(.selected) { border-color: var(--muted); }
+    &.selected { border-color: var(--cyan); background: var(--cyan-tint-strong); }
+
+    // Some of a category picked: the fill grows with the share (--fill, set
+    // inline), under the icon and the name; the corner says "2/4".
+    &.is-partial, &.is-partial.open:not(.selected) {
+      border-color: var(--cyan);
+      overflow: hidden;
+
+      &::before {
+        content: "";
+        position: absolute;
+        inset: 0 auto 0 0;
+        width: var(--fill, 0%);
+        background: var(--cyan-tint-strong);
+        transition: width var(--t-base) var(--ease);
+        pointer-events: none;
+      }
+
+      > * { position: relative; }
+      > .tagsv2-count { position: absolute; }
+    }
+    &:disabled { opacity: .45; cursor: not-allowed; }
   }
+}
+
+// Over an open category's topics: the hint, and Clear (everything in it off).
+.tagsv2-topics-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  .tagsv2-hint { margin: 0; }
+}
+
+.tagsv2-clear {
+  flex: none;
+  min-height: 32px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: var(--r-md);
+  background: transparent;
+  color: var(--cyan);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+
+  &:hover:not(:disabled) { background: var(--bg-hover); }
+  &:disabled { opacity: .45; cursor: not-allowed; }
 }

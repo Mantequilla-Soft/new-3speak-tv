@@ -115,7 +115,7 @@
       "tips": "Gorjetas"
     },
     "legendOurs": "no 3Speak",
-    "legendOther": "em outros lugares da Hive",
+    "legendOther": "em outros lugares",
     "segments": {
       "ours": "Recompensas de posts no 3Speak",
       "other": "Recompensas de posts em outros lugares da Hive",
@@ -144,7 +144,8 @@
     "communities": "Visitando suas comunidades…",
     "followers": "Vendo quem seguiu você…",
     "watched": "Revendo o que você assistiu…",
-    "thumbnails": "Carregando suas miniaturas… {{done}} de {{total}}"
+    "thumbnails": "Carregando suas miniaturas… {{done}} de {{total}}",
+    "thumbnailsWaiting": "Carregando suas miniaturas…"
   },
   "tips": {
     "label": "Dica:",

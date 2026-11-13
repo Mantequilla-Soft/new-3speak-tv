@@ -1,16 +1,13 @@
+import { Icon } from '../v2/Icon';
+import { EmptyState } from '../v2/ui';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
-import {
-  MdArrowBack, MdPlayArrow, MdPause, MdOpenInNew, MdCheck, MdPodcasts, MdPlaylistAdd, MdPlaylistAddCheck,
-  MdLink, MdOndemandVideo, MdClose, MdBolt, MdFormatListBulleted, MdShare, MdThumbUp, MdForum,
-} from 'react-icons/md';
-import { BiDollar } from 'react-icons/bi';
 import { useAppStore } from '../../lib/store';
 import { toastIn } from '../../utils/toast';
 import { notifyMediaPlay, onMediaPlay } from '../../utils/mediaCoordinator';
-import { usePodcastEpisode, useEpisodeNotes, episodeToTrack, episodePath, fetchPrivateChapters, threeSpeakPost } from '../../lib/podcasts';
+import { usePodcastEpisode, useEpisodeNotes, episodeToTrack, episodePath, fetchPrivateChapters, threeSpeakPost, episodeNumberLabel } from '../../lib/podcasts';
 import { usePodcastProgress, progressOf, recordProgress, flushProgress, resumePosition } from '../../lib/podcastProgress';
 import { fetchChapters } from '../../lib/podcastMedia';
 import { useDownloads } from '../../lib/podcastDownloads';
@@ -140,8 +137,8 @@ export default function EpisodeView({ episodeId, user, onOpenShow }) {
   if (error || !ep) {
     return (
       <div className="pod-show">
-        <button type="button" className="pod-back" onClick={() => onOpenShow(null)}><MdArrowBack size={18} /> {t('audio.podcasts.allPodcasts')}</button>
-        <p className="pod-empty">{t('audio.podcasts.episodeMissing')}</p>
+        <button type="button" className="pod-back" onClick={() => onOpenShow(null)}><Icon name="arrow_back" size={18} /> {t('audio.podcasts.allPodcasts')}</button>
+        <EmptyState className="pod-missing" icon="music_off" title={t('audio.podcasts.episodeMissing')} />
       </div>
     );
   }
@@ -188,89 +185,96 @@ export default function EpisodeView({ episodeId, user, onOpenShow }) {
   return (
     <div className="pod-show pod-episode">
       <button type="button" className="pod-back" onClick={() => onOpenShow(ep.feed_id)}>
-        <MdArrowBack size={18} /> {feed?.title || t('audio.podcasts.allPodcasts')}
+        <Icon name="arrow_back" size={18} /> {feed?.title || t('audio.podcasts.allPodcasts')}
       </button>
 
-      <header className="pod-show-head">
-        <PodcastArt art={ep.art || feed?.art} fallback={feed?.art} px={512} className="pod-show-cover" />
-        <div className="pod-show-info">
-          <button type="button" className="pod-show-kicker pod-episode-show" onClick={() => onOpenShow(ep.feed_id)}>
-            <MdPodcasts size={14} /> {feed?.title || t('audio.podcasts.kicker')}
+      <header className="pod-epcard">
+        <PodcastArt art={ep.art || feed?.art} fallback={feed?.art} px={512} className="pod-epcard-art" />
+        <div className="pod-epcard-info">
+          <button type="button" className="pod-epcard-kicker" onClick={() => onOpenShow(ep.feed_id)}>
+            <Icon name="podcasts" size={16} />
+            <span>{[feed?.title || t('audio.podcasts.kicker'), episodeNumberLabel(ep)].filter(Boolean).join(' · ')}</span>
           </button>
-          <h2 className="pod-show-title">{ep.title || t('audio.untitled')}</h2>
-          <div className="pod-show-meta">
-            <EpisodeBadges ep={ep} />
+          <h2 className="pod-epcard-title">{ep.title || t('audio.untitled')}</h2>
+          <div className="pod-epcard-meta">
+            <EpisodeBadges ep={ep} noNumber />
             {(ep.private || feed?.private) && <PrivateBadge withText />}
-            {ep.published_at && <span>{fmtDate(ep.published_at)}</span>}
-            {ep.duration > 0 && <span className="pod-chip">{fmtDuration(ep.duration)}</span>}
-            {progress?.done && <span className="pod-tile-listened"><MdCheck size={13} /> {t('audio.podcasts.listened')}</span>}
+            <span>{[ep.duration > 0 ? fmtDuration(ep.duration) : null, ep.published_at ? fmtDate(ep.published_at) : null].filter(Boolean).join(' · ')}</span>
+            {progress?.done && <span className="pod-tile-listened"><Icon name="check" size={14} /> {t('audio.podcasts.listened')}</span>}
             {started && <span className="pod-tile-pct">{t('audio.podcasts.listenedPct', { pct: progress.pct })}</span>}
             {post && <PayoutAmount amount={payout} size={13} />}
           </div>
           {(started || progress?.done) && (
             <div className="pod-episode-bar" aria-hidden="true"><span style={{ width: `${progress.pct}%` }} /></div>
           )}
-          <div className="pod-show-actions">
+          <div className="pod-show-actions pod-epcard-actions">
             <button type="button" className={`pod-btn ${deepOpen ? 'pod-btn--primary' : 'pod-btn--solid'}`} onClick={play}>
-              {playing ? <MdPause size={18} /> : <MdPlayArrow size={18} />}
+              {playing ? <Icon name="pause" size={28} fill /> : <Icon name="play_arrow" size={28} fill />}
               {playing
                 ? t('audio.podcasts.pause')
                 : deepOpen ? deepLabel
-                  : started && !isCurrent ? t('audio.podcasts.resume') : t('audio.podcasts.play')}
-            </button>
-            <button
-              type="button"
-              className={`pod-btn${inQueue ? ' pod-btn--on' : ''}`}
-              onClick={() => { if (!inQueue) audioAddToQueue(track); }}
-              disabled={inQueue}
-            >
-              {inQueue ? <MdPlaylistAddCheck size={18} /> : <MdPlaylistAdd size={18} />}
-              {inQueue ? t('audio.podcasts.inQueue') : t('audio.podcasts.addToQueue')}
+                  : started && !isCurrent ? t('audio.podcasts.resume') : t('common.actions.play')}
             </button>
             {hive && (
               <button
                 type="button"
-                className={`pod-btn${voted ? ' pod-btn--on' : ''}`}
+                className={`pod-btn${voted ? ' pod-btn--hot' : ''}`}
+                aria-pressed={voted}
                 onClick={() => {
                   if (!loggedIn) { toastIn('Post').error(t('audio.post.signInToVote')); return; }
                   setVoting((v) => !v);
                 }}
               >
-                <MdThumbUp size={16} /> {voted ? t('audio.post.voted') : t('audio.post.vote')}
-                {voteCount > 0 && <span className="pod-btn-count">{voteCount}</span>}
+                <Icon name="thumb_up" size={24} fill={voted} />
+                {voteCount > 0 ? voteCount : voted ? t('audio.post.voted') : t('audio.post.vote')}
               </button>
             )}
-            <DownloadButton track={track} variant="button" />
-            {ep.video?.url && (
-              <button type="button" className={`pod-btn${video ? ' pod-btn--on' : ''}`} aria-pressed={video} onClick={() => setVideo((v) => !v)}>
-                {video ? <MdClose size={16} /> : <MdOndemandVideo size={16} />}
-                {video ? t('audio.podcasts.video.hide') : t('audio.podcasts.video.watch')}
-              </button>
-            )}
-            <button type="button" className="pod-btn" onClick={() => copyLink(link(shareAt), t)}>
-              {shareAt ? <MdShare size={16} /> : <MdLink size={16} />}
-              {shareAt ? t('audio.podcasts.share.copyAt', { time: fmtClock(shareAt) }) : t('audio.podcasts.share.copy')}
+            <button
+              type="button"
+              className={`pod-btn${inQueue ? ' pod-btn--on' : ''}`}
+              onClick={() => { if (!inQueue) audioAddToQueue(track); }}
+              disabled={inQueue}
+              title={inQueue ? t('audio.podcasts.inQueue') : t('audio.podcasts.addToQueue')}
+            >
+              {inQueue ? <Icon name="playlist_add_check" size={24} /> : <Icon name="playlist_add" size={24} />}
+              {inQueue ? t('audio.podcasts.inQueue') : t('audio.tile.queue')}
             </button>
+            <DownloadButton track={track} variant="tile" />
             {/* Signed out, the tip window opens on Lightning: no Hive account needed. */}
             {hive && user !== hive.author && (
               <button type="button" className="pod-btn" onClick={() => setHiveTipping(true)}>
-                <BiDollar size={16} /> {t('audio.post.tip')}
+                <Icon name="volunteer_activism" size={24} /> {t('audio.post.tip')}
               </button>
             )}
             {!hive && canTipEpisode(track) && (
-              <button type="button" className="pod-btn" onClick={() => setTipping(true)}>
-                <BiDollar size={16} /> {t('audio.podcasts.tip.button')}
+              <button type="button" className="pod-btn" onClick={() => setTipping(true)} title={t('audio.podcasts.tip.button')} aria-label={t('audio.podcasts.tip.button')}>
+                <Icon name="volunteer_activism" size={24} /> {t('audio.post.tip')}
               </button>
             )}
+            <button
+              type="button"
+              className="pod-btn"
+              onClick={() => copyLink(link(shareAt), t)}
+              title={shareAt ? t('audio.podcasts.share.copyAt', { time: fmtClock(shareAt) }) : t('audio.podcasts.share.copy')}
+              aria-label={shareAt ? t('audio.podcasts.share.copyAt', { time: fmtClock(shareAt) }) : t('audio.podcasts.share.copy')}
+            >
+              <Icon name="ios_share" size={24} /> {t('common.actions.share')}
+            </button>
             {hive && (
-              <button type="button" className="pod-btn" onClick={() => navigate(postPage)}>
-                <MdForum size={16} /> {t('audio.item.comments')}
-                {post?.children > 0 && <span className="pod-btn-count">{post.children}</span>}
+              <button type="button" className="pod-btn" onClick={() => navigate(postPage)} title={t('audio.item.comments')} aria-label={t('audio.item.comments')}>
+                <Icon name="chat_bubble" size={24} />
+                {post?.children > 0 ? post.children : t('audio.item.comments')}
+              </button>
+            )}
+            {ep.video?.url && (
+              <button type="button" className={`pod-btn${video ? ' pod-btn--on' : ''}`} aria-pressed={video} onClick={() => setVideo((v) => !v)}>
+                {video ? <Icon name="close" size={24} /> : <Icon name="smart_display" size={24} />}
+                {video ? t('audio.podcasts.video.hide') : t('audio.podcasts.video.watch')}
               </button>
             )}
             {ep.link && (
               <a className="pod-btn" href={ep.link} target="_blank" rel="noopener noreferrer nofollow">
-                <MdOpenInNew size={16} /> {t('audio.podcasts.episodePage')}
+                <Icon name="open_in_new" size={24} /> {t('audio.podcasts.episodePage')}
               </a>
             )}
           </div>
@@ -281,12 +285,12 @@ export default function EpisodeView({ episodeId, user, onOpenShow }) {
 
       {soundbites.length > 0 && (
         <section className="pod-section">
-          <h2 className="pod-section-title"><MdBolt size={18} />{t('audio.podcasts.highlights.title')}</h2>
+          <h2 className="pod-section-title"><Icon name="bolt" size={18} />{t('audio.podcasts.highlights.title')}</h2>
           <ul className="pod-marks">
             {soundbites.map((b) => (
               <li key={`${b.start}-${b.duration}`} className="pod-mark">
                 <button type="button" className="pod-mark-play" onClick={() => playFrom(b.start, b.start + b.duration)} aria-label={t('audio.podcasts.highlights.play')}>
-                  <MdPlayArrow size={18} />
+                  <Icon name="play_arrow" size={18} fill />
                   <span className="pod-mark-time">{fmtClock(b.start)}</span>
                   <span className="pod-mark-title">{b.title || t('audio.podcasts.highlights.untitled', { time: fmtClock(b.start) })}</span>
                   <span className="pod-mark-len">{fmtClock(b.duration)}</span>
@@ -298,7 +302,7 @@ export default function EpisodeView({ episodeId, user, onOpenShow }) {
                   title={t('audio.podcasts.share.clip')}
                   aria-label={t('audio.podcasts.share.clip')}
                 >
-                  <MdLink size={16} />
+                  <Icon name="link" size={16} />
                 </button>
               </li>
             ))}
@@ -308,7 +312,7 @@ export default function EpisodeView({ episodeId, user, onOpenShow }) {
 
       {ep.chapters && (
         <section className="pod-section">
-          <h2 className="pod-section-title"><MdFormatListBulleted size={18} />{t('audio.podcasts.chapters.title')}</h2>
+          <h2 className="pod-section-title"><Icon name="format_list_bulleted" size={18} />{t('audio.podcasts.chapters.title')}</h2>
           {chapters.isLoading && <p className="pod-empty">{t('audio.podcasts.chapters.loading')}</p>}
           {!chapters.isLoading && chapterList.length === 0 && <p className="pod-empty">{t('audio.podcasts.chapters.none')}</p>}
           <ol className="pod-marks">
@@ -317,13 +321,13 @@ export default function EpisodeView({ episodeId, user, onOpenShow }) {
               return (
                 <li key={`${c.start}-${i}`} className={`pod-mark${now ? ' pod-mark--now' : ''}`}>
                   <button type="button" className="pod-mark-play" onClick={() => playFrom(c.start)} aria-current={now || undefined}>
-                    <MdPlayArrow size={18} />
+                    <Icon name="play_arrow" size={18} fill />
                     <span className="pod-mark-time">{fmtClock(c.start)}</span>
                     <span className="pod-mark-title">{c.title}</span>
                   </button>
                   {/^https?:\/\//i.test(c.url || '') && (
                     <a className="pod-icon-btn" href={c.url} target="_blank" rel="noopener noreferrer nofollow" title={t('audio.podcasts.chapters.link')} aria-label={t('audio.podcasts.chapters.link')}>
-                      <MdOpenInNew size={16} />
+                      <Icon name="open_in_new" size={16} />
                     </a>
                   )}
                 </li>

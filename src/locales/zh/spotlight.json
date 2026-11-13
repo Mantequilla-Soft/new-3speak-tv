@@ -208,7 +208,7 @@
       "imageUploadFailed": "图片上传失败：{{error}}",
       "tryAgain": "请重试",
       "styleApplied": "样式已应用到所有{{type}}块",
-      "templateApplied": "已应用“{{name}}”——可以微调或撤销",
+      "templateApplied": "已应用“{{name}}”。可以微调或撤销。",
       "reverted": "已恢复为你之前的设计",
       "saved": "Spotlight 已保存到你的 Hive 资料",
       "saveFailed": "无法保存",
@@ -224,7 +224,7 @@
       "phone": "电话",
       "platformGroup": "平台",
       "yourname": "yourname",
-      "platformIconHint": "图标为 {{platform}} 的 Logo——切换到“网站 / URL”即可选择自定义图标。",
+      "platformIconHint": "图标为 {{platform}} 的 Logo。切换到“网站 / URL”即可选择自定义图标。",
       "icon": "图标",
       "iconColor": "图标颜色",
       "iconBg": "图标背景"
@@ -263,9 +263,9 @@
       "showPosts_other": "显示 {{count}} 条帖子",
       "perRow": "每行 {{value}} 个",
       "hiveRecentHint": "你最近的顶层帖子（不含转发或交叉发布）。自动更新。",
-      "linkPlaceholder": "粘贴任意链接——Hive 帖子、Instagram、X、YouTube、文章…",
+      "linkPlaceholder": "粘贴任意链接：Hive 帖子、Instagram、X、YouTube、文章…",
       "fetching": "正在获取预览…",
-      "noPreview": "没有找到预览——仍会以链接卡片的形式显示。",
+      "noPreview": "没有找到预览。仍会以链接卡片的形式显示。",
       "pasteHint": "粘贴链接，我们会自动获取它的标题、描述和图片。"
     },
     "style": {
@@ -294,8 +294,8 @@
     "openPage": "打开页面",
     "templates": {
       "title": "模板",
-      "hint": "选择一个设计来填充所有内容——你的简介会保留，并且可以撤销。",
-      "undo": "撤销模板——恢复我的设计"
+      "hint": "选择一个设计即可填充所有内容。你的简介会保留，也可以撤销。",
+      "undo": "撤销模板，恢复我的设计"
     },
     "profile": {
       "title": "个人资料",

@@ -11,6 +11,8 @@
       "transferFailed": "Kutuma kumeshindwa: {{message}}"
     },
     "heading": "Tuma bakshishi kwa @{{recipient}}",
+    "pageTitle": "Bakshishi kwa @{{recipient}}",
+    "pageSub": "Imefunguliwa kutoka kwenye overlay ya mtiririko au kiungo",
     "methodHive": "HIVE / HBD",
     "methodLightning": "Lightning",
     "methodMore": "Njia zaidi",
@@ -22,6 +24,17 @@
     "memoPlaceholder": "k.m. Asante kwa maudhui haya mazuri!",
     "memoLinkNote": "Kiungo hiki kinaongezwa kwenye memo: {{link}}",
     "send": "Tuma bakshishi",
+    "sendAmount": "Tuma {{amount}} {{currency}}",
+    "paidIn": "Inalipwa kwa {{currency}} · bila ada",
+    "forTitle": "kwa “{{title}}”",
+    "presets": {
+      "coffee": "Kahawa moja",
+      "popular": "Maarufu zaidi",
+      "thanks": "Asante sana",
+      "superFan": "Shabiki mkubwa"
+    },
+    "sentEyebrow": "Bakshishi imetumwa",
+    "sentTo": "{{amount}} kwa @{{recipient}}",
     "lightning": {
       "amountLabel": "Kiasi (sats):",
       "messageLabel": "Ujumbe (si lazima):",
@@ -65,6 +78,8 @@
     "monthly": {
       "label": "Mara ngapi",
       "once": "Mara moja",
+      "oneTime": "Mara moja",
+      "monthly": "Kila mwezi",
       "until": "Kila mwezi, hadi {{date}}",
       "note": "Hive huituma yenyewe kila siku 30, ya kwanza sasa hivi. Unaweza kuisimamisha wakati wowote.",
       "replaces": "Hii itachukua nafasi ya usaidizi wa kila mwezi unaomtumia @{{recipient}} tayari.",
@@ -79,7 +94,7 @@
   },
   "cardMenu": {
     "loginToPersonalize": "Tafadhali ingia ili kubinafsisha mlisho wako",
-    "notInterestedToast": "Huvutiwi — tutaficha video hii",
+    "notInterestedToast": "Huvutiwi. Tutaficha video hii",
     "undo": "Tendua",
     "cantHideOwn": "Huwezi kuficha video zako mwenyewe",
     "hidingCreatorToast": "Inaficha video za @{{author}}",
@@ -89,7 +104,8 @@
     "addToPlaylist": "Ongeza kwenye orodha ya kucheza",
     "addTag": "Ongeza lebo",
     "notInterested": "Sivutiwi",
-    "dontShowCreator": "Usionyeshe @{{author}}"
+    "dontShowCreator": "Usionyeshe @{{author}}",
+    "saveToPlaylist": "Hifadhi kwenye orodha ya kucheza"
   },
   "guestList": {
     "loadFailed": "Imeshindwa kupakia orodha ya wageni ya sasa",
@@ -132,26 +148,32 @@
     "tagged": "Lebo “{{tag}}” imewekwa.",
     "vote": "Piga kura",
     "tagThisVideo": "Weka lebo kwenye video hii",
-    "tagOptional": "— si lazima —",
+    "tagOptional": "Si lazima",
     "pickTopicFirst": "Chagua mada kwanza",
     "taggedNoDot": "Lebo “{{tag}}” imewekwa",
     "tagFailed": "Kuweka lebo kumeshindwa: {{message}}",
-    "taggedAlreadyVoted": "Lebo “{{tag}}” imewekwa — kura yako ya {{weight}}% ilikuwa imeshapigwa.",
-    "votingClosed": "Upigaji kura umefungwa — weka lebo kwenye video hii",
+    "taggedAlreadyVoted": "Lebo “{{tag}}” imewekwa. Kura yako ya {{weight}}% ilikuwa imeshapigwa.",
+    "votingClosed": "Upigaji kura umefungwa: weka lebo kwenye video hii",
     "youTagged": "Umeweka lebo hii kama <b>{{tag}}</b>.",
-    "pickTopic": "Chagua mada (inahesabiwa kama kura ya 100%)",
+    "pickTopic": "Kuchagua mada kunahesabiwa kama kura ya 100%.",
     "submitTag": "Wasilisha lebo",
     "tagThisVideoFull": "Weka lebo kwenye video hii (inahesabiwa kama kura ya 100%)",
-    "justTag": "Usipige kura — weka lebo tu"
+    "justTag": "Usipige kura, weka lebo tu",
+    "justTagShort": "Lebo tu",
+    "voteAndTag": "Piga kura na uweke lebo",
+    "addsAbout": "inaongeza takriban {{value}}",
+    "postSoFar_one": "{{value}} hadi sasa · kura {{count}}",
+    "postSoFar_other": "{{value}} hadi sasa · kura {{count}}"
   },
   "tagsPicker": {
     "autoTagged": "Lebo za kiotomatiki: {{tags}}",
     "searchPlaceholder": "Tafuta mada…",
     "searchAria": "Tafuta mada",
     "noMatches": "Hakuna mada inayolingana na “{{query}}”.",
-    "allSelected": "{{category}} yote imechaguliwa. Ongeza mada moja moja ili tu kubana zaidi:",
+    "allSelected": "{{category}} yote imechaguliwa. Gusa mada ili kuiondoa.",
     "orPickTopics": "Au chagua mada moja moja:",
-    "goodEnough": "Inatosha — au kuwa mahususi zaidi (si lazima):",
+    "clear": "Futa",
+    "goodEnough": "Inatosha, au kuwa mahususi zaidi (si lazima)",
     "moreSpecific": "Mahususi zaidi:"
   }
 }

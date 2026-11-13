@@ -3,11 +3,9 @@ import { useParams, Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import axios from "axios";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { Users, Video, CalendarDays, Award, Check, Plus, Globe, MapPin } from "lucide-react";
 import { BADGES_URL, appendNsfw } from "../../utils/config";
 import { feedParams } from "../../utils/feedParams";
 import { useAppStore } from "../../lib/store";
-import ProfileHeader from "../ProfileHeader/ProfileHeader";
 import HiveAvatar from "../HiveAvatar/HiveAvatar";
 import { cachedProfileImage } from "../../utils/avatarCache";
 import Card3 from "../Cards/Card3";
@@ -17,7 +15,14 @@ import { useWatchHistory } from "../../hooks/useWatchHistory";
 import useViewCounts from "../../hooks/useViewCounts";
 import { useTranslation, Trans } from "react-i18next";
 import { formatNumber, formatDate } from "../../i18n";
+import { toastIn } from "../../utils/toast";
+import { Button, EmptyState, Segmented, StatTile } from "../v2/ui";
+import { Icon } from "../v2/Icon";
+import GroupHero from "../Groups/GroupHero";
 import "./BadgePage.scss";
+
+// Toasts from this page are headed "Badges"; see utils/toast.js.
+const toast = toastIn('Badges');
 
 const LIMIT = 30;
 
@@ -142,33 +147,25 @@ function BadgeView({ account }) {
   })();
 
   const kpis = badge ? [
-    { key: 'recipients', icon: <Award size={16} />, label: t('badges.page.kpis.recipients'), value: fmtNum(badge.recipients) },
-    { key: 'videos', icon: <Video size={16} />, label: t('badges.page.kpis.recentVideos'), value: fmtNum(videoTotal) },
-    { key: 'since', icon: <CalendarDays size={16} />, label: t('badges.page.kpis.issued'), value: createdLabel },
+    { key: 'recipients', label: t('badges.page.kpis.recipients'), value: fmtNum(badge.recipients) },
+    { key: 'videos', label: t('badges.page.kpis.recentVideos'), value: fmtNum(videoTotal) },
+    { key: 'since', label: t('badges.page.kpis.issued'), value: createdLabel },
   ] : [];
 
+  // Design 41c: three KPI wells under the header.
   const kpiBlock = kpis.length ? (
     <div className="badge-kpis">
-      {kpis.map((k) => (
-        <div className="badge-kpi" key={k.key}>
-          <span className="badge-kpi-icon">{k.icon}</span>
-          <span className="badge-kpi-text">
-            <span className="badge-kpi-value">{k.value}</span>
-            <span className="badge-kpi-label">{k.label}</span>
-          </span>
-        </div>
-      ))}
+      {kpis.map((k) => <StatTile key={k.key} className="badge-kpi" label={k.label} value={k.value} />)}
     </div>
   ) : null;
 
-  // Issuer + links, shown under the stats. `creator` is the account that created
-  // the badge account, which is the closest thing Hive records to "who issues
-  // this badge".
+  // Issuer + links, on the header's meta line. `creator` is the account that
+  // created the badge account, which is the closest thing Hive records to "who
+  // issues this badge".
   const metaBlock = badge && (badge.creator || badge.website || badge.location) ? (
-    <div className="badge-meta">
+    <>
       {badge.creator ? (
         <span className="badge-meta-row">
-          <Award size={14} />{' '}
           <Trans
             i18nKey="badges.page.issuedBy"
             values={{ creator: badge.creator }}
@@ -177,27 +174,44 @@ function BadgeView({ account }) {
         </span>
       ) : null}
       {badge.location ? (
-        <span className="badge-meta-row"><MapPin size={14} /> {badge.location}</span>
+        <span className="badge-meta-row"><Icon name="location_on" size={16} /> {badge.location}</span>
       ) : null}
       {badge.website ? (
         <span className="badge-meta-row">
-          <Globe size={14} />
+          <Icon name="language" size={16} />
           <a href={badge.website} target="_blank" rel="noopener noreferrer nofollow">
             {String(badge.website).replace(/^https?:\/\//, '')}
           </a>
         </span>
       ) : null}
-    </div>
+    </>
   ) : null;
+
+  // Share tile: the system share sheet where there is one, else copy the link.
+  const handleShare = async () => {
+    const url = `${window.location.origin}/b/${account}`;
+    try {
+      if (navigator.share) { await navigator.share({ title: badgeTitle, url }); return; }
+    } catch (err) {
+      if (err?.name === 'AbortError') return;
+    }
+    try {
+      await navigator.clipboard.writeText(url);
+      toast.success(t('common.actions.copied'));
+    } catch { /* nothing to copy into */ }
+  };
 
   if (loadError) {
     return (
       <div className="badge-page-wrap">
-        <div className="badge-empty">
-          <h2>{t('badges.page.notFoundTitle')}</h2>
-          <p>{t('badges.page.notFoundBody', { account })}</p>
-          <Link className="badge-empty-link" to="/badges">{t('badges.page.browseAll')}</Link>
-        </div>
+        <EmptyState
+          className="badge-empty"
+          icon="workspace_premium"
+          title={t('badges.page.notFoundTitle')}
+          action={<Button as={Link} to="/badges" variant="secondary" size={36} next>{t('badges.page.browseAll')}</Button>}
+        >
+          {t('badges.page.notFoundBody', { account })}
+        </EmptyState>
       </div>
     );
   }
@@ -208,96 +222,73 @@ function BadgeView({ account }) {
         <title>{`3S | ${badgeTitle}`}</title>
       </Helmet>
 
-      <ProfileHeader
-        username={account}
-        name={badge?.title || account}
-        bio={badge?.description}
+      {/* No subscribe here. Subscribing to a badge is a plain Hive follow of
+          the badge account, which does nothing: a badge is not a feed you join,
+          it is an award someone gives you. */}
+      <GroupHero
         // From the index, but through our /img/ cache rather than the raw
         // original on someone else's host (see cachedProfileImage).
-        avatarUrl={cachedProfileImage(account, badge?.image, 'large')}
-        avatarCoin
-        coverUrl={badge?.cover}
-        // No subscribe here. Subscribing to a badge is a plain Hive follow of
-        // the badge account, which does nothing: a badge is not a feed you join,
-        // it is an award someone gives you. The count it produced was a
-        // popularity number that read as if it meant membership.
+        avatar={cachedProfileImage(account, badge?.image, 'large')}
+        round
+        coin
+        eyebrow={t('badges.page.fallbackTitle')}
+        title={badge?.title || account}
+        meta={metaBlock}
+        about={badge?.description}
+        tiles={[{ icon: 'ios_share', label: t('common.actions.share'), onClick: handleShare }]}
       />
 
-      {/* Mobile-only: stats sit above the tabs; the desktop sidebar carries them. */}
-      {kpiBlock ? (
-        <div className="badge-intro">
-          <div className="badge-intro-stats">{kpiBlock}</div>
-        </div>
-      ) : null}
+      {kpiBlock}
 
-      <div className="badge-tabs" role="tablist">
-        <button
-          type="button"
-          role="tab"
-          aria-selected={tab === 'videos'}
-          className={`badge-tab${tab === 'videos' ? ' active' : ''}`}
-          onClick={() => setTab('videos')}
-        >
-          <span className="badge-tab-icon"><Video size={16} /></span>
-          <span className="badge-tab-label">{t('badges.page.tabs.videos')}</span>
-        </button>
-        <button
-          type="button"
-          role="tab"
-          aria-selected={tab === 'recipients'}
-          className={`badge-tab${tab === 'recipients' ? ' active' : ''}`}
-          onClick={() => setTab('recipients')}
-        >
-          <span className="badge-tab-icon"><Award size={16} /></span>
-          <span className="badge-tab-label">
-            {badge?.recipients
+      <Segmented
+        className="badge-tabs"
+        options={[
+          { value: 'videos', label: t('badges.page.tabs.videos') },
+          {
+            value: 'recipients',
+            label: badge?.recipients
               ? t('badges.page.tabs.recipientsWithCount', { num: fmtNum(badge.recipients) })
-              : t('badges.page.tabs.recipients')}
-          </span>
-        </button>
-      </div>
+              : t('badges.page.tabs.recipients'),
+          },
+        ]}
+        value={tab}
+        onChange={setTab}
+        size={36}
+        block={false}
+        label={badgeTitle}
+      />
 
-      <div className="badge-body">
-        <div className="badge-feed">
-          {tab === 'videos' ? (
-            isLoading ? (
-              <CardSkeleton />
-            ) : isError ? (
-              <p>{t('badges.page.errorVideos')}</p>
-            ) : videos.length === 0 ? (
-              // A badge with no recipients, or recipients who have not posted
-              // here, gets this. It must never fall through to the global feed,
-              // which is why the checker's badge feed has the fallback off.
-              <div className="badge-empty">
-                <h2>{t('badges.page.noVideosTitle')}</h2>
-                <p>
-                  {feedType === 'empty'
-                    ? t('badges.page.noHolders')
-                    : t('badges.page.noHolderVideos')}
-                </p>
-              </div>
-            ) : (
-              <Card3 windowed
-                videos={videos}
-                loading={isFetchingNextPage}
-                getContentForVideo={getContentForVideo}
-                isWatched={isWatched}
-                getViewCount={getViewCount}
-              />
-            )
+      <div className="badge-feed">
+        {tab === 'videos' ? (
+          isLoading ? (
+            <CardSkeleton />
+          ) : isError ? (
+            <div className="v2-failure"><b>{t('badges.page.errorVideos')}</b></div>
+          ) : videos.length === 0 ? (
+            // A badge with no recipients, or recipients who have not posted
+            // here, gets this. It must never fall through to the global feed,
+            // which is why the checker's badge feed has the fallback off.
+            <EmptyState className="badge-empty" icon="video_library" title={t('badges.page.noVideosTitle')}>
+              {feedType === 'empty' ? t('badges.page.noHolders') : t('badges.page.noHolderVideos')}
+            </EmptyState>
           ) : (
-            <RecipientList data={recipients} error={recipientsError} />
-          )}
+            <Card3 windowed
+              videos={videos}
+              loading={isFetchingNextPage}
+              getContentForVideo={getContentForVideo}
+              isWatched={isWatched}
+              getViewCount={getViewCount}
+            />
+          )
+        ) : (
+          <RecipientList data={recipients} error={recipientsError} />
+        )}
 
-          {tab === 'videos' && isFetchingNextPage && (
-            <p style={{ textAlign: "center" }}>{t('badges.page.loadingMore')}</p>
-          )}
-        </div>
-
-        <aside className="badge-side">
-          {kpiBlock}
-          {metaBlock}
-        </aside>
+        {tab === 'videos' && isFetchingNextPage && (
+          <p className="badge-loading-more v2-meta">
+            <Icon name="progress_activity" size={16} className="v2-spin" /> {t('badges.page.loadingMore')}
+          </p>
+        )}
       </div>
     </div>
   );
@@ -310,19 +301,24 @@ function BadgeView({ account }) {
  */
 function RecipientList({ data, error }) {
   const { t } = useTranslation();
-  if (error) return <p>{t('badges.page.recipientsError')}</p>;
-  if (!data) return <p className="badge-recipients-loading">{t('badges.page.recipientsLoading')}</p>;
+  if (error) return <div className="v2-failure"><b>{t('badges.page.recipientsError')}</b></div>;
+  if (!data) {
+    return (
+      <p className="badge-recipients-loading v2-meta">
+        <Icon name="progress_activity" size={16} className="v2-spin" /> {t('badges.page.recipientsLoading')}
+      </p>
+    );
+  }
   if (!data.recipients?.length) {
     return (
-      <div className="badge-empty">
-        <h2>{t('badges.page.noRecipientsTitle')}</h2>
-        <p>{t('badges.page.noRecipientsBody')}</p>
-      </div>
+      <EmptyState className="badge-empty" icon="workspace_premium" title={t('badges.page.noRecipientsTitle')}>
+        {t('badges.page.noRecipientsBody')}
+      </EmptyState>
     );
   }
 
   return (
-    <>
+    <div className="badge-recipients-card">
       <p className="badge-recipients-summary">
         {data.withVideos > 0
           ? t('badges.page.recipientsSummaryWithVideos', { count: data.total, num: fmtNum(data.total), publishing: fmtNum(data.withVideos) })
@@ -330,19 +326,16 @@ function RecipientList({ data, error }) {
       </p>
       <div className="badge-recipients">
         {data.recipients.map(r => (
-          <Link className="badge-recipient" to={`/@${r.account}`} key={r.account}>
+          <Link className="badge-recipient" to={`/@${r.account}`} key={r.account} title={`@${r.account}`}>
             <HiveAvatar username={r.account} size="small" className="badge-recipient-avatar" />
-            <span className="badge-recipient-text">
-              <span className="badge-recipient-name">{r.displayName || r.account}</span>
-              <span className="badge-recipient-handle">@{r.account}</span>
-            </span>
-            <span className="badge-recipient-count">
+            <b className="badge-recipient-name">{r.displayName || r.account}</b>
+            <span className="badge-recipient-count num">
               {r.videos > 0 ? t('badges.page.recipientVideos', { count: r.videos, num: fmtNum(r.videos) }) : t('badges.page.recipientNoVideos')}
             </span>
           </Link>
         ))}
       </div>
-    </>
+    </div>
   );
 }
 

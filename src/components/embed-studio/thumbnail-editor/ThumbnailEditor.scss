@@ -1,8 +1,10 @@
 @use "../../../mixins.scss" as mix;
+@use "../../../styles/v2" as v2;
 
 // Thumbnail step: the pictures to start from left, the result in the middle,
 // the editor and the upload tiles right; and the editor popup.
-// Flat, theme variables only.
+// v2 tokens only (design 23c): the studio is a card, pictures are 16:9 tiles
+// with an accent outline when picked, the editor's tools a segmented track.
 
 $gap: 10px;
 
@@ -11,7 +13,11 @@ $gap: 10px;
   display: flex;
   flex-direction: column;
   gap: 14px;
-  margin-top: 6px;
+  @include v2.card;
+  padding: 16px;
+  box-sizing: border-box;
+
+  @include mix.respond(phone) { padding: 12px; }
 }
 
 // ── Pictures | preview | actions ────────────────────────────────────────────
@@ -29,12 +35,14 @@ $gap: 10px;
 .thumb-studio__preview {
   position: relative;
   aspect-ratio: 16 / 9;
-  border-radius: 12px;
+  border-radius: var(--r-xl);
   overflow: hidden;
-  background: #000;
-  border: 1px solid var(--border-color, rgba(0, 0, 0, 0.15));
+  background: var(--media-black);
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  transition: outline-color var(--t-fast) var(--ease);
 
-  &:has(.thumb-canvas.is-readonly):hover { border-color: var(--accent-primary, #e53935); }
+  &:has(.thumb-canvas.is-readonly):hover { outline-color: var(--accent); }
 }
 
 .thumb-studio__empty {
@@ -45,8 +53,8 @@ $gap: 10px;
   justify-content: center;
   padding: 16px;
   text-align: center;
-  color: rgba(255, 255, 255, 0.75);
-  font-size: 14px;
+  color: var(--on-media);
+  @include v2.text(body);
 }
 
 // No picture yet (always so at first on phones): the preview opens the editor
@@ -57,17 +65,17 @@ $gap: 10px;
   width: 100%;
   border: 0;
   background: transparent;
-  color: #fff;
+  color: var(--on-media);
   font: inherit;
-  font-size: 15px;
-  font-weight: 600;
+  @include v2.text(label);
+  font-size: 14px;
   cursor: pointer;
 
-  .thumb-option__icon { width: 40px; height: 40px; }
-  &:hover { background: rgba(255, 255, 255, 0.06); }
+  .thumb-option__icon { width: 48px; height: 48px; }
+  &:hover { background: var(--media-scrim); }
 
   &:focus-visible {
-    outline: 2px solid var(--accent-primary, #e53935);
+    outline: 2px solid var(--accent);
     outline-offset: -4px;
   }
 }
@@ -98,8 +106,10 @@ $gap: 10px;
 
 .thumb-studio__options {
   display: grid;
-  grid-auto-rows: calc((100% - 3 * #{$gap}) / 4);
+  grid-auto-rows: calc((100% - 3 * #{$gap} - 8px) / 4);
   gap: $gap;
+  // Room for the picked tile's outline inside the scroll box.
+  padding: 4px;
   overflow-y: auto;
   scrollbar-width: thin;
 }
@@ -122,12 +132,14 @@ $gap: 10px;
   height: 100%;
   min-height: 0;
   padding: 0;
-  border: 1px solid var(--border-color, rgba(0, 0, 0, 0.15));
-  border-radius: 8px;
+  border: 0;
+  border-radius: var(--r-md);
   overflow: hidden;
-  background: var(--bg-secondary, #f1f1f3);
+  @include v2.thumb-placeholder(6px);
   cursor: pointer;
-  transition: box-shadow 0.15s ease, border-color 0.15s ease;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  transition: outline-color var(--t-fast) var(--ease);
 
   img {
     display: block;
@@ -136,17 +148,11 @@ $gap: 10px;
     object-fit: cover;
   }
 
-  &:hover { border-color: color-mix(in srgb, var(--accent-primary, #e53935) 50%, transparent); }
+  &:hover { outline-color: color-mix(in srgb, var(--accent) 45%, transparent); }
 
-  &:focus-visible {
-    outline: 2px solid var(--accent-primary, #e53935);
-    outline-offset: 2px;
-  }
+  &:focus-visible { outline-color: var(--accent); }
 
-  &.is-selected {
-    border-color: var(--accent-primary, #e53935);
-    box-shadow: inset 0 0 0 2px var(--accent-primary, #e53935);
-  }
+  &.is-selected { outline-color: var(--accent); }
 }
 
 .thumb-option__check {
@@ -159,20 +165,15 @@ $gap: 10px;
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background: var(--accent-primary, #e53935);
-  color: #fff;
+  background: var(--accent);
+  color: var(--on-accent);
 }
 
 .thumb-option__badge {
   position: absolute;
   left: 4px;
   bottom: 4px;
-  padding: 1px 6px;
-  border-radius: 6px;
-  font-size: 11px;
-  font-weight: 600;
-  background: rgba(0, 0, 0, 0.65);
-  color: #fff;
+  @include v2.scrim-pill;
 }
 
 // The two tiles on the right, the editor and the upload: one look.
@@ -185,26 +186,26 @@ $gap: 10px;
   justify-content: center;
   gap: 6px;
   padding: 8px;
-  border: 2px dashed var(--border-color, rgba(0, 0, 0, 0.2));
-  border-radius: 8px;
-  background: var(--bg-primary, #fff);
-  color: var(--text-primary, #111);
+  border: 2px dashed var(--border);
+  border-radius: var(--r-lg);
+  background: transparent;
+  color: var(--muted);
   font: inherit;
   text-align: center;
   cursor: pointer;
-  transition: background-color 0.15s ease, border-color 0.15s ease;
+  transition: background var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease);
 
-  &:hover { border-color: color-mix(in srgb, var(--accent-primary, #e53935) 50%, transparent); }
+  &:hover { background: var(--bg-hover); border-color: color-mix(in srgb, var(--text) 25%, transparent); }
 
   &:focus-visible {
-    outline: 2px solid var(--accent-primary, #e53935);
+    outline: 2px solid var(--accent);
     outline-offset: 2px;
   }
 }
 
 .thumb-action--upload.is-dragging {
-  border-color: var(--accent-primary, #e53935);
-  background: color-mix(in srgb, var(--accent-primary, #e53935) 6%, transparent);
+  border-color: var(--accent);
+  background: var(--accent-tint);
 }
 
 // Between the two tiles: the design made in the editor (a live render of it;
@@ -216,6 +217,7 @@ $gap: 10px;
   display: flex;
   flex-direction: column;
   gap: $gap;
+  padding: 4px;
   overflow-y: auto;
   scrollbar-width: thin;
 
@@ -231,7 +233,7 @@ $gap: 10px;
 .thumb-studio__side--actions .thumb-action { min-height: 64px; }
 
 .thumb-option--design {
-  background: #000;
+  background: var(--media-black);
 
   .thumb-canvas { object-fit: cover; }
 }
@@ -242,25 +244,24 @@ $gap: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
+  width: 36px;
+  height: 36px;
   flex-shrink: 0;
-  border-radius: 50%;
-  background: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent);
-  color: var(--accent-primary, #e53935);
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+  color: var(--text);
 }
 
 .thumb-option__label {
-  font-size: 13px;
-  font-weight: 600;
+  @include v2.text(label);
   line-height: 1.2;
-  color: var(--text-primary, #111);
+  color: var(--text);
 }
 
 .thumb-option__hint {
-  font-size: 11px;
+  @include v2.text(meta-sm);
   line-height: 1.2;
-  color: var(--text-secondary, #6b7280);
+  color: var(--muted);
 }
 
 // Shorts / stories: a 9:16 preview; the pictures one column of 9:16 rows.
@@ -347,35 +348,18 @@ $gap: 10px;
 
 .thumb-tools__tabs {
   display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid var(--border-color, rgba(0, 0, 0, 0.12));
+  flex-wrap: nowrap;
+  gap: 4px;
+  flex: none;
+  background: var(--bg);
 }
 
-.thumb-tools__tab {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  min-height: 36px;
-  padding: 6px 12px;
-  border: 1px solid transparent;
-  border-radius: 10px;
-  background: transparent;
-  color: var(--text-secondary, #6b7280);
-  font: inherit;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-
-  &:hover:not(:disabled) { background: var(--bg-secondary, #f1f1f3); }
-
-  &.is-active {
-    border-color: var(--accent-primary, #e53935);
-    color: var(--accent-primary, #e53935);
-  }
-
-  &:disabled { cursor: not-allowed; opacity: 0.5; }
+.thumb-tools__tab.v2-seg__opt {
+  flex: 1 1 0;
+  min-width: max-content;
+  gap: 4px;
+  padding: 0 8px;
+  font-size: 12px;
 }
 
 .thumb-tools__panel {
@@ -404,9 +388,8 @@ $gap: 10px;
 }
 
 .thumb-field__label {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text-primary, #111);
+  @include v2.text(eyebrow);
+  color: var(--muted);
 }
 
 .thumb-field__control {
@@ -419,34 +402,15 @@ $gap: 10px;
 .thumb-field__value {
   min-width: 3.2em;
   text-align: right;
-  font-size: 13px;
-  font-variant-numeric: tabular-nums;
-  color: var(--text-secondary, #6b7280);
+  @include v2.mono(12, 700);
+  color: var(--text);
 }
 
 .thumb-slider {
   flex: 1;
   min-width: 0;
-  accent-color: var(--accent-primary, #e53935);
-}
-
-.thumb-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  min-height: 34px;
-  padding: 6px 12px;
-  border: 1px solid var(--border-color, rgba(0, 0, 0, 0.2));
-  border-radius: 10px;
-  background: transparent;
-  color: var(--text-primary, #111);
-  font: inherit;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-
-  &:hover:not(:disabled) { background: var(--bg-secondary, #f1f1f3); }
-  &:disabled { opacity: 0.5; cursor: not-allowed; }
+  height: 6px;
+  accent-color: var(--accent);
 }
 
 .thumb-tool-row {
@@ -457,36 +421,12 @@ $gap: 10px;
 
 .thumb-hint {
   margin: 0;
-  font-size: 12px;
-  color: var(--text-secondary, #6b7280);
+  @include v2.text(meta);
+  color: var(--muted);
+  line-height: 1.45;
 }
 
-.thumb-seg {
-  display: inline-flex;
-  border: 1px solid var(--border-color, rgba(0, 0, 0, 0.2));
-  border-radius: 10px;
-  overflow: hidden;
-}
-
-.thumb-seg__btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 40px;
-  min-height: 34px;
-  padding: 4px 10px;
-  border: 0;
-  background: transparent;
-  color: var(--text-secondary, #6b7280);
-  cursor: pointer;
-
-  & + & { border-left: 1px solid var(--border-color, rgba(0, 0, 0, 0.2)); }
-  &:hover { background: var(--bg-secondary, #f1f1f3); }
-  &.is-active {
-    color: var(--accent-primary, #e53935);
-    box-shadow: inset 0 0 0 2px var(--accent-primary, #e53935);
-  }
-}
+.thumb-seg .thumb-seg__btn { min-width: 44px; padding: 0 10px; }
 
 .thumb-sr {
   position: absolute;
@@ -509,87 +449,99 @@ $gap: 10px;
   display: inline-flex;
   align-items: stretch;
   max-width: 220px;
-  border: 1px solid var(--border-color, rgba(0, 0, 0, 0.2));
-  border-radius: 10px;
+  height: 36px;
+  border-radius: v2.radius-for(36);
+  background: var(--surface-2);
   overflow: hidden;
 
-  &.is-active { border-color: var(--accent-primary, #e53935); }
+  &.is-active { background: var(--text); }
 }
 
 .thumb-layer-chip__pick,
 .thumb-layer-chip__remove {
   border: 0;
   background: transparent;
-  color: var(--text-primary, #111);
+  color: var(--text);
   font: inherit;
   cursor: pointer;
 
-  &:hover { background: var(--bg-secondary, #f1f1f3); }
+  .is-active > & { color: var(--bg); }
 }
 
 .thumb-layer-chip__pick {
-  padding: 6px 10px;
+  padding: 0 4px 0 12px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-size: 13px;
-  font-weight: 600;
-
-  .is-active > & { color: var(--accent-primary, #e53935); }
+  @include v2.text(label);
 }
 
 .thumb-layer-chip__remove {
   display: flex;
   align-items: center;
   padding: 0 8px;
-  border-left: 1px solid var(--border-color, rgba(0, 0, 0, 0.2));
-  color: var(--text-secondary, #6b7280);
+  opacity: .7;
+  &:hover { opacity: 1; }
 }
 
 .thumb-textarea {
   flex: 1;
   min-width: 0;
-  padding: 8px 10px;
-  border: 1px solid var(--border-color, rgba(0, 0, 0, 0.2));
-  border-radius: 10px;
-  background: var(--bg-primary, #fff);
-  color: var(--text-primary, #111);
+  min-height: 64px;
+  padding: 10px 12px;
+  border: 2px solid transparent;
+  border-radius: var(--r-md);
+  background: var(--bg);
+  color: var(--text);
   font: inherit;
   font-size: 14px;
+  line-height: 1.45;
   resize: vertical;
 
+  &::placeholder { color: var(--muted); }
   &:focus {
     outline: none;
-    border-color: var(--accent-primary, #e53935);
+    border-color: var(--accent);
   }
 }
 
 .thumb-fonts {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: 8px;
   // 26 fonts: a few rows show, the rest scroll inside.
-  max-height: 172px;
+  max-height: 176px;
   overflow-y: auto;
   padding: 2px;
   scrollbar-width: thin;
 }
 
+// 23c: the fonts as "Aa" tiles, four to a row; the name is the tooltip.
+.thumb-modal .thumb-fonts {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  flex: 1 1 auto;
+  width: 100%;
+  max-height: 128px;
+}
+.thumb-modal .thumb-font { height: 56px; border-radius: var(--r-lg); font-size: 20px; padding: 0; }
+
 .thumb-font {
-  padding: 5px 10px;
-  border: 1px solid var(--border-color, rgba(0, 0, 0, 0.2));
-  border-radius: 10px;
+  height: 48px;
+  padding: 0 12px;
+  border: 2px solid var(--border);
+  border-radius: v2.radius-for(48);
   background: transparent;
-  color: var(--text-primary, #111);
-  font-size: 17px;
+  color: var(--text);
+  font-size: 18px;
   line-height: 1.2;
   cursor: pointer;
+  transition: border-color var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
 
-  &:hover { background: var(--bg-secondary, #f1f1f3); }
+  &:hover { background: var(--bg-hover); }
   &.is-active {
-    border-color: var(--accent-primary, #e53935);
-    box-shadow: inset 0 0 0 1px var(--accent-primary, #e53935);
-    color: var(--accent-primary, #e53935);
+    border-color: var(--accent);
+    background: var(--accent-tint-strong);
   }
 }
 
@@ -602,15 +554,17 @@ $gap: 10px;
 
 .thumb-swatch {
   position: relative;
-  width: 28px;
-  height: 28px;
+  width: 44px;
+  height: 44px;
   padding: 0;
-  border: 1px solid var(--border-color, rgba(0, 0, 0, 0.25));
-  border-radius: 50%;
+  border: 1px solid var(--border);
+  border-radius: v2.radius-for(44);
   cursor: pointer;
 
+  // 23c: the picked swatch in an accent ring.
   &.is-active {
-    box-shadow: 0 0 0 2px var(--bg-primary, #fff), 0 0 0 4px var(--accent-primary, #e53935);
+    outline: 3px solid var(--accent);
+    outline-offset: 2px;
   }
 
   // The "any colour" swatch: a palette icon until a custom colour is picked.
@@ -619,8 +573,8 @@ $gap: 10px;
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    background: var(--bg-secondary, #f1f1f3);
-    color: var(--text-secondary, #6b7280);
+    background: var(--surface-2);
+    color: var(--muted);
 
     input {
       position: absolute;
@@ -635,37 +589,20 @@ $gap: 10px;
 
 .thumb-btn--icon {
   justify-content: center;
-  min-width: 36px;
-  padding: 6px 8px;
+  width: 36px;
+  padding: 0;
 }
 
-// Done: the accent outline, like the wizard's primary actions.
-.thumb-btn--primary {
-  min-height: 40px;
-  padding: 8px 18px;
-  font-size: 14px;
-  border-color: var(--accent-primary, #e53935);
-  color: var(--accent-primary, #e53935);
-
-  &:hover:not(:disabled) { background: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent); }
-}
-
-// Destructive: red text and outline, never a red fill.
-.thumb-btn--danger {
-  border-color: var(--accent-primary, #e53935);
-  color: var(--accent-primary, #e53935);
-
-  &:hover:not(:disabled) { background: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent); }
-}
+// Done: the one accent button of the editor.
+.thumb-btn--primary { min-width: 180px; }
 
 .thumb-confirm {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 8px;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text-primary, #111);
+  @include v2.text(label);
+  color: var(--text);
 }
 
 .thumb-tool-row__spacer { flex: 1 1 auto; }
@@ -673,54 +610,6 @@ $gap: 10px;
 .thumb-btn--block {
   width: 100%;
   justify-content: center;
-}
-
-// On/off switch
-.thumb-toggle {
-  position: relative;
-  display: inline-flex;
-  cursor: pointer;
-
-  input {
-    position: absolute;
-    opacity: 0;
-    width: 1px;
-    height: 1px;
-  }
-
-  input:focus-visible + .thumb-toggle__track {
-    outline: 2px solid var(--accent-primary, #e53935);
-    outline-offset: 2px;
-  }
-}
-
-.thumb-toggle__track {
-  position: relative;
-  width: 40px;
-  height: 22px;
-  border-radius: 11px;
-  border: 1px solid var(--border-color, rgba(0, 0, 0, 0.25));
-  background: var(--bg-secondary, #f1f1f3);
-  transition: background-color 0.15s ease, border-color 0.15s ease;
-
-  .is-on & {
-    background: var(--accent-primary, #e53935);
-    border-color: var(--accent-primary, #e53935);
-  }
-}
-
-.thumb-toggle__knob {
-  position: absolute;
-  top: 2px;
-  left: 2px;
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  background: #fff;
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.15);
-  transition: transform 0.15s ease;
-
-  .is-on & { transform: translateX(18px); }
 }
 
 // Pick frame: the video on the left, its controls beside it (stacked on phones).
@@ -737,8 +626,8 @@ $gap: 10px;
   display: block;
   width: 100%;
   max-height: 260px;
-  border-radius: 10px;
-  background: #000;
+  border-radius: var(--r-md);
+  background: var(--media-black);
   cursor: pointer;
 }
 
@@ -757,10 +646,11 @@ $gap: 10px;
   .thumb-field__value { min-width: 7.5em; }
 }
 
-// ── Editor popup ────────────────────────────────────────────────────────────
-// Canvas left (the pictures to start from under it), tools right, so every
-// setting sits beside the picture it changes. Phones: a full-height sheet,
-// canvas on top and the tools scrolling under it.
+// ── Editor popup (23c) ──────────────────────────────────────────────────────
+// One column like the board: the accent-barred head with the Download and
+// Reset tiles, the canvas (radius 20), the pictures to start from, the tool
+// track, the open tool's panel (it scrolls), one full-width primary.
+// Phones: a full-height sheet, the canvas sticking on top.
 
 .thumb-modal-overlay {
   position: fixed;
@@ -770,30 +660,41 @@ $gap: 10px;
   align-items: center;
   justify-content: center;
   padding: 16px;
-  background: rgba(0, 0, 0, 0.6);
+  background: var(--overlay);
 }
 
 .thumb-modal {
   display: flex;
   flex-direction: column;
-  width: min(1280px, 100%);
-  height: min(880px, 100%);
-  padding: 16px 18px;
+  width: min(560px, 100%);
+  max-height: min(920px, 100%);
+  padding: 20px;
   box-sizing: border-box;
-  border-radius: 16px;
-  background: var(--bg-primary, #fff);
-  color: var(--text-primary, #111);
+  border: 1px solid var(--border);
+  border-radius: var(--r-3xl);
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: var(--shadow-sheet);
   overflow: hidden;
 
-  .thumb-modal__header { margin-bottom: 12px; }
+  .thumb-modal__header {
+    margin-bottom: 14px;
+    padding: 0;
+    gap: 6px;
+    .app-modal-header-title { font-size: 20px; font-weight: 900; }
+  }
+  .thumb-modal__headbtn { flex: none; }
 }
+
+// Shorts and covers are taller pictures: a little more room.
+.thumb-modal--portrait { width: min(520px, 100%); }
 
 .thumb-modal__body {
   flex: 1 1 auto;
   min-height: 0;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 380px;
-  gap: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .thumb-modal__stage {
@@ -801,14 +702,14 @@ $gap: 10px;
   flex-direction: column;
   gap: $gap;
   min-width: 0;
-  min-height: 0;
+  flex: none;
 }
 
-// The canvas keeps its aspect and takes as much of this box as fits.
+// The canvas keeps its aspect at the panel's width.
 .thumb-modal__canvas {
   position: relative;
-  flex: 1 1 auto;
-  min-height: 0;
+  width: 100%;
+  aspect-ratio: 16 / 9;
 
   .thumb-canvas {
     position: absolute;
@@ -818,66 +719,64 @@ $gap: 10px;
     height: auto;
     max-width: 100%;
     max-height: 100%;
-    border-radius: 10px;
+    border-radius: var(--r-xl);
   }
 
   .thumb-studio__empty {
-    border-radius: 10px;
-    background: #000;
+    height: 100%;
+    border-radius: var(--r-xl);
+    background: var(--media-black);
   }
 }
+.thumb-modal--portrait .thumb-modal__canvas { aspect-ratio: auto; height: min(42vh, 420px); }
+.thumb-modal--square .thumb-modal__canvas { aspect-ratio: auto; height: min(40vh, 400px); }
 
 .thumb-modal__sources {
   flex: 0 0 auto;
   display: flex;
   gap: 8px;
   overflow-x: auto;
-  padding-bottom: 2px;
+  padding: 4px;
   scrollbar-width: thin;
 
   .thumb-option {
     flex: 0 0 auto;
-    width: 112px;
+    width: 88px;
     height: auto;
     aspect-ratio: 16 / 9;
   }
 }
 
 .thumb-modal--portrait .thumb-modal__sources .thumb-option {
-  width: 54px;
+  width: 44px;
   aspect-ratio: 9 / 16;
 }
 
 .thumb-modal--square .thumb-modal__sources .thumb-option {
-  width: 72px;
+  width: 56px;
   aspect-ratio: 1;
 }
 
+// The tools under the picture: the track, then the panel scrolling inside.
 .thumb-modal__side {
   display: flex;
   flex-direction: column;
-  min-height: 0;
-  padding-left: 18px;
-  border-left: 1px solid var(--border-color, rgba(0, 0, 0, 0.12));
+  flex: 1 1 auto;
+  min-height: 140px;
 
-  // The column is narrow: the picker's video goes above its controls.
+  .thumb-tools__tabs { background: var(--bg); border-radius: var(--r-lg); }
   .thumb-pick { grid-template-columns: minmax(0, 1fr); }
 }
 
 .thumb-modal__footer {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
   gap: 8px;
-  margin-top: 12px;
-  padding-top: 12px;
-  border-top: 1px solid var(--border-color, rgba(0, 0, 0, 0.12));
+  margin-top: 14px;
 }
 
-@media (max-width: 900px) {
-  .thumb-modal__body { grid-template-columns: minmax(0, 1fr) 320px; }
-  .thumb-field { grid-template-columns: minmax(0, 1fr); gap: 6px; }
-}
+// The panel is narrow: labels over their controls.
+.thumb-modal .thumb-field { grid-template-columns: minmax(0, 1fr); gap: 6px; }
 
 // Phones: one scrolling sheet. The preview sticks to the top while the
 // pictures, the tool tabs (one row that swipes) and the settings scroll under
@@ -892,8 +791,8 @@ $gap: 10px;
     width: 100%;
     height: 100%;
     padding: 12px 14px calc(10px + env(safe-area-inset-bottom, 0px));
-    border-radius: 16px 16px 0 0;
-    animation: thumb-modal-up 0.2s ease-out;
+    border-radius: var(--r-3xl) var(--r-3xl) 0 0;
+    animation: thumb-modal-up var(--t-slow) var(--ease);
 
     .thumb-modal__header { margin-bottom: 8px; }
   }
@@ -914,8 +813,8 @@ $gap: 10px;
     top: 0;
     z-index: 2;
     height: 30vh;
-    background: var(--bg-primary, #fff);
-    box-shadow: 0 8px 0 var(--bg-primary, #fff);
+    background: var(--surface);
+    box-shadow: 0 8px 0 var(--surface);
   }
   .thumb-modal--portrait .thumb-modal__canvas { height: 42vh; }
   .thumb-modal--square .thumb-modal__canvas { height: 38vh; }
@@ -945,10 +844,7 @@ $gap: 10px;
     scrollbar-width: none;
     &::-webkit-scrollbar { display: none; }
   }
-  .thumb-tools__tab {
-    flex: 0 0 auto;
-    padding: 6px 10px;
-  }
+  .thumb-tools__tab { flex: 0 0 auto; }
 
   .thumb-tools__panel {
     overflow: visible;
@@ -960,7 +856,8 @@ $gap: 10px;
     margin-top: 8px;
     padding-top: 10px;
 
-    .thumb-btn { padding: 6px 10px; }
+    .thumb-btn:not(.thumb-btn--primary) { padding: 0 10px; }
+    .thumb-btn--primary { min-width: 0; flex: 1 1 auto; }
     .thumb-confirm { flex: 1 1 auto; min-width: 0; flex-wrap: wrap; }
   }
 }
@@ -977,8 +874,8 @@ $gap: 10px;
   flex-direction: column;
   gap: 10px;
   padding: 10px 12px;
-  border: 1px solid var(--accent-primary, #e53935);
-  border-radius: 10px;
+  border-radius: var(--r-lg);
+  background: var(--accent-wash);
 }
 
 .thumb-sticker-selected__head {
@@ -1000,12 +897,15 @@ $gap: 10px;
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 6px 10px;
-  border: 1px solid var(--border-color, rgba(0, 0, 0, 0.2));
-  border-radius: 10px;
-  color: var(--text-secondary, #6b7280);
+  height: 36px;
+  padding: 0 12px;
+  border: 2px solid transparent;
+  border-radius: v2.radius-for(36);
+  background: var(--bg);
+  color: var(--muted);
+  box-sizing: border-box;
 
-  &:focus-within { border-color: var(--accent-primary, #e53935); }
+  &:focus-within { border-color: var(--accent); }
 
   input {
     flex: 1;
@@ -1013,9 +913,10 @@ $gap: 10px;
     border: 0;
     outline: none;
     background: transparent;
-    color: var(--text-primary, #111);
+    color: var(--text);
     font: inherit;
     font-size: 14px;
+    &::placeholder { color: var(--muted); }
   }
 }
 
@@ -1025,21 +926,23 @@ $gap: 10px;
   gap: 6px;
 }
 
+// Filter chips: surface-2, the picked one ink-filled.
 .thumb-sticker-tab {
-  padding: 5px 10px;
-  border: 1px solid var(--border-color, rgba(0, 0, 0, 0.2));
-  border-radius: 10px;
-  background: transparent;
-  color: var(--text-secondary, #6b7280);
+  height: 28px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: v2.radius-for(28);
+  background: var(--surface-2);
+  color: var(--text);
   font: inherit;
-  font-size: 13px;
-  font-weight: 600;
+  @include v2.text(label);
+  font-size: 12px;
   cursor: pointer;
 
-  &:hover { background: var(--bg-secondary, #f1f1f3); }
+  &:hover { background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); }
   &.is-active {
-    border-color: var(--accent-primary, #e53935);
-    color: var(--accent-primary, #e53935);
+    background: var(--text);
+    color: var(--bg);
   }
 }
 
@@ -1052,12 +955,14 @@ $gap: 10px;
 .thumb-sticker {
   aspect-ratio: 1;
   padding: 6px;
-  border: 1px solid var(--border-color, rgba(0, 0, 0, 0.15));
-  border-radius: 8px;
-  background: var(--bg-secondary, #f1f1f3);
+  border: 0;
+  border-radius: var(--r-md);
+  background: var(--bg);
   cursor: pointer;
+  outline: 2px solid transparent;
+  outline-offset: 0;
 
-  &:hover { border-color: var(--accent-primary, #e53935); }
+  &:hover { outline-color: color-mix(in srgb, var(--accent) 45%, transparent); }
 
   img {
     display: block;
@@ -1081,15 +986,17 @@ $gap: 10px;
   justify-content: center;
   min-height: 64px;
   padding: 10px 6px;
-  border: 1px solid var(--border-color, rgba(0, 0, 0, 0.15));
-  border-radius: 8px;
-  background: #2b2b2f;
-  font-size: 15px;
+  border: 0;
+  border-radius: var(--r-md);
+  // Most presets are white text made for video: show them on the media black.
+  background: var(--media-black);
+  font-size: 16px;
   line-height: 1.2;
   cursor: pointer;
   overflow: hidden;
+  outline: 2px solid transparent;
 
-  &:hover { border-color: var(--accent-primary, #e53935); }
+  &:hover { outline-color: var(--accent); }
 
   span {
     max-width: 100%;

@@ -16,7 +16,8 @@
       "rep": "声誉 {{rep}}",
       "repTitle": "Hive 声誉",
       "viewProfile": "查看主页"
-    }
+    },
+    "replyTo": "回复 {{user}}…"
   },
   "errors": {
     "votingUnavailable": "此帖子暂不支持点赞",
@@ -30,7 +31,7 @@
     "interestsTitle": "只看符合你兴趣的短视频",
     "pickInterestsFirst": "请先选择一些兴趣",
     "noInterests": "你还没有选择任何兴趣——去设置里选择吧",
-    "interestsExhausted": "符合你兴趣的短视频已经看完了——正在显示发现",
+    "interestsExhausted": "符合你兴趣的短视频已经看完了。正在显示发现。",
     "noInterestMatches": "目前没有符合你兴趣的短视频。",
     "switchToDiscover": "切换到发现",
     "empty": "暂无短视频",
@@ -39,12 +40,18 @@
   "glow": {
     "subtle": "氛围光：柔和",
     "vivid": "氛围光：鲜艳",
-    "off": "氛围光：关"
+    "off": "氛围光：关",
+    "label": "氛围光",
+    "offShort": "关",
+    "subtleShort": "柔和",
+    "vividShort": "鲜艳"
   },
   "playbackMode": {
     "autoReplay": "自动重播",
     "autoSwipe": "自动下滑",
-    "manual": "手动"
+    "manual": "手动",
+    "label": "播放",
+    "options": "播放选项"
   },
   "subtitles": {
     "off": "关"
@@ -99,7 +106,7 @@
     "postRemoved": "这个短视频对应的 Hive 帖子已被删除，因此无法再评论或点赞。",
     "beFirst": "来抢沙发吧！",
     "unavailable": "此帖子暂不支持评论",
-    "addPlaceholder": "发条评论...",
+    "addPlaceholder": "加入讨论…",
     "addPlaceholderBar": "发条评论…",
     "loginPlaceholder": "登录后评论",
     "send": "发送评论",
@@ -126,7 +133,7 @@
     "seenNote": "已登录且开启了观看记录的观众。",
     "seenEmpty": "还没有人看过。",
     "keep": "保留为短视频",
-    "keepHint": "24 小时后仍留在你的频道",
+    "keepHint": "24 小时后它仍会留在你的频道。",
     "keepConfirm": "要永久保留吗？",
     "keepYes": "保留",
     "keeping": "正在保留…",
@@ -137,5 +144,9 @@
   "audiogram": {
     "fullEpisode": "完整节目",
     "listen": "收听完整节目：{{title}}"
+  },
+  "panel": {
+    "discussion": "讨论",
+    "upNext": "接下来"
   }
 }

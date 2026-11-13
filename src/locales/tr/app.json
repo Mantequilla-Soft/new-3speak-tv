@@ -5,11 +5,11 @@
   "supportBlock": {
     "banned": {
       "title": "Hesabın yasaklandı",
-      "body": "3Speak hesabın yasaklandı, bu yüzden giriş yapamazsın. Bunun bir hata olduğunu düşünüyorsan lütfen 3Speak destek ekibiyle iletişime geç."
+      "body": "3Speak hesabın yasaklandı, bu yüzden giriş yapamazsın. Bunun bir hata olduğunu düşünüyorsan 3Speak destek ekibiyle iletişime geç."
     },
     "upload": {
       "title": "Hesabın için yükleme devre dışı",
-      "body": "3Speak hesabının şu an yükleme yapmasına izin verilmiyor. Bunun bir hata olduğunu düşünüyorsan lütfen 3Speak destek ekibiyle iletişime geç."
+      "body": "Hesabının şu an yükleme yapmasına izin verilmiyor. Bunun bir hata olduğunu düşünüyorsan 3Speak destek ekibiyle iletişime geç."
     }
   },
   "uploadBlock": {
@@ -18,7 +18,7 @@
   },
   "emergency": {
     "title": "Altyapı sorunları yaşıyoruz",
-    "body": "Ekibimiz konunun üzerinde ve 3Speak'i şu an geri getirmek için çalışıyor. Bize ulaşmak ve canlı güncellemeler almak için Discord'umuza katıl; sabrın için teşekkürler.",
+    "body": "Ekibimiz 3Speak'i şu an geri getirmek için çalışıyor. Canlı güncellemeler için Discord'umuza katıl.",
     "joinDiscord": "Discord'umuza katıl"
   },
   "changelog": {
@@ -87,7 +87,7 @@
     "lookAround": "Sadece etrafa bakmak istiyorum"
   },
   "interests": {
-    "saved": "İlgi alanları kaydedildi; istediğin zaman Ayarlar'dan değiştirebilirsin",
+    "saved": "İlgi alanları kaydedildi. İstediğin zaman Ayarlar'dan değiştirebilirsin",
     "saveFailed": "İlgi alanları kaydedilemedi",
     "title": "Nelerden hoşlanırsın?",
     "body": "Sevdiğin birkaç konu seç, sana beğendiğin türden daha çok içerik gösterelim. Bunları istediğin zaman <b>Ayarlar</b>'dan değiştirebilirsin.",
@@ -105,27 +105,27 @@
     "things": {
       "postVideos": {
         "title": "Video paylaş",
-        "text": "Uzun videolar yükle; senin kalsınlar, kimsenin sessizce silemeyeceği bir zincirde."
+        "text": "Senin kalan uzun videolar"
       },
       "filmShorts": {
         "title": "Shorts çek",
-        "text": "Hızlı, dikey ve paylaşması kolay bir şey. İlk izleyicilerini bulmak için harika."
+        "text": "Hızlı, dikey, paylaşması kolay"
       },
       "goLive": {
         "title": "Canlı yayın yap",
-        "text": "Kitlene yayın yap, sahneye konuk al ve kaydı sonrasında sakla."
+        "text": "Sahneye konuk al, kaydı sakla"
       },
       "buildCommunity": {
         "title": "Topluluk kur",
-        "text": "Önem verdiğin şey etrafında bir alan aç ya da zaten hareketli olan birine katıl."
+        "text": "Bir alan aç ya da birine katıl"
       },
       "makeFriends": {
         "title": "Gerçek arkadaşlar edin",
-        "text": "Birbirine destek olan gerçek insanlarla yorumlaş, sohbet et ve iş birliği yap."
+        "text": "Yorum yap, sohbet et, iş birliği yap"
       },
       "getInspired": {
         "title": "İlham al, dahil ol",
-        "text": "İçerik üreticilerini keşfet, sevdiklerini destekle ve bu arada kazan."
+        "text": "İçerik üreticilerini destekle, sen de kazan"
       }
     },
     "advertiserThings": {
@@ -174,7 +174,10 @@
     "uploading": "Yükleniyor…",
     "interestsHint": "Ana sayfanda neyin görüneceğini seçmek için bunları kullanırız. İstediğin kadar seç ya da hiç seçme, istediğin zaman değiştir.",
     "interestsFineprint": "Hive hesabına kaydedilir, böylece tüm Hive uygulamaları aynı profili ve aynı ilgi alanlarını gösterir.",
-    "saveAndExplore": "Kaydet ve keşfetmeye başla"
+    "saveAndExplore": "Kaydet ve keşfetmeye başla",
+    "eyebrow": "Hoş geldin",
+    "stepOf": "Adım {{n}} / {{total}}",
+    "profileFineprint": "Hive hesabına kaydedilir, böylece her Hive uygulaması aynı profili gösterir."
   },
   "profileEdit": {
     "updated": "Profil güncellendi",
@@ -193,7 +196,7 @@
     "uploadBanner": "Profil kapağı yükle",
     "changeBanner": "Kapağı değiştir",
     "addBanner": "Kapak ekle",
-    "bannerHint": "En iyisi <b>2800 × 684</b> px (veya herhangi bir 4:1 görsel). Önemli kısmı ortada tut: dar ekranlarda kenarlar kırpılır ve adın sol alt köşenin üzerinde durur.",
+    "bannerHint": "Önemli kısmı ortada tut: dar ekranlarda kenarlar kırpılır ve adın sol alt köşenin üzerinde durur.",
     "uploadPicture": "Profil fotoğrafı yükle",
     "pictureLabel": "Profil fotoğrafı",
     "pictureHint": "Bir yüz veya logo en iyi sonucu verir. Kare, 400 × 400 px veya daha büyük. En fazla 8MB.",
@@ -201,7 +204,7 @@
     "namePlaceholderUser": "Sana nasıl hitap edelim? (@{{username}})",
     "namePlaceholder": "Sana nasıl hitap edelim?",
     "shortBio": "Kısa biyografi",
-    "bioPlaceholder": "Ne üretiyorsun ve insanlar senden ne beklemeli?",
+    "bioPlaceholder": "Ne üretiyorsun, insanlar ne beklemeli?",
     "location": "Konum",
     "optional": "isteğe bağlı",
     "locationPlaceholder": "Dünyanın neresindesin?"

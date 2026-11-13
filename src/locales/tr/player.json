@@ -77,6 +77,11 @@
     }
   },
   "reactionUpload": {
+    "title": "Video tepkisi paylaş",
+    "rec": "REC {{time}}",
+    "mic": "Mikrofon",
+    "camera": "Kamera",
+    "restart": "Yeniden başlat",
     "authorized": "@threespeak yetkilendirildi, artık tepkini paylaşabilirsin",
     "authFailed": "Yetkilendirme başarısız. Lütfen tekrar dene.",
     "webcamDenied": "Web kamerasına erişilemedi",
@@ -90,7 +95,7 @@
     "uploadVideo": "Video Yükle",
     "recordVideo": "Video Kaydet",
     "startRecording": "Kaydı Başlat",
-    "stopRecording": "Kaydı Durdur",
+    "stopRecording": "Durdur ve incele",
     "recordedVideo": "Kaydedilen video",
     "descriptionPlaceholder": "Video tepkine bir açıklama ekle...",
     "showInShorts": "3Speak Shorts'ta göster",

@@ -22,7 +22,8 @@
     "step1": "Buka video ini di",
     "step2": "Klik menu tiga titik dan pilih Unduh.",
     "step3": "Pilih file yang sudah diunduh di bawah.",
-    "pickFile": "Pilih file yang diunduh"
+    "pickFile": "Pilih file yang diunduh",
+    "title": "Yang ini tidak dapat diambil"
   },
   "errors": {
     "signIn": "Masuk untuk mengimpor video Anda.",
@@ -133,7 +134,8 @@
     },
     "stopConfirm": "Hentikan impor ini? Video yang belum diterbitkan akan dibatalkan, termasuk yang sudah dijadwalkan. Video yang sudah terbit tetap ada.",
     "stopYes": "Ya, hentikan",
-    "stopKeep": "Lanjutkan impor"
+    "stopKeep": "Lanjutkan impor",
+    "countOf": "{{done}} dari {{total}}"
   },
   "bitchute": {
     "noLink": "Anda belum menautkan akun BitChute. Tautkan dan verifikasi dulu di profil Anda, lalu kembali ke sini.",

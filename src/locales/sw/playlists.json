@@ -23,6 +23,9 @@
     "noOtherPlaylists": "Bado huna orodha nyingine za kucheza",
     "createFirst": "Unda orodha ya kucheza",
     "createNew": "Unda orodha mpya ya kucheza",
+    "newPlaylist": "Orodha mpya ya kucheza",
+    "savedTo_one": "Imehifadhiwa kwenye orodha {{count}} ya kucheza",
+    "savedTo_other": "Imehifadhiwa kwenye orodha {{count}} za kucheza",
     "name": "Jina",
     "namePlaceholder": "Orodha yangu bora ya kucheza",
     "privacy": "Faragha",
@@ -55,6 +58,7 @@
     "items_other": "vipengee {{count}}",
     "created": "Iliundwa {{when}}",
     "podcastFeed": "Mlisho wa podikasti",
+    "playAll": "Cheza zote",
     "podcastFeedTitle": "Fuatilia {{name}} kwenye programu yoyote ya podikasti (mlisho wa RSS)",
     "album": {
       "genre": "<strong>Aina:</strong> {{value}}",
@@ -95,12 +99,15 @@
     "description": "Maelezo",
     "descriptionPlaceholder": "Kuhusu albamu hii (si lazima)",
     "filterCount_one": "{{shown}} kati ya kipengee {{count}}",
-    "filterCount_other": "{{shown}} kati ya vipengee {{count}}"
+    "filterCount_other": "{{shown}} kati ya vipengee {{count}}",
+    "shuffle": "Changanya"
   },
   "type": {
     "label": "Aina",
     "video": "Video",
     "audio": "Sauti",
+    "videoSub": "Video ndefu",
+    "audioSub": "Nyimbo na podikasti",
     "kindLabel": "Ni sauti ya aina gani?",
     "kinds": {
       "podcast": "Podikasti",
@@ -108,5 +115,31 @@
       "voice": "Ujumbe wa sauti",
       "sounds": "Sauti nyingine"
     }
+  },
+  "feeds": {
+    "button": "Vipindi vya nje",
+    "title": "Vipindi vya nje",
+    "intro": "Ongeza vipindi kamili vya podikasti kutoka popote. Vipindi vyake vitaonekana kwenye orodha hii kando ya vyako, vipya kwanza, na vipya vitaongezeka vyenyewe.",
+    "searchLabel": "Tafuta vipindi au bandika kiungo cha mlisho",
+    "searchPlaceholder": "Jina la kipindi, mlisho wa RSS au kiungo cha Apple Podcasts",
+    "add": "Ongeza",
+    "checking": "Inakagua...",
+    "searching": "Inatafuta...",
+    "noResults": "Hakuna vipindi vilivyopatikana.",
+    "inList": "Kwenye orodha",
+    "inPlaylist": "Kwenye orodha hii",
+    "none": "Bado hakuna vipindi vya nje.",
+    "remove": "Ondoa {{title}}",
+    "already": "Kipindi hicho tayari kiko kwenye orodha hii.",
+    "limit": "Orodha moja inaweza kuwa na hadi vipindi {{max}} vya nje.",
+    "ownFeed": "Huo ni mlisho wa orodha hii yenyewe.",
+    "privateFeed": "Milisho inayohitaji nenosiri haiwezi kuwekwa kwenye orodha, kwa sababu orodha ni za umma.",
+    "tooBig": "Hiyo ni zaidi ya uwezo wa orodha. Ondoa kipindi kimoja kwanza.",
+    "saved": "Vipindi vya nje vimehifadhiwa. Orodha itasasishwa baada ya sekunde chache.",
+    "saveFailed": "Imeshindwa kuhifadhi: {{error}}",
+    "fromShows": "Kutoka vipindi vingine:",
+    "video": "Video",
+    "pending_one": "Kipindi {{count}} bado kinasomwa. Vipindi vyake vitaonekana ndani ya dakika chache.",
+    "pending_other": "Vipindi {{count}} bado vinasomwa. Vipindi vyake vitaonekana ndani ya dakika chache."
   }
 }

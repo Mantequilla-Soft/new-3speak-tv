@@ -11,6 +11,8 @@
       "transferFailed": "Transfer başarısız: {{message}}"
     },
     "heading": "@{{recipient}} kullanıcısına bahşiş gönder",
+    "pageTitle": "@{{recipient}} için bahşiş",
+    "pageSub": "Bir yayın katmanından ya da bağlantıdan açıldı",
     "methodHive": "HIVE / HBD",
     "methodLightning": "Lightning",
     "methodMore": "Diğer yollar",
@@ -22,6 +24,17 @@
     "memoPlaceholder": "örn. Bu harika içerik için teşekkürler!",
     "memoLinkNote": "Bu bağlantı nota eklenir: {{link}}",
     "send": "Bahşiş Gönder",
+    "sendAmount": "{{amount}} {{currency}} gönder",
+    "paidIn": "{{currency}} ile ödenir · ücret yok",
+    "forTitle": "“{{title}}” için",
+    "presets": {
+      "coffee": "Bir kahve",
+      "popular": "En popüler",
+      "thanks": "Çok teşekkürler",
+      "superFan": "Süper hayran"
+    },
+    "sentEyebrow": "Bahşiş gönderildi",
+    "sentTo": "@{{recipient}} hesabına {{amount}}",
     "lightning": {
       "amountLabel": "Tutar (sats):",
       "messageLabel": "Mesaj (isteğe bağlı):",
@@ -65,6 +78,8 @@
     "monthly": {
       "label": "Ne sıklıkla",
       "once": "Bir kez",
+      "oneTime": "Tek seferlik",
+      "monthly": "Aylık",
       "until": "Her ay, {{date}} tarihine kadar",
       "note": "Hive bunu her 30 günde bir kendiliğinden gönderir, ilki hemen. İstediğin zaman durdurabilirsin.",
       "replaces": "Bu, @{{recipient}} kullanıcısına zaten gönderdiğin aylık desteğin yerini alır.",
@@ -79,7 +94,7 @@
   },
   "cardMenu": {
     "loginToPersonalize": "Akışını kişiselleştirmek için giriş yap",
-    "notInterestedToast": "İlgilenmiyorsun, bu videoyu gizleyeceğiz",
+    "notInterestedToast": "İlgilenmiyorsun. Bu videoyu gizleyeceğiz",
     "undo": "Geri al",
     "cantHideOwn": "Kendi videolarını gizleyemezsin",
     "hidingCreatorToast": "@{{author}} kullanıcısının videoları gizleniyor",
@@ -89,7 +104,8 @@
     "addToPlaylist": "Oynatma listesine ekle",
     "addTag": "Etiket ekle",
     "notInterested": "İlgilenmiyorum",
-    "dontShowCreator": "@{{author}} gösterilmesin"
+    "dontShowCreator": "@{{author}} gösterilmesin",
+    "saveToPlaylist": "Oynatma listesine kaydet"
   },
   "guestList": {
     "loadFailed": "Mevcut misafir listesi yüklenemedi",
@@ -132,26 +148,32 @@
     "tagged": "“{{tag}}” olarak etiketlendi.",
     "vote": "Oy ver",
     "tagThisVideo": "Bu videoyu etiketle",
-    "tagOptional": "isteğe bağlı",
+    "tagOptional": "İsteğe bağlı",
     "pickTopicFirst": "Önce bir konu seç",
     "taggedNoDot": "“{{tag}}” olarak etiketlendi",
     "tagFailed": "Etiketleme başarısız: {{message}}",
     "taggedAlreadyVoted": "“{{tag}}” olarak etiketlendi. %{{weight}} oyun zaten verilmişti.",
-    "votingClosed": "Oylama kapandı, bu videoyu etiketle",
+    "votingClosed": "Oylama kapandı: bu videoyu etiketle",
     "youTagged": "Bunu <b>{{tag}}</b> olarak etiketledin.",
-    "pickTopic": "Bir konu seç (%100 oy sayılır)",
+    "pickTopic": "Bir konu seçmek %100 oy sayılır.",
     "submitTag": "Etiketi gönder",
     "tagThisVideoFull": "Bu videoyu etiketle (%100 oy sayılır)",
-    "justTag": "Oy verme, sadece etiketle"
+    "justTag": "Oy verme, sadece etiketle",
+    "justTagShort": "Sadece etiketle",
+    "voteAndTag": "Oy ver ve etiketle",
+    "addsAbout": "yaklaşık {{value}} ekler",
+    "postSoFar_one": "Şimdiye kadar {{value}} · {{count}} oy",
+    "postSoFar_other": "Şimdiye kadar {{value}} · {{count}} oy"
   },
   "tagsPicker": {
     "autoTagged": "Otomatik etiketlendi: {{tags}}",
     "searchPlaceholder": "Konu ara…",
     "searchAria": "Konu ara",
     "noMatches": "“{{query}}” ile eşleşen konu yok.",
-    "allSelected": "{{category}} kategorisinin tamamı seçili. Daraltmak için yalnızca tek tek konular ekle:",
+    "allSelected": "{{category}} tümüyle seçili. Çıkarmak istediğin konuya dokun.",
     "orPickTopics": "Ya da tek tek konular seç:",
-    "goodEnough": "Bu kadarı yeterli, ya da daha ayrıntılı seç (isteğe bağlı):",
+    "clear": "Temizle",
+    "goodEnough": "Bu kadarı yeterli ya da daha ayrıntılı seç (isteğe bağlı)",
     "moreSpecific": "Daha ayrıntılı:"
   }
 }

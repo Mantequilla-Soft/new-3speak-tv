@@ -18,6 +18,90 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.8',
+    category: 'account',
+    date: '2026-11-12',
+    summary: 'Your Receive QR code can now ask for an amount in HIVE or HBD and carry a memo.',
+  },
+  {
+    version: '2.0.7',
+    category: 'account',
+    date: '2026-11-12',
+    summary: 'On phones, tap Scan in the Send window to fill in the recipient from their QR code.',
+  },
+  {
+    version: '2.0.6',
+    category: 'audio',
+    date: '2026-11-12',
+    summary: 'The track that is playing now shows in the queue, and the player closes when the queue is empty.',
+  },
+  {
+    version: '2.0.5',
+    category: 'audio',
+    date: '2026-11-12',
+    summary: 'On phones, swipe the audio player left or right to jump 15 seconds, up to open it and down to close it; in the open player, swipe down to make it small again.',
+  },
+  {
+    version: '2.0.4',
+    category: 'general',
+    date: '2026-11-12',
+    summary: "The About page's Voices of Freedom quotes now scroll sideways.",
+  },
+  {
+    version: '2.0.3',
+    category: 'home',
+    date: '2026-11-12',
+    summary: "Not interested and Don't show this creator now keep those videos out of every feed right away, also when you come back to a page.",
+  },
+  {
+    version: '2.0.2',
+    category: 'account',
+    date: '2026-11-12',
+    summary: 'A Powered by Hive link to hive.io now sits in the profile menu, on the About page and in the FAQ.',
+  },
+  {
+    version: '2.0.1',
+    category: 'home',
+    date: '2026-11-12',
+    summary: 'The home page loads much faster, on phones most of all: icons, video players, dialogs and the emoji picker now load only when they are needed, and the Spotlight starts fetching its videos right away.',
+  },
+  {
+    version: '2.0.0',
+    category: 'general',
+    date: '2026-11-12',
+    summary: '3Speak 2.0: a fresh look on every page with wider layouts. Home gets a sliding Spotlight and a side panel with community posts, live streams and groups, and in your Wallet (/wallet) you can claim rewards with one click.',
+  },
+  {
+    version: '1.81.118',
+    category: 'podcasts',
+    date: '2026-11-10',
+    summary: 'The "Add external podcast" button is now called "Add external RSS feed" and uses the plain grey style instead of red.',
+  },
+  {
+    version: '1.81.117',
+    category: 'playlists',
+    date: '2026-11-10',
+    summary: 'Add whole podcast shows from anywhere to your playlists with the new External shows button; their new episodes appear by themselves.',
+  },
+  {
+    version: '1.81.115',
+    category: 'upload',
+    date: '2026-11-10',
+    summary: "Audio upload: Make a transcript writes down what is said in your audio (English for now) and puts it under your post text, ready to edit before you publish.",
+  },
+  {
+    version: '1.81.114',
+    category: 'editor',
+    date: '2026-11-10',
+    summary: "Audio editor: the voice recorder now has a teleprompter. Write your script and it scrolls while you record, at a steady speed or following your voice.",
+  },
+  {
+    version: '1.81.113',
+    category: 'upload',
+    date: '2026-11-10',
+    summary: "Audio upload: recording in your browser now has a teleprompter. Write what you will say and it moves along while you record.",
+  },
+  {
     version: '1.81.108',
     category: 'editor',
     date: '2026-11-09',

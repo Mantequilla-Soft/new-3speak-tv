@@ -17,7 +17,8 @@
     "loginFailed": "Accesso non riuscito: {{error}}",
     "logoAlt": "Logo di 3Speak",
     "title": "Accedi con il tuo nome utente",
-    "usernamePlaceholder": "Nome utente"
+    "usernamePlaceholder": "Nome utente",
+    "continueWith": "Continua con {{method}}"
   },
   "socialLink": {
     "hashCopied": "Hash copiato",
@@ -54,8 +55,8 @@
     "verify": "Verifica"
   },
   "auth": {
-    "title": "Autorizza 3Speak!",
-    "text": "Per caricare video su 3peak ci serve la tua autorità posting. Ci permette di pubblicare su Hive i video che carichi. Devi concederci l'autorità posting una sola volta.",
+    "title": "Autorizza 3Speak",
+    "text": "Per caricare ci serve la tua autorità posting, così possiamo pubblicare i tuoi video su Hive. La concedi una sola volta.",
     "authorize": "Autorizza"
   },
   "beneficiary": {
@@ -69,20 +70,25 @@
       "duplicate": "Questo account è già nell'elenco.",
       "invalidAccount": "Nome utente o ID community non valido.",
       "cannotIncrease": "Non puoi superare il {{percent}}% rimanente",
-      "pendingRow": "@{{account}} non è ancora stato aggiunto — fai clic su + per aggiungerlo, o svuota il campo.",
+      "pendingRow": "@{{account}} non è ancora stato aggiunto. Fai clic su + per aggiungerlo, o svuota il campo.",
       "atLeastOne": "La percentuale di ricompensa deve essere almeno dell'1%",
       "maxCount": "Hive consente al massimo {{max}} beneficiari per post."
     },
     "title": "Beneficiari",
+    "shareRewards": "Condividi le ricompense",
+    "you": "tu",
+    "toYou": "a te",
+    "addCollaborator": "Aggiungi un collaboratore",
+    "saveSplit": "Salva ripartizione",
     "intro": "Aggiungi un utente che deve ricevere automaticamente una parte delle ricompense di questo post.",
     "minPercent": "% (min {{percent}}%)",
     "usernamePlaceholder": "Inserisci il nome utente",
     "minimumReward": "La ricompensa minima è <strong>1%</strong>",
     "checking": "Verifica di <strong>@{{account}}</strong> su Hive…",
-    "notExisting": "⚠️ <strong>@{{account}}</strong> non è un account Hive esistente.",
-    "notAdded": "⚠️ <strong>@{{account}}</strong> non è ancora stato aggiunto — fai clic su <strong>+</strong> per aggiungerlo, o svuota il campo.",
-    "infrastructure": "10% === Infrastruttura",
-    "videoEncoding": "Codifica video === 1%",
+    "notExisting": "<strong>@{{account}}</strong> non è un account Hive esistente.",
+    "notAdded": "<strong>@{{account}}</strong> non è ancora stato aggiunto. Fai clic su <strong>+</strong> per aggiungerlo, o svuota il campo.",
+    "infrastructure": "Infrastruttura: 10%",
+    "videoEncoding": "Codifica video: 1%",
     "defaults": "Beneficiari predefiniti ({{count}})"
   },
   "qr": {
@@ -100,7 +106,7 @@
   },
   "verifyAuth": {
     "title": "Verifica dell'autorizzazione",
-    "text": "Attendi mentre verifichiamo che l'autorizzazione sia stata concessa..."
+    "text": "Controllo che sia stata concessa…"
   },
   "editor": {
     "confirmLeave": "L'editor è ancora aperto. Se lasci questa pagina l'editor verrà chiuso e le modifiche non salvate andranno perse.\n\nOK = Chiudi l'editor ed esci\nAnnulla = Resta su questa pagina",
@@ -176,7 +182,9 @@
     "details": "Dettagli aggiuntivi (facoltativo)",
     "detailsPlaceholder": "Fornisci più contesto...",
     "submitting": "Invio...",
-    "submit": "Invia segnalazione"
+    "submit": "Invia segnalazione",
+    "intro": "Le segnalazioni vanno al team di 3Speak. Il creator non vedrà chi ha segnalato.",
+    "nextDetails": "Avanti: aggiungi dettagli"
   },
   "upload": {
     "missingInfo": "Mancano le informazioni sul video o sulla miniatura.",

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { setIncubationTrack } from '../../lib/incubation';
 import { openTracks } from './tracks';
+import { ChoiceCard } from '../v2/ui';
 import { useTranslation } from 'react-i18next';
 import './TrackChooser.scss';
 
@@ -35,23 +36,18 @@ export default function TrackChooser({ current = null, onChosen }) {
 
   return (
     <div className="track-chooser">
-      <div className="track-chooser-options" role="radiogroup" aria-label={t('incubation.trackQuestion.title')}>
-        {openTracks(current).map(({ id, Icon, titleKey, bodyKey }) => (
-          <button
+      <div className="track-chooser-options v2-choices" role="radiogroup" aria-label={t('incubation.trackQuestion.title')}>
+        {openTracks(current).map(({ id, icon, titleKey, bodyKey }) => (
+          <ChoiceCard
             key={id}
-            type="button"
-            role="radio"
-            aria-checked={current === id}
-            className={`track-option${current === id ? ' is-current' : ''}`}
+            selected={current === id}
+            icon={saving === id ? 'progress_activity' : icon}
+            title={t(titleKey)}
+            sub={saving === id ? t('incubation.trackChooser.saving') : t(bodyKey)}
             onClick={() => choose(id)}
             disabled={!!saving}
-          >
-            <span className="track-option-icon"><Icon size={16} aria-hidden="true" /></span>
-            <span className="track-option-text">
-              <strong>{t(titleKey)}</strong>
-              <span>{saving === id ? t('incubation.trackChooser.saving') : t(bodyKey)}</span>
-            </span>
-          </button>
+            className={`track-option${current === id ? ' is-current' : ''}${saving === id ? ' is-saving' : ''}`}
+          />
         ))}
       </div>
       {error && <p className="track-chooser-error" role="alert">{error}</p>}

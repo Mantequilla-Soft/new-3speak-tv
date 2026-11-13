@@ -1,0 +1,32 @@
+@use "../../styles/v2" as v2;
+
+/* "Tell your followers first" row above the announcement options in the
+   studio's post tab. A flat setting row like the announce toggle below it. */
+.stream-story-prompt {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  padding: 10px 12px;
+  border-radius: var(--r-md);
+  background: var(--bg);
+  color: var(--text);
+
+  &__icon { color: var(--muted); flex: none; }
+
+  &__text {
+    flex: 1;
+    min-width: 0;
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.4;
+  }
+
+  &__btn { flex: none; }
+
+  @include v2.mobile {
+    flex-wrap: wrap;
+
+    &__btn { width: 100%; justify-content: center; }
+  }
+}

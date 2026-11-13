@@ -1,0 +1,466 @@
+@use "../../styles/v2" as v2;
+
+// The Spotlight hero (20a). The picture runs the full width of the window and
+// up under the floating top bar (560 tall from the top of the window, 280 on
+// phones), washed by two gradients into the page ground: down (40% at the top,
+// clear from 20% to 50%, solid at the bottom) and across (92% at the left, 45%
+// at 42%, clear from 68%). The text sits 96px under the bar, 64 in from the
+// frame's edge (HomeGrouped adds the 40 on top of the page padding).
+
+// The picture is 100vw wide; keep that from adding a sideways scroll.
+:root:has(.home-hero) body { overflow-x: clip; }
+
+.home-hero {
+  --hero-h: 560px;
+  position: relative;
+  // Up under the bar and the page's top padding.
+  margin-top: calc(-1 * (var(--nav-height, 78px) + var(--page-pad)));
+  padding-top: calc(var(--nav-height, 78px) + 96px);
+  color: var(--text);
+
+  // Phones: two thirds of 20a's 420 (owner 2026-11-12). The text needs 176
+  // (chip, two title lines, Play) under the 52px bar, so this is about the floor.
+  @include v2.mobile {
+    --hero-h: 280px;
+    padding-top: calc(var(--nav-height, 52px) + 44px);
+  }
+}
+
+.home-hero__bg {
+  position: absolute;
+  top: 0;
+  left: calc(50% - 50vw);
+  width: 100vw;
+  height: var(--hero-h);
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;   // the blurred picture is scaled up a touch
+  @include v2.thumb-placeholder(16px);
+  @include v2.mobile { @include v2.thumb-placeholder(14px); }
+
+  img,
+  video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  // Thumbnails are mostly small, so the full-width picture gets a slight blur
+  // (scaled up a touch so the blurred edges stay off-screen).
+  img {
+    filter: blur(6px);
+    transform: scale(1.04);
+  }
+
+  // The 3Speak card under it all while the first slide loads (owner
+  // 2026-11-12), in the open right side on desktop, centred on phones. Sharp,
+  // it is a logo. Light theme: the full logo on the page ground. Dark theme:
+  // the mark and the spaced wordmark on the logo's blue.
+  .home-hero__fallback {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 28px;
+    padding-left: min(40vw, 640px);
+    background: var(--bg);
+    color: var(--on-media);
+
+    img {
+      position: static;
+      width: auto;
+      height: 96px;
+      filter: none;
+      transform: none;
+    }
+
+    span {
+      font-size: 44px;
+      font-weight: 500;
+      letter-spacing: .45em;
+      line-height: 1;
+    }
+
+    .is-dark { display: none; }
+
+    // Preview on: over the clips until the first one is on top, then gone.
+    &.is-over { z-index: 2; transition: opacity var(--t-xfade) ease-in-out; }
+    &.is-gone { opacity: 0; }
+
+    @include v2.mobile {
+      padding-left: 0;
+      gap: 14px;
+      img { height: 44px; }
+      span { font-size: 20px; }
+    }
+  }
+
+  [data-theme="dark"] & .home-hero__fallback {
+    background: var(--brand-indigo);
+    .is-light { display: none; }
+    .is-dark { display: block; }
+  }
+
+  // The muted previews (HomeHero HERO_PREVIEW): two that take turns, both
+  // always drawn, under the wash. The top one fades out (.is-off) to reveal
+  // the next clip already playing under it; a slight blur, as the streams are
+  // small for this width.
+  .home-hero__video {
+    z-index: 0;
+    filter: blur(3px);
+    transform: scale(1.03);
+    transition: opacity var(--t-xfade) ease-in-out;
+    &.is-top { z-index: 1; }
+    &.is-off { opacity: 0; }
+  }
+
+  // The slider's cross-fade: the last picture stays under the new one.
+  img.is-cur { animation: home-hero-fade var(--t-xfade) ease-in-out both; }
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 3;   // over the clips and the 3Speak card
+    background:
+      linear-gradient(180deg, color-mix(in srgb, var(--bg) 40%, transparent) 0%, transparent 20%, transparent 50%, var(--bg) 100%),
+      linear-gradient(90deg, color-mix(in srgb, var(--bg) 92%, transparent) 0%, color-mix(in srgb, var(--bg) 45%, transparent) 42%, transparent 68%);
+
+    @include v2.mobile {
+      background: linear-gradient(180deg, transparent 40%, var(--bg));
+    }
+  }
+}
+
+// The hero is anchored to the 1280 frame, not the 100vw picture: on a window
+// wider than the frame the left wash starts at the window's edge.
+@include v2.wide {
+  .home-hero__bg::after {
+    background:
+      linear-gradient(180deg, color-mix(in srgb, var(--bg) 40%, transparent) 0%, transparent 20%, transparent 50%, var(--bg) 100%),
+      linear-gradient(90deg, color-mix(in srgb, var(--bg) 92%, transparent) 0%, color-mix(in srgb, var(--bg) 92%, transparent) calc(50vw - 640px), color-mix(in srgb, var(--bg) 45%, transparent) calc(50vw - 640px + 538px), transparent calc(50vw - 640px + 870px));
+  }
+}
+
+// 720 wide in the frame, less its 64px inset: the text keeps to the washed side.
+// The body keeps the height of a two-line title, with the buttons at its
+// bottom, so the page under the hero does not jump as the slider moves on to a
+// title of another length: chip 36 + 16 + title 2 x 64 + 16 + creator 32 + 22 +
+// Play 64 (56px titles under 1280; phones: chip 28 + 10 + 2 x 32 + 14 + 60).
+.home-hero__body {
+  position: relative;
+  z-index: 1;
+  max-width: 656px;
+  min-height: 314px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  > .home-hero__chip { align-self: flex-start; }
+
+  @include v2.below-wide { min-height: 298px; }
+  @include v2.mobile { max-width: none; min-height: 176px; }
+}
+
+// "Spotlight in Wildlife Videos · 3:12": cyan 16% wash, radius 12, 13/700.
+.home-hero__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 100%;
+  padding: 6px 12px 6px 6px;
+  border-radius: var(--r-md);
+  background: color-mix(in srgb, var(--cyan) 16%, transparent);
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: inherit;
+  text-decoration: none;
+  transition: background var(--t-fast) var(--ease);
+
+  // A link to the community page when the post sits in one.
+  &[href]:hover { background: color-mix(in srgb, var(--cyan) 28%, transparent); }
+
+  .is-narrow { display: none; }
+
+  @include v2.mobile {
+    gap: 6px;
+    padding: 4px 10px 4px 4px;
+    font-size: 12px;
+    background: color-mix(in srgb, var(--cyan) 18%, transparent);
+    .is-wide, .home-hero__chip-time { display: none; }
+    .is-narrow { display: inline; }
+  }
+}
+
+.home-hero__chip-text { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.home-hero__chip-tile {
+  flex: none;
+  width: 24px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--r-sm);
+  background: var(--cyan);
+  color: var(--bg);
+  font-size: 11px;
+  font-weight: 900;
+
+  @include v2.mobile { width: 20px; height: 20px; font-size: 10px; }
+}
+
+.home-hero__chip-time { color: var(--muted); font-weight: 500; }
+
+.home-hero__title {
+  margin: 16px 0 0;
+  font-size: 64px;
+  line-height: 1;
+  // At line-height 1 the clamp cut the descenders of line two (g, y, p): a
+  // little room under the clip, taken back by the margin so nothing moves,
+  // and short of the ascenders of a hidden third line.
+  padding-bottom: .065em;
+  margin-bottom: -.065em;
+  font-weight: 900;
+  letter-spacing: -.035em;
+  overflow-wrap: anywhere;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  text-wrap: balance;
+
+  a { color: inherit; text-decoration: none; &:hover { color: inherit; } }
+
+  @include v2.below-wide { font-size: 56px; }
+  @include v2.mobile {
+    margin-top: 10px;
+    font-size: 32px;
+    letter-spacing: -.03em;
+  }
+}
+
+// The creator: a 32 avatar in a cyan ring, the name 14/700, followers 13 muted.
+.home-hero__creator {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 16px;
+  min-width: 0;
+
+  @include v2.mobile { display: none; }
+}
+
+.home-hero__avatar {
+  flex: none;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 2px solid var(--cyan);
+  border-radius: 50%;
+  background: var(--avatar);
+  overflow: hidden;
+  cursor: pointer;
+
+  .hive-avatar, img { width: 100%; height: 100%; display: block; border-radius: 50%; object-fit: cover; }
+  .hive-avatar__badge { display: none; }
+}
+
+.home-hero__name {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--text);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  &:hover { text-decoration: underline; }
+}
+
+.home-hero__followers { font-size: 13px; color: var(--muted); white-space: nowrap; }
+
+// Play (an ink slab, 64 tall, radius 20, label left and the arrow right) and
+// two 64px tiles on a 12% ink wash. Phones: 60 tall, the tiles icon only.
+.home-hero__actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 22px;
+
+  @include v2.mobile {
+    display: grid;
+    grid-template-columns: 1fr 60px 60px;
+    margin-top: 14px;
+  }
+}
+
+.home-hero__play {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+  height: 64px;
+  padding: 0 20px 0 24px;
+  border-radius: var(--r-xl);
+  background: var(--text);
+  color: var(--bg);
+  font-size: 16px;
+  font-weight: 900;
+  text-decoration: none;
+  transition: filter var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
+
+  &:hover { color: var(--bg); filter: brightness(.92); }
+  &:active { transform: scale(.98); }
+
+  @include v2.mobile {
+    height: 60px;
+    padding: 0 16px 0 20px;
+    .material-symbols-rounded { font-size: 28px !important; }
+  }
+}
+
+.home-hero__tile {
+  width: 64px;
+  height: 64px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--r-xl);
+  background: color-mix(in srgb, var(--text) 12%, transparent);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  color: var(--text);
+  font: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
+
+  &:hover { background: color-mix(in srgb, var(--text) 18%, transparent); }
+  &:active { transform: scale(.98); }
+
+  @include v2.mobile {
+    width: 60px;
+    height: 60px;
+    > span:not(.material-symbols-rounded) { display: none; }
+  }
+}
+
+// While the featured video is on its way: the stripes, and blocks where the
+// chip, the title and Play will be.
+.home-hero.is-pending {
+  .home-hero__ph {
+    display: block;
+    border-radius: var(--r-md);
+    background: color-mix(in srgb, var(--text) 8%, transparent);
+
+    &.is-chip { width: 220px; height: 36px; }
+    &.is-title { width: min(560px, 100%); height: 56px; margin-top: 16px; &.is-short { width: min(380px, 70%); margin-top: 8px; } }
+    &.is-play { width: 168px; height: 64px; margin-top: 22px; border-radius: var(--r-xl); }
+
+    @include v2.mobile {
+      &.is-title { height: 30px; }
+      &.is-play { width: 100%; height: 60px; }
+    }
+  }
+}
+
+// ── The slider (owner 2026-11-12): one video fades into the next. The text
+// fades out (.is-fading, --t-slow), the next one's fades in while its picture
+// cross-fades over the last (--t-xfade). A small row of segments at the
+// hero's bottom right shows where it is, like the stories: the active one
+// fills over SLIDE_MS (HomeHero.jsx) and its animationend moves on, so
+// .is-paused holds both. Reduced motion: nothing fades or fills, so the hero
+// stays put and the segments only jump.
+@keyframes home-hero-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes home-hero-fill {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+.home-hero__body {
+  animation: home-hero-fade var(--t-slow) var(--ease) both;
+  transition: opacity var(--t-slow) var(--ease);
+  .home-hero.is-fading & { opacity: 0; }
+}
+
+// Bottom right, level with the foot of Play; on phones under it, in the gap
+// above the stories.
+.home-hero__slides {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  width: 50%;
+  display: flex;
+  justify-content: flex-end;
+
+  // Phones: not shown (owner 2026-11-12), swiping moves on. Hidden, not
+  // removed: the active segment's fill animation is the slide timer.
+  @include v2.mobile { visibility: hidden; pointer-events: none; }
+}
+
+// Sized from the count (HomeHero sets --segs): the segments are empty, so a
+// shrink-to-fit row would squeeze them to their 4px minimum. The 50% cap of
+// .home-hero__slides still applies, they shrink to fit a long list.
+.home-hero__segs {
+  display: flex;
+  gap: 4px;
+  width: calc(var(--segs, 1) * 28px - 4px);
+  max-width: 100%;
+}
+
+// A 16px hit area around a 2px bar.
+.home-hero__seg {
+  flex: 1 1 24px;   // owner 2026-11-12: a bit longer (was 12)
+  min-width: 4px;
+  height: 16px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.home-hero__seg-track {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 2px;
+  border-radius: 1px;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--text) 24%, transparent);
+  transition: background var(--t-fast) var(--ease);
+
+  .home-hero__seg:hover & { background: color-mix(in srgb, var(--text) 48%, transparent); }
+  .home-hero__seg.is-done & { background: color-mix(in srgb, var(--text) 64%, transparent); }
+}
+
+.home-hero__seg-fill {
+  position: absolute;
+  inset: 0;
+  background: var(--text);
+  transform-origin: left center;
+  animation-name: home-hero-fill;
+  animation-timing-function: linear;
+  animation-fill-mode: both;
+
+  .home-hero.is-paused & { animation-play-state: paused; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-hero__bg img.is-cur,
+  .home-hero__body { animation: none; transition: none; }
+  .home-hero__seg-fill { animation: none; transform: none; }
+}

@@ -56,7 +56,7 @@ function mount(props = {}, opts) {
   return { ...r, onClose }
 }
 const signIn = () => { m.loggedIn = true; act(() => useAppStore.setState({ user: 'listener' })) }
-const field = (label) => screen.getByText(label).parentElement.querySelector('input, select')
+const field = (label) => screen.getByText(label).parentElement.querySelector('input, select, textarea')
 
 beforeEach(() => {
   Object.assign(m, {
@@ -80,7 +80,8 @@ afterEach(() => vi.useRealTimers())
 describe('the tip window for a visitor: Lightning', () => {
   it('opens on Lightning, the one way that needs no Hive account', async () => {
     mount()
-    expect(screen.getByRole('heading', { name: 'Send a Tip to @badadib' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Tip' })).toBeInTheDocument()
+    expect(screen.getByText('@badadib')).toBeInTheDocument()
     expect(screen.getByRole('tab', { name: /Lightning/ })).toHaveAttribute('aria-selected', 'true')
     expect(await screen.findByText(/Goes to @badadib through v4v.app/)).toBeInTheDocument()
     expect(m.receiver).toHaveBeenCalledWith('badadib')
@@ -128,7 +129,7 @@ describe('the tip window for a visitor: Lightning', () => {
     await user.click(screen.getByRole('button', { name: (5000).toLocaleString() }))
     await user.click(screen.getByRole('button', { name: 'Show QR code' }))
     await user.click(await screen.findByRole('button', { name: 'Back' }))
-    expect(screen.getByRole('button', { name: (5000).toLocaleString() })).toHaveClass('active')
+    expect(screen.getByRole('button', { name: (5000).toLocaleString() })).toHaveAttribute('aria-pressed', 'true')
     await user.click(screen.getByRole('button', { name: 'Show QR code' }))
     await user.click(await screen.findByRole('button', { name: 'Done' }))
     expect(onClose).toHaveBeenCalled()
@@ -142,7 +143,7 @@ describe('the tip window for a visitor: Lightning', () => {
     await screen.findByText(/Scan with any Lightning wallet/)
     await act(async () => { await vi.advanceTimersByTimeAsync(3100) })
     expect(m.paid).toHaveBeenCalledWith('h1')
-    expect(await screen.findByRole('heading', { name: 'Tip Sent Successfully!', level: 1 })).toBeInTheDocument()
+    expect(await screen.findByRole('heading', { name: '1000 sats to @badadib', level: 1 })).toBeInTheDocument()
     expect(screen.getByText('You have successfully sent 1000 sats as a tip. Thank you for your support!')).toBeInTheDocument()
   })
 
@@ -218,7 +219,7 @@ describe('the tip window for a member: HIVE and HBD', () => {
     await screen.findByText('25')
     await user.type(field('Amount:'), '5')
     await user.type(field('Memo (optional):'), 'Thanks')
-    await user.click(screen.getByRole('button', { name: 'Send Tip' }))
+    await user.click(screen.getByRole('button', { name: 'Send 5 HIVE' }))
     expect(m.valid).toHaveBeenCalledWith('badadib')
     expect(m.queue).toHaveBeenCalledWith({ tipper: 'listener', author: 'badadib', permlink: 'lake-day', amount: 5, currency: 'HIVE', memo: `Thanks ${LINK}` })
     expect(m.transfer).toHaveBeenCalledWith('badadib', 5, 'HIVE', `Thanks ${LINK}`)
@@ -230,7 +231,7 @@ describe('the tip window for a member: HIVE and HBD', () => {
     const { user } = mount({ permlink: undefined, memoLink: undefined })
     await screen.findByText('25')
     await user.type(field('Amount:'), '1')
-    await user.click(screen.getByRole('button', { name: 'Send Tip' }))
+    await user.click(screen.getByRole('button', { name: 'Send 1 HIVE' }))
     await screen.findByText(/successfully sent 1 HIVE/)
     expect(m.queue).not.toHaveBeenCalled()
     expect(m.transfer).toHaveBeenCalledWith('badadib', 1, 'HIVE', '')
@@ -244,7 +245,7 @@ describe('the tip window for a member: HIVE and HBD', () => {
     const { user } = mount()
     await screen.findByText('25')
     await user.type(field('Amount:'), amount)
-    await user.click(screen.getByRole('button', { name: 'Send Tip' }))
+    await user.click(screen.getByRole('button', { name: /^Send \d+ HIVE$/ }))
     await waitFor(() => expect(toastMessages(toast.error)).toEqual([message]))
     expect(m.transfer).not.toHaveBeenCalled()
   })
@@ -261,7 +262,7 @@ describe('the tip window for a member: HIVE and HBD', () => {
     const { user } = mount()
     await screen.findByText('25')
     await user.type(field('Amount:'), '2')
-    await user.click(screen.getByRole('button', { name: 'Send Tip' }))
+    await user.click(screen.getByRole('button', { name: 'Send 2 HIVE' }))
     await waitFor(() => expect(toastMessages(toast.error)).toEqual(['Transfer failed: Keychain cancelled']))
     expect(screen.queryByText(/successfully sent/)).not.toBeInTheDocument()
   })
@@ -270,9 +271,11 @@ describe('the tip window for a member: HIVE and HBD', () => {
     const { user } = mount()
     await screen.findByText('25')
     await user.type(field('Amount:'), '3')
+    expect(screen.queryByRole('combobox', { name: 'How often' })).not.toBeInTheDocument()
+    await user.click(screen.getByRole('tab', { name: 'Monthly' }))
     await user.selectOptions(screen.getByRole('combobox', { name: 'How often' }), '6')
     expect(screen.getByText(/Hive sends it by itself every 30 days/)).toBeInTheDocument()
-    await user.click(screen.getByRole('button', { name: 'Send Tip' }))
+    await user.click(screen.getByRole('button', { name: 'Send 3 HIVE' }))
     expect(m.broadcast).toHaveBeenCalledWith([['recurrent_transfer', {
       from: 'listener', to: 'badadib', amount: '3.000 HIVE', memo: LINK, recurrence: 720, executions: 6, extensions: [],
     }]], 'active')
@@ -290,11 +293,19 @@ describe('the tip window for a member: HIVE and HBD', () => {
     expect(toastMessages(toast.success)).toContain('Monthly support stopped')
   })
 
-  it('Cancel and the X close the window', async () => {
+  it('the X closes the window', async () => {
     const { user, onClose } = mount()
-    await user.click(screen.getByRole('button', { name: 'Cancel' }))
     await user.click(screen.getByRole('button', { name: 'Close' }))
-    expect(onClose).toHaveBeenCalledTimes(2)
+    expect(onClose).toHaveBeenCalledTimes(1)
+  })
+
+  it('an amount tile fills the amount (17a)', async () => {
+    const { user } = mount()
+    await screen.findByText('25')
+    await user.click(screen.getByRole('button', { name: /Most popular/ }))
+    expect(field('Amount:')).toHaveValue(5)
+    expect(screen.getByRole('button', { name: /Most popular/ })).toHaveAttribute('aria-pressed', 'true')
+    expect(screen.getByRole('button', { name: 'Send 5 HIVE' })).toBeInTheDocument()
   })
 
   // BUG: an amount of 0 (or a negative one) passes every check (TipModal.jsx:206

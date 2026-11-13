@@ -12,7 +12,7 @@
   z-index: 6;
   pointer-events: none;
   overflow: hidden;
-  border-radius: 4px;
+  border-radius: var(--r-xs);
   line-height: 0;
 
   img,
@@ -33,14 +33,15 @@
   position: absolute;
   left: 4px;
   bottom: 4px;
-  padding: 1px 5px;
-  border-radius: 3px;
-  background: rgba(0, 0, 0, 0.6);
-  color: #fff;
+  padding: 1px 6px;
+  border-radius: var(--r-xs);
+  background: var(--accent);
+  color: var(--on-accent);
   font-size: 10px;
-  font-weight: 600;
+  font-weight: 900;
   line-height: 1.5;
-  letter-spacing: 0.02em;
+  letter-spacing: .04em;
+  text-transform: uppercase;
 }
 
 .watch-banner-hit {
@@ -56,13 +57,13 @@
   display: block;
   /* No background, no border, no text. */
   background: transparent;
-  border-radius: 6px;
+  border-radius: var(--r-xs);
 
   /* No highlight over the frame itself — a tinted rectangle over part of the picture
      reads as a rendering fault rather than an affordance. Hover and focus brighten
      the open icon instead, which is a hint rather than a change to the video. */
   &:focus-visible {
-    outline: 2px solid #fff;
+    outline: 2px solid var(--on-media);
     outline-offset: 2px;
   }
 
@@ -81,13 +82,15 @@
   height: 18px;
   padding: 3px;
   box-sizing: content-box;
+  display: grid;
+  place-items: center;
   border-radius: 50%;
-  background: rgba(0, 0, 0, 0.55);
-  color: #fff;
+  background: var(--media-scrim);
+  color: var(--on-media);
   /* Present but quiet: the banner is the advertiser's, and this is a hint on top of
      it rather than a control competing with it. Full strength on hover and focus. */
   opacity: 0.75;
-  transition: opacity 120ms ease;
+  transition: opacity var(--t-fast) var(--ease);
   pointer-events: none;
 }
 
@@ -100,9 +103,10 @@
   .watch-banner-open {
     top: 2px;
     right: 2px;
-    width: 13px;
-    height: 13px;
+    width: 14px;
+    height: 14px;
     padding: 2px;
+    font-size: 14px !important;
   }
 }
 
@@ -131,22 +135,21 @@
   border-radius: 50%;
   /* Its own dark ground, for the same reason the open icon has one: it is drawn over
      a picture we do not control and cannot assume any contrast against. */
-  background: rgba(0, 0, 0, 0.62);
-  color: #fff;
-  font-size: 15px;
+  background: var(--media-scrim);
+  color: var(--on-media);
   line-height: 1;
   cursor: pointer;
   opacity: 0.8;
-  transition: opacity 120ms ease, background 120ms ease;
+  transition: opacity var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
 
   &:hover,
   &:focus-visible {
     opacity: 1;
-    background: rgba(0, 0, 0, 0.82);
+    background: var(--media-scrim-strong);
   }
 
   &:focus-visible {
-    outline: 2px solid #fff;
+    outline: 2px solid var(--on-media);
     outline-offset: 2px;
   }
 }
@@ -160,7 +163,6 @@
   .watch-banner-close {
     width: 26px;
     height: 26px;
-    font-size: 17px;
     opacity: 0.9;
   }
 }

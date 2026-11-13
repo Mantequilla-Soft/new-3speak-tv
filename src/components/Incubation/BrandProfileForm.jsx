@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { useProfileEditor } from '../WelcomePrompt/ProfileFields';
-import { fetchMyIncubationProfile, saveIncubationProfile, handleAvatar, currentHandle } from '../../lib/incubation';
+import { fetchMyIncubationProfile, saveIncubationProfile } from '../../lib/incubation';
 import { useTranslation } from 'react-i18next';
+import { Button, Field, Icon } from '../v2/ui';
 import './AdvertiserContactForm.scss';
 
 /**
@@ -53,51 +54,61 @@ export default function BrandProfileForm() {
 
   return (
     <form className="inc-contact" onSubmit={onSubmit}>
-      <label className="inc-contact-field">
-        <span>{t('incubation.brand.name')}</span>
-        <input value={form.name} onChange={setField('name')} placeholder={t('incubation.brand.namePlaceholder')} maxLength={60} disabled={!loaded} />
-      </label>
-
-      <label className="inc-contact-field">
-        <span>{t('incubation.brand.about')}</span>
-        <textarea
-          rows={3}
-          value={form.about}
-          onChange={setField('about')}
-          placeholder={t('incubation.brand.aboutPlaceholder')}
-          maxLength={300}
-          disabled={!loaded}
-        />
-      </label>
-
-      <div className="inc-contact-field">
-        <span>{t('incubation.brand.logo')}</span>
-        <div className="inc-brand-logo">
-          <img src={form.profile_image || handleAvatar(currentHandle())} alt="" />
-          <label className="inc-task-cta inc-brand-upload">
-            {uploading ? t('incubation.brand.uploading') : (form.profile_image ? t('incubation.brand.replaceLogo') : t('incubation.brand.uploadLogo'))}
-            <input type="file" accept="image/*" onChange={pickImage('profile_image')} disabled={!loaded || uploading} hidden />
-          </label>
-        </div>
-        <span className="inc-contact-hint">{t('incubation.brand.logoHint')}</span>
+      {/* "Your brand" (design 46c): the logo as it will be shown, then the
+          three fields, then the one save. */}
+      <div className="inc-brand-logo">
+        {/* The circle is the upload button: the logo as it will be shown. */}
+        <label
+          className="inc-brand-logo-pick"
+          aria-label={form.profile_image ? t('incubation.brand.replaceLogo') : t('incubation.brand.uploadLogo')}
+          title={form.profile_image ? t('incubation.brand.replaceLogo') : t('incubation.brand.uploadLogo')}
+        >
+          {uploading
+            ? <span className="inc-brand-logo-blank" aria-hidden="true"><Icon name="progress_activity" size={20} className="v2-spin" /></span>
+            : form.profile_image
+              ? <img src={form.profile_image} alt="" />
+              : <span className="inc-brand-logo-blank" aria-hidden="true"><Icon name="add_photo_alternate" size={20} /></span>}
+          <input type="file" accept="image/*" onChange={pickImage('profile_image')} disabled={!loaded || uploading} hidden />
+        </label>
+        <span className="inc-brand-logo-hint">{uploading ? t('incubation.brand.uploading') : t('incubation.brand.logoHint')}</span>
       </div>
 
-      <label className="inc-contact-field">
-        <span>{t('incubation.brand.website')} <em>{t('incubation.brand.websiteOptional')}</em></span>
-        <input
-          type="url"
-          inputMode="url"
-          value={form.website}
-          onChange={setField('website')}
-          placeholder={t('incubation.brand.websitePlaceholder')}
-          disabled={!loaded}
-        />
-        {!websiteOk ? <span className="inc-contact-error">{t('incubation.brand.websiteInvalid')}</span> : null}
-      </label>
+      <Field
+        label={t('incubation.brand.name')}
+        value={form.name}
+        onChange={setField('name')}
+        placeholder={t('incubation.brand.namePlaceholder')}
+        maxLength={60}
+        disabled={!loaded}
+      />
 
-      <button type="submit" className="inc-task-cta" disabled={!loaded || saving || uploading || !websiteOk}>
+      <Field
+        as="textarea"
+        label={t('incubation.brand.about')}
+        rows={3}
+        value={form.about}
+        onChange={setField('about')}
+        placeholder={t('incubation.brand.aboutPlaceholder')}
+        maxLength={300}
+        disabled={!loaded}
+      />
+
+      <Field
+        label={t('incubation.brand.website')}
+        optional
+        optionalLabel={t('incubation.brand.websiteOptional')}
+        type="url"
+        inputMode="url"
+        value={form.website}
+        onChange={setField('website')}
+        placeholder={t('incubation.brand.websitePlaceholder')}
+        disabled={!loaded}
+        error={!websiteOk ? t('incubation.brand.websiteInvalid') : null}
+      />
+
+      <Button type="submit" variant="primary" size={40} block className="inc-contact-submit" disabled={!loaded || saving || uploading || !websiteOk} loading={saving}>
         {saving ? t('common.actions.saving') : t('incubation.brand.save')}
-      </button>
+      </Button>
     </form>
   );
 }

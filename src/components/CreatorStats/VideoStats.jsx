@@ -1,9 +1,13 @@
 import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
-import { fetchVideoAnalytics, fmtDuration, fmtCount } from '../../lib/creatorStats';
-import BarLoader from '../Loader/BarLoader';
+import { fetchVideoAnalytics, fmtCount } from '../../lib/creatorStats';
+import { Icon } from '../v2/Icon';
 import useSeekPreview from '../../hooks/useSeekPreview';
 import './VideoStats.scss';
 import { useTranslation, Trans } from 'react-i18next';
+
+// The insight strings open with an emoji in every locale; the chips draw a
+// Material icon instead (no emoji as icons), so the leading emoji is dropped.
+const LEAD_EMOJI = /^\s*\p{Extended_Pictographic}\uFE0F?\s*/u;
 
 function mmss(sec) {
   const s = Math.max(0, Math.round(sec || 0));
@@ -15,7 +19,10 @@ function mmss(sec) {
 // frame at that moment (same scrub-preview technique as the player timeline;
 // see useSeekPreview) plus the value + timestamp — falls back to a plain
 // tooltip when no videoId is available.
-export function PositionChart({ values, maxValue, color, duration, formatValue, emptyLabel, videoId }) {
+// `bars` draws N bars instead of the area (23d retention, 45a most replayed): the
+// highest bar (or `hotIndex`) in the accent. `marker` is a dashed accent line at
+// a position (0..1) with a label pill (45a: the biggest drop-off).
+export function PositionChart({ values, maxValue, color, duration, formatValue, emptyLabel, videoId, bars = 0, hotIndex = null, marker = null, axis = true }) {
   const { t } = useTranslation();
   const [hover, setHover] = useState(null);
   const wrapRef = useRef(null);
@@ -26,11 +33,12 @@ export function PositionChart({ values, maxValue, color, duration, formatValue, 
     videoRef: previewVideoRef, preview, previewWidth, showAt, hide,
   } = useSeekPreview({ videoId, trackRef: wrapRef, duration });
 
-  const path = useMemo(() => {
-    if (!has) return '';
+  // The area (a tint) and its top edge (the line), drawn in the series color.
+  const { path, line } = useMemo(() => {
+    if (!has) return { path: '', line: '' };
     const y = (v) => (100 - Math.max(0, Math.min(1, (v || 0) / maxValue)) * 96).toFixed(2);
     const pts = values.map((v, i) => `${((i / (n - 1)) * 100).toFixed(2)},${y(v)}`).join(' L');
-    return `M0,100 L${pts} L100,100 Z`;
+    return { path: `M0,100 L${pts} L100,100 Z`, line: `M${pts}` };
   }, [values, maxValue, has, n]);
 
   // Handles both mouse hover (desktop) and touch drag (mobile — no hover there).
@@ -47,11 +55,25 @@ export function PositionChart({ values, maxValue, color, duration, formatValue, 
 
   const onLeave = useCallback(() => { setHover(null); hide(); }, [hide]);
 
+  // Bucket the 0..100% samples into `bars` columns (mean of each bucket).
+  const barVals = useMemo(() => {
+    if (!bars || !has) return null;
+    return Array.from({ length: bars }, (_, b) => {
+      const from = Math.floor((b / bars) * n);
+      const to = Math.max(from + 1, Math.floor(((b + 1) / bars) * n));
+      const slice = values.slice(from, to);
+      return slice.reduce((a, v) => a + (v || 0), 0) / (slice.length || 1);
+    });
+  }, [bars, has, n, values]);
+  const hot = barVals
+    ? (hotIndex != null ? Math.min(bars - 1, Math.floor(hotIndex * bars)) : barVals.indexOf(Math.max(...barVals)))
+    : null;
+
   if (!has) return <div className="vs-chart-empty">{emptyLabel || t('stats.video.noData')}</div>;
 
   return (
     <div
-      className="vs-poschart"
+      className={`vs-poschart${barVals ? ' is-bars' : ''}${axis ? '' : ' no-axis'}`}
       ref={wrapRef}
       onMouseMove={onMove}
       onMouseLeave={onLeave}
@@ -60,9 +82,28 @@ export function PositionChart({ values, maxValue, color, duration, formatValue, 
       onTouchEnd={onLeave}
       onTouchCancel={onLeave}
     >
-      <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="vs-poschart-svg" aria-hidden="true">
-        <path d={path} style={{ fill: color, stroke: color }} />
-      </svg>
+      {barVals ? (
+        <div className="vs-bars" aria-hidden="true">
+          {barVals.map((v, i) => (
+            <span
+              key={i}
+              className={i === hot ? 'is-hot' : undefined}
+              style={{ height: `${Math.max(4, Math.min(1, v / maxValue) * 100)}%`, ...(i === hot ? null : { background: color }) }}
+            />
+          ))}
+        </div>
+      ) : (
+        <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="vs-poschart-svg" aria-hidden="true">
+          <path className="vs-poschart-area" d={path} style={{ fill: color }} />
+          <path className="vs-poschart-line" d={line} style={{ stroke: color }} vectorEffect="non-scaling-stroke" />
+        </svg>
+      )}
+      {marker && (
+        <>
+          <span className="vs-marker" style={{ left: `${marker.x * 100}%` }} aria-hidden="true" />
+          <span className="vs-marker-label" style={{ left: `${marker.x * 100}%` }}>{marker.label}</span>
+        </>
+      )}
       {hover && <div className="vs-poschart-cursor" style={{ left: `${hover.x * 100}%` }} />}
 
       {videoId ? (
@@ -87,7 +128,7 @@ export function PositionChart({ values, maxValue, color, duration, formatValue, 
           </div>
         )
       )}
-      <div className="vs-poschart-axis"><span>0:00</span><span>{mmss(duration)}</span></div>
+      {axis && <div className="vs-poschart-axis"><span>0:00</span><span>{mmss(duration)}</span></div>}
     </div>
   );
 }
@@ -106,7 +147,9 @@ function deriveInsights(data) {
     const d = retention[i] - retention[i + 1];
     if (d > dropAmt) { dropAmt = d; dropI = i + 1; }
   }
-  const biggestDrop = dropAmt >= 8 && dropI > 0 ? { t: tAt(dropI), amt: Math.round(dropAmt) } : null;
+  const biggestDrop = dropAmt >= 8 && dropI > 0
+    ? { t: tAt(dropI), amt: Math.round(dropAmt), x: dropI / Math.max(1, retention.length - 1), left: retention[dropI] }
+    : null;
 
   // Top replayed moments: peak buckets, deduped by proximity.
   const ranked = norm.map((v, i) => ({ v, i })).filter((p) => p.v >= 0.55).sort((a, b) => b.v - a.v);
@@ -125,19 +168,33 @@ function deriveInsights(data) {
 }
 
 /**
- * Per-video watch analytics — stats + insights + audience-retention + most-replayed.
- * Reused by the profile dashboard AND the watch page.
+ * Per-video watch analytics, reused by the profile dashboard AND the watch page,
+ * both drawn as 45a: four wells (unique viewers, avg view duration, avg watched,
+ * avg speed), the retention curve with the biggest drop-off marked, the insights
+ * line, most replayed as bars.
+ *
+ * variant "detail" (profile): the body only; the dashboard has its own title
+ *   and footnote.
+ * default (watch page, `.watch-stats-panel`): with the 16/700 title over it and
+ *   the private footnote under it.
  *
  * @param {string} username  video owner (Hive author)
  * @param {string} permlink  asset OR Hive permlink (the API resolves either)
  * @param {boolean} compact  tighter layout for inline use (watch page)
+ * @param {string} variant   "detail" for the profile dashboard
+ * @param {string} title     optional panel title (the video's); defaults to "Video stats"
  * @param {function} onSeek  optional — makes replay timestamps clickable (seek the player)
  */
-export default function VideoStats({ username, permlink, compact = false, onSeek = null }) {
+export default function VideoStats({ username, permlink, compact = false, variant = 'panel', title = '', onSeek = null }) {
   const { t } = useTranslation();
+  const tPlain = (...args) => String(t(...args)).replace(LEAD_EMOJI, '');
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState(false);
+  const detail = variant === 'detail';
+  const cls = `video-stats is-detail${compact ? ' compact' : ''}${detail ? '' : ' is-panel'}`;
+  // The watch-page panel carries its own title (45a: 16/700, the video's name).
+  const head = detail ? null : <h3 className="vs-title">{title || t('watch.actions.videoStats')}</h3>;
 
   useEffect(() => {
     let cancelled = false;
@@ -155,63 +212,71 @@ export default function VideoStats({ username, permlink, compact = false, onSeek
     ? `${username}/${data?.permlink || permlink}`
     : null;
 
-  if (loading) return <div className={`video-stats${compact ? ' compact' : ''}`}><BarLoader /></div>;
+  if (loading) {
+    return (
+      <div className={cls} aria-busy="true">
+        {head}
+        <div className="vs-skeleton v2-skeleton" />
+      </div>
+    );
+  }
   if (err || !data || data.sessions === 0) {
-    return <div className={`video-stats${compact ? ' compact' : ''}`}><div className="vs-chart-empty">{t('stats.video.empty')}</div></div>;
+    return <div className={cls}>{head}<div className="vs-chart-empty">{t('stats.video.empty')}</div></div>;
   }
 
+  const ins = deriveInsights(data);
+  const showEarly = data.duration <= 90 && ins.earlyDrop != null;
+  const hasInsights = ins.biggestDrop || ins.topMoments.length || showEarly;
+  const avgView = data.sessions ? data.watchSeconds / data.sessions : 0;
+  const norm = data.replay?.normalized || [];
+
+  const insights = hasInsights ? (
+    <div className="vs-insights">
+      {ins.biggestDrop && <span className="vs-insight"><Icon name="trending_down" size={16} /><Trans t={tPlain} i18nKey="stats.video.mostDropOff" values={{ time: mmss(ins.biggestDrop.t) }} components={{ b: <b /> }} /></span>}
+      {showEarly && <span className="vs-insight"><Icon name="bolt" size={16} /><Trans t={tPlain} i18nKey="stats.video.earlyDrop" values={{ pct: ins.earlyDrop }} components={{ b: <b /> }} /></span>}
+      {ins.topMoments.length > 0 && (
+        <span className="vs-insight"><Icon name="replay" size={16} />{tPlain('stats.video.replayed')}
+          {ins.topMoments.map((m, i) => (
+            onSeek
+              ? <button key={i} type="button" className="vs-ts" onClick={() => onSeek(m.t)}>{mmss(m.t)}</button>
+              : <b key={i} className="vs-ts-static">{mmss(m.t)}</b>
+          ))}
+        </span>
+      )}
+    </div>
+  ) : null;
+
   return (
-    <div className={`video-stats${compact ? ' compact' : ''}`}>
-      <div className="vs-stats">
-        <div><span>{fmtDuration(data.watchSeconds)}</span><label>{t('stats.metrics.watchTime')}</label></div>
-        <div><span>{fmtCount(data.sessions)}</span><label>{t('stats.metrics.views')}</label></div>
-        <div><span>{fmtCount(data.viewers)}</span><label>{t('stats.video.uniqueViewers')}</label></div>
-        <div><span>{data.avgPct}%</span><label>{t('stats.tiles.avgWatched')}</label></div>
-        <div><span>{data.avgRate}×</span><label>{t('stats.video.avgSpeed')}</label></div>
+    <div className={cls}>
+      {head}
+      <div className="vs-wells">
+        <div className="vs-well"><span>{t('stats.video.uniqueViewers')}</span><b>{fmtCount(data.viewers ?? data.sessions)}</b></div>
+        <div className="vs-well"><span>{t('stats.tiles.avgViewDuration')}</span><b>{mmss(avgView)}</b></div>
+        <div className="vs-well"><span>{t('stats.tiles.avgWatched')}</span><b>{`${Math.round(data.avgPct)}%`}</b></div>
+        <div className="vs-well"><span>{t('stats.video.avgSpeed')}</span><b>{`${data.avgRate}×`}</b></div>
       </div>
 
-      {(() => {
-        const ins = deriveInsights(data);
-        if (!ins.biggestDrop && !ins.topMoments.length && !(data.duration <= 90 && ins.earlyDrop)) return null;
-        return (
-          <div className="vs-insights">
-            {ins.biggestDrop && <span className="vs-insight"><Trans i18nKey="stats.video.mostDropOff" values={{ time: mmss(ins.biggestDrop.t) }} components={{ b: <b /> }} /></span>}
-            {data.duration <= 90 && ins.earlyDrop != null && <span className="vs-insight"><Trans i18nKey="stats.video.earlyDrop" values={{ pct: ins.earlyDrop }} components={{ b: <b /> }} /></span>}
-            {ins.topMoments.length > 0 && (
-              <span className="vs-insight">{t('stats.video.replayed')}
-                {ins.topMoments.map((m, i) => (
-                  onSeek
-                    ? <button key={i} type="button" className="vs-ts" onClick={() => onSeek(m.t)}>{mmss(m.t)}</button>
-                    : <b key={i} className="vs-ts-static">{mmss(m.t)}</b>
-                ))}
-              </span>
-            )}
-          </div>
-        );
-      })()}
+      <h5 className="vs-h">{t('stats.video.retentionTitle')}<em>{t('stats.video.retentionSub')}</em></h5>
+      <PositionChart
+        values={data.retention} maxValue={100} duration={data.duration}
+        color="var(--cyan)"
+        formatValue={(v) => t('stats.video.pctWatching', { pct: Math.round(v) })}
+        videoId={previewId}
+        marker={ins.biggestDrop ? { x: ins.biggestDrop.x, label: t('stats.video.pctWatching', { pct: Math.round(ins.biggestDrop.left ?? 0) }) } : null}
+      />
+      {insights}
 
-      <div className="vs-charts">
-        <div className="vs-chart-block">
-          <h5>{t('stats.video.retentionTitle')}<em>{t('stats.video.retentionSub')}</em></h5>
-          <PositionChart
-            values={data.retention} maxValue={100} duration={data.duration}
-            color="var(--accent-primary, #e53935)"
-            formatValue={(v) => t('stats.video.pctWatching', { pct: Math.round(v) })}
-            videoId={previewId}
-          />
-        </div>
-
-        <div className="vs-chart-block">
-          <h5>{t('stats.video.replayTitle')}<em>{t('stats.video.replaySub')}</em></h5>
-          <PositionChart
-            values={data.replay?.normalized || []} maxValue={1} duration={data.duration}
-            color="rgba(120,170,255,0.85)"
-            formatValue={() => t('stats.video.hotSpot')}
-            emptyLabel={t('stats.video.notEnoughReplays')}
-            videoId={previewId}
-          />
-        </div>
-      </div>
+      <h5 className="vs-h">{t('stats.video.replayTitle')}<em>{t('stats.video.replaySub')}</em></h5>
+      <PositionChart
+        values={norm} maxValue={1} duration={data.duration}
+        color="color-mix(in srgb, var(--text) 28%, transparent)"
+        formatValue={() => t('stats.video.hotSpot')}
+        emptyLabel={t('stats.video.notEnoughReplays')}
+        videoId={previewId}
+        bars={30}
+        axis={false}
+      />
+      {!detail && <p className="vs-foot">{t('stats.footnote')}</p>}
     </div>
   );
 }

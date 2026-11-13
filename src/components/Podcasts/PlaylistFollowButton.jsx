@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { MdAdd, MdCheck, MdPodcasts } from 'react-icons/md';
+import { Button } from '../v2/ui';
 import { toastIn } from '../../utils/toast';
 import {
   usePodcastSubscriptions, useInvalidatePodcasts, followFeeds, unfollowFeed, followErrorText, feedKey, podcastPath,
@@ -51,14 +51,23 @@ export default function PlaylistFollowButton({ playlistId, name, user }) {
 
   return (
     <span className="playlist-follow">
-      <button type="button" className={`pod-btn${sub ? ' pod-btn--on' : ' pod-btn--solid'}`} onClick={toggle} disabled={busy} aria-pressed={!!sub}>
-        {sub ? <MdCheck size={16} /> : <MdAdd size={16} />}
+      {/* 28d: Follow is a cyan choice; once on, a cyan tint. */}
+      <Button
+        variant={sub ? 'secondary' : 'cyan'}
+        size={36}
+        icon={sub ? 'bookmark_added' : 'bookmark_add'}
+        className={`pod-btn playlist-follow__btn${sub ? ' is-on' : ''}`}
+        onClick={toggle}
+        disabled={busy}
+        loading={busy}
+        aria-pressed={!!sub}
+      >
         {sub ? t('audio.podcasts.following') : t('audio.podcasts.follow')}
-      </button>
+      </Button>
       {sub && (
-        <button type="button" className="pod-btn" onClick={() => navigate(podcastPath(sub.id))}>
-          <MdPodcasts size={16} /> {t('audio.podcasts.openShow')}
-        </button>
+        <Button variant="secondary" size={36} icon="podcasts" className="pod-btn" onClick={() => navigate(podcastPath(sub.id))}>
+          {t('audio.podcasts.openShow')}
+        </Button>
       )}
     </span>
   );

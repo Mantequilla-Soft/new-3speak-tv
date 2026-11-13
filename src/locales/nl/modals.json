@@ -17,7 +17,8 @@
     "loginFailed": "Inloggen mislukt: {{error}}",
     "logoAlt": "3Speak-logo",
     "title": "Inloggen met je gebruikersnaam",
-    "usernamePlaceholder": "Gebruikersnaam"
+    "usernamePlaceholder": "Gebruikersnaam",
+    "continueWith": "Doorgaan met {{method}}"
   },
   "socialLink": {
     "hashCopied": "Hash gekopieerd",
@@ -54,8 +55,8 @@
     "verify": "Verifiëren"
   },
   "auth": {
-    "title": "Autoriseer 3Speak!",
-    "text": "Om video's op 3Speak te uploaden hebben we je posting-autoriteit nodig. Daarmee kunnen we je geüploade video's op Hive publiceren. Je hoeft ons maar één keer posting-autoriteit te geven.",
+    "title": "Autoriseer 3Speak",
+    "text": "Om te uploaden hebben we je posting-autoriteit nodig, zodat we je video's op Hive kunnen publiceren. Je geeft die maar één keer.",
     "authorize": "Autoriseren"
   },
   "beneficiary": {
@@ -69,20 +70,25 @@
       "duplicate": "Dit account staat al in de lijst.",
       "invalidAccount": "Ongeldige gebruikersnaam of community-ID.",
       "cannotIncrease": "Kan niet hoger dan de resterende {{percent}}%",
-      "pendingRow": "@{{account}} is nog niet toegevoegd — klik op + om het toe te voegen, of maak het veld leeg.",
+      "pendingRow": "@{{account}} is nog niet toegevoegd. Klik op + om het toe te voegen, of maak het veld leeg.",
       "atLeastOne": "Het beloningspercentage moet minstens 1% zijn",
       "maxCount": "Hive staat maximaal {{max}} begunstigden per post toe."
     },
     "title": "Begunstigden",
+    "shareRewards": "Beloningen delen",
+    "you": "jij",
+    "toYou": "naar jou",
+    "addCollaborator": "Medewerker toevoegen",
+    "saveSplit": "Verdeling opslaan",
     "intro": "Voeg een gebruiker toe die automatisch een deel van de beloningen van deze post moet krijgen.",
     "minPercent": "% (min. {{percent}}%)",
     "usernamePlaceholder": "Gebruikersnaam invullen",
     "minimumReward": "Minimale beloning is <strong>1%</strong>",
     "checking": "<strong>@{{account}}</strong> controleren op Hive…",
-    "notExisting": "⚠️ <strong>@{{account}}</strong> is geen bestaand Hive-account.",
-    "notAdded": "⚠️ <strong>@{{account}}</strong> is nog niet toegevoegd — klik op <strong>+</strong> om het toe te voegen, of maak het veld leeg.",
-    "infrastructure": "10% === Infrastructuur",
-    "videoEncoding": "Video-encoding === 1%",
+    "notExisting": "<strong>@{{account}}</strong> is geen bestaand Hive-account.",
+    "notAdded": "<strong>@{{account}}</strong> is nog niet toegevoegd. Klik op <strong>+</strong> om het toe te voegen, of maak het veld leeg.",
+    "infrastructure": "Infrastructuur: 10%",
+    "videoEncoding": "Video-encoding: 1%",
     "defaults": "Standaardbegunstigden ({{count}})"
   },
   "qr": {
@@ -100,7 +106,7 @@
   },
   "verifyAuth": {
     "title": "Autorisatie controleren",
-    "text": "Even geduld terwijl we controleren of de autorisatie is gegeven..."
+    "text": "Controleren of die is verleend…"
   },
   "editor": {
     "confirmLeave": "De editor is nog open. Als je deze pagina verlaat, wordt de editor gesloten en gaan niet-opgeslagen wijzigingen verloren.\n\nOK = Editor sluiten & weggaan\nAnnuleren = Op deze pagina blijven",
@@ -176,7 +182,9 @@
     "details": "Extra details (optioneel)",
     "detailsPlaceholder": "Geef meer context...",
     "submitting": "Versturen...",
-    "submit": "Melding versturen"
+    "submit": "Melding versturen",
+    "intro": "Meldingen gaan naar het 3Speak-team. De maker ziet niet wie heeft gemeld.",
+    "nextDetails": "Volgende: details toevoegen"
   },
   "upload": {
     "missingInfo": "Video- of thumbnailgegevens ontbreken.",

@@ -10,7 +10,7 @@
     "optional": "A única opção: podemos lembrar <b>onde você parou em cada vídeo</b> para retomar a reprodução. Isso nunca sai do seu dispositivo."
   },
   "details": {
-    "essentialTitle": "Essencial — sempre ativado",
+    "essentialTitle": "Essencial (sempre ativado)",
     "essential": {
       "login": "Sua sessão de login",
       "settings": "As configurações que você define: tema, volume, idioma, legendas, preferências do feed",

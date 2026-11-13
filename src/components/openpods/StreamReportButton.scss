@@ -1,141 +1,39 @@
-@use "../../mixins.scss" as mix;
+@use "../../styles/v2" as v2;
 
-// Inline trigger (desktop) — a quiet text+icon button.
-.stream-report-trigger {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 12px;
-  border: 1px solid var(--border-color, rgba(150, 150, 150, 0.4));
-  border-radius: 999px;
-  background: transparent;
-  color: var(--text-secondary, #888);
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: color 0.15s ease, border-color 0.15s ease;
-
-  &:hover { color: var(--accent-primary, #e53935); border-color: var(--accent-primary, #e53935); }
+/* Report a stream (39c): the v2 Dialog (a sheet on phones), reasons as a
+   two-column grid of choices, accent when chosen, a details field. */
+.stream-report__sub {
+  margin: 0;
+  @include v2.text(meta);
+  color: var(--muted);
 }
 
-.stream-report {
-  position: fixed;
-  inset: 0;
-  z-index: 4000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.stream-report__reasons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
 
-  // Convention: popups are bottom sheets on mobile.
-  @include mix.respond(phone) { align-items: flex-end; }
+  @media (max-width: 359px) { grid-template-columns: 1fr; }
+}
 
-  &__backdrop {
-    position: absolute;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.55);
-  }
+.stream-report__reason {
+  min-height: 44px;
+  padding: 6px 10px;
+  border: 2px solid var(--border);
+  border-radius: var(--r-md);
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
 
-  &__card {
-    position: relative;
-    width: min(440px, calc(100% - 32px));
-    max-height: 85vh;
-    overflow-y: auto;
-    background: var(--bg-primary, #fff);
-    color: var(--text-primary, #111);
-    border: 1px solid var(--border-light, rgba(150, 150, 150, 0.3));
-    border-radius: 16px;
-    padding: 18px;
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+  &:hover { background: var(--bg-hover); }
 
-    @include mix.respond(phone) {
-      width: 100%;
-      border-radius: 16px 16px 0 0;
-      max-height: 90vh;
-    }
-  }
-
-  &__sub {
-    margin: 6px 0 14px;
-    font-size: 13px;
-    line-height: 1.4;
-    color: var(--text-secondary, #666);
-  }
-
-  &__reasons {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-
-  &__reason {
-    padding: 8px 12px;
-    border-radius: 999px;
-    border: 1px solid var(--border-color, rgba(150, 150, 150, 0.4));
-    background: transparent;
-    color: var(--text-primary, #111);
-    font-size: 13px;
-    cursor: pointer;
-    transition: border-color 0.12s ease, color 0.12s ease, background 0.12s ease;
-
-    &:hover { border-color: var(--accent-primary, #e53935); }
-
-    // Selected = red outline + red text (never a red fill), per app convention.
-    &.is-selected {
-      border-color: var(--accent-primary, #e53935);
-      color: var(--accent-primary, #e53935);
-      box-shadow: inset 0 0 0 1px var(--accent-primary, #e53935);
-      font-weight: 600;
-    }
-  }
-
-  &__detail {
-    width: 100%;
-    box-sizing: border-box;
-    margin-top: 14px;
-    min-height: 72px;
-    resize: vertical;
-    padding: 10px 12px;
-    border-radius: 10px;
-    border: 1px solid var(--border-color, rgba(150, 150, 150, 0.4));
-    background: var(--bg-secondary, #f6f6f6);
-    color: var(--text-primary, #111);
-    font: inherit;
-    font-size: 13px;
-
-    &::placeholder { color: var(--text-secondary, #999); }
-    &:focus { outline: none; border-color: var(--accent-primary, #e53935); }
-  }
-
-  &__actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    margin-top: 16px;
-  }
-
-  &__cancel {
-    padding: 9px 16px;
-    border-radius: 999px;
-    border: 1px solid var(--border-color, rgba(150, 150, 150, 0.4));
-    background: transparent;
-    color: var(--text-secondary, #888);
-    font-weight: 500;
-    cursor: pointer;
-    &:disabled { opacity: 0.5; cursor: default; }
-  }
-
-  // Red-outline (not fill) primary, matching the red-button convention.
-  &__submit {
-    padding: 9px 18px;
-    border-radius: 999px;
-    border: 1px solid var(--accent-primary, #e53935);
-    background: transparent;
-    color: var(--accent-primary, #e53935);
-    font-weight: 700;
-    cursor: pointer;
-    transition: background 0.15s ease;
-
-    &:hover:not(:disabled) { background: rgba(229, 57, 53, 0.08); }
-    &:disabled { opacity: 0.45; cursor: default; }
+  &.is-selected {
+    border-color: var(--accent);
+    background: var(--accent-tint-strong);
   }
 }

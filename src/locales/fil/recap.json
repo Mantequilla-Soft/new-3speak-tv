@@ -105,7 +105,7 @@
       "tips": "Tips"
     },
     "legendOurs": "sa 3Speak",
-    "legendOther": "sa ibang bahagi ng Hive",
+    "legendOther": "sa ibang lugar",
     "segments": {
       "ours": "Post rewards sa 3Speak",
       "other": "Post rewards sa ibang bahagi ng Hive",
@@ -132,7 +132,8 @@
     "communities": "Binibisita ang mga community mo…",
     "followers": "Tinitingnan kung sino ang nag-follow sa iyo…",
     "watched": "Sinusuri ang mga pinanood mo…",
-    "thumbnails": "Nilo-load ang mga thumbnail mo… {{done}} ng {{total}}"
+    "thumbnails": "Nilo-load ang mga thumbnail mo… {{done}} ng {{total}}",
+    "thumbnailsWaiting": "Nilo-load ang mga thumbnail mo…"
   },
   "tips": {
     "label": "Tip:",

@@ -1,8 +1,12 @@
+@use "../../styles/v2" as v2;
+
+// The live OpenPods player in the watch page's player slot. Text over video is
+// white on scrims, in both themes.
 .live-stream-player {
   position: absolute;
   inset: 0;
   z-index: 8; // above the idle VOD <video> + loading/unavailable overlays
-  background: #000;
+  background: var(--media-black);
 
   // StreamVideo fills its parent (absolute inset:0 from the SDK).
   .hh-stream-video { position: absolute; inset: 0; }
@@ -12,16 +16,14 @@
     top: 12px;
     right: 12px;
     z-index: 5;
-    padding: 4px 10px;
-    border-radius: 6px;
-    background: rgba(0, 0, 0, 0.55);
-    color: #fff;
+    @include v2.scrim-pill;
     font-size: 12px;
-    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: var(--r-sm);
   }
 }
 
-/* "The recording is processing" — covers the dead live player after the host
+/* "The recording is processing": covers the dead live player after the host
    leaves, until Watch.jsx sees the VOD published and swaps in the real one. */
 .live-stream-player__vod {
   position: absolute;
@@ -29,44 +31,37 @@
   z-index: 4;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
-  gap: 0.6rem;
-  padding: 1.5rem;
-  text-align: center;
-  background: rgba(0, 0, 0, 0.88);
-  color: #fff;
+  gap: 6px;
+  padding: 24px;
+  background: var(--media-scrim-strong);
+  color: var(--on-media);
 
-  strong { font-size: 1.05rem; }
-  span { font-size: 0.85rem; opacity: 0.75; max-width: 32ch; line-height: 1.45; }
+  strong { @include v2.text(title-sm); }
+  span { @include v2.text(meta); opacity: .75; max-width: 40ch; line-height: 1.45; }
 }
 
 .live-stream-player__vod-spinner {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  border: 3px solid rgba(255, 255, 255, 0.22);
-  border-top-color: var(--accent-primary, #e0594b);
-  animation: live-stream-player-spin 0.9s linear infinite;
-}
-
-@keyframes live-stream-player-spin {
-  to { transform: rotate(360deg); }
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  margin-bottom: 4px;
+  border-radius: var(--r-lg);
+  background: var(--cyan-tint-strong);
+  color: var(--cyan);
+  opacity: 1 !important;
 }
 
 /* "Ask to join" sits beside the gift chip, over the player. */
 .live-stream-player__collab {
   position: absolute;
-  right: 6.2rem;
-  bottom: 0.6rem;
+  right: 100px;
+  bottom: 10px;
   z-index: 6;
 
   .pv-btn {
-    padding: 0.35rem 0.7rem;
-    border-radius: 999px;
-    background: rgba(0, 0, 0, 0.62);
-    backdrop-filter: blur(6px);
-    color: #fff;
-    font-size: 0.8rem;
+    @include v2.btn(media, 32);
   }
 }

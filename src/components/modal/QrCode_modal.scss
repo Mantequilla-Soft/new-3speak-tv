@@ -1,3 +1,50 @@
-@use "./modal-base";
+@use "../../styles/v2" as v2;
 
-// QR Code modal specific styles (if needed)
+// QR code dialog (design 25e): the code on a white tile (radius 24, padding 12)
+// on the left; what to do with it and the one action on the right. Stacked on
+// a phone. The tile stays white whatever the theme, so every camera reads it.
+.qr-modal {
+  .qr-modal__row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    @include v2.mobile { flex-direction: column; align-items: stretch; }
+  }
+
+  .qr-modal__code {
+    flex: none;
+    display: block;
+    align-self: center;
+    padding: 12px;
+    border: 0;
+    border-radius: var(--r-2xl);
+    background: var(--on-media);
+    cursor: pointer;
+    line-height: 0;
+  }
+
+  .qr-modal__side {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    min-width: 0;
+  }
+
+  .qr-modal__lead {
+    margin: 0;
+    @include v2.text(body-sm);
+    line-height: 1.5;
+    color: var(--muted);
+  }
+
+  .qr-modal__hint.v2-btn {
+    gap: 12px;
+    max-width: 100%;
+    white-space: normal;
+
+    .v2-btn__label { white-space: normal; text-align: left; }
+    @include v2.mobile { width: 100%; justify-content: space-between; }
+  }
+}

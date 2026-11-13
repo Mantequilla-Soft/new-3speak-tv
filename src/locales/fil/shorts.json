@@ -17,7 +17,8 @@
       "rep": "Rep {{rep}}",
       "repTitle": "Reputasyon sa Hive",
       "viewProfile": "Tingnan ang profile"
-    }
+    },
+    "replyTo": "Sumagot kay {{user}}…"
   },
   "errors": {
     "votingUnavailable": "Hindi available ang voting sa post na ito",
@@ -31,7 +32,7 @@
     "interestsTitle": "Shorts lang na tugma sa mga interes mo",
     "pickInterestsFirst": "Pumili muna ng ilang interes",
     "noInterests": "Wala ka pang napiling interes — pumili sa Settings",
-    "interestsExhausted": "Iyan na lahat ng Shorts para sa mga interes mo — ipinapakita ang Discover",
+    "interestsExhausted": "Iyan na lahat ng Shorts para sa mga interes mo. Ipinapakita ang Discover.",
     "noInterestMatches": "Walang Shorts na tugma sa mga interes mo ngayon.",
     "switchToDiscover": "Lumipat sa Discover",
     "empty": "Walang available na Shorts",
@@ -40,12 +41,18 @@
   "glow": {
     "subtle": "Ambient light: banayad",
     "vivid": "Ambient light: matingkad",
-    "off": "Ambient light: off"
+    "off": "Ambient light: off",
+    "label": "Ambient light",
+    "offShort": "Naka-off",
+    "subtleShort": "Banayad",
+    "vividShort": "Matingkad"
   },
   "playbackMode": {
     "autoReplay": "Auto-Replay",
     "autoSwipe": "Auto-Swipe",
-    "manual": "Manual"
+    "manual": "Manual",
+    "label": "Playback",
+    "options": "Mga opsyon sa playback"
   },
   "subtitles": {
     "off": "Off"
@@ -83,7 +90,7 @@
     "noUrl": "Hindi makuha ang video URL para sa remix",
     "loadFailed": "Hindi ma-load ang video para sa remix",
     "chainFull": "Nakabatay na ang video na ito sa {{max}} naunang video, kaya hindi na ito puwedeng i-remix.",
-    "chainNoSlots": "Napakarami nang creator na binabayaran ng remix chain na ito kaya wala nang puwang sa Hive para sa isa pang remix. Sa 3Speak Pro, puwede mo pa rin itong i-remix."
+    "chainNoSlots": "Napakarami nang creator na binabayaran ng chain na ito kaya wala nang puwang sa Hive para sa remix. Sa 3Speak Pro, puwede mo pa rin itong i-remix."
   },
   "watchLater": {
     "loginRequired": "Mag-log in para mag-save ng Shorts",
@@ -100,7 +107,7 @@
     "postRemoved": "Inalis na ang Hive post sa likod ng short na ito, kaya hindi na ito puwedeng i-comment o i-vote.",
     "beFirst": "Ikaw ang unang mag-comment!",
     "unavailable": "Hindi available ang comments sa post na ito",
-    "addPlaceholder": "Mag-comment...",
+    "addPlaceholder": "Sumali sa usapan…",
     "addPlaceholderBar": "Mag-comment…",
     "loginPlaceholder": "Mag-log in para mag-comment",
     "send": "Ipadala ang comment",
@@ -130,7 +137,7 @@
     "seenNote": "Mga naka-sign-in na manonood na naka-on ang watch history.",
     "seenEmpty": "Wala pang nakakakita.",
     "keep": "Itago bilang Short",
-    "keepHint": "Mananatili sa channel mo pagkalipas ng 24 oras",
+    "keepHint": "Mananatili ito sa channel mo pagkalipas ng 24 oras.",
     "keepConfirm": "Itago na ito nang tuluyan?",
     "keepYes": "Itago",
     "keeping": "Itinatago…",
@@ -141,5 +148,9 @@
   "audiogram": {
     "fullEpisode": "Buong episode",
     "listen": "Pakinggan ang buong episode: {{title}}"
+  },
+  "panel": {
+    "discussion": "Talakayan",
+    "upNext": "Susunod"
   }
 }

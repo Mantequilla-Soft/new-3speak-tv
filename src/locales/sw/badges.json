@@ -34,7 +34,7 @@
   },
   "directory": {
     "title": "Beji",
-    "intro": "Beji ni tuzo <b>unazopewa na wengine</b> kwenye Hive, kwa matukio, michango na hatua muhimu. Huwezi kujiunga na beji: mtu anakutunuku. Fungua beji ili utazame kile wapokeaji wake wanachapisha hapa.",
+    "intro": "Beji ni tuzo <b>unazopewa na wengine</b> kwenye Hive, kwa matukio, michango na hatua muhimu. Huwezi kujiunga na beji: mtu anakutunuku.",
     "searchPlaceholder": "Tafuta beji...",
     "sort": {
       "recipients": "Wapokeaji",
@@ -58,6 +58,7 @@
     "awarding": "Inatunuku…",
     "held": "Anayo",
     "award": "Tunuku",
+    "awardNamed": "Tunuku \"{{title}}\"",
     "note": "Beji inamfuata kwenye Hive, na hiyo ndiyo maana ya kuwa nayo. Unaweza kuirudisha kutoka kwenye ukurasa wa beji yenyewe."
   },
   "hive": {
@@ -85,9 +86,10 @@
     "unclaimed": "Haijadaiwa",
     "noActivity": "Bado hakuna shughuli katika kipindi hiki",
     "otherTopics": "Nyingine",
-    "title": "Viwango",
-    "subtitle": "{{blurb}} — watayarishaji bora kwenye 3Speak.",
-    "subtitleTopic": "{{blurb}} — watayarishaji bora katika {{topic}}.",
+    "title": "Ubao wa viongozi",
+    "subtitle": "{{blurb}}: watayarishaji bora kwenye 3Speak.",
+    "explain": "{{label}}: {{blurb}}.",
+    "subtitleTopic": "{{blurb}}: watayarishaji bora katika {{topic}}.",
     "allTopics": "Mada zote",
     "finding": "Inamtafuta @{{user}} kwenye jedwali hili…",
     "notInTop": "@{{user}} hayumo kwenye {{n}} bora wa jedwali hili.",

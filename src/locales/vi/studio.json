@@ -7,11 +7,19 @@
     "createNewDesc": "Tải lên và chia sẻ nội dung của bạn với thế giới"
   },
   "preview": {
-    "cannotPreview": "Trình duyệt của bạn không thể xem trước video này — điều này thường gặp với clip HEVC/H.265 (ví dụ video quay ở chế độ “Hiệu suất cao” trên iPhone). Không sao cả: video vẫn được tải lên và chuyển đổi để mọi người đều xem được."
+    "cannotPreview": "<b>Không thể xem trước video này.</b> Thường gặp với clip HEVC / H.265, chẳng hạn video quay ở chế độ Hiệu suất cao trên iPhone. Video vẫn được tải lên và chuyển đổi để mọi người đều xem được."
   },
   "drafts": {
     "untitled": "(chưa có tiêu đề)",
-    "empty": "Không tìm thấy video nào với bộ lọc đã chọn."
+    "empty": "Không tìm thấy video nào với bộ lọc đã chọn.",
+    "title": "Studio",
+    "create": "Tạo",
+    "views28": "Lượt xem, 28 ngày",
+    "newFollowers": "Người theo dõi mới",
+    "views": "lượt xem",
+    "stats": "Thống kê",
+    "more": "Thêm",
+    "public": "Công khai"
   },
   "schedule": {
     "days": {
@@ -30,6 +38,7 @@
     "am": "SA",
     "pm": "CH",
     "pastWarning": "Ngày giờ này đã qua. Vui lòng chọn ngày giờ trong tương lai.",
+    "pickDay": "Chọn ngày",
     "publishAt": "Video của bạn sẽ được tự động xuất bản lúc {{when}}"
   },
   "scheduled": {
@@ -99,6 +108,7 @@
     "insertTable": "Chèn bảng",
     "spoiler": "Spoiler/Văn bản ẩn",
     "emoji": "Emoji",
+    "gifs": "GIF",
     "searchEmoji": "Tìm emoji",
     "searchGifs": "Tìm GIF…",
     "noGifs": "Không tìm thấy GIF nào.",

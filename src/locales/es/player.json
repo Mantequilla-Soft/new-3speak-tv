@@ -20,8 +20,8 @@
     "fullscreen": "Pantalla completa",
     "exitFullscreen": "Salir de pantalla completa",
     "markerReplies_one": "({{count}} respuesta)",
-    "markerReplies_other": "({{count}} respuestas)",
-    "markerReplies_many": "({{count}} respuestas)"
+    "markerReplies_many": "({{count}} respuestas)",
+    "markerReplies_other": "({{count}} respuestas)"
   },
   "subtitles": {
     "title": "Subtítulos",
@@ -78,6 +78,11 @@
     }
   },
   "reactionUpload": {
+    "title": "Publicar una reacción en video",
+    "rec": "REC {{time}}",
+    "mic": "Micrófono",
+    "camera": "Cámara",
+    "restart": "Reiniciar",
     "authorized": "@threespeak autorizado: ya puedes publicar tu reacción",
     "authFailed": "Falló la autorización. Inténtalo de nuevo.",
     "webcamDenied": "No se pudo acceder a la cámara web",
@@ -91,7 +96,7 @@
     "uploadVideo": "Subir video",
     "recordVideo": "Grabar video",
     "startRecording": "Empezar a grabar",
-    "stopRecording": "Detener grabación",
+    "stopRecording": "Detener y revisar",
     "recordedVideo": "Video grabado",
     "descriptionPlaceholder": "Agrega una descripción a tu reacción en video...",
     "showInShorts": "Mostrar en 3Speak Shorts",

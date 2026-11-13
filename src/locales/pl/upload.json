@@ -2,7 +2,7 @@
   "drafts": {
     "title": "Szkice filmów",
     "filters": {
-      "all": "Wszystkie filmy",
+      "all": "Wszystkie",
       "published": "Opublikowane",
       "scheduled": "zaplanowane",
       "failed": "Nieudane"
@@ -30,7 +30,7 @@
   },
   "preview": {
     "playVideo": "Odtwórz film",
-    "cannotPreviewHevc": "Twoja przeglądarka nie może wyświetlić podglądu tego filmu — to częste w przypadku klipów HEVC/H.265 (np. nagrań iPhone'a w trybie „Wysoka wydajność”). Nic nie szkodzi: film i tak zostanie przesłany i przekonwertowany, aby każdy mógł go odtworzyć."
+    "cannotPreviewHevc": "Twoja przeglądarka nie może wyświetlić podglądu tego klipu HEVC. Klip i tak zostanie przesłany i każdy będzie mógł go odtworzyć."
   },
   "rc": {
     "title": "Za mało Resource Credits",
@@ -58,8 +58,10 @@
   },
   "progress": {
     "uploadedFinishDetails": "Film przesłany — uzupełnij szczegóły, aby opublikować.",
+    "uploaded": "Przesłano",
+    "uploading": "Przesyłanie",
     "backgroundFailed": "Przesyłanie w tle się nie zakończyło — zostanie ponowione przy publikacji.",
-    "uploadingPct": "Przesyłanie filmu… {{pct}}%",
+    "uploadingPct": "Przesyłanie · {{pct}}%",
     "methodReliable": "Niezawodne przesyłanie",
     "methodResumable": "Przesyłanie ze wznawianiem",
     "attempt": "próba {{attempt}}/{{attempts}}",
@@ -70,15 +72,15 @@
     "waitingOn": "Oczekiwanie na: {{what}}",
     "uploadServer": "Serwer przesyłania: {{host}}",
     "cancelled": "Przesyłanie anulowane.",
-    "connectionUnstable": "Niestabilne połączenie — ponawianie…",
-    "connectionUnstableAttempt": "Niestabilne połączenie — ponawianie… ({{attempt}}/{{attempts}})",
+    "connectionUnstable": "Niestabilne połączenie, ponawianie…",
+    "connectionUnstableAttempt": "Niestabilne połączenie, ponawianie… ({{attempt}}/{{attempts}})",
     "uploadingVideoPct": "Przesyłanie filmu... {{pct}}%",
     "uploadingSinglePct": "Przesyłanie w jednym żądaniu… {{pct}}%",
     "checkingConnection": "Sprawdzanie połączenia...",
     "startingUpload": "Rozpoczynanie przesyłania…",
     "tryingSingleRequest": "Próbujemy ostatniej metody — wysyłanie w jednym żądaniu…",
     "stillStuck": "Nadal stoi — próbujemy ostatniej metody przesyłania.",
-    "patchBlockedSwitching": "Twoja sieć zablokowała przesyłanie ze wznawianiem — przełączamy na bardziej zgodną metodę.",
+    "patchBlockedSwitching": "Twoja sieć zablokowała przesyłanie ze wznawianiem, więc przełączamy na bardziej zgodną metodę.",
     "switchingMethod": "Zmiana metody przesyłania…",
     "uploadingBackground": "Przesyłanie filmu w tle…",
     "phase": {
@@ -107,7 +109,7 @@
       "frame": "Kadr",
       "text": "Tekst",
       "pickFrame": "Wybierz klatkę",
-      "stickers": "Naklejki"
+      "stickers": "Naklejka"
     },
     "frame": {
       "zoom": "Powiększenie",
@@ -161,8 +163,9 @@
     "editor": {
       "open": "Edytor miniatury",
       "openHint": "Tekst, naklejki, powiększenie, dowolna klatka",
-      "title": "Edytor miniatury",
+      "title": "Miniatura",
       "done": "Gotowe",
+      "useThumbnail": "Użyj miniatury",
       "sources": "Obrazy na start",
       "pickPrompt": "Wybierz klatkę z filmu",
       "download": "Pobierz",
@@ -199,7 +202,7 @@
     "invalidVideo": "Wybierz prawidłowy plik wideo",
     "tooLarge": "Film jest za duży. Maksymalny rozmiar to 5GB.",
     "shortTooLong": "Shorts mogą trwać maksymalnie {{max}}. Twój film ma {{seconds}} s.",
-    "shortNotVertical": "Shorts muszą być nagrane w pionie. Twój film wygląda na poziomy.",
+    "shortNotVertical": "Shorts muszą być pionowe. Ten wygląda na poziomy.",
     "thumbnailGenFailed": "Nie udało się automatycznie wygenerować miniatury dla tego pliku — możesz przesłać własną w następnym kroku.",
     "processFailed": "Nie udało się przetworzyć filmu.",
     "selectFirst": "Najpierw wybierz plik wideo.",
@@ -215,9 +218,9 @@
     "backgroundInfo": "Info: film zacznie przesyłać się w tle, gdy dojdziesz do kroku ze szczegółami.",
     "noRc": "Twoje konto nie ma teraz wystarczająco dużo <b>Resource Credits</b>, aby opublikować post.",
     "whyCantUpload": "Dlaczego nie mogę przesyłać?",
-    "needsAuth": "Aby przesyłać, pozwól <b>@threespeak</b> publikować w twoim imieniu.",
+    "needsAuth": "Aby przesyłać, pozwól <b>@threespeak</b> publikować w twoim imieniu. Robisz to tylko raz.",
     "authorizing": "Autoryzowanie…",
-    "authorize": "Autoryzuj @threespeak",
+    "authorize": "Autoryzuj",
     "selectVideo": "Wybierz film",
     "selfieTeleprompter": "Telepromter do selfie",
     "beta": "beta",
@@ -226,7 +229,7 @@
     "replace": "Zastąp film",
     "editVideo": "Edytuj ten film",
     "asStory": "Opublikuj jako relację na 24 godz.",
-    "asStoryHint": "Trafia na początek kanału Shorts, a obserwujący dostają powiadomienie. Dopóki trwa, możesz ją jeszcze zachować jako shorta."
+    "asStoryHint": "Trafia na początek kanału Shorts i powiadamia obserwujących. Dopóki trwa, możesz ją jeszcze zachować jako Shorta."
   },
   "details": {
     "guests": {
@@ -284,24 +287,24 @@
       "none": "Brak"
     },
     "remix": {
-      "label": "Zezwól na remiks/klip",
+      "label": "Zezwól na remiks i klip",
       "info": "Pozwól innym tworzyć remiksy i klipy z tego filmu. Jako autor oryginału widniejesz ty i otrzymujesz co najmniej 5% jako beneficjent.",
-      "hint": "Pozwól innym remiksować."
+      "hint": "Dostajesz co najmniej 5% z każdego remiksu"
     },
     "nsfw": {
       "label": "Oznacz jako NSFW",
       "info": "Oznacza ten film jako treść dla dorosłych. Będzie ukryty w kanałach i wyszukiwaniu dla widzów, którzy nie włączyli NSFW, i otagowany jako <code>nsfw</code> w całym Hive.",
-      "hint": "Treść dla dorosłych."
+      "hint": "Ukryte, chyba że widz zezwolił na NSFW"
     },
     "addToBlog": {
       "label": "Dodaj do mojego bloga",
-      "hint": "Pokaż go na swoim blogu i w kanale swoich obserwujących.",
+      "hint": "Reblogguje go, aby obserwujący zobaczyli go w swoim kanale",
       "info": "3Speak publikuje każdy film w społeczności, a Hive nie pokazuje postów ze społeczności na Twoim blogu ani w kanale Twoich obserwujących, dopóki ich nie udostępnisz. Gdy ta opcja jest włączona, 3Speak udostępnia (rebloguje) film na Twoim blogu zaraz po publikacji."
     },
     "ads": {
       "label": "Reklamy w tym filmie",
       "info": "Twoje konto wyświetla reklamy, więc ten film też, chyba że wyłączysz je tutaj. Dotyczy to tylko tego jednego filmu; pozostałe filmy i ustawienie konta się nie zmieniają.",
-      "hintOn": "W tym filmie mogą pojawiać się reklamy.",
+      "hintOn": "Tylko ten film, konto pozostaje bez zmian",
       "hintOff": "Brak reklam w tym filmie."
     },
     "rolls": {
@@ -317,21 +320,34 @@
       "withGuests_few": "Subskrybenci Pro + {{count}} gości.",
       "withGuests_many": "Subskrybenci Pro + {{count}} gości.",
       "withGuests_other": "Subskrybenci Pro + {{count}} gościa.",
-      "hint": "Tylko subskrybenci Pro."
+      "hint": "Zaszyfrowane dla subskrybentów Pro. Nie można zmienić po przesłaniu."
     },
     "trailer": {
       "label": "Zwiastun kanału",
       "info": "Odtwarza się automatycznie na górze zakładki <b>Przegląd</b> na twoim profilu, zastępując poprzedni zwiastun.",
-      "hint": "Odtwarza się automatycznie na profilu."
+      "hint": "Odtwarza się automatycznie na górze profilu"
     },
     "schedule": {
       "label": "Zaplanuj ten post",
       "info": "Dodaje post do kolejki i publikuje go automatycznie o wybranej godzinie, co najmniej 15 minut od teraz i maksymalnie 90 dni naprzód. Post publikuje @threespeak w twoim imieniu, więc raz poprosimy cię o autoryzację.",
       "immediately": "Opublikuj od razu.",
       "changeTime": "Zmień godzinę",
-      "note": "Co najmniej 15 minut od teraz, maksymalnie 90 dni. Publikowane automatycznie przez @threespeak w twoim imieniu — raz poprosimy cię o autoryzację."
+      "note": "Co najmniej 15 minut od teraz, maksymalnie 90 dni. Publikowane automatycznie przez @threespeak w twoim imieniu — raz poprosimy cię o autoryzację.",
+      "short": "Zaplanuj",
+      "publishLater": "Opublikuj później",
+      "scheduleFor": "Zaplanuj na {{when}}",
+      "publishNow": "Opublikuj od razu"
     },
-    "proceed": "Dalej"
+    "proceed": "Dalej",
+    "nextStep": "Dalej: {{step}}",
+    "tagsCount_one": "{{count}} tag",
+    "tagsCount_few": "{{count}} tagi",
+    "tagsCount_many": "{{count}} tagów",
+    "tagsCount_other": "{{count}} tagu",
+    "shareRewards": "Podziel nagrody",
+    "shareRewardsSub": "Podziel ze współtwórcami",
+    "advanced": "NSFW / wypłata",
+    "advancedSub": "Zaawansowane"
   },
   "review": {
     "payoutDeclined": "Odrzucona (nagrody spalone)",
@@ -348,20 +364,21 @@
     "editPost": "Edytuj post",
     "watchAdToPublish": "Obejrzyj reklamę, aby opublikować",
     "watchSponsorFirst": "Najpierw obejrzyj wiadomość sponsora",
+    "gateNote": "Nowe konta oglądają krótki komunikat sponsora przed publikacją. Płaci on za twoje darmowe konto.",
     "postShort": "Opublikuj shorta",
     "postStory": "Opublikuj relację",
     "postVideo": "Opublikuj film",
     "backToTimeline": "Wróć do osi czasu"
   },
   "publishing": {
-    "titleShort": "Publikowanie shorta",
+    "titleShort": "Publikowanie Shorta",
     "titleStory": "Publikowanie relacji",
     "titleVideo": "Publikowanie filmu",
-    "subtitle": "Poczekaj, aż przetworzymy twoje treści...",
+    "subtitle": "Zostań na tej stronie, aż się skończy.",
     "starting": "Rozpoczynanie...",
     "stayOnPage": "Nie opuszczaj tej strony, dopóki publikacja się nie zakończy.",
     "activityLog": "Dziennik aktywności",
-    "support": "Po pomoc odezwij się do nas na <discordLink>Discordzie</discordLink>",
+    "support": "Utknęło? Odezwij się na <discordLink>Discordzie</discordLink>.",
     "finishingUpload": "Kończenie przesyłania filmu…",
     "preparing": "Przygotowywanie publikacji...",
     "finalizing": "Finalizowanie…",
@@ -419,14 +436,14 @@
     "title": "Przesyłanie zakończone!",
     "shortPublished": "Twój short został opublikowany na 3Speak. Pojawienie się na twoim profilu zajmie około 5 minut.",
     "storyPublished": "Twoja relacja będzie widoczna na 3Speak przez najbliższe 24 godziny.",
-    "videoPublished": "Twój film został opublikowany!<br/>Teraz jest kodowany w tle, co może potrwać kilka minut.",
-    "promote": "Promuj ten film",
-    "goToProfile": "Przejdź do mojego profilu →",
-    "feedback": "Jak poszło przesyłanie"
+    "videoPublished": "Twój film jest opublikowany. Jest kodowany w tle, co może potrwać kilka minut.",
+    "promote": "Promuj",
+    "goToProfile": "Mój profil",
+    "feedback": "Jak poszło przesyłanie?"
   },
   "record": {
     "speechErrors": {
-      "network": "Usługa mowy jest nieosiągalna — rozpoznawanie wymaga połączenia z internetem (Chrome wysyła audio do Google w celu transkrypcji).",
+      "network": "Przewijanie głosem wymaga internetu. Przewijaj skrypt ręcznie.",
       "audioCapture": "Do rozpoznawania nie dociera dźwięk — mikrofon może być zajęty. Spróbuj z zestawem słuchawkowym.",
       "notAllowed": "Uprawnienie do mikrofonu jest zablokowane dla rozpoznawania mowy.",
       "generic": "Błąd rozpoznawania mowy: {{err}}"
@@ -442,9 +459,10 @@
     "portrait": "Pionowo",
     "landscape": "Poziomo",
     "autoDetect": "Wykryj automatycznie ({{lang}})",
+    "layout": "Układ",
     "presets": {
       "frontcam": "Przednia kamera",
-      "frontcamTitle": "Wąski pasek pod obiektywem selfie — najmniej widać, że czytasz",
+      "frontcamTitle": "Wąski pasek pod obiektywem",
       "max": "Maks. rozmiar",
       "maxTitle": "Duża czcionka do czytania z daleka",
       "top": "Górne linie",
@@ -467,11 +485,11 @@
     "startingMic": "Uruchamianie mikrofonu…",
     "leave": {
       "title": "Opuścić kamerę?",
-      "sub": "Wróć do skryptu, zostań tutaj lub zamknij (nic nie zostanie zapisane).",
+      "sub": "Nic jeszcze nie zostało zapisane.",
       "backToScript": "Wróć do skryptu",
       "stay": "Zostań"
     },
-    "experimentalTitle": "Eksperymentalny telepromter",
+    "experimentalTitle": "Prompter",
     "scriptPlaceholder": "Napisz lub wklej tu swój skrypt. Podczas nagrywania przewija się automatycznie, gdy czytasz go na głos.",
     "orientation": "Orientacja",
     "continueToCamera": "Przejdź do kamery",
@@ -484,14 +502,14 @@
     "cameraN": "Kamera {{n}}",
     "flipRotationTitle": "Jeśli obraz jest do góry nogami, odwróć obrót o 90°",
     "flipRotation": "Odwróć obrót",
-    "stopVoiceTest": "Zatrzymaj test głosu",
+    "stopVoiceTest": "Zatrzymaj test",
     "testVoice": "Testuj głos",
     "stopRecording": "Zatrzymaj nagrywanie",
     "startRecording": "Rozpocznij nagrywanie",
     "script": "Skrypt",
     "reRecord": "Nagraj ponownie",
     "preparing": "Przygotowywanie…",
-    "useThisVideo": "Użyj tego filmu"
+    "useThisVideo": "Użyj filmu"
   },
   "errors": {
     "patchBlocked": "PATCH wygląda na zablokowany (żaden fragment nie został potwierdzony)",
@@ -603,6 +621,13 @@
     "streakNext_few": "Dzięki tej relacji seria wyniesie {{count}} dni z rzędu.",
     "streakNext_many": "Dzięki tej relacji seria wyniesie {{count}} dni z rzędu.",
     "streakNext_other": "Dzięki tej relacji seria wyniesie {{count}} dnia z rzędu.",
-    "streakStart": "Dodawaj relację codziennie, by zbudować serię."
+    "streakStart": "Dodawaj relację codziennie, by zbudować serię.",
+    "keepGoing": "Publikuj relację codziennie, aby utrzymać passę"
+  },
+  "originalOnly": {
+    "title": "Przesyłaj tylko treści, które sam stworzyłeś.",
+    "body": "3Speak jest dla oryginalnych treści. Materiały chronione prawem autorskim nie mogą zarabiać nagród, więc ich nie przesyłaj albo ustaw Nagrody na „Odrzuć wypłatę”.",
+    "decline": "Odrzuć wypłatę",
+    "declined": "Wypłata odrzucona"
   }
 }

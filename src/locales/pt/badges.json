@@ -37,7 +37,7 @@
   },
   "directory": {
     "title": "Selos",
-    "intro": "Selos são prêmios <b>dados a você por outras pessoas</b> na Hive, por eventos, contribuições e conquistas. Não dá para entrar em um: alguém precisa conceder. Abra um selo para ver o que os premiados publicam aqui.",
+    "intro": "Selos são prêmios <b>dados a você por outras pessoas</b> na Hive, por eventos, contribuições e conquistas. Não dá para entrar em um: alguém concede.",
     "searchPlaceholder": "Pesquisar selos...",
     "sort": {
       "recipients": "Premiados",
@@ -62,6 +62,7 @@
     "awarding": "Concedendo…",
     "held": "Já tem",
     "award": "Conceder",
+    "awardNamed": "Conceder “{{title}}”",
     "note": "O selo passa a seguir a pessoa na Hive, e é isso que significa ter o selo. Você pode retirá-lo na própria página do selo."
   },
   "hive": {
@@ -91,9 +92,10 @@
     "unclaimed": "Não resgatado",
     "noActivity": "Nenhuma atividade neste período ainda",
     "otherTopics": "Outros",
-    "title": "Rankings",
-    "subtitle": "{{blurb}} — os principais criadores do 3Speak.",
-    "subtitleTopic": "{{blurb}} — os principais criadores em {{topic}}.",
+    "title": "Ranking",
+    "subtitle": "{{blurb}}: os principais criadores do 3Speak.",
+    "explain": "{{label}}: {{blurb}}.",
+    "subtitleTopic": "{{blurb}}: os principais criadores em {{topic}}.",
     "allTopics": "Todos os temas",
     "finding": "Procurando @{{user}} neste ranking…",
     "notInTop": "@{{user}} não está no top {{n}} deste ranking.",

@@ -1,0 +1,188 @@
+@use "../../styles/v2" as v2;
+
+// The big follow button (20b): 64 tall, label flush left, icon on the right.
+.ph-follow.v2-btn {
+  height: 64px;
+  border-radius: var(--r-xl);
+  padding: 0 18px 0 22px;
+  gap: 28px;
+  justify-content: space-between;
+  font-size: 16px;
+
+  @include v2.mobile { width: 100%; min-width: 0; height: 48px; border-radius: var(--r-lg); gap: 12px; font-size: 14px; }
+}
+
+// 64x64 action tiles beside it (Message, Tip, Share, More…).
+.ph-tile.v2-dock {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  flex: none;
+  border-radius: var(--r-xl);
+  gap: 3px;
+  font-size: 11px;
+  text-decoration: none;
+
+  @include v2.mobile { width: 56px; height: 56px; border-radius: var(--r-lg); font-size: 10px; }
+}
+
+// "More" tile and its popover (37a).
+.ph-more {
+  position: relative;
+  flex: none;
+
+  .ph-more__menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    min-width: 260px;
+  }
+}
+
+.ph-more__sheet {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-bottom: 8px;
+
+  .v2-menu__row { min-height: 48px; }
+}
+
+// Tabs: one segmented track on a surface tray (20b): 36px options, 14/700,
+// scrolling sideways, then "Search this channel" at the end of the row.
+.ph-tabs {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 24px 0 20px;
+  min-width: 0;
+
+  @include v2.mobile { margin: 16px 0 12px; gap: 8px; flex-wrap: wrap; }
+
+  .ph-tabs__track.v2-seg {
+    flex: 0 1 auto;
+    min-width: 0;
+    background: var(--surface);
+    border-radius: var(--r-lg);
+
+    .v2-seg__opt { flex: none; padding: 0 14px; font-size: 14px; }
+
+    @include v2.mobile {
+      flex-basis: 100%;
+      .v2-seg__opt { padding: 0 12px; font-size: 13px; }
+    }
+  }
+}
+
+// "Search this channel": 280 x 40 on the surface, icon and text muted.
+.ph-search {
+  margin-left: auto;
+  flex: 0 0 280px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 6px 0 14px;
+  border-radius: var(--r-md);
+  background: var(--surface);
+  color: var(--muted);
+  border: 2px solid transparent;
+  transition: border-color var(--t-fast) var(--ease);
+
+  &:focus-within { border-color: var(--accent); }
+
+  input {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    border: 0;
+    outline: none;
+    background: transparent;
+    color: var(--text);
+    font: inherit;
+    font-size: 14px;
+
+    &::placeholder { color: var(--muted); }
+    &::-webkit-search-cancel-button { display: none; }
+  }
+
+  .ph-search__clear {
+    flex: none;
+    width: 28px;
+    height: 28px;
+    display: grid;
+    place-items: center;
+    border: 0;
+    border-radius: var(--r-sm);
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+
+    &:hover { background: var(--bg-hover); color: var(--text); }
+  }
+
+  @include v2.below-wide { flex-basis: 220px; }
+  @include v2.mobile { flex: 1 1 100%; margin-left: 0; height: 44px; border-radius: var(--r-lg); }
+}
+
+// The search results replace the tab's content while there is a query.
+.ph-results {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 32px;
+
+  .ph-results__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-height: 32px;
+
+    h3 { margin: 0; @include v2.text(title); color: var(--text); }
+  }
+}
+
+// Shared by both profile pages (UserProfilePage and page/ProfilePage).
+.profile-page-container {
+  // A tab's own row of actions (Create playlist), flush left above its content.
+  .profile-tab-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  // Everything under the header lines up with the name column (20b: the
+  // tabs and the grid sit 64px in from the cover's edge on a 1280 frame).
+  > .ph-tabs,
+  > .container-video,
+  > .active-renders {
+    margin-left: 40px;
+    margin-right: 40px;
+
+    @include v2.below-wide { margin-left: 24px; margin-right: 24px; }
+    @include v2.mobile { margin-left: 0; margin-right: 0; }
+  }
+
+  // Phones tip from the speed-dial, which already has Tip.
+  .ph-tile--tip {
+    @include v2.mobile { display: none; }
+  }
+}
+
+// PlaylistTypePicker inside the v2 create / edit playlist dialogs: it draws its
+// buttons with the host form's classes (here the segmented track) and marks
+// the pick with `active`.
+.v2-dialog__panel {
+  .form-group { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+  .pl-type-seg .v2-seg__opt.active { background: var(--surface-2); color: var(--text); }
+  .pl-type-seg.playlist-type-kinds { flex-wrap: wrap; }
+}
+
+// A tile's short label (ProfileTile shortLabel) on the narrowest phones only.
+.ph-tile__short { display: none; }
+@media (max-width: 380px) {
+  .ph-tile__long { display: none; }
+  .ph-tile__short { display: inline; }
+}

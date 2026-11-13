@@ -93,12 +93,13 @@
   "legal": {
     "pageTitle": "Jak 3Speak przetwarza twoje dane · 3Speak",
     "englishOnly": "Ta strona jest dostępna tylko po angielsku. Wiążąca jest wersja angielska.",
-    "back": "← Wróć do 3Speak"
+    "back": "← Wróć do 3Speak",
+    "onThisPage": "Na tej stronie"
   },
   "notFound": {
     "imageAlt": "404",
-    "title": "PRZEPRASZAMY! NIE ZNALEZIONO STRONY",
+    "title": "Przepraszamy, nie znaleziono strony",
     "message": "Niestety strona, której szukasz, nie jest dostępna.",
-    "goHome": "PRZEJDŹ NA STRONĘ GŁÓWNĄ"
+    "goHome": "Przejdź na stronę główną"
   }
 }

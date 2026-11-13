@@ -2,7 +2,7 @@
   "drafts": {
     "title": "Video nháp",
     "filters": {
-      "all": "Tất cả video",
+      "all": "Tất cả",
       "published": "Đã xuất bản",
       "scheduled": "đã lên lịch",
       "failed": "Thất bại"
@@ -30,7 +30,7 @@
   },
   "preview": {
     "playVideo": "Phát video",
-    "cannotPreviewHevc": "Trình duyệt của bạn không thể xem trước video này — điều này thường gặp với clip HEVC/H.265 (ví dụ video quay ở chế độ “Hiệu suất cao” trên iPhone). Không sao cả: video vẫn được tải lên và chuyển đổi để mọi người đều xem được."
+    "cannotPreviewHevc": "Trình duyệt của bạn không thể xem trước clip HEVC này. Video vẫn được tải lên và phát được cho mọi người."
   },
   "rc": {
     "title": "Không đủ Resource Credits",
@@ -58,8 +58,10 @@
   },
   "progress": {
     "uploadedFinishDetails": "Đã tải video lên — hoàn tất thông tin để xuất bản.",
+    "uploaded": "Đã tải lên",
+    "uploading": "Đang tải lên",
     "backgroundFailed": "Tải lên trong nền chưa hoàn tất — sẽ thử lại khi bạn xuất bản.",
-    "uploadingPct": "Đang tải video của bạn lên… {{pct}}%",
+    "uploadingPct": "Đang tải lên · {{pct}}%",
     "methodReliable": "Tải lên ổn định",
     "methodResumable": "Tải lên có thể tiếp tục",
     "attempt": "lần thử {{attempt}}/{{attempts}}",
@@ -70,15 +72,15 @@
     "waitingOn": "Đang chờ: {{what}}",
     "uploadServer": "Máy chủ tải lên: {{host}}",
     "cancelled": "Đã hủy tải lên.",
-    "connectionUnstable": "Kết nối không ổn định — đang thử lại…",
-    "connectionUnstableAttempt": "Kết nối không ổn định — đang thử lại… ({{attempt}}/{{attempts}})",
+    "connectionUnstable": "Kết nối không ổn định, đang thử lại…",
+    "connectionUnstableAttempt": "Kết nối không ổn định, đang thử lại… ({{attempt}}/{{attempts}})",
     "uploadingVideoPct": "Đang tải video lên... {{pct}}%",
     "uploadingSinglePct": "Đang tải lên trong một yêu cầu duy nhất… {{pct}}%",
     "checkingConnection": "Đang kiểm tra kết nối của bạn...",
     "startingUpload": "Đang bắt đầu tải lên…",
     "tryingSingleRequest": "Đang thử cách cuối cùng — gửi trong một yêu cầu duy nhất…",
     "stillStuck": "Vẫn bị kẹt — đang thử cách tải lên cuối cùng.",
-    "patchBlockedSwitching": "Mạng của bạn đã chặn kiểu tải lên có thể tiếp tục — đang chuyển sang cách tương thích hơn.",
+    "patchBlockedSwitching": "Mạng của bạn đã chặn kiểu tải lên có thể tiếp tục, nên chúng tôi đang chuyển sang cách tương thích hơn.",
     "switchingMethod": "Đang chuyển cách tải lên…",
     "uploadingBackground": "Đang tải video lên trong nền…",
     "phase": {
@@ -161,8 +163,9 @@
     "editor": {
       "open": "Trình chỉnh ảnh thu nhỏ",
       "openHint": "Chữ, nhãn dán, thu phóng, khung hình bất kỳ",
-      "title": "Trình chỉnh ảnh thu nhỏ",
+      "title": "Hình thu nhỏ",
       "done": "Xong",
+      "useThumbnail": "Dùng hình thu nhỏ",
       "sources": "Ảnh để bắt đầu",
       "pickPrompt": "Chọn một khung hình từ video của bạn",
       "download": "Tải xuống",
@@ -199,7 +202,7 @@
     "invalidVideo": "Vui lòng chọn một tệp video hợp lệ",
     "tooLarge": "Video quá lớn. Kích thước tối đa cho phép là 5GB.",
     "shortTooLong": "Shorts phải dài tối đa {{max}}. Video của bạn dài {{seconds}} giây.",
-    "shortNotVertical": "Shorts phải được quay ở định dạng dọc. Video của bạn có vẻ là ngang.",
+    "shortNotVertical": "Shorts phải ở định dạng dọc. Video này có vẻ là ngang.",
     "thumbnailGenFailed": "Không thể tự tạo hình thu nhỏ cho tệp này — bạn có thể tải lên hình của riêng mình ở bước tiếp theo.",
     "processFailed": "Xử lý video thất bại.",
     "selectFirst": "Vui lòng chọn tệp video trước.",
@@ -215,9 +218,9 @@
     "backgroundInfo": "Thông tin: Video của bạn bắt đầu tải lên trong nền khi bạn đến bước thông tin.",
     "noRc": "Tài khoản của bạn hiện không đủ <b>Resource Credits</b> để đăng bài.",
     "whyCantUpload": "Tại sao tôi không thể tải lên?",
-    "needsAuth": "Để tải lên, hãy cho phép <b>@threespeak</b> đăng bài thay bạn.",
+    "needsAuth": "Để tải lên, hãy cho phép <b>@threespeak</b> đăng bài thay bạn. Bạn chỉ cần làm một lần.",
     "authorizing": "Đang cấp quyền…",
-    "authorize": "Cấp quyền cho @threespeak",
+    "authorize": "Cấp quyền",
     "selectVideo": "Chọn video",
     "selfieTeleprompter": "Máy nhắc chữ selfie",
     "beta": "beta",
@@ -226,7 +229,7 @@
     "replace": "Thay video",
     "editVideo": "Chỉnh sửa video này",
     "asStory": "Đăng thành tin 24 giờ",
-    "asStoryHint": "Tin sẽ đứng đầu bảng tin Shorts và người theo dõi bạn sẽ nhận thông báo. Khi tin còn hiển thị, bạn vẫn có thể giữ lại thành Shorts."
+    "asStoryHint": "Đứng đầu bảng tin Shorts và thông báo cho người theo dõi bạn. Khi tin còn hiển thị, bạn vẫn có thể giữ lại thành Short."
   },
   "details": {
     "guests": {
@@ -281,24 +284,24 @@
       "none": "Không có"
     },
     "remix": {
-      "label": "Cho phép Remix/Clip",
+      "label": "Cho phép remix và clip",
       "info": "Cho phép người khác tạo remix và clip từ video này. Bạn sẽ được ghi nhận là tác giả gốc và nhận tối thiểu 5% dưới dạng người thụ hưởng.",
-      "hint": "Cho phép người khác remix."
+      "hint": "Bạn nhận ít nhất 5% từ mỗi bản remix"
     },
     "nsfw": {
       "label": "Đánh dấu là NSFW",
       "info": "Đánh dấu video này là nội dung người lớn. Video sẽ bị ẩn khỏi bảng tin và tìm kiếm đối với người xem chưa bật NSFW, và được gắn thẻ <code>nsfw</code> trên toàn Hive.",
-      "hint": "Nội dung người lớn."
+      "hint": "Bị ẩn trừ khi người xem đã cho phép NSFW"
     },
     "addToBlog": {
       "label": "Thêm vào blog của tôi",
-      "hint": "Hiển thị trên blog của bạn và trong bảng tin của người theo dõi.",
+      "hint": "Reblog để người theo dõi thấy trong bảng tin của họ",
       "info": "3Speak đăng mọi video vào một cộng đồng, và Hive không hiển thị bài đăng cộng đồng trên blog của bạn hay trong bảng tin của người theo dõi trừ khi bạn chia sẻ chúng. Khi bật tùy chọn này, 3Speak sẽ chia sẻ (reblog) video lên blog của bạn ngay sau khi xuất bản."
     },
     "ads": {
       "label": "Quảng cáo trên video này",
       "info": "Tài khoản của bạn đang bật quảng cáo, nên video này cũng có quảng cáo trừ khi bạn tắt tại đây. Cài đặt này chỉ áp dụng cho video này; các video khác và cài đặt tài khoản của bạn vẫn giữ nguyên.",
-      "hintOn": "Video này có thể phát quảng cáo.",
+      "hintOn": "Chỉ video này, tài khoản của bạn giữ nguyên",
       "hintOff": "Không có quảng cáo trên video này."
     },
     "rolls": {
@@ -311,21 +314,31 @@
       "label": "Chỉ dành cho thành viên",
       "info": "Mã hóa video này để chỉ người đăng ký 3Speak Pro mới phát được. Một <b>bản xem trước 10 giây không mã hóa</b> được xuất bản kèm theo, nên bài đăng vẫn hiển thị đoạn giới thiệu ở mọi nơi trên Hive. Tiêu đề, mô tả và thẻ của bạn là nội dung bài đăng Hive thông thường và <b>không được mã hóa</b>: chỉ có video được mã hóa. <b>Không thể thay đổi sau khi tải lên.</b>",
       "withGuests_other": "Người đăng ký Pro + {{count}} khách.",
-      "hint": "Chỉ người đăng ký Pro."
+      "hint": "Được mã hóa cho người đăng ký Pro. Không thể thay đổi sau khi tải lên."
     },
     "trailer": {
       "label": "Video giới thiệu kênh",
       "info": "Tự động phát ở đầu tab <b>Tổng quan</b> trên hồ sơ của bạn, thay thế video giới thiệu bạn đã đặt trước đó.",
-      "hint": "Tự động phát trên hồ sơ của bạn."
+      "hint": "Tự động phát ở đầu hồ sơ của bạn"
     },
     "schedule": {
       "label": "Lên lịch bài đăng này",
       "info": "Đưa bài đăng vào hàng đợi và tự động xuất bản vào thời điểm bạn chọn, ít nhất 15 phút kể từ bây giờ và tối đa 90 ngày. Bài sẽ được @threespeak phát lên chuỗi thay bạn, nên bạn sẽ được yêu cầu cấp quyền một lần.",
       "immediately": "Xuất bản ngay.",
       "changeTime": "Đổi thời gian",
-      "note": "Ít nhất 15 phút kể từ bây giờ, tối đa 90 ngày. Được @threespeak tự động đăng thay bạn — bạn sẽ được yêu cầu cấp quyền một lần."
+      "note": "Ít nhất 15 phút kể từ bây giờ, tối đa 90 ngày. Được @threespeak tự động đăng thay bạn — bạn sẽ được yêu cầu cấp quyền một lần.",
+      "short": "Lên lịch",
+      "publishLater": "Xuất bản sau",
+      "scheduleFor": "Lên lịch vào {{when}}",
+      "publishNow": "Xuất bản ngay"
     },
-    "proceed": "Tiếp tục"
+    "proceed": "Tiếp tục",
+    "nextStep": "Tiếp: {{step}}",
+    "tagsCount_other": "{{count}} thẻ",
+    "shareRewards": "Chia sẻ phần thưởng",
+    "shareRewardsSub": "Chia với cộng tác viên",
+    "advanced": "NSFW / phần thưởng",
+    "advancedSub": "Nâng cao"
   },
   "review": {
     "payoutDeclined": "Từ chối (phần thưởng bị hủy)",
@@ -342,20 +355,21 @@
     "editPost": "Chỉnh sửa bài đăng",
     "watchAdToPublish": "Xem quảng cáo để xuất bản",
     "watchSponsorFirst": "Hãy xem thông điệp của nhà tài trợ trước",
+    "gateNote": "Tài khoản mới xem một thông điệp tài trợ ngắn trước khi xuất bản. Nó chi trả cho tài khoản miễn phí của bạn.",
     "postShort": "Đăng Shorts",
     "postStory": "Đăng tin",
     "postVideo": "Đăng video",
     "backToTimeline": "Quay lại dòng thời gian"
   },
   "publishing": {
-    "titleShort": "Đang xuất bản Shorts",
+    "titleShort": "Đang xuất bản Short",
     "titleStory": "Đang đăng tin",
     "titleVideo": "Đang xuất bản video",
-    "subtitle": "Vui lòng chờ trong lúc chúng tôi xử lý nội dung của bạn...",
+    "subtitle": "Vui lòng ở lại trang này cho đến khi hoàn tất.",
     "starting": "Đang bắt đầu...",
     "stayOnPage": "Vui lòng ở lại trang này cho đến khi xuất bản xong.",
     "activityLog": "Nhật ký hoạt động",
-    "support": "Để được hỗ trợ, hãy liên hệ chúng tôi trên <discordLink>Discord</discordLink>",
+    "support": "Bị kẹt? Liên hệ chúng tôi trên <discordLink>Discord</discordLink>.",
     "finishingUpload": "Đang hoàn tất tải video lên…",
     "preparing": "Đang chuẩn bị xuất bản...",
     "finalizing": "Đang hoàn tất…",
@@ -413,14 +427,14 @@
     "title": "Đã tải lên xong!",
     "shortPublished": "Shorts của bạn đã được xuất bản trên 3Speak. Sẽ mất khoảng 5 phút để hiển thị trên hồ sơ của bạn.",
     "storyPublished": "Tin của bạn sẽ hiển thị trên 3Speak trong 24 giờ tới.",
-    "videoPublished": "Video của bạn đã được xuất bản!<br/>Video đang được mã hóa trong nền, có thể mất vài phút.",
-    "promote": "Quảng bá video này",
-    "goToProfile": "Đến hồ sơ của tôi →",
-    "feedback": "Lượt tải lên của bạn thế nào"
+    "videoPublished": "Video của bạn đã được xuất bản. Video đang được mã hóa trong nền, có thể mất vài phút.",
+    "promote": "Quảng bá",
+    "goToProfile": "Hồ sơ của tôi",
+    "feedback": "Lượt tải lên của bạn thế nào?"
   },
   "record": {
     "speechErrors": {
-      "network": "Không kết nối được dịch vụ giọng nói — tính năng nhận dạng cần kết nối internet (Chrome gửi âm thanh đến Google để chuyển thành văn bản).",
+      "network": "Cuộn bằng giọng nói cần internet. Hãy cuộn kịch bản bằng tay.",
       "audioCapture": "Không có âm thanh nào đến bộ nhận dạng — micrô có thể đang bận. Hãy thử dùng tai nghe.",
       "notAllowed": "Quyền micrô cho nhận dạng giọng nói đang bị chặn.",
       "generic": "Lỗi nhận dạng giọng nói: {{err}}"
@@ -436,9 +450,10 @@
     "portrait": "Dọc",
     "landscape": "Ngang",
     "autoDetect": "Tự phát hiện ({{lang}})",
+    "layout": "Bố cục",
     "presets": {
       "frontcam": "Camera trước",
-      "frontcamTitle": "Dải nhỏ ngay dưới ống kính selfie — ít lộ nhất là bạn đang đọc",
+      "frontcamTitle": "Dải nhỏ ngay dưới ống kính",
       "max": "Cỡ tối đa",
       "maxTitle": "Chữ lớn để đọc từ xa",
       "top": "Dòng phía trên",
@@ -461,11 +476,11 @@
     "startingMic": "Đang bật micrô…",
     "leave": {
       "title": "Rời camera?",
-      "sub": "Quay lại kịch bản, ở lại đây, hoặc đóng (không có gì được lưu).",
+      "sub": "Chưa có gì được lưu.",
       "backToScript": "Quay lại kịch bản",
       "stay": "Ở lại"
     },
-    "experimentalTitle": "Máy nhắc chữ thử nghiệm",
+    "experimentalTitle": "Máy nhắc chữ",
     "scriptPlaceholder": "Viết hoặc dán kịch bản của bạn tại đây. Khi quay, kịch bản sẽ tự cuộn theo khi bạn đọc to.",
     "orientation": "Hướng",
     "continueToCamera": "Tiếp tục đến camera",
@@ -478,14 +493,14 @@
     "cameraN": "Camera {{n}}",
     "flipRotationTitle": "Nếu hình bị ngược, hãy lật góc xoay 90°",
     "flipRotation": "Lật góc xoay",
-    "stopVoiceTest": "Dừng thử giọng",
+    "stopVoiceTest": "Dừng thử",
     "testVoice": "Thử giọng",
     "stopRecording": "Dừng quay",
     "startRecording": "Bắt đầu quay",
     "script": "Kịch bản",
     "reRecord": "Quay lại",
     "preparing": "Đang chuẩn bị…",
-    "useThisVideo": "Dùng video này"
+    "useThisVideo": "Dùng video"
   },
   "errors": {
     "patchBlocked": "PATCH có vẻ bị chặn (không có phần nào được xác nhận)",
@@ -588,6 +603,13 @@
     "reachNoCount": "Đến với người theo dõi của bạn và đứng đầu bảng tin Shorts trong 24 giờ.",
     "streakOn_other": "Bạn đang có chuỗi đăng tin {{count}} ngày.",
     "streakNext_other": "Tin này đưa chuỗi đăng tin của bạn lên {{count}} ngày.",
-    "streakStart": "Đăng một tin mỗi ngày để tạo chuỗi."
+    "streakStart": "Đăng một tin mỗi ngày để tạo chuỗi.",
+    "keepGoing": "Đăng một tin mỗi ngày để duy trì chuỗi"
+  },
+  "originalOnly": {
+    "title": "Chỉ tải lên nội dung do bạn tự làm.",
+    "body": "3Speak dành cho nội dung gốc. Nội dung có bản quyền không được nhận phần thưởng, vì vậy đừng tải lên hoặc đặt Phần thưởng thành \"Từ chối phần thưởng\".",
+    "decline": "Từ chối phần thưởng",
+    "declined": "Đã từ chối phần thưởng"
   }
 }

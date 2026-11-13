@@ -4,6 +4,7 @@
   },
   "tools": {
     "emoji": "Emoji",
+    "image": "Add image",
     "searchEmoji": "Search emoji",
     "searchGifs": "Search GIFs…",
     "noGifs": "No GIFs found.",
@@ -18,6 +19,7 @@
     "communityWithSubscribers_one": "Community · {{formatted}} subscriber",
     "communityWithSubscribers_other": "Community · {{formatted}} subscribers",
     "commentFallback": "(comment)",
+    "videoKind": "3Speak · Video",
     "play": "Play {{title}}"
   },
   "share": {
@@ -31,22 +33,29 @@
     "responsiveSub": "Scales to fit the page it sits on",
     "fixedSub": "Fixed size iframe",
     "sendInChat": "Send in 3Speak Chat",
-    "sendInChatSub": "Message it to someone on 3Speak",
+    "sendInChatSub": "Message it to someone",
     "embedOnWebsite": "Embed on a website",
-    "embedOnWebsiteSub": "Copy the HTML for your own site or blog",
-    "forHivePost": "For Hive post",
+    "embedOnWebsiteSub": "Responsive or fixed size",
+    "forHivePost": "For a Hive post",
+    "forHivePostSub": "Copy the link to paste",
     "hivePostCopied": "Link copied. Paste it into your Hive post.",
-    "generalShare": "Share / copy link",
-    "generalShareSub": "Other apps, or copy the link"
+    "generalShare": "Share or copy link",
+    "generalShareSub": "Other apps",
+    "embed": "Embed",
+    "chat": "Chat",
+    "more": "More",
+    "startAt": "Start at",
+    "toFollowers_one": "To your {{n}} follower",
+    "toFollowers_other": "To your {{n}} followers"
   },
   "gate": {
     "connectTitle": "Connect to 3Speak Chat",
-    "connectBody": "Chat is powered by Snapie. Connecting signs a one-time login challenge with your Hive posting key — no transaction, no cost.",
+    "connectBody": "Chat is powered by Snapie. Connecting signs a one-time login challenge with your posting key. No transaction, no cost.",
     "connecting": "Connecting…",
     "connectButton": "Connect chat",
     "cannotSign": "Your current login can’t sign the chat challenge. Use Keychain, HiveAuth, PeakVault or Ledger.",
-    "needsAccountTitle": "Chat needs a Hive account",
-    "needsAccountBody": "Messages are signed with your own account keys, so chat unlocks along with everything else once your account is ready. Finish the goals on your profile and the team will get you there.",
+    "needsAccountTitle": "Chat needs a Hive account.",
+    "needsAccountBody": "It unlocks with everything else once you graduate.",
     "loginTitle": "Log in to use chat",
     "loginBody": "Sign in with your Hive account to send and receive messages.",
     "connectingToChat": "Connecting to chat…"
@@ -94,8 +103,8 @@
     "serverRejectedServerMap_other": "Server rejected all {{count}} requests (ids from the server's own unread map)",
     "failed": "Could not mark everything as read",
     "marking": "Marking as read…",
-    "button": "Mark all as read",
-    "buttonCount": "Mark all as read ({{count}})"
+    "button": "Mark all read",
+    "buttonCount": "Mark all read ({{count}})"
   },
   "list": {
     "chooseTarget": "Choose a chat to send to",
@@ -117,7 +126,7 @@
     "deleteError": "Could not delete the message.",
     "back": "Back to conversations",
     "loading": "Loading messages…",
-    "empty": "No messages yet — say hi 👋",
+    "empty": "No messages yet. Say hi 👋",
     "editedSuffix": " · edited",
     "messageActions": "Message actions",
     "quote": "Quote",
@@ -129,7 +138,8 @@
     "quoting": "Quoting @{{user}}",
     "cancelQuote": "Cancel quote",
     "removeImage": "Remove image",
-    "placeholder": "Type a message…"
+    "placeholder": "Type a message…",
+    "placeholderTo": "Message {{name}}"
   },
   "page": {
     "chooseTarget": "Choose a chat to send to.",

@@ -1,4 +1,4 @@
-@use "../../mixins.scss" as mix;
+@use "../../styles/v2" as v2;
 
 // The links column beside the Overview tab. Desktop only — ProfileOverview does
 // not mount it below 1025px, and this guard keeps it out of the flow if it ever
@@ -38,19 +38,19 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 34px;
-    height: 34px;
+    width: 36px;
+    height: 36px;
     padding: 0;
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--border);
     border-radius: 50%;
-    background: var(--bg-secondary);
-    color: var(--text-secondary);
+    background: var(--surface);
+    color: var(--muted);
     cursor: pointer;
-    animation: plp-nudge 3.2s ease-in-out infinite;
+    animation: plp-nudge 3.2s var(--ease) infinite;
 
     &:hover {
-      color: var(--text-primary);
-      border-color: var(--accent-primary);
+      color: var(--text);
+      background: var(--surface-2);
       animation-play-state: paused;
     }
   }
@@ -59,7 +59,7 @@
     position: relative;   // anchors the collapse button to the frame's corner
     display: flex;
     flex-direction: column;
-    gap: 0.6rem;
+    gap: 10px;
   }
 
   // No heading above the frame — the page inside carries its own identity
@@ -67,13 +67,13 @@
   .plp-foot {
     display: flex;
     align-items: center;
-    gap: 0.6rem;
-    padding: 0 0.25rem;
+    gap: 10px;
+    padding: 0 4px;
   }
 
   // The two corner controls: collapse on the left, edit (own profile only) on
   // the right. They sit OVER the framed page, which paints its own background,
-  // so they carry their own dark scrim rather than a theme token.
+  // so they carry the media scrim, like controls over a video.
   .plp-hide,
   .plp-edit {
     position: absolute;
@@ -82,21 +82,17 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 26px;
-    height: 26px;
+    width: 32px;
+    height: 32px;
     padding: 0;
-    border: 1px solid rgba(255, 255, 255, 0.25);
+    border: 0;
     border-radius: 50%;
-    background: rgba(0, 0, 0, 0.55);
-    color: #fff;
+    background: var(--media-scrim);
+    color: var(--on-media);
     cursor: pointer;
-    backdrop-filter: blur(3px);
-    transition: all 0.2s ease;
+    transition: background var(--t-fast) var(--ease);
 
-    &:hover {
-      background: rgba(0, 0, 0, 0.8);
-      border-color: rgba(255, 255, 255, 0.55);
-    }
+    &:hover { background: var(--media-scrim-strong); }
   }
 
   .plp-hide { left: 8px; }
@@ -110,53 +106,40 @@
     width: 100%;
     height: calc(100vh - var(--nav-height, 60px) - 90px);
     min-height: 320px;
-    border: 1px solid var(--border-color, rgba(150, 150, 150, 0.25));
-    border-radius: 14px;
+    border: 1px solid var(--border);
+    border-radius: var(--r-2xl);
     // Same surface the framed document is re-skinned to (see applyHostTheme),
     // so there's no flash of the creator's own background before it lands.
-    background: var(--bg-secondary, #16181c);
+    background: var(--surface);
     color-scheme: normal;
   }
 
   .plp-open {
     min-width: 0;
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: var(--text-secondary);
+    @include v2.text(label);
+    font-size: 12px;
+    color: var(--muted);
     text-decoration: none;
 
-    &:hover { color: var(--text-primary); text-decoration: underline; }
+    &:hover { color: var(--text); text-decoration: underline; }
   }
 
   // ── owner-only prompt when there is no page yet ──
   &--empty .plp-inner {
-    padding: 14px;
-    border-radius: 14px;
-    border: 1px dashed var(--border-color, rgba(150, 150, 150, 0.35));
-    gap: 0.5rem;
+    padding: 16px;
+    border-radius: var(--r-2xl);
+    border: 2px dashed var(--border);
+    gap: 8px;
   }
 
   .plp-hint {
     margin: 0;
-    font-size: 0.82rem;
+    @include v2.text(meta);
     line-height: 1.45;
-    color: var(--text-secondary);
+    color: var(--muted);
   }
 
-  .plp-btn {
-    align-self: flex-start;
-    padding: 0.4rem 0.9rem;
-    border: 1px solid var(--border-color);
-    border-radius: 999px;
-    background: transparent;
-    color: var(--text-primary);
-    font-size: 0.82rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
-
-    &:hover { background: var(--bg-hover); border-color: var(--text-secondary); }
-  }
+  .plp-btn { align-self: flex-start; }
 }
 
 // A double-nudge every few seconds, not a constant wobble: it has to catch the
@@ -180,7 +163,7 @@
   flex: none;
   width: 100%;
   max-width: 100%;
-  margin-bottom: 2rem;
+  margin-bottom: 32px;
 
   .plp-frame {
     height: min(640px, calc(100vh - var(--nav-height, 60px) - 90px));

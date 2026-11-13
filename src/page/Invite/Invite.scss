@@ -1,151 +1,132 @@
-@use "../../mixins.scss" as mix;
+@use "../../styles/v2" as v2;
 
-// Invite landing page (/invite/:code) and the referrer's screen (/invite-links).
+// The referrer's screen (/invite-links, 42c) and the invite popup
+// (components/InvitePopup, 44b).
+
+// ── /invite-links (42c) ─────────────────────────────────────────────────────
+// The links on the left; paused, used-up and "no links yet" in a 380 column
+// on the right when there are any.
 .invite-page {
-  max-width: 560px;
+  width: 100%;
+  max-width: 860px;
   margin: 0 auto;
-  padding: 40px 16px 60px;
+  padding: 0 0 24px;   // the app frame already gives the page padding
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: "head" "main";
+  gap: 10px 16px;
+  align-items: start;
 
-  &.wide {
-    max-width: 760px;
-    padding-top: 20px;
+  &.has-aside {
+    max-width: var(--content-max);
+    grid-template-columns: minmax(0, 1fr) 380px;
+    grid-template-areas: "head aside" "main aside";
+    grid-template-rows: auto 1fr;
   }
 
-  @include mix.respond(phone) {
-    padding: 16px 10px 80px;
-  }
-
-  h1 {
-    margin: 0;
-    font-size: 22px;
-    font-weight: 700;
-    color: var(--text-primary);
+  @include v2.below-wide {
+    &.has-aside {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-areas: "head" "aside" "main";
+      grid-template-rows: none;
+    }
   }
 }
 
 .invite-header {
+  grid-area: head;
   display: flex;
-  align-items: center;
-  gap: 14px;
-  margin-bottom: 18px;
+  flex-direction: column;
+  gap: 10px;
 
-  .invite-header-icon {
-    flex-shrink: 0;
-    font-size: 38px;
-    color: var(--accent-primary);
-  }
+  h1 { margin: 0; font-size: 24px; font-weight: 700; line-height: 1.15; color: var(--text); }
+  p { margin: 0; max-width: 620px; font-size: 12px; line-height: 1.45; color: var(--muted); }
+}
 
-  h1 {
-    font-size: 26px;
+.invite-main {
+  grid-area: main;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
 
-    @include mix.respond(phone) {
-      font-size: 21px;
-    }
-  }
-
-  p {
-    margin: 2px 0 0;
-    font-size: 14px;
-    color: var(--text-muted);
-  }
+.invite-aside {
+  grid-area: aside;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .invite-card {
-  background: var(--card-bg, var(--bg-secondary));
-  border: 1px solid var(--border-color);
-  border-radius: 14px;
-  padding: 20px;
-  margin-bottom: 14px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 
-  @include mix.respond(phone) {
+  // A link: a surface panel, no outline (42c)
+  &.link {
     padding: 14px;
+    border-radius: var(--r-xl);
+    background: var(--surface);
   }
 }
 
-.invite-from {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-
-  // HiveAvatar renders a <span> around an unsized <img>: the size has to go on
-  // the img itself, or the picture shows at its natural resolution.
-  .invite-avatar {
-    flex-shrink: 0;
-    display: inline-flex;
-    position: relative;
-
-    img {
-      width: 56px;
-      height: 56px;
-      border-radius: 50%;
-      object-fit: cover;
-      display: block;
-    }
-  }
-}
+.invite-skeleton { height: 240px; border-radius: var(--r-xl); }
 
 .invite-text {
   margin: 0;
-  font-size: 15px;
+  font-size: 14px;
   line-height: 1.5;
-  color: var(--text-secondary);
+  color: var(--muted);
 }
 
 .invite-muted {
   margin: 0;
-  font-size: 13px;
-  line-height: 1.45;
-  color: var(--text-muted);
-
-  a {
-    color: var(--accent-primary);
-  }
+  font-size: 11px;
+  line-height: 1.4;
+  color: var(--muted);
+  a { color: var(--cyan); text-decoration: none; &:hover { text-decoration: underline; } }
 }
+.invite-dash { line-height: 1.45; }
 
-.invite-actions {
+.invite-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+
+// Paused by you / paused by 3Speak / used up for this month: a row card
+.invite-status {
   display: flex;
-  flex-wrap: wrap;
+  align-items: center;
   gap: 10px;
+  padding: 12px;
+  border-radius: var(--r-xl);
+  background: var(--surface);
+  .material-symbols-rounded { flex: none; }
+  &.is-muted .material-symbols-rounded { color: var(--muted); }
+  &.is-accent .material-symbols-rounded { color: var(--accent); }
+}
+.invite-status__text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  b { font-size: 13px; font-weight: 700; color: var(--text); }
+}
+.invite-status__link {
+  @include v2.mono(11, 500);
+  color: var(--muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.invite-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  padding: 9px 18px;
-  border-radius: 999px;
-  border: 1px solid var(--border-color);
-  background: transparent;
-  color: var(--text-primary);
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  text-decoration: none;
-
-  &:hover {
-    background: var(--bg-hover);
-  }
-
-  // Red buttons are outlined, never filled: same as the nav's Sign up button.
-  &.primary {
-    background: transparent;
-    border-color: var(--accent-primary);
-    color: var(--accent-primary);
-
-    &:hover {
-      background: var(--bg-hover);
-    }
-  }
-
-  &.small {
-    align-self: flex-start;
-    padding: 6px 12px;
-    font-size: 13px;
-  }
+// No invite links yet
+.invite-none {
+  padding: 14px;
+  border-radius: var(--r-xl);
+  background: var(--surface);
+  b { font-size: 13px; font-weight: 700; color: var(--text); }
+  p { margin: 2px 0 0; font-size: 11px; line-height: 1.45; color: var(--muted); }
 }
 
 .invite-link-row {
@@ -153,170 +134,158 @@
   gap: 8px;
   align-items: center;
 
-  input {
+  .v2-input {
     flex: 1;
     min-width: 0;
-    padding: 9px 12px;
-    border-radius: 10px;
-    border: 1px solid var(--input-border, var(--border-color));
-    background: var(--input-bg, var(--bg-tertiary));
-    color: var(--text-primary);
-    font-family: 'SF Mono', ui-monospace, monospace;
-    font-size: 13px;
-  }
-
-  .invite-btn.small {
-    align-self: stretch;
+    background: var(--bg);
+    @include v2.mono(12, 500);
   }
 }
 
 .invite-stats {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 8px;
-
-  @include mix.respond(phone) {
-    grid-template-columns: repeat(2, 1fr);
-  }
+  @include v2.mobile { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 .invite-stat {
-  display: flex;
-  flex-direction: column;
-  padding: 10px 12px;
-  border-radius: 10px;
-  background: var(--bg-tertiary);
-
-  strong {
-    font-size: 20px;
-    color: var(--text-primary);
-    font-variant-numeric: tabular-nums;
-  }
-
-  span {
-    font-size: 12px;
-    color: var(--text-muted);
-  }
+  min-width: 0;
+  padding: 10px;
+  border-radius: var(--r-lg);
+  background: var(--bg);
+  b { display: block; @include v2.mono(18, 900); line-height: 1.3; color: var(--text); }
+  span { display: block; font-size: 10px; line-height: 1.35; color: var(--muted); }
 }
 
-.invite-meter {
-  height: 6px;
-  border-radius: 3px;
-  background: var(--bg-tertiary);
-  overflow: hidden;
-
-  span {
-    display: block;
-    height: 100%;
-    background: var(--accent-primary);
-  }
+// "WHO JOINED · Hide people": the eyebrow line is the switch.
+.invite-who {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  gap: 4px;
+  min-height: 24px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  font: inherit;
+  cursor: pointer;
+  .v2-eyebrow { color: var(--muted); }
+  &:hover .v2-eyebrow, &:hover { color: var(--text); }
+  &:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
 }
+.invite-who__hide { font-size: 10px; font-weight: 700; letter-spacing: .04em; }
 
+// Who joined: a fixed-height list that scrolls inside.
 .invite-people {
   list-style: none;
   margin: 0;
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 10px;
+  max-height: 280px;
+  @include v2.scroll-y;
 
   li {
     display: flex;
     align-items: center;
     gap: 8px;
-    font-size: 13px;
     min-width: 0;
+    min-height: 24px;
+    font-size: 12px;
   }
 
+  // HiveAvatar renders a <span> around an unsized <img>: size the img itself.
   .invite-people-avatar {
-    flex-shrink: 0;
+    flex: none;
     display: inline-flex;
     width: 24px;
     height: 24px;
-    border-radius: 50%;
-
-    img {
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      object-fit: cover;
-      display: block;
-    }
-
-    &.empty {
-      background: var(--bg-tertiary);
-    }
+    border-radius: var(--r-sm);
+    overflow: hidden;
+    background: var(--avatar);
+    img { width: 24px; height: 24px; border-radius: var(--r-sm); object-fit: cover; display: block; }
   }
 
   .invite-people-name {
-    color: var(--text-primary);
+    flex: 1;
+    min-width: 0;
+    font-weight: 700;
+    color: var(--text);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    &.is-pending { color: var(--muted); }
+  }
+
+  // The state: a small lowercase pill in a 16% tint
+  .invite-state {
+    flex: none;
+    padding: 2px 8px;
+    border-radius: var(--r-sm);
+    font-size: 10px;
+    font-weight: 900;
+    line-height: 1.4;
+    &.is-cyan { background: var(--cyan-tint-strong); color: var(--cyan); }
+    &.is-muted { background: color-mix(in srgb, var(--muted) 16%, transparent); color: var(--muted); }
   }
 }
 
-.invite-state {
-  margin-left: auto;
-  flex-shrink: 0;
-  font-size: 11px;
-  padding: 2px 8px;
-  border-radius: 999px;
-  border: 1px solid var(--border-color);
-  color: var(--text-muted);
-  white-space: nowrap;
+// ── The invite popup (44b): the shared Dialog, a bottom sheet on phones ────
+.invite-pop .v2-dialog__body { gap: 8px; padding-bottom: 20px; }
 
-  &.is-fast {
-    color: #2e9c4a;
-    border-color: #2e9c4a;
-  }
-}
-
-// The invite popup (components/InvitePopup). Centred on desktop, a bottom sheet
-// on phones like every other 3Speak popup.
-.invite-popup-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 10000;
+.invite-pop__head {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  background: rgba(0, 0, 0, 0.6);
-
-  @include mix.respond(phone) {
-    align-items: flex-end;
-    padding: 0;
-  }
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  padding-top: 14px;
 }
 
-.invite-popup {
-  width: 100%;
-  max-width: 480px;
-  max-height: 88vh;
-  overflow-y: auto;
-  overscroll-behavior: contain;
+// HiveAvatar renders a <span> around an unsized <img>: size the img itself.
+.invite-pop__avatar {
+  flex: none;
+  display: inline-flex;
+  position: relative;
+  width: 52px;
+  height: 52px;
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  background: var(--avatar);
+  img { width: 52px; height: 52px; border-radius: var(--r-lg); object-fit: cover; display: block; }
+}
+
+.invite-pop__title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--text);
+}
+.invite-pop__who { color: var(--accent); }
+
+.invite-pop__text {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--muted);
+  strong { color: var(--text); }
+}
+// Already warming up: a note in a well
+.invite-pop__note {
+  margin: 0;
+  padding: 10px;
+  border-radius: var(--r-md);
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--muted);
+  strong { color: var(--text); }
+}
+
+.invite-pop__actions {
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  padding: 22px;
-  border-radius: 16px;
-  border: 1px solid var(--border-color);
-  background: var(--card-bg, var(--bg-secondary));
-  box-shadow: var(--shadow-md, 0 10px 30px rgba(0, 0, 0, 0.35));
-
-  @include mix.respond(phone) {
-    max-width: 100%;
-    border-radius: 16px 16px 0 0;
-    padding-bottom: calc(22px + env(safe-area-inset-bottom, 0px));
-    animation: invite-popup-up 0.22s ease-out;
-  }
-}
-
-// The popup's flex gap already spaces the shared header from the body.
-.invite-popup .invite-popup-header { margin-bottom: 0; }
-
-@keyframes invite-popup-up {
-  from { transform: translateY(100%); }
-  to { transform: translateY(0); }
+  gap: 8px;
 }

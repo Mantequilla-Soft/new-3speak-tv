@@ -16,7 +16,9 @@
     "translatedTo": "{{language}}(으)로 번역됨",
     "showLanguage": "{{language}}(으)로 보기",
     "showOriginal": "원문 보기",
-    "buttonTitle": "이 동영상의 AI 요약"
+    "buttonTitle": "이 동영상의 AI 요약",
+    "jumpTo": "바로 가기",
+    "disclaimer": "스크립트를 바탕으로 생성되었어요. 오류가 있을 수 있어요."
   },
   "errors": {
     "notAvailable": "이 동영상은 사용할 수 없어요.",
@@ -29,7 +31,8 @@
   "gated": {
     "title": "멤버 전용",
     "checkFailed": "지금은 구독을 확인할 수 없어요. 잠시 후 다시 시도하세요.",
-    "preview": "무료 미리보기를 시청 중이에요. 3Speak Pro로 전체 동영상을 볼 수 있어요.",
+    "preview": "무료 미리보기를 시청 중이에요",
+    "previewSub": "3Speak Pro로 전체 동영상을 볼 수 있어요.",
     "subscribersOnly": "3Speak Pro 구독자만 볼 수 있는 동영상이에요.",
     "cta": "3Speak Pro 시작하기"
   },
@@ -38,7 +41,19 @@
     "add": "리액션 추가"
   },
   "liveChat": "라이브 채팅",
+  "side": {
+    "label": "동영상 패널"
+  },
+  "voters": {
+    "title": "투표자",
+    "cardLabel": "후원자와 투표자",
+    "voter": "투표자",
+    "weight": "비율",
+    "value": "금액"
+  },
   "moreVideos": "동영상 더보기",
+  "nextIn": "{{name}}에서 다음",
+  "fromCommunity": "{{name}}에서",
   "vote": {
     "saveFailed": "투표를 저장하지 못했어요"
   },
@@ -74,7 +89,7 @@
     "setEnd": "끝 설정",
     "createClip": "클립 만들기",
     "barStart": "클립 시작 지점으로 이동하세요",
-    "barEnd": "시작: {{start}} — 이제 끝 지점으로 이동하세요",
+    "barEnd": "시작 {{start}} · 이제 끝 지점으로 이동하세요",
     "barDone": "클립: {{start}} – {{end}}"
   },
   "share": {
@@ -92,18 +107,21 @@
   },
   "media": {
     "unavailableTitle": "더 이상 볼 수 없는 동영상이에요",
-    "unavailableBody": "오래된 업로드라 네트워크에서 미디어를 찾을 수 없어요. 게시물은 블록체인에 남아 있지만 동영상은 더 이상 재생할 수 없어요.",
+    "unavailableBody": "이 오래된 업로드의 미디어를 찾을 수 없어요. 게시물은 Hive에 그대로 있어요.",
     "scheduledTitle": "예약된 게시물입니다",
     "scheduledBody": "{{date}}에 게시됩니다. 그때부터 동영상을 볼 수 있습니다.",
     "blockedTitle": "지금은 동영상을 불러올 수 없어요",
-    "blockedBody": "동영상 서버 중 하나가 응답하지 않았어요. 동영상 자체에는 문제가 없으니 다시 시도해 주세요."
+    "blockedBody": "동영상 서버 중 하나가 응답하지 않았어요. 동영상에는 문제가 없어요."
   },
   "tipNudge": {
     "text": "재미있게 보셨나요?<hide> <b>@{{author}}</b>님에게 팁을 보내 보세요!</hide>",
     "dismiss": "닫기"
   },
   "community": {
-    "members_other": "멤버 {{count}}명"
+    "members_other": "멤버 {{count}}명",
+    "postedIn": "게시된 곳",
+    "partOf": "소속",
+    "position": "{{total}}개 중 {{current}}번째"
   },
   "tags": {
     "curated": "큐레이션"
@@ -118,7 +136,8 @@
     "openTagFeed": "태그 피드 열기"
   },
   "scheduled": {
-    "notice": "<b>{{date}}</b>에 게시 예약됨 — 아직 게시되지 않았어요.",
+    "notice": "<b>{{date}}</b>에 게시 예약됨",
+    "notPublished": "아직 게시되지 않았어요.",
     "futureDate": "미래의 날짜",
     "edit": "수정, 일정 변경 또는 취소",
     "editTitle": "예약 게시물 수정(세부 정보, 날짜 또는 취소)"
@@ -145,7 +164,8 @@
     "toggleDetails": "세부정보 펼치기/접기",
     "followCreator": "크리에이터 팔로우",
     "closeMenu": "메뉴 닫기",
-    "openActions": "작업 열기"
+    "openActions": "작업 열기",
+    "support": "{{name}}님 후원하기"
   },
   "description": {
     "hide": "설명 숨기기",
@@ -181,26 +201,27 @@
     "markdownHint": "마크다운을 지원해요.",
     "listed": "공개",
     "unlistedLabel": "일부 공개",
-    "listedHint": "피드, 검색, 내 프로필에 표시돼요.",
-    "unlistedHint": "피드와 검색에서 숨겨져요. 링크로는 계속 재생되고 프로필에도 (배지와 함께) 남아 있어요.",
-    "allowRemix": "리믹스/클립 허용",
-    "remixOn": "다른 사람이 리믹스나 클립을 만들 수 있으며, 원작자로 내 이름이 표시돼요.",
+    "listedHint": "피드, 검색, 내 프로필에 표시",
+    "unlistedHint": "링크로만 볼 수 있고, 프로필에 배지로 표시",
+    "allowRemix": "리믹스 및 클립 허용",
+    "remixOn": "원작자로 내 이름이 표시돼요",
     "remixOff": "다른 사람이 이 동영상을 리믹스하거나 클립으로 만들 수 없어요.",
     "adsOnVideo": "이 동영상의 광고",
     "adsOnHint": "이 동영상에 광고가 재생될 수 있습니다.",
     "adsOffHint": "이 동영상에는 광고가 없습니다.",
     "rollsOnVideo": "동영상 광고",
     "rollsOnHint": "동영상 광고, 배너, 티커가 표시될 수 있어요.",
-    "rollsOffHint": "이 동영상에는 배너와 티커만 표시돼요.",
+    "rollsOffHint": "끄면 배너와 티커만 표시돼요",
     "trailer": "채널 트레일러",
     "trailerOn": "프로필 개요 탭 상단에서 자동 재생되며, 이전에 설정한 트레일러를 대체해요.",
-    "trailerOff": "이 동영상을 프로필 개요 탭 상단에서 자동 재생되도록 설정해요.",
+    "trailerOff": "내 프로필 맨 위에서 자동 재생돼요",
     "nsfw": "성인 / NSFW",
     "notNsfw": "성인용 아님",
     "nsfwHint": "시청자가 NSFW를 켜지 않으면 피드와 검색에서 숨겨지며, Hive에 nsfw 태그가 붙어요.",
     "notNsfwHint": "일반 콘텐츠로, 모든 사람에게 표시돼요.",
+    "nsfwOffHint": "시청자가 NSFW를 켜지 않으면 숨겨져요",
     "promoted": "프로모션 중",
-    "promote": "동영상 프로모션",
+    "promote": "프로모션",
     "saveChanges": "변경 사항 저장",
     "noChanges": "저장할 변경 사항이 없어요.",
     "thumbUploaded": "썸네일을 업로드했어요.",
@@ -245,7 +266,8 @@
       "visibility": "공개 범위",
       "content": "콘텐츠",
       "ads": "광고",
-      "promotion": "홍보"
+      "promotion": "홍보",
+      "contentAds": "콘텐츠, 광고, 프로모션"
     },
     "chaptersNoteAll": "저장할 때 챕터 목록이 설명에 기록됩니다.",
     "editChapters": "챕터 편집",

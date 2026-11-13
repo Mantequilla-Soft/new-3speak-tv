@@ -1,0 +1,115 @@
+@use "../../styles/v2" as v2;
+
+/* The action dock under the player (02): 60px tiles (the .v2-dock primitive)
+   in one row, and the "More" menu (07d) as a popover or, on a phone, a sheet. */
+.wv2-dock {
+  position: relative;
+  min-width: 0;
+
+  &__tiles {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
+    gap: 8px;
+  }
+
+  // Beside the title (wide column): fixed 64px squares.
+  @container wv2main (min-width: 720px) {
+    .wv2-headrow > & .wv2-dock__tiles { grid-auto-columns: 64px; }
+  }
+
+  // 02: 64px tiles, radius 20, a 24 icon over an 11/700 label; the vote tile
+  // in the accent tint. Phones: 60 tall, 10px labels.
+  .v2-dock {
+    min-width: 0;
+    height: 64px;
+    gap: 3px;
+    border-radius: var(--r-xl);
+    font-size: 11px;
+
+    @include v2.mobile { height: 60px; gap: 2px; font-size: 10px; }
+  }
+
+  // The popover, under the tiles and flush with their right edge.
+  &__menu {
+    position: absolute;
+    right: 0;
+    top: calc(100% + 8px);
+    width: 260px;
+    max-width: 100%;
+    padding: 12px;
+    border-radius: var(--r-2xl);
+    animation: v2-pop var(--t-base) var(--ease);
+  }
+}
+
+// The menu's contents, the same in the popover and the sheet.
+.wv2-more {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  &__tile {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    min-height: 76px;
+    padding: 12px;
+    border: 0;
+    border-radius: var(--r-lg);
+    background: var(--surface-2);
+    color: var(--text);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition: background var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
+
+    // The label, with the key chip at its end (07d).
+    .wv2-more__label { display: flex; align-items: center; gap: 6px; width: 100%; min-width: 0;
+      @include v2.text(body-sm); font-weight: 700; line-height: 1.25;
+      > span { flex: 1; min-width: 0; }
+    }
+
+    &:hover { background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); }
+    &:active { transform: scale(.98); }
+    &:disabled { opacity: .45; cursor: not-allowed; transform: none; }
+
+    &.is-on.is-accent { background: var(--accent-tint-strong); color: var(--accent); }
+    &.is-on.is-cyan { background: var(--cyan-tint); color: var(--cyan); }
+  }
+
+  // Key chip: mono 10/700 on the ground colour, radius 4 (07d).
+  &__kbd {
+    flex: none;
+    padding: 2px 5px;
+    border-radius: 4px;
+    background: var(--bg);
+    color: var(--muted);
+    @include v2.mono(10, 700);
+    // Keys mean nothing on a phone.
+    @include v2.mobile { display: none; }
+  }
+
+  // Rows (07d): 20 icons, 13px regular, 12 between icon and label, the
+  // feed-tuning rows muted, Report in the accent.
+  &__rows {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+
+    .v2-menu__row { gap: 12px; padding: 0 8px; font-weight: 400; }
+    .v2-menu__row.is-muted { color: var(--muted); &:hover { color: var(--text); } }
+    .v2-menu__row.is-on { background: transparent; color: var(--muted); .material-symbols-rounded { color: var(--muted); } }
+  }
+}
+
+.wv2-more-sheet .wv2-more__grid {
+  @include v2.mobile { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}

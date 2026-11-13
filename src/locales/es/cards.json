@@ -6,10 +6,12 @@
   "watchingNow_one": "{{count}} viendo ahora",
   "watchingNow_many": "{{count}} viendo ahora",
   "watchingNow_other": "{{count}} viendo ahora",
+  "previewMuted": "Vista previa · sin sonido",
   "badges": {
-    "gatedTitle": "Solo para miembros. 3Speak Pro desbloquea el video completo",
+    "gatedTitle": "Solo para miembros",
     "pro": "PRO",
     "new": "NUEVO",
+    "first": "Primero",
     "live": "● EN VIVO",
     "liveChat": "● CHAT EN VIVO",
     "spotlight": "Destacado"
@@ -17,17 +19,17 @@
   "status": {
     "scheduled": "Programado",
     "mobile": "Móvil",
-    "mobileTitle": "Subido desde la app móvil",
+    "mobileTitle": "Desde la app móvil",
     "processing": "Procesando",
-    "processingTitle": "El video se está procesando",
+    "processingTitle": "Procesándose",
     "draft": "Borrador",
-    "draftTitle": "Borrador: aún no publicado",
+    "draftTitle": "Aún no publicado",
     "deleted": "Eliminado",
-    "deletedTitle": "Este video fue eliminado",
+    "deletedTitle": "Se eliminó",
     "failed": "Falló",
-    "failedTitle": "Falló el procesamiento del video",
+    "failedTitle": "Falló el procesamiento",
     "unlisted": "No listado",
-    "unlistedTitle": "No listado: oculto en feeds y búsquedas, solo accesible con el enlace directo"
+    "unlistedTitle": "Solo con enlace directo"
   },
   "playlist": {
     "loading": "Cargando playlists...",
@@ -36,7 +38,11 @@
     "items_other": "{{count}} elementos",
     "openAria": "Abrir playlist {{name}}",
     "tag": "Playlist",
-    "updated": "Actualizada {{when}}"
+    "updated": "Actualizada {{when}}",
+    "public": "pública",
+    "private": "privada",
+    "history": "historial",
+    "audio": "audio"
   },
   "watchLater": {
     "title": "Ver más tarde",
@@ -50,5 +56,14 @@
     "label": "Cambiar tamaño",
     "small": "Pequeño",
     "medium": "Mediano"
+  },
+  "payout": {
+    "title": "Pago",
+    "author": "Autor",
+    "curators": "Curadores",
+    "paysOutIn": "Se paga en",
+    "days_one": "{{count}} día",
+    "days_many": "{{count}} días",
+    "days_other": "{{count}} días"
   }
 }

@@ -5,10 +5,12 @@
   "topicTitle": "Konu: {{topic}}",
   "watchingNow_one": "Şu an {{count}} kişi izliyor",
   "watchingNow_other": "Şu an {{count}} kişi izliyor",
+  "previewMuted": "Önizleme · sessiz",
   "badges": {
-    "gatedTitle": "Yalnızca üyelere. 3Speak Pro videonun tamamını açar",
+    "gatedTitle": "Yalnızca üyelere",
     "pro": "PRO",
     "new": "YENİ",
+    "first": "İlk",
     "live": "● CANLI",
     "liveChat": "● CANLI SOHBET",
     "spotlight": "Öne çıkan"
@@ -16,17 +18,17 @@
   "status": {
     "scheduled": "Planlandı",
     "mobile": "Mobil",
-    "mobileTitle": "Mobil uygulamadan yüklendi",
+    "mobileTitle": "Mobil uygulamadan",
     "processing": "İşleniyor",
-    "processingTitle": "Video işleniyor",
+    "processingTitle": "İşleniyor",
     "draft": "Taslak",
-    "draftTitle": "Taslak - henüz yayınlanmadı",
+    "draftTitle": "Henüz yayınlanmadı",
     "deleted": "Silindi",
-    "deletedTitle": "Bu video silindi",
+    "deletedTitle": "Silindi",
     "failed": "Başarısız",
-    "failedTitle": "Video işlenemedi",
+    "failedTitle": "İşlenemedi",
     "unlisted": "Liste dışı",
-    "unlistedTitle": "Liste dışı: akışlarda ve aramada gizli, yalnızca doğrudan bağlantıyla açılır"
+    "unlistedTitle": "Yalnızca doğrudan bağlantıyla"
   },
   "playlist": {
     "loading": "Oynatma listeleri yükleniyor...",
@@ -34,7 +36,11 @@
     "items_other": "{{count}} öğe",
     "openAria": "{{name}} oynatma listesini aç",
     "tag": "Oynatma listesi",
-    "updated": "Güncellendi: {{when}}"
+    "updated": "Güncellendi: {{when}}",
+    "public": "herkese açık",
+    "private": "özel",
+    "history": "geçmiş",
+    "audio": "ses"
   },
   "watchLater": {
     "title": "Sonra İzle",
@@ -48,5 +54,13 @@
     "label": "Boyutu değiştir",
     "small": "Küçük",
     "medium": "Orta"
+  },
+  "payout": {
+    "title": "Ödeme",
+    "author": "Yazar",
+    "curators": "Küratörler",
+    "paysOutIn": "Ödemeye kalan",
+    "days_one": "{{count}} gün",
+    "days_other": "{{count}} gün"
   }
 }

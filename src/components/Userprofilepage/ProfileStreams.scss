@@ -1,75 +1,81 @@
+@use "../../styles/v2" as v2;
+
+// Streams tab and the live block on top of Videos (37a): room cards with a
+// LIVE (solid accent) or STANDBY (cyan) pill, past streams under a muted pill.
 .profile-streams {
   &__heading {
-    margin: 14px 0 10px;
-    font-size: 15px;
-    font-weight: 700;
-    color: var(--text-primary, #eee);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 16px 0 10px;
+    @include v2.text(title);
+    color: var(--text);
   }
 
   &__empty {
-    padding: 28px 12px;
-    text-align: center;
-    color: var(--text-muted, #999);
-    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    max-width: 560px;
+    margin: 8px 0 24px;
+    padding: 14px 16px;
+    border-radius: var(--r-2xl);
+    border: 2px dashed var(--border);
+    @include v2.text(body);
+    color: var(--muted);
   }
 
   &__live {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
     gap: 12px;
-    margin-bottom: 6px;
+    margin-bottom: 8px;
   }
 
   &__room {
-    text-decoration: none;
-    color: inherit;
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 8px;
+    padding: 8px;
+    border-radius: var(--r-xl);
+    @include v2.card(20);
+    color: var(--text);
+    text-decoration: none;
+    transition: background var(--t-fast) var(--ease);
+
+    &:hover { background: var(--surface-2); color: var(--text); }
   }
 
   &__room-thumb {
     position: relative;
     width: 100%;
     aspect-ratio: 16 / 9;
-    border-radius: 10px;
-    background: #000 center/cover no-repeat;
-    border: 1px solid var(--border-light, #2a2a2a);
+    border-radius: var(--r-lg);
+    @include v2.thumb-placeholder;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
   }
 
   &__badge {
     position: absolute;
     top: 8px;
     left: 8px;
-    padding: 3px 8px;
-    border-radius: 5px;
-    background: #e31337;
-    color: #fff;
-    font-size: 11px;
-    font-weight: 700;
-
-    &--off { background: rgba(0, 0, 0, 0.65); }
   }
 
   &__room-title {
-    font-size: 14px;
-    font-weight: 600;
+    padding: 0 4px 4px;
+    @include v2.text(body-sm);
+    font-weight: 700;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-  }
-
-  // Match the Videos tab grid so past streams read as normal video cards.
-  &__grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 16px;
   }
 }
 
 /* The live block on top of the Videos tab / overview (ProfileLiveNow). */
 .profile-streams--now {
-  margin-bottom: 18px;
+  margin-bottom: 20px;
 
   .profile-streams__heading { margin-top: 4px; }
 }

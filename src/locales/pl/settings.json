@@ -4,9 +4,9 @@
     "saveFailed": "Nie udało się zapisać zainteresowań",
     "title": "Zainteresowania",
     "loading": "wczytywanie…",
-    "hint": "Wybierz tematy, które cię interesują — na ich podstawie pokażemy ci więcej treści, które lubisz.",
+    "hint": "Wybierz tematy, które cię interesują. Na ich podstawie pokażemy ci więcej treści, które lubisz.",
     "loginHint": "Zaloguj się, aby wybrać zainteresowania.",
-    "save": "Zapisz zainteresowania"
+    "save": "Zapisz w moim profilu Hive"
   },
   "ads": {
     "chainNotSaved": "Zapisano na 3Speak, ale nie na twoim koncie Hive. Spróbuj ponownie, aby zapisać to także tam.",
@@ -16,18 +16,18 @@
     "rollsOnToast": "Spoty w Twoich filmach są włączone",
     "rollsOffToast": "Teraz w Twoich filmach są tylko banery i paski",
     "audio": "Reklamy w Twoich nagraniach audio",
-    "audioDesc": "Krótki komunikat sponsora czytany głosem może zostać odtworzony podczas Twojego audio, z linkiem, który słuchacze mogą otworzyć. Dostajesz udział, tak jak przy reklamach w filmach. Możesz to zmienić dla każdego przesłania w narzędziu do przesyłania audio.",
+    "audioDesc": "Krótki mówiony komunikat sponsora z linkiem, który słuchacze mogą otworzyć.",
     "audioOnToast": "Reklamy w Twoich nagraniach audio są włączone",
     "audioOffToast": "Reklamy w Twoich nagraniach audio są wyłączone",
     "splitSaved": "Podział przychodów zapisany",
     "title": "Reklamy w twoich filmach",
     "allow": "Zezwól na reklamy",
-    "allowDesc": "W twoich filmach może być odtwarzany krótki spot sponsora. Otrzymujesz część tego, co zarobi, podobnie jak społeczność, w której opublikowano film. Jeśli to wyłączysz, twoje filmy nie będą zawierać żadnych reklam — zostaną też usunięte z oferty dla reklamodawców, więc nie sprzedajemy niczego, z czego zrezygnowano.",
+    "allowDesc": "W twoich filmach może być odtwarzany krótki spot sponsora. Wyłączenie usuwa je z oferty dla reklamodawców.",
     "allowAria": "Zezwól na reklamy w twoich filmach",
     "rolls": "Spoty w filmach",
-    "rollsDesc": "Krótkie spoty wideo odtwarzane przed filmem lub w jego trakcie. Wyłącz, aby zostawić tylko banery i paski, które pojawiają się na filmie bez zatrzymywania go.",
+    "rollsDesc": "Wyłączone zostawia tylko banery i paski.",
     "shareTitle": "Podziel się ze społecznością",
-    "shareDesc": "{{pool}}% zarobku z reklamy jest dzielone między ciebie a społeczność, w której opublikowano film. Wybierz, ile z tego dostaje społeczność — jeśli zostawisz zero, zatrzymasz całe {{pool}}%.",
+    "shareDesc": "{{pool}}% przychodu z reklam jest dzielone między ciebie a społeczność, w której publikujesz.",
     "youPct": "Ty {{pct}}%",
     "communityPct": "Społeczność {{pct}}%",
     "shareInputLabel": "Udział społeczności w procentach",
@@ -40,14 +40,15 @@
     "saveFailed": "Nie udało się zapisać tego ustawienia.",
     "title": "Zarabiaj, oglądając",
     "rowTitle": "Nagrody dla widzów",
-    "desc": "Otrzymuj część przychodów z reklam za to, co oglądasz, wypłacaną w HBD lub HIVE. Płacimy za obejrzane filmy niezależnie od tego, czy wyświetliła się reklama, więc nagradzane jest oglądanie, a nie przesiadywanie nad reklamami. Same reklamy wyświetlają się wszystkim poza subskrybentami 3Speak Pro. Zapisujemy, jaką część każdego filmu obejrzano, oprócz historii oglądania, którą już prowadzi strona Obejrzane, i usuwamy te dane w chwili, gdy to wyłączysz.",
+    "desc": "Część przychodów z reklam za to, co oglądasz, wypłacana w HBD lub HIVE. Płacimy za oglądanie, niezależnie od tego, czy wyświetliła się reklama. Wyłączenie usuwa dane o oglądaniu.",
     "aria": "Otrzymuj część przychodów z reklam za to, co oglądasz",
     "titleListen": "Zarabiaj, oglądając i słuchając",
-    "listenDesc": "Słuchanie też się liczy: zapisujemy, jak długo słuchasz audio 3Speak i odcinków podcastów na 3speak.tv. Nagrody za słuchanie ruszą, gdy sprawdzimy liczby, a liczy się to, czego słuchasz od dnia włączenia tej opcji.",
+    "listenDesc": "Audio i odcinki podcastów na 3speak.tv",
     "listenAlso": "Licz też moje słuchanie",
     "listenOnToast": "Twoje słuchanie liczy się teraz do nagród za słuchanie",
     "onToastBoth": "Nagrody za oglądanie i słuchanie włączone",
-    "offToastBoth": "Nagrody wyłączone, a twoje dane oglądania i słuchania zostały usunięte"
+    "offToastBoth": "Nagrody wyłączone, a twoje dane oglądania i słuchania zostały usunięte",
+    "listenOffToast": "Twoje słuchanie nie liczy się już do nagród za słuchanie"
   },
   "postingAuth": {
     "updateFailed": "Nie udało się zaktualizować uprawnień posting.",
@@ -59,10 +60,16 @@
     "canPost": "@threespeak może publikować za ciebie",
     "cannotPost": "@threespeak nie może publikować za ciebie",
     "checkingStatus": "@threespeak …",
-    "desc": "Pozwala 3Speak publikować twoje przesłane filmy i zaplanowane posty w twoim imieniu oraz zapisywać niektóre ustawienia bez każdorazowego pytania portfela. Może tylko publikować, głosować i komentować; nigdy nie może przenosić środków ani zmieniać twoich kluczy. Bez tego przesyłanie poprosi o ponowne dodanie. Zmiana wymaga twojego klucza active.",
+    "desc": "Pozwala tylko publikować, głosować i komentować. Nigdy nie może przenosić środków ani zmieniać kluczy. Zmiana wymaga klucza active.",
     "checking": "Sprawdzanie…",
     "removing": "Usuwanie…",
-    "adding": "Dodawanie…"
+    "adding": "Dodawanie…",
+    "letTitle": "Pozwól 3Speak publikować za ciebie",
+    "letDesc": "Potrzebne, aby publikować filmy i Shorts bez podpisywania każdego z osobna. Możesz to cofnąć w dowolnej chwili.",
+    "canPublish": "Publikowanie postów i filmów",
+    "canVote": "Głosowanie i komentowanie",
+    "never": "Nigdy wysyłanie tokenów ani zmiana kluczy",
+    "grantWith": "Przyznaj przez {{wallet}}"
   },
   "notifications": {
     "kinds": {
@@ -95,7 +102,7 @@
         "desc": "Gdy ktoś zacznie cię obserwować."
       },
       "votes": {
-        "title": "Upvote'y",
+        "title": "Upvote'y (domyślnie wyłączone)",
         "desc": "Gdy ktoś da upvote twojemu postowi. Domyślnie wyłączone — popularny post to mnóstwo powiadomień."
       },
       "reblogs": {
@@ -117,15 +124,16 @@
     "device": "Powiadamiaj to urządzenie",
     "deviceBlocked": "Zablokowane w ustawieniach przeglądarki dla tej strony — najpierw zezwól tam na powiadomienia.",
     "deviceNoWorker": "Niedostępne w tej wersji.",
-    "deviceDesc": "Otrzymuj powiadomienia, nawet gdy 3Speak nie jest otwarty. Dotyczy tylko tej przeglądarki.",
-    "whatHint": "O czym chcesz dostawać powiadomienia. Dotyczy to każdego urządzenia, na którym je włączono."
+    "deviceDesc": "Nawet gdy 3Speak nie jest otwarty",
+    "whatHint": "O czym chcesz dostawać powiadomienia. Dotyczy to każdego urządzenia, na którym je włączono.",
+    "iosNote": "Na iPhonie i iPadzie powiadomienia działają dopiero po dodaniu 3Speak do ekranu początkowego."
   },
   "tabs": {
     "general": "Ogólne",
     "content": "Treści",
     "connections": "Połączenia",
     "rewards": "Reklamy i nagrody",
-    "about": "Informacje / wersja"
+    "about": "Informacje"
   },
   "contentTabs": {
     "feed": "Kanał",
@@ -142,51 +150,51 @@
     "title": "Wygląd",
     "darkMode": {
       "title": "Tryb ciemny",
-      "desc": "Używaj ciemnego motywu w całej aplikacji."
+      "desc": "Ciemny motyw w całej aplikacji"
     },
     "largeCards": {
       "title": "Duże karty",
-      "desc": "Pokazuj większe karty filmów na stronie głównej, profilu i playlistach. Wyłącz, aby karty były mniejsze i bardziej kompaktowe."
+      "desc": "Większe karty filmów na stronie głównej, profilu i playlistach"
     },
     "previews": {
       "title": "Podglądy filmów",
-      "desc": "Odtwarzaj wyciszony podgląd po najechaniu na kartę filmu (a na telefonie w trybie dużych kart środkowa karta odtwarza się sama podczas przewijania)."
+      "desc": "Wyciszony podgląd po najechaniu; na telefonie odtwarza się środkowa karta"
     },
-    "simpleFeeds": {
-      "title": "Proste kanały",
-      "desc": "Wyłącz algorytm rekomendacji — Odkrywaj, Zainteresowania i Na czasie stają się zwykłymi listami od najnowszych zamiast rankingów."
+    "heroPreviews": {
+      "title": "Podgląd wideo w Spotlight",
+      "desc": "Wyciszone klipy w Spotlight na stronie głównej. Wyłączone pokazuje obrazy."
     }
   },
   "shorts": {
     "commentBar": {
       "title": "Pasek komentarza w Shorts",
-      "desc": "Pokazuj pole komentarza pod shortem. Domyślnie wyłączone — panel komentarzy zawsze możesz otworzyć przyciskiem komentarza."
+      "desc": "Pole komentarza pod każdym Shortem"
     },
     "openOnStart": {
       "title": "Otwieraj Shorts na starcie",
-      "desc": "Po otwarciu 3Speak przechodź od razu do Shorts zamiast do kanału głównego."
+      "desc": "Po otwarciu 3Speak przechodź od razu do Shorts"
     },
     "inFeeds": {
       "title": "Shorts w kanałach",
-      "desc": "Pokazuj rzędy Shorts między filmami w kanałach na stronie głównej i w rekomendacjach na stronie filmu. Wyłącz, aby te listy zawierały tylko filmy."
+      "desc": "Rzędy Shorts między filmami"
     }
   },
   "feed": {
     "nsfw": {
       "title": "Pokazuj treści NSFW",
-      "desc": "Wyświetlaj filmy i audio oznaczone jako nieodpowiednie w pracy (NSFW). Domyślnie wyłączone."
+      "desc": "Domyślnie wyłączone"
     },
     "hideWatched": {
       "title": "Ukryj obejrzane filmy",
-      "desc": "Pomijaj już obejrzane filmy na stronie głównej, w Na czasie i w polecanych."
+      "desc": "Na stronie głównej, w Na czasie i w polecanych"
     },
     "hideAi": {
       "title": "Ukryj filmy wygenerowane przez AI",
-      "desc": "Pomijaj filmy i Shorts oznaczone jako wygenerowane przez AI we wszystkich kanałach. Oznaczenie pochodzi z automatycznego sprawdzenia, więc niektóre mogą się prześlizgnąć."
+      "desc": "Na podstawie automatycznego sprawdzenia, niektóre mogą się prześlizgnąć"
     },
     "privateMode": {
       "title": "Tryb prywatny",
-      "desc": "Nie uwzględniaj twojego kraju w statystykach twórców. Nigdy nie przechowujemy twojego adresu IP — niczyjego. W chwili naciśnięcia odtwarzania zamieniamy go na kod kraju, a potem odrzucamy. Gdy to jest włączone, przy twoich wyświetleniach nie zapisujemy nawet kraju."
+      "desc": "Nie pokazuj swojego kraju w statystykach twórców. Nigdy nie przechowujemy twojego IP."
     }
   },
   "about": {
@@ -194,7 +202,8 @@
     "version": "Wersja aplikacji",
     "rpcNode": "Węzeł RPC Hive",
     "yourData": "Twoje dane",
-    "privacyLink": "Jak 3Speak przetwarza twoje dane"
+    "privacyLink": "Jak 3Speak przetwarza twoje dane",
+    "getOrDelete": "Pobierz lub usuń"
   },
   "dataRequest": {
     "emailRequired": "Podaj adres e-mail, abyśmy mogli odpowiedzieć",
@@ -204,13 +213,13 @@
     "dataReceived": "Otrzymaliśmy żądanie dostępu do danych",
     "sendFailed": "Nie udało się wysłać twojego żądania",
     "doneTitle": "Żądanie otrzymane",
-    "doneBody": "Twój numer referencyjny to <b>{{ref}}</b>. Odpowiemy na <b>{{contact}}</b> najpóźniej do <b>{{dueBy}}</b>.",
+    "doneBody": "Twój numer referencyjny to <b>{{ref}}</b>. Odpowiemy na {{contact}} najpóźniej do {{dueBy}}.",
     "keepRef": "Zachowaj numer referencyjny na wypadek, gdyby trzeba było wrócić do sprawy.",
     "signIn": "Zaloguj się, aby zażądać swoich danych lub je usunąć — żądanie dotyczy konta, na które się logujesz.",
     "requestFor": "Żądanie dla <b>@{{username}}</b>",
     "typeAria": "Rodzaj żądania",
-    "getData": "Pobierz moje dane",
-    "deleteData": "Usuń dane mojego konta",
+    "getData": "Eksportuj moje dane",
+    "deleteData": "Usuń moje konto",
     "ledeDelete": "Usuniemy wszystko, co 3Speak przechowuje o tobie w naszej własnej bazie danych.",
     "ledeExport": "Wyślemy ci wszystko, co 3Speak przechowuje o tobie w naszej własnej bazie danych, jako plik JSON.",
     "covers": "Obejmuje to:",
@@ -220,13 +229,14 @@
     "cannotExport": "Twoje dane w blockchainie są już publiczne i czytelne maszynowo przez dowolne API Hive — wskażemy ci, gdzie je znaleźć. To, co ci wyślemy, to dane, które przechowujemy dodatkowo.",
     "emailLabel": "E-mail do odpowiedzi",
     "emailPlaceholder": "ty@example.com",
-    "messageLabel": "Chcesz coś dodać? (opcjonalnie)",
+    "messageLabel": "Co powinniśmy wiedzieć (opcjonalnie)",
     "messagePlaceholder": "Opcjonalne szczegóły dotyczące żądania",
     "confirmLabel": "Rozumiem, że moje treści w blockchainie Hive są trwałe i nie mogą zostać usunięte ani przez 3Speak, ani przez nikogo innego.",
     "sending": "Wysyłanie…",
     "requestDeletion": "Zażądaj usunięcia",
-    "requestData": "Zażądaj moich danych",
-    "foot": "Odpowiadamy w ciągu miesiąca. Możesz też napisać bezpośrednio na <mail>privacy@3speak.tv</mail>."
+    "requestData": "Wyślij prośbę",
+    "foot": "Odpowiadamy w ciągu miesiąca. Możesz też napisać bezpośrednio na <mail>privacy@3speak.tv</mail>.",
+    "intro": "Poproś o kopię danych, które 3Speak o tobie przechowuje, albo o ich usunięcie. Posty na Hive są publiczne i nie można ich usunąć."
   },
   "lightning": {
     "title": "Napiwki Lightning",
@@ -240,14 +250,14 @@
     "useV4v": "Znowu używaj v4v.app",
     "savedOwn": "Napiwki Lightning trafiają teraz na twój adres",
     "savedV4v": "Napiwki Lightning znowu idą przez v4v.app",
-    "badAddress": "To nie jest adres Lightning. Wygląda on tak: nazwa@portfel.com.",
+    "badAddress": "To nie jest adres Lightning. Wygląda tak: nazwa@wallet.com.",
     "unreachable": "Ten adres nie odpowiedział jako adres Lightning. Sprawdź go i spróbuj ponownie.",
     "saveFailed": "Nie udało się zapisać w twoim profilu Hive.",
-    "supportersNote": "Napiwki na twój własny adres nigdy nie przechodzą przez Hive, więc nie pojawiają się wśród Wspierających.",
-    "publicNote": "Twój adres Lightning jest zapisywany na twoim koncie Hive, gdzie każdy może go zobaczyć."
+    "supportersNote": "Napiwki na twój własny adres nie pojawiają się wśród Wspierających.",
+    "publicNote": "Zapisany na twoim koncie Hive, gdzie każdy może go zobaczyć."
   },
   "supportLinks": {
-    "title": "Inne sposoby, by cię wesprzeć",
+    "title": "Linki wsparcia",
     "desc": "Twoja strona na {{sites}}. Widzowie znajdą te linki w twoim oknie napiwków.",
     "placeholder": "https://ko-fi.com/twojanazwa",
     "add": "Dodaj",
@@ -268,12 +278,12 @@
     "shareTip": "Wrzuć go do bio, do podpisu w mailach albo wydrukuj na koszulce. Nie będziemy oceniać.",
     "earnTitle": "Ile zarabiasz",
     "bonusValue": "{{pct}}%",
-    "bonusLabel": "ich nagród reklamowych",
+    "bonusLabel": "ich nagród reklamowych, jako twórca, widz lub słuchacz",
     "bonusDesc": "jako twórca, widz lub słuchacz",
     "timeValue": "{{months}} miesiące",
     "timeLabel": "od dnia rejestracji",
     "adsValue": "{{pct}}%",
-    "adsLabel": "ich kampanii reklamowych",
+    "adsLabel": "ich kampanii reklamowych, jeśli zarezerwują reklamy",
     "adsDesc": "jeśli wykupią reklamy",
     "earnOnTop": "3Speak płaci to dodatkowo. Zaproszone osoby zachowują wszystko, co zarobią.",
     "rules": "Liczą się tylko nowe konta założone przez twój link. Nagrody przychodzą razem ze zwykłymi wypłatami z reklam, oznaczone jako bonus za polecenie."

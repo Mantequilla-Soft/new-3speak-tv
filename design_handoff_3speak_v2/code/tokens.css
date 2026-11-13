@@ -1,0 +1,134 @@
+/* ============================================================
+   3Speak v2 design tokens
+   Drop-in for src/index.css. Same structure as the current file:
+   :root = light (the default), [data-theme="dark"] = dark.
+
+   1. v2 tokens: use these in all new and redesigned code.
+   2. Legacy aliases: the existing variable names point at v2
+      values, so un-migrated screens move to the v2 palette
+      straight away. Delete each alias once nothing uses it.
+   ============================================================ */
+
+:root {
+  /* ---- 1. v2 color tokens (light) ---- */
+  --bg: #f9f9f9;
+  --surface: #ffffff;
+  --surface-2: #f1f1f1;
+  --border: #ebebeb;
+  --text: #111111;
+  --muted: #5a5a5a;
+  --accent: #e53935;          /* brand red: primary actions, earnings, live */
+  --accent-hover: #c62828;
+  --on-accent: #ffffff;
+  --cyan: #0891b2;            /* community, info, selected-but-not-primary */
+  --avatar: #dcdcdc;
+  --thumb-a: #ecebe8;         /* striped thumbnail placeholder */
+  --thumb-b: #e4e3df;
+  --frame: #111111;           /* device frame in mockups only */
+  --overlay: rgba(0, 0, 0, .6);
+  --on-media: #ffffff;        /* text/icons drawn over video and images */
+  --media-scrim: rgba(10, 10, 10, .6);
+
+  /* tints: always color-mix, never new hues */
+  --accent-tint: color-mix(in srgb, var(--accent) 14%, transparent);
+  --accent-tint-strong: color-mix(in srgb, var(--accent) 16%, transparent);
+  --cyan-tint: color-mix(in srgb, var(--cyan) 14%, transparent);
+  --cyan-wash: color-mix(in srgb, var(--cyan) 9%, var(--bg));  /* banners, pinned rows */
+
+  /* ---- type ---- */
+  --font-sans: "Roboto", "Arial", sans-serif;
+  --font-mono: "Roboto Mono", ui-monospace, Menlo, monospace;
+  --fs-10: 10px;  --fs-11: 11px;  --fs-12: 12px;  --fs-13: 13px;
+  --fs-14: 14px;  --fs-16: 16px;  --fs-18: 18px;  --fs-20: 20px;
+  --fs-24: 24px;  --fs-28: 28px;  --fs-32: 32px;  --fs-40: 40px;
+  --fs-48: 48px;  --fs-56: 56px;  --fs-64: 64px;  --fs-72: 72px;
+  --fw-regular: 400; --fw-medium: 500; --fw-bold: 700; --fw-black: 900;
+  --tracking-eyebrow: .08em;
+  --tracking-title: -.02em;
+
+  /* ---- spacing (4px grid) ---- */
+  --sp-1: 4px;  --sp-2: 6px;  --sp-3: 8px;  --sp-4: 10px; --sp-5: 12px;
+  --sp-6: 14px; --sp-7: 16px; --sp-8: 20px; --sp-9: 24px; --sp-10: 32px;
+  --sp-11: 40px; --sp-12: 48px;
+
+  /* ---- radius ---- */
+  --r-bar: 2px;
+  --r-xs: 4px;
+  --r-sm: 8px;    /* controls up to 28px tall */
+  --r-md: 12px;   /* controls 32 to 40px tall, fields */
+  --r-lg: 16px;   /* controls 44 to 52px tall, list cards */
+  --r-xl: 20px;   /* controls 56 to 64px tall, panels */
+  --r-2xl: 24px;  /* cards, dialogs */
+  --r-3xl: 28px;  /* sheets, large panels */
+  --r-round: 50%;
+
+  /* ---- control heights ---- */
+  --h-24: 24px; --h-28: 28px; --h-32: 32px; --h-36: 36px; --h-40: 40px;
+  --h-44: 44px; --h-48: 48px; --h-56: 56px; --h-64: 64px;
+
+  /* ---- elevation (only floating layers get a shadow) ---- */
+  --shadow-float: 0 20px 60px rgba(0, 0, 0, .2);
+  --shadow-sheet: 0 24px 60px rgba(0, 0, 0, .35);
+
+  /* ---- motion ---- */
+  --ease: cubic-bezier(.2, .8, .2, 1);
+  --t-fast: 120ms;
+  --t-base: 200ms;
+  --t-slow: 320ms;
+
+  /* ---- 2. legacy aliases (src/index.css names → v2) ---- */
+  --bg-primary: var(--bg);
+  --bg-secondary: var(--surface);
+  --bg-tertiary: var(--surface-2);
+  --bg-elevated: var(--surface);
+  --bg-hover: color-mix(in srgb, var(--text) 5%, transparent);
+  --text-primary: var(--text);
+  --text-secondary: var(--muted);
+  --text-muted: var(--muted);
+  --text-inverse: var(--surface);
+  --border-color: var(--border);
+  --border-light: var(--border);
+  --divider: var(--border);
+  --accent-primary: var(--accent);
+  --accent-light: var(--accent-tint);
+  --story-cyan: var(--cyan);
+  --link-color: var(--muted);
+  --link-hover: var(--accent);
+  --input-bg: var(--bg);
+  --input-border: transparent;
+  --input-focus: color-mix(in srgb, var(--accent) 30%, transparent);
+  --sidebar-bg: var(--surface);
+  --sidebar-hover-bg: var(--bg-hover);
+  --nav-bg: var(--surface);
+  --card-bg: var(--surface);
+  --overlay-bg: var(--overlay);
+}
+
+[data-theme="dark"] {
+  --bg: #0a0a0a;
+  --surface: #161616;
+  --surface-2: #1f1f1f;
+  --border: #262626;
+  --text: #f1f1f1;
+  --muted: #a3a3a3;
+  --accent: #ff5252;
+  --accent-hover: #ff6b6b;
+  --on-accent: #0a0a0a;
+  --cyan: #22d3ee;
+  --avatar: #2d2d2d;
+  --thumb-a: #1c1c1c;
+  --thumb-b: #232323;
+  --frame: #000000;
+  --overlay: rgba(0, 0, 0, .8);
+  --shadow-float: 0 20px 60px rgba(0, 0, 0, .5);
+  --shadow-sheet: 0 24px 60px rgba(0, 0, 0, .6);
+  --bg-hover: color-mix(in srgb, var(--text) 8%, transparent);
+}
+
+/* ---- base ---- */
+html, body { background: var(--bg); color: var(--text); font-family: var(--font-sans); }
+a { color: var(--accent); text-decoration: none; }
+a:hover { color: var(--accent-hover); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+::selection { background: color-mix(in srgb, var(--accent) 30%, transparent); }
+.num, .mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }

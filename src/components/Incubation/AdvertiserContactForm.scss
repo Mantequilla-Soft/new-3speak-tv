@@ -1,63 +1,35 @@
-/* The advertiser's private contact form, inside its warm-up goal. */
+@use "../../styles/v2" as v2;
+
+/* The advertiser's brand profile and private contact forms, inside their
+   warm-up goals (design 46c). Fields are the v2 filled fields. */
 .inc-contact {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  max-width: 560px;
   margin-top: 10px;
 
-  input,
-  textarea {
-    width: 100%;
-    min-width: 0;
-    padding: 8px 10px;
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    background: var(--bg-secondary);
-    color: var(--text-primary);
-    font: inherit;
-    font-size: 13px;
-  }
+  .v2-input.is-area { min-height: 88px; }
 
-  em {
-    font-style: normal;
-    font-weight: 400;
-    color: var(--text-muted);
-  }
+  // 46c: "WEBSITE · OPTIONAL IF YOU GIVE AN ADDRESS", the whole label one eyebrow.
+  .v2-field__opt { text-transform: inherit; letter-spacing: inherit; font-weight: inherit; }
 }
 
-/* Said first and plainly: where these details go, and where they never go. */
-.inc-contact-private {
-  display: flex;
-  gap: 8px;
-  align-items: flex-start;
-  margin: 0;
-  padding: 10px 12px;
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  background: var(--bg-secondary);
-  font-size: 12.5px;
-  line-height: 1.5;
-  color: var(--text-secondary);
-
-  svg {
-    flex-shrink: 0;
-    margin-top: 3px;
-    color: var(--accent-primary);
-  }
-}
-
-.inc-contact-field {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  font-size: 12.5px;
-  font-weight: 600;
+// The address grid has no visible heading (46c); the legend stays for screen readers.
+.inc-contact-legend {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
 }
 
 .inc-contact-address {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
+  min-width: 0;
   margin: 0;
   padding: 0;
   border: 0;
@@ -65,59 +37,65 @@
   legend {
     margin-bottom: 4px;
     padding: 0;
-    font-size: 12.5px;
-    font-weight: 600;
   }
 }
 
-.inc-contact-row {
-  display: flex;
-  gap: 6px;
+// Six short address fields, two across.
+.inc-contact-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px;
 
-  > input { flex: 1 1 0; }
-}
-
-.inc-contact-hint {
-  font-size: 12px;
-  color: var(--text-muted);
+  .v2-input { height: 36px; font-size: 13px; }
 }
 
 .inc-contact-error {
   margin: 0;
-  font-size: 12.5px;
-  color: var(--error-color, #e5484d);
+  @include v2.text(meta-sm);
+  color: var(--accent);
 }
 
-.inc-contact .inc-task-cta {
-  align-self: flex-start;
-  margin-top: 0;
-  cursor: pointer;
+.inc-contact-submit.v2-btn { margin-top: 6px; }
 
-  &:disabled {
-    opacity: 0.5;
-    cursor: default;
-  }
-}
-
-/* The brand form's logo row: the current logo as it will be shown, beside the button. */
+/* The brand form's logo row (46c): the logo as it will be shown, a circle that
+   is also the upload button, beside its one-line hint. */
 .inc-brand-logo {
   display: flex;
   align-items: center;
   gap: 12px;
+}
 
-  img {
-    width: 48px;
-    height: 48px;
+.inc-brand-logo-pick {
+  flex: none;
+  cursor: pointer;
+  border-radius: 50%;
+
+  img,
+  .inc-brand-logo-blank {
+    display: block;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
     object-fit: cover;
-    background: var(--bg-secondary);
-    border: 1px solid var(--border-color);
+    background: var(--surface-2);
   }
+
+  .inc-brand-logo-blank {
+    display: grid;
+    place-items: center;
+    color: var(--muted);
+  }
+
+  &:hover .inc-brand-logo-blank { color: var(--text); }
+  &:focus-within { outline: 2px solid var(--accent); outline-offset: 2px; }
 }
 
-.inc-brand-upload {
-  margin-top: 0;
-  cursor: pointer;
+.inc-brand-logo-hint {
+  @include v2.text(meta-sm);
+  line-height: 1.4;
+  color: var(--muted);
 }
 
-.inc-contact textarea { resize: vertical; }
+@include v2.mobile {
+  .inc-contact-submit.v2-btn { height: 44px; border-radius: v2.radius-for(44); }
+}

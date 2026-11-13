@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { MdOndemandVideo, MdVisibility, MdTimer, MdLocalOffer, MdRocketLaunch, MdAccessTime, MdLocalFireDepartment } from 'react-icons/md';
-import ShortsIcon from '../icons/ShortsIcon';
+import { Icon } from '../v2/Icon';
 import { usePremiumBadge } from '../../hooks/usePremiumStatus';
 import {
   fetchLeaderboardBadges,
@@ -13,14 +12,15 @@ import { useTranslation } from 'react-i18next';
 import './LeaderboardBadges.scss';
 
 // One icon per topic, so the shortened label doesn't have to carry the meaning.
+// Material Symbols names.
 const BADGE_ICONS = {
-  video_uploads: MdOndemandVideo,
-  short_uploads: ShortsIcon,
-  video_watch_secs: MdVisibility,
-  short_watch_secs: MdTimer,
-  tags_given: MdLocalOffer,
-  story_uploads: MdAccessTime,
-  story_streak: MdLocalFireDepartment,
+  video_uploads: 'smart_display',
+  short_uploads: 'smartphone',
+  video_watch_secs: 'visibility',
+  short_watch_secs: 'timer',
+  tags_given: 'sell',
+  story_uploads: 'history_toggle_off',
+  story_streak: 'local_fire_department',
 };
 
 /**
@@ -54,12 +54,12 @@ function LeaderboardBadges({ username }) {
     <div className="lb-badges">
       {isPro && (
         <span className="lb-badge lb-badge-pro" title={t('badges.leaderboardBadges.proTitle')}>
-          <MdRocketLaunch className="lb-badge-icon" />
+          <Icon name="rocket_launch" size={14} fill className="lb-badge-icon" />
           <span>3Speak Pro</span>
         </span>
       )}
       {badges.map((b) => {
-        const Icon = BADGE_ICONS[b.metric] || MdOndemandVideo;
+        const icon = BADGE_ICONS[b.metric] || 'smart_display';
         return (
           <Link
             key={b.metric}
@@ -67,7 +67,7 @@ function LeaderboardBadges({ username }) {
             className={`lb-badge lb-badge-${b.tier}`}
             title={badgeTitle(b)}
           >
-            <Icon className="lb-badge-icon" />
+            <Icon name={icon} size={14} className="lb-badge-icon" />
             <span>{badgeLabel(b)}</span>
           </Link>
         );

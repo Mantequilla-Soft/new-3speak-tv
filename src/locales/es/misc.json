@@ -1,8 +1,8 @@
 {
   "leaderboard": {
     "windows": {
-      "7d": "7 días",
-      "30d": "30 días",
+      "7d": "Semana",
+      "30d": "Mes",
       "365d": "Año",
       "all": "Todo el tiempo"
     },
@@ -155,9 +155,9 @@
     "audioFull": "Con título",
     "audioCompact": "Compacto",
     "audioMinimal": "Mínimo",
-    "heightSub": "Ancho completo, {{height}} px de alto",
+    "heightSub": "Ancho completo, {{height}} px de alto · Adaptable",
     "podcastTitle": "Insertar este pódcast",
-    "podcastHint": "Pégalo en cualquier sitio web o entrada de blog. Reproduce todos los episodios del programa, también los nuevos en cuanto salgan."
+    "podcastHint": "Reproduce todos los episodios del programa, incluidos los nuevos en cuanto salgan."
   },
   "incubation": {
     "requestFailed": "Falló la solicitud ({{status}})",
@@ -169,9 +169,9 @@
   },
   "routeError": {
     "title": "Esta página no cargó",
-    "body": "No se pudo descargar una parte de la app. Normalmente significa que se lanzó una nueva versión mientras esta pestaña estaba abierta. Al recargar se obtiene.",
+    "body": "No se pudo descargar una parte de la app. Normalmente salió una versión nueva mientras esta pestaña estaba abierta. Recargar la carga.",
     "brokenTitle": "Algo salió mal en esta página",
-    "brokenBody": "Una parte de esta página tuvo un error. Recargar suele solucionarlo, y los detalles de abajo nos ayudan a encontrar la causa.",
+    "brokenBody": "Una parte de esta página tuvo un error. Recargar suele arreglarlo, y los detalles nos ayudan a encontrar la causa.",
     "reload": "Recargar",
     "goHome": "Ir al inicio",
     "details": "Detalles"
@@ -203,9 +203,9 @@
       "regularVideo": "Video clásico para tu canal",
       "verticalShort": "Clip vertical para el feed de Shorts",
       "shortsEditor": "Graba y edita un short en tu navegador",
-      "story": "Clip corto que dura 24 horas",
+      "story": "Se queda 24 horas",
       "musicAudio": "Canciones, podcasts y otro audio",
-      "audioEditor": "Corta, limpia y nivela pódcasts y música",
+      "audioEditor": "Corta, limpia y nivela",
       "groupChat": "Sala en vivo que presentas con invitados",
       "goLiveNow": "Transmite en vivo para tus seguidores",
       "communitySnap": "Publicación rápida en tu pestaña de comunidad",
@@ -219,8 +219,8 @@
   },
   "hiveAuth": {
     "waiting": "Esperando la aprobación en HiveAuth...",
-    "title": "Se necesita aprobación en HiveAuth",
-    "hint": "Revisa tu app HiveAuth para aprobar esta transacción"
+    "title": "Se requiere aprobación de HiveAuth",
+    "hint": "Revisa tu app de HiveAuth para aprobar esta transacción."
   },
   "hiveApi": {
     "keychainNotSigned": "Keychain no firmó la transacción",
@@ -233,7 +233,7 @@
     "announceFailed": "El OpenPod empezó, pero no se pudo publicar el anuncio en Hive."
   },
   "appUpdate": {
-    "updating": "Actualizando a la última versión ({{version}})…",
+    "updating": "Actualizando a {{version}}…",
     "reloadingForUpload": "Recargando para que tu subida use la versión más reciente."
   },
   "auth": {
@@ -251,7 +251,9 @@
   },
   "followFeed": {
     "title": "Feed de seguidos",
-    "error": "Error al cargar los videos"
+    "error": "Error al cargar los videos",
+    "emptyTitle": "Aún no hay nadie aquí",
+    "emptyBody": "Sigue a creadores y sus videos, Snaps y directos aparecerán aquí primero."
   },
   "groups": {
     "title": "Grupos",
@@ -303,6 +305,17 @@
     "moreTag": "Más #{{tag}}",
     "moreVideos": "Más videos",
     "hideControls": "Ocultar controles",
-    "showControls": "Mostrar controles"
+    "showControls": "Mostrar controles",
+    "watching": "{{count}} viendo",
+    "startedAgo": "Empezó {{when}}",
+    "topSupporters": "Principales seguidores",
+    "noSupporters": "Aún no hay boosts",
+    "full": "Pantalla completa",
+    "loginToChat": "Inicia sesión para chatear"
+  },
+  "pullToRefresh": {
+    "pull": "Desliza para actualizar",
+    "release": "Suelta para actualizar",
+    "refreshing": "Actualizando…"
   }
 }

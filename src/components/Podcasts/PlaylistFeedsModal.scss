@@ -1,0 +1,58 @@
+@use "../../styles/v2" as v2;
+
+// The owner's editor for a playlist's outside shows (PlaylistFeedsModal.jsx),
+// on the v2 Dialog (a sheet on phones): a search field, results, the shows in
+// the playlist with their count, Save in the footer.
+.pl-feeds-modal {
+  // The dialog's grid would otherwise grow to the content's min-content width on phones.
+  min-width: 0;
+  .pl-feeds-intro { margin: 0; font-size: 13px; line-height: 1.45; color: var(--muted); }
+  .pl-feeds-search {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    .pod-field-row { flex: 1; }
+  }
+  .pl-feeds-results, .pl-feeds-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .pl-feeds-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 56px;
+    padding: 6px 8px;
+    border-radius: var(--r-lg);
+    background: var(--bg);
+  }
+  .pl-feeds-art { width: 44px; height: 44px; border-radius: var(--r-md); object-fit: cover; flex: none; background: var(--avatar); }
+  .pl-feeds-row-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+  .pl-feeds-row-title { font-size: 13px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .pl-feeds-row-meta { font-size: 11px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .pl-feeds-row .pod-btn { height: 32px; border-radius: v2.radius-for(32); font-size: 12px; padding: 0 10px; }
+  .pl-feeds-in { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 700; color: var(--cyan); white-space: nowrap; }
+  .pl-feeds-note { margin: 0; padding: 8px 0; font-size: 12px; color: var(--muted); }
+  .pl-feeds-subtitle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 8px 0 0;
+    @include v2.text(eyebrow);
+    color: var(--muted);
+  }
+  .pl-feeds-count { @include v2.mono(11, 700); color: var(--muted); }
+  .pl-feeds-remove {
+    @include v2.control(32);
+    width: 32px;
+    padding: 0;
+    justify-content: center;
+    background: transparent;
+    color: var(--muted);
+    &:hover { background: var(--bg-hover); color: var(--accent); }
+  }
+}

@@ -23,6 +23,7 @@
     "followers_many": "{{num}} seguidores",
     "followers_other": "{{num}} seguidores",
     "popularTitle": "Creadores populares",
+    "suggestedTitle": "Creadores para seguir",
     "scrollLeft": "Desplazar a la izquierda",
     "scrollRight": "Desplazar a la derecha",
     "mostlyPosts": "Publica sobre todo de {{topic}}"
@@ -80,7 +81,8 @@
     "views_one": "{{num}} vista",
     "views_many": "{{num}} vistas",
     "views_other": "{{num}} vistas",
-    "readMore": "Leer más"
+    "readMore": "Leer más",
+    "label": "Tráiler"
   },
   "snaps": {
     "readMore": "Leer más",
@@ -185,7 +187,8 @@
       "text": "Agrupa tus videos en una playlist que la gente pueda ver en orden.",
       "cta": "Crea tu primera playlist",
       "visitor": "@{{user}} no tiene playlists públicas."
-    }
+    },
+    "visitorPreview": "Los visitantes ven: “{{text}}”"
   },
   "links": {
     "button": "Enlaces",
@@ -204,7 +207,8 @@
     "shorts": "Shorts",
     "audio": "Audio",
     "community": "Comunidad",
-    "playlists": "Playlists"
+    "playlists": "Playlists",
+    "latestSnap": "Último snap"
   },
   "streams": {
     "loading": "Cargando transmisiones…",
@@ -235,6 +239,7 @@
     "messageTitle": "Enviar mensaje a @{{user}}",
     "messageLogin": "Inicia sesión para enviar un mensaje",
     "message": "Mensaje",
+    "messageShort": "MD",
     "unhideTitle": "Volver a mostrar los videos de @{{user}} en tus feeds",
     "hideTitle": "Ocultar los videos de @{{user}} en todos tus feeds",
     "unhide": "Mostrar",
@@ -248,7 +253,11 @@
     "loginToUpload": "Inicia sesión para subir videos",
     "linkExternalTitle": "Vincular un perfil externo",
     "addProfile": "Agregar perfil",
-    "editTitle": "Edita tu foto, nombre, biografía y ubicación"
+    "editTitle": "Edita tu foto, nombre, biografía y ubicación",
+    "more": "Más",
+    "moreActions": "Más acciones para @{{user}}",
+    "copyProfileLink": "Copiar enlace del perfil",
+    "podcastFeed": "Feed del podcast (RSS)"
   },
   "tabs": {
     "overview": "Resumen",
@@ -283,11 +292,7 @@
     "tip": "Propina",
     "tipCreator": "Dar propina al creador",
     "latestVideo": "Último video",
-    "watchLatestVideo": "Ver el último video",
-    "latestShort": "Último short",
-    "watchLatestShort": "Ver el último short",
-    "closeMenu": "Cerrar menú",
-    "openActions": "Abrir acciones"
+    "latestShort": "Último short"
   },
   "uploads": {
     "processing": "Procesando tus videos",
@@ -315,7 +320,11 @@
     "hiddenToast": "Propina ocultada de tu perfil",
     "unhiddenToast": "La propina vuelve a mostrarse en tu perfil",
     "hideFailed": "No se pudo cambiar esta propina. Inténtalo de nuevo.",
-    "hideWalletPrompt": "Firma para cambiar qué propinas se muestran en tu perfil"
+    "hideWalletPrompt": "Firma para cambiar qué propinas se muestran en tu perfil",
+    "whoTitle": "@{{user}} apoya a",
+    "tipped_one": "{{count}} propina",
+    "tipped_many": "{{count}} propinas",
+    "tipped_other": "{{count}} propinas"
   },
   "layout": {
     "customize": "Personalizar perfil",
@@ -430,5 +439,14 @@
   },
   "audioTab": {
     "files": "Archivos de audio"
+  },
+  "search": {
+    "placeholder": "Buscar en este canal",
+    "clear": "Borrar búsqueda",
+    "results_one": "{{count}} resultado para “{{query}}”",
+    "results_many": "{{count}} resultados para “{{query}}”",
+    "results_other": "{{count}} resultados para “{{query}}”",
+    "empty": "Nada en este canal coincide con “{{query}}”.",
+    "older": "Buscar subidas anteriores"
   }
 }

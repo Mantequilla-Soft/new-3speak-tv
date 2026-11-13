@@ -9,7 +9,7 @@
     "needKeychain": "Kamu perlu ekstensi Keychain untuk melakukan transfer"
   },
   "header": {
-    "mine": "Dompet SAYA",
+    "mine": "Dompetku",
     "ofUser": "Dompet {{user}}"
   },
   "assets": "Aset",
@@ -28,7 +28,16 @@
     "recipientPlaceholder": "Masukkan nama pengguna Hive",
     "memoLabel": "Memo",
     "memoPlaceholder": "Masukkan memo",
-    "confirm": "Konfirmasi Transfer"
+    "confirm": "Konfirmasi Transfer",
+    "sendTo": "Kirim {{amount}} {{coin}} ke @{{to}}",
+    "sendAmount": "Kirim {{amount}} {{coin}}",
+    "recent": "Terbaru",
+    "activeKey": "Perlu active key-mu",
+    "available": "Tersedia: {{balance}}",
+    "scan": "Pindai kode QR",
+    "scanHint": "Arahkan kamera ke kode QR orang lain.",
+    "scanNoAccount": "Kode QR ini tidak berisi akun Hive. Coba yang lain.",
+    "scanNoCamera": "Kamera tidak bisa dibuka. Periksa apakah 3Speak boleh menggunakannya."
   },
   "history": {
     "loadFailed": "Gagal memuat transaksi",
@@ -46,5 +55,50 @@
       "received": "Diterima"
     },
     "claimedRewards": "Reward yang Diklaim"
+  },
+  "total": "Total saldo",
+  "rate": "1 HIVE = {{price}}",
+  "pro": "Pro",
+  "coins": {
+    "hp": "Hive Power",
+    "savings": "Tabungan HBD"
+  },
+  "claim": {
+    "ready": "{{amount}} siap diklaim",
+    "readyShort": "{{amount}} untuk diklaim",
+    "button": "Klaim",
+    "done": "Reward diklaim",
+    "failed": "Klaim gagal: {{error}}"
+  },
+  "activity": {
+    "title": "Aktivitas",
+    "filters": {
+      "all": "Semua",
+      "rewards": "Reward",
+      "received": "Diterima",
+      "sent": "Terkirim"
+    },
+    "from": "Dari @{{user}}",
+    "sentTo": "Dikirim ke @{{user}}",
+    "emptyTitle": "Belum ada apa-apa di sini",
+    "empty": "Transfer dan reward yang diklaim akan muncul di sini."
+  },
+  "earnings": {
+    "title": "Pendapatan, 30 hari",
+    "sub": "Reward yang diklaim dan HIVE atau HBD yang diterima"
+  },
+  "rc": {
+    "title": "Resource Credits",
+    "sub": "Setiap aksi di Hive memakai sebagian. Akan terisi lagi dalam sekitar 5 hari.",
+    "posts_other": "Cukup untuk sekitar {{count}} postingan saat ini"
+  },
+  "receive": {
+    "title": "Terima",
+    "sub": "Siapa pun bisa mengirim HIVE atau HBD ke nama akun ini dari dompet Hive mana pun. Tidak perlu memo.",
+    "amountLabel": "Minta jumlah tertentu (opsional)",
+    "memoLabel": "Memo (opsional)",
+    "memoPlaceholder": "Untuk apa, misalnya nomor tagihan",
+    "subRequest": "Memindai kode ini meminta {{amount}} {{coin}}. 3Speak dan dompet Hive yang bisa membaca kode pembayaran akan mengisinya.",
+    "subMemo": "Memindai kode ini mengisi nama akunmu dan memonya di 3Speak dan di dompet Hive yang bisa membaca kode pembayaran."
   }
 }

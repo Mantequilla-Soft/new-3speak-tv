@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Maximize, Minimize } from 'lucide-react';
+import { DockTile, Icon } from '../v2/ui';
 import './StreamFullscreenButton.scss';
 
 const PLAYER_BOX = '.ws-player, .live-stream-player';
-const boxOf = (el) => el?.closest(PLAYER_BOX) || el?.parentElement || null;
+// The dock tile sits under the player, not in it: it finds the page's player.
+const boxOf = (el) => el?.closest(PLAYER_BOX) || el?.closest('.ws-page')?.querySelector('.ws-player') || el?.parentElement || null;
 
 /**
  * Fullscreen for a live stream on the desktop layouts (the /watch stream page
@@ -19,8 +20,11 @@ const boxOf = (el) => el?.closest(PLAYER_BOX) || el?.parentElement || null;
  *
  * Renders nothing where the browser cannot fullscreen an element (iPhone
  * Safari), rather than a button that does nothing.
+ *
+ * `variant="dock"`: the "Full" tile in the stream page's dock (30b); `label`
+ * is its short caption.
  */
-export default function StreamFullscreenButton() {
+export default function StreamFullscreenButton({ variant = 'overlay', label: tileLabel }) {
   const { t } = useTranslation();
   const ref = useRef(null);
   const [isFull, setIsFull] = useState(false);
@@ -50,6 +54,13 @@ export default function StreamFullscreenButton() {
 
   if (!supported) return null;
   const label = isFull ? t('player.controls.exitFullscreen') : t('player.controls.fullscreen');
+  if (variant === 'dock') {
+    return (
+      <span ref={ref} className="stream-fs-tile">
+        <DockTile icon="fullscreen" label={tileLabel || t('player.controls.fullscreen')} onClick={toggle} title={label} aria-label={label} />
+      </span>
+    );
+  }
   return (
     <button
       ref={ref}
@@ -59,7 +70,7 @@ export default function StreamFullscreenButton() {
       aria-label={label}
       title={label}
     >
-      {isFull ? <Minimize size={18} /> : <Maximize size={18} />}
+      <Icon name={isFull ? 'fullscreen_exit' : 'fullscreen'} size={22} />
     </button>
   );
 }

@@ -2,7 +2,7 @@ import React, { useRef, useLayoutEffect, useState, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
-import { IoClose } from 'react-icons/io5'
+import { Icon } from '../v2/Icon'
 import HiveAvatar from '../HiveAvatar/HiveAvatar'
 
 import "./BeneficiariesTooltip.scss"
@@ -86,8 +86,8 @@ function BeneficiariesTooltip({ beneficiaries, payoutInfo, displayTotal, anchorR
             : t('engagement.payout.beneficiaries')}
         </span>
         {pinned && (
-          <button type="button" className="beneficiaries-tooltip-close" onClick={onClose}>
-            <IoClose size={14} />
+          <button type="button" className="beneficiaries-tooltip-close" onClick={onClose} aria-label={t('common.actions.close')}>
+            <Icon name="close" size={16} />
           </button>
         )}
       </div>

@@ -1,12 +1,15 @@
-// Shorts-style vertical action rail — the SINGLE source of truth for the look.
+// Shorts-style vertical action rail: the SINGLE source of truth for the look.
 //
-// Used by the shorts player (`.actionSidebar`) and by the mobile OpenPods
-// studio rail, which reuses the exact same treatment so the two can't drift.
-// Values lifted verbatim from the shorts mobile rail so this is a refactor,
-// not a second implementation.
+// v2 (design 18a, phone): a column of dock tiles ON the video. Each tile is a
+// 56px square, radius 16, on the media scrim, with a 24px glyph over a 10px/700
+// label, white in both themes (it always sits over video).
+//
+// Used by the shorts player (`.actionSidebar` on phones) and by the mobile
+// OpenPods studio rail and the live stream page, which reuse the exact same
+// treatment so they can't drift. Only tokens from design-system.scss.
 
 // The column itself: floats over the video, bottom-right.
-@mixin rail-sidebar($right: 0.75rem, $bottom: 2rem) {
+@mixin rail-sidebar($right: 12px, $bottom: 32px) {
   position: absolute;
   right: $right;
   bottom: $bottom;
@@ -14,55 +17,53 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.625rem;
+  gap: 8px;
 }
 
-// One button: a translucent CIRCLE wrapping the icon AND its label.
-// `border-radius: 50%` only yields a circle on a SQUARE box — left to size
-// itself the item is as wide as its label ("Saved", "Share", "1.2K") and as
-// tall as icon+label, so every button comes out a differently-shaped ellipse.
-// Pin a fixed square and centre the content inside it.
+// One tile: a fixed 56px square (so every tile is the same shape whatever its
+// label: "Saved", "Share", "1.2K"), the glyph and its label centred inside.
 @mixin rail-item {
   box-sizing: border-box;
   flex: 0 0 auto;
-  width: 3.4rem;
-  height: 3.4rem;
-  padding: 0;
+  width: 56px;
+  height: 56px;
+  padding: 0 4px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0;
+  gap: 2px;
   border: none;
-  border-radius: 50%;
-  background-color: rgba(0, 0, 0, 0.22);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
+  border-radius: var(--r-lg);
+  background-color: var(--media-scrim);
+  color: var(--on-media);
   cursor: pointer;
+  transition: background-color var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
+
+  &:hover { background-color: var(--media-scrim-strong); }
+  &:active { transform: scale(.98); }
 }
 
-// The glyph. Always white with a drop shadow — the rail sits over live video,
-// so it can't rely on theme colours.
+// The glyph. Always white: the rail sits over live video, so it can't rely on
+// theme colours.
 @mixin rail-icon {
   width: auto;
-  height: 1.5rem;
+  height: 24px;
   flex: 0 0 auto;
   background-color: transparent !important;
-  backdrop-filter: none;
-  font-size: 22px;
+  font-size: 24px;
   line-height: 1;
-  color: #fff;
-  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.8));
+  color: var(--on-media);
 }
 
 // The caption under the glyph.
 @mixin rail-label {
   margin: 0;
   max-width: 100%;
-  font-size: 0.68rem;
-  line-height: 1;
-  color: #fff;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--on-media);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

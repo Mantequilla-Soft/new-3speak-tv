@@ -7,7 +7,8 @@
     "feeds": "Feeds",
     "groups": "Groups",
     "audio": "Audio",
-    "login": "Login"
+    "login": "Login",
+    "you": "Ikaw"
   },
   "installApp": "I-install ang App",
   "iosInstallHint": "I-tap ang <b>Share</b> tapos <b>Add to Home Screen</b>",
@@ -28,7 +29,9 @@
     "shortsTooltip": "Maiikling vertical na video, sunud-sunod",
     "audioTooltip": "Mga podcast, musika at iba pang audio na naka-publish sa 3Speak",
     "groupsTooltip": "Mga komunidad na puwede mong salihan, at mga badge na ibinibigay sa mga tao",
-    "rankingsTooltip": "Ang mga creator na pinakamaraming kinikita at pinapanood ngayon"
+    "rankingsTooltip": "Ang mga creator na pinakamaraming kinikita at pinapanood ngayon",
+    "live": "Live",
+    "liveTooltip": "Mga stream at room na live ngayon"
   },
   "aboutLink": "Tungkol sa 3Speak",
   "faqLink": "FAQ",
@@ -38,6 +41,8 @@
     "myChannelAria": "Channel ko",
     "vpTooltip": "Voting Power: gaano kabigat ang susunod mong vote",
     "rcTooltip": "Resource Credits: ang gastos ng mga aksyon mo sa Hive",
+    "votingPower": "Voting Power",
+    "resourceCredits": "Resource Credits",
     "myChannel": "Channel Ko",
     "publishBacklog": "I-publish ang backlog",
     "analytics": "Analytics",
@@ -47,14 +52,20 @@
     "logout": "Mag-log out",
     "onDiscord": "3Speak sa Discord",
     "onX": "3Speak sa X",
-    "onTelegram": "3Speak sa Telegram"
+    "onTelegram": "3Speak sa Telegram",
+    "switch": "Lumipat",
+    "tiles": {
+      "channel": "Channel",
+      "history": "History"
+    },
+    "darkTheme": "Madilim na theme"
   },
   "notifications": {
     "pushOff": "Naka-off ang mga notification sa device na ito",
-    "pushOn": "Aabisuhan ka kapag nag-post ang mga creator na fina-follow mo",
+    "pushOn": "Aabisuhan ka kapag nag-post ang mga creator na fina-follow mo.",
     "pushFailed": "Hindi mabago ang notification settings",
     "ariaUnread": "Mga Notification ({{count}} hindi pa nababasa)",
-    "pushBlocked": "Naka-block ang mga notification para sa site na ito sa browser settings mo",
+    "pushBlocked": "Naka-block ang mga notification para sa site na ito sa browser settings mo.",
     "pushNoWorker": "Walang service worker ang build na ito, kaya hindi ma-register dito ang mga notification",
     "pushStop": "Itigil ang pag-abiso sa device na ito",
     "pushStart": "Maabisuhan kapag nag-post ang mga creator na fina-follow mo",
@@ -91,6 +102,13 @@
       "heading": "Mga bagong episode ng mga podcast na fina-follow mo",
       "newEpisode": "Bagong episode ng {{show}}",
       "type": "Podcast"
+    },
+    "tabs": {
+      "all": "Lahat",
+      "mentions": "Mga mention",
+      "follows": "Mga follow",
+      "uploads": "Mga upload",
+      "pods": "Podcast"
     }
   },
   "search": {
@@ -128,6 +146,17 @@
     "views_other": "{{formatted}} views",
     "tags": "Tags",
     "titles": "Mga Pamagat",
-    "placeholder": "Maghanap..."
-  }
+    "placeholder": "Maghanap...",
+    "recent": "Kamakailan",
+    "allResultsFor": "Lahat ng resulta para sa “{{term}}”",
+    "kinds": {
+      "creator": "Creator",
+      "community": "Komunidad",
+      "video": "Video",
+      "short": "Short",
+      "audio": "Audio",
+      "playlist": "Playlist"
+    }
+  },
+  "create": "Gumawa"
 }

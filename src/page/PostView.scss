@@ -1,292 +1,189 @@
-@use "../mixins.scss" as mix;
+@use "../styles/v2" as v2;
 
+/* Text post (19b, PostView /post/:author/:permlink and /@author/permlink for a
+   post that is not a video): the community strip, a big title, the byline with
+   Follow, the hero image, the text, tags, and the action dock beside it (a row
+   under it on a phone). Comments follow. */
 .post-view-page {
-  max-width: 820px;
+  max-width: 900px;
   margin: 0 auto;
-  padding: 24px 20px 80px;
-
-  @include mix.respond(phone) {
-    padding: 14px 12px 80px;
-  }
-}
-
-.post-view-thumbnail {
-  width: 100%;
-  max-height: 380px;
-  object-fit: cover;
-  display: block;
-  border-radius: 12px;
-  margin-bottom: 20px;
-}
-
-.post-view-inner {
+  padding: 0 0 48px;
   display: flex;
   flex-direction: column;
+  gap: 16px;
+  color: var(--text);
 }
 
 .post-view-nav-buttons {
   display: flex;
   gap: 8px;
-  margin-bottom: 14px;
   flex-wrap: wrap;
 }
 
-.post-view-nav-btn {
-  display: inline-flex;
+// "Posted in" community strip (cyan wash), like the watch page's.
+.post-view-community {
+  display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 8px 14px;
-  border-radius: 8px;
-  background: transparent;
-  border: 1px solid var(--accent-primary, #e53935);
-  color: var(--accent-primary, #e53935);
-  font-size: 13px;
-  font-weight: 500;
+  gap: 12px;
+  min-height: 52px;
+  padding: 10px 12px 10px 10px;
+  border-radius: var(--r-lg);
+  background: var(--cyan-wash);
+  border: 1px solid color-mix(in srgb, var(--cyan) 25%, transparent);
+  color: var(--text);
   text-decoration: none;
-  transition: opacity 0.15s ease;
 
-  &:hover { background: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent); }
+  &:hover { color: var(--text); .post-view-community__text b { color: var(--cyan); } }
 
-  &.post-view-nav-btn-secondary {
-    background: var(--bg-secondary);
-    color: var(--text-primary);
-    border: 1px solid var(--border-light);
+  &__mark {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    border-radius: var(--r-sm);
+    overflow: hidden;
+    flex: none;
+    background: var(--cyan);
+    color: var(--bg);
+    @include v2.text(label);
+    font-size: 12px;
+    font-weight: 900;
 
-    &:hover {
-      background: var(--bg-hover, var(--sidebar-hover-bg));
-    }
+    img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
   }
+  &__text { flex: 1; @include v2.text(body); min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; b { font-weight: 700; } .is-muted { color: var(--muted); } }
+  &__read { flex: none; @include v2.text(body-sm); color: var(--muted); padding-right: 4px; }
+
+  @include v2.mobile { min-height: 44px; padding: 6px 10px 6px 6px; border-radius: var(--r-md); border: 0; }
 }
+
+// Text beside a 72px dock column (wide); one column with the dock as a row (phone).
+.post-view-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 72px;
+  gap: 24px;
+  padding: 16px 0 0 40px;
+  align-items: start;
+
+  @include v2.below-wide { padding-left: 0; }
+  @include v2.mobile { grid-template-columns: minmax(0, 1fr); gap: 16px; padding-top: 4px; }
+}
+
+.post-view-main { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
 
 .post-view-title {
-  font-size: 28px;
-  font-weight: 700;
-  line-height: 1.25;
-  color: var(--text-primary);
-  margin: 0 0 12px;
-  word-break: break-word;
+  margin: 0;
+  font-size: 48px;
+  font-weight: 900;
+  letter-spacing: -.03em;
+  line-height: 1.05;
+  color: var(--text);
+  overflow-wrap: anywhere;
+  text-wrap: balance;
 
-  @include mix.respond(phone) {
-    font-size: 22px;
-  }
+  @include v2.below-wide { font-size: 40px; }
+  @include v2.mobile { @include v2.text(heading-lg); }
 }
 
-.post-view-author-row {
+.post-view-byline {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 10px;
   flex-wrap: wrap;
-}
+  gap: 10px;
 
-.post-view-community {
-  font-size: 13px;
-  color: var(--text-secondary);
-  text-decoration: none;
-
-  &:hover {
-    color: var(--accent-primary);
-    text-decoration: underline;
-  }
-}
-
-.post-view-meta-row {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  margin-bottom: 14px;
-  flex-wrap: wrap;
-}
-
-.post-view-meta-item {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 13px;
-  color: var(--text-secondary);
-}
-
-.post-view-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-bottom: 18px;
-}
-
-.post-view-tag {
-  display: inline-block;
-  font-size: 12px;
-  padding: 4px 10px;
-  border-radius: 999px;
-  background: var(--bg-tertiary);
-  color: var(--text-secondary);
-  text-decoration: none;
-
-  &:hover {
-    background: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent);
-    box-shadow: inset 0 0 0 1px var(--accent-primary, #e53935);
-    color: var(--accent-primary, #e53935);
-  }
-}
-
-.post-view-body {
-  padding-top: 12px;
-  border-top: 1px solid var(--border-light);
-  margin-bottom: 20px;
-}
-
-.post-view-actions {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 12px 0;
-  border-top: 1px solid var(--border-light);
-  border-bottom: 1px solid var(--border-light);
-  margin-bottom: 20px;
-  position: relative;
-  flex-wrap: wrap;
-}
-
-.post-view-actions-primary,
-.post-view-actions-secondary {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.post-action-btn,
-.post-icon-action {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  border: 1px solid var(--border-light);
-  background: var(--bg-secondary);
-  color: var(--text-secondary);
-  border-radius: 999px;
-  cursor: pointer;
-  font-size: 13px;
-  font-weight: 600;
-  min-height: 34px;
-  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease, transform 0.12s ease;
-
-  &:hover:not(:disabled) {
-    background: var(--bg-hover);
-    border-color: var(--accent-primary, #e53935);
-    color: var(--accent-primary, #e53935);
-    transform: translateY(-1px);
-  }
-
-  &:disabled {
-    cursor: not-allowed;
-    opacity: 0.45;
-  }
-}
-
-.post-action-btn {
-  padding: 7px 13px;
-}
-
-.post-action-btn-vote {
-  .upvote-count-badge {
-    color: inherit;
-  }
-
-  &.active {
-    border-color: color-mix(in srgb, var(--accent-primary, #e53935) 40%, var(--border-light));
-    color: var(--accent-primary, #e53935);
-    background: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent);
-  }
-}
-
-.post-icon-action {
-  min-width: 34px;
-  padding: 7px 10px;
-}
-
-.post-reblog-action {
-  &.active {
-    border-color: rgba(34, 197, 94, 0.38);
-    color: #22c55e;
-    background: rgba(34, 197, 94, 0.12);
-  }
-
-  &.armed {
-    border-color: var(--accent-primary);
-    color: var(--accent-primary);
-  }
-
-  span {
-    font-size: 12px;
-    font-weight: 700;
-  }
-}
-
-.post-reshare-action {
-  &.active {
-    border-color: rgba(34, 197, 94, 0.38);
-    color: #22c55e;
-    background: rgba(34, 197, 94, 0.12);
-  }
-
-  span {
-    font-size: 12px;
-    font-weight: 700;
-  }
-}
-
-.post-tip-action:hover:not(:disabled) {
-  color: #f59e0b;
-  border-color: rgba(245, 158, 11, 0.45);
-}
-
-.post-report-action {
-  &.reported {
-    color: #e31337;
-    background: rgba(227, 19, 55, 0.12);
-    border-color: rgba(227, 19, 55, 0.25);
-  }
-}
-
-@include mix.respond(phone) {
-  .post-view-actions {
-    align-items: stretch;
-  }
-
-  .post-view-actions-primary,
-  .post-view-actions-secondary {
-    width: 100%;
-  }
-
-  .post-view-actions-primary {
-    .post-action-btn {
-      flex: 1;
-    }
-  }
-
-  .post-view-actions-secondary {
-    justify-content: space-between;
-  }
-}
-
-.post-view-comments {
-  border-top: 1px solid var(--border-light);
-  padding-top: 20px;
-}
-
-.post-view-error {
-  padding: 48px 16px;
-  text-align: center;
-  color: var(--text-secondary);
-
-  a {
-    display: inline-block;
-    margin-top: 12px;
-    color: var(--accent-primary);
+  // The author: avatar with the cyan community ring, name, Follow as an inverse pill.
+  .author-badge { display: inline-flex; align-items: center; gap: 10px; min-width: 0; padding: 0; border: 0; border-radius: 0; background: transparent; }
+  .author-badge-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+    color: var(--text);
     text-decoration: none;
 
-    &:hover { text-decoration: underline; }
+    img { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; box-shadow: 0 0 0 2px var(--cyan); background: var(--avatar); }
   }
+  .author-text { display: flex; flex-direction: column; min-width: 0; line-height: 1.25; }
+  .author-name { @include v2.text(body); font-weight: 700; }
+  .followers-count { @include v2.text(meta-sm); color: var(--muted); }
+  .follow-btn {
+    @include v2.btn(inverse, 28);
+    &.following { background: var(--surface-2); color: var(--text); }
+  }
+
+  &__meta {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    @include v2.text(body-sm);
+    color: var(--muted);
+  }
+}
+
+.post-view-hero {
+  width: 100%;
+  aspect-ratio: 16 / 8;
+  object-fit: cover;
+  display: block;
+  border-radius: var(--r-xl);
+  @include v2.thumb-placeholder;
+}
+
+// The text itself reads larger here than in a video description.
+.post-view-body {
+  min-width: 0;
+
+  .blog-content-container { border-radius: 0; }
+  .markdown-view { padding: 0; font-size: 16px; line-height: 1.65; }
+}
+
+.post-view-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+
+.post-view-tag {
+  display: inline-flex;
+  align-items: center;
+  height: 28px;
+  padding: 0 12px;
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+  color: var(--text);
+  @include v2.text(body-sm);
+  text-decoration: none;
+
+  &:hover { background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); color: var(--text); }
+}
+
+// The action dock: 64px tiles in a sticky column (wide), a row (phone).
+.post-view-dock {
+  position: sticky;
+  top: calc(var(--topbar-h) + 24px);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 100px;
+
+  .v2-dock { width: 64px; height: 64px; border-radius: var(--r-xl); font-size: 11px; }
+  .v2-dock.is-reported { color: var(--muted); }
+
+  @include v2.mobile {
+    position: static;
+    padding-top: 0;
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
+    gap: 6px;
+
+    .v2-dock { width: auto; height: 60px; border-radius: var(--r-lg); font-size: 10px; }
+  }
+}
+
+.post-view-comments { min-width: 0; }
+
+.post-view-error {
+  display: grid;
+  place-items: center;
+  min-height: 40vh;
+
+  .v2-empty { width: min(440px, 100%); }
 }

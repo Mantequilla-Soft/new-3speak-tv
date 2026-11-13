@@ -3,15 +3,16 @@
 // the support popup once per block, quoting the admin's note, and a banner with
 // the note and the Discord / Telegram links for as long as the block lasts.
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { screen, waitFor, act } from '@testing-library/react'
+import { screen, waitFor, act, within } from '@testing-library/react'
 import { renderWithProviders } from './_render.jsx'
 
 const get = vi.hoisted(() => vi.fn())
-// Only GET /check is faked; the rest of axios (axios.create for the app's API
-// clients) stays real.
+const post = vi.hoisted(() => vi.fn())
+// Only GET /check and POST /translate are faked; the rest of axios
+// (axios.create for the app's API clients) stays real.
 vi.mock('axios', async (importOriginal) => {
   const real = (await importOriginal()).default
-  return { default: Object.assign(Object.create(real), real, { get }) }
+  return { default: Object.assign(Object.create(real), real, { get, post }) }
 })
 vi.mock('../../../src/hive-api/aioha', async () => (await import('./_render.jsx')).aiohaModule())
 
@@ -25,12 +26,15 @@ const { default: SupportModal } = await import('../../../src/components/SupportM
 let rows
 const asked = () => get.mock.calls.map(([url]) => decodeURIComponent(url.split('/check/')[1]))
 
-const mount = (route = '/') => renderWithProviders(<><UploadBlockNotice /><SupportModal /></>, { route })
+// Home as it is built: the app-level copy (the one-time popup) and Home's
+// inline copy (the banner, between the Spotlight and the feed tabs).
+const mount = (route = '/') => renderWithProviders(<><UploadBlockNotice /><UploadBlockNotice inline /><SupportModal /></>, { route })
 const banner = () => document.querySelector('.upload-block-notice')
 const popup = () => document.querySelector('.support-modal')
 
 beforeEach(() => {
   get.mockReset()
+  post.mockReset()
   get.mockImplementation(async (url) => ({ data: rows[decodeURIComponent(url.split('/check/')[1])] ?? { canPost: false, reason: 'User not found' } }))
   rows = {}
   clearCreatorSettingsCache()
@@ -52,7 +56,7 @@ describe('a blocked warm-up user', () => {
 
     expect(popup()).toHaveTextContent('Message from the 3Speak team')
     expect(popup()).toHaveTextContent('Only post your own videos.')
-    await user.click(popup().querySelector('.app-modal-header button'))
+    await user.click(within(popup()).getByRole('button', { name: 'Close' }))
     expect(popup()).toBeNull()
     unmount()
 
@@ -61,6 +65,34 @@ describe('a blocked warm-up user', () => {
     mount()
     await waitFor(() => expect(banner()).not.toBeNull())
     expect(popup()).toBeNull()
+  })
+
+  it('can translate the note in the popup and switch back to the original', async () => {
+    rows['~newbie'] = { canUpload: false, uploadBlockedReason: 'Only post your own videos.' }
+    post.mockResolvedValue({ data: { translatedText: 'Lade nur eigene Videos hoch.' } })
+    const { user } = mount()
+    await waitFor(() => expect(popup()).not.toBeNull())
+    await user.click(popup().querySelector('.comment-translate-btn'))
+    const german = [...document.querySelectorAll('.translate-lang-item')].find((b) => b.textContent.includes('Deutsch'))
+    await user.click(german)
+    await waitFor(() => expect(popup()).toHaveTextContent('Lade nur eigene Videos hoch.'))
+    expect(post).toHaveBeenCalledWith(expect.stringMatching(/\/translate$/), expect.objectContaining({ q: 'Only post your own videos.', target: 'de' }))
+    expect(popup()).toHaveTextContent('Translated to Deutsch')
+    // the banner keeps the original until translated on its own
+    expect(banner()).toHaveTextContent('Only post your own videos.')
+    await user.click(screen.getByRole('button', { name: 'Show original' }))
+    expect(popup()).toHaveTextContent('Only post your own videos.')
+  })
+
+  it('says so when the translation fails, and keeps the original', async () => {
+    rows['~newbie'] = { canUpload: false, uploadBlockedReason: 'Only post your own videos.' }
+    post.mockRejectedValue(new Error('down'))
+    const { user } = mount()
+    await waitFor(() => expect(popup()).not.toBeNull())
+    await user.click(popup().querySelector('.comment-translate-btn'))
+    await user.click([...document.querySelectorAll('.translate-lang-item')].find((b) => b.textContent.includes('Deutsch')))
+    await waitFor(() => expect(popup()).toHaveTextContent('This message could not be translated. Please try again.'))
+    expect(popup()).toHaveTextContent('Only post your own videos.')
   })
 
   it('a new block (new date) shows the popup again', async () => {
@@ -136,5 +168,22 @@ describe('everyone else', () => {
     await act(async () => {})
     expect(get).not.toHaveBeenCalled()
     expect(banner()).toBeNull()
+  })
+})
+
+describe('the banner is on Home only', () => {
+  it('any other page gets the one-time popup but no banner (owner 2026-11-12)', async () => {
+    rows['~newbie'] = { canUpload: false, uploadBlockedReason: 'Only post your own videos.', uploadBlockedAt: '2026-11-10T09:00:00.000Z' }
+    renderWithProviders(<><UploadBlockNotice /><SupportModal /></>, { route: '/shorts' })
+    await waitFor(() => expect(popup()).not.toBeNull())
+    expect(banner()).toBeNull()
+  })
+
+  it('on Home there is exactly one banner and one popup', async () => {
+    rows['~newbie'] = { canUpload: false, uploadBlockedReason: 'Only post your own videos.', uploadBlockedAt: '2026-11-10T09:00:00.000Z' }
+    mount()
+    await waitFor(() => expect(popup()).not.toBeNull())
+    expect(document.querySelectorAll('.upload-block-notice')).toHaveLength(1)
+    expect(document.querySelectorAll('.support-modal')).toHaveLength(1)
   })
 })

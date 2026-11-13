@@ -16,7 +16,9 @@
     "translatedTo": "Übersetzung: {{language}}",
     "showLanguage": "{{language}} anzeigen",
     "showOriginal": "Original anzeigen",
-    "buttonTitle": "KI-Zusammenfassung dieses Videos"
+    "buttonTitle": "KI-Zusammenfassung dieses Videos",
+    "jumpTo": "Springen zu",
+    "disclaimer": "Aus dem Transkript erstellt. Kann Fehler enthalten."
   },
   "errors": {
     "notAvailable": "Dieses Video ist nicht verfügbar.",
@@ -29,7 +31,8 @@
   "gated": {
     "title": "Nur für Mitglieder",
     "checkFailed": "Wir konnten dein Abo gerade nicht bestätigen. Versuch es gleich nochmal.",
-    "preview": "Du siehst eine kostenlose Vorschau. 3Speak Pro schaltet das ganze Video frei.",
+    "preview": "Du siehst eine kostenlose Vorschau",
+    "previewSub": "3Speak Pro schaltet das ganze Video frei.",
     "subscribersOnly": "Dieses Video ist für 3Speak-Pro-Abonnenten verfügbar.",
     "cta": "3Speak Pro holen"
   },
@@ -38,7 +41,19 @@
     "add": "Reaktion hinzufügen"
   },
   "liveChat": "Live-Chat",
+  "side": {
+    "label": "Videobereiche"
+  },
+  "voters": {
+    "title": "Voter",
+    "cardLabel": "Unterstützer und Voter",
+    "voter": "Voter",
+    "weight": "Gewichtung",
+    "value": "Wert"
+  },
   "moreVideos": "Mehr Videos",
+  "nextIn": "Als Nächstes in {{name}}",
+  "fromCommunity": "Aus {{name}}",
   "vote": {
     "saveFailed": "Dein Vote konnte nicht gespeichert werden"
   },
@@ -67,14 +82,14 @@
     "loginRequired": "Melde dich an, um zu clippen",
     "cancel": "Clip abbrechen",
     "clipVideo": "Video clippen",
-    "label": "clippen",
+    "label": "Video clippen",
     "clip": "Clip",
     "seekToStart": "Zum Anfang spulen",
     "setStart": "Start setzen",
     "setEnd": "Ende setzen",
     "createClip": "Clip erstellen",
     "barStart": "Spul zum Anfang deines Clips",
-    "barEnd": "Start: {{start}} – jetzt zum Ende spulen",
+    "barEnd": "Start {{start}} · jetzt zum Ende spulen",
     "barDone": "Clip: {{start}} – {{end}}"
   },
   "share": {
@@ -92,11 +107,11 @@
   },
   "media": {
     "unavailableTitle": "Dieses Video ist nicht mehr verfügbar",
-    "unavailableBody": "Die Mediendatei dieses älteren Uploads wurde im Netzwerk nicht gefunden. Der Post existiert weiterhin auf der Blockchain, aber das Video kann nicht mehr abgespielt werden.",
+    "unavailableBody": "Die Mediendatei dieses älteren Uploads wurde nicht gefunden. Der Post existiert weiterhin auf Hive.",
     "scheduledTitle": "Dieser Beitrag ist geplant",
     "scheduledBody": "Er wird am {{date}} veröffentlicht. Ab dann kann das Video angesehen werden.",
     "blockedTitle": "Das Video konnte gerade nicht geladen werden",
-    "blockedBody": "Einer unserer Videoserver hat nicht geantwortet. Mit dem Video selbst ist alles in Ordnung, also versuch es bitte nochmal."
+    "blockedBody": "Einer unserer Videoserver hat nicht geantwortet. Mit dem Video ist alles in Ordnung."
   },
   "tipNudge": {
     "text": "Hat's dir gefallen?<hide> Schick <b>@{{author}}</b> ein Trinkgeld!</hide>",
@@ -104,7 +119,10 @@
   },
   "community": {
     "members_one": "{{count}} Mitglied",
-    "members_other": "{{count}} Mitglieder"
+    "members_other": "{{count}} Mitglieder",
+    "postedIn": "Gepostet in",
+    "partOf": "Teil von",
+    "position": "{{current}} von {{total}}"
   },
   "tags": {
     "curated": "Kuratiert"
@@ -120,7 +138,8 @@
     "openTagFeed": "Tag-Feed öffnen"
   },
   "scheduled": {
-    "notice": "Geplant für <b>{{date}}</b> – noch nicht veröffentlicht.",
+    "notice": "Geplant für <b>{{date}}</b>",
+    "notPublished": "Noch nicht veröffentlicht.",
     "futureDate": "ein zukünftiges Datum",
     "edit": "Bearbeiten, verschieben oder abbrechen",
     "editTitle": "Geplanten Post bearbeiten (Details, Datum oder abbrechen)"
@@ -147,7 +166,8 @@
     "toggleDetails": "Details ein-/ausblenden",
     "followCreator": "Creator folgen",
     "closeMenu": "Menü schließen",
-    "openActions": "Aktionen öffnen"
+    "openActions": "Aktionen öffnen",
+    "support": "{{name}} unterstützen"
   },
   "description": {
     "hide": "Beschreibung ausblenden",
@@ -185,26 +205,27 @@
     "markdownHint": "Markdown wird unterstützt.",
     "listed": "Gelistet",
     "unlistedLabel": "Nicht gelistet",
-    "listedHint": "Wird in Feeds, in der Suche und auf deinem Profil angezeigt.",
-    "unlistedHint": "Nicht in Feeds & Suche – lässt sich per Direktlink abspielen und bleibt auf deinem Profil (mit Kennzeichnung).",
-    "allowRemix": "Remix/Clip erlauben",
-    "remixOn": "Andere können Remixe/Clips erstellen; du wirst als Originalautor genannt.",
+    "listedHint": "In Feeds, in der Suche und auf deinem Profil",
+    "unlistedHint": "Nur per Direktlink, auf deinem Profil gekennzeichnet",
+    "allowRemix": "Remix und Clip erlauben",
+    "remixOn": "Du wirst als Originalautor genannt",
     "remixOff": "Andere können dieses Video nicht remixen oder clippen.",
     "adsOnVideo": "Werbung in diesem Video",
     "adsOnHint": "In diesem Video kann Werbung laufen.",
     "adsOffHint": "Keine Werbung in diesem Video.",
     "rollsOnVideo": "Video-Rolls",
     "rollsOnHint": "Rolls, Banner und Ticker können erscheinen.",
-    "rollsOffHint": "Auf diesem Video nur Banner und Ticker.",
+    "rollsOffHint": "Sonst nur Banner und Ticker",
     "trailer": "Kanaltrailer",
     "trailerOn": "Startet automatisch oben im Übersicht-Tab deines Profils und ersetzt jeden Trailer, den du vorher festgelegt hast.",
-    "trailerOff": "Mach dieses Video zu dem, das oben im Übersicht-Tab deines Profils automatisch startet.",
+    "trailerOff": "Startet automatisch oben auf deinem Profil",
     "nsfw": "Ab 18 / NSFW",
     "notNsfw": "Nicht ab 18",
     "nsfwHint": "Nicht in Feeds & Suche, außer der Zuschauer hat NSFW aktiviert; auf Hive mit nsfw getaggt.",
     "notNsfwHint": "Normaler Inhalt, für alle sichtbar.",
+    "nsfwOffHint": "Ausgeblendet, außer der Zuschauer hat NSFW eingeschaltet",
     "promoted": "Beworben",
-    "promote": "Video bewerben",
+    "promote": "Bewerben",
     "saveChanges": "Änderungen speichern",
     "noChanges": "Keine Änderungen zum Speichern.",
     "thumbUploaded": "Thumbnail hochgeladen.",
@@ -249,7 +270,8 @@
       "visibility": "Sichtbarkeit",
       "content": "Inhalt",
       "ads": "Werbung",
-      "promotion": "Werbung"
+      "promotion": "Werbung",
+      "contentAds": "Inhalt, Werbung und Bewerbung"
     },
     "chaptersNoteAll": "Die Kapitelliste wird beim Speichern in die Beschreibung geschrieben.",
     "editChapters": "Kapitel bearbeiten",

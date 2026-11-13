@@ -1,6 +1,6 @@
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { MdOutlineRateReview } from 'react-icons/md';
+import { Icon } from '../v2/Icon';
 import { useReviewModal } from '../../lib/reviewStore';
 import { useAppStore } from '../../lib/store';
 import './ReviewModal.scss';
@@ -21,11 +21,12 @@ export default function ReviewFab() {
 
   return (
     <button
+      type="button"
       className={`review-fab${miniPlayer ? ' review-fab--mini' : ''}`}
       onClick={() => openReview({ area: 'global', username: user || null, permlink: null })}
       aria-label={t('comments.review.fabAria')}
     >
-      <MdOutlineRateReview />
+      <Icon name="rate_review" size={20} />
       <span>{t('comments.review.fab')}</span>
     </button>
   );

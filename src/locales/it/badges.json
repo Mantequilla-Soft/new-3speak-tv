@@ -37,7 +37,7 @@
   },
   "directory": {
     "title": "Badge",
-    "intro": "I badge sono riconoscimenti <b>assegnati da altri</b> su Hive, per eventi, contributi e traguardi. Non puoi unirti a un badge: è qualcuno a conferirtelo. Apri un badge per guardare cosa pubblicano qui i suoi destinatari.",
+    "intro": "I badge sono riconoscimenti <b>assegnati da altri</b> su Hive, per eventi, contributi e traguardi. Non puoi unirti a un badge: è qualcuno a conferirtelo.",
     "searchPlaceholder": "Cerca badge...",
     "sort": {
       "recipients": "Destinatari",
@@ -62,6 +62,7 @@
     "awarding": "Assegnazione…",
     "held": "Posseduto",
     "award": "Assegna",
+    "awardNamed": "Assegna “{{title}}”",
     "note": "Il badge segue l'utente su Hive, ed è questo che significa possederlo. Puoi revocarlo dalla pagina del badge."
   },
   "hive": {
@@ -91,9 +92,10 @@
     "unclaimed": "Non rivendicato",
     "noActivity": "Ancora nessuna attività in questo periodo",
     "otherTopics": "Altro",
-    "title": "Classifiche",
-    "subtitle": "{{blurb}} — i migliori creator su 3Speak.",
-    "subtitleTopic": "{{blurb}} — i migliori creator in {{topic}}.",
+    "title": "Classifica",
+    "subtitle": "{{blurb}}: i migliori creator su 3Speak.",
+    "explain": "{{label}}: {{blurb}}.",
+    "subtitleTopic": "{{blurb}}: i migliori creator in {{topic}}.",
     "allTopics": "Tutti gli argomenti",
     "finding": "Ricerca di @{{user}} in questa classifica…",
     "notInTop": "@{{user}} non è tra i primi {{n}} di questa classifica.",

@@ -1,190 +1,276 @@
-@use "../../mixins.scss" as mix;
+@use "../../styles/v2" as v2;
 
-/* Stream templates ("go live from OBS"): the Stream Studio's Templates tab and
-   the "Save as template" sheet on its New stream form. Buttons follow the 3Speak
-   rule: no red fills anywhere, red is an outline (text + border). */
+/* Stream templates ("go live from OBS"), design 39b: the Stream Studio's
+   Templates tab (stream secret, chat dock URL, template cards with their state,
+   the OBS guide beside them) and the "Save as template" sheet on its New stream
+   form. Only v2 tokens. */
 .stream-templates {
-  color: var(--text-primary);
+  color: var(--text);
+}
 
-  // AnnounceOptions (and the modals it opens) are styled with the SDK's vars;
-  // map them to the 3Speak theme exactly as the /openpods page does.
-  --hh-bg:               var(--bg-primary);
-  --hh-bg-secondary:     var(--card-bg);
-  --hh-bg-hover:         var(--bg-hover);
-  --hh-text:             var(--text-primary);
-  --hh-text-secondary:   var(--text-secondary);
-  --hh-text-muted:       var(--text-muted, var(--text-secondary));
-  --hh-border:           var(--border-color);
-  --hh-border-light:     var(--border-light);
-  --hh-primary:          var(--accent-primary, #e53935);
+/* Templates tab: the library on the left, the OBS guide in a 400px aside. */
+.stream-templates.has-guide {
+  @include v2.wide {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 400px;
+    gap: 20px;
+    align-items: start;
+  }
+}
+
+.st-main {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+
+.st-aside {
+  min-width: 0;
+  @include v2.wide { position: sticky; top: calc(var(--topbar-h) + 16px); }
+  @include v2.below-wide { margin-top: 12px; }
 }
 
 .st-intro {
-  margin: 0 0 14px;
-  color: var(--text-secondary);
-  font-size: 0.9rem;
-  line-height: 1.5;
+  margin: 0;
+  @include v2.text(body-sm);
+  color: var(--muted);
 }
 
-.st-empty,
-.st-gate p {
-  color: var(--text-secondary);
+.st-loading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  @include v2.text(body-sm);
+  color: var(--muted);
+  .material-symbols-rounded { color: var(--cyan); }
 }
 
 .st-gate {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 12px;
-  padding: 24px 0;
+  gap: 10px;
 }
 
-/* ── Buttons ─────────────────────────────────────────────────────────────── */
-.st-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  padding: 8px 14px;
-  border-radius: 8px;
-  font-size: 0.875rem;
-  font-weight: 600;
-  cursor: pointer;
-  background: transparent;
-  border: 1px solid var(--border-color);
-  color: var(--text-primary);
-  transition: background 0.15s, border-color 0.15s;
-  white-space: nowrap;
+.st-empty-state { width: 100%; box-sizing: border-box; }
 
-  &:hover:not(:disabled) { background: var(--bg-hover); }
-  &:disabled { opacity: 0.5; cursor: not-allowed; }
-}
-
-.st-btn--primary {
-  color: var(--accent-primary, #e53935);
-  border-color: var(--accent-primary, #e53935);
-
-  &:hover:not(:disabled) {
-    background: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent);
-  }
-}
-
-.st-btn--danger {
-  color: #e53935;
-  border-color: color-mix(in srgb, #e53935 60%, transparent);
-
-  &:hover:not(:disabled) {
-    background: color-mix(in srgb, #e53935 10%, transparent);
-    border-color: #e53935;
-  }
+// A 4px bar in front of a panel title (39b, 22c).
+.st-bar {
+  flex: none;
+  width: 4px;
+  height: 22px;
+  border-radius: var(--r-bar);
+  background: var(--accent);
+  &.is-cyan { background: var(--cyan); }
 }
 
 /* ── Stream secret ───────────────────────────────────────────────────────── */
-// Free accounts: "Streaming from OBS is part of 3Speak Pro" + Get 3Speak Pro.
-.st-pro .st-btn { text-decoration: none; }
-
-.st-secret {
-  border: 1px solid var(--border-color);
-  background: var(--card-bg);
-  border-radius: 12px;
-  padding: 16px;
-  margin-bottom: 14px;
-
-  h2 {
-    font-size: 1.05rem;
-    margin: 0 0 4px;
-  }
-
-  p {
-    margin: 0 0 12px;
-    color: var(--text-secondary);
-    font-size: 0.875rem;
-    line-height: 1.5;
-  }
+.st-card-box {
+  padding: 14px;
+  border-radius: var(--r-xl);
+  background: var(--surface);
+  border: 1px solid var(--border);
 }
 
-.st-secret__row {
+.st-secret {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.st-secret__head {
   display: flex;
   align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.st-secret__icon { color: var(--accent); }
+
+.st-secret__text {
+  flex: 1;
+  min-width: 0;
+  h2 { margin: 0; font-size: 14px; font-weight: 700; }
 }
 
 .st-secret__value {
-  flex: 1 1 260px;
-  min-width: 0;
-  padding: 9px 12px;
-  border-radius: 8px;
-  background: var(--bg-tertiary, var(--bg-hover));
-  font-size: 0.85rem;
+  display: block;
+  margin-top: 2px;
+  @include v2.mono(12, 700);
+  color: var(--text);
   overflow-wrap: anywhere;
   user-select: all;
 
   &.is-masked {
-    letter-spacing: 2px;
-    color: var(--text-secondary);
+    color: var(--muted);
     user-select: none;
   }
+}
+
+.st-secret__desc {
+  margin: 0;
+  @include v2.text(meta-sm);
+  color: var(--muted);
 }
 
 .st-secret__actions {
   display: flex;
   gap: 8px;
-  flex-wrap: wrap;
+  flex: none;
+
+  .v2-btn { font-size: 12px; }
+  .v2-btn--danger { font-weight: 900; }
 }
 
-/* ── OBS guide ───────────────────────────────────────────────────────────── */
-.st-guide {
-  border: 1px solid var(--border-color);
-  border-radius: 12px;
-  margin-bottom: 20px;
-  background: var(--card-bg);
+// Phones: the actions go under the name, each a third of the row.
+@include v2.mobile {
+  .st-secret__head { flex-wrap: wrap; }
+  .st-secret__actions { flex: 1 1 100%; .v2-btn { flex: 1; justify-content: center; } }
+}
 
-  &.is-open .st-guide__toggle svg { transform: rotate(180deg); }
+/* ── Chat dock URL: a cyan wash row (39b) ───────────────────────────────── */
+.st-chatbox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: var(--r-xl);
+  background: var(--cyan-wash);
+  border: 1px solid color-mix(in srgb, var(--cyan) 25%, transparent);
+
+  @include v2.mobile { flex-wrap: wrap; .v2-btn { width: 100%; } }
+}
+
+.st-chatbox__icon { color: var(--cyan); }
+
+.st-chatbox__text {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  @include v2.text(body-sm);
+  b { font-weight: 700; }
+}
+
+.st-chatbox .v2-btn { font-size: 12px; font-weight: 900; }
+
+/* ── OBS is Pro: the accent wash notice (the free plan note in 39a) ────── */
+.st-pro {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: var(--r-2xl);
+  background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+}
+
+.st-pro__icon { color: var(--accent); }
+
+.st-pro__text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  b { font-size: 14px; font-weight: 700; }
+  span { @include v2.text(meta); color: var(--muted); }
+}
+
+.st-pro__cta { margin-top: 6px; align-self: flex-start; }
+
+/* ── OBS guide: the aside card (39b) ────────────────────────────────────── */
+.st-guide {
+  border-radius: var(--r-2xl);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  overflow: hidden;
+
+  &.is-open .st-guide__chevron { transform: rotate(180deg); }
 }
 
 .st-guide__toggle {
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 14px 16px;
-  border: none;
+  gap: 10px;
+  min-height: 56px;
+  padding: 0 16px 0 18px;
+  border: 0;
   background: transparent;
-  color: var(--text-primary);
-  font-size: 1rem;
-  font-weight: 600;
+  color: var(--text);
+  font: inherit;
   cursor: pointer;
   text-align: start;
 
-  svg { transition: transform 0.2s; flex-shrink: 0; }
+  &:hover { background: var(--bg-hover); }
 }
 
-.st-guide__body {
-  padding: 0 16px 16px;
-  font-size: 0.9rem;
-  line-height: 1.55;
+.st-guide__title { flex: 1; @include v2.text(title-sm); }
+.st-guide__chevron { color: var(--muted); transition: transform var(--t-base) var(--ease); }
 
-  h4 {
-    margin: 14px 0 6px;
-    font-size: 0.95rem;
+.st-guide__body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0 18px 18px;
+
+  h4 { margin: 6px 0 0; }
+}
+
+.st-guide__steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  li {
+    display: flex;
+    gap: 10px;
+    padding: 8px;
+    border-radius: var(--r-md);
+    background: var(--bg);
+    font-size: 12px;
+    line-height: 1.4;
   }
 }
 
-.st-guide__steps,
-.st-guide__list {
-  margin: 0;
-  padding-inline-start: 22px;
+.st-guide__n {
+  flex: none;
+  width: 24px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--r-sm);
+  background: var(--surface-2);
+  @include v2.mono(11, 900);
+}
 
-  li { margin-bottom: 4px; }
+.st-guide__chips {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+
+  li {
+    padding: 5px 9px;
+    border-radius: var(--r-sm);
+    background: var(--bg);
+    @include v2.mono(11, 700);
+  }
 }
 
 .st-guide__limits {
-  margin: 12px 0 0;
+  margin: 0;
   padding: 10px 12px;
-  border-radius: 8px;
-  background: var(--bg-tertiary, var(--bg-hover));
-  color: var(--text-secondary);
+  border-radius: var(--r-md);
+  background: var(--bg);
+  @include v2.text(meta);
+  color: var(--muted);
 }
 
 /* ── Template list ───────────────────────────────────────────────────────── */
@@ -193,289 +279,154 @@
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  margin-bottom: 12px;
+  margin-top: 8px;
 
-  h2 {
-    font-size: 1.15rem;
-    margin: 0;
-  }
+  h2 { margin: 0; @include v2.text(title); }
 }
 
 .st-grid {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 12px;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 10px;
+
+  @include v2.mobile { grid-template-columns: 1fr; }
 }
 
+// One template (39b): 2px border, the accent one while it is live.
 .st-card {
-  display: grid;
-  grid-template-columns: 200px minmax(0, 1fr);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+  padding: 12px;
+  border-radius: var(--r-xl);
+  background: var(--surface);
+  border: 2px solid var(--border);
 
-  @include mix.respond(phone) {
-    grid-template-columns: 1fr;
-  }
+  &--live { border-color: var(--accent); }
+}
 
-  border: 1px solid var(--border-color);
-  border-radius: 12px;
-  overflow: hidden;
-  background: var(--card-bg);
-
-  &--live { border-color: color-mix(in srgb, #e53935 60%, transparent); }
+.st-card__top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .st-card__thumb {
-  position: relative;
+  flex: none;
+  width: 96px;
   aspect-ratio: 16 / 9;
-  align-self: start;
-  background: var(--bg-tertiary, #111);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--text-secondary);
+  border-radius: var(--r-md);
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  color: var(--muted);
+  @include v2.thumb-placeholder(6px);
 
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
+  img { width: 100%; height: 100%; object-fit: cover; display: block; }
 }
 
-.st-badge {
-  position: absolute;
-  top: 8px;
-  left: 8px;
-  padding: 3px 8px;
-  border-radius: 999px;
-  font-size: 0.72rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.4px;
-  background: rgba(0, 0, 0, 0.6);
-  color: #fff;
-
-  &--live { color: #ff5a5f; border: 1px solid #ff5a5f; }
-  &--connecting,
-  &--ending { color: #ffb300; border: 1px solid #ffb300; }
-}
-
-.st-card__body {
-  padding: 12px 14px 14px;
+.st-card__head {
+  flex: 1;
+  min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  min-width: 0;
+  gap: 2px;
 }
 
 .st-card__name {
+  font-size: 14px;
   font-weight: 700;
-  font-size: 1rem;
   overflow-wrap: anywhere;
 }
 
 .st-card__title {
-  color: var(--text-secondary);
-  font-size: 0.875rem;
-  overflow-wrap: anywhere;
-}
-
-.st-card__url {
-  font-size: 0.75rem;
-  color: var(--text-secondary);
+  @include v2.text(meta);
+  color: var(--muted);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.st-card__ingress,
 .st-card__meta {
-  font-size: 0.78rem;
-  color: var(--text-secondary);
+  @include v2.text(meta-sm);
+  color: var(--muted);
 }
 
-.st-card__watch {
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--accent-primary, #e53935);
-  align-self: flex-start;
+.st-badge { align-self: flex-start; }
+
+.st-card__url {
+  display: block;
+  padding: 6px 10px;
+  border-radius: var(--r-sm);
+  background: var(--bg);
+  @include v2.mono(11, 500);
+  color: var(--muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
+
+.st-card__ingress {
+  @include v2.mono(11, 700);
+  color: var(--muted);
+}
+
+.st-card__watch { align-self: flex-start; }
 
 .st-card__warn {
-  font-size: 0.8rem;
-  color: #ffb300;
+  padding: 8px 10px;
+  border-radius: var(--r-md);
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  font-size: 11px;
+  line-height: 1.35;
 }
 
 .st-card__actions {
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 8px;
+  gap: 6px;
+  margin-top: auto;
 
-  .st-btn { padding: 6px 10px; font-size: 0.8rem; }
+  .st-card__copy { flex: 1 1 auto; min-width: 0; font-size: 11px; }
+  .v2-iconbtn .material-symbols-rounded { font-size: 16px !important; }
 }
 
-/* ── Sheets (dialog on desktop, bottom sheet on phones) ──────────────────── */
-.st-sheet-overlay {
-  position: fixed;
-  inset: 0;
-  // Same level as Settings: above the page FABs, below the login / signing
-  // prompts (100000), which must be able to open on top of this form.
-  z-index: 99990;
-  background: rgba(0, 0, 0, 0.6);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 16px;
-}
-
-.st-sheet {
-  width: 460px;
-  max-width: 100%;
-  max-height: min(88vh, 860px);
-  display: flex;
-  flex-direction: column;
-  background: var(--card-bg, #1a1a2e);
-  color: var(--text-primary);
-  border: 1px solid var(--border-light, rgba(255, 255, 255, 0.12));
-  border-radius: 14px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-
-  &--wide { width: 680px; }
-
-  // Same SDK var mapping as the page: the sheet is portalled out of it.
-  --hh-bg:               var(--bg-primary);
-  --hh-bg-secondary:     var(--card-bg);
-  --hh-bg-hover:         var(--bg-hover);
-  --hh-text:             var(--text-primary);
-  --hh-text-secondary:   var(--text-secondary);
-  --hh-text-muted:       var(--text-muted, var(--text-secondary));
-  --hh-border:           var(--border-color);
-  --hh-border-light:     var(--border-light);
-  --hh-primary:          var(--accent-primary, #e53935);
-}
-
-.st-sheet .st-sheet__header {
-  flex-shrink: 0;
-  padding: 14px 20px 12px;
-  margin-bottom: 0;
-}
-
-.st-sheet__body {
-  padding: 16px 20px;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  flex: 1 1 auto;
-}
-
-.st-sheet__foot {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  flex-wrap: wrap;
-  gap: 10px;
-  padding: 12px 20px 16px;
-  border-top: 1px solid var(--border-light, rgba(255, 255, 255, 0.08));
-}
-
+/* ── Sheets: the v2 Dialog; just the footer error and the body text ────── */
 .st-sheet__foot-error {
-  margin-inline-end: auto;
+  flex: 1 1 100%;
+  margin: 0;
 }
 
 .st-confirm-text {
   margin: 0;
-  line-height: 1.55;
-  color: var(--text-secondary);
-}
-
-@media (max-width: 767px) {
-  .st-sheet-overlay {
-    align-items: flex-end;
-    padding: 0;
-  }
-
-  .st-sheet,
-  .st-sheet--wide {
-    width: 100%;
-    max-width: 100%;
-    max-height: 92vh;
-    border-radius: 16px 16px 0 0;
-    border-bottom: none;
-    // No fill-mode: a transform left on the sheet would turn it into the
-    // containing block of the community / beneficiary modals opened inside it.
-    animation: st-sheet-up 0.26s ease;
-  }
-
-  .st-sheet__foot {
-    padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
-  }
-}
-
-@keyframes st-sheet-up {
-  from { transform: translateY(100%); }
-  to { transform: translateY(0); }
+  @include v2.text(body);
+  color: var(--muted);
 }
 
 /* ── Form ────────────────────────────────────────────────────────────────── */
 .st-form {
   display: flex;
   flex-direction: column;
-  gap: 18px;
-}
-
-.st-field {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  min-width: 0;
-}
-
-.st-field__label {
-  font-size: 0.85rem;
-  font-weight: 600;
-
-  em { font-style: normal; color: var(--text-secondary); font-weight: 400; }
-}
-
-.st-field__hint {
-  font-size: 0.8rem;
-  color: var(--text-secondary);
-  line-height: 1.45;
-  margin: 0;
+  gap: 16px;
 }
 
 .st-field__preview {
-  font-size: 0.78rem;
+  display: block;
   padding: 6px 10px;
-  border-radius: 6px;
-  background: var(--bg-tertiary, var(--bg-hover));
+  border-radius: var(--r-sm);
+  background: var(--bg);
+  @include v2.mono(11, 500);
+  color: var(--muted);
   overflow-wrap: anywhere;
-}
-
-.st-field__error {
-  font-size: 0.8rem;
-  color: #ff5a5f;
-}
-
-.st-input {
-  width: 100%;
-  padding: 9px 12px;
-  border-radius: 8px;
-  border: 1px solid var(--border-color);
-  background: var(--bg-primary);
-  color: var(--text-primary);
-  font-size: 0.9rem;
-
-  &:focus { outline: none; border-color: var(--accent-primary, #e53935); }
 }
 
 .st-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  margin-top: 8px;
+  gap: 10px;
+  margin-top: 4px;
 
-  @include mix.respond(phone) {
-    grid-template-columns: 1fr;
-  }
+  @include v2.mobile { grid-template-columns: 1fr; }
 }
 
 .st-thumb {
@@ -488,16 +439,15 @@
   .st-thumb__empty {
     width: 160px;
     aspect-ratio: 16 / 9;
-    border-radius: 8px;
+    border-radius: var(--r-md);
     object-fit: cover;
-    background: var(--bg-tertiary, var(--bg-hover));
   }
 
   .st-thumb__empty {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--text-secondary);
+    display: grid;
+    place-items: center;
+    color: var(--muted);
+    @include v2.thumb-placeholder;
   }
 }
 
@@ -507,95 +457,79 @@
   flex-wrap: wrap;
 }
 
+// Tags: a filled field holding 28px chips and a bare input.
 .st-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
-  padding: 6px;
-  border-radius: 8px;
-  border: 1px solid var(--border-color);
-  background: var(--bg-primary);
+  align-items: center;
+  gap: 4px;
+  min-height: 40px;
+  padding: 4px 6px;
+  box-sizing: border-box;
+  border-radius: var(--r-md);
+  border: 2px solid transparent;
+  background: var(--bg);
+
+  &:focus-within { border-color: var(--accent); }
 }
 
 .st-tag {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  padding: 3px 4px 3px 10px;
-  border-radius: 999px;
-  background: var(--bg-tertiary, var(--bg-hover));
-  font-size: 0.82rem;
+  gap: 2px;
+  height: 28px;
+  padding: 0 4px 0 10px;
+  border-radius: var(--r-sm);
+  background: var(--surface-2);
+  font-size: 12px;
+  font-weight: 700;
 
   button {
-    border: none;
+    display: grid;
+    place-items: center;
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    border: 0;
+    border-radius: var(--r-xs);
     background: transparent;
-    color: var(--text-secondary);
+    color: var(--muted);
     cursor: pointer;
-    font-size: 1rem;
-    line-height: 1;
-    padding: 0 4px;
+    &:hover { color: var(--accent); }
   }
 }
 
 .st-tags__input {
   flex: 1 1 120px;
   min-width: 100px;
-  border: none;
+  height: 28px;
+  border: 0;
   background: transparent;
-  color: var(--text-primary);
-  padding: 4px;
-  font-size: 0.875rem;
+  color: var(--text);
+  padding: 0 4px;
+  font: inherit;
+  font-size: 14px;
 
+  &::placeholder { color: var(--muted); }
   &:focus { outline: none; }
 }
 
 .st-tiles {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 8px;
 
-  @include mix.respond(phone) {
-    grid-template-columns: 1fr;
-  }
+  @include v2.mobile { grid-template-columns: 1fr; }
 }
 
-.st-tile {
+// A block of setting rows with its own label (boost, recording, announce).
+.st-group {
   display: flex;
   flex-direction: column;
-  gap: 2px;
-  padding: 10px 12px;
-  border-radius: 10px;
-  border: 1px solid var(--border-color);
-  background: transparent;
-  color: var(--text-primary);
-  text-align: start;
-  cursor: pointer;
+  gap: 4px;
 
-  span { font-size: 0.78rem; color: var(--text-secondary); }
-
-  &.is-active {
-    border-color: var(--accent-primary, #e53935);
-    background: color-mix(in srgb, var(--accent-primary, #e53935) 8%, transparent);
-  }
-}
-
-.st-check {
-  display: flex;
-  align-items: flex-start;
-  gap: 8px;
-  font-size: 0.9rem;
-  cursor: pointer;
-
-  input { margin-top: 3px; accent-color: var(--accent-primary, #e53935); }
-
-  &.is-locked { opacity: 0.7; cursor: not-allowed; }
-}
-
-.st-pro-hint {
-  display: block;
-  font-style: normal;
-  font-size: 0.78rem;
-  color: var(--text-secondary);
+  .v2-setting { padding: 10px 0; }
+  .v2-setting.is-locked .v2-setting__body { opacity: .7; }
 }
 
 .st-notice {
@@ -603,65 +537,105 @@
   flex-direction: column;
   align-items: flex-start;
   gap: 8px;
-  padding: 10px 12px;
-  border-radius: 8px;
-  border: 1px solid color-mix(in srgb, #ffb300 50%, transparent);
-  background: color-mix(in srgb, #ffb300 8%, transparent);
-
-  p { margin: 0; font-size: 0.85rem; line-height: 1.45; }
+  margin: 4px 0 8px;
 }
 
-.st-announce {
-  gap: 10px;
-}
+.st-announce { gap: 8px; }
 
 /* "Save as template" inside the SDK's create form (renderStandaloneExtras). */
 .st-save {
   display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 8px 12px;
-  padding: 12px 0 2px;
-  border-top: 1px solid var(--border-light, rgba(255, 255, 255, 0.08));
+  flex-direction: column;
+  gap: 6px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
 }
+
+.st-save__btn.v2-btn { justify-content: space-between; .v2-btn__label { flex: 1; text-align: left; } }
 
 .st-save__hint {
-  font-size: 0.8rem;
-  color: var(--text-secondary);
-  flex: 1 1 200px;
-}
-
-.st-saved .st-secret,
-.st-saved .st-guide {
-  margin-bottom: 0;
+  @include v2.text(meta-sm);
+  color: var(--muted);
 }
 
 .st-saved {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 12px;
 }
 
-/* "Start from a template" above the New stream form (TemplatePicker). */
-.st-picker {
+.st-saved__intro {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  .st-intro { color: var(--text); }
+}
+
+.st-saved__ok { color: var(--cyan); }
+
+.st-copyrow {
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 8px 12px;
-  margin: 0 0 1rem;
-  font-size: 0.88rem;
-  font-weight: 600;
-  color: var(--text-secondary, #b5b5b5);
+  gap: 8px;
+}
 
-  select {
-    flex: 1 1 220px;
-    max-width: 360px;
-    padding: 8px 10px;
-    border-radius: 10px;
-    border: 1px solid var(--border-color, #3a3a3a);
-    background: var(--background-secondary, #1a1a1a);
-    color: var(--text-primary, #f2f2f2);
-    font: inherit;
-    font-weight: 500;
-  }
+.st-copyrow__value {
+  flex: 1;
+  min-width: 0;
+  padding: 10px 12px;
+  border-radius: var(--r-md);
+  background: var(--bg);
+  @include v2.mono(12, 700);
+  overflow-wrap: anywhere;
+}
+
+/* "Start from a template" above the New stream form (39a): a 48px surface bar
+   with the picker on the right. */
+.st-picker {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 48px;
+  padding: 0 14px;
+  box-sizing: border-box;
+  border-radius: var(--r-lg);
+  background: var(--surface);
+  font-size: 13px;
+  color: var(--text);
+  cursor: pointer;
+
+  &:hover { background: color-mix(in srgb, var(--text) 4%, var(--surface)); }
+  &:focus-within { outline: 2px solid var(--accent); outline-offset: 2px; }
+}
+
+.st-picker__text {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  b { font-weight: 700; }
+}
+
+// The real control: a select over the whole bar, not drawn.
+.st-picker__select {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+  font-size: 16px;   // no zoom on focus in iOS
+}
+
+.st-picker__icon { color: var(--cyan); }
+
+// The shared `.v2-dialog__panel .v2-input { background }` shorthand drops the
+// select chevron inside dialogs; draw it again for our selects.
+.st-sheet.v2-dialog__panel select.v2-input.is-select {
+  background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%), linear-gradient(135deg, var(--muted) 50%, transparent 50%);
+  background-position: calc(100% - 18px) 50%, calc(100% - 13px) 50%;
+  background-size: 5px 5px;
+  background-repeat: no-repeat;
 }

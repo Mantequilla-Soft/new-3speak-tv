@@ -2,8 +2,7 @@ import { useRef, useState, useEffect, useCallback } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { FaChevronLeft, FaChevronRight, FaPlus } from "react-icons/fa";
-import { MdLocalFireDepartment } from "react-icons/md";
+import { Icon } from "../v2/Icon";
 import { SHORTS_STORIES_URL, storiesEnabledFor } from "../../utils/config";
 import { useAppStore } from "../../lib/store";
 import HiveAvatar from "../HiveAvatar/HiveAvatar";
@@ -53,7 +52,7 @@ const StreakBadge = ({ streak }) => {
   if (!(streak >= STREAK_MIN)) return null;
   return (
     <div className="streak-badge" title={t("shorts.stories.streakTitle", { count: streak })}>
-      <MdLocalFireDepartment aria-hidden="true" />
+      <Icon name="local_fire_department" size={12} fill />
       {streak}
     </div>
   );
@@ -74,12 +73,15 @@ const CARD_FADE_MS = 200;
  * - activeCreator: string | null — username of the currently selected creator (highlighted)
  * - activeStory: boolean — the active creator is being watched as a 24h story
  * - onCreatorSelect: (username: string, { story: boolean }) => void — called when a creator avatar is clicked.
- *                    `story` is true for a 24h-story avatar (the cyan ring).
+ *                    `story` is true for a 24h-story avatar (the countdown ring).
  *                    If not provided, defaults to navigating to the shorts / story viewer
  * - compact: boolean — smaller avatars for the shorts player context
  * - hiddenOnMobile: boolean — hide the entire bar on mobile (for shorts player, where swipe is used instead)
+ * - tiles: boolean — the Home row (20a): a dashed "+" tile, then 64px rounded
+ *          tiles in rings (accent = followed, ink = others, countdown for 24h
+ *          stories), names kept for screen readers only
  */
-const ShortsStories = ({ activeCreator, activeStory = false, onCreatorSelect, compact = false, hiddenOnMobile = false }) => {
+const ShortsStories = ({ activeCreator, activeStory = false, onCreatorSelect, compact = false, hiddenOnMobile = false, tiles = false }) => {
   const { t } = useTranslation();
   const { authenticated, user } = useAppStore();
   const navigate = useNavigate();
@@ -97,7 +99,7 @@ const ShortsStories = ({ activeCreator, activeStory = false, onCreatorSelect, co
   const fadeTimer = useRef(null);
 
   const { creators, currentUserHasShort, isLoading } = useShortsStories();
-  // 24h stories go first, with the cyan ring. A creator with a live story shows
+  // 24h stories go first, with the countdown ring. A creator with a live story shows
   // once, as a story; the shorts creators follow (they leave this row over time).
   const { storyCreators, currentUserStreak } = useStoryCreators();
   const now = useStoryClock();
@@ -226,6 +228,7 @@ const ShortsStories = ({ activeCreator, activeStory = false, onCreatorSelect, co
   const wrapperClass = [
     "shorts-stories",
     compact && "shorts-stories--compact",
+    tiles && "shorts-stories--tiles",
     hiddenOnMobile && "shorts-stories--hidden-mobile",
   ].filter(Boolean).join(" ");
 
@@ -233,8 +236,8 @@ const ShortsStories = ({ activeCreator, activeStory = false, onCreatorSelect, co
     <div className={wrapperClass}>
       <div className="stories-scroll-wrapper">
         {showLeft && (
-          <button className="stories-scroll-btn left" onClick={() => scroll("left")}>
-            <FaChevronLeft />
+          <button type="button" className="stories-scroll-btn left" onClick={() => scroll("left")} aria-label={t("feeds.scrollLeft")}>
+            <Icon name="chevron_left" size={20} />
           </button>
         )}
 
@@ -258,7 +261,24 @@ const ShortsStories = ({ activeCreator, activeStory = false, onCreatorSelect, co
           ) : (
             <div className="stories-row">
               {/* Current user avatar — always first */}
-              {authenticated && (
+              {authenticated && tiles && (
+                <div
+                  className="story-item own-story own-story--add"
+                  role="button"
+                  tabIndex={0}
+                  onClick={handleOwnAvatarClick}
+                  onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); handleOwnAvatarClick(); } }}
+                  aria-label={t("shorts.stories.you")}
+                  title={t("shorts.stories.you")}
+                >
+                  <div className="story-add-tile">
+                    <Icon name="add" size={24} />
+                    <StreakBadge streak={currentUserStreak} />
+                  </div>
+                  <span className="story-username">{t("shorts.stories.you")}</span>
+                </div>
+              )}
+              {authenticated && !tiles && (
                 <div className="story-item own-story" onClick={handleOwnAvatarClick}>
                   <div
                     className={`story-avatar-wrap ${
@@ -276,7 +296,7 @@ const ShortsStories = ({ activeCreator, activeStory = false, onCreatorSelect, co
                       badgeSize={12}
                     />
                     <div className="add-badge">
-                      <FaPlus />
+                      <Icon name="add" size={14} weight={700} />
                     </div>
                     <StreakBadge streak={currentUserStreak} />
                   </div>
@@ -364,8 +384,8 @@ const ShortsStories = ({ activeCreator, activeStory = false, onCreatorSelect, co
         </div>
 
         {showRight && (
-          <button className="stories-scroll-btn right" onClick={() => scroll("right")}>
-            <FaChevronRight />
+          <button type="button" className="stories-scroll-btn right" onClick={() => scroll("right")} aria-label={t("feeds.scrollRight")}>
+            <Icon name="chevron_right" size={20} />
           </button>
         )}
       </div>

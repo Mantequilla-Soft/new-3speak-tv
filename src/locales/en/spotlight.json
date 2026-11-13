@@ -208,7 +208,7 @@
       "imageUploadFailed": "Image upload failed: {{error}}",
       "tryAgain": "try again",
       "styleApplied": "Style applied to all {{type}} blocks",
-      "templateApplied": "“{{name}}” applied — tweak or Undo",
+      "templateApplied": "“{{name}}” applied. Tweak it or Undo.",
       "reverted": "Reverted to your previous design",
       "saved": "Spotlight saved to your Hive profile",
       "saveFailed": "Could not save",
@@ -224,7 +224,7 @@
       "phone": "Phone",
       "platformGroup": "Platform",
       "yourname": "yourname",
-      "platformIconHint": "Icon is the {{platform}} logo — switch to “Website / URL” to choose a custom icon.",
+      "platformIconHint": "Icon is the {{platform}} logo. Switch to “Website / URL” to choose a custom icon.",
       "icon": "Icon",
       "iconColor": "Icon color",
       "iconBg": "Icon bg"
@@ -264,9 +264,9 @@
       "showPosts_other": "Show {{count}} posts",
       "perRow": "{{value}} per row",
       "hiveRecentHint": "Your most recent top-level posts (no reblogs or cross-posts). Updates automatically.",
-      "linkPlaceholder": "Paste any link — Hive post, Instagram, X, YouTube, article…",
+      "linkPlaceholder": "Paste any link: Hive post, Instagram, X, YouTube, article…",
       "fetching": "Fetching preview…",
-      "noPreview": "No preview found — it’ll still show as a link card.",
+      "noPreview": "No preview found. It will still show as a link card.",
       "pasteHint": "Paste a link and we’ll pull in its title, description & image."
     },
     "style": {
@@ -295,8 +295,8 @@
     "openPage": "Open page",
     "templates": {
       "title": "Templates",
-      "hint": "Pick a design to fill everything in — your bio is kept, and you can Undo.",
-      "undo": "Undo template — back to my design"
+      "hint": "Pick a design to fill everything in. Your bio is kept, and you can Undo.",
+      "undo": "Undo template, back to my design"
     },
     "profile": {
       "title": "Profile",

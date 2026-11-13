@@ -1,7 +1,4 @@
 import { useEffect, useState } from 'react';
-import { createPortal } from 'react-dom';
-import { FaYoutube, FaSoundcloud, FaTiktok, FaInstagram, FaPlayCircle, FaCopy, FaCheck, FaTrash, FaExternalLinkAlt } from 'react-icons/fa';
-import { SiRumble } from 'react-icons/si';
 import { toastIn } from '../../utils/toast';
 import {
   getHash,
@@ -15,20 +12,23 @@ import {
 } from '../../utils/socialVerifier';
 import { useTranslation, Trans } from 'react-i18next';
 import { SOCIAL_LINK_ENABLED } from '../../utils/config';
-import ModalHeader from '../ModalHeader/ModalHeader';
+import DialogShell from './DialogShell';
+import { Button, IconButton } from '../v2/ui';
+import { Icon } from '../v2/Icon';
 import './AddSocialLink_modal.scss';
 
 // Every toast from this module is headed "Profile"; the message becomes the
 // line under it. See utils/toast.js.
 const toast = toastIn('Profile');
 
+// Material Symbols stand-ins for the platforms (one icon set per screen).
 const PLATFORM_ICONS = {
-  youtube: FaYoutube,
-  tiktok: FaTiktok,
-  instagram: FaInstagram,
-  bitchute: FaPlayCircle,
-  rumble: SiRumble,
-  soundcloud: FaSoundcloud,
+  youtube: 'smart_display',
+  tiktok: 'music_video',
+  instagram: 'photo_camera',
+  bitchute: 'play_circle',
+  rumble: 'live_tv',
+  soundcloud: 'cloud',
 };
 
 // `warmup`: a warm-up user (no Hive account) doing the optional "link your
@@ -205,6 +205,31 @@ export default function AddSocialLink_modal({ isOpen, onClose, hiveUsername, onC
     ? t('modals.socialLink.flowTitle', { platform: platformLabel(selectedPlatform) })
     : t('modals.socialLink.title');
 
+  const actions = step === 'flow' && selectedPlatform ? (
+    <>
+      <Button
+        variant="secondary"
+        className="social-link-btn-secondary"
+        onClick={() => { setStep('list'); setError(''); }}
+        disabled={submitting}
+      >
+        {t('common.actions.back')}
+      </Button>
+      <Button
+        variant="cyan"
+        className="social-link-btn-primary"
+        onClick={handleVerify}
+        disabled={submitting || !platformUsername.trim()}
+        loading={submitting}
+      >
+        {submitting ? t('modals.socialLink.verifying') : t('modals.socialLink.verify')}
+      </Button>
+    </>
+  ) : null;
+
+  // Design 43b (linked external profiles): the linked list as filled rows,
+  // the platforms as tiles; verifying is three numbered steps with the hash in
+  // a mono well, the error in accent, Back and Verify in the footer.
   const body = (
     <>
       {step === 'list' && (
@@ -214,39 +239,44 @@ export default function AddSocialLink_modal({ isOpen, onClose, hiveUsername, onC
           </p>
 
           {loadingLinks ? (
-            <p className="social-link-loading">{t('common.status.loading')}</p>
+            <p className="social-link-loading"><Icon name="progress_activity" size={16} className="v2-spin" /> {t('common.status.loading')}</p>
           ) : links.length > 0 ? (
             <ul className="social-link-list">
               {links.map((link) => {
-                const Icon = PLATFORM_ICONS[link.platform];
+                const icon = PLATFORM_ICONS[link.platform] || 'link';
                 const url = platformProfileUrl(link.platform, link.platform_username);
                 const key = `${link.platform}:${link.platform_username}`;
                 return (
                   <li key={key} className="social-link-list__item">
-                    {Icon && <Icon className="social-link-list__icon" />}
+                    <span className="social-link-list__icon"><Icon name={icon} size={20} /></span>
                     <div className="social-link-list__meta">
                       <strong>{platformLabel(link.platform)}</strong>
                       <span className="social-link-list__id">{link.platform_username}</span>
                     </div>
                     {url && (
-                      <a
+                      <IconButton
+                        as="a"
                         href={url}
                         className="social-link-list__open"
                         target="_blank"
                         rel="noopener noreferrer"
-                        title={t('modals.socialLink.openProfile')}
-                      >
-                        <FaExternalLinkAlt />
-                      </a>
+                        icon="open_in_new"
+                        label={t('modals.socialLink.openProfile')}
+                        size={32}
+                        variant="ghost"
+                        round
+                      />
                     )}
-                    <button
+                    <IconButton
                       className="social-link-list__remove"
                       onClick={() => handleUnlink(link)}
                       disabled={unlinkingKey === key}
-                      title={t('modals.socialLink.removeLink')}
-                    >
-                      {unlinkingKey === key ? '…' : <FaTrash />}
-                    </button>
+                      icon={unlinkingKey === key ? 'progress_activity' : 'delete'}
+                      label={t('modals.socialLink.removeLink')}
+                      size={32}
+                      variant="ghost"
+                      round
+                    />
                   </li>
                 );
               })}
@@ -257,19 +287,17 @@ export default function AddSocialLink_modal({ isOpen, onClose, hiveUsername, onC
 
           <h4 className="social-link-section-title">{t('modals.socialLink.addPlatform')}</h4>
           <div className="social-link-platform-grid">
-            {Object.entries(PLATFORMS).filter(([key]) => (warmup ? warmupPlatforms.includes(key) : SOCIAL_LINK_ENABLED[key])).map(([key, info]) => {
-              const Icon = PLATFORM_ICONS[key];
-              return (
-                <button
-                  key={key}
-                  className="social-link-platform-btn"
-                  onClick={() => handlePickPlatform(key)}
-                >
-                  {Icon && <Icon size={28} />}
-                  <span>{info.label}</span>
-                </button>
-              );
-            })}
+            {Object.entries(PLATFORMS).filter(([key]) => (warmup ? warmupPlatforms.includes(key) : SOCIAL_LINK_ENABLED[key])).map(([key, info]) => (
+              <button
+                key={key}
+                type="button"
+                className="v2-dock social-link-platform-btn"
+                onClick={() => handlePickPlatform(key)}
+              >
+                <Icon name={PLATFORM_ICONS[key] || 'link'} size={22} />
+                <span>{info.label}</span>
+              </button>
+            ))}
           </div>
         </>
       )}
@@ -278,57 +306,53 @@ export default function AddSocialLink_modal({ isOpen, onClose, hiveUsername, onC
         <>
           <ol className="social-link-steps">
             <li>
-              <strong>{t('modals.socialLink.step1')}</strong>
-              <div className="social-link-hash-row">
-                <code className="social-link-hash">{hashInfo?.hash || '…'}</code>
-                <button
-                  className="social-link-copy-btn"
-                  onClick={handleCopyHash}
-                  disabled={!hashInfo?.hash}
-                >
-                  {hashCopied ? <FaCheck /> : <FaCopy />}
-                </button>
+              <span className="social-link-steps__n">1</span>
+              <div className="social-link-steps__body">
+                <strong>{t('modals.socialLink.step1')}</strong>
+                <div className="social-link-hash-row">
+                  <code className="social-link-hash">{hashInfo?.hash || '…'}</code>
+                  <Button
+                    size={36}
+                    className="social-link-copy-btn"
+                    onClick={handleCopyHash}
+                    disabled={!hashInfo?.hash}
+                    icon={hashCopied ? 'check' : 'content_copy'}
+                  >
+                    {hashCopied ? t('common.actions.copied') : t('common.actions.copy')}
+                  </Button>
+                </div>
               </div>
             </li>
             <li>
-              <Trans i18nKey="modals.socialLink.step2" values={{ platform: platformLabel(selectedPlatform) }} components={{ strong: <strong /> }} />
+              <span className="social-link-steps__n">2</span>
+              <div className="social-link-steps__body">
+                <Trans i18nKey="modals.socialLink.step2" values={{ platform: platformLabel(selectedPlatform) }} components={{ strong: <strong /> }} />
+              </div>
             </li>
             <li>
-              <strong>{t('modals.socialLink.step3', { platform: platformLabel(selectedPlatform) })}</strong>
-              <input
-                className="social-link-input"
-                type="text"
-                value={platformUsername}
-                onChange={(e) => setPlatformUsername(e.target.value)}
-                placeholder={PLATFORMS[selectedPlatform]?.inputPlaceholderKey && t(PLATFORMS[selectedPlatform].inputPlaceholderKey)}
-                autoFocus
-              />
-              {PLATFORMS[selectedPlatform]?.inputHelpKey && (
-                <small className="social-link-input-help">
-                  {t(PLATFORMS[selectedPlatform].inputHelpKey)}
-                </small>
-              )}
+              <span className="social-link-steps__n">3</span>
+              <div className="social-link-steps__body">
+                <strong>{t('modals.socialLink.step3', { platform: platformLabel(selectedPlatform) })}</strong>
+                <input
+                  className="v2-input social-link-input"
+                  type="text"
+                  value={platformUsername}
+                  onChange={(e) => setPlatformUsername(e.target.value)}
+                  placeholder={PLATFORMS[selectedPlatform]?.inputPlaceholderKey && t(PLATFORMS[selectedPlatform].inputPlaceholderKey)}
+                  aria-label={t('modals.socialLink.step3', { platform: platformLabel(selectedPlatform) })}
+                  autoFocus
+                />
+                {PLATFORMS[selectedPlatform]?.inputHelpKey && (
+                  <small className="social-link-input-help">
+                    {t(PLATFORMS[selectedPlatform].inputHelpKey)}
+                  </small>
+                )}
+              </div>
             </li>
           </ol>
 
-          {error && <div className="social-link-error">{error}</div>}
-
-          <div className="social-link-actions">
-            <button
-              className="social-link-btn-secondary"
-              onClick={() => { setStep('list'); setError(''); }}
-              disabled={submitting}
-            >
-              {t('common.actions.back')}
-            </button>
-            <button
-              className="social-link-btn-primary"
-              onClick={handleVerify}
-              disabled={submitting || !platformUsername.trim()}
-            >
-              {submitting ? t('modals.socialLink.verifying') : t('modals.socialLink.verify')}
-            </button>
-          </div>
+          {error && <div className="social-link-error" role="alert">{error}</div>}
+          {inline && <div className="social-link-actions">{actions}</div>}
         </>
       )}
     </>
@@ -344,14 +368,17 @@ export default function AddSocialLink_modal({ isOpen, onClose, hiveUsername, onC
     );
   }
 
-  return createPortal(
-    <div className="social-link-modal-overlay" onClick={handleClose}>
-      <div className="social-link-modal-content" onClick={(e) => e.stopPropagation()}>
-        <ModalHeader title={title} onClose={handleClose} />
-
-        {body}
-      </div>
-    </div>,
-    document.body
+  return (
+    <DialogShell
+      onClose={handleClose}
+      title={title}
+      width={520}
+      zIndex={1100}
+      overlayClassName="social-link-modal-overlay"
+      className="social-link-modal-content"
+      footer={actions}
+    >
+      {body}
+    </DialogShell>
   );
 }

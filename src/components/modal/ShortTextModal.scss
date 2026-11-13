@@ -1,0 +1,9 @@
+@use "../../styles/v2" as v2;
+
+// The Short's text (design 19g, "Caption your Short"): an accent bar before
+// the title, the count in mono beside the X, two equal actions at the bottom.
+.short-text-modal {
+  .short-text-count { @include v2.mono(12, 700); color: var(--muted); flex: none; }
+  .v2-dialog__foot { flex-wrap: nowrap; }
+  .v2-dialog__foot .short-text-btn { flex: 1; justify-content: space-between; }
+}

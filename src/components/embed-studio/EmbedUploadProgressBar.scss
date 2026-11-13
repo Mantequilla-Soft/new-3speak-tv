@@ -1,136 +1,138 @@
+@use "../../styles/v2" as v2;
+
+// Background upload card (EmbedUploadProgressBar.jsx), design 35b: a surface
+// card under the stepper bar, a cyan bar (system work), the chunk strip and the
+// diagnostics in mono. `is-compact` sits in the details step's side column.
 .embed-upload-progress {
+  @include v2.card;
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  margin: 10px auto 4px; // centered; width is capped to the stepper via inline max-width
+  gap: 10px;
   width: 100%;
-  padding: 0 4px;
+  margin: 0 0 16px;
+  padding: 16px;
   box-sizing: border-box;
+  min-width: 0;
 
-  .embed-upload-progress-track {
-    width: 100%;
-    height: 8px;
-    border-radius: 6px;
-    background: var(--bg-tertiary, #e6e6e6);
-    overflow: hidden;
-  }
+  &.is-compact {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    border-radius: 0;
+    gap: 6px;
 
-  .embed-upload-progress-fill {
-    height: 100%;
-    border-radius: 6px;
-    background: linear-gradient(90deg, rgb(141, 11, 33) 15%, rgb(227, 19, 55) 97%);
-    transition: width 0.3s ease;
-  }
-
-  // Detail text + spinner share a row, spinner pushed to the right edge. The row
-  // owns the colour because Ring2 draws with `currentColor`, which resolves
-  // through its shadow DOM from this element's computed colour — so the indicator
-  // matches the line it belongs to, in either theme, with no second palette.
-  .embed-upload-progress-detailrow {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    color: var(--text-muted, #999);
-  }
-
-  .embed-upload-progress-spinner {
-    display: inline-flex;
-    line-height: 0;
-    flex-shrink: 0;      // never squeezed by a long detail string
-    margin-left: auto;   // hold the right edge even when the text wraps
-  }
-
-  // Label and the cancel control share a row, so the escape hatch sits with the
-  // status it applies to rather than below the machine facts.
-  .embed-upload-progress-labelrow {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .embed-upload-progress-label {
-    font-size: 9.4px;
-    color: var(--text-secondary, #777);
-  }
-
-  // Outline, not a fill: this sits inside a progress readout, and a solid red
-  // block here would read as an error state rather than as a control.
-  .embed-upload-progress-cancel {
-    margin-left: auto;      // hold the right edge even when the label wraps
-    flex-shrink: 0;
-    padding: 2px 8px;
-    background: none;
-    border: 1px solid rgb(227, 19, 55);
-    border-radius: 4px;
-    color: rgb(227, 19, 55);
-    font-size: 9px;
-    line-height: 1.5;
-    cursor: pointer;
-
-    &:hover {
-      background: rgba(227, 19, 55, 0.08);
-    }
-  }
-
-  // Which method / step / byte counters. Sits directly under the label so the
-  // "is it moving?" question is answered without opening devtools.
-  // Same typography as the "Upload server:" line below — these are all machine
-  // facts (counters, endpoints), so they read as one block rather than three
-  // competing styles.
-  .embed-upload-progress-detail {
-    font-size: 8.5px;
-    color: var(--text-muted, #999);
-    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-    line-height: 1.35;
-  }
-
-  // The specific request being awaited, incl. its deadline. Monospace because it
-  // names an endpoint path.
-  .embed-upload-progress-waiting {
-    font-size: 8.5px;
-    color: var(--text-muted, #999);
-    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-    opacity: 0.85;
-    line-height: 1.35;
-    word-break: break-word;
-  }
-
-  .embed-upload-progress-endpoint {
-    font-size: 8.5px;
-    color: var(--text-muted, #999);
-    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  }
-
-  // While actively uploading, gently pulse the bar so it reads as "in progress".
-  &--uploading .embed-upload-progress-fill {
-    animation: embed-upload-pulse 1.4s ease-in-out infinite;
-  }
-
-  &--done {
-    .embed-upload-progress-fill {
-      background: #2e9b57;
-    }
-    .embed-upload-progress-label {
-      color: #2e9b57;
-    }
-  }
-
-  &--error {
-    .embed-upload-progress-fill {
-      width: 100% !important;
-      background: #e0a852;
-    }
-    .embed-upload-progress-label {
-      color: #e0a852;
-    }
+    // 21c: "Uploaded" 13/700 with the percentage in mono at the right, an 8px bar.
+    .embed-upload-progress-icon, .embed-upload-progress-bar { display: none; }
+    .embed-upload-progress-label { font-size: 13px; }
+    .embed-upload-progress-method { display: none; }
+    .v2-progress { height: 8px; border-radius: 4px; }
   }
 }
 
-@keyframes embed-upload-pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.65; }
+.embed-upload-progress-pct {
+  @include v2.mono(12, 500);
+  color: var(--muted);
+  flex: none;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .embed-upload-progress--uploading .embed-upload-progress-fill { animation: none; }
+.embed-upload-progress-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.embed-upload-progress-icon {
+  color: var(--cyan);
+  &.is-error { color: var(--accent); }
+}
+
+// 35b: the 4 × 22 tone bar before the title (accent while it runs, cyan done).
+.embed-upload-progress-bar {
+  width: 4px;
+  height: 22px;
+  flex: none;
+  border-radius: var(--r-bar);
+  background: var(--accent);
+  &.is-done { background: var(--cyan); }
+}
+
+.embed-upload-progress-label {
+  flex: 1;
+  min-width: 0;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.35;
+  color: var(--text);
+  overflow-wrap: anywhere;
+
+  &.is-error { color: var(--accent); }
+}
+
+// RESUMABLE: mono 10/700 on surface-2.
+.embed-upload-progress-method {
+  flex: none;
+  padding: 3px 8px;
+  border-radius: var(--r-sm);
+  background: var(--surface-2);
+  @include v2.mono(10, 700);
+  text-transform: uppercase;
+  color: var(--text);
+}
+
+.embed-upload-progress:not(.is-compact) .v2-progress { height: 10px; border-radius: 4px; }
+
+.embed-upload-progress-chunks {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 3px;
+
+  span {
+    height: 10px;
+    border-radius: var(--r-bar);
+    background: var(--surface-2);
+    &.is-done { background: var(--cyan); }
+    &.is-live { background: var(--accent); }
+  }
+}
+
+.embed-upload-progress-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.embed-upload-progress-detail,
+.embed-upload-progress-endpoint {
+  @include v2.mono(11, 500);
+  color: var(--muted);
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+
+  &.is-accent { color: var(--accent); }
+}
+
+.embed-upload-progress-waiting {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 10px;
+  border-radius: var(--r-md);
+  background: var(--bg);
+  @include v2.text(meta);
+  line-height: 1.4;
+  color: var(--text);
+  .material-symbols-rounded { color: var(--cyan); }
+}
+
+// 35b: a full-width 44 row, the label left and the close at the right.
+.embed-upload-progress .embed-upload-progress-cancel {
+  align-self: stretch;
+  gap: 18px;
+}
+
+.embed-upload-progress.is-compact .embed-upload-progress-cancel {
+  align-self: stretch;
 }

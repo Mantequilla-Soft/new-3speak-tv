@@ -1,104 +1,36 @@
-.interests-prompt-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 1400;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  background: rgba(0, 0, 0, 0.55);
-  backdrop-filter: blur(2px);
-}
+@use "../../styles/v2" as v2;
 
-.interests-prompt {
-  width: 100%;
-  // Matches the Settings dialog (520px) so the shared TagsV2Picker gets the
-  // same room and the two screens read identically.
-  max-width: 520px;
-  max-height: 90vh;
-  overflow-y: auto;
-  background: var(--bg-secondary, #1e1e1e);
-  color: var(--text-primary, #f1f1f1);
-  border: 1px solid var(--border-light, rgba(255, 255, 255, 0.1));
-  border-radius: 16px;
-  padding: 22px;
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+/* "What are you into?" on the shared v2 Dialog (a bottom sheet under 768px).
+   520 wide, like the Settings dialog, so the shared TagsV2Picker gets the
+   same room and the two screens read identically. */
+.interests-prompt .v2-dialog__body { padding-top: 20px; }
+
+.interests-prompt-title {
+  margin: 0;
+  @include v2.text(title);
+  color: var(--text);
 }
 
 .interests-prompt-text {
-  margin: 0 0 16px;
-  font-size: 13.5px;
+  margin: 0;
+  @include v2.text(body-sm);
   line-height: 1.5;
-  color: var(--text-secondary, #aaa);
+  color: var(--muted);
 
-  strong { color: var(--text-primary, #f1f1f1); font-weight: 600; }
+  strong { color: var(--text); font-weight: 700; }
 }
 
-.interests-prompt-actions {
-  margin-top: 20px;
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
+@include v2.tablet-up {
+  .interests-prompt .v2-dialog__foot .interests-prompt-save.v2-btn { flex: 1; }
 }
 
-.interests-prompt-cancel,
-.interests-prompt-save {
-  padding: 9px 18px;
-  border-radius: 9px;
-  border: none;
-  font-size: 13.5px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: opacity 0.12s ease, background 0.12s ease;
-
-  &:disabled { opacity: 0.45; cursor: not-allowed; }
-}
-
-.interests-prompt-cancel {
-  background: transparent;
-  color: var(--text-secondary, #aaa);
-  &:hover:not(:disabled) { color: var(--text-primary, #f1f1f1); }
-}
-
-.interests-prompt-save {
-  background: transparent;
-  border: 1px solid var(--accent-primary, #e53935);
-  color: var(--accent-primary, #e53935);
-}
-
-// Mobile: bottom sheet instead of a centred popup (convention: all popups are
-// bottom modals on mobile). Mirrors the Settings dialog. Must come AFTER the
-// base rules above so these win on a tie.
-@media (max-width: 640px) {
-  .interests-prompt-overlay {
-    align-items: flex-end;
-    padding: 0;
+// 23a on a phone: the 32 headline and the 14 muted line under it.
+@include v2.mobile {
+  .interests-prompt-title {
+    font-size: 32px;
+    font-weight: 900;
+    letter-spacing: -.03em;
+    line-height: 1.02;
   }
-
-  .interests-prompt {
-    width: 100%;
-    max-width: 100%;
-    border-radius: 16px 16px 0 0;
-    border-bottom: none;
-    max-height: 88vh;
-    padding-bottom: calc(22px + env(safe-area-inset-bottom, 0px));
-    overscroll-behavior: contain;
-    animation: interests-sheet-up 0.28s ease forwards;
-  }
-
-  // Full-width buttons are easier to hit on a sheet.
-  .interests-prompt-actions {
-    gap: 8px;
-
-    .interests-prompt-cancel,
-    .interests-prompt-save {
-      flex: 1 1 0;
-      padding: 12px 18px;
-    }
-  }
-}
-
-@keyframes interests-sheet-up {
-  from { transform: translateY(100%); }
-  to { transform: translateY(0); }
+  .interests-prompt-text { @include v2.text(body); line-height: 1.5; }
 }

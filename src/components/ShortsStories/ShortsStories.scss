@@ -1,102 +1,62 @@
-@use "../../mixins.scss" as *;
+@use "../../styles/v2" as v2;
+@use "../../mixins.scss" as mix;
 
-@keyframes shimmer {
-  0% { background-position: -1000px 0; }
-  100% { background-position: 1000px 0; }
-}
-
+// The stories row on Home (20a): rounded-square creator tiles with a ring. A ring
+// in accent = someone you follow (or your own "add"), in ink = someone else; a 24h
+// story's ring is its countdown. The compact variant serves the shorts player.
 .shorts-stories {
   margin-bottom: 16px;
-  padding: 0 10px;
+  min-width: 0;
 
-  @include respond(phone) {
-    margin-bottom: 10px;
-    padding: 0 6px;
-  }
+  @include v2.mobile { margin-bottom: 12px; }
+
+  // Shape of every tile; the compact variant shrinks it
+  --story-size: 64px;
+  --story-r: 20px;
+  --story-ring: 2.5px;
+  @include v2.mobile { --story-size: 56px; }
 
   .story-username {
     font-size: 11px;
-    color: var(--text-primary);
+    color: var(--text);
     text-align: center;
     width: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    line-height: 1.2;
+    line-height: 1.3;
 
-    @include respond(phone) {
-      font-size: 10px;
-    }
+    @include v2.mobile { font-size: 10px; }
   }
 
-  // Hidden on mobile variant (for shorts player — swipe used instead)
+  // Hidden on mobile variant (for shorts player, swipe used instead)
   &--hidden-mobile {
-    @include respond(phone) {
-      display: none;
-    }
+    @include v2.mobile { display: none; }
   }
 
-  // Compact variant (for shorts player context).
-  //
-  // Deliberately has NO background: this variant is used BOTH for the desktop bar
-  // (which sits on the page, where a dark scrim looked like a stray grey strip in
-  // light theme) and for the mobile overlay (which sits ON the video). Everything
-  // that needs to be white-on-video is scoped to the mobile overlay in
-  // ShortsStoryFeed.scss instead of being hardcoded here.
+  // Compact variant (shorts player). No background: it sits on the page on
+  // desktop and on the video on phones (ShortsStoryFeed.scss whitens it there).
   &--compact {
     margin-bottom: 0;
-    padding-top: 2px;
-    padding-bottom: 4px;
-    padding-left: 10px;
-    padding-right: 10px;
+    padding: 2px 10px 4px;
+    --story-size: 52px;
+    --story-r: 16px;
+    --story-ring: 2px;
 
     .stories-row,
-    .stories-skeleton-row {
-      gap: 10px;
-      padding: 2px 2px;
-    }
+    .stories-skeleton-row { gap: 10px; padding: 2px; }
 
-    .story-item {
-      width: 64px;
-    }
+    .story-item { width: 64px; }
 
     .story-avatar-wrap {
-      width: 52px;
-      height: 52px;
-      padding: 2px;
-
-      .count-badge {
-        font-size: 9px;
-        min-width: 15px;
-        height: 15px;
-        border-width: 1.5px;
-      }
-
-      .streak-badge {
-        height: 15px;
-        font-size: 9px;
-        border-width: 1.5px;
-      }
-
-      .add-badge {
-        width: 16px;
-        height: 16px;
-        border-width: 1.5px;
-
-        svg {
-          font-size: 7px;
-        }
-      }
+      .count-badge,
+      .streak-badge { height: 16px; min-width: 16px; font-size: 10px; border-width: 2px; }
+      .add-badge { width: 16px; height: 16px; border-width: 2px; }
     }
 
-    .story-username {
-      font-size: 10px;
-    }
+    .story-username { font-size: 10px; }
 
-    .stories-scroll-btn {
-      width: 26px;
-      height: 26px;
-    }
+    .stories-scroll-btn { width: 28px; height: 28px; }
   }
 
   .stories-scroll-wrapper {
@@ -107,326 +67,315 @@
       top: 50%;
       transform: translateY(-60%);
       z-index: 5;
-      background: var(--card-bg);
-      border: 1px solid var(--border-light);
-      width: 32px;
-      height: 32px;
+      width: 36px;
+      height: 36px;
+      display: grid;
+      place-items: center;
+      padding: 0;
+      border: 1px solid var(--border);
       border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      background: var(--surface);
+      color: var(--text);
+      box-shadow: var(--shadow-float);
       cursor: pointer;
-      transition: all 0.2s ease;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-      color: var(--text-primary);
+      transition: background var(--t-fast) var(--ease);
 
-      &:hover {
-        background: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent);
-        border-color: var(--accent-primary, #e53935);
-        color: var(--accent-primary, #e53935);
-        transform: translateY(-60%) scale(1.1);
-      }
+      &:hover { background: var(--surface-2); }
+      &.left { left: -8px; }
+      &.right { right: -8px; }
 
-      &.left {
-        left: -10px;
-      }
-
-      &.right {
-        right: -10px;
-      }
-
-      @include respond(phone) {
-        display: none;
-      }
-
-      svg {
-        font-size: 12px;
-      }
+      @include v2.mobile { display: none; }
     }
   }
 
   .stories-scroll-container {
-    overflow-x: auto;
+    @include v2.scroll-x;
     scroll-behavior: smooth;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-
-    &::-webkit-scrollbar {
-      display: none;
-    }
   }
 
   .stories-row,
   .stories-skeleton-row {
     display: flex;
-    gap: 14px;
-    padding: 6px 2px;
-
-    @include respond(phone) {
-      gap: 10px;
-    }
+    gap: 10px;
+    padding: 4px 2px;
   }
 
   .story-item {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 4px;
+    gap: 6px;
     cursor: pointer;
     flex-shrink: 0;
-    width: 72px;
-    transition: transform 0.15s ease, opacity 0.15s ease;
+    width: calc(var(--story-size) + 8px);
+    transition: transform var(--t-fast) var(--ease), opacity var(--t-fast) var(--ease);
 
-    @include respond(phone) {
-      width: 62px;
-    }
+    &:active { transform: scale(.98); }
 
-    &:hover {
-      transform: scale(1.05);
-    }
-
-    &:active {
-      transform: scale(0.97);
-    }
-
-    // Active creator highlight — replaces the followed/unfollowed border.
-    // Theme-aware: a neutral glow reads on both light and dark. (The mobile overlay
-    // re-whitens this, since it sits on the video.)
+    // Active creator (shorts player): a thicker ink ring.
     &--active {
       .story-avatar-wrap {
-        border-color: var(--text-primary) !important;
-        box-shadow: 0 0 8px rgba(128, 128, 128, 0.35), 0 0 16px rgba(128, 128, 128, 0.12);
+        border-color: var(--text) !important;
+        outline: 2px solid color-mix(in srgb, var(--text) 30%, transparent);
+        outline-offset: 2px;
       }
-
-      // A story's ring is its timer: keep the arc, only add the glow.
-      .story-avatar-wrap.story-timer {
-        border-color: transparent !important;
-      }
-
-      .story-username {
-        color: var(--text-primary);
-        font-weight: 600;
-      }
+      // A story's ring is its timer: keep the arc, only add the halo.
+      .story-avatar-wrap.story-timer { border-color: transparent !important; }
+      .story-username { color: var(--text); font-weight: 700; }
     }
   }
 
   .story-avatar-wrap {
     position: relative;
-    width: 58px;
-    height: 58px;
-    border-radius: 50%;
-    padding: 2.5px;
+    width: var(--story-size);
+    height: var(--story-size);
+    border-radius: var(--story-r);
+    padding: var(--story-ring);
     box-sizing: border-box;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: box-shadow 0.2s ease, border-color 0.2s ease;
+    border: var(--story-ring) solid transparent;
+    transition: border-color var(--t-fast) var(--ease);
 
-    @include respond(phone) {
-      width: 50px;
-      height: 50px;
-      padding: 2px;
-    }
+    &.border-primary { border-color: var(--accent); }
+    &.border-foreground { border-color: color-mix(in srgb, var(--text) 45%, transparent); }
 
-    &.border-primary {
-      border: 2.5px solid var(--accent-primary);
-    }
-
-    &.border-foreground {
-      border: 2.5px solid var(--text-primary);
-    }
-
-    // 24h story: the ring is a countdown. Same colours as the shorts rings (red =
-    // you follow them, white = you don't), but only the time left is drawn: the arc
-    // runs counter-clockwise from 12 o'clock and shrinks as the newest story ages, so
-    // a story posted 12h ago shows the left half of the ring. `--story-left` (0..1) is set inline.
-    // A gradient can't be a border, so the transparent border keeps the box and a
-    // masked conic gradient on ::before paints the arc into it.
+    // 24h story: the ring is a countdown, drawn only for the share of its 24h
+    // still left (counter-clockwise from 12 o'clock). `--story-left` (0..1) is set
+    // inline. The arc is a conic gradient cut to a ring by a mask, so it follows
+    // the tile's rounded corners.
     &.story-timer {
-      border: 2.5px solid transparent;
-      --story-ring: var(--text-primary);
+      --story-arc: color-mix(in srgb, var(--text) 45%, transparent);
 
       &::before {
         content: '';
         position: absolute;
-        inset: -2.5px;
-        border-radius: 50%;
-        // Track first, arc last: the arc ends at 12 o'clock, so it reads counter-clockwise.
+        inset: calc(var(--story-ring) * -1);
+        border-radius: var(--story-r);
+        padding: var(--story-ring);
         background: conic-gradient(
-          color-mix(in srgb, var(--text-primary) 12%, transparent) calc((1 - var(--story-left, 1)) * 360deg),
-          var(--story-ring) 0
+          color-mix(in srgb, var(--text) 12%, transparent) calc((1 - var(--story-left, 1)) * 360deg),
+          var(--story-arc) 0
         );
-        -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 2.5px), #000 calc(100% - 2.5px));
-        mask: radial-gradient(farthest-side, transparent calc(100% - 2.5px), #000 calc(100% - 2.5px));
+        -webkit-mask: linear-gradient(black 0 0) content-box, linear-gradient(black 0 0);
+        -webkit-mask-composite: xor;
+        mask: linear-gradient(black 0 0) content-box exclude, linear-gradient(black 0 0);
         pointer-events: none;
       }
     }
 
-    &.story-timer--followed {
-      --story-ring: var(--accent-primary);
-    }
+    &.story-timer--followed { --story-arc: var(--accent); }
 
     // Every story of theirs watched: the timer still runs, quieter.
-    &.story-timer--seen::before {
-      opacity: 0.45;
-    }
+    &.story-timer--seen::before { opacity: .45; }
 
-    // HiveAvatar wraps the <img> in a span (so the premium badge can overlap the
-    // corner). That span is an auto-sized inline-block, so "height: 100%" on the
-    // image below resolved against nothing and the picture spilled out of its
-    // ring. Give the wrapper the ring's box and the image fills it properly.
+    // HiveAvatar wraps the <img> in a span (for the Pro badge): give that span
+    // the tile's box so the picture fills it.
     .hive-avatar {
       width: 100%;
       height: 100%;
       display: block;
       // Hovered with a mouse, the picture turns around once inside its still
       // ring while the creator card opens (StoryCreatorCard).
-      @include coin-spin(220px);
+      @include mix.coin-spin(220px);
     }
 
     .story-avatar {
       width: 100%;
       height: 100%;
-      border-radius: 50%;
+      border-radius: calc(var(--story-r) - 5px);
       object-fit: cover;
-      background: var(--bg-tertiary);
+      background: var(--avatar);
     }
 
     // A story streak (days in a row), opposite the count / add badge.
     .streak-badge {
       position: absolute;
-      bottom: -2px;
-      left: -2px;
+      bottom: -4px;
+      left: -4px;
       display: flex;
       align-items: center;
       gap: 1px;
       height: 18px;
       padding: 0 5px 0 3px;
-      border-radius: 9px;
-      border: 2px solid var(--bg-primary);
-      background: var(--card-bg, var(--bg-secondary));
-      color: var(--text-primary);
-      font-size: 10px;
-      font-weight: 700;
+      border-radius: var(--r-sm);
+      border: 2px solid var(--bg);
+      background: var(--surface);
+      color: var(--text);
+      @include v2.mono(10, 700);
       line-height: 1;
 
-      svg {
-        color: var(--accent-primary);
-        font-size: 11px;
-      }
+      .material-symbols-rounded { color: var(--accent); }
     }
 
     .count-badge {
       position: absolute;
-      bottom: -2px;
-      right: -2px;
-      background: var(--accent-primary);
-      color: #fff;
-      font-size: 10px;
-      font-weight: 700;
+      bottom: -4px;
+      right: -4px;
       min-width: 18px;
       height: 18px;
-      border-radius: 9px;
+      padding: 0 4px;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 0 4px;
-      border: 2px solid var(--bg-primary);
+      border-radius: var(--r-sm);
+      border: 2px solid var(--bg);
+      background: var(--accent);
+      color: var(--on-accent);
+      @include v2.mono(10, 700);
       line-height: 1;
-
-      @include respond(phone) {
-        font-size: 9px;
-        min-width: 16px;
-        height: 16px;
-      }
     }
 
     .add-badge {
       position: absolute;
-      bottom: -2px;
-      right: -2px;
-      background: var(--accent-primary);
-      color: #fff;
+      bottom: -4px;
+      right: -4px;
       width: 20px;
       height: 20px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: 2px solid var(--bg-primary);
+      display: grid;
+      place-items: center;
+      border-radius: var(--r-sm);
+      border: 2px solid var(--bg);
+      background: var(--accent);
+      color: var(--on-accent);
+    }
 
-      svg {
-        font-size: 9px;
-      }
-
-      @include respond(phone) {
-        width: 18px;
-        height: 18px;
-
-        svg {
-          font-size: 8px;
-        }
-      }
+    .hive-avatar__badge {
+      top: -4px;
+      right: -4px;
+      width: 16px;
+      height: 16px;
+      padding: 2px;
+      box-sizing: border-box;
+      svg { width: 100%; height: 100%; }
     }
   }
 
-  // Skeleton states
-  .skeleton-story {
-    .story-avatar-wrap {
-      border: 2.5px solid transparent;
-    }
-  }
+  // Skeleton tiles
+  .skeleton-story .story-avatar-wrap { border-color: transparent; }
 
   .skeleton {
-    animation: shimmer 2s infinite linear;
-    background: linear-gradient(to right, var(--bg-tertiary) 4%, var(--border-light) 25%, var(--bg-tertiary) 36%);
-    background-size: 1000px 100%;
-    border-radius: 4px;
+    @include v2.thumb-placeholder(6px);
+    border-radius: var(--r-xs);
   }
 
   .story-avatar-skeleton {
     width: 100%;
     height: 100%;
-    border-radius: 50% !important;
+    border-radius: calc(var(--story-r) - 5px) !important;
   }
 
   .story-name-skeleton {
     width: 48px;
     height: 10px;
-    border-radius: 4px;
+    border-radius: var(--r-xs);
   }
 }
 
-// Dark mode: count badge — card-bg bg, foreground text, no red border.
-[data-theme="dark"] {
-  .count-badge,
-  .add-badge {
-    background: var(--card-bg) !important;
-    color: var(--text-primary) !important;
-    border: none !important;
+// ── The Home row (20a) ──
+// A dashed "+" tile (2px, ink at 30%), then 64px tiles, radius 20: a 2px ring
+// around a 3px ground gap around the picture. Gap 10, no names (they stay for
+// screen readers). Ring colours as everywhere else (owner 2026-11-12: no cyan):
+// accent = someone you follow, ink = someone else. A 24h story's ring is its
+// COUNTDOWN (the arc of the 24h still left, see .story-timer above), quieter
+// once all of it was watched.
+.shorts-stories--tiles {
+  --story-size: 64px;
+  --story-r: 20px;
+  @include v2.mobile { --story-size: 64px; }
+
+  .stories-row,
+  .stories-skeleton-row { gap: 10px; padding: 0; }
+
+  // The count, streak and add badges hang 4px past the tile (plus their 2px
+  // ground border); the scroller clips at its padding box, so it gets 6px of
+  // room on the sides and below, taken back by a negative margin: the tiles and
+  // the spacing around the row stay where they were.
+  .stories-scroll-container {
+    padding: 0 6px 6px;
+    margin: 0 -6px -6px;
   }
-}
 
-// Dark mode: shrink the stories 3Speak-Pro rocket chip — the detailed rocket
-// glyph reads larger than a flat count number, so keep the chip smaller.
-[data-theme="dark"] {
-  .story-avatar-wrap .hive-avatar__badge {
-    box-sizing: border-box;
-    width: 15px;
-    height: 15px;
-    padding: 1px;
-    box-shadow: none;
+  .story-item {
+    width: var(--story-size);
+    gap: 0;
+  }
 
-    svg { width: 100%; height: 100%; }
+  .story-username,
+  .story-name-skeleton {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
 
-    @include respond(phone) {
-      width: 13px;
-      height: 13px;
+  .story-avatar-wrap {
+    padding: 2px;
+    border: 0;
+    background: color-mix(in srgb, var(--text) 45%, transparent);
+
+    &.border-primary { background: var(--accent); }
+
+    // The countdown: the ring is drawn by .story-timer::before in the 2px
+    // padding (the arc for the time left, a faint track for the rest).
+    &.story-timer {
+      background: transparent;
+      &::before { inset: 0; padding: 2px; }
     }
+
+    .hive-avatar {
+      border: 3px solid var(--bg);
+      border-radius: var(--story-r);
+      background: var(--avatar);
+      overflow: hidden;
+    }
+
+    .story-avatar { border-radius: calc(var(--story-r) - 3px); }
+  }
+
+  .skeleton-story .story-avatar-wrap { background: transparent; padding: 0; }
+
+  .story-add-tile {
+    position: relative;
+    width: var(--story-size);
+    height: var(--story-size);
+    display: grid;
+    place-items: center;
+    border-radius: var(--story-r);
+    border: 2px dashed color-mix(in srgb, var(--text) 30%, transparent);
+    color: var(--text);
+    transition: background var(--t-fast) var(--ease);
+
+    .streak-badge {
+      position: absolute;
+      bottom: -4px;
+      left: -4px;
+      display: flex;
+      align-items: center;
+      gap: 1px;
+      height: 18px;
+      padding: 0 5px 0 3px;
+      border-radius: var(--r-sm);
+      border: 2px solid var(--bg);
+      background: var(--surface);
+      color: var(--text);
+      @include v2.mono(10, 700);
+      line-height: 1;
+      .material-symbols-rounded { color: var(--accent); }
+    }
+  }
+  .own-story--add:hover .story-add-tile { background: var(--bg-hover); }
+  .own-story--add:focus-visible { outline: none; .story-add-tile { outline: 2px solid var(--accent); outline-offset: 2px; } }
+
+  .story-item {
+    position: relative;
   }
 }
 
 // The turnaround, for the avatars that open a creator card (not your own "+").
 .shorts-stories .story-item:not(.own-story):hover .story-avatar-wrap .hive-avatar {
-  @include coin-spin-hover(220px);
+  @include mix.coin-spin-hover(220px);
 }

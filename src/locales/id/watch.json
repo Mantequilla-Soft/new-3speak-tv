@@ -16,7 +16,9 @@
     "translatedTo": "Diterjemahkan ke {{language}}",
     "showLanguage": "Tampilkan {{language}}",
     "showOriginal": "Tampilkan asli",
-    "buttonTitle": "Ringkasan AI untuk video ini"
+    "buttonTitle": "Ringkasan AI untuk video ini",
+    "jumpTo": "Lompat ke",
+    "disclaimer": "Dibuat dari transkrip. Mungkin ada kesalahan."
   },
   "errors": {
     "notAvailable": "Video ini tidak tersedia.",
@@ -29,7 +31,8 @@
   "gated": {
     "title": "Khusus anggota",
     "checkFailed": "Kami belum bisa mengonfirmasi langgananmu. Coba lagi sebentar lagi.",
-    "preview": "Kamu sedang menonton pratinjau gratis. 3Speak Pro membuka video lengkapnya.",
+    "preview": "Kamu sedang menonton pratinjau gratis",
+    "previewSub": "3Speak Pro membuka video lengkapnya.",
     "subscribersOnly": "Video ini tersedia untuk pelanggan 3Speak Pro.",
     "cta": "Dapatkan 3Speak Pro"
   },
@@ -38,7 +41,19 @@
     "add": "Tambah Reaksi"
   },
   "liveChat": "Chat live",
+  "side": {
+    "label": "Panel video"
+  },
+  "voters": {
+    "title": "Pemberi vote",
+    "cardLabel": "Pendukung dan pemberi vote",
+    "voter": "Pemberi vote",
+    "weight": "Bobot",
+    "value": "Nilai"
+  },
   "moreVideos": "Video lainnya",
+  "nextIn": "Berikutnya di {{name}}",
+  "fromCommunity": "Dari {{name}}",
   "vote": {
     "saveFailed": "Vote-mu tidak dapat disimpan"
   },
@@ -67,14 +82,14 @@
     "loginRequired": "Masuk untuk membuat klip",
     "cancel": "Batalkan klip",
     "clipVideo": "Klip video",
-    "label": "Klip Video",
+    "label": "Klip video",
     "clip": "Klip",
     "seekToStart": "Geser ke awal",
-    "setStart": "Atur Awal",
-    "setEnd": "Atur Akhir",
-    "createClip": "Buat Klip",
+    "setStart": "Atur awal",
+    "setEnd": "Atur akhir",
+    "createClip": "Buat klip",
     "barStart": "Geser ke awal klipmu",
-    "barEnd": "Awal: {{start}} — Sekarang geser ke akhir",
+    "barEnd": "Awal {{start}} · sekarang geser ke akhir",
     "barDone": "Klip: {{start}} – {{end}}"
   },
   "share": {
@@ -92,18 +107,21 @@
   },
   "media": {
     "unavailableTitle": "Video ini sudah tidak tersedia",
-    "unavailableBody": "Media untuk unggahan lama ini tidak ditemukan di jaringan. Postingannya masih ada di blockchain, tetapi videonya tidak bisa diputar lagi.",
+    "unavailableBody": "Media untuk unggahan lama ini tidak ditemukan. Postingannya masih ada di Hive.",
     "scheduledTitle": "Postingan ini dijadwalkan",
     "scheduledBody": "Postingan akan dipublikasikan pada {{date}}. Video dapat ditonton sejak saat itu.",
     "blockedTitle": "Video tidak dapat dimuat saat ini",
-    "blockedBody": "Salah satu server video kami tidak merespons. Videonya sendiri baik-baik saja, jadi silakan coba lagi."
+    "blockedBody": "Salah satu server video kami tidak merespons. Videonya sendiri baik-baik saja."
   },
   "tipNudge": {
     "text": "Suka video ini?<hide> Kirim tip ke <b>@{{author}}</b>!</hide>",
     "dismiss": "Tutup"
   },
   "community": {
-    "members_other": "{{count}} Anggota"
+    "members_other": "{{count}} anggota",
+    "postedIn": "Diposting di",
+    "partOf": "Bagian dari",
+    "position": "{{current}} dari {{total}}"
   },
   "tags": {
     "curated": "Dikurasi"
@@ -118,7 +136,8 @@
     "openTagFeed": "Buka feed tag"
   },
   "scheduled": {
-    "notice": "Dijadwalkan pada <b>{{date}}</b> — belum diterbitkan.",
+    "notice": "Dijadwalkan pada <b>{{date}}</b>",
+    "notPublished": "Belum diterbitkan.",
     "futureDate": "tanggal mendatang",
     "edit": "Edit, jadwalkan ulang, atau batalkan",
     "editTitle": "Edit postingan terjadwal (detail, tanggal, atau batalkan)"
@@ -145,14 +164,15 @@
     "toggleDetails": "Tampilkan/sembunyikan detail",
     "followCreator": "Ikuti kreator",
     "closeMenu": "Tutup menu",
-    "openActions": "Buka aksi"
+    "openActions": "Buka aksi",
+    "support": "Dukung {{name}}"
   },
   "description": {
     "hide": "Sembunyikan deskripsi",
     "show": "Tampilkan deskripsi"
   },
   "edit": {
-    "title": "Edit Video",
+    "title": "Edit video",
     "loading": "Memuat postingan saat ini…",
     "videoFile": "File video",
     "replaceVideo": "Ganti video",
@@ -181,26 +201,27 @@
     "markdownHint": "Mendukung markdown.",
     "listed": "Publik",
     "unlistedLabel": "Tidak publik",
-    "listedHint": "Tampil di feed, pencarian, dan di profilmu.",
-    "unlistedHint": "Tersembunyi dari feed & pencarian — tetap bisa diputar lewat tautan langsung, tetap ada di profilmu (dengan label).",
-    "allowRemix": "Izinkan Remix/Klip",
-    "remixOn": "Orang lain bisa membuat remix/klip; kamu dicantumkan sebagai pembuat aslinya.",
+    "listedHint": "Di feed, pencarian, dan profilmu",
+    "unlistedHint": "Hanya lewat tautan langsung, diberi label di profilmu",
+    "allowRemix": "Izinkan remix dan klip",
+    "remixOn": "Kamu dicantumkan sebagai pembuat aslinya",
     "remixOff": "Orang lain tidak bisa me-remix atau membuat klip dari video ini.",
     "adsOnVideo": "Iklan di video ini",
     "adsOnHint": "Iklan dapat diputar di video ini.",
     "adsOffHint": "Tidak ada iklan di video ini.",
     "rollsOnVideo": "Video roll iklan",
     "rollsOnHint": "Roll, banner, dan ticker bisa tampil.",
-    "rollsOffHint": "Hanya banner dan ticker di video ini.",
+    "rollsOffHint": "Jika tidak, hanya banner dan ticker",
     "trailer": "Trailer channel",
     "trailerOn": "Diputar otomatis di bagian atas tab Ringkasan profilmu, menggantikan trailer yang kamu atur sebelumnya.",
-    "trailerOff": "Jadikan video ini yang diputar otomatis di bagian atas tab Ringkasan profilmu.",
+    "trailerOff": "Diputar otomatis di bagian atas profilmu",
     "nsfw": "Dewasa / NSFW",
     "notNsfw": "Bukan dewasa",
     "nsfwHint": "Tersembunyi dari feed & pencarian kecuali penonton mengaktifkan NSFW; diberi tag nsfw di Hive.",
     "notNsfwHint": "Konten biasa, ditampilkan ke semua orang.",
+    "nsfwOffHint": "Disembunyikan kecuali penonton mengaktifkan NSFW",
     "promoted": "Dipromosikan",
-    "promote": "Promosikan video",
+    "promote": "Promosikan",
     "saveChanges": "Simpan perubahan",
     "noChanges": "Tidak ada perubahan untuk disimpan.",
     "thumbUploaded": "Thumbnail diunggah.",
@@ -245,7 +266,8 @@
       "visibility": "Visibilitas",
       "content": "Konten",
       "ads": "Iklan",
-      "promotion": "Promosi"
+      "promotion": "Promosi",
+      "contentAds": "Konten, iklan, dan promosi"
     },
     "chaptersNoteAll": "Daftar bab ditulis ke deskripsi saat kamu menyimpan.",
     "editChapters": "Edit bab",

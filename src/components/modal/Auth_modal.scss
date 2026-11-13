@@ -1,0 +1,23 @@
+// "Authorize 3Speak" (42a): posting authority for uploads, granted once. The
+// key in cyan over the title, then why, then one cyan action.
+.auth-modal .v2-dialog__body { padding-top: 16px; gap: 8px; }
+.auth-modal .v2-dialog__foot { border-top: 0; padding-top: 8px; }
+.auth-modal__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+.auth-modal__icon { color: var(--cyan); }
+.auth-modal__title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+}
+.auth-modal__text {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--muted);
+}

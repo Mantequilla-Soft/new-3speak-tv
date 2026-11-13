@@ -7,10 +7,12 @@
   "watchingNow_few": "Зараз дивляться {{count}}",
   "watchingNow_many": "Зараз дивляться {{count}}",
   "watchingNow_other": "Зараз дивляться {{count}}",
+  "previewMuted": "Прев'ю · без звуку",
   "badges": {
-    "gatedTitle": "Лише для учасників. 3Speak Pro відкриває повне відео",
+    "gatedTitle": "Лише для учасників",
     "pro": "PRO",
     "new": "НОВЕ",
+    "first": "Перше",
     "live": "● НАЖИВО",
     "liveChat": "● ЧАТ НАЖИВО",
     "spotlight": "У фокусі"
@@ -18,17 +20,17 @@
   "status": {
     "scheduled": "Заплановано",
     "mobile": "Мобільне",
-    "mobileTitle": "Завантажено з мобільного застосунку",
+    "mobileTitle": "З мобільного застосунку",
     "processing": "Обробка",
-    "processingTitle": "Відео обробляється",
+    "processingTitle": "Обробляється",
     "draft": "Чернетка",
-    "draftTitle": "Чернетка — ще не опубліковано",
+    "draftTitle": "Ще не опубліковано",
     "deleted": "Видалено",
-    "deletedTitle": "Це відео видалено",
+    "deletedTitle": "Було видалено",
     "failed": "Помилка",
-    "failedTitle": "Не вдалося обробити відео",
+    "failedTitle": "Не вдалося обробити",
     "unlisted": "За посиланням",
-    "unlistedTitle": "За посиланням — приховано зі стрічок і пошуку, доступно лише за прямим посиланням"
+    "unlistedTitle": "Лише за прямим посиланням"
   },
   "playlist": {
     "loading": "Завантаження плейлистів...",
@@ -38,7 +40,11 @@
     "items_other": "{{count}} елемента",
     "openAria": "Відкрити плейлист {{name}}",
     "tag": "Плейлист",
-    "updated": "Оновлено {{when}}"
+    "updated": "Оновлено {{when}}",
+    "public": "публічний",
+    "private": "приватний",
+    "history": "історія",
+    "audio": "аудіо"
   },
   "watchLater": {
     "title": "Переглянути пізніше",
@@ -52,5 +58,15 @@
     "label": "Змінити розмір",
     "small": "Малий",
     "medium": "Середній"
+  },
+  "payout": {
+    "title": "Виплата",
+    "author": "Автор",
+    "curators": "Куратори",
+    "paysOutIn": "Виплата через",
+    "days_one": "{{count}} день",
+    "days_few": "{{count}} дні",
+    "days_many": "{{count}} днів",
+    "days_other": "{{count}} дня"
   }
 }

@@ -1,291 +1,171 @@
-@use "../../mixins.scss" as mix;
+@use "../../styles/v2" as v2;
 
-.social-link-modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.6);
-  z-index: 1100;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  @include mix.respond(phone) {
-    align-items: flex-end;
-  }
-}
-
-.social-link-modal-content {
-  background: var(--card-bg, #fff);
-  color: var(--text-primary, #000);
-  border-radius: 12px;
-  padding: 24px;
-  width: 460px;
-  max-width: 95vw;
-  max-height: 90vh;
-  overflow-y: auto;
-  position: relative;
-
-  @include mix.respond(phone) {
-    width: 100%;
-    max-width: 100%;
-    border-radius: 16px 16px 0 0;
-    padding: 20px 16px;
-    padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px));
-    animation: modal-slide-up 0.3s ease forwards;
-  }
-}
-
-.social-link-modal-sub {
-  font-size: 13px;
-  color: var(--text-secondary, #666);
-  margin: 0 0 16px;
-  line-height: 1.4;
-}
-
+// Linked external profiles (design 43b): the v2 dialog (DialogShell) or the
+// inline Settings > Connections section. Linked profiles as bg-filled rows, the
+// platforms as dock tiles; verifying is three numbered steps with the hash in a
+// mono well and the error in accent.
+.social-link-modal-sub,
 .social-link-loading,
 .social-link-empty {
-  font-size: 13px;
-  color: var(--text-secondary, #666);
-  margin: 0 0 12px;
+  margin: 0;
+  @include v2.text(body-sm);
+  color: var(--muted);
+}
+
+.social-link-loading {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  .material-symbols-rounded { color: var(--cyan); }
 }
 
 .social-link-section-title {
-  font-size: 14px;
-  font-weight: 600;
-  margin: 16px 0 8px;
-  color: var(--text-primary, #000);
+  margin: 8px 0 0;
+  @include v2.text(eyebrow);
+  color: var(--muted);
 }
 
 .social-link-list {
-  list-style: none;
-  padding: 0;
-  margin: 0 0 12px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 
   &__item {
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 8px 10px;
-    border-radius: 8px;
-    background: var(--input-bg, #f9f9f9);
-    border: 1px solid var(--border-color, #ddd);
+    min-height: 52px;
+    padding: 6px 6px 6px 10px;
+    border-radius: var(--r-md);
+    background: var(--bg);
   }
 
   &__icon {
-    flex: 0 0 auto;
-    font-size: 20px;
-    color: #ff0000;
+    width: 36px;
+    height: 36px;
+    border-radius: var(--r-md);
+    background: var(--surface-2);
+    color: var(--text);
+    display: grid;
+    place-items: center;
+    flex: none;
   }
 
   &__meta {
-    flex: 1 1 auto;
+    flex: 1;
+    min-width: 0;
     display: flex;
     flex-direction: column;
-    min-width: 0;
+    gap: 2px;
 
-    strong {
-      font-size: 13px;
-      font-weight: 600;
-    }
+    strong { @include v2.text(label); }
   }
 
   &__id {
-    font-size: 11px;
-    color: var(--text-secondary, #666);
+    @include v2.mono(12, 400);
+    color: var(--muted);
+    white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    white-space: nowrap;
   }
 
-  &__open,
-  &__remove {
-    flex: 0 0 auto;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 6px;
-    border-radius: 6px;
-    color: var(--text-secondary, #666);
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    text-decoration: none;
-    font-size: 13px;
-
-    &:hover {
-      color: var(--text-primary, #000);
-      background: rgba(127, 127, 127, 0.12);
-    }
-
-    &:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-  }
-
-  &__remove:hover {
-    color: var(--accent-color, #e31337);
-  }
+  &__remove:hover:not(:disabled) { color: var(--accent); }
 }
 
 .social-link-platform-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  gap: 8px;
-}
-
-.social-link-platform-btn {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  grid-template-columns: repeat(auto-fill, minmax(88px, 1fr));
   gap: 6px;
-  padding: 14px 10px;
-  border-radius: 10px;
-  border: 1px solid var(--border-color, #ddd);
-  background: var(--input-bg, #f9f9f9);
-  color: var(--text-primary, #000);
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: border-color 0.15s ease, transform 0.15s ease;
-
-  &:hover {
-    border-color: var(--accent-color, #e31337);
-    transform: translateY(-1px);
-  }
 }
 
+// Numbered steps (43b): a 20px square with the number, then the step.
 .social-link-steps {
-  margin: 8px 0 12px;
-  padding-left: 20px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  font-size: 13px;
-  color: var(--text-primary, #000);
-  line-height: 1.4;
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 
-  li > strong {
-    display: block;
-    margin-bottom: 4px;
+  > li {
+    display: flex;
+    gap: 10px;
+    @include v2.text(body-sm);
+    color: var(--text);
+  }
+
+  &__n {
+    width: 20px;
+    height: 20px;
+    border-radius: var(--r-sm);
+    background: var(--surface-2);
+    display: grid;
+    place-items: center;
+    @include v2.mono(11, 900);
+    flex: none;
+    margin-top: 1px;
+  }
+
+  &__body {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    strong { font-weight: 700; }
   }
 }
 
 .social-link-hash-row {
   display: flex;
-  align-items: stretch;
+  align-items: center;
   gap: 6px;
-  margin-top: 4px;
 }
 
 .social-link-hash {
-  flex: 1 1 auto;
-  padding: 8px 10px;
-  border-radius: 6px;
-  background: rgba(15, 23, 42, 0.85);
-  color: #f1f5f9;
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 12px;
-  word-break: break-all;
-  user-select: all;
-}
-
-.social-link-copy-btn {
-  flex: 0 0 auto;
-  padding: 8px 12px;
-  border-radius: 6px;
-  border: 1px solid var(--border-color, #ddd);
-  background: var(--input-bg, #f9f9f9);
-  color: var(--text-primary, #000);
-  cursor: pointer;
-  display: inline-flex;
+  @include v2.well;
+  flex: 1;
+  min-width: 0;
+  height: 36px;
+  display: flex;
   align-items: center;
-  justify-content: center;
-
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
+  padding: 0 10px;
+  @include v2.mono(12, 700);
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.social-link-input {
-  width: 100%;
-  margin-top: 4px;
-  padding: 10px 12px;
-  border-radius: 8px;
-  border: 1px solid var(--border-color, #ddd);
-  background: var(--input-bg, #f9f9f9);
-  color: var(--text-primary, #000);
-  font-size: 14px;
-  box-sizing: border-box;
-
-  &:focus {
-    outline: none;
-    border-color: var(--accent-color, #e31337);
-  }
-}
+.social-link-input { width: 100%; }
 
 .social-link-input-help {
-  display: block;
-  margin-top: 4px;
-  font-size: 11px;
-  color: var(--text-secondary, #666);
+  @include v2.text(meta-sm);
+  color: var(--muted);
 }
 
 .social-link-error {
-  margin: 8px 0 0;
-  padding: 10px 12px;
-  border-radius: 8px;
-  background: rgba(227, 19, 55, 0.1);
-  color: var(--accent-color, #e31337);
-  font-size: 13px;
-  line-height: 1.4;
+  padding: 8px 12px;
+  border-radius: var(--r-md);
+  background: var(--accent-wash);
+  color: var(--accent);
+  @include v2.text(meta);
 }
 
+// Inline (Settings > Connections): the actions end the section, primary right.
 .social-link-actions {
   display: flex;
-  gap: 8px;
   justify-content: flex-end;
-  margin-top: 16px;
+  gap: 8px;
 }
 
-.social-link-btn-primary,
-.social-link-btn-secondary {
-  padding: 10px 18px;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-}
-
-.social-link-btn-primary {
-  border: 1px solid var(--accent-primary, #e53935);
-  background: transparent;
-  color: var(--accent-primary, #e53935);
-
-  &:hover:not(:disabled) { opacity: 0.9; }
-}
-
-.social-link-btn-secondary {
-  background: transparent;
-  border: 1px solid var(--border-color, #ddd);
-  color: var(--text-primary, #000);
-
-  &:hover:not(:disabled) {
-    background: rgba(127, 127, 127, 0.08);
-  }
-}
-
-@keyframes modal-slide-up {
-  from { transform: translateY(100%); }
-  to { transform: translateY(0); }
+.social-link-inline {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }

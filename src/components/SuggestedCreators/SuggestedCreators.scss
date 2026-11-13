@@ -1,171 +1,161 @@
-@use "../../mixins.scss" as mix;
+@use "../../styles/v2" as v2;
 
-// "Follow these" — a horizontal rail of creator tiles interleaved into the discover /
-// interests grids. Behaves like the shorts-stories row: swipe-able scroller, hidden
-// scrollbar, prev/next arrows on desktop.
+// "Creators to follow" (28b): a swipeable row of creator cards interleaved into
+// the Discover / Interests grids. No heading in the grid (owner 2026-11-12); the
+// section keeps its name for screen readers.
 .suggested-creators {
-  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 4px 0;
+  min-width: 0;
 
-  .sc-scroll-wrapper {
-    position: relative;
-  }
+  .sc-scroll-wrapper { position: relative; min-width: 0; }
 
-  // The scroller — fixed-width tiles, swipe sideways, scrollbar hidden.
+  // The scroller: fixed-width cards, swipe sideways, scrollbar hidden.
   .sc-row {
     display: flex;
     gap: 10px;
-    overflow-x: auto;
-    padding-bottom: 2px;
+    @include v2.scroll-x;
     scroll-behavior: smooth;
-    scrollbar-width: none;          // Firefox
-    -ms-overflow-style: none;       // old Edge
-    &::-webkit-scrollbar { display: none; } // WebKit
+    @include v2.mobile { gap: 8px; }
   }
 
-  // Prev/next arrows — shown on desktop only (mobile swipes), exactly like the
-  // stories row. Visibility is driven by scroll position (showLeft / showRight).
+  // Prev/next arrows on desktop only (mobile swipes)
   .sc-scroll-btn {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
     z-index: 3;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 34px;
-    height: 34px;
-    border: none;
+    width: 36px;
+    height: 36px;
+    display: grid;
+    place-items: center;
+    padding: 0;
+    border: 1px solid var(--border);
     border-radius: 50%;
-    background: rgba(0, 0, 0, 0.6);
-    color: #fff;
+    background: var(--surface);
+    color: var(--text);
+    box-shadow: var(--shadow-float);
     cursor: pointer;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
-    transition: background 0.15s ease;
-
-    &:hover { background: rgba(0, 0, 0, 0.82); }
-    &.left { left: -4px; }
-    &.right { right: -4px; }
-    svg { font-size: 14px; }
-
-    @include mix.respond(phone) { display: none; }
+    &:hover { background: var(--surface-2); }
+    &.left { left: -8px; }
+    &.right { right: -8px; }
+    @include v2.mobile { display: none; }
   }
 
-  // Compact tile — small avatar so the rail is no taller than a feed video card.
-  // Height is content-driven; `align-self: start` on the grid-item wrapper below
-  // stops it stretching to fill a tall row in the large/TV grid.
+  // 28b: padding 14, radius 24; as many across as fit (--sc-per-row), else 220.
   .sc-card {
     flex: 0 0 auto;
-    width: 150px;
+    width: 220px;
     min-width: 0;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: 5px;
-    padding: 10px;
-    border-radius: 14px;
-    border: 1px solid var(--border-light);
-    background: var(--card-bg);
-    text-align: center;
-    transition: border-color 0.15s ease;
+    gap: 10px;
+    padding: 14px;
+    border-radius: var(--r-2xl);
+    border: 1px solid var(--border);
+    background: var(--surface);
 
-    &:hover { border-color: var(--border-color); }
-
-    @include mix.respond(phone) { width: 140px; }
+    @include v2.mobile { width: 188px; padding: 12px; }
   }
-
-  .sc-avatar {
-    display: block;
-    width: 54px;
-    height: 54px;
-    line-height: 0;
-
-    img {
-      width: 54px;
-      height: 54px;
-      border-radius: 50%;
-      object-fit: cover;
+  @include v2.tablet-up {
+    .sc-row[style] .sc-card {
+      width: calc((100% - (var(--sc-per-row) - 1) * 10px) / var(--sc-per-row));
+      min-width: 198px;
     }
   }
 
+  .sc-who {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+  }
+
+  .sc-avatar {
+    flex: none;
+    width: 48px;
+    height: 48px;
+    border-radius: var(--r-lg);
+    background: var(--avatar);
+    line-height: 0;
+
+    .hive-avatar { width: 100%; height: 100%; display: block; }
+    img { width: 48px; height: 48px; border-radius: var(--r-lg); object-fit: cover; }
+  }
+
+  .sc-who-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+    flex: 1;
+  }
+
+  .sc-dismiss {
+    flex: none;
+    align-self: center;
+    width: 28px;
+    height: 28px;
+    display: grid;
+    place-items: center;
+    margin-right: -4px;
+    padding: 0;
+    border: 0;
+    border-radius: var(--r-sm);
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    &:hover { background: var(--bg-hover); color: var(--text); }
+  }
+
+  // Their latest video: the strip three square thumbnails take on the board.
+  .sc-thumb {
+    display: block;
+    aspect-ratio: 3 / 1;
+    border-radius: var(--r-sm);
+    overflow: hidden;
+    @include v2.thumb-placeholder(5px);
+
+    img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  }
+
   .sc-name {
-    max-width: 100%;
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--text-primary);
+    @include v2.text(body);
+    font-weight: 700;
+    color: var(--text);
     text-decoration: none;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-
-    &:hover { color: var(--accent-primary); }
-  }
-
-  // "Why suggested" — the topic most of their recent videos are tagged in.
-  .sc-basis {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    max-width: 100%;
-    padding: 2px 10px;
-    border-radius: 999px;
-    background: var(--bg-hover, rgba(150, 150, 150, 0.14));
-    color: var(--text-secondary);
-    font-size: 12px;
-    font-weight: 600;
-    line-height: 1.35;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-
-    .sc-basis-emoji { font-size: 13px; line-height: 1; }
+    &:hover { color: var(--text); text-decoration: underline; }
   }
 
   // Reserves its line even while the count is still loading, so cards don't jump.
   .sc-followers {
-    min-height: 15px;
-    font-size: 12px;
-    color: var(--text-secondary);
+    font-size: 11px;
+    color: var(--muted);
+    white-space: nowrap;
   }
 
-  // Neutral outline: a row of these read as a wall of red.
-  .sc-follow {
-    width: 100%;
-    margin-top: 2px;
-    padding: 4px 0;
-    border-radius: 999px;
-    border: 1px solid var(--border-color);
-    background: transparent;
-    color: var(--text-primary);
-    font-size: 12px;
+  // "Why suggested", in cyan (28b)
+  .sc-basis {
+    font-size: 11px;
     font-weight: 700;
-    cursor: pointer;
-    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
-
-    &:hover:not(:disabled) { background: var(--bg-hover); }
-
-    // Already following: settled state, no longer the call to action.
-    &.followed {
-      border-color: transparent;
-      background: var(--bg-secondary);
-      color: var(--text-secondary);
-      cursor: default;
-    }
-
-    &:disabled:not(.followed) { opacity: 0.6; cursor: default; }
+    color: var(--cyan);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
-  // Respect the card-size setting — track the smaller video tiles in "small" mode.
-  html[data-card-size="small"] & {
-    .sc-card { width: 132px; padding: 9px; }
-    .sc-avatar,
-    .sc-avatar img { width: 46px; height: 46px; }
-    .sc-name { font-size: 13px; }
-  }
+  // Follow: 44 tall, radius 16, accent, 13/900, the label left and the icon right
+  .sc-follow.is-block { justify-content: space-between; font-size: 13px; font-weight: 900; padding: 0 14px; }
+  .sc-follow.followed { color: var(--muted); opacity: 1; }
 }
 
-// The generic grid-item wrapper Card3 emits for an interleaved row. In the large /
-// "TV" home grid the rows are `1fr` tall — top-align the creator rail so it can never
-// stretch to fill one (that stretch is what made the tiles look "large-card" tall).
+// The grid-item wrapper Card3 emits for an interleaved row: top-align the creator
+// rail so it can never stretch to fill a tall grid row.
 .card-interleave:has(.suggested-creators) {
   align-self: start;
 }

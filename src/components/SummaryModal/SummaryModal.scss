@@ -1,69 +1,104 @@
-.summary-modal-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 16px;
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(2px);
+@use "../../styles/v2" as v2;
+
+/* The AI summary as a sheet (17h). On a wide screen it slides in from the right
+   edge, full height, 420 wide, radius 28 on the left; on a phone the shared
+   Dialog is already a bottom sheet. */
+@include v2.tablet-up {
+  .v2-dialog:has(> .summary-sheet) {
+    place-items: stretch end;
+    padding: 0;
+  }
+  .v2-dialog__panel.summary-sheet {
+    height: 100%;
+    max-height: 100vh;
+    max-height: 100dvh;
+    border-radius: var(--r-3xl) 0 0 var(--r-3xl);
+    border-right: 0;
+    animation: summary-sheet-in var(--t-slow) var(--ease);
+  }
 }
 
-.summary-modal {
-  width: 100%;
-  max-width: 560px;
-  max-height: 80vh;
-  display: flex;
-  flex-direction: column;
-  background: var(--bg-secondary, #0f172a);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 14px;
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
-  overflow: hidden;
+@keyframes summary-sheet-in { from { transform: translateX(24px); opacity: 0; } }
 
-  // The box has no side padding, so the shared header brings its own.
-  .summary-modal-header {
-    padding: 14px 16px 12px;
-    margin-bottom: 0;
+.summary-sheet {
+  .v2-dialog__head { padding: 22px 22px 6px; }
+
+  // 17h head: the muted bar (Dialog tone), "Summary" 20/900, the AI pill on
+  // the right next to a round 36 close on surface-2.
+  &__title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    @include v2.text(title);
+    font-size: 20px;
+    font-weight: 900;
+
+    .v2-pill { margin-left: auto; }
+  }
+  .v2-dialog__head .v2-iconbtn {
+    width: 36px;
+    height: 36px;
+    background: var(--surface-2);
+    &:hover { background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); }
   }
 
-  .summary-modal-translated-note {
+  &__body { padding: 10px 22px 20px; gap: 12px; }
+
+  &__video { margin: 0; @include v2.text(meta); color: var(--muted); }
+
+  &__tools {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 10px;
-    padding: 8px 16px 0;
-    font-size: 12px;
-    color: var(--text-secondary, #94a3b8);
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  &__lang {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    @include v2.text(meta);
+    color: var(--muted);
 
     button {
-      border: none;
-      background: none;
-      color: var(--accent-primary, #e53935);
-      font-size: 12px;
-      font-weight: 500;
-      cursor: pointer;
       padding: 0;
-
+      border: 0;
+      background: none;
+      color: var(--cyan);
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
       &:hover { text-decoration: underline; }
     }
   }
 
-  .summary-modal-title {
-    margin: 0;
-    padding: 12px 16px 0;
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--text-secondary, #94a3b8);
-  }
-
-  .summary-modal-body {
-    padding: 12px 16px 18px;
-    overflow-y: auto;
-    color: var(--text-primary, #e2e8f0);
-    font-size: 14.5px;
+  &__text {
+    @include v2.text(body);
+    font-size: 16px;
     line-height: 1.6;
     white-space: pre-wrap;
+    text-wrap: pretty;
   }
+
+  &__eyebrow { margin-top: 8px; }
+
+  // Chapter rows on the bg well, like the design's "Jump to" list.
+  &__chapters {
+    gap: 8px;
+    padding-top: 0;
+
+    .wv2-chapter-row {
+      padding: 8px;
+      background: var(--bg);
+      border-color: var(--border);
+      &:hover { background: color-mix(in srgb, var(--text) 4%, var(--bg)); }
+      &.is-on { border-color: var(--cyan); }
+    }
+    .wv2-chapter-row__thumb { width: 72px; border-radius: var(--r-sm); }
+    .wv2-chapter-row__text b { @include v2.text(body); font-weight: 700; }
+  }
+
+  .v2-dialog__foot { justify-content: flex-start; padding: 16px 22px 22px; }
+  &__note { margin: 0; @include v2.text(meta); color: var(--muted); }
 }

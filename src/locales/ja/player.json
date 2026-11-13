@@ -76,6 +76,11 @@
     }
   },
   "reactionUpload": {
+    "title": "リアクション動画を投稿",
+    "rec": "REC {{time}}",
+    "mic": "マイク",
+    "camera": "カメラ",
+    "restart": "やり直す",
     "authorized": "@threespeak を承認しました。リアクションを投稿できます",
     "authFailed": "承認に失敗しました。もう一度お試しください。",
     "webcamDenied": "Web カメラにアクセスできませんでした",
@@ -89,7 +94,7 @@
     "uploadVideo": "動画をアップロード",
     "recordVideo": "動画を録画",
     "startRecording": "録画を開始",
-    "stopRecording": "録画を停止",
+    "stopRecording": "停止して確認",
     "recordedVideo": "録画した動画",
     "descriptionPlaceholder": "動画リアクションの説明を追加...",
     "showInShorts": "3Speak ショートに表示",

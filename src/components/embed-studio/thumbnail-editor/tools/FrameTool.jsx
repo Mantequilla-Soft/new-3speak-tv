@@ -1,6 +1,5 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Crosshair } from 'lucide-react';
 import { Field, Hint, Slider, ToolButton } from './controls';
 import { MAX_ZOOM, MIN_ZOOM } from '../editState';
 import { clampFrame } from '../renderThumbnail';
@@ -25,7 +24,7 @@ export default function FrameTool({ edit, onChange, image, width, height }) {
       </Field>
       <div className="thumb-tool-row">
         <ToolButton
-          icon={Crosshair}
+          icon="filter_center_focus"
           onClick={() => setFrame({ x: 0.5, y: 0.5 })}
           disabled={frame.x === 0.5 && frame.y === 0.5}
         >

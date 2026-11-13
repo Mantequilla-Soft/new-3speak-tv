@@ -7,11 +7,19 @@
     "createNewDesc": "I-upload at i-share ang content mo sa mundo"
   },
   "preview": {
-    "cannotPreview": "Hindi ma-preview ng browser mo ang video na ito — karaniwan ito sa mga HEVC/H.265 clip (hal. mga iPhone “High Efficiency” recording). Ayos lang: maa-upload pa rin ito at iko-convert para mapanood ng lahat."
+    "cannotPreview": "<b>Hindi ma-preview ang video na ito.</b> Karaniwan ito sa mga HEVC / H.265 clip gaya ng mga iPhone High Efficiency recording. Maa-upload pa rin ito at iko-convert para mapanood ng lahat."
   },
   "drafts": {
     "untitled": "(walang pamagat)",
-    "empty": "Walang nahanap na video sa napiling filter."
+    "empty": "Walang nahanap na video sa napiling filter.",
+    "title": "Studio",
+    "create": "Gumawa",
+    "views28": "Views, 28 araw",
+    "newFollowers": "Mga bagong follower",
+    "views": "views",
+    "stats": "Stats",
+    "more": "Iba pa",
+    "public": "Public"
   },
   "schedule": {
     "days": {
@@ -30,6 +38,7 @@
     "am": "AM",
     "pm": "PM",
     "pastWarning": "Lumipas na ang petsa at oras na ito. Pumili ng petsa at oras sa hinaharap.",
+    "pickDay": "Pumili ng araw",
     "publishAt": "Awtomatikong ipa-publish ang video mo sa {{when}}"
   },
   "scheduled": {
@@ -99,6 +108,7 @@
     "insertTable": "Maglagay ng Table",
     "spoiler": "Spoiler/Nakatagong Text",
     "emoji": "Emoji",
+    "gifs": "Mga GIF",
     "searchEmoji": "Maghanap ng emoji",
     "searchGifs": "Maghanap ng GIF…",
     "noGifs": "Walang nahanap na GIF.",

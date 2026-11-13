@@ -12,7 +12,8 @@ import { useWatchHistory } from "../hooks/useWatchHistory";
 import useViewCounts from "../hooks/useViewCounts";
 import { useAppStore } from "../lib/store";
 import PullToRefresh from "../components/PullToRefresh/PullToRefresh";
-import { TrendingIcon } from "../components/FeedIcons";
+import PopularCreators from "../components/PopularCreators/PopularCreators";
+import { FeedPageHeader, FollowFeedIcon } from "../components/FeedIcons";
 import { useTranslation } from "react-i18next";
 
 const LIMIT = 50;
@@ -83,21 +84,28 @@ const FollowFeed = () => {
   return (
     <PullToRefresh onRefresh={handleRefresh}>
     <div className="firstupload-container">
-      <div className="feed-page-header">
-        <TrendingIcon />
-        <h2>{t('misc.followFeed.title')}</h2>
-      </div>
+      <FeedPageHeader icon={<FollowFeedIcon />} title={t('misc.followFeed.title')} />
 
       {isLoading ? (
         <CardSkeleton />
+      ) : !isError && videos.length === 0 && liveStreams.length === 0 ? (
+        /* Nobody followed yet, or nothing from them (19j): say what this feed is
+           for, and offer creators to follow right here. */
+        <>
+          <div className="feed-empty">
+            <h2>{t('misc.followFeed.emptyTitle')}</h2>
+            <p>{t('misc.followFeed.emptyBody')}</p>
+          </div>
+          <PopularCreators />
+        </>
       ) : (
         <Card3 windowed videos={[...liveStreams, ...videos]} loading={isFetchingNextPage} getContentForVideo={getContentForVideo} isWatched={isWatched} getViewCount={getViewCount} />
       )}
 
-      {isError && <p>{t('misc.followFeed.error')}</p>}
+      {isError && <p className="feed-error" role="alert">{t('misc.followFeed.error')}</p>}
 
       {isFetchingNextPage && (
-        <p style={{ textAlign: "center" }}>{t('feeds.loadingMore')}</p>
+        <p className="feed-loading-more">{t('feeds.loadingMore')}</p>
       )}
     </div>
     </PullToRefresh>

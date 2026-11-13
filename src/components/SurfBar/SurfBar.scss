@@ -1,135 +1,118 @@
-@use "../../mixins.scss" as *;
+@use "../../styles/v2" as v2;
 
-// Neutral surfaces from the theme; red only as text or border, and only on what
-// matters: the Flip button, the channel number, the channel you are on.
+// The Channel Surfing remote under the video (34a, 25d). A card with the
+// channel display (cyan CH badge, opens the guide), Zap as the one accent fill
+// with up next beside it, and dock tiles for CH -, CH + and Stop.
 
 .surf-bar {
+  @include v2.card;
   display: flex;
-  align-items: stretch;
+  flex-direction: column;
   gap: 12px;
   margin: 12px 0 4px;
-  padding: 10px;
-  border-radius: 12px;
-  background: var(--card-bg);
-  border: 1px solid var(--border-light);
+  padding: 14px;
 
-  .sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip: rect(0 0 0 0);
-    white-space: nowrap;
-  }
-
-  button { font: inherit; cursor: pointer; }
+  > button { font: inherit; }
   button:disabled { cursor: progress; }
 
-  // Phones: one slim row (channel, rocker, Flip, off) instead of two tall blocks.
-  // The up-next thumbnail and title and the "On air" line are dropped there;
-  // the static burst on the display still marks each flip.
-  @include respond(phone) {
-    align-items: center;
-    gap: 6px;
-    margin: 6px 0 2px;
-    padding: 6px;
-    border-radius: 10px;
-
-    .surf-bar__tuner { gap: 6px; align-items: center; }
-    .surf-bar__display {
-      grid-template-rows: auto;
-      column-gap: 8px;
-      padding: 6px 10px;
-      border-radius: 8px;
-    }
-    .surf-bar__ch { grid-row: auto; font-size: 15px; letter-spacing: 0.5px; }
-    .surf-bar__name { font-size: 13px; }
-    .surf-bar__live { display: none; }
-
-    .surf-bar__rocker {
-      flex-direction: row;
-      width: auto;
-      height: 34px;
-      border-radius: 17px;
-
-      button { width: 34px; font-size: 20px; }
-    }
-    .surf-bar__rocker-label { display: none; }
-
-    .surf-bar__off {
-      align-self: center;
-      width: 28px;
-      height: 28px;
-      font-size: 16px;
-    }
+  @include v2.mobile {
+    gap: 8px;
+    margin: 8px 0 2px;
+    padding: 10px;
+    border-radius: var(--r-xl);
   }
 }
 
-.surf-bar__tuner {
+// The channel display and what plays next, side by side (34a's top row).
+.surf-bar__top {
   display: flex;
-  align-items: stretch;
-  gap: 8px;
-  flex: 1 1 auto;
+  align-items: center;
+  gap: 10px;
   min-width: 0;
 }
 
 .surf-bar__display {
   position: relative;
   overflow: hidden;
-  flex: 1 1 auto;
+  flex: 1 1 240px;
   min-width: 0;
-  display: grid;
-  grid-template-columns: auto 1fr;
-  grid-template-rows: auto auto;
-  column-gap: 12px;
+  display: flex;
   align-items: center;
-  padding: 8px 14px;
+  gap: 10px;
+  height: 60px;
+  padding: 0 12px 0 8px;
+  border: 0;
+  border-radius: var(--r-lg);
+  background: var(--bg);
+  color: var(--text);
   text-align: left;
-  border: 1px solid var(--border-light);
-  border-radius: 10px;
-  background: var(--bg-tertiary);
-  color: var(--text-primary);
-  transition: border-color 0.15s;
+  cursor: pointer;
+  transition: background var(--t-fast) var(--ease);
 
-  &:hover { border-color: var(--border-color); }
+  &:hover { background: color-mix(in srgb, var(--text) 6%, var(--bg)); }
+
+  // Phones: just the CH badge (still opens the guide); Zap takes the room.
+  @include v2.mobile {
+    height: 52px;
+    padding: 0 10px 0 6px;
+  }
 }
 
 .surf-bar__ch {
-  grid-row: 1 / span 2;
-  font-family: "Courier New", ui-monospace, monospace;
-  font-weight: 700;
-  font-size: 22px;
-  letter-spacing: 1px;
-  color: var(--accent-primary);
+  position: relative;
+  z-index: 2;
+  flex: none;
+  display: grid;
+  place-items: center;
+  height: 44px;
+  padding: 0 10px;
+  border-radius: var(--r-md);
+  background: var(--cyan);
+  color: var(--bg);
+  @include v2.mono(16, 900);
+  white-space: nowrap;
+
+  @include v2.mobile { height: 32px; padding: 0 8px; @include v2.mono(13, 900); }
+}
+
+.surf-bar__text {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
 }
 
 .surf-bar__name {
-  font-weight: 700;
-  font-size: 15px;
+  @include v2.text(title-sm);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+
+  @include v2.mobile { font-size: 13px; }
 }
 
 .surf-bar__live {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  color: var(--text-muted);
+  @include v2.text(meta);
+  color: var(--muted);
 
   i {
-    width: 7px;
-    height: 7px;
+    width: 8px;
+    height: 8px;
     border-radius: 50%;
-    border: 2px solid var(--accent-primary);
+    background: var(--accent);
     animation: surf-blink 1.6s ease-in-out infinite;
   }
+
+  @include v2.mobile { display: none; }
 }
 
-// TV static, in the theme's own grey: a short burst over the display on every
+// TV static in the theme's own ink: a short burst over the display on every
 // flip, and a loop in the thumbnail slot while the next video is being found.
 .surf-bar__static {
   position: absolute;
@@ -138,117 +121,39 @@
   pointer-events: none;
   opacity: 0;
   background:
-    repeating-radial-gradient(circle at 17% 32%, var(--text-muted) 0 1px, transparent 1px 3px),
-    repeating-radial-gradient(circle at 73% 61%, var(--text-secondary) 0 1px, transparent 1px 2px),
-    var(--bg-tertiary);
-  animation: surf-static-burst 0.55s steps(6) 1;
+    repeating-radial-gradient(circle at 17% 32%, var(--muted) 0 1px, transparent 1px 3px),
+    repeating-radial-gradient(circle at 73% 61%, var(--text) 0 1px, transparent 1px 2px),
+    var(--surface-2);
+  animation: surf-static-burst .55s steps(6) 1;
 
   &--loop {
-    opacity: 0.6;
-    animation: surf-static-jitter 0.3s steps(3) infinite;
+    opacity: .6;
+    animation: surf-static-jitter .3s steps(3) infinite;
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    animation: none;
-  }
+  @media (prefers-reduced-motion: reduce) { animation: none; }
 }
 
-.surf-bar__rocker {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  width: 44px;
-  flex-shrink: 0;
-  border-radius: 22px;
-  background: var(--bg-tertiary);
-  border: 1px solid var(--border-light);
-  overflow: hidden;
-
-  button {
-    flex: 1;
-    width: 100%;
-    display: grid;
-    place-items: center;
-    border: 0;
-    background: transparent;
-    color: var(--text-primary);
-    font-size: 22px;
-    transition: background 0.15s, transform 0.1s;
-
-    &:hover:not(:disabled) { background: var(--bg-hover); }
-    &:active:not(:disabled) { transform: scale(0.9); }
-  }
-}
-
-.surf-bar__rocker-label {
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 1px;
-  color: var(--text-muted);
-}
-
-.surf-bar__off {
-  flex-shrink: 0;
-  align-self: flex-start;
-  display: grid;
-  place-items: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  border: 1px solid var(--border-light);
-  background: transparent;
-  color: var(--text-secondary);
-  font-size: 18px;
-
-  &:hover { color: var(--text-primary); background: var(--bg-hover); }
-}
-
-.surf-bar__flip {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex: 0 1 380px;
+// ── Zap ──────────────────────────────────────────────────────────────────────
+// What Zap plays next: the poster and the title, muted (34a "next in").
+.surf-bar__next {
+  flex: 1 1 0;
   min-width: 0;
-  padding: 8px 16px 8px 8px;
-  border: 2px solid var(--accent-primary);
-  border-radius: 10px;
-  color: var(--accent-primary);
-  background: transparent;
-  text-align: left;
-  transition: background 0.15s, transform 0.12s;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 
-  &:hover:not(:disabled) {
-    background: var(--bg-hover);
-
-    .surf-bar__flip-icon { animation: surf-nudge 0.5s ease-in-out; }
-  }
-  &:active:not(:disabled) { transform: scale(0.97); }
-  &:disabled { opacity: 0.7; }
-
-  @include respond(phone) {
-    flex: 0 0 auto;
-    gap: 4px;
-    height: 34px;
-    padding: 0 8px 0 12px;
-    border-width: 1.5px;
-    border-radius: 17px;
-
-    .surf-bar__flip-thumb,
-    .surf-bar__flip-next { display: none; }
-    .surf-bar__flip-label { font-size: 13px; }
-    .surf-bar__flip-icon { font-size: 20px; }
-  }
+  @include v2.mobile { display: none; }
 }
 
 .surf-bar__flip-thumb {
   position: relative;
-  flex-shrink: 0;
-  width: 88px;
+  flex: none;
+  width: 80px;
   aspect-ratio: 16 / 9;
-  border-radius: 6px;
+  border-radius: var(--r-sm);
   overflow: hidden;
-  background: var(--bg-tertiary);
+  @include v2.thumb-placeholder(6px);
 
   img {
     width: 100%;
@@ -261,38 +166,61 @@
 .surf-bar__flip-text {
   display: flex;
   flex-direction: column;
+  gap: 2px;
   min-width: 0;
   flex: 1;
 }
 
 .surf-bar__flip-label {
-  font-size: 20px;
-  font-weight: 800;
-  line-height: 1.1;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
+  @include v2.text(eyebrow);
+  color: var(--muted);
+  white-space: nowrap;
 }
 
 .surf-bar__flip-next {
-  font-size: 12px;
-  color: var(--text-secondary);
+  @include v2.text(body-sm);
+  font-weight: 700;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.surf-bar__flip-icon {
-  flex-shrink: 0;
-  font-size: 32px;
+// ── Dock tiles: CH -, CH +, Stop ──────────────────────────────────────────────
+// The keys (34a): five equal tiles, 60 tall at radius 20, the icon filled;
+// Zap is the one accent fill.
+.surf-bar__docks {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 8px;
+
+  .surf-key.v2-dock {
+    height: 60px;
+    border-radius: var(--r-xl);
+    font-weight: 900;
+
+    .material-symbols-rounded { font-size: 24px !important; } // the Icon sets its size inline
+  }
+
+  .surf-key--zap.v2-dock {
+    background: var(--accent);
+    color: var(--on-accent);
+    &:hover:not(:disabled) { background: var(--accent-hover); }
+    &:hover:not(:disabled) .material-symbols-rounded { animation: surf-nudge .5s var(--ease); }
+  }
+
+  @include v2.mobile {
+    gap: 6px;
+    .surf-key.v2-dock { height: 56px; border-radius: var(--r-xl); padding: 0 2px; }
+  }
 }
 
-.surf-bar.is-tuning .surf-bar__ch { animation: surf-blink 0.4s steps(2) infinite; }
+.surf-bar.is-tuning .surf-bar__ch { animation: surf-blink .4s steps(2) infinite; }
 
 // ── Fullscreen remote ────────────────────────────────────────────────────────
 // Portalled into the player wrapper while it is fullscreen. Top-right (the
 // sponsor label owns top-left), above the control bar (z 10) and the tap
-// surface (z 5), and it fades in and out with the controls. Always dark,
-// whatever the theme: it sits on video, like the control bar does.
+// surface (z 5), and it fades in and out with the controls. Media scrim in
+// both themes: it sits on video, like the control bar does.
 .surf-fs {
   position: absolute;
   top: calc(12px + env(safe-area-inset-top, 0px));
@@ -302,176 +230,183 @@
   align-items: center;
   gap: 6px;
   max-width: calc(100% - 24px);
-  padding: 4px 4px 4px 12px;
-  border-radius: 999px;
-  background: rgba(0, 0, 0, 0.6);
-  color: #fff;
+  padding: 4px;
+  border-radius: var(--r-lg);
+  background: var(--media-scrim);
+  color: var(--on-media);
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.3s ease;
+  transition: opacity var(--t-slow) var(--ease);
 
   &.is-visible { opacity: 1; pointer-events: auto; }
-
-  .sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip: rect(0 0 0 0);
-    white-space: nowrap;
-  }
 
   button {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 2px;
-    height: 32px;
-    min-width: 32px;
+    gap: 4px;
+    height: 40px;
+    min-width: 40px;
     border: 0;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.12);
-    color: #fff;
+    border-radius: var(--r-md);
+    background: color-mix(in srgb, var(--on-media) 12%, transparent);
+    color: var(--on-media);
     font: inherit;
-    font-size: 20px;
     cursor: pointer;
+    transition: background var(--t-fast) var(--ease);
 
-    &:hover:not(:disabled) { background: rgba(255, 255, 255, 0.24); }
-    &:disabled { cursor: progress; opacity: 0.7; }
+    &:hover:not(:disabled) { background: color-mix(in srgb, var(--on-media) 24%, transparent); }
+    &:disabled { cursor: progress; opacity: .7; }
   }
 
-  &.is-tuning .surf-fs__ch { animation: surf-blink 0.4s steps(2) infinite; }
+  &.is-tuning .surf-fs__ch { animation: surf-blink .4s steps(2) infinite; }
 }
 
 .surf-fs__ch {
-  font-family: "Courier New", ui-monospace, monospace;
-  font-weight: 700;
-  font-size: 15px;
+  display: grid;
+  place-items: center;
+  height: 32px;
+  padding: 0 8px;
+  border-radius: var(--r-sm);
+  background: var(--cyan);
+  color: var(--media-black);
+  @include v2.mono(13, 900);
+  white-space: nowrap;
 }
 
 .surf-fs__name {
   min-width: 0;
-  font-size: 13px;
-  font-weight: 600;
+  padding: 0 4px;
+  @include v2.text(label);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 
-  @include respond(phone) { display: none; }
+  @include v2.mobile { display: none; }
 }
 
 .surf-fs .surf-fs__flip {
-  padding: 0 10px 0 14px;
-  border: 1.5px solid #fff;
-  background: transparent;
-  font-size: 13px;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  padding: 0 12px 0 14px;
+  background: var(--accent);
+  color: var(--on-accent);
+  @include v2.text(label);
+  font-weight: 900;
 
-  svg { font-size: 20px; }
+  &:hover:not(:disabled) { background: var(--accent-hover); }
 }
 
-// ── Channel guide ────────────────────────────────────────────────────────────
-.surf-guide-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 3000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 16px;
-  background: var(--overlay-bg, rgba(0, 0, 0, 0.6));
-
-  @include respond(phone) {
-    align-items: flex-end;
-    padding: 0;
-  }
-}
-
+// ── Channel guide (Dialog; a bottom sheet under 768px) ───────────────────────
+// The channel guide (34a): on a tablet or wider a 440 panel down the right
+// edge, rounded on its open side; one channel per row. A sheet on a phone.
 .surf-guide {
-  width: min(720px, 100%);
-  max-height: 80vh;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  padding: 16px;
-  border-radius: 16px;
-  background: var(--bg-secondary);
-  color: var(--text-primary);
-  box-shadow: var(--shadow-lg);
+  .v2-dialog__body { gap: 16px; }
 
-  @include respond(phone) {
-    max-width: 100%;
-    max-height: 88vh;
-    border-radius: 16px 16px 0 0;
-    padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
-    animation: surf-sheet-up 0.22s ease-out;
+  .v2-dialog__foot { justify-content: flex-start; border-top: 0; }
+
+  @include v2.mobile {
+    .v2-dialog__foot { display: none; }
   }
 }
 
-.surf-guide__group + .surf-guide__group {
-  margin-top: 10px;
-  padding-top: 10px;
-  border-top: 1px solid var(--border-light);
+@include v2.tablet-up {
+  .v2-dialog:has(> .surf-guide) { place-items: stretch end; padding: 0; }
+
+  .surf-guide.v2-dialog__panel {
+    width: 440px;
+    height: 100%;
+    max-height: none;
+    border-right: 0;
+    border-radius: var(--r-3xl) 0 0 var(--r-3xl);
+  }
+
+  .surf-guide .surf-guide__grid { grid-template-columns: minmax(0, 1fr); }
+}
+
+.surf-guide__top { display: flex; }
+
+.surf-guide__group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .surf-guide__grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 8px;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 6px;
+
+  @include v2.mobile { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 .surf-guide__ch {
-  display: flex;
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr);
+  gap: 10px;
   align-items: center;
-  gap: 8px;
-  padding: 10px;
-  border-radius: 10px;
-  border: 1px solid var(--border-light);
-  background: var(--bg-tertiary);
-  color: var(--text-primary);
+  height: 64px;
+  padding: 8px;
+  border-radius: var(--r-lg);
+  border: 2px solid transparent;
+  background: var(--bg);
+  color: var(--text);
   font: inherit;
   text-align: left;
   cursor: pointer;
-  transition: border-color 0.15s;
+  transition: background var(--t-fast) var(--ease);
 
-  &:hover { border-color: var(--border-color); }
+  &:hover { background: color-mix(in srgb, var(--text) 6%, var(--bg)); }
 
-  &--category { font-weight: 700; }
+  &--category .surf-guide__label { font-weight: 900; }
 
   &.is-current {
-    border-color: var(--accent-primary);
+    border-color: var(--cyan);
+    background: var(--cyan-tint);
 
-    .surf-guide__num,
-    .surf-guide__label { color: var(--accent-primary); }
+    .surf-guide__num { background: var(--cyan); color: var(--bg); }
+  }
+
+  @include v2.mobile {
+    grid-template-columns: 36px minmax(0, 1fr);
+    gap: 8px;
+    height: 52px;
   }
 }
 
 .surf-guide__num {
-  font-family: "Courier New", ui-monospace, monospace;
-  font-weight: 700;
-  font-size: 12px;
-  color: var(--text-muted);
+  display: grid;
+  place-items: center;
+  height: 44px;
+  border-radius: var(--r-lg);
+  background: var(--surface-2);
+  @include v2.mono(16, 900);
+
+  @include v2.mobile { height: 40px; @include v2.mono(13, 900); }
 }
 
-.surf-guide__emoji { font-size: 18px; }
-
 .surf-guide__label {
-  font-size: 13px;
-  font-weight: inherit;
+  @include v2.text(body);
+  font-weight: 700;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
+.surf-guide__keys {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  @include v2.mono(11, 700);
+  color: var(--muted);
+}
+
 @keyframes surf-blink {
-  50% { opacity: 0.35; }
+  50% { opacity: .35; }
 }
 
 @keyframes surf-static-burst {
-  0% { opacity: 0.9; transform: translate(0, 0); }
+  0% { opacity: .9; transform: translate(0, 0); }
   33% { transform: translate(-6%, 4%); }
-  66% { opacity: 0.5; transform: translate(5%, -3%); }
+  66% { opacity: .5; transform: translate(5%, -3%); }
   100% { opacity: 0; transform: translate(0, 0); }
 }
 
@@ -483,9 +418,4 @@
 
 @keyframes surf-nudge {
   50% { transform: translateX(4px); }
-}
-
-@keyframes surf-sheet-up {
-  from { transform: translateY(100%); }
-  to { transform: translateY(0); }
 }

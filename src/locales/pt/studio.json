@@ -7,11 +7,19 @@
     "createNewDesc": "Envie e compartilhe seu conteúdo com o mundo"
   },
   "preview": {
-    "cannotPreview": "Seu navegador não consegue exibir a prévia deste vídeo — isso é comum em clipes HEVC/H.265 (ex.: gravações “Alta eficiência” do iPhone). Sem problema: ele ainda será enviado e convertido para que todos possam assistir."
+    "cannotPreview": "<b>Não é possível pré-visualizar este vídeo.</b> É comum em clipes HEVC/H.265, como gravações do iPhone em Alta eficiência. Ele ainda será enviado e convertido para tocar para todos."
   },
   "drafts": {
     "untitled": "(sem título)",
-    "empty": "Nenhum vídeo encontrado com o filtro selecionado."
+    "empty": "Nenhum vídeo encontrado com o filtro selecionado.",
+    "title": "Estúdio",
+    "create": "Criar",
+    "views28": "Visualizações, 28 dias",
+    "newFollowers": "Novos seguidores",
+    "views": "visualizações",
+    "stats": "Estatísticas",
+    "more": "Mais",
+    "public": "Público"
   },
   "schedule": {
     "days": {
@@ -30,6 +38,7 @@
     "am": "AM",
     "pm": "PM",
     "pastWarning": "Esta data e hora já passaram. Selecione uma data e hora futuras.",
+    "pickDay": "Escolha um dia",
     "publishAt": "Seu vídeo será publicado automaticamente em {{when}}"
   },
   "scheduled": {
@@ -99,6 +108,7 @@
     "insertTable": "Inserir tabela",
     "spoiler": "Spoiler/texto oculto",
     "emoji": "Emoji",
+    "gifs": "GIFs",
     "searchEmoji": "Pesquisar emoji",
     "searchGifs": "Pesquisar GIFs…",
     "noGifs": "Nenhum GIF encontrado.",

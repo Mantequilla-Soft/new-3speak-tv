@@ -11,7 +11,7 @@ export default function ThumbnailTools({ activeTool, onToolChange, ...panelProps
 
   return (
     <section className="thumb-tools">
-      <div className="thumb-tools__tabs" role="tablist">
+      <div className="v2-seg is-block is-scroll thumb-tools__tabs" role="tablist">
         {tools.map((x) => {
           const { key, icon: Icon, labelKey } = x;
           return (
@@ -22,11 +22,11 @@ export default function ThumbnailTools({ activeTool, onToolChange, ...panelProps
               id={`thumb-tab-${key}`}
               aria-selected={key === tool.key}
               aria-controls="thumb-tool-panel"
-              className={`thumb-tools__tab${key === tool.key ? ' is-active' : ''}`}
+              className={`v2-seg__opt h36 thumb-tools__tab${key === tool.key ? ' is-on is-active' : ''}`}
               onClick={() => onToolChange(key)}
               disabled={!toolIsEnabled(x, panelProps)}
             >
-              <Icon size={16} aria-hidden="true" />
+              <Icon size={18} aria-hidden="true" />
               <span>{t(labelKey)}</span>
             </button>
           );

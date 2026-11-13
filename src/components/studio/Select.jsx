@@ -1,33 +1,31 @@
-import React from "react";
 import "./Select.scss";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { Icon } from "../v2/Icon";
+
+// Studio start (44c): edit a draft, or create a new video. Two choice tiles in
+// one card; "Create" is the primary choice, so it carries the accent.
 function Select() {
   const { t } = useTranslation();
   return (
     <div className="select-container">
       <div className="main-option">
         <Link to="/draft" className="draft-wrap">
-          <div className="icon group-hover">
-            <i className="fas fa-edit group-hover"></i>
-          </div>
-          <h3>{t('studio.select.editDraft')}</h3>
-          <p className="">
-            {t('studio.select.editDraftDesc')}
-          </p>
+          <span className="draft-wrap__icon"><Icon name="edit_note" size={22} /></span>
+          <span className="draft-wrap__body">
+            <b>{t('studio.select.editDraft')}</b>
+            <span>{t('studio.select.editDraftDesc')}</span>
+          </span>
+          <Icon name="arrow_forward" size={18} className="draft-wrap__go" />
         </Link>
         <span className="or">{t('studio.select.or')}</span>
-        <Link to="/studio">
-          <div className="draft-wrap">
-          
-          <div className="icon group-hover">
-          <i className="fas fa-cloud-upload-alt group-hover"></i>
-          </div>
-            <h3>{t('studio.select.createNew')}</h3>
-            <p className="video-options__desc group-hover">
-            {t('studio.select.createNewDesc')}
-          </p>
-          </div>
+        <Link to="/studio" className="draft-wrap is-primary">
+          <span className="draft-wrap__icon"><Icon name="upload" size={22} /></span>
+          <span className="draft-wrap__body">
+            <b>{t('studio.select.createNew')}</b>
+            <span>{t('studio.select.createNewDesc')}</span>
+          </span>
+          <Icon name="arrow_forward" size={18} className="draft-wrap__go" />
         </Link>
       </div>
     </div>

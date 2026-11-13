@@ -1,132 +1,243 @@
-@use "../mixins.scss" as mix;
+@use "../styles/v2" as v2;
 
-// Hive galaxy. The 3D map fills everything under the nav, edge to edge, and
-// the controls float over it as flat dark panels (no glass or blur).
+// Hive galaxy (48a, 32d). The 3D map fills everything under the top bar, edge
+// to edge, and the controls float over it as flat panels: no blur, no shadow.
+// The page root carries data-theme="dark", so the tokens below are always the
+// dark ones, whatever the site theme. Tints are written with color-mix here
+// (not the --*-tint tokens) so they mix the dark values.
 $side-w: 312px;
+$left-w: 312px;
 
 .container:has(.galaxy-page) { padding: 0 !important; }
 
 .galaxy-page {
   position: relative;
-  height: calc(100dvh - var(--nav-height, 60px));
+  height: calc(100dvh - var(--nav-height, var(--topbar-h)));
   overflow: hidden;
-  background: #121212;
+  // The sky (48a): a faint cyan glow behind the centre, fading to the ground.
+  background: radial-gradient(ellipse at 45% 50%, color-mix(in srgb, var(--cyan) 12%, var(--bg)) 0%, var(--bg) 70%);
+  color: var(--text);
+  font-family: var(--font-sans);
 
-  // Tablet/phone also have the fixed BottomNav.
-  @include mix.respond(tab) {
-    height: calc(100dvh - var(--nav-height, 60px) - var(--bottom-nav-height, 56px));
+  // Tablets also have the fixed bottom nav.
+  @media (min-width: 768px) and (max-width: 1024px) {
+    height: calc(100dvh - var(--nav-height, var(--topbar-h)) - var(--bottom-bar-clearance));
   }
 
-  // The sky is dark in either site theme, so the panels are too. Re-pointing
-  // the theme variables keeps every control inside them on-palette.
   .galaxy-overlay {
-    --card-bg: #1e1e1e;
-    --text-primary: #f5f5f5;
-    --text-secondary: #bdbdbd;
-    --text-muted: #9e9e9e;
-    --border-color: #3a3a3a;
-    --border-light: #333;
-    --bg-hover: #2a2a2a;
     position: absolute;
     z-index: 5;
   }
 }
 
-// Panel cards. The space between them stays the sky, so it can still be dragged.
-.galaxy-top,
-.galaxy-side {
+// Panels: surface at 88% over the sky.
+%galaxy-panel {
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+
+// ---- Left column: title + controls, legend, hint.
+.galaxy-top {
+  top: 16px;
+  left: 16px;
+  width: $left-w;
+  max-height: calc(100% - 92px);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
   pointer-events: none;
 
   > * { pointer-events: auto; }
 }
 
-// ---- Top panel: the toolbar, or its folded pill.
-.galaxy-top {
-  top: 12px;
-  left: 12px;
-  right: calc(#{$side-w} + 24px);
+.galaxy-toolbar {
+  @extend %galaxy-panel;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
   gap: 8px;
+  padding: 12px;
+  border-radius: var(--r-xl);
 
-  @media (max-width: 960px) { right: 12px; }
-
-  @include mix.respond(phone) {
-    top: 8px;
-    left: 8px;
-    right: 8px;
-  }
-
-  > .galaxy-toolbar,
-  > .galaxy-toolbar-open {
-    max-width: 100%;
-    border-radius: 12px;
-    background: #1e1e1e;
-    border: 1px solid #333;
-  }
-
-  > .galaxy-toolbar { padding: 10px 14px; }
-
-  > .galaxy-tools {
-    display: flex;
-    gap: 8px;
-  }
-
-  .galaxy-pill {
-    display: inline-flex;
-    gap: 2px;
-    padding: 3px;
-    border-radius: 12px;
-    background: #1e1e1e;
-    border: 1px solid #333;
-
-    .galaxy-collapse:disabled {
-      opacity: 0.35;
-      cursor: default;
-
-      &:hover { background: transparent; color: var(--text-secondary); }
-    }
-
-    .galaxy-collapse.is-on { color: var(--text-primary); }
-  }
+  .v2-seg { background: var(--bg); }
 }
 
+.galaxy-toolbar-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: -2px -4px 0 0;
+}
+
+.galaxy-title {
+  flex: 1;
+  margin: 0;
+  font-size: 20px;
+  font-weight: 900;
+  letter-spacing: var(--tracking-title);
+  line-height: 1.2;
+}
+
+// Folded toolbar: one 40px pill.
 .galaxy-toolbar-open {
+  @extend %galaxy-panel;
+  align-self: flex-start;
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 12px;
-  color: var(--text-primary);
-  font-size: 14px;
-  font-weight: 600;
+  height: 40px;
+  padding: 0 14px 0 12px;
+  border-radius: var(--r-md);
+  @include v2.text(label);
   cursor: pointer;
+  transition: background var(--t-fast) var(--ease);
 
-  &:hover { background: var(--bg-hover) !important; }
+  &:hover { background: var(--surface-2); }
 
   .galaxy-toolbar-open-mode {
     font-weight: 400;
-    color: var(--text-secondary);
+    color: var(--muted);
   }
 }
 
-// Folds the toolbar away.
-.galaxy-collapse {
-  display: inline-flex;
+// Scan depth: a 36px field with its label inside.
+.galaxy-depth {
+  position: relative;
+  display: flex;
   align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  border: 0;
-  border-radius: 8px;
-  background: transparent;
-  color: var(--text-secondary);
-  cursor: pointer;
+  gap: 6px;
+  height: 36px;
+  padding: 0 32px 0 12px;
+  border-radius: var(--r-md);
+  border: 2px solid transparent;
+  background: var(--bg);
+  @include v2.text(meta);
 
-  &:hover { background: var(--bg-hover); color: var(--text-primary); }
+  &:focus-within { border-color: var(--accent); }
+
+  .galaxy-depth-label { color: var(--muted); flex: none; line-height: 32px; }
+
+  select {
+    appearance: none;
+    flex: 1;
+    min-width: 0;
+    height: 32px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: none;
+    background: transparent;
+    color: var(--text);
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    option { background: var(--surface); color: var(--text); font-weight: 400; }
+  }
+
+  .galaxy-depth-caret {
+    position: absolute;
+    right: 10px;
+    color: var(--muted);
+    pointer-events: none;
+  }
 }
 
-// Kept for screen readers and the document outline; the panels say the rest.
+.galaxy-find {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.galaxy-find-row {
+  display: flex;
+  gap: 6px;
+}
+
+.galaxy-find-field {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+  min-width: 0;
+  height: 36px;
+  padding: 0 10px;
+  border-radius: var(--r-md);
+  border: 2px solid transparent;
+  background: var(--bg);
+  color: var(--muted);
+
+  &:focus-within { border-color: var(--accent); }
+
+  input {
+    all: unset;
+    flex: 1;
+    min-width: 0;
+    color: var(--text);
+    font-size: 13px;
+
+    &::placeholder { color: var(--muted); }
+  }
+}
+
+.galaxy-find-note {
+  @include v2.text(meta);
+  color: var(--muted);
+
+  a { color: var(--cyan); font-weight: 700; text-decoration: none; &:hover { text-decoration: underline; } }
+}
+
+// Narrow windows (900 to 960 wide): the side panel opens on demand.
+.galaxy-panel-toggle {
+  display: none !important;
+
+  &.is-on { background: color-mix(in srgb, var(--cyan) 16%, transparent); color: var(--cyan); }
+
+  @media (max-width: 960px) { display: inline-flex !important; }
+}
+
+// ---- Legend (keyed to the scene's colours).
+.galaxy-legend {
+  @extend %galaxy-panel;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 12px;
+  border-radius: var(--r-md);
+  @include v2.text(meta);
+  pointer-events: none;
+
+  span { display: flex; align-items: center; gap: 8px; }
+
+  .dot {
+    display: inline-block;
+    flex: none;
+    border-radius: 50%;
+
+    &--center { width: 12px; height: 12px; background: var(--accent); }
+    &--follow { width: 6px; height: 6px; margin: 0 3px; background: var(--text); }
+    &--oneway { width: 6px; height: 6px; margin: 0 3px; background: var(--muted); }
+    &--suggest { width: 10px; height: 10px; margin: 0 1px; background: var(--accent); }
+  }
+
+  .galaxy-legend-note { color: var(--muted); padding-left: 20px; }
+}
+
+.galaxy-hint {
+  margin: 0;
+  padding: 0 4px;
+  @include v2.text(meta-sm);
+  color: var(--muted);
+  pointer-events: none;
+
+  @media (max-height: 760px) { display: none; }
+}
+
+// Kept for screen readers and the document outline.
 .galaxy-sr-only {
   position: absolute;
   width: 1px;
@@ -139,107 +250,27 @@ $side-w: 312px;
   border: 0;
 }
 
-.galaxy-toolbar {
+// ---- Bottom left: back / forward, music.
+.galaxy-tools {
+  left: 16px;
+  bottom: 16px;
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px 14px;
-  font-size: 14px;
-  color: var(--text-secondary);
-}
-
-// Following / Followers / Mutuals
-.galaxy-seg {
-  display: inline-flex;
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  overflow: hidden;
-
-  button {
-    padding: 6px 12px;
-    border: 0;
-    background: transparent;
-    color: var(--text-secondary);
-    font-size: 14px;
-    cursor: pointer;
-
-    & + button { border-left: 1px solid var(--border-color); }
-    &:hover { background: var(--bg-hover); }
-    &.active {
-      color: var(--text-primary);
-      font-weight: 600;
-      box-shadow: inset 0 -2px 0 var(--accent-primary);
-    }
-  }
-}
-
-.galaxy-select {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-
-  select {
-    padding: 6px 8px;
-    border-radius: 8px;
-    border: 1px solid var(--border-color);
-    background: var(--card-bg);
-    color: var(--text-primary);
-    font-size: 14px;
-
-    &:disabled { opacity: 0.5; }
-  }
-}
-
-.galaxy-find {
-  display: inline-flex;
-  flex-wrap: wrap;
-  align-items: center;
   gap: 6px;
-
-  input {
-    width: 170px;
-    padding: 6px 10px;
-    border-radius: 8px;
-    border: 1px solid var(--border-color);
-    background: var(--card-bg);
-    color: var(--text-primary);
-    font-size: 14px;
-  }
-
-  button {
-    padding: 6px 12px;
-    border-radius: 8px;
-    border: 1px solid var(--border-color);
-    background: transparent;
-    color: var(--text-primary);
-    cursor: pointer;
-
-    &:hover { background: var(--bg-hover); }
-  }
-
-  .galaxy-find-note {
-    flex-basis: 100%;
-    font-size: 12px;
-    color: var(--text-secondary);
-
-    a { color: var(--text-primary); text-decoration: underline; }
-  }
 }
 
-// Narrow screens: the filters + list panel opens as a bottom sheet.
-.galaxy-panel-toggle {
-  display: none;
-  padding: 6px 12px;
-  border-radius: 8px;
-  border: 1px solid var(--border-color);
-  background: transparent;
-  color: var(--text-primary);
-  font-size: 14px;
-  cursor: pointer;
+.galaxy-pill {
+  @extend %galaxy-panel;
+  display: inline-flex;
+  gap: 2px;
+  padding: 3px;
+  border-radius: var(--r-lg);
 
-  &.active { box-shadow: inset 0 -2px 0 var(--accent-primary); }
+  .v2-iconbtn {
+    color: var(--text);
 
-  @media (max-width: 960px) { display: inline-block; }
+    &:disabled { opacity: .35; }
+    &.is-on { background: color-mix(in srgb, var(--cyan) 16%, transparent); color: var(--cyan); }
+  }
 }
 
 // ---- The sky. Body and stage are pinned to the page box: the canvas sizes
@@ -254,7 +285,7 @@ $side-w: 312px;
   position: absolute;
   inset: 0;
   overflow: hidden;
-  color: #f5f5f5;
+  color: var(--text);
 }
 
 .galaxy-scene {
@@ -271,35 +302,56 @@ $side-w: 312px;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 8px;
   padding: 24px;
   text-align: center;
-  color: #bdbdbd;
+  color: var(--muted);
 
   p { margin: 0; }
-  .galaxy-state-sub { font-size: 13px; color: #9e9e9e; }
+  .galaxy-state-title { @include v2.text(title-sm); color: var(--text); }
 }
 
-// Loading: a tiny galaxy of its own. Red centre, a white star on the inner
+.galaxy-state-card {
+  @extend %galaxy-panel;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 440px;
+  padding: 14px 16px;
+  border-radius: var(--r-2xl);
+  @include v2.text(body);
+  text-align: left;
+
+  .material-symbols-rounded { color: var(--cyan); }
+
+  &.is-error {
+    background: color-mix(in srgb, var(--accent) 10%, var(--bg));
+    border-color: transparent;
+
+    .material-symbols-rounded { color: var(--accent); }
+  }
+}
+
+// Loading: a tiny galaxy of its own. Red centre, a light star on the inner
 // orbit, a grey one on the outer, turning opposite ways. Flat, no glow.
 .galaxy-loader {
   position: relative;
   width: 64px;
   height: 64px;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 
   .galaxy-loader-core {
     position: absolute;
     inset: 26px;
     border-radius: 50%;
-    background: #e53935;
+    background: var(--accent);
   }
 
   .galaxy-loader-orbit {
     position: absolute;
     inset: 14px;
     border-radius: 50%;
-    border: 1px solid #2e2e2e;
+    border: 1px solid var(--border);
     animation: galaxy-orbit 1.4s linear infinite;
 
     i {
@@ -309,7 +361,7 @@ $side-w: 312px;
       width: 8px;
       height: 8px;
       border-radius: 50%;
-      background: #f5f5f5;
+      background: var(--text);
     }
 
     &--outer {
@@ -317,7 +369,7 @@ $side-w: 312px;
       animation-duration: 2.6s;
       animation-direction: reverse;
 
-      i { top: -3px; left: calc(50% - 3px); width: 6px; height: 6px; background: #8a8a8a; }
+      i { top: -3px; left: calc(50% - 3px); width: 6px; height: 6px; background: var(--muted); }
     }
   }
 
@@ -330,90 +382,55 @@ $side-w: 312px;
   to { transform: rotate(360deg); }
 }
 
+// Mapping progress: a pill with the step and the count, a cyan bar under it.
 .galaxy-progress {
+  @extend %galaxy-panel;
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  width: min(320px, 80%);
-  margin-top: 6px;
-
-  .galaxy-progress-label {
-    font-size: 13px;
-    color: #9e9e9e;
-  }
+  gap: 8px;
+  width: min(360px, 90%);
+  margin-top: 4px;
+  padding: 10px 12px;
+  border-radius: var(--r-lg);
 
   .galaxy-progress-row {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
+  }
+
+  .galaxy-progress-spin { color: var(--cyan); }
+
+  .galaxy-progress-label {
+    flex: 1;
+    min-width: 0;
+    @include v2.text(meta);
+    color: var(--text);
+    text-align: left;
+  }
+
+  .galaxy-progress-count {
+    @include v2.mono(12, 700);
+    color: var(--muted);
   }
 
   .galaxy-progress-bar {
     position: relative;
-    flex: 1;
-    height: 6px;
-    border-radius: 3px;
-    background: #2a2a2a;
-    overflow: hidden;
-
-    i {
-      position: absolute;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      width: 0;
-      border-radius: 3px;
-      background: #e53935;
-      transition: width 0.25s ease-out;
-    }
+    background: var(--surface-2);
 
     // No total yet: a short block sweeping across.
-    &.is-sweeping i {
+    &.is-sweeping span {
       width: 30%;
       animation: galaxy-sweep 1.2s ease-in-out infinite;
 
       @media (prefers-reduced-motion: reduce) { animation: none; }
     }
   }
-
-  .galaxy-progress-count {
-    min-width: 64px;
-    text-align: right;
-    font-size: 12px;
-    font-variant-numeric: tabular-nums;
-    color: #bdbdbd;
-  }
 }
 
 @keyframes galaxy-sweep {
   from { transform: translateX(-100%); }
   to { transform: translateX(340%); }
-}
-
-.galaxy-legend {
-  position: absolute;
-  left: 12px;
-  bottom: 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  font-size: 12px;
-  color: #e0e0e0;
-  pointer-events: none;
-
-  span { display: flex; align-items: center; gap: 6px; }
-
-  .dot {
-    display: inline-block;
-    border-radius: 50%;
-
-    &--center { width: 12px; height: 12px; background: #e53935; }
-    &--follow { width: 6px; height: 6px; margin: 0 3px; background: #f5f5f5; }
-    &--oneway { width: 5px; height: 5px; margin: 0 3.5px; background: #8a8a8a; }
-    &--suggest { width: 9px; height: 9px; margin: 0 1.5px; background: #e53935; }
-  }
-
-  .galaxy-legend-note { color: #9e9e9e; }
 }
 
 // Name labels over the canvas, placed every frame by the scene.
@@ -430,15 +447,15 @@ $side-w: 312px;
   top: 0;
   padding: 1px 6px;
   border-radius: 6px;
-  background: #1e1e1e;
+  background: color-mix(in srgb, var(--surface) 85%, transparent);
   font-size: 11px;
   line-height: 16px;
-  color: #e0e0e0;
+  color: var(--text);
   white-space: nowrap;
   will-change: transform;
 
-  &.is-far { opacity: 0.45; }
-  &.is-selected { color: #fff; box-shadow: inset 0 0 0 1px #e53935; }
+  &.is-far { opacity: .45; }
+  &.is-selected { font-weight: 700; box-shadow: inset 0 0 0 1px var(--accent); }
 }
 
 // A circle's name at the middle of its patch; click to focus the circle.
@@ -446,40 +463,33 @@ $side-w: 312px;
   position: absolute;
   left: 0;
   top: 0;
-  padding: 3px 10px;
-  border-radius: 999px;
-  border: 1px solid #4a4a4a;
-  background: #1e1e1e;
+  height: 24px;
+  padding: 0 10px;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--border);
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
+  color: var(--text);
+  font: inherit;
   font-size: 12px;
-  font-weight: 600;
-  line-height: 16px;
-  color: #e0e0e0;
+  font-weight: 700;
+  line-height: 22px;
   white-space: nowrap;
   cursor: pointer;
   pointer-events: auto;
   will-change: transform;
   z-index: 1; // above the account labels it sits among
 
-  &:hover { border-color: #bdbdbd; color: #fff; }
-  &.is-far { opacity: 0.5; }
-  &.is-active { border-color: #e53935; color: #fff; }
-}
-
-.galaxy-hint {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 28px;
-  margin: 0;
-  text-align: center;
-  font-size: 12px;
-  color: #9e9e9e;
-  pointer-events: none;
-
-  @media (max-width: 1200px) { display: none; }
+  &:hover { background: var(--surface-2); }
+  &.is-far { opacity: .5; }
+  &.is-active {
+    border-color: var(--cyan);
+    background: color-mix(in srgb, var(--cyan) 16%, var(--surface));
+    color: var(--cyan);
+  }
 }
 
 .galaxy-tip {
+  @extend %galaxy-panel;
   position: absolute;
   z-index: 3;
   transform: translate(12px, -50%);
@@ -488,82 +498,73 @@ $side-w: 312px;
   gap: 2px;
   max-width: 240px;
   padding: 6px 10px;
-  border-radius: 8px;
-  background: #1e1e1e;
-  border: 1px solid #333;
-  font-size: 12px;
-  color: #bdbdbd;
+  border-radius: var(--r-md);
+  @include v2.text(meta-sm);
+  color: var(--muted);
   pointer-events: none;
 
-  strong { color: #f5f5f5; font-size: 13px; }
+  strong { color: var(--text); font-size: 13px; font-weight: 700; }
 }
 
-// ---- Selection card, beside the side panel.
+// ---- Star card, beside the side panel.
 .galaxy-card {
+  @extend %galaxy-panel;
   position: absolute;
-  right: calc(#{$side-w} + 24px);
-  bottom: 12px;
+  right: calc(#{$side-w} + 32px);
+  bottom: 16px;
   z-index: 4;
-  width: 260px;
-  padding: 14px;
-  border-radius: 12px;
-  background: #1e1e1e;
-  border: 1px solid #333;
-  font-size: 13px;
-  color: #bdbdbd;
+  width: 288px;
+  padding: 12px;
+  border-radius: var(--r-xl);
+  @include v2.text(meta);
+  color: var(--muted);
 
-  @media (max-width: 960px) { right: 12px; }
+  @media (max-width: 960px) { right: 16px; }
 
-  @include mix.respond(phone) {
-    left: 10px;
-    right: 10px;
-    width: auto;
-  }
-
-  p { margin: 8px 0 0; }
+  p { margin: 6px 0 0; }
 
   .galaxy-card-close {
     position: absolute;
     top: 8px;
     right: 8px;
-    border: 0;
-    background: transparent;
-    color: #9e9e9e;
-    cursor: pointer;
+    color: var(--muted);
   }
 
   .galaxy-card-who {
     display: flex;
     align-items: center;
     gap: 10px;
-    color: #f5f5f5;
-    font-size: 14px;
+    padding-right: 28px;
+    color: var(--text);
   }
 
   .galaxy-card-names {
     display: flex;
     flex-direction: column;
     min-width: 0;
+
+    strong { font-size: 14px; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   }
 
   .galaxy-card-display {
-    font-size: 12px;
-    color: #bdbdbd;
+    @include v2.text(meta-sm);
+    color: var(--muted);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 
-  .galaxy-card-sub { color: #9e9e9e; font-size: 12px; }
+  .galaxy-card-relation { color: var(--cyan); font-weight: 700; }
+  .galaxy-card-sub { color: var(--muted); }
 
   // The selection's links on the map, keyed to the line colours in the scene.
   .galaxy-card-links {
     display: flex;
     flex-direction: column;
-    gap: 3px;
+    gap: 4px;
     margin-top: 8px;
-    font-size: 12px;
-    color: #bdbdbd;
+    @include v2.text(meta-sm);
+    color: var(--muted);
 
     &:empty { display: none; }
 
@@ -572,32 +573,37 @@ $side-w: 312px;
 
   .galaxy-line {
     display: inline-block;
+    flex: none;
     width: 16px;
     height: 2px;
-    border-radius: 1px;
+    border-radius: var(--r-bar);
 
-    &--out { background: #f5f5f5; }
-    &--in { background: #8a8a8a; }
+    &--out { background: var(--text); }
+    &--in { background: var(--muted); }
   }
 
   .galaxy-card-stats {
     display: flex;
     flex-wrap: wrap;
-    gap: 4px 6px;
+    gap: 4px;
     margin: 8px 0 0;
     padding: 0;
     list-style: none;
 
     li {
-      padding: 2px 8px;
-      border-radius: 999px;
-      background: #2a2a2a;
-      font-size: 12px;
-      color: #e0e0e0;
+      display: inline-flex;
+      align-items: center;
+      height: 24px;
+      padding: 0 8px;
+      border-radius: var(--r-sm);
+      background: var(--bg);
+      @include v2.text(meta-sm);
+      color: var(--text);
     }
   }
 
   .galaxy-card-avatar img {
+    display: block;
     width: 36px;
     height: 36px;
     border-radius: 50%;
@@ -605,38 +611,56 @@ $side-w: 312px;
 
   .galaxy-card-actions {
     display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
+    gap: 6px;
     margin-top: 12px;
+
+    .v2-btn { flex: 1; min-width: 0; }
   }
 }
 
-// Outlined, never red-filled (house rule for buttons).
-.galaxy-btn {
-  padding: 6px 12px;
-  border-radius: 8px;
-  border: 1px solid var(--accent-primary, #e53935);
-  color: #f5f5f5;
-  font-weight: 600;
-  text-decoration: none;
+// ---- Side panel: one fixed-height panel that scrolls inside. Each heading
+// folds its section; the footnote sits at the end.
+.galaxy-side {
+  @extend %galaxy-panel;
+  top: 16px;
+  right: 16px;
+  bottom: 16px;
+  width: $side-w;
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--r-xl);
+  overflow: hidden;
 
-  &:hover { background: rgba(229, 57, 53, 0.12); }
+  @media (max-width: 960px) {
+    display: none;
+    top: auto;
+    left: 16px;
+    right: 16px;
+    bottom: 16px;
+    width: auto;
+    height: 62%;
+    border-radius: var(--r-3xl);
 
-  &--ghost {
-    border-color: #444;
-    &:hover { background: rgba(255, 255, 255, 0.06); }
-  }
-
-  &--plain {
-    display: inline-block;
-    background: transparent;
-    color: var(--text-primary);
-    cursor: pointer;
-    font-size: 13px;
+    &.is-open { display: flex; }
   }
 }
 
-// ---- Side panel: filters, then the creators list. Each heading folds its panel.
+.galaxy-side-scroll {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 6px 14px 14px;
+  @include v2.scroll-y;
+}
+
+.galaxy-panel {
+  padding: 8px 0 12px;
+  border-bottom: 1px solid var(--border);
+
+  &.is-collapsed { padding-bottom: 8px; }
+}
+
 .galaxy-panel-head {
   margin: 0;
 
@@ -646,160 +670,153 @@ $side-w: 312px;
     justify-content: space-between;
     gap: 8px;
     width: 100%;
+    height: 32px;
     padding: 0;
     border: 0;
     background: transparent;
-    color: var(--text-primary);
-    font-size: 16px;
-    font-weight: 600;
+    color: var(--muted);
+    @include v2.text(eyebrow);
     text-align: left;
     cursor: pointer;
 
-    svg { flex-shrink: 0; color: var(--text-secondary); }
-    &:hover svg { color: var(--text-primary); }
+    &:hover { color: var(--text); }
   }
 }
 
-.galaxy-panel-body { margin-top: 12px; }
+.galaxy-panel-body { margin-top: 4px; }
 
-.galaxy-side {
-  top: 12px;
-  right: 12px;
-  width: $side-w;
-  max-height: calc(100% - 24px);
-  overflow-y: auto;
-  scrollbar-width: thin;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-
-  @media (max-width: 960px) {
-    display: none;
-    top: auto;
-    left: 8px;
-    right: 8px;
-    bottom: 8px;
-    width: auto;
-    max-height: 62%;
-
-    &.is-open { display: flex; }
-  }
+.galaxy-filters-note {
+  margin: 0;
+  @include v2.text(meta-sm);
+  color: var(--muted);
 }
 
 .galaxy-filters {
-  border-radius: 12px;
-  background: var(--card-bg);
-  border: 1px solid var(--border-light);
-  padding: 12px;
-  font-size: 13px;
-  color: var(--text-secondary);
-
   .galaxy-panel-body {
     display: flex;
     flex-direction: column;
     gap: 12px;
   }
 
-  .galaxy-select {
-    justify-content: space-between;
-    select { max-width: 60%; }
-  }
-
   .galaxy-range {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 8px;
+    @include v2.text(meta);
+    color: var(--text);
 
-    input { width: 100%; accent-color: var(--accent-primary); }
+    input { width: 100%; height: 6px; margin: 0; accent-color: var(--accent); }
+    input:disabled { opacity: .45; }
+  }
+
+  .galaxy-selects {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .galaxy-select {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+
+    select:disabled { opacity: .45; cursor: not-allowed; }
   }
 
   .galaxy-check {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    cursor: pointer;
-
-    input { accent-color: var(--accent-primary); }
-    input:disabled + span { opacity: 0.5; }
-  }
-
-  .galaxy-filters-note {
-    margin: 0;
     font-size: 12px;
-    color: var(--text-muted, var(--text-secondary));
+
+    input:disabled { opacity: .45; cursor: not-allowed; }
+    input:disabled + span { opacity: .45; }
   }
 }
 
 .galaxy-list {
-  border-radius: 12px;
-  background: var(--card-bg);
-  border: 1px solid var(--border-light);
-  padding: 12px;
-
-  .galaxy-panel-body { margin-top: 8px; }
-
-  &.galaxy-circles .galaxy-filters-note {
-    margin: 0 0 8px;
-    font-size: 12px;
-    color: var(--text-muted, var(--text-secondary));
-  }
-
   ul {
     list-style: none;
     margin: 0;
     padding: 0;
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 4px;
   }
 
-  li button {
+  // Circles: filled rows; the focused one is the cyan choice.
+  .galaxy-circle-row,
+  .galaxy-list-row {
     display: flex;
     align-items: center;
     gap: 10px;
     width: 100%;
+    min-height: 44px;
     padding: 6px 8px;
-    border: 0;
-    border-radius: 8px;
+    border: 2px solid transparent;
+    border-radius: var(--r-md);
     background: transparent;
+    color: var(--text);
+    font: inherit;
     text-align: left;
     cursor: pointer;
+    transition: background var(--t-fast) var(--ease);
 
-    &:hover,
-    &.active { background: var(--bg-hover); }
-    &.active { box-shadow: inset 2px 0 0 var(--accent-primary); }
+    &:hover { background: var(--bg-hover); }
   }
 
+  .galaxy-circle-row {
+    background: var(--bg);
+
+    &:hover { background: color-mix(in srgb, var(--text) 6%, var(--bg)); }
+    &.is-on { border-color: var(--cyan); background: color-mix(in srgb, var(--cyan) 14%, transparent); }
+  }
+
+  .galaxy-list-row.is-on { background: var(--surface-2); }
+
   .galaxy-list-avatar img {
-    width: 32px;
-    height: 32px;
+    display: block;
+    width: 28px;
+    height: 28px;
     border-radius: 50%;
   }
 
   .galaxy-list-text {
     display: flex;
     flex-direction: column;
+    flex: 1;
     min-width: 0;
   }
 
   .galaxy-list-name {
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--text-primary);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .galaxy-list-via {
-    font-size: 12px;
-    color: var(--text-secondary);
+    @include v2.text(meta-sm);
+    color: var(--muted);
   }
 
   .galaxy-list-badge {
-    flex-shrink: 0;
+    display: inline-flex;
+    flex: none;
     margin-left: auto;
-    color: var(--accent-primary);
+    color: var(--cyan);
   }
 
+  &.galaxy-circles .galaxy-filters-note { margin: 0 0 8px; }
+
   // "In @x's circle  x": the list is narrowed to one circle.
+  .galaxy-list-chip {
+    margin-bottom: 8px;
+    max-width: 100%;
+
+    > span { overflow: hidden; text-overflow: ellipsis; }
+  }
+
   .galaxy-circle-ring {
     margin-bottom: 10px;
 
@@ -822,24 +839,8 @@ $side-w: 312px;
   }
 
   .galaxy-circle-more {
-    font-size: 12px;
-    color: var(--text-secondary);
-  }
-
-  .galaxy-list-chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    margin-bottom: 8px;
-    padding: 3px 8px 3px 10px;
-    border-radius: 999px;
-    border: 1px solid var(--accent-primary);
-    background: transparent;
-    color: var(--text-primary);
-    font-size: 12px;
-    cursor: pointer;
-
-    &:hover { background: var(--bg-hover); }
+    @include v2.mono(11, 700);
+    color: var(--muted);
   }
 
   .galaxy-list-empty {
@@ -847,38 +848,60 @@ $side-w: 312px;
     flex-direction: column;
     align-items: flex-start;
     gap: 8px;
-    font-size: 13px;
-    color: var(--text-secondary);
+    @include v2.text(body-sm);
+    color: var(--muted);
 
     p { margin: 0; }
   }
 }
 
-// Data credit under the hint: small, quiet, but its links work.
-.galaxy-credit {
-  position: absolute;
-  left: 50%;
-  bottom: 8px;
-  transform: translateX(-50%);
-  margin: 0;
-  font-size: 11px;
-  color: #757575;
-  white-space: nowrap;
+// What the map is made of, and the data credit. Small, quiet, links work.
+.galaxy-side-foot {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: auto;
+  padding-top: 12px;
+  @include v2.text(meta-sm);
+  color: var(--muted);
+
+  p { margin: 0; }
 
   a {
-    color: #9e9e9e;
-    text-decoration: underline;
+    color: var(--cyan);
+    text-decoration: none;
 
-    &:hover { color: #e0e0e0; }
+    &:hover { text-decoration: underline; }
   }
+}
 
-  // Narrow: out of the legend's way, in the bottom-right corner.
-  @media (max-width: 960px) {
-    left: auto;
-    right: 12px;
-    transform: none;
-    max-width: 45%;
-    white-space: normal;
-    text-align: right;
-  }
+// ---- Phones and small windows: no scan, a note instead (follows the site theme).
+.galaxy-page--small {
+  display: grid;
+  place-items: center;
+  padding: 16px;
+}
+
+.galaxy-small {
+  @include v2.card;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  width: min(440px, 100%);
+  padding: 20px;
+
+  h1 { @include v2.text(title-sm); margin: 0; }
+  p { @include v2.text(body); color: var(--muted); margin: 0 0 8px; }
+  .v2-btn { max-width: 100%; }
+}
+
+.galaxy-small__icon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--r-lg);
+  background: var(--cyan-tint-strong);
+  color: var(--cyan);
 }

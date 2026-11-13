@@ -1,16 +1,12 @@
 import { useEffect, useState } from 'react';
-import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
-import {
-  FaVideo, FaMobileAlt, FaComments, FaUserPlus, FaClock, FaKey, FaCoins, FaGlobeAmericas,
-  FaCubes, FaSeedling, FaBolt, FaRocket,
-} from 'react-icons/fa';
 import { useAppStore } from '../../lib/store';
 import { usePromptsActive, setPromptActive } from '../../utils/welcomeGate';
 import TrackChooser from './TrackChooser';
 import { fetchIncubationProgress } from '../../lib/incubation';
 import { withTracksKey } from './tracks';
 import { useTranslation, Trans } from 'react-i18next';
+import { Button, Dialog, Eyebrow, Icon, StepBar } from '../v2/ui';
 import './IncubationWelcome.scss';
 
 // Shown once per handle, per browser. Not a server flag: it is a greeting, and
@@ -45,7 +41,7 @@ const markSeen = (handle) => {
 const STEPS = [
   {
     key: 'what',
-    Icon: FaCubes,
+    icon: 'hub',
     titleKey: 'incubation.welcome.what.title',
     body: () => (
       <>
@@ -57,7 +53,7 @@ const STEPS = [
   },
   {
     key: 'warmup',
-    Icon: FaSeedling,
+    icon: 'eco',
     titleKey: 'incubation.welcome.warmup.title',
     body: (t) => (
       <>
@@ -72,16 +68,16 @@ const STEPS = [
   },
   {
     key: 'do',
-    Icon: FaBolt,
+    icon: 'bolt',
     titleKey: 'incubation.welcome.do.title',
     body: (t) => (
       <>
         <ul className="incw-list">
-          <li><FaVideo aria-hidden="true" /> <span>{t('incubation.welcome.do.upload')}</span></li>
-          <li><FaMobileAlt aria-hidden="true" /> <span>{t('incubation.welcome.do.shorts')}</span></li>
-          <li><FaComments aria-hidden="true" /> <span>{t('incubation.welcome.do.comment')}</span></li>
-          <li><FaUserPlus aria-hidden="true" /> <span>{t('incubation.welcome.do.follow')}</span></li>
-          <li><FaClock aria-hidden="true" /> <span>{t('incubation.welcome.do.watch')}</span></li>
+          <li><Icon name="check" size={18} /> <span>{t('incubation.welcome.do.upload')}</span></li>
+          <li><Icon name="check" size={18} /> <span>{t('incubation.welcome.do.shorts')}</span></li>
+          <li><Icon name="check" size={18} /> <span>{t('incubation.welcome.do.comment')}</span></li>
+          <li><Icon name="check" size={18} /> <span>{t('incubation.welcome.do.follow')}</span></li>
+          <li><Icon name="check" size={18} /> <span>{t('incubation.welcome.do.watch')}</span></li>
         </ul>
         <p className="incw-aside">
           {t('incubation.welcome.do.aside')}
@@ -93,7 +89,7 @@ const STEPS = [
     // The question itself is rendered below the body (TrackChooser), because it
     // needs state; see `current.key === 'path'` in the component.
     key: 'path',
-    Icon: FaRocket,
+    icon: 'explore',
     titleKey: 'incubation.trackQuestion.title',
     body: (t) => (
       <>
@@ -104,9 +100,9 @@ const STEPS = [
           {t('incubation.welcome.path.p2')}
         </p>
         <div className="incw-perks">
-          <span><FaCoins aria-hidden="true" /> {t('incubation.welcome.path.perkEarn')}</span>
-          <span><FaKey aria-hidden="true" /> {t('incubation.welcome.path.perkKeys')}</span>
-          <span><FaGlobeAmericas aria-hidden="true" /> {t('incubation.welcome.path.perkNetwork')}</span>
+          <span><Icon name="payments" size={16} /> {t('incubation.welcome.path.perkEarn')}</span>
+          <span><Icon name="key" size={16} /> {t('incubation.welcome.path.perkKeys')}</span>
+          <span><Icon name="hub" size={16} /> {t('incubation.welcome.path.perkNetwork')}</span>
         </div>
       </>
     ),
@@ -177,58 +173,56 @@ export default function IncubationWelcome() {
   if (!open) return null;
 
   const current = STEPS[step];
-  const { Icon } = current;
   const last = step === STEPS.length - 1;
 
-  return createPortal(
-    // No close button and no click-outside: the only way out is picking a path.
-    <div className="incw-overlay">
-      <div className="incw" role="dialog" aria-modal="true" aria-label={t('incubation.welcome.what.title')}>
-        <div className="incw-body">
-          <h2>
-            <span className="incw-head-icon"><Icon size={16} aria-hidden="true" /></span>
-            {t(current.titleKey)}
-          </h2>
-          {current.body(t)}
-          {current.key === 'path' && (
-            <>
-              <h3 className="incw-choose">{t('incubation.progress.choosePath')}</h3>
-              <TrackChooser current={chosen} onChosen={setChosen} />
-            </>
+  return (
+    // The warm-up intro (design 46a). No close button, no Esc, no click-outside:
+    // the only way out is picking a path. A 4px step bar on top (§11). Under
+    // 768px a full-screen step page (.v2-onboard, 23a).
+    <Dialog
+      open
+      dismissible={false}
+      head={false}
+      title={t('incubation.welcome.what.title')}
+      width={520}
+      className="incw v2-onboard"
+      footer={(
+        <>
+          {step > 0 && (
+            <Button variant="secondary" className="v2-onboard__skip" onClick={() => setStep((n) => n - 1)}>
+              {t('common.actions.back')}
+            </Button>
           )}
-        </div>
-
-        <div className="incw-foot">
-          {/* Dots, not a numbered wizard: it is four short screens, and a
-              progress count would make it feel like paperwork. */}
-          <div className="incw-dots" aria-hidden="true">
-            {STEPS.map((s, i) => (
-              <span key={s.key} className={i === step ? 'is-on' : ''} />
-            ))}
-          </div>
-          <div className="incw-actions">
-            {step > 0 && (
-              <button type="button" className="incw-secondary" onClick={() => setStep((n) => n - 1)}>
-                {t('common.actions.back')}
-              </button>
-            )}
-            {last && chosen ? (
-              <Link to="/profile" className="incw-primary" onClick={close}>
-                {t('incubation.welcome.showList')}
-              </Link>
-            ) : last ? (
-              <button type="button" className="incw-primary" disabled>
-                {t('incubation.welcome.showList')}
-              </button>
-            ) : (
-              <button type="button" className="incw-primary" onClick={() => setStep((n) => n + 1)}>
-                {t('common.actions.next')}
-              </button>
-            )}
-          </div>
-        </div>
+          {last && chosen ? (
+            <Button as={Link} to="/profile" variant="primary" next className="incw-primary" onClick={close}>
+              {t('incubation.welcome.showList')}
+            </Button>
+          ) : last ? (
+            <Button variant="primary" next className="incw-primary" disabled>
+              {t('incubation.welcome.showList')}
+            </Button>
+          ) : (
+            <Button variant="primary" next className="incw-primary" onClick={() => setStep((n) => n + 1)}>
+              {t('common.actions.next')}
+            </Button>
+          )}
+        </>
+      )}
+    >
+      <StepBar steps={STEPS.length} current={step} />
+      <div className="v2-onboard__eyebrow">
+        {step === 0 ? t('app.welcome.eyebrow') : t('app.welcome.stepOf', { n: step + 1, total: STEPS.length })}
       </div>
-    </div>,
-    document.body,
+      <h2 className="incw-title">{t(current.titleKey)}</h2>
+      <div className="incw-body">
+        {current.body(t)}
+      </div>
+      {current.key === 'path' && (
+        <>
+          <Eyebrow as="h3" className="incw-choose">{t('incubation.progress.choosePath')}</Eyebrow>
+          <TrackChooser current={chosen} onChosen={setChosen} />
+        </>
+      )}
+    </Dialog>
   );
 }

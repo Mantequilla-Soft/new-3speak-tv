@@ -10,8 +10,8 @@
     "unknownError": "Bilinmeyen hata"
   },
   "authorBadge": {
-    "followers_one": "{{count}} Takipçi",
-    "followers_other": "{{count}} Takipçi"
+    "followers_one": "{{count}} takipçi",
+    "followers_other": "{{count}} takipçi"
   },
   "creators": {
     "loginRequired": "İçerik üreticilerini takip etmek için giriş yap",
@@ -21,6 +21,7 @@
     "followers_one": "{{num}} takipçi",
     "followers_other": "{{num}} takipçi",
     "popularTitle": "Popüler içerik üreticileri",
+    "suggestedTitle": "Takip edebileceğin içerik üreticileri",
     "scrollLeft": "Sola kaydır",
     "scrollRight": "Sağa kaydır",
     "mostlyPosts": "Çoğunlukla {{topic}} paylaşıyor"
@@ -66,7 +67,8 @@
     "tapForSound": "Ses için dokun",
     "views_one": "{{num}} görüntülenme",
     "views_other": "{{num}} görüntülenme",
-    "readMore": "Devamını oku"
+    "readMore": "Devamını oku",
+    "label": "Fragman"
   },
   "snaps": {
     "readMore": "Devamını oku",
@@ -167,7 +169,8 @@
       "text": "Videolarını, insanların sırayla izleyebileceği bir oynatma listesinde topla.",
       "cta": "İlk oynatma listeni oluştur",
       "visitor": "@{{user}} kullanıcısının herkese açık oynatma listesi yok."
-    }
+    },
+    "visitorPreview": "Ziyaretçiler şunu görür: “{{text}}”"
   },
   "links": {
     "button": "Bağlantılar",
@@ -186,7 +189,8 @@
     "shorts": "Shorts",
     "audio": "Ses",
     "community": "Topluluk",
-    "playlists": "Oynatma listeleri"
+    "playlists": "Oynatma listeleri",
+    "latestSnap": "Son snap"
   },
   "streams": {
     "loading": "Yayınlar yükleniyor…",
@@ -217,6 +221,7 @@
     "messageTitle": "@{{user}} kullanıcısına mesaj gönder",
     "messageLogin": "Mesaj göndermek için giriş yap",
     "message": "Mesaj",
+    "messageShort": "DM",
     "unhideTitle": "@{{user}} videolarını akışlarında yeniden göster",
     "hideTitle": "@{{user}} videolarını tüm akışlarından gizle",
     "unhide": "Göster",
@@ -230,7 +235,11 @@
     "loginToUpload": "Video yüklemek için giriş yap",
     "linkExternalTitle": "Harici bir profil bağla",
     "addProfile": "Profil ekle",
-    "editTitle": "Fotoğrafını, adını, biyografini ve konumunu düzenle"
+    "editTitle": "Fotoğrafını, adını, biyografini ve konumunu düzenle",
+    "more": "Daha fazla",
+    "moreActions": "@{{user}} için diğer işlemler",
+    "copyProfileLink": "Profil bağlantısını kopyala",
+    "podcastFeed": "Podcast akışı (RSS)"
   },
   "tabs": {
     "overview": "Genel Bakış",
@@ -265,11 +274,7 @@
     "tip": "Bahşiş",
     "tipCreator": "İçerik üreticisine bahşiş",
     "latestVideo": "Son Video",
-    "watchLatestVideo": "Son videoyu izle",
-    "latestShort": "Son Shorts",
-    "watchLatestShort": "Son Shorts videosunu izle",
-    "closeMenu": "Menüyü kapat",
-    "openActions": "İşlemleri aç"
+    "latestShort": "Son Shorts"
   },
   "uploads": {
     "processing": "Videoların işleniyor",
@@ -296,7 +301,10 @@
     "hiddenToast": "Bahşiş profilinden gizlendi",
     "unhiddenToast": "Bahşiş profilinde yeniden görünüyor",
     "hideFailed": "Bu bahşiş değiştirilemedi. Lütfen tekrar dene.",
-    "hideWalletPrompt": "Profilinde hangi bahşişlerin görüneceğini değiştirmek için imzala"
+    "hideWalletPrompt": "Profilinde hangi bahşişlerin görüneceğini değiştirmek için imzala",
+    "whoTitle": "@{{user}} kimleri destekliyor",
+    "tipped_one": "{{count}}× bahşiş",
+    "tipped_other": "{{count}}× bahşiş"
   },
   "layout": {
     "customize": "Profili özelleştir",
@@ -409,5 +417,13 @@
   },
   "audioTab": {
     "files": "Ses dosyaları"
+  },
+  "search": {
+    "placeholder": "Bu kanalda ara",
+    "clear": "Aramayı temizle",
+    "results_one": "“{{query}}” için {{count}} sonuç",
+    "results_other": "“{{query}}” için {{count}} sonuç",
+    "empty": "Bu kanalda “{{query}}” ile eşleşen bir şey yok.",
+    "older": "Eski yüklemelerde ara"
   }
 }

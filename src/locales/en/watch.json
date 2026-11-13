@@ -16,7 +16,9 @@
     "translatedTo": "Translated to {{language}}",
     "showLanguage": "Show {{language}}",
     "showOriginal": "Show original",
-    "buttonTitle": "AI summary of this video"
+    "buttonTitle": "AI summary of this video",
+    "jumpTo": "Jump to",
+    "disclaimer": "Generated from the transcript. It may contain mistakes."
   },
   "errors": {
     "notAvailable": "This video is not available.",
@@ -29,7 +31,8 @@
   "gated": {
     "title": "Members only",
     "checkFailed": "We could not confirm your subscription just now. Try again in a moment.",
-    "preview": "You are watching a free preview. 3Speak Pro unlocks the full video.",
+    "preview": "You're watching a free preview",
+    "previewSub": "3Speak Pro unlocks the full video.",
     "subscribersOnly": "This video is available to 3Speak Pro subscribers.",
     "cta": "Get 3Speak Pro"
   },
@@ -38,7 +41,19 @@
     "add": "Add Reaction"
   },
   "liveChat": "Live chat",
+  "side": {
+    "label": "Video panels"
+  },
+  "voters": {
+    "title": "Voters",
+    "cardLabel": "Supporters and voters",
+    "voter": "Voter",
+    "weight": "Weight",
+    "value": "Value"
+  },
   "moreVideos": "More videos",
+  "nextIn": "Next in {{name}}",
+  "fromCommunity": "From {{name}}",
   "vote": {
     "saveFailed": "Could not save your vote"
   },
@@ -67,14 +82,14 @@
     "loginRequired": "Log in to clip",
     "cancel": "Cancel clip",
     "clipVideo": "Clip video",
-    "label": "Clip Video",
+    "label": "Clip video",
     "clip": "Clip",
     "seekToStart": "Seek to start",
-    "setStart": "Set Start",
-    "setEnd": "Set End",
-    "createClip": "Create Clip",
+    "setStart": "Set start",
+    "setEnd": "Set end",
+    "createClip": "Create clip",
     "barStart": "Seek to the start of your clip",
-    "barEnd": "Start: {{start}} — Now seek to the end",
+    "barEnd": "Start {{start}} · now seek to the end",
     "barDone": "Clip: {{start}} – {{end}}"
   },
   "share": {
@@ -92,19 +107,22 @@
   },
   "media": {
     "unavailableTitle": "This video is no longer available",
-    "unavailableBody": "The media for this older upload could not be found on the network. The post still exists on the blockchain, but the video can no longer be played.",
+    "unavailableBody": "The media for this older upload couldn't be found. The post still exists on Hive.",
     "scheduledTitle": "This post is scheduled",
     "scheduledBody": "It will be published on {{date}}. The video can be watched from then on.",
     "blockedTitle": "Couldn't load the video right now",
-    "blockedBody": "One of our video servers didn't respond. The video itself is fine, so please try again."
+    "blockedBody": "One of our video servers didn't respond. The video is fine."
   },
   "tipNudge": {
     "text": "Enjoyed this?<hide> Send <b>@{{author}}</b> a tip!</hide>",
     "dismiss": "Dismiss"
   },
   "community": {
-    "members_one": "{{count}} Member",
-    "members_other": "{{count}} Members"
+    "members_one": "{{count}} member",
+    "members_other": "{{count}} members",
+    "postedIn": "Posted in",
+    "partOf": "Part of",
+    "position": "{{current}} of {{total}}"
   },
   "tags": {
     "curated": "Curated"
@@ -120,7 +138,8 @@
     "openTagFeed": "Open tag feed"
   },
   "scheduled": {
-    "notice": "Scheduled for <b>{{date}}</b> — not published yet.",
+    "notice": "Scheduled for <b>{{date}}</b>",
+    "notPublished": "Not published yet.",
     "futureDate": "a future date",
     "edit": "Edit, reschedule or cancel",
     "editTitle": "Edit scheduled post (details, date, or cancel)"
@@ -147,14 +166,15 @@
     "toggleDetails": "Toggle details",
     "followCreator": "Follow creator",
     "closeMenu": "Close menu",
-    "openActions": "Open actions"
+    "openActions": "Open actions",
+    "support": "Support {{name}}"
   },
   "description": {
     "hide": "Hide description",
     "show": "Show description"
   },
   "edit": {
-    "title": "Edit Video",
+    "title": "Edit video",
     "loading": "Loading current post…",
     "videoFile": "Video file",
     "replaceVideo": "Replace video",
@@ -164,7 +184,7 @@
     "uploadedTo": "Uploaded to <b>{{host}}</b>. Press Save to swap it in.",
     "uploaded": "Uploaded. Press Save to swap it in.",
     "cancelUpload": "Cancel upload",
-    "keepCurrent": "Keep the current video",
+    "keepCurrent": "Keep current video",
     "encodeHint": "After you save it still needs a few minutes to encode, and the old video keeps playing until it is ready. Your thumbnail is unchanged, so update it above if it no longer matches.",
     "thumbnail": "Thumbnail",
     "thumbPreviewAlt": "Thumbnail preview",
@@ -185,26 +205,27 @@
     "markdownHint": "Supports markdown.",
     "listed": "Listed",
     "unlistedLabel": "Unlisted",
-    "listedHint": "Shown in feeds, search and on your profile.",
-    "unlistedHint": "Hidden from feeds & search — still plays by direct link, stays on your profile (badged).",
-    "allowRemix": "Allow Remix/Clip",
-    "remixOn": "Others can create remixes/clips; you are credited as original author.",
+    "listedHint": "In feeds, search and your profile",
+    "unlistedHint": "Only by direct link, badged on your profile",
+    "allowRemix": "Allow remix and clip",
+    "remixOn": "You’re credited as the original author",
     "remixOff": "Others cannot remix or clip this video.",
     "adsOnVideo": "Ads on this video",
     "adsOnHint": "Ads may play on this video.",
     "adsOffHint": "No ads on this video.",
     "rollsOnVideo": "Video ad rolls",
     "rollsOnHint": "Rolls, banners and tickers may show.",
-    "rollsOffHint": "Only banners and tickers on this video.",
+    "rollsOffHint": "Otherwise only banners and tickers",
     "trailer": "Channel trailer",
     "trailerOn": "Autoplays at the top of your profile’s Overview tab, replacing any trailer you set before.",
-    "trailerOff": "Make this the video that autoplays at the top of your profile’s Overview tab.",
+    "trailerOff": "Autoplays at the top of your profile",
     "nsfw": "Adult / NSFW",
     "notNsfw": "Not adult",
     "nsfwHint": "Hidden from feeds & search unless the viewer enabled NSFW; tagged nsfw on Hive.",
     "notNsfwHint": "Normal content, shown to everyone.",
+    "nsfwOffHint": "Hidden unless the viewer turned NSFW on",
     "promoted": "Promoted",
-    "promote": "Promote video",
+    "promote": "Promote",
     "saveChanges": "Save changes",
     "noChanges": "No changes to save.",
     "thumbUploaded": "Thumbnail uploaded.",
@@ -249,7 +270,8 @@
       "visibility": "Visibility",
       "content": "Content",
       "ads": "Ads",
-      "promotion": "Promotion"
+      "promotion": "Promotion",
+      "contentAds": "Content, ads and promotion"
     },
     "chaptersNoteAll": "The chapter list is written into the description when you save.",
     "editChapters": "Edit chapters",

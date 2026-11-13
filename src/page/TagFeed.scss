@@ -1,23 +1,55 @@
-@use "../mixins.scss" as mix;
+@use "../styles/v2" as v2;
 
-.tag-feed-section-title {
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--text-primary);
-  margin: 20px 10px 10px;
-  padding: 0;
+// Tag feed (19c): the tag as the page title, then the toolbar card, the "new
+// from following" strip and the grid, 24px apart (20 above the strip).
+.firstupload-container.tag-feed {
+  gap: 24px;
 
-  &:first-of-type {
-    margin-top: 0;
-  }
+  // The strip keeps its own bottom margin on Home; here the column gap spaces it.
+  > .new-from-following { margin: -4px 0 0; }
+}
 
-  @include mix.respond(phone) {
-    font-size: 13px;
-  }
+.tag-feed-head {
+  display: flex;
+  align-items: flex-end;
+  gap: 20px;
+  min-width: 0;
+  padding-top: 8px;
+}
+
+.tag-feed-head__text {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.tag-feed-eyebrow {
+  @include v2.text(eyebrow);
+  font-size: 13px;
+  letter-spacing: .1em;
+  color: var(--cyan);
+}
+
+.tag-feed-title {
+  margin: 0;
+  @include v2.text(display);
+  font-size: 64px;
+  letter-spacing: -.04em;
+  line-height: 1;
+  overflow-wrap: anywhere;
+
+  @include v2.mobile { font-size: 40px; }
+}
+
+.tag-feed-meta {
+  margin: 8px 0 0;
+  @include v2.text(body);
+  color: var(--muted);
 }
 
 .tag-feed-pagination-bottom {
   display: flex;
   justify-content: center;
-  margin-top: 20px;
+  margin-top: 8px;
 }

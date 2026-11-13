@@ -5,13 +5,12 @@
     "yourStreamEnded": "방송이 종료되었어요",
     "thisStreamEnded": "이 방송은 종료되었어요",
     "noLongerLive": "더 이상 라이브가 아니에요. 준비되면 언제든 새 방송을 시작하세요.",
-    "recordingProcessing": "멋져요! 녹화본을 처리하는 중이며, 곧 공지 게시물에 표시될 거예요.",
-    "thanksForLive": "멋져요 — 라이브 방송 고마워요!",
+    "recordingProcessing": "녹화본을 처리하는 중이며, 곧 공지 게시물에 표시될 거예요.",
+    "thanksForLive": "멋져요, 라이브 방송 고마워요",
     "backHome": "홈으로 돌아가기",
     "howWasStream": "방송은 어떠셨나요?",
     "connecting": "OpenPods에 연결하는 중…",
-    "authenticating": "OpenPods 인증 중…",
-    "postStoryAboutIt": "이 방송에 대한 스토리 올리기"
+    "authenticating": "OpenPods 인증 중…"
   },
   "strip": {
     "liveNow_other": "지금 <n>{{count}}</n>개의 OpenPod 라이브 중",
@@ -28,7 +27,9 @@
     "rewardDecline": "보상 거절",
     "beneficiaries": "수혜자",
     "beneProHint": "3Speak Pro 이용 중이라 플랫폼 수수료가 없어요. 원하면 분배를 추가하세요.",
-    "beneLockedHint": "@threespeakfund에 대한 10%는 고정이에요. 더 추가할 수 있어요."
+    "beneLockedHint": "@threespeakfund에 대한 10%는 고정이에요. 더 추가할 수 있어요.",
+    "storyPrompt": "곧 라이브를 시작하나요? 먼저 24시간 스토리로 팔로워에게 알려 보세요. 새 탭에서 열리므로 스튜디오는 그대로 유지됩니다.",
+    "storyButton": "스토리 올리기"
   },
   "boost": {
     "label": "부스트",
@@ -40,7 +41,7 @@
     "slowDown": "잠시 후 다시 클립을 만들어 주세요.",
     "failed": "클립을 만들지 못했어요. 몇 초 후 다시 시도해 주세요.",
     "title": "최근 30초 클립 만들기",
-    "label": "30초",
+    "label": "클립",
     "clipping": "클립 만드는 중…"
   },
   "report": {
@@ -53,11 +54,11 @@
       "spam": "스팸 또는 사기",
       "other": "기타"
     },
-    "sent": "감사합니다 — 이 방송을 운영팀에 신고했어요.",
+    "sent": "감사합니다. 이 방송을 운영팀에 신고했어요.",
     "failed": "신고를 보내지 못했어요. 다시 시도해 주세요.",
     "title": "이 방송 신고",
     "reporting": "<b>@{{host}}</b>님을 신고합니다.",
-    "intro": "무엇이 문제인지 알려주세요. 모든 신고는 운영팀이 검토해요.",
+    "intro": "모든 신고는 운영팀이 검토해요.",
     "detailPlaceholder": "세부 내용 추가(선택)",
     "sending": "보내는 중…",
     "submit": "신고 제출"
@@ -91,6 +92,7 @@
   "lobby": {
     "descriptionPlaceholder": "이 세션은 어떤 내용인가요? 쇼 노트, 링크, 요약을 추가하세요…",
     "enableHosting": "호스팅 및 발언 사용",
+    "enableHostingHint": "@threespeak 포스팅 권한이 필요해요",
     "handoverFailed": "호스팅을 자동으로 사용 설정하지 못했어요. OpenPods는 @threespeak를 통해 나 대신 게시해요. 게시 권한을 부여했는지 확인한 뒤 다시 시도해 주세요.",
     "signInToHost": "호스팅하거나 발언하려면 Hive로 로그인하세요"
   },
@@ -130,8 +132,8 @@
     },
     "chatBox": {
       "title": "OBS에서 보는 내 채팅",
-      "desc": "모든 방송에 쓰는 링크 하나예요. OBS에 독으로 추가하면 방송 중에 새 메시지를 읽을 수 있어요. 방법은 아래 가이드를 참고하세요.",
-      "copy": "OBS용 채팅 URL 복사",
+      "desc": "사용자 지정 브라우저 독으로 추가하세요",
+      "copy": "채팅 URL 복사",
       "copied": "채팅 URL을 복사했어요"
     },
     "card": {
@@ -142,26 +144,26 @@
       "watch": "방송 보기",
       "notAnnounced": "이 방송은 Hive에 알리지 않았어요.",
       "notAnnouncedAuth": "Hive에 알리지 않음: 아직 3Speak가 나 대신 게시할 수 없어요. 템플릿을 편집해서 허용하세요.",
-      "stuck": "OBS가 연결됐지만 영상이 전달되지 않아 방송이 시작되지 않았어요. OBS에서 방송을 중지한 뒤 다시 시작하세요.",
-      "dailyLimit": "OBS로 방송을 시작하지 못했어요. 무료 계정은 하루에 한 번 방송을 시작할 수 있어요. 마지막 방송을 시작한 지 24시간 후에 다시 시도하거나, 3Speak Pro로 하루 제한 없이 방송하세요.",
+      "stuck": "OBS가 연결됐지만 영상이 전달되지 않았어요. 방송을 중지한 뒤 다시 시작하세요.",
+      "dailyLimit": "무료 계정은 하루에 한 번 방송을 시작할 수 있어요. 마지막 방송을 시작한 지 24시간 후에 다시 시도하거나 Pro를 이용하세요.",
       "useInStudio": "Stream Studio에서 사용",
       "proRequired": "OBS로 라이브를 시작하지 못했습니다: OBS 스트리밍은 3Speak Pro 기능입니다."
     },
     "guide": {
       "title": "OBS 설정 방법",
-      "step1": "OBS Studio 30 이상을 사용하고 Settings에서 Stream을 여세요.",
-      "step2": "Service를 \"WHIP\"으로 설정하세요.",
-      "step3": "Server: 원하는 템플릿의 서버 URL을 붙여넣으세요(카드의 \"서버 URL 복사\"). 템플릿마다 주소가 달라요.",
-      "step4": "Bearer Token: 이 페이지 상단의 방송 시크릿을 붙여넣으세요. 모든 템플릿에 동일해요.",
-      "step5": "OBS에서 \"Start Streaming\"을 누르면 해당 템플릿으로 3Speak에서 라이브가 시작돼요. \"Stop Streaming\"을 누르면 방송이 끝나요.",
+      "step1": "OBS Studio 30 이상 사용: Settings → Stream",
+      "step2": "Service를 \"WHIP\"으로 설정",
+      "step3": "Server: 템플릿의 서버 URL 붙여넣기",
+      "step4": "Bearer Token: 방송 시크릿 붙여넣기",
+      "step5": "OBS에서 Start Streaming을 누르세요. 3Speak에서 라이브가 시작돼요.",
       "outputTitle": "권장 출력 설정",
-      "keyframe": "키프레임 간격: 1~2초",
-      "bitrate": "비트레이트 제어 CBR, 2500~6000 kbps",
-      "encoder": "인코더: x264 또는 하드웨어 인코더",
-      "audio": "오디오 샘플 레이트: 48 kHz",
-      "bframes": "B-frames 사용 안 함(인코더에 옵션이 있으면 0으로 설정)",
+      "keyframe": "키프레임 1~2초",
+      "bitrate": "CBR 2500~6000 kbps",
+      "encoder": "x264 / 하드웨어",
+      "audio": "48 kHz 오디오",
+      "bframes": "B-frames 사용 안 함",
       "chatTitle": "OBS에서 채팅 보기",
-      "chatCopy": "이 페이지 위쪽의 \"OBS에서 보는 내 채팅\"에서 \"OBS용 채팅 URL 복사\"를 클릭하세요. 모든 방송에 쓰는 링크 하나예요.",
+      "chatCopy": "이 페이지 위쪽의 \"OBS에서 보는 내 채팅\"에서 \"채팅 URL 복사\"를 클릭하세요. 모든 방송에 쓰는 링크 하나예요.",
       "chat2": "OBS에서 \"Docks\" 메뉴를 열고 \"Custom Browser Docks\"를 선택하세요. \"3Speak 채팅\" 같은 이름을 입력하고 URL을 붙여 넣은 뒤 \"Apply\"를 클릭하세요. 방송 중에는 그 패널에 새 메시지가 표시돼요. 시청자에게는 보이지 않아요.",
       "chat3": "시청자는 이미 방송 옆에서 채팅을 보고 있으니 영상에 넣을 필요는 없어요. 방송을 다른 곳에도 공유할 때만 같은 URL을 \"Browser\" 소스로 추가하고 끝의 \"&dock=1\"을 지우세요. 그러면 메시지가 영상 위에 떠서 30초 뒤에 사라져요.",
       "chatOptions": "선택 사항, URL 끝에 추가하세요: &max=10은 줄 수를 줄이고, &size=18은 글자를 키우고, &fade=0은 메시지를 영상에 계속 표시해요.",
@@ -255,5 +257,13 @@
       "desc": "3Speak Pro가 있으면 템플릿을 사용해 OBS에서 바로 라이브를 시작할 수 있습니다. Pro가 없어도 템플릿은 브라우저의 Stream Studio에서 계속 사용할 수 있습니다.",
       "cta": "3Speak Pro 받기"
     }
+  },
+  "grid": {
+    "openpods": "OpenPods",
+    "listening_other": "{{count}}명 청취 중",
+    "emptySub": "방송과 OpenPods는 시작되는 즉시 여기에 표시돼요.",
+    "emptyRooms": "지금 열린 OpenPods가 없어요.",
+    "emptyScheduled": "지금 예약된 방송이 없어요.",
+    "emptyScheduledSub": "열려 있지만 아직 라이브가 아닌 방이 여기에 표시돼요."
   }
 }

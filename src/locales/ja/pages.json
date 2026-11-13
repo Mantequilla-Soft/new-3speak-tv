@@ -93,7 +93,8 @@
   "legal": {
     "pageTitle": "3Speak のデータの取り扱い · 3Speak",
     "englishOnly": "このページは英語でのみ提供しています。英語版が正式なものです。",
-    "back": "← 3Speak に戻る"
+    "back": "← 3Speak に戻る",
+    "onThisPage": "このページの内容"
   },
   "notFound": {
     "imageAlt": "404",

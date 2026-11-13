@@ -1,53 +1,55 @@
+@use "../styles/v2" as v2;
+
+// 404 (design 26d): a single card in the middle of the page.
 .not-found-container {
-  min-height: 80vh;
+  min-height: 70vh;
+  display: grid;
+  place-items: center;
+  padding: 24px 0;
+}
+
+.not-found-card {
+  @include v2.card;
+  width: min(440px, 100%);
+  border-radius: var(--r-3xl);
+  padding: 22px;
   display: flex;
   flex-direction: column;
-  justify-content: center;   /* center vertically */
-  align-items: center;       /* center horizontally */
-  text-align: center;
-  background-color: #f9fafb;
-  color: #333;
-  font-family: "Poppins", sans-serif;
-  padding: 20px;
-    [data-theme="dark"] & {
-    background: #3a3939c9;
-    border: solid 1px rgba(128, 128, 128, 0.144);
-    color: #fff;
-  }
+  align-items: flex-start;
+  color: var(--text);
 }
 
-.not-found-container img {
-  width: 300px;
-  max-width: 80%;
-  margin-bottom: 20px;
+// 26d: the big code, a 24 bold line, one muted sentence, then the two ways out.
+.not-found-title {
+  margin: 16px 0 0;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -.01em;
 }
 
-.not-found-container p {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #e63946;
-  margin-bottom: 10px;
+.not-found-sub {
+  margin: 6px 0 0;
+  @include v2.text(body-sm);
+  line-height: 1.5;
+  color: var(--muted);
 }
 
-.not-found-container h3 {
-  font-size: 1rem;
-  color: #555;
-  max-width: 500px;
-  margin-bottom: 25px;
+.not-found-code {
+  font-size: 72px;
+  font-weight: 900;
+  line-height: .85;
+  letter-spacing: -.06em;
+  color: var(--accent);
 }
 
-.not-found-container button {
-  background-color: #e63946;
-  color: white;
-  border: none;
-  padding: 12px 30px;
-  border-radius: 8px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: 0.3s ease;
-}
+.not-found-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  width: 100%;
+  margin-top: 24px;
 
-.not-found-container button:hover {
-  background-color: #c72d39;
-  transform: scale(1.05);
+  .v2-btn { padding: 0 14px; }
+  .v2-btn--secondary { font-weight: 700; }
 }

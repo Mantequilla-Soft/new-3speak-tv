@@ -1,154 +1,68 @@
-@use "../../mixins.scss" as mix;
+@use "../../styles/v2" as v2;
 
-.rc-modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.6);
-  z-index: 1100;
+// Not enough Resource Credits (RcInsufficientModal.jsx), inside the v2 dialog
+// (DialogShell). An accent lead with the explanation, the RC meter (cyan: it
+// refills by itself), then a well with the estimate in mono.
+.rc-modal-body { gap: 14px; }
+
+.rc-modal-lead {
   display: flex;
-  align-items: center;
-  justify-content: center;
-
-  @include mix.respond(phone) {
-    align-items: flex-end;
-  }
-}
-
-.rc-modal-content {
-  background: var(--card-bg, #fff);
-  color: var(--text-primary, #000);
-  border-radius: 14px;
-  padding: 20px 24px 24px;
-  width: 440px;
-  max-width: 95vw;
-  position: relative;
-  text-align: center;
-
-  @include mix.respond(phone) {
-    width: 100%;
-    max-width: 100%;
-    border-radius: 16px 16px 0 0;
-    padding: 24px 16px;
-    padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px));
-    animation: modal-slide-up 0.3s ease forwards;
-  }
-}
-
-.rc-modal-content .app-modal-header {
-  text-align: left;
+  align-items: flex-start;
+  gap: 12px;
 }
 
 .rc-modal-icon {
-  width: 56px;
-  height: 56px;
-  margin: 0 auto 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  background: rgba(227, 19, 55, 0.12);
-  color: rgb(227, 19, 55);
-  font-size: 26px;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  flex: none;
+  border-radius: v2.radius-for(44);
+  background: var(--accent-tint-strong);
+  color: var(--accent);
 }
 
 .rc-modal-text {
-  font-size: 14.5px;
-  line-height: 1.55;
-  color: var(--text-secondary, #555);
-  margin: 0 0 18px;
+  margin: 0;
+  @include v2.text(body);
+  color: var(--muted);
+  strong { color: var(--text); }
 }
 
 .rc-meter {
-  margin: 0 0 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
 
-  .rc-meter-bar {
-    height: 10px;
-    border-radius: 6px;
-    background: var(--bg-tertiary, #e6e6e6);
-    overflow: hidden;
-  }
-
-  .rc-meter-fill {
-    height: 100%;
-    border-radius: 6px;
-    background: linear-gradient(90deg, rgb(141, 11, 33) 15%, rgb(227, 19, 55) 97%);
-    transition: width 0.4s ease;
-  }
-
-  .rc-meter-label {
-    display: block;
-    margin-top: 6px;
-    font-size: 12.5px;
-    color: var(--text-secondary, #777);
-  }
+.rc-meter-label {
+  @include v2.mono(12, 700);
+  color: var(--text);
 }
 
 .rc-eta {
+  @include v2.well;
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  padding: 14px 16px;
-  margin-bottom: 18px;
-  border-radius: 10px;
-  background: var(--bg-secondary, #f6f6f6);
+  gap: 2px;
+  padding: 12px 14px;
 
-  .rc-eta-label {
-    font-size: 12.5px;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    color: var(--text-secondary, #888);
-  }
-
-  .rc-eta-value {
-    font-size: 20px;
-    font-weight: 700;
-    color: var(--text-primary, #111);
-  }
-
-  .rc-eta-hint {
-    font-size: 13px;
-    line-height: 1.5;
-    color: var(--text-secondary, #777);
-  }
-
-  &--blocked .rc-eta-hint {
-    text-align: left;
-  }
-
-  a {
-    color: rgb(227, 19, 55);
-    text-decoration: none;
-    &:hover { text-decoration: underline; }
-  }
+  &--blocked { background: var(--accent-wash); }
 }
 
-.rc-modal-actions {
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-
-  @include mix.respond(phone) {
-    flex-direction: column-reverse;
-  }
+.rc-eta-label {
+  @include v2.text(eyebrow);
+  color: var(--muted);
 }
 
-.rc-btn {
-  padding: 9px 22px;
-  border: none;
-  border-radius: 9px;
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
+.rc-eta-value {
+  @include v2.mono(24, 900);
+  color: var(--text);
+}
 
-  &:disabled { opacity: 0.6; cursor: default; }
-
-  &--primary {
-    color: #fff;
-    background-image: linear-gradient(90deg, rgb(141, 11, 33) 15%, rgb(227, 19, 55) 97%);
-  }
-
-  &--ghost {
-    color: var(--text-primary, #000);
-    background: var(--bg-tertiary, #ececec);
-  }
+.rc-eta-hint {
+  @include v2.text(meta);
+  color: var(--muted);
+  line-height: 1.45;
+  a { color: var(--cyan); font-weight: 700; }
 }

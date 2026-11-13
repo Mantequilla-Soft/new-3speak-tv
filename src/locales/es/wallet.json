@@ -9,7 +9,7 @@
     "needKeychain": "Necesitas la extensión Keychain para hacer transferencias"
   },
   "header": {
-    "mine": "MI billetera",
+    "mine": "Mi billetera",
     "ofUser": "Billetera de {{user}}"
   },
   "assets": "Activos",
@@ -28,7 +28,16 @@
     "recipientPlaceholder": "Ingresa el usuario de Hive",
     "memoLabel": "Memo",
     "memoPlaceholder": "Escribe un memo",
-    "confirm": "Confirmar transferencia"
+    "confirm": "Confirmar transferencia",
+    "sendTo": "Enviar {{amount}} {{coin}} a @{{to}}",
+    "sendAmount": "Enviar {{amount}} {{coin}}",
+    "recent": "Recientes",
+    "activeKey": "Requiere tu clave activa",
+    "available": "Disponible: {{balance}}",
+    "scan": "Escanear un código QR",
+    "scanHint": "Apunta la cámara al código QR de la otra persona.",
+    "scanNoAccount": "Este código QR no contiene ninguna cuenta de Hive. Prueba con otro.",
+    "scanNoCamera": "No se pudo abrir la cámara. Comprueba que 3Speak tenga permiso para usarla."
   },
   "history": {
     "loadFailed": "No se pudieron cargar las transacciones",
@@ -46,5 +55,52 @@
       "received": "Recibido"
     },
     "claimedRewards": "Recompensas reclamadas"
+  },
+  "total": "Saldo total",
+  "rate": "1 HIVE = {{price}}",
+  "pro": "Pro",
+  "coins": {
+    "hp": "Hive Power",
+    "savings": "Ahorros en HBD"
+  },
+  "claim": {
+    "ready": "{{amount}} listos para reclamar",
+    "readyShort": "{{amount}} por reclamar",
+    "button": "Reclamar",
+    "done": "Recompensas reclamadas",
+    "failed": "No se pudo reclamar: {{error}}"
+  },
+  "activity": {
+    "title": "Actividad",
+    "filters": {
+      "all": "Todo",
+      "rewards": "Recompensas",
+      "received": "Recibidas",
+      "sent": "Enviadas"
+    },
+    "from": "De @{{user}}",
+    "sentTo": "Enviado a @{{user}}",
+    "emptyTitle": "Aún no hay nada aquí",
+    "empty": "Aquí aparecen las transferencias y las recompensas reclamadas."
+  },
+  "earnings": {
+    "title": "Ganancias, 30 días",
+    "sub": "Recompensas reclamadas y HIVE o HBD recibidos"
+  },
+  "rc": {
+    "title": "Resource Credits",
+    "sub": "Cada acción en Hive gasta un poco. Se recargan en unos 5 días.",
+    "posts_one": "Alcanza para cerca de {{count}} publicación ahora mismo",
+    "posts_many": "Alcanza para cerca de {{count}} publicaciones ahora mismo",
+    "posts_other": "Alcanza para cerca de {{count}} publicaciones ahora mismo"
+  },
+  "receive": {
+    "title": "Recibir",
+    "sub": "Cualquiera puede enviar HIVE o HBD a este nombre de cuenta desde cualquier billetera de Hive. No hace falta memo.",
+    "amountLabel": "Pedir una cantidad (opcional)",
+    "memoLabel": "Memo (opcional)",
+    "memoPlaceholder": "Para qué es, por ejemplo un número de factura",
+    "subRequest": "Al escanear este código se piden {{amount}} {{coin}}. 3Speak y las billeteras de Hive que leen códigos de pago lo completan.",
+    "subMemo": "Al escanear este código se completan tu nombre de cuenta y el memo en 3Speak y en las billeteras de Hive que leen códigos de pago."
   }
 }

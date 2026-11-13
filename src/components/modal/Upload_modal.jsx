@@ -1,13 +1,11 @@
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import "./Upload_modal.scss";
 import axios from "axios";
 import * as tus from "tus-js-client";
 import { getTusUploadOptions, TUS_THUMBNAIL_CONFIG } from "../../utils/tusConfig";
-import cloud from "../../assets/image/cloud-blue.png";
-import gif_icon from "../../assets/image/icons-gif.gif";
-import thumbnail from "../../assets/image/thumbnail.png";
-import { TailChase } from 'ldrs/react'
-import 'ldrs/react/TailChase.css'
+import DialogShell from "./DialogShell";
+import { Button, Progress } from "../v2/ui";
+import { Icon } from "../v2/Icon";
 import { useTranslation } from 'react-i18next'
 
 function Upload_modal({ setPrevVideoUrl, setPrevVideoFile,  close, isOpen, setVideoId, username, accessToken, thumbnailFile, setThumbnailFile }) {
@@ -166,76 +164,46 @@ function Upload_modal({ setPrevVideoUrl, setPrevVideoFile,  close, isOpen, setVi
     }
   };
 
+  // Legacy studio upload (video + thumbnail) on the v2 dialog: two dashed
+  // drop tiles with cyan progress (system work), the error as an accent line,
+  // one primary action.
   return (
-    <div className={`modal ${isOpen ? "open" : ""}`}>
-      <div className="overlay" onClick={close}></div>
-      <div
-        className={`modal-content video-upload-moadal-size ${isOpen ? "open" : ""}`}
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className="modal-header">
-          <h2>{t('modals.upload.title')}</h2>
-          {error && <span className="err-upload">{error}</span> }
-          <button className="close-btn" onClick={close}>
-            &times;
-          </button>
-        </div>
-        <div
-          className="upload-wrap"
-          onClick={handleVideoDivClick}
-          style={{
-            padding: "10px",
-            border: "2px dashed #ccc",
-            textAlign: "center",
-            cursor: "pointer",
-          }}
-        >
-         <img src={cloud} alt="" />
-          <label>{t('modals.upload.selectVideo')}</label>
-          <input
-            type="file"
-            ref={videoInputRef}
-            style={{ display: "none" }}
-            onChange={handleFileUpload}
-          />
-          {uploadProgress > 0 &&<div className="progress-bar">
-            <div className="progress-bar-fill" style={{ width: `${uploadProgress}%` }}>
-              {uploadProgress > 0 && <span className="progress-bar-text">{uploadProgress}%</span>}
-            </div>
-          </div>}
-        </div>
+    <DialogShell
+      open={isOpen}
+      onClose={close}
+      title={t('modals.upload.title')}
+      width={480}
+      className="upload-modal"
+      footer={(
+        <Button variant="primary" className="btn" onClick={updateVideoInfo} loading={loading}>{t('modals.upload.updateInfo')}</Button>
+      )}
+    >
+      {error && <div className="err-upload" role="alert"><Icon name="error" size={16} />{error}</div>}
+      <button type="button" className="upload-wrap" onClick={handleVideoDivClick}>
+        <Icon name="cloud_upload" size={28} />
+        <span className="upload-wrap__title">{t('modals.upload.selectVideo')}</span>
+        {uploadProgress > 0 && (
+          <span className="upload-wrap__progress">
+            <Progress value={uploadProgress} tone="cyan" label={t('modals.upload.selectVideo')} />
+            <span className="num">{uploadProgress}%</span>
+          </span>
+        )}
+      </button>
+      <input type="file" ref={videoInputRef} style={{ display: "none" }} onChange={handleFileUpload} />
 
-        <div
-          className="upload-wrap"
-          onClick={handleThumbnailDivClick}
-          style={{
-            padding: "10px",
-            border: "2px dashed #ccc",
-            textAlign: "center",
-            cursor: "pointer",
-          }}
-        >
-          <img className="thumbnail" src={thumbnail} alt="" />
-          <label>{t('modals.upload.thumbnail')}</label>
-          <div>{t('modals.upload.clickThumbnail')}</div>
-          <input
-            type="file"
-            accept="image/*"
-            ref={thumbnailInputRef}
-            style={{ display: "none" }}
-            onChange={handleThumbnailUpload}
-          />
-          {thumbnailProgress > 0 &&<div className="progress-bar">
-            <div className="progress-bar-fill" style={{ width: `${thumbnailProgress}%` }}>
-              {thumbnailProgress > 0 && <span className="progress-bar-text">{thumbnailProgress}%</span>}
-            </div>
-          </div>}
-        </div>
-        <div className="updateVideoInfo-btn-wrap">
-          <button className="btn" onClick={updateVideoInfo}>{t('modals.upload.updateInfo')} {loading && <TailChase size="15" speed="1.75" color="white" />}</button>
-        </div>
-      </div>
-    </div>
+      <button type="button" className="upload-wrap" onClick={handleThumbnailDivClick}>
+        {thumbnailPreview ? <img className="thumbnail" src={thumbnailPreview} alt="" /> : <Icon name="image" size={28} />}
+        <span className="upload-wrap__title">{t('modals.upload.thumbnail')}</span>
+        <span className="upload-wrap__sub">{t('modals.upload.clickThumbnail')}</span>
+        {thumbnailProgress > 0 && (
+          <span className="upload-wrap__progress">
+            <Progress value={thumbnailProgress} tone="cyan" label={t('modals.upload.thumbnail')} />
+            <span className="num">{thumbnailProgress}%</span>
+          </span>
+        )}
+      </button>
+      <input type="file" accept="image/*" ref={thumbnailInputRef} style={{ display: "none" }} onChange={handleThumbnailUpload} />
+    </DialogShell>
   );
 }
 

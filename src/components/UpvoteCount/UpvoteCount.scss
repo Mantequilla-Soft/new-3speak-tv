@@ -1,34 +1,50 @@
-@use "../../mixins.scss" as *;
+@use "../../styles/v2" as v2;
 
+// Votes: arrow + count in mono, muted; accent once voted.
 .upvote-count-badge {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 4px;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
   font-size: 12px;
-  color: var(--text-secondary);
+  font-weight: 700;
+  color: var(--muted);
+  white-space: nowrap;
+  flex: none;
 
   .upvote-icon {
-    transition: color 0.2s ease;
+    transition: color var(--t-fast) var(--ease);
 
     &.clickable {
       cursor: pointer;
-
-      &:hover {
-        color: var(--accent-primary, #e53935);
-      }
+      &:hover { color: var(--accent); }
     }
   }
 
-  &.voted {
-    .upvote-icon {
-      color: var(--accent-primary, #e53935);
-    }
+  &.voted .upvote-icon { color: var(--accent); }
+
+  // Pill: the same 36px secondary control as the other actions on a card.
+  &.is-pill {
+    height: 36px;
+    padding: 0 10px;
+    border: 0;
+    border-radius: var(--r-md);
+    background: var(--surface-2);
+    color: var(--text);
+    font-size: 12px;
+    transition: background var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
+
+    &:is(button) { cursor: pointer; }
+    &:is(button):hover { background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); }
+    &:is(button):active { transform: scale(.98); }
+    &.voted { background: var(--accent-tint); color: var(--accent); }
   }
 }
 
 // Full count on desktop, whole thousands on a phone (see UpvoteCount.jsx).
 .upvote-count-compact { display: none; }
-@include respond(phone) {
+@include v2.mobile {
   .upvote-count-full { display: none; }
   .upvote-count-compact { display: inline; }
 }

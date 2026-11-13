@@ -1,12 +1,25 @@
 import { useState, useRef, useEffect, useLayoutEffect, useCallback, useMemo } from "react";
 import { reportVideoUnavailable } from '../lib/reportUnavailable';
-import { ThreeSpeakApi } from "@mantequilla-soft/3speak-player";
 import { getPlayerUrl } from "../utils/playerUrl";
-import { createLowResPreviewPlayer } from "../lib/lowResPreviewPlayer";
 import { useAppStore } from "../lib/store";
 import useCardSize from "./useCardSize";
 import useSubtitles, { prefetchSubtitles } from "./useSubtitles";
+import { heroReady } from "../lib/heroPriority";
 import SubtitleOverlay from "../components/SubtitleOverlay/SubtitleOverlay";
+
+// The player SDK + hls.js (~1 MB of JavaScript) load on demand: the cards draw
+// with their pictures first, and the sources are only looked up after the
+// Spotlight's clip anyway (heroReady), so nothing waits for this on screen.
+// A failed load just means no previews on this page view.
+let previewKit = null;
+const loadPreviewKit = () => {
+  if (!previewKit) {
+    previewKit = Promise.all([import("@mantequilla-soft/3speak-player"), import("../lib/lowResPreviewPlayer")])
+      .then(([sdk, lowRes]) => ({ ThreeSpeakApi: sdk.ThreeSpeakApi, createLowResPreviewPlayer: lowRes.createLowResPreviewPlayer }))
+      .catch((err) => { previewKit = null; throw err; });
+  }
+  return previewKit;
+};
 
 // Statuses with no playable stream — never preview these.
 const NON_PLAYABLE = new Set(["scheduled", "encoding", "draft", "failed", "deleted"]);
@@ -144,7 +157,6 @@ export default function useHoverPreview({ renderControls } = {}) {
 
   // ── Preload visible tiles (lowest-res) + track card nodes for mobile centring ──
   const apiRef = useRef(null);
-  if (!apiRef.current) apiRef.current = new ThreeSpeakApi(getPlayerUrl());
   const sourcesRef = useRef(new Map());
   const inflightRef = useRef(new Map()); // key -> AbortController (in-flight preloads)
   const cardNodesRef = useRef(new Set());
@@ -155,7 +167,14 @@ export default function useHoverPreview({ renderControls } = {}) {
     if (sources.has(key) || inflight.has(key)) return;
     const ctrl = new AbortController();
     inflight.set(key, ctrl);
-    apiRef.current.fetchSource(author, permlink)
+    // The Spotlight's video first (lib/heroPriority.js), then the cards.
+    heroReady()
+      .then(() => loadPreviewKit())
+      .then((kit) => {
+        if (ctrl.signal.aborted) throw new Error("aborted");
+        if (!apiRef.current) apiRef.current = new kit.ThreeSpeakApi(getPlayerUrl());
+        return apiRef.current.fetchSource(author, permlink);
+      })
       .then((src) => {
         if (ctrl.signal.aborted) return;
         sources.set(key, src);
@@ -204,12 +223,12 @@ export default function useHoverPreview({ renderControls } = {}) {
   }, []);
 
   // ── Single reused Player (only load() per active card) ──
-  const ensurePlayer = useCallback(() => {
+  const ensurePlayer = useCallback((kit) => {
     if (playerRef.current) return playerRef.current;
     const el = videoElRef.current;
     if (!el) return null;
     // Shared lowest-rendition preview player (also used by the scrubber preview).
-    const player = createLowResPreviewPlayer(el, { loop: true });
+    const player = kit.createLowResPreviewPlayer(el, { loop: true });
     playerRef.current = player;
     el.addEventListener("timeupdate", () => {
       if (!el.duration) return;
@@ -223,9 +242,9 @@ export default function useHoverPreview({ renderControls } = {}) {
   }, []);
 
   useEffect(() => {
-    const player = hover ? ensurePlayer() : playerRef.current;
-    if (!player) return undefined;
     if (!hover) {
+      const player = playerRef.current;
+      if (!player) return undefined;
       // Keeps playing while it fades out; a new preview cancels the pause.
       const t = setTimeout(() => { try { player.pause(); } catch { /* ignore */ } }, FADE_OUT_MS);
       return () => clearTimeout(t);
@@ -233,10 +252,18 @@ export default function useHoverPreview({ renderControls } = {}) {
     setReady(false);
     setProgress(0);
     setCurTime(0);
-    player.load(hover.source || `${hover.author}/${hover.permlink}`)
-      .then(() => { if (!player.destroyed) player.play().catch(() => {}); })
+    const start = (player) => {
+      player.load(hover.source || `${hover.author}/${hover.permlink}`)
+        .then(() => { if (!player.destroyed) player.play().catch(() => {}); })
+        .catch(() => {});
+    };
+    if (playerRef.current) { start(playerRef.current); return undefined; }
+    // First preview on this page: the player kit may still be loading.
+    let live = true;
+    loadPreviewKit()
+      .then((kit) => { if (!live) return; const player = ensurePlayer(kit); if (player) start(player); })
       .catch(() => {});
-    return undefined;
+    return () => { live = false; };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hover?.key]);
 

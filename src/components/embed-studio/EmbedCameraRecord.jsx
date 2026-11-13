@@ -1,9 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useLocation, Navigate } from 'react-router-dom';
 import { toastIn } from '../../utils/toast';
-import {
-  X, Camera, Mic, RotateCcw, Check, Download, GripHorizontal, ChevronLeft, ChevronDown, ChevronUp, RotateCw, Sliders,
-} from 'lucide-react';
 import { useEmbedUpload } from '../../context/EmbedUploadContext';
 import { useVoiceTeleprompter } from '../../hooks/useVoiceTeleprompter';
 import { generateVideoThumbnailsAt } from '../../utils/videoThumbnails';
@@ -12,6 +9,8 @@ import { useAppStore } from '../../lib/store';
 import { detectScriptLang, modelIdToTag } from '../../utils/detectLang';
 import { createSttStream } from '../../utils/sttClient';
 import './EmbedCameraRecord.scss';
+import DialogShell from '../modal/DialogShell';
+import { Button, Icon, IconButton, StatusPill } from '../v2/ui';
 import { useTranslation } from 'react-i18next';
 import { t as i18nT } from '../../i18n';
 
@@ -198,6 +197,8 @@ function EmbedCameraRecord() {
   const [recordedUrl, setRecordedUrl] = useState(null);
   const [finishing, setFinishing] = useState(false);
   const [confirmClose, setConfirmClose] = useState(false);
+  // The layout preset last applied (35a: the picked tile is outlined).
+  const [activePreset, setActivePreset] = useState(null);
   const [sttStatus, setSttStatus] = useState(''); // '', 'connecting', 'connected', 'error:<msg>', 'closed'
   // Quarter-turns applied to the sensor frame (0 = none, 1 = 90°, 3 = 270°).
   const [rotateTurns, setRotateTurns] = useState(0);
@@ -209,8 +210,10 @@ function EmbedCameraRecord() {
   useEffect(() => { try { localStorage.setItem('tp-menu-collapsed', JSON.stringify({ v: menuCollapsed })); } catch { /* ignore */ } }, [menuCollapsed]);
 
   // Draggable widgets (positions persisted).
-  const menu = useMovable('tp-menu-pos', () => ({ x: 12, y: 70 }));
-  const settingsMov = useMovable('tp-settings-pos', () => ({ x: 12, y: 120 }));
+  // Defaults sit under the script box (it starts at 6% and is 38% of the stage
+  // tall), at the left like the 35a rail, so they never cover the first words.
+  const menu = useMovable('tp-menu-pos', () => ({ x: 12, y: Math.round(winH() * 0.47) }));
+  const settingsMov = useMovable('tp-settings-pos', () => ({ x: 12, y: Math.round(winH() * 0.47) + 56 }));
 
   // Orientation: shorts (?from=stories) → portrait; longform → landscape. Follows
   // the source until the user flips it, then sticks.
@@ -393,7 +396,7 @@ function EmbedCameraRecord() {
   // ---- draggable record/stop button (tap = action, drag = move) ------------
   const recordRef = useRef(null);
   const recordDrag = useRef(null);
-  const [recordPos, setRecordPos] = useState(() => loadJson('tp-record-pos', { x: winW() - 84, y: winH() - 168 }));
+  const [recordPos, setRecordPos] = useState(() => loadJson('tp-record-pos', { x: winW() - 96, y: winH() - 168 })); // 80px button, 16px from the edge
   const recordPosRef = useRef(recordPos);
   recordPosRef.current = recordPos;
 
@@ -818,9 +821,9 @@ function EmbedCameraRecord() {
   const boxBg = hexToRgba(settings.bgColor, settings.bgOpacity);
 
   const orientationToggle = (
-    <div className="cr-orient" role="group" aria-label={t('upload.record.orientationAria')}>
-      <button type="button" className={eff === 'portrait' ? 'is-on' : ''} onClick={() => setOrient('portrait')}>{t('upload.record.portrait')}</button>
-      <button type="button" className={eff === 'landscape' ? 'is-on' : ''} onClick={() => setOrient('landscape')}>{t('upload.record.landscape')}</button>
+    <div className="v2-seg cr-orient" role="group" aria-label={t('upload.record.orientationAria')}>
+      <button type="button" className={`v2-seg__opt h32${eff === 'portrait' ? ' is-on' : ''}`} aria-pressed={eff === 'portrait'} onClick={() => setOrient('portrait')}>{t('upload.record.portrait')}</button>
+      <button type="button" className={`v2-seg__opt h32${eff === 'landscape' ? ' is-on' : ''}`} aria-pressed={eff === 'landscape'} onClick={() => setOrient('landscape')}>{t('upload.record.landscape')}</button>
     </div>
   );
 
@@ -831,46 +834,62 @@ function EmbedCameraRecord() {
     ...LANG_OPTIONS.filter((o) => availableLangs.includes(o.value)),
   ];
 
+  const PRESETS = [
+    { key: 'frontcam', icon: 'videocam', label: t('upload.record.presets.frontcam'), sub: t('upload.record.presets.frontcamTitle') },
+    { key: 'max', icon: 'format_size', label: t('upload.record.presets.max'), sub: t('upload.record.presets.maxTitle') },
+    { key: 'top', icon: 'vertical_align_top', label: t('upload.record.presets.top'), sub: t('upload.record.presets.topTitle') },
+  ];
+  const pickPreset = (key) => { applyPreset(key); setActivePreset(key); };
+
+  // One-tap layouts as tiles (35a: icon, name, what it is for).
+  const presetTiles = (
+    <div className="cr-presets" role="group" aria-label={t('upload.record.layout')}>
+      {PRESETS.map((p) => (
+        <button
+          key={p.key}
+          type="button"
+          className={`cr-preset${activePreset === p.key ? ' is-on' : ''}`}
+          aria-pressed={activePreset === p.key}
+          onClick={() => pickPreset(p.key)}
+          title={p.sub}
+        >
+          <Icon name={p.icon} size={20} />
+          <b>{p.label}</b>
+          <span>{p.sub}</span>
+        </button>
+      ))}
+    </div>
+  );
+
   const overlaySettingsPanel = (
     <>
-      <div className="cr-presets">
-        <button type="button" onClick={() => applyPreset('frontcam')} title={t('upload.record.presets.frontcamTitle')}>
-          {t('upload.record.presets.frontcam')}
-        </button>
-        <button type="button" onClick={() => applyPreset('max')} title={t('upload.record.presets.maxTitle')}>
-          {t('upload.record.presets.max')}
-        </button>
-        <button type="button" onClick={() => applyPreset('top')} title={t('upload.record.presets.topTitle')}>
-          {t('upload.record.presets.top')}
-        </button>
-      </div>
+      <div className="cr-set-label">{t('upload.record.layout')}</div>
+      {presetTiles}
 
-      <label className="cr-set-row">
-        <span>{t('upload.record.style.fontSize')}</span>
-        <input type="range" min="10" max="52" step="1" value={settings.fontSize}
-          onChange={(e) => setSetting({ fontSize: Number(e.target.value) })} />
-        <span className="cr-set-val">{settings.fontSize}px</span>
-      </label>
-      <div className="cr-set-colors">
-        <label className="cr-set-color">
-          <span>{t('upload.record.style.text')}</span>
+      <div className="cr-set-grid">
+        <label className="cr-set-well cr-set-well--wide">
+          <span className="cr-set-head"><span>{t('upload.record.style.fontSize')}</span><b className="num">{settings.fontSize} px</b></span>
+          <input type="range" min="10" max="52" step="1" value={settings.fontSize}
+            onChange={(e) => setSetting({ fontSize: Number(e.target.value) })} />
+        </label>
+        <label className="cr-set-well cr-set-color">
+          <span className="cr-set-head"><span>{t('upload.record.style.text')}</span></span>
           <input type="color" value={settings.fontColor} onChange={(e) => setSetting({ fontColor: e.target.value })} />
         </label>
-        <label className="cr-set-color">
-          <span>{t('upload.record.style.background')}</span>
+        <label className="cr-set-well cr-set-color">
+          <span className="cr-set-head"><span>{t('upload.record.style.background')}</span></span>
           <input type="color" value={settings.bgColor} onChange={(e) => setSetting({ bgColor: e.target.value })} />
         </label>
-        <label className="cr-set-row cr-set-opacity">
-          <span>{t('upload.record.style.bgOpacity')}</span>
+        <label className="cr-set-well cr-set-well--wide">
+          <span className="cr-set-head"><span>{t('upload.record.style.bgOpacity')}</span><b className="num">{Math.round(settings.bgOpacity * 100)}%</b></span>
           <input type="range" min="0" max="1" step="0.05" value={settings.bgOpacity}
             onChange={(e) => setSetting({ bgOpacity: Number(e.target.value) })} />
-          <span className="cr-set-val">{Math.round(settings.bgOpacity * 100)}%</span>
         </label>
       </div>
-      <label className="cr-set-row">
-        <span>{t('upload.record.style.voiceLanguage')}</span>
+      <label className="cr-set-well cr-set-lang">
+        <span className="cr-set-head"><span><Icon name="record_voice_over" size={16} /> {t('upload.record.style.voiceLanguage')}</span></span>
         <select
-          className="cr-lang-select"
+          className="cr-lang-select v2-input is-select h32"
           value={langOptions.some((o) => o.value === settings.lang) ? settings.lang : 'auto'}
           onChange={(e) => setSetting({ lang: e.target.value })}
         >
@@ -881,18 +900,18 @@ function EmbedCameraRecord() {
   );
 
   const settingsGearBtn = (
-    <button type="button" className={`cr-gear${settingsOpen ? ' is-on' : ''}`} onClick={() => setSettingsOpen((o) => !o)}>
-      <Sliders size={15} /> {t('upload.record.style.title')}
+    <button type="button" className={`cr-gear${settingsOpen ? ' is-on' : ''}`} aria-pressed={settingsOpen} onClick={() => setSettingsOpen((o) => !o)}>
+      <Icon name="tune" size={18} /> {t('upload.record.style.title')}
     </button>
   );
 
   const settingsPopupEl = settingsOpen ? (
     <div ref={settingsMov.ref} className="cr-settings-pop" style={{ left: settingsMov.pos.x, top: settingsMov.pos.y }} {...settingsMov.surfaceProps}>
       <div className="cr-pop-header" {...settingsMov.handleProps}>
-        <GripHorizontal size={14} />
+        <Icon name="drag_indicator" size={18} />
         <span className="cr-pop-title">{t('upload.record.style.title')}</span>
         <button type="button" className="cr-pop-close" onPointerDown={(e) => e.stopPropagation()} onClick={() => setSettingsOpen(false)} aria-label={t('common.actions.close')}>
-          <X size={15} />
+          <Icon name="close" size={18} />
         </button>
       </div>
       <div className="cr-pop-body">{overlaySettingsPanel}</div>
@@ -903,14 +922,14 @@ function EmbedCameraRecord() {
   const voiceActive = tp.totalWords > 0 && (phase === 'recording' || (phase === 'setup' && tp.listening));
   const voiceStatusEl = voiceActive ? (
     (!tp.supported && !usingStt) ? (
-      <div className="cr-tp-warn">{t('upload.record.voiceUnsupported')}</div>
+      <div className="cr-tp-warn"><Icon name="wifi_off" size={16} />{t('upload.record.voiceUnsupported')}</div>
     ) : (usingStt && sttStatus.startsWith('error')) ? (
-      <div className="cr-tp-warn">{t('upload.record.speechServerError', { reason: sttStatus.slice(6) || t('upload.record.unreachable') })}</div>
+      <div className="cr-tp-warn"><Icon name="wifi_off" size={16} />{t('upload.record.speechServerError', { reason: sttStatus.slice(6) || t('upload.record.unreachable') })}</div>
     ) : (!usingStt && speechErrorLabel(tp.error)) ? (
-      <div className="cr-tp-warn">{speechErrorLabel(tp.error)}</div>
+      <div className="cr-tp-warn"><Icon name="mic_off" size={16} />{speechErrorLabel(tp.error)}</div>
     ) : (
       <div className="cr-heard">
-        <Mic size={13} />
+        <Icon name="mic" size={16} />
         <span>
           {tp.interimText
             || (usingStt
@@ -921,54 +940,65 @@ function EmbedCameraRecord() {
     )
   ) : null;
 
-  const confirmDialogEl = confirmClose ? (
-    <div className="cr-confirm">
-      <div className="cr-confirm-box">
-        <p className="cr-confirm-title">{t('upload.record.leave.title')}</p>
-        <p className="cr-confirm-sub">{t('upload.record.leave.sub')}</p>
-        <div className="cr-confirm-actions cr-confirm-actions--stack">
-          <button
-            type="button"
-            className="cr-btn cr-btn--outline"
+  // 35a: "Leave the camera?" with Back to script, Stay and Close.
+  const confirmDialogEl = (
+    <DialogShell
+      open={confirmClose}
+      onClose={() => setConfirmClose(false)}
+      title={t('upload.record.leave.title')}
+      width={400}
+      zIndex={4000}
+      className="cr-confirm-box"
+      footer={(
+        <div className="cr-confirm-actions">
+          <Button
+            variant="secondary"
+            size={48}
+            center
             onClick={() => { setConfirmClose(false); stopRecording(); goToScript(); }}
           >
-            <ChevronLeft size={16} /> {t('upload.record.leave.backToScript')}
-          </button>
-          <div className="cr-confirm-row">
-            <button type="button" className="cr-btn cr-btn--ghost" onClick={() => setConfirmClose(false)}>{t('upload.record.leave.stay')}</button>
-            <button type="button" className="cr-btn cr-btn--record" onClick={doClose}>{t('common.actions.close')}</button>
-          </div>
+            {t('upload.record.leave.backToScript')}
+          </Button>
+          <Button variant="inverse" size={48} center onClick={() => setConfirmClose(false)}>{t('upload.record.leave.stay')}</Button>
+          <Button variant="danger" size={48} center onClick={doClose}>{t('common.actions.close')}</Button>
         </div>
-      </div>
-    </div>
-  ) : null;
+      )}
+    >
+      <p className="cr-confirm-sub">{t('upload.record.leave.sub')}</p>
+    </DialogShell>
+  );
 
-  // ---- fullscreen script editor -------------------------------------------
+  // ---- fullscreen script editor (35a, left) --------------------------------
   if (phase === 'script') {
     return (
       <div className="camera-record cr-script-phase">
-        <div className="cr-script-head">
-          <button type="button" className="cr-icon-btn" onClick={requestClose} aria-label={t('common.actions.close')}><X size={22} /></button>
-          <span className="cr-title">{t('upload.record.experimentalTitle')}</span>
-          <span style={{ width: 40 }} />
-        </div>
+        <div className="cr-script-card">
+          <div className="cr-script-head">
+            <span className="cr-mark" aria-hidden="true" />
+            <b className="cr-title">{t('upload.record.experimentalTitle')}</b>
+            <StatusPill tone="cyan">{t('upload.select.beta')}</StatusPill>
+            <span className="cr-script-head__spacer" />
+            <IconButton icon="close" label={t('common.actions.close')} size={40} variant="secondary" round onClick={requestClose} />
+          </div>
 
-        <textarea
-          className="cr-script-full"
-          value={script}
-          onChange={(e) => setScript(e.target.value)}
-          placeholder={t('upload.record.scriptPlaceholder')}
-        />
+          <textarea
+            className="cr-script-full"
+            value={script}
+            onChange={(e) => setScript(e.target.value)}
+            placeholder={t('upload.record.scriptPlaceholder')}
+          />
 
-        <div className="cr-script-bar">
-          <div className="cr-orient-line"><span>{t('upload.record.orientation')}</span>{orientationToggle}</div>
-          {settingsGearBtn}
-        </div>
+          <div className="cr-set-label">{t('upload.record.layout')}</div>
+          {presetTiles}
 
-        <div className="cr-controls">
-          <button type="button" className="cr-btn cr-btn--record" onClick={goToCamera}>
-            <Camera size={18} /> {t('upload.record.continueToCamera')}
-          </button>
+          <div className="cr-script-bar">
+            <div className="cr-orient-line"><span className="v2-eyebrow">{t('upload.record.orientation')}</span>{orientationToggle}</div>
+            {settingsGearBtn}
+          </div>
+
+          <Button variant="primary" size={56} block trailing="videocam" className="is-next cr-continue" onClick={goToCamera}>
+            {t('upload.record.continueToCamera')}
+          </Button>
         </div>
 
         {settingsPopupEl}
@@ -1000,14 +1030,19 @@ function EmbedCameraRecord() {
           </div>
         )}
 
-        {camError && <div className="cr-error">{camError}</div>}
+        {camError && (
+          <div className="cr-error" role="alert">
+            <Icon name="no_photography" size={24} />
+            <span>{camError}</span>
+          </div>
+        )}
 
         {phase === 'recording' && (
           <div className="cr-topbar">
             <span className="cr-rec-badge"><span className="cr-rec-dot" /> REC {fmtTime(elapsed)}{capLabel}</span>
             {tp.totalWords > 0 && (
               <span className={`cr-listen${tp.listening ? ' cr-listen--on' : ''}`}>
-                <Mic size={14} /> {tp.matchedCount}/{tp.totalWords}
+                <Icon name="mic" size={16} /> {tp.matchedCount}/{tp.totalWords}
               </span>
             )}
           </div>
@@ -1015,7 +1050,7 @@ function EmbedCameraRecord() {
 
         {rotateHint && (
           <div className="cr-rotate-hint">
-            <RotateCw size={14} /> {eff === 'landscape' ? t('upload.record.rotateHintLandscape') : t('upload.record.rotateHintPortrait')}
+            <Icon name="screen_rotation" size={16} /> {eff === 'landscape' ? t('upload.record.rotateHintLandscape') : t('upload.record.rotateHintPortrait')}
           </div>
         )}
 
@@ -1048,7 +1083,7 @@ function EmbedCameraRecord() {
             {/* small corner grip instead of a header bar, so the script can sit
                 right under the front lens without an obvious UI strip above it */}
             <div className="cr-tp-grip" onPointerDown={beginDrag('move')} title={t('upload.record.dragToMove')}>
-              <GripHorizontal size={13} />
+              <Icon name="open_with" size={14} />
             </div>
             <div className="cr-tp-resize" onPointerDown={beginDrag('resize')} />
           </div>
@@ -1058,16 +1093,16 @@ function EmbedCameraRecord() {
       </div>
 
       {/* floating close */}
-      <button type="button" className="cr-close" onClick={requestClose} aria-label={t('common.actions.close')}><X size={22} /></button>
+      <button type="button" className="cr-close" onClick={requestClose} aria-label={t('common.actions.close')}><Icon name="close" size={24} /></button>
 
       {/* floating draggable, collapsible menu */}
       {(phase === 'setup' || phase === 'recording') && (
         <div ref={menu.ref} className="cr-menu" style={{ left: menu.pos.x, top: menu.pos.y }} {...menu.surfaceProps}>
           <div className="cr-menu-head" {...menu.handleProps}>
-            <GripHorizontal size={14} />
+            <Icon name="drag_indicator" size={18} />
             <span className="cr-menu-title">{t('upload.record.menu')}</span>
             <button type="button" className="cr-menu-collapse" onPointerDown={(e) => e.stopPropagation()} onClick={() => setMenuCollapsed((c) => !c)} aria-label={t('upload.record.collapseMenu')}>
-              {menuCollapsed ? <ChevronDown size={16} /> : <ChevronUp size={16} />}
+              <Icon name={menuCollapsed ? 'expand_more' : 'expand_less'} size={20} />
             </button>
           </div>
           {!menuCollapsed && (
@@ -1076,11 +1111,11 @@ function EmbedCameraRecord() {
                 <>
                   <div className="cr-menu-line"><span>{t('upload.record.orientation')}</span>{orientationToggle}</div>
                   <button type="button" className="cr-menu-btn" onClick={goToScript}>
-                    <ChevronLeft size={15} /> {t('upload.record.editScript')}
+                    <Icon name="edit_note" size={20} /> {t('upload.record.editScript')}
                   </button>
                   {devices.length > 1 && (
                     <label className="cr-cam-select">
-                      <Camera size={15} />
+                      <Icon name="flip_camera_ios" size={20} />
                       <select value={selectedDeviceId} onChange={onSelectCamera}>
                         {devices.map((d, i) => <option key={d.deviceId} value={d.deviceId}>{d.label || t('upload.record.cameraN', { n: i + 1 })}</option>)}
                       </select>
@@ -1093,12 +1128,12 @@ function EmbedCameraRecord() {
                       onClick={() => setSetting({ rotateDir: settings.rotateDir === 3 ? 1 : 3 })}
                       title={t('upload.record.flipRotationTitle')}
                     >
-                      <RotateCw size={15} /> {t('upload.record.flipRotation')}
+                      <Icon name="screen_rotation" size={20} /> {t('upload.record.flipRotation')}
                     </button>
                   )}
                   {tp.totalWords > 0 && tp.supported && (
                     <button type="button" className={`cr-menu-btn cr-test${tp.listening ? ' is-on' : ''}`} onClick={toggleVoiceTest}>
-                      <Mic size={15} /> {tp.listening ? t('upload.record.stopVoiceTest') : t('upload.record.testVoice')}
+                      <Icon name={tp.listening ? 'mic' : 'mic_none'} size={20} /> {tp.listening ? t('upload.record.stopVoiceTest') : t('upload.record.testVoice')}
                     </button>
                   )}
                 </>
@@ -1128,18 +1163,18 @@ function EmbedCameraRecord() {
 
       {phase === 'review' && (
         <div className="cr-review-actions">
-          <button type="button" className="cr-btn cr-btn--ghost" onClick={goToScript} disabled={finishing}>
-            <ChevronLeft size={16} /> {t('upload.record.script')}
-          </button>
-          <button type="button" className="cr-btn cr-btn--ghost" onClick={retake} disabled={finishing}>
-            <RotateCcw size={16} /> {t('upload.record.reRecord')}
-          </button>
-          <button type="button" className="cr-btn cr-btn--outline" onClick={downloadRecording} disabled={finishing}>
-            <Download size={16} /> {t('common.actions.download')}
-          </button>
-          <button type="button" className="cr-btn cr-btn--record" onClick={useThisVideo} disabled={finishing}>
-            <Check size={16} /> {finishing ? t('upload.record.preparing') : t('upload.record.useThisVideo')}
-          </button>
+          <Button variant="media" size={48} icon="edit_note" onClick={goToScript} disabled={finishing}>
+            {t('upload.record.script')}
+          </Button>
+          <Button variant="media" size={48} icon="replay" onClick={retake} disabled={finishing}>
+            {t('upload.record.reRecord')}
+          </Button>
+          <Button variant="media" size={48} icon="download" onClick={downloadRecording} disabled={finishing}>
+            {t('common.actions.download')}
+          </Button>
+          <Button variant="media" size={48} trailing="check" className="cr-btn--use is-next" onClick={useThisVideo} disabled={finishing} loading={finishing}>
+            {finishing ? t('upload.record.preparing') : t('upload.record.useThisVideo')}
+          </Button>
         </div>
       )}
 

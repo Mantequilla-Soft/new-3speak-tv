@@ -16,7 +16,7 @@
       "upload": "¿Qué tal tu subida?",
       "stream": "¿Qué tal tu transmisión en vivo?",
       "watch": "¿Qué tal ver videos en 3Speak?",
-      "global": "¿Cómo va tu experiencia en 3Speak?",
+      "global": "¿Qué te parece el nuevo 3Speak?",
       "fallback": "Ayúdanos a mejorar 3Speak"
     },
     "stars": {
@@ -50,7 +50,7 @@
   },
   "live": {
     "vodProcessing": "La grabación se está procesando…",
-    "vodProcessingHint": "Esta transmisión terminó. El video la reemplazará aquí en cuanto termine el codificador; no hace falta recargar.",
+    "vodProcessingHint": "El video la reemplazará aquí en cuanto termine el codificador. No hace falta recargar.",
     "watching_one": "👁 {{count}} viendo",
     "watching_many": "👁 {{count}} viendo",
     "watching_other": "👁 {{count}} viendo",
@@ -111,13 +111,20 @@
     "atTime": "en {{time}}",
     "commentPlaceholder": "Escribe tu comentario aquí...",
     "replyPlaceholder": "Escribe tu respuesta aquí...",
+    "joinPlaceholder": "Únete a la conversación…",
     "commentButton": "Comentar",
     "count_one": "{{count}} comentario",
     "count_many": "{{count}} comentarios",
     "count_other": "{{count}} comentarios",
+    "replies_one": "{{count}} respuesta",
+    "replies_many": "{{count}} respuestas",
+    "replies_other": "{{count}} respuestas",
     "edited": "(editado)",
     "hideComment": "Ocultar comentario",
     "showComment": "Mostrar el comentario de @{{user}}",
+    "hiddenComment": "Comentario oculto",
+    "hiddenLowScore": "Comentario ocultado por la comunidad · puntuación baja",
+    "show": "Mostrar",
     "saving": "Guardando...",
     "translation": "Traducción",
     "translationFailed": "Falló la traducción. ¿Está funcionando el servicio de traducción?",
@@ -142,6 +149,9 @@
     "uploadingImage": "Subiendo imagen",
     "write": "Escribir",
     "preview": "Vista previa",
-    "nothingToPreview": "Aún no hay nada que previsualizar"
+    "nothingToPreview": "Aún no hay nada que previsualizar",
+    "creator": "Creador",
+    "empty": "Aún no hay comentarios",
+    "emptyHint": "Los comentarios ligados a un momento aparecen en la línea de tiempo del video."
   }
 }

@@ -33,6 +33,11 @@ const HIVE_API = 'https://api.hive.blog';
 // answered 403 "Domain suspended" since 2026-09-08, which left every legacy
 // thumbnail in the cards and the VideoObject pointing at an error page.
 const IPFS_GATEWAY = 'https://ipfs.3speak.tv';
+// Thumbnails (VideoObject thumbnailUrl, og:image) go out through ipfs-audio:
+// since 2026-11 many new uploads are not announced to the IPFS network and
+// ipfs.3speak.tv hangs on ~8% of their thumbnails, which Search Console reports
+// as "invalid URL in thumbnailUrl". The node behind ipfs-audio has them all.
+const THUMB_GATEWAY = process.env.OG_THUMB_GATEWAY || 'https://ipfs-audio.3speak.tv';
 // Base for author/publisher links + the fallback logo. og:url / canonical are
 // derived from the *request* host instead (so a shared preview link points back
 // to preview, and a prod link to prod) — see requestOrigin().
@@ -305,11 +310,11 @@ function fixThumbnail(thumbnail) {
   if (t.includes('ipfs://')) {
     const hash = t.replace('ipfs://', '').trim();
     if (!hash) return FALLBACK_THUMBNAIL;
-    return `${IPFS_GATEWAY}/ipfs/${hash}`;
+    return `${THUMB_GATEWAY}/ipfs/${hash}`;
   }
 
-  if (/^https:\/\/(hot)?ipfs-3speak(-1)?\.b-cdn\.net\/ipfs\//.test(t)) {
-    return t.replace(/^https:\/\/[^/]+/, IPFS_GATEWAY);
+  if (/^https:\/\/((hot)?ipfs-3speak(-1)?\.b-cdn\.net|ipfs\.3speak\.tv|ipfs-audio\.3speak\.tv)\/ipfs\//.test(t)) {
+    return t.replace(/^https:\/\/[^/]+/, THUMB_GATEWAY);
   }
 
   if (
@@ -1243,6 +1248,14 @@ async function resolveVideoCard(video, origin) {
     const asShort = await lookupEmbed(post.author, post.permlink);
     if (asShort.doc && asShort.doc.short === true) embed = asShort.doc;
   }
+  // A 3Speak video posted from Ecency, PeakD, Skatehive...: the post carries
+  // only the player link, no `video` metadata and no 3Speak app name. Without
+  // the checker's doc the page was taken for a text post and noindexed, while
+  // the sitemap (built from those docs) listed it.
+  if (!embed && post && !post.parent_author && !meta.video && !/speak/i.test(String(meta.app || ''))) {
+    const asEmbed = await lookupEmbed(post.author, post.permlink);
+    if (asEmbed.doc) embed = asEmbed.doc;
+  }
   const isShort = video.kind === 'shorts' || !!(embed && embed.short === true);
 
   // Thumbnail: embed doc's thumbnail_url wins (it's the one the app shows for
@@ -1295,7 +1308,9 @@ async function resolveVideoCard(video, origin) {
   const indexability = post ? getIndexability(post, meta) : null;
   // A Hive post with no video in it (a text post opened as /@author/permlink)
   // is not a video page: kept out of the index rather than offered as one.
-  const isVideo = !!embed || !!meta.video || /speak/i.test(String(meta.app || ''));
+  // The player link in the body counts too: a slow checker proves nothing.
+  const isVideo = !!embed || !!meta.video || /speak/i.test(String(meta.app || ''))
+    || /play\.3speak\.tv\/(embed|watch)\?v=/.test(String((post && post.body) || ''));
   const index = post
     ? indexability.index && isVideo
     : !(embed && embed.isNsfwContent) && !isAdultByTitle(title);

@@ -2,7 +2,7 @@ import React, { useRef, useLayoutEffect, useState, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
-import { IoClose } from 'react-icons/io5'
+import { Icon } from '../v2/Icon'
 import HiveAvatar from '../HiveAvatar/HiveAvatar'
 
 import "./ToolTip.scss"
@@ -65,9 +65,10 @@ function ToolTip({
             ? (pinnedTitle || t('engagement.voters.pinnedTitle', { count: tooltipVoters.length }))
             : (title || t('engagement.voters.topVoters'))}
         </span>
+        {!pinned && tooltipVoters.length > 0 && <span className="votes-tooltip-count">{tooltipVoters.length}</span>}
         {pinned && (
-          <button className="votes-tooltip-close" onClick={onClose}>
-            <IoClose size={14} />
+          <button type="button" className="votes-tooltip-close" onClick={onClose} aria-label={t('common.actions.close')}>
+            <Icon name="close" size={16} />
           </button>
         )}
       </div>
@@ -88,6 +89,10 @@ function ToolTip({
             >
               @{voter.username}
             </a>
+            {/* 40a: the voter's weight in muted mono beside what the vote is worth */}
+            {voter.reward != null && voter.weight != null && (
+              <span className="votes-tooltip-pct">{Math.round(voter.weight)}%</span>
+            )}
             {voter.reward != null && (
               <span className="votes-tooltip-reward">${voter.reward.toFixed(3)}</span>
             )}

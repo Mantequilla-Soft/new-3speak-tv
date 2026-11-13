@@ -1,5 +1,5 @@
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { Camera } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { Icon } from '../v2/Icon';
 import HiveAvatar from '../HiveAvatar/HiveAvatar';
 import { getHiveClient } from '../../utils/hiveNode';
 import { fetchProfile } from '../../utils/profileMeta';
@@ -41,8 +41,8 @@ export default function ProfileHeader({
   // Slot between the bio/location and the badge row — user profiles put their
   // stat line here (see ProfileStats); community pages pass nothing.
   meta,
-  // Inside the details panel, on its right edge, stacked in a column on
-  // desktop (a centred row at the bottom on phones): the linked channels.
+  // The linked channels: on the stat line, right after "on Hive since"
+  // (owner 2026-11-12), so the badge row below stays badges only.
   aside,
   avatarBadgeSize = 16,
   refreshKey = 0,
@@ -124,23 +124,6 @@ export default function ProfileHeader({
   const heading = displayName || name || username;
   const avatarClickable = typeof onAvatarClick === 'function';
 
-  // Keep the avatar exactly as tall as the identity lines beside it (display
-  // name, @handle, bio, location). Measured rather than done in CSS: a flex
-  // item resolves its width from content before the cross-axis stretch, so
-  // "square as tall as my sibling" isn't expressible with aspect-ratio.
-  const metaRef = useRef(null);
-  const [avatarSize, setAvatarSize] = useState(0);
-  useLayoutEffect(() => {
-    const el = metaRef.current;
-    if (!el) return;
-    const measure = () => setAvatarSize(el.offsetHeight);
-    measure();
-    if (typeof ResizeObserver === 'undefined') return;   // fine, CSS min-* holds
-    const ro = new ResizeObserver(measure);
-    ro.observe(el);
-    return () => ro.disconnect();
-  }, [heading, bioText, locationText, badges]);
-
   // Adapt the panel's veil to the cover behind it: white text over a pale banner
   // needs a heavier scrim than the same text over a dark one. Continuous rather
   // than a light/dark switch, so a mid-tone banner gets a mid-strength veil and
@@ -175,6 +158,8 @@ export default function ProfileHeader({
       className="profile-card"
       style={{ '--panel-scrim': scrim }}
     >
+      {/* 20b: the cover across the top, fading into the page at the bottom so
+          the avatar and the name can sit on its lower edge. */}
       <div className="profile-header">
         <img
           className={`gradient-bg${shownCover === defaultCover ? ' gradient-bg--default' : ''}`}
@@ -182,26 +167,24 @@ export default function ProfileHeader({
           alt=""
           onError={() => setCoverFailed(true)}
         />
+        <div className="profile-header__fade" aria-hidden="true" />
       </div>
       <div className="profile-body">
         <div className="top-section">
-          <div className={`left-info${aside ? ' left-info--has-aside' : ''}`}>
-            {/* Avatar + identity lines: the avatar is sized off this row, so it
-                matches the text lines and stops above the badges. */}
-            <div className="identity-row">
-            <div
-              className={`avatar${avatarClickable ? ' avatar--clickable' : ''}${avatarCoin ? ' avatar--coin' : ''}`}
-              style={avatarSize ? { width: avatarSize, height: avatarSize } : undefined}
-              {...(avatarClickable ? {
-                role: 'button',
-                tabIndex: 0,
-                title: t('profile.header.editProfile'),
-                onClick: onAvatarClick,
-                onKeyDown: (e) => {
-                  if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onAvatarClick(); }
-                },
-              } : {})}
-            >
+          <div
+            className={`avatar${avatarClickable ? ' avatar--clickable' : ''}${avatarCoin ? ' avatar--coin' : ''}`}
+            {...(avatarClickable ? {
+              role: 'button',
+              tabIndex: 0,
+              title: t('profile.header.editProfile'),
+              'aria-label': t('profile.header.editProfile'),
+              onClick: onAvatarClick,
+              onKeyDown: (e) => {
+                if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onAvatarClick(); }
+              },
+            } : {})}
+          >
+            <div className="avatar__inner">
               <HiveAvatar
                 username={username}
                 size={null}
@@ -211,30 +194,43 @@ export default function ProfileHeader({
               />
               {avatarClickable ? (
                 <span className="avatar-edit-overlay" aria-hidden="true">
-                  <Camera size={22} />
+                  <Icon name="photo_camera" size={24} />
                 </span>
               ) : null}
             </div>
-            <div className="user-meta" ref={metaRef}>
-              <div className="name-row">
-                <h2>{heading}</h2>
-                {nameActions ? <div className="name-actions">{nameActions}</div> : null}
-              </div>
-              {displayName ? <span className="profile-handle">@{username}</span> : null}
-              {bioText ? <p className="profile-bio">{bioText}</p> : null}
-              {locationText ? (
-                <p className="profile-location">
-                  <span className="profile-location-label">{t('profile.header.location')}</span> {locationText}
-                </p>
-              ) : null}
-              {meta}
-            </div>
-            </div>
-            {badges ? <div className="user-badges">{badges}</div> : null}
-            {aside ? <div className="header-aside">{aside}</div> : null}
           </div>
-          {actions ? <div className="button-group">{actions}</div> : null}
+          <div className="user-meta">
+            <div className="name-row">
+              <h2>{heading}</h2>
+            </div>
+            {displayName || locationText ? (
+              <p className="profile-sub">
+                {displayName ? <span className="profile-handle">@{username}</span> : null}
+                {locationText ? (
+                  <span className="profile-location" title={`${t('profile.header.location')} ${locationText}`}>
+                    <Icon name="location_on" size={16} />
+                    <span className="profile-location-label">{t('profile.header.location')}</span>
+                    {locationText}
+                  </span>
+                ) : null}
+              </p>
+            ) : null}
+            {meta || aside ? (
+              <div className="profile-meta-row">
+                {meta}
+                {aside ? <div className="header-aside">{aside}</div> : null}
+              </div>
+            ) : null}
+          </div>
+          {nameActions || actions ? (
+            <div className="name-actions">
+              {nameActions}
+              {actions ? <div className="button-group">{actions}</div> : null}
+            </div>
+          ) : null}
         </div>
+        {bioText ? <p className="profile-bio">{bioText}</p> : null}
+        {badges ? <div className="user-badges">{badges}</div> : null}
       </div>
     </div>
   );

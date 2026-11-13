@@ -21,6 +21,7 @@
     "followers_one": "{{num}} volger",
     "followers_other": "{{num}} volgers",
     "popularTitle": "Populaire makers",
+    "suggestedTitle": "Makers om te volgen",
     "scrollLeft": "Naar links scrollen",
     "scrollRight": "Naar rechts scrollen",
     "mostlyPosts": "Post vooral over {{topic}}"
@@ -66,7 +67,8 @@
     "tapForSound": "Tik voor geluid",
     "views_one": "{{num}} weergave",
     "views_other": "{{num}} weergaven",
-    "readMore": "Lees meer"
+    "readMore": "Lees meer",
+    "label": "Trailer"
   },
   "snaps": {
     "readMore": "Lees meer",
@@ -167,7 +169,8 @@
       "text": "Groepeer je video's in een playlist die mensen op volgorde kunnen bekijken.",
       "cta": "Maak je eerste playlist",
       "visitor": "@{{user}} heeft geen openbare playlists."
-    }
+    },
+    "visitorPreview": "Bezoekers zien: “{{text}}”"
   },
   "links": {
     "button": "Links",
@@ -186,7 +189,8 @@
     "shorts": "Shorts",
     "audio": "Audio",
     "community": "Community",
-    "playlists": "Playlists"
+    "playlists": "Playlists",
+    "latestSnap": "Nieuwste snap"
   },
   "streams": {
     "loading": "Streams laden…",
@@ -217,6 +221,7 @@
     "messageTitle": "@{{user}} een bericht sturen",
     "messageLogin": "Log in om een bericht te sturen",
     "message": "Bericht",
+    "messageShort": "DM",
     "unhideTitle": "Video's van @{{user}} weer in je feeds tonen",
     "hideTitle": "Video's van @{{user}} in al je feeds verbergen",
     "unhide": "Weer tonen",
@@ -230,7 +235,11 @@
     "loginToUpload": "Log in om een video te uploaden",
     "linkExternalTitle": "Een extern profiel koppelen",
     "addProfile": "Profiel toevoegen",
-    "editTitle": "Bewerk je foto, naam, bio en locatie"
+    "editTitle": "Bewerk je foto, naam, bio en locatie",
+    "more": "Meer",
+    "moreActions": "Meer acties voor @{{user}}",
+    "copyProfileLink": "Profiellink kopiëren",
+    "podcastFeed": "Podcastfeed (RSS)"
   },
   "tabs": {
     "overview": "Overzicht",
@@ -265,11 +274,7 @@
     "tip": "Fooi",
     "tipCreator": "Maker een fooi geven",
     "latestVideo": "Nieuwste video",
-    "watchLatestVideo": "Nieuwste video bekijken",
-    "latestShort": "Nieuwste short",
-    "watchLatestShort": "Nieuwste short bekijken",
-    "closeMenu": "Menu sluiten",
-    "openActions": "Acties openen"
+    "latestShort": "Nieuwste short"
   },
   "uploads": {
     "processing": "Je video's worden verwerkt",
@@ -296,7 +301,10 @@
     "hiddenToast": "Fooi verborgen op je profiel",
     "unhiddenToast": "Fooi staat weer op je profiel",
     "hideFailed": "Kon deze fooi niet wijzigen. Probeer het opnieuw.",
-    "hideWalletPrompt": "Onderteken om te kiezen welke fooien op je profiel staan"
+    "hideWalletPrompt": "Onderteken om te kiezen welke fooien op je profiel staan",
+    "whoTitle": "@{{user}} steunt",
+    "tipped_one": "{{count}}× fooi",
+    "tipped_other": "{{count}}× fooi"
   },
   "layout": {
     "customize": "Profiel aanpassen",
@@ -409,5 +417,13 @@
   },
   "audioTab": {
     "files": "Audiobestanden"
+  },
+  "search": {
+    "placeholder": "Dit kanaal doorzoeken",
+    "clear": "Zoekopdracht wissen",
+    "results_one": "{{count}} resultaat voor “{{query}}”",
+    "results_other": "{{count}} resultaten voor “{{query}}”",
+    "empty": "Niets op dit kanaal komt overeen met “{{query}}”.",
+    "older": "Oudere uploads doorzoeken"
   }
 }

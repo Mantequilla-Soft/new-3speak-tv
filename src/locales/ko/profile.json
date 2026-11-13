@@ -19,6 +19,7 @@
     "pleaseTryAgain": "다시 시도해 주세요",
     "followers_other": "팔로워 {{num}}명",
     "popularTitle": "인기 크리에이터",
+    "suggestedTitle": "팔로우할 만한 크리에이터",
     "scrollLeft": "왼쪽으로 스크롤",
     "scrollRight": "오른쪽으로 스크롤",
     "mostlyPosts": "주로 {{topic}} 콘텐츠를 게시해요"
@@ -52,7 +53,8 @@
     "upload": "채널 트레일러 업로드",
     "tapForSound": "탭해서 소리 켜기",
     "views_other": "조회수 {{num}}회",
-    "readMore": "더보기"
+    "readMore": "더보기",
+    "label": "예고편"
   },
   "snaps": {
     "readMore": "더보기",
@@ -149,7 +151,8 @@
       "text": "동영상을 재생목록으로 묶으면 사람들이 순서대로 볼 수 있어요.",
       "cta": "첫 재생목록 만들기",
       "visitor": "@{{user}}님은 공개 재생목록이 없어요."
-    }
+    },
+    "visitorPreview": "방문자에게 표시: “{{text}}”"
   },
   "links": {
     "button": "링크",
@@ -168,7 +171,8 @@
     "shorts": "쇼츠",
     "audio": "오디오",
     "community": "커뮤니티",
-    "playlists": "재생목록"
+    "playlists": "재생목록",
+    "latestSnap": "최신 Snap"
   },
   "streams": {
     "loading": "방송 불러오는 중…",
@@ -199,6 +203,7 @@
     "messageTitle": "@{{user}}님에게 메시지 보내기",
     "messageLogin": "메시지를 보내려면 로그인해 주세요",
     "message": "메시지",
+    "messageShort": "DM",
     "unhideTitle": "@{{user}}님의 동영상을 다시 피드에 표시",
     "hideTitle": "모든 피드에서 @{{user}}님의 동영상 숨기기",
     "unhide": "숨기기 해제",
@@ -212,7 +217,11 @@
     "loginToUpload": "동영상을 업로드하려면 로그인하세요",
     "linkExternalTitle": "외부 프로필 연결",
     "addProfile": "프로필 추가",
-    "editTitle": "사진, 이름, 소개, 위치 수정"
+    "editTitle": "사진, 이름, 소개, 위치 수정",
+    "more": "더보기",
+    "moreActions": "@{{user}} 관련 작업 더보기",
+    "copyProfileLink": "프로필 링크 복사",
+    "podcastFeed": "팟캐스트 피드 (RSS)"
   },
   "tabs": {
     "overview": "개요",
@@ -247,11 +256,7 @@
     "tip": "팁",
     "tipCreator": "크리에이터에게 팁",
     "latestVideo": "최신 동영상",
-    "watchLatestVideo": "최신 동영상 보기",
-    "latestShort": "최신 쇼츠",
-    "watchLatestShort": "최신 쇼츠 보기",
-    "closeMenu": "메뉴 닫기",
-    "openActions": "작업 열기"
+    "latestShort": "최신 쇼츠"
   },
   "uploads": {
     "processing": "동영상을 처리하는 중",
@@ -277,7 +282,9 @@
     "hiddenToast": "팁을 내 프로필에서 숨겼습니다",
     "unhiddenToast": "팁이 내 프로필에 다시 표시됩니다",
     "hideFailed": "이 팁을 변경할 수 없습니다. 다시 시도해 주세요.",
-    "hideWalletPrompt": "내 프로필에 표시할 팁을 바꾸려면 서명하세요"
+    "hideWalletPrompt": "내 프로필에 표시할 팁을 바꾸려면 서명하세요",
+    "whoTitle": "@{{user}}님이 후원하는 사람",
+    "tipped_other": "팁 {{count}}회"
   },
   "layout": {
     "customize": "프로필 꾸미기",
@@ -388,5 +395,12 @@
   },
   "audioTab": {
     "files": "오디오 파일"
+  },
+  "search": {
+    "placeholder": "이 채널 검색",
+    "clear": "검색 지우기",
+    "results_other": "“{{query}}” 결과 {{count}}개",
+    "empty": "이 채널에 “{{query}}”와(과) 일치하는 항목이 없어요.",
+    "older": "이전 업로드 검색"
   }
 }

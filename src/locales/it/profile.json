@@ -23,6 +23,7 @@
     "followers_many": "{{num}} follower",
     "followers_other": "{{num}} follower",
     "popularTitle": "Creator popolari",
+    "suggestedTitle": "Creator da seguire",
     "scrollLeft": "Scorri a sinistra",
     "scrollRight": "Scorri a destra",
     "mostlyPosts": "Pubblica soprattutto {{topic}}"
@@ -80,7 +81,8 @@
     "views_one": "{{num}} visualizzazione",
     "views_many": "{{num}} visualizzazioni",
     "views_other": "{{num}} visualizzazioni",
-    "readMore": "Leggi di più"
+    "readMore": "Leggi di più",
+    "label": "Trailer"
   },
   "snaps": {
     "readMore": "Leggi di più",
@@ -185,7 +187,8 @@
       "text": "Raccogli i tuoi video in una playlist da guardare in ordine.",
       "cta": "Crea la tua prima playlist",
       "visitor": "@{{user}} non ha playlist pubbliche."
-    }
+    },
+    "visitorPreview": "I visitatori vedono: “{{text}}”"
   },
   "links": {
     "button": "Link",
@@ -204,7 +207,8 @@
     "shorts": "Shorts",
     "audio": "Audio",
     "community": "Community",
-    "playlists": "Playlist"
+    "playlists": "Playlist",
+    "latestSnap": "Ultimo snap"
   },
   "streams": {
     "loading": "Caricamento dirette…",
@@ -235,6 +239,7 @@
     "messageTitle": "Scrivi a @{{user}}",
     "messageLogin": "Accedi per inviare un messaggio",
     "message": "Messaggio",
+    "messageShort": "DM",
     "unhideTitle": "Mostra di nuovo i video di @{{user}} nei tuoi feed",
     "hideTitle": "Nascondi i video di @{{user}} da tutti i tuoi feed",
     "unhide": "Mostra",
@@ -248,7 +253,11 @@
     "loginToUpload": "Accedi per caricare un video",
     "linkExternalTitle": "Collega un profilo esterno",
     "addProfile": "Aggiungi profilo",
-    "editTitle": "Modifica immagine, nome, bio e località"
+    "editTitle": "Modifica immagine, nome, bio e località",
+    "more": "Altro",
+    "moreActions": "Altre azioni per @{{user}}",
+    "copyProfileLink": "Copia link del profilo",
+    "podcastFeed": "Feed del podcast (RSS)"
   },
   "tabs": {
     "overview": "Panoramica",
@@ -283,11 +292,7 @@
     "tip": "Mancia",
     "tipCreator": "Manda una mancia al creator",
     "latestVideo": "Ultimo video",
-    "watchLatestVideo": "Guarda l'ultimo video",
-    "latestShort": "Ultimo short",
-    "watchLatestShort": "Guarda l'ultimo short",
-    "closeMenu": "Chiudi menu",
-    "openActions": "Apri azioni"
+    "latestShort": "Ultimo short"
   },
   "uploads": {
     "processing": "Elaborazione dei tuoi video",
@@ -315,7 +320,11 @@
     "hiddenToast": "Mancia nascosta dal tuo profilo",
     "unhiddenToast": "La mancia è di nuovo visibile sul tuo profilo",
     "hideFailed": "Impossibile modificare questa mancia. Riprova.",
-    "hideWalletPrompt": "Firma per scegliere quali mance mostrare sul tuo profilo"
+    "hideWalletPrompt": "Firma per scegliere quali mance mostrare sul tuo profilo",
+    "whoTitle": "@{{user}} sostiene",
+    "tipped_one": "{{count}} mancia",
+    "tipped_many": "{{count}} mance",
+    "tipped_other": "{{count}} mance"
   },
   "layout": {
     "customize": "Personalizza profilo",
@@ -430,5 +439,14 @@
   },
   "audioTab": {
     "files": "File audio"
+  },
+  "search": {
+    "placeholder": "Cerca in questo canale",
+    "clear": "Cancella ricerca",
+    "results_one": "{{count}} risultato per “{{query}}”",
+    "results_many": "{{count}} risultati per “{{query}}”",
+    "results_other": "{{count}} risultati per “{{query}}”",
+    "empty": "Niente su questo canale corrisponde a “{{query}}”.",
+    "older": "Cerca nei caricamenti più vecchi"
   }
 }

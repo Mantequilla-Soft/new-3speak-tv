@@ -1,49 +1,16 @@
+@use "../../styles/v2" as v2;
+
+// Legacy text button, now the v2 secondary button (32 tall); `prominent` is
+// the v2 primary (accent fill), the one primary action of its view.
 .btn-default {
-  appearance: none;
-  display: inline-flex;
-  align-items: center;
-  padding: 4px 16px;
-  font-size: 13px;
-  font-family: inherit;
-  font-weight: 400;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  background: transparent;
-  border: 1px solid var(--border-light);
-  color: var(--text-secondary);
+  @include v2.btn(secondary, 32);
   white-space: nowrap;
 
-  &:hover:not(:disabled) {
-    background: var(--bg-tertiary);
-    border-color: var(--border-color);
-    color: var(--text-primary);
-  }
-
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-
   &.prominent {
-    background: transparent;
-    border-color: var(--accent-primary, #e53935);
-    color: var(--accent-primary, #e53935);
-    font-weight: 500;
+    background: var(--accent);
+    color: var(--on-accent);
+    font-weight: 900;
 
-    &:hover:not(:disabled) {
-      opacity: 0.85;
-      background: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent);
-      color: var(--accent-primary, #e53935);
-    }
-  }
-}
-
-// Dark mode: outlined style — card-bg bg, red (--accent-primary) outline + text.
-[data-theme="dark"] {
-  .btn-default.prominent {
-    background: var(--card-bg) !important;
-    color: var(--accent-primary) !important;
-    border: 1px solid var(--accent-primary) !important;
+    &:hover:not(:disabled) { background: var(--accent-hover); color: var(--on-accent); }
   }
 }

@@ -19,6 +19,7 @@
     "pleaseTryAgain": "もう一度お試しください",
     "followers_other": "フォロワー {{num}} 人",
     "popularTitle": "人気のクリエイター",
+    "suggestedTitle": "おすすめのクリエイター",
     "scrollLeft": "左にスクロール",
     "scrollRight": "右にスクロール",
     "mostlyPosts": "主に {{topic}} を投稿"
@@ -52,7 +53,8 @@
     "upload": "チャンネル予告編をアップロード",
     "tapForSound": "タップして音声をオン",
     "views_other": "{{num}} 回視聴",
-    "readMore": "続きを読む"
+    "readMore": "続きを読む",
+    "label": "予告編"
   },
   "snaps": {
     "readMore": "続きを読む",
@@ -149,7 +151,8 @@
       "text": "動画を再生リストにまとめて、順番に見てもらいましょう。",
       "cta": "最初の再生リストを作成",
       "visitor": "@{{user}} さんには公開の再生リストがありません。"
-    }
+    },
+    "visitorPreview": "訪問者に表示: 「{{text}}」"
   },
   "links": {
     "button": "リンク",
@@ -168,7 +171,8 @@
     "shorts": "ショート",
     "audio": "音声",
     "community": "コミュニティ",
-    "playlists": "再生リスト"
+    "playlists": "再生リスト",
+    "latestSnap": "最新の Snap"
   },
   "streams": {
     "loading": "配信を読み込み中…",
@@ -199,6 +203,7 @@
     "messageTitle": "@{{user}} さんにメッセージ",
     "messageLogin": "メッセージを送るにはログインしてください",
     "message": "メッセージ",
+    "messageShort": "DM",
     "unhideTitle": "@{{user}} さんの動画を再びフィードに表示する",
     "hideTitle": "@{{user}} さんの動画をすべてのフィードから非表示にする",
     "unhide": "再表示",
@@ -212,7 +217,11 @@
     "loginToUpload": "動画をアップロードするにはログイン",
     "linkExternalTitle": "外部プロフィールをリンク",
     "addProfile": "プロフィールを追加",
-    "editTitle": "写真、名前、自己紹介、場所を編集"
+    "editTitle": "写真、名前、自己紹介、場所を編集",
+    "more": "その他",
+    "moreActions": "@{{user}} のその他の操作",
+    "copyProfileLink": "プロフィールのリンクをコピー",
+    "podcastFeed": "ポッドキャストフィード (RSS)"
   },
   "tabs": {
     "overview": "概要",
@@ -247,11 +256,7 @@
     "tip": "投げ銭",
     "tipCreator": "クリエイターに投げ銭",
     "latestVideo": "最新の動画",
-    "watchLatestVideo": "最新の動画を見る",
-    "latestShort": "最新のショート",
-    "watchLatestShort": "最新のショートを見る",
-    "closeMenu": "メニューを閉じる",
-    "openActions": "操作を開く"
+    "latestShort": "最新のショート"
   },
   "uploads": {
     "processing": "動画を処理しています",
@@ -277,7 +282,9 @@
     "hiddenToast": "チップをプロフィールから非表示にしました",
     "unhiddenToast": "チップがプロフィールに再び表示されます",
     "hideFailed": "このチップを変更できませんでした。もう一度お試しください。",
-    "hideWalletPrompt": "プロフィールに表示するチップを変更するには署名してください"
+    "hideWalletPrompt": "プロフィールに表示するチップを変更するには署名してください",
+    "whoTitle": "@{{user}} が応援している人",
+    "tipped_other": "投げ銭 {{count}} 回"
   },
   "layout": {
     "customize": "プロフィールをカスタマイズ",
@@ -388,5 +395,12 @@
   },
   "audioTab": {
     "files": "音声ファイル"
+  },
+  "search": {
+    "placeholder": "このチャンネルを検索",
+    "clear": "検索をクリア",
+    "results_other": "「{{query}}」の結果 {{count}} 件",
+    "empty": "このチャンネルに「{{query}}」に一致するものはありません。",
+    "older": "古いアップロードを検索"
   }
 }

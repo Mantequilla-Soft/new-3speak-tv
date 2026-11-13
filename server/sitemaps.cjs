@@ -28,8 +28,14 @@ const CACHE_TTL_MS = 6 * 60 * 60 * 1000
 // older no longer plays, and a dead page in the sitemap costs more than it adds.
 const MAX_AGE_YEARS = 6
 const PLAYER_ORIGIN = 'https://play.3speak.tv'
-// Our own gateway: both Bunny IPFS zones answer 403 "Domain suspended" (2026-09-08).
-const IPFS_GATEWAY = 'https://ipfs.3speak.tv'
+// Thumbnails go out through ipfs-audio.3speak.tv: since 2026-11 many new uploads
+// are not announced to the IPFS network, so ipfs.3speak.tv (and the Bunny zones,
+// 403 "Domain suspended" since 2026-09-08) hang on ~8% of them and Search
+// Console reports "invalid URL in thumbnailUrl". The node behind ipfs-audio has
+// them all. Same setting as the share cards (og-server.cjs OG_THUMB_GATEWAY).
+const THUMB_GATEWAY = process.env.OG_THUMB_GATEWAY || 'https://ipfs-audio.3speak.tv'
+// Any IPFS gateway address we have stored or handed out over the years.
+const IPFS_GATEWAY_URL = /^https:\/\/((hot)?ipfs-3speak(-1)?\.b-cdn\.net|ipfs\.3speak\.tv|ipfs-audio\.3speak\.tv)\/ipfs\//
 const HOSTS = new Set(['3speak.tv', 'preview.3speak.tv'])
 
 // IndexNow (Bing, Yandex, Seznam, Naver): a sitemap is read whenever a crawler
@@ -189,8 +195,8 @@ function firstLine(md) {
 
 function thumbnailUrl(t) {
   const s = String(t || '').trim()
-  if (/^ipfs:\/\/[A-Za-z0-9]{40,}$/.test(s)) return `${IPFS_GATEWAY}/ipfs/${s.slice(7)}`
-  if (/^https:\/\/(hot)?ipfs-3speak(-1)?\.b-cdn\.net\/ipfs\//.test(s)) return s.replace(/^https:\/\/[^/]+/, IPFS_GATEWAY)
+  if (/^ipfs:\/\/[A-Za-z0-9]{40,}$/.test(s)) return `${THUMB_GATEWAY}/ipfs/${s.slice(7)}`
+  if (IPFS_GATEWAY_URL.test(s)) return s.replace(/^https:\/\/[^/]+/, THUMB_GATEWAY)
   if (/^https?:\/\/[^\s"'<>]+$/.test(s) && !s.includes('media.3speak.tv')) return s
   return null
 }
@@ -533,4 +539,4 @@ function mountSitemaps(app, { uri, dbName }) {
   })
 }
 
-module.exports = { mountSitemaps }
+module.exports = { mountSitemaps, thumbnailUrl }

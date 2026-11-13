@@ -1,8 +1,7 @@
 import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
-import { MdTranslate } from 'react-icons/md';
-import { ImSpinner9 } from 'react-icons/im';
+import { Icon } from '../v2/Icon';
 import { SUPPORTED_LANGUAGES, getTargetLanguage, setTargetLanguage } from '../../utils/translate';
 import './TranslateButton.scss';
 
@@ -97,7 +96,8 @@ export default function TranslateButton({ onTranslate, isTranslating, compact, l
 
   const menu = open && createPortal(
     <div
-      className="translate-lang-menu"
+      className="v2-menu translate-lang-menu"
+      role="menu"
       ref={menuRef}
       style={{
         position: 'fixed',
@@ -112,7 +112,10 @@ export default function TranslateButton({ onTranslate, isTranslating, compact, l
       {sortedLanguages.map(l => (
         <button
           key={l.code}
-          className={`translate-lang-item${l.code === saved ? ' selected' : ''}`}
+          type="button"
+          role="menuitemradio"
+          aria-checked={l.code === saved}
+          className={`v2-menu__row translate-lang-item${l.code === saved ? ' selected' : ''}`}
           onClick={() => handlePick(l.code)}
         >
           <span className="translate-lang-native">{l.native}</span>
@@ -127,13 +130,17 @@ export default function TranslateButton({ onTranslate, isTranslating, compact, l
     <>
       <div className="translate-btn-wrap" ref={btnRef}>
         <button
+          type="button"
           className="comment-translate-btn"
           onClick={() => setOpen(o => !o)}
           disabled={isTranslating}
+          aria-haspopup="menu"
+          aria-expanded={open}
+          aria-label={compact ? t('watch.translate.translate') : undefined}
         >
           {isTranslating
-            ? <ImSpinner9 size={compact ? 10 : 12} className="spinner" />
-            : <MdTranslate size={compact ? 12 : 14} />}
+            ? <Icon name="progress_activity" size={compact ? 14 : 16} className="v2-spin" />
+            : <Icon name="translate" size={compact ? 14 : 16} />}
           {!compact && <span className="comment-btn-label">{isTranslating ? t('watch.translate.translating') : t('watch.translate.translate')}</span>}
         </button>
       </div>

@@ -115,7 +115,7 @@
       "tips": "Propinas"
     },
     "legendOurs": "en 3Speak",
-    "legendOther": "en otras partes de Hive",
+    "legendOther": "en otros sitios",
     "segments": {
       "ours": "Recompensas de publicaciones en 3Speak",
       "other": "Recompensas de publicaciones en otras partes de Hive",
@@ -144,7 +144,8 @@
     "communities": "Visitando tus comunidades…",
     "followers": "Viendo quién te siguió…",
     "watched": "Repasando lo que viste…",
-    "thumbnails": "Cargando tus miniaturas… {{done}} de {{total}}"
+    "thumbnails": "Cargando tus miniaturas… {{done}} de {{total}}",
+    "thumbnailsWaiting": "Cargando tus miniaturas…"
   },
   "tips": {
     "label": "Consejo:",

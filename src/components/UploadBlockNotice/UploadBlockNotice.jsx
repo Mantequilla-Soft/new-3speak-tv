@@ -1,12 +1,11 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { FaDiscord } from 'react-icons/fa';
-import { SiTelegram } from 'react-icons/si';
-import { IoCloudOfflineOutline } from 'react-icons/io5';
+import { Icon } from '../v2/ui';
 import { useAppStore } from '../../lib/store';
 import { useSupportBlock } from '../../lib/supportBlockStore';
 import { creatorKey, isUploadBlocked, useCreatorSettings } from '../../utils/creatorSettings';
+import BlockNote from './BlockNote';
 import './UploadBlockNotice.scss';
 
 // Same links as the support popup and the profile sidebar.
@@ -47,7 +46,10 @@ function markSeen(key, id) {
  * account only when the admin left a note: older Hive blocks carry none and keep
  * the click-time popup only.
  */
-export default function UploadBlockNotice({ hidden = false }) {
+// `inline`: the copy Home draws between the Spotlight and the feed tabs; the
+// banner shows THERE ONLY (owner 2026-11-12: not over Shorts or any other
+// page). The app-level copy is the one-time popup and never a banner.
+export default function UploadBlockNotice({ hidden = false, inline = false }) {
   const { t } = useTranslation();
   const { pathname } = useLocation();
   const authenticated = useAppStore((s) => s.authenticated);
@@ -63,7 +65,7 @@ export default function UploadBlockNotice({ hidden = false }) {
   const blockId = active ? String(settings.uploadBlockedAt || note || 'blocked') : null;
 
   useEffect(() => {
-    if (!blockId || changelogPending) return;
+    if (inline || !blockId || changelogPending) return;
     if (readSeen(key) === blockId) return;
     const support = useSupportBlock.getState();
     if (support.block) return; // another support popup is open; try again on the next page load
@@ -71,31 +73,38 @@ export default function UploadBlockNotice({ hidden = false }) {
       ...(note ? { note } : {}),
       onClose: () => markSeen(key, blockId),
     });
-  }, [key, blockId, note, changelogPending]);
+  }, [inline, key, blockId, note, changelogPending]);
 
-  if (!active || hidden) return null;
+  if (!active || hidden || !inline) return null;
 
   return (
     <section className="upload-block-notice" role="status">
       <div className="ubn-head">
-        <IoCloudOfflineOutline className="ubn-icon" size={20} aria-hidden="true" />
-        <h2 className="ubn-title">{t('app.supportBlock.upload.title')}</h2>
+        <span className="ubn-icon"><Icon name="block" size={28} /></span>
+        <div className="ubn-head__text">
+          <h2 className="ubn-title">{t('app.supportBlock.upload.title')}</h2>
+          <p className="ubn-body">{t('app.uploadBlock.bannerBody')}</p>
+        </div>
+        {/* The ways forward, compact on the head's right (owner 2026-11-12:
+            the 23d tiles took too much height); their own row on phones. */}
+        <div className="ubn-actions">
+          <a className="ubn-tile" href={DISCORD_URL} target="_blank" rel="noopener noreferrer">
+            <Icon name="forum" size={18} />
+            <b>Discord</b>
+            <Icon name="open_in_new" size={14} className="ubn-tile__out" />
+          </a>
+          <a className="ubn-tile" href={TELEGRAM_URL} target="_blank" rel="noopener noreferrer">
+            <Icon name="send" size={18} />
+            <b>Telegram</b>
+            <Icon name="open_in_new" size={14} className="ubn-tile__out" />
+          </a>
+        </div>
       </div>
       {note && (
         <div className="ubn-note">
-          <span className="ubn-note-label">{t('app.uploadBlock.noteLabel')}</span>
-          <p className="ubn-note-text">{note}</p>
+          <BlockNote note={note} />
         </div>
       )}
-      <p className="ubn-body">{t('app.uploadBlock.bannerBody')}</p>
-      <div className="ubn-actions">
-        <a className="ubn-btn" href={DISCORD_URL} target="_blank" rel="noopener noreferrer">
-          <FaDiscord size={16} aria-hidden="true" /> <span>Discord</span>
-        </a>
-        <a className="ubn-btn" href={TELEGRAM_URL} target="_blank" rel="noopener noreferrer">
-          <SiTelegram size={16} aria-hidden="true" /> <span>Telegram</span>
-        </a>
-      </div>
     </section>
   );
 }

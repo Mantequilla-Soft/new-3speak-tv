@@ -1,207 +1,126 @@
-@use "../../mixins.scss" as *;
-.communities-render {
-  padding: 20px;
+@use "../../styles/v2" as v2;
 
-  // Mirrors the badge grid next door -- same card, same hover, same spacing --
-  // so the two tabs of Groups read as one page. The one difference is width:
-  // twice the badge minimum, because a community carries a sentence about
-  // itself where a badge carries a title.
-  // Search left, sort and create right. Matches the Groups page it now lives
-  // in: same control heights, same radius, same border token.
-  // Mirrors .badges-head p, so both tabs introduce themselves the same way.
-  .communities-head {
-    margin: 0 0 14px;
+// Community directory cards (design 19d): a banner fading from the card's
+// colour, the picture riding over it, name, about, then counts and Join.
+.communities-render { color: var(--text); }
 
-    p {
-      margin: 0;
-      max-width: 640px;
-      font-size: 13.5px;
-      line-height: 1.55;
-      // --text-secondary, matching .badges-head p. The two intros are the same
-      // kind of sentence and were on different greys.
-      color: var(--text-secondary);
-    }
+.group-card {
+  @include v2.card;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: border-color var(--t-fast) var(--ease);
+
+  &:hover { border-color: color-mix(in srgb, var(--cyan) 40%, var(--border)); }
+  &:focus-within { border-color: var(--cyan); }
+
+  // The card's colour: the banner fades from it, the Join button wears it.
+  --tone: var(--cyan);
+  --tone-ink: var(--bg);
+  &.tone-accent { --tone: var(--accent); --tone-ink: var(--on-accent); }
+  &.tone-ink { --tone: var(--on-media); }
+  &.tone-muted { --tone: var(--muted); }
+
+  &__banner {
+    height: 72px;
+    flex: none;
+    background: linear-gradient(135deg, var(--tone), var(--frame));
   }
 
-  .blog-feed {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
-    gap: 14px;
-    @include respond(phone) {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 10px;
-    }
+  &__body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 0 16px 16px;
+    margin-top: -28px;
+    min-width: 0;
+  }
 
-    .blog-card {
-      // Logo on the left, the three lines stacked beside it:
-      //
-      //        | Name
-      //   logo | Description
-      //        | Subscribers
-      //   [ 3Speak activity strip ]
-      display: flex;
-      flex-direction: column;
-      align-items: stretch;
-      gap: 12px;
-      text-align: left;
-      padding: 14px 16px;
-      border: 1px solid var(--border-light, rgba(150, 150, 150, 0.18));
-      border-radius: 14px;
-      background: var(--bg-secondary, rgba(150, 150, 150, 0.06));
-      cursor: pointer;
-      transition: border-color 0.12s ease, transform 0.12s ease;
+  &__pic {
+    width: 56px;
+    height: 56px;
+    border-radius: var(--r-xl);
+    border: 3px solid var(--surface);
+    background: var(--avatar);
+    object-fit: cover;
+    display: block;
+    position: relative;
+  }
 
-      &:hover {
-        border-color: var(--accent-primary, #e0594b);
-        transform: translateY(-2px);
-      }
+  &__name {
+    margin: 10px 0 0;
+    font-size: 16px;
+    font-weight: 900;
+    line-height: 1.3;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 
-      .blog-card-main {
-        display: flex;
-        align-items: center;
-        gap: 14px;
-        min-width: 0;
-      }
+  // The title link covers the whole card; other links and buttons sit above it.
+  &__link {
+    color: var(--text);
+    text-decoration: none;
+    &::after { content: ""; position: absolute; inset: 0; z-index: 0; border-radius: inherit; }
+    &:hover { color: var(--text); }
+    &:focus-visible { outline: none; }
+  }
 
-      .img-wrap {
-        // Never squashed by a long description, and never stretched by a short
-        // one: it is a fixed square the text sits beside.
-        flex: 0 0 76px;
-        width: 76px;
-        height: 76px;
-        border-radius: 50%;
-        overflow: hidden;
-        background: var(--bg-tertiary, #e2e2ec);
-      }
+  &__about {
+    margin: 4px 0 0;
+    text-wrap: pretty;
+    font-size: 13px;
+    line-height: 1.4;
+    color: var(--muted);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
 
-      .blog-image {
-        height: 100%;
-        width: 100%;
-        object-fit: cover;
-      }
+  &__foot {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: auto;
+    padding-top: 14px;
+  }
 
-      // Title, blurb and count, matched to the badge card so the two grids are
-      // the same object with different contents.
-      // The three lines, held together against the logo.
-      .blog-text {
-        display: flex;
-        flex-direction: column;
-        gap: 3px;
-        // Lets the description ellipsis instead of forcing the card wider.
-        min-width: 0;
-      }
+  &__meta {
+    flex: 1;
+    min-width: 0;
+    font-size: 12px;
+    color: var(--muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 
-      .blog-title {
-        margin: 0;
-        font-size: 13.5px;
-        font-weight: 700;
-        line-height: 1.3;
-        color: var(--text-primary, #f1f1f1);
-      }
+    > * + *::before { content: " · "; }
+    .money { font-size: 12px; }
+  }
 
-      .blog-about {
-        margin: 0;
-        font-size: 11.5px;
-        line-height: 1.4;
-        color: var(--text-secondary, #888);
-        // Three lines, as on a badge: enough to tell two communities apart
-        // without one long description setting the height of the whole row.
-        display: -webkit-box;
-        -webkit-line-clamp: 3;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-      }
+  &__join, &__joined { position: relative; z-index: 1; flex: none; }
 
-      // Size, in the accent: the one number most people are scanning for.
-      .blog-count {
-        font-size: 11px;
-        font-weight: 600;
-        color: var(--accent-primary, #e0594b);
-      }
+  // 36px, 13/900, in the card's colour.
+  &__join.v2-btn {
+    padding: 0 14px;
+    font-size: 13px;
+    background: var(--tone);
+    color: var(--tone-ink);
+    &:hover { background: var(--tone); color: var(--tone-ink); filter: brightness(1.08); }
+  }
+  &.tone-ink &__join.v2-btn { background: var(--text); color: var(--bg); }
 
-      // Everything else on its own line, all in the muted grey. These are
-      // context rather than headline: how busy it is, what is in flight, how
-      // old it is. Colouring them like the subscriber count made a card of four
-      // red numbers with no hierarchy at all.
-      .blog-meta {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        gap: 3px 10px;
-        font-size: 11px;
-        font-weight: 500;
-        color: var(--text-muted);
-
-        span {
-          display: inline-flex;
-          align-items: center;
-          white-space: nowrap;
-          color: inherit;
-        }
-
-        // Drawn BEFORE each item except the first, so a missing stat never
-        // leaves a dangling dot.
-        span + span::before {
-          content: "";
-          width: 3px;
-          height: 3px;
-          margin-right: 10px;
-          border-radius: 50%;
-          background: currentColor;
-          opacity: 0.55;
-        }
-      }
-
-      // --- 3Speak activity ------------------------------------------------
-      .blog-activity {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-        padding-top: 10px;
-        border-top: 1px solid var(--border-light, rgba(150, 150, 150, 0.14));
-      }
-
-      .blog-activity-counts {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 3px 10px;
-        font-size: 11px;
-        font-weight: 600;
-        color: var(--text-secondary, #888);
-
-        // Accent as TEXT only: "posted today" is the live signal on the card.
-        .is-today { color: var(--accent-primary, #e0594b); }
-
-        span + span::before {
-          content: "·";
-          margin-right: 10px;
-          opacity: 0.6;
-          color: var(--text-secondary, #888);
-        }
-      }
-
-      // Three equal 16:9 tiles; fewer videos leave the slots empty rather than
-      // stretching one thumbnail across the card.
-      .blog-activity-strip {
-        display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 6px;
-      }
-
-      .blog-activity-thumb {
-        display: block;
-        aspect-ratio: 16 / 9;
-        border-radius: 8px;
-        overflow: hidden;
-        background: var(--bg-tertiary, rgba(150, 150, 150, 0.14));
-        transition: opacity 0.12s ease;
-
-        img { width: 100%; height: 100%; object-fit: cover; display: block; }
-
-        &:hover { opacity: 0.85; }
-      }
-
-    }
+  &__joined {
+    height: 36px;
+    padding: 0 14px;
+    border-radius: var(--r-md);
+    background: var(--surface-2);
+    color: var(--text);
+    display: inline-flex;
+    align-items: center;
+    font-size: 13px;
+    font-weight: 900;
   }
 }

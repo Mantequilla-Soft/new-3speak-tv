@@ -1,8 +1,8 @@
 {
   "leaderboard": {
     "windows": {
-      "7d": "7 days",
-      "30d": "30 days",
+      "7d": "Week",
+      "30d": "Month",
       "365d": "Year",
       "all": "All time"
     },
@@ -155,9 +155,9 @@
     "audioFull": "With title",
     "audioCompact": "Compact",
     "audioMinimal": "Minimal",
-    "heightSub": "Full width, {{height}} px tall",
+    "heightSub": "Full width, {{height}} px tall · Responsive",
     "podcastTitle": "Embed this podcast",
-    "podcastHint": "Paste this into any website or blog post. It plays every episode of the show, including new ones as they come out."
+    "podcastHint": "Plays every episode of the show, including new ones as they come out."
   },
   "incubation": {
     "requestFailed": "Request failed ({{status}})",
@@ -169,9 +169,9 @@
   },
   "routeError": {
     "title": "This page didn't load",
-    "body": "Part of the app failed to download. That usually means a new version was released while this tab was open. Reloading picks it up.",
+    "body": "Part of the app failed to download. Usually a new version was released while this tab was open. Reloading picks it up.",
     "brokenTitle": "Something went wrong on this page",
-    "brokenBody": "Part of this page ran into an error. Reloading usually fixes it, and the details below help us find the cause.",
+    "brokenBody": "Part of this page ran into an error. Reloading usually fixes it, and the details help us find the cause.",
     "reload": "Reload",
     "goHome": "Go home",
     "details": "Details"
@@ -203,13 +203,13 @@
       "regularVideo": "Classic video for your channel",
       "verticalShort": "Portrait clip for the Shorts feed",
       "shortsEditor": "Record and edit a short in your browser",
-      "story": "Short clip that stays up for 24 hours",
+      "story": "Stays up for 24 hours",
       "musicAudio": "Songs, podcasts and other audio",
-      "audioEditor": "Cut, clean up and level podcasts and music",
+      "audioEditor": "Cut, clean up and level",
       "groupChat": "Live room you host with guests",
       "goLiveNow": "Stream live to your followers",
       "communitySnap": "Quick post on your community tab",
-      "playlist": "Group videos into a list you can share"
+      "playlist": "Group videos into a shareable list"
     }
   },
   "chat": {
@@ -219,8 +219,8 @@
   },
   "hiveAuth": {
     "waiting": "Waiting for approval on HiveAuth...",
-    "title": "HiveAuth Approval Required",
-    "hint": "Please check your HiveAuth app to approve this transaction"
+    "title": "HiveAuth approval required",
+    "hint": "Check your HiveAuth app to approve this transaction."
   },
   "hiveApi": {
     "keychainNotSigned": "Keychain did not sign the transaction",
@@ -233,7 +233,7 @@
     "announceFailed": "OpenPod started, but the Hive announcement could not be posted."
   },
   "appUpdate": {
-    "updating": "Updating to the latest version ({{version}})…",
+    "updating": "Updating to {{version}}…",
     "reloadingForUpload": "Reloading so your upload runs on the newest build."
   },
   "auth": {
@@ -251,7 +251,9 @@
   },
   "followFeed": {
     "title": "Follow Feed",
-    "error": "Error fetching videos"
+    "error": "Error fetching videos",
+    "emptyTitle": "Nobody here yet",
+    "emptyBody": "Follow creators and their uploads, snaps and lives show up here first."
   },
   "groups": {
     "title": "Groups",
@@ -302,6 +304,17 @@
     "moreTag": "More #{{tag}}",
     "moreVideos": "More videos",
     "hideControls": "Hide controls",
-    "showControls": "Show controls"
+    "showControls": "Show controls",
+    "watching": "{{count}} watching",
+    "startedAgo": "Started {{when}}",
+    "topSupporters": "Top supporters",
+    "noSupporters": "No boosts yet",
+    "full": "Full",
+    "loginToChat": "Log in to chat"
+  },
+  "pullToRefresh": {
+    "pull": "Pull to refresh",
+    "release": "Release to refresh",
+    "refreshing": "Refreshing…"
   }
 }

@@ -1,7 +1,7 @@
+import { Icon } from '../v2/Icon';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { MdPlayArrow, MdPause, MdHistory, MdAdd, MdClose } from 'react-icons/md';
 import { useAppStore } from '../../lib/store';
 import { episodeToTrack } from '../../lib/podcasts';
 import { fetchContinueListening, hideFromContinue, usePodcastProgress, progressOf } from '../../lib/podcastProgress';
@@ -93,7 +93,7 @@ function ContinueCard({ item, onRemove }) {
       ref={cardRef}
       role="button"
       tabIndex={0}
-      className={`pod-card pod-continue-card${isCurrent ? ' pod-continue-card--current' : ''}${revealed ? ' pod-continue-card--revealed' : ''}`}
+      className={`pod-continue-card${isCurrent ? ' pod-continue-card--current' : ''}${revealed ? ' pod-continue-card--revealed' : ''}`}
       onClick={play}
       onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); play(); } }}
       onTouchStart={startPress}
@@ -102,26 +102,27 @@ function ContinueCard({ item, onRemove }) {
       onContextMenu={(e) => e.preventDefault()}
       title={title}
     >
-      <span className="pod-card-art">
+      <span className="pod-continue-art">
         {item.kind === 'episode'
           ? <PodcastArt art={item.episode.art} fallback={item.feed?.art} px={256} />
           : <img src={trackCover(track)} alt="" loading="lazy" />}
-        <span className={`pod-tile-play${playing ? ' pod-tile-play--on' : ''}`} aria-hidden="true">
-          {playing ? <MdPause size={32} /> : <MdPlayArrow size={32} />}
-        </span>
-        <span className="pod-tile-bar" aria-hidden="true"><span style={{ width: `${pct}%` }} /></span>
-        <span className="pod-continue-actions" onClick={(e) => e.stopPropagation()} onTouchStart={(e) => e.stopPropagation()}>
-          <button type="button" className="audio-tile-action-btn" onClick={() => { setRevealed(false); audioAddToQueue(track); }} title={t('audio.tile.queue')} aria-label={t('audio.tile.queue')}>
-            <MdAdd size={14} />
-          </button>
-          <button type="button" className="audio-tile-action-btn" onClick={() => { setRevealed(false); onRemove(item); }} title={t('audio.podcasts.continue.remove')} aria-label={t('audio.podcasts.continue.remove')}>
-            <MdClose size={14} />
-          </button>
+        <span className={`pod-continue-play${playing ? ' is-on' : ''}`} aria-hidden="true">
+          <Icon name={playing ? 'pause' : 'play_arrow'} size={18} fill />
         </span>
       </span>
-      <span className="pod-card-title">{title}</span>
-      <span className="pod-card-meta">
-        {t('audio.podcasts.continue.left', { minutes: minutesLeft })}{from ? ` · ${from}` : ''}
+      <span className="pod-continue-body">
+        <b className="pod-continue-title">{title}</b>
+        {from && <span className="pod-continue-from">{from}</span>}
+        <span className="pod-continue-bar" aria-hidden="true"><span style={{ width: `${pct}%` }} /></span>
+        <span className="pod-continue-left">{t('audio.podcasts.continue.left', { minutes: minutesLeft })}</span>
+      </span>
+      <span className="pod-continue-actions" onClick={(e) => e.stopPropagation()} onTouchStart={(e) => e.stopPropagation()}>
+        <button type="button" className="audio-tile-action-btn" onClick={() => { setRevealed(false); audioAddToQueue(track); }} title={t('audio.tile.queue')} aria-label={t('audio.tile.queue')}>
+          <Icon name="add" size={14} />
+        </button>
+        <button type="button" className="audio-tile-action-btn" onClick={() => { setRevealed(false); onRemove(item); }} title={t('audio.podcasts.continue.remove')} aria-label={t('audio.podcasts.continue.remove')}>
+          <Icon name="close" size={14} />
+        </button>
       </span>
     </div>
   );
@@ -159,8 +160,8 @@ export default function ContinueListening({ user }) {
   if (!shown.length) return null;
   return (
     <section className="pod-section pod-continue">
-      <h2 className="pod-section-title"><MdHistory size={18} />{t('audio.podcasts.continue.title')}</h2>
-      <div className="pod-rail">
+      <h2 className="pod-app-title is-eyebrow">{t('audio.podcasts.continue.title')}</h2>
+      <div className="pod-continue-rail">
         {shown.map((it) => <ContinueCard key={it.id} item={it} onRemove={remove} />)}
       </div>
     </section>

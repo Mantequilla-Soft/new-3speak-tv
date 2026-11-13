@@ -9,7 +9,7 @@
     "needKeychain": "Für Überweisungen brauchst du die Keychain-Erweiterung"
   },
   "header": {
-    "mine": "MEIN Wallet",
+    "mine": "Mein Wallet",
     "ofUser": "Wallet von {{user}}"
   },
   "assets": "Assets",
@@ -28,7 +28,16 @@
     "recipientPlaceholder": "Hive-Benutzername eingeben",
     "memoLabel": "Memo",
     "memoPlaceholder": "Memo eingeben",
-    "confirm": "Überweisung bestätigen"
+    "confirm": "Überweisung bestätigen",
+    "sendTo": "{{amount}} {{coin}} an @{{to}} senden",
+    "sendAmount": "{{amount}} {{coin}} senden",
+    "recent": "Zuletzt verwendet",
+    "activeKey": "Braucht deinen Active Key",
+    "available": "Verfügbar: {{balance}}",
+    "scan": "QR-Code scannen",
+    "scanHint": "Richte die Kamera auf den QR-Code der anderen Person.",
+    "scanNoAccount": "Dieser QR-Code enthält kein Hive-Konto. Versuche einen anderen.",
+    "scanNoCamera": "Die Kamera ließ sich nicht öffnen. Prüfe, ob 3Speak sie verwenden darf."
   },
   "history": {
     "loadFailed": "Transaktionen konnten nicht geladen werden",
@@ -46,5 +55,51 @@
       "received": "Empfangen"
     },
     "claimedRewards": "Abgeholte Belohnungen"
+  },
+  "total": "Gesamtguthaben",
+  "rate": "1 HIVE = {{price}}",
+  "pro": "Pro",
+  "coins": {
+    "hp": "Hive Power",
+    "savings": "HBD-Sparkonto"
+  },
+  "claim": {
+    "ready": "{{amount}} zum Abholen bereit",
+    "readyShort": "{{amount}} abholbar",
+    "button": "Abholen",
+    "done": "Belohnungen abgeholt",
+    "failed": "Abholen fehlgeschlagen: {{error}}"
+  },
+  "activity": {
+    "title": "Aktivität",
+    "filters": {
+      "all": "Alle",
+      "rewards": "Belohnungen",
+      "received": "Erhalten",
+      "sent": "Gesendet"
+    },
+    "from": "Von @{{user}}",
+    "sentTo": "An @{{user}} gesendet",
+    "emptyTitle": "Noch nichts hier",
+    "empty": "Überweisungen und abgeholte Belohnungen erscheinen hier."
+  },
+  "earnings": {
+    "title": "Einnahmen, 30 Tage",
+    "sub": "Abgeholte Belohnungen und erhaltene HIVE oder HBD"
+  },
+  "rc": {
+    "title": "Resource Credits",
+    "sub": "Jede Aktion auf Hive verbraucht etwas davon. Sie laden sich in etwa 5 Tagen wieder auf.",
+    "posts_one": "Reicht gerade für etwa {{count}} Post",
+    "posts_other": "Reicht gerade für etwa {{count}} Posts"
+  },
+  "receive": {
+    "title": "Empfangen",
+    "sub": "Jeder kann aus jeder Hive-Wallet HIVE oder HBD an diesen Kontonamen senden. Kein Memo nötig.",
+    "amountLabel": "Einen Betrag anfordern (optional)",
+    "memoLabel": "Memo (optional)",
+    "memoPlaceholder": "Wofür es ist, zum Beispiel eine Rechnungsnummer",
+    "subRequest": "Wer diesen Code scannt, wird um {{amount}} {{coin}} gebeten. 3Speak und Hive-Wallets, die Zahlungscodes lesen, tragen das ein.",
+    "subMemo": "Wer diesen Code scannt, bekommt deinen Kontonamen und das Memo eingetragen, in 3Speak und in Hive-Wallets, die Zahlungscodes lesen."
   }
 }

@@ -4,10 +4,12 @@
   "thumbnailAlt": "サムネイル",
   "topicTitle": "トピック: {{topic}}",
   "watchingNow_other": "{{count}} 人が視聴中",
+  "previewMuted": "プレビュー · ミュート",
   "badges": {
-    "gatedTitle": "メンバー限定。3Speak Pro で動画全編が見られます",
+    "gatedTitle": "メンバー限定",
     "pro": "PRO",
     "new": "NEW",
+    "first": "初投稿",
     "live": "● LIVE",
     "liveChat": "● LIVE チャット",
     "spotlight": "スポットライト"
@@ -15,24 +17,28 @@
   "status": {
     "scheduled": "予約済み",
     "mobile": "モバイル",
-    "mobileTitle": "モバイルアプリからアップロード",
+    "mobileTitle": "モバイルアプリから",
     "processing": "処理中",
-    "processingTitle": "動画を処理しています",
+    "processingTitle": "処理中",
     "draft": "下書き",
-    "draftTitle": "下書き - まだ公開されていません",
+    "draftTitle": "未公開",
     "deleted": "削除済み",
-    "deletedTitle": "この動画は削除されました",
+    "deletedTitle": "削除済み",
     "failed": "失敗",
-    "failedTitle": "動画の処理に失敗しました",
+    "failedTitle": "処理に失敗しました",
     "unlisted": "限定公開",
-    "unlistedTitle": "限定公開 — フィードや検索には表示されず、リンクを知っている人だけが見られます"
+    "unlistedTitle": "リンクを知っている人のみ"
   },
   "playlist": {
     "loading": "再生リストを読み込み中...",
     "items_other": "{{count}} 件",
     "openAria": "再生リスト {{name}} を開く",
     "tag": "再生リスト",
-    "updated": "{{when}} に更新"
+    "updated": "{{when}} に更新",
+    "public": "公開",
+    "private": "非公開",
+    "history": "履歴",
+    "audio": "音声"
   },
   "watchLater": {
     "title": "後で見る",
@@ -46,5 +52,12 @@
     "label": "サイズを変更",
     "small": "小",
     "medium": "中"
+  },
+  "payout": {
+    "title": "報酬",
+    "author": "投稿者",
+    "curators": "キュレーター",
+    "paysOutIn": "支払いまで",
+    "days_other": "{{count}} 日"
   }
 }

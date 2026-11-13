@@ -2,7 +2,6 @@ import { useState, useEffect, useMemo, useRef } from 'react';
 import { getHiveClient } from '../../utils/hiveNode';
 import { createPortal } from 'react-dom';
 import { useTranslation, Trans } from 'react-i18next';
-import { MdImage, MdUpload } from 'react-icons/md';
 import { toastIn } from '../../utils/toast';
 import axios from 'axios';
 import { Client } from '@hiveio/dhive';
@@ -14,7 +13,9 @@ import { setChannelTrailer, fetchChannelTrailer, trailerMatches } from '../../ut
 import { useAppStore } from '../../lib/store';
 import PromoteModal from '../Promote/PromoteModal';
 import ModalHeader from '../ModalHeader/ModalHeader';
-import { Rocket, FileText, Image as ImageIcon, ListOrdered, SlidersHorizontal } from 'lucide-react';
+import { Button, ChoiceCard, Progress, SettingRow, Toggle } from '../v2/ui';
+import { Icon } from '../v2/Icon';
+import { cx } from '../v2/helpers';
 import TimelineEditor, { withTimelineKeys, chapterIssues } from '../timeline/TimelineEditor';
 import { readTimeline, withTimeline, applyTimelineToBody, chaptersFromText } from '../../utils/videoTimeline';
 import { fetchPlaySource } from '../../lib/videoData';
@@ -118,6 +119,17 @@ function recombinePostBody(header, middle, footer) {
   return parts.filter(Boolean).join('\n\n') + '\n';
 }
 
+// Section head of the design (33b): a 4px bar in the tone, a title, an aside.
+function SecHead({ tone = 'accent', title: label, aside }) {
+  return (
+    <div className="evm-sec__head">
+      <span className={cx('evm-sec__bar', `is-${tone}`)} aria-hidden="true" />
+      <h4 className="evm-sec__title">{label}</h4>
+      {aside && <span className="evm-sec__aside">{aside}</span>}
+    </div>
+  );
+}
+
 /**
  * Modal for editing a video post on Hive.
  * Broadcasts a `comment` operation with the same author/permlink to replace
@@ -160,7 +172,7 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
   const [videoUploadPct, setVideoUploadPct] = useState(0);
   const [videoUploading, setVideoUploading] = useState(false);
   const [newAsset, setNewAsset] = useState(null); // { embedUrl, owner, permlink }
-  const [newDuration, setNewDuration] = useState(0);
+  const [, setNewDuration] = useState(0);
   // Which embed host the pool picked for this upload — shown while it runs, so a
   // misbehaving upload can be traced to an endpoint without opening devtools.
   const [uploadHost, setUploadHost] = useState('');
@@ -252,7 +264,7 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
         }
 
         let meta = {};
-        try { meta = JSON.parse(post.json_metadata || '{}'); } catch (_) {}
+        try { meta = JSON.parse(post.json_metadata || '{}'); } catch { /* keep {} */ }
 
         // Extract current thumbnail
         let currentThumb = '';
@@ -335,7 +347,7 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
             setIsNsfw(tagNsfw);
             initialNsfwRef.current = tagNsfw;
           }
-        } catch (_) {
+        } catch {
           if (!cancelled) { setIsNsfw(tagNsfw); initialNsfwRef.current = tagNsfw; }
         }
 
@@ -862,10 +874,10 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
   if (!isOpen) return null;
 
   const tabs = [
-    { id: 'details', icon: FileText, label: t('watch.edit.tabs.details'), dirty: detailsDirty, error: detailsError },
-    { id: 'media', icon: ImageIcon, label: t('watch.edit.tabs.media'), dirty: mediaDirty, error: false },
-    ...(!isShort ? [{ id: 'timeline', icon: ListOrdered, label: t('watch.edit.timeline'), dirty: timelineDirty, error: timelineIssues.length > 0 }] : []),
-    { id: 'settings', icon: SlidersHorizontal, label: t('watch.edit.tabs.settings'), dirty: settingsDirty, error: false },
+    { id: 'details', icon: 'description', label: t('watch.edit.tabs.details'), dirty: detailsDirty, error: detailsError },
+    { id: 'media', icon: 'image', label: t('watch.edit.tabs.media'), dirty: mediaDirty, error: false },
+    ...(!isShort ? [{ id: 'timeline', icon: 'view_timeline', label: t('watch.edit.timeline'), dirty: timelineDirty, error: timelineIssues.length > 0 }] : []),
+    { id: 'settings', icon: 'tune', label: t('watch.edit.tabs.settings'), dirty: settingsDirty, error: false },
   ];
 
   // Arrow keys move between tabs (and select them), Home/End jump to the ends.
@@ -883,11 +895,12 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
   };
 
   const ready = !loading && !loadError && !!original;
+  const isPromoted = promotedUntil && new Date(promotedUntil).getTime() > Date.now();
 
   return createPortal(
-    <div className="edit-video-modal-overlay" onClick={onClose}>
+    <div className="v2-dialog edit-video-modal-overlay" onClick={onClose}>
       <form
-        className="edit-video-modal-content"
+        className="v2-dialog__panel edit-video-modal-content"
         onClick={(e) => e.stopPropagation()}
         onSubmit={trySave}
         role="dialog"
@@ -895,11 +908,12 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
         aria-labelledby="evm-title"
         noValidate
       >
+        <div className="v2-dialog__grab" aria-hidden="true" />
         <ModalHeader closeOnEscape={false} className="evm-header" title={t('watch.edit.title')} titleId="evm-title" onClose={onClose} />
         <p className="edit-video-subtitle">@{author}/{permlink}</p>
 
-        <div className="evm-tabs" role="tablist" aria-label={t('watch.edit.tabs.label')} onKeyDown={onTabKey}>
-          {tabs.map(({ id, icon: Icon, label, dirty, error }) => (
+        <div className="evm-tabs v2-seg is-block is-scroll" role="tablist" aria-label={t('watch.edit.tabs.label')} onKeyDown={onTabKey}>
+          {tabs.map(({ id, icon, label, dirty, error }) => (
             <button
               key={id}
               id={`evm-tab-${id}`}
@@ -908,11 +922,11 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
               aria-selected={tab === id}
               aria-controls={`evm-panel-${id}`}
               tabIndex={tab === id ? 0 : -1}
-              className={`evm-tab${tab === id ? ' is-active' : ''}${error ? ' has-error' : ''}`}
+              className={cx('v2-seg__opt', 'h36', 'evm-tab', tab === id && 'is-on is-active', error && 'has-error')}
               onClick={() => selectTab(id)}
               disabled={!ready}
             >
-              <Icon size={16} aria-hidden="true" />
+              <Icon name={icon} size={16} />
               <span className="evm-tab__label">{label}</span>
               {error ? (
                 <span className="evm-tab__badge" title={t('watch.edit.tabs.hasErrors')} aria-label={t('watch.edit.tabs.hasErrors')}>!</span>
@@ -925,116 +939,140 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
 
         <div className="evm-body">
           {loading && (
-            <div className="edit-video-loading">{t('watch.edit.loading')}</div>
+            <div className="edit-video-loading" role="status">
+              <Icon name="progress_activity" size={18} className="v2-spin" />
+              {t('watch.edit.loading')}
+            </div>
           )}
 
           {loadError && !loading && (
-            <div className="edit-video-error">{loadError}</div>
+            <div className="edit-video-error v2-failure" role="alert"><b>{loadError}</b></div>
           )}
 
           {ready && tab === 'details' && (
             <div className="evm-panel" role="tabpanel" id="evm-panel-details" aria-labelledby="evm-tab-details">
-              {/* Title. For a short it is optional and lives in the body as a
-                  `## Title` first line (utils/shortTitle.js). */}
-              <div className="evm-field">
-                <label className="edit-video-label" htmlFor="evm-title-input">{shortEdit ? t('upload.details.titleShort') : t('watch.edit.titleLabel')}</label>
-                <input
-                  id="evm-title-input"
-                  type="text"
-                  className="edit-video-input"
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                  maxLength={titleMax}
-                />
-                <span className={`edit-video-hint${!titleValid && title ? ' error' : ''}`}>
-                  {shortEdit ? `${titleLen}/${SHORT_TITLE_MAX}` : <>{titleLen}/{TITLE_MAX} · {t('watch.edit.titleMin', { min: TITLE_MIN })}</>}
-                </span>
+              <div className="evm-details-top">
+                {/* The thumbnail is edited on the Media tab; here it is the shortcut there. */}
+                <button
+                  type="button"
+                  className="evm-thumb v2-thumb r16"
+                  onClick={() => selectTab('media')}
+                  aria-label={t('watch.edit.thumbnail')}
+                  title={t('watch.edit.thumbnail')}
+                >
+                  {thumbnailUrl && <img src={thumbnailUrl} alt="" onError={(e) => { e.currentTarget.style.visibility = 'hidden'; }} />}
+                  <span className="v2-media-pill is-br evm-thumb__pill"><Icon name="image" size={12} />{t('watch.edit.thumbnail')}</span>
+                </button>
+
+                <div className="evm-details-fields">
+                  {/* Title. For a short it is optional and lives in the body as a
+                      `## Title` first line (utils/shortTitle.js). */}
+                  <div className={cx('v2-field', 'evm-field', !titleValid && title && 'is-error')}>
+                    <label className="v2-eyebrow" htmlFor="evm-title-input">{shortEdit ? t('upload.details.titleShort') : t('watch.edit.titleLabel')}</label>
+                    <input
+                      id="evm-title-input"
+                      type="text"
+                      className="v2-input h44 evm-title-input"
+                      value={title}
+                      onChange={(e) => setTitle(e.target.value)}
+                      maxLength={titleMax}
+                    />
+                    <span className={cx('v2-field__hint', 'edit-video-hint', !titleValid && title && 'error')}>
+                      {shortEdit ? `${titleLen}/${SHORT_TITLE_MAX}` : <>{titleLen}/{TITLE_MAX} · {t('watch.edit.titleMin', { min: TITLE_MIN })}</>}
+                    </span>
+                  </div>
+
+                  <div className={cx('v2-field', 'evm-field', !tagsValid && 'is-error')}>
+                    <label className="v2-eyebrow" htmlFor="evm-tags-input">{t('watch.edit.tags')}</label>
+                    <input
+                      id="evm-tags-input"
+                      type="text"
+                      className="v2-input h44"
+                      value={tagsInput}
+                      onChange={(e) => setTagsInput(e.target.value)}
+                      placeholder={t('watch.edit.tagsPlaceholder')}
+                    />
+                    <div className="edit-video-tags-preview">
+                      {/* Auto-added taxonomy (community/category): shown pinned and
+                          can't be removed; it's always preserved on save. */}
+                      {systemTags.map((tag) => (
+                        <span key={`sys-${tag}`} className="tag--auto" title={t('watch.edit.autoTag')}>
+                          <Icon name="lock" size={12} />{tag}
+                        </span>
+                      ))}
+                      {parsedTags.map((tag) => <span key={tag}>{tag}</span>)}
+                    </div>
+                    <span className={cx('v2-field__hint', 'edit-video-hint', !tagsValid && 'error')}>
+                      {isShort ? t('watch.edit.tagCount', { count: parsedTags.length, max: userTagLimit }) : t('watch.edit.tagCountRequired', { count: parsedTags.length, max: userTagLimit })}
+                    </span>
+                  </div>
+                </div>
               </div>
 
-              <div className="evm-field">
-                <label className="edit-video-label" htmlFor="evm-body-input">{t('watch.edit.description')}</label>
+              <div className={cx('v2-field', 'evm-field', 'evm-field--grow', !bodyValid && 'is-error')}>
+                <label className="v2-eyebrow" htmlFor="evm-body-input">{t('watch.edit.description')}</label>
                 <textarea
                   id="evm-body-input"
-                  className="edit-video-textarea"
+                  className="v2-input is-area edit-video-textarea"
                   value={body}
                   onChange={(e) => setBody(e.target.value)}
                   rows={10}
                   placeholder={t('watch.edit.descriptionPlaceholder')}
                 />
-                <span className={`edit-video-hint${!bodyValid ? ' error' : ''}`}>{t('watch.edit.markdownHint')}</span>
+                <span className={cx('v2-field__hint', 'edit-video-hint', !bodyValid && 'error')}>{t('watch.edit.markdownHint')}</span>
                 {!isShort && (
                   <p className="evm-note">
-                    {t('watch.edit.chaptersNoteAll')}{' '}
+                    <Icon name="view_timeline" size={16} />
+                    <span>{t('watch.edit.chaptersNoteAll')}</span>
                     <button type="button" className="evm-linkbtn" onClick={() => selectTab('timeline')}>
                       {t('watch.edit.editChapters')}
                     </button>
                   </p>
                 )}
               </div>
-
-              <div className="evm-field">
-                <label className="edit-video-label" htmlFor="evm-tags-input">{t('watch.edit.tags')}</label>
-                <input
-                  id="evm-tags-input"
-                  type="text"
-                  className="edit-video-input"
-                  value={tagsInput}
-                  onChange={(e) => setTagsInput(e.target.value)}
-                  placeholder={t('watch.edit.tagsPlaceholder')}
-                />
-                <div className="edit-video-tags-preview">
-                  {/* Auto-added taxonomy (community/category): shown pinned and
-                      can't be removed; it's always preserved on save. */}
-                  {systemTags.map((tag) => (
-                    <span key={`sys-${tag}`} className="tag--auto" title={t('watch.edit.autoTag')}>
-                      {tag}
-                    </span>
-                  ))}
-                  {parsedTags.map((tag) => <span key={tag}>{tag}</span>)}
-                </div>
-                <span className={`edit-video-hint${!tagsValid ? ' error' : ''}`}>
-                  {isShort ? t('watch.edit.tagCount', { count: parsedTags.length, max: userTagLimit }) : t('watch.edit.tagCountRequired', { count: parsedTags.length, max: userTagLimit })}
-                </span>
-              </div>
             </div>
           )}
 
           {ready && tab === 'media' && (
             <div className="evm-panel" role="tabpanel" id="evm-panel-media" aria-labelledby="evm-tab-media">
-              <section className="evm-group">
-                <h4 className="evm-group__title">{t('watch.edit.thumbnail')}</h4>
-                <div className="edit-video-thumb-row">
-                  {thumbnailUrl ? (
-                    <img
-                      className="edit-video-thumb-preview"
-                      src={thumbnailUrl}
-                      alt={t('watch.edit.thumbPreviewAlt')}
-                      onError={(e) => { e.currentTarget.style.visibility = 'hidden'; }}
-                      onLoad={(e) => { e.currentTarget.style.visibility = 'visible'; }}
-                    />
-                  ) : (
-                    <div className="edit-video-thumb-placeholder"><MdImage size={32} /></div>
-                  )}
-                  <div className="edit-video-thumb-inputs">
+              <section className="evm-sec">
+                <SecHead tone="accent" title={t('watch.edit.thumbnail')} />
+                <div className="evm-sec__grid">
+                  <div className="evm-preview v2-thumb r16">
+                    {thumbnailUrl ? (
+                      <img
+                        className="edit-video-thumb-preview"
+                        src={thumbnailUrl}
+                        alt={t('watch.edit.thumbPreviewAlt')}
+                        onError={(e) => { e.currentTarget.style.visibility = 'hidden'; }}
+                        onLoad={(e) => { e.currentTarget.style.visibility = 'visible'; }}
+                      />
+                    ) : (
+                      <div className="edit-video-thumb-placeholder"><Icon name="image" size={28} /></div>
+                    )}
+                  </div>
+                  <div className="evm-sec__side">
                     <input
                       type="url"
-                      className="edit-video-input"
+                      className="v2-input"
                       value={thumbnailUrl}
                       onChange={(e) => setThumbnailUrl(e.target.value)}
                       placeholder="https://..."
                       disabled={thumbUploading}
                       aria-label={t('watch.edit.thumbnail')}
                     />
-                    <button
-                      type="button"
-                      className="edit-video-upload-btn"
-                      onClick={() => thumbInputRef.current?.click()}
-                      disabled={thumbUploading || saving}
-                      title={t('watch.edit.uploadImage')}
-                    >
-                      <MdUpload size={16} />
-                      {thumbUploading ? t('watch.edit.uploading') : t('common.actions.upload')}
-                    </button>
+                    <div className="evm-row">
+                      <Button
+                        variant="secondary"
+                        icon="upload"
+                        loading={thumbUploading}
+                        onClick={() => thumbInputRef.current?.click()}
+                        disabled={thumbUploading || saving}
+                        title={t('watch.edit.uploadImage')}
+                      >
+                        {thumbUploading ? t('watch.edit.uploading') : t('common.actions.upload')}
+                      </Button>
+                    </div>
                     <input
                       ref={thumbInputRef}
                       type="file"
@@ -1042,67 +1080,85 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
                       style={{ display: 'none' }}
                       onChange={handleThumbFilePick}
                     />
+                    <span className="v2-field__hint">{t('watch.edit.thumbHint')}</span>
                   </div>
                 </div>
-                <span className="edit-video-hint">{t('watch.edit.thumbHint')}</span>
               </section>
 
               {/* Video file: swap the media without touching the post itself. */}
-              <section className="evm-group">
-                <h4 className="evm-group__title">{t('watch.edit.videoFile')}</h4>
-                <div className="evm-video-replace">
-                  {!newVideoFile && (
-                    <>
-                      <label className="evm-video-pick">
-                        <MdUpload size={18} />
-                        <span>{t('watch.edit.replaceVideo')}</span>
-                        <input
-                          type="file"
-                          accept="video/*"
-                          hidden
-                          onChange={handleVideoFilePick}
-                        />
-                      </label>
-                      <p className="edit-video-hint">{t('watch.edit.replaceHint')}</p>
-                    </>
-                  )}
-
-                  {newVideoFile && (
-                    <div className="evm-video-staged">
-                      <div className="evm-video-staged__name" title={newVideoFile.name}>
-                        {newVideoFile.name}
-                      </div>
-
-                      {videoUploading && (
-                        <>
-                          <div className="evm-video-bar">
-                            <div className="evm-video-bar__fill" style={{ width: `${videoUploadPct}%` }} />
-                          </div>
-                          <div className="evm-video-staged__status">
-                            {uploadHost
-                              ? <Trans i18nKey="watch.edit.uploadingTo" values={{ host: uploadHost, pct: videoUploadPct }} components={{ b: <b /> }} />
-                              : t('watch.edit.choosingServer')}
-                          </div>
-                        </>
-                      )}
-
-                      {!videoUploading && newAsset && (
-                        <div className="evm-video-staged__status evm-video-staged__status--ok">
-                          {uploadHost
-                            ? <Trans i18nKey="watch.edit.uploadedTo" values={{ host: uploadHost }} components={{ b: <b /> }} />
-                            : t('watch.edit.uploaded')}
+              <section className="evm-sec">
+                <SecHead
+                  tone="accent"
+                  title={t('watch.edit.videoFile')}
+                  aside={newVideoFile ? <span className="num" title={newVideoFile.name}>{newVideoFile.name}</span> : null}
+                />
+                <div className="evm-sec__grid">
+                  <div className="evm-preview v2-thumb r16" aria-hidden="true">
+                    {thumbnailUrl && <img src={thumbnailUrl} alt="" onError={(e) => { e.currentTarget.style.visibility = 'hidden'; }} />}
+                    <span className="v2-media-pill is-tl"><Icon name="movie" size={12} /></span>
+                  </div>
+                  <div className="evm-sec__side evm-video-replace">
+                    {!newVideoFile && (
+                      <>
+                        <p className="evm-copy">{t('watch.edit.replaceHint')}</p>
+                        <div className="evm-row">
+                          <label className="v2-btn v2-btn--secondary h40 evm-video-pick">
+                            <Icon name="swap_horiz" size={18} />
+                            <span className="v2-btn__label">{t('watch.edit.replaceVideo')}</span>
+                            <input
+                              type="file"
+                              accept="video/*"
+                              hidden
+                              onChange={handleVideoFilePick}
+                            />
+                          </label>
                         </div>
-                      )}
+                      </>
+                    )}
 
-                      <button type="button" className="evm-video-cancel" onClick={cancelVideoReplacement}>
-                        {videoUploading ? t('watch.edit.cancelUpload') : t('watch.edit.keepCurrent')}
-                      </button>
+                    {newVideoFile && (
+                      <div className="evm-video-staged">
+                        {videoUploading && (
+                          <div className="evm-video-progress">
+                            <div className="evm-video-staged__status">
+                              <span>
+                                {uploadHost
+                                  ? <Trans i18nKey="watch.edit.uploadingTo" values={{ host: uploadHost, pct: videoUploadPct }} components={{ b: <b /> }} />
+                                  : t('watch.edit.choosingServer')}
+                              </span>
+                            </div>
+                            <Progress value={videoUploadPct} label={t('watch.edit.videoFile')} />
+                          </div>
+                        )}
 
-                      {!videoUploading && newAsset && (
-                        <p className="edit-video-hint">{t('watch.edit.encodeHint')}</p>
-                      )}
-                    </div>
-                  )}
+                        {!videoUploading && newAsset && (
+                          <div className="evm-video-staged__status evm-video-staged__status--ok">
+                            <Icon name="check_circle" size={18} />
+                            <span>
+                              {uploadHost
+                                ? <Trans i18nKey="watch.edit.uploadedTo" values={{ host: uploadHost }} components={{ b: <b /> }} />
+                                : t('watch.edit.uploaded')}
+                            </span>
+                          </div>
+                        )}
+
+                        <div className="evm-row">
+                          <Button
+                            variant="secondary"
+                            icon={videoUploading ? 'close' : 'undo'}
+                            className="evm-video-cancel"
+                            onClick={cancelVideoReplacement}
+                          >
+                            {videoUploading ? t('watch.edit.cancelUpload') : t('watch.edit.keepCurrent')}
+                          </Button>
+                        </div>
+
+                        {!videoUploading && newAsset && (
+                          <p className="v2-field__hint">{t('watch.edit.encodeHint')}</p>
+                        )}
+                      </div>
+                    )}
+                  </div>
                 </div>
               </section>
             </div>
@@ -1112,177 +1168,140 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
               for its preview is fetched the first time this tab opens. */}
           {ready && tab === 'timeline' && !isShort && (
             <div className="evm-panel" role="tabpanel" id="evm-panel-timeline" aria-labelledby="evm-tab-timeline">
-              <p className="edit-video-hint evm-panel__intro">{t('watch.edit.timelineHint')}</p>
-              {tlSrcState === 'loading' ? (
-                <p className="edit-video-hint">{t('watch.edit.timelineLoadingVideo')}</p>
-              ) : (
-                <TimelineEditor
-                  src={tlSrc}
-                  hls
-                  poster={thumbnailUrl || null}
-                  duration={tlDuration}
-                  chapters={tlChapters}
-                  links={tlLinks}
-                  onChaptersChange={setTlChapters}
-                  onLinksChange={setTlLinks}
-                />
-              )}
+              <section className="evm-sec">
+                <SecHead tone="cyan" title={t('watch.edit.timeline')} />
+                <p className="evm-copy evm-panel__intro">{t('watch.edit.timelineHint')}</p>
+                {tlSrcState === 'loading' ? (
+                  <p className="evm-copy evm-loading-line">
+                    <Icon name="progress_activity" size={16} className="v2-spin" />
+                    {t('watch.edit.timelineLoadingVideo')}
+                  </p>
+                ) : (
+                  <TimelineEditor
+                    src={tlSrc}
+                    hls
+                    poster={thumbnailUrl || null}
+                    duration={tlDuration}
+                    chapters={tlChapters}
+                    links={tlLinks}
+                    onChaptersChange={setTlChapters}
+                    onLinksChange={setTlLinks}
+                  />
+                )}
+                <p className="v2-field__hint">{t('watch.edit.chaptersNoteAll')}</p>
+              </section>
             </div>
           )}
 
           {ready && tab === 'settings' && (
             <div className="evm-panel" role="tabpanel" id="evm-panel-settings" aria-labelledby="evm-tab-settings">
               <section className="evm-group">
-                <h4 className="evm-group__title">{t('watch.edit.sections.visibility')}</h4>
-                <div className="evm-toggle-row">
-                  <button
-                    type="button"
-                    role="switch"
-                    aria-checked={listed}
-                    className={`evm-switch${listed ? ' is-on' : ''}`}
-                    onClick={() => setListed((v) => !v)}
+                <h4 className="evm-group__title v2-eyebrow">{t('watch.edit.sections.visibility')}</h4>
+                <div className="evm-listing" role="radiogroup" aria-label={t('watch.edit.sections.visibility')}>
+                  <ChoiceCard
+                    className="evm-listing__opt"
+                    selected={listed}
+                    icon="public"
+                    title={t('watch.edit.listed')}
+                    sub={t('watch.edit.listedHint')}
+                    onClick={() => setListed(true)}
                     disabled={saving}
-                  >
-                    <span className="evm-switch__track"><span className="evm-switch__thumb" /></span>
-                    <span className="evm-switch__label">
-                      <strong>{listed ? t('watch.edit.listed') : t('watch.edit.unlistedLabel')}</strong>
-                      <small>{listed ? t('watch.edit.listedHint') : t('watch.edit.unlistedHint')}</small>
-                    </span>
-                  </button>
+                  />
+                  <ChoiceCard
+                    className="evm-listing__opt"
+                    selected={!listed}
+                    icon="link"
+                    title={t('watch.edit.unlistedLabel')}
+                    sub={t('watch.edit.unlistedHint')}
+                    onClick={() => setListed(false)}
+                    disabled={saving}
+                  />
+                </div>
+              </section>
+
+              {/* 33b: one group, "Content, ads and promotion"; the ad rows join it. */}
+              <section className="evm-group">
+                <h4 className="evm-group__title v2-eyebrow">{t('watch.edit.sections.contentAds')}</h4>
+                <div className="evm-toggle-row">
+                  {!isShort && (
+                    <SettingRow
+                      icon="content_cut"
+                      title={t('watch.edit.allowRemix')}
+                      sub={reusable ? t('watch.edit.remixOn') : t('watch.edit.remixOff')}
+                      control={<Toggle checked={reusable} onChange={(v) => setReusable(v)} label={t('watch.edit.allowRemix')} disabled={saving} />}
+                    />
+                  )}
 
                   {/* Landscape only: the trailer frame on Overview is 16:9. */}
                   {!isShort && isOwner && trailerKnown && (
-                    <button
-                      type="button"
-                      role="switch"
-                      aria-checked={isTrailer}
-                      className={`evm-switch${isTrailer ? ' is-on' : ''}`}
-                      onClick={() => setIsTrailer((v) => !v)}
-                      disabled={saving}
-                    >
-                      <span className="evm-switch__track"><span className="evm-switch__thumb" /></span>
-                      <span className="evm-switch__label">
-                        <strong>{t('watch.edit.trailer')}</strong>
-                        <small>{isTrailer ? t('watch.edit.trailerOn') : t('watch.edit.trailerOff')}</small>
-                      </span>
-                    </button>
+                    <SettingRow
+                      icon="play_circle"
+                      title={t('watch.edit.trailer')}
+                      sub={isTrailer ? t('watch.edit.trailerOn') : t('watch.edit.trailerOff')}
+                      control={<Toggle checked={isTrailer} onChange={(v) => setIsTrailer(v)} label={t('watch.edit.trailer')} disabled={saving} />}
+                    />
                   )}
+
+                  {/* Shorts and stories never carry ads, so there is nothing to switch. */}
+                  {isOwner && accountAds.ads && !isShort && !docShort && (
+                    <SettingRow
+                      icon="ads_click"
+                      title={t('watch.edit.adsOnVideo')}
+                      sub={videoAds ? t('watch.edit.adsOnHint') : t('watch.edit.adsOffHint')}
+                      control={<Toggle checked={videoAds} onChange={(v) => setVideoAds(v)} label={t('watch.edit.adsOnVideo')} disabled={saving} />}
+                    />
+                  )}
+                  {isOwner && accountAds.ads && !isShort && !docShort && accountAds.rolls && videoAds && (
+                    <SettingRow
+                      icon="smart_display"
+                      title={t('watch.edit.rollsOnVideo')}
+                      sub={videoRolls ? t('watch.edit.rollsOnHint') : t('watch.edit.rollsOffHint')}
+                      control={<Toggle checked={videoRolls} onChange={(v) => setVideoRolls(v)} label={t('watch.edit.rollsOnVideo')} disabled={saving} />}
+                    />
+                  )}
+
+                  {/* 33b: the row keeps its name; the line says what the switch does. */}
+                  <SettingRow
+                    icon="explicit"
+                    title={t('watch.edit.nsfw')}
+                    sub={isNsfw ? t('watch.edit.nsfwHint') : t('watch.edit.nsfwOffHint')}
+                    control={<Toggle checked={isNsfw} onChange={(v) => setIsNsfw(v)} label={t('watch.edit.nsfw')} disabled={saving} />}
+                  />
                 </div>
               </section>
 
-              <section className="evm-group">
-                <h4 className="evm-group__title">{t('watch.edit.sections.content')}</h4>
-                <div className="evm-toggle-row">
-                  <button
-                    type="button"
-                    role="switch"
-                    aria-checked={isNsfw}
-                    className={`evm-switch evm-switch--danger${isNsfw ? ' is-on' : ''}`}
-                    onClick={() => setIsNsfw((v) => !v)}
-                    disabled={saving}
-                  >
-                    <span className="evm-switch__track"><span className="evm-switch__thumb" /></span>
-                    <span className="evm-switch__label">
-                      <strong>{isNsfw ? t('watch.edit.nsfw') : t('watch.edit.notNsfw')}</strong>
-                      <small>{isNsfw ? t('watch.edit.nsfwHint') : t('watch.edit.notNsfwHint')}</small>
-                    </span>
-                  </button>
-
-                  {!isShort && (
-                    <button
-                      type="button"
-                      role="switch"
-                      aria-checked={reusable}
-                      className={`evm-switch${reusable ? ' is-on' : ''}`}
-                      onClick={() => setReusable((v) => !v)}
-                      disabled={saving}
-                    >
-                      <span className="evm-switch__track"><span className="evm-switch__thumb" /></span>
-                      <span className="evm-switch__label">
-                        <strong>{t('watch.edit.allowRemix')}</strong>
-                        <small>{reusable ? t('watch.edit.remixOn') : t('watch.edit.remixOff')}</small>
-                      </span>
-                    </button>
-                  )}
-                </div>
-              </section>
-
-              {/* Shorts and stories never carry ads, so there is nothing to switch. */}
-              {isOwner && accountAds.ads && !isShort && !docShort && (
-                <section className="evm-group">
-                  <h4 className="evm-group__title">{t('watch.edit.sections.ads')}</h4>
-                  <div className="evm-toggle-row">
-                    <button
-                      type="button"
-                      role="switch"
-                      aria-checked={videoAds}
-                      className={`evm-switch${videoAds ? ' is-on' : ''}`}
-                      onClick={() => setVideoAds((v) => !v)}
-                      disabled={saving}
-                    >
-                      <span className="evm-switch__track"><span className="evm-switch__thumb" /></span>
-                      <span className="evm-switch__label">
-                        <strong>{t('watch.edit.adsOnVideo')}</strong>
-                        <small>{videoAds ? t('watch.edit.adsOnHint') : t('watch.edit.adsOffHint')}</small>
-                      </span>
-                    </button>
-
-                    {accountAds.rolls && videoAds && (
-                      <button
-                        type="button"
-                        role="switch"
-                        aria-checked={videoRolls}
-                        className={`evm-switch${videoRolls ? ' is-on' : ''}`}
-                        onClick={() => setVideoRolls((v) => !v)}
-                        disabled={saving}
-                      >
-                        <span className="evm-switch__track"><span className="evm-switch__thumb" /></span>
-                        <span className="evm-switch__label">
-                          <strong>{t('watch.edit.rollsOnVideo')}</strong>
-                          <small>{videoRolls ? t('watch.edit.rollsOnHint') : t('watch.edit.rollsOffHint')}</small>
-                        </span>
-                      </button>
-                    )}
-                  </div>
-                </section>
-              )}
-
-              {!isShort && (
-                <section className="evm-group">
-                  <h4 className="evm-group__title">{t('watch.edit.sections.promotion')}</h4>
-                  <button
-                    type="button"
-                    className="evm-promote-btn"
-                    onClick={() => setPromoteOpen(true)}
-                    disabled={saving}
-                  >
-                    <Rocket size={16} />
-                    {promotedUntil && new Date(promotedUntil).getTime() > Date.now() ? t('watch.edit.promoted') : t('watch.edit.promote')}
-                  </button>
-                </section>
-              )}
             </div>
           )}
         </div>
 
         {/* One Save for every tab, as before: only what changed is written. */}
-        <footer className="evm-footer">
-          <button
-            type="button"
-            className="edit-video-btn-secondary"
-            onClick={onClose}
-            disabled={saving}
-          >
-            {t('common.actions.cancel')}
-          </button>
-          <button
+        <footer className="v2-dialog__foot evm-footer">
+          {/* 33b: Promote and Save side by side, 56 tall, labels flush left; the X closes. */}
+          {!isShort && (
+            <Button
+              variant="secondary"
+              size={56}
+              trailing="campaign"
+              className={cx('evm-promote-btn is-next', isPromoted && 'is-promoted')}
+              onClick={() => setPromoteOpen(true)}
+              disabled={saving || !ready}
+              title={t('watch.edit.sections.promotion')}
+            >
+              {isPromoted ? t('watch.edit.promoted') : t('watch.edit.promote')}
+            </Button>
+          )}
+          <Button
             type="submit"
-            className={`edit-video-btn-primary${errorTab ? ' is-blocked' : ''}`}
+            variant="primary"
+            size={56}
+            trailing="check"
+            loading={saving}
+            className={cx('edit-video-btn-primary is-next', errorTab && 'is-blocked')}
             disabled={!ready || !isDirty || saving || videoUploading}
             aria-disabled={errorTab ? 'true' : undefined}
           >
             {saving ? t('common.actions.saving') : t('watch.edit.saveChanges')}
-          </button>
+          </Button>
         </footer>
       </form>
 

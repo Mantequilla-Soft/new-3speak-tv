@@ -77,6 +77,11 @@
     }
   },
   "reactionUpload": {
+    "title": "Mag-post ng video reaction",
+    "rec": "REC {{time}}",
+    "mic": "Mic",
+    "camera": "Camera",
+    "restart": "I-restart",
     "authorized": "Na-authorize na si @threespeak — puwede mo nang i-post ang reaction mo",
     "authFailed": "Pumalya ang authorization. Subukan ulit.",
     "webcamDenied": "Hindi ma-access ang webcam",
@@ -90,7 +95,7 @@
     "uploadVideo": "Mag-upload ng Video",
     "recordVideo": "Mag-record ng Video",
     "startRecording": "Simulan ang Recording",
-    "stopRecording": "Itigil ang Recording",
+    "stopRecording": "Ihinto at i-review",
     "recordedVideo": "Na-record na video",
     "descriptionPlaceholder": "Magdagdag ng description para sa video reaction mo...",
     "showInShorts": "Ipakita sa 3Speak Shorts",

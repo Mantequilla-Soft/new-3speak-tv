@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
-import { Scissors } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { toastIn } from '../../utils/toast';
+import { DockTile, Icon } from '../v2/ui';
 
 // Every toast from this module is headed "Live"; the message becomes the
 // line under it. See utils/toast.js.
@@ -79,14 +79,19 @@ export default function StreamClipButton({ roomName, variant = 'inline' }) {
   if (variant === 'sidebar') {
     return (
       <div className="actionItem" onClick={clip} role="button" title={t('live.clip.title')}>
-        <div className={`actionButton${busy ? ' liked' : ''}`}><Scissors size={22} /></div>
+        <div className={`actionButton${busy ? ' liked' : ''}`}><Icon name="content_cut" size={24} /></div>
         <span className="actionLabel">{busy ? '…' : t('live.clip.label')}</span>
       </div>
     );
   }
   return (
-    <button type="button" className="pv-btn" onClick={clip} disabled={busy} title={t('live.clip.title')}>
-      <Scissors size={14} /><span>{busy ? t('live.clip.clipping') : t('live.clip.label')}</span>
-    </button>
+    <DockTile
+      icon={busy ? 'progress_activity' : 'content_cut'}
+      label={busy ? t('live.clip.clipping') : t('live.clip.label')}
+      className={busy ? 'stream-clip is-busy' : 'stream-clip'}
+      onClick={clip}
+      disabled={busy}
+      title={t('live.clip.title')}
+    />
   );
 }

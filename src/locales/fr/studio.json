@@ -7,11 +7,19 @@
     "createNewDesc": "Mettez en ligne et partagez votre contenu avec le monde"
   },
   "preview": {
-    "cannotPreview": "Votre navigateur ne peut pas prévisualiser cette vidéo — c'est courant pour les clips HEVC/H.265 (par ex. les enregistrements iPhone « Haute efficacité »). Pas de souci : elle sera quand même mise en ligne et convertie pour être lisible par tous."
+    "cannotPreview": "<b>Impossible de prévisualiser cette vidéo.</b> C'est courant avec les clips HEVC/H.265, comme les enregistrements iPhone en Haute efficacité. Elle sera quand même mise en ligne et convertie pour être lisible par tous."
   },
   "drafts": {
     "untitled": "(sans titre)",
-    "empty": "Aucune vidéo trouvée avec ce filtre."
+    "empty": "Aucune vidéo trouvée avec ce filtre.",
+    "title": "Studio",
+    "create": "Créer",
+    "views28": "Vues, 28 jours",
+    "newFollowers": "Nouveaux abonnés",
+    "views": "vues",
+    "stats": "Statistiques",
+    "more": "Plus",
+    "public": "Public"
   },
   "schedule": {
     "days": {
@@ -30,6 +38,7 @@
     "am": "AM",
     "pm": "PM",
     "pastWarning": "Cette date et cette heure sont passées. Veuillez choisir une date et une heure à venir.",
+    "pickDay": "Choisissez un jour",
     "publishAt": "Votre vidéo sera publiée automatiquement le {{when}}"
   },
   "scheduled": {
@@ -99,6 +108,7 @@
     "insertTable": "Insérer un tableau",
     "spoiler": "Spoiler/Texte masqué",
     "emoji": "Emoji",
+    "gifs": "GIF",
     "searchEmoji": "Rechercher un emoji",
     "searchGifs": "Rechercher des GIF…",
     "noGifs": "Aucun GIF trouvé.",

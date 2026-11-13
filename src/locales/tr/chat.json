@@ -4,6 +4,7 @@
   },
   "tools": {
     "emoji": "Emoji",
+    "image": "Görsel ekle",
     "searchEmoji": "Emoji ara",
     "searchGifs": "GIF ara…",
     "noGifs": "GIF bulunamadı.",
@@ -18,6 +19,7 @@
     "communityWithSubscribers_one": "Topluluk · {{formatted}} abone",
     "communityWithSubscribers_other": "Topluluk · {{formatted}} abone",
     "commentFallback": "(yorum)",
+    "videoKind": "3Speak · Video",
     "play": "{{title}} oynat"
   },
   "share": {
@@ -31,22 +33,29 @@
     "responsiveSub": "Bulunduğu sayfaya sığacak şekilde ölçeklenir",
     "fixedSub": "Sabit boyutlu iframe",
     "sendInChat": "3Speak Sohbet'te gönder",
-    "sendInChatSub": "3Speak'te birine mesajla gönder",
+    "sendInChatSub": "Birine mesajla gönder",
     "embedOnWebsite": "Web sitesine yerleştir",
-    "embedOnWebsiteSub": "Kendi siten veya blogun için HTML kodunu kopyala",
+    "embedOnWebsiteSub": "Duyarlı ya da sabit boyut",
     "forHivePost": "Hive gönderisi için",
+    "forHivePostSub": "Yapıştırmak için bağlantıyı kopyala",
     "hivePostCopied": "Bağlantı kopyalandı. Hive gönderine yapıştır.",
-    "generalShare": "Paylaş / bağlantıyı kopyala",
-    "generalShareSub": "Diğer uygulamalar ya da bağlantıyı kopyala"
+    "generalShare": "Paylaş ya da bağlantıyı kopyala",
+    "generalShareSub": "Diğer uygulamalar",
+    "embed": "Yerleştir",
+    "chat": "Sohbet",
+    "more": "Diğer",
+    "startAt": "Başlangıç",
+    "toFollowers_one": "{{n}} takipçine",
+    "toFollowers_other": "{{n}} takipçine"
   },
   "gate": {
     "connectTitle": "3Speak Sohbet'e bağlan",
-    "connectBody": "Sohbet Snapie altyapısıyla çalışır. Bağlanmak, Hive posting anahtarınla tek seferlik bir giriş doğrulamasını imzalar; işlem yok, ücret yok.",
+    "connectBody": "Sohbet Snapie altyapısıyla çalışır. Bağlanmak, posting anahtarınla tek seferlik bir giriş doğrulamasını imzalar. İşlem yok, ücret yok.",
     "connecting": "Bağlanılıyor…",
     "connectButton": "Sohbete bağlan",
     "cannotSign": "Mevcut girişin sohbet doğrulamasını imzalayamıyor. Keychain, HiveAuth, PeakVault veya Ledger kullan.",
-    "needsAccountTitle": "Sohbet için Hive hesabı gerekli",
-    "needsAccountBody": "Mesajlar kendi hesap anahtarlarınla imzalanır, bu yüzden sohbet de hesabın hazır olduğunda diğer her şeyle birlikte açılır. Profilindeki hedefleri tamamla, ekip seni oraya ulaştıracak.",
+    "needsAccountTitle": "Sohbet için Hive hesabı gerekir.",
+    "needsAccountBody": "Isınmayı tamamladığında diğer her şeyle birlikte açılır.",
     "loginTitle": "Sohbeti kullanmak için giriş yap",
     "loginBody": "Mesaj göndermek ve almak için Hive hesabınla giriş yap.",
     "connectingToChat": "Sohbete bağlanılıyor…"
@@ -94,8 +103,8 @@
     "serverRejectedServerMap_other": "Sunucu {{count}} isteğin tümünü reddetti (kimlikler sunucunun kendi okunmamış listesinden)",
     "failed": "Hepsi okundu olarak işaretlenemedi",
     "marking": "Okundu olarak işaretleniyor…",
-    "button": "Tümünü okundu olarak işaretle",
-    "buttonCount": "Tümünü okundu olarak işaretle ({{count}})"
+    "button": "Tümünü okundu işaretle",
+    "buttonCount": "Tümünü okundu işaretle ({{count}})"
   },
   "list": {
     "chooseTarget": "Gönderilecek sohbeti seç",
@@ -117,7 +126,7 @@
     "deleteError": "Mesaj silinemedi.",
     "back": "Sohbetlere dön",
     "loading": "Mesajlar yükleniyor…",
-    "empty": "Henüz mesaj yok, bir merhaba de 👋",
+    "empty": "Henüz mesaj yok. Bir merhaba de 👋",
     "editedSuffix": " · düzenlendi",
     "messageActions": "Mesaj işlemleri",
     "quote": "Alıntıla",
@@ -129,7 +138,8 @@
     "quoting": "@{{user}} alıntılanıyor",
     "cancelQuote": "Alıntıyı iptal et",
     "removeImage": "Görseli kaldır",
-    "placeholder": "Bir mesaj yaz…"
+    "placeholder": "Bir mesaj yaz…",
+    "placeholderTo": "Mesaj yaz: {{name}}"
   },
   "page": {
     "chooseTarget": "Gönderilecek sohbeti seç.",

@@ -1,0 +1,73 @@
+@use "../../styles/v2" as v2;
+
+// A short audio preview (AudioClip.jsx): a bg well 44 tall with a round play
+// button, an accent seek bar and the time in mono. Replaces <audio controls>.
+.audio-clip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-width: 0;
+  height: 44px;
+  padding: 0 12px 0 6px;
+  border-radius: var(--r-md);
+  background: var(--bg);
+  box-sizing: border-box;
+
+  audio { display: none; }
+
+  &__time {
+    @include v2.mono(12, 700);
+    color: var(--muted);
+    white-space: nowrap;
+    flex: none;
+  }
+
+  // The seek bar: 6px track on surface-2, accent fill up to --p.
+  &__seek {
+    flex: 1;
+    min-width: 40px;
+    height: 24px;
+    margin: 0;
+    background: transparent;
+    appearance: none;
+    cursor: pointer;
+
+    &:disabled { cursor: default; }
+    &:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
+
+    &::-webkit-slider-runnable-track {
+      height: 6px;
+      border-radius: 3px;
+      background: linear-gradient(to right, var(--accent) var(--p, 0%), var(--surface-2) var(--p, 0%));
+    }
+    &::-moz-range-track {
+      height: 6px;
+      border-radius: 3px;
+      background: var(--surface-2);
+    }
+    &::-moz-range-progress {
+      height: 6px;
+      border-radius: 3px;
+      background: var(--accent);
+    }
+    &::-webkit-slider-thumb {
+      appearance: none;
+      width: 14px;
+      height: 14px;
+      margin-top: -4px;
+      border: 0;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+    &::-moz-range-thumb {
+      width: 14px;
+      height: 14px;
+      border: 0;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+    &:disabled::-webkit-slider-thumb { background: var(--muted); }
+    &:disabled::-moz-range-thumb { background: var(--muted); }
+  }
+}

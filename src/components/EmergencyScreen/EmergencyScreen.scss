@@ -1,0 +1,50 @@
+@use "../../styles/v2" as v2;
+
+// The outage takeover (design 44a), shown INSTEAD of the app, so it carries its
+// own page: the ground colour, the logo, one card, a cyan progress glyph.
+.emergency-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483647;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  padding: 24px 16px;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.emergency-logo {
+  width: min(200px, 56vw);
+  height: auto;
+  cursor: default;
+}
+
+.emergency-card {
+  @include v2.card;
+  width: min(460px, 100%);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+
+  h1 {
+    margin: 0;
+    @include v2.text(heading);
+  }
+
+  p {
+    margin: 0 0 8px;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--muted);
+  }
+
+  .emergency-discord { align-self: stretch; text-decoration: none; }
+}
+
+.emergency-icon { color: var(--cyan); }
+.emergency-spinner { color: var(--cyan); }

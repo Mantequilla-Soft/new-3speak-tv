@@ -1,34 +1,34 @@
-@use "../../mixins.scss" as mix;
+@use "../../styles/v2" as v2;
 
-// The creator's link toasters, top-right over the video.
+// The creator's link toasters (33a "Links from the creator"), top-right over the
+// video. Text over media: white on the strong scrim, in both themes.
 //
 // z 8: above the click surface (5), the ticker band and the sponsor disclosure
 // (7); below the tip nudge and the controls (10) and the surf remote (11), which
-// they are pushed down under (see `top`) rather than covering. Always dark,
-// whatever the theme: they sit on video, like the control bar.
+// they are pushed down under (see `top`) rather than covering.
 .tl-toasts {
   position: absolute;
-  right: 10px;
+  right: 12px;
   z-index: 8;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   gap: 6px;
   // A fixed width, so a stack of toasters lines up whatever their titles.
-  width: min(290px, calc(100% - 20px));
+  width: min(280px, calc(100% - 24px));
   pointer-events: none;
-  transition: top 0.2s ease;
+  transition: top var(--t-base) var(--ease);
 
-  @include mix.respond(phone) {
-    right: 6px;
+  @include v2.mobile {
+    right: 8px;
     gap: 4px;
-    width: min(220px, calc(100% - 12px));
+    width: min(220px, calc(100% - 16px));
   }
 
   &--compact {
-    right: 6px;
+    right: 8px;
     gap: 4px;
-    width: min(220px, calc(100% - 12px));
+    width: min(220px, calc(100% - 16px));
   }
 }
 
@@ -38,20 +38,13 @@
   align-items: stretch;
   width: 100%;
   min-width: 0;
-  background: rgba(0, 0, 0, 0.78);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 10px;
-  color: #fff;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
-  animation: tl-toast-in 0.28s ease-out;
+  border-radius: var(--r-lg);
+  background: var(--media-scrim-strong);
+  color: var(--on-media);
   overflow: hidden;
+  animation: tl-toast-in var(--t-slow) var(--ease);
 
-  &.is-selected {
-    border-color: var(--accent-primary, #e53935);
-    box-shadow: 0 0 0 1px var(--accent-primary, #e53935), 0 4px 14px rgba(0, 0, 0, 0.35);
-  }
+  &.is-selected { outline: 2px solid var(--accent); outline-offset: -2px; }
 }
 
 .tl-toast__main {
@@ -70,16 +63,16 @@
   cursor: pointer;
 
   &:hover .tl-toast__title { text-decoration: underline; }
-  &:focus-visible { outline: 2px solid #fff; outline-offset: -2px; border-radius: 9px; }
+  &:focus-visible { outline: 2px solid var(--on-media); outline-offset: -2px; border-radius: var(--r-lg); }
 }
 
 .tl-toast__thumb {
   flex-shrink: 0;
   width: 64px;
   height: 36px;
-  border-radius: 5px;
+  border-radius: var(--r-sm);
   object-fit: cover;
-  background: #222;
+  background: color-mix(in srgb, var(--on-media) 14%, transparent);
 }
 
 .tl-toast__avatar {
@@ -88,19 +81,19 @@
   height: 36px;
   border-radius: 50%;
   object-fit: cover;
-  background: #222;
+  background: color-mix(in srgb, var(--on-media) 14%, transparent);
 }
 
 .tl-toast__icon {
   flex-shrink: 0;
   width: 36px;
   height: 36px;
-  border-radius: 8px;
+  border-radius: var(--r-md);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.12);
-  color: #fff;
+  background: color-mix(in srgb, var(--on-media) 14%, transparent);
+  color: var(--on-media);
 }
 
 .tl-toast__text {
@@ -111,20 +104,19 @@
   line-height: 1.25;
 }
 
+// The eyebrow in cyan, like the design's "LINKS FROM THE CREATOR".
 .tl-toast__kind {
   display: inline-flex;
   align-items: center;
   gap: 3px;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.6);
+  @include v2.text(eyebrow);
+  color: var(--cyan);
 }
 
 .tl-toast__title {
-  font-size: 13px;
-  font-weight: 600;
+  @include v2.text(body-sm);
+  font-weight: 700;
+  line-height: 1.25;
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -133,8 +125,9 @@
 }
 
 .tl-toast__sub {
-  font-size: 11px;
-  color: rgba(255, 255, 255, 0.65);
+  @include v2.text(meta-sm);
+  color: var(--on-media);
+  opacity: .7;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -143,43 +136,47 @@
 .tl-toast__close {
   flex-shrink: 0;
   align-self: flex-start;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
   margin: 4px 4px 0 0;
-  padding: 4px;
-  line-height: 0;
+  padding: 0;
   background: none;
   border: 0;
   border-radius: 50%;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--on-media);
+  opacity: .7;
   cursor: pointer;
 
-  &:hover { color: #fff; background: rgba(255, 255, 255, 0.15); }
+  &:hover { opacity: 1; background: color-mix(in srgb, var(--on-media) 14%, transparent); }
 }
 
 // Phones (and the compact editor preview): one line of title, smaller media.
 @mixin tl-compact {
-  .tl-toast__main { gap: 7px; padding: 5px 2px 5px 6px; }
+  .tl-toast { border-radius: var(--r-md); }
+  .tl-toast__main { gap: 8px; padding: 6px 2px 6px 6px; }
   .tl-toast__thumb { width: 48px; height: 27px; }
   .tl-toast__avatar, .tl-toast__icon { width: 28px; height: 28px; }
   .tl-toast__kind { display: none; }
   .tl-toast__title { font-size: 12px; -webkit-line-clamp: 1; }
   .tl-toast__sub { font-size: 10px; }
-  .tl-toast__close { margin: 2px 2px 0 0; padding: 3px; }
+  .tl-toast__close { width: 24px; height: 24px; margin: 2px 2px 0 0; }
 }
 
-@include mix.respond(phone) {
+@include v2.mobile {
   .tl-toasts { @include tl-compact; }
   // The phone player is small: the two newest only, outside fullscreen.
   .video-iframe-wrapper:not(:fullscreen):not(.landscape-fullscreen) .tl-toast:nth-last-child(n + 3) { display: none; }
 }
 .tl-toasts--compact { @include tl-compact; }
 
-// Fullscreen on a wider screen has room again: a little larger. A phone held
-// upright keeps the compact size, or the stack would cover the picture.
+// Fullscreen on a wider screen has room again: a little larger.
 @media (min-width: 600px) {
   :fullscreen .tl-toasts:not(.tl-toasts--compact),
   .landscape-fullscreen .tl-toasts:not(.tl-toasts--compact) {
-    width: min(330px, calc(100% - 24px));
-    right: 14px;
+    width: min(320px, calc(100% - 24px));
+    right: 16px;
   }
 }
 

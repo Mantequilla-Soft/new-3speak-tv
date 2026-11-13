@@ -1,10 +1,11 @@
-import React from "react";
 import "./NotFound.scss"
-import image from "../assets/image/404.png";
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Helmet } from 'react-helmet-async';
+import { Icon } from '../components/v2/Icon';
 
+// 404 (design 26d): one card, the big accent "404", what happened, and the one
+// way forward.
 function NotFound() {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -17,11 +18,22 @@ function NotFound() {
       <Helmet>
         <meta name="robots" content="noindex" />
       </Helmet>
-      <img src={image} alt={t('pages.notFound.imageAlt')} />
-      <p>{t('pages.notFound.title')}</p>
-      <h3>{t('pages.notFound.message')}</h3>
-      {/* One control: a <button> inside a <Link> was two tab stops for one action. */}
-      <button type="button" onClick={() => navigate('/')}>{t('pages.notFound.goHome')}</button>
+      <div className="not-found-card">
+        <div className="not-found-code" role="img" aria-label={t('pages.notFound.imageAlt')}>404</div>
+        <h1 className="not-found-title">{t('pages.notFound.title')}</h1>
+        <p className="not-found-sub">{t('pages.notFound.message')}</p>
+        {/* One control: a <button> inside a <Link> was two tab stops for one action. */}
+        <div className="not-found-actions">
+          <button type="button" className="v2-btn v2-btn--inverse h48 is-block is-next" onClick={() => navigate('/')}>
+            <span className="v2-btn__label">{t('pages.notFound.goHome')}</span>
+            <Icon name="home" size={20} />
+          </button>
+          <button type="button" className="v2-btn v2-btn--secondary h48 is-block is-next" onClick={() => navigate('/discover')}>
+            <span className="v2-btn__label">{t('common.actions.search')}</span>
+            <Icon name="search" size={20} />
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

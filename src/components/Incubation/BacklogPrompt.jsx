@@ -4,8 +4,8 @@ import { useAppStore } from '../../lib/store';
 import { usePromptsActive, setPromptActive } from '../../utils/welcomeGate';
 import { fetchBackfillSummary, claimAssetsOnce } from '../../lib/incubation';
 import { useTranslation, Trans } from 'react-i18next';
-import ModalHeader from '../ModalHeader/ModalHeader';
-import '../AdsPrompt/AdsPrompt.scss';
+import { Button, Dialog } from '../v2/ui';
+import './GraduationPrompt.scss';
 
 const SNOOZE_KEY = 'backlog_prompt_snoozed_until';
 const SNOOZE_MS = 3 * 24 * 60 * 60 * 1000;
@@ -70,28 +70,35 @@ export default function BacklogPrompt() {
   const n = summary.pending;
 
   return (
-    <div className="ads-prompt-overlay">
-      <div className="ads-prompt" role="dialog" aria-modal="true" aria-labelledby="backlog-title">
-        <ModalHeader title={t('incubation.backlog.title')} titleId="backlog-title" onClose={close} />
-        <p className="ads-prompt-lede">
-          <Trans i18nKey="incubation.backlog.lede" count={n} values={{ user }} components={{ b: <strong /> }} />
-        </p>
-
-        <p className="ads-prompt-text">
-          {t('incubation.backlog.text')}
-        </p>
-
-        <div className="ads-prompt-actions">
-          <button type="button" className="ads-prompt-ghost" onClick={close}>{t('incubation.backlog.later')}</button>
-          <button
-            type="button"
-            className="ads-prompt-primary"
+    // "Your earlier posts are still here" (design 46d).
+    <Dialog
+      open
+      onClose={close}
+      title={t('incubation.backlog.title')}
+      closeLabel={t('common.actions.close')}
+      width={480}
+      className="inc-prompt"
+      footer={(
+        <>
+          <Button variant="secondary" onClick={close}>{t('incubation.backlog.later')}</Button>
+          <Button
+            variant="primary"
+            next
+            className="inc-prompt-primary"
             onClick={() => { close(); navigate('/publish-backlog'); }}
           >
-            {t('incubation.tipCard.takeALook')}
-          </button>
-        </div>
-      </div>
-    </div>
+            {t('nav.profile.publishBacklog')}
+          </Button>
+        </>
+      )}
+    >
+      <p className="inc-prompt-lede">
+        <Trans i18nKey="incubation.backlog.lede" count={n} values={{ user }} components={{ b: <strong /> }} />
+      </p>
+
+      <p className="inc-prompt-text">
+        {t('incubation.backlog.text')}
+      </p>
+    </Dialog>
   );
 }

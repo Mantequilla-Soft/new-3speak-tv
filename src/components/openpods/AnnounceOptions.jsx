@@ -1,13 +1,12 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 import axios from 'axios';
 import { useTranslation } from 'react-i18next';
-import { MdPeopleAlt } from 'react-icons/md';
-import { IoIosArrowDropdownCircle } from 'react-icons/io';
 import { getHiveUrl } from '../../utils/hiveNode';
 import { getAnnounceConfig, setAnnounceConfig } from '../../utils/openpodAnnounce';
 import { readAddToBlog, writeAddToBlog } from '../../utils/addToBlog';
 import Community_modal from '../modal/Community_modal';
 import Beneficiary_modal from '../modal/Beneficiary_modal';
+import { Icon, Toggle } from '../v2/ui';
 import './AnnounceOptions.scss';
 import AccountImg from '../HiveAvatar/AccountImg';
 
@@ -20,6 +19,7 @@ import AccountImg from '../HiveAvatar/AccountImg';
  */
 export default function AnnounceOptions({ announceType, isPremium = false, onChange, showAnnounceToggle = false, announceEnabled: announceEnabledProp, onAnnounceEnabledChange, initialConfig = null }) {
   const { t } = useTranslation();
+  const rewardsId = useId();
   // `initialConfig` DETACHES this instance from the shared store: it starts from
   // the given values and reports changes only through onChange. The stream
   // templates page uses it, since each template keeps its own announcement
@@ -150,6 +150,9 @@ export default function AnnounceOptions({ announceType, isPremium = false, onCha
   const communityLabel = typeof community === 'string'
     ? (community === 'hive-181335' ? '3Speak (hive-181335)' : community)
     : community?.title || community?.name || t('live.announce.selectCommunity');
+  // The string starts with an emoji (📣); the row already has its campaign
+  // icon, so it is drawn without one (one icon set per screen).
+  const shareLabel = t('live.announce.shareToggle').replace(/^\p{Extended_Pictographic}\uFE0F?\s*/u, '');
 
   return (
     <div className="hh-announce-opts">
@@ -158,14 +161,15 @@ export default function AnnounceOptions({ announceType, isPremium = false, onCha
           still call off the post before they hit Start; hides the rest of the
           controls when switched off. */}
       {showAnnounceToggle && (
-        <label className="hh-announce-opts__toggle">
-          <input
-            type="checkbox"
+        <div className="hh-announce-opts__toggle">
+          <Icon name="campaign" size={20} className="hh-announce-opts__toggle-icon" />
+          <span>{shareLabel}</span>
+          <Toggle
             checked={announceEnabled}
-            onChange={(e) => setAnnounceEnabled(e.target.checked)}
+            label={shareLabel}
+            onChange={(on) => setAnnounceEnabled(on)}
           />
-          <span>{t('live.announce.shareToggle')}</span>
-        </label>
+        </div>
       )}
 
       {showAnnounceToggle && !announceEnabled ? null : (
@@ -174,7 +178,7 @@ export default function AnnounceOptions({ announceType, isPremium = false, onCha
         {/* Community — only relevant to a full top-level post */}
         {announceType === 'post' && (
           <div className="hh-announce-opts__field">
-            <label>{t('live.announce.community')}</label>
+            <span className="v2-eyebrow">{t('live.announce.community')}</span>
             <button
               type="button"
               className="hh-announce-opts__selector"
@@ -188,15 +192,15 @@ export default function AnnounceOptions({ announceType, isPremium = false, onCha
                 />
               )}
               <span>{communityLabel}</span>
-              <IoIosArrowDropdownCircle size={16} className="hh-announce-opts__chevron" />
+              <Icon name="expand_more" size={18} className="hh-announce-opts__chevron" />
             </button>
           </div>
         )}
 
         {/* Payout / rewards */}
         <div className="hh-announce-opts__field">
-          <label>{t('live.announce.rewards')}</label>
-          <select className="hh-announce-opts__select" onChange={handleReward} defaultValue={rewardInitial}>
+          <label className="v2-eyebrow" htmlFor={rewardsId}>{t('live.announce.rewards')}</label>
+          <select id={rewardsId} className="v2-input is-select hh-announce-opts__select" onChange={handleReward} defaultValue={rewardInitial}>
             <option value="default">{t('live.announce.rewardDefault')}</option>
             <option value="powerup">{t('live.announce.rewardPowerup')}</option>
             <option value="decline">{t('live.announce.rewardDecline')}</option>
@@ -206,6 +210,7 @@ export default function AnnounceOptions({ announceType, isPremium = false, onCha
 
       {/* Beneficiaries */}
       <div className="hh-announce-opts__bene">
+        <Icon name={isPremium ? 'group' : 'lock'} size={18} className="hh-announce-opts__bene-icon" />
         <div className="hh-announce-opts__bene-info">
           <span className="hh-announce-opts__bene-title">{t('live.announce.beneficiaries')}</span>
           <span className="hh-announce-opts__bene-sub">
@@ -219,14 +224,14 @@ export default function AnnounceOptions({ announceType, isPremium = false, onCha
           className="hh-announce-opts__bene-btn"
           onClick={() => setBeneModalOpen(true)}
         >
-          {beneList.length > 0 && <span className="hh-announce-opts__bene-count">{beneList.length}</span>}
-          <MdPeopleAlt />
+          <Icon name="group_add" size={16} />
           <span>{t('live.announce.beneficiaries')}</span>
+          {beneList.length > 0 && <span className="hh-announce-opts__bene-count num">{beneList.length}</span>}
         </button>
       </div>
 
       {announceType === 'post' && !detached && (
-        <label className="hh-announce-opts__toggle hh-announce-opts__blog">
+        <label className="v2-check hh-announce-opts__blog">
           <input type="checkbox" checked={addToBlog} onChange={(e) => setAddToBlog(e.target.checked)} />
           <span>
             {t('upload.details.addToBlog.label')}

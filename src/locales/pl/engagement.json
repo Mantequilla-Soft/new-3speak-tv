@@ -11,6 +11,8 @@
       "transferFailed": "Przelew nie powiódł się: {{message}}"
     },
     "heading": "Wyślij napiwek do @{{recipient}}",
+    "pageTitle": "Napiwek dla @{{recipient}}",
+    "pageSub": "Otwarte z nakładki transmisji lub linku",
     "methodHive": "HIVE / HBD",
     "methodLightning": "Lightning",
     "methodMore": "Więcej sposobów",
@@ -22,6 +24,17 @@
     "memoPlaceholder": "np. Dzięki za świetne treści!",
     "memoLinkNote": "Ten link zostanie dodany do notatki: {{link}}",
     "send": "Wyślij napiwek",
+    "sendAmount": "Wyślij {{amount}} {{currency}}",
+    "paidIn": "Płatność w {{currency}} · bez opłat",
+    "forTitle": "za „{{title}}”",
+    "presets": {
+      "coffee": "Kawa",
+      "popular": "Najpopularniejszy",
+      "thanks": "Wielkie dzięki",
+      "superFan": "Superfan"
+    },
+    "sentEyebrow": "Napiwek wysłany",
+    "sentTo": "{{amount}} dla @{{recipient}}",
     "lightning": {
       "amountLabel": "Kwota (sats):",
       "messageLabel": "Wiadomość (opcjonalnie):",
@@ -65,6 +78,8 @@
     "monthly": {
       "label": "Jak często",
       "once": "Jednorazowo",
+      "oneTime": "Jednorazowo",
+      "monthly": "Co miesiąc",
       "until": "Co miesiąc, do {{date}}",
       "note": "Hive wysyła to samo co 30 dni, pierwszy raz od razu. Możesz to zatrzymać w każdej chwili.",
       "replaces": "To zastąpi miesięczne wsparcie, które już wysyłasz do @{{recipient}}.",
@@ -79,7 +94,7 @@
   },
   "cardMenu": {
     "loginToPersonalize": "Zaloguj się, aby spersonalizować swój kanał",
-    "notInterestedToast": "Nie interesuje cię — ukryjemy ten film",
+    "notInterestedToast": "Nie interesuje cię to. Ukryjemy ten film",
     "undo": "Cofnij",
     "cantHideOwn": "Nie możesz ukryć własnych filmów",
     "hidingCreatorToast": "Ukrywamy filmy od @{{author}}",
@@ -89,7 +104,8 @@
     "addToPlaylist": "Dodaj do playlisty",
     "addTag": "Dodaj tag",
     "notInterested": "Nie interesuje mnie",
-    "dontShowCreator": "Nie pokazuj @{{author}}"
+    "dontShowCreator": "Nie pokazuj @{{author}}",
+    "saveToPlaylist": "Zapisz na playliście"
   },
   "guestList": {
     "loadFailed": "Nie udało się wczytać obecnej listy gości",
@@ -136,26 +152,34 @@
     "tagged": "Otagowano jako „{{tag}}”.",
     "vote": "Zagłosuj",
     "tagThisVideo": "Otaguj ten film",
-    "tagOptional": "— opcjonalnie —",
+    "tagOptional": "Opcjonalnie",
     "pickTopicFirst": "Najpierw wybierz temat",
     "taggedNoDot": "Otagowano jako „{{tag}}”",
     "tagFailed": "Tagowanie nie powiodło się: {{message}}",
-    "taggedAlreadyVoted": "Otagowano jako „{{tag}}” — twój głos {{weight}}% został już oddany.",
-    "votingClosed": "Głosowanie zamknięte — otaguj ten film",
+    "taggedAlreadyVoted": "Otagowano jako „{{tag}}”. Twój głos {{weight}}% został już oddany.",
+    "votingClosed": "Głosowanie zamknięte: otaguj ten film",
     "youTagged": "Otagowano to jako <b>{{tag}}</b>.",
-    "pickTopic": "Wybierz temat (liczy się jako głos 100%)",
+    "pickTopic": "Wybór tematu liczy się jako głos 100%.",
     "submitTag": "Zapisz tag",
     "tagThisVideoFull": "Otaguj ten film (liczy się jako głos 100%)",
-    "justTag": "Nie głosuj — tylko otaguj"
+    "justTag": "Nie głosuj, tylko otaguj",
+    "justTagShort": "Tylko otaguj",
+    "voteAndTag": "Zagłosuj i otaguj",
+    "addsAbout": "dodaje około {{value}}",
+    "postSoFar_one": "{{value}} do tej pory · {{count}} głos",
+    "postSoFar_few": "{{value}} do tej pory · {{count}} głosy",
+    "postSoFar_many": "{{value}} do tej pory · {{count}} głosów",
+    "postSoFar_other": "{{value}} do tej pory · {{count}} głosu"
   },
   "tagsPicker": {
     "autoTagged": "Automatyczne tagi: {{tags}}",
     "searchPlaceholder": "Szukaj tematów…",
     "searchAria": "Szukaj tematów",
     "noMatches": "Brak tematów pasujących do „{{query}}”.",
-    "allSelected": "Wybrano całą kategorię {{category}}. Dodaj pojedyncze tematy tylko po to, by zawęzić wybór:",
+    "allSelected": "Wybrano całe {{category}}. Dotknij tematu, aby go pominąć.",
     "orPickTopics": "Albo wybierz pojedyncze tematy:",
-    "goodEnough": "Wystarczy — albo doprecyzuj (opcjonalnie):",
+    "clear": "Wyczyść",
+    "goodEnough": "Wystarczy albo doprecyzuj (opcjonalnie)",
     "moreSpecific": "Bardziej szczegółowo:"
   }
 }

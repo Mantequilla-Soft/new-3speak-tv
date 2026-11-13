@@ -22,7 +22,8 @@
     "step1": "Abre este video en",
     "step2": "Haz clic en el menú de tres puntos y elige Descargar.",
     "step3": "Elige abajo el archivo descargado.",
-    "pickFile": "Elegir el archivo descargado"
+    "pickFile": "Elegir el archivo descargado",
+    "title": "No se pudo obtener este"
   },
   "errors": {
     "signIn": "Inicia sesión para importar tus videos.",
@@ -133,7 +134,8 @@
     },
     "stopConfirm": "¿Detener esta importación? Los videos que aún no se han publicado se cancelan, incluidos los ya programados. Los publicados se quedan.",
     "stopYes": "Sí, detener",
-    "stopKeep": "Seguir importando"
+    "stopKeep": "Seguir importando",
+    "countOf": "{{done}} de {{total}}"
   },
   "bitchute": {
     "noLink": "Aún no has vinculado una cuenta de BitChute. Vincúlala y verifícala primero en tu perfil y luego vuelve aquí.",

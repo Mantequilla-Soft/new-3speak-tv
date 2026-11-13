@@ -1,19 +1,93 @@
-@use "../../mixins.scss" as mix;
+@use "../../styles/v2" as v2;
 
-// Base modal styles shared across all modals
+// Shared modal base. Loaded with ModalHeader (ModalHeader.scss), so it is on
+// every page that can open a modal.
+//
+// 1. The v2 dialog frame (STYLE_GUIDE §7, design 07/07g) for every box that
+//    ModalHeader marks: a box using the shared header that sits directly in a
+//    fixed full-screen overlay (see useDialogFrame in ModalHeader.jsx). Desktop:
+//    surface, 1px border, radius 28, sheet shadow, fade + 8px rise. Under 768px:
+//    a bottom sheet, top radius 28, grab handle, max 88vh, scrolling inside.
+//    The look wins over a box's own colors and radii on purpose, so every
+//    modal reads as one dialog; its size and inner layout stay its own.
+// 2. The legacy .modal / .overlay / .modal-content classes, now the same look.
+
+/* ─── 1. v2 dialog frame for marked boxes ───────────────────────────────── */
+[data-v2-scrim="fill"] {
+  background: var(--overlay) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+[data-v2-dialog] {
+  background: var(--surface) !important;
+  color: var(--text) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--r-3xl) !important;
+  box-shadow: var(--shadow-sheet) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  text-align: left;
+  animation: app-dialog-in var(--t-base) var(--ease) !important;
+
+  &:focus { outline: none; }
+}
+
+@include v2.mobile {
+  [data-v2-dialog] {
+    // A sheet from the bottom edge, whatever the overlay's own layout is.
+    position: fixed !important;
+    top: auto !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    transform: none !important;
+    margin: 0 !important;
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    max-height: 88vh !important;
+    max-height: 88dvh !important;
+    overflow-y: auto !important;
+    overscroll-behavior: contain;
+    border-bottom: 0 !important;
+    border-radius: var(--r-3xl) var(--r-3xl) 0 0 !important;
+    padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px)) !important;
+    animation: app-sheet-up var(--t-slow) var(--ease) !important;
+
+    > .app-modal-header > .app-modal-header-grab {
+      display: block;
+      position: absolute;
+      top: 6px;
+      left: 50%;
+      width: 40px;
+      height: 4px;
+      margin-left: -20px;
+      border-radius: 2px;
+      background: var(--border);
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-v2-dialog] { animation: none !important; }
+}
+
+// translate/scale (not transform), so boxes centred with a transform don't jump
+@keyframes app-dialog-in { from { opacity: 0; translate: 0 8px; } }
+@keyframes app-sheet-up { from { translate: 0 100%; } }
+
+/* ─── 2. Legacy modal classes ───────────────────────────────────────────── */
 .modal, .overlay {
+  position: fixed;
+  inset: 0;
   width: 100vw;
   height: 100vh;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  position: fixed;
   z-index: 1000;
 }
 
 .overlay {
-  background: rgba(49, 49, 49, 0.8);
+  background: var(--overlay);
 }
 
 .modal-content {
@@ -21,132 +95,92 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  line-height: 1.4;
-  background: var(--card-bg, #f1f1f1);
-  color: var(--text-primary, #000);
-  padding: 14px 28px;
-  max-width: 600px;
-  min-width: 600px;
-  overflow: hidden;
-  border-radius: 12px;
-  text-align: center;
   z-index: 1001;
+  width: min(480px, calc(100vw - 48px));
+  max-height: calc(100vh - 48px);
+  max-height: calc(100dvh - 48px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 18px 20px 20px;
+  line-height: 1.45;
+  text-align: left;
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--r-3xl);
+  box-shadow: var(--shadow-sheet);
 
-  @include mix.respond(phone) {
-    // Bottom sheet on mobile
+  @include v2.mobile {
     top: auto;
+    right: 0;
     bottom: 0;
     left: 0;
-    right: 0;
     transform: none;
-    min-width: 100%;
-    max-width: 100%;
-    max-height: 85vh;
-    overflow-y: auto;
-    border-radius: 16px 16px 0 0;
-    padding: 14px 16px;
-    padding-bottom: calc(14px + env(safe-area-inset-bottom, 0px));
-    animation: modal-slide-up 0.3s ease forwards;
+    width: auto;
+    max-height: 88vh;
+    max-height: 88dvh;
+    border-bottom: 0;
+    border-radius: var(--r-3xl) var(--r-3xl) 0 0;
+    padding: 20px 16px calc(16px + env(safe-area-inset-bottom, 0px));
+    animation: app-sheet-up var(--t-slow) var(--ease);
   }
 
-  // The box centres its text; the shared header keeps its title on the left.
-  .app-modal-header {
-    text-align: left;
-  }
-
-  &.auth-bg {
-    background-color: green;
-    background-image: linear-gradient(to right, rgb(55, 65, 81), rgb(31, 41, 55), rgb(17, 24, 39));
-
-    .app-modal-header {
-      border-bottom-color: rgba(255, 255, 255, 0.2);
-    }
-
-    .app-modal-header-title {
-      color: #fff;
-    }
-
-    .app-modal-header-close {
-      color: rgba(255, 255, 255, 0.75);
-
-      &:hover {
-        background: rgba(255, 255, 255, 0.12);
-        color: #fff;
-      }
-    }
-  }
+  // The old dark-gradient variant is the plain v2 surface now.
+  &.auth-bg { background: var(--surface); }
 }
 
-// Still matched by AddToPlaylistModal, ReactionPlayer and PlaylistBar buttons.
+// Still matched by AddToPlaylistModal, ReactionPlayer and PlaylistBar buttons:
+// a round ghost icon button in the top-right corner.
 .close-btn {
-  background: none;
-  border: none;
-  font-size: 20px;
   position: absolute;
-  top: 10px;
-  right: 10px;
-  padding: 5px 7px;
+  top: 12px;
+  right: 12px;
+  display: inline-grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text);
+  font-size: 18px;
   cursor: pointer;
-  color: var(--text-primary, #000);
+  transition: background var(--t-fast) var(--ease);
+
+  &:hover { background: var(--bg-hover); }
 }
 
 .modal-body {
   button {
+    @include v2.btn(primary, 40);
     margin-top: 10px;
-    padding: 7px 20px;
-    border: none;
-    color: #fff;
-    border-radius: 8px;
-    font-size: 16px;
-    background-image: linear-gradient(90deg, rgb(141, 11, 33) 15%, rgb(227, 19, 55) 97%);
-
-    @include mix.respond(phone) {
-      font-size: 14.5px;
-    }
   }
 
-  &.auth-bg {
-    p {
-      color: #fff;
-      font-size: 16.5px;
-      line-height: 24.5px;
-
-      @include mix.respond(phone) {
-        font-size: 12.5px;
-      }
-    }
+  &.auth-bg p {
+    @include v2.text(body);
+    color: var(--text);
   }
 }
 
 @keyframes modal-slide-up {
-  from {
-    transform: translateY(100%);
-  }
-  to {
-    transform: translateY(0);
-  }
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
 }
 
 @keyframes shake {
-  0%, 100% {
-    transform: translateX(0);
-  }
-  25% {
-    transform: translateX(-5px);
-  }
-  50% {
-    transform: translateX(5px);
-  }
-  75% {
-    transform: translateX(-5px);
-  }
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  50% { transform: translateX(5px); }
+  75% { transform: translateX(-5px); }
 }
 
+// Form error under a field or above the actions: 11-13px accent text, flush left.
 .error-message {
-  color: red;
-  font-size: 14px;
-  margin: 10px 0px;
-  text-align: center;
-  display: inline-block;
-  animation: shake 0.5s ease-in-out;
+  display: block;
+  margin: 8px 0;
+  color: var(--accent);
+  @include v2.text(body-sm);
+  text-align: left;
+  animation: shake .5s ease-in-out;
 }

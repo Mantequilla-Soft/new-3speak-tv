@@ -1,15 +1,13 @@
-import { useMemo, useState } from 'react';
+import { Icon } from '../v2/Icon';
+import { EmptyState } from '../v2/ui';
+import { lazy, useMemo, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import {
-  MdArrowBack, MdPlayArrow, MdPause, MdPlaylistAdd, MdPlaylistAddCheck, MdLink, MdShare,
-  MdPlaylistPlay, MdForum, MdAlbum, MdThumbUp,
-} from 'react-icons/md';
-import { BiDollar } from 'react-icons/bi';
 import { useAppStore } from '../../lib/store';
-import { CHECKER_URL } from '../../utils/config';
+import { CHECKER_URL, PLAYLISTS_READ_URL } from '../../utils/config';
+import { storedPlaylistType } from '../../lib/playlistType';
 import { toastIn } from '../../utils/toast';
 import { isLoggedIn } from '../../hive-api/aioha';
 import { fixVideoThumbnail, fallbackImg, wholeCover } from '../../utils/fixThumbnails';
@@ -21,9 +19,12 @@ import { DownloadButton } from '../Podcasts/PodcastBits';
 import PayoutAmount from '../PayoutAmount/PayoutAmount';
 import CommentVoteTooltip from '../tooltip/CommentVoteTooltip';
 import BlogContent from '../playVideo/BlogContent';
-import TipModal from '../tip-reward/TipModal';
-import AddToPlaylistModal from '../AddToPlaylistModal/AddToPlaylistModal';
+import { LazyBoundary } from '../common/LazyMount';
 import '../Podcasts/PodcastsTab.scss';
+
+// Opened from a card's Tip / Save buttons only: not part of the first download.
+const TipModal = lazy(() => import('../tip-reward/TipModal'));
+const AddToPlaylistModal = lazy(() => import('../AddToPlaylistModal/AddToPlaylistModal'));
 
 /** The audio page's own link to one 3Speak audio: `/audio?play=<owner>/<id>`. */
 export const audioItemPath = (item) => `/audio?play=${item.owner}/${item.permlink}`;
@@ -100,6 +101,15 @@ export default function AudioItemView({ owner, id, onBack }) {
     queryFn: () => getUersContent(owner, postPermlink),
     staleTime: 60 * 1000,
   });
+  // The playlist the track is in (same query key as PlaylistView, so the cache
+  // is shared): a music playlist's tracks say "Play track", not "Play episode".
+  const { data: playlist } = useQuery({
+    queryKey: ['playlist', item?.playlist_id],
+    enabled: !!item?.playlist_id,
+    queryFn: async () => (await axios.get(`${PLAYLISTS_READ_URL}/playlists/${item.playlist_id}`)).data,
+    staleTime: 5 * 60 * 1000,
+    retry: 1,
+  });
   // The post's title over the audio row's, which can still be the upload's
   // file name ("recording 4702").
   const title = String(post?.title || '').trim() || item?.title;
@@ -110,12 +120,12 @@ export default function AudioItemView({ owner, id, onBack }) {
 
   const back = (
     <button type="button" className="pod-back" onClick={onBack}>
-      <MdArrowBack size={18} /> {t('audio.item.back')}
+      <Icon name="arrow_back" size={18} /> {t('audio.item.back')}
     </button>
   );
   if (isLoading) return <div className="pod-empty">{t('common.status.loading')}</div>;
   if (error || !item || (item.status && item.status !== 'published')) {
-    return <div className="pod-show">{back}<p className="pod-empty">{t('audio.item.missing')}</p></div>;
+    return <div className="pod-show">{back}<EmptyState className="pod-missing" icon="music_off" title={t('audio.item.missing')} /></div>;
   }
 
   const playing = isCurrent && audioIsPlaying;
@@ -130,6 +140,9 @@ export default function AudioItemView({ owner, id, onBack }) {
   };
   const shareAt = isCurrent && currentSec > 0 ? currentSec : 0;
   const link = (from) => episodeShareUrl(window.location.origin, audioItemPath(item), from);
+  // The playlist's saved kind wins; with none saved, the track's own category.
+  const listKind = storedPlaylistType(playlist).kind;
+  const isTrack = listKind ? listKind === 'music' : item.category === 'song';
   const genre = item.category === 'song' && item.genre ? item.genre : '';
   const votes = post?.active_votes || [];
   const voted = votedNow || (!!user && votes.some((v) => v.voter === user));
@@ -160,13 +173,13 @@ export default function AudioItemView({ owner, id, onBack }) {
           </div>
           {item.playlist_id && item.playlist_name && (
             <button type="button" className="pod-show-kicker pod-episode-show" onClick={() => navigate(`/playlist/${item.playlist_id}`)}>
-              <MdAlbum size={14} /> {t('audio.item.album', { name: item.playlist_name })}
+              <Icon name="album" size={14} /> {t('audio.item.album', { name: item.playlist_name })}
             </button>
           )}
           <div className="pod-show-actions">
             <button type="button" className={`pod-btn ${deepOpen ? 'pod-btn--primary' : 'pod-btn--solid'}`} onClick={play}>
-              {playing ? <MdPause size={18} /> : <MdPlayArrow size={18} />}
-              {playing ? t('audio.podcasts.pause') : deepOpen ? deepLabel : t('audio.podcasts.play')}
+              {playing ? <Icon name="pause" size={18} fill /> : <Icon name="play_arrow" size={18} fill />}
+              {playing ? t('audio.podcasts.pause') : deepOpen ? deepLabel : t(isTrack ? 'audio.podcasts.playTrack' : 'audio.podcasts.play')}
             </button>
             <button
               type="button"
@@ -174,7 +187,7 @@ export default function AudioItemView({ owner, id, onBack }) {
               onClick={() => { if (!inQueue) audioAddToQueue(item); }}
               disabled={inQueue}
             >
-              {inQueue ? <MdPlaylistAddCheck size={18} /> : <MdPlaylistAdd size={18} />}
+              {inQueue ? <Icon name="playlist_add_check" size={18} /> : <Icon name="playlist_add" size={18} />}
               {inQueue ? t('audio.podcasts.inQueue') : t('audio.podcasts.addToQueue')}
             </button>
             {postPermlink && (
@@ -186,29 +199,29 @@ export default function AudioItemView({ owner, id, onBack }) {
                   setVoting((v) => !v);
                 }}
               >
-                <MdThumbUp size={16} /> {voted ? t('audio.post.voted') : t('audio.post.vote')}
+                <Icon name="thumb_up" size={16} /> {voted ? t('audio.post.voted') : t('audio.post.vote')}
                 {voteCount > 0 && <span className="pod-btn-count">{voteCount}</span>}
               </button>
             )}
             <DownloadButton track={item} variant="button" />
             <button type="button" className="pod-btn" onClick={() => copyLink(link(shareAt), t)}>
-              {shareAt ? <MdShare size={16} /> : <MdLink size={16} />}
+              {shareAt ? <Icon name="ios_share" size={16} /> : <Icon name="link" size={16} />}
               {shareAt ? t('audio.podcasts.share.copyAt', { time: fmtClock(shareAt) }) : t('audio.podcasts.share.copy')}
             </button>
             {/* Signed out, the tip window opens on Lightning: no Hive account needed. */}
             {postPermlink && user !== item.owner && (
               <button type="button" className="pod-btn" onClick={() => setTipping(true)}>
-                <BiDollar size={16} /> {t('audio.post.tip')}
+                <Icon name="volunteer_activism" size={16} /> {t('audio.post.tip')}
               </button>
             )}
             {loggedIn && (
               <button type="button" className="pod-btn" onClick={() => setListing(true)}>
-                <MdPlaylistPlay size={16} /> {t('audio.player.playlist')}
+                <Icon name="playlist_play" size={16} /> {t('audio.player.playlist')}
               </button>
             )}
             {postPermlink && (
               <button type="button" className="pod-btn" onClick={() => navigate(`/audio/${item.owner}/${postPermlink}`)}>
-                <MdForum size={16} /> {t('audio.item.comments')}
+                <Icon name="forum" size={16} /> {t('audio.item.comments')}
                 {post?.children > 0 && <span className="pod-btn-count">{post.children}</span>}
               </button>
             )}
@@ -237,23 +250,23 @@ export default function AudioItemView({ owner, id, onBack }) {
         />
       )}
       {tipping && (
-        <TipModal
+        <LazyBoundary name="tip"><TipModal
           recipient={item.owner}
           permlink={postPermlink}
           memoLink={`https://3speak.tv/audio/${item.owner}/${postPermlink}`}
           isOpen
           onClose={() => setTipping(false)}
-        />
+        /></LazyBoundary>
       )}
       {listing && (
-        <AddToPlaylistModal
+        <LazyBoundary name="add to playlist"><AddToPlaylistModal
           isOpen
           onClose={() => setListing(false)}
           author={item.owner}
           permlink={postPermlink || item.permlink}
           videoTitle={title}
           audioCategory={item.category || ''}
-        />
+        /></LazyBoundary>
       )}
     </div>
   );

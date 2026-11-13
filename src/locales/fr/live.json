@@ -5,13 +5,12 @@
     "yourStreamEnded": "Votre live est terminé",
     "thisStreamEnded": "Ce live est terminé",
     "noLongerLive": "Il n'est plus en direct. Lancez-en un nouveau quand vous voulez.",
-    "recordingProcessing": "Bravo ! Votre enregistrement est en cours de traitement et apparaîtra bientôt sur la publication d'annonce.",
-    "thanksForLive": "Bravo — merci d'avoir fait un live !",
+    "recordingProcessing": "Votre enregistrement est en cours de traitement et apparaîtra bientôt sur la publication d'annonce.",
+    "thanksForLive": "Bravo, merci d'avoir fait un live",
     "backHome": "Retour à l'accueil",
     "howWasStream": "Comment s'est passé votre live ?",
     "connecting": "Connexion à OpenPods…",
-    "authenticating": "Authentification auprès d'OpenPods…",
-    "postStoryAboutIt": "Publier une story à ce sujet"
+    "authenticating": "Authentification auprès d'OpenPods…"
   },
   "strip": {
     "liveNow_one": "<n>{{count}}</n> OpenPod en direct",
@@ -30,7 +29,9 @@
     "rewardDecline": "Refuser les gains",
     "beneficiaries": "Bénéficiaires",
     "beneProHint": "Vous êtes sur 3Speak Pro — aucuns frais de plateforme. Ajoutez des partages si vous le souhaitez.",
-    "beneLockedHint": "10 % pour @threespeakfund sont fixes. Vous pouvez en ajouter d'autres."
+    "beneLockedHint": "10 % pour @threespeakfund sont fixes. Vous pouvez en ajouter d'autres.",
+    "storyPrompt": "Bientôt en direct ? Prévenez d'abord vos abonnés avec une story de 24 h. Elle s'ouvre dans un nouvel onglet, votre studio reste ouvert.",
+    "storyButton": "Publier une story"
   },
   "boost": {
     "label": "Boost",
@@ -42,24 +43,24 @@
     "slowDown": "Patientez un instant, puis refaites un clip.",
     "failed": "Impossible de créer un clip. Réessayez dans quelques secondes.",
     "title": "Clipper les 30 dernières secondes",
-    "label": "30 s",
+    "label": "Clip",
     "clipping": "Création du clip…"
   },
   "report": {
     "reasons": {
       "harassment": "Harcèlement ou haine",
-      "sexual": "Contenu sexuel ou explicite",
+      "sexual": "Sexuel ou explicite",
       "violence": "Violence ou actes dangereux",
       "selfharm": "Automutilation",
       "illegal": "Contenu illégal",
       "spam": "Spam ou arnaque",
       "other": "Autre chose"
     },
-    "sent": "Merci — ce live a été signalé à notre équipe.",
+    "sent": "Merci, ce live a été signalé à notre équipe.",
     "failed": "Impossible d'envoyer le signalement. Veuillez réessayer.",
     "title": "Signaler ce live",
     "reporting": "Signalement de <b>@{{host}}</b>.",
-    "intro": "Dites-nous ce qui ne va pas — notre équipe examine chaque signalement.",
+    "intro": "Notre équipe examine chaque signalement.",
     "detailPlaceholder": "Ajoutez des détails (facultatif)",
     "sending": "Envoi…",
     "submit": "Envoyer le signalement"
@@ -93,6 +94,7 @@
   "lobby": {
     "descriptionPlaceholder": "De quoi parle cette session ? Ajoutez des notes, des liens ou un résumé…",
     "enableHosting": "Activer l'animation et la prise de parole",
+    "enableHostingHint": "Nécessite l'autorité de publication de @threespeak",
     "handoverFailed": "Impossible d'activer l'animation automatiquement. OpenPods publie en votre nom via @threespeak — vérifiez que vous lui avez accordé l'autorité de publication, puis réessayez.",
     "signInToHost": "Connectez-vous avec Hive pour animer ou prendre la parole"
   },
@@ -132,8 +134,8 @@
     },
     "chatBox": {
       "title": "Votre chat dans OBS",
-      "desc": "Un seul lien pour tous vos streams. Ajoutez-le dans OBS comme dock pour lire les nouveaux messages pendant votre live. Le guide ci-dessous explique comment.",
-      "copy": "Copier l'URL du chat pour OBS",
+      "desc": "à ajouter comme dock de navigateur personnalisé",
+      "copy": "Copier l'URL du chat",
       "copied": "URL du chat copiée"
     },
     "card": {
@@ -144,26 +146,26 @@
       "watch": "Regarder le live",
       "notAnnounced": "Ce live n'a pas été annoncé sur Hive.",
       "notAnnouncedAuth": "Non annoncé sur Hive : 3Speak n'a pas encore le droit de publier pour vous. Modifiez le modèle pour l'autoriser.",
-      "stuck": "OBS s'est connecté, mais aucune vidéo ne nous est parvenue, le stream n'a donc pas démarré. Arrêtez le stream dans OBS puis relancez-le.",
-      "dailyLimit": "OBS n'a pas pu passer en direct : les comptes gratuits peuvent lancer un live par jour. Réessayez 24 heures après le début de votre dernier live, ou passez à 3Speak Pro pour streamer sans limite quotidienne.",
+      "stuck": "OBS est connecté, mais aucune vidéo ne nous est parvenue. Arrêtez le stream puis relancez-le.",
+      "dailyLimit": "Les comptes gratuits peuvent lancer un live par jour. Réessayez 24 heures après le début de votre dernier live, ou passez à Pro.",
       "useInStudio": "Utiliser dans Stream Studio",
       "proRequired": "OBS n'a pas pu passer en direct : diffuser depuis OBS fait partie de 3Speak Pro."
     },
     "guide": {
       "title": "Configurer OBS",
-      "step1": "Utilisez OBS Studio 30 ou plus récent et ouvrez Paramètres, puis Stream.",
-      "step2": "Choisissez \"WHIP\" comme Service.",
-      "step3": "Serveur : collez l'URL du serveur du modèle voulu (\"Copier l'URL du serveur\" sur sa carte). Chaque modèle a la sienne.",
-      "step4": "Bearer Token : collez votre clé secrète de live, en haut de cette page. Elle est la même pour tous les modèles.",
-      "step5": "Cliquez sur \"Start Streaming\" dans OBS et vous êtes en direct sur 3Speak avec ce modèle. \"Stop Streaming\" termine le live.",
-      "outputTitle": "Réglages de sortie recommandés",
-      "keyframe": "Intervalle d'images clés : 1 à 2 secondes",
-      "bitrate": "Contrôle du débit CBR, 2500 à 6000 kbps",
-      "encoder": "Encodeur : x264 ou votre encodeur matériel",
-      "audio": "Fréquence d'échantillonnage audio : 48 kHz",
-      "bframes": "Pas de B-frames (réglez-les sur 0 si votre encodeur le propose)",
+      "step1": "Utilisez OBS Studio 30 ou plus récent : Paramètres → Stream",
+      "step2": "Choisissez « WHIP » comme Service",
+      "step3": "Serveur : collez l'URL du serveur du modèle",
+      "step4": "Bearer Token : collez votre clé secrète de live",
+      "step5": "Lancez le stream dans OBS. Vous êtes en direct sur 3Speak.",
+      "outputTitle": "Sortie recommandée",
+      "keyframe": "Image clé 1–2 s",
+      "bitrate": "CBR 2500–6000 kbps",
+      "encoder": "x264 / matériel",
+      "audio": "Audio 48 kHz",
+      "bframes": "Pas de B-frames",
       "chatTitle": "Voir le chat dans OBS",
-      "chatCopy": "En haut de cette page, sous « Votre chat dans OBS », cliquez sur « Copier l'URL du chat pour OBS ». C'est un seul lien pour tous vos streams.",
+      "chatCopy": "En haut de cette page, sous « Votre chat dans OBS », cliquez sur « Copier l'URL du chat ». C'est un seul lien pour tous vos streams.",
       "chat2": "Dans OBS, ouvrez le menu \"Docks\" et choisissez \"Custom Browser Docks\". Saisissez un nom comme « Chat 3Speak », collez l'URL et cliquez sur \"Apply\". Les nouveaux messages s'affichent dans ce panneau pendant votre live. Les spectateurs ne le voient jamais.",
       "chat3": "Les spectateurs voient déjà le chat à côté de votre stream, inutile donc de l'ajouter à la vidéo. Seulement si vous partagez aussi le stream ailleurs : ajoutez la même URL comme source \"Browser\" et retirez \"&dock=1\" à la fin. Les messages flottent alors sur la vidéo et disparaissent après 30 secondes.",
       "chatOptions": "Facultatif, à ajouter à la fin de l'URL : &max=10 affiche moins de lignes, &size=18 agrandit le texte, &fade=0 garde les messages sur la vidéo.",
@@ -257,5 +259,15 @@
       "desc": "Avec 3Speak Pro, vous pouvez passer en direct directement depuis OBS avec vos modèles. Sans Pro, vos modèles fonctionnent toujours dans le Stream Studio de votre navigateur.",
       "cta": "Obtenir 3Speak Pro"
     }
+  },
+  "grid": {
+    "openpods": "OpenPods",
+    "listening_one": "{{count}} à l'écoute",
+    "listening_many": "{{count}} à l'écoute",
+    "listening_other": "{{count}} à l'écoute",
+    "emptySub": "Les lives et les OpenPods apparaissent ici dès qu'ils commencent.",
+    "emptyRooms": "Aucun OpenPod n'est ouvert pour le moment.",
+    "emptyScheduled": "Rien n'est programmé pour le moment.",
+    "emptyScheduledSub": "Les salons ouverts mais pas encore en direct apparaissent ici."
   }
 }

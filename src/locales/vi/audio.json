@@ -46,7 +46,7 @@
     "curated": "Tuyển chọn",
     "noCues": "Không có lời.",
     "clearQueue": "Xóa hàng đợi",
-    "clearAll": "Xóa tất cả",
+    "clearAll": "Xóa",
     "queueMoveUp": "Chuyển {{title}} lên",
     "queueMoveDown": "Chuyển {{title}} xuống",
     "queueRemove": "Xóa {{title}} khỏi hàng đợi",
@@ -57,7 +57,7 @@
     "collapse": "Thu gọn trình phát",
     "skipBack": "Lùi {{seconds}} giây",
     "skipForward": "Tới {{seconds}} giây",
-    "speed": "Tốc độ phát",
+    "speed": "Tốc độ",
     "speedValue": "Tốc độ phát: {{speed}}",
     "sleep": "Hẹn giờ tắt",
     "sleepOff": "Tắt",
@@ -74,8 +74,8 @@
     "effectsChecking": "Đang kiểm tra xem tập này có hỗ trợ không…",
     "timeSaved": "Thời gian tiết kiệm: {{time}}",
     "cast": "Phát trên thiết bị khác",
-    "download": "Lưu để nghe ngoại tuyến",
-    "downloading": "Đang lưu: {{pct}}%",
+    "download": "Tải xuống",
+    "downloading": "Đang lưu để nghe ngoại tuyến: {{pct}}%",
     "downloaded": "Đã lưu ngoại tuyến",
     "downloadDone": "Đã lưu để nghe ngoại tuyến",
     "downloadFailed": "Không thể lưu tập này",
@@ -99,8 +99,17 @@
     "nextChapter": "Chương sau",
     "chapterLink": "Liên kết chương",
     "upNext": "Tiếp theo",
-    "hideIdle": "Ẩn (hàng đợi vẫn còn)",
-    "continueAt": "Tiếp tục từ {{time}}"
+    "hideIdle": "Ẩn · hàng đợi vẫn còn",
+    "continueAt": "Tiếp tục từ {{time}}",
+    "position": "{{current}} / {{total}}",
+    "playingFrom": "Đang phát từ {{name}}",
+    "atThisMoment": "Tại thời điểm này",
+    "goTo": "Đi tới {{name}}",
+    "shuffle": "Phát ngẫu nhiên",
+    "repeat": "Lặp lại bản nhạc này",
+    "sleepMinutesShort": "{{minutes}} phút",
+    "swipeUp": "Vuốt lên để mở trình phát",
+    "commentAt": "Bình luận tại {{time}}…"
   },
   "share": {
     "failed": "Thất bại",
@@ -110,7 +119,16 @@
     "copied3speak": "Đã sao chép đường liên kết 3Speak!",
     "copyAudioPlayer": "Sao chép đường liên kết trình phát âm thanh",
     "copiedAudioPlayer": "Đã sao chép đường liên kết trình phát âm thanh!",
-    "searchingHive": "Đang tìm trên Hive…"
+    "searchingHive": "Đang tìm trên Hive…",
+    "title": "Chia sẻ bản nhạc",
+    "atTime": "Tại {{time}}",
+    "peakd": "PeakD",
+    "player": "Liên kết trình phát",
+    "x": "X",
+    "telegram": "Telegram",
+    "email": "Email",
+    "qr": "QR",
+    "episode": "Liên kết tập"
   },
   "post": {
     "notFound": "Không tìm thấy bài đăng",
@@ -124,6 +142,8 @@
     "vote": "Vote",
     "signInToTip": "Đăng nhập để gửi tip",
     "tip": "Tip",
+    "albumLabel": "Album",
+    "notes": "Ghi chú",
     "stillIndexing": "Âm thanh của bài đăng này vẫn đang được lập chỉ mục — hãy thử lại sau vài phút."
   },
   "page": {
@@ -155,7 +175,7 @@
     "tracks_other": "{{count}} bản nhạc",
     "noTracks": "Không tìm thấy bản nhạc nào.",
     "creators": "Nhà sáng tạo",
-    "albumsPlaylists": "Album & danh sách phát",
+    "albumsPlaylists": "Danh sách phát âm thanh",
     "noAudioForFilters": "Không tìm thấy âm thanh nào với các bộ lọc này.",
     "tabsLabel": "Chế độ xem âm thanh",
     "tabExplore": "Duyệt",
@@ -168,6 +188,21 @@
   "upload": {
     "title": "Tải âm thanh lên",
     "publishing": "Đang xuất bản…",
+    "nextTo": "Tiếp: {{step}}",
+    "publishAlbum_other": "Xuất bản album · {{count}} bản nhạc",
+    "publishWithShorts_other": "Xuất bản âm thanh + {{count}} Shorts",
+    "side": {
+      "publishTo": "Xuất bản lên",
+      "shortsTitle": "Shorts audiogram",
+      "clips_other": "{{count}} clip",
+      "tracks_other": "{{count}} bản nhạc",
+      "audio": "Âm thanh",
+      "shorts": "Shorts",
+      "snaps": "Snaps",
+      "community": "Cộng đồng",
+      "rss": "Nguồn RSS",
+      "clipLabel": "Hình thu nhỏ của Short {{n}}: {{title}}"
+    },
     "failed": "Thất bại",
     "unknown": "không rõ",
     "unknownError": "lỗi không xác định",
@@ -188,7 +223,7 @@
       "review": "Xem lại"
     },
     "trackTypes": {
-      "voiceSnap": "Giọng nói / Snap"
+      "voiceSnap": "Ghi chú giọng nói"
     },
     "toasts": {
       "pickImage": "Chọn một tệp hình ảnh",
@@ -226,13 +261,14 @@
       "discard": "Hủy bỏ"
     },
     "source": {
-      "dropHere": "Thả tệp âm thanh vào đây, hoặc nhấn để chọn",
-      "formats": "MP3, WAV, OGG, WEBM, M4A, FLAC, AAC — cho phép nhiều tệp",
+      "dropHere": "Thả tệp âm thanh, hoặc chọn tệp",
+      "formats": "MP3, WAV, OGG, WEBM, M4A, FLAC, AAC · nhiều tệp cùng lúc",
       "stop": "Dừng",
       "orRecord": "Hoặc ghi âm trực tiếp",
       "recordLimit": "Tối đa {{minutes}} phút mỗi lần ghi",
       "record": "Ghi âm",
-      "added": "Đã thêm ({{count}})"
+      "added": "Đã thêm ({{count}})",
+      "filesTitle": "Tệp âm thanh"
     },
     "titles": {
       "help": "Đặt tiêu đề cho từng bản nhạc và chọn loại. Bản nhạc thuộc loại âm nhạc có thêm trường thể loại + BPM."
@@ -241,7 +277,10 @@
       "trackTitle": "Tiêu đề bản nhạc",
       "genre": "Thể loại",
       "bpm": "BPM",
-      "descriptionOptional": "Mô tả (không bắt buộc)"
+      "descriptionOptional": "Mô tả (không bắt buộc)",
+      "track": "Bản nhạc",
+      "category": "Danh mục",
+      "musicGenre": "Thể loại nhạc"
     },
     "playlist": {
       "helpRequired": "Bắt buộc — chọn hoặc tạo một danh sách phát. Bài đăng album nằm trong một danh sách phát để các bản nhạc được nhóm lại trong một album 3Speak. Điều này giúp tăng khả năng tiếp cận và vị trí nổi bật hơn trên trang âm thanh.",
@@ -254,6 +293,7 @@
       "empty": "Bạn chưa có danh sách phát nào.",
       "items_other": "{{count}} mục",
       "newPlaylist": "Danh sách phát âm thanh mới",
+      "newAlbum": "Album mới",
       "namePlaceholder": "Tên danh sách phát",
       "public": "Công khai",
       "private": "Riêng tư",
@@ -261,6 +301,9 @@
       "creditsPlaceholder": "Thực hiện (không bắt buộc)",
       "yearPlaceholder": "Năm",
       "labelPlaceholder": "Hãng đĩa (không bắt buộc)",
+      "fieldYear": "Năm",
+      "fieldLabel": "Hãng đĩa",
+      "fieldCredits": "Thực hiện",
       "thumbAlt": "Hình thu nhỏ album",
       "removeThumb": "Gỡ hình thu nhỏ",
       "creating": "Đang tạo…",
@@ -283,20 +326,21 @@
       "help_other": "Đã thêm {{count}} bản nhạc. Chọn cách đăng chúng.",
       "howPublished": "Bạn muốn xuất bản như thế nào?",
       "snapsTitle": "Bình luận Snap",
-      "snapsDesc": "Mỗi âm thanh được đăng dưới dạng phản hồi trong bài chứa peak.snaps mới nhất — hiển thị trong bảng tin Snaps (mặc định).",
+      "snapsDesc": "Mỗi âm thanh là một phản hồi trong chuỗi snaps mới nhất. Hiển thị trong bảng tin Snaps.",
       "singleTitle": "Bài đăng độc lập",
       "singleTitleSingleOnly": "Bài đăng độc lập (chỉ một tệp)",
-      "singleDesc": "Một âm thanh trong bài đăng Hive cấp cao nhất của riêng nó, với tiêu đề, cộng đồng, thẻ và ảnh bìa.",
+      "singleDesc": "Một âm thanh trong bài đăng riêng, có tiêu đề, cộng đồng, thẻ và ảnh bìa.",
       "albumTitle": "Bài đăng album",
       "albumTitleNeeds2": "Bài đăng album (cần từ 2 tệp trở lên)",
-      "albumDesc": "Một bài chính (không có âm thanh) làm trang giới thiệu; mỗi bản nhạc được xuất bản dưới dạng bình luận phản hồi với ảnh bìa, mô tả, phần thưởng và người thụ hưởng riêng.",
-      "howEarn": "Âm thanh này nên kiếm thu nhập thế nào?",
-      "postRewardsTitle": "Phần thưởng bài đăng (một lần)",
-      "postRewardsDesc": "Bạn nhận phần thưởng tác giả Hive thông thường — trả một lần, khoảng 7 ngày sau khi xuất bản.",
-      "pplTitle": "Trả theo lượt nghe (trọn đời)",
-      "pplDesc": "Toàn bộ phần thưởng bài đăng âm thanh được chuyển cho @{{account}}. Thay vì một khoản thanh toán duy nhất, một chương trình của 3Speak trả cho bạn theo từng lượt nghe trong suốt vòng đời của bản nhạc.",
+      "albumDesc": "Một bài chính làm trang giới thiệu, mỗi bản nhạc là một phản hồi có ảnh bìa và phần thưởng riêng.",
+      "howEarn": "Kiếm thu nhập theo cách nào?",
+      "postRewardsTitle": "Phần thưởng bài đăng",
+      "postRewardsDesc": "Phần thưởng Hive thông thường, một lần, khoảng 7 ngày sau khi xuất bản",
+      "pplTitle": "Trả theo lượt nghe",
+      "pplDesc": "Một chương trình của 3Speak trả bạn theo từng lượt nghe trong suốt vòng đời của bản nhạc. Phần thưởng bài đăng được chuyển cho @{{account}}.",
       "adsTitle": "Quảng cáo trong âm thanh này",
-      "adsHint": "Một thông điệp ngắn được đọc từ nhà tài trợ có thể phát trong âm thanh này, và bạn nhận một phần doanh thu. Mặc định theo cài đặt tài khoản; đổi ở đây chỉ cho lượt tải lên này."
+      "adsHint": "Một thông điệp ngắn được đọc từ nhà tài trợ có thể phát trong âm thanh này, và bạn nhận một phần doanh thu. Mặc định theo cài đặt tài khoản; đổi ở đây chỉ cho lượt tải lên này.",
+      "adsSpoken": "Thông điệp tài trợ đọc trong âm thanh này"
     },
     "reward": {
       "distribution": "Phân chia phần thưởng",
@@ -322,6 +366,7 @@
       "helpAlbum": "Mỗi bản nhạc được xuất bản dưới dạng bình luận trong bài chính. Đặt giá trị chung một lần và áp dụng cho tất cả, rồi chỉnh riêng cho từng bản nhạc.",
       "helpSnaps": "Mỗi bản nhạc được xuất bản thành một snap riêng. Đặt giá trị chung một lần và áp dụng cho tất cả, rồi chỉnh riêng cho từng bản nhạc.",
       "applyToAllHeading": "Áp dụng cho tất cả bản nhạc",
+      "applyNote_other": "<b>Áp dụng cho cả {{count}} bản nhạc:</b> mô tả và ảnh bìa chung, sau đó chỉnh riêng từng bản nhạc.",
       "sharedDescription": "Mô tả chung (không bắt buộc)",
       "sharedCover": "Ảnh bìa chung",
       "applyToAll_other": "Áp dụng cho tất cả {{count}} bản nhạc",
@@ -385,11 +430,37 @@
       "couldNotLoad": "Không tải được audiogram: {{error}}",
       "rowTitle": "Short: {{title}}",
       "withAudio": "Được đăng cùng với audio này"
+    },
+    "transcript": {
+      "make": "Tạo bản chép lời",
+      "again": "Tạo lại bản chép lời",
+      "hint": "Ghi lại những gì được nói ({{language}}) và đặt bên dưới văn bản của bạn, nơi bạn vẫn có thể sửa.",
+      "reading": "Đang đọc âm thanh...",
+      "writing": "Đang chép lời... {{percent}}%",
+      "added": "Đã thêm bản chép lời bên dưới văn bản của bạn. Hãy đọc lại: một số từ có thể sai.",
+      "shortened": "Đã thêm bản chép lời, được rút gọn để vừa một bài đăng.",
+      "empty": "Không tìm thấy giọng nói trong âm thanh này.",
+      "failed": "Không thể tạo bản chép lời. Vui lòng thử lại.",
+      "heading": "Bản chép lời",
+      "language": "Ngôn ngữ của âm thanh",
+      "waitPublish": "Bản chép lời vẫn đang được tạo. Hãy chờ hoặc hủy nó trước."
+    },
+    "teleprompter": {
+      "title": "Máy nhắc chữ",
+      "subtitle": "Viết những gì bạn sẽ nói và đọc khi ghi âm",
+      "placeholder": "Viết hoặc dán những gì bạn sẽ nói. Chữ sẽ hiện lớn khi bạn ghi âm.",
+      "followsVoice": "Theo giọng của bạn",
+      "steady": "Chạy với tốc độ đều",
+      "voiceStopped": "Đã ngừng theo giọng, chạy với tốc độ đều",
+      "wpm": "{{n}} từ mỗi phút",
+      "slower": "Chậm hơn",
+      "faster": "Nhanh hơn"
     }
   },
   "podcasts": {
     "chip": "Bên ngoài",
     "chipHint": "Podcast từ bất kỳ nguồn RSS nào, ngoài 3Speak",
+    "on3speak": "Trên 3Speak",
     "follow": "Theo dõi",
     "following": "Đang theo dõi",
     "unfollow": "Bỏ theo dõi",
@@ -416,6 +487,7 @@
     "allPodcasts": "Tất cả podcast",
     "openShow": "Mở podcast",
     "play": "Phát tập",
+    "playTrack": "Phát bài",
     "pause": "Tạm dừng",
     "episodePage": "Trang của tập",
     "website": "Trang web",
@@ -432,6 +504,7 @@
     "notifyOnDone": "Bạn sẽ được thông báo khi có tập mới",
     "notifyOffDone": "Không còn thông báo cho podcast này",
     "notifyHint": "Nhận thông báo khi có tập mới",
+    "notifyLabel": "Thông báo về tập mới",
     "search": {
       "button": "Tìm",
       "results_other": "Tìm thấy {{count}} podcast",
@@ -450,7 +523,7 @@
       "export": "Xuất OPML",
       "invalid": "Đây không phải tệp OPML.",
       "empty": "Không tìm thấy nguồn podcast nào trong tệp này.",
-      "imported_other": "Đã theo dõi {{count}} podcast, {{failed}} podcast không thêm được. Các nguồn mới sẽ tải trong vài phút tới."
+      "imported_other": "Đã theo dõi {{count}} podcast, {{failed}} không thêm được. Các nguồn mới sẽ tải trong vài phút tới."
     },
     "errors": {
       "signIn": "Đăng nhập để theo dõi podcast.",
@@ -471,7 +544,8 @@
     },
     "tip": {
       "button": "Ủng hộ podcast này",
-      "heading": "Ủng hộ {{show}}",
+      "heading": "Gửi tip cho {{show}}",
+      "support": "Ủng hộ {{show}}",
       "hive": "Tip Hive cho @{{account}}",
       "messageLabel": "Lời nhắn cho podcaster (không bắt buộc):",
       "messagePlaceholder": "Tập rất hay!",
@@ -567,7 +641,7 @@
     "downloads": {
       "title": "Bản tải xuống",
       "download": "Tải xuống để nghe ngoại tuyến",
-      "short": "Tải xuống",
+      "short": "Lưu",
       "downloading": "Đang tải {{pct}}%",
       "cancel": "Hủy tải xuống",
       "saved": "Đã lưu ngoại tuyến",
@@ -576,7 +650,7 @@
       "removed": "Đã xóa bản tải xuống",
       "done": "Đã lưu để nghe ngoại tuyến",
       "total": "Đã lưu {{size}}",
-      "storage": "trang này dùng {{used}} trên {{quota}} trong trình duyệt này",
+      "storage": "dùng {{used}} trên {{quota}} trong trình duyệt này",
       "perBrowser": "Bản tải xuống nằm trong trình duyệt này, dù ai đang đăng nhập.",
       "errors": {
         "tooLarge": "Tập này quá lớn để lưu.",
@@ -588,7 +662,7 @@
     },
     "autoQueue": {
       "label": "Tự động thêm tập mới vào hàng chờ",
-      "hint": "Tập mới của chương trình này sẽ vào cuối hàng chờ của bạn khi phát hành",
+      "hint": "Chúng sẽ vào cuối hàng đợi của bạn",
       "onDone": "Tập mới của chương trình này sẽ vào hàng chờ của bạn",
       "offDone": "Tập mới của chương trình này không còn vào hàng chờ của bạn",
       "added_other": "Đã thêm {{count}} tập mới vào hàng chờ của bạn"
@@ -625,6 +699,7 @@
       "startsAt": "Bắt đầu: {{time}}"
     },
     "private": {
+      "title": "Thêm nguồn riêng tư",
       "toggle": "Đây là nguồn riêng tư (cần đăng nhập)",
       "username": "Tên người dùng",
       "password": "Mật khẩu",
@@ -660,7 +735,7 @@
       "hide": "Ẩn video"
     },
     "signInToFollow": "Đăng nhập để theo dõi podcast",
-    "addExternal": "Thêm podcast bên ngoài",
+    "addExternal": "Thêm nguồn RSS bên ngoài",
     "continue": {
       "title": "Nghe tiếp",
       "left": "còn {{minutes}} phút",

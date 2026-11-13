@@ -1,131 +1,167 @@
-@use "../../mixins.scss" as mix;
+@use "../../styles/v2" as v2;
 
-// Everything here is built on the shared tokens rather than literal colours, so
-// the page follows the light/dark switch like the rest of the app. The one
-// literal is the accent gradient, which is derived from --accent-primary via
-// color-mix so it still tracks the theme.
+// The warm-up profile (designs 46b and 19h), the goal list (46b "Your path to a
+// Hive account"), the unlocks, the admin view (46c, STYLE_GUIDE §11) and "your
+// account is ready" (46c). Tokens only: every colour follows the theme.
 
 .inc-profile {
-  max-width: 1360px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: var(--content-max);
   margin: 0 auto;
-  padding: 20px 16px 64px;
+  padding: 8px 0 64px;
+
+  // The owner's page on a wide screen (46b): the goal list in a 420 column on
+  // the left, the profile and its tabs on the right.
+  &.has-side {
+    display: grid;
+    grid-template-columns: 420px minmax(0, 1fr);
+    gap: 16px;
+    align-items: start;
+  }
 }
+
+.inc-side { min-width: 0; }
+
+.inc-maincol {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.inc-profile-loading,
+.inc-profile-error {
+  padding: 32px 0;
+  @include v2.text(body);
+  color: var(--muted);
+}
+
+.inc-profile-error { color: var(--accent); }
 
 /* ---------------------------------------------------------------- hero --- */
 
+// The profile card (46b): a striped band, the avatar over its lower edge with
+// the name, the badge and the counts beside it, the note, then the tabs.
 .inc-hero {
-  position: relative;
-  border: 1px solid var(--border-color);
-  border-radius: 16px;
+  @include v2.card;
   overflow: hidden;
-  background: var(--card-bg);
-  box-shadow: var(--shadow-md);
-  margin-bottom: 18px;
+  padding-bottom: 16px;
 }
 
-// A tinted band even when the user has no cover image, so the header has a
-// shape instead of collapsing onto the avatar.
-.inc-hero::before {
-  content: "";
-  display: block;
-  height: 104px;
-  background:
-    radial-gradient(120% 160% at 10% 0%, color-mix(in srgb, var(--accent-primary) 32%, transparent), transparent 70%),
-    linear-gradient(120deg, color-mix(in srgb, var(--accent-primary) 16%, transparent), var(--bg-tertiary));
-}
-
+// Striped band when there is no banner, so the header has a shape instead of
+// collapsing onto the avatar. Their own banner replaces the stripes.
 .inc-hero-cover {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 104px;
+  height: 90px;
+  @include v2.thumb-placeholder(10px);
+}
+
+.inc-hero.has-cover .inc-hero-cover {
+  height: 120px;
   background-size: cover;
   background-position: center;
-}
-
-// A scrim over the lower half of the banner. The name sits across the seam
-// between the cover and the card, so on a light or busy image it was reading as
-// white text on white. Darkening only the bottom keeps the picture itself
-// intact, which is the half of the banner people actually chose.
-.inc-hero-cover::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, transparent 45%, rgba(0, 0, 0, 0.6));
+  background-repeat: no-repeat;
 }
 
 .inc-hero-body {
   display: flex;
   align-items: flex-end;
-  gap: 16px;
-  padding: 0 20px 18px;
-  margin-top: -34px;
+  gap: 12px;
+  padding: 0 18px;
+  margin-top: -28px;
+}
+
+// The avatar overlaps the band. For the owner it wears a cyan progress ring.
+.inc-hero-avatar-wrap {
   position: relative;
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: var(--surface);
 }
 
 .inc-hero-avatar {
-  width: 92px;
-  height: 92px;
+  width: 72px;
+  height: 72px;
   border-radius: 50%;
   object-fit: cover;
-  flex-shrink: 0;
-  background: var(--bg-tertiary);
-  border: 3px solid var(--card-bg);
-  box-shadow: var(--shadow-md);
+  background: var(--avatar);
+}
+
+.inc-hero-avatar-wrap.has-ring .inc-hero-avatar {
+  width: 64px;
+  height: 64px;
+}
+
+.inc-hero-ring {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+
+  circle { fill: none; stroke-width: 2.5; }
+}
+
+.inc-hero-ring-track { stroke: var(--surface-2); }
+
+.inc-hero-ring-arc {
+  stroke: var(--cyan);
+  stroke-linecap: round;
+  transition: stroke-dasharray var(--t-slow) var(--ease);
 }
 
 .inc-hero-text {
   flex: 1;
   min-width: 0;
+  padding-bottom: 2px;
 
   h1 {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px 8px;
     margin: 0;
-    font-size: 26px;
-    line-height: 1.2;
-    color: var(--text-primary);
-    word-break: break-word;
+    @include v2.text(title);
+    color: var(--text);
   }
 }
 
-// Over a real banner the name is white on whatever the user uploaded, so it
-// carries its own contrast rather than trusting the image to provide it.
-.inc-hero.has-cover .inc-hero-text h1 {
-  color: #fff;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9), 0 2px 10px rgba(0, 0, 0, 0.6);
-}
+.inc-hero-name { overflow-wrap: anywhere; }
 
-.inc-hero-handle {
+// "4 posts · 12 followers · 31 following", the numbers in bold.
+.inc-hero-stats {
   display: flex;
-  align-items: center;
-  gap: 8px;
   flex-wrap: wrap;
-  margin: 4px 0 0;
-  font-size: 14px;
-  color: var(--text-muted);
-}
+  margin: 2px 0 0;
+  @include v2.text(meta);
+  color: var(--muted);
 
-.inc-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 2px 9px;
-  border-radius: 999px;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  color: var(--accent-primary);
-  // Outline only. Filled, it read as an alert sitting next to the name rather
-  // than a quiet status about the account.
-  background: transparent;
-  border: 1px solid color-mix(in srgb, var(--accent-primary) 45%, transparent);
+  > span + span::before { content: "·"; margin: 0 6px; }
+
+  strong {
+    margin-right: .25em;
+    font-weight: 700;
+    color: var(--text);
+  }
 }
 
 .inc-hero-about {
-  margin: 8px 0 0;
-  font-size: 14px;
+  margin: 0;
+  @include v2.text(body-sm);
   line-height: 1.5;
-  color: var(--text-secondary);
+  color: var(--muted);
+}
+
+.inc-hero-more {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 18px 0;
 }
 
 .inc-chips {
@@ -134,655 +170,325 @@
   flex-wrap: wrap;
   gap: 6px;
   padding: 0;
-  margin: 10px 0 0;
+  margin: 0;
 
   li {
-    border: 1px solid var(--border-color);
-    background: var(--bg-tertiary);
-    color: var(--text-secondary);
-    border-radius: 999px;
-    padding: 3px 11px;
+    display: inline-flex;
+    align-items: center;
+    height: 28px;
+    padding: 0 10px;
+    border-radius: var(--r-sm);
+    background: var(--surface-2);
+    color: var(--text);
+    @include v2.text(label);
     font-size: 12px;
   }
 }
 
-.inc-hero-stats {
-  display: flex;
-  gap: 22px;
-  padding-bottom: 4px;
+.inc-follow-btn,
+.inc-edit-btn { flex: none; }
 
-  span {
-    display: flex;
-    flex-direction: column;
-    font-size: 12px;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-  }
+// The note under the header: a bg well inside the card.
+.inc-note {
+  margin: 12px 18px 0;
+  padding: 10px 12px;
+  border-radius: var(--r-lg);
+  background: var(--bg);
+  @include v2.text(meta);
+  line-height: 1.45;
+  color: var(--muted);
 
-  strong {
-    font-size: 20px;
-    color: var(--text-primary);
-    letter-spacing: 0;
-  }
+  a { color: var(--cyan); font-weight: 700; }
 }
 
-// Shares the shape of the edit button, since they occupy the same slot for
-// different viewers. Primary while not following, because following is the
-// action being offered; quiet once it is done.
-.inc-follow-btn {
-  align-self: center;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  flex-shrink: 0;
-  padding: 8px 16px;
-  border-radius: 999px;
-  border: 1px solid var(--accent-primary, #e53935);
-  background: transparent;
-  color: var(--accent-primary, #e53935);
-  font: inherit;
-  font-size: 13px;
-  font-weight: 700;
-  cursor: pointer;
-
-  &:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
-
-  &.is-following {
-    background: transparent;
-    color: var(--text-primary);
-    border-color: var(--border-color);
-
-    &:hover { border-color: var(--accent-primary); color: var(--accent-primary); }
+@include v2.mobile {
+  .inc-hero-body {
+    flex-wrap: wrap;
+    padding: 0 16px;
   }
-}
 
-.inc-edit-btn {
-  align-self: center;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  flex-shrink: 0;
-  padding: 7px 13px;
-  border-radius: 999px;
-  border: 1px solid var(--border-color);
-  background: var(--bg-tertiary);
-  color: var(--text-primary);
-  font: inherit;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
+  // Name and counts under the avatar, then the action, full width.
+  .inc-hero-text { flex: 1 0 100%; order: 1; }
+  .inc-follow-btn,
+  .inc-edit-btn { order: 2; flex: 1 0 100%; height: 44px; border-radius: v2.radius-for(44); }
 
-  &:hover {
-    border-color: var(--accent-primary);
-    color: var(--accent-primary);
-  }
+  .inc-hero-more { padding: 10px 16px 0; }
+  .inc-note { margin: 12px 16px 0; }
 }
 
 /* ------------------------------------------------------------- panels --- */
 
-.inc-note {
-  border: 1px solid var(--border-color);
-  border-radius: 10px;
-  background: transparent;
-  padding: 12px 16px;
-  font-size: 14px;
-  line-height: 1.55;
-  color: var(--text-secondary);
-  margin: 0 0 18px;
-
-  a { color: var(--accent-primary); }
-}
-
 .inc-panel {
-  border: 1px solid var(--border-color);
-  border-radius: 16px;
-  background: var(--card-bg);
-  box-shadow: var(--shadow-md);
+  @include v2.card;
   padding: 20px;
-  margin-bottom: 18px;
 
-  h2 {
-    margin: 0;
-    font-size: 17px;
-    color: var(--text-primary);
+  > h2 {
     display: flex;
     align-items: center;
     gap: 8px;
+    margin: 0 0 12px;
+    @include v2.text(title-sm);
+    color: var(--text);
+
+    .material-symbols-rounded { color: var(--muted); }
   }
 
-  // The icon is decoration beside the words, so it takes the accent colour and
-  // never shrinks when the heading wraps.
-  h2 svg {
-    color: var(--accent-primary);
-    flex-shrink: 0;
-  }
+  @include v2.mobile { padding: 16px; }
 }
 
-// Sitting under the feed now, it is the widest thing on the page, so the
-// unlock cards spread out again instead of stacking in a 340px column.
-.inc-main .inc-unlocks {
-  // The card grid ends flush against its own last row, so without this the
-  // panel reads as another row of the feed rather than a separate thing. Same
-  // gap the section headings use, so the column keeps one rhythm.
-  margin-top: 26px;
+.inc-subhead {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 12px 0 12px;
+  @include v2.text(title);
+  color: var(--text);
 
-  ul {
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  }
+  .material-symbols-rounded { color: var(--muted); }
 }
+
+.inc-subhead-note {
+  @include v2.text(meta);
+  color: var(--muted);
+}
+
+.inc-empty { margin-top: 4px; }
 
 /* ----------------------------------------------------------------- tabs --- */
 
-// Hidden by default: above the split both panels are on screen at once, so a
-// switch between them would do nothing.
-.inc-tabs {
-  display: none;
-  gap: 6px;
-  margin-bottom: 14px;
-  border-bottom: 1px solid var(--border-color);
+// The sections as a segmented track at the foot of the profile card (46b).
+.inc-tabs.v2-seg {
+  margin: 12px 18px 0;
 
-  button {
-    flex: 1;
-    padding: 10px 8px;
-    background: none;
-    border: 0;
-    border-bottom: 2px solid transparent;
-    margin-bottom: -1px;
-    font: inherit;
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--text-muted);
-    cursor: pointer;
-  }
+  .v2-seg__opt { flex: 1 0 auto; }
 
-  button.is-active {
-    color: var(--text-primary);
-    border-bottom-color: var(--accent-primary);
-  }
-}
-
-/* The VISITOR's tab strip.
-   Same control as the owner's switcher above, but visible at EVERY width: for
-   the owner those tabs are a mobile fallback for a layout that is two columns
-   on a desktop, so the rule above hides them there. For a visitor they are the
-   page's actual navigation, and hiding them on a desktop would hide three of
-   the four things on the page. */
-.inc-tabs--visitor {
-  display: flex;
-
-  /* Four labels will not always fit a narrow phone. Let them keep their own
-     width and scroll, rather than squeezing every one to an ellipsis. */
-  overflow-x: auto;
-  scrollbar-width: none;
-
-  &::-webkit-scrollbar { display: none; }
-
-  button {
-    flex: 1 0 auto;
-    white-space: nowrap;
-  }
+  @include v2.mobile { margin: 12px 16px 0; }
 }
 
 /* --------------------------------------------------------------- layout --- */
 
-// One column by default, which is what a VISITOR gets: there is no sidebar for
-// them, and the cards should use the whole width rather than leaving a gap
-// where someone else's to-do list would have been.
-.inc-cols {
-  display: grid;
-  gap: 22px;
-  align-items: start;
-}
-
-// min-width 0: a grid item is auto-sized to its content by default, and the
-// card grid inside would push the column wider than the page instead of wrapping.
+// min-width 0: the card grid inside would otherwise push the column wider than
+// the page instead of wrapping.
 .inc-main {
   min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
-/* ------------------------------------------------------ tasks disclosure --- */
+.inc-feed { min-width: 0; }
 
-.inc-tasks-toggle {
+/* ------------------------------------------- "Your path to a Hive account" --- */
+
+.inc-panel.inc-progress { padding: 16px; }
+
+.inc-progress-head {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 10px;
+
+  h2 {
+    flex: 1;
+    min-width: 0;
+    margin: 0;
+    @include v2.text(title-sm);
+    color: var(--text);
+  }
+}
+
+.inc-progress-count {
+  @include v2.mono(11, 700);
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+// "Creator path · Hide the details" (46b): one muted line under the bar.
+.inc-progress-meta {
   display: flex;
   align-items: center;
-  gap: 6px;
-  width: 100%;
-  margin-bottom: 12px;
-  padding: 0;
-  background: none;
-  border: 0;
-  cursor: pointer;
-  font: inherit;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text-secondary);
-
-  &:hover { color: var(--text-primary); }
-
-  svg {
-    transition: transform 0.2s ease;
-    transform: rotate(-90deg);
-  }
-
-  &.is-open svg { transform: rotate(0deg); }
-}
-
-/* ----------------------------------------------------------- progress --- */
-
-.inc-progress {
-  // Plain card. The tint that used to sit behind the top of this panel read as
-  // a rendering artefact rather than emphasis, especially next to the bar,
-  // which is doing that job properly now by changing colour.
-  background: var(--card-bg);
-
-  > header {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 12px;
-    margin-bottom: 12px;
-  }
+  flex-wrap: wrap;
+  margin: 8px 0 4px;
+  @include v2.text(meta-sm);
+  color: var(--muted);
 }
 
 // Which path they picked (viewer, creator, advertiser).
-.inc-track-current {
+.inc-track-current + .inc-tasks-toggle::before { content: "·"; margin: 0 6px; }
+
+.inc-tasks-toggle {
   display: inline-flex;
-  align-items: baseline;
-  gap: 6px;
-  margin-right: auto;
-  font-size: 12px;
-  color: var(--text-secondary);
-}
-
-// The path question in the main column, centred under "What a Hive account
-// gets you".
-.inc-track-question {
-  margin-top: 18px;
-  text-align: center;
-
-  h2 {
-    justify-content: center;
-  }
-
-  .inc-track-intro {
-    max-width: 560px;
-    margin: 8px auto 16px;
-  }
-
-  .track-chooser {
-    max-width: 720px;
-    margin: 0 auto;
-  }
-
-  .track-option {
-    text-align: left;
-  }
+  align-items: center;
+  min-height: 24px;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: var(--muted);
+  cursor: pointer;
+  &:hover { color: var(--text); }
 }
 
 .inc-track-intro {
   margin: 0 0 12px;
-  font-size: 13px;
+  @include v2.text(body-sm);
   line-height: 1.5;
-  color: var(--text-secondary);
+  color: var(--muted);
 }
 
-.inc-progress-count {
-  font-size: 13px;
-  font-weight: 600;
-  color: hsl(var(--bar-hue, 4) 72% 52%);
-  white-space: nowrap;
-  transition: color 0.45s ease;
-}
+// The path question in the main column.
+.inc-track-question .inc-track-intro { max-width: 640px; }
 
-// One continuous track. The number behind it is still built goal by goal (each
-// of the five is worth a fifth, and a part-finished goal contributes its part),
-// so a single comment moves the bar; it is only the DRAWING that stopped being
-// divided, because five stubs read as five separate things to finish rather
-// than as one journey.
-.inc-progress-bar {
-  height: 8px;
-  margin-bottom: 12px;
-  border-radius: 999px;
-  background: var(--bg-tertiary);
-  overflow: hidden;
-
-  span {
-    display: block;
-    height: 100%;
-    border-radius: inherit;
-    // --bar-hue is set per render from the completion fraction: red at the
-    // start, green at the end. The fallback is the red it starts at, so a
-    // missing value is the honest one rather than a surprise.
-    background: linear-gradient(
-      90deg,
-      hsl(var(--bar-hue, 4) 78% 46%),
-      hsl(var(--bar-hue, 4) 85% 57%)
-    );
-    // The colour crosses with the width, so finishing a task visibly moves it
-    // along AND warms it towards green in the same motion.
-    transition: width 0.45s ease, background 0.45s ease;
-  }
-}
-
-.inc-tasks {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: grid;
-  gap: 10px;
-
-  // Child selectors throughout: an expanded goal carries its own <ul> of rules,
-  // and a descendant selector would give every one of those bullets the border,
-  // padding and background of a goal card.
-  > li {
-    position: relative;
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    background: var(--bg-secondary);
-    overflow: hidden;
-  }
-
-  // Done is said by the green check icon alone (owner 2026-10-01: too many
-  // colours). No tinted border, no fill.
-
-  > li.is-open .inc-task-chevron {
-    transform: rotate(180deg);
-  }
-}
-
-// The header IS the button. The row was already one idea; making only the
-// chevron interactive would have put a 18px target on a phone next to a 300px
-// one that does nothing.
-.inc-task-head {
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  width: 100%;
-  padding: 12px 14px;
-  border: 0;
-  background: none;
-  font: inherit;
-  color: inherit;
-  text-align: left;
-  cursor: pointer;
-}
-
-// How much of this ONE task is done, filled from the left. The summary bar at
-// the top answers "how many tasks", which is a different question: three
-// untouched tasks and three nearly-finished ones look identical up there.
-//
-// On the header rather than the whole card, or an expanded goal would carry a
-// tall block of green behind its rules.
-// Removed 2026-10-01 (owner: too many colours on the page); the count on the
-// right of each row still says how far along a goal is.
-.inc-task-head::before {
-  content: none;
-}
-
-// The fill is painted behind the row, so the row's own content has to be
-// lifted out of its way -- an absolutely positioned sibling otherwise covers
-// static content whatever the source order.
-.inc-task-head > * {
-  position: relative;
-  z-index: 1;
-}
-
-.inc-task-chevron {
-  flex-shrink: 0;
-  color: var(--text-muted);
-  transition: transform 0.2s ease;
-}
-
-.inc-task-icon {
-  flex-shrink: 0;
-  color: var(--text-muted);
-
-  &.done { color: #2e9c4a; }
-}
-
-.inc-task-text {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  min-width: 0;
-
-  strong {
-    display: flex;
-    // Not centre: a label that wraps to two lines would float its icon into
-    // the middle of the block instead of sitting beside the first word.
-    align-items: flex-start;
-    gap: 7px;
-    font-size: 14px;
-    color: var(--text-primary);
-  }
-
-  // Foreground, not accent: these sit inside the row rather than heading it,
-  // and five red marks down the panel would pull the eye away from the bar
-  // that is actually reporting something.
-  strong svg {
-    color: currentColor;
-    flex-shrink: 0;
-    margin-top: 3px;   // optical centre of the first line
-  }
-
-  span {
-    font-size: 12.5px;
-    color: var(--text-muted);
-  }
-}
-
-.inc-task-count {
-  font-variant-numeric: tabular-nums;
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--text-secondary);
-  white-space: nowrap;
-}
-
-/* ---------------------------------------------------- goals as tiles --- */
-
-// The goals in groups (IncubationProgressPanel GOAL_GROUPS). On a wide screen
-// the groups are columns side by side, each stacking its own tiles, so four
-// groups of two fill the row instead of leaving most of it empty. Narrower,
-// auto-fit wraps them, and on a phone they stack with their tiles two across.
-// The checklist's wrapper in the main column (IncubatingProfile): clear air
-// between the uploads above it and the goals (owner 2026-10-06).
-.inc-goals {
-  margin-top: 32px;
-}
-
+// Groups side by side on a wide screen, each a column of goal rows.
 .inc-goal-groups {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-  gap: 16px 14px;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px 12px;
   align-items: start;
-  margin-top: 4px;
 }
 
 .inc-goal-group {
   min-width: 0;
 
+  // An advertiser's brand and contact goals carry a form: while one is open,
+  // its group takes the whole row so the fields get room to breathe.
+  &:has(.inc-contact) { grid-column: 1 / -1; }
+
   h3 {
     display: flex;
     align-items: baseline;
     gap: 8px;
-    margin: 0 0 8px;
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    color: var(--text-secondary);
+    margin: 0 0 6px;
   }
 }
 
 .inc-goal-group-count {
-  font-variant-numeric: tabular-nums;
+  font-family: var(--font-mono);
   letter-spacing: 0;
-  color: var(--text-muted);
 }
 
 .inc-goal-tiles {
   list-style: none;
   padding: 0;
   margin: 0;
-  display: grid;
-  // One tile per row inside a group column; a phone puts two side by side (below).
-  grid-template-columns: minmax(0, 1fr);
-  gap: 10px;
-
-  @media (max-width: 600px) {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
+// One goal: a bg well, cyan-tinted once done, outlined in accent while open.
 .inc-goal-tile {
-  border: 1px solid var(--border-color);
-  border-radius: 12px;
-  background: var(--bg-secondary);
-  overflow: hidden;
   min-width: 0;
-  // A column, so the header fills a closed tile (tiles in a row stay even) and an
-  // open tile's details get their own space below it. `height: 100%` on the
-  // header did that wrong: it took the open tile's whole height and pushed the
-  // details out of view.
-  display: flex;
-  flex-direction: column;
+  border: 2px solid transparent;
+  border-radius: var(--r-lg);
+  background: var(--bg);
+  transition: border-color var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
 
-  // An open tile grows taller in place, inside its own column, so nothing else
-  // on the page moves (owner 2026-10-06: spanning the row looked weird). Only on
-  // a phone, where tiles sit two across and are too narrow, does it take the row.
-  @media (max-width: 600px) {
-    &.is-open { grid-column: 1 / -1; }
-  }
+  &.is-done { background: var(--cyan-tint-strong); }
+  &.is-open { border-color: var(--accent); background: transparent; }
 }
 
-.inc-goal-head {
+.inc-goal-head,
+.inc-optional-head {
   display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  gap: 6px;
-  flex: 1 0 auto;
+  align-items: flex-start;
+  gap: 10px;
   width: 100%;
-  padding: 12px 14px;
+  min-height: 44px;
+  padding: 10px;
   border: 0;
+  border-radius: 14px;
   background: none;
   font: inherit;
   color: inherit;
   text-align: left;
   cursor: pointer;
 
-  &:hover { background: var(--bg-tertiary); }
-  &:focus-visible { outline: 2px solid var(--text-secondary); outline-offset: -2px; }
+  &:hover { background: var(--bg-hover); }
+}
+
+.inc-goal-status {
+  color: var(--muted);
+  .is-done & { color: var(--cyan); }
+}
+
+.inc-goal-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+
+  .v2-progress { margin-top: 5px; }
 }
 
 .inc-goal-top {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   gap: 8px;
 }
 
-.inc-goal-type {
-  color: var(--text-secondary);
-  flex-shrink: 0;
+.inc-goal-label {
+  flex: 1;
+  min-width: 0;
+  @include v2.text(body-sm);
+  font-weight: 700;
+  color: var(--text);
 }
 
 .inc-goal-count {
-  flex: 1;
-  font-variant-numeric: tabular-nums;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text-secondary);
+  @include v2.mono(11, 700);
+  color: var(--muted);
   white-space: nowrap;
 }
 
-.inc-goal-label {
-  font-size: 14px;
-  line-height: 1.3;
-  color: var(--text-primary);
-}
-
 .inc-goal-hint {
-  font-size: 12.5px;
+  @include v2.text(meta);
   line-height: 1.4;
-  color: var(--text-muted);
-  // Kept to three lines so the tiles in a row stay even; the full text is one
-  // tap away in the open tile.
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+  color: var(--muted);
 }
 
-.inc-goal-tile.is-open .inc-goal-hint {
-  -webkit-line-clamp: unset;
+// The next step as a cyan text link under the hint (46b), lined up with the
+// goal's label.
+.inc-goal-cta {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  margin: -8px 0 8px 40px;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  @include v2.text(meta-sm);
+  font-weight: 900;
+  color: var(--cyan);
+  text-decoration: none;
+  cursor: pointer;
+  &:hover { text-decoration: underline; color: var(--cyan); }
 }
 
-.inc-goal-bar {
-  margin-top: auto;
-  height: 4px;
-  border-radius: 999px;
-  background: var(--bg-tertiary);
-  overflow: hidden;
-
-  span {
-    display: block;
-    height: 100%;
-    border-radius: inherit;
-    background: var(--text-muted);
-    transition: width 0.45s ease;
-  }
-}
-
-.inc-goal-tile.is-done .inc-goal-bar span {
-  background: #2e9c4a;
-}
-
-// The detail inside a tile starts at the tile's edge; the row layout indented
-// it under a label that sat beside a status icon. Both classes, so this wins
-// over .inc-task-detail, which comes later in the file.
-.inc-task-detail.inc-goal-detail {
-  padding-left: 14px;
-}
-
-/* ------------------------------------------- expanded goal detail --- */
-
+// The open goal: what counts (accent eyebrow), why, the form or the next step.
 .inc-task-detail {
-  position: relative;
-  z-index: 1;
-  // Aligned under the goal's LABEL rather than the card edge, so the detail
-  // reads as belonging to the row above it. 14px padding + 20px status icon +
-  // 12px gap is where that label starts.
-  padding: 12px 14px 14px 46px;
-  border-top: 1px solid var(--border-color);
+  padding: 0 12px 12px 40px;
 
-  h5 {
-    margin: 12px 0 6px;
-    font-size: 11px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    color: var(--text-muted);
-  }
+  h5 { margin: 2px 0 6px; }
 
   ul {
     list-style: none;
-    margin: 0;
+    margin: 0 0 8px;
     padding: 0;
     display: grid;
-    gap: 6px;
+    gap: 4px;
   }
 
-  // Hand-drawn bullets: list-style markers sit outside the padding box and
-  // would hang into the indent that lines this panel up with the label.
+  // Hand-drawn bullets: list markers would hang into the indent that lines
+  // this up with the goal's label.
   li {
     position: relative;
-    padding-left: 14px;
-    font-size: 12.5px;
-    line-height: 1.5;
-    color: var(--text-secondary);
+    padding-left: 12px;
+    @include v2.text(meta);
+    line-height: 1.45;
+    color: var(--text);
   }
 
   li::before {
@@ -793,202 +499,143 @@
     width: 5px;
     height: 5px;
     border-radius: 50%;
-    background: var(--text-muted);
+    background: var(--accent);
   }
 
-  @include mix.respond(phone) {
-    // The indent costs more than it buys once the column is narrow: five words
-    // per line is worse than losing the alignment with the label.
-    padding-left: 14px;
-  }
+  @include v2.mobile { padding-left: 12px; }
 }
 
 .inc-task-why {
   margin: 0;
-  font-size: 13px;
-  line-height: 1.55;
-  color: var(--text-primary);
+  @include v2.text(meta);
+  line-height: 1.5;
+  color: var(--muted);
 }
 
-.inc-task-cta {
-  display: inline-flex;
+.inc-task-cta.v2-btn { margin-top: 10px; }
+
+// The optional goal under the list (it never holds up a review).
+.inc-optional-title { margin: 14px 0 6px; }
+
+.inc-optional {
+  display: flex;
   align-items: center;
-  margin-top: 12px;
-  padding: 7px 14px;
-  border-radius: 8px;
-  border: 1px solid var(--accent-primary);
-  background: transparent;
-  color: var(--accent-primary);
-  font-size: 12.5px;
-  font-weight: 600;
-  font-family: inherit;
-  text-decoration: none;
-  cursor: pointer;
-  transition: background 0.15s ease;
+  gap: 8px;
+  min-height: 44px;
+  padding: 8px 10px;
+  border-radius: var(--r-md);
+  background: var(--bg);
 
-  &:hover {
-    background: var(--accent-light);
-  }
+  &.is-done .inc-optional-icon { color: var(--cyan); }
 }
 
-// The optional goals under the list (they never hold up a review).
-.inc-optional-title {
-  margin: 18px 0 8px;
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--text-secondary);
+.inc-optional-icon { color: var(--text); }
+
+.inc-optional-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+
+  strong { @include v2.text(meta); font-weight: 400; color: var(--text); }
+  span { @include v2.text(meta-sm); color: var(--muted); }
+}
+
+.inc-optional-cta {
+  flex: none;
+  min-height: 32px;
+  padding: 0 2px;
+  border: 0;
+  background: none;
+  font: inherit;
+  @include v2.text(meta);
+  font-weight: 900;
+  color: var(--cyan);
+  cursor: pointer;
+  &:hover { text-decoration: underline; }
 }
 
 .inc-review {
-  margin: 16px 0 0;
-  padding: 12px 14px;
-  border-radius: 10px;
-  background: var(--accent-light);
-  border: 1px dashed color-mix(in srgb, var(--accent-primary) 40%, transparent);
-  font-size: 13.5px;
-  line-height: 1.5;
-  color: var(--text-primary);
+  margin: 14px 0 0;
+  @include v2.text(meta);
+  line-height: 1.45;
+  color: var(--muted);
 }
 
 /* ------------------------------------------------------------ unlocks --- */
 
-.inc-unlocks {
-  ul {
-    list-style: none;
-    padding: 0;
-    margin: 14px 0 0;
-    display: grid;
-    gap: 10px;
-    grid-template-columns: 1fr;
-  }
+.inc-unlocks ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 10px 20px;
 
   li {
-    padding: 13px 15px;
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    background: var(--bg-secondary);
-    font-size: 13.5px;
-    line-height: 1.5;
-    color: var(--text-secondary);
-  }
-
-  strong {
     display: flex;
-    align-items: flex-start;
     gap: 8px;
-    color: var(--text-primary);
-    margin-bottom: 3px;
+    @include v2.text(body-sm);
+    line-height: 1.45;
+    color: var(--muted);
   }
 
-  strong svg {
-    color: currentColor;
-    flex-shrink: 0;
-    margin-top: 3px;   // optical centre of the first line
-  }
+  strong { color: var(--text); font-weight: 700; }
 }
 
-.inc-subhead {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  font-size: 18px;
-  color: var(--text-primary);
-  margin: 26px 0 12px;
-
-  svg {
-    color: var(--accent-primary);
-    flex-shrink: 0;
-  }
-}
-
-.inc-profile-error {
-  padding: 32px;
-  color: var(--accent-primary);
-}
-
-// Below the split the sidebar stops being a sidebar and goes back into the flow
-// ABOVE the posts, because on a phone the owner's next step matters more than
-// scrolling their own back catalogue.
-@media (max-width: 1000px) {
-  .inc-tabs {
-    display: flex;
-  }
-
-  // One at a time, chosen by the tabs above. Both stay mounted, so switching
-  // back does not refetch the feed or lose the collapsed/expanded state.
-  // "What a Hive account gets you" stays on both tabs, under whichever is open.
-  .inc-cols--goals.inc-show-progress .inc-feed { display: none; }
-  .inc-cols--goals.inc-show-posts .inc-goals { display: none; }
-}
-
-@include mix.respond(phone) {
-  .inc-hero-body {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-  }
-
-  .inc-hero-stats {
-    gap: 18px;
-  }
-
-  .inc-edit-btn {
-    align-self: flex-start;
-  }
-
-  .inc-hero-text h1 { font-size: 21px; }
-
-  .inc-panel { padding: 16px; }
-}
-
-.inc-subhead-note {
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--text-muted);
-}
+.inc-unlock-icon { color: var(--accent); margin-top: 1px; }
 
 /* ── Admin view of an advertiser's private details (AdvertiserAdminPanel) ──── */
-.inc-admin {
-  border-color: color-mix(in srgb, var(--accent-primary) 45%, transparent);
+// STYLE_GUIDE §11: a 2px dashed card titled "Admin view".
+.inc-panel.inc-admin {
+  background: transparent;
+  border: 2px dashed var(--border);
+
+  > h2 { margin-bottom: 2px; }
 
   dl {
-    display: grid;
-    gap: 8px;
-    margin: 12px 0 0;
+    margin: 8px 0 0;
 
     > div {
       display: grid;
       grid-template-columns: 120px minmax(0, 1fr);
       gap: 10px;
-      font-size: 13.5px;
+      align-items: baseline;
+      min-height: 36px;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+      @include v2.text(body-sm);
+
+      &:last-child { border-bottom: 0; }
     }
 
-    dt { color: var(--text-muted); }
-    dd { margin: 0; color: var(--text-primary); overflow-wrap: anywhere; }
+    dt { color: var(--muted); }
+    dd { margin: 0; color: var(--text); font-weight: 700; overflow-wrap: anywhere; }
     dd span { display: block; }
-    em { color: var(--text-muted); font-style: normal; }
+    dd a { color: var(--cyan); }
+    em { color: var(--muted); font-style: normal; font-weight: 400; }
+    code { @include v2.mono(12, 500); }
   }
 }
 
 .inc-admin-note,
 .inc-admin-empty {
-  margin: 6px 0 0;
-  font-size: 12.5px;
-  color: var(--text-muted);
+  margin: 0;
+  @include v2.text(meta);
+  color: var(--muted);
 }
 
 .inc-admin-sub {
   margin: 16px 0 0;
-  font-size: 14px;
-  color: var(--text-primary);
+  @include v2.text(eyebrow);
+  color: var(--muted);
 
   span {
     margin-left: 6px;
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--text-muted);
+    text-transform: none;
+    letter-spacing: 0;
+    font-weight: 400;
   }
 }
 
@@ -997,16 +644,18 @@
   height: 40px;
   border-radius: 50%;
   object-fit: cover;
-  border: 1px solid var(--border-color);
+  background: var(--avatar);
 }
 
 .inc-admin-about { white-space: pre-wrap; }
+
 /* Linked social profiles: one per line, icon in front. */
 .inc-admin-socials {
   display: flex;
   flex-direction: column;
   gap: 4px;
 }
+
 .inc-admin-social {
   display: inline-flex;
   align-items: center;
@@ -1014,64 +663,45 @@
   min-width: 0;
   overflow-wrap: anywhere;
 
-  svg { flex-shrink: 0; opacity: 0.8; }
+  svg { flex: none; color: var(--muted); }
 }
 
-/* Admin view: public profile and private contact side by side. Labels are narrower
-   than in a single column so each half keeps room for its values. */
+/* Public profile and private contact side by side. */
 .inc-admin-cols {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0 28px;
 
-  .inc-admin dl > div,
   dl > div { grid-template-columns: 96px minmax(0, 1fr); }
 
-  @media (max-width: 760px) {
-    grid-template-columns: minmax(0, 1fr);
-  }
+  @include v2.mobile { grid-template-columns: minmax(0, 1fr); }
 }
 
-/* "Your Hive account is ready" (CreateAccountPanel). A plain panel like the rest of
-   the page; the red OUTLINE button (the app's rule for red buttons) is the accent. */
+/* "You can create your own account now" (CreateAccountPanel, design 46c): the
+   §11 success card with the accent hero tint, and the page's one primary. */
 .inc-ready {
   display: flex;
   align-items: center;
   gap: 14px;
-  margin: 0 0 18px;
-  padding: 16px 18px;
-  border: 1px solid var(--border-color);
-  border-radius: 14px;
-  background: var(--card-bg);
 
-  h2 { margin: 0 0 2px; font-size: 16px; color: var(--text-primary); }
-  p { margin: 0; font-size: 13.5px; line-height: 1.5; color: var(--text-secondary); }
+  h2 { margin: 0 0 4px; @include v2.text(title-sm); color: var(--text); }
+  p { margin: 0; @include v2.text(body-sm); line-height: 1.5; color: var(--muted); }
 
-  @media (max-width: 600px) {
+  @include v2.mobile {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
   }
 }
 
 .inc-ready-icon {
-  flex-shrink: 0;
-  font-size: 30px;
-  color: var(--accent-primary);
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  flex: none;
+  border-radius: var(--r-lg);
+  background: var(--accent-tint-strong);
+  color: var(--accent);
 }
 
 .inc-ready-text { flex: 1; min-width: 0; }
-
-.inc-ready-btn {
-  flex-shrink: 0;
-  padding: 10px 16px;
-  border: 1px solid var(--accent-primary);
-  border-radius: 10px;
-  background: transparent;
-  color: var(--accent-primary);
-  font: inherit;
-  font-weight: 700;
-  cursor: pointer;
-
-  &:hover:not(:disabled) { background: color-mix(in srgb, var(--accent-primary) 12%, transparent); }
-  &:disabled { opacity: 0.6; cursor: default; }
-}

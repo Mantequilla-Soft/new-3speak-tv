@@ -11,6 +11,8 @@
       "transferFailed": "Transfer gagal: {{message}}"
     },
     "heading": "Kirim Tip ke @{{recipient}}",
+    "pageTitle": "Beri tip ke @{{recipient}}",
+    "pageSub": "Dibuka dari overlay siaran atau tautan",
     "methodHive": "HIVE / HBD",
     "methodLightning": "Lightning",
     "methodMore": "Cara lain",
@@ -22,6 +24,17 @@
     "memoPlaceholder": "mis. Makasih untuk konten kerennya!",
     "memoLinkNote": "Tautan ini ditambahkan ke memo: {{link}}",
     "send": "Kirim Tip",
+    "sendAmount": "Kirim {{amount}} {{currency}}",
+    "paidIn": "Dibayar dalam {{currency}} · tanpa biaya",
+    "forTitle": "untuk “{{title}}”",
+    "presets": {
+      "coffee": "Secangkir kopi",
+      "popular": "Paling populer",
+      "thanks": "Terima kasih banyak",
+      "superFan": "Penggemar berat"
+    },
+    "sentEyebrow": "Tip terkirim",
+    "sentTo": "{{amount}} ke @{{recipient}}",
     "lightning": {
       "amountLabel": "Jumlah (sats):",
       "messageLabel": "Pesan (opsional):",
@@ -65,6 +78,8 @@
     "monthly": {
       "label": "Seberapa sering",
       "once": "Sekali",
+      "oneTime": "Sekali",
+      "monthly": "Bulanan",
       "until": "Setiap bulan, sampai {{date}}",
       "note": "Hive mengirimnya sendiri setiap 30 hari, yang pertama sekarang juga. Kamu bisa menghentikannya kapan saja.",
       "replaces": "Ini menggantikan dukungan bulanan yang sudah kamu kirim ke @{{recipient}}.",
@@ -79,7 +94,7 @@
   },
   "cardMenu": {
     "loginToPersonalize": "Silakan masuk untuk menyesuaikan feed-mu",
-    "notInterestedToast": "Tidak tertarik — kami akan menyembunyikan video ini",
+    "notInterestedToast": "Tidak tertarik. Kami akan menyembunyikan video ini",
     "undo": "Urungkan",
     "cantHideOwn": "Kamu tidak bisa menyembunyikan videomu sendiri",
     "hidingCreatorToast": "Menyembunyikan video dari @{{author}}",
@@ -89,7 +104,8 @@
     "addToPlaylist": "Tambahkan ke playlist",
     "addTag": "Tambah tag",
     "notInterested": "Tidak tertarik",
-    "dontShowCreator": "Jangan tampilkan @{{author}}"
+    "dontShowCreator": "Jangan tampilkan @{{author}}",
+    "saveToPlaylist": "Simpan ke playlist"
   },
   "guestList": {
     "loadFailed": "Daftar tamu saat ini tidak dapat dimuat",
@@ -130,26 +146,31 @@
     "tagged": "Diberi tag “{{tag}}”.",
     "vote": "Vote",
     "tagThisVideo": "Beri tag video ini",
-    "tagOptional": "— opsional —",
+    "tagOptional": "Opsional",
     "pickTopicFirst": "Pilih topik dulu",
     "taggedNoDot": "Diberi tag “{{tag}}”",
     "tagFailed": "Tag gagal: {{message}}",
-    "taggedAlreadyVoted": "Diberi tag “{{tag}}” — vote {{weight}}%-mu sudah diberikan.",
-    "votingClosed": "Voting ditutup — beri tag video ini",
+    "taggedAlreadyVoted": "Diberi tag “{{tag}}”. Vote {{weight}}%-mu sudah diberikan.",
+    "votingClosed": "Voting ditutup: beri tag video ini",
     "youTagged": "Kamu memberi tag <b>{{tag}}</b> pada video ini.",
-    "pickTopic": "Pilih topik (dihitung sebagai vote 100%)",
+    "pickTopic": "Memilih topik dihitung sebagai vote 100%.",
     "submitTag": "Kirim tag",
     "tagThisVideoFull": "Beri tag video ini (dihitung sebagai vote 100%)",
-    "justTag": "Jangan vote — beri tag saja"
+    "justTag": "Jangan vote, beri tag saja",
+    "justTagShort": "Tag saja",
+    "voteAndTag": "Vote dan beri tag",
+    "addsAbout": "menambah sekitar {{value}}",
+    "postSoFar_other": "{{value}} sejauh ini · {{count}} vote"
   },
   "tagsPicker": {
     "autoTagged": "Tag otomatis: {{tags}}",
     "searchPlaceholder": "Cari topik…",
     "searchAria": "Cari topik",
     "noMatches": "Tidak ada topik yang cocok dengan “{{query}}”.",
-    "allSelected": "Semua {{category}} sudah dipilih. Tambahkan topik satuan hanya jika ingin lebih spesifik:",
+    "allSelected": "Semua {{category}} dipilih. Ketuk topik untuk mengecualikannya.",
     "orPickTopics": "Atau pilih topik satuan:",
-    "goodEnough": "Sudah cukup — atau buat lebih spesifik (opsional):",
+    "clear": "Hapus",
+    "goodEnough": "Sudah cukup, atau buat lebih spesifik (opsional)",
     "moreSpecific": "Lebih spesifik:"
   }
 }

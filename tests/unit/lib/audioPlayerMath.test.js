@@ -227,3 +227,38 @@ describe('live streams', () => {
     expect(isHlsTrack(null)).toBe(false)
   })
 })
+
+// Swipes on the phone player (owner 2026-11-12).
+describe('swipes on the phone player', async () => {
+  const { barSwipe, fullSwipeCollapses, SWIPE_SKIP } = await import('../../../src/components/GlobalAudioPlayer/playerMath.js')
+
+  it('sideways on the bar: left goes back, right goes forward, by 15 seconds', () => {
+    expect(SWIPE_SKIP).toBe(15)
+    expect(barSwipe(-80, 5)).toBe('back')
+    expect(barSwipe(80, -5)).toBe('forward')
+  })
+
+  it('up opens the player, down closes it', () => {
+    expect(barSwipe(4, -60)).toBe('open')
+    expect(barSwipe(-4, 60)).toBe('close')
+  })
+
+  it('a tap, a short or a diagonal move does nothing', () => {
+    expect(barSwipe(3, 2)).toBe(null)
+    expect(barSwipe(30, 0)).toBe(null)
+    expect(barSwipe(0, 20)).toBe(null)
+    expect(barSwipe(60, 50)).toBe(null)
+  })
+
+  it('a live stream cannot be moved sideways', () => {
+    expect(barSwipe(-80, 0, { live: true })).toBe(null)
+    expect(barSwipe(0, -60, { live: true })).toBe('open')
+  })
+
+  it('the full player collapses on a long, mostly downward swipe only', () => {
+    expect(fullSwipeCollapses(10, 120)).toBe(true)
+    expect(fullSwipeCollapses(0, 60)).toBe(false)
+    expect(fullSwipeCollapses(100, 120)).toBe(false)
+    expect(fullSwipeCollapses(0, -120)).toBe(false)
+  })
+})

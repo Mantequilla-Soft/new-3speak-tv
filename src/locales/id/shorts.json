@@ -16,7 +16,8 @@
       "rep": "Rep {{rep}}",
       "repTitle": "Reputasi Hive",
       "viewProfile": "Lihat profil"
-    }
+    },
+    "replyTo": "Balas {{user}}…"
   },
   "errors": {
     "votingUnavailable": "Vote tidak tersedia untuk postingan ini",
@@ -30,7 +31,7 @@
     "interestsTitle": "Hanya Shorts yang sesuai minatmu",
     "pickInterestsFirst": "Pilih beberapa minat dulu",
     "noInterests": "Kamu belum memilih minat apa pun — pilih di Pengaturan",
-    "interestsExhausted": "Itu semua Shorts untuk minatmu — menampilkan Jelajahi",
+    "interestsExhausted": "Itu semua Shorts untuk minatmu. Menampilkan Jelajahi.",
     "noInterestMatches": "Belum ada Shorts yang sesuai minatmu saat ini.",
     "switchToDiscover": "Beralih ke Jelajahi",
     "empty": "Tidak ada Shorts yang tersedia",
@@ -39,12 +40,18 @@
   "glow": {
     "subtle": "Cahaya ambient: lembut",
     "vivid": "Cahaya ambient: terang",
-    "off": "Cahaya ambient: nonaktif"
+    "off": "Cahaya ambient: nonaktif",
+    "label": "Cahaya ambient",
+    "offShort": "Mati",
+    "subtleShort": "Lembut",
+    "vividShort": "Terang"
   },
   "playbackMode": {
     "autoReplay": "Ulang Otomatis",
     "autoSwipe": "Geser Otomatis",
-    "manual": "Manual"
+    "manual": "Manual",
+    "label": "Pemutaran",
+    "options": "Opsi pemutaran"
   },
   "subtitles": {
     "off": "Nonaktif"
@@ -82,7 +89,7 @@
     "noUrl": "URL video untuk remix tidak dapat ditemukan",
     "loadFailed": "Gagal memuat video untuk remix",
     "chainFull": "Video ini sudah dibuat dari {{max}} video sebelumnya, jadi tidak bisa di-remix lagi.",
-    "chainNoSlots": "Rantai remix ini sudah membayar begitu banyak kreator sehingga remix baru tidak muat lagi di Hive. Dengan 3Speak Pro kamu masih bisa me-remix-nya."
+    "chainNoSlots": "Rantai ini sudah membayar begitu banyak kreator sehingga remix tidak akan muat lagi di Hive. Dengan 3Speak Pro kamu tetap bisa me-remix-nya."
   },
   "watchLater": {
     "loginRequired": "Masuk untuk menyimpan Shorts",
@@ -99,7 +106,7 @@
     "postRemoved": "Postingan Hive di balik Shorts ini sudah dihapus, jadi tidak bisa lagi menerima komentar atau vote.",
     "beFirst": "Jadilah yang pertama berkomentar!",
     "unavailable": "Komentar tidak tersedia untuk postingan ini",
-    "addPlaceholder": "Tambahkan komentar...",
+    "addPlaceholder": "Ikut berdiskusi…",
     "addPlaceholderBar": "Tambahkan komentar…",
     "loginPlaceholder": "Masuk untuk berkomentar",
     "send": "Kirim komentar",
@@ -126,7 +133,7 @@
     "seenNote": "Penonton yang login dan mengaktifkan riwayat tontonan.",
     "seenEmpty": "Belum ada yang melihatnya.",
     "keep": "Simpan sebagai Shorts",
-    "keepHint": "Tetap ada di channel-mu setelah 24 jam",
+    "keepHint": "Tetap ada di channel-mu setelah 24 jam.",
     "keepConfirm": "Simpan selamanya?",
     "keepYes": "Simpan",
     "keeping": "Menyimpan…",
@@ -137,5 +144,9 @@
   "audiogram": {
     "fullEpisode": "Episode lengkap",
     "listen": "Dengarkan episode lengkap: {{title}}"
+  },
+  "panel": {
+    "discussion": "Diskusi",
+    "upNext": "Berikutnya"
   }
 }

@@ -1,140 +1,164 @@
-.share-chooser-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 1300;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  animation: share-chooser-fade 0.15s ease;
-
-  @media (min-width: 601px) {
-    align-items: center;
-  }
-}
-
-@keyframes share-chooser-fade { from { opacity: 0; } to { opacity: 1; } }
+// The share sheet (07b; 07g on the phone; 39d share, 19e): DialogShell's side
+// sheet. Tabs Share | Embed | Clip, two big Hive tiles, a row of app tiles, the
+// link with its QR code and start time, Copy link pinned at the bottom.
+@use "../../styles/v2" as v2;
 
 .share-chooser {
-  position: relative;
-  width: 100%;
-  max-width: 380px;
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-light);
-  border-radius: 16px 16px 0 0;
-  padding: 18px 16px calc(20px + env(safe-area-inset-bottom, 0px));
-  box-shadow: 0 -8px 28px rgba(0, 0, 0, 0.3);
-  animation: share-chooser-up 0.2s ease;
+  // The context card is drawn on the phone sheet only (07g); on desktop the
+  // video stays visible beside the sheet (07b).
+  .share-ctx { display: none; }
 
-  @media (min-width: 601px) {
-    border-radius: 16px;
-    margin-bottom: 0;
-    animation: share-chooser-fade 0.18s ease;
+  .share-tabs {
+    padding: 4px;
+    gap: 6px;
+    border-radius: var(--r-lg);
+    flex: none;
+  }
+
+  .share-hive-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    flex: none;
+    &.is-single { grid-template-columns: 1fr; }
+  }
+
+  .share-hive {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    min-height: 120px;
+    padding: 16px;
+    border: 0;
+    border-radius: var(--r-xl);
+    background: var(--avatar);
+    color: var(--text);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition: filter var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
+
+    &:hover:not(:disabled) { filter: brightness(1.08); }
+    &:active:not(:disabled) { transform: scale(.98); }
+    &:disabled { cursor: default; }
+    &.is-cyan { background: var(--cyan); color: var(--bg); }
+    &.is-cyan:disabled { opacity: .7; }
+    &.is-cyan[aria-pressed="true"]:not(:disabled) { box-shadow: inset 0 0 0 2px var(--text); }
+
+    .share-hive__text { margin-top: auto; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+    b { font-size: 16px; font-weight: 900; line-height: 1.25; }
+    .share-hive__text > span { @include v2.text(meta); opacity: .8; }
+  }
+
+  .share-apps {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 10px;
+    flex: none;
+  }
+
+  .share-app {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    height: 64px;
+    min-width: 0;
+    border: 0;
+    border-radius: var(--r-xl);
+    background: var(--surface-2);
+    color: var(--muted);
+    font: inherit;
+    @include v2.text(meta-sm);
+    cursor: pointer;
+    transition: background var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
+
+    .material-symbols-rounded { color: var(--text); }
+    > span:last-child { max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 0 4px; }
+    &:hover { background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); color: var(--text); }
+    &:active { transform: scale(.98); }
+  }
+
+  .share-link {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px;
+    border-radius: var(--r-xl);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    flex: none;
+    min-width: 0;
+  }
+  // The code stays dark on white in both themes so any camera reads it.
+  .share-link__qr {
+    width: 76px;
+    height: 76px;
+    padding: 8px;
+    border-radius: var(--r-md);
+    background: var(--on-media);
+    flex: none;
+    svg { display: block; width: 60px; height: 60px; }
+  }
+  .share-link__body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 10px; }
+  .share-link__url { @include v2.mono(12, 500); color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .share-link__start {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    @include v2.text(body-sm);
+    color: var(--text);
+    cursor: pointer;
+
+    input { position: absolute; opacity: 0; width: 18px; height: 18px; margin: 0; cursor: pointer; }
+    b { @include v2.mono(13, 700); }
+  }
+  .share-link__box {
+    width: 18px;
+    height: 18px;
+    border-radius: var(--r-xs);
+    border: 2px solid var(--muted);
+    display: grid;
+    place-items: center;
+    flex: none;
+    color: transparent;
+  }
+  .share-link__start input:checked + .share-link__box { background: var(--cyan); border-color: var(--cyan); color: var(--bg); }
+  .share-link__start input:focus-visible + .share-link__box { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  @include v2.mobile {
+    .share-ctx { display: flex; }
+    .share-hive { min-height: 92px; padding: 14px; gap: 8px; }
+    .share-hive b { font-size: 14px; font-weight: 700; }
+    .share-link { display: none; }
   }
 }
 
-@keyframes share-chooser-up { from { transform: translateY(100%); } to { transform: translateY(0); } }
-
-// The first option row brings its own 10px top margin.
-.share-chooser .share-chooser-header { margin-bottom: 6px; }
-
-.share-chooser-opt {
+/* --- Embed tab --- */
+.share-embed {
   display: flex;
-  align-items: center;
-  gap: 12px;
-  width: 100%;
-  text-align: left;
-  background: var(--bg-tertiary);
-  border: 1px solid var(--border-light);
-  border-radius: 12px;
-  padding: 12px 14px;
-  margin-top: 10px;
-  color: var(--text-primary);
-  cursor: pointer;
-  transition: background 0.12s ease;
-  &:hover { background: var(--bg-hover); }
-
-  svg { color: var(--accent-primary); flex: 0 0 auto; }
-
-  .share-chooser-opt-title { display: block; font-size: 14.5px; font-weight: 600; }
-  .share-chooser-opt-sub { display: block; font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
-  /* The literal link: long permlinks must wrap, not push the dialog wider. */
-  .share-chooser-opt-link { word-break: break-all; }
+  flex-direction: column;
+  gap: 10px;
 }
 
-/* --- Embed view (share menu → "Embed on a website") --- */
-.share-chooser-back {
-  flex-shrink: 0;
-  margin-left: -6px;
-  width: 30px;
-  height: 30px;
-  border: none;
-  background: transparent;
-  color: var(--text-secondary);
-  border-radius: 8px;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  &:hover { background: var(--bg-hover); color: var(--text-primary); }
-}
-
-.share-embed-hint {
-  margin: -6px 0 12px;
-  font-size: 12.5px;
-  color: var(--text-secondary);
-  text-align: center;
-}
-
-.share-embed-sizes {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  justify-content: center;
-}
-
-.share-embed-size {
-  flex: 0 0 auto;
-  background: var(--bg-tertiary);
-  border: 1px solid var(--border-light);
-  border-radius: 999px;
-  padding: 5px 11px;
-  font-size: 12px;
-  color: var(--text-secondary);
-  cursor: pointer;
-  transition: background 0.12s ease, color 0.12s ease, border-color 0.12s ease;
-
-  &:hover { background: var(--bg-hover); color: var(--text-primary); }
-
-  &.active {
-    border-color: var(--accent-primary);
-    color: var(--accent-primary);
-    font-weight: 600;
-  }
+.share-embed-hint,
+.share-embed-sub {
+  margin: 0;
+  @include v2.text(meta);
+  color: var(--muted);
 }
 
 .share-embed-code {
   display: block;
   width: 100%;
-  margin-top: 10px;
-  padding: 10px 12px;
-  background: var(--bg-tertiary);
-  border: 1px solid var(--border-light);
-  border-radius: 12px;
-  color: var(--text-primary);
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  font-size: 11.5px;
+  min-height: 160px;
+  @include v2.mono(12, 400);
   line-height: 1.5;
-  resize: vertical;
   // Wrapped, not scrolled sideways: the box is only ~350px wide on a phone, and
   // a snippet the user can't see all of reads like it was truncated.
   white-space: pre-wrap;
   overflow-wrap: anywhere;
-
-  &:focus {
-    outline: none;
-    border-color: var(--accent-primary);
-  }
 }
-
-.share-embed-copy svg { color: var(--accent-primary); }

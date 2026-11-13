@@ -93,6 +93,29 @@ const FIXTURES = {
     { url: 'https://3speak.tv/api/referral/invite/abcde12345', json: { valid: true, referrer: 'alice', fastTrack: false } },
     { url: 'https://3speak.tv/api/referral/invite/', prefix: true, json: { valid: false } },
     { url: 'https://checker.test.invalid/feeds/trendingSorted?limit=40', json: { videos: [{ owner: 'alice', permlink: 'my-video', title: 'Cooking with fire', images: { thumbnail: 'https://images.3speak.tv/thumb.jpg' } }] } },
+    // 3Speak videos posted from other Hive apps: no `video` metadata, no 3Speak
+    // app name. One the checker knows, one only the player link in the body
+    // gives away, and a plain text post from the same kind of app.
+    hivePost('dave', 'ecency-video', {
+      body: 'A walk along the beach at sunset, with the food stalls opening for the night.',
+      json_metadata: { app: 'ecency/4.3.9-vision', tags: ['food'], image: ['https://images.ecency.com/DQmX/thumb.jpg'] },
+    }),
+    { url: 'https://checker.test.invalid/videodetails/dave/ecency-video', json: { owner: 'dave', permlink: 'ecency-video', status: 'published', embed_url: '@dave/ecency-video', thumbnail_url: 'https://images.3speak.tv/dave.jpg', duration: 90 } },
+    hivePost('dave', 'skate-link', {
+      body: 'Night session at the station.\n\nhttps://play.3speak.tv/embed?v=dave/xyz789',
+      json_metadata: { app: 'skatehive', tags: ['skatehive'] },
+    }),
+    hivePost('dave', 'just-words', {
+      body: 'Some thoughts on the week, no video in here, only a long enough text to read.',
+      json_metadata: { app: 'peakd/2026.10.1', tags: ['life'] },
+    }),
+    // IPFS thumbnails, stored as ipfs:// and as a full gateway address.
+    hivePost('erin', 'ipfs-thumb', {
+      json_metadata: { app: '3speak/0.3.0', tags: ['music'], video: { info: { duration: 60, sourceMap: [{ type: 'thumbnail', url: 'ipfs://bafkreid35b2rrxw4gh56b3rpxpegpwtvd3pav7kgwooovnfndnpy5uuada' }] } } },
+    }),
+    hivePost('erin', 'gateway-thumb', {
+      json_metadata: { app: '3speak/0.3.0', tags: ['music'], video: { info: { duration: 60 } }, image: ['https://ipfs.3speak.tv/ipfs/QmRqNYX1tghNHzKuXg5FmTajes8qwxc7FAMWSdFxJbvBY7'] },
+    }),
     // Every other video id: the checker has no such video.
     { url: 'https://checker.test.invalid/videodetails/', prefix: true, status: 404, json: { error: 'Video not found' } },
     // Anything else on Hive: no such post.
@@ -340,6 +363,28 @@ describe('search engines', () => {
     expect(r.text).toMatch(/<meta name="robots" content="noindex, follow"/)
     const ok = await crawl('/watch?v=alice/my-video', GOOGLEBOT)
     expect(ok.text).toMatch(/<meta name="robots" content="index, follow"/)
+  })
+
+  it('index a 3Speak video posted from another Hive app, but not a text post from one', async () => {
+    const known = await crawl('/@dave/ecency-video', GOOGLEBOT)
+    expect(known.status).toBe(200)
+    expect(known.text).toMatch(/<meta name="robots" content="index, follow"/)
+    const video = jsonLd(known.text).find((d) => d['@type'] === 'VideoObject')
+    expect(video.thumbnailUrl).toBe('https://images.3speak.tv/dave.jpg')
+    // The checker does not know it: the player link in the body is enough.
+    const linked = await crawl('/@dave/skate-link', GOOGLEBOT)
+    expect(linked.text).toMatch(/<meta name="robots" content="index, follow"/)
+    const words = await crawl('/@dave/just-words', GOOGLEBOT)
+    expect(words.text).toMatch(/<meta name="robots" content="noindex, follow"/)
+  })
+
+  it('serve IPFS thumbnails from the gateway that has every upload', async () => {
+    const stored = jsonLd((await crawl('/watch?v=erin/ipfs-thumb', GOOGLEBOT)).text).find((d) => d['@type'] === 'VideoObject')
+    expect(stored.thumbnailUrl).toBe('https://ipfs-audio.3speak.tv/ipfs/bafkreid35b2rrxw4gh56b3rpxpegpwtvd3pav7kgwooovnfndnpy5uuada')
+    // A full ipfs.3speak.tv address is moved over too, not wrapped in the Hive image proxy.
+    const r = await crawl('/watch?v=erin/gateway-thumb', GOOGLEBOT)
+    const video = jsonLd(r.text).find((d) => d['@type'] === 'VideoObject')
+    expect(video.thumbnailUrl).toBe('https://ipfs-audio.3speak.tv/ipfs/QmRqNYX1tghNHzKuXg5FmTajes8qwxc7FAMWSdFxJbvBY7')
   })
 
   it('keep a voice snap with no caption out of the index, but not one that says something', async () => {

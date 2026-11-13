@@ -1,28 +1,37 @@
-// Offline notice: a flat bar at the bottom, above the player and the bottom
-// navigation (--audio-np-clearance covers both while the player is open), so it
-// never sits over the page's own tabs. Full width less the page gutter on a
-// phone, a centred card on a wide screen.
+// Offline notice (design 25e): an accent-washed bar at the bottom, above the
+// player and the bottom bar (--audio-np-clearance covers both while the player
+// is open), so it never sits over the page's own tabs. Full width less the page
+// gutter on a phone, a centred bar on a wide screen.
 .offline-banner {
   position: fixed;
   left: 16px;
   right: 16px;
-  bottom: calc(var(--audio-np-clearance, var(--bottom-nav-height, 0px)) + 12px);
+  bottom: calc(var(--audio-np-clearance, var(--bottom-bar-clearance)) + 12px);
   z-index: 95;
   display: flex;
   align-items: center;
   gap: 10px;
   max-width: 520px;
+  min-height: 52px;
   margin: 0 auto;
-  padding: 10px 14px;
-  border: 1px solid var(--border-light);
-  border-radius: 12px;
-  background: var(--bg-elevated, var(--bg-secondary));
-  color: var(--text-primary);
-  font-size: 13px;
+  padding: 6px 8px 6px 14px;
+  border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+  border-radius: var(--r-lg);
+  background: color-mix(in srgb, var(--accent) 14%, var(--surface));
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 700;
   line-height: 1.35;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+  box-shadow: var(--shadow-float);
+  animation: offline-in var(--t-slow) var(--ease);
 
-  > svg { flex-shrink: 0; color: var(--text-secondary); }
+  .offline-banner-icon { flex: none; color: var(--accent); }
+}
+
+// Below 1025px there is no bottom bar padding to lean on when the player is
+// closed on desktop widths, so keep the plain 12px there.
+@media (min-width: 1025px) {
+  .offline-banner { bottom: calc(var(--audio-np-clearance, 0px) + 16px); }
 }
 
 .offline-banner-text {
@@ -30,14 +39,12 @@
   min-width: 0;
 }
 
-.offline-banner-link {
-  flex-shrink: 0;
-  border: none;
-  background: none;
-  padding: 0;
-  color: var(--accent-primary);
-  font-weight: 600;
-  font-size: 13px;
-  white-space: nowrap;
-  cursor: pointer;
+.offline-banner-link { flex: none; }
+
+@keyframes offline-in {
+  from { opacity: 0; transform: translateY(8px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .offline-banner { animation: none; }
 }

@@ -16,7 +16,9 @@
     "avgPct": "Śr. %",
     "votes": "Głosy",
     "comments": "Komentarze",
-    "payout": "Wypłata"
+    "payout": "Wypłata",
+    "followers": "Obserwujący",
+    "earned": "Zarobione"
   },
   "days": {
     "short": {
@@ -76,7 +78,8 @@
     "cellTitle_few": "{{day}} {{hour}}:00 — {{count}} wyświetlenia",
     "cellTitle_many": "{{day}} {{hour}}:00 — {{count}} wyświetleń",
     "cellTitle_other": "{{day}} {{hour}}:00 — {{count}} wyświetlenia",
-    "hour": "{{hour}}:00"
+    "hour": "{{hour}}:00",
+    "best": "Najlepsza pora: <b>{{day}} {{from}}–{{to}} UTC</b>"
   },
   "detail": {
     "summary": "Głosy: {{votes}} · komentarze: {{comments}} · ${{payout}}"
@@ -89,7 +92,8 @@
     "title": "Porównaj filmy",
     "pickA": "Wybierz film…",
     "vs": "vs",
-    "pickB": "Wybierz inny…"
+    "pickB": "Wybierz inny…",
+    "lastPeriod": "Porównaj z poprzednim okresem"
   },
   "loadError": "Nie udało się teraz wczytać statystyk.",
   "emptyRange": "Brak danych o oglądaniu w tym okresie — wybierz „Wszystko” albo poczekaj, aż ludzie obejrzą twoje filmy.",
@@ -102,7 +106,8 @@
   "sections": {
     "trend": "Czas oglądania w czasie",
     "best": "Najlepsze wyniki",
-    "audience": "Twoi widzowie"
+    "audience": "Twoi widzowie",
+    "top": "Najlepsze treści"
   },
   "openInNewTab": "Otwórz film w nowej karcie",
   "footnote": "Statystyki oglądania pochodzą z testowego śledzenia i są widoczne tylko dla ciebie.",
@@ -111,9 +116,9 @@
     "empty": "Brak danych o oglądaniu tego filmu.",
     "uniqueViewers": "Unikalni widzowie",
     "avgSpeed": "Śr. prędkość",
-    "mostDropOff": "📉 Najwięcej osób odpada w <b>{{time}}</b>",
-    "earlyDrop": "⚡ <b>{{pct}}%</b> wyszło w pierwszych 3 s",
-    "replayed": "🔁 Odtwarzane ponownie:",
+    "mostDropOff": "Najwięcej osób odpada w <b>{{time}}</b>",
+    "earlyDrop": "<b>{{pct}}%</b> wyszło w pierwszych 3 s",
+    "replayed": "Odtwarzane ponownie:",
     "retentionTitle": "Utrzymanie widzów",
     "retentionSub": "odsetek widzów, którzy wciąż oglądają w danym momencie",
     "pctWatching": "{{pct}}% ogląda",
@@ -121,5 +126,15 @@
     "replaySub": "fragmenty, które widzowie oglądają i powtarzają najczęściej",
     "hotSpot": "gorący punkt",
     "notEnoughReplays": "Za mało ponownych odtworzeń"
+  },
+  "title": "Statystyki kanału",
+  "legend": {
+    "current": "Ten okres",
+    "previous": "Poprzedni"
+  },
+  "audience": {
+    "title": "Widownia",
+    "topCountry": "Główny kraj",
+    "topDevice": "Główne urządzenie"
   }
 }

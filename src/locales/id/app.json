@@ -5,11 +5,11 @@
   "supportBlock": {
     "banned": {
       "title": "Akunmu diblokir",
-      "body": "Akun 3Speak-mu sudah diblokir, jadi kamu tidak bisa masuk. Jika menurutmu ini kesalahan, silakan hubungi dukungan 3Speak."
+      "body": "Akun 3Speak-mu telah diblokir, jadi kamu tidak bisa masuk. Jika menurutmu ini kesalahan, hubungi dukungan 3Speak."
     },
     "upload": {
       "title": "Unggahan dinonaktifkan untuk akunmu",
-      "body": "Akun 3Speak-mu saat ini tidak diizinkan mengunggah. Jika menurutmu ini kesalahan, silakan hubungi dukungan 3Speak."
+      "body": "Akunmu saat ini tidak diizinkan mengunggah. Jika menurutmu ini kesalahan, hubungi dukungan 3Speak."
     }
   },
   "uploadBlock": {
@@ -18,7 +18,7 @@
   },
   "emergency": {
     "title": "Kami sedang mengalami masalah infrastruktur",
-    "body": "Tim kami sedang menanganinya dan berusaha memulihkan 3Speak sekarang juga. Gabung ke Discord kami untuk menghubungi kami dan mendapat kabar terbaru — terima kasih atas kesabaranmu.",
+    "body": "Tim kami sedang berusaha memulihkan 3Speak sekarang. Gabung ke Discord kami untuk kabar terbaru secara langsung.",
     "joinDiscord": "Gabung ke Discord kami"
   },
   "changelog": {
@@ -87,7 +87,7 @@
     "lookAround": "Aku cuma mau lihat-lihat"
   },
   "interests": {
-    "saved": "Minat disimpan — ubah kapan saja di Pengaturan",
+    "saved": "Minat disimpan. Ubah kapan saja di Pengaturan",
     "saveFailed": "Minat tidak dapat disimpan",
     "title": "Kamu suka apa?",
     "body": "Pilih beberapa topik yang kamu suka dan kami akan menampilkan lebih banyak konten yang sesuai. Kamu bisa mengubahnya kapan saja di <b>Pengaturan</b>.",
@@ -105,27 +105,27 @@
     "things": {
       "postVideos": {
         "title": "Posting video",
-        "text": "Unggah video panjang yang tetap milikmu, di chain yang tidak bisa dihapus diam-diam oleh siapa pun."
+        "text": "Video panjang yang tetap milikmu"
       },
       "filmShorts": {
         "title": "Rekam Shorts",
-        "text": "Sesuatu yang cepat, vertikal, dan mudah dibagikan. Cocok untuk mendapatkan penonton pertamamu."
+        "text": "Cepat, vertikal, mudah dibagikan"
       },
       "goLive": {
         "title": "Siaran langsung",
-        "text": "Siarkan ke orang-orangmu, ajak tamu ke panggung, dan simpan rekamannya setelahnya."
+        "text": "Ajak tamu ke panggung, simpan rekamannya"
       },
       "buildCommunity": {
         "title": "Bangun komunitas",
-        "text": "Buat ruang seputar hal yang kamu pedulikan, atau gabung ke komunitas yang sudah ramai."
+        "text": "Buat ruang sendiri atau gabung ke yang sudah ada"
       },
       "makeFriends": {
         "title": "Dapatkan teman sungguhan",
-        "text": "Berkomentar, chat, dan berkolaborasi dengan manusia sungguhan yang saling mendukung."
+        "text": "Berkomentar, chat, dan berkolaborasi"
       },
       "getInspired": {
         "title": "Dapatkan inspirasi, ikut terlibat",
-        "text": "Temukan kreator, dukung yang kamu sukai, dan dapatkan penghasilan sambil melakukannya."
+        "text": "Dukung kreator dan dapatkan penghasilan juga"
       }
     },
     "advertiserThings": {
@@ -174,7 +174,10 @@
     "uploading": "Mengunggah…",
     "interestsHint": "Kami memakai ini untuk memilih apa yang muncul di berandamu. Pilih sebanyak yang kamu mau, atau tidak sama sekali, dan ubah kapan pun kamu mau.",
     "interestsFineprint": "Disimpan ke akun Hive-mu, jadi semua aplikasi Hive menampilkan profil dan minat yang sama.",
-    "saveAndExplore": "Simpan dan mulai menjelajah"
+    "saveAndExplore": "Simpan dan mulai menjelajah",
+    "eyebrow": "Selamat datang",
+    "stepOf": "Langkah {{n}} dari {{total}}",
+    "profileFineprint": "Disimpan di akun Hive-mu, jadi semua aplikasi Hive menampilkan profil yang sama."
   },
   "profileEdit": {
     "updated": "Profil diperbarui",
@@ -193,7 +196,7 @@
     "uploadBanner": "Unggah banner profil",
     "changeBanner": "Ganti banner",
     "addBanner": "Tambah banner",
-    "bannerHint": "Paling bagus di <b>2800 × 684</b> px (atau gambar 4:1 apa pun). Taruh bagian penting di tengah: sisi-sisinya terpotong di layar sempit dan namamu ada di kiri bawah.",
+    "bannerHint": "Taruh bagian penting di tengah: sisi-sisinya terpotong di layar sempit dan namamu berada di kiri bawah.",
     "uploadPicture": "Unggah foto profil",
     "pictureLabel": "Foto profil",
     "pictureHint": "Wajah atau logo paling cocok. Persegi, 400 × 400 px atau lebih besar. Maksimal 8MB.",
@@ -201,7 +204,7 @@
     "namePlaceholderUser": "Kami panggil kamu apa? (@{{username}})",
     "namePlaceholder": "Kami panggil kamu apa?",
     "shortBio": "Bio singkat",
-    "bioPlaceholder": "Kamu membuat apa, dan apa yang bisa diharapkan orang darimu?",
+    "bioPlaceholder": "Kamu membuat apa, dan apa yang bisa diharapkan orang?",
     "location": "Lokasi",
     "optional": "opsional",
     "locationPlaceholder": "Kamu ada di mana?"

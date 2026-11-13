@@ -1,4 +1,4 @@
-@use "../../mixins.scss" as mix;
+@use "../../styles/v2" as v2;
 
 .profile-overview {
   // ── desktop: content column + sticky links column ─────────────────────────
@@ -7,7 +7,7 @@
   @media screen and (min-width: 1025px) {
     display: flex;
     align-items: flex-start;   // required, or the aside stretches and `sticky` has no room to travel
-    gap: 1.5rem;
+    gap: 24px;
   }
 
   // `flex: 1 1 0` — basis 0, NOT auto. With `auto` the base size is the rails'
@@ -31,58 +31,30 @@
   }
 
   .pov-section {
-    margin-bottom: 2rem;
+    margin-bottom: 32px;
 
-    @include mix.respond(phone) {
-      margin-bottom: 1.4rem;
-    }
+    @include v2.mobile { margin-bottom: 24px; }
   }
 
+  // Section title flush left, "View more" as a ghost button on the right.
   .pov-head {
     display: flex;
-    align-items: baseline;
+    align-items: center;
     justify-content: space-between;
-    gap: 1rem;
-    margin-bottom: 0.6rem;
-    padding: 0 0.25rem;
+    gap: 12px;
+    min-height: 32px;
+    margin-bottom: 10px;
 
     h3 {
       margin: 0;
-      font-size: 1.05rem;
-      font-weight: 700;
-      color: var(--text-primary);
+      @include v2.text(title);
+      color: var(--text);
 
-      @include mix.respond(phone) {
-        font-size: 0.95rem;
-      }
+      @include v2.mobile { @include v2.text(title-sm); }
     }
   }
 
-  // `.pov-more` is a <button> in every section but the playlist rails, whose
-  // "View all" is a real link to the playlist page.
-  a.pov-more {
-    display: inline-block;
-    text-decoration: none;
-  }
-
-  .pov-more {
-    flex-shrink: 0;
-    padding: 0.3rem 0.8rem;
-    border: 1px solid var(--border-color);
-    border-radius: 999px;
-    background: transparent;
-    color: var(--text-secondary);
-    font-size: 0.8rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
-
-    &:hover {
-      color: var(--text-primary);
-      border-color: var(--text-secondary);
-      background: var(--bg-hover);
-    }
-  }
+  .pov-more { color: var(--muted); &:hover { color: var(--text); } }
 
   // An empty audio list renders its own "nothing here" block; in a preview row
   // that reads as a broken section, so the whole section hides instead.
@@ -107,10 +79,10 @@
     // Rails always start at the left edge. The tab versions of these lists
     // centre themselves, which in a one-item rail parks it mid-screen.
     justify-content: flex-start;
-    gap: 0.75rem;
+    gap: 12px;
     overflow-x: auto;
     overflow-y: hidden;
-    padding-bottom: 0.35rem;
+    padding-bottom: 6px;
     scroll-snap-type: x proximity;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
@@ -127,7 +99,7 @@
 
     // The hover preview is a child of .card-container too, but it is not a
     // card. As a snap target, showing it scrolled the rail to it, which moved
-    // the card it follows, which moved it again: an endless loop (React #185).
+    // the card it follows, which moved it again: an endless loop (React error 185).
     > .card-hover-overlay {
       scroll-snap-align: none;
     }
@@ -169,7 +141,7 @@
   // needs: below ~170px the payout / likes / age row wraps onto a second line.
   .card-container--shorts > * { width: 172px; }
 
-  @include mix.respond(phone) {
+  @include v2.mobile {
     .card-container > * { width: 240px; }
     .playlist-card-container > * { width: 200px; }
     .audio-tile-grid > * { width: 168px; }
@@ -187,7 +159,7 @@
     .snap-list {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 0.9rem 0.75rem;
+      gap: 14px 12px;
       overflow: visible;
       scroll-snap-type: none;
       padding-bottom: 0;
@@ -200,7 +172,7 @@
     .audio-tile-grid { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }
     .snap-list { grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); align-items: start; }
 
-    @include mix.respond(phone) {
+    @include v2.mobile {
       .card-container { grid-template-columns: 1fr; }
       .card-container--shorts,
       .playlist-card-container,
@@ -210,13 +182,47 @@
   }
 }
 
+// ── The channel's own videos (20b) ─────────────────────────────────────────
+// Every card is this creator's, so the creator line, the topic and the stat
+// pills go: a 16px-radius thumbnail, the title, then views and age. As a grid
+// they run four to a row at the full width, 14px apart. "Search this channel"
+// shows its results the same way (.ph-results).
+.profile-overview .pov-section--channel,
+.ph-results {
+  .card-container.card-container { gap: 14px; }
+  &.pov-section--grid .card-container,
+  > .card-container { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+
+  .card {
+    .img-wrap { border-radius: var(--r-lg); }
+    .card-duration { right: 8px; bottom: 8px; border-radius: var(--r-sm); }
+    .card-avatar,
+    .card-author-group,
+    .card-topic-chip,
+    .card-stats { display: none; }
+    .card-meta > .card-author-group + *::before { content: none; margin: 0; }
+    .card-text { gap: 2px; }
+    h2 { min-height: 0; }
+  }
+
+  // Phones follow the card size setting: two to a row with small cards, one
+  // with large ones (the default, 20a).
+  @include v2.mobile {
+    &.pov-section--grid .card-container,
+    > .card-container { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+    html[data-card-size="large"] &.pov-section--grid .card-container,
+    html[data-card-size="large"] & > .card-container { grid-template-columns: minmax(0, 1fr); gap: 14px; }
+    .card .img-wrap { border-radius: var(--r-md); }
+  }
+}
+
 // ── The 12-column grid ──────────────────────────────────────────────────────
 // Sections carry a span (lib/profileLayoutGrid.js); narrower ones share a row.
 // Phones and tablets keep one column: every section takes the full row there.
 .pov-grid {
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
-  column-gap: 1.25rem;
+  column-gap: 20px;
   align-items: start;
 
   > * { min-width: 0; }

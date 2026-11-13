@@ -10,7 +10,7 @@
     "optional": "Satu hal opsional: kami bisa mengingat <b>posisi terakhir tontonanmu di setiap video</b> agar pemutaran bisa dilanjutkan. Data ini tidak pernah keluar dari perangkatmu."
   },
   "details": {
-    "essentialTitle": "Wajib — selalu aktif",
+    "essentialTitle": "Wajib (selalu aktif)",
     "essential": {
       "login": "Sesi login-mu",
       "settings": "Pengaturan yang kamu atur: tema, volume, bahasa, subtitle, preferensi feed",

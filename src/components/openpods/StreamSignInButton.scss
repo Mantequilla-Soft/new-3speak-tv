@@ -1,27 +1,27 @@
-// Quiet, not the accent colour: an invitation, not a warning.
+@use "../../styles/v2" as v2;
+
+// Stands in for the chat box or the raise-hand button while a signed-in viewer
+// still watches as a guest. Quiet, not the accent: an invitation (30b).
 .stream-signin {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 8px 14px;
-  border: 1px solid var(--border-color);
-  border-radius: 999px;
-  background: var(--bg-secondary);
-  color: var(--text-primary);
-  font: inherit;
-  font-size: 13px;
-  cursor: pointer;
+  @include v2.btn(secondary, 40);
+  max-width: 100%;
 
-  &:hover:not(:disabled) { background: var(--bg-hover); }
-  &:disabled { opacity: 0.7; cursor: default; }
+  > span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .stream-signin__icon { font-size: 18px; }
 
-  // Over the video: translucent dark, so it holds up on any frame.
+  // Over the video: the media scrim, so it holds up on any frame.
   &--overlay {
-    border-color: rgba(255, 255, 255, 0.28);
-    background: rgba(0, 0, 0, 0.55);
-    color: #fff;
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-    &:hover:not(:disabled) { background: rgba(0, 0, 0, 0.7); }
+    background: var(--media-scrim);
+    color: var(--on-media);
+    &:hover:not(:disabled) { background: var(--media-scrim-strong); color: var(--on-media); }
   }
+}
+
+// The dock tile (stream page): DockTile owns the look; the wait spins.
+.stream-signin--dock.v2-dock {
+  height: 60px;
+  padding: 0 6px;
+  border-radius: var(--r-lg);
+  font-size: 10px;
+  &:disabled .material-symbols-rounded { animation: v2-spin 1s linear infinite; }
 }

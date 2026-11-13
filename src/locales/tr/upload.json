@@ -2,7 +2,7 @@
   "drafts": {
     "title": "Video Taslakları",
     "filters": {
-      "all": "Tüm Videolar",
+      "all": "Tümü",
       "published": "Yayınlanan",
       "scheduled": "planlanan",
       "failed": "Başarısız"
@@ -30,7 +30,7 @@
   },
   "preview": {
     "playVideo": "Videoyu oynat",
-    "cannotPreviewHevc": "Tarayıcın bu videoyu önizleyemiyor; bu HEVC/H.265 kliplerde (ör. iPhone “Yüksek Verimlilik” kayıtları) sık görülür. Sorun değil: yine de yüklenecek ve herkesin oynatabilmesi için dönüştürülecek."
+    "cannotPreviewHevc": "Tarayıcın bu HEVC klibi önizleyemiyor. Yine de yüklenecek ve herkes için oynayacak."
   },
   "rc": {
     "title": "Yeterli Resource Credits yok",
@@ -58,8 +58,10 @@
   },
   "progress": {
     "uploadedFinishDetails": "Video yüklendi; yayınlamak için ayrıntıları tamamla.",
+    "uploaded": "Yüklendi",
+    "uploading": "Yükleniyor",
     "backgroundFailed": "Arka plandaki yükleme tamamlanmadı; yayınladığında yeniden denenecek.",
-    "uploadingPct": "Videon yükleniyor… %{{pct}}",
+    "uploadingPct": "Yükleniyor · %{{pct}}",
     "methodReliable": "Güvenilir yükleme",
     "methodResumable": "Devam ettirilebilir yükleme",
     "attempt": "deneme {{attempt}}/{{attempts}}",
@@ -78,7 +80,7 @@
     "startingUpload": "Yükleme başlatılıyor…",
     "tryingSingleRequest": "Son bir yöntem deneniyor: tek istekte gönderiliyor…",
     "stillStuck": "Hâlâ takılı; son bir yükleme yöntemi deneniyor.",
-    "patchBlockedSwitching": "Ağın devam ettirilebilir yüklemeyi engelledi; daha uyumlu bir yönteme geçiliyor.",
+    "patchBlockedSwitching": "Ağın devam ettirilebilir yüklemeyi engelledi, bu yüzden daha uyumlu bir yönteme geçiyoruz.",
     "switchingMethod": "Yükleme yöntemi değiştiriliyor…",
     "uploadingBackground": "Video arka planda yükleniyor…",
     "phase": {
@@ -107,7 +109,7 @@
       "frame": "Kadraj",
       "text": "Metin",
       "pickFrame": "Kare seç",
-      "stickers": "Çıkartmalar"
+      "stickers": "Çıkartma"
     },
     "frame": {
       "zoom": "Yakınlaştır",
@@ -161,8 +163,9 @@
     "editor": {
       "open": "Küçük resim düzenleyici",
       "openHint": "Metin, çıkartma, yakınlaştırma, herhangi bir kare",
-      "title": "Küçük resim düzenleyici",
+      "title": "Küçük resim",
       "done": "Bitti",
+      "useThumbnail": "Küçük resmi kullan",
       "sources": "Başlangıç görselleri",
       "pickPrompt": "Videondan bir kare seç",
       "download": "İndir",
@@ -199,7 +202,7 @@
     "invalidVideo": "Lütfen geçerli bir video dosyası seç",
     "tooLarge": "Video çok büyük. İzin verilen en büyük boyut 5GB.",
     "shortTooLong": "Shorts en fazla {{max}} olmalı. Videon {{seconds}} sn.",
-    "shortNotVertical": "Shorts dikey (portre) formatta çekilmeli. Videon yatay görünüyor.",
+    "shortNotVertical": "Shorts dikey olmalı. Bu video yatay görünüyor.",
     "thumbnailGenFailed": "Bu dosya için otomatik küçük resim oluşturulamadı; bir sonraki adımda kendininkini yükleyebilirsin.",
     "processFailed": "Video işlenemedi.",
     "selectFirst": "Lütfen önce bir video dosyası seç.",
@@ -215,9 +218,9 @@
     "backgroundInfo": "Bilgi: Ayrıntılar adımına geldiğinde videon arka planda yüklenmeye başlar.",
     "noRc": "Hesabında şu an gönderi yayınlamak için yeterli <b>Resource Credits</b> yok.",
     "whyCantUpload": "Neden yükleyemiyorum?",
-    "needsAuth": "Yüklemek için <b>@threespeak</b> hesabının senin adına paylaşım yapmasına izin ver.",
+    "needsAuth": "Yüklemek için <b>@threespeak</b> hesabının senin adına paylaşım yapmasına izin ver. Bunu yalnızca bir kez yaparsın.",
     "authorizing": "Yetkilendiriliyor…",
-    "authorize": "@threespeak'i yetkilendir",
+    "authorize": "Yetkilendir",
     "selectVideo": "Video Seç",
     "selfieTeleprompter": "Selfie prompter",
     "beta": "beta",
@@ -226,7 +229,7 @@
     "replace": "Videoyu Değiştir",
     "editVideo": "Bu videoyu düzenle",
     "asStory": "24 saatlik hikâye olarak paylaş",
-    "asStoryHint": "Shorts akışının başında yer alır ve takipçilerin bildirim alır. Yayındayken onu hâlâ Shorts olarak tutabilirsin."
+    "asStoryHint": "Shorts akışının başında yer alır ve takipçilerine bildirim gider. Yayındayken onu yine de Short olarak tutabilirsin."
   },
   "details": {
     "guests": {
@@ -282,24 +285,24 @@
       "none": "Yok"
     },
     "remix": {
-      "label": "Remix/Klibe İzin Ver",
+      "label": "Remix ve klibe izin ver",
       "info": "Başkalarının bu videodan remix ve klip oluşturmasına izin ver. Orijinal yazar olarak gösterilirsin ve lehtar olarak en az %5 alırsın.",
-      "hint": "Başkaları bunu remixleyebilsin."
+      "hint": "Her remixten en az %5 alırsın"
     },
     "nsfw": {
       "label": "NSFW olarak işaretle",
       "info": "Bu videoyu yetişkin içerik olarak işaretler. NSFW'yi açmamış izleyiciler için akışlardan ve aramadan gizlenir ve Hive genelinde <code>nsfw</code> olarak etiketlenir.",
-      "hint": "Yetişkin içerik."
+      "hint": "İzleyici NSFW'ye izin vermediyse gizlenir"
     },
     "addToBlog": {
       "label": "Bloguma ekle",
-      "hint": "Blogunda ve takipçilerinin akışında göster.",
+      "hint": "Takipçilerin akışında görsün diye reblog yapar",
       "info": "3Speak her videoyu bir toplulukta yayınlar ve Hive, sen paylaşmadıkça topluluk gönderilerini blogunda ve takipçilerinin akışında göstermez. Bu açıkken 3Speak, videoyu yayınladıktan hemen sonra bloguna paylaşır (reblog)."
     },
     "ads": {
       "label": "Bu videoda reklamlar",
       "info": "Hesabında reklamlar açık, bu yüzden burada kapatmadığın sürece bu videoda da reklam gösterilir. Bu yalnızca bu videoyu etkiler; diğer videoların ve hesap ayarın aynı kalır.",
-      "hintOn": "Bu videoda reklam gösterilebilir.",
+      "hintOn": "Yalnızca bu video, hesap ayarın aynı kalır",
       "hintOff": "Bu videoda reklam yok."
     },
     "rolls": {
@@ -313,21 +316,32 @@
       "info": "Bu videoyu şifreler, böylece yalnızca 3Speak Pro aboneleri oynatabilir. Yanında <b>10 saniyelik şifresiz bir önizleme</b> yayınlanır, böylece gönderi Hive'ın her yerinde yine bir fragman gösterir. Başlığın, açıklaman ve etiketlerin sıradan Hive gönderi içeriğidir ve <b>şifrelenmez</b>; yalnızca video şifrelenir. <b>Bu, yüklemeden sonra değiştirilemez.</b>",
       "withGuests_one": "Pro aboneleri + {{count}} misafir.",
       "withGuests_other": "Pro aboneleri + {{count}} misafir.",
-      "hint": "Yalnızca Pro aboneleri."
+      "hint": "Pro aboneleri için şifrelenir. Yüklemeden sonra değiştirilemez."
     },
     "trailer": {
       "label": "Kanal fragmanı",
       "info": "Profilinin <b>Genel Bakış</b> sekmesinin en üstünde otomatik oynar ve daha önce ayarladığın fragmanın yerini alır.",
-      "hint": "Profilinde otomatik oynar."
+      "hint": "Profilinin en üstünde otomatik oynar"
     },
     "schedule": {
       "label": "Bu gönderiyi planla",
       "info": "Gönderiyi sıraya alır ve seçtiğin zamanda, şu andan en az 15 dakika sonra ve en fazla 90 gün içinde otomatik olarak yayınlar. Senin adına @threespeak tarafından yayınlanır, bu yüzden bunu bir kez yetkilendirmen istenecek.",
       "immediately": "Hemen yayınla.",
       "changeTime": "Zamanı değiştir",
-      "note": "Şu andan en az 15 dakika sonra, en fazla 90 gün. Senin adına @threespeak tarafından otomatik paylaşılır; bunu bir kez yetkilendirmen istenecek."
+      "note": "Şu andan en az 15 dakika sonra, en fazla 90 gün. Senin adına @threespeak tarafından otomatik paylaşılır; bunu bir kez yetkilendirmen istenecek.",
+      "short": "Planla",
+      "publishLater": "Daha sonra yayınla",
+      "scheduleFor": "{{when}} için planla",
+      "publishNow": "Hemen yayınla"
     },
-    "proceed": "Devam"
+    "proceed": "Devam",
+    "nextStep": "Sonraki: {{step}}",
+    "tagsCount_one": "{{count}} etiket",
+    "tagsCount_other": "{{count}} etiket",
+    "shareRewards": "Ödülleri paylaş",
+    "shareRewardsSub": "Ortak çalışanlarla bölüş",
+    "advanced": "NSFW / ödeme",
+    "advancedSub": "Gelişmiş"
   },
   "review": {
     "payoutDeclined": "Reddedildi (ödüller yakılır)",
@@ -344,20 +358,21 @@
     "editPost": "Gönderiyi Düzenle",
     "watchAdToPublish": "Yayınlamak için reklamı izle",
     "watchSponsorFirst": "Önce sponsor mesajını izle",
+    "gateNote": "Yeni hesaplar yayınlamadan önce kısa bir sponsor mesajı izler. Bu, ücretsiz hesabının bedelini karşılar.",
     "postShort": "Shorts Paylaş",
     "postStory": "Hikâyeyi paylaş",
     "postVideo": "Video Paylaş",
     "backToTimeline": "Zaman çizelgesine dön"
   },
   "publishing": {
-    "titleShort": "Shorts Yayınlanıyor",
+    "titleShort": "Short yayınlanıyor",
     "titleStory": "Hikâye yayınlanıyor",
-    "titleVideo": "Video Yayınlanıyor",
-    "subtitle": "İçeriğini işlerken lütfen bekle...",
+    "titleVideo": "Video yayınlanıyor",
+    "subtitle": "Bitene kadar lütfen bu sayfada kal.",
     "starting": "Başlatılıyor...",
     "stayOnPage": "Lütfen yayınlama bitene kadar bu sayfada kal.",
-    "activityLog": "Etkinlik Günlüğü",
-    "support": "Destek için <discordLink>Discord</discordLink> üzerinden bize ulaş",
+    "activityLog": "Etkinlik günlüğü",
+    "support": "Takıldın mı? <discordLink>Discord</discordLink> üzerinden bize ulaş.",
     "finishingUpload": "Video yüklemesi tamamlanıyor…",
     "preparing": "Yayınlama hazırlanıyor...",
     "finalizing": "Son işlemler yapılıyor…",
@@ -412,17 +427,17 @@
     }
   },
   "done": {
-    "title": "Yükleme Tamamlandı!",
+    "title": "Yükleme tamamlandı!",
     "shortPublished": "Shorts videon 3Speak'te yayınlandı. Profilinde görünmesi yaklaşık 5 dakika sürer.",
     "storyPublished": "Hikâyen önümüzdeki 24 saat boyunca 3Speak'te yayında.",
-    "videoPublished": "Videon yayınlandı!<br/>Şu an arka planda kodlanıyor, bu birkaç dakika sürebilir.",
-    "promote": "Bu videoyu öne çıkar",
-    "goToProfile": "Profilime Git →",
-    "feedback": "Yüklemen nasıl geçti"
+    "videoPublished": "Videon yayınlandı. Arka planda kodlanıyor, bu birkaç dakika sürebilir.",
+    "promote": "Öne çıkar",
+    "goToProfile": "Profilim",
+    "feedback": "Yüklemen nasıl geçti?"
   },
   "record": {
     "speechErrors": {
-      "network": "Konuşma servisine ulaşılamıyor; tanıma için internet bağlantısı gerekir (Chrome sesi yazıya dökmek için Google'a gönderir).",
+      "network": "Sesle kaydırma için internet gerekir. Metni elle kaydır.",
       "audioCapture": "Tanımaya hiç ses ulaşmadı; mikrofon meşgul olabilir. Kulaklıklı mikrofon dene.",
       "notAllowed": "Konuşma tanıma için mikrofon izni engellenmiş.",
       "generic": "Konuşma tanıma hatası: {{err}}"
@@ -438,9 +453,10 @@
     "portrait": "Dikey",
     "landscape": "Yatay",
     "autoDetect": "Otomatik algıla ({{lang}})",
+    "layout": "Düzen",
     "presets": {
       "frontcam": "Ön kamera",
-      "frontcamTitle": "Selfie lensinin altında küçük bir şerit; okuduğun en az böyle anlaşılır",
+      "frontcamTitle": "Lensin altında küçük şerit",
       "max": "En büyük boyut",
       "maxTitle": "Uzaktan okumak için büyük yazı",
       "top": "Üst satırlar",
@@ -463,11 +479,11 @@
     "startingMic": "Mikrofon başlatılıyor…",
     "leave": {
       "title": "Kameradan çıkılsın mı?",
-      "sub": "Metnine dön, burada kal ya da kapat (hiçbir şey kaydedilmez).",
+      "sub": "Henüz hiçbir şey kaydedilmedi.",
       "backToScript": "Metne dön",
       "stay": "Kal"
     },
-    "experimentalTitle": "Deneysel prompter",
+    "experimentalTitle": "Teleprompter",
     "scriptPlaceholder": "Metnini buraya yaz veya yapıştır. Kayıt sırasında sen sesli okudukça otomatik kayar.",
     "orientation": "Yön",
     "continueToCamera": "Kameraya geç",
@@ -480,14 +496,14 @@
     "cameraN": "Kamera {{n}}",
     "flipRotationTitle": "Görüntü ters ise 90° döndürmeyi çevir",
     "flipRotation": "Döndürmeyi çevir",
-    "stopVoiceTest": "Ses testini durdur",
+    "stopVoiceTest": "Testi durdur",
     "testVoice": "Sesi test et",
     "stopRecording": "Kaydı durdur",
     "startRecording": "Kaydı başlat",
     "script": "Metin",
     "reRecord": "Yeniden kaydet",
     "preparing": "Hazırlanıyor…",
-    "useThisVideo": "Bu videoyu kullan"
+    "useThisVideo": "Videoyu kullan"
   },
   "errors": {
     "patchBlocked": "PATCH engellenmiş görünüyor (hiçbir parça onaylanmadı)",
@@ -593,6 +609,13 @@
     "streakOn_other": "{{count}} günlük hikâye serisindesin.",
     "streakNext_one": "Bununla hikâye serin {{count}} güne çıkıyor.",
     "streakNext_other": "Bununla hikâye serin {{count}} güne çıkıyor.",
-    "streakStart": "Seri oluşturmak için her gün bir hikâye paylaş."
+    "streakStart": "Seri oluşturmak için her gün bir hikâye paylaş.",
+    "keepGoing": "Devam ettirmek için her gün bir hikâye paylaş"
+  },
+  "originalOnly": {
+    "title": "Yalnızca kendi ürettiğin içeriği yükle.",
+    "body": "3Speak özgün içerik içindir. Telif hakkıyla korunan içerik ödül kazanmamalı; bu yüzden ya yükleme ya da Ödüller ayarını \"Ödemeyi reddet\" yap.",
+    "decline": "Ödemeyi reddet",
+    "declined": "Ödeme reddedildi"
   }
 }

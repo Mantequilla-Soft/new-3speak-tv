@@ -37,7 +37,7 @@
   },
   "directory": {
     "title": "Badges",
-    "intro": "Les badges sont des distinctions <b>que d'autres vous décernent</b> sur Hive, pour des événements, des contributions ou des étapes franchies. Vous ne pouvez pas en rejoindre un : quelqu'un doit vous le décerner. Ouvrez un badge pour voir ce que ses détenteurs publient ici.",
+    "intro": "Les badges sont des distinctions <b>que d'autres vous décernent</b> sur Hive, pour des événements, des contributions ou des étapes franchies. Vous ne pouvez pas en rejoindre un : quelqu'un vous le décerne.",
     "searchPlaceholder": "Rechercher des badges...",
     "sort": {
       "recipients": "Détenteurs",
@@ -62,6 +62,7 @@
     "awarding": "Attribution…",
     "held": "Détenu",
     "award": "Décerner",
+    "awardNamed": "Décerner « {{title}} »",
     "note": "Le badge suit la personne sur Hive : c'est ce que signifie le détenir. Vous pouvez le lui retirer depuis la page du badge."
   },
   "hive": {
@@ -91,9 +92,10 @@
     "unclaimed": "Non réclamé",
     "noActivity": "Aucune activité sur cette période pour l'instant",
     "otherTopics": "Autres",
-    "title": "Classements",
-    "subtitle": "{{blurb}} — les meilleurs créateurs sur 3Speak.",
-    "subtitleTopic": "{{blurb}} — les meilleurs créateurs en {{topic}}.",
+    "title": "Classement",
+    "subtitle": "{{blurb}} : les meilleurs créateurs sur 3Speak.",
+    "explain": "{{label}} : {{blurb}}.",
+    "subtitleTopic": "{{blurb}} : les meilleurs créateurs en {{topic}}.",
     "allTopics": "Tous les sujets",
     "finding": "Recherche de @{{user}} dans ce classement…",
     "notInTop": "@{{user}} n'est pas dans le top {{n}} de ce classement.",

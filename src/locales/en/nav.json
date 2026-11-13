@@ -7,7 +7,8 @@
     "feeds": "Feeds",
     "groups": "Groups",
     "audio": "Audio",
-    "login": "Login"
+    "login": "Login",
+    "you": "You"
   },
   "installApp": "Install App",
   "iosInstallHint": "Tap <b>Share</b> then <b>Add to Home Screen</b>",
@@ -28,7 +29,9 @@
     "shortsTooltip": "Short vertical videos, one after another",
     "audioTooltip": "Podcasts, music and other audio published on 3Speak",
     "groupsTooltip": "Communities you can join, and badges people are awarded",
-    "rankingsTooltip": "The creators earning and being watched most right now"
+    "rankingsTooltip": "The creators earning and being watched most right now",
+    "live": "Live",
+    "liveTooltip": "Streams and rooms that are live right now"
   },
   "aboutLink": "About 3Speak",
   "faqLink": "FAQ",
@@ -38,23 +41,31 @@
     "myChannelAria": "My channel",
     "vpTooltip": "Voting Power: how much weight your next vote carries",
     "rcTooltip": "Resource Credits: what your actions on Hive cost",
+    "votingPower": "Voting power",
+    "resourceCredits": "Resource credits",
     "myChannel": "My Channel",
     "publishBacklog": "Publish backlog",
     "analytics": "Analytics",
     "inviteLinks": "Invite links",
     "iosInstallToast": "Tap the Share button in Safari, then \"Add to Home Screen\"",
     "changeAccount": "Change account",
-    "logout": "Logout",
+    "logout": "Log out",
     "onDiscord": "3Speak on Discord",
     "onX": "3Speak on X",
-    "onTelegram": "3Speak on Telegram"
+    "onTelegram": "3Speak on Telegram",
+    "switch": "Switch",
+    "tiles": {
+      "channel": "Channel",
+      "history": "History"
+    },
+    "darkTheme": "Dark theme"
   },
   "notifications": {
     "pushOff": "Notifications turned off for this device",
-    "pushOn": "You will be notified when creators you follow post",
+    "pushOn": "You will be notified when creators you follow post.",
     "pushFailed": "Could not change notification settings",
     "ariaUnread": "Notifications ({{count}} unread)",
-    "pushBlocked": "Notifications are blocked for this site in your browser settings",
+    "pushBlocked": "Notifications are blocked for this site in your browser settings.",
     "pushNoWorker": "This build has no service worker, so notifications cannot be registered here",
     "pushStop": "Stop notifying this device",
     "pushStart": "Get notified when creators you follow post",
@@ -74,8 +85,8 @@
       "followMany_other": "@{{a}} and {{count}} others followed you",
       "other": "{{count}} {{type}} notifications",
       "typeCount": "{{count}} {{type}}s",
-      "includesWhale": "Includes 🐋 whale account(s)",
-      "includesOrca": "Includes 🐬 orca account(s)",
+      "includesWhale": "Includes 🐋 whale accounts",
+      "includesOrca": "Includes 🐬 orca accounts",
       "andMore": "and {{count}} more…"
     },
     "stories": {
@@ -91,6 +102,13 @@
       "heading": "New episodes of podcasts you follow",
       "newEpisode": "New episode of {{show}}",
       "type": "Podcast"
+    },
+    "tabs": {
+      "all": "All",
+      "mentions": "Mentions",
+      "follows": "Follows",
+      "uploads": "Uploads",
+      "pods": "Pods"
     }
   },
   "search": {
@@ -128,6 +146,17 @@
     "views_other": "{{formatted}} views",
     "tags": "Tags",
     "titles": "Titles",
-    "placeholder": "Search..."
-  }
+    "placeholder": "Search...",
+    "recent": "Recent",
+    "allResultsFor": "All results for “{{term}}”",
+    "kinds": {
+      "creator": "Creator",
+      "community": "Community",
+      "video": "Video",
+      "short": "Short",
+      "audio": "Audio",
+      "playlist": "Playlist"
+    }
+  },
+  "create": "Create"
 }

@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
-import { MdPersonAdd, MdContentCopy, MdCheck } from 'react-icons/md';
 import HiveAvatar from '../../components/HiveAvatar/HiveAvatar';
 import { useAppStore } from '../../lib/store';
 import { fetchMyInviteLinks, fetchInvitePeople } from '../../lib/referralLinks';
 import { BUTRAUTH_URL } from '../../utils/config';
 import { useTranslation, Trans } from 'react-i18next';
+import { Button, Card, Icon } from '../../components/v2/ui';
 import './Invite.scss';
 
 /**
- * /invite-links, the screen for people 3Speak made referrers.
+ * /invite-links, the screen for people 3Speak made referrers (42c).
  *
  * Lists the invite links 3Speak gave the signed-in account, with this month's
  * usage. Everything comes from Butter Auth through the SDK (server/index.cjs):
@@ -26,8 +26,14 @@ const STATE_LABEL_KEY = {
   warmup: 'auth.invite.state.warmup',
   signed_up: 'auth.invite.state.signedUp',
 };
+// Account made (or being made) through the link = cyan; the rest muted.
+const STATE_TONE = { fast_track: 'cyan', creating: 'cyan' };
 
-const fmtDate = (d) => (d ? new Date(d).toLocaleDateString() : '');
+// "1 December" (42c, STYLE_GUIDE §10: dates as day and month), in the UI language.
+const fmtDate = (d, lang) => {
+  if (!d) return '';
+  try { return new Date(d).toLocaleDateString(lang || undefined, { day: 'numeric', month: 'long' }); } catch { return new Date(d).toLocaleDateString(); }
+};
 
 function CopyButton({ text }) {
   const { t } = useTranslation();
@@ -40,9 +46,9 @@ function CopyButton({ text }) {
     } catch { /* the link is selectable text as a fallback */ }
   };
   return (
-    <button type="button" className="invite-btn small" onClick={copy}>
-      {copied ? <><MdCheck /> {t('common.actions.copied')}</> : <><MdContentCopy /> {t('common.actions.copy')}</>}
-    </button>
+    <Button variant="secondary" size={40} onClick={copy}>
+      {copied ? t('common.actions.copied') : t('common.actions.copy')}
+    </Button>
   );
 }
 
@@ -60,29 +66,32 @@ function People({ linkId }) {
   if (error) return <p className="invite-muted">{error}</p>;
   if (people === null) return <p className="invite-muted">{t('common.status.loading')}</p>;
   if (!people.length) return <p className="invite-muted">{t('auth.invite.nobodyYet')}</p>;
+  // 42c: a square-ish face, the name, the state as a small lowercase pill.
   return (
     <ul className="invite-people">
       {people.map((p, i) => (
-        <li key={i}>
+        <li key={i} title={fmtDate(p.invitedAt)}>
           {p.name ? <HiveAvatar username={p.name} size="small" className="invite-people-avatar" /> : <span className="invite-people-avatar empty" />}
-          <span className="invite-people-name">{p.name ? `@${p.name}` : t('auth.invite.noNameYet')}</span>
-          <span className="invite-muted">{fmtDate(p.invitedAt)}</span>
-          <span className={`invite-state${p.state === 'fast_track' ? ' is-fast' : ''}`}>{STATE_LABEL_KEY[p.state] ? t(STATE_LABEL_KEY[p.state]) : p.state}</span>
+          <span className={`invite-people-name${p.name ? '' : ' is-pending'}`}>{p.name || t('auth.invite.noNameYet')}</span>
+          <span className={`invite-state is-${STATE_TONE[p.state] || 'muted'}`}>
+            {STATE_LABEL_KEY[p.state] ? t(STATE_LABEL_KEY[p.state]) : p.state}
+          </span>
         </li>
       ))}
     </ul>
   );
 }
 
-function statusText(link, t) {
-  if (link.status === 'paused') return t('auth.invite.status.pausedBy3speak');
-  if (link.pausedByReferrer) return t('auth.invite.status.pausedByYou');
-  if (link.leftThisMonth <= 0) return t('auth.invite.status.usedUp');
+// A paused or used-up link: icon + what happened (42c).
+function linkStatus(link, t) {
+  if (link.status === 'paused') return { icon: 'block', tone: 'accent', text: t('auth.invite.status.pausedBy3speak') };
+  if (link.pausedByReferrer) return { icon: 'pause_circle', tone: 'muted', text: t('auth.invite.status.pausedByYou') };
+  if (link.leftThisMonth <= 0) return { icon: 'event_busy', tone: 'muted', text: t('auth.invite.status.usedUp') };
   return null;
 }
 
 export default function InviteLinks({ openLoginModal }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const user = useAppStore((s) => s.user);
   const [data, setData] = useState(null);
   const [error, setError] = useState('');
@@ -103,72 +112,94 @@ export default function InviteLinks({ openLoginModal }) {
   }, [user, t]);
 
   const links = data?.links || [];
+  const statuses = links.map((l) => ({ link: l, st: linkStatus(l, t) })).filter((x) => x.st);
+  const empty = !!user && !!data && links.length === 0;
+  // Paused, used-up and "no links yet" sit in a column of their own (42c).
+  const hasAside = statuses.length > 0 || empty;
 
   return (
-    <div className="invite-page wide">
-      <div className="invite-header">
-        <MdPersonAdd className="invite-header-icon" />
-        <div>
-          <h1>{t('auth.invite.title')}</h1>
-          <p>{t('auth.invite.subtitle')}</p>
-        </div>
-      </div>
+    <div className={`invite-page${hasAside ? ' has-aside' : ''}`}>
+      <header className="invite-header">
+        <h1>{t('auth.invite.title')}</h1>
+        <p>{t('auth.invite.subtitle')}</p>
+      </header>
 
-      {!user && (
-        <div className="invite-card">
-          <p className="invite-text">{t('auth.invite.signInPrompt')}</p>
-          <div className="invite-actions">
-            <button type="button" className="invite-btn primary" onClick={() => openLoginModal?.('login')}>{t('common.actions.login')}</button>
-          </div>
-        </div>
-      )}
+      <div className="invite-main">
+        {!user && (
+          <Card className="invite-card">
+            <p className="invite-text">{t('auth.invite.signInPrompt')}</p>
+            <div className="invite-actions">
+              <Button variant="primary" icon="login" onClick={() => openLoginModal?.('login')}>{t('common.actions.login')}</Button>
+            </div>
+          </Card>
+        )}
 
-      {user && error && <p className="invite-muted">{error}</p>}
-      {user && !error && data === null && <p className="invite-muted">{t('common.status.loading')}</p>}
-      {user && data && links.length === 0 && (
-        <div className="invite-card">
-          <p className="invite-text">
-            {t('auth.invite.noLinks')}
-          </p>
-        </div>
-      )}
+        {user && error && (
+          <div className="v2-failure invite-card" role="alert"><b>{error}</b></div>
+        )}
+        {user && !error && data === null && (
+          <div className="v2-skeleton invite-skeleton" aria-label={t('common.status.loading')} />
+        )}
 
-      {links.map((l) => {
-        const pct = l.limit > 0 ? Math.min(100, (l.usedThisMonth / l.limit) * 100) : 100;
-        const st = statusText(l, t);
-        return (
-          <div key={l.id} className="invite-card link">
+        {links.map((l) => (
+          <section key={l.id} className="invite-card link">
             <div className="invite-link-row">
-              <input type="text" readOnly value={l.url} onFocus={(e) => e.target.select()} aria-label={t('auth.invite.linkAria')} />
+              <input type="text" className="v2-input" readOnly value={l.url.replace(/^https?:\/\//, '')} onFocus={(e) => e.target.select()} aria-label={t('auth.invite.linkAria')} />
               <CopyButton text={l.url} />
             </div>
 
             <div className="invite-stats">
-              <div className="invite-stat"><strong>{l.leftThisMonth}</strong><span>{t('auth.invite.stats.left')}</span></div>
-              <div className="invite-stat"><strong>{l.usedThisMonth}</strong><span>{t('auth.invite.stats.usedOf', { limit: l.limit })}</span></div>
-              <div className="invite-stat"><strong>{l.accountsCreated}</strong><span>{t('auth.invite.stats.accountsCreated')}</span></div>
-              <div className="invite-stat"><strong>{l.peopleInvited}</strong><span>{t('auth.invite.stats.peopleInvited')}</span></div>
+              <div className="invite-stat"><b>{l.leftThisMonth}</b><span>{t('auth.invite.stats.left')}</span></div>
+              <div className="invite-stat"><b>{l.usedThisMonth}</b><span>{t('auth.invite.stats.usedOf', { limit: l.limit })}</span></div>
+              <div className="invite-stat"><b>{l.accountsCreated}</b><span>{t('auth.invite.stats.accountsCreated')}</span></div>
+              <div className="invite-stat"><b>{l.peopleInvited}</b><span>{t('auth.invite.stats.peopleInvited')}</span></div>
             </div>
-            <div className="invite-meter" aria-hidden="true"><span style={{ width: `${pct}%` }} /></div>
-            <p className="invite-muted">
-              {st ? `${st} · ` : ''}{t('auth.invite.resetsNote', { date: fmtDate(l.resetsAt) })}
-            </p>
+            <p className="invite-muted">{t('auth.invite.resetsNote', { date: fmtDate(l.resetsAt, i18n.language) })}</p>
 
-            <button type="button" className="invite-btn small" onClick={() => setOpen(open === l.id ? null : l.id)}>
-              {open === l.id ? t('auth.invite.hidePeople') : t('auth.invite.whoJoined')}
+            {/* "WHO JOINED · Hide people": the eyebrow is the switch */}
+            <button
+              type="button"
+              className="invite-who"
+              aria-expanded={open === l.id}
+              onClick={() => setOpen(open === l.id ? null : l.id)}
+            >
+              <span className="v2-eyebrow">{t('auth.invite.whoJoined')}</span>
+              {open === l.id
+                ? <span className="invite-who__hide">· {t('auth.invite.hidePeople')}</span>
+                : <Icon name="expand_more" size={16} />}
             </button>
             {open === l.id && <People linkId={l.id} />}
-          </div>
-        );
-      })}
+          </section>
+        ))}
 
-      {user && links.length > 0 && (
-        <p className="invite-muted">
-          <Trans
-            i18nKey="auth.invite.dashboardNote"
-            components={{ dashLink: <a href={`${BUTRAUTH_URL}/dashboard?tab=referrals`} target="_blank" rel="noopener noreferrer" /> }}
-          />
-        </p>
+        {user && links.length > 0 && (
+          <p className="invite-muted invite-dash">
+            <Trans
+              i18nKey="auth.invite.dashboardNote"
+              components={{ dashLink: <a href={`${BUTRAUTH_URL}/dashboard?tab=referrals`} target="_blank" rel="noopener noreferrer" /> }}
+            />
+          </p>
+        )}
+      </div>
+
+      {hasAside && (
+        <aside className="invite-aside">
+          {statuses.map(({ link, st }) => (
+            <div key={link.id} className={`invite-status is-${st.tone}`}>
+              <Icon name={st.icon} size={20} />
+              <span className="invite-status__text">
+                <b>{st.text}</b>
+                {links.length > 1 && <span className="invite-status__link">{link.url.replace(/^https?:\/\//, '')}</span>}
+              </span>
+            </div>
+          ))}
+          {empty && (
+            <div className="invite-none">
+              <b>{t('auth.invite.noLinksTitle')}</b>
+              <p>{t('auth.invite.noLinksBody')}</p>
+            </div>
+          )}
+        </aside>
       )}
     </div>
   );

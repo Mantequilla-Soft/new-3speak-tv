@@ -1,330 +1,186 @@
-@use "../mixins.scss" as *;
-$primary-blue: #1eaedb;
-$primary-red: #ea384c;
-$white: #ffffff;
-$light-gray: #f8f9fa;
-$gray: #e9ecef;
-$dark-gray: #6c757d;
-$black: #212529;
+@use "../styles/v2" as v2;
+
+// Edit video page (33b): a main column (details + preview) and a 480 side
+// panel (visibility, switches, Promote + Save). Under 1280 the panel stacks.
 .edit-page {
-  background-color: $white;
-  border-radius: 10px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  margin-bottom: 30px;
-  animation: fade-in 0.4s ease-out;
-  padding: 10px;
-  [data-theme="dark"] & {
-    background: #3a3939c9;
-    border: solid 1px rgba(128, 128, 128, 0.144);
+  max-width: var(--content-max);
+  margin: 0 auto;
+  // The app column (.container, App.css) already gives the page padding.
+  padding: 0;
+  color: var(--text);
+
+  .edit-form {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 480px;
+    gap: 20px;
+    align-items: start;
+
+    @include v2.below-wide { grid-template-columns: minmax(0, 1fr) 400px; }
+    @media (max-width: 1023px) { grid-template-columns: minmax(0, 1fr); }
   }
 
-  .header {
-    padding: 20px;
-    border-bottom: 1px solid $gray;
-
-    h1 {
-      font-size: 24px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      color: $black;
-      [data-theme="dark"] & {
-        color: #ffffff;
-      }
-
-      .edit-icon {
-        color: $primary-red;
-      }
-    }
-  }
-
-  .content {
-    //   display: grid;
-    //   grid-template-columns: 1fr 1fr;
+  &__main {
     display: flex;
-    gap: 30px;
-    margin-top: 20px;
+    flex-direction: column;
+    gap: 12px;
+    min-width: 0;
+  }
+
+  .header h1 {
+    @include v2.text(heading-lg);
+    margin: 0 0 4px;
+  }
+
+  // Section card: a 4px bar in the tone, a title, then the content.
+  .edit-sec {
+    @include v2.card;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    min-width: 0;
+  }
+
+  .edit-sec__head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    h2 { @include v2.text(title-sm); margin: 0; flex: 1; }
+  }
+
+  .edit-sec__bar {
+    width: 4px;
+    height: 20px;
+    border-radius: var(--r-bar);
+    background: var(--accent);
+    flex: none;
+
+    &.is-cyan { background: var(--cyan); }
+  }
+
+  .form-group { gap: 6px; }
+
+  // Preview: thumbnail beside the rendered title, description and tags.
+  .video-preview {
+    display: grid;
+    grid-template-columns: 200px minmax(0, 1fr);
+    gap: 14px;
+    align-items: start;
+
+    @include v2.mobile { grid-template-columns: minmax(0, 1fr); }
+  }
+
+  .thumbnail {
+    aspect-ratio: 16 / 9;
     width: 100%;
 
-    @include respond(phone) {
-      flex-direction: column;
-    }
-  }
-
-  .form-container {
-    animation: slide-in-right 0.3s ease-out;
-    width: 50%;
-    @include respond(phone) {
-      width: 100%;
-    }
-  }
-}
-
-.edit-form {
-  .form-group {
-    margin-bottom: 20px;
-    &.tap-sp {
-      margin-top: 60px;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 8px;
-      font-weight: 500;
-      color: $dark-gray;
-      [data-theme="dark"] & {
-        color: #ffffff;
-      }
-    }
-
-    .form-input,
-    .form-textarea {
-      width: 100%;
-      border: 1px solid $gray;
-      border-radius: 6px;
-      transition: border-color 0.3s;
-
-      &:focus {
-        outline: none;
-        border-color: $primary-red;
-        box-shadow: 0 0 0 2px rgba($primary-red, 0.1);
-      }
-    }
-
-    .form-input {
-      height: 30px;
-      padding-left: 5px;
-    }
-
-    .form-textarea {
-      height: 400px;
-      resize: vertical; // Optional: allows users to resize textarea
-      padding: 5px;
-      @include respond(phone) {
-        height: 200px;
-      }
-    }
-  }
-
-  .form-actions {
-    display: flex;
-    justify-content: flex-start;
-    margin-top: 30px;
-  }
-
-
-  .preview {
-    animation: scale-in 0.4s ease-out;
-    width: 50%;
-    @include respond(phone) {
-      width: 100%;
-    }
-
-    h2 {
-      margin-bottom: 20px;
-      font-size: 18px;
-      font-weight: 600;
-      color: $dark-gray;
-    }
-  }
-}
-.video-preview {
-  background-color: $white;
-  border: 1px solid $gray;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-        [data-theme="dark"] & {
-          background: #3a3939c9;
-          border: solid 1px rgba(128, 128, 128, 0.144);
-        }
-  .thumbnail {
-    // width: 70%;
-    height: 200px;
-    overflow: hidden;
-
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
+    @include v2.mobile { max-width: 260px; }
   }
 
   .content-pre {
-    padding: 15px;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
     .title {
-      font-size: 18px;
-      font-weight: 600;
-      margin-bottom: 10px;
-      color: $black;
-              [data-theme="dark"] & {
-          color: #fff;
-        }
+      @include v2.text(title-sm);
+      margin: 0;
+      overflow-wrap: anywhere;
     }
   }
 
-  // .meta {
-  //   display: flex;
-  //   justify-content: space-between;
-  //   align-items: center;
-  //   margin-bottom: 15px;
+  .markdown-view {
+    @include v2.text(body-sm);
+    color: var(--muted);
+    max-height: 240px;
+    @include v2.scroll-y;
+    overflow-wrap: anywhere;
 
-  //   .video-preview__date {
-  //     font-size: 14px;
-  //     color: $dark-gray;
-  //   }
-
-  //   .video-preview__status {
-  //     display: inline-block;
-  //     padding: 3px 10px;
-  //     font-size: 12px;
-  //     border-radius: 30px;
-  //     font-weight: 500;
-
-  //     &--published {
-  //       background-color: rgba($primary-red, 0.1);
-  //       color: $primary-red;
-  //     }
-
-  //     &--failed {
-  //       background-color: rgba($primary-red, 0.1);
-  //       color: $primary-red;
-  //     }
-  //   }
-  // }
-
-  .description {
-    margin-bottom: 15px;
-    font-size: 14px;
-    color: $dark-gray;
-    line-height: 1.5;
+    p { margin: 0 0 8px; }
+    img { max-width: 100%; height: auto; border-radius: var(--r-md); }
+    a { color: var(--cyan); }
   }
 
   .tags {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 5px;
+    gap: 4px;
 
     .tag {
-      display: inline-block;
-      padding: 4px 10px;
-      background-color: #1bbbeb5d;
-      border-radius: 20px;
-      font-size: 12px;
-      color: black;
+      display: inline-flex;
+      align-items: center;
+      height: 24px;
+      padding: 0 8px;
+      border-radius: var(--r-sm);
+      background: var(--surface-2);
+      @include v2.text(meta);
+      color: var(--text);
     }
   }
-}
 
-// Loading state
-.page-loading {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 400px;
-
-  .spinner {
-    width: 40px;
-    height: 40px;
-    border: 3px solid rgba($primary-red, 0.3);
-    border-radius: 50%;
-    border-top-color: $primary-red;
-    animation: spin 1s ease-in-out infinite;
-    margin-bottom: 15px;
-  }
-
-  p {
-    color: $dark-gray;
-  }
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-/* Listing (unlist / re-list) toggle */
-.edit-form .listing-toggle {
-  margin-top: 4px;
-}
-.listing-switch {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  width: 100%;
-  text-align: left;
-  background: var(--bg-secondary, #f3f3f3);
-  border: 1px solid var(--border-color, rgba(0, 0, 0, 0.12));
-  border-radius: 12px;
-  padding: 14px 16px;
-  cursor: pointer;
-  transition: border-color 0.15s ease, background 0.15s ease;
-
-  &:hover { border-color: var(--accent-primary, #e53935); }
-
-  &__track {
-    flex: 0 0 auto;
-    width: 44px;
-    height: 26px;
-    border-radius: 999px;
-    background: #9aa0a6; // OFF = neutral grey
-    position: relative;
-    transition: background 0.18s ease;
-  }
-  &__thumb {
-    position: absolute;
-    top: 3px;
-    left: 3px;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background: #fff;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
-    transition: transform 0.18s ease;
-  }
-  &__label {
+  // Side panel: surface, radius 28 on the open side like the design; its
+  // content scrolls, the actions stay at its foot.
+  &__side {
+    @include v2.card(28);
+    position: sticky;
+    top: calc(var(--topbar-h) + 16px);
     display: flex;
     flex-direction: column;
-    gap: 2px;
-    strong { font-size: 14px; font-weight: 700; color: var(--text-primary, #111); }
-    small { font-size: 12px; color: var(--text-secondary, #666); line-height: 1.35; }
+    max-height: calc(100vh - var(--topbar-h) - 32px);
+    max-height: calc(100dvh - var(--topbar-h) - 32px);
+    overflow: hidden;
+
+    @media (max-width: 1023px) {
+      position: static;
+      max-height: none;
+    }
   }
 
-  // ON = colored + thumb right (standard toggle)
-  &.is-on {
-    .listing-switch__track { background: #2e9e5b; }
-    .listing-switch__thumb { transform: translateX(18px); }
+  &__side-scroll {
+    flex: 1;
+    min-height: 0;
+    @include v2.scroll-y;
+    padding: 22px 22px 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    > .v2-eyebrow { margin: 8px 0 0; &:first-child { margin-top: 0; } }
+
+    @include v2.mobile { padding: 16px 16px 8px; }
   }
 
-  // NSFW: ON reads as a warning, not a positive.
-  &--danger.is-on .listing-switch__track { background: var(--accent-primary, #e53935); }
+  .edit-listing {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+
+    .v2-choice { min-height: 92px; }
+
+    @include v2.mobile { grid-template-columns: minmax(0, 1fr); .v2-choice { min-height: 0; } }
+  }
+
+  .form-actions {
+    flex: none;
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 8px;
+    padding: 16px 22px 22px;
+    border-top: 1px solid var(--border);
+
+    @include v2.mobile { padding: 12px 16px 16px; }
+  }
 }
 
-/* Promote button (edit page actions) */
-.edit-form .form-actions {
+.edit-loading {
   display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-.btn--promote {
-  display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: transparent;
-  border: 1px solid var(--accent-primary, #e53935);
-  color: var(--accent-primary, #e53935);
-  border-radius: 10px;
-  padding: 10px 16px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: background 0.15s ease, color 0.15s ease;
+  padding: var(--page-pad);
+  color: var(--muted);
 
-  &:hover {
-    background: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent);
-    border-color: var(--accent-primary, #e53935);
-    color: var(--accent-primary, #e53935);
-  }
+  .material-symbols-rounded { color: var(--cyan); }
+  p { margin: 0; }
 }

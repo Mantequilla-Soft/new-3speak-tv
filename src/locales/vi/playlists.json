@@ -22,6 +22,8 @@
     "noOtherPlaylists": "Bạn chưa có danh sách phát nào khác",
     "createFirst": "Tạo danh sách phát",
     "createNew": "Tạo danh sách phát mới",
+    "newPlaylist": "Danh sách phát mới",
+    "savedTo_other": "Đã lưu vào {{count}} danh sách phát",
     "name": "Tên",
     "namePlaceholder": "Danh sách phát tuyệt vời của tôi",
     "privacy": "Quyền riêng tư",
@@ -52,6 +54,7 @@
     "items_other": "{{count}} mục",
     "created": "Đã tạo {{when}}",
     "podcastFeed": "Nguồn podcast",
+    "playAll": "Phát tất cả",
     "podcastFeedTitle": "Theo dõi {{name}} trên mọi ứng dụng podcast (nguồn RSS)",
     "album": {
       "genre": "<strong>Thể loại:</strong> {{value}}",
@@ -90,12 +93,15 @@
     "creditsPlaceholder": "Sản xuất bởi…",
     "description": "Mô tả",
     "descriptionPlaceholder": "Giới thiệu album này (không bắt buộc)",
-    "filterCount_other": "{{shown}} / {{count}} mục"
+    "filterCount_other": "{{shown}} / {{count}} mục",
+    "shuffle": "Phát ngẫu nhiên"
   },
   "type": {
     "label": "Loại",
     "video": "Video",
     "audio": "Âm thanh",
+    "videoSub": "Video dài",
+    "audioSub": "Bản nhạc & podcast",
     "kindLabel": "Loại âm thanh nào?",
     "kinds": {
       "podcast": "Podcast",
@@ -103,5 +109,30 @@
       "voice": "Ghi chú giọng nói",
       "sounds": "Âm thanh khác"
     }
+  },
+  "feeds": {
+    "button": "Chương trình bên ngoài",
+    "title": "Chương trình bên ngoài",
+    "intro": "Thêm trọn bộ chương trình podcast từ bất kỳ đâu. Các tập của chúng xuất hiện trong danh sách phát này cạnh của bạn, mới nhất trước, và tập mới tự động được thêm.",
+    "searchLabel": "Tìm chương trình hoặc dán liên kết feed",
+    "searchPlaceholder": "Tên chương trình, feed RSS hoặc liên kết Apple Podcasts",
+    "add": "Thêm",
+    "checking": "Đang kiểm tra...",
+    "searching": "Đang tìm...",
+    "noResults": "Không tìm thấy chương trình.",
+    "inList": "Trong danh sách phát",
+    "inPlaylist": "Trong danh sách phát này",
+    "none": "Chưa có chương trình bên ngoài.",
+    "remove": "Xóa {{title}}",
+    "already": "Chương trình đó đã có trong danh sách phát này.",
+    "limit": "Một danh sách phát chứa được tối đa {{max}} chương trình bên ngoài.",
+    "ownFeed": "Đó là feed của chính danh sách phát này.",
+    "privateFeed": "Feed cần mật khẩu không thể đưa vào danh sách phát, vì danh sách phát là công khai.",
+    "tooBig": "Vượt quá sức chứa của danh sách phát. Hãy xóa bớt một chương trình trước.",
+    "saved": "Đã lưu chương trình bên ngoài. Danh sách phát sẽ cập nhật sau vài giây.",
+    "saveFailed": "Không lưu được: {{error}}",
+    "fromShows": "Từ chương trình khác:",
+    "video": "Video",
+    "pending_other": "{{count}} chương trình vẫn đang được đọc. Các tập sẽ xuất hiện trong vài phút."
   }
 }

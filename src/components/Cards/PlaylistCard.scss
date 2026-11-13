@@ -1,157 +1,111 @@
-@use "../../mixins.scss" as *;
+@use "../../styles/v2" as v2;
 
+// Playlist cards (28d): a 20-radius surface card, a 16:9 cover on a little
+// stack, the count in a mono scrim pill, a bold title and one muted line.
+// Shared by PlaylistCard, WatchLaterPlaylistCard, WatchedPlaylistCard and the
+// count pill of PlaylistFeedCard.
 .playlist-card-container {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  grid-column-gap: 16px;
-  grid-row-gap: 30px;
-  margin-top: 15px;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 10px;
+  margin-bottom: 24px;
 
-  @include respond(phone) {
-    grid-row-gap: 10px;
+  @include v2.mobile { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+}
+
+// The special cards bring a wrapper div; it should not add a box of its own.
+.watch-later-playlist-card-container,
+.watched-playlist-card-container { display: contents; }
+
+.plc {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 8px;
+  @include v2.card(20);
+  color: var(--text);
+  text-decoration: none;
+  transition: background var(--t-fast) var(--ease);
+
+  &:hover { background: var(--surface-2); color: var(--text); }
+}
+
+// The stack: a surface-2 card peeking out behind the cover.
+.plc-stack {
+  position: relative;
+  margin: 0 4px 6px 0;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 6px -4px -6px 6px;
+    border-radius: var(--r-lg);
+    background: var(--surface-2);
   }
+}
 
-  .playlist-card {
-    background-color: var(--card-bg);
-    border-radius: 12px;
-    box-shadow: var(--card-shadow);
-    display: flex;
-    flex-direction: column;
-    transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
-    text-decoration: none;
+.plc-art {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  @include v2.thumb-placeholder;
 
-    @include respond(phone) {
-      border-radius: 8px;
-    }
+  img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
 
-    &:hover {
-      transform: translateY(-2px);
-      box-shadow: var(--card-shadow-hover, 0 4px 12px rgba(0, 0, 0, 0.15));
-    }
+  // No cover: a tinted tile with the playlist's icon (28d plCards).
+  &--accent { background: var(--accent-tint); color: var(--accent); }
+  &--cyan { background: var(--cyan-tint); color: var(--cyan); }
+  &--neutral { background: var(--surface-2); color: var(--text); }
+}
 
-    .img-wrap {
-      width: 100%;
-      position: relative;
+.plc-count {
+  position: absolute;
+  right: 6px;
+  bottom: 6px;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 1px 6px;
+  border-radius: var(--r-sm);
+  background: var(--media-scrim);
+  color: var(--on-media);
+  @include v2.mono(10, 700);
+}
 
-      img {
-        width: 100%;
-        height: 170px;
-        border-radius: 5px 5px 0 0;
-        object-fit: cover;
-        object-position: center;
-        background-position: center;
-        background-size: cover;
+.plc-privacy {
+  position: absolute;
+  left: 6px;
+  top: 6px;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: var(--r-sm);
+  background: var(--media-scrim);
+  color: var(--on-media);
+}
 
-        @include respond(phone) {
-          height: 195px;
-        }
-      }
+.plc-title {
+  margin: 8px 4px 2px;
+  @include v2.text(body-sm);
+  font-weight: 700;
+  color: var(--text);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
 
-      .playlist-overlay {
-        position: absolute;
-        right: 0;
-        top: 0;
-        bottom: 0;
-        width: 45%;
-        background: linear-gradient(
-          to right,
-          rgba(0, 0, 0, 0) 0%,
-          rgba(0, 0, 0, 0.85) 100%
-        );
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 4px;
-        border-radius: 0 5px 0 0;
-
-        .video-count {
-          font-size: 18px;
-          font-weight: 600;
-          color: #fff;
-        }
-
-        .playlist-icon {
-          font-size: 32px;
-          color: #fff;
-        }
-      }
-
-      .privacy-badge {
-        position: absolute;
-        top: 8px;
-        left: 8px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 28px;
-        height: 28px;
-        border-radius: 6px;
-        font-size: 16px;
-
-        &.private {
-          background: rgba(239, 68, 68, 0.9);
-          color: #fff;
-        }
-
-        &.public {
-          background: rgba(76, 175, 80, 0.9);
-          color: #fff;
-        }
-      }
-    }
-
-    h2 {
-      padding: 8px 8px 4px;
-      overflow: hidden;
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 2;
-      color: var(--text-primary);
-      font-size: 14px;
-      font-weight: 500;
-      margin: 0;
-    }
-
-    .playlist-meta {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      padding: 0 8px;
-      font-size: 12px;
-      color: var(--text-secondary);
-
-      .owner {
-        color: var(--text-secondary);
-
-        &:hover {
-          color: var(--accent-primary);
-        }
-      }
-
-      .separator {
-        color: var(--text-secondary);
-        opacity: 0.5;
-      }
-
-      .item-count {
-        color: var(--text-secondary);
-      }
-    }
-
-    .bottom-info {
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      padding: 8px;
-      border-top: 1px solid var(--border-light);
-      margin-top: auto;
-
-      p {
-        font-size: 12px;
-        color: var(--text-secondary);
-        margin: 0;
-      }
-    }
-  }
+.plc-sub {
+  margin: 0 4px 2px;
+  @include v2.text(meta-sm);
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

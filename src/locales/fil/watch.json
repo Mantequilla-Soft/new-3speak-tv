@@ -16,7 +16,9 @@
     "translatedTo": "Isinalin sa {{language}}",
     "showLanguage": "Ipakita sa {{language}}",
     "showOriginal": "Ipakita ang original",
-    "buttonTitle": "AI na buod ng video na ito"
+    "buttonTitle": "AI na buod ng video na ito",
+    "jumpTo": "Tumalon sa",
+    "disclaimer": "Ginawa mula sa transcript. Puwedeng may mali."
   },
   "errors": {
     "notAvailable": "Hindi available ang video na ito.",
@@ -29,7 +31,8 @@
   "gated": {
     "title": "Para lang sa mga miyembro",
     "checkFailed": "Hindi namin makumpirma ang subscription mo ngayon. Subukan ulit maya-maya.",
-    "preview": "Libreng preview ang pinapanood mo. Buong video ang mapapanood gamit ang 3Speak Pro.",
+    "preview": "Libreng preview ang pinapanood mo",
+    "previewSub": "Binubuksan ng 3Speak Pro ang buong video.",
     "subscribersOnly": "Available ang video na ito sa mga 3Speak Pro subscriber.",
     "cta": "Kumuha ng 3Speak Pro"
   },
@@ -38,7 +41,19 @@
     "add": "Magdagdag ng Reaction"
   },
   "liveChat": "Live chat",
+  "side": {
+    "label": "Mga panel ng video"
+  },
+  "voters": {
+    "title": "Mga voter",
+    "cardLabel": "Mga supporter at voter",
+    "voter": "Voter",
+    "weight": "Bigat",
+    "value": "Halaga"
+  },
   "moreVideos": "Iba pang video",
+  "nextIn": "Susunod sa {{name}}",
+  "fromCommunity": "Mula sa {{name}}",
   "vote": {
     "saveFailed": "Hindi ma-save ang vote mo"
   },
@@ -67,14 +82,14 @@
     "loginRequired": "Mag-log in para mag-clip",
     "cancel": "Kanselahin ang clip",
     "clipVideo": "I-clip ang video",
-    "label": "I-clip ang Video",
+    "label": "I-clip ang video",
     "clip": "Clip",
     "seekToStart": "Pumunta sa simula",
-    "setStart": "Itakda ang Simula",
-    "setEnd": "Itakda ang Dulo",
-    "createClip": "Gumawa ng Clip",
+    "setStart": "Itakda ang simula",
+    "setEnd": "Itakda ang dulo",
+    "createClip": "Gumawa ng clip",
     "barStart": "Pumunta sa simula ng clip mo",
-    "barEnd": "Simula: {{start}} — Pumunta na sa dulo",
+    "barEnd": "Simula {{start}} · pumunta na sa dulo",
     "barDone": "Clip: {{start}} – {{end}}"
   },
   "share": {
@@ -92,19 +107,22 @@
   },
   "media": {
     "unavailableTitle": "Hindi na available ang video na ito",
-    "unavailableBody": "Hindi mahanap sa network ang media ng lumang upload na ito. Nasa blockchain pa rin ang post, pero hindi na mapapanood ang video.",
+    "unavailableBody": "Hindi mahanap ang media ng lumang upload na ito. Nasa Hive pa rin ang post.",
     "scheduledTitle": "Naka-iskedyul ang post na ito",
     "scheduledBody": "Ipa-publish ito sa {{date}}. Mapapanood na ang video simula noon.",
     "blockedTitle": "Hindi ma-load ang video ngayon",
-    "blockedBody": "Hindi sumagot ang isa sa mga video server namin. Ayos lang ang video mismo, kaya subukan ulit."
+    "blockedBody": "Hindi sumagot ang isa sa mga video server namin. Ayos lang ang video."
   },
   "tipNudge": {
     "text": "Nagustuhan mo ba?<hide> Padalhan si <b>@{{author}}</b> ng tip!</hide>",
     "dismiss": "Isara"
   },
   "community": {
-    "members_one": "{{count}} Member",
-    "members_other": "{{count}} Members"
+    "members_one": "{{count}} miyembro",
+    "members_other": "{{count}} miyembro",
+    "postedIn": "Na-post sa",
+    "partOf": "Bahagi ng",
+    "position": "{{current}} sa {{total}}"
   },
   "tags": {
     "curated": "Curated"
@@ -120,7 +138,8 @@
     "openTagFeed": "Buksan ang tag feed"
   },
   "scheduled": {
-    "notice": "Naka-schedule sa <b>{{date}}</b> — hindi pa naka-publish.",
+    "notice": "Naka-schedule sa <b>{{date}}</b>",
+    "notPublished": "Hindi pa naka-publish.",
     "futureDate": "isang petsa sa hinaharap",
     "edit": "I-edit, i-reschedule o i-cancel",
     "editTitle": "I-edit ang naka-schedule na post (detalye, petsa, o i-cancel)"
@@ -147,14 +166,15 @@
     "toggleDetails": "Ipakita/itago ang detalye",
     "followCreator": "I-follow ang creator",
     "closeMenu": "Isara ang menu",
-    "openActions": "Buksan ang mga aksyon"
+    "openActions": "Buksan ang mga aksyon",
+    "support": "Suportahan si {{name}}"
   },
   "description": {
     "hide": "Itago ang description",
     "show": "Ipakita ang description"
   },
   "edit": {
-    "title": "I-edit ang Video",
+    "title": "I-edit ang video",
     "loading": "Naglo-load ng kasalukuyang post…",
     "videoFile": "Video file",
     "replaceVideo": "Palitan ang video",
@@ -185,26 +205,27 @@
     "markdownHint": "Puwede ang markdown.",
     "listed": "Listed",
     "unlistedLabel": "Unlisted",
-    "listedHint": "Makikita sa feeds, search at sa profile mo.",
-    "unlistedHint": "Nakatago sa feeds at search — napapanood pa rin gamit ang direktang link, nananatili sa profile mo (may badge).",
-    "allowRemix": "Payagan ang Remix/Clip",
-    "remixOn": "Puwedeng gumawa ang iba ng remix/clip; ikaw ang kikilalaning original author.",
+    "listedHint": "Sa feeds, search at profile mo",
+    "unlistedHint": "Direktang link lang, may badge sa profile mo",
+    "allowRemix": "Payagan ang remix at clip",
+    "remixOn": "Ikaw ang kikilalaning original author",
     "remixOff": "Hindi puwedeng i-remix o i-clip ng iba ang video na ito.",
     "adsOnVideo": "Mga ad sa video na ito",
     "adsOnHint": "Maaaring may ad na mag-play sa video na ito.",
     "adsOffHint": "Walang ad sa video na ito.",
     "rollsOnVideo": "Video ad roll",
     "rollsOnHint": "Puwedeng lumabas ang roll, banner at ticker.",
-    "rollsOffHint": "Banner at ticker lang sa video na ito.",
+    "rollsOffHint": "Kung hindi, banner at ticker lang",
     "trailer": "Channel trailer",
     "trailerOn": "Kusang magpe-play sa itaas ng Overview tab ng profile mo, at papalitan ang anumang trailer na itinakda mo dati.",
-    "trailerOff": "Gawin itong video na kusang magpe-play sa itaas ng Overview tab ng profile mo.",
+    "trailerOff": "Kusang magpe-play sa itaas ng profile mo",
     "nsfw": "Adult / NSFW",
     "notNsfw": "Hindi adult",
     "nsfwHint": "Nakatago sa feeds at search maliban kung in-enable ng viewer ang NSFW; naka-tag na nsfw sa Hive.",
     "notNsfwHint": "Normal na content, makikita ng lahat.",
+    "nsfwOffHint": "Nakatago maliban kung in-on ng viewer ang NSFW",
     "promoted": "Naka-promote",
-    "promote": "I-promote ang video",
+    "promote": "I-promote",
     "saveChanges": "I-save ang mga pagbabago",
     "noChanges": "Walang pagbabagong ise-save.",
     "thumbUploaded": "Na-upload ang thumbnail.",
@@ -249,7 +270,8 @@
       "visibility": "Visibility",
       "content": "Nilalaman",
       "ads": "Mga ad",
-      "promotion": "Promosyon"
+      "promotion": "Promosyon",
+      "contentAds": "Content, ads at promotion"
     },
     "chaptersNoteAll": "Isinusulat ang listahan ng mga kabanata sa description pag nag-save ka.",
     "editChapters": "I-edit ang mga kabanata",

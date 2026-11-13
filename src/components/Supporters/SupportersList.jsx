@@ -2,12 +2,12 @@ import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
-import { MdGraphicEq, MdRedeem, MdVolunteerActivism, MdVisibilityOff, MdVisibility, MdBolt } from 'react-icons/md';
+import { Icon } from '../v2/Icon';
+import { Button, IconButton, Segmented } from '../v2/ui';
 import AccountImg from '../HiveAvatar/AccountImg';
 import TimeAgo from '../TimeAgo/TimeAgo';
 import BarLoader from '../Loader/BarLoader';
-import { fixVideoThumbnail } from '../../utils/fixThumbnails';
-import { fetchSupports, fetchSupportsGiven, supportItemLink, formatHbd, formatSats, formatSupportTotal } from '../../lib/supports';
+import { fetchSupports, fetchSupportsGiven, supportItemLink, formatHbd, formatSats, formatSupportTotal, useSupported } from '../../lib/supports';
 import { setSupportHidden } from '../../lib/supportsHide';
 import { toastIn } from '../../utils/toast';
 import './Supporters.scss';
@@ -75,62 +75,94 @@ function HideTipButton({ item }) {
     }
   };
   const label = hidden ? t('profile.supports.unhideTip') : t('profile.supports.hideTip');
-  const Icon = hidden ? MdVisibility : MdVisibilityOff;
+  // 37a: an eye on the row; the label is its name and tooltip.
   return (
-    <button type="button" className="sp-card-hide" onClick={onClick} disabled={busy} title={label}>
-      <Icon aria-hidden="true" />
-      <span>{label}</span>
-    </button>
+    <IconButton
+      icon={hidden ? 'visibility' : 'visibility_off'}
+      label={label}
+      variant="ghost"
+      size={36}
+      round
+      className="sp-card-hide"
+      onClick={onClick}
+      disabled={busy}
+    />
   );
 }
 
-// One tip as a card. `person` is the other side: the tipper on Received, the
-// creator who got it on Given. `canHide`: your own Received tab.
+// One tip as a row (37a): the other side's squircle avatar, their name, the
+// video and when, the amount in accent mono, and the owner's eye. `person` is
+// the tipper on Received, the creator who got it on Given. `canHide`: your
+// own Received tab.
 function SupportCard({ item, person, canHide }) {
   const { t } = useTranslation();
   const link = supportItemLink(item);
-  const isAudio = item.kind === 'audio';
-  const thumb = !isAudio && item.video?.thumbnail ? fixVideoThumbnail({ thumbnail: item.video.thumbnail }) : null;
   const title = item.video?.title || t('profile.supports.untitled');
   return (
     <article className={`sp-card${item.hidden ? ' is-hidden' : ''}`}>
-      <Link to={link} className="sp-card-thumb" aria-label={title}>
-        {thumb ? <img src={thumb} alt="" loading="lazy" /> : <MdGraphicEq className="sp-card-thumb-icon" />}
-      </Link>
+      {person ? (
+        <Link to={`/@${person}`} className="sp-card-av" aria-hidden="true" tabIndex={-1}>
+          <AccountImg account={person} alt="" loading="lazy" />
+        </Link>
+      ) : (
+        // A Lightning tip whose payer can't be told (not paid from Hive).
+        <span className="sp-card-av sp-card-av--anon" aria-hidden="true"><Icon name="bolt" size={18} fill /></span>
+      )}
       <div className="sp-card-body">
-        <Link to={link} className="sp-card-title" title={title}>{title}</Link>
+        {person ? (
+          <Link to={`/@${person}`} className="sp-card-name">@{person}</Link>
+        ) : (
+          <span className="sp-card-name">{t('profile.supports.lightningSupporter')}</span>
+        )}
         <div className="sp-card-meta">
-          {person ? (
-            <Link to={`/@${person}`} className="sp-card-tipper">
-              <AccountImg account={person} alt="" loading="lazy" />
-              <span>@{person}</span>
-            </Link>
+          {item.hidden ? (
+            <span className="sp-card-hidden-label">{t('profile.supports.hiddenLabel')}</span>
           ) : (
-            // A Lightning tip whose payer can't be told (not paid from Hive).
-            <span className="sp-card-tipper sp-card-tipper--anon">
-              <MdBolt aria-hidden="true" />
-              <span>{t('profile.supports.lightningSupporter')}</span>
-            </span>
+            <Link to={link} className="sp-card-title" title={title}>{title}</Link>
           )}
           <span className="sp-card-time"><TimeAgo date={item.tippedAt || item.createdAt} /></span>
-        </div>
-        <div className="sp-card-amount">
-          {item.currency === 'SATS'
-            ? <span className="sp-pill"><MdBolt aria-hidden="true" />{formatSats(item.amount)}</span>
-            : <span className="sp-pill">{formatHbd(item.hbd_value)}</span>}
           {item.currency === 'HIVE' && (
             <span className="sp-card-paid">{t('profile.supports.paidInHive', { amount: Number(item.amount).toFixed(3) })}</span>
           )}
         </div>
         {typeof item.memo === 'string' && item.memo.trim() && <TipMemo text={item.memo} />}
-        {(item.hidden || canHide) && (
-          <div className="sp-card-foot">
-            {item.hidden && <span className="sp-card-hidden-label">{t('profile.supports.hiddenLabel')}</span>}
-            {canHide && <HideTipButton item={item} />}
-          </div>
-        )}
       </div>
+      <div className="sp-card-amount">
+        {item.currency === 'SATS'
+          ? <span className="sp-pill"><Icon name="bolt" size={14} fill />{formatSats(item.amount)}</span>
+          : <span className="sp-pill">{formatHbd(item.hbd_value)}</span>}
+      </div>
+      {canHide && <HideTipButton item={item} />}
     </article>
+  );
+}
+
+// "Who @user supports" (31e): the creators this profile tipped, each once,
+// with a cyan ring, how often and how much. Above the list on both sub-tabs
+// (owner 2026-11-12: it stays when Received is picked).
+function SupportsSummary({ user }) {
+  const { t } = useTranslation();
+  const { data } = useSupported(user);
+  const list = data?.supported || [];
+  if (!list.length) return null;
+  return (
+    <section className="sp-who v2-card">
+      <div className="sp-who-head">
+        <h3>{t('profile.supports.whoTitle', { user })}</h3>
+        <span className="sp-who-count">{data?.total ?? list.length}</span>
+      </div>
+      <div className="sp-who-grid">
+        {list.map((s, i) => (
+          <Link key={s.author} to={`/@${s.author}`} className="sp-who-row">
+            <span className={`sp-who-av ${i % 2 ? 'is-cyan' : 'is-accent'}`}><AccountImg account={s.author} alt="" loading="lazy" /></span>
+            <span className="sp-who-text">
+              <b>@{s.author}</b>
+              <span>{t('profile.supports.tipped', { count: s.count || 1 })} · {formatSupportTotal(s.hbd_total, s.sats_total)}</span>
+            </span>
+          </Link>
+        ))}
+      </div>
+    </section>
   );
 }
 
@@ -171,20 +203,9 @@ export default function SupportersList({ user, isOwnProfile }) {
   }, [urlDir, bothLoaded, receivedTotal, givenTotal]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const active = dir === 'given' ? given : received;
-  const subTab = (key, Icon, label, page) => (
-    <button
-      type="button"
-      role="tab"
-      aria-selected={dir === key}
-      className={`sp-subtab${dir === key ? ' active' : ''}`}
-      onClick={() => selectDir(key)}
-    >
-      <Icon className="sp-subtab-icon" aria-hidden="true" />
-      {page
-        ? t('profile.supports.subTabTotal', { label, amount: formatSupportTotal(page.total_hbd, page.total_sats) })
-        : label}
-    </button>
-  );
+  const subLabel = (label, page) => (page
+    ? t('profile.supports.subTabTotal', { label, amount: formatSupportTotal(page.total_hbd, page.total_sats) })
+    : label);
 
   const items = (active.data?.pages || []).flatMap((p) => p?.items || []);
   let body;
@@ -194,14 +215,14 @@ export default function SupportersList({ user, isOwnProfile }) {
     body = (
       <div className="sp-list-empty">
         <p>{t('common.status.error')}</p>
-        <button type="button" className="sp-list-more" onClick={() => active.refetch()}>{t('common.actions.retry')}</button>
+        <Button variant="secondary" size={36} icon="refresh" className="sp-list-more" onClick={() => active.refetch()}>{t('common.actions.retry')}</Button>
       </div>
     );
   } else if (!items.length) {
     const key = dir === 'given'
       ? (isOwnProfile ? 'profile.supports.emptyGivenOwn' : 'profile.supports.emptyGiven')
       : (isOwnProfile ? 'profile.supports.emptyReceivedOwn' : 'profile.supports.emptyReceived');
-    body = <div className="sp-list-empty"><p>{t(key, { user })}</p></div>;
+    body = <div className="sp-list-empty"><Icon name="volunteer_activism" size={24} /><p>{t(key, { user })}</p></div>;
   } else {
     body = (
       <>
@@ -216,9 +237,9 @@ export default function SupportersList({ user, isOwnProfile }) {
           ))}
         </div>
         {active.hasNextPage && (
-          <button type="button" className="sp-list-more" onClick={() => active.fetchNextPage()} disabled={active.isFetchingNextPage}>
+          <Button variant="secondary" className="sp-list-more" onClick={() => active.fetchNextPage()} disabled={active.isFetchingNextPage} loading={active.isFetchingNextPage} trailing="expand_more">
             {active.isFetchingNextPage ? t('common.status.loading') : t('common.actions.loadMore')}
-          </button>
+          </Button>
         )}
       </>
     );
@@ -226,11 +247,27 @@ export default function SupportersList({ user, isOwnProfile }) {
 
   return (
     <div className="sp-list">
-      <div className="sp-subtabs" role="tablist">
-        {subTab('received', MdRedeem, t('profile.supports.received'), firstPage(received))}
-        {subTab('given', MdVolunteerActivism, t('profile.supports.given'), firstPage(given))}
-      </div>
-      {body}
+      <SupportsSummary user={user} />
+      {/* 37a: one card, "Supporters" with Received / Given (each with its
+          total) on the right, then a row per tip. */}
+      <section className="sp-panel v2-card">
+        <div className="sp-panel-head">
+          <h3>{t('profile.tabs.supporters')}</h3>
+          <Segmented
+            block={false}
+            scroll
+            value={dir}
+            onChange={selectDir}
+            label={t('profile.tabs.supporters')}
+            className="sp-subtabs"
+            options={[
+              { value: 'received', label: subLabel(t('profile.supports.received'), firstPage(received)) },
+              { value: 'given', label: subLabel(t('profile.supports.given'), firstPage(given)) },
+            ]}
+          />
+        </div>
+        {body}
+      </section>
     </div>
   );
 }

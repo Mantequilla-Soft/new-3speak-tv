@@ -5,13 +5,12 @@
     "yourStreamEnded": "配信が終了しました",
     "thisStreamEnded": "この配信は終了しました",
     "noLongerLive": "現在は配信されていません。準備ができたらいつでも新しく始めましょう。",
-    "recordingProcessing": "お疲れさまでした！録画を処理しています。まもなく告知投稿に表示されます。",
-    "thanksForLive": "お疲れさまでした。ライブ配信ありがとうございます！",
+    "recordingProcessing": "録画を処理しています。まもなく告知投稿に表示されます。",
+    "thanksForLive": "お疲れさまでした。ライブ配信ありがとうございます",
     "backHome": "ホームに戻る",
     "howWasStream": "配信はいかがでしたか？",
     "connecting": "OpenPods に接続中…",
-    "authenticating": "OpenPods で認証中…",
-    "postStoryAboutIt": "この配信についてストーリーを投稿"
+    "authenticating": "OpenPods で認証中…"
   },
   "strip": {
     "liveNow_other": "<n>{{count}}</n> 件の OpenPod が配信中",
@@ -28,7 +27,9 @@
     "rewardDecline": "報酬を辞退",
     "beneficiaries": "受益者",
     "beneProHint": "3Speak Pro をご利用中なので、プラットフォーム手数料はかかりません。必要なら分配先を追加できます。",
-    "beneLockedHint": "@threespeakfund への 10% は固定です。さらに追加できます。"
+    "beneLockedHint": "@threespeakfund への 10% は固定です。さらに追加できます。",
+    "storyPrompt": "もうすぐライブ配信？まずは24時間ストーリーでフォロワーに知らせましょう。新しいタブで開くので、スタジオは開いたままです。",
+    "storyButton": "ストーリーを投稿"
   },
   "boost": {
     "label": "ブースト",
@@ -40,13 +41,13 @@
     "slowDown": "少し待ってから、もう一度クリップしてください。",
     "failed": "クリップを作成できませんでした。数秒後にもう一度お試しください。",
     "title": "直近 30 秒をクリップ",
-    "label": "30 秒",
+    "label": "クリップ",
     "clipping": "クリップ中…"
   },
   "report": {
     "reasons": {
       "harassment": "嫌がらせやヘイト",
-      "sexual": "性的または露骨なコンテンツ",
+      "sexual": "性的または露骨な内容",
       "violence": "暴力や危険な行為",
       "selfharm": "自傷行為",
       "illegal": "違法なコンテンツ",
@@ -57,7 +58,7 @@
     "failed": "報告を送信できませんでした。もう一度お試しください。",
     "title": "この配信を報告",
     "reporting": "<b>@{{host}}</b> を報告しています。",
-    "intro": "何が問題か教えてください。チームがすべての報告を確認します。",
+    "intro": "チームがすべての報告を確認します。",
     "detailPlaceholder": "詳細を追加（任意）",
     "sending": "送信中…",
     "submit": "報告を送信"
@@ -91,6 +92,7 @@
   "lobby": {
     "descriptionPlaceholder": "このセッションは何についてですか？番組メモやリンク、要約を追加しましょう…",
     "enableHosting": "ホストと発言を有効にする",
+    "enableHostingHint": "@threespeak のポスティング権限が必要です",
     "handoverFailed": "ホスト機能を自動で有効にできませんでした。OpenPods は @threespeak を通じてあなたの代わりに投稿します。ポスティング権限を付与しているか確認して、もう一度お試しください。",
     "signInToHost": "ホストや発言をするには Hive でログイン"
   },
@@ -130,8 +132,8 @@
     },
     "chatBox": {
       "title": "OBS でのチャット",
-      "desc": "すべての配信で使えるリンクはひとつです。OBS にドックとして追加すると、配信中に新しいメッセージを読めます。やり方は下のガイドを参照してください。",
-      "copy": "OBS 用のチャット URL をコピー",
+      "desc": "カスタムブラウザドックとして追加",
+      "copy": "チャット URL をコピー",
       "copied": "チャット URL をコピーしました"
     },
     "card": {
@@ -142,26 +144,26 @@
       "watch": "配信を見る",
       "notAnnounced": "この配信は Hive で告知されませんでした。",
       "notAnnouncedAuth": "Hive で告知されていません: 3Speak はまだあなたの代わりに投稿できません。テンプレートを編集して許可してください。",
-      "stuck": "OBS は接続されましたが、映像が届かなかったため配信は始まりませんでした。OBS で配信を停止して、もう一度開始してください。",
-      "dailyLimit": "OBS で配信を開始できませんでした。無料アカウントは 1 日に 1 回まで配信を開始できます。前回の配信開始から 24 時間後にもう一度お試しいただくか、3Speak Pro で 1 日の上限なしに配信してください。",
+      "stuck": "OBS は接続されましたが、映像が届いていません。配信を停止して、もう一度開始してください。",
+      "dailyLimit": "無料アカウントは 1 日に 1 回まで配信を開始できます。前回の配信開始から 24 時間後にもう一度お試しいただくか、Pro をご利用ください。",
       "useInStudio": "Stream Studio で使う",
       "proRequired": "OBSでライブを開始できませんでした：OBSからの配信は3Speak Proの機能です。"
     },
     "guide": {
       "title": "OBS の設定方法",
-      "step1": "OBS Studio 30 以降を使い、Settings から Stream を開きます。",
-      "step2": "Service を \"WHIP\" に設定します。",
-      "step3": "Server: 使いたいテンプレートのサーバー URL を貼り付けます（カードの \"サーバー URL をコピー\"）。テンプレートごとに異なります。",
-      "step4": "Bearer Token: このページ上部の配信シークレットを貼り付けます。すべてのテンプレートで共通です。",
-      "step5": "OBS で \"Start Streaming\" をクリックすると、そのテンプレートで 3Speak での配信が始まります。\"Stop Streaming\" で配信を終了します。",
+      "step1": "OBS Studio 30 以降を使用: Settings → Stream",
+      "step2": "Service を \"WHIP\" に設定",
+      "step3": "Server: テンプレートのサーバー URL を貼り付け",
+      "step4": "Bearer Token: 配信シークレットを貼り付け",
+      "step5": "OBS で Start Streaming をクリック。3Speak でライブ配信が始まります。",
       "outputTitle": "推奨の出力設定",
-      "keyframe": "キーフレーム間隔: 1〜2 秒",
-      "bitrate": "レート制御 CBR、2500〜6000 kbps",
-      "encoder": "エンコーダー: x264 またはハードウェアエンコーダー",
-      "audio": "音声サンプルレート: 48 kHz",
-      "bframes": "B-frames なし（エンコーダーに設定があれば 0 に）",
+      "keyframe": "キーフレーム 1〜2 秒",
+      "bitrate": "CBR 2500〜6000 kbps",
+      "encoder": "x264 / ハードウェア",
+      "audio": "音声 48 kHz",
+      "bframes": "B フレームなし",
       "chatTitle": "OBS でチャットを見る",
-      "chatCopy": "このページ上部の「OBS でのチャット」で「OBS 用のチャット URL をコピー」をクリックします。すべての配信で使えるリンクはひとつです。",
+      "chatCopy": "このページ上部の「OBS でのチャット」で「チャット URL をコピー」をクリックします。すべての配信で使える 1 つのリンクです。",
       "chat2": "OBS で \"Docks\" メニューを開き、\"Custom Browser Docks\" を選びます。「3Speak チャット」などの名前を入力し、URL を貼り付けて \"Apply\" をクリックします。配信中はそのパネルに新しいメッセージが表示されます。視聴者には見えません。",
       "chat3": "視聴者には配信の横にすでにチャットが表示されているので、映像に入れる必要はありません。配信をほかの場所でも共有する場合だけ、同じ URL を \"Browser\" ソースとして追加し、末尾の \"&dock=1\" を削除してください。メッセージが映像の上に表示され、30 秒後に消えます。",
       "chatOptions": "任意で URL の末尾に追加できます: &max=10 で表示行数を減らし、&size=18 で文字を大きくし、&fade=0 でメッセージを映像に残します。",
@@ -255,5 +257,13 @@
       "desc": "3Speak Proなら、テンプレートを使ってOBSから直接ライブ配信できます。Proがなくても、テンプレートはブラウザのStream Studioで引き続き使えます。",
       "cta": "3Speak Proを入手"
     }
+  },
+  "grid": {
+    "openpods": "OpenPods",
+    "listening_other": "{{count}} 人が聴取中",
+    "emptySub": "配信や OpenPods は、始まるとすぐここに表示されます。",
+    "emptyRooms": "現在開いている OpenPods はありません。",
+    "emptyScheduled": "現在、予定されているものはありません。",
+    "emptyScheduledSub": "開いているけれどまだライブではないルームがここに表示されます。"
   }
 }

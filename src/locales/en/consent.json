@@ -10,7 +10,7 @@
     "optional": "The one optional thing: we can remember <b>where you left off in each video</b> so playback resumes. It never leaves your device."
   },
   "details": {
-    "essentialTitle": "Essential — always on",
+    "essentialTitle": "Essential (always on)",
     "essential": {
       "login": "Your login session",
       "settings": "Settings you set: theme, volume, language, subtitles, feed preferences",

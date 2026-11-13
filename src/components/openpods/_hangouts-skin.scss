@@ -1,0 +1,725 @@
+// Icons drawn as CSS text (Material Symbols ligatures) carry `/ ""`: the
+// glyph name is decoration, not part of the button's accessible name (screen
+// readers read "close Close modal", "qr_code_2 HiveAuth" before). The plain
+// `content` first is the fallback where `/ alt` is not supported.
+// The @snapie/hangouts SDK in the v2 look (live area only).
+//
+// The SDK ships its own CSS driven by --hh-* variables and fixed class names
+// (hh-btn, hh-cd, hh-chat...). These mixins point those variables at the v2
+// tokens and re-skin the SDK pieces that sit on 3Speak's live surfaces: the
+// Stream Studio create form (/openpods), the room/studio modal, the stream watch
+// page chat and the boost dialog. Only tokens from design-system.scss.
+//
+// Usage:  @use "../components/openpods/hangouts-skin" as hh;
+//         .my-root { @include hh.tokens; @include hh.buttons; }
+@use "../../styles/v2" as v2;
+
+// The SDK reads these everywhere. Fields are fills, not borders, so the input
+// border is transparent and the SDK's bg fill does the work.
+@mixin tokens {
+  --hh-bg: var(--bg);
+  --hh-bg-secondary: var(--surface);
+  --hh-bg-hover: var(--bg-hover);
+  --hh-bg-input: var(--bg);
+  --hh-surface: var(--surface);
+  --hh-text: var(--text);
+  --hh-text-secondary: var(--muted);
+  --hh-text-muted: var(--muted);
+  --hh-border: var(--border);
+  --hh-border-light: var(--border);
+  --hh-input-border: transparent;
+  --hh-primary: var(--accent);
+  --hh-primary-hover: var(--accent-hover);
+  --hh-accent: var(--accent);
+  --hh-danger: var(--accent);
+  --hh-success: var(--cyan);
+  --hh-btn-secondary-bg: var(--surface-2);
+  --hh-btn-secondary-text: var(--text);
+  --hh-btn-secondary-hover: color-mix(in srgb, var(--text) 10%, var(--surface-2));
+  --hh-shadow: transparent;
+  // Pro is marked in the accent, not a gold of its own (no other hues).
+  --hh-pro-gold: var(--accent);
+  --hh-pro-gold-soft: var(--accent-tint);
+  --hh-pro-gold-strong: var(--accent-tint-strong);
+  font-family: var(--font-sans);
+}
+
+// Draws a Material Symbols glyph in place of an SDK emoji: the emoji text is
+// hidden and the ligature is drawn by ::before, so a screen never mixes icon sets.
+@mixin glyph($name, $size: 20px) {
+  font-size: 0;
+  &::before {
+    content: $name; content: $name / "";
+    display: inline-block;
+    font-family: "Material Symbols Rounded";
+    font-size: $size;
+    font-weight: 400;
+    font-style: normal;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    white-space: nowrap;
+    direction: ltr;
+    font-feature-settings: "liga";
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+// SDK buttons as v2 buttons: flat fills, radius by height, no lift or glow.
+// $sized: false keeps the SDK's own heights (the studio lays out around them).
+@mixin buttons($sized: true) {
+  .hh-btn {
+    font-family: inherit;
+    font-weight: 700;
+    letter-spacing: 0;
+    border: 0;
+    border-radius: var(--r-md);
+    box-shadow: none;
+    transition: background var(--t-fast) var(--ease), color var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
+    @if $sized {
+      min-height: 40px;
+      padding: 0 14px;
+      font-size: 13px;
+    }
+
+    &:hover:not(:disabled) { transform: none; box-shadow: none; }
+    &:active:not(:disabled) { transform: scale(.98); box-shadow: none; }
+    &:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; box-shadow: none; border-color: transparent; }
+    &:disabled { opacity: .45; }
+  }
+  .hh-btn--primary { background: var(--accent); color: var(--on-accent); font-weight: 900;
+    &:hover:not(:disabled) { background: var(--accent-hover); color: var(--on-accent); } }
+  .hh-btn--secondary { background: var(--surface-2); color: var(--text);
+    &:hover:not(:disabled) { background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); } }
+  .hh-btn--ghost { background: transparent; color: var(--text);
+    &:hover:not(:disabled) { background: var(--bg-hover); } }
+  .hh-btn--danger { background: var(--accent-tint); color: var(--accent);
+    &:hover:not(:disabled) { background: color-mix(in srgb, var(--accent) 22%, transparent); color: var(--accent); } }
+  @if $sized {
+    .hh-btn--small { min-height: 32px; padding: 0 10px; font-size: 12px; }
+    .hh-btn--icon { width: 40px; height: 40px; min-height: 40px; padding: 0; border-radius: 50%; }
+  }
+}
+
+// A field: bg fill, no border at rest, accent ring on focus.
+@mixin field($h: 40) {
+  box-sizing: border-box;
+  min-height: $h * 1px;
+  padding: 0 12px;
+  border: 2px solid transparent;
+  border-radius: v2.radius-for($h);
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
+  font-size: 14px;
+  box-shadow: none;
+  &::placeholder { color: var(--muted); }
+  &:focus { outline: none; border-color: var(--accent); box-shadow: none; }
+}
+
+// The live chat (ChatPanel) inside a v2 surface: messages scroll inside, the
+// composer is a 44px filled field over a divider.
+@mixin chat {
+  .hh-chat {
+    flex: 1;
+    min-height: 0;
+    max-height: none;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+  .hh-chat__header { display: none; }
+  .hh-chat__messages {
+    padding: 8px 16px;
+    gap: 10px;
+    @include v2.scroll-y;
+  }
+  .hh-chat__msg { gap: 8px; }
+  .hh-chat__msg-avatar { width: 24px; height: 24px; border-radius: 50%; }
+  .hh-chat__msg-name { color: var(--text); font-size: 14px; font-weight: 700; }
+  .hh-chat__msg-text { color: var(--text); font-size: 14px; line-height: 1.4; }
+  .hh-chat__mention { color: var(--cyan); font-weight: 700; }
+  .hh-chat__msg--mentioned { background: var(--cyan-wash); border-radius: var(--r-md); }
+  .hh-chat__empty { color: var(--muted); font-size: 13px; padding: 24px 0; }
+  .hh-chat__compose { border-top: 1px solid var(--border); }
+  .hh-chat__input-row { padding: 12px; gap: 8px; align-items: center; border-top-color: var(--border); }
+  .hh-chat__compose .hh-chat__input-row { border-top: 0; }
+  .hh-chat__input {
+    @include field(44);
+    height: 44px;
+    background: var(--surface-2);
+  }
+  .hh-chat__input-row .hh-btn { min-height: 44px; height: 44px; border-radius: var(--r-lg); padding: 0 14px; }
+  .hh-chat__emoji-toggle {
+    width: 44px;
+    height: 44px;
+    flex: none;
+    border: 0;
+    border-radius: 50%;
+    background: var(--surface-2);
+    color: var(--muted);
+    cursor: pointer;
+    @include glyph("mood", 20px);
+  }
+  .hh-chat__emoji-tray { background: var(--surface); border-bottom: 1px solid var(--border); }
+  .hh-chat__emoji-btn { border-radius: var(--r-sm); &:hover { background: var(--bg-hover); } }
+  .hh-chat__mention-tray { background: var(--surface); border-bottom: 1px solid var(--border); }
+  .hh-chat__mention-candidate { border-radius: var(--r-sm); color: var(--text); &:hover { background: var(--bg-hover); } }
+  .hh-chat__guest-prompt {
+    padding: 12px;
+    border-top: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    font-size: 13px;
+    text-align: left;
+  }
+}
+
+// The quality <select> (StreamQualityControl): a small filled select.
+@mixin quality-select {
+  .hh-stream-quality select {
+    @include field(32);
+    height: 32px;
+    padding: 0 28px 0 10px;
+    font-size: 12px;
+    font-weight: 700;
+    appearance: none;
+    cursor: pointer;
+    background-color: var(--surface-2);
+    background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%), linear-gradient(135deg, var(--muted) 50%, transparent 50%);
+    background-position: calc(100% - 14px) 50%, calc(100% - 9px) 50%;
+    background-size: 5px 5px;
+    background-repeat: no-repeat;
+    option { background: var(--surface); color: var(--text); }
+  }
+}
+
+// The Stream Studio create form (RoomLobby + CreateRoomDialog), design 39a:
+// a card, eyebrow labels, step chips, choice tiles, filled fields, v2 toggles.
+@mixin create-form {
+  .hh-lobby { max-width: none; margin: 0; padding: 0; font-family: inherit; color: var(--text); }
+  .hh-lobby__header { margin-bottom: 16px; }
+  .hh-lobby__title { @include v2.text(heading); }
+  .hh-lobby__empty { color: var(--muted); }
+
+  .hh-cd {
+    @include v2.card;
+    padding: 20px;
+    gap: 16px;
+    @include v2.mobile { padding: 16px; }
+  }
+  .hh-cd__intro-title { @include v2.text(heading); }
+  .hh-cd__intro-desc { color: var(--muted); font-size: 13px; }
+  .hh-cd__beta { background: var(--cyan-tint); color: var(--cyan); border-radius: 7px; font-size: 10px; font-weight: 900; }
+  .hh-cd__section { gap: 8px; }
+  .hh-cd__label { @include v2.text(eyebrow); color: var(--muted); }
+  .hh-cd__label-note { font-size: 11px; font-weight: 400; }
+
+  // Choice tiles: 2px border, cyan when chosen (a secondary choice, 39a).
+  .hh-cd__tiles { gap: 8px; }
+  .hh-cd__tile {
+    align-items: flex-start;
+    text-align: left;
+    gap: 2px;
+    padding: 12px;
+    border: 2px solid var(--border);
+    border-radius: var(--r-lg);
+    background: transparent;
+    color: var(--text);
+    box-shadow: none;
+    transition: border-color var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
+    &:hover { transform: none; border-color: var(--border); background: var(--bg-hover); }
+    &.is-active { border-color: var(--cyan); background: var(--cyan-tint); box-shadow: none; .hh-cd__tile-icon { color: var(--cyan); } }
+  }
+  .hh-cd__tile-icon { color: var(--muted); margin-bottom: 6px; line-height: 1; }
+  .hh-cd__tile-title { font-size: 13px; font-weight: 700; }
+  .hh-cd__tile-desc { font-size: 11px; color: var(--muted); line-height: 1.35; }
+  // Mode tiles (group chat / stream) and visibility tiles, in the SDK's order.
+  .hh-cd__tiles:not(.hh-cd__tiles--3) .hh-cd__tile:nth-child(1) .hh-cd__tile-icon { @include glyph("groups", 24px); }
+  .hh-cd__tiles:not(.hh-cd__tiles--3) .hh-cd__tile:nth-child(2) .hh-cd__tile-icon { @include glyph("sensors", 24px); }
+  .hh-cd__tiles--3 .hh-cd__tile:nth-child(1) .hh-cd__tile-icon { @include glyph("public", 24px); }
+  .hh-cd__tiles--3 .hh-cd__tile:nth-child(2) .hh-cd__tile-icon { @include glyph("key", 24px); }
+  .hh-cd__tiles--3 .hh-cd__tile:nth-child(3) .hh-cd__tile-icon { @include glyph("link", 24px); }
+
+  .hh-cd__input, .hh-cd__select { @include field(40); height: 40px; }
+  .hh-cd__textarea { @include field(40); min-height: 88px; padding: 10px 12px; line-height: 1.45; }
+  .hh-cd__tags { @include field(40); display: flex; flex-wrap: wrap; align-items: center; gap: 4px; padding: 4px 6px; height: auto; }
+  .hh-cd__tag { height: 28px; padding: 0 6px 0 10px; border-radius: var(--r-sm); background: var(--surface-2); color: var(--text); font-size: 12px; font-weight: 700;
+    button { color: var(--muted); &:hover { color: var(--accent); } } }
+  .hh-cd__tag-input { font-size: 14px; color: var(--text); }
+  .hh-cd__field-error { font-size: 11px; color: var(--accent); }
+
+  // Switch → v2 toggle (44 x 26, accent when on).
+  .hh-cd__switch { gap: 12px; }
+  .hh-cd__switch-track { width: 44px; height: 26px; border-radius: 13px; background: var(--surface-2); box-shadow: inset 0 0 0 1px var(--border); }
+  .hh-cd__switch-thumb { top: 3px; left: 3px; width: 20px; height: 20px; background: var(--muted); box-shadow: none; }
+  .hh-cd__switch input:checked + .hh-cd__switch-track { background: var(--accent); box-shadow: none; }
+  .hh-cd__switch input:checked + .hh-cd__switch-track .hh-cd__switch-thumb { background: var(--on-accent); transform: translateX(18px); }
+  .hh-cd__switch input:focus-visible + .hh-cd__switch-track { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .hh-cd__switch-label { font-size: 14px; font-weight: 700; }
+  .hh-cd__check, .hh-cd__reccheck { font-size: 13px; input { accent-color: var(--accent); width: 18px; height: 18px; } }
+  .hh-cd__reccheck em { font-size: 11px; color: var(--muted); opacity: 1; }
+  .hh-cd__row2 { gap: 10px; @include v2.mobile { grid-template-columns: 1fr; } }
+
+  .hh-cd__announce { margin-top: 4px; padding: 12px; border: 0; border-radius: var(--r-lg); background: var(--bg); gap: 10px; }
+  .hh-cd__seg { gap: 4px; padding: 4px; border-radius: var(--r-md); background: var(--surface); }
+  .hh-cd__seg button { height: 32px; padding: 0 10px; border: 0; border-radius: var(--r-md); background: transparent; color: var(--muted); font-size: 13px; font-weight: 700; box-shadow: none;
+    &:hover { color: var(--text); }
+    &.is-active { background: var(--surface-2); color: var(--text); border: 0; box-shadow: none; } }
+  .hh-cd__announce-hint { font-size: 11px; color: var(--muted); }
+  .hh-cd__announce-hint--solo { font-size: 13px; color: var(--muted); }
+  // The free plan note (39a): an accent wash card, "3Speak Pro" in the accent.
+  .hh-cd__limit-hint {
+    margin: 0;
+    padding: 16px;
+    border-radius: var(--r-2xl);
+    background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+    border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+    color: var(--text);
+    font-size: 12px;
+    line-height: 1.45;
+    opacity: 1;
+    strong { color: var(--accent); font-weight: 700; }
+  }
+  .hh-cd__unlock { @include v2.btn(danger, 32); align-self: flex-start; }
+  .hh-cd__create-error { border: 0; border-radius: var(--r-2xl); background: var(--accent-wash); padding: 12px 14px; font-size: 13px; }
+  .hh-cd__create-error--limit { border: 0; background: var(--accent-wash); }
+  .hh-bg-picker__upload-btn { min-height: 48px; border: 2px dashed var(--border); border-radius: var(--r-lg); background: transparent; color: var(--muted); font: inherit; font-size: 13px; font-weight: 700;
+    &:hover:not(:disabled) { background: var(--bg-hover); color: var(--text); } }
+  .hh-bg-picker__preview { border-radius: var(--r-md); }
+  .hh-bg-picker__error { color: var(--accent); font-size: 11px; }
+
+  // Steps (39a): 44px chips with a 32px numbered square. Done = cyan check,
+  // current = accent tint and border, next = outlined and muted.
+  .hh-cd-steps__row { gap: 6px; @include v2.scroll-x; }
+  .hh-cd-steps__item, .hh-cd-steps__item:last-child { flex: 0 0 auto; }
+  .hh-cd-steps__line { display: none; }
+  .hh-cd-steps__step {
+    height: 44px;
+    padding: 0 14px 0 6px;
+    gap: 8px;
+    border: 2px solid var(--border);
+    border-radius: var(--r-lg);
+    &:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: var(--r-lg); }
+  }
+  .hh-cd-steps__ring {
+    width: 32px;
+    height: 32px;
+    border: 0;
+    border-radius: var(--r-md);
+    background: var(--surface-2);
+    color: var(--muted);
+    @include v2.mono(12, 900);
+    box-shadow: none;
+  }
+  .hh-cd-steps__label { font-size: 13px; font-weight: 700; color: var(--muted); }
+  .hh-cd-steps__caption { margin-top: 8px; text-align: left; font-size: 13px; font-weight: 700; color: var(--text); }
+  @include v2.mobile { .hh-cd-steps__step { padding: 0 4px; } }
+  .hh-cd-steps__step.is-done { border-color: transparent;
+    .hh-cd-steps__ring { background: var(--cyan); color: var(--bg); @include glyph("check", 18px);
+      svg { display: none; } }
+    .hh-cd-steps__label { color: var(--text); } }
+  .hh-cd-steps__step.is-active { border-color: var(--accent); background: var(--accent-tint-strong);
+    .hh-cd-steps__ring { background: var(--accent); color: var(--on-accent); border: 0; box-shadow: none; }
+    .hh-cd-steps__label { color: var(--text); font-weight: 700; } }
+
+  .hh-cd__actions--steps .hh-btn { min-width: 120px; min-height: 48px; border-radius: var(--r-lg); font-size: 14px; justify-content: flex-start; padding: 0 16px; }
+  .hh-cd__actions--bottom { padding-top: 16px; border-top: 1px solid var(--border); }
+  .hh-cd__next.hh-btn--primary,
+  .hh-cd__submit.hh-btn--primary {
+    background: var(--accent);
+    color: var(--on-accent);
+    border: 0;
+    font-weight: 900;
+    padding: 0 16px;
+    &:hover:not(:disabled) { background: var(--accent-hover); }
+  }
+
+  // Switches and checkboxes as setting rows (39a): the label on the left (13/700,
+  // a muted line under it where the SDK gives one), a v2 toggle on the right.
+  // A well on the form card; the wide studio page draws them as surfaces.
+  .hh-cd__switch,
+  .hh-cd__check,
+  .hh-cd__reccheck {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-height: 52px;
+    box-sizing: border-box;
+    padding: 10px 12px;
+    border-radius: var(--r-lg);
+    background: var(--bg);
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.35;
+  }
+  .hh-cd__switch-label { font-size: 13px; font-weight: 700; }
+  .hh-cd__reccheck > span { display: block; flex: 1; min-width: 0; }
+  .hh-cd__reccheck em { display: block; margin-top: 2px; font-size: 11px; font-weight: 400; color: var(--muted); opacity: 1; }
+  .hh-cd__reccheck--locked { opacity: .5; > span { opacity: 1; } }
+  .hh-cd__check > span { flex: 1; min-width: 0; }
+  .hh-cd__check input,
+  .hh-cd__reccheck input {
+    appearance: none;
+    position: relative;
+    flex: none;
+    width: 44px;
+    height: 26px;
+    margin: 0;
+    border-radius: 13px;
+    background: var(--surface-2);
+    box-shadow: inset 0 0 0 1px var(--border);
+    cursor: pointer;
+    transition: background var(--t-base) var(--ease);
+    &::before {
+      content: "";
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--muted);
+      transition: transform var(--t-base) var(--ease), background var(--t-base) var(--ease);
+    }
+    &:checked { background: var(--accent); box-shadow: none; }
+    &:checked::before { transform: translateX(18px); background: var(--on-accent); }
+    &:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    &:disabled { cursor: not-allowed; }
+  }
+
+  // The SDK starts these labels with an emoji. Hidden (the first letter of a
+  // block is the emoji), so a screen never mixes icon sets. Only where the
+  // text ALWAYS starts with one: elsewhere it would eat a real letter.
+  .hh-cd__switch-label,
+  .hh-cd__check > span,
+  .hh-cd__reccheck > span,
+  .hh-cd__limit-hint,
+  .hh-cd__create-error--limit p { display: block; &::first-letter { font-size: 0; margin-right: -3px; } }
+  .hh-cd__unlock { display: inline-block; line-height: 32px; &::first-letter { font-size: 0; } }
+  .hh-bg-picker__upload-btn:not(:disabled) { display: block; width: 100%; &::first-letter { font-size: 0; } }
+}
+
+// The browser Stream Studio (SDK StandaloneStudio inside HangoutsRoom), design
+// 22c: v2 tokens instead of the SDK's gradients and glows, Roboto, the preview
+// in a 24-radius frame, the side panel's tabs as a segmented track, and the go
+// live button as the 56px accent button. The SDK draws the layout (scenes,
+// preview, mixer, side panel); only its look is changed here.
+@mixin studio {
+  .hh-studio {
+    --st-glow: transparent;
+    --st-amber: var(--accent);
+    --st-green: var(--cyan);
+    --st-radius: 24px;
+    background: var(--bg);
+    font-family: var(--font-sans);
+  }
+  .hh-studio__header { gap: 12px; padding: 12px 16px; backdrop-filter: none; }
+  .hh-studio__live {
+    display: inline-flex;
+    align-items: center;
+    height: 22px;
+    padding: 0 9px;
+    border-radius: var(--r-sm);
+    background: var(--accent);
+    color: var(--on-accent);
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: .06em;
+    box-shadow: none;
+    animation: none;
+  }
+  .hh-studio__live--standby { background: var(--surface-2); color: var(--muted); }
+  .hh-studio__live--paused { background: var(--accent-tint-strong); color: var(--accent); }
+  .hh-studio__title { @include v2.text(title-sm); }
+  .hh-studio__warn { color: var(--accent); font-size: 12px; font-weight: 700; }
+  .hh-studio__warn-icon { @include glyph("warning", 20px); color: var(--accent); }
+  .hh-studio__viewers { display: inline-block; @include v2.mono(14, 700); &::first-letter { font-size: 0; } }
+  .hh-studio__close {
+    @include v2.btn(secondary, 32);
+    border: 0;
+    &:hover { color: var(--text); }
+  }
+
+  // Scenes and sources: 40px rows, the active scene in the accent (22c layout tiles).
+  .hh-studio__panel-head,
+  .hh-studio__rail-label { @include v2.text(eyebrow); color: var(--muted); }
+  .hh-studio__scene {
+    min-height: 40px;
+    padding: 0 12px;
+    border: 2px solid transparent;
+    border-radius: var(--r-md);
+    background: var(--surface);
+    font-size: 13px;
+    font-weight: 700;
+    box-shadow: none;
+    &:hover:not(:disabled) { background: color-mix(in srgb, var(--text) 6%, var(--surface)); }
+  }
+  .hh-studio__scene--active { border-color: var(--accent); background: var(--accent-tint-strong); box-shadow: none; }
+  // "＋ Add source": the fullwidth plus is dropped (not every font has it).
+  .hh-studio__scene--add { display: block; border: 2px dashed var(--border); background: transparent; line-height: 36px; text-align: center; &::first-letter { font-size: 0; } }
+  .hh-studio__error { color: var(--accent); font-size: 11px; }
+
+  // The preview: a 24-radius frame on black, the tag as a media pill.
+  .hh-studio__frame { border: 0; border-radius: var(--r-2xl); box-shadow: none; background: var(--media-black); }
+  .hh-studio__preview-tag {
+    padding: 4px 9px;
+    border: 0;
+    border-radius: var(--r-sm);
+    background: var(--media-scrim);
+    color: var(--on-media);
+    font-size: 11px;
+    font-weight: 700;
+    backdrop-filter: none;
+  }
+  .hh-studio__mixer { border: 1px solid var(--border); border-radius: var(--r-xl); background: var(--surface); }
+  .hh-studio__mixer-empty { color: var(--muted); font-size: 12px; }
+
+  // Side panel: tabs as one segmented track, the emoji in front dropped.
+  .hh-studio__tabs { gap: 4px; padding: 4px; border-radius: var(--r-md); background: var(--surface); }
+  .hh-studio__tab {
+    display: block;
+    height: 32px;
+    padding: 0 10px;
+    border: 0;
+    border-radius: var(--r-md);
+    background: transparent;
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 32px;
+    text-align: center;
+    white-space: nowrap;
+    &::first-letter { font-size: 0; }
+    &:hover { color: var(--text); }
+  }
+  .hh-studio__tab--active { background: var(--surface-2); color: var(--text); border: 0; }
+  .hh-studio__chat .hh-chat { border-color: var(--border); border-radius: var(--r-2xl); }
+
+  // The post tab: v2 fields and eyebrows.
+  .hh-post { gap: 8px; padding: 16px; border: 1px solid var(--border); border-radius: var(--r-2xl); background: var(--surface); }
+  .hh-post__title-label { @include v2.text(eyebrow); color: var(--muted); }
+  .hh-post__saved { color: var(--muted); font-size: 11px; }
+  .hh-post__input,
+  .hh-post__tag-input { @include field(40); height: 40px; }
+  .hh-post__desc-input { @include field(40); min-height: 88px; padding: 10px 12px; line-height: 1.45; }
+  .hh-post__thumb-add { border: 2px dashed var(--border); border-radius: var(--r-lg); background: transparent; color: var(--muted); font: inherit; font-size: 13px; font-weight: 700; }
+  .hh-post__tag { height: 28px; padding: 0 6px 0 10px; border-radius: var(--r-sm); background: var(--surface-2); color: var(--text); font-size: 12px; font-weight: 700; }
+  .hh-post__extras { border-top-color: var(--border); }
+
+  // Go live: the 56px accent button, sentence-sized, no glow or pulse.
+  .hh-studio__go-btn,
+  .hh-studio__pause-btn,
+  .hh-studio__end-btn {
+    min-height: 56px;
+    padding: 0 20px;
+    border-radius: var(--r-xl);
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 900;
+    letter-spacing: 0;
+    text-align: left;
+    box-shadow: none;
+    animation: none;
+  }
+  .hh-studio__go-btn {
+    display: block;
+    background: var(--accent);
+    color: var(--on-accent);
+    // "🔴 START STREAM": the leading emoji goes, the words stay.
+    &:not(:disabled)::first-letter { font-size: 0; }
+    &:hover:not(:disabled) { background: var(--accent-hover); filter: none; }
+  }
+  .hh-studio__pause-btn { background: var(--surface-2); color: var(--text); }
+  .hh-studio__end-btn {
+    min-height: 44px;
+    border: 0;
+    border-radius: var(--r-lg);
+    background: var(--accent-tint);
+    color: var(--accent);
+    font-size: 13px;
+    &:hover { background: color-mix(in srgb, var(--accent) 22%, transparent); }
+  }
+}
+
+// The OpenPod audio room (SDK HangoutsRoom, conference), design 22d: Roboto on
+// the page ground, the title at 32/900, stage tiles as surface cards with the
+// cyan ring for whoever is speaking, the audience as rounded avatar squares,
+// and the controls as a row of 48px tiles with Material glyphs in place of the
+// SDK's emoji. "Raise hand" is the cyan "ask to speak" button.
+@mixin room {
+  .hh-room {
+    padding: 16px 20px;
+    font-family: var(--font-sans);
+    background: var(--bg);
+    color: var(--text);
+  }
+  .hh-room__header { align-items: center; gap: 12px; margin-bottom: 16px; }
+  .hh-room__title { margin: 0; font-size: 32px; font-weight: 900; letter-spacing: -.02em; line-height: 1.15; color: var(--text); text-shadow: none; }
+  .hh-room__description { color: var(--muted); font-size: 13px; text-shadow: none; }
+  .hh-room__count { @include v2.text(body-sm); color: var(--muted); text-shadow: none; }
+  .hh-room__share {
+    display: inline-block;
+    min-height: 36px;
+    line-height: 36px;
+    padding: 0 12px;
+    border-radius: var(--r-md);
+    font-size: 12px;
+    &::first-letter { font-size: 0; }
+  }
+
+  // Audience: "LISTENING" with rounded avatar squares (22d).
+  .hh-room__listeners { padding: 12px 8px; border: 0; border-radius: var(--r-2xl); background: var(--surface); backdrop-filter: none; }
+  .hh-audience__label { @include v2.text(eyebrow); color: var(--muted); text-shadow: none; }
+  .hh-tile--small .hh-tile__avatar-wrap { width: 44px; height: 44px; }
+  .hh-tile--small .hh-tile__avatar,
+  .hh-tile--small .hh-tile__video { border-radius: var(--r-lg); background: var(--surface-2); }
+  .hh-tile--small.hh-tile--speaking .hh-tile__avatar { border-color: var(--cyan); box-shadow: none; }
+  .hh-tile--small .hh-tile__name { font-size: 11px; font-weight: 700; color: var(--text); text-shadow: none; }
+
+  // Stage: surface cards, the speaker ringed in cyan, the avatar a 64 square.
+  .hh-tile { border-radius: var(--r-xl); background: var(--surface); box-shadow: none; }
+  .hh-tile--speaking { border-color: var(--cyan); box-shadow: none; }
+  .hh-tile__placeholder .hh-tile__avatar { width: 64px; border: 0; border-radius: var(--r-lg); box-shadow: none; background: var(--surface-2); }
+  .hh-tile__overlay { background: var(--media-scrim); }
+  .hh-tile__overlay .hh-tile__name { font-size: 13px; font-weight: 700; text-shadow: none; }
+  .hh-tile__overlay .hh-tile__role { border-radius: var(--r-sm); background: var(--cyan-tint); color: var(--cyan); font-size: 10px; font-weight: 900; }
+  .hh-tile__hand { @include glyph("back_hand", 16px); color: var(--cyan); background: var(--media-scrim); }
+
+  // Controls: 48px tiles on the page ground, no glass bar.
+  .hh-controls {
+    gap: 8px;
+    margin-top: 12px;
+    padding: 12px 0 0;
+    border: 0;
+    border-top: 1px solid var(--border);
+    border-radius: 0;
+    background: transparent;
+    backdrop-filter: none;
+  }
+  .hh-controls__group { gap: 8px; }
+  .hh-controls__group--right { border-left-color: var(--border); }
+  .hh-controls .hh-btn,
+  .hh-controls .hh-recording-idle select {
+    min-height: 48px;
+    padding: 0 14px;
+    border-radius: var(--r-lg);
+    font-size: 13px;
+    font-weight: 700;
+  }
+  .hh-controls .hh-btn--icon { width: 48px; height: 48px; padding: 0; }
+  .hh-controls [title="Show games"] { @include glyph("sports_esports", 20px); }
+  .hh-controls [title="Boost history"] { @include glyph("history", 20px); }
+  .hh-controls [title="Boost settings"] { @include glyph("tune", 20px); }
+  .hh-controls [title="Turn off camera"] { @include glyph("videocam", 20px); }
+  .hh-controls [title="Turn on camera"] { @include glyph("videocam_off", 20px); }
+  .hh-controls [title="Share screen"],
+  .hh-controls [title="Stop sharing"] { @include glyph("screen_share", 20px); }
+  .hh-controls [title="Show chat"] { @include glyph("chat_bubble", 20px); position: relative; }
+  .hh-controls__chat-badge { font-size: 10px; }
+  .hh-controls [title^="Switch to"] { @include glyph("swap_horiz", 20px); }
+  // Text buttons that open with an emoji or symbol: the glyph goes, the words stay.
+  .hh-controls__group--left > .hh-btn:not(.hh-btn--icon):not(.hh-btn--ptt),
+  .hh-controls__group--right > .hh-btn:not(.hh-btn--icon):not(.hh-end-menu__trigger):not(.hh-controls__layout),
+  .hh-recording-idle > button {
+    display: inline-block;
+    line-height: 48px;
+    &::first-letter { font-size: 0; }
+  }
+  // Raise hand, the listener's way on stage: the cyan button (22d "Ask to speak").
+  .hh-controls__group--left > .hh-btn.hh-btn--secondary:not(.hh-btn--icon) {
+    background: var(--cyan);
+    color: var(--bg);
+    font-weight: 900;
+    &:hover:not(:disabled) { background: var(--cyan); filter: brightness(1.08); color: var(--bg); }
+  }
+  .hh-controls__layout-value { display: inline-block; &::first-letter { font-size: 0; } }
+  .hh-controls__layout-label { color: var(--muted); }
+  .hh-controls__layout-chevron,
+  .hh-end-menu__chevron { @include glyph("expand_more", 18px); }
+
+  // The restream panel (SDK StreamingPanel, "Go Live" to YouTube or Twitch), 29d:
+  // anchored to the controls bar (it was placed against the room's content box
+  // and opened above the top of the sheet), a v2 surface card with filled fields.
+  .hh-controls { position: relative; }
+  .hh-streaming-panel {
+    width: 320px;
+    gap: 12px;
+    padding: 20px;
+    border: 1px solid var(--border);
+    border-radius: var(--r-3xl);
+    background: var(--surface);
+    box-shadow: var(--shadow-float);
+  }
+  .hh-streaming-panel__header {
+    font-size: 18px;
+    font-weight: 700;
+    &::before { content: ""; width: 4px; height: 22px; margin-right: 10px; border-radius: var(--r-bar); background: var(--accent); }
+    > span { flex: 1; }
+    .hh-btn--icon { width: 32px; height: 32px; min-height: 32px; border-radius: 50%; background: transparent; }
+  }
+  .hh-streaming-panel__tabs { gap: 4px; padding: 4px; border-radius: var(--r-md); background: var(--bg);
+    .hh-btn { flex: 1; min-height: 32px; height: 32px; justify-content: center; border-radius: var(--r-md); font-size: 13px; }
+    .hh-btn--secondary { background: transparent; color: var(--muted); }
+    .hh-btn--primary { background: var(--surface-2); color: var(--text); font-weight: 700; } }
+  .hh-streaming-panel__label { @include v2.text(eyebrow); color: var(--muted); }
+  .hh-streaming-panel__input { @include field(40); height: 40px; }
+  .hh-streaming-panel__error { color: var(--accent); font-size: 11px; }
+  .hh-streaming-panel .hh-btn--full { min-height: 48px; border-radius: var(--r-lg); font-size: 14px; font-weight: 900; }
+  .hh-streaming-panel .hh-btn--primary.hh-btn--full:enabled { display: block; line-height: 48px; &::first-letter { font-size: 0; } }
+
+  // The room's chat panel: a v2 surface with a filled composer.
+  .hh-room__sidebar .hh-chat {
+    border: 1px solid var(--border);
+    border-radius: var(--r-2xl);
+    background: var(--surface);
+    box-shadow: none;
+    backdrop-filter: none;
+  }
+  .hh-room__sidebar .hh-chat__header { border-bottom-color: var(--border); }
+  .hh-room__sidebar .hh-chat__title { @include v2.text(eyebrow); color: var(--muted); }
+  .hh-room__sidebar .hh-chat__input { @include field(44); height: 44px; background: var(--surface-2); }
+  .hh-room__sidebar .hh-chat__emoji-toggle { width: 44px; height: 44px; border: 0; border-radius: 50%; background: var(--surface-2); color: var(--muted); @include glyph("mood", 20px); }
+  .hh-room__sidebar .hh-chat__input-row .hh-btn--primary { width: 44px; min-height: 44px; height: 44px; padding: 0; border-radius: 50%; @include glyph("send", 20px); }
+}
+
+// The OBS Browser Source panel (SDK ObsPanel, the room's OBS button), in the
+// 32e "Stream with OBS" card look: a surface sheet, the title behind a 4px
+// accent bar, wells for the URL, cyan for what is switched on. The SDK injects
+// its own <style>, hence the extra parent in each selector.
+@mixin obs-panel {
+  .hh-obs-panel.hh-obs-panel {
+    padding: 20px;
+    border: 1px solid var(--border);
+    border-radius: var(--r-3xl);
+    background: var(--surface);
+    box-shadow: var(--shadow-float);
+    font-family: var(--font-sans);
+    color: var(--text);
+    backdrop-filter: none;
+  }
+  .hh-obs-panel .hh-obs-panel__title { gap: 10px; color: var(--text); font-size: 18px; font-weight: 700; letter-spacing: 0; text-transform: none; }
+  .hh-obs-panel .hh-obs-panel__title-dot { width: 4px; height: 22px; border-radius: var(--r-bar); background: var(--accent); box-shadow: none; animation: none; }
+  .hh-obs-panel .hh-obs-panel__close { width: 32px; height: 32px; border-radius: 50%; background: transparent; color: var(--text); font-size: 14px;
+    &:hover { background: var(--bg-hover); color: var(--text); } }
+  .hh-obs-panel .hh-obs-panel__divider { background: var(--border); }
+  .hh-obs-panel .hh-obs-panel__label { @include v2.text(eyebrow); color: var(--muted); }
+  .hh-obs-panel .hh-obs-panel__check { min-height: 32px; border: 0; border-radius: var(--r-md); background: var(--surface-2); color: var(--muted); font-family: inherit; font-size: 12px; font-weight: 700;
+    &:hover { background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); } }
+  .hh-obs-panel .hh-obs-panel__check--on { background: var(--cyan-tint); color: var(--cyan);
+    &:hover { background: var(--cyan-tint-strong); } }
+  .hh-obs-panel .hh-obs-panel__box { border-color: var(--muted); border-radius: var(--r-xs); }
+  .hh-obs-panel .hh-obs-panel__check--on .hh-obs-panel__box { background: var(--cyan); border-color: var(--cyan); }
+  .hh-obs-panel .hh-obs-panel__check-icon { color: var(--bg); }
+  .hh-obs-panel .hh-obs-panel__url { padding: 12px 14px; border: 0; border-radius: var(--r-lg); background: var(--bg); color: var(--text); @include v2.mono(12, 700); line-height: 1.5; box-shadow: none; }
+  .hh-obs-panel .hh-obs-panel__url--invalid { color: var(--muted); font-family: inherit; font-weight: 400; }
+  .hh-obs-panel .hh-obs-panel__copy { min-height: 48px; border-radius: var(--r-lg); background: var(--accent); color: var(--on-accent); font-family: inherit; font-size: 14px; font-weight: 900; box-shadow: none;
+    &:hover:not(:disabled) { background: var(--accent-hover); box-shadow: none; transform: none; } }
+  .hh-obs-panel .hh-obs-panel__copy--copied { background: var(--cyan) !important; color: var(--bg); }
+  .hh-obs-panel .hh-obs-panel__hint { color: var(--muted); font-size: 11px; }
+}

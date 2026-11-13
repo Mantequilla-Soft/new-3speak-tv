@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap"><style>*,*::before,*::after{box-sizing:border-box}body{margin:0;background:#0a0a0a;font-family:Roboto,Arial,sans-serif;color:#f1f1f1}a{color:#f1f1f1;text-decoration:none}a:hover{color:#ff5252}</style></helmet>
+<div style="max-width:1200px;margin:0 auto;padding:64px 32px">
+<img src="server/og-outro/3s-mark.png" alt="3Speak" style="width:44px">
+<div style="font-size:56px;font-weight:900;letter-spacing:-.04em;line-height:1;margin-top:20px">3Speak redesign</div>
+<div style="font-size:16px;color:#a3a3a3;margin-top:12px;max-width:720px;line-height:1.5">The current set is all v2: red and cyan only, action tiles, segmented tabs, a context strip and side sheets. Every file has a dark and light Theme switch in Tweaks.</div>
+
+<div style="display:flex;align-items:center;gap:10px;margin-top:48px"><span style="width:4px;height:24px;border-radius:2px;background:#ff5252"></span><div style="font-size:24px;font-weight:900">Current set</div></div>
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:12px;margin-top:16px">
+<a href="3Speak App 20 Home Channel Community v2.dc.html" style="display:flex;flex-direction:column;gap:6px;padding:20px;border-radius:24px;background:#161616;border:1px solid #262626" style-hover="border-color:#ff5252"><span style="font-size:12px;font-weight:900;color:#ff5252">20</span><b style="font-size:20px">Home, Channel, Community</b><span style="font-size:13px;color:#a3a3a3;line-height:1.5">The five v2 rules, Home, Channel, Community</span></a>
+<a href="3Speak App 02 Watch v2.dc.html" style="display:flex;flex-direction:column;gap:6px;padding:20px;border-radius:24px;background:#161616;border:1px solid #262626" style-hover="border-color:#ff5252"><span style="font-size:12px;font-weight:900;color:#ff5252">02 v2</span><b style="font-size:20px">Watch</b><span style="font-size:13px;color:#a3a3a3;line-height:1.5">Discussion beside the player, action dock, chapters, playlist shelf</span></a>
+<a href="3Speak App 18 Shorts Audio Live Settings v2.dc.html" style="display:flex;flex-direction:column;gap:6px;padding:20px;border-radius:24px;background:#161616;border:1px solid #262626" style-hover="border-color:#ff5252"><span style="font-size:12px;font-weight:900;color:#ff5252">18</span><b style="font-size:20px">Shorts, Audio, Live, Settings</b><span style="font-size:13px;color:#a3a3a3;line-height:1.5">The same player pattern everywhere, settings as tiles</span></a>
+<a href="3Speak App 21 Search Studio Wallet v2.dc.html" style="display:flex;flex-direction:column;gap:6px;padding:20px;border-radius:24px;background:#161616;border:1px solid #262626" style-hover="border-color:#ff5252"><span style="font-size:12px;font-weight:900;color:#ff5252">21</span><b style="font-size:20px">Search, Discover, Upload, Studio, Wallet</b><span style="font-size:13px;color:#a3a3a3;line-height:1.5">Cards instead of tables, a tile stepper for upload</span></a>
+<a href="3Speak App 07 Dialogs v2.dc.html" style="display:flex;flex-direction:column;gap:6px;padding:20px;border-radius:24px;background:#161616;border:1px solid #262626" style-hover="border-color:#ff5252"><span style="font-size:12px;font-weight:900;color:#ff5252">07 v2</span><b style="font-size:20px">Dialogs</b><span style="font-size:13px;color:#a3a3a3;line-height:1.5">Side and bottom sheets: login, share, save, report, menus</span></a>
+<a href="3Speak App 17 Sheets.dc.html" style="display:flex;flex-direction:column;gap:6px;padding:20px;border-radius:24px;background:#161616;border:1px solid #262626" style-hover="border-color:#ff5252"><span style="font-size:12px;font-weight:900;color:#ff5252">17</span><b style="font-size:20px">Sheets</b><span style="font-size:13px;color:#a3a3a3;line-height:1.5">Tip, vote, promote, schedule, rewards split, send, new community</span></a>
+<a href="3Speak App 19 Gap Fill.dc.html" style="display:flex;flex-direction:column;gap:6px;padding:20px;border-radius:24px;background:#161616;border:1px solid #262626" style-hover="border-color:#ff5252"><span style="font-size:12px;font-weight:900;color:#ff5252">19</span><b style="font-size:20px">Gap fill</b><span style="font-size:13px;color:#a3a3a3;line-height:1.5">Player controls, post view, tag feed, groups, chat and tip extras, OBS</span></a>
+</div>
+
+<div style="display:flex;align-items:center;gap:10px;margin-top:48px"><span style="width:4px;height:24px;border-radius:2px;background:#22d3ee"></span><div style="font-size:24px;font-weight:900">Current set, continued</div></div>
+<div style="font-size:14px;color:#a3a3a3;margin-top:8px;max-width:760px;line-height:1.5">Every remaining function, redrawn by hand with the v2 rules from <a href="3Speak App 20 Home Channel Community v2.dc.html" style="color:#22d3ee">20</a>.</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px;margin-top:16px">
+<sc-for list="{{ refs }}" as="r" hint-placeholder-count="8"><a href="{{ r.href }}" style="display:flex;flex-direction:column;gap:4px;padding:16px;border-radius:20px;background:#161616;border:1px solid #222" style-hover="border-color:#22d3ee"><span style="font-size:12px;font-weight:900;color:#22d3ee">{{ r.n }}</span><b style="font-size:16px">{{ r.t }}</b><span style="font-size:12px;color:#a3a3a3;line-height:1.45">{{ r.s }}</span></a></sc-for>
+</div>
+
+<div style="display:flex;align-items:center;gap:10px;margin-top:48px"><span style="width:4px;height:24px;border-radius:2px;background:#555"></span><div style="font-size:24px;font-weight:900;color:#a3a3a3">Replaced (v1, kept for history)</div></div>
+<div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:16px"><sc-for list="{{ old }}" as="o" hint-placeholder-count="6"><a href="{{ o.href }}" style="height:40px;padding:0 14px;border-radius:12px;background:#161616;border:1px solid #222;display:flex;align-items:center;gap:8px;font-size:13px;color:#a3a3a3" style-hover="color:#f1f1f1">{{ o.t }}<span style="color:#555">→ {{ o.by }}</span></a></sc-for></div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    const f = n => '3Speak App ' + n + '.dc.html';
+    return {
+      refs: [
+        ['22', 'Watch extras and Live', 'Transcript, translate, react, supporters, mini player, go live, OpenPod room, pre-roll', '22 Watch Extras Live v2'],
+        ['23', 'Onboarding and Studio tools', 'Welcome flow, incubation, accounts, record, timeline, thumbnail editor, stats, import, limits', '23 Onboarding Studio Tools v2'],
+        ['24', 'Audio and profile extras', 'Audio upload, audiograms, podcasts, episode, tip, layout editor, trailer, links page, stories, snaps', '24 Audio Profile Extras v2'],
+        ['25', 'Ads, Pro and utility', 'Advertise, ad wizard, player ads, Pro, campaigns, Galaxy, Surf, embed, system states', '25 Ads Pro Utility v2'],
+        ['28', 'Comments, cards, search, playlists, audio', 'Full comment threads, comment vote, card hover / menu / payout, Shorts row, creator suggestions, desktop search dropdown, playlist page and cards, audio browse', '28 Comments Cards Playlists Audio v2'],
+        ['29', 'Sign up, settings, moderation, utilities', 'Create account and key backup, all 6 settings sections, mod queue and roles, award badge, image upload, restream, invite popup, pull to refresh, Shorts loading', '29 Account Settings Moderation v2'],
+        ['49', 'Data page, batch import, First Uploads', 'How 3Speak handles your data (the one English-only page), batch import form and status with stop, First Uploads feed, bare embed player states', '49 Legal Batch Import Depth v2'],
+        ['48', 'Galaxy, player extras, FAQ', 'Hive galaxy modes, scan depth, filters, circles, star card; player size, autoplay, subtitle styling, reactions panel and posting a video reaction; hype and reblog; team announcement with reply; FAQ page', '48 Galaxy Player FAQ Depth v2'],
+        ['47', 'Advertise in depth', 'General tab with formats, audience and price explorer; enrolling a product; ad types, ticker editor, label, production tiers; booking, paying, funds; flights and delivery credit; viewer-side ads, creator and viewer prompts, promote and run as an ad', '47 Advertise Depth v2'],
+        ['46', 'Warm-up in depth', 'Warm-up intro, five tracks, goal list with what counts, warm-up profile, brand and private contact, admin view, graduation, name taken, reconnect, publishing the backlog to Hive', '46 Warm-up Depth v2'],
+        ['45', 'Stats, Shorts, translator in depth', 'Per-video retention and replays, viewer locations, compare; Shorts modes, ambient light, remix limits, story tools; live watch page; watch history; leaderboard metrics; translation editor', '45 Stats Shorts Translator Depth v2'],
+        ['44', 'System, welcome, studio in depth', 'Banned and upload blocks, outage, update and changelog, route errors; invite landing, welcome for creators and advertisers, profile fields; full Create menu, embeds, scheduled post editing, description composer', '44 System Welcome Studio Depth v2'],
+        ['43', 'Comments, transcript, modals in depth', 'Comment composer, pins, hidden and translated comments; transcript search and caption editing; linked profiles, report, tag, editor render; feedback, storage consent, card states, 404, About', '43 Comments Transcript Modals Depth v2'],
+        ['42', 'Auth, nav, invites in depth', 'Welcome and sign-in, account switching, active-key signing, posting authority; account menu with VP/RC, push and stories in the bell, install app; invite links', '42 Auth Nav Invites Depth v2'],
+        ['41', 'Spotlight, recap, badges, playlists in depth', 'Spotlight templates with Undo, 5 block types, link type and platform icon, style sliders with Apply to all, page style and buttons, live preview; year recap watch-time, income pillars, leaderboard steps, loading and empty; badge directory, page, award and arrange; save to playlist, album editing, grouped notifications', '41 Spotlight Recap Badges Depth v2'],
+        ['40', 'Engagement and communities in depth', 'Tip tabs, Lightning invoice and waiting, wallet picker incl. HiveSigner, monthly support with stop, top voters, vote and tag with topics, community directory sorts, KPIs, New/Trending/Top/Discussion, pinned Start here, team roles, surf a community, create community or badge with keys and fee', '40 Engagement Communities Depth v2'],
+        ['39', 'Live and chat in depth', 'Stream Studio steps and visibility, boosts and payout, OBS templates with states, stream secret, chat dock, WHIP guide, stream ended and rating, report reasons, publish OpenPod recording, chat connect gate, private rooms, public channels, message actions, share options', '39 Live Chat Depth v2'],
+        ['38', 'Settings in depth', 'Real tab structure, ads and community revenue split, viewer and listener rewards, posting authority, referral earnings, notification kinds, appearance, Shorts and feed options incl. hide AI and private mode, interests, Lightning validation, about and RPC node, data request receipt', '38 Settings Depth v2'],
+        ['37', 'Profile in depth', 'All 11 profile tabs, supporters received/given with hide tip, Pro subscribers, streams, profile menu, owner/visitor empty states, mobile action button, snap options, linked profiles, full layout editor with dock, hidden tray and tour', '37 Profile Depth v2'],
+        ['36', 'Audio in depth', 'Audio upload modes (snaps, standalone, album) and earnings (post rewards, pay-per-listen), albums, player clips and offline, Explore/Player tabs, podcast app: search, RSS, OPML, trending, charts, private feeds, seasons, episode filters, hosts, live, highlights, value-for-value split tips', '36 Audio Depth v2'],
+        ['35', 'Upload in depth', 'Selfie teleprompter, file checks, resumable upload and retries, 24h story with streak, every publish option incl. members-only guest list, watch ad to publish, activity log, upload feedback, timeline link editor, drafts filter', '35 Upload Depth v2'],
+        ['34', 'Passes 3 and 4', 'Channel Surfing guide and remote, customize Home sections, Discover filters, first-time uploads row, audio effects and filters, podcast co-hosts, Lightning through v4v.app, Galaxy music, the toast system', '34 Passes 3 and 4 v2'],
+        ['33', 'Final passes', 'Watch-page states (topics, viewer tagging, clip, creator links, tip nudge, scheduled, Pro preview, locked, media errors), full Edit video, import from 5 platforms with batch status, welcome banner and desktop tour, install app, push, cast, podcast RSS and Lightning QR, ad production tiers, keep story as Short, offline chat', '33 Final Passes v2'],
+        ['31', 'Creator and monetization depth', 'Channel stats (sources, best time, audience, compare), publish review / progress / done / failed, gated and locked videos, ad booking calendar and creatives, Lightning, support links, who you support', '31 Creator Monetization Depth v2'],
+        ['32', 'Social and system depth', 'Chat rooms, channels, threads, Short remix and chains, reblog, notification summary, community picker, Galaxy controls, OBS setup, lobby, stream replay, translator workspace, posting authority, connections, feed settings, system notices', '32 Social System Depth v2'],
+        ['30', 'Stories, stream tools, banners, errors', 'Story viewer and creator, clip and boost a stream, watermark, scheduled and welcome banners, supporter rings, badges, translate states, error page', '30 Stories Stream Tools Errors v2'],
+        ['27', 'Global audio player', 'Expanded overlay, queue editing, player menu, share clip, comments, hype, docked bar, PiP, inline, lock screen, mobile sheets', '27 Global Audio Player v2'],
+        ['26', 'Notifications, leaderboard, Recap, info', 'Notifications, chat, leaderboard, live grid, Recap, badges, About, FAQ, invite, translate, legal, 404', '26 Notifications Leaderboard Recap Info v2']
+      ].map(([n, t, s, file]) => ({ n, t, s, href: f(file) })),
+      old: [['01 Home', '20a', '01 Home'], ['02 Watch & Listen', '02 v2, 18', '02 Watch & Listen'], ['03 People', '20, 26a', '03 People'], ['04 Create', '21c, 21d', '04 Create'], ['05 Explore', '21, 26b', '05 Explore'], ['06 Rewards', '21e, 17, 26c', '06 Rewards'], ['07 Dialogs & Settings', '07 v2, 18d', '07 Dialogs & Settings'], ['08 Info Pages', '26d', '08 Info Pages'], ['09 Watch Extras', '22', '09 Watch Extras'], ['10 Live & OpenPods', '22', '10 Live & OpenPods'], ['11 Onboarding', '23', '11 Onboarding'], ['12 Studio Tools', '23', '12 Studio Tools'], ['13 Audio & Podcasts', '24', '13 Audio & Podcasts'], ['14 Profile Extras', '24', '14 Profile Extras'], ['15 Ads & Pro', '25', '15 Ads & Pro'], ['16 Utility', '25', '16 Utility']].map(([t, by, file]) => ({ t, by, href: 'archive/' + f(file) }))
+    };
+  }
+}
+</script>
+</body>
+</html>

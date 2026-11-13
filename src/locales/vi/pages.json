@@ -93,12 +93,13 @@
   "legal": {
     "pageTitle": "Cách 3Speak xử lý dữ liệu của bạn · 3Speak",
     "englishOnly": "Trang này chỉ có bằng tiếng Anh. Bản tiếng Anh là bản có giá trị ràng buộc.",
-    "back": "← Quay lại 3Speak"
+    "back": "← Quay lại 3Speak",
+    "onThisPage": "Trong trang này"
   },
   "notFound": {
     "imageAlt": "404",
-    "title": "XIN LỖI! KHÔNG TÌM THẤY TRANG",
+    "title": "Xin lỗi, không tìm thấy trang",
     "message": "Rất tiếc, trang bạn đang tìm không khả dụng.",
-    "goHome": "VỀ TRANG CHỦ"
+    "goHome": "Về trang chủ"
   }
 }

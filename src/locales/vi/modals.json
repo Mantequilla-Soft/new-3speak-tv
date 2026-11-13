@@ -17,7 +17,8 @@
     "loginFailed": "Đăng nhập thất bại: {{error}}",
     "logoAlt": "Logo 3Speak",
     "title": "Đăng nhập bằng tên người dùng",
-    "usernamePlaceholder": "Tên người dùng"
+    "usernamePlaceholder": "Tên người dùng",
+    "continueWith": "Tiếp tục với {{method}}"
   },
   "socialLink": {
     "hashCopied": "Đã sao chép mã hash",
@@ -54,8 +55,8 @@
     "verify": "Xác minh"
   },
   "auth": {
-    "title": "Cấp quyền cho 3Speak!",
-    "text": "Để tải video lên 3Speak, chúng tôi cần quyền posting của bạn. Quyền này cho phép chúng tôi xuất bản video bạn đã tải lên Hive. Bạn chỉ cần cấp quyền posting cho chúng tôi một lần.",
+    "title": "Cấp quyền cho 3Speak",
+    "text": "Để tải lên, chúng tôi cần quyền posting của bạn để xuất bản video của bạn lên Hive. Bạn chỉ cần cấp một lần.",
     "authorize": "Cấp quyền"
   },
   "beneficiary": {
@@ -69,20 +70,25 @@
       "duplicate": "Tài khoản này đã có trong danh sách.",
       "invalidAccount": "Tên người dùng hoặc ID cộng đồng không hợp lệ.",
       "cannotIncrease": "Không thể tăng vượt quá {{percent}}% còn lại",
-      "pendingRow": "@{{account}} chưa được thêm — nhấn + để thêm, hoặc xóa trường này.",
+      "pendingRow": "@{{account}} chưa được thêm. Nhấn + để thêm, hoặc xóa trường này.",
       "atLeastOne": "Tỷ lệ phần thưởng phải ít nhất 1%",
       "maxCount": "Hive cho phép tối đa {{max}} người thụ hưởng cho mỗi bài đăng."
     },
     "title": "Người thụ hưởng",
+    "shareRewards": "Chia sẻ phần thưởng",
+    "you": "bạn",
+    "toYou": "cho bạn",
+    "addCollaborator": "Thêm cộng tác viên",
+    "saveSplit": "Lưu cách chia",
     "intro": "Thêm người dùng mà bạn muốn tự động nhận một phần phần thưởng của bài đăng này.",
     "minPercent": "% (tối thiểu {{percent}}%)",
     "usernamePlaceholder": "Nhập tên người dùng",
     "minimumReward": "Phần thưởng tối thiểu là <strong>1%</strong>",
     "checking": "Đang kiểm tra <strong>@{{account}}</strong> trên Hive…",
-    "notExisting": "⚠️ <strong>@{{account}}</strong> không phải là tài khoản Hive tồn tại.",
-    "notAdded": "⚠️ <strong>@{{account}}</strong> chưa được thêm — nhấn <strong>+</strong> để thêm, hoặc xóa trường này.",
-    "infrastructure": "10% === Hạ tầng",
-    "videoEncoding": "Mã hóa video === 1%",
+    "notExisting": "<strong>@{{account}}</strong> không phải là tài khoản Hive tồn tại.",
+    "notAdded": "<strong>@{{account}}</strong> chưa được thêm. Nhấn <strong>+</strong> để thêm, hoặc xóa trường này.",
+    "infrastructure": "Hạ tầng: 10%",
+    "videoEncoding": "Mã hóa video: 1%",
     "defaults": "Người thụ hưởng mặc định ({{count}})"
   },
   "qr": {
@@ -100,7 +106,7 @@
   },
   "verifyAuth": {
     "title": "Đang xác minh quyền",
-    "text": "Vui lòng chờ trong lúc chúng tôi xác minh quyền đã được cấp..."
+    "text": "Đang kiểm tra quyền đã được cấp…"
   },
   "editor": {
     "confirmLeave": "Trình chỉnh sửa vẫn đang mở. Rời trang này sẽ đóng trình chỉnh sửa và các thay đổi chưa lưu sẽ bị mất.\n\nOK = Đóng trình chỉnh sửa & rời đi\nHủy = Ở lại trang này",
@@ -176,7 +182,9 @@
     "details": "Chi tiết bổ sung (không bắt buộc)",
     "detailsPlaceholder": "Cung cấp thêm ngữ cảnh...",
     "submitting": "Đang gửi...",
-    "submit": "Gửi báo cáo"
+    "submit": "Gửi báo cáo",
+    "intro": "Báo cáo được gửi đến đội ngũ 3Speak. Nhà sáng tạo sẽ không biết ai đã báo cáo.",
+    "nextDetails": "Tiếp: thêm chi tiết"
   },
   "upload": {
     "missingInfo": "Thiếu thông tin video hoặc hình thu nhỏ.",

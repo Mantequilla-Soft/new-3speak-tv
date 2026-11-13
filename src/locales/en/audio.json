@@ -48,7 +48,7 @@
     "curated": "Curated",
     "noCues": "No cues.",
     "clearQueue": "Clear queue",
-    "clearAll": "Clear all",
+    "clearAll": "Clear",
     "queueMoveUp": "Move {{title}} up",
     "queueMoveDown": "Move {{title}} down",
     "queueRemove": "Remove {{title}} from the queue",
@@ -59,7 +59,7 @@
     "collapse": "Collapse player",
     "skipBack": "Back {{seconds}} seconds",
     "skipForward": "Forward {{seconds}} seconds",
-    "speed": "Playback speed",
+    "speed": "Speed",
     "speedValue": "Playback speed: {{speed}}",
     "sleep": "Sleep timer",
     "sleepOff": "Off",
@@ -76,8 +76,8 @@
     "effectsChecking": "Checking whether this episode supports it…",
     "timeSaved": "Time saved: {{time}}",
     "cast": "Play on another device",
-    "download": "Save for offline",
-    "downloading": "Saving: {{pct}}%",
+    "download": "Download",
+    "downloading": "Saving for offline: {{pct}}%",
     "downloaded": "Saved for offline",
     "downloadDone": "Saved for offline listening",
     "downloadFailed": "Couldn't save this episode",
@@ -101,8 +101,17 @@
     "nextChapter": "Next chapter",
     "chapterLink": "Chapter link",
     "upNext": "Up next",
-    "hideIdle": "Hide (your queue stays)",
-    "continueAt": "Continue at {{time}}"
+    "hideIdle": "Hide · queue stays",
+    "continueAt": "Continue at {{time}}",
+    "position": "{{current}} of {{total}}",
+    "playingFrom": "Playing from {{name}}",
+    "atThisMoment": "At this moment",
+    "goTo": "Go to {{name}}",
+    "shuffle": "Shuffle",
+    "repeat": "Repeat this track",
+    "sleepMinutesShort": "{{minutes}} min",
+    "swipeUp": "Swipe up for the player",
+    "commentAt": "Comment at {{time}}…"
   },
   "share": {
     "failed": "Failed",
@@ -112,7 +121,16 @@
     "copied3speak": "3Speak link copied!",
     "copyAudioPlayer": "Copy audio player link",
     "copiedAudioPlayer": "Audio player link copied!",
-    "searchingHive": "Searching Hive…"
+    "searchingHive": "Searching Hive…",
+    "title": "Share track",
+    "atTime": "At {{time}}",
+    "peakd": "PeakD",
+    "player": "Player link",
+    "x": "X",
+    "telegram": "Telegram",
+    "email": "Email",
+    "qr": "QR",
+    "episode": "Episode link"
   },
   "post": {
     "notFound": "Post not found",
@@ -126,12 +144,14 @@
     "vote": "Vote",
     "signInToTip": "Sign in to tip",
     "tip": "Tip",
+    "albumLabel": "Album",
+    "notes": "Notes",
     "stillIndexing": "Audio for this post is still being indexed — try again in a few minutes."
   },
   "page": {
     "sections": {
       "popular": "Popular",
-      "recent": "New Releases",
+      "recent": "New releases",
       "podcasts": "Podcasts",
       "songs": "Songs",
       "audiobooks": "Audiobooks",
@@ -158,7 +178,7 @@
     "tracks_other": "{{count}} tracks",
     "noTracks": "No tracks found.",
     "creators": "Creators",
-    "albumsPlaylists": "Albums & Playlists",
+    "albumsPlaylists": "Audio playlists",
     "noAudioForFilters": "No audio found for these filters.",
     "tabsLabel": "Audio views",
     "tabExplore": "Explore",
@@ -171,6 +191,25 @@
   "upload": {
     "title": "Upload audio",
     "publishing": "Publishing…",
+    "nextTo": "Next: {{step}}",
+    "publishAlbum_one": "Publish album · {{count}} track",
+    "publishAlbum_other": "Publish album · {{count}} tracks",
+    "publishWithShorts_one": "Publish audio + {{count}} Short",
+    "publishWithShorts_other": "Publish audio + {{count}} Shorts",
+    "side": {
+      "publishTo": "Publish to",
+      "shortsTitle": "Audiogram Shorts",
+      "clips_one": "{{count}} clip",
+      "clips_other": "{{count}} clips",
+      "tracks_one": "{{count}} track",
+      "tracks_other": "{{count}} tracks",
+      "audio": "Audio",
+      "shorts": "Shorts",
+      "snaps": "Snaps",
+      "community": "Community",
+      "rss": "RSS feed",
+      "clipLabel": "Thumbnail of Short {{n}}: {{title}}"
+    },
     "failed": "Failed",
     "unknown": "unknown",
     "unknownError": "unknown error",
@@ -191,7 +230,7 @@
       "review": "Review"
     },
     "trackTypes": {
-      "voiceSnap": "Voice / Snap"
+      "voiceSnap": "Voice note"
     },
     "toasts": {
       "pickImage": "Pick an image file",
@@ -232,13 +271,14 @@
       "discard": "Discard"
     },
     "source": {
-      "dropHere": "Drop audio files here, or click to browse",
-      "formats": "MP3, WAV, OGG, WEBM, M4A, FLAC, AAC — multiple allowed",
+      "dropHere": "Drop audio files, or browse",
+      "formats": "MP3, WAV, OGG, WEBM, M4A, FLAC, AAC · several at once",
       "stop": "Stop",
       "orRecord": "Or record live",
       "recordLimit": "Up to {{minutes}} min per recording",
       "record": "Record",
-      "added": "Added ({{count}})"
+      "added": "Added ({{count}})",
+      "filesTitle": "Audio files"
     },
     "titles": {
       "help": "Title each track and pick a type. Music tracks get genre + BPM fields."
@@ -247,7 +287,10 @@
       "trackTitle": "Track title",
       "genre": "Genre",
       "bpm": "BPM",
-      "descriptionOptional": "Description (optional)"
+      "descriptionOptional": "Description (optional)",
+      "track": "Track",
+      "category": "Category",
+      "musicGenre": "Music genre"
     },
     "playlist": {
       "helpRequired": "Required — pick or create a playlist. Album posts live inside a playlist so its tracks stay grouped inside of a 3Speak album. This helps exposure and more prominent placement on the audio page.",
@@ -261,6 +304,7 @@
       "items_one": "{{count}} item",
       "items_other": "{{count}} items",
       "newPlaylist": "New audio playlist",
+      "newAlbum": "New album",
       "namePlaceholder": "Playlist name",
       "public": "Public",
       "private": "Private",
@@ -268,6 +312,9 @@
       "creditsPlaceholder": "Credits (optional)",
       "yearPlaceholder": "Year",
       "labelPlaceholder": "Label (optional)",
+      "fieldYear": "Year",
+      "fieldLabel": "Label",
+      "fieldCredits": "Credits",
       "thumbAlt": "Album thumbnail",
       "removeThumb": "Remove thumbnail",
       "creating": "Creating…",
@@ -291,20 +338,21 @@
       "help_other": "{{count}} tracks added. Choose how they go out.",
       "howPublished": "How should this be published?",
       "snapsTitle": "Snap comments",
-      "snapsDesc": "Each audio posts as a reply under the latest peak.snaps container — shows in the Snaps feed (default).",
+      "snapsDesc": "Each audio is a reply under the latest snaps thread. Shows in the Snaps feed.",
       "singleTitle": "Standalone post",
       "singleTitleSingleOnly": "Standalone post (single file only)",
-      "singleDesc": "One audio in its own top-level Hive post, with a title, community, tags & cover.",
+      "singleDesc": "One audio in its own post with title, community, tags and cover.",
       "albumTitle": "Album post",
       "albumTitleNeeds2": "Album post (needs 2+ files)",
-      "albumDesc": "One main post (no audio) acting as a landing page; every track is published as a comment reply with its own cover, description, payout & beneficiaries.",
-      "howEarn": "How should this audio earn?",
-      "postRewardsTitle": "Post rewards (one-time)",
-      "postRewardsDesc": "You receive the normal Hive author payout — paid out once, ~7 days after publishing.",
-      "pplTitle": "Pay-per-listen (lifetime)",
-      "pplDesc": "All audio-post rewards go to @{{account}}. Instead of a single payout, a 3Speak program pays you per listen for the lifetime of the track.",
+      "albumDesc": "A main landing post, every track as a reply with its own cover and payout.",
+      "howEarn": "How should it earn?",
+      "postRewardsTitle": "Post rewards",
+      "postRewardsDesc": "Normal Hive payout, once, about 7 days after publishing",
+      "pplTitle": "Pay-per-listen",
+      "pplDesc": "A 3Speak program pays you per listen for the life of the track. The post rewards go to @{{account}}.",
       "adsTitle": "Ads on this audio",
-      "adsHint": "A short spoken sponsor message can play during this audio, and you get a share. Starts at your account setting; change it here for this upload only."
+      "adsHint": "A short spoken sponsor message can play during this audio, and you get a share. Starts at your account setting; change it here for this upload only.",
+      "adsSpoken": "Spoken sponsor message in this audio"
     },
     "reward": {
       "distribution": "Rewards distribution",
@@ -330,6 +378,8 @@
       "helpAlbum": "Each track is published as a comment under the main post. Set shared values once and apply them to all, then override per track.",
       "helpSnaps": "Each track is published as its own snap. Set shared values once and apply them to all, then override per track.",
       "applyToAllHeading": "Apply to all tracks",
+      "applyNote_one": "<b>Apply to all {{count}} track:</b> shared description and cover, then change any track on its own.",
+      "applyNote_other": "<b>Apply to all {{count}} tracks:</b> shared description and cover, then change any track on its own.",
       "sharedDescription": "Shared description (optional)",
       "sharedCover": "Shared cover image",
       "applyToAll_one": "Apply to all {{count}} track",
@@ -400,11 +450,37 @@
       "couldNotLoad": "The audiogram could not be loaded: {{error}}",
       "rowTitle": "Short: {{title}}",
       "withAudio": "Goes out together with this audio"
+    },
+    "transcript": {
+      "make": "Make a transcript",
+      "again": "Make the transcript again",
+      "hint": "Writes down what is said ({{language}}) and puts it under your text, where you can still change it.",
+      "reading": "Reading the audio...",
+      "writing": "Writing it down... {{percent}}%",
+      "added": "Transcript added under your text. Read it through: some words may be wrong.",
+      "shortened": "Transcript added, shortened to fit in a post.",
+      "empty": "No speech found in this audio.",
+      "failed": "The transcript could not be made. Please try again.",
+      "heading": "Transcript",
+      "language": "Language of the audio",
+      "waitPublish": "A transcript is still being made. Wait for it or cancel it first."
+    },
+    "teleprompter": {
+      "title": "Teleprompter",
+      "subtitle": "Write what you will say and read it while you record",
+      "placeholder": "Write or paste what you will say. It shows up big while you record.",
+      "followsVoice": "Follows your voice",
+      "steady": "Moves on at a steady pace",
+      "voiceStopped": "Voice following stopped, moving on at a steady pace",
+      "wpm": "{{n}} words a minute",
+      "slower": "Slower",
+      "faster": "Faster"
     }
   },
   "podcasts": {
     "chip": "External",
     "chipHint": "Podcasts from any RSS feed, outside 3Speak",
+    "on3speak": "On 3Speak",
     "follow": "Follow",
     "following": "Following",
     "unfollow": "Unfollow",
@@ -432,6 +508,7 @@
     "allPodcasts": "All podcasts",
     "openShow": "Open podcast",
     "play": "Play episode",
+    "playTrack": "Play track",
     "pause": "Pause",
     "episodePage": "Episode page",
     "website": "Website",
@@ -449,7 +526,8 @@
     "notifyOff": "Notifications off",
     "notifyOnDone": "You will be notified about new episodes",
     "notifyOffDone": "No more notifications for this podcast",
-    "notifyHint": "Get a notification when a new episode comes out",
+    "notifyHint": "Get a notification when one comes out",
+    "notifyLabel": "Notify about new episodes",
     "search": {
       "button": "Search",
       "results_one": "{{count}} podcast found",
@@ -470,8 +548,8 @@
       "export": "Export OPML",
       "invalid": "This is not an OPML file.",
       "empty": "No podcast feeds found in this file.",
-      "imported_one": "{{count}} podcast followed, {{failed}} could not be added. New feeds load over the next minutes.",
-      "imported_other": "{{count}} podcasts followed, {{failed}} could not be added. New feeds load over the next minutes."
+      "imported_one": "{{count}} podcast followed, {{failed}} couldn't be added. New feeds load over the next few minutes.",
+      "imported_other": "{{count}} podcasts followed, {{failed}} couldn't be added. New feeds load over the next few minutes."
     },
     "errors": {
       "signIn": "Sign in to follow podcasts.",
@@ -485,14 +563,15 @@
       "internal": "That is a 3Speak channel: you find it under the other audio types.",
       "disabled": "Outside podcasts are switched off right now.",
       "generic": "Something went wrong. Please try again.",
-      "closedPlatform": "{{platform}} does not share its shows' feeds. Search for the show by name instead.",
+      "closedPlatform": "{{platform}} doesn't share its shows' feeds. Search for the show by name instead.",
       "appleOnly": "This show is only available inside Apple Podcasts.",
       "directoryNotFound": "We could not find that show's feed. Try its RSS feed or search by name.",
       "directoryDown": "That podcast directory is not answering right now. Please try again."
     },
     "tip": {
       "button": "Support this podcast",
-      "heading": "Support {{show}}",
+      "heading": "Tip {{show}}",
+      "support": "Support {{show}}",
       "hive": "Hive tip to @{{account}}",
       "messageLabel": "Message to the podcaster (optional):",
       "messagePlaceholder": "Great episode!",
@@ -590,7 +669,7 @@
     "downloads": {
       "title": "Downloads",
       "download": "Download for offline listening",
-      "short": "Download",
+      "short": "Save",
       "downloading": "Downloading {{pct}}%",
       "cancel": "Cancel download",
       "saved": "Saved offline",
@@ -599,7 +678,7 @@
       "removed": "Download removed",
       "done": "Saved for offline listening",
       "total": "{{size}} saved",
-      "storage": "this site uses {{used}} of {{quota}} in this browser",
+      "storage": "uses {{used}} of {{quota}} in this browser",
       "perBrowser": "Downloads stay in this browser, whoever is signed in.",
       "errors": {
         "tooLarge": "This episode is too big to save.",
@@ -611,7 +690,7 @@
     },
     "autoQueue": {
       "label": "Auto-add new episodes to the queue",
-      "hint": "New episodes of this show go to the end of your queue when they come out",
+      "hint": "They go to the end of your queue",
       "onDone": "New episodes of this show will go to your queue",
       "offDone": "New episodes of this show no longer go to your queue",
       "added_one": "{{count}} new episode added to your queue",
@@ -649,6 +728,7 @@
       "startsAt": "Starts {{time}}"
     },
     "private": {
+      "title": "Add a private feed",
       "toggle": "This is a private feed (needs a login)",
       "username": "Username",
       "password": "Password",
@@ -685,7 +765,7 @@
       "hide": "Hide video"
     },
     "signInToFollow": "Sign in to follow podcasts",
-    "addExternal": "Add external podcast",
+    "addExternal": "Add external RSS feed",
     "continue": {
       "title": "Continue listening",
       "left": "{{minutes}} min left",

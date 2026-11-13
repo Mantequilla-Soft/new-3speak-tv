@@ -4,6 +4,7 @@
   },
   "tools": {
     "emoji": "Emoji",
+    "image": "Ongeza picha",
     "searchEmoji": "Tafuta emoji",
     "searchGifs": "Tafuta GIF…",
     "noGifs": "Hakuna GIF zilizopatikana.",
@@ -18,6 +19,7 @@
     "communityWithSubscribers_one": "Jumuiya · mwanachama {{formatted}}",
     "communityWithSubscribers_other": "Jumuiya · wanachama {{formatted}}",
     "commentFallback": "(maoni)",
+    "videoKind": "3Speak · Video",
     "play": "Cheza {{title}}"
   },
   "share": {
@@ -31,22 +33,29 @@
     "responsiveSub": "Hujirekebisha kutoshea ukurasa ulipo",
     "fixedSub": "iframe ya ukubwa usiobadilika",
     "sendInChat": "Tuma kwenye Gumzo la 3Speak",
-    "sendInChatSub": "Mtumie mtu kwenye 3Speak",
+    "sendInChatSub": "Mtumie mtu ujumbe",
     "embedOnWebsite": "Pachika kwenye tovuti",
-    "embedOnWebsiteSub": "Nakili HTML kwa tovuti au blogu yako",
+    "embedOnWebsiteSub": "Inayojirekebisha au ukubwa maalum",
     "forHivePost": "Kwa chapisho la Hive",
+    "forHivePostSub": "Nakili kiungo ili ubandike",
     "hivePostCopied": "Kiungo kimenakiliwa. Kibandike kwenye chapisho lako la Hive.",
-    "generalShare": "Shiriki / nakili kiungo",
-    "generalShareSub": "Programu nyingine, au nakili kiungo"
+    "generalShare": "Shiriki au nakili kiungo",
+    "generalShareSub": "Programu nyingine",
+    "embed": "Pachika",
+    "chat": "Gumzo",
+    "more": "Zaidi",
+    "startAt": "Anza kwenye",
+    "toFollowers_one": "Kwa mfuasi wako {{n}}",
+    "toFollowers_other": "Kwa wafuasi wako {{n}}"
   },
   "gate": {
     "connectTitle": "Unganisha na Gumzo la 3Speak",
-    "connectBody": "Gumzo linaendeshwa na Snapie. Kuunganisha kunasaini changamoto ya kuingia ya mara moja kwa posting key yako ya Hive — hakuna muamala, hakuna gharama.",
+    "connectBody": "Gumzo linaendeshwa na Snapie. Kuunganisha kunasaini changamoto ya kuingia ya mara moja kwa posting key yako. Hakuna muamala, hakuna gharama.",
     "connecting": "Inaunganisha…",
     "connectButton": "Unganisha gumzo",
     "cannotSign": "Njia yako ya sasa ya kuingia haiwezi kusaini changamoto ya gumzo. Tumia Keychain, HiveAuth, PeakVault au Ledger.",
-    "needsAccountTitle": "Gumzo linahitaji akaunti ya Hive",
-    "needsAccountBody": "Ujumbe husainiwa kwa funguo za akaunti yako mwenyewe, kwa hivyo gumzo hufunguka pamoja na kila kitu kingine akaunti yako ikiwa tayari. Kamilisha malengo kwenye wasifu wako na timu itakufikisha huko.",
+    "needsAccountTitle": "Gumzo linahitaji akaunti ya Hive.",
+    "needsAccountBody": "Linafunguka pamoja na kila kitu kingine ukishahitimu.",
     "loginTitle": "Ingia ili kutumia gumzo",
     "loginBody": "Ingia kwa akaunti yako ya Hive ili kutuma na kupokea ujumbe.",
     "connectingToChat": "Inaunganisha na gumzo…"
@@ -94,8 +103,8 @@
     "serverRejectedServerMap_other": "Seva imekataa maombi yote {{count}} (vitambulisho kutoka kwenye ramani ya seva ya ambazo hazijasomwa)",
     "failed": "Imeshindwa kuweka zote kuwa zimesomwa",
     "marking": "Inaweka kuwa zimesomwa…",
-    "button": "Weka zote kuwa zimesomwa",
-    "buttonCount": "Weka zote kuwa zimesomwa ({{count}})"
+    "button": "Weka zote zimesomwa",
+    "buttonCount": "Weka zote zimesomwa ({{count}})"
   },
   "list": {
     "chooseTarget": "Chagua gumzo la kutuma",
@@ -117,7 +126,7 @@
     "deleteError": "Imeshindwa kufuta ujumbe.",
     "back": "Rudi kwenye mazungumzo",
     "loading": "Inapakia ujumbe…",
-    "empty": "Bado hakuna ujumbe — sema habari 👋",
+    "empty": "Bado hakuna ujumbe. Sema habari 👋",
     "editedSuffix": " · imehaririwa",
     "messageActions": "Vitendo vya ujumbe",
     "quote": "Nukuu",
@@ -129,7 +138,8 @@
     "quoting": "Unamnukuu @{{user}}",
     "cancelQuote": "Ghairi nukuu",
     "removeImage": "Ondoa picha",
-    "placeholder": "Andika ujumbe…"
+    "placeholder": "Andika ujumbe…",
+    "placeholderTo": "Mtumie {{name}} ujumbe"
   },
   "page": {
     "chooseTarget": "Chagua gumzo la kutuma.",

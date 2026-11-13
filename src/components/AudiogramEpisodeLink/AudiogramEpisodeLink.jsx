@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Headphones, ChevronRight } from 'lucide-react';
+import { Icon } from '../v2/Icon';
 import { getPostDetails } from '../../hive-api/hiveApi';
 import { episodePath } from '../../utils/audiogramLink';
 import './AudiogramEpisodeLink.scss';
@@ -43,13 +43,13 @@ export default function AudiogramEpisodeLink({ author, permlink, className = '' 
       data-testid="audiogram-episode-link"
     >
       <span className="audiogramEpisodeLink__cover" aria-hidden="true">
-        {data?.cover ? <img src={data.cover} alt="" loading="lazy" /> : <Headphones size={16} />}
+        {data?.cover ? <img src={data.cover} alt="" loading="lazy" /> : <Icon name="headphones" size={16} />}
       </span>
       <span className="audiogramEpisodeLink__text">
         <small>{t('shorts.audiogram.fullEpisode')}</small>
+        <span aria-hidden="true"> · </span>
         <strong>{data?.title || `@${author}`}</strong>
       </span>
-      <ChevronRight size={16} aria-hidden="true" className="audiogramEpisodeLink__go" />
     </Link>
   );
 }

@@ -1,51 +1,47 @@
-@use "../mixins.scss" as mix;
+@use "../styles/v2" as v2;
 
+/* Publish an OpenPod recording (/openpods/publish), design 39c: a heading with
+   the 4px bar, the recording preview, then the post form in a v2 card. */
 .openpod-publish-page {
-  max-width: 860px;
+  box-sizing: border-box;
+  max-width: 760px;
   margin: 0 auto;
-  padding: 28px 24px 60px;
+  // The app column (.container, App.css) already gives the page padding.
+  padding: 0 0 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  color: var(--text);
 
-  @include mix.respond(phone) {
-    padding: 16px 14px 40px;
-  }
 }
 
 .publish-header {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 28px;
+  gap: 10px;
 
   h1 {
-    font-size: 22px;
-    font-weight: 700;
-    color: var(--text-primary);
     margin: 0;
+    @include v2.text(heading);
   }
 }
 
-.publish-mic-icon {
-  font-size: 26px;
-  color: var(--accent-primary, #e53935);
-  flex-shrink: 0;
+.publish-bar {
+  flex: none;
+  width: 4px;
+  height: 22px;
+  border-radius: var(--r-bar);
+  background: var(--accent);
 }
 
 // ── Audio preview ─────────────────────────────────────────────
 .publish-audio-preview {
   display: grid;
-  gap: 14px;
-  background:
-    linear-gradient(135deg, rgba(229, 57, 53, 0.08), transparent 42%),
-    var(--bg-secondary, rgba(255,255,255,0.04));
-  border: 1px solid var(--border-light, rgba(255,255,255,0.08));
-  border-radius: 16px;
+  gap: 12px;
   padding: 16px;
-  margin-bottom: 28px;
-  box-shadow: var(--shadow-sm);
-
-  @include mix.respond(phone) {
-    padding: 14px;
-  }
+  border-radius: var(--r-2xl);
+  background: var(--surface);
+  border: 1px solid var(--border);
 }
 
 .preview-copy {
@@ -56,123 +52,88 @@
 
   p {
     margin: 0;
-    color: var(--text-secondary, rgba(255,255,255,0.5));
-    font-size: 13px;
-    line-height: 1.4;
+    @include v2.text(meta);
+    color: var(--muted);
     text-align: right;
   }
 
-  @include mix.respond(phone) {
-    align-items: flex-start;
+  @include v2.mobile {
     flex-direction: column;
-    gap: 6px;
-
-    p {
-      text-align: left;
-    }
+    gap: 4px;
+    p { text-align: left; }
   }
 }
 
-.preview-label {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--accent-primary, #e53935);
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  white-space: nowrap;
-}
+.preview-label { white-space: nowrap; }
 
 // ── Form ──────────────────────────────────────────────────────
 .publish-form {
   display: flex;
   flex-direction: column;
-  gap: 22px;
+  gap: 16px;
+  padding: 20px;
+  border-radius: var(--r-2xl);
+  background: var(--surface);
+  border: 1px solid var(--border);
+
+  @include v2.mobile { padding: 16px; }
 }
 
 .publish-field {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-
-  label {
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--text-primary);
-  }
-
-  .optional {
-    font-weight: 400;
-    color: var(--text-secondary, rgba(255,255,255,0.45));
-    font-size: 12px;
-  }
-}
-
-.publish-input {
-  background: var(--bg-secondary, rgba(255,255,255,0.05));
-  border: 1px solid rgba(255,255,255,0.12);
-  border-radius: 8px;
-  padding: 10px 14px;
-  font-size: 14px;
-  color: var(--text-primary);
-  width: 100%;
-  transition: border-color 0.15s;
-
-  &:focus {
-    outline: none;
-    border-color: var(--accent-primary, #e53935);
-  }
-
-  &::placeholder { color: var(--text-secondary, rgba(255,255,255,0.35)); }
+  gap: 4px;
+  min-width: 0;
 }
 
 .tags-preview {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
-  margin-top: 2px;
+  gap: 4px;
+  margin-top: 6px;
 }
 
 .tag-chip {
-  background: rgba(229, 57, 53, 0.12);
-  color: var(--accent-primary, #e53935);
-  border: 1px solid rgba(229, 57, 53, 0.25);
-  border-radius: 20px;
-  padding: 2px 10px;
+  display: inline-flex;
+  align-items: center;
+  height: 28px;
+  padding: 0 10px;
+  border-radius: var(--r-sm);
+  background: var(--surface-2);
   font-size: 12px;
+  font-weight: 700;
 }
 
 .publish-row {
   display: flex;
-  gap: 16px;
+  gap: 10px;
 
-  @include mix.respond(phone) {
-    flex-direction: column;
-  }
+  @include v2.mobile { flex-direction: column; }
 }
 
-.publish-field--half {
-  flex: 1;
-}
+.publish-field--half { flex: 1; }
 
-// Community selector
+// Community selector: looks like a select field.
 .publish-selector {
   display: flex;
   align-items: center;
   gap: 8px;
-  background: var(--bg-secondary, rgba(255,255,255,0.05));
-  border: 1px solid rgba(255,255,255,0.12);
-  border-radius: 8px;
-  padding: 10px 14px;
-  cursor: pointer;
   width: 100%;
-  color: var(--text-primary);
+  height: 40px;
+  padding: 0 10px 0 12px;
+  box-sizing: border-box;
+  border: 2px solid transparent;
+  border-radius: var(--r-md);
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
   font-size: 14px;
   text-align: left;
-  transition: border-color 0.15s;
+  cursor: pointer;
 
-  &:hover { border-color: var(--accent-primary, #e53935); }
-
-  span { flex: 1; }
+  > span:not(.material-symbols-rounded) { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  &:hover { background: color-mix(in srgb, var(--text) 4%, var(--bg)); }
+  &:focus-visible { outline: none; border-color: var(--accent); }
 }
 
 .community-avatar {
@@ -182,150 +143,64 @@
   object-fit: cover;
 }
 
-.selector-chevron {
-  color: var(--text-secondary, rgba(255,255,255,0.45));
-  flex-shrink: 0;
-}
+.selector-chevron { color: var(--muted); }
 
-// Rewards select
-.publish-select {
-  background: var(--bg-secondary, rgba(255,255,255,0.05));
-  border: 1px solid rgba(255,255,255,0.12);
-  border-radius: 8px;
-  padding: 10px 14px;
-  font-size: 14px;
-  color: var(--text-primary);
-  width: 100%;
-  cursor: pointer;
-  transition: border-color 0.15s;
+.publish-select.v2-input { background-color: var(--bg); }
 
-  &:focus { outline: none; border-color: var(--accent-primary, #e53935); }
-
-  option { background: var(--bg-primary, #0d0d0d); }
-}
-
-// ── Beneficiaries ─────────────────────────────────────────────
+// ── Beneficiaries: a well with the lock and the edit button ──────
 .bene-row {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  background: var(--bg-secondary, rgba(255,255,255,0.04));
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 8px;
-  padding: 12px 16px;
+  gap: 10px;
+  padding: 10px 10px 10px 12px;
+  border-radius: var(--r-md);
+  background: var(--bg);
+
+  @include v2.mobile { flex-wrap: wrap; }
 }
 
+.bene-icon { color: var(--muted); }
+
 .bene-info {
+  flex: 1;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   gap: 2px;
 }
 
-.bene-title {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text-primary);
-}
-
-.bene-sub {
-  font-size: 11px;
-  color: var(--text-secondary, rgba(255,255,255,0.45));
-}
-
-.bene-btn {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: rgba(255,255,255,0.07);
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 8px;
-  padding: 7px 14px;
-  color: var(--text-primary);
-  cursor: pointer;
-  font-size: 13px;
-  white-space: nowrap;
-  transition: background 0.15s;
-
-  &:hover { background: rgba(255,255,255,0.12); }
-}
+.bene-title { font-size: 13px; font-weight: 700; }
+.bene-sub { @include v2.text(meta-sm); color: var(--muted); }
 
 .bene-count {
-  background: var(--accent-primary, #e53935);
-  color: #fff;
-  border-radius: 10px;
+  display: inline-grid;
+  place-items: center;
+  min-width: 20px;
+  height: 20px;
+  margin-left: 6px;
   padding: 0 6px;
+  box-sizing: border-box;
+  border-radius: 7px;
+  background: var(--accent-tint-strong);
+  color: var(--accent);
   font-size: 11px;
-  font-weight: 700;
+  font-weight: 900;
 }
 
-// ── Actions ───────────────────────────────────────────────────
+// ── Actions: back on the left, publish on the right ─────────────
 .publish-actions {
   display: flex;
-  justify-content: flex-end;
-  gap: 12px;
-  padding-top: 8px;
+  justify-content: space-between;
+  gap: 8px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
 
-  @include mix.respond(phone) {
+  .publish-submit { min-width: 200px; justify-content: space-between; }
+
+  @include v2.mobile {
     flex-direction: column-reverse;
+    .v2-btn { width: 100%; }
   }
 }
 
-.publish-cancel {
-  background: transparent;
-  border: 1px solid rgba(255,255,255,0.15);
-  border-radius: 8px;
-  padding: 10px 22px;
-  color: var(--text-secondary, rgba(255,255,255,0.6));
-  cursor: pointer;
-  font-size: 14px;
-  transition: border-color 0.15s, color 0.15s;
-
-  &:hover {
-    border-color: rgba(255,255,255,0.3);
-    color: var(--text-primary);
-  }
-}
-
-.publish-submit {
-  background: transparent;
-  border: 1px solid var(--accent-primary, #e53935);
-  border-radius: 8px;
-  padding: 10px 28px;
-  color: var(--accent-primary, #e53935);
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.15s, opacity 0.15s;
-
-  &:hover:not(:disabled) { background: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent); border-color: var(--accent-primary, #e53935); color: var(--accent-primary, #e53935); }
-  &:disabled { opacity: 0.55; cursor: not-allowed; }
-}
-
-// ── Login gate ────────────────────────────────────────────────
-.publish-login-gate {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
-  padding: 60px 0;
-
-  .gate-icon {
-    font-size: 48px;
-    color: var(--accent-primary, #e53935);
-    opacity: 0.6;
-  }
-
-  p { color: var(--text-secondary, rgba(255,255,255,0.6)); font-size: 15px; }
-
-  button {
-    background: transparent;
-    border: 1px solid var(--accent-primary, #e53935);
-    border-radius: 8px;
-    padding: 10px 28px;
-    color: var(--accent-primary, #e53935);
-    font-weight: 600;
-    cursor: pointer;
-    &:hover { background: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent); border-color: var(--accent-primary, #e53935); color: var(--accent-primary, #e53935); }
-  }
-}
+.publish-login-gate { max-width: 440px; }

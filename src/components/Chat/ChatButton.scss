@@ -2,42 +2,49 @@
 // renders in the always-on Nav) rather than in chat.scss — chat.scss only loads
 // with the lazy-loaded chat page, so before /chat is ever opened the unread badge
 // had no styles and the count rendered inline, wrapping under the icon on first load.
+@use "../../styles/v2" as v2;
+
 .chat-nav-btn {
   position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  flex: none;
 
   // Shown at every width. Chat used to be the centre item of the mobile bottom
   // bar and this button hid below 1024px to avoid two of them; the bottom bar
   // now carries Groups in that slot, so this is chat's entry point everywhere.
   // The unread badge comes with it, which is why it is no longer mounted twice.
-  background: transparent;
-  border: none;
+  //
+  // A 40px top-bar icon button (42b), the same shape as the bell: filled
+  // surface-2, inverse while the panel or the page is open. nav.scss repeats
+  // this for every icon in the bar.
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 0;
+  border-radius: v2.radius-for(40);
+  background: var(--surface-2);
+  color: var(--text);
   cursor: pointer;
-  // Match the settings icon: muted secondary tone, brightening on hover/active.
-  color: var(--text-secondary);
-  opacity: 0.8;
-  padding: 4px;
-  border-radius: 8px;
-  transition: color 0.15s ease, opacity 0.15s ease;
+  transition: background var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
 
-  &:hover { color: var(--text-primary); opacity: 1; }
-  &.open { color: var(--text-primary); opacity: 1; }
+  &:hover { background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); color: var(--text); }
+  &.open { background: var(--text); color: var(--bg); }
 
   .chat-nav-badge {
     position: absolute;
-    top: -2px;
-    right: -2px;
-    min-width: 16px;
-    height: 16px;
-    padding: 0 4px;
-    border-radius: 8px;
-    background: var(--accent-primary);
-    color: #fff;
-    font-size: 10px;
-    font-weight: 700;
-    line-height: 16px;
+    top: -4px;
+    right: -4px;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    border-radius: 9px;
+    background: var(--accent);
+    color: var(--on-accent);
+    @include v2.mono(10, 900);
+    line-height: 18px;
     text-align: center;
+    box-shadow: 0 0 0 2px var(--surface);
   }
 }

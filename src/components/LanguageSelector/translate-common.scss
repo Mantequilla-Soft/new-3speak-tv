@@ -1,28 +1,31 @@
-// Shared translate button + translation block styles
+// Shared "Translate" button and translated-text block (comments, posts,
+// announcements, block notes). v2: a 28 ghost chip, and the translation as a
+// bg well with a cyan rule on its left edge (cyan = info).
 .comment-translate-btn {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  font-size: 12px;
-  font-weight: 400;
+  height: 28px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: var(--r-sm);
+  background: var(--surface-2);
+  color: var(--muted);
   font-family: inherit;
-  color: var(--text-secondary, #aaa);
-  background: none;
-  border: 1px solid var(--border-light, rgba(255, 255, 255, 0.1));
-  border-radius: 6px;
-  padding: 3px 10px;
-  cursor: pointer;
+  font-size: 12px;
+  font-weight: 700;
   white-space: nowrap;
-  transition: background 0.15s ease, color 0.15s ease;
+  cursor: pointer;
+  transition: background var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
 
   &:hover {
-    color: var(--text-primary, #fff);
-    background: rgba(255, 255, 255, 0.08);
+    color: var(--text);
+    background: color-mix(in srgb, var(--text) 10%, var(--surface-2));
   }
 
   &:disabled {
-    opacity: 0.6;
-    cursor: default;
+    opacity: .45;
+    cursor: not-allowed;
   }
 
   .spinner {
@@ -33,49 +36,53 @@
 .comment-translation {
   margin: 6px 0 4px;
   padding: 8px 12px;
-  border-left: 3px solid var(--accent-primary, #e53935);
-  background: rgba(255, 255, 255, 0.04);
-  border-radius: 0 6px 6px 0;
+  border-left: 2px solid var(--cyan);
+  border-radius: 0 var(--r-md) var(--r-md) 0;
+  background: var(--bg);
 
   .comment-translation-header {
     display: flex;
     align-items: center;
-    gap: 5px;
-    font-size: 11px;
-    font-weight: 600;
-    color: var(--text-secondary, #aaa);
+    gap: 6px;
     margin-bottom: 4px;
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--cyan);
   }
 
   .comment-translation-dismiss {
     margin-left: auto;
+    width: 24px;
+    height: 24px;
+    display: grid;
+    place-items: center;
+    padding: 0;
+    border: 0;
+    border-radius: var(--r-sm);
     background: none;
-    border: none;
-    color: var(--text-secondary, #aaa);
+    color: var(--muted);
     font-size: 16px;
-    cursor: pointer;
     line-height: 1;
-    padding: 0 2px;
+    cursor: pointer;
 
-    &:hover {
-      color: var(--text-primary, #fff);
-    }
+    &:hover { color: var(--text); background: var(--bg-hover); }
   }
 
   p {
-    font-size: 13px;
-    color: var(--text-primary, #fff);
     margin: 0;
+    font-size: 13px;
     line-height: 1.5;
+    color: var(--text);
   }
 
   &--error p {
-    color: var(--accent-primary, #e53935);
+    color: var(--accent);
     font-size: 12px;
   }
 }
 
 @keyframes translate-spin {
-  from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }

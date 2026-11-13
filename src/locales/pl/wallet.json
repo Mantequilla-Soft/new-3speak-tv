@@ -9,7 +9,7 @@
     "needKeychain": "Do wykonania przelewu potrzebujesz rozszerzenia Keychain"
   },
   "header": {
-    "mine": "MÓJ portfel",
+    "mine": "Mój portfel",
     "ofUser": "Portfel {{user}}"
   },
   "assets": "Aktywa",
@@ -28,7 +28,16 @@
     "recipientPlaceholder": "Wpisz nazwę użytkownika Hive",
     "memoLabel": "Notatka",
     "memoPlaceholder": "Wpisz notatkę",
-    "confirm": "Potwierdź przelew"
+    "confirm": "Potwierdź przelew",
+    "sendTo": "Wyślij {{amount}} {{coin}} do @{{to}}",
+    "sendAmount": "Wyślij {{amount}} {{coin}}",
+    "recent": "Ostatnie",
+    "activeKey": "Wymaga twojego klucza active",
+    "available": "Dostępne: {{balance}}",
+    "scan": "Zeskanuj kod QR",
+    "scanHint": "Skieruj aparat na kod QR drugiej osoby.",
+    "scanNoAccount": "Ten kod QR nie zawiera konta Hive. Spróbuj innego.",
+    "scanNoCamera": "Nie udało się otworzyć aparatu. Sprawdź, czy 3Speak może z niego korzystać."
   },
   "history": {
     "loadFailed": "Nie udało się wczytać transakcji",
@@ -46,5 +55,53 @@
       "received": "Otrzymano"
     },
     "claimedRewards": "Odebrane nagrody"
+  },
+  "total": "Saldo łączne",
+  "rate": "1 HIVE = {{price}}",
+  "pro": "Pro",
+  "coins": {
+    "hp": "Hive Power",
+    "savings": "Oszczędności HBD"
+  },
+  "claim": {
+    "ready": "{{amount}} czeka na odebranie",
+    "readyShort": "{{amount}} do odebrania",
+    "button": "Odbierz",
+    "done": "Nagrody odebrane",
+    "failed": "Nie udało się odebrać: {{error}}"
+  },
+  "activity": {
+    "title": "Aktywność",
+    "filters": {
+      "all": "Wszystko",
+      "rewards": "Nagrody",
+      "received": "Otrzymane",
+      "sent": "Wysłane"
+    },
+    "from": "Od @{{user}}",
+    "sentTo": "Wysłano do @{{user}}",
+    "emptyTitle": "Jeszcze nic tu nie ma",
+    "empty": "Tutaj pojawią się przelewy i odebrane nagrody."
+  },
+  "earnings": {
+    "title": "Zarobki, 30 dni",
+    "sub": "Odebrane nagrody oraz otrzymane HIVE i HBD"
+  },
+  "rc": {
+    "title": "Resource Credits",
+    "sub": "Każda akcja na Hive zużywa ich trochę. Odnawiają się w około 5 dni.",
+    "posts_one": "Wystarczy teraz na około {{count}} post",
+    "posts_few": "Wystarczy teraz na około {{count}} posty",
+    "posts_many": "Wystarczy teraz na około {{count}} postów",
+    "posts_other": "Wystarczy teraz na około {{count}} posta"
+  },
+  "receive": {
+    "title": "Odbierz",
+    "sub": "Każdy może wysłać HIVE lub HBD na tę nazwę konta z dowolnego portfela Hive. Memo nie jest potrzebne.",
+    "amountLabel": "Poproś o kwotę (opcjonalnie)",
+    "memoLabel": "Memo (opcjonalnie)",
+    "memoPlaceholder": "Na co to jest, np. numer faktury",
+    "subRequest": "Zeskanowanie tego kodu prosi o {{amount}} {{coin}}. 3Speak i portfele Hive, które czytają kody płatności, uzupełniają to same.",
+    "subMemo": "Zeskanowanie tego kodu uzupełnia nazwę Twojego konta i memo w 3Speak i w portfelach Hive, które czytają kody płatności."
   }
 }

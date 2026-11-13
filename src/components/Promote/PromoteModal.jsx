@@ -1,20 +1,24 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { createPortal } from 'react-dom';
 import axios from 'axios';
 import { useTranslation, Trans } from 'react-i18next';
 import { toastIn } from '../../utils/toast';
-import { Rocket, Megaphone, ChevronRight } from 'lucide-react';
 import { CHECKER_URL, CHECKER_API_KEY, selfPromoEnabledFor } from '../../utils/config';
 import { transferWithAioha, isLoggedIn } from '../../hive-api/aioha';
 import { fetchBalances } from '../../hive-api/api';
 import { useAppStore } from '../../lib/store';
 import AdWizardModal from './AdWizardModal';
-import ModalHeader from '../ModalHeader/ModalHeader';
+import { Button, Segmented, Banner } from '../v2/ui';
+import { cx } from '../v2/helpers';
+import DialogShell, { SheetContext } from '../modal/DialogShell';
+import usePostThumb from '../modal/usePostThumb';
 import './PromoteModal.scss';
 
 // Every toast from this module is headed "Promotion"; the message becomes the
 // line under it. See utils/toast.js.
 const toast = toastIn('Promotion');
+
+// The run-length tiles of 17c (1 day, 3 days, the longest allowed).
+const DAY_TILES = [1, 3, 7];
 
 /**
  * Promote a video by transferring HBD (or the HIVE equivalent) to the promotion
@@ -42,6 +46,7 @@ export default function PromoteModal({ open, onClose, author, permlink, promoted
   const [balances, setBalances] = useState(null); // { hbd, hive }
 
   const { user: me } = useAppStore();
+  const post = usePostThumb(author, permlink, open);
 
   const activeUntil = freshUntil ? new Date(freshUntil).getTime() : 0;
   const isActive = activeUntil > Date.now();
@@ -49,7 +54,8 @@ export default function PromoteModal({ open, onClose, author, permlink, promoted
   useEffect(() => {
     if (!open) return;
     let cancelled = false;
-    setMode(null);
+    // With one thing to buy there is nothing to choose: straight to the boost.
+    setMode(selfPromoEnabledFor(me) ? null : 'boost');
     setFreshUntil(promotedUntil || null);
     setBalances(null);
     axios.get(`${CHECKER_URL}/promote/quote`)
@@ -108,7 +114,7 @@ export default function PromoteModal({ open, onClose, author, permlink, promoted
             { headers: CHECKER_API_KEY ? { Authorization: `Bearer ${CHECKER_API_KEY}` } : {} },
           );
           if (res.data?.success && res.data.promotedUntil) { credited = res.data; break; }
-        } catch (_) { /* keep retrying */ }
+        } catch { /* keep retrying */ }
       }
 
       if (credited) {
@@ -127,87 +133,112 @@ export default function PromoteModal({ open, onClose, author, permlink, promoted
     }
   };
 
-  return createPortal(
-    <div className="promote-overlay" onClick={onClose}>
-      <div className="promote-modal" onClick={e => e.stopPropagation()}>
-        <ModalHeader title={t('ads.promote.title')} onClose={onClose} />
+  const showChoices = selfPromoEnabledFor(me);
+  const money = (n) => (n ? n.toFixed(3) : '…');
+  const dayTiles = [...new Set(DAY_TILES.map((d) => Math.min(d, maxDays)))];
 
-        {mode === null ? (
-          <div className="promote-choose">
-            <button className="promote-choice" onClick={() => setMode('boost')}>
-              <Rocket size={18} />
-              <span>
-                <strong>{t('ads.promote.boostTitle')}</strong>
-                <em>{t('ads.promote.boostDesc')}</em>
-              </span>
-              <ChevronRight size={16} />
+  return (
+    <DialogShell
+      open
+      onClose={onClose}
+      side
+      tone="accent"
+      title={t('ads.promote.title')}
+      width={420}
+      className="promote-v2"
+      footer={mode === 'boost' && !isActive ? (
+        <>
+          <div className={cx('dlg-note promote-v2__balance', insufficient && 'is-low')}>
+            <span>{t('ads.promote.yourBalance')}: <span className="num">{walletBalance != null ? `${walletBalance.toFixed(3)} ${currency}` : '…'}</span></span>
+            {currency === 'HBD' && costHive > 0 && <span className="num">≈ {costHive.toFixed(3)} HIVE</span>}
+            {currency === 'HIVE' && costHbd > 0 && <span className="num">≈ {costHbd.toFixed(3)} HBD</span>}
+          </div>
+          <Button
+            variant="primary"
+            size={48}
+            block
+            className="dlg-main"
+            trailing="campaign"
+            onClick={handlePromote}
+            disabled={busy || !quote || insufficient}
+            loading={busy}
+          >
+            {busy ? t('common.status.processing') : insufficient ? t('ads.promote.notEnough', { currency }) : t('ads.promote.promoteFor', { amount: amount ? amount.toFixed(3) : '', currency })}
+          </Button>
+        </>
+      ) : null}
+    >
+      <SheetContext thumb={post.thumbnail} title={post.title || permlink} meta={author ? `@${author}` : undefined} />
+
+      {/* Boost in feeds or run it as an ad (47d): two stacked choice rows,
+          the picked one in an accent border and tint. */}
+      {showChoices && (
+        <div className="promote-v2__modes" role="radiogroup" aria-label={t('ads.promote.title')}>
+          {[
+            { id: 'boost', title: t('ads.promote.boostTitle'), sub: t('ads.promote.boostDesc') },
+            // Beta testers only (selfPromoEnabledFor), even with ads public: it
+            // sells at a testing price while in beta. Where those ads may SHOW is a
+            // separate, server-side limit (AD_SELFPROMO_ALLOWED_OWNERS on the checker).
+            { id: 'ad', title: t('ads.promote.adTitle'), sub: t('ads.promote.adDesc') },
+          ].map((o) => (
+            <button key={o.id} type="button" role="radio" aria-checked={mode === o.id} className={cx('promote-v2__tile', mode === o.id && 'is-on')} onClick={() => setMode(o.id)}>
+              <b>{o.title}</b>
+              <span>{o.sub}</span>
             </button>
-            {/* Beta testers only (selfPromoEnabledFor), even with ads public: it
-                sells at a testing price while in beta. Where those ads may SHOW is a
-                separate, server-side limit (AD_SELFPROMO_ALLOWED_OWNERS on the checker). */}
-            {selfPromoEnabledFor(me) && (
-              <button className="promote-choice" onClick={() => setMode('ad')}>
-                <Megaphone size={18} />
-                <span>
-                  <strong>{t('ads.promote.adTitle')}</strong>
-                  <em>{t('ads.promote.adDesc')}</em>
-                </span>
-                <ChevronRight size={16} />
-              </button>
-            )}
-          </div>
-        ) : isActive ? (
-          <div className="promote-active">
-            <p>{t('ads.promote.alreadyUntil')}</p>
-            <strong>{new Date(activeUntil).toLocaleString()}</strong>
-            <p className="promote-muted">{t('ads.promote.againLater')}</p>
-          </div>
-        ) : (
-          <>
-            <p className="promote-intro">
-              {t('ads.promote.intro', { cost: quote ? quote.costPer24hHbd : '…' })}
-            </p>
+          ))}
+        </div>
+      )}
 
-            <div className="promote-field">
-              <label><Trans i18nKey="ads.promote.duration" count={days} components={{ b: <strong /> }} /></label>
-              <input
-                type="range" min={1} max={maxDays} step={1}
-                value={days} onChange={e => setDays(Number(e.target.value))}
-                disabled={busy}
+      {mode !== null && isActive && (
+        <Banner tone="info" icon="schedule" title={t('ads.promote.alreadyUntil')}>
+          <span className="num">{new Date(activeUntil).toLocaleString()}</span>. {t('ads.promote.againLater')}
+        </Banner>
+      )}
+
+      {mode === 'boost' && !isActive && (
+        <div className="promote-v2__form">
+          <div className="promote-v2__days" role="group" aria-label={t('ads.promote.duration', { count: days }).replace(/<\/?b>/g, '')}>
+            {dayTiles.map((d) => {
+              const cost = quote ? d * quote.costPer24hHbd : 0;
+              const shown = currency === 'HBD' ? cost : (quote?.hbdPerHive ? cost / quote.hbdPerHive : 0);
+              return (
+                <button key={d} type="button" className={cx('promote-v2__day', days === d && 'is-on')} aria-pressed={days === d} disabled={busy} onClick={() => setDays(d)}>
+                  <b className="num">{money(shown)}</b>
+                  <span>{t('ads.promote.days', { count: d })} · {currency}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="v2-slider">
+            <input
+              type="range" min={1} max={maxDays} step={1}
+              value={days} onChange={e => setDays(Number(e.target.value))}
+              disabled={busy}
+              aria-label={t('ads.promote.duration', { count: days }).replace(/<\/?b>/g, '')}
+            />
+          </div>
+
+          {/* The summary line (47d): Duration · Pay with HBD | HIVE · Total. */}
+          <div className="promote-v2__summary">
+            <span><Trans i18nKey="ads.promote.duration" count={days} components={{ b: <b /> }} /></span>
+            <span className="promote-v2__pay">
+              <span className="promote-v2__dot" aria-hidden="true">·</span>
+              {t('ads.promote.payWith')}
+              <Segmented
+                block={false}
+                size={28}
+                value={currency}
+                onChange={(c) => !busy && setCurrency(c)}
+                label={t('ads.promote.payWith')}
+                options={[{ value: 'HBD', label: 'HBD' }, { value: 'HIVE', label: 'HIVE' }]}
               />
-              <div className="promote-range-ends"><span>1d</span><span>{maxDays}d</span></div>
-            </div>
-
-            <div className="promote-field">
-              <label>{t('ads.promote.payWith')}</label>
-              <div className="promote-currency">
-                <button className={currency === 'HBD' ? 'active' : ''} onClick={() => setCurrency('HBD')} disabled={busy}>HBD</button>
-                <button className={currency === 'HIVE' ? 'active' : ''} onClick={() => setCurrency('HIVE')} disabled={busy}>HIVE</button>
-              </div>
-            </div>
-
-            <div className="promote-total">
-              <span>{t('ads.promote.total')}</span>
-              <strong>{amount ? amount.toFixed(3) : '—'} {currency}</strong>
-            </div>
-
-            <div className="promote-balance">
-              <span>{t('ads.promote.yourBalance')}</span>
-              <span className={insufficient ? 'promote-balance--low' : ''}>
-                {walletBalance != null ? `${walletBalance.toFixed(3)} ${currency}` : '…'}
-              </span>
-            </div>
-
-            <button className="promote-cta" onClick={handlePromote} disabled={busy || !quote || insufficient}>
-              {busy ? t('common.status.processing') : insufficient ? t('ads.promote.notEnough', { currency }) : t('ads.promote.promoteFor', { amount: amount ? amount.toFixed(3) : '', currency })}
-            </button>
-            <p className="promote-muted promote-foot">
-              {t('ads.promote.signNote', { account: quote?.account || 'threespeakfund' })}
-            </p>
-          </>
-        )}
-      </div>
-    </div>,
-    document.body,
+            </span>
+            <span><span className="promote-v2__dot" aria-hidden="true">·</span> {t('ads.promote.total')} <b className="num">{money(amount)} {currency}</b></span>
+          </div>
+          <p className="v2-meta-sm">{t('ads.promote.signNote', { account: quote?.account || 'threespeakfund' })}</p>
+        </div>
+      )}
+    </DialogShell>
   );
 }

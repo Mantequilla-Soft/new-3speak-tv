@@ -5,13 +5,12 @@
     "yourStreamEnded": "Tapos na ang stream mo",
     "thisStreamEnded": "Tapos na ang stream na ito",
     "noLongerLive": "Hindi na ito live. Magsimula ng bago kapag handa ka na.",
-    "recordingProcessing": "Ang galing! Pinoproseso na ang recording mo at lalabas ito sa announcement post maya-maya.",
-    "thanksForLive": "Ang galing — salamat sa pag-live!",
+    "recordingProcessing": "Pinoproseso na ang recording mo at lalabas ito sa announcement post maya-maya.",
+    "thanksForLive": "Ayos, salamat sa pag-live",
     "backHome": "Bumalik sa Home",
     "howWasStream": "Kumusta ang stream mo?",
     "connecting": "Kumokonekta sa OpenPods…",
-    "authenticating": "Nag-a-authenticate sa OpenPods…",
-    "postStoryAboutIt": "Mag-post ng story tungkol dito"
+    "authenticating": "Nag-a-authenticate sa OpenPods…"
   },
   "strip": {
     "liveNow_one": "<n>{{count}}</n> OpenPod ang live ngayon",
@@ -29,7 +28,9 @@
     "rewardDecline": "Tanggihan ang payout",
     "beneficiaries": "Mga Beneficiary",
     "beneProHint": "Naka-3Speak Pro ka — walang platform fee. Magdagdag ng split kung gusto mo.",
-    "beneLockedHint": "Naka-lock ang 10% para kay @threespeakfund. Puwede kang magdagdag pa."
+    "beneLockedHint": "Naka-lock ang 10% para kay @threespeakfund. Puwede kang magdagdag pa.",
+    "storyPrompt": "Magla-live ka na ba? Sabihan muna ang mga follower mo gamit ang 24h story. Bubukas ito sa bagong tab, kaya mananatiling bukas ang studio mo.",
+    "storyButton": "Mag-post ng story"
   },
   "boost": {
     "label": "Boost",
@@ -41,24 +42,24 @@
     "slowDown": "Dahan-dahan lang, tapos mag-clip ulit.",
     "failed": "Hindi makagawa ng clip. Subukan ulit pagkalipas ng ilang segundo.",
     "title": "I-clip ang huling 30 segundo",
-    "label": "30 seg",
+    "label": "Clip",
     "clipping": "Kina-clip…"
   },
   "report": {
     "reasons": {
       "harassment": "Harassment o hate",
-      "sexual": "Sekswal o malaswang content",
+      "sexual": "Sekswal o malaswa",
       "violence": "Karahasan o mapanganib na gawain",
       "selfharm": "Pananakit sa sarili",
       "illegal": "Ilegal na content",
       "spam": "Spam o scam",
       "other": "Iba pa"
     },
-    "sent": "Salamat — nai-report na sa team namin ang stream na ito.",
+    "sent": "Salamat, nai-report na sa team namin ang stream na ito.",
     "failed": "Hindi maipadala ang report. Subukan ulit.",
     "title": "I-report ang stream na ito",
     "reporting": "Nire-report si <b>@{{host}}</b>.",
-    "intro": "Sabihin sa amin kung ano ang mali — sinusuri ng team namin ang bawat report.",
+    "intro": "Sinusuri ng team namin ang bawat report.",
     "detailPlaceholder": "Magdagdag ng detalye (opsyonal)",
     "sending": "Ipinapadala…",
     "submit": "Isumite ang report"
@@ -74,7 +75,7 @@
     },
     "published": "Na-publish na sa Hive ang recording!",
     "loginGate": "Mag-log in para i-publish ang recording mo.",
-    "heading": "I-publish ang OpenPod Recording",
+    "heading": "I-publish ang OpenPod recording",
     "previewLabel": "Preview ng recording",
     "previewHint": "Pakinggan muna ang audio bago i-publish. Ito rin ang player na makikita ng mga mambabasa sa post.",
     "recordingFallback": "OpenPod Recording",
@@ -87,11 +88,12 @@
     "tagsPlaceholder": "Mga tag na hiwalay sa space",
     "declinePayout": "Tanggihan ang Payout",
     "publishing": "Pine-publish…",
-    "submit": "I-publish ang Recording"
+    "submit": "I-publish ang recording"
   },
   "lobby": {
     "descriptionPlaceholder": "Tungkol saan ang session na ito? Magdagdag ng show notes, link, o buod…",
     "enableHosting": "I-enable ang hosting at pagsasalita",
+    "enableHostingHint": "Kailangan ang posting authority ng @threespeak",
     "handoverFailed": "Hindi ma-enable nang awtomatiko ang hosting. Nagpo-post ang OpenPods para sa iyo gamit si @threespeak — siguraduhing nabigyan mo ito ng posting authority, tapos subukan ulit.",
     "signInToHost": "Mag-sign in gamit ang Hive para mag-host o magsalita"
   },
@@ -131,8 +133,8 @@
     },
     "chatBox": {
       "title": "Ang chat mo sa OBS",
-      "desc": "Iisang link para sa lahat ng stream mo. Idagdag ito sa OBS bilang dock para mabasa ang mga bagong mensahe habang live ka. Ipinapakita ng gabay sa ibaba kung paano.",
-      "copy": "Kopyahin ang chat URL para sa OBS",
+      "desc": "idagdag bilang custom browser dock",
+      "copy": "Kopyahin ang chat URL",
       "copied": "Nakopya ang chat URL"
     },
     "card": {
@@ -143,26 +145,26 @@
       "watch": "Panoorin ang stream",
       "notAnnounced": "Hindi in-announce sa Hive ang stream na ito.",
       "notAnnouncedAuth": "Hindi in-announce sa Hive: hindi pa puwedeng mag-post ang 3Speak para sa iyo. I-edit ang template para payagan ito.",
-      "stuck": "Nakakonekta ang OBS, pero walang video na dumating sa amin, kaya hindi nagsimula ang stream. Ihinto ang pag-stream sa OBS at simulan ulit.",
-      "dailyLimit": "Hindi naka-live ang OBS: isang stream lang bawat araw ang puwedeng simulan ng mga libreng account. Subukan ulit 24 oras matapos magsimula ang huli mong stream, o kumuha ng 3Speak Pro para mag-stream nang walang araw-araw na limit.",
+      "stuck": "Nakakonekta ang OBS, pero walang video na dumating sa amin. Ihinto at simulan ulit ang pag-stream.",
+      "dailyLimit": "Isang stream lang bawat araw ang puwedeng simulan ng mga libreng account. Subukan ulit 24 oras matapos magsimula ang huli mong stream, o kumuha ng Pro.",
       "useInStudio": "Gamitin sa Stream Studio",
       "proRequired": "Hindi naka-live ang OBS: bahagi ng 3Speak Pro ang pag-stream mula sa OBS."
     },
     "guide": {
       "title": "Paano i-set up ang OBS",
-      "step1": "Gamitin ang OBS Studio 30 o mas bago at buksan ang Settings, tapos Stream.",
-      "step2": "Itakda ang Service sa \"WHIP\".",
-      "step3": "Server: i-paste ang server URL ng template na gusto mo (\"I-copy ang server URL\" sa card nito). May sariling URL ang bawat template.",
-      "step4": "Bearer Token: i-paste ang stream secret mo mula sa itaas ng page na ito. Pareho ito para sa bawat template.",
-      "step5": "I-click ang \"Start Streaming\" sa OBS at live ka na sa 3Speak gamit ang template na iyon. Tinatapos ng \"Stop Streaming\" ang stream.",
-      "outputTitle": "Mga inirerekomendang output setting",
-      "keyframe": "Keyframe interval: 1 hanggang 2 segundo",
-      "bitrate": "Rate control CBR, 2500 hanggang 6000 kbps",
-      "encoder": "Encoder: x264 o ang hardware encoder mo",
-      "audio": "Audio sample rate: 48 kHz",
-      "bframes": "Walang B-frames (gawing 0 kung may ganitong option ang encoder mo)",
+      "step1": "Gamitin ang OBS Studio 30 o mas bago: Settings → Stream",
+      "step2": "Itakda ang Service sa \"WHIP\"",
+      "step3": "Server: i-paste ang server URL ng template",
+      "step4": "Bearer Token: i-paste ang stream secret mo",
+      "step5": "I-click ang Start Streaming sa OBS. Live ka na sa 3Speak.",
+      "outputTitle": "Inirerekomendang output",
+      "keyframe": "Keyframe 1–2 seg",
+      "bitrate": "CBR 2500–6000 kbps",
+      "encoder": "x264 / hardware",
+      "audio": "48 kHz na audio",
+      "bframes": "Walang B-frames",
       "chatTitle": "Tingnan ang chat sa OBS",
-      "chatCopy": "Sa itaas ng page na ito, sa ilalim ng \"Ang chat mo sa OBS\", i-click ang \"Kopyahin ang chat URL para sa OBS\". Iisang link ito para sa lahat ng stream mo.",
+      "chatCopy": "Sa itaas ng page na ito, sa ilalim ng \"Ang chat mo sa OBS\", i-click ang \"Kopyahin ang chat URL\". Iisang link ito para sa lahat ng stream mo.",
       "chat2": "Sa OBS, buksan ang menu na \"Docks\" at piliin ang \"Custom Browser Docks\". Maglagay ng pangalan gaya ng \"3Speak chat\", i-paste ang URL at i-click ang \"Apply\". Lalabas sa panel na iyon ang mga bagong mensahe habang live ka. Hindi ito nakikita ng mga manonood.",
       "chat3": "Nakikita na ng mga manonood ang chat sa tabi ng stream mo, kaya hindi mo na kailangang ilagay ito sa video. Kung ibinabahagi mo rin ang stream sa ibang lugar: idagdag ang parehong URL bilang \"Browser\" source at alisin ang \"&dock=1\" sa dulo. Lulutang ang mga mensahe sa ibabaw ng video at mawawala pagkalipas ng 30 segundo.",
       "chatOptions": "Opsyonal, idagdag sa dulo ng URL: &max=10 para mas kaunting linya, &size=18 para lumaki ang text, &fade=0 para manatili ang mga mensahe sa video.",
@@ -256,5 +258,14 @@
       "desc": "Sa 3Speak Pro, puwede kang mag-live diretso mula sa OBS gamit ang iyong mga template. Kahit walang Pro, gumagana pa rin ang iyong mga template sa Stream Studio sa iyong browser.",
       "cta": "Kumuha ng 3Speak Pro"
     }
+  },
+  "grid": {
+    "openpods": "OpenPods",
+    "listening_one": "{{count}} nakikinig",
+    "listening_other": "{{count}} nakikinig",
+    "emptySub": "Lumalabas dito ang mga stream at OpenPods sa sandaling magsimula sila.",
+    "emptyRooms": "Walang bukas na OpenPods ngayon.",
+    "emptyScheduled": "Walang naka-schedule ngayon.",
+    "emptyScheduledSub": "Lumalabas dito ang mga room na bukas pero hindi pa live."
   }
 }

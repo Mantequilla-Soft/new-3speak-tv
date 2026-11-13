@@ -16,7 +16,9 @@
     "translatedTo": "Vertaald naar het {{language}}",
     "showLanguage": "{{language}} tonen",
     "showOriginal": "Origineel tonen",
-    "buttonTitle": "AI-samenvatting van deze video"
+    "buttonTitle": "AI-samenvatting van deze video",
+    "jumpTo": "Ga naar",
+    "disclaimer": "Gemaakt op basis van het transcript. Kan fouten bevatten."
   },
   "errors": {
     "notAvailable": "Deze video is niet beschikbaar.",
@@ -29,7 +31,8 @@
   "gated": {
     "title": "Alleen voor leden",
     "checkFailed": "We konden je abonnement nu niet bevestigen. Probeer het zo opnieuw.",
-    "preview": "Je kijkt naar een gratis voorproefje. 3Speak Pro ontgrendelt de volledige video.",
+    "preview": "Je bekijkt een gratis voorproefje",
+    "previewSub": "3Speak Pro ontgrendelt de volledige video.",
     "subscribersOnly": "Deze video is beschikbaar voor 3Speak Pro-abonnees.",
     "cta": "3Speak Pro nemen"
   },
@@ -38,7 +41,19 @@
     "add": "Reactie toevoegen"
   },
   "liveChat": "Livechat",
+  "side": {
+    "label": "Videopanelen"
+  },
+  "voters": {
+    "title": "Voters",
+    "cardLabel": "Supporters en voters",
+    "voter": "Voter",
+    "weight": "Gewicht",
+    "value": "Waarde"
+  },
   "moreVideos": "Meer video's",
+  "nextIn": "Volgende in {{name}}",
+  "fromCommunity": "Uit {{name}}",
   "vote": {
     "saveFailed": "Je vote kon niet worden opgeslagen"
   },
@@ -70,11 +85,11 @@
     "label": "Video clippen",
     "clip": "Clip",
     "seekToStart": "Spoel naar het begin",
-    "setStart": "Begin instellen",
+    "setStart": "Start instellen",
     "setEnd": "Einde instellen",
     "createClip": "Clip maken",
     "barStart": "Spoel naar het begin van je clip",
-    "barEnd": "Begin: {{start}} — Spoel nu naar het einde",
+    "barEnd": "Start {{start}} · spoel nu naar het einde",
     "barDone": "Clip: {{start}} – {{end}}"
   },
   "share": {
@@ -92,11 +107,11 @@
   },
   "media": {
     "unavailableTitle": "Deze video is niet meer beschikbaar",
-    "unavailableBody": "De media van deze oudere upload zijn niet gevonden op het netwerk. De post bestaat nog op de blockchain, maar de video kan niet meer worden afgespeeld.",
+    "unavailableBody": "De media van deze oudere upload zijn niet gevonden. De post bestaat nog steeds op Hive.",
     "scheduledTitle": "Dit bericht is ingepland",
     "scheduledBody": "Het wordt gepubliceerd op {{date}}. Vanaf dan kun je de video bekijken.",
     "blockedTitle": "De video kon nu niet worden geladen",
-    "blockedBody": "Een van onze videoservers reageerde niet. Er is niets mis met de video zelf, dus probeer het opnieuw."
+    "blockedBody": "Een van onze videoservers reageerde niet. Met de video is niets mis."
   },
   "tipNudge": {
     "text": "Vond je dit leuk?<hide> Stuur <b>@{{author}}</b> een fooi!</hide>",
@@ -104,7 +119,10 @@
   },
   "community": {
     "members_one": "{{count}} lid",
-    "members_other": "{{count}} leden"
+    "members_other": "{{count}} leden",
+    "postedIn": "Geplaatst in",
+    "partOf": "Onderdeel van",
+    "position": "{{current}} van {{total}}"
   },
   "tags": {
     "curated": "Geselecteerd"
@@ -120,7 +138,8 @@
     "openTagFeed": "Tagfeed openen"
   },
   "scheduled": {
-    "notice": "Ingepland voor <b>{{date}}</b> — nog niet gepubliceerd.",
+    "notice": "Ingepland voor <b>{{date}}</b>",
+    "notPublished": "Nog niet gepubliceerd.",
     "futureDate": "een datum in de toekomst",
     "edit": "Bewerken, verzetten of annuleren",
     "editTitle": "Ingeplande post bewerken (details, datum of annuleren)"
@@ -147,7 +166,8 @@
     "toggleDetails": "Details tonen/verbergen",
     "followCreator": "Maker volgen",
     "closeMenu": "Menu sluiten",
-    "openActions": "Acties openen"
+    "openActions": "Acties openen",
+    "support": "Steun {{name}}"
   },
   "description": {
     "hide": "Beschrijving verbergen",
@@ -164,7 +184,7 @@
     "uploadedTo": "Geüpload naar <b>{{host}}</b>. Druk op Opslaan om hem te vervangen.",
     "uploaded": "Geüpload. Druk op Opslaan om hem te vervangen.",
     "cancelUpload": "Upload annuleren",
-    "keepCurrent": "Huidige video houden",
+    "keepCurrent": "Huidige video behouden",
     "encodeHint": "Na het opslaan duurt het nog een paar minuten om te encoderen, en de oude video blijft afspelen tot hij klaar is. Je thumbnail blijft hetzelfde, dus werk hem hierboven bij als hij niet meer past.",
     "thumbnail": "Thumbnail",
     "thumbPreviewAlt": "Voorbeeld van thumbnail",
@@ -185,26 +205,27 @@
     "markdownHint": "Markdown wordt ondersteund.",
     "listed": "Zichtbaar",
     "unlistedLabel": "Verborgen",
-    "listedHint": "Zichtbaar in feeds, zoekresultaten en op je profiel.",
-    "unlistedHint": "Niet zichtbaar in feeds en zoekresultaten — speelt nog af via een directe link, blijft op je profiel staan (met label).",
-    "allowRemix": "Remix/clip toestaan",
-    "remixOn": "Anderen kunnen remixes/clips maken; jij wordt vermeld als oorspronkelijke maker.",
+    "listedHint": "In feeds, zoekresultaten en op je profiel",
+    "unlistedHint": "Alleen via directe link, gemarkeerd op je profiel",
+    "allowRemix": "Remix en clip toestaan",
+    "remixOn": "Je wordt vermeld als oorspronkelijke maker",
     "remixOff": "Anderen kunnen deze video niet remixen of clippen.",
     "adsOnVideo": "Advertenties in deze video",
     "adsOnHint": "Er kunnen advertenties in deze video worden getoond.",
     "adsOffHint": "Geen advertenties in deze video.",
     "rollsOnVideo": "Videorolls",
     "rollsOnHint": "Rolls, banners en tickers kunnen verschijnen.",
-    "rollsOffHint": "Alleen banners en tickers op deze video.",
+    "rollsOffHint": "Anders alleen banners en tickers",
     "trailer": "Kanaaltrailer",
     "trailerOn": "Speelt automatisch af bovenaan het tabblad Overzicht van je profiel en vervangt een eerder ingestelde trailer.",
-    "trailerOff": "Maak dit de video die automatisch afspeelt bovenaan het tabblad Overzicht van je profiel.",
+    "trailerOff": "Speelt automatisch bovenaan je profiel",
     "nsfw": "Volwassenen / NSFW",
     "notNsfw": "Niet voor volwassenen",
     "nsfwHint": "Niet zichtbaar in feeds en zoekresultaten tenzij de kijker NSFW heeft ingeschakeld; getagd als nsfw op Hive.",
     "notNsfwHint": "Normale inhoud, zichtbaar voor iedereen.",
+    "nsfwOffHint": "Verborgen tenzij de kijker NSFW heeft aangezet",
     "promoted": "Gepromoot",
-    "promote": "Video promoten",
+    "promote": "Promoten",
     "saveChanges": "Wijzigingen opslaan",
     "noChanges": "Geen wijzigingen om op te slaan.",
     "thumbUploaded": "Thumbnail geüpload.",
@@ -249,7 +270,8 @@
       "visibility": "Zichtbaarheid",
       "content": "Inhoud",
       "ads": "Advertenties",
-      "promotion": "Promotie"
+      "promotion": "Promotie",
+      "contentAds": "Content, advertenties en promotie"
     },
     "chaptersNoteAll": "De hoofdstukkenlijst wordt bij het opslaan in de beschrijving gezet.",
     "editChapters": "Hoofdstukken bewerken",

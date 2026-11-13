@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { getHiveClient } from '../utils/hiveNode';
 import { fetchSpotlight, iconForSlug, bgToCss } from '../utils/spotlight';
 import HiveAvatar from '../components/HiveAvatar/HiveAvatar';
+import { Icon } from '../components/v2/Icon';
 import './Spotlight.scss';
 
 const FONT_STACK = {
@@ -25,6 +26,10 @@ const FONT_STACK = {
   palatino: 'Palatino, "Palatino Linotype", "Book Antiqua", Georgia, serif',
   wide: '"Arial Black", "Arial Bold", Impact, Gadget, sans-serif',
 };
+
+// The creator's default border / shadow colour (page data, kept as hex like
+// every colour the editor stores).
+const DEFAULT_INK = `#${'0'.repeat(6)}`;
 
 // hex(#rrggbb) + opacity% → rgba(); passes rgba()/other through untouched.
 function withOpacity(col, pct) {
@@ -54,14 +59,14 @@ function safeColor(c) {
   return (typeof c === 'string' && /^(#[0-9a-fA-F]{3,8}|rgba?\([\d.,%\s]+\))$/.test(c.trim())) ? c : undefined;
 }
 const num = (v, d = 0) => (Number.isFinite(Number(v)) ? Number(v) : d);
-const cleanUser = (u) => String(u || '').replace(/[^a-z0-9.\-]/gi, '').toLowerCase();
+const cleanUser = (u) => String(u || '').replace(/[^a-z0-9.-]/gi, '').toLowerCase();
 
 // Per-block border + shadow inline style (mirrors the standalone renderer's boxCss).
 // Numbers are coerced and colours validated so nothing but a valid CSS value lands here.
 function fxStyle(s) {
   const st = {};
-  if (s.borderWidth) st.border = `${num(s.borderWidth)}px solid ${withOpacity(safeColor(s.borderColor) || '#000000', num(s.borderOpacity, 100))}`;
-  if (s.shadowOpacity) st.boxShadow = `${s.shadowInset ? 'inset ' : ''}${num(s.shadowX)}px ${num(s.shadowY)}px ${num(s.shadowBlur)}px ${num(s.shadowSpread)}px ${withOpacity(safeColor(s.shadowColor) || '#000000', num(s.shadowOpacity))}`;
+  if (s.borderWidth) st.border = `${num(s.borderWidth)}px solid ${withOpacity(safeColor(s.borderColor) || DEFAULT_INK, num(s.borderOpacity, 100))}`;
+  if (s.shadowOpacity) st.boxShadow = `${s.shadowInset ? 'inset ' : ''}${num(s.shadowX)}px ${num(s.shadowY)}px ${num(s.shadowBlur)}px ${num(s.shadowSpread)}px ${withOpacity(safeColor(s.shadowColor) || DEFAULT_INK, num(s.shadowOpacity))}`;
   return st;
 }
 
@@ -71,7 +76,7 @@ function VideoBlock({ section, radius, fx, theme }) {
   // Only render for a well-formed Hive author/permlink (guards the iframe URL).
   const author = String(section.author || '').toLowerCase();
   const permlink = String(section.permlink || '').toLowerCase();
-  if (!/^[a-z][a-z0-9.\-]{2,15}$/.test(author) || !/^[a-z0-9-]{1,255}$/.test(permlink)) return null;
+  if (!/^[a-z][a-z0-9.-]{2,15}$/.test(author) || !/^[a-z0-9-]{1,255}$/.test(permlink)) return null;
   const isShort = !!section.isShort;
   // Our own same-origin SDK player (src/page/EmbedPlayer.jsx), not a play.3speak.tv iframe.
   const src = `/embed/${author}/${permlink}${isShort ? '?short=1' : ''}`;
@@ -83,7 +88,7 @@ function VideoBlock({ section, radius, fx, theme }) {
     background: cardBg,
     color: safeColor(section.text) || safeColor(theme?.sectionText) || undefined,
     borderRadius: radius,
-    fontSize: `calc(14.5px * ${section.fontScale ? section.fontScale / 100 : 1})`,
+    fontSize: `calc(14px * ${section.fontScale ? section.fontScale / 100 : 1})`,
     padding: section.padding != null ? num(section.padding) : 10,
     ...fx,
   };
@@ -234,7 +239,7 @@ export default function Spotlight() {
   }, [theme]);
 
   if (state.loading) {
-    return <div className="spotlight-page spotlight-page--plain"><div className="sp-spinner" /></div>;
+    return <div className="spotlight-page spotlight-page--plain" role="status"><Icon name="progress_activity" size={28} className="v2-spin sp-spinner" /></div>;
   }
 
   const sections = state.page?.sections || [];

@@ -1,6 +1,6 @@
 import { Route, Routes, useLocation, useNavigate, useParams, useSearchParams, Navigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import { useRef, Suspense } from "react";
+import { useRef, Suspense, lazy } from "react";
 import "./App.css";
 // import Home from './page/Home'
 // import Treanding from './page/Treanding'
@@ -20,7 +20,6 @@ import ReviewFab from "./components/ReviewModal/ReviewFab";
 import { useEffect } from "react";
 import { readAppVersion } from "./utils/appVersion";
 import { captureReferralFromUrl } from "./utils/referral";
-import ChangelogModal from "./components/Changelog/ChangelogModal";
 import AnnouncementModal from "./components/Announcement/AnnouncementModal";
 import EmbedCodeHost from "./components/Embed/EmbedCodeModal";
 import ProfileNav from "./components/nav/ProfileNav";
@@ -36,15 +35,15 @@ import { fetchPlaySource } from "./lib/videoData";
 import { useQueryClient } from "@tanstack/react-query";
 import RouteTitle from "./components/RouteTitle";
 import OpenShortsOnStart from "./components/OpenShortsOnStart";
-import AddAccount_modal from "./components/modal/AddAccount_modal";
 // import TestingLogin from "./page/Login/TestingLogin";
 import { Toaster } from 'sonner';
 import { toastIn } from './utils/toast';
 import { useTranslation } from 'react-i18next';
 import { t } from './i18n';
-import { CircleCheck, CircleX, TriangleAlert, Info } from 'lucide-react'
+import { Icon } from './components/v2/Icon'
 import './toast.css'
-import { fetchNewerVersion, reloadForUpdate } from './utils/checkLatestVersion'
+import { fetchNewerVersion } from './utils/checkLatestVersion'
+import UpdateNotice from './components/UpdateNotice/UpdateNotice'
 // Retired alongside the legacy /studio flow — kept here as comments for ease of
 // roll-back; the embed-studio equivalents at /embed-studio/{thumbnail,details,preview}
 // are what users hit now.
@@ -66,6 +65,7 @@ import ChatOverlay from "./components/Chat/ChatOverlay";
 import ChatAutoOpen from "./components/Chat/ChatAutoOpen";
 const OpenPodModal = lazyRoute(() => import("./components/OpenPod/OpenPodModal"), "./components/OpenPod/OpenPodModal");
 const ObsOverlay = lazyRoute(() => import("./page/ObsOverlay"), "./page/ObsOverlay");
+const UiPlayground = lazyRoute(() => import("./components/v2/UiPlayground"), "./components/v2/UiPlayground");
 const ObsChatOverlay = lazyRoute(() => import("./page/ObsChatOverlay"), "./page/ObsChatOverlay");
 
 // Route components are code-split: only the route the visitor actually opens is
@@ -114,6 +114,8 @@ const NewVideos = lazyRoute(() => import("./page/NewVideos"), "./page/NewVideos"
 const Notifications = lazyRoute(() => import("./page/Notifications"), "./page/Notifications");
 const OpenPodPublish = lazyRoute(() => import("./page/OpenPodPublish"), "./page/OpenPodPublish");
 const OpenPods = lazyRoute(() => import("./page/OpenPods"), "./page/OpenPods");
+// The top bar's Live tab (20a): what is live right now.
+const Live = lazyRoute(() => import("./page/Live"), "./page/Live");
 const PlaylistView = lazyRoute(() => import("./page/PlaylistView"), "./page/PlaylistView");
 const PostView = lazyRoute(() => import("./page/PostView"), "./page/PostView");
 const ProfileModal = lazyRoute(() => import("./components/modal/ProfileModal"), "./components/modal/ProfileModal");
@@ -172,22 +174,13 @@ import InterestsPrompt from "./components/InterestsPrompt/InterestsPrompt";
 import WelcomePrompt from "./components/WelcomePrompt/WelcomePrompt";
 import AdsPrompt from "./components/AdsPrompt/AdsPrompt";
 import ViewerRewardsPrompt from "./components/AdsPrompt/ViewerRewardsPrompt";
-import GraduationPrompt from "./components/Incubation/GraduationPrompt";
-import BacklogPrompt from "./components/Incubation/BacklogPrompt";
 import GraduatedFollowsPrompt from "./components/Incubation/GraduatedFollowsPrompt";
-import IncubationWelcome from "./components/Incubation/IncubationWelcome";
-import IncubationTips from "./components/Incubation/IncubationTips";
-import HandleTakenPrompt from "./components/Incubation/HandleTakenPrompt";
 import IncubationSessionSync from "./components/Incubation/IncubationSessionSync";
 import AvatarSync from "./components/HiveAvatar/AvatarSync";
-import EditorModal from "./components/modal/EditorModal";
 import { useEditorLauncher } from "./hooks/useEditorLauncher";
 import { FEATURE_EDITOR, VIDEO_IMPORT_ENABLED } from "./utils/config";
 import BottomNav from "./components/BottomNav/BottomNav";
-import MiniPlayer from "./components/MiniPlayer/MiniPlayer";
-import GlobalAudioPlayer from "./components/GlobalAudioPlayer/GlobalAudioPlayer";
 import OfflineBanner from "./components/OfflineBanner/OfflineBanner";
-import AudioUploadModal from "./components/AudioUploadModal/AudioUploadModal";
 import { KeyTypes, Providers } from "@aioha/aioha";
 import '@aioha/react-ui/dist/build.css';
 import { LOCAL_STORAGE_USER_ID_KEY } from "./hooks/localStorageKeys";
@@ -195,6 +188,24 @@ import { endWalletSession } from "./hive-api/aioha";
 import { rememberButrauthAccount } from "./utils/butrauthAccounts";
 import useCardSize from "./hooks/useCardSize";
 import useHoverPeek from "./hooks/useHoverPeek";
+import MountWhenOpened, { LazyBoundary } from "./components/common/LazyMount";
+
+// Kept out of the first download so the home page draws as early as it can.
+// Dialogs load when first opened (MountWhenOpened); the rest are always on the
+// page but only matter a moment later (the audio player's bar, the popups that
+// decide for themselves whether to show), so they load right after the first
+// paint (LazyBoundary). See components/common/LazyMount.jsx.
+const MiniPlayer = lazy(() => import("./components/MiniPlayer/MiniPlayer"));
+const GlobalAudioPlayer = lazy(() => import("./components/GlobalAudioPlayer/GlobalAudioPlayer"));
+const AudioUploadModal = lazy(() => import("./components/AudioUploadModal/AudioUploadModal"));
+const AddAccount_modal = lazy(() => import("./components/modal/AddAccount_modal"));
+const EditorModal = lazy(() => import("./components/modal/EditorModal"));
+const ChangelogModal = lazy(() => import("./components/Changelog/ChangelogModal"));
+const GraduationPrompt = lazy(() => import("./components/Incubation/GraduationPrompt"));
+const BacklogPrompt = lazy(() => import("./components/Incubation/BacklogPrompt"));
+const IncubationWelcome = lazy(() => import("./components/Incubation/IncubationWelcome"));
+const IncubationTips = lazy(() => import("./components/Incubation/IncubationTips"));
+const HandleTakenPrompt = lazy(() => import("./components/Incubation/HandleTakenPrompt"));
 
 // Every toast from this module is headed "Sign in"; the message becomes the
 // line under it. See utils/toast.js.
@@ -291,6 +302,15 @@ const LoginRedirect = ({ openLoginModal }) => {
   return null;
 };
 
+// The island toast's parts (toast.css), shared by both <Toaster/>s.
+const TOAST_CLASSNAMES = {
+  toast: 'ts-toast',
+  title: 'ts-toast-title',
+  description: 'ts-toast-desc',
+  icon: 'ts-toast-icon',
+  closeButton: 'ts-toast-close',
+};
+
 // Survives StrictMode's double mount and any remount, so the refresh prompt is
 // raised at most once per page load.
 let updatePromptShown = false;
@@ -324,6 +344,7 @@ function App() {
   // The global editor popup: the shorts editor or, in audio mode, the audio
   // editor, with the file it opens with (hooks/useEditorLauncher.js)
   const editor = useEditorLauncher();
+  const miniPlayerOn = useAppStore((s) => Boolean(s.miniPlayer));
   const [audioUploadOpen, setAudioUploadOpen] = useState(false);
   // Carries an in-flight blob handed off from another flow (e.g. an
   // OpenPods recording stop). The AudioUploadModal seeds it as the
@@ -348,6 +369,8 @@ function App() {
   }, []);
 
   const hideNavOnMobile = isShorts && isMobile;
+  // Pages that draw edge to edge under the bar instead of in the 1280 column.
+  const isBleedRoute = isShorts || /^\/(galaxy|egress-stream)(\/|$)/.test(location.pathname);
 
   // Apply the saved theme on every route — Nav (which also calls this) isn't
   // rendered on the mobile shorts view, so a fresh /shorts deep link would
@@ -428,11 +451,12 @@ function App() {
       const newer = await fetchNewerVersion();
       if (!newer) return;
       updatePromptShown = true;
-      toast(t('app.update.available', { version: newer }), {
-        description: t('app.update.description'),
-        duration: Infinity,
-        action: { label: t('common.actions.refresh'), onClick: () => reloadForUpdate() },
-      });
+      // The cyan notice of 32g/44a: icon, title, line, Refresh (UpdateNotice).
+      // It stays until Refresh or close.
+      toast.custom(
+        (id) => <UpdateNotice version={newer} onDismiss={() => toast.dismiss(id)} />,
+        { duration: Infinity, className: 'ts-update-toast' },
+      );
     };
     promptIfNewer();
     const onFocus = () => promptIfNewer();
@@ -659,10 +683,20 @@ function App() {
       // returns BEFORE the router's Suspense below. Fallback is a bare black box
       // rather than a spinner: this renders inside an iframe on someone else's
       // page, where a flash of loading chrome is worse than nothing.
-      <Suspense fallback={<div style={{ position: 'fixed', inset: 0, background: '#000' }} />}>
+      <Suspense fallback={<div style={{ position: 'fixed', inset: 0, background: 'var(--media-black)' }} />}>
         <Routes>
           <Route path="/embed/:author/:permlink" element={<EmbedPlayer />} />
         </Routes>
+      </Suspense>
+    );
+  }
+
+  // The v2 design system playground: every primitive in both themes, to check
+  // against design_handoff_3speak_v2/designs. Dev builds only.
+  if (import.meta.env.DEV && location.pathname === '/dev/ui') {
+    return (
+      <Suspense fallback={null}>
+        <UiPlayground />
       </Suspense>
     );
   }
@@ -693,7 +727,7 @@ function App() {
   if (location.pathname.startsWith('/tip/')) {
     return (
       <Suspense fallback={null}>
-        <Toaster position="top-center" expand visibleToasts={3} />
+        <Toaster position="top-center" expand visibleToasts={3} toastOptions={{ classNames: TOAST_CLASSNAMES }} />
         <Routes>
           <Route path="/tip/:author/:permlink?" element={<TipPopup />} />
         </Routes>
@@ -722,43 +756,35 @@ function App() {
     <ChatProvider>
     <div onClick={()=> {setGlobalCloseRender(true)}}>
       <Toaster
-        position="top-right"
-        /* Below the title bar, never on top of it. The user icon sits in the
-           top-right corner, so a toast landing there made the avatar unclickable for
-           as long as any message was on screen — and the messages that fire most
-           often are the login ones, i.e. exactly when someone is reaching for it.
+        /* The island (STYLE_GUIDE §7, designs 07f/17i/34d): top centre, just
+           under the top bar, never a corner toast. Centred, it also stays off
+           the avatar and the bell at the bar's right end.
 
            Driven by --nav-top-offset, which Nav.jsx sets from the bar's OWN measured
            height (and 0 when the bar is hidden or unmounted), so this tracks the real
            bar instead of a hardcoded guess that goes wrong the moment it reflows. */
-        offset={{ top: 'calc(var(--nav-top-offset, 50px) + 12px)', right: '16px' }}
-        mobileOffset={{ top: 'calc(var(--nav-top-offset, 50px) + 8px)', right: '8px', left: '8px' }}
+        position="top-center"
+        offset={{ top: 'calc(var(--nav-top-offset, 76px) + 8px)' }}
+        mobileOffset={{ top: 'calc(var(--nav-top-offset, 56px) + 8px)', right: '16px', left: '16px' }}
+        style={{ '--width': '420px' }}
         containerAriaLabel={t('app.toastsRegion')}
         expand
-        visibleToasts={6}
-        gap={12}
+        visibleToasts={4}
+        gap={8}
         closeButton
-        swipeDirections={['right']}
-        /* 20px to match the rail-style toast in toast.css — the icon now sits
-           beside the text rather than out on its own, so it reads as part of
-           the line instead of a badge. */
+        swipeDirections={['top', 'left', 'right']}
+        /* Material Symbols in a round chip coloured by type (toast.css). */
         icons={{
-          success: <CircleCheck size={20} strokeWidth={2.25} />,
-          error: <CircleX size={20} strokeWidth={2.25} />,
-          warning: <TriangleAlert size={20} strokeWidth={2.25} />,
-          info: <Info size={20} strokeWidth={2.25} />,
+          success: <Icon name="check" size={20} weight={700} />,
+          error: <Icon name="priority_high" size={20} weight={700} />,
+          warning: <Icon name="warning" size={18} fill />,
+          info: <Icon name="info" size={20} />,
+          loading: <Icon name="progress_activity" size={20} className="v2-spin" />,
+          close: <Icon name="close" size={16} />,
         }}
-        toastOptions={{
-          classNames: {
-            toast: 'ts-toast',
-            title: 'ts-toast-title',
-            description: 'ts-toast-desc',
-            icon: 'ts-toast-icon',
-            closeButton: 'ts-toast-close',
-          },
-        }}
+        toastOptions={{ classNames: TOAST_CLASSNAMES }}
       />
-      <ChangelogModal />
+      <LazyBoundary name="changelog"><ChangelogModal /></LazyBoundary>
       <AnnouncementModal />
       <EmbedCodeHost />
       <SupportModal />
@@ -770,12 +796,13 @@ function App() {
       {!hideNavOnMobile && (
         <Nav toggleProfileNav={toggleProfileNav} profileMenuHover={profileMenu.hoverProps} globalClose={globalCloseRender} setGlobalClose={setGlobalCloseRender} openLoginModal={openLoginModal} />
       )}
-      <div>
-        {/* The left sidebar is gone. The content keeps the classes it wore
-            when the sidebar was hidden -- large-container plus
-            sidebar-fully-hidden -- which is now simply what the layout is,
-            rather than one of three states it could be in. */}
-        <div className={`container large-container sidebar-fully-hidden ${hideNavOnMobile ? "shorts-mobile-container" : ""}`}>
+      <div className="app-shell">
+        {/* The content column (App.css): max 1280 wide, page padding, room for
+            the bottom bar. There is no left sidebar; the sections live in the
+            top bar's tabs and the bottom bar. large-container and
+            sidebar-fully-hidden stay only because other stylesheets select on
+            them. Full-bleed routes drop the column (is-bleed). */}
+        <div className={`container large-container sidebar-fully-hidden${isBleedRoute ? " is-bleed" : ""}${hideNavOnMobile ? " shorts-mobile-container" : ""}`}>
           <ScrollToTop />
           {/* A creator blocked from uploading: popup once, banner while it lasts.
               No banner over the full-screen mobile shorts player. */}
@@ -890,6 +917,7 @@ function App() {
               <Route path="/wallet/:user" element={<Wallet />} />
               <Route path="/test" element={<ProfileModal />} />
               <Route path="/image" element={<HiveImageUploader />} />
+              <Route path="/live" element={<Live />} />
               <Route path="/openpods" element={<OpenPods />} />
               <Route path="/openpods/publish" element={<OpenPodPublish />} />
               {/* Old address of the OBS templates, now the Stream Studio's
@@ -906,16 +934,18 @@ function App() {
         {!hideNavOnMobile && (
           <ProfileNav isVisible={profileMenu.rendered} pinned={profileMenu.open} leaving={profileMenu.leaving} hoverProps={profileMenu.hoverProps} onclose={profileMenu.close} toggleAddAccount={toggleAddAccount} openLoginModal={openLoginModal} />
         )}
-        <MiniPlayer />
-        <GlobalAudioPlayer />
+        <MountWhenOpened when={miniPlayerOn} name="mini player"><MiniPlayer /></MountWhenOpened>
+        <LazyBoundary name="audio player"><GlobalAudioPlayer /></LazyBoundary>
         <OfflineBanner />
-        <AudioUploadModal
-          isOpen={audioUploadOpen}
-          onClose={() => { setAudioUploadOpen(false); setPendingAudioTrack(null); }}
-          initialTrack={pendingAudioTrack}
-        />
+        <MountWhenOpened when={audioUploadOpen} name="audio upload">
+          <AudioUploadModal
+            isOpen={audioUploadOpen}
+            onClose={() => { setAudioUploadOpen(false); setPendingAudioTrack(null); }}
+            initialTrack={pendingAudioTrack}
+          />
+        </MountWhenOpened>
         {!hideNavOnMobile && <BottomNav openLoginModal={openLoginModal} onOpenProfileMenu={toggleProfileNav} profileMenuOpen={profileNavVisible} />}
-        {toggle && <AddAccount_modal close={toggleAddAccount} isOpen={toggle} /> }
+        {toggle && <LazyBoundary name="add account"><AddAccount_modal close={toggleAddAccount} isOpen={toggle} /></LazyBoundary>}
         {/* After a 3speak.tv/invite/<code> link: "@alice invited you" over
             the home page. The code stays for any later sign-up. */}
         <InvitePopup openLoginModal={openLoginModal} />
@@ -941,19 +971,19 @@ function App() {
         {/* Offers an incubating user their own Hive account once BOTH
             butrauth (may they) and our own signal (have they earned it)
             agree. Shares the one-prompt-at-a-time gate with the others. */}
-        <GraduationPrompt />
+        <LazyBoundary name="graduation prompt"><GraduationPrompt /></LazyBoundary>
         {/* The other side of the same journey: once they HAVE an account,
             tell them the things they made earlier are still here. */}
-        <BacklogPrompt />
+        <LazyBoundary name="backlog prompt"><BacklogPrompt /></LazyBoundary>
         {/* Speaks through a toast, so it never competes for the modal slot. */}
         <GraduatedFollowsPrompt />
         {/* Both render nothing for anyone who already has a Hive account. */}
-        <IncubationWelcome />
-        <IncubationTips />
+        <LazyBoundary name="incubation welcome"><IncubationWelcome /></LazyBoundary>
+        <LazyBoundary name="incubation tips"><IncubationTips /></LazyBoundary>
         {/* Last of the incubation prompts, and the only one about something
             being lost rather than gained: it holds the others back while it is
             up (see its setPromptActive). */}
-        <HandleTakenPrompt />
+        <LazyBoundary name="handle taken prompt"><HandleTakenPrompt /></LazyBoundary>
         {/* Before the prompts have anything to say: if this device is
             behind and the account already exists, none of them apply. */}
         <IncubationSessionSync />
@@ -962,14 +992,16 @@ function App() {
         <ChatOverlay />
         <ChatAutoOpen />
         {FEATURE_EDITOR && (
-          <EditorModal
-            isOpen={editor.open}
-            onClose={editor.close}
-            mode={editor.mode}
-            videoFile={editor.mode === 'video' ? editor.file : null}
-            audioFile={editor.mode === 'audio' ? editor.file : null}
-            audioTrackId={editor.audioTrackId}
-          />
+          <MountWhenOpened when={editor.open} name="editor">
+            <EditorModal
+              isOpen={editor.open}
+              onClose={editor.close}
+              mode={editor.mode}
+              videoFile={editor.mode === 'video' ? editor.file : null}
+              audioFile={editor.mode === 'audio' ? editor.file : null}
+              audioTrackId={editor.audioTrackId}
+            />
+          </MountWhenOpened>
         )}
       </div>
     </div>

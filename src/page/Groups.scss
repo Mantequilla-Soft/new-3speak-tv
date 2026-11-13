@@ -1,102 +1,82 @@
-@use "../mixins.scss" as mix;
+@use "../styles/v2" as v2;
 
+// /groups (design 19d): a big title, the tabs as one segmented track on the
+// right, then the list of the open tab.
 .groups-page {
-  padding: 18px 16px 48px;
+  max-width: var(--content-max);
+  margin: 0 auto;
+  // The app column (.container, App.css) already gives the page padding.
+  padding: 0 0 48px;
+  color: var(--text);
 }
 
 .groups-head {
-  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
 
   h1 {
+    flex: 1;
+    min-width: 0;
     margin: 0;
-    font-size: 26px;
-    color: var(--text-primary);
+    font-size: 48px;
+    font-weight: 900;
+    letter-spacing: -.03em;
+    line-height: 1.1;
   }
 
-  p {
-    margin: 6px 0 0;
-    font-size: 14px;
-    color: var(--text-muted);
+  // "New community": a 44px cyan fill with a 16px label (19d).
+  .groups-create {
+    flex: none;
+    padding: 0 18px;
+    font-size: 16px;
+    font-weight: 700;
+    // aria-disabled rather than `disabled`, so it can still be hovered and
+    // explain itself.
+    &.is-locked { opacity: .45; cursor: not-allowed; filter: none; }
+  }
+
+  @include v2.mobile {
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 14px;
+
+    h1 { font-size: 28px; }
+    .groups-tabs { order: 3; width: 100%; }
+    .groups-create { height: 40px; border-radius: var(--r-md); font-size: 13px; padding: 0 14px; }
   }
 }
 
-// Underlined rather than filled, matching the sub-tab row in Settings, so a
-// row of tabs means the same thing wherever it appears.
-.groups-tabs {
+// 40b: the lock note, a quiet surface strip.
+.groups-locked {
   display: flex;
-  gap: 4px;
-  margin-bottom: 18px;
-  border-bottom: 1px solid var(--border-color);
-  overflow-x: auto;
-  scrollbar-width: none;
-
-  &::-webkit-scrollbar { display: none; }
+  align-items: flex-start;
+  gap: 8px;
+  margin: -8px 0 16px;
+  padding: 10px;
+  border-radius: var(--r-lg);
+  background: var(--surface);
+  font-size: 11px;
+  line-height: 1.4;
+  color: var(--muted);
 }
 
-.groups-tab {
-  flex: 0 0 auto;
-  padding: 10px 14px;
-  margin-bottom: -1px;
-  border: 0;
-  border-bottom: 2px solid transparent;
-  background: none;
-  color: var(--text-muted);
-  font: inherit;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
+.groups-tabs {
+  flex: none;
+  background: var(--surface);
+  border-radius: var(--r-lg);
 
-  &:hover { color: var(--text-primary); }
+  .v2-seg__opt { font-size: 14px; padding: 0 16px; flex: 0 0 auto; }
 
-  &.is-active {
-    color: var(--text-primary);
-    border-bottom-color: var(--accent-primary);
+  @include v2.mobile {
+    .v2-seg__opt { flex: 1 0 auto; }
   }
 }
 
-// Badges still carries its own <h1> from when it was a page of its own. The tab
-// above already says which one you are looking at. (Communities lost its
-// heading outright when its header became a search-and-actions bar.)
+// Both lists were written as standalone routes with their own page padding;
+// inside Groups the page's own padding is the only one.
 .groups-page {
-  .badges-head h1 { display: none; }
-  .badges-head { margin-top: 0; }
-
-  // Both pages were written as standalone routes and brought their own page
-  // padding: 20px on communities, 16px 4px on badges. Inside Groups that made
-  // the two grids start at different left edges, so the cards visibly shifted
-  // when you changed tab. The page's own padding is the only one now.
   .communities-render,
-  .badges-render {
-    padding: 0;
-  }
-
-  // The two intros are coloured in their own stylesheets, both on
-  // --text-secondary. Overriding them from here tied on specificity and lost to
-  // whichever file loaded last, which is not a thing to leave to import order.
-}
-
-.groups-soon {
-  border: 1px dashed var(--border-color);
-  border-radius: 14px;
-  padding: 28px;
-  text-align: center;
-
-  h2 {
-    margin: 0 0 8px;
-    font-size: 18px;
-    color: var(--text-primary);
-  }
-
-  p {
-    margin: 0 auto;
-    max-width: 460px;
-    font-size: 14px;
-    line-height: 1.6;
-    color: var(--text-muted);
-  }
-}
-
-@include mix.respond(phone) {
-  .groups-head h1 { font-size: 21px; }
-  .groups-page { padding: 14px 12px 40px; }
+  .badges-render { padding: 0; }
 }

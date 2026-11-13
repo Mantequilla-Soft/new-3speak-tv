@@ -23,6 +23,9 @@
     "noOtherPlaylists": "You don't have any other playlists yet",
     "createFirst": "Create a playlist",
     "createNew": "Create new playlist",
+    "newPlaylist": "New playlist",
+    "savedTo_one": "Saved to {{count}} playlist",
+    "savedTo_other": "Saved to {{count}} playlists",
     "name": "Name",
     "namePlaceholder": "My awesome playlist",
     "privacy": "Privacy",
@@ -55,6 +58,7 @@
     "items_other": "{{count}} items",
     "created": "Created {{when}}",
     "podcastFeed": "Podcast feed",
+    "playAll": "Play all",
     "podcastFeedTitle": "Follow {{name}} in any podcast app (RSS feed)",
     "album": {
       "genre": "<strong>Genre:</strong> {{value}}",
@@ -95,12 +99,15 @@
     "description": "Description",
     "descriptionPlaceholder": "About this album (optional)",
     "filterCount_one": "{{shown}} of {{count}} item",
-    "filterCount_other": "{{shown}} of {{count}} items"
+    "filterCount_other": "{{shown}} of {{count}} items",
+    "shuffle": "Shuffle"
   },
   "type": {
     "label": "Type",
     "video": "Video",
     "audio": "Audio",
+    "videoSub": "Long-form",
+    "audioSub": "Tracks & podcasts",
     "kindLabel": "What kind of audio?",
     "kinds": {
       "podcast": "Podcast",
@@ -108,5 +115,31 @@
       "voice": "Voice notes",
       "sounds": "Other sounds"
     }
+  },
+  "feeds": {
+    "button": "External shows",
+    "title": "External shows",
+    "intro": "Add whole podcast shows from anywhere. Their episodes appear in this playlist next to yours, newest first, and new ones arrive by themselves.",
+    "searchLabel": "Search shows or paste a feed link",
+    "searchPlaceholder": "Show name, RSS feed or Apple Podcasts link",
+    "add": "Add",
+    "checking": "Checking...",
+    "searching": "Searching...",
+    "noResults": "No shows found.",
+    "inList": "In the playlist",
+    "inPlaylist": "In this playlist",
+    "none": "No external shows yet.",
+    "remove": "Remove {{title}}",
+    "already": "That show is already in this playlist.",
+    "limit": "A playlist can hold up to {{max}} external shows.",
+    "ownFeed": "That is this playlist's own feed.",
+    "privateFeed": "Feeds that need a password can't go into a playlist, because playlists are public.",
+    "tooBig": "That is more than a playlist can hold. Remove a show first.",
+    "saved": "External shows saved. The playlist updates in a few seconds.",
+    "saveFailed": "Could not save: {{error}}",
+    "fromShows": "From other shows:",
+    "video": "Video",
+    "pending_one": "{{count}} show is still being read. Its episodes appear within a few minutes.",
+    "pending_other": "{{count}} shows are still being read. Their episodes appear within a few minutes."
   }
 }

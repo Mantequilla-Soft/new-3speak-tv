@@ -1,17 +1,17 @@
-import { useEffect, useRef, useMemo, useState } from 'react';
+import { useCallback, useEffect, useRef, useMemo, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
-import { MdOutlineLeaderboard, MdInfoOutline } from 'react-icons/md';
 import HiveAvatar from '../components/HiveAvatar/HiveAvatar';
-import PodiumStage from '../components/PodiumStage/PodiumStage';
 import { useAppStore } from '../lib/store';
+import { getRelationshipBetweenAccounts } from '../hive-api/api';
+import { followWithAioha, isLoggedIn } from '../hive-api/aioha';
+import { toastIn } from '../utils/toast';
 import { TAG_CATEGORIES, getCategoryOf } from '../utils/tagsV2';
 import {
   WINDOWS,
   METRICS,
   BOARD_TYPES,
   boardTypeOf,
-  metricForType,
   DEFAULT_WINDOW,
   DEFAULT_METRIC,
   metricSupportsTopics,
@@ -24,9 +24,22 @@ import {
 } from '../lib/leaderboardData';
 import { useTranslation } from 'react-i18next';
 import { t as tNow, formatDate } from '../i18n';
+import { Banner, Button, Chip, EmptyState, Segmented } from '../components/v2/ui';
+import { cx } from '../components/v2/helpers';
+import { Icon } from '../components/v2/Icon';
 import './Leaderboard.scss';
 
 const PAGE_SIZE = 50;
+
+// Follow toasts are headed "Profile", like the other follow buttons.
+const toast = toastIn('Profile');
+
+// The metric groups of 45c, in the order the metrics are listed.
+const GROUPS = [
+  { id: 'Video', labelKey: 'misc.leaderboard.groups.video' },
+  { id: 'Streaming', labelKey: 'misc.leaderboard.groups.streaming' },
+  { id: 'Stories', labelKey: 'misc.leaderboard.groups.stories' },
+];
 
 // Arriving from a profile badge (?user=), the board keeps loading pages until it
 // reaches that creator's row. Bounded so a long-tail rank can't turn one click
@@ -43,38 +56,30 @@ function watchNotice(sinceIso) {
   return tNow('badges.leaderboard.watchNotice', { since });
 }
 
-// Top 3 get the podium; everyone else falls through to the ranked rows below.
-// A thin board (one or two creators — common on a quiet topic) still gets the
-// full three-slot podium, with the unclaimed places shown as empty placeholders
-// rather than collapsing the winner into a plain list row.
-//
-// Behind the cards, PodiumStage draws 3D steps that rise out of the floor; once
-// they are up it reports how high each card stands (`steps`), and the cards
-// ride up onto them. Until then (or without WebGL) the podium stays flat.
+// Top 3 get the podium (26b): three cards standing on a common baseline, the
+// winner in the middle and taller, each card's content at its foot. Everyone
+// else falls through to the ranked rows below. A thin board (one or two
+// creators, common on a quiet topic) still gets all three places, the
+// unclaimed ones as dashed placeholders.
 function Podium({ entries, metric, focusUser }) {
   const { t } = useTranslation();
-  const podiumRef = useRef(null);
-  const [steps, setSteps] = useState(null);
   if (!entries.length) return null;
   const slot = (rank) => entries[rank - 1] || { rank, placeholder: true };
   // Visual order puts the winner in the middle: 2nd, 1st, 3rd.
   const order = [slot(2), slot(1), slot(3)];
-  const stepStyle = (rank) => (steps?.[rank] != null ? { '--lb-step': `${steps[rank]}px` } : undefined);
+  const unit = t(`misc.leaderboard.metricsInSentence.${metric.id}`);
   return (
-    <div className={`lb-podium${steps ? ' lb-podium--3d' : ''}`} ref={podiumRef}>
-      <PodiumStage podiumRef={podiumRef} onSteps={setSteps} />
+    <div className="lb-podium">
       {order.map((e) => (e.placeholder ? (
         <div
           key={`empty-${e.rank}`}
           className={`lb-podium-slot lb-rank-${e.rank} empty`}
-          style={stepStyle(e.rank)}
           aria-hidden="true"
         >
-          <span className="lb-podium-medal">{e.rank}</span>
+          <span className="lb-podium-medal num">{e.rank}</span>
           <span className="lb-podium-avatar-empty" />
-          <span className="lb-podium-user">{t('badges.leaderboard.unclaimed')}</span>
-          <span className="lb-podium-value">—</span>
-          <span className="lb-podium-metric">{t(metric.labelKey)}</span>
+          <b className="lb-podium-user">{t('badges.leaderboard.unclaimed')}</b>
+          <span className="lb-podium-value"><span className="num">—</span> {unit}</span>
         </div>
       ) : (
         <Link
@@ -82,31 +87,91 @@ function Podium({ entries, metric, focusUser }) {
           to={`/@${e.user}`}
           id={rowId(e.user)}
           className={`lb-podium-slot lb-rank-${e.rank}${e.user === focusUser ? ' focused' : ''}`}
-          style={stepStyle(e.rank)}
         >
-          <span className="lb-podium-medal">{e.rank}</span>
+          <span className="lb-podium-medal num">{e.rank}</span>
           <HiveAvatar username={e.user} size="medium" className="lb-podium-avatar" badgeSize={14} />
-          <span className="lb-podium-user">@{e.user}</span>
-          <span className="lb-podium-value">{formatMetric(e[metric.id], metric.unit)}</span>
-          <span className="lb-podium-metric">{t(metric.labelKey)}</span>
+          <b className="lb-podium-user">{e.user}</b>
+          <span className="lb-podium-value"><span className="num">{formatMetric(e[metric.id], metric.unit)}</span> {unit}</span>
         </Link>
       )))}
     </div>
   );
 }
 
-function Row({ entry, metric, isMe, focused }) {
+// Follow at the end of a row (26b): accent "Follow", quiet "Following". The
+// relationship is read only once the row scrolls into view, so a page of 50
+// rows does not ask Hive 50 questions up front.
+function RowFollow({ author }) {
+  const { t } = useTranslation();
+  const user = useAppStore((s) => s.user);
+  const ref = useRef(null);
+  const [seen, setSeen] = useState(false);
+  const [following, setFollowing] = useState(null);
+  const [busy, setBusy] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || seen) return undefined;
+    const io = new IntersectionObserver((list) => {
+      if (list.some((x) => x.isIntersecting)) { setSeen(true); io.disconnect(); }
+    }, { rootMargin: '200px' });
+    io.observe(el);
+    return () => io.disconnect();
+  }, [seen]);
+
+  useEffect(() => {
+    if (!seen || !user || author === user) return undefined;
+    let live = true;
+    getRelationshipBetweenAccounts(user, author).then((r) => {
+      if (live && r?.follows != null) setFollowing(!!r.follows);
+    }).catch(() => {});
+    return () => { live = false; };
+  }, [seen, author, user]);
+
+  const toggle = useCallback(() => {
+    if (busy || following === null) return;
+    const willFollow = !following;
+    setBusy(true);
+    setFollowing(willFollow);
+    followWithAioha(author, willFollow)
+      .then(() => toast.success(willFollow ? t('audio.author.followed', { author }) : t('audio.author.unfollowed', { author })))
+      .catch((err) => { setFollowing(!willFollow); toast.error(err?.message || t('audio.author.failed')); })
+      .finally(() => setBusy(false));
+  }, [author, following, busy, t]);
+
+  if (author === user) return <span className="lb-row-follow" ref={ref} aria-hidden="true" />;
   return (
-    <Link
-      to={`/@${entry.user}`}
+    <span className="lb-row-follow" ref={ref}>
+      <Button
+        variant={following ? 'secondary' : 'primary'}
+        size={40}
+        block
+        className={cx('lb-follow', following && 'is-following')}
+        onClick={toggle}
+        disabled={busy || following === null}
+        aria-pressed={!!following}
+        trailing={following ? 'check' : 'person_add'}
+      >
+        {following ? t('common.actions.following') : t('common.actions.follow')}
+      </Button>
+    </span>
+  );
+}
+
+// The name is the row's link and stretches over the whole row; the Follow
+// button sits above it as its own target.
+function Row({ entry, metric, isMe, focused, follow }) {
+  return (
+    <div
       id={rowId(entry.user)}
-      className={`lb-row${isMe ? ' me' : ''}${focused ? ' focused' : ''}`}
+      className={`lb-row${isMe ? ' me' : ''}${focused ? ' focused' : ''}${follow ? ' has-follow' : ''}`}
     >
-      <span className="lb-row-rank">{entry.rank}</span>
+      <span className="lb-row-rank num">{entry.rank}</span>
       <HiveAvatar username={entry.user} size="small" className="lb-row-avatar" />
-      <span className="lb-row-user">@{entry.user}</span>
-      <span className="lb-row-value">{formatMetric(entry[metric.id], metric.unit)}</span>
-    </Link>
+      <Link className="lb-row-user" to={`/@${entry.user}`}>{entry.user}</Link>
+      <span className="lb-row-value num">{formatMetric(entry[metric.id], metric.unit)}</span>
+      {follow && <RowFollow author={entry.user} />}
+    </div>
   );
 }
 
@@ -127,14 +192,16 @@ function MyStanding({ user, window, metric }) {
   const value = data.stats?.[metric.id] || 0;
   return (
     <div className="lb-me">
-      <span className="lb-me-rank">{rank ? `#${rank}` : '—'}</span>
+      <span className="lb-me-rank num">{rank ? `#${rank}` : '—'}</span>
       <HiveAvatar username={user} size="small" className="lb-row-avatar" />
-      <span className="lb-me-user">@{user}</span>
+      <span className="lb-me-text">
+        <b className="lb-me-user">{user}</b>
+        {!rank && <span className="lb-me-empty">{t('badges.leaderboard.noActivity')}</span>}
+      </span>
       <span className="lb-me-value">
-        {formatMetric(value, metric.unit)}
+        <span className="num">{formatMetric(value, metric.unit)}</span>
         <small>{t(metric.labelKey)}</small>
       </span>
-      {!rank && <span className="lb-me-empty">{t('badges.leaderboard.noActivity')}</span>}
     </div>
   );
 }
@@ -251,6 +318,8 @@ function Leaderboard() {
   const partialWatch = pages[0]?.partial_watch_data;
   const trackedSince = pages[0]?.watch_tracked_since;
   const podium = entries.slice(0, 3);
+  // Follow buttons on the rows need a Hive account that can sign.
+  const canFollow = !!user && isLoggedIn();
   const rest = entries.slice(3);
 
   const found = focusUser && entries.some((e) => e.user === focusUser);
@@ -281,120 +350,107 @@ function Leaderboard() {
   return (
     <div className="leaderboard-page">
       {/* The time range applies to every board, so it sits with the title as the
-          page's one global filter. */}
+          page's one global filter (design 26b). */}
       <header className="lb-header">
-        <MdOutlineLeaderboard className="lb-header-icon" />
-        <div className="lb-header-text">
-          <h1>{t('badges.leaderboard.title')}</h1>
-          <p>
-            {activeTopic
-              ? t('badges.leaderboard.subtitleTopic', { blurb: t(metric.blurbKey), topic: activeTopic })
-              : t('badges.leaderboard.subtitle', { blurb: t(metric.blurbKey) })}
-          </p>
-        </div>
-        <div className="lb-window-switch" role="group" aria-label={t('misc.leaderboard.timeRange')}>
-          {WINDOWS.map((w) => (
-            <button
-              key={w.id}
-              type="button"
-              className={window === w.id ? 'active' : ''}
-              aria-pressed={window === w.id}
-              onClick={() => setWindow(w.id)}
-            >
-              {t(w.labelKey)}
-            </button>
-          ))}
-        </div>
+        <h1>{t('badges.leaderboard.title')}</h1>
+        <Segmented
+          className="lb-window-switch"
+          label={t('misc.leaderboard.timeRange')}
+          options={WINDOWS.map((w) => ({ value: w.id, label: t(w.labelKey) }))}
+          value={window}
+          onChange={setWindow}
+          size={36}
+          block={false}
+        />
       </header>
 
-      {/* What is ranked: the type as chips, then the measure inside it. */}
-      <div className="lb-tabs lb-types">
-        {shownTypes.map((bt) => (
-          <button
-            key={bt.id}
-            type="button"
-            className={`lb-tab${boardType.id === bt.id ? ' active' : ''}`}
-            onClick={() => setMetricId(metricForType(bt, metricId))}
-          >
-            {t(bt.labelKey)}
-          </button>
-        ))}
-      </div>
-
-      {boardType.metrics.length > 1 && (
-        <div className="lb-subs" role="group" aria-label={t(boardType.labelKey)}>
-          {boardType.metrics.map((m) => (
-            <button
-              key={m.id}
-              type="button"
-              className={metricId === m.id ? 'active' : ''}
-              aria-pressed={metricId === m.id}
-              onClick={() => setMetricId(m.id)}
-            >
-              {t(m.labelKey)}
-            </button>
-          ))}
-        </div>
-      )}
-
-      {/* Hidden entirely for Tags, which isn't tracked per topic. */}
-      {topicsAvailable && groups.length > 0 && (
-        <>
-          <div className="lb-tabs lb-topics">
-            <button
-              type="button"
-              className={`lb-tab lb-topic${!activeTopic ? ' active' : ''}`}
-              onClick={() => { setTopic(''); setOpenCat(null); }}
-            >
-              {t('badges.leaderboard.allTopics')}
-            </button>
-            {groups.map((g) => (
-              <button
-                key={g.slug}
-                type="button"
-                className={`lb-tab lb-topic${shownCat === g.slug ? ' open' : ''}${activeTopic === g.slug ? ' active' : ''}`}
-                onClick={() => {
-                  setOpenCat(g.slug);
-                  // '__other' is a UI bucket, not a real board — it only expands.
-                  if (g.slug !== '__other') setTopic(g.slug);
-                }}
-              >
-                {g.emoji} {g.label}
-              </button>
-            ))}
-          </div>
-
-          {openGroup && (
-            <div className="lb-tabs lb-topics lb-subtopics">
-              {openGroup.topics.map((tp) => (
-                <button
-                  key={tp.slug}
-                  type="button"
-                  className={`lb-tab lb-topic${activeTopic === tp.slug ? ' active' : ''}`}
-                  onClick={() => setTopic(tp.slug)}
-                >
-                  {tp.label}
-                </button>
+      {/* What is ranked (design 45c): every metric as a chip under its group's
+          eyebrow (Video, Streaming, Stories), then one line saying what the
+          picked one counts, then the topics. Streaming only shows while a
+          badge link has it selected (see BOARD_TYPES). */}
+      <section className="lb-filters">
+        {GROUPS.filter((g) => g.id !== 'Streaming' || shownTypes.some((bt) => bt.id === 'streams')).map((g) => (
+          <div className="lb-group" key={g.id}>
+            <div className="v2-eyebrow lb-group-label">{t(g.labelKey)}</div>
+            <div className="v2-chips lb-types" role="group" aria-label={t(g.labelKey)}>
+              {METRICS.filter((m) => m.group === g.id).map((m) => (
+                <Chip key={m.id} selected={metricId === m.id} onClick={() => setMetricId(m.id)}>
+                  {t(m.labelKey)}
+                </Chip>
               ))}
             </div>
-          )}
-        </>
-      )}
+          </div>
+        ))}
+        <p className="lb-blurb">
+          {activeTopic
+            ? t('badges.leaderboard.subtitleTopic', { blurb: t(metric.blurbKey), topic: activeTopic })
+            // 45c: "Peak viewers: best concurrent viewers (a high-water mark, not a sum)."
+            : t('badges.leaderboard.explain', { label: t(metric.labelKey), blurb: t(`misc.leaderboard.blurbsInSentence.${metric.id}`) })}
+        </p>
+
+        {/* Hidden entirely for Tags, which isn't tracked per topic. */}
+        {topicsAvailable && groups.length > 0 && (
+          <>
+            <div className="v2-chips lb-topics">
+              <Chip
+                size={28}
+                selected={!activeTopic}
+                onClick={() => { setTopic(''); setOpenCat(null); }}
+              >
+                {t('badges.leaderboard.allTopics')}
+              </Chip>
+              {groups.map((g) => (
+                <Chip
+                  key={g.slug}
+                  size={28}
+                  // The board being shown is ink; an expanded category that is
+                  // not itself the board is cyan, so it reads weaker.
+                  selected={activeTopic === g.slug || shownCat === g.slug}
+                  tone={activeTopic === g.slug ? undefined : 'cyan'}
+                  className="lb-topic"
+                  onClick={() => {
+                    setOpenCat(g.slug);
+                    // '__other' is a UI bucket, not a real board: it only expands.
+                    if (g.slug !== '__other') setTopic(g.slug);
+                  }}
+                >
+                  {g.label}
+                </Chip>
+              ))}
+            </div>
+
+            {openGroup && openGroup.topics.length > 0 && (
+              <div className="v2-chips lb-topics lb-subtopics">
+                {openGroup.topics.map((tp) => (
+                  <Chip
+                    key={tp.slug}
+                    size={28}
+                    selected={activeTopic === tp.slug}
+                    className="lb-topic"
+                    onClick={() => setTopic(tp.slug)}
+                  >
+                    {tp.label}
+                  </Chip>
+                ))}
+              </div>
+            )}
+          </>
+        )}
+      </section>
 
       {partialWatch && trackedSince && (
-        <div className="lb-notice">
-          <MdInfoOutline /> <span>{watchNotice(trackedSince)}</span>
-        </div>
+        <Banner tone="info" className="lb-notice">{watchNotice(trackedSince)}</Banner>
       )}
 
       {seeking && (
-        <div className="lb-state">{t('badges.leaderboard.finding', { user: focusUser })}</div>
+        <div className="lb-state v2-meta">
+          <Icon name="progress_activity" size={16} className="v2-spin" /> {t('badges.leaderboard.finding', { user: focusUser })}
+        </div>
       )}
       {unreachable && (
-        <div className="lb-notice">
-          <MdInfoOutline />
-          <span>{t('badges.leaderboard.notInTop', { user: focusUser, n: MAX_AUTO_PAGES * PAGE_SIZE })}</span>
-        </div>
+        <Banner tone="neutral" className="lb-notice">
+          {t('badges.leaderboard.notInTop', { user: focusUser, n: MAX_AUTO_PAGES * PAGE_SIZE })}
+        </Banner>
       )}
 
       {/* Your-standing card is overall-only: the checker's per-user endpoint
@@ -403,19 +459,25 @@ function Leaderboard() {
           posted a story yet) a lone "you: 0" row reads as a board of one. */}
       {user && !activeTopic && entries.length > 0 && <MyStanding user={user} window={window} metric={metric} />}
 
-      {isLoading && <div className="lb-state">{t('badges.leaderboard.loading')}</div>}
-      {isError && <div className="lb-state error">{t('badges.leaderboard.loadError')}</div>}
+      {isLoading && (
+        <div className="lb-skeleton" aria-label={t('badges.leaderboard.loading')}>
+          <div className="lb-skeleton-podium">
+            {[0, 1, 2].map((i) => <div key={i} className="v2-skeleton" />)}
+          </div>
+          {[0, 1, 2, 3].map((i) => <div key={i} className="v2-skeleton lb-skeleton-row" />)}
+        </div>
+      )}
+      {isError && <div className="v2-failure lb-state-card"><b>{t('badges.leaderboard.loadError')}</b></div>}
 
       {!isLoading && !isError && entries.length === 0 && (
-        <div className="lb-state">{t('badges.leaderboard.empty', { metric: t(`misc.leaderboard.metricsInSentence.${metric.id}`) })}</div>
+        <EmptyState className="lb-state-card" icon="leaderboard" title={t('badges.leaderboard.empty', { metric: t(`misc.leaderboard.metricsInSentence.${metric.id}`) })} />
       )}
 
       {!isLoading && !isError && entries.length > 0 && (
         <>
-          {/* Keyed by board, so switching boards raises the steps again. */}
           <Podium key={`${activeTopic}|${window}|${metricId}`} entries={podium} metric={metric} focusUser={focusUser} />
           {/* Only 1–2 creators on the board: they're all on the podium, so the
-              list would just be an empty bordered box. */}
+              list would just be an empty box. */}
           {rest.length > 0 && (
             <div className="lb-list">
               {rest.map((e) => (
@@ -425,19 +487,22 @@ function Leaderboard() {
                   metric={metric}
                   isMe={e.user === user}
                   focused={e.user === focusUser}
+                  follow={canFollow}
                 />
               ))}
             </div>
           )}
           {hasNextPage && (
-            <button
-              type="button"
+            <Button
+              variant="secondary"
               className="lb-more"
               onClick={() => fetchNextPage()}
               disabled={isFetchingNextPage}
+              loading={isFetchingNextPage}
+              center
             >
               {isFetchingNextPage ? t('common.status.loading') : t('common.actions.loadMore')}
-            </button>
+            </Button>
           )}
         </>
       )}

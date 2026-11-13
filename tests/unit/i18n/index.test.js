@@ -392,7 +392,9 @@ describe('formatting', () => {
   })
 
   it.each([
-    ['en', 5 * DAY, '5d ago'],
+    ['en', 5 * DAY, '5d'],
+    ['en', 9 * DAY, '1w'],
+    ['en', 62 * DAY, '2mo'],
     ['es', 5 * DAY, 'hace 5 d'],
     ['fr', 5 * DAY, 'il y a 5 j'],
     ['ru', 5 * DAY, '5 дн. назад'],

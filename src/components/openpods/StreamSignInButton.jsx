@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { DockTile } from '../v2/ui';
 import './StreamSignInButton.scss';
 
 /**
@@ -10,6 +11,19 @@ import './StreamSignInButton.scss';
  */
 export default function StreamSignInButton({ label, onSignIn, busy = false, variant = 'inline' }) {
   const { t } = useTranslation();
+  // `dock`: a tile in the stream page's dock, where the raise-hand tile goes.
+  if (variant === 'dock') {
+    return (
+      <DockTile
+        icon={busy ? 'progress_activity' : 'login'}
+        label={busy ? t('live.signIn.waitingWallet') : label}
+        className="stream-signin stream-signin--dock"
+        onClick={(e) => { e.stopPropagation(); onSignIn?.(); }}
+        disabled={busy}
+        title={label}
+      />
+    );
+  }
   return (
     <button
       type="button"
@@ -17,7 +31,8 @@ export default function StreamSignInButton({ label, onSignIn, busy = false, vari
       onClick={(e) => { e.stopPropagation(); onSignIn?.(); }}
       disabled={busy}
     >
-      {busy ? t('live.signIn.waitingWallet') : label}
+      <span className={`material-symbols-rounded stream-signin__icon${busy ? ' v2-spin' : ''}`} aria-hidden="true">{busy ? 'progress_activity' : 'login'}</span>
+      <span>{busy ? t('live.signIn.waitingWallet') : label}</span>
     </button>
   );
 }

@@ -35,8 +35,8 @@ describe('first visit defaults', () => {
   it('starts with the documented defaults', async () => {
     const s = (await loadStore()).getState()
     expect(s).toMatchObject({
-      theme: 'dark', homeCardSize: 'small', spotlightSize: 'small', previewEnabled: true,
-      hideWatched: true, hideAi: true, inlineShorts: true, privateMode: false, simpleFeed: false,
+      theme: 'dark', homeCardSize: 'large', spotlightSize: 'small', previewEnabled: true,
+      hideWatched: true, hideAi: true, inlineShorts: true, privateMode: false,
       shortsFeedMode: 'discover', shortsCommentBar: false, openShortsOnStart: false,
       watchHistoryEnabled: true, showNsfw: false, interests: [], appUpdatedFrom: null,
     })
@@ -53,7 +53,7 @@ describe('what survives a reload', () => {
     store.getState().setMiniPlayer({ author: 'badadib', permlink: 'p' })
 
     const saved = persisted()
-    expect(saved.version).toBe(2)
+    expect(saved.version).toBe(4)
     expect(saved.state).toMatchObject({ user: 'badadib', privateMode: true, interests: ['music'], theme: 'dark' })
     expect(saved.state).not.toHaveProperty('appUpdatedFrom')
     expect(saved.state).not.toHaveProperty('miniPlayer')
@@ -61,21 +61,39 @@ describe('what survives a reload', () => {
   })
 
   it('a reload restores what was saved', async () => {
-    localStorage.setItem('user-store', JSON.stringify({ version: 2, state: { homeCardSize: 'large', hideAi: false, theme: 'light' } }))
+    localStorage.setItem('user-store', JSON.stringify({ version: 3, state: { homeCardSize: 'small', hideAi: false, theme: 'light' } }))
     const s = (await loadStore()).getState()
-    expect(s).toMatchObject({ homeCardSize: 'large', hideAi: false, theme: 'light' })
+    expect(s).toMatchObject({ homeCardSize: 'small', hideAi: false, theme: 'light' })
   })
 })
 
 describe('migrating an older saved store', () => {
+  it('drops an old "Simple feeds" choice (the setting is gone)', async () => {
+    localStorage.setItem('user-store', JSON.stringify({ version: 3, state: { simpleFeed: true, theme: 'light' } }))
+    const s = (await loadStore()).getState()
+    expect(s.simpleFeed).toBeUndefined()
+    expect(s.theme).toBe('light')
+  })
+
   it.each([
     [0, { hideWatched: false, hideAi: false }, { hideWatched: true, hideAi: true }],
     [1, { hideWatched: false, hideAi: false }, { hideWatched: false, hideAi: true }],
     [2, { hideWatched: false, hideAi: false }, { hideWatched: false, hideAi: false }],
+    [3, { hideWatched: false, hideAi: false }, { hideWatched: false, hideAi: false }],
   ])('a version %i store becomes %o -> %o', async (version, state, expected) => {
     localStorage.setItem('user-store', JSON.stringify({ version, state }))
     const s = (await loadStore()).getState()
     expect({ hideWatched: s.hideWatched, hideAi: s.hideAi }).toEqual(expected)
+  })
+
+  // v3: phone cards default to one per row (20a); a saved 'large' was a choice.
+  it.each([
+    [2, 'small', 'large'],
+    [2, 'large', 'large'],
+    [3, 'small', 'small'],
+  ])('a version %i store with %s cards gets %s cards', async (version, saved, expected) => {
+    localStorage.setItem('user-store', JSON.stringify({ version, state: { homeCardSize: saved } }))
+    expect((await loadStore()).getState().homeCardSize).toBe(expected)
   })
 })
 
@@ -90,7 +108,6 @@ describe('the setters', () => {
     ['setInterests', 'interests'],
     ['setHideWatched', 'hideWatched'],
     ['setPrivateMode', 'privateMode'],
-    ['setSimpleFeed', 'simpleFeed'],
   ])('%s takes a value or an updater of the previous value', (setter, key) => {
     store.getState()[setter]('first')
     expect(store.getState()[key]).toBe('first')

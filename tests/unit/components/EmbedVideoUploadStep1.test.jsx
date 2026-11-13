@@ -215,7 +215,7 @@ describe('upload step 1: picking a video', () => {
     await user.upload(input(), video('hevc.mov', 'video/quicktime'))
     await screen.findByText('hevc.mov')
     fireEvent.error(document.querySelector('video.video-preview'))
-    expect(screen.getByText(/can't preview this video/)).toBeInTheDocument()
+    expect(screen.getByText(/preview this HEVC clip/)).toBeInTheDocument()
   })
 })
 
@@ -242,7 +242,7 @@ describe('upload step 1: shorts and stories', () => {
     const { user } = mount()
     await ready()
     await user.upload(input(), video())
-    await waitFor(() => expect(toastMessages(toast.error)).toEqual([expect.stringMatching(/vertical \(portrait\) format/)]))
+    await waitFor(() => expect(toastMessages(toast.error)).toEqual([expect.stringMatching(/must be vertical/)]))
   })
 
   it('takes a vertical short as a short', async () => {
@@ -258,7 +258,7 @@ describe('upload step 1: shorts and stories', () => {
     m.meta = { duration: 30, width: 1080, height: 1920 }
     const { user } = mount()
     await ready()
-    await user.click(screen.getByRole('checkbox', { name: /Post as a 24h story/ }))
+    await user.click(screen.getByRole('switch', { name: /Post as a 24h story/ }))
     expect(m.calls.setIsStory).toHaveBeenCalledWith(true)
     await user.upload(input(), video())
     await waitFor(() => expect(screen.getByTestId('location')).toHaveTextContent('/embed-studio/preview'))
@@ -276,7 +276,7 @@ describe('upload step 1: before a file can be picked', () => {
     expect(input()).toBeDisabled()
     expect(screen.queryByRole('heading', { name: 'Choose a video file' })).not.toBeInTheDocument()
 
-    await user.click(screen.getByRole('button', { name: 'Authorize @threespeak' }))
+    await user.click(screen.getByRole('button', { name: 'Authorize' }))
     expect(m.addAuth).toHaveBeenCalledWith('uploader', { signWindow: null })
     expect(await screen.findByRole('heading', { name: 'Choose a video file' })).toBeInTheDocument()
     expect(toastMessages(toast.success)).toContain('@threespeak authorized — you can now select a video')
@@ -288,16 +288,16 @@ describe('upload step 1: before a file can be picked', () => {
     m.addAuth = vi.fn(async () => { throw new Error('Active key needed') })
     const { user } = mount()
     await ready()
-    await user.click(screen.getByRole('button', { name: 'Authorize @threespeak' }))
+    await user.click(screen.getByRole('button', { name: 'Authorize' }))
     await waitFor(() => expect(toastMessages(toast.error)).toContain('Active key needed'))
-    expect(screen.getByRole('button', { name: 'Authorize @threespeak' })).toBeEnabled()
+    expect(screen.getByRole('button', { name: 'Authorize' })).toBeEnabled()
   })
 
   it('asks for the authorization when it cannot be checked (fails closed)', async () => {
     m.provider = 'keychain'
     m.hasAuth = vi.fn(async () => { throw new Error('rpc down') })
     mount()
-    expect(await screen.findByRole('button', { name: 'Authorize @threespeak' })).toBeInTheDocument()
+    expect(await screen.findByRole('button', { name: 'Authorize' })).toBeInTheDocument()
   })
 
   it('a Butter Auth login needs no authorization', async () => {
@@ -305,14 +305,14 @@ describe('upload step 1: before a file can be picked', () => {
     mount()
     await ready()
     expect(m.hasAuth).not.toHaveBeenCalled()
-    expect(screen.queryByRole('button', { name: 'Authorize @threespeak' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Authorize' })).not.toBeInTheDocument()
   })
 
   it('ignores a drop while the authorization is missing', async () => {
     m.provider = 'keychain'
     m.hasAuth = vi.fn(async () => false)
     mount()
-    await screen.findByRole('button', { name: 'Authorize @threespeak' })
+    await screen.findByRole('button', { name: 'Authorize' })
     fireEvent.drop(document.querySelector('.file-upload'), { dataTransfer: { files: [video()] } })
     await act(async () => {})
     expect(m.calls.setVideoFile).not.toHaveBeenCalled()

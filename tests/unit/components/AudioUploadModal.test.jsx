@@ -15,15 +15,21 @@ import { describe, it, expect, vi, beforeAll, afterAll, beforeEach, afterEach } 
 import { act, screen, waitFor, within, fireEvent } from '@testing-library/react'
 import { renderWithProviders, toastMessages } from './_render.jsx'
 
-const m = vi.hoisted(() => ({ editor: true, playlists: [], duration: 125 }))
+const m = vi.hoisted(() => ({ editor: true, playlists: [], duration: 125, stt: false, transcribe: null }))
 vi.mock('sonner', async () => (await import('./_render.jsx')).sonnerModule())
 vi.mock('../../../src/hive-api/aioha', async () => (await import('./_render.jsx')).aiohaModule())
 vi.mock('../../../src/utils/config', async (importOriginal) => ({
   ...(await importOriginal()),
   get FEATURE_EDITOR() { return m.editor },
+  sttEnabledFor: () => m.stt,
   ENABLE_PPL: false,
   CHECKER_API_KEY: '',
   adsEnabledFor: () => false,
+}))
+vi.mock('../../../src/utils/transcribe', async (importOriginal) => ({
+  ...(await importOriginal()),
+  transcriptLanguages: async () => ['en-US'],
+  transcribe: (...args) => m.transcribe(...args),
 }))
 vi.mock('../../../src/hooks/useMyPlaylists', () => ({
   useMyPlaylists: () => ({ data: m.playlists, isLoading: false, refetch: vi.fn() }),
@@ -110,6 +116,8 @@ beforeEach(() => {
   vi.clearAllMocks()
   m.editor = true
   m.duration = 125
+  m.stt = false
+  m.transcribe = null
   m.playlists = [
     { id: 'p1', name: 'Show A', thumbnail: 'https://images.hive.blog/DQmA/a.jpg', items: [] },
     { id: 'p2', name: 'Show B', metadata: { album: { thumbnail: 'https://images.hive.blog/DQmB/b.jpg' } }, items: [] },
@@ -146,12 +154,13 @@ const back = (user) => user.click(screen.getByRole('button', { name: /Back/ }))
 const row = (name) => screen.getByText(name).closest('.audio-upload-track-row')
 const cover = () => document.querySelector('.audio-upload-post-form .audio-upload-album-thumb')
 
-// source -> mode (Standalone post) -> playlist (name) -> post
+// source -> mode (Standalone post) -> playlist (name) -> post; the modes and the
+// playlists are choice cards (role "radio")
 async function toPostStep(user, playlistName) {
   await next(user)
-  await user.click(screen.getByRole('button', { name: /Standalone post/ }))
+  await user.click(screen.getByRole('radio', { name: /Standalone post/ }))
   await next(user)
-  if (playlistName) await user.click(screen.getByRole('button', { name: new RegExp(playlistName) }))
+  if (playlistName) await user.click(screen.getByRole('radio', { name: new RegExp(playlistName) }))
   await next(user)
   await screen.findByPlaceholderText('Title (required)')
 }
@@ -223,7 +232,7 @@ describe('AudioUploadModal: Edit audio', () => {
     openModal({ initialTrack: { blob: new Blob(['x'], { type: 'audio/ogg' }), filename: 'openpod.ogg', type: 'podcast' } })
     const r = await waitFor(() => row('openpod.ogg'))
     expect(within(r).queryByText('Edited')).toBeNull()
-    expect(within(r).getByTitle('Recorded')).toBeInTheDocument()
+    expect(within(r).getByText('Recorded')).toBeInTheDocument()
   })
 })
 
@@ -236,12 +245,12 @@ describe('AudioUploadModal: covers', () => {
     expect(within(cover()).getByText('From playlist')).toBeInTheDocument()
 
     await back(user)
-    await user.click(screen.getByRole('button', { name: /Show B/ }))
+    await user.click(screen.getByRole('radio', { name: /Show B/ }))
     await next(user)
     expect(within(cover()).getByRole('img')).toHaveAttribute('src', 'https://images.hive.blog/DQmB/b.jpg')
 
     await back(user)
-    await user.click(screen.getByRole('button', { name: /No cover/ }))
+    await user.click(screen.getByRole('radio', { name: /No cover/ }))
     await next(user)
     expect(within(cover()).queryByRole('img')).toBeNull()
     expect(within(cover()).getByText('Add cover image')).toBeInTheDocument()
@@ -257,7 +266,7 @@ describe('AudioUploadModal: covers', () => {
     expect(within(cover()).queryByText('From playlist')).toBeNull()
 
     await back(user)
-    await user.click(screen.getByRole('button', { name: /Show B/ }))
+    await user.click(screen.getByRole('radio', { name: /Show B/ }))
     await next(user)
     expect(within(cover()).getByRole('img')).toHaveAttribute('src', 'https://images.hive.blog/DQmMine/mine.jpg')
   })
@@ -268,7 +277,7 @@ describe('AudioUploadModal: covers', () => {
     await toPostStep(user, 'Show A')
     await user.click(within(cover()).getByRole('button', { name: 'Remove cover' }))
     await back(user)
-    await user.click(screen.getByRole('button', { name: /Show B/ }))
+    await user.click(screen.getByRole('radio', { name: /Show B/ }))
     await next(user)
     expect(within(cover()).queryByRole('img')).toBeNull()
   })
@@ -318,7 +327,7 @@ describe('AudioUploadModal: covers', () => {
     await addFile(user, 'two.wav')
     await next(user) // mode: snaps by default
     await next(user)
-    await user.click(screen.getByRole('button', { name: /Show A/ }))
+    await user.click(screen.getByRole('radio', { name: /Show A/ }))
     await next(user) // tracks
     const cards = await waitFor(() => {
       const list = [...document.querySelectorAll('.audio-upload-title-card')].filter((c) => c.querySelector('.audio-upload-track-text'))
@@ -360,7 +369,7 @@ describe('AudioUploadModal: chapters from the editor', () => {
     await waitFor(() => row('Episode 12.mp3'))
     // Snap comments: each track's own text, on the tracks step
     await next(user)
-    await user.click(screen.getByRole('button', { name: /Snap comments/ }))
+    await user.click(screen.getByRole('radio', { name: /Snap comments/ }))
     await next(user)
     await next(user)
     const text = () => screen.getByPlaceholderText('Text for this snap (optional)')
@@ -422,7 +431,7 @@ describe('AudioUploadModal: audiograms as Shorts', () => {
     await result({ trackId, file: new File(['ID3'], 'Episode 12.mp3', { type: 'audio/mpeg' }), durationSec: 120, audiograms: [ag(1), ag(2)] })
     await waitFor(() => row('Episode 12.mp3'))
     await next(user)
-    await user.click(screen.getByRole('button', { name: /Snap comments/ }))
+    await user.click(screen.getByRole('radio', { name: /Snap comments/ }))
     await next(user)
     await next(user) // tracks
     const section = await screen.findByTestId('audiogram-shorts')
@@ -444,7 +453,8 @@ describe('AudioUploadModal: audiograms as Shorts', () => {
     expect(rows[0]).toHaveTextContent('Short: The best bit')
     expect(rows[0]).toHaveTextContent('Goes out together with this audio')
     expect(rows[0].querySelector('img')).toHaveAttribute('src', 'https://images.hive.blog/DQmThumb/short.jpg')
-    await user.click(screen.getByRole('button', { name: 'Publish' }))
+    // the primary action says what goes out (24a)
+    await user.click(screen.getByRole('button', { name: 'Publish audio + 2 Shorts' }))
     await waitFor(() => expect(publishAudiogramShorts).toHaveBeenCalledTimes(1))
     const call = publishAudiogramShorts.mock.calls[0][0]
     expect(call.user).toBe('alice')
@@ -472,5 +482,100 @@ describe('AudioUploadModal: audiograms as Shorts', () => {
     await toPostStep(user, null)
     const section = await screen.findByTestId('audiogram-shorts')
     expect(within(section).getByLabelText('Title of Short 1')).toHaveValue('Teaser 1')
+  })
+})
+
+describe('AudioUploadModal: transcripts', () => {
+  // A transcript run the test finishes by hand: progress, then the sentences
+  function controlledTranscribe() {
+    const runs = []
+    m.transcribe = vi.fn((blob, opts) => new Promise((resolve, reject) => {
+      runs.push({ blob, opts, resolve, reject })
+      opts.signal?.addEventListener('abort', () => reject(Object.assign(new Error('aborted'), { name: 'AbortError' })))
+    }))
+    return runs
+  }
+
+  it('is not offered without the speech server', async () => {
+    const blob = new File(['ID3'], 'Episode.mp3', { type: 'audio/mpeg' })
+    const { user } = openModal({ initialTrack: { blob, filename: 'Episode.mp3', type: null, source: 'editor' } })
+    await waitFor(() => row('Episode.mp3'))
+    await toPostStep(user, null)
+    expect(screen.queryByRole('button', { name: /Make a transcript/ })).toBeNull()
+  })
+
+  it('writes a standalone post\'s audio down under the description, and it is published with it', async () => {
+    m.stt = true
+    const runs = controlledTranscribe()
+    const blob = new File(['ID3'], 'Episode.mp3', { type: 'audio/mpeg' })
+    const { user } = openModal({ initialTrack: { blob, filename: 'Episode.mp3', type: null, source: 'editor' } })
+    await waitFor(() => row('Episode.mp3'))
+    await toPostStep(user, null)
+    await user.click(await screen.findByRole('button', { name: /Make a transcript/ }))
+    expect(runs[0].blob).toBe(blob)
+    expect(runs[0].opts).toMatchObject({ name: 'Episode.mp3', lang: 'en-US' })
+    act(() => runs[0].opts.onProgress({ phase: 'listening', done: 0.42 }))
+    expect(await screen.findByText('Writing it down... 42%')).toBeTruthy()
+    // Publishing waits for it
+    await next(user)
+    await user.click(screen.getByRole('button', { name: 'Publish' }))
+    expect(toastMessages(toast.error)).toContain('A transcript is still being made. Wait for it or cancel it first.')
+    expect(aioha.broadcastWithAioha).not.toHaveBeenCalled()
+    await back(user)
+    await act(async () => runs[0].resolve(['Hello there.', 'This is the show.']))
+    expect(await screen.findByText(/Transcript added under your text/)).toBeTruthy()
+    expect(screen.getByRole('button', { name: /Make the transcript again/ })).toBeTruthy()
+    await next(user)
+    await user.click(screen.getByRole('button', { name: 'Publish' }))
+    await waitFor(() => expect(aioha.broadcastWithAioha).toHaveBeenCalled())
+    const ops = aioha.broadcastWithAioha.mock.calls.map(([o]) => o).find((o) => o[0][0] === 'comment')
+    expect(ops[0][1].body).toContain('**Transcript**\n\nHello there. This is the show.')
+  })
+
+  it('Cancel stops it and leaves the text alone', async () => {
+    m.stt = true
+    const runs = controlledTranscribe()
+    const blob = new File(['ID3'], 'Episode.mp3', { type: 'audio/mpeg' })
+    const { user } = openModal({ initialTrack: { blob, filename: 'Episode.mp3', type: null, source: 'editor' } })
+    await waitFor(() => row('Episode.mp3'))
+    await toPostStep(user, null)
+    await user.click(await screen.findByRole('button', { name: /Make a transcript/ }))
+    await user.click(await screen.findByRole('button', { name: /Cancel/ }))
+    expect(runs[0].opts.signal.aborted).toBe(true)
+    expect(await screen.findByRole('button', { name: /Make a transcript/ })).toBeTruthy()
+  })
+
+  it('a snap\'s transcript goes in its own text, and making it again replaces it', async () => {
+    m.stt = true
+    const runs = controlledTranscribe()
+    const { user } = openModal()
+    await addFile(user)
+    await next(user)
+    await user.click(screen.getByRole('radio', { name: /Snap comments/ }))
+    await next(user)
+    await next(user)
+    const text = () => screen.getByPlaceholderText('Text for this snap (optional)')
+    await user.type(text(), 'My notes')
+    await user.click(await screen.findByRole('button', { name: /Make a transcript/ }))
+    await act(async () => runs[0].resolve(['First take.']))
+    await waitFor(() => expect(text()).toHaveValue('My notes\n\n**Transcript**\n\nFirst take.'))
+    await user.click(screen.getByRole('button', { name: /Make the transcript again/ }))
+    await act(async () => runs[1].resolve(['Second take.']))
+    await waitFor(() => expect(text()).toHaveValue('My notes\n\n**Transcript**\n\nSecond take.'))
+  })
+
+  it('says so when there was no speech, and when it failed', async () => {
+    m.stt = true
+    const runs = controlledTranscribe()
+    const blob = new File(['ID3'], 'Song.mp3', { type: 'audio/mpeg' })
+    const { user } = openModal({ initialTrack: { blob, filename: 'Song.mp3', type: null, source: 'editor' } })
+    await waitFor(() => row('Song.mp3'))
+    await toPostStep(user, null)
+    await user.click(await screen.findByRole('button', { name: /Make a transcript/ }))
+    await act(async () => runs[0].resolve([]))
+    expect(await screen.findByText('No speech found in this audio.')).toBeTruthy()
+    await user.click(screen.getByRole('button', { name: /Make a transcript/ }))
+    await act(async () => runs[1].reject(Object.assign(new Error('x'), { code: 'connection' })))
+    expect(await screen.findByText('The transcript could not be made. Please try again.')).toBeTruthy()
   })
 })

@@ -4,6 +4,7 @@
   },
   "tools": {
     "emoji": "絵文字",
+    "image": "画像を追加",
     "searchEmoji": "絵文字を検索",
     "searchGifs": "GIF を検索…",
     "noGifs": "GIF が見つかりません。",
@@ -17,6 +18,7 @@
     "community": "コミュニティ",
     "communityWithSubscribers_other": "コミュニティ · 登録者 {{formatted}} 人",
     "commentFallback": "（コメント）",
+    "videoKind": "3Speak · 動画",
     "play": "{{title}} を再生"
   },
   "share": {
@@ -30,22 +32,28 @@
     "responsiveSub": "配置先のページに合わせて拡大縮小",
     "fixedSub": "固定サイズの iframe",
     "sendInChat": "3Speak チャットで送る",
-    "sendInChatSub": "3Speak のユーザーにメッセージで送る",
+    "sendInChatSub": "誰かにメッセージで送る",
     "embedOnWebsite": "ウェブサイトに埋め込む",
-    "embedOnWebsiteSub": "自分のサイトやブログ用の HTML をコピー",
-    "forHivePost": "Hive投稿用",
+    "embedOnWebsiteSub": "レスポンシブまたは固定サイズ",
+    "forHivePost": "Hive 投稿用",
+    "forHivePostSub": "リンクをコピーして貼り付け",
     "hivePostCopied": "リンクをコピーしました。Hiveの投稿に貼り付けてください。",
     "generalShare": "共有 / リンクをコピー",
-    "generalShareSub": "ほかのアプリ、またはリンクをコピー"
+    "generalShareSub": "ほかのアプリ",
+    "embed": "埋め込み",
+    "chat": "チャット",
+    "more": "その他",
+    "startAt": "開始位置",
+    "toFollowers_other": "フォロワー {{n}} 人に"
   },
   "gate": {
     "connectTitle": "3Speak チャットに接続",
-    "connectBody": "チャットは Snapie を利用しています。接続すると、Hive のポスティングキーで一度限りのログイン認証に署名します。トランザクションは発生せず、費用もかかりません。",
+    "connectBody": "チャットは Snapie を利用しています。接続すると、ポスティングキーで一度限りのログイン認証に署名します。トランザクションも費用もありません。",
     "connecting": "接続中…",
     "connectButton": "チャットに接続",
     "cannotSign": "現在のログイン方法ではチャットの認証に署名できません。Keychain、HiveAuth、PeakVault、Ledger のいずれかを使ってください。",
-    "needsAccountTitle": "チャットには Hive アカウントが必要です",
-    "needsAccountBody": "メッセージは自分のアカウントの鍵で署名されるため、アカウントの準備ができるとほかの機能と一緒にチャットも使えるようになります。プロフィールの目標を達成すれば、チームが手続きを進めます。",
+    "needsAccountTitle": "チャットには Hive アカウントが必要です。",
+    "needsAccountBody": "Hive アカウントを手に入れると、ほかの機能と一緒に使えるようになります。",
     "loginTitle": "チャットを使うにはログイン",
     "loginBody": "Hive アカウントでログインすると、メッセージを送受信できます。",
     "connectingToChat": "チャットに接続中…"
@@ -123,7 +131,8 @@
     "quoting": "@{{user}} を引用中",
     "cancelQuote": "引用をキャンセル",
     "removeImage": "画像を削除",
-    "placeholder": "メッセージを入力…"
+    "placeholder": "メッセージを入力…",
+    "placeholderTo": "{{name}} にメッセージ"
   },
   "page": {
     "chooseTarget": "送信先のチャットを選んでください。",

@@ -16,7 +16,7 @@
       "upload": "アップロードはいかがでしたか？",
       "stream": "ライブ配信はいかがでしたか？",
       "watch": "3Speak での視聴はいかがでしたか？",
-      "global": "3Speak の使い心地はいかがですか？",
+      "global": "新しい 3Speak はいかがですか？",
       "fallback": "3Speak の改善にご協力ください"
     },
     "stars": {
@@ -48,7 +48,7 @@
   },
   "live": {
     "vodProcessing": "録画を処理しています…",
-    "vodProcessingHint": "この配信は終了しました。エンコードが終わり次第、ここに動画が表示されます。再読み込みは不要です。",
+    "vodProcessingHint": "エンコードが終わり次第、ここに動画が表示されます。再読み込みは不要です。",
     "watching_other": "👁 {{count}} 人が視聴中",
     "signInRaiseHand": "挙手するにはログイン",
     "signInChat": "チャットするにはログイン",
@@ -103,11 +103,16 @@
     "atTime": "{{time}} 時点",
     "commentPlaceholder": "コメントを入力...",
     "replyPlaceholder": "返信を入力...",
+    "joinPlaceholder": "ディスカッションに参加…",
     "commentButton": "コメント",
     "count_other": "{{count}} 件のコメント",
+    "replies_other": "{{count}} 件の返信",
     "edited": "（編集済み）",
     "hideComment": "コメントを非表示",
     "showComment": "@{{user}} さんのコメントを表示",
+    "hiddenComment": "非表示のコメント",
+    "hiddenLowScore": "コミュニティにより非表示 · 低スコア",
+    "show": "表示",
     "saving": "保存中...",
     "translation": "翻訳",
     "translationFailed": "翻訳に失敗しました。翻訳サービスは動作していますか？",
@@ -132,6 +137,9 @@
     "uploadingImage": "画像をアップロード中",
     "write": "書く",
     "preview": "プレビュー",
-    "nothingToPreview": "プレビューする内容はまだありません"
+    "nothingToPreview": "プレビューする内容はまだありません",
+    "creator": "クリエイター",
+    "empty": "まだコメントはありません",
+    "emptyHint": "特定の場面に付けたコメントは、動画のタイムラインに表示されます。"
   }
 }

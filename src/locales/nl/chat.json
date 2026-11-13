@@ -4,6 +4,7 @@
   },
   "tools": {
     "emoji": "Emoji",
+    "image": "Afbeelding toevoegen",
     "searchEmoji": "Emoji zoeken",
     "searchGifs": "GIF's zoeken…",
     "noGifs": "Geen GIF's gevonden.",
@@ -18,6 +19,7 @@
     "communityWithSubscribers_one": "Community · {{formatted}} abonnee",
     "communityWithSubscribers_other": "Community · {{formatted}} abonnees",
     "commentFallback": "(reactie)",
+    "videoKind": "3Speak · Video",
     "play": "{{title}} afspelen"
   },
   "share": {
@@ -31,22 +33,29 @@
     "responsiveSub": "Past zich aan de pagina aan waarop hij staat",
     "fixedSub": "Iframe met vaste grootte",
     "sendInChat": "Versturen in 3Speak Chat",
-    "sendInChatSub": "Stuur het naar iemand op 3Speak",
+    "sendInChatSub": "Stuur het naar iemand",
     "embedOnWebsite": "Embedden op een website",
-    "embedOnWebsiteSub": "Kopieer de HTML voor je eigen site of blog",
-    "forHivePost": "Voor Hive-post",
+    "embedOnWebsiteSub": "Responsief of vaste grootte",
+    "forHivePost": "Voor een Hive-post",
+    "forHivePostSub": "Kopieer de link om te plakken",
     "hivePostCopied": "Link gekopieerd. Plak hem in je Hive-post.",
-    "generalShare": "Delen / link kopiëren",
-    "generalShareSub": "Andere apps, of kopieer de link"
+    "generalShare": "Delen of link kopiëren",
+    "generalShareSub": "Andere apps",
+    "embed": "Insluiten",
+    "chat": "Chat",
+    "more": "Meer",
+    "startAt": "Start bij",
+    "toFollowers_one": "Naar je {{n}} volger",
+    "toFollowers_other": "Naar je {{n}} volgers"
   },
   "gate": {
     "connectTitle": "Verbinden met 3Speak Chat",
-    "connectBody": "Chat werkt met Snapie. Bij het verbinden onderteken je eenmalig een inlog-challenge met je Hive posting key — geen transactie, geen kosten.",
+    "connectBody": "Chat werkt met Snapie. Bij het verbinden onderteken je eenmalig een inlog-challenge met je posting key. Geen transactie, geen kosten.",
     "connecting": "Verbinden…",
     "connectButton": "Chat verbinden",
     "cannotSign": "Je huidige login kan de chat-challenge niet ondertekenen. Gebruik Keychain, HiveAuth, PeakVault of Ledger.",
-    "needsAccountTitle": "Voor chat heb je een Hive-account nodig",
-    "needsAccountBody": "Berichten worden ondertekend met de keys van je eigen account, dus chat wordt samen met al het andere ontgrendeld zodra je account klaar is. Rond de doelen op je profiel af en het team helpt je verder.",
+    "needsAccountTitle": "Voor chat heb je een Hive-account nodig.",
+    "needsAccountBody": "Het wordt samen met al het andere ontgrendeld zodra je de warming-up afrondt.",
     "loginTitle": "Log in om te chatten",
     "loginBody": "Log in met je Hive-account om berichten te versturen en te ontvangen.",
     "connectingToChat": "Verbinden met chat…"
@@ -94,8 +103,8 @@
     "serverRejectedServerMap_other": "Server weigerde alle {{count}} verzoeken (id's uit de eigen ongelezen-lijst van de server)",
     "failed": "Niet alles kon als gelezen worden gemarkeerd",
     "marking": "Als gelezen markeren…",
-    "button": "Alles als gelezen markeren",
-    "buttonCount": "Alles als gelezen markeren ({{count}})"
+    "button": "Alles gelezen",
+    "buttonCount": "Alles gelezen ({{count}})"
   },
   "list": {
     "chooseTarget": "Kies een chat om naar te versturen",
@@ -117,7 +126,7 @@
     "deleteError": "Het bericht kon niet worden verwijderd.",
     "back": "Terug naar gesprekken",
     "loading": "Berichten laden…",
-    "empty": "Nog geen berichten — zeg hoi 👋",
+    "empty": "Nog geen berichten. Zeg hoi 👋",
     "editedSuffix": " · bewerkt",
     "messageActions": "Berichtacties",
     "quote": "Citeren",
@@ -129,7 +138,8 @@
     "quoting": "@{{user}} citeren",
     "cancelQuote": "Citaat annuleren",
     "removeImage": "Afbeelding verwijderen",
-    "placeholder": "Typ een bericht…"
+    "placeholder": "Typ een bericht…",
+    "placeholderTo": "Bericht aan {{name}}"
   },
   "page": {
     "chooseTarget": "Kies een chat om naar te versturen.",

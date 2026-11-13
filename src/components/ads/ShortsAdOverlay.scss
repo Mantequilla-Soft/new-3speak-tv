@@ -35,21 +35,30 @@
   }
 
   &-tag {
-    background: rgba(0, 0, 0, 0.72);
-    color: #fff;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    padding: 3px 7px;
-    border-radius: 4px;
+    display: inline-flex;
+    align-items: center;
+    height: 20px;
+    background: var(--accent);
+    color: var(--on-accent);
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    padding: 0 8px;
+    border-radius: 7px;
   }
 
   &-count {
-    background: rgba(0, 0, 0, 0.55);
-    color: #fff;
-    font-size: 12px;
-    padding: 3px 7px;
-    border-radius: 4px;
+    display: inline-flex;
+    align-items: center;
+    height: 20px;
+    background: var(--media-scrim);
+    color: var(--on-media);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 0 6px;
+    border-radius: 6px;
   }
 
   &-brand {
@@ -63,18 +72,17 @@
     max-width: calc(100% - 24px);
     margin: 0 12px 84px;   // clear of the shorts action rail
     padding: 10px 12px;
-    background: rgba(0, 0, 0, 0.62);
-    border-radius: 10px;
+    background: var(--media-scrim);
+    border-radius: var(--r-lg);
     text-decoration: none;
-    color: #fff;
+    color: var(--on-media);
     pointer-events: auto;
-    backdrop-filter: blur(3px);
   }
 
   &-logo {
-    width: 38px;
-    height: 38px;
-    border-radius: 8px;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--r-md);
     object-fit: cover;
     flex: 0 0 auto;
   }
@@ -84,8 +92,10 @@
     flex-direction: column;
     min-width: 0;
 
-    strong { font-size: 14px; line-height: 1.2; }
+    strong { font-size: 14px; font-weight: 700; line-height: 1.2; }
   }
+
+  &-open { opacity: .85; }
 
   &-slogan {
     font-size: 12px;
@@ -114,20 +124,20 @@
   align-items: center;
   justify-content: center;
   gap: 14px;
-  background: #0b0b0b;
+  background: var(--media-black);
   pointer-events: auto;  // swallow taps aimed at a player that is not showing yet
 
   &-logo {
     width: 72px;
     height: 72px;
-    border-radius: 16px;
+    border-radius: var(--r-xl);
     object-fit: cover;
   }
 
   &-name {
-    color: rgba(255, 255, 255, 0.92);
-    font-size: 15px;
-    font-weight: 600;
+    color: var(--on-media);
+    font-size: 16px;
+    font-weight: 700;
     text-align: center;
     padding: 0 24px;
   }
@@ -138,7 +148,8 @@
   &-slogan {
     margin-top: -6px;      // pull under the name; the flex gap is sized for the logo
     max-width: 20rem;
-    color: rgba(255, 255, 255, 0.62);
+    color: var(--on-media);
+    opacity: .62;
     font-size: 13px;
     line-height: 1.45;
     text-align: center;
@@ -153,17 +164,17 @@
   // and a spinner at that length reads as a stall.
   &-bar {
     width: 96px;
-    height: 3px;
-    border-radius: 2px;
-    background: rgba(255, 255, 255, 0.18);
+    height: 4px;
+    border-radius: var(--r-bar);
+    background: color-mix(in srgb, var(--on-media) 18%, transparent);
     overflow: hidden;
 
     i {
       display: block;
       width: 40%;
       height: 100%;
-      border-radius: 2px;
-      background: rgba(255, 255, 255, 0.75);
+      border-radius: var(--r-bar);
+      background: var(--on-media);
       animation: mkt-shortad-sweep 1.1s ease-in-out infinite;
     }
   }

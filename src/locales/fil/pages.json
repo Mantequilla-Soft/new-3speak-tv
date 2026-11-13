@@ -93,12 +93,13 @@
   "legal": {
     "pageTitle": "Paano hinahawakan ng 3Speak ang data mo · 3Speak",
     "englishOnly": "Available lang sa English ang page na ito. Ang English na bersyon ang may bisa.",
-    "back": "← Bumalik sa 3Speak"
+    "back": "← Bumalik sa 3Speak",
+    "onThisPage": "Sa pahinang ito"
   },
   "notFound": {
     "imageAlt": "404",
-    "title": "SORRY! HINDI NAHANAP ANG PAGE",
+    "title": "Paumanhin, hindi nahanap ang page",
     "message": "Sa kasamaang palad, hindi available ang page na hinahanap mo.",
-    "goHome": "PUMUNTA SA HOME PAGE"
+    "goHome": "Pumunta sa home page"
   }
 }

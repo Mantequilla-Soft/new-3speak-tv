@@ -5,13 +5,12 @@
     "yourStreamEnded": "Mtiririko wako umekwisha",
     "thisStreamEnded": "Mtiririko huu umekwisha",
     "noLongerLive": "Haupo mubashara tena. Anzisha mwingine wakati wowote ukiwa tayari.",
-    "recordingProcessing": "Vizuri sana! Rekodi yako inachakatwa na itaonekana kwenye chapisho la tangazo hivi karibuni.",
-    "thanksForLive": "Vizuri sana — asante kwa kwenda mubashara!",
+    "recordingProcessing": "Rekodi yako inachakatwa na itaonekana kwenye chapisho la tangazo hivi karibuni.",
+    "thanksForLive": "Vizuri sana, asante kwa kwenda mubashara",
     "backHome": "Rudi Nyumbani",
     "howWasStream": "Mtiririko wako ulikuwaje?",
     "connecting": "Inaunganisha na OpenPods…",
-    "authenticating": "Inathibitisha na OpenPods…",
-    "postStoryAboutIt": "Chapisha hadithi kuhusu hili"
+    "authenticating": "Inathibitisha na OpenPods…"
   },
   "strip": {
     "liveNow_one": "OpenPod <n>{{count}}</n> iko mubashara sasa",
@@ -29,7 +28,9 @@
     "rewardDecline": "Kataa malipo",
     "beneficiaries": "Wanufaika",
     "beneProHint": "Uko kwenye 3Speak Pro — hakuna ada ya jukwaa. Ongeza migawanyo ukipenda.",
-    "beneLockedHint": "10% kwa @threespeakfund imefungwa. Unaweza kuongeza zaidi."
+    "beneLockedHint": "10% kwa @threespeakfund imefungwa. Unaweza kuongeza zaidi.",
+    "storyPrompt": "Unakaribia kwenda live? Waambie wafuasi wako kwanza kwa hadithi ya saa 24. Inafunguka kwenye kichupo kipya, kwa hivyo studio yako inabaki wazi.",
+    "storyButton": "Chapisha hadithi"
   },
   "boost": {
     "label": "Boost",
@@ -41,24 +42,24 @@
     "slowDown": "Punguza kasi kidogo, kisha ukate klipu tena.",
     "failed": "Imeshindwa kutengeneza klipu. Jaribu tena baada ya sekunde chache.",
     "title": "Kata klipu ya sekunde 30 za mwisho",
-    "label": "sek 30",
+    "label": "Klipu",
     "clipping": "Inakata klipu…"
   },
   "report": {
     "reasons": {
       "harassment": "Unyanyasaji au chuki",
-      "sexual": "Maudhui ya ngono au machafu",
+      "sexual": "Ngono au maudhui ya wazi",
       "violence": "Vurugu au vitendo hatari",
       "selfharm": "Kujidhuru",
       "illegal": "Maudhui haramu",
       "spam": "Barua taka au utapeli",
       "other": "Kitu kingine"
     },
-    "sent": "Asante — mtiririko huu umeripotiwa kwa timu yetu.",
+    "sent": "Asante, mtiririko huu umeripotiwa kwa timu yetu.",
     "failed": "Imeshindwa kutuma ripoti. Tafadhali jaribu tena.",
     "title": "Ripoti mtiririko huu",
     "reporting": "Unaripoti <b>@{{host}}</b>.",
-    "intro": "Tuambie tatizo ni nini — timu yetu hukagua kila ripoti.",
+    "intro": "Timu yetu hukagua kila ripoti.",
     "detailPlaceholder": "Ongeza maelezo yoyote (si lazima)",
     "sending": "Inatuma…",
     "submit": "Wasilisha ripoti"
@@ -92,6 +93,7 @@
   "lobby": {
     "descriptionPlaceholder": "Kipindi hiki kinahusu nini? Ongeza maelezo ya kipindi, viungo, au muhtasari…",
     "enableHosting": "Washa uendeshaji na uzungumzaji",
+    "enableHostingHint": "Inahitaji mamlaka ya posting ya @threespeak",
     "handoverFailed": "Imeshindwa kuwasha uendeshaji kiotomatiki. OpenPods huchapisha kwa niaba yako kupitia @threespeak — hakikisha umeipa mamlaka ya kuchapisha, kisha ujaribu tena.",
     "signInToHost": "Ingia kwa Hive ili kuendesha au kuzungumza"
   },
@@ -131,8 +133,8 @@
     },
     "chatBox": {
       "title": "Gumzo lako ndani ya OBS",
-      "desc": "Kiungo kimoja kwa mitiririko yako yote. Kiongeze kwenye OBS kama dock ili usome ujumbe mpya ukiwa mubashara. Mwongozo ulio hapa chini unaonyesha jinsi.",
-      "copy": "Nakili URL ya gumzo kwa OBS",
+      "desc": "ongeza kama dock maalum ya kivinjari",
+      "copy": "Nakili URL ya gumzo",
       "copied": "URL ya gumzo imenakiliwa"
     },
     "card": {
@@ -143,26 +145,26 @@
       "watch": "Tazama mtiririko",
       "notAnnounced": "Mtiririko huu haukutangazwa kwenye Hive.",
       "notAnnouncedAuth": "Haukutangazwa kwenye Hive: 3Speak bado haiwezi kuchapisha kwa niaba yako. Hariri kiolezo ili kuruhusu.",
-      "stuck": "OBS imeunganishwa, lakini hakuna video iliyotufikia, kwa hivyo mtiririko haukuanza. Simamisha utiririshaji kwenye OBS kisha uanze tena.",
-      "dailyLimit": "OBS haikuweza kwenda hewani: akaunti za bure zinaweza kuanzisha mtiririko mmoja kwa siku. Jaribu tena saa 24 baada ya mtiririko wako wa mwisho kuanza, au pata 3Speak Pro ili kutiririsha bila kikomo cha kila siku.",
+      "stuck": "OBS imeunganishwa, lakini hakuna video iliyotufikia. Simamisha na uanze kutiririsha tena.",
+      "dailyLimit": "Akaunti za bure zinaweza kuanzisha mtiririko mmoja kwa siku. Jaribu tena saa 24 baada ya mtiririko wako wa mwisho kuanza, au pata Pro.",
       "useInStudio": "Tumia kwenye Stream Studio",
       "proRequired": "OBS haikuweza kwenda moja kwa moja: kutiririsha kutoka OBS ni sehemu ya 3Speak Pro."
     },
     "guide": {
       "title": "Jinsi ya kuweka OBS",
-      "step1": "Tumia OBS Studio 30 au mpya zaidi na ufungue Settings, kisha Stream.",
-      "step2": "Weka Service kuwa \"WHIP\".",
-      "step3": "Server: bandika URL ya seva ya kiolezo unachotaka (\"Nakili URL ya seva\" kwenye kadi yake). Kila kiolezo kina yake.",
-      "step4": "Bearer Token: bandika siri ya mtiririko wako kutoka juu ya ukurasa huu. Ni ileile kwa kila kiolezo.",
-      "step5": "Bofya \"Start Streaming\" kwenye OBS na uko mubashara kwenye 3Speak kwa kiolezo hicho. \"Stop Streaming\" humaliza mtiririko.",
-      "outputTitle": "Mipangilio ya matokeo inayopendekezwa",
-      "keyframe": "Muda kati ya keyframe: sekunde 1 hadi 2",
-      "bitrate": "Udhibiti wa kasi CBR, 2500 hadi 6000 kbps",
-      "encoder": "Encoder: x264 au encoder ya maunzi yako",
-      "audio": "Kiwango cha sampuli za sauti: 48 kHz",
-      "bframes": "Bila B-frames (ziweke 0 ikiwa encoder yako ina chaguo hilo)",
+      "step1": "Tumia OBS Studio 30 au mpya zaidi: Settings → Stream",
+      "step2": "Weka Service kuwa \"WHIP\"",
+      "step3": "Server: bandika URL ya seva ya kiolezo",
+      "step4": "Bearer Token: bandika siri ya mtiririko wako",
+      "step5": "Bofya Start Streaming kwenye OBS. Uko mubashara kwenye 3Speak.",
+      "outputTitle": "Matokeo yanayopendekezwa",
+      "keyframe": "Keyframe kila 1–2 s",
+      "bitrate": "CBR 2500–6000 kbps",
+      "encoder": "x264 / maunzi",
+      "audio": "Sauti 48 kHz",
+      "bframes": "Bila B-frames",
       "chatTitle": "Ona gumzo ndani ya OBS",
-      "chatCopy": "Juu ya ukurasa huu, chini ya \"Gumzo lako ndani ya OBS\", bofya \"Nakili URL ya gumzo kwa OBS\". Ni kiungo kimoja kwa mitiririko yako yote.",
+      "chatCopy": "Juu ya ukurasa huu, chini ya \"Gumzo lako ndani ya OBS\", bofya \"Nakili URL ya gumzo\". Ni kiungo kimoja kwa mitiririko yako yote.",
       "chat2": "Katika OBS, fungua menyu ya \"Docks\" na uchague \"Custom Browser Docks\". Andika jina kama \"Gumzo la 3Speak\", bandika URL na ubofye \"Apply\". Ujumbe mpya huonekana kwenye paneli hiyo ukiwa mubashara. Watazamaji hawaioni kamwe.",
       "chat3": "Watazamaji tayari wanaona gumzo kando ya mtiririko wako, kwa hivyo huhitaji kuliweka kwenye video. Ikiwa tu unashiriki mtiririko mahali pengine pia: ongeza URL hiyo hiyo kama chanzo cha \"Browser\" na uondoe \"&dock=1\" mwishoni. Hapo ujumbe huelea juu ya video na kufifia baada ya sekunde 30.",
       "chatOptions": "Si lazima, ongeza mwishoni mwa URL: &max=10 huonyesha mistari michache, &size=18 hukuza maandishi, &fade=0 huacha ujumbe kwenye video.",
@@ -256,5 +258,14 @@
       "desc": "Ukiwa na 3Speak Pro unaweza kwenda moja kwa moja kutoka OBS ukitumia violezo vyako. Bila Pro, violezo vyako bado vinafanya kazi kwenye Stream Studio katika kivinjari chako.",
       "cta": "Pata 3Speak Pro"
     }
+  },
+  "grid": {
+    "openpods": "OpenPods",
+    "listening_one": "{{count}} anasikiliza",
+    "listening_other": "{{count}} wanasikiliza",
+    "emptySub": "Mitiririko na OpenPods huonekana hapa mara tu zinapoanza.",
+    "emptyRooms": "Hakuna OpenPods zilizo wazi sasa hivi.",
+    "emptyScheduled": "Hakuna kilichoratibiwa sasa hivi.",
+    "emptyScheduledSub": "Vyumba vilivyo wazi lakini bado si mubashara huonekana hapa."
   }
 }

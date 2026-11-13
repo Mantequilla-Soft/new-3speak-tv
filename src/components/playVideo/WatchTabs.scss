@@ -1,65 +1,120 @@
-@use "../../mixins.scss" as mix;
+@use "../../styles/v2" as v2;
 
-// Reactions and the transcript share the top of the watch page's right column.
-.watch-tabs {
-  width: 100%;
+/* The watch page's side panel (02, 22a). One fixed area: switching tabs never
+   changes its size.
+   - .is-wide: beside the player, as tall as the player. The scroll area is
+     absolutely positioned, so the panel adds no height of its own and the grid
+     row follows the player.
+   - .is-narrow: under the video's details, chip tabs above a scroll area of a
+     fixed height (STYLE_GUIDE §11, mobile variant of a desktop panel). */
+.wv2-side {
+  grid-area: side;
+  display: flex;
+  flex-direction: column;
   min-width: 0;
-  margin-bottom: 14px;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-3xl);
+  color: var(--text);
 
-  .watch-tabs-bar {
+  &.is-wide {
+    align-self: stretch;
+    min-height: 360px;
+
+    // Cinema size: the player spans the page, so the panel brings its own height.
+    .reaction-cinema & { height: 560px; }
+  }
+
+  &.is-narrow {
+    height: min(72dvh, 640px);
+    min-height: 360px;
+    // A chip below the player brings this into view under the sticky player.
+    scroll-margin-top: calc(var(--nav-top-offset, 56px) + 56.25vw + 8px);
+
+    @include v2.tablet-up { scroll-margin-top: calc(var(--nav-top-offset, 64px) + 16px); }
+    @include v2.mobile {
+      margin: 0 calc(-1 * var(--page-pad));
+      border-radius: 0;
+      border-width: 1px 0 0;
+      background: var(--bg);
+    }
+  }
+}
+
+// Wide: the segmented track (v2-seg), 36px options in a 6px-padded track.
+.wv2-side__tabs.v2-seg {
+  flex: none;
+  margin: 12px 12px 0;
+  padding: 6px;
+  border-radius: var(--r-lg);
+  background: var(--bg);
+  @include v2.scroll-x;
+
+  .v2-seg__opt { flex: 1 0 auto; padding: 0 12px; gap: 6px; }
+}
+
+// Narrow: a row of chips that scrolls sideways.
+.wv2-side__tabs.is-chips {
+  flex: none;
+  display: flex;
+  gap: 6px;
+  padding: 12px 16px 8px;
+  @include v2.scroll-x;
+}
+
+.wv2-side__chip.v2-chip {
+  height: 36px;
+  border-radius: var(--r-md);
+  font-size: 13px;
+  padding: 0 12px;
+  gap: 5px;
+  // Filled chips, no outline (fills, not borders): surface on the bg ground (02),
+  // the open one inverse.
+  background: var(--surface);
+  color: var(--text);
+  &.is-on { background: var(--text); color: var(--bg); }
+}
+
+.wv2-side__body {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+}
+
+.wv2-side__scroll {
+  position: absolute;
+  inset: 0;
+  padding: 6px 16px 16px;
+  @include v2.scroll-y;
+
+  &[hidden] { display: none; }
+
+  // A flush panel fills the area and scrolls itself (the discussion pins its
+  // composer at the bottom; the transcript keeps its own head).
+  &.is-flush {
+    padding: 0;
+    overflow: hidden;
     display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    border-bottom: 1px solid var(--border-color);
+    flex-direction: column;
+
+    > * { flex: 1; min-height: 0; }
   }
 
-  .watch-tab {
-    padding: 0.5rem 0.9rem;
-    border: 0;
-    border-bottom: 2px solid transparent;
-    background: transparent;
-    color: var(--text-secondary);
-    font-size: 0.9rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: color 0.15s ease, border-color 0.15s ease;
+  // The reaction player fills the panel's width.
+  > .show-reactions-btn { margin-top: 10px; }
+}
 
-    &:hover { color: var(--text-primary); }
+// The transcript's own frame is redundant here: the tab track is the chrome.
+.wv2-side .transcript.embedded {
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
 
-    &.active {
-      color: var(--text-primary);
-      border-bottom-color: var(--accent-primary);
-    }
-
-    @include mix.respond(phone) {
-      padding: 0.45rem 0.7rem;
-      font-size: 0.85rem;
-    }
-  }
-
-  .watch-tabs-panel {
-    padding-top: 10px;
-    min-width: 0;
-  }
-
-  // The transcript's own frame is redundant here — the tab bar is the chrome.
-  .transcript.embedded {
-    margin: 0;
-    border: 0;
-    background: transparent;
-
-    .transcript-head {
-      justify-content: flex-end;
-      padding: 0 0 0.5rem;
-      border-bottom: 0;
-    }
-
-    // Matches the reaction panel's own footprint, so switching tabs doesn't
-    // shove the recommendations up and down the column.
-    .transcript-body {
-      max-height: min(52vh, 30rem);
-      padding-left: 0;
-      padding-right: 0;
-    }
-  }
+  .transcript-body { flex: 1; min-height: 0; max-height: none; @include v2.scroll-y; }
 }

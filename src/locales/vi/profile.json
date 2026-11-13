@@ -19,6 +19,7 @@
     "pleaseTryAgain": "vui lòng thử lại",
     "followers_other": "{{num}} người theo dõi",
     "popularTitle": "Nhà sáng tạo nổi bật",
+    "suggestedTitle": "Nhà sáng tạo nên theo dõi",
     "scrollLeft": "Cuộn sang trái",
     "scrollRight": "Cuộn sang phải",
     "mostlyPosts": "Chủ yếu đăng về {{topic}}"
@@ -52,7 +53,8 @@
     "upload": "Tải lên video giới thiệu kênh",
     "tapForSound": "Chạm để bật tiếng",
     "views_other": "{{num}} lượt xem",
-    "readMore": "Đọc thêm"
+    "readMore": "Đọc thêm",
+    "label": "Trailer"
   },
   "snaps": {
     "readMore": "Đọc thêm",
@@ -149,7 +151,8 @@
       "text": "Nhóm video của bạn thành một danh sách phát để mọi người xem theo thứ tự.",
       "cta": "Tạo danh sách phát đầu tiên",
       "visitor": "@{{user}} không có danh sách phát công khai nào."
-    }
+    },
+    "visitorPreview": "Khách truy cập thấy: “{{text}}”"
   },
   "links": {
     "button": "Liên kết",
@@ -168,7 +171,8 @@
     "shorts": "Shorts",
     "audio": "Âm thanh",
     "community": "Cộng đồng",
-    "playlists": "Danh sách phát"
+    "playlists": "Danh sách phát",
+    "latestSnap": "Snap mới nhất"
   },
   "streams": {
     "loading": "Đang tải buổi phát…",
@@ -199,6 +203,7 @@
     "messageTitle": "Nhắn tin cho @{{user}}",
     "messageLogin": "Vui lòng đăng nhập để gửi tin nhắn",
     "message": "Nhắn tin",
+    "messageShort": "Nhắn",
     "unhideTitle": "Hiện lại video của @{{user}} trong bảng tin của bạn",
     "hideTitle": "Ẩn video của @{{user}} khỏi mọi bảng tin của bạn",
     "unhide": "Bỏ ẩn",
@@ -212,7 +217,11 @@
     "loginToUpload": "Đăng nhập để tải video lên",
     "linkExternalTitle": "Liên kết hồ sơ bên ngoài",
     "addProfile": "Thêm hồ sơ",
-    "editTitle": "Chỉnh sửa ảnh, tên, tiểu sử và vị trí của bạn"
+    "editTitle": "Chỉnh sửa ảnh, tên, tiểu sử và vị trí của bạn",
+    "more": "Thêm",
+    "moreActions": "Thêm thao tác cho @{{user}}",
+    "copyProfileLink": "Sao chép liên kết hồ sơ",
+    "podcastFeed": "Nguồn podcast (RSS)"
   },
   "tabs": {
     "overview": "Tổng quan",
@@ -247,11 +256,7 @@
     "tip": "Tip",
     "tipCreator": "Gửi tip cho nhà sáng tạo",
     "latestVideo": "Video mới nhất",
-    "watchLatestVideo": "Xem video mới nhất",
-    "latestShort": "Short mới nhất",
-    "watchLatestShort": "Xem Short mới nhất",
-    "closeMenu": "Đóng menu",
-    "openActions": "Mở thao tác"
+    "latestShort": "Short mới nhất"
   },
   "uploads": {
     "processing": "Đang xử lý video của bạn",
@@ -277,7 +282,9 @@
     "hiddenToast": "Đã ẩn tip khỏi hồ sơ của bạn",
     "unhiddenToast": "Tip đã hiện lại trên hồ sơ của bạn",
     "hideFailed": "Không thể thay đổi tip này. Vui lòng thử lại.",
-    "hideWalletPrompt": "Ký để thay đổi những tip hiển thị trên hồ sơ của bạn"
+    "hideWalletPrompt": "Ký để thay đổi những tip hiển thị trên hồ sơ của bạn",
+    "whoTitle": "@{{user}} ủng hộ",
+    "tipped_other": "Đã tip {{count}} lần"
   },
   "layout": {
     "customize": "Tùy chỉnh hồ sơ",
@@ -388,5 +395,12 @@
   },
   "audioTab": {
     "files": "Tệp âm thanh"
+  },
+  "search": {
+    "placeholder": "Tìm trong kênh này",
+    "clear": "Xóa tìm kiếm",
+    "results_other": "{{count}} kết quả cho “{{query}}”",
+    "empty": "Không có gì trên kênh này khớp với “{{query}}”.",
+    "older": "Tìm video tải lên cũ hơn"
   }
 }

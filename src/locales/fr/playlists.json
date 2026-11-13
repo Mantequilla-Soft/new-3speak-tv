@@ -24,6 +24,10 @@
     "noOtherPlaylists": "Vous n'avez pas encore d'autre playlist",
     "createFirst": "Créer une playlist",
     "createNew": "Créer une nouvelle playlist",
+    "newPlaylist": "Nouvelle playlist",
+    "savedTo_one": "Enregistré dans {{count}} playlist",
+    "savedTo_many": "Enregistré dans {{count}} playlists",
+    "savedTo_other": "Enregistré dans {{count}} playlists",
     "name": "Nom",
     "namePlaceholder": "Ma super playlist",
     "privacy": "Confidentialité",
@@ -58,6 +62,7 @@
     "items_other": "{{count}} éléments",
     "created": "Créée {{when}}",
     "podcastFeed": "Flux podcast",
+    "playAll": "Tout lire",
     "podcastFeedTitle": "Suivez {{name}} dans n'importe quelle application de podcast (flux RSS)",
     "album": {
       "genre": "<strong>Genre :</strong> {{value}}",
@@ -100,12 +105,15 @@
     "descriptionPlaceholder": "À propos de cet album (facultatif)",
     "filterCount_one": "{{shown}} sur {{count}} élément",
     "filterCount_many": "{{shown}} sur {{count}} éléments",
-    "filterCount_other": "{{shown}} sur {{count}} éléments"
+    "filterCount_other": "{{shown}} sur {{count}} éléments",
+    "shuffle": "Aléatoire"
   },
   "type": {
     "label": "Type",
     "video": "Vidéo",
     "audio": "Audio",
+    "videoSub": "Format long",
+    "audioSub": "Titres et podcasts",
     "kindLabel": "Quel type d'audio ?",
     "kinds": {
       "podcast": "Podcast",
@@ -113,5 +121,32 @@
       "voice": "Notes vocales",
       "sounds": "Autres sons"
     }
+  },
+  "feeds": {
+    "button": "Émissions externes",
+    "title": "Émissions externes",
+    "intro": "Ajoutez des émissions de podcast entières, d'où qu'elles viennent. Leurs épisodes apparaissent dans cette playlist à côté des vôtres, les plus récents d'abord, et les nouveaux arrivent tout seuls.",
+    "searchLabel": "Cherchez une émission ou collez un lien de flux",
+    "searchPlaceholder": "Nom de l'émission, flux RSS ou lien Apple Podcasts",
+    "add": "Ajouter",
+    "checking": "Vérification...",
+    "searching": "Recherche...",
+    "noResults": "Aucune émission trouvée.",
+    "inList": "Dans la playlist",
+    "inPlaylist": "Dans cette playlist",
+    "none": "Pas encore d'émission externe.",
+    "remove": "Retirer {{title}}",
+    "already": "Cette émission est déjà dans cette playlist.",
+    "limit": "Une playlist peut contenir jusqu'à {{max}} émissions externes.",
+    "ownFeed": "C'est le flux de cette playlist elle-même.",
+    "privateFeed": "Les flux protégés par un mot de passe ne peuvent pas aller dans une playlist, car les playlists sont publiques.",
+    "tooBig": "C'est plus que ce qu'une playlist peut contenir. Retirez d'abord une émission.",
+    "saved": "Émissions externes enregistrées. La playlist se met à jour dans quelques secondes.",
+    "saveFailed": "Échec de l'enregistrement : {{error}}",
+    "fromShows": "D'autres émissions :",
+    "video": "Vidéo",
+    "pending_one": "{{count}} émission est encore en cours de lecture. Ses épisodes apparaissent d'ici quelques minutes.",
+    "pending_many": "{{count}} émissions sont encore en cours de lecture. Leurs épisodes apparaissent d'ici quelques minutes.",
+    "pending_other": "{{count}} émissions sont encore en cours de lecture. Leurs épisodes apparaissent d'ici quelques minutes."
   }
 }

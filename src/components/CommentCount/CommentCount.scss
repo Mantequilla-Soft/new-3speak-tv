@@ -1,12 +1,13 @@
 // Matches .upvote-count-badge so the stats row reads as one set.
 .comment-count-badge {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 4px;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
   font-size: 12px;
-  color: var(--text-secondary);
-
-  .comment-count-icon {
-    transition: color 0.2s ease;
-  }
+  font-weight: 700;
+  color: var(--muted);
+  white-space: nowrap;
+  flex: none;
 }

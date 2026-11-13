@@ -22,7 +22,8 @@
     "step1": "Bu videoyu şurada açın:",
     "step2": "Üç nokta menüsüne tıklayın ve İndir'i seçin.",
     "step3": "İndirdiğiniz dosyayı aşağıdan seçin.",
-    "pickFile": "İndirilen dosyayı seç"
+    "pickFile": "İndirilen dosyayı seç",
+    "title": "Bu alınamadı"
   },
   "errors": {
     "signIn": "Videolarınızı içe aktarmak için giriş yapın.",
@@ -133,7 +134,8 @@
     },
     "stopConfirm": "Bu içe aktarma durdurulsun mu? Henüz yayınlanmamış videolar, zaten zamanlanmış olanlar dahil, iptal edilir. Yayınlanan videolar kalır.",
     "stopYes": "Evet, durdur",
-    "stopKeep": "Aktarmaya devam et"
+    "stopKeep": "Aktarmaya devam et",
+    "countOf": "{{done}} / {{total}}"
   },
   "bitchute": {
     "noLink": "Henüz bir BitChute hesabı bağlamadınız. Önce profilinizde bağlayıp doğrulayın, sonra buraya dönün.",

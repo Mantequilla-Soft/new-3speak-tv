@@ -208,7 +208,7 @@
       "imageUploadFailed": "Error al subir la imagen: {{error}}",
       "tryAgain": "inténtalo de nuevo",
       "styleApplied": "Estilo aplicado a todos los bloques de {{type}}",
-      "templateApplied": "Se aplicó “{{name}}”: ajústalo o deshaz",
+      "templateApplied": "Se aplicó “{{name}}”. Ajústalo o deshazlo.",
       "reverted": "Se restauró tu diseño anterior",
       "saved": "Spotlight guardado en tu perfil de Hive",
       "saveFailed": "No se pudo guardar",
@@ -224,7 +224,7 @@
       "phone": "Teléfono",
       "platformGroup": "Plataforma",
       "yourname": "tunombre",
-      "platformIconHint": "El ícono es el logo de {{platform}}; cambia a “Sitio web / URL” para elegir un ícono personalizado.",
+      "platformIconHint": "El ícono es el logo de {{platform}}. Cambia a “Sitio web / URL” para elegir un ícono personalizado.",
       "icon": "Ícono",
       "iconColor": "Color del ícono",
       "iconBg": "Fondo del ícono"
@@ -267,7 +267,7 @@
       "hiveRecentHint": "Tus publicaciones principales más recientes (sin reblogs ni cross-posts). Se actualiza automáticamente.",
       "linkPlaceholder": "Pega cualquier enlace: publicación de Hive, Instagram, X, YouTube, artículo…",
       "fetching": "Obteniendo vista previa…",
-      "noPreview": "No se encontró vista previa; igual se mostrará como tarjeta de enlace.",
+      "noPreview": "No se encontró vista previa. Igual se mostrará como tarjeta de enlace.",
       "pasteHint": "Pega un enlace y traeremos su título, descripción e imagen."
     },
     "style": {
@@ -296,8 +296,8 @@
     "openPage": "Abrir página",
     "templates": {
       "title": "Plantillas",
-      "hint": "Elige un diseño para completarlo todo; tu biografía se conserva y puedes deshacerlo.",
-      "undo": "Deshacer plantilla: volver a mi diseño"
+      "hint": "Elige un diseño para completarlo todo. Tu biografía se conserva y puedes deshacerlo.",
+      "undo": "Deshacer plantilla y volver a mi diseño"
     },
     "profile": {
       "title": "Perfil",

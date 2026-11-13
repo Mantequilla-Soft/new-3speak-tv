@@ -1,70 +1,60 @@
-.login-btn-primary {
-    width: 100%;
-    color: var(--accent-primary, #e53935);
-    background-color: transparent;
-    padding: 12px 20px;
-    border-radius: 15px;
-    border: 1px solid var(--accent-primary, #e53935);
+@use "../../styles/v2" as v2;
+
+// KeyChainLogin, the old /login page (not routed any more: /login opens the
+// login window). Same look as that window's right half (07e): a card with the
+// handle field, the wallets as choice cards and the accounts used here.
+.kcl-page {
+  display: grid;
+  place-items: center;
+  min-height: 80vh;
+  min-height: 80dvh;
+  // The app column (.container, App.css) already gives the page padding.
+  padding: 0;
+}
+
+.kcl-card {
+  width: min(420px, 100%);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.kcl-mark { width: 40px; height: 40px; display: block; }
+
+.kcl-title { margin: 0; @include v2.text(heading-lg); }
+
+.kcl-handle {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 48px;
+  padding: 0 14px;
+  border: 2px solid transparent;
+  border-radius: var(--r-lg);
+  background: var(--bg);
+  cursor: text;
+  &:focus-within { border-color: var(--accent); }
+  > span { color: var(--muted); font-size: 16px; }
+  input {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    padding: 0;
+    border: 0;
+    outline: none;
+    background: transparent;
+    color: var(--text);
+    font: inherit;
     font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-    margin-top: 10px;
-
-    &:hover {
-        background-color: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent);
-        border-color: var(--accent-primary, #e53935);
-        color: var(--accent-primary, #e53935);
-    }
+    &::placeholder { color: var(--muted); }
+  }
 }
 
-.legacy-options {
-    margin-top: 15px;
-    padding-top: 15px;
-    border-top: 1px solid rgba(128, 128, 128, 0.3);
-    font-size: 12px;
-    opacity: 0.8;
-}
+.v2-choices.is-grid.kcl-wallets { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 
-.switch-acct-wrapper{
-    margin: 20px;
-    padding: 6px 10px;
-    border-radius: 8px;
-    max-width: 100%;
-    
-    box-shadow: 3px 2px 10px 0px rgba(0, 0, 0, 0.2509803922);
-    h3{
-        font-size: 14px;
-        margin-bottom: 4px;
-        color: grey;
-    }
+.kcl-email { align-self: flex-start; }
 
-    .list-acct-wrap{
-        display: flex;
-        gap: 10px;
-        flex-wrap: wrap;
-        justify-content: center;
-        align-items: center;
-        .wrap{
-            display: flex;
-            align-items: center;
-            width: fit-content;
-            padding: 5px 10px;
-            border-radius: 8px;
-            gap: 6px;
-            // background-color: aqua;
-            box-shadow: 3px 2px 10px 0px rgba(0, 0, 0, 0.2509803922);
-            cursor: pointer;
-            color: black;
-            img{
-                width: 20px;
-                height: 20px;
-                border-radius: 50%;
-            }
-            span{
-                font-size: 14px;
-            }
-        }
-    }
-
-}
+.kcl-accounts { display: flex; flex-direction: column; gap: 6px; }
+.kcl-accounts__list { display: flex; flex-wrap: wrap; gap: 6px; }
+.kcl-account { display: inline-flex; align-items: center; gap: 2px; }
+.kcl-account img { width: 20px; height: 20px; border-radius: 50%; object-fit: cover; }

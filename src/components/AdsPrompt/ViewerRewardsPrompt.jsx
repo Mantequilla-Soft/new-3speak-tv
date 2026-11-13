@@ -8,7 +8,7 @@ import { fetchAdAccess, fetchViewerAdPrefs, setViewerAdPrefs, setListenerAdPrefs
 import { resetViewerRewards } from '../../utils/viewerRewards';
 import { usePromptsActive, setPromptActive } from '../../utils/welcomeGate';
 import { isAdvertiserAccount } from '../../utils/advertiserAccount';
-import ModalHeader from '../ModalHeader/ModalHeader';
+import { Dialog, Button } from '../v2/ui';
 import './AdsPrompt.scss';
 
 // Every toast from this module is headed "Advertising"; the message becomes the
@@ -115,54 +115,42 @@ export default function ViewerRewardsPrompt() {
 
   if (!open) return null;
 
-  if (open === 'listen') {
-    return (
-      <div className="ads-prompt-overlay">
-        <div className="ads-prompt" role="dialog" aria-modal="true" aria-labelledby="listener-rewards-title">
-          <ModalHeader title={t('ads.listenPrompt.title')} titleId="listener-rewards-title" />
-          <p className="ads-prompt-text">{t('ads.listenPrompt.text')}</p>
-          <p className="ads-prompt-note">{t('ads.listenPrompt.note')}</p>
-          <div className="ads-prompt-actions">
-            <button type="button" className="ads-prompt-ghost" onClick={() => answer(false)} disabled={saving}>
-              {t('ads.viewerPrompt.noThanks')}
-            </button>
-            <button type="button" className="ads-prompt-primary" onClick={() => answer(true)} disabled={saving}>
-              {saving ? t('common.actions.saving') : t('ads.listenPrompt.yes')}
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
+  const listen = open === 'listen';
+  // No X and no backdrop close: both ways out record an answer (yes or no), and
+  // closing without one would only bring the question back.
+  // Design 47d: the title, one muted paragraph, then No thanks | Yes side by side
+  // (cyan for listening). The consent fine print stays under the paragraph.
   return (
-    <div className="ads-prompt-overlay">
-      <div className="ads-prompt" role="dialog" aria-modal="true" aria-labelledby="viewer-rewards-title">
-        {/* No X: both ways out record an answer (yes or no), and closing without
-            one would only bring the question back. */}
-        <ModalHeader title={t('ads.viewerPrompt.titleBoth')} titleId="viewer-rewards-title" />
-        <p className="ads-prompt-lede">
-          <Trans i18nKey="ads.viewerPrompt.lede" components={{ b: <strong /> }} />
-        </p>
-
-        <p className="ads-prompt-text">
-          {t('ads.viewerPrompt.text')}
-        </p>
-        <p className="ads-prompt-note">
-          {t('ads.viewerPrompt.listenNote')}
-        </p>
-        <p className="ads-prompt-note">
-          {t('ads.viewerPrompt.note')}
-        </p>
-        <div className="ads-prompt-actions">
-          <button type="button" className="ads-prompt-ghost" onClick={() => answer(false)} disabled={saving}>
+    <Dialog
+      open
+      dismissible={false}
+      title={listen ? t('ads.listenPrompt.title') : t('ads.viewerPrompt.titleBoth')}
+      width={460}
+      className="ads-prompt-v2 ads-prompt-v2--answer"
+      footer={(
+        <>
+          <Button variant="secondary" size={44} onClick={() => answer(false)} disabled={saving}>
             {t('ads.viewerPrompt.noThanks')}
-          </button>
-          <button type="button" className="ads-prompt-primary" onClick={() => answer(true)} disabled={saving}>
-            {saving ? t('common.actions.saving') : t('ads.viewerPrompt.yes')}
-          </button>
-        </div>
-      </div>
-    </div>
+          </Button>
+          <Button variant={listen ? 'cyan' : 'primary'} size={44} className="ads-prompt-v2__main" onClick={() => answer(true)} disabled={saving} loading={saving}>
+            {saving ? t('common.actions.saving') : listen ? t('ads.listenPrompt.yes') : t('ads.viewerPrompt.yes')}
+          </Button>
+        </>
+      )}
+    >
+      {listen ? (
+        <>
+          <p className="ads-prompt-v2__lede">{t('ads.listenPrompt.text')}</p>
+          <p className="v2-meta-sm">{t('ads.listenPrompt.note')}</p>
+        </>
+      ) : (
+        <>
+          <p className="ads-prompt-v2__lede">
+            <Trans i18nKey="ads.viewerPrompt.lede" components={{ b: <span /> }} />
+          </p>
+          <p className="v2-meta-sm">{t('ads.viewerPrompt.note')}</p>
+        </>
+      )}
+    </Dialog>
   );
 }

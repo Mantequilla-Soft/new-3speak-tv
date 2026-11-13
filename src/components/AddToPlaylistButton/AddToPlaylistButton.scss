@@ -1,27 +1,29 @@
+@use "../../styles/v2" as v2;
+
+// "Add to playlist" over a thumbnail (recommended list): a scrim icon button in
+// the top-left corner, shown on hover by the card.
 .add-to-playlist-btn {
   position: absolute;
   top: 8px;
   left: 8px;
+  z-index: 3;
+  display: grid;
+  place-items: center;
   width: 32px;
   height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(0, 0, 0, 0.75);
-  backdrop-filter: blur(4px);
-  border: none;
-  border-radius: 6px;
-  color: white;
+  padding: 0;
+  border: 0;
+  border-radius: var(--r-sm);
+  background: var(--media-scrim);
+  color: var(--on-media);
   cursor: pointer;
   opacity: 0;
-  transform: translateY(-5px);
-  transition: all 0.2s ease;
-  z-index: 3;
+  transform: translateY(-4px);
+  transition: opacity var(--t-fast) var(--ease), transform var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
 
   &:hover {
-    background: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent);
-    box-shadow: inset 0 0 0 1px var(--accent-primary, #e53935);
-    color: var(--accent-primary, #e53935);
+    background: var(--media-scrim-strong);
+    color: var(--on-media);
     transform: translateY(0);
   }
 

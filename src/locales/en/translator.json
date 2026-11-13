@@ -8,7 +8,7 @@
     "contribute": "How to contribute translations"
   },
   "verify": {
-    "body": "Confirm your Hive account to open the editor. Your wallet will ask you to approve a sign-in.",
+    "body": "Invited? Confirm your Hive account to open the editor.",
     "button": "Confirm account",
     "failed": "Could not confirm your account."
   },
@@ -51,9 +51,9 @@
   "add": {
     "title": "Add a language",
     "code": "Language code",
-    "codeHint": "Two or three lowercase letters (ISO 639), optionally with a region: nl, fil, pt-BR",
+    "codeHint": "Two or three lowercase letters (ISO 639), optionally with a region",
     "native": "Name in the language itself",
-    "nativeHint": "This is what people see in the language menu, e.g. Nederlands",
+    "nativeHint": "What people see in the language menu",
     "english": "Name in English",
     "rtl": "Written right-to-left (Arabic, Hebrew, Persian, Urdu…)",
     "submit": "Add language",
@@ -67,6 +67,7 @@
     "checkboxFor": "Mark {{key}} as proofread",
     "checkedBy": "Checked by @{{user}}, {{when}}",
     "notChecked": "Tick once you have checked this translation",
+    "notCheckedShort": "Not checked",
     "noText": "Nothing to proofread: this string has no translation yet",
     "saveFirst": "Save your edit first. Saving marks the string as proofread.",
     "changed": "changed since check",

@@ -1,14 +1,15 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useId, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import axios from 'axios';
-import { LineSpinner } from 'ldrs/react';
-import 'ldrs/react/LineSpinner.css';
+import { Button, ChoiceCard, Field, Banner, Icon } from '../v2/ui';
 import { isAccountValid } from '../../hive-api/api';
 import { queueSupport, recordSupport, dropPendingSupport } from '../../lib/supports';
 import { CHECKER_URL } from '../../utils/config';
 import { toastIn } from '../../utils/toast';
 import { recurrentTransferOp, findMonthlySupport, MONTH_HOURS, isMonthly } from '../../lib/recurringTip';
 import MonthlyField from './MonthlyField';
+import { TIP_PRESETS } from './tipPresets';
+import { cx } from '../v2/helpers';
 
 const toast = toastIn('Tip');
 
@@ -44,6 +45,7 @@ const readLastUser = () => {
  */
 export default function WalletTip({ recipient, permlink, memoLink, onSent, onClose }) {
   const { t } = useTranslation();
+  const uid = useId();
   const [stage, setStage] = useState('details'); // details | wallet | hivesigner
   const [user, setUser] = useState(readLastUser);
   const [amount, setAmount] = useState('');
@@ -163,25 +165,25 @@ export default function WalletTip({ recipient, permlink, memoLink, onSent, onClo
     return () => { stopped = true; clearTimeout(timer); };
   }, [stage, pending]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  const spin = <Icon name="progress_activity" size={18} className="v2-spin" />;
+
   if (stage === 'hivesigner') {
     return (
-      <div className="tip-modal-in">
-        <div className="lightning-invoice">
-          <p className="tip-method-note">{t('engagement.tip.wallet.waitingHiveSigner')}</p>
-          {pending && (
-            <p className="lightning-waiting">
-              <LineSpinner size="12" stroke="2" speed="1" color="currentColor" />
-              {t('engagement.tip.lightning.waiting')}
-            </p>
-          )}
-          <div className="lightning-links">
-            <button type="button" className="lightning-done" onClick={() => setStage('wallet')}>
-              {t('engagement.tip.lightning.back')}
-            </button>
-            <button type="button" className="lightning-done" onClick={onClose}>
-              {t('engagement.tip.lightning.done')}
-            </button>
-          </div>
+      <div className="tip-v2__invoice">
+        <p className="v2-meta">{t('engagement.tip.wallet.waitingHiveSigner')}</p>
+        {pending && (
+          <p className="tip-v2__waiting">
+            {spin}
+            {t('engagement.tip.lightning.waiting')}
+          </p>
+        )}
+        <div className="tip-v2__links">
+          <Button variant="ghost" size={40} icon="arrow_back" onClick={() => setStage('wallet')}>
+            {t('engagement.tip.lightning.back')}
+          </Button>
+          <Button variant="ghost" size={40} onClick={onClose}>
+            {t('engagement.tip.lightning.done')}
+          </Button>
         </div>
       </div>
     );
@@ -191,87 +193,87 @@ export default function WalletTip({ recipient, permlink, memoLink, onSent, onClo
     const keychain = typeof window !== 'undefined' && !!window.hive_keychain;
     const peakvault = typeof window !== 'undefined' && !!window.peakvault;
     return (
-      <div className="tip-modal-in">
-        <div className="form">
-          <p className="tip-method-note">
-            {t('engagement.tip.wallet.signWith', { amount: value.toFixed(3), currency, user: tipper, recipient })}
-          </p>
-          {months > 0 && <p className="tip-method-note">{t('engagement.tip.monthly.note')}</p>}
-          {months > 0 && existing && <p className="tip-method-note">{t(isMonthly(existing) ? 'engagement.tip.monthly.replaces' : 'engagement.tip.monthly.replacesOther', { recipient })}</p>}
-          <div className="wallet-choices">
-            {keychain && (
-              <button type="button" className="send-btn" onClick={payKeychain} disabled={!!busy}>
-                {busy === 'keychain' ? <LineSpinner size="14" stroke="2" speed="1" color="currentColor" /> : 'Hive Keychain'}
-              </button>
-            )}
-            {peakvault && (
-              <button type="button" className="send-btn" onClick={payPeakVault} disabled={!!busy}>
-                {busy === 'peakvault' ? <LineSpinner size="14" stroke="2" speed="1" color="currentColor" /> : 'PeakVault'}
-              </button>
-            )}
-            <button type="button" className="send-btn" onClick={payHiveSigner} disabled={!!busy}>HiveSigner</button>
-          </div>
-          {!keychain && !peakvault && <p className="tip-method-note">{t('engagement.tip.wallet.noExtension')}</p>}
-          <div className="lightning-links">
-            <button type="button" className="lightning-done" onClick={() => setStage('details')}>
-              {t('engagement.tip.lightning.back')}
-            </button>
-          </div>
+      <div className="tip-v2__form">
+        <p className="v2-meta">
+          {t('engagement.tip.wallet.signWith', { amount: value.toFixed(3), currency, user: tipper, recipient })}
+        </p>
+        {months > 0 && <p className="v2-meta-sm">{t('engagement.tip.monthly.note')}</p>}
+        {months > 0 && existing && <p className="v2-meta-sm">{t(isMonthly(existing) ? 'engagement.tip.monthly.replaces' : 'engagement.tip.monthly.replacesOther', { recipient })}</p>}
+        <div className="tip-v2__wallets" role="group">
+          {keychain && (
+            <ChoiceCard role="button" tone="cyan" selected={busy === 'keychain'} icon={busy === 'keychain' ? spin : 'key'} disabled={!!busy} onClick={payKeychain}
+              title="Hive Keychain" />
+          )}
+          {peakvault && (
+            <ChoiceCard role="button" tone="cyan" selected={busy === 'peakvault'} icon={busy === 'peakvault' ? spin : 'account_balance_wallet'} disabled={!!busy} onClick={payPeakVault}
+              title="PeakVault" />
+          )}
+          <ChoiceCard role="button" tone="cyan" icon="open_in_new" disabled={!!busy} onClick={payHiveSigner}
+            title="HiveSigner" />
+        </div>
+        {!keychain && !peakvault && <Banner tone="info">{t('engagement.tip.wallet.noExtension')}</Banner>}
+        <div className="tip-v2__links">
+          <Button variant="ghost" size={40} icon="arrow_back" onClick={() => setStage('details')}>
+            {t('engagement.tip.lightning.back')}
+          </Button>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="tip-modal-in">
-      <div className="form">
-        <div className="field">
-          <label>{t('engagement.tip.wallet.usernameLabel')}</label>
-          <input
-            type="text"
-            autoCapitalize="none"
-            autoCorrect="off"
-            spellCheck={false}
-            placeholder={t('engagement.tip.wallet.usernamePlaceholder')}
-            value={user}
-            onChange={(e) => setUser(e.target.value)}
-          />
-        </div>
-        <div className="field">
-          <label>{t('engagement.tip.amountLabel')}</label>
-          <input
-            type="number"
-            min="0"
-            step="0.001"
-            placeholder={t('engagement.tip.amountPlaceholder')}
-            value={amount}
-            onChange={(e) => setAmount(e.target.value)}
-          />
-        </div>
-        <div className="field">
-          <label>{t('engagement.tip.currencyLabel')}</label>
-          <select value={currency} onChange={(e) => setCurrency(e.target.value)}>
+    <div className="tip-v2__form">
+      <div className="tip-v2__quick" role="group" aria-label={t('engagement.tip.amountLabel')}>
+        {TIP_PRESETS.map((p) => {
+          const on = parseFloat(amount) === p.value;
+          return (
+            <button key={p.value} type="button" className={cx('tip-v2__pill', on && 'is-on')} aria-pressed={on} title={t(`engagement.tip.presets.${p.key}`)} onClick={() => setAmount(String(p.value))}>
+              <span className="num">{p.value}</span>
+            </button>
+          );
+        })}
+      </div>
+      <Field
+        label={t('engagement.tip.wallet.usernameLabel')}
+        type="text"
+        autoCapitalize="none"
+        autoCorrect="off"
+        spellCheck={false}
+        placeholder={t('engagement.tip.wallet.usernamePlaceholder')}
+        value={user}
+        onChange={(e) => setUser(e.target.value)}
+      />
+      <div className="tip-v2__row">
+        <Field
+          className="tip-v2__amount"
+          label={t('engagement.tip.amountLabel')}
+          type="number"
+          inputMode="decimal"
+          min="0"
+          step="0.001"
+          placeholder={t('engagement.tip.amountPlaceholder')}
+          value={amount}
+          onChange={(e) => setAmount(e.target.value)}
+        />
+        <Field label={t('engagement.tip.currencyLabel')} className="tip-v2__currency" id={`${uid}-currency`}>
+          <select id={`${uid}-currency`} className="v2-input is-select h48" value={currency} onChange={(e) => setCurrency(e.target.value)}>
             <option value="HIVE">HIVE</option>
             <option value="HBD">HBD</option>
           </select>
-        </div>
-        <MonthlyField months={months} onChange={setMonths} recipient={recipient} />
-        <div className="field">
-          <label>{t('engagement.tip.memoLabel')}</label>
-          <input
-            type="text"
-            placeholder={t('engagement.tip.memoPlaceholder')}
-            value={memo}
-            onChange={(e) => setMemo(e.target.value)}
-          />
-          {memoLink && <div className="memo-link-note">{t('engagement.tip.memoLinkNote', { link: memoLink })}</div>}
-        </div>
-        <div className="actions">
-          <button className="send-btn" onClick={goToWallet} disabled={!!busy}>
-            {busy === 'next' ? <LineSpinner size="14" stroke="2" speed="1" color="currentColor" /> : t('engagement.tip.wallet.next')}
-          </button>
-        </div>
+        </Field>
       </div>
+      <MonthlyField months={months} onChange={setMonths} recipient={recipient} />
+      <Field
+        label={t('engagement.tip.memoLabel')}
+        type="text"
+        placeholder={t('engagement.tip.memoPlaceholder')}
+        value={memo}
+        onChange={(e) => setMemo(e.target.value)}
+        hint={memoLink ? t('engagement.tip.memoLinkNote', { link: memoLink }) : undefined}
+      />
+      <Button variant="primary" size={48} block next onClick={goToWallet} disabled={!!busy} loading={busy === 'next'}>
+        {t('engagement.tip.wallet.next')}
+      </Button>
     </div>
   );
 }

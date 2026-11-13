@@ -31,7 +31,7 @@
   },
   "directory": {
     "title": "徽章",
-    "intro": "徽章是 Hive 上<b>由他人颁发给你</b>的奖励，用于表彰活动、贡献和里程碑。你无法主动加入：只能由别人颁发。打开一枚徽章，就能在这里观看其获得者发布的内容。",
+    "intro": "徽章是 Hive 上<b>由他人颁发给你</b>的奖励，用于表彰活动、贡献和里程碑。你无法主动加入：只能由别人颁发。",
     "searchPlaceholder": "搜索徽章...",
     "sort": {
       "recipients": "获得者",
@@ -54,6 +54,7 @@
     "awarding": "颁发中…",
     "held": "已拥有",
     "award": "颁发",
+    "awardNamed": "颁发“{{title}}”",
     "note": "徽章会在 Hive 上关注对方，这就是“拥有徽章”的含义。你可以在徽章自己的页面上收回它。"
   },
   "hive": {
@@ -80,8 +81,9 @@
     "noActivity": "该时间段内还没有活动",
     "otherTopics": "其他",
     "title": "排行榜",
-    "subtitle": "{{blurb}} — 3Speak 上的头部创作者。",
-    "subtitleTopic": "{{blurb}} — {{topic}} 领域的头部创作者。",
+    "subtitle": "{{blurb}}：3Speak 上的头部创作者。",
+    "explain": "{{label}}：{{blurb}}。",
+    "subtitleTopic": "{{blurb}}：{{topic}} 领域的头部创作者。",
     "allTopics": "全部话题",
     "finding": "正在榜单中查找 @{{user}}…",
     "notInTop": "@{{user}} 不在本榜单前 {{n}} 名中。",

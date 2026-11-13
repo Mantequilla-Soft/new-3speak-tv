@@ -76,6 +76,11 @@
     }
   },
   "reactionUpload": {
+    "title": "โพสต์วิดีโอรีแอ็กชัน",
+    "rec": "REC {{time}}",
+    "mic": "ไมค์",
+    "camera": "กล้อง",
+    "restart": "เริ่มใหม่",
     "authorized": "อนุญาต @threespeak แล้ว — ตอนนี้คุณโพสต์รีแอ็กชันได้แล้ว",
     "authFailed": "การอนุญาตไม่สำเร็จ โปรดลองอีกครั้ง",
     "webcamDenied": "เข้าถึงเว็บแคมไม่ได้",
@@ -89,7 +94,7 @@
     "uploadVideo": "อัปโหลดวิดีโอ",
     "recordVideo": "บันทึกวิดีโอ",
     "startRecording": "เริ่มบันทึก",
-    "stopRecording": "หยุดบันทึก",
+    "stopRecording": "หยุดและตรวจดู",
     "recordedVideo": "วิดีโอที่บันทึกไว้",
     "descriptionPlaceholder": "เพิ่มคำอธิบายสำหรับวิดีโอรีแอ็กชันของคุณ...",
     "showInShorts": "แสดงใน 3Speak Shorts",

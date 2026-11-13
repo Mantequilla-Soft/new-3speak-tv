@@ -16,7 +16,7 @@
       "upload": "Lượt tải lên của bạn thế nào?",
       "stream": "Buổi phát trực tiếp của bạn thế nào?",
       "watch": "Bạn thấy xem video trên 3Speak thế nào?",
-      "global": "Trải nghiệm 3Speak của bạn thế nào?",
+      "global": "3Speak mới thế nào?",
       "fallback": "Giúp chúng tôi làm 3Speak tốt hơn"
     },
     "stars": {
@@ -48,7 +48,7 @@
   },
   "live": {
     "vodProcessing": "Bản ghi đang được xử lý…",
-    "vodProcessingHint": "Buổi phát trực tiếp này đã kết thúc. Video sẽ thay thế tại đây ngay khi bộ mã hóa xử lý xong — không cần tải lại trang.",
+    "vodProcessingHint": "Video sẽ thay thế tại đây ngay khi bộ mã hóa xử lý xong. Không cần tải lại trang.",
     "watching_other": "👁 {{count}} người đang xem",
     "signInRaiseHand": "Đăng nhập để giơ tay",
     "signInChat": "Đăng nhập để chat",
@@ -103,11 +103,16 @@
     "atTime": "lúc {{time}}",
     "commentPlaceholder": "Viết bình luận của bạn tại đây...",
     "replyPlaceholder": "Viết phản hồi của bạn tại đây...",
+    "joinPlaceholder": "Tham gia thảo luận…",
     "commentButton": "Bình luận",
     "count_other": "{{count}} bình luận",
+    "replies_other": "{{count}} phản hồi",
     "edited": "(đã chỉnh sửa)",
     "hideComment": "Ẩn bình luận",
     "showComment": "Hiện bình luận của @{{user}}",
+    "hiddenComment": "Bình luận bị ẩn",
+    "hiddenLowScore": "Bình luận bị cộng đồng ẩn · điểm thấp",
+    "show": "Hiện",
     "saving": "Đang lưu...",
     "translation": "Bản dịch",
     "translationFailed": "Dịch thất bại. Dịch vụ dịch có đang chạy không?",
@@ -132,6 +137,9 @@
     "uploadingImage": "Đang tải hình ảnh lên",
     "write": "Viết",
     "preview": "Xem trước",
-    "nothingToPreview": "Chưa có gì để xem trước"
+    "nothingToPreview": "Chưa có gì để xem trước",
+    "creator": "Nhà sáng tạo",
+    "empty": "Chưa có bình luận nào",
+    "emptyHint": "Bình luận gắn với một khoảnh khắc sẽ hiện trên dòng thời gian của video."
   }
 }

@@ -1,179 +1,64 @@
-@use "../../mixins.scss" as mix;
+@use "../../styles/v2" as v2;
 
-.evh-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.6);
-  z-index: 1100;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+// The edit-video hint (design 19g / 43b): a cyan hint card. The pen in a cyan
+// icon well, the title 16/900, one muted sentence and "Got it" in cyan. The
+// dialog head stays for screen readers and the X; the card carries the title.
+.evh-content.v2-dialog__panel {
+  position: relative;
+  background: color-mix(in srgb, var(--cyan) 10%, var(--surface));
+  border-color: color-mix(in srgb, var(--cyan) 35%, transparent);
 
-  @include mix.respond(phone) {
-    align-items: flex-end;
+  > .app-modal-header {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 12px;
+    .app-modal-header-title { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
   }
+  > .v2-dialog__body { padding: 18px; }
 }
 
 .evh-content {
-  position: relative;
-  background: var(--card-bg, #fff);
-  color: var(--text-primary, #000);
-  border-radius: 14px;
-  padding: 20px 24px 24px;
-  width: 460px;
-  max-width: 95vw;
-  text-align: center;
+  .evh-card { display: flex; gap: 14px; padding-right: 32px; }
 
-  @include mix.respond(phone) {
-    width: 100%;
-    max-width: 100%;
-    border-radius: 16px 16px 0 0;
-    padding: 24px 16px;
-    padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px));
-    animation: modal-slide-up 0.3s ease forwards;
+  .evh-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--r-lg);
+    background: var(--cyan);
+    color: var(--bg);
+    display: grid;
+    place-items: center;
+    flex: none;
+  }
+
+  .evh-body { display: flex; flex-direction: column; align-items: flex-start; min-width: 0; }
+  .evh-title { font-size: 16px; font-weight: 900; line-height: 1.3; }
+
+  .evh-text {
+    margin: 4px 0 0;
+    @include v2.text(body-sm);
+    line-height: 1.45;
+    color: var(--muted);
+
+    strong { color: var(--text); font-weight: 700; }
+  }
+
+  .evh-got {
+    margin-top: 10px;
+    padding: 0;
+    min-height: 24px;
+    border: 0;
+    background: transparent;
+    color: var(--cyan);
+    font: inherit;
+    @include v2.text(body-sm);
+    font-weight: 900;
+    cursor: pointer;
+    &:hover { text-decoration: underline; }
   }
 }
 
-.evh-content .app-modal-header {
-  text-align: left;
-}
-
-.evh-text {
-  font-size: 14.5px;
-  line-height: 1.55;
-  color: var(--text-secondary, #555);
-  margin: 0 0 20px;
-}
-
-// ---- Mocked action row ----
-.evh-mock {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 10px;
-  padding: 18px 14px;
-  border-radius: 12px;
-  background: var(--bg-secondary, #f6f6f6);
-  margin-bottom: 14px;
-}
-
-.evh-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  background: var(--bg-tertiary, #e9e9e9);
-  color: var(--text-secondary, #666);
-  flex: 0 0 auto;
-
-  &--tip {
-    width: auto;
-    padding: 0 16px;
-    border-radius: 19px;
-    font-size: 14px;
-    font-weight: 600;
-    color: #fff;
-    background-image: linear-gradient(90deg, rgb(141, 11, 33) 15%, rgb(227, 19, 55) 97%);
-  }
-
-  // The highlighted pen button: clipped shimmer sweep + a pulsing scale, plus a
-  // glowing ring so it clearly stands out from the decorative siblings.
-  &--pen {
-    position: relative;
-    overflow: hidden;
-    color: #fff;
-    background-image: linear-gradient(90deg, rgb(141, 11, 33) 15%, rgb(227, 19, 55) 97%);
-    box-shadow: 0 0 0 0 rgba(227, 19, 55, 0.55);
-    transform-origin: center;
-    animation: evh-pulse 1.8s ease-in-out infinite;
-    z-index: 1;
-  }
-}
-
-.evh-shimmer {
-  position: absolute;
-  top: 0;
-  left: -120%;
-  width: 80%;
-  height: 100%;
-  background: linear-gradient(
-    100deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.65) 50%,
-    transparent 100%
-  );
-  transform: skewX(-20deg);
-  animation: evh-shimmer 1.8s ease-in-out infinite;
-}
-
-.evh-caption {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  font-size: 13px;
-  color: var(--text-secondary, #777);
-  margin: 0 0 20px;
-
-  .evh-caption-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: rgb(227, 19, 55);
-    animation: evh-blink 1.8s ease-in-out infinite;
-  }
-}
-
-.evh-actions {
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-
-  @include mix.respond(phone) {
-    flex-direction: column-reverse;
-  }
-}
-
-.evh-cta {
-  padding: 9px 22px;
-  border: none;
-  border-radius: 9px;
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
-
-  &--primary {
-    color: #fff;
-    background-image: linear-gradient(90deg, rgb(141, 11, 33) 15%, rgb(227, 19, 55) 97%);
-  }
-}
-
-@keyframes evh-pulse {
-  0%, 100% {
-    transform: scale(1);
-    box-shadow: 0 0 0 0 rgba(227, 19, 55, 0.5);
-  }
-  50% {
-    transform: scale(1.18);
-    box-shadow: 0 0 0 8px rgba(227, 19, 55, 0);
-  }
-}
-
-@keyframes evh-shimmer {
-  0% { left: -120%; }
-  60%, 100% { left: 120%; }
-}
-
-@keyframes evh-blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.3; }
-}
-
-// Respect reduced-motion preferences — keep the highlight, drop the motion.
-@media (prefers-reduced-motion: reduce) {
-  .evh-btn--pen { animation: none; }
-  .evh-shimmer { animation: none; display: none; }
-  .evh-caption-dot { animation: none; }
+@include v2.mobile {
+  .evh-content .evh-got { min-height: 44px; }
 }

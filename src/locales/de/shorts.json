@@ -17,7 +17,8 @@
       "rep": "Rep {{rep}}",
       "repTitle": "Hive-Reputation",
       "viewProfile": "Profil ansehen"
-    }
+    },
+    "replyTo": "Antworte {{user}}…"
   },
   "errors": {
     "votingUnavailable": "Voten ist für diesen Post nicht verfügbar",
@@ -31,7 +32,7 @@
     "interestsTitle": "Nur Shorts, die zu deinen Interessen passen",
     "pickInterestsFirst": "Wähle zuerst ein paar Interessen",
     "noInterests": "Du hast noch keine Interessen ausgewählt – wähle sie in den Einstellungen",
-    "interestsExhausted": "Das waren alle Shorts zu deinen Interessen – jetzt kommt Entdecken",
+    "interestsExhausted": "Das waren alle Shorts zu deinen Interessen. Jetzt kommt Entdecken.",
     "noInterestMatches": "Gerade passen keine Shorts zu deinen Interessen.",
     "switchToDiscover": "Zu Entdecken wechseln",
     "empty": "Keine Shorts verfügbar",
@@ -40,12 +41,18 @@
   "glow": {
     "subtle": "Umgebungslicht: dezent",
     "vivid": "Umgebungslicht: kräftig",
-    "off": "Umgebungslicht: aus"
+    "off": "Umgebungslicht: aus",
+    "label": "Umgebungslicht",
+    "offShort": "Aus",
+    "subtleShort": "Dezent",
+    "vividShort": "Kräftig"
   },
   "playbackMode": {
     "autoReplay": "Auto-Wiederholen",
     "autoSwipe": "Auto-Swipe",
-    "manual": "Manuell"
+    "manual": "Manuell",
+    "label": "Wiedergabe",
+    "options": "Wiedergabeoptionen"
   },
   "subtitles": {
     "off": "Aus"
@@ -83,7 +90,7 @@
     "noUrl": "Video-URL für den Remix konnte nicht ermittelt werden",
     "loadFailed": "Video für den Remix konnte nicht geladen werden",
     "chainFull": "Dieses Video baut schon auf {{max}} früheren Videos auf und kann nicht mehr geremixt werden.",
-    "chainNoSlots": "Diese Remix-Kette bezahlt schon so viele Creator, dass für einen Remix auf Hive kein Platz mehr bleibt. Mit 3Speak Pro kannst du es trotzdem remixen."
+    "chainNoSlots": "Diese Kette bezahlt schon so viele Creator, dass für einen Remix auf Hive kein Platz mehr bleibt. Mit 3Speak Pro kannst du sie trotzdem remixen."
   },
   "watchLater": {
     "loginRequired": "Melde dich an, um Shorts zu speichern",
@@ -100,7 +107,7 @@
     "postRemoved": "Der Hive-Post zu diesem Short wurde entfernt, daher sind keine Kommentare oder Votes mehr möglich.",
     "beFirst": "Schreib den ersten Kommentar!",
     "unavailable": "Kommentare sind für diesen Post nicht verfügbar",
-    "addPlaceholder": "Kommentar hinzufügen...",
+    "addPlaceholder": "Diskutier mit…",
     "addPlaceholderBar": "Kommentar hinzufügen…",
     "loginPlaceholder": "Melde dich an, um zu kommentieren",
     "send": "Kommentar senden",
@@ -130,7 +137,7 @@
     "seenNote": "Angemeldete Zuschauer, die ihren Wiedergabeverlauf eingeschaltet haben.",
     "seenEmpty": "Noch hat sie niemand gesehen.",
     "keep": "Als Short behalten",
-    "keepHint": "Bleibt nach den 24 Stunden auf deinem Kanal",
+    "keepHint": "Sie bleibt nach den 24 Stunden auf deinem Kanal.",
     "keepConfirm": "Für immer behalten?",
     "keepYes": "Behalten",
     "keeping": "Wird behalten…",
@@ -141,5 +148,9 @@
   "audiogram": {
     "fullEpisode": "Ganze Folge",
     "listen": "Die ganze Folge anhören: {{title}}"
+  },
+  "panel": {
+    "discussion": "Diskussion",
+    "upNext": "Als Nächstes"
   }
 }

@@ -19,10 +19,71 @@ const versionFile = () => ({
   },
 });
 
+// Preload the icon font (src/styles/material-symbols.css). Without it the
+// browser only finds the font after the CSS is parsed and the first icon is
+// laid out, and `font-display: block` keeps every icon blank until then.
+const preloadIconFont = () => ({
+  name: "3speak-preload-icon-font",
+  apply: "build",
+  transformIndexHtml: {
+    order: "post",
+    handler(html, ctx) {
+      const font = Object.keys(ctx.bundle || {}).find((f) => /material-symbols-rounded-subset-[^/]*\.woff2$/.test(f));
+      if (!font) throw new Error("preloadIconFont: subset icon font missing from the bundle");
+      return [{ tag: "link", attrs: { rel: "preload", href: `/${font}`, as: "font", type: "font/woff2", crossorigin: "" }, injectTo: "head-prepend" }];
+    },
+  },
+});
+
+// Landing straight on a video (a shared /@author/permlink link) or on /shorts:
+// start downloading that page's code, the player and hls.js included, together
+// with the app itself. Without this the browser only learns it needs them once
+// the app has booted and the route asks, one wait after the other. (The player
+// used to sit in the first download of EVERY page; it is code-split now so the
+// home page is lighter, and this keeps these two pages as quick as before.)
+const ROUTE_PRELOADS = [
+  { path: "^/@[^/]+/[^/]+/?$", module: "src/page/Watch.jsx" },
+  { path: "^/shorts/?$", module: "src/page/Short.jsx" },
+];
+const preloadRouteChunks = () => ({
+  name: "3speak-preload-route-chunks",
+  apply: "build",
+  transformIndexHtml: {
+    order: "post",
+    handler(html, ctx) {
+      const bundle = ctx.bundle || {};
+      const chunks = Object.values(bundle).filter((c) => c.type === "chunk");
+      // Already preloaded by Vite for every page: the entry and its static imports.
+      const boot = new Set();
+      const walk = (file, into) => {
+        if (into.has(file)) return;
+        into.add(file);
+        for (const dep of bundle[file]?.imports || []) walk(dep, into);
+      };
+      for (const c of chunks) if (c.isEntry) walk(c.fileName, boot);
+      const map = ROUTE_PRELOADS.map(({ path, module }) => {
+        const chunk = chunks.find((c) => c.facadeModuleId?.replaceAll("\\", "/").endsWith(module));
+        if (!chunk) throw new Error(`preloadRouteChunks: no chunk for ${module}`);
+        const files = new Set();
+        walk(chunk.fileName, files);
+        const js = [...files].filter((f) => !boot.has(f));
+        const css = [...new Set(js.flatMap((f) => [...(bundle[f].viteMetadata?.importedCss || [])]))];
+        return [path, js, css];
+      });
+      const script = `(function(){try{var m=${JSON.stringify(map)},p=location.pathname;for(var i=0;i<m.length;i++){if(!new RegExp(m[i][0]).test(p))continue;`
+        + `m[i][1].forEach(function(f){var l=document.createElement('link');l.rel='modulepreload';l.href='/'+f;document.head.appendChild(l);});`
+        + `m[i][2].forEach(function(f){var l=document.createElement('link');l.rel='preload';l.as='style';l.href='/'+f;document.head.appendChild(l);});break;}}catch(e){}})();`;
+      return [{ tag: "script", children: script, injectTo: "head" }];
+    },
+  },
+});
+
 export default defineConfig({
   plugins: [
     react(),
     versionFile(),
+    preloadIconFont(),
+    preloadRouteChunks(),
     nodePolyfills({
       // Include all modules needed by keychain-sdk and hive crypto libraries
       include: [
@@ -256,6 +317,9 @@ export default defineConfig({
           }
 
           // Wallet adapters: only needed once a user actually authenticates.
+          // Not the Ledger app (+ its tx digest): aioha imports those on demand,
+          // and forcing them in here put ~125 KB into every first page load.
+          if (/[\\/]node_modules[\\/]@aioha[\\/](ledger-app-hive|tx-digest)[\\/]/.test(id)) return;
           if (
             /[\\/]node_modules[\\/](@aioha|aioha|keychain-sdk|hive-auth-wrapper|@metamask)[\\/]/.test(id)
           ) {
@@ -271,7 +335,7 @@ export default defineConfig({
   },
 
   server: {
-    allowedHosts: ["3speak.okinoko.io", "preview.3speak.tv"],
+    allowedHosts: ["3speak.okinoko.io", "preview.3speak.tv", "facelift-3speak.okinoko.io"],
     // preview.3speak.tv is a PUBLIC dev server, so scanners probe it for secrets
     // (.env, .git/config, .htaccess …). Vite's own deny list already covers most
     // of those, but `.htaccess` sits inside the project root with no extension it

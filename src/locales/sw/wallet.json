@@ -9,7 +9,7 @@
     "needKeychain": "Unahitaji kiendelezi cha Keychain ili kutuma"
   },
   "header": {
-    "mine": "Pochi YANGU",
+    "mine": "Pochi yangu",
     "ofUser": "Pochi ya {{user}}"
   },
   "assets": "Mali",
@@ -28,7 +28,16 @@
     "recipientPlaceholder": "Weka jina la mtumiaji la Hive",
     "memoLabel": "Memo",
     "memoPlaceholder": "Andika memo",
-    "confirm": "Thibitisha kutuma"
+    "confirm": "Thibitisha kutuma",
+    "sendTo": "Tuma {{amount}} {{coin}} kwa @{{to}}",
+    "sendAmount": "Tuma {{amount}} {{coin}}",
+    "recent": "Za hivi karibuni",
+    "activeKey": "Inahitaji active key yako",
+    "available": "Inapatikana: {{balance}}",
+    "scan": "Changanua msimbo wa QR",
+    "scanHint": "Elekeza kamera kwenye msimbo wa QR wa mtu mwingine.",
+    "scanNoAccount": "Msimbo huu wa QR hauna akaunti ya Hive. Jaribu mwingine.",
+    "scanNoCamera": "Kamera haikuweza kufunguliwa. Hakikisha 3Speak inaruhusiwa kuitumia."
   },
   "history": {
     "loadFailed": "Imeshindwa kupakia miamala",
@@ -46,5 +55,51 @@
       "received": "Imepokelewa"
     },
     "claimedRewards": "Zawadi zilizodaiwa"
+  },
+  "total": "Jumla ya salio",
+  "rate": "HIVE 1 = {{price}}",
+  "pro": "Pro",
+  "coins": {
+    "hp": "Hive Power",
+    "savings": "Akiba ya HBD"
+  },
+  "claim": {
+    "ready": "{{amount}} tayari kudaiwa",
+    "readyShort": "{{amount}} za kudai",
+    "button": "Dai",
+    "done": "Zawadi zimedaiwa",
+    "failed": "Kudai kumeshindwa: {{error}}"
+  },
+  "activity": {
+    "title": "Shughuli",
+    "filters": {
+      "all": "Zote",
+      "rewards": "Zawadi",
+      "received": "Zilizopokelewa",
+      "sent": "Zilizotumwa"
+    },
+    "from": "Kutoka kwa @{{user}}",
+    "sentTo": "Imetumwa kwa @{{user}}",
+    "emptyTitle": "Bado hakuna kitu hapa",
+    "empty": "Uhamisho na zawadi ulizodai huonekana hapa."
+  },
+  "earnings": {
+    "title": "Mapato, siku 30",
+    "sub": "Zawadi ulizodai na HIVE au HBD uliyopokea"
+  },
+  "rc": {
+    "title": "Resource Credits",
+    "sub": "Kila kitendo kwenye Hive hutumia baadhi. Hujaa tena baada ya takriban siku 5.",
+    "posts_one": "Inatosha kwa takriban chapisho {{count}} kwa sasa",
+    "posts_other": "Inatosha kwa takriban machapisho {{count}} kwa sasa"
+  },
+  "receive": {
+    "title": "Pokea",
+    "sub": "Mtu yeyote anaweza kutuma HIVE au HBD kwa jina hili la akaunti kutoka pochi yoyote ya Hive. Hakuna haja ya memo.",
+    "amountLabel": "Omba kiasi (si lazima)",
+    "memoLabel": "Memo (si lazima)",
+    "memoPlaceholder": "Ni kwa ajili ya nini, kama namba ya ankara",
+    "subRequest": "Kuchanganua msimbo huu kunaomba {{amount}} {{coin}}. 3Speak na pochi za Hive zinazosoma misimbo ya malipo hujaza hili.",
+    "subMemo": "Kuchanganua msimbo huu kunajaza jina la akaunti yako na memo kwenye 3Speak na kwenye pochi za Hive zinazosoma misimbo ya malipo."
   }
 }

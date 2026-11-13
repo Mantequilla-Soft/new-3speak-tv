@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
-import { createPortal } from 'react-dom';
-import { FaCheck } from 'react-icons/fa';
 import { toastIn } from '../../utils/toast';
 import { awardBadgeWithAioha } from '../../hive-api/aioha';
 import { badgeHolders } from '../../utils/badgeAwards';
-import { cachedProfileImage } from '../../utils/avatarCache';
-import { useTranslation, Trans } from 'react-i18next';
-import ModalHeader from '../ModalHeader/ModalHeader';
+import { cachedProfileImage, useAvatarUrl } from '../../utils/avatarCache';
+import { useTranslation } from 'react-i18next';
+import DialogShell, { SheetContext } from '../modal/DialogShell';
+import { Button } from '../v2/ui';
+import { Icon } from '../v2/Icon';
+import { cx } from '../v2/helpers';
 import './AwardBadgeModal.scss';
 
 // Every toast from this module is headed "Badges"; the message becomes the line
@@ -28,6 +29,9 @@ export default function AwardBadgeModal({ username, badges, onClose, onAwarded }
   const { t } = useTranslation();
   const [held, setHeld] = useState(null); // null = still looking
   const [busy, setBusy] = useState('');
+  // 29c: pick a badge tile, then award it with the one main action.
+  const [picked, setPicked] = useState('');
+  const avatar = useAvatarUrl(username);
 
   useEffect(() => {
     let alive = true;
@@ -41,12 +45,6 @@ export default function AwardBadgeModal({ username, badges, onClose, onAwarded }
     })();
     return () => { alive = false; };
   }, [badges, username]);
-
-  useEffect(() => {
-    const onKey = (e) => { if (e.key === 'Escape' && !busy) onClose(); };
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  }, [busy, onClose]);
 
   const award = async (badge) => {
     setBusy(badge.account);
@@ -62,52 +60,73 @@ export default function AwardBadgeModal({ username, badges, onClose, onAwarded }
     }
   };
 
-  return createPortal(
-    <div className="award-overlay" onClick={onClose}>
-      <div
-        className="award-modal"
-        role="dialog"
-        aria-modal="true"
-        aria-label={t('badges.award.dialogLabel', { username })}
-        onClick={(e) => e.stopPropagation()}
-      >
-        <ModalHeader closeOnEscape={false} className="award-header" title={t('badges.award.title')} onClose={onClose} />
-        <p className="award-sub">{t('badges.award.toUser', { username })}</p>
+  const choice = badges.find((b) => b.account === picked && !held?.[b.account]);
 
-        <ul className="award-list">
-          {badges.map((badge) => {
-            const has = held?.[badge.account];
-            const working = busy === badge.account;
-            return (
-              <li key={badge.account}>
-                <button
-                  type="button"
-                  className={`award-item${has ? ' is-held' : ''}`}
-                  disabled={has || !!busy || held === null}
-                  onClick={() => award(badge)}
-                >
-                  <img
-                    src={cachedProfileImage(badge.account, badge.image, 'small')}
-                    alt=""
-                  />
-                  <span className="award-item-text">
-                    <strong>{badge.title}</strong>
-                    <span>{badge.account}</span>
-                  </span>
-                  <span className="award-item-state">
-                    {working ? t('badges.award.awarding') : has ? <><FaCheck /> {t('badges.award.held')}</> : held === null ? '…' : t('badges.award.award')}
-                  </span>
-                </button>
-              </li>
-            );
-          })}
-        </ul>
-
-        <p className="award-note">
-          {t('badges.award.note')}
-        </p>
+  // Design 29c / 41c: the 17 sheet (docked right on desktop, a bottom sheet on
+  // a phone) with an accent bar: who gets it, a grid of your badge tiles (Held
+  // ones muted), and one accent action that names the badge.
+  return (
+    <DialogShell
+      onClose={onClose}
+      busy={!!busy}
+      side
+      tone="accent"
+      title={t('badges.award.title')}
+      width={420}
+      className="award-modal"
+      panelProps={{ 'aria-label': t('badges.award.dialogLabel', { username }) }}
+      footer={(
+        <Button
+          variant="primary"
+          size={56}
+          block
+          className="dlg-main award-main"
+          disabled={!choice || !!busy}
+          loading={!!busy}
+          trailing={busy ? null : <Icon name="workspace_premium" size={24} />}
+          onClick={() => choice && award(choice)}
+        >
+          {busy ? t('badges.award.awarding') : choice ? t('badges.award.awardNamed', { title: choice.title }) : t('badges.award.award')}
+        </Button>
+      )}
+    >
+      <SheetContext
+        avatar={<span className="award-who">{avatar ? <img src={avatar} alt="" /> : null}</span>}
+        title={username}
+        meta={t('badges.award.toUser', { username })}
+      />
+      <div className="award-grid" role="radiogroup" aria-label={t('badges.award.title')}>
+        {badges.map((badge) => {
+          const has = held?.[badge.account];
+          const on = picked === badge.account && !has;
+          return (
+            <button
+              key={badge.account}
+              type="button"
+              role="radio"
+              aria-checked={on}
+              className={cx('award-tile', on && 'is-on', has && 'is-held')}
+              disabled={has || !!busy || held === null}
+              onClick={() => setPicked(badge.account)}
+              title={badge.account}
+            >
+              <span className="award-tile-pic">
+                <img src={cachedProfileImage(badge.account, badge.image, 'small')} alt="" />
+              </span>
+              <b>{badge.title}</b>
+              {has ? (
+                <span className="award-tile-state"><Icon name="check" size={12} /> {t('badges.award.held')}</span>
+              ) : held === null ? (
+                <Icon name="progress_activity" size={12} className="v2-spin award-tile-state" />
+              ) : null}
+            </button>
+          );
+        })}
       </div>
-    </div>,
-    document.body,
+
+      <p className="award-note">
+        {t('badges.award.note')}
+      </p>
+    </DialogShell>
   );
 }

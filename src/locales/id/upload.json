@@ -2,7 +2,7 @@
   "drafts": {
     "title": "Draf Video",
     "filters": {
-      "all": "Semua Video",
+      "all": "Semua",
       "published": "Diterbitkan",
       "scheduled": "terjadwal",
       "failed": "Gagal"
@@ -30,7 +30,7 @@
   },
   "preview": {
     "playVideo": "Putar video",
-    "cannotPreviewHevc": "Browsermu tidak bisa menampilkan pratinjau video ini — ini umum terjadi pada klip HEVC/H.265 (mis. rekaman iPhone “High Efficiency”). Tidak masalah: video tetap akan diunggah dan dikonversi agar bisa diputar semua orang."
+    "cannotPreviewHevc": "Browsermu tidak bisa menampilkan pratinjau klip HEVC ini. Video tetap akan diunggah dan bisa diputar semua orang."
   },
   "rc": {
     "title": "Resource Credits tidak cukup",
@@ -58,8 +58,10 @@
   },
   "progress": {
     "uploadedFinishDetails": "Video terunggah — lengkapi detailnya untuk menerbitkan.",
+    "uploaded": "Terunggah",
+    "uploading": "Mengunggah",
     "backgroundFailed": "Unggahan di latar belakang belum selesai — akan dicoba lagi saat kamu menerbitkan.",
-    "uploadingPct": "Mengunggah videomu… {{pct}}%",
+    "uploadingPct": "Mengunggah · {{pct}}%",
     "methodReliable": "Unggahan andal",
     "methodResumable": "Unggahan yang bisa dilanjutkan",
     "attempt": "percobaan {{attempt}}/{{attempts}}",
@@ -70,15 +72,15 @@
     "waitingOn": "Menunggu: {{what}}",
     "uploadServer": "Server unggah: {{host}}",
     "cancelled": "Unggahan dibatalkan.",
-    "connectionUnstable": "Koneksi tidak stabil — mencoba lagi…",
-    "connectionUnstableAttempt": "Koneksi tidak stabil — mencoba lagi… ({{attempt}}/{{attempts}})",
+    "connectionUnstable": "Koneksi tidak stabil, mencoba lagi…",
+    "connectionUnstableAttempt": "Koneksi tidak stabil, mencoba lagi… ({{attempt}}/{{attempts}})",
     "uploadingVideoPct": "Mengunggah video... {{pct}}%",
     "uploadingSinglePct": "Mengunggah dalam satu permintaan… {{pct}}%",
     "checkingConnection": "Memeriksa koneksimu...",
     "startingUpload": "Memulai unggahan…",
     "tryingSingleRequest": "Mencoba satu cara terakhir — mengirim dalam satu permintaan…",
     "stillStuck": "Masih tersendat — mencoba satu cara unggah terakhir.",
-    "patchBlockedSwitching": "Jaringanmu memblokir unggahan yang bisa dilanjutkan — beralih ke cara yang lebih kompatibel.",
+    "patchBlockedSwitching": "Jaringanmu memblokir unggahan yang bisa dilanjutkan, jadi kami beralih ke cara yang lebih kompatibel.",
     "switchingMethod": "Beralih cara unggah…",
     "uploadingBackground": "Mengunggah video di latar belakang…",
     "phase": {
@@ -161,8 +163,9 @@
     "editor": {
       "open": "Editor thumbnail",
       "openHint": "Teks, stiker, zoom, frame mana pun",
-      "title": "Editor thumbnail",
+      "title": "Thumbnail",
       "done": "Selesai",
+      "useThumbnail": "Gunakan thumbnail",
       "sources": "Gambar untuk memulai",
       "pickPrompt": "Pilih frame dari videomu",
       "download": "Unduh",
@@ -199,7 +202,7 @@
     "invalidVideo": "Silakan pilih file video yang valid",
     "tooLarge": "Video terlalu besar. Ukuran maksimal 5GB.",
     "shortTooLong": "Shorts maksimal {{max}}. Videomu {{seconds}} dtk.",
-    "shortNotVertical": "Shorts harus direkam dalam format vertikal (potret). Videomu tampaknya horizontal.",
+    "shortNotVertical": "Shorts harus vertikal. Video ini tampaknya horizontal.",
     "thumbnailGenFailed": "Thumbnail untuk file ini tidak dapat dibuat otomatis — kamu bisa mengunggah milikmu sendiri di langkah berikutnya.",
     "processFailed": "Gagal memproses video.",
     "selectFirst": "Silakan pilih file video dulu.",
@@ -215,9 +218,9 @@
     "backgroundInfo": "Info: Videomu mulai diunggah di latar belakang begitu kamu sampai di langkah detail.",
     "noRc": "Akunmu saat ini tidak punya cukup <b>Resource Credits</b> untuk menerbitkan postingan.",
     "whyCantUpload": "Kenapa aku tidak bisa mengunggah?",
-    "needsAuth": "Untuk mengunggah, izinkan <b>@threespeak</b> memposting atas namamu.",
+    "needsAuth": "Untuk mengunggah, izinkan <b>@threespeak</b> memposting atas namamu. Kamu cukup melakukannya sekali.",
     "authorizing": "Memberi izin…",
-    "authorize": "Beri izin @threespeak",
+    "authorize": "Beri izin",
     "selectVideo": "Pilih Video",
     "selfieTeleprompter": "Teleprompter selfie",
     "beta": "beta",
@@ -226,7 +229,7 @@
     "replace": "Ganti Video",
     "editVideo": "Edit video ini",
     "asStory": "Posting sebagai story 24 jam",
-    "asStoryHint": "Story tampil paling atas di feed Shorts dan pengikutmu mendapat notifikasi. Selama masih aktif, kamu masih bisa menyimpannya sebagai Shorts."
+    "asStoryHint": "Tampil paling atas di feed Shorts dan memberi tahu pengikutmu. Selama masih aktif, kamu tetap bisa menyimpannya sebagai Short."
   },
   "details": {
     "guests": {
@@ -281,24 +284,24 @@
       "none": "Tidak ada"
     },
     "remix": {
-      "label": "Izinkan Remix/Klip",
+      "label": "Izinkan remix dan klip",
       "info": "Izinkan orang lain membuat remix dan klip dari video ini. Kamu akan dicantumkan sebagai pembuat asli dan menerima minimal 5% sebagai penerima manfaat.",
-      "hint": "Biarkan orang lain me-remix ini."
+      "hint": "Kamu mendapat minimal 5% dari setiap remix"
     },
     "nsfw": {
       "label": "Tandai sebagai NSFW",
       "info": "Menandai video ini sebagai konten dewasa. Video akan disembunyikan dari feed dan pencarian bagi penonton yang belum mengaktifkan NSFW, dan diberi tag <code>nsfw</code> di seluruh Hive.",
-      "hint": "Konten dewasa."
+      "hint": "Disembunyikan kecuali penonton mengizinkan NSFW"
     },
     "addToBlog": {
       "label": "Tambahkan ke blog saya",
-      "hint": "Tampilkan di blog Anda dan di feed pengikut Anda.",
+      "hint": "Me-reblog-nya agar pengikut melihatnya di feed mereka",
       "info": "3Speak memposting setiap video ke sebuah komunitas, dan Hive tidak menampilkan postingan komunitas di blog Anda maupun di feed pengikut Anda kecuali Anda membagikannya. Jika ini aktif, 3Speak membagikan (me-reblog) video ke blog Anda tepat setelah diterbitkan."
     },
     "ads": {
       "label": "Iklan di video ini",
       "info": "Akunmu menayangkan iklan, jadi video ini juga, kecuali kamu mematikannya di sini. Ini hanya berlaku untuk video ini; video lain dan pengaturan akunmu tetap sama.",
-      "hintOn": "Iklan dapat diputar di video ini.",
+      "hintOn": "Hanya video ini, pengaturan akunmu tetap sama",
       "hintOff": "Tidak ada iklan di video ini."
     },
     "rolls": {
@@ -311,21 +314,31 @@
       "label": "Khusus anggota",
       "info": "Mengenkripsi video ini agar hanya pelanggan 3Speak Pro yang bisa memutarnya. <b>Pratinjau 10 detik tanpa enkripsi</b> diterbitkan bersamanya, jadi postingan tetap menampilkan cuplikan di mana pun di Hive. Judul, deskripsi, dan tag-mu adalah konten postingan Hive biasa dan <b>tidak dienkripsi</b>: hanya videonya. <b>Ini tidak bisa diubah setelah diunggah.</b>",
       "withGuests_other": "Pelanggan Pro + {{count}} tamu.",
-      "hint": "Hanya pelanggan Pro."
+      "hint": "Dienkripsi untuk pelanggan Pro. Tidak bisa diubah setelah diunggah."
     },
     "trailer": {
       "label": "Trailer channel",
       "info": "Diputar otomatis di bagian atas tab <b>Ringkasan</b> profilmu, menggantikan trailer yang kamu atur sebelumnya.",
-      "hint": "Diputar otomatis di profilmu."
+      "hint": "Diputar otomatis di bagian atas profilmu"
     },
     "schedule": {
       "label": "Jadwalkan postingan ini",
       "info": "Mengantrekan postingan dan menerbitkannya otomatis pada waktu yang kamu pilih, minimal 15 menit dari sekarang dan hingga 90 hari ke depan. Postingan di-broadcast oleh @threespeak atas namamu, jadi kamu akan diminta memberi izin sekali.",
       "immediately": "Terbitkan segera.",
       "changeTime": "Ubah waktu",
-      "note": "Minimal 15 menit dari sekarang, hingga 90 hari. Diposting otomatis oleh @threespeak atas namamu — kamu akan diminta memberi izin sekali."
+      "note": "Minimal 15 menit dari sekarang, hingga 90 hari. Diposting otomatis oleh @threespeak atas namamu — kamu akan diminta memberi izin sekali.",
+      "short": "Jadwalkan",
+      "publishLater": "Terbitkan nanti",
+      "scheduleFor": "Jadwalkan untuk {{when}}",
+      "publishNow": "Terbitkan sekarang"
     },
-    "proceed": "Lanjut"
+    "proceed": "Lanjut",
+    "nextStep": "Berikutnya: {{step}}",
+    "tagsCount_other": "{{count}} tag",
+    "shareRewards": "Bagikan reward",
+    "shareRewardsSub": "Bagi dengan kolaborator",
+    "advanced": "NSFW / payout",
+    "advancedSub": "Lanjutan"
   },
   "review": {
     "payoutDeclined": "Ditolak (reward dibakar)",
@@ -342,20 +355,21 @@
     "editPost": "Edit Postingan",
     "watchAdToPublish": "Tonton iklan untuk menerbitkan",
     "watchSponsorFirst": "Tonton pesan sponsor dulu",
+    "gateNote": "Akun baru menonton pesan sponsor singkat sebelum menerbitkan. Ini membiayai akun gratismu.",
     "postShort": "Posting Shorts",
     "postStory": "Posting Story",
     "postVideo": "Posting Video",
     "backToTimeline": "Kembali ke linimasa"
   },
   "publishing": {
-    "titleShort": "Menerbitkan Shorts",
-    "titleStory": "Memublikasikan Story",
-    "titleVideo": "Menerbitkan Video",
-    "subtitle": "Mohon tunggu, kami sedang memproses kontenmu...",
+    "titleShort": "Menerbitkan Short",
+    "titleStory": "Menerbitkan story",
+    "titleVideo": "Menerbitkan video",
+    "subtitle": "Mohon tetap di halaman ini sampai selesai.",
     "starting": "Memulai...",
     "stayOnPage": "Tetap di halaman ini sampai penerbitan selesai.",
-    "activityLog": "Log Aktivitas",
-    "support": "Untuk bantuan, hubungi kami di <discordLink>Discord</discordLink>",
+    "activityLog": "Log aktivitas",
+    "support": "Macet? Hubungi kami di <discordLink>Discord</discordLink>.",
     "finishingUpload": "Menyelesaikan unggahan video…",
     "preparing": "Menyiapkan penerbitan...",
     "finalizing": "Menyelesaikan…",
@@ -410,17 +424,17 @@
     }
   },
   "done": {
-    "title": "Unggahan Selesai!",
+    "title": "Unggahan selesai!",
     "shortPublished": "Shorts-mu sudah diterbitkan di 3Speak. Butuh sekitar 5 menit untuk muncul di profilmu.",
     "storyPublished": "Story kamu tayang di 3Speak selama 24 jam ke depan.",
-    "videoPublished": "Videomu sudah diterbitkan!<br/>Sekarang sedang di-encode di latar belakang, yang bisa memakan waktu beberapa menit.",
-    "promote": "Promosikan video ini",
-    "goToProfile": "Ke Profilku →",
-    "feedback": "Bagaimana unggahanmu"
+    "videoPublished": "Videomu sudah diterbitkan. Sedang di-encode di latar belakang, yang bisa memakan waktu beberapa menit.",
+    "promote": "Promosikan",
+    "goToProfile": "Profilku",
+    "feedback": "Bagaimana unggahanmu?"
   },
   "record": {
     "speechErrors": {
-      "network": "Layanan suara tidak terjangkau — pengenalan suara butuh koneksi internet (Chrome mengirim audio ke Google untuk ditranskripsi).",
+      "network": "Gulir dengan suara butuh internet. Gulir naskah secara manual.",
       "audioCapture": "Tidak ada audio yang sampai ke pengenalan suara — mikrofon mungkin sedang dipakai. Coba pakai headset.",
       "notAllowed": "Izin mikrofon diblokir untuk pengenalan suara.",
       "generic": "Kesalahan pengenalan suara: {{err}}"
@@ -436,9 +450,10 @@
     "portrait": "Potret",
     "landscape": "Lanskap",
     "autoDetect": "Deteksi otomatis ({{lang}})",
+    "layout": "Tata letak",
     "presets": {
       "frontcam": "Kamera depan",
-      "frontcamTitle": "Strip kecil di bawah lensa selfie — paling tidak kentara bahwa kamu sedang membaca",
+      "frontcamTitle": "Strip kecil di bawah lensa",
       "max": "Ukuran maks",
       "maxTitle": "Huruf besar untuk dibaca dari jauh",
       "top": "Baris atas",
@@ -461,11 +476,11 @@
     "startingMic": "Menyalakan mikrofon…",
     "leave": {
       "title": "Tinggalkan kamera?",
-      "sub": "Kembali ke naskahmu, tetap di sini, atau tutup (tidak ada yang disimpan).",
+      "sub": "Belum ada yang disimpan.",
       "backToScript": "Kembali ke naskah",
       "stay": "Tetap di sini"
     },
-    "experimentalTitle": "Teleprompter eksperimental",
+    "experimentalTitle": "Teleprompter",
     "scriptPlaceholder": "Tulis atau tempel naskahmu di sini. Saat merekam, naskah akan bergulir otomatis saat kamu membacanya dengan suara keras.",
     "orientation": "Orientasi",
     "continueToCamera": "Lanjut ke kamera",
@@ -478,14 +493,14 @@
     "cameraN": "Kamera {{n}}",
     "flipRotationTitle": "Jika gambarnya terbalik, balik rotasi 90°",
     "flipRotation": "Balik rotasi",
-    "stopVoiceTest": "Hentikan tes suara",
+    "stopVoiceTest": "Hentikan tes",
     "testVoice": "Tes suara",
     "stopRecording": "Berhenti merekam",
     "startRecording": "Mulai merekam",
     "script": "Naskah",
     "reRecord": "Rekam ulang",
     "preparing": "Menyiapkan…",
-    "useThisVideo": "Gunakan video ini"
+    "useThisVideo": "Gunakan video"
   },
   "errors": {
     "patchBlocked": "PATCH tampaknya diblokir (tidak ada bagian yang dikonfirmasi)",
@@ -588,6 +603,13 @@
     "reachNoCount": "Sampai ke pengikutmu dan tampil paling atas di feed Shorts selama 24 jam.",
     "streakOn_other": "Kamu sedang dalam streak story {{count}} hari.",
     "streakNext_other": "Dengan ini, streak story-mu jadi {{count}} hari.",
-    "streakStart": "Posting story setiap hari untuk membangun streak."
+    "streakStart": "Posting story setiap hari untuk membangun streak.",
+    "keepGoing": "Posting story setiap hari agar tetap berlanjut"
+  },
+  "originalOnly": {
+    "title": "Unggah hanya konten buatanmu sendiri.",
+    "body": "3Speak untuk konten orisinal. Materi berhak cipta tidak boleh mendapat reward, jadi jangan unggah atau atur Reward ke \"Tolak payout\".",
+    "decline": "Tolak payout",
+    "declined": "Payout ditolak"
   }
 }

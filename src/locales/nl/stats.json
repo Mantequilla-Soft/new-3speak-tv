@@ -16,7 +16,9 @@
     "avgPct": "Gem. %",
     "votes": "Votes",
     "comments": "Reacties",
-    "payout": "Uitbetaling"
+    "payout": "Uitbetaling",
+    "followers": "Volgers",
+    "earned": "Verdiend"
   },
   "days": {
     "short": {
@@ -70,7 +72,8 @@
     "sub": "UTC · donkerder = meer weergaven",
     "cellTitle_one": "{{day}} {{hour}}:00 — {{count}} weergave",
     "cellTitle_other": "{{day}} {{hour}}:00 — {{count}} weergaven",
-    "hour": "{{hour}}u"
+    "hour": "{{hour}}u",
+    "best": "Beste tijd: <b>{{day}} {{from}}–{{to}} UTC</b>"
   },
   "detail": {
     "summary": "{{votes}} votes · {{comments}} reacties · ${{payout}}"
@@ -83,7 +86,8 @@
     "title": "Video's vergelijken",
     "pickA": "Kies een video…",
     "vs": "vs",
-    "pickB": "Kies er nog een…"
+    "pickB": "Kies er nog een…",
+    "lastPeriod": "Vergelijken met vorige periode"
   },
   "loadError": "Je statistieken konden nu niet worden geladen.",
   "emptyRange": "Nog geen kijkgegevens in deze periode — probeer “Alles”, of wacht tot mensen je video's bekijken.",
@@ -96,7 +100,8 @@
   "sections": {
     "trend": "Kijktijd door de tijd",
     "best": "Best presterend",
-    "audience": "Je publiek"
+    "audience": "Je publiek",
+    "top": "Topcontent"
   },
   "openInNewTab": "Video openen in een nieuw tabblad",
   "footnote": "Kijkstatistieken komen uit preview-tracking en zijn alleen voor jou zichtbaar.",
@@ -105,9 +110,9 @@
     "empty": "Nog geen kijkgegevens voor deze video.",
     "uniqueViewers": "Unieke kijkers",
     "avgSpeed": "Gem. snelheid",
-    "mostDropOff": "📉 De meeste kijkers haken af op <b>{{time}}</b>",
-    "earlyDrop": "⚡ <b>{{pct}}%</b> vertrok in de eerste 3 s",
-    "replayed": "🔁 Opnieuw bekeken:",
+    "mostDropOff": "De meesten haken af bij <b>{{time}}</b>",
+    "earlyDrop": "<b>{{pct}}%</b> vertrok in de eerste 3 s",
+    "replayed": "Opnieuw bekeken:",
     "retentionTitle": "Kijkersbehoud",
     "retentionSub": "aandeel kijkers dat op elk moment nog kijkt",
     "pctWatching": "{{pct}}% kijkt",
@@ -115,5 +120,15 @@
     "replaySub": "delen die kijkers het vaakst (opnieuw) bekijken",
     "hotSpot": "hotspot",
     "notEnoughReplays": "Nog niet genoeg herhalingen"
+  },
+  "title": "Kanaalstatistieken",
+  "legend": {
+    "current": "Deze periode",
+    "previous": "Vorige"
+  },
+  "audience": {
+    "title": "Publiek",
+    "topCountry": "Topland",
+    "topDevice": "Topapparaat"
   }
 }

@@ -91,16 +91,19 @@ describe('the comments under a video', () => {
     mount()
     await loaded()
     expect(m.call).toHaveBeenCalledWith('condenser_api', 'get_content_replies', ['badadib', 'my-video'])
-    expect(screen.getByRole('heading', { name: '3 Comments' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: '3 comments' })).toBeInTheDocument()
     expect(screen.getByText('Body of c2')).toBeInTheDocument()
     expect(within(commentOf('Body of c1')).getByText('Body of r1')).toBeInTheDocument()
-    expect(within(commentOf('Body of c1')).getByText('1 likes')).toBeInTheDocument()
+    expect(within(commentOf('Body of c1')).getAllByRole('button', { name: 'Vote' })[0]).toHaveTextContent('1')
   })
 
-  it('leaves out low-reputation accounts, also from the count', async () => {
-    mount()
+  it('folds low-reputation accounts behind a bar, also out of the count', async () => {
+    const { user } = mount()
     await loaded()
     expect(screen.queryByText('Body of c3')).not.toBeInTheDocument()
+    expect(screen.getByText('Comment hidden by the community · low score')).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Show the comment by @spammer' }))
+    expect(screen.getByText('Body of c3')).toBeInTheDocument()
   })
 
   it('still shows the off-chain replies of a post Hive does not know', async () => {
@@ -109,13 +112,15 @@ describe('the comments under a video', () => {
     vi.spyOn(console, 'warn').mockImplementation(() => {})
     mount()
     expect(await screen.findByText('Off-chain hello')).toBeInTheDocument()
-    expect(screen.getByRole('heading', { name: '1 Comment' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: '1 comment' })).toBeInTheDocument()
   })
 
   it('sorts newest first by default and remembers another order', async () => {
     const { user } = mount()
     await loaded()
-    const order = () => [...document.querySelectorAll('.vid-comment-wrap > .comment-container')].map((c) => c.querySelector('.markdown-view').textContent)
+    const order = () => [...document.querySelectorAll('.comment-list > .comment-container')]
+      .map((c) => c.querySelector('.markdown-view')?.textContent)
+      .filter(Boolean)
     expect(order()).toEqual(['Body of c2', 'Body of c1'])
     await user.selectOptions(screen.getByRole('combobox', { name: 'Sort' }), 'oldest')
     expect(order()).toEqual(['Body of c1', 'Body of c2'])
@@ -127,7 +132,7 @@ describe('the comments under a video', () => {
   it('puts the creator\'s pins first, marked as pinned', async () => {
     mount({ pinnedComments: ['c1'] })
     await loaded()
-    const first = document.querySelector('.vid-comment-wrap > .comment-container')
+    const first = document.querySelector('.comment-list > .comment-container')
     expect(within(first).getByText('Body of c1')).toBeInTheDocument()
     expect(within(first).getByText('Pinned by creator')).toBeInTheDocument()
   })
@@ -135,7 +140,8 @@ describe('the comments under a video', () => {
   it('jumps the video to the moment a comment refers to', async () => {
     const { user, onSeek } = mount()
     await loaded()
-    await user.click(screen.getByText('at 1:15'))
+    // The chip shows the time; its name says what it is.
+    await user.click(screen.getByRole('button', { name: 'at 1:15' }))
     expect(onSeek).toHaveBeenCalledWith(75)
   })
 
@@ -159,7 +165,7 @@ describe('the comments under a video', () => {
   it('switches the composer to recording a video reaction', async () => {
     const { user } = mount()
     await loaded()
-    await user.click(screen.getAllByRole('button', { name: 'React' })[0])
+    await user.click(screen.getAllByRole('tab', { name: 'React' })[0])
     expect(screen.getByText('Record a reaction')).toBeInTheDocument()
     expect(screen.queryByPlaceholderText('Write your comment here...')).not.toBeInTheDocument()
   })
@@ -193,11 +199,11 @@ describe('writing a comment', () => {
     await user.click(screen.getAllByRole('button', { name: 'Comment' }).at(-1))
     expect(m.comment).toHaveBeenCalledWith('badadib', 'my-video', expect.stringMatching(/^re-my-video-\d+$/), '', 'Great video', { app: '3speak/new-version' })
     expect(toastMessages(toast.success)).toContain('Comment posted successfully!')
-    const first = document.querySelector('.vid-comment-wrap > .comment-container')
+    const first = document.querySelector('.comment-list > .comment-container')
     await waitFor(() => expect(within(first).getByText('Great video')).toBeInTheDocument())
-    expect(within(first).getByText('@listener')).toBeInTheDocument()
+    expect(within(first).getByRole('link', { name: 'listener' })).toBeInTheDocument()
     expect(composer()).toHaveValue('')
-    expect(screen.getByRole('heading', { name: '4 Comments' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: '4 comments' })).toBeInTheDocument()
   })
 
   it('ties the comment to the moment it was written at, and links timestamps in it', async () => {
@@ -277,7 +283,9 @@ describe('writing a comment', () => {
     const c2 = commentOf('Body of c2')
     await user.click(within(c2).getByRole('button', { name: 'Reply' }))
     const box = screen.getByPlaceholderText('Write your reply here...')
-    expect(within(c2).getAllByText('at 1:15').length).toBe(2)
+    // The comment's own moment chip, and the reply box's inherited one.
+    expect(within(c2).getByRole('button', { name: 'at 1:15' })).toBeInTheDocument()
+    expect(within(c2).getByText('at 1:15')).toBeInTheDocument()
     await user.type(box, 'Agreed')
     await user.click(within(c2).getAllByRole('button', { name: 'Comment' }).at(-1))
     expect(m.comment).toHaveBeenCalledWith('viewer-b', 'c2', expect.stringMatching(/^re-c2-\d+$/), '', expect.stringMatching(/^Agreed\n<br><sup>replied to \[1:15\]/), { app: '3speak/new-version', parentTimestamp: 75 })

@@ -62,6 +62,10 @@ function hive(over = {}) {
   }
 }
 
+// A row's message: the actor's name in bold, then the rest (26a), so the
+// sentence is spread over two elements.
+const msg = (text) => (_, el) => !!el?.classList?.contains('notif-msg') && el.textContent === text
+
 function mount() {
   return renderWithProviders(<NotificationBell />)
 }
@@ -120,11 +124,10 @@ describe('the notifications bell', () => {
   it('opens the list with single rows and grouped votes', async () => {
     const { user } = mount()
     const menu = await openList(user)
-    expect(within(menu).getByText('@badadib replied to your post')).toBeInTheDocument()
+    expect(within(menu).getByText(msg('badadib replied to your post'))).toBeInTheDocument()
     expect(within(menu).getByText('5m')).toBeInTheDocument()
     expect(within(menu).getByText('@fan-one and @fan-two voted on your post ($1.50)')).toBeInTheDocument()
-    expect(within(menu).getByText('2 votes')).toBeInTheDocument()
-    expect(within(menu).getByText('@badadib followed you')).toBeInTheDocument()
+    expect(within(menu).getByText(msg('badadib followed you'))).toBeInTheDocument()
     expect(within(menu).getByRole('link', { name: 'See all' })).toHaveAttribute('href', '/notifications')
   })
 
@@ -147,7 +150,7 @@ describe('the notifications bell', () => {
   it('opens the post a notification is about, and closes', async () => {
     const { user } = mount()
     const menu = await openList(user)
-    await user.click(within(menu).getByText('@badadib replied to your post'))
+    await user.click(within(menu).getByText(msg('badadib replied to your post')))
     expect(screen.getByTestId('location')).toHaveTextContent('/post/badadib/re-my-video')
     await waitFor(() => expect(screen.queryByRole('menu')).not.toBeInTheDocument())
   })
@@ -155,7 +158,7 @@ describe('the notifications bell', () => {
   it('a follow leads to the follower\'s profile', async () => {
     const { user } = mount()
     const menu = await openList(user)
-    await user.click(within(menu).getByText('@badadib followed you'))
+    await user.click(within(menu).getByText(msg('badadib followed you')))
     expect(screen.getByTestId('location')).toHaveTextContent('/@badadib')
   })
 
@@ -172,7 +175,7 @@ describe('the notifications bell', () => {
     n.threeSpeak = new Map([['badadib/re-my-video', true]])
     const { user } = mount()
     const menu = await openList(user)
-    const row = within(menu).getByText('@badadib replied to your post').closest('li')
+    const row = within(menu).getByText(msg('badadib replied to your post')).closest('li')
     expect(row).toHaveClass('notif-whale')
     expect(within(row).getByRole('img', { name: '3Speak' })).toBeInTheDocument()
   })
@@ -209,7 +212,7 @@ describe('the notifications bell', () => {
     const { user } = mount()
     const menu = await openList(user)
     const stories = within(menu).getByRole('list', { name: 'Stories from people you follow' })
-    await user.click(within(stories).getByText('@badadib posted a story'))
+    await user.click(within(stories).getByRole('button', { name: '@badadib posted a story' }))
     expect(n.markStorySeen).toHaveBeenCalledWith('badadib', 's1', 'h1')
     expect(screen.getByTestId('location')).toHaveTextContent('/shorts/stories?user=badadib&story=1')
   })
@@ -218,7 +221,7 @@ describe('the notifications bell', () => {
     n.episodes = [{ id: 'ep1', title: 'Episode one', seen: false, first_seen_at: ago(3), feed: { title: 'A show' } }]
     const { user } = mount()
     const menu = await openList(user)
-    await user.click(within(menu).getByText('Episode one'))
+    await user.click(within(menu).getByText(/Episode one/))
     expect(useAppStore.getState().audioCurrent).toMatchObject({ _id: 'ep1', external: true })
     expect(screen.getByTestId('location')).toHaveTextContent('/audio?type=external&episode=ep1')
   })
@@ -241,7 +244,7 @@ describe('the notifications bell', () => {
       await user.click(toggle)
       expect(n.enablePush).toHaveBeenCalledWith('listener')
       expect(await screen.findByRole('button', { name: 'On' })).toBeInTheDocument()
-      expect(toastMessages(toast.success)).toContain('You will be notified when creators you follow post')
+      expect(toastMessages(toast.success)).toContain('You will be notified when creators you follow post.')
     })
 
     it('re-registers a live subscription the server may have forgotten', async () => {
@@ -272,7 +275,7 @@ describe('the notifications bell', () => {
       const { user } = mount()
       await openList(user)
       await waitFor(() => expect(screen.getByRole('button', { name: 'Notify me' })).toBeDisabled())
-      expect(screen.getByRole('button', { name: 'Notify me' })).toHaveAttribute('title', 'Notifications are blocked for this site in your browser settings')
+      expect(screen.getByRole('button', { name: 'Notify me' })).toHaveAttribute('title', 'Notifications are blocked for this site in your browser settings.')
     })
   })
 

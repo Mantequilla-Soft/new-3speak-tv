@@ -16,7 +16,9 @@
     "avgPct": "Moy. %",
     "votes": "Votes",
     "comments": "Commentaires",
-    "payout": "Gains"
+    "payout": "Gains",
+    "followers": "Abonnés",
+    "earned": "Gagné"
   },
   "days": {
     "short": {
@@ -73,7 +75,8 @@
     "cellTitle_one": "{{day}} {{hour}}h — {{count}} vue",
     "cellTitle_many": "{{day}} {{hour}}h — {{count}} vues",
     "cellTitle_other": "{{day}} {{hour}}h — {{count}} vues",
-    "hour": "{{hour}}h"
+    "hour": "{{hour}}h",
+    "best": "Meilleur moment : <b>{{day}} {{from}}–{{to}} UTC</b>"
   },
   "detail": {
     "summary": "{{votes}} votes · {{comments}} commentaires · ${{payout}}"
@@ -86,7 +89,8 @@
     "title": "Comparer des vidéos",
     "pickA": "Choisir une vidéo…",
     "vs": "vs",
-    "pickB": "Choisir une autre…"
+    "pickB": "Choisir une autre…",
+    "lastPeriod": "Comparer à la période précédente"
   },
   "loadError": "Impossible de charger vos statistiques pour le moment.",
   "emptyRange": "Aucune donnée de visionnage sur cette période — essayez « Tout », ou attendez que des gens regardent vos vidéos.",
@@ -99,7 +103,8 @@
   "sections": {
     "trend": "Durée de visionnage dans le temps",
     "best": "Meilleures performances",
-    "audience": "Votre audience"
+    "audience": "Votre audience",
+    "top": "Meilleurs contenus"
   },
   "openInNewTab": "Ouvrir la vidéo dans un nouvel onglet",
   "footnote": "Les statistiques de visionnage proviennent d'un suivi en aperçu et ne sont visibles que par vous.",
@@ -108,9 +113,9 @@
     "empty": "Aucune donnée de visionnage pour cette vidéo pour l'instant.",
     "uniqueViewers": "Spectateurs uniques",
     "avgSpeed": "Vitesse moy.",
-    "mostDropOff": "📉 La plupart décrochent à <b>{{time}}</b>",
-    "earlyDrop": "⚡ <b>{{pct}} %</b> partent dans les 3 premières secondes",
-    "replayed": "🔁 Revu :",
+    "mostDropOff": "La plupart décrochent à <b>{{time}}</b>",
+    "earlyDrop": "<b>{{pct}} %</b> sont partis dans les 3 premières s",
+    "replayed": "Revu :",
     "retentionTitle": "Rétention de l'audience",
     "retentionSub": "part des spectateurs encore présents à chaque instant",
     "pctWatching": "{{pct}} % regardent",
@@ -118,5 +123,15 @@
     "replaySub": "passages que les spectateurs regardent et revoient le plus",
     "hotSpot": "moment fort",
     "notEnoughReplays": "Pas encore assez de revisionnages"
+  },
+  "title": "Statistiques de la chaîne",
+  "legend": {
+    "current": "Cette période",
+    "previous": "Précédente"
+  },
+  "audience": {
+    "title": "Audience",
+    "topCountry": "Pays principal",
+    "topDevice": "Appareil principal"
   }
 }

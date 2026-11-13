@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Rocket } from 'lucide-react';
 import { SendBoostDialog, useStreamContext } from '@snapie/hangouts-react';
 import { useAppStore } from '../../lib/store';
 import { withHiveAuthWaiting } from '../../hive-api/aioha';
+import { DockTile, Icon } from '../v2/ui';
 import './StreamBoostButton.scss';
 
 /**
@@ -20,7 +20,7 @@ import './StreamBoostButton.scss';
  *
  * `variant` picks the shape for the surface it sits on:
  *   - `rail`    shorts-style action rail (mobile stream page)
- *   - `button`  a normal watch-page action button
+ *   - `button`  a tile in the stream page's dock (v2 DockTile)
  *   - `overlay` floats over the player, next to the viewer count
  */
 export default function StreamBoostButton({ variant = 'button' }) {
@@ -42,7 +42,7 @@ export default function StreamBoostButton({ variant = 'button' }) {
     <>
       {variant === 'rail' ? (
         <div className="actionItem" onClick={() => setOpen(true)}>
-          <div className="actionButton"><Rocket size={24} /></div>
+          <div className="actionButton"><Icon name="rocket_launch" size={24} /></div>
           <span className="actionLabel">{label}</span>
         </div>
       ) : variant === 'overlay' ? (
@@ -52,12 +52,10 @@ export default function StreamBoostButton({ variant = 'button' }) {
           onClick={() => setOpen(true)}
           title={t('live.boost.sendTo', { user: roomName.split('-')[0] })}
         >
-          <Rocket size={15} /><span>{label}</span>
+          <Icon name="rocket_launch" size={16} /><span>{label}</span>
         </button>
       ) : (
-        <button type="button" className="pv-btn stream-boost-btn" onClick={() => setOpen(true)} title={t('live.boost.send')}>
-          <Rocket size={14} /><span>{label}</span>
-        </button>
+        <DockTile icon="rocket_launch" label={label} className="stream-boost-btn" onClick={() => setOpen(true)} title={t('live.boost.send')} />
       )}
 
       {open && (

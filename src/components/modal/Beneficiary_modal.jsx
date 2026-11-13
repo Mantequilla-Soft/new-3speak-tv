@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { getHiveClient } from '../../utils/hiveNode';
 import './Beneficiary_modal.scss';
-import { MdDeleteForever } from 'react-icons/md';
 
 import { Client } from '@hiveio/dhive';
 import { useAppStore } from '../../lib/store';
@@ -9,7 +8,9 @@ import { usePremiumStatus } from '../../hooks/usePremiumStatus';
 import { HIVE_API_NODES } from '../../utils/config';
 import { HIVE_MAX_BENEFICIARIES } from '../../utils/beneficiaries';
 import { useTranslation, Trans } from 'react-i18next';
-import ModalHeader from '../ModalHeader/ModalHeader';
+import DialogShell from './DialogShell';
+import { Button, Eyebrow, IconButton } from '../v2/ui';
+import { Icon } from '../v2/Icon';
 
 const client = getHiveClient();
 
@@ -47,6 +48,8 @@ function Beneficiary_modal({ isOpen, close, setBeneficiaries, setBeneficiaryList
   // 'checking', 'valid', 'invalid'. Debounced so we don't hit the API on every
   // keystroke. handleBeneficairy still re-checks authoritatively on add.
   const [acctStatus, setAcctStatus] = useState('idle');
+  // "Add a collaborator" opens the add row (17e).
+  const [adding, setAdding] = useState(false);
 
 
   useEffect(() => {
@@ -159,6 +162,7 @@ function Beneficiary_modal({ isOpen, close, setBeneficiaries, setBeneficiaryList
     // Clear inputs
     setAccount('');
     setPercent(0);
+    setAdding(false);
   };
 
   const handleDelete = (index) => {
@@ -206,167 +210,176 @@ function Beneficiary_modal({ isOpen, close, setBeneficiaries, setBeneficiaryList
     close(); // Close the modal after saving
   };
 
+  // Defaults that the publish path adds on top (not editable here).
+  const defaults = (() => {
+    if (list.some(item => item.locked)) return [];
+    // Pro users skip the 10% threespeakfund split entirely. The 1% encoder
+    // split is kept for /studio uploads (3Speak encodes them), shown for /embed
+    // non-premium, and NEVER for audio (no encoding pipeline for audio posts).
+    const entries = [];
+    if (!isPremium) entries.push({ key: 'fund', account: 'threespeakfund', label: t('modals.beneficiary.infrastructure') });
+    // 'stream' = an OpenPods session announcement: nothing goes through the
+    // video encoder, so the 1% split never applies (the publish path doesn't
+    // add it either, so don't advertise it).
+    const keepEncoder = variant === 'studio'
+      ? true
+      : (variant === 'audio' || variant === 'stream')
+        ? false
+        : !isPremium;
+    if (keepEncoder) entries.push({ key: 'enc', label: t('modals.beneficiary.videoEncoding') });
+    return entries;
+  })();
+
+  // Design 17e (share rewards): the split as a ring with what stays with you
+  // in the middle, everyone's share as tiles (you, collaborators with an X,
+  // locked platform splits with a lock), "Add a collaborator", then the
+  // platform defaults; "Save split" pinned at the bottom.
+  const shares = [
+    { key: 'you', tone: 'you', name: t('modals.beneficiary.you'), percent: remaingPercent },
+    ...list.map((item, index) => ({ key: `${item.account}-${index}`, tone: item.locked ? 'locked' : 'bene', name: item.account, percent: item.percent, item, index })),
+  ];
+  // The ring: a conic gradient, one arc per share in the order of the tiles.
+  let at = 0;
+  const arcs = shares.map((sh) => {
+    const from = at;
+    at += Math.max(0, Number(sh.percent) || 0);
+    const color = sh.tone === 'you' ? 'var(--accent)' : sh.tone === 'bene' ? 'var(--cyan)' : 'var(--muted)';
+    return `${color} ${from}% ${Math.min(100, at)}%`;
+  });
+  const ring = `conic-gradient(${arcs.join(', ')}${at < 100 ? `, var(--surface-2) ${at}% 100%` : ''})`;
+
   return (
-    <div className={`modal ${isOpen ? 'open' : ''}`}>
-      <div className="overlay" onClick={cancel}></div>
-      <div
-        className={`modal-content video-upload-moadal-size bene ${
-          isOpen ? 'open' : ''
-        }`}
-        onClick={(e) => e.stopPropagation()}
-      >
-        <ModalHeader title={t('modals.beneficiary.title')} onClose={cancel} />
-
-        <p className="bene-text">
-          {t('modals.beneficiary.intro')}
-        </p>
-
-        {error && <span className="error">{error}</span>}
-
-        <div className="bene-content-wrap">
-          <div className="user-wrap">
-            <span>{user}</span> <span>{remaingPercent}%</span>
-          </div>
-
-          {/* Render the beneficiary list */}
-          <div className="beneficiary-list">
-            {list.map((item, index) => (
-              <div className="wrap" key={index}>
-                <span>@{item.account}</span>
-                {item.locked ? (
-                  <>
-                    <input
-                      type="number"
-                      value={item.percent}
-                      min={item.minPercent || 1}
-                      step="1"
-                      style={{ width: '62px', textAlign: 'center' }}
-                      onChange={(e) => handleLockedPercentChange(index, e.target.value)}
-                    />
-                    <span>{t('modals.beneficiary.minPercent', { percent: item.minPercent })}</span>
-                  </>
-                ) : (
-                  <>
-                    <span>{item.percent}%</span>
-                    <MdDeleteForever
-                      className="delete-icon"
-                      onClick={() => handleDelete(index)}
-                    />
-                  </>
-                )}
-              </div>
-            ))}
-          </div>
-
-          <div className="reward-main">
-            <div className="wrap">
-              <label>@</label>
-              <input
-                type="text"
-                value={account}
-                placeholder={t('modals.beneficiary.usernamePlaceholder')}
-                onChange={(e) => setAccount(e.target.value.toLowerCase())}
-              />
-            </div>
-            <div className="num-wrap">
-              <div className="input-tooltip-wrap">
-                <input
-                  type="number"
-                  value={percent}
-                  min="1"
-                  step="1"
-                  palaceholder="Enter usernmae"
-                  onChange={(e) => {
-                    const value = parseFloat(e.target.value);
-
-                    if (value < 1) {
-                      setPercent(value);
-                      setError(t('modals.beneficiary.errors.atLeastOne'));
-                    } else {
-                      setError("");
-                      setPercent(value);
-                    }
-                  }}
-                />
-
-                {percent > 0 && percent < 1 && (
-                  <div className="tooltip">
-                    <Trans i18nKey="modals.beneficiary.minimumReward" components={{ strong: <strong /> }} />
-                  </div>
-                )}
-              </div>
-
-              <span>%</span>
-              <button type="button" onClick={handleBeneficairy} className="green">+</button>
-            </div>
-
-          </div>
-
-          {/* Typed but not committed with "+" — say so, and report whether the
-              account actually exists on Hive. Nothing shows while the row is
-              empty. */}
-          {hasPendingRow && (
-            <div className={`bene-pending${acctStatus === 'invalid' ? ' bene-pending--bad' : ''}`}>
-              {acctStatus === 'checking' && <Trans i18nKey="modals.beneficiary.checking" values={{ account: account.trim() }} components={{ strong: <strong /> }} />}
-              {acctStatus === 'invalid' && <Trans i18nKey="modals.beneficiary.notExisting" values={{ account: account.trim() }} components={{ strong: <strong /> }} />}
-              {(acctStatus === 'valid' || acctStatus === 'idle') && (
-                <Trans i18nKey="modals.beneficiary.notAdded" values={{ account: account.trim() }} components={{ strong: <strong /> }} />
-              )}
-            </div>
-          )}
-
-          {/* Render the beneficiary list
-          <div className="beneficiary-list">
-            {list.map((item, index) => (
-              <div className="wrap" key={index}>
-                <span>@{item.account}</span>
-                <span>{item.percent}%</span>
-                <MdDeleteForever
-                  className="delete-icon"
-                  onClick={() => handleDelete(index)}
-                />
-              </div>
-            ))}
-          </div> */}
-
-          <div className="last-btn-wrap">
-            {/* <button onClick={close}>Cancel</button> */}
-            <button type="button" onClick={handleSave}>{t('common.actions.ok')}</button>
-          </div>
-
-          {(() => {
-            if (list.some(item => item.locked)) return null;
-            // Pro users skip the 10% threespeakfund split entirely. The 1%
-            // encoder split is kept for /studio uploads (3Speak encodes
-            // them), shown for /embed non-premium, and NEVER for audio
-            // (no encoding pipeline for audio posts).
-            const entries = [];
-            if (!isPremium) {
-              entries.push(<div key="fund" className="wrap"><span>threespeakfund</span> <span>{t('modals.beneficiary.infrastructure')}</span></div>);
-            }
-            // 'stream' = an OpenPods session announcement: nothing goes
-            // through the video encoder, so the 1% split never applies (the
-            // publish path doesn't add it either — don't advertise it).
-            const keepEncoder = variant === 'studio'
-              ? true
-              : (variant === 'audio' || variant === 'stream')
-                ? false
-                : !isPremium;
-            if (keepEncoder) {
-              entries.push(<div key="enc" className="wrap"><span> {t('modals.beneficiary.videoEncoding')}</span></div>);
-            }
-            if (entries.length === 0) return null;
-            return (
-              <div className="default-bene-wrap">
-                <p>{t('modals.beneficiary.defaults', { count: entries.length })}</p>
-                {entries}
-              </div>
-            );
-          })()}
-
-        </div>
+    <DialogShell
+      open={isOpen}
+      onClose={cancel}
+      side
+      tone="cyan"
+      title={t('modals.beneficiary.shareRewards')}
+      width={420}
+      zIndex={1100}
+      className="bene-dialog"
+      footer={(
+        <Button variant="inverse" size={48} block trailing="check" className="dlg-main" onClick={handleSave}>{t('modals.beneficiary.saveSplit')}</Button>
+      )}
+    >
+      <div className="bene-ring" style={{ background: ring }} role="img" aria-label={`@${user} ${remaingPercent}%`}>
+        <span className="bene-ring__hole">
+          <b className="num">{remaingPercent}%</b>
+          <span>{t('modals.beneficiary.toYou')}</span>
+        </span>
       </div>
-    </div>
+
+      <div className="bene-tiles beneficiary-list">
+        {shares.map((sh) => (
+          <div key={sh.key} className={`bene-tile is-${sh.tone}${sh.item?.locked ? ' is-locked' : ''}`}>
+            <span className="bene-tile__bar" aria-hidden="true" />
+            <span className="bene-tile__body">
+              <span className="bene-tile__who">{sh.name}</span>
+              {sh.item?.locked ? (
+                <span className="bene-tile__edit">
+                  <input
+                    type="number"
+                    className="bene-tile__pct-input num"
+                    style={{ width: `${String(sh.item.percent).length + 0.5}ch` }}
+                    value={sh.item.percent}
+                    min={sh.item.minPercent || 1}
+                    step="1"
+                    aria-label={`@${sh.item.account} %`}
+                    title={t('modals.beneficiary.minPercent', { percent: sh.item.minPercent })}
+                    onChange={(e) => handleLockedPercentChange(sh.index, e.target.value)}
+                  />
+                  <span aria-hidden="true">%</span>
+                </span>
+              ) : (
+                <b className="bene-tile__pct num">{sh.percent}%</b>
+              )}
+            </span>
+            {sh.tone === 'bene' && (
+              <IconButton icon="close" label={t('common.actions.remove')} size={32} variant="ghost" round className="delete-icon" onClick={() => handleDelete(sh.index)} />
+            )}
+            {sh.item?.locked && <Icon name="lock" size={18} className="bene-tile__lock" />}
+          </div>
+        ))}
+      </div>
+
+      {adding || hasPendingRow ? (
+        <div className="reward-main">
+          <label className="bene-add__user">
+            <span aria-hidden="true">@</span>
+            <input
+              type="text"
+              value={account}
+              placeholder={t('modals.beneficiary.usernamePlaceholder')}
+              aria-label={t('modals.beneficiary.usernamePlaceholder')}
+              onChange={(e) => setAccount(e.target.value.toLowerCase())}
+              autoFocus
+            />
+          </label>
+          <label className="bene-add__pct">
+            <input
+              type="number"
+              value={percent}
+              min="1"
+              step="1"
+              aria-label="%"
+              onChange={(e) => {
+                const value = parseFloat(e.target.value);
+
+                if (value < 1) {
+                  setPercent(value);
+                  setError(t('modals.beneficiary.errors.atLeastOne'));
+                } else {
+                  setError("");
+                  setPercent(value);
+                }
+              }}
+            />
+            <span aria-hidden="true">%</span>
+          </label>
+          <IconButton icon="person_add" label={t('common.actions.add')} size={40} variant="secondary" onClick={handleBeneficairy} />
+        </div>
+      ) : (
+        <button type="button" className="bene-addbtn" onClick={() => setAdding(true)}>
+          <Icon name="person_add" size={18} />
+          {t('modals.beneficiary.addCollaborator')}
+        </button>
+      )}
+
+      {percent > 0 && percent < 1 && (
+        <p className="bene-hint">
+          <Trans i18nKey="modals.beneficiary.minimumReward" components={{ strong: <strong /> }} />
+        </p>
+      )}
+
+      {error && <div className="error bene-error" role="alert"><Icon name="error" size={16} />{error}</div>}
+
+      {/* Typed but not committed with "+": say so, and report whether the
+          account actually exists on Hive. Nothing shows while the row is
+          empty. */}
+      {hasPendingRow && (
+        <div className={`bene-pending${acctStatus === 'invalid' ? ' bene-pending--bad' : ''}`}>
+          {acctStatus === 'checking' && <Trans i18nKey="modals.beneficiary.checking" values={{ account: account.trim() }} components={{ strong: <strong /> }} />}
+          {acctStatus === 'invalid' && <Trans i18nKey="modals.beneficiary.notExisting" values={{ account: account.trim() }} components={{ strong: <strong /> }} />}
+          {(acctStatus === 'valid' || acctStatus === 'idle') && (
+            <Trans i18nKey="modals.beneficiary.notAdded" values={{ account: account.trim() }} components={{ strong: <strong /> }} />
+          )}
+        </div>
+      )}
+
+      <p className="bene-text">{t('modals.beneficiary.intro')}</p>
+
+      {defaults.length > 0 && (
+        <div className="default-bene-wrap">
+          <Eyebrow>{t('modals.beneficiary.defaults', { count: defaults.length })}</Eyebrow>
+          {defaults.map((d) => (
+            <div key={d.key} className="bene-default">
+              <Icon name="lock" size={14} />
+              <span>{d.account ? `${d.account} · ${d.label}` : d.label}</span>
+            </div>
+          ))}
+        </div>
+      )}
+    </DialogShell>
   );
 }
 

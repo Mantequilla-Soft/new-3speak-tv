@@ -18,7 +18,8 @@ const toast = toastIn('Profile');
 // `followLockedReason` disables Follow and explains why. Following writes a
 // custom_json naming the target account, so it cannot work when that account
 // does not exist on chain yet — the caller knows that, this component does not.
-function AuthorBadge({ author, onClick, followersCount, fetchFollowers, showFollow, isFollowing: isFollowingProp, onFollow, noLink, compact, reputation, color, tabHint, subtitle, followLockedReason = null, offChainAuthor = false }) {
+// A `reputation` prop from older callers is ignored: no board shows a score.
+function AuthorBadge({ author, onClick, followersCount, fetchFollowers, showFollow, isFollowing: isFollowingProp, onFollow, noLink, compact, color, tabHint, subtitle, followLockedReason = null, offChainAuthor = false }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { user } = useAppStore();
@@ -151,7 +152,9 @@ function AuthorBadge({ author, onClick, followersCount, fetchFollowers, showFoll
       />
       <div className="author-text">
         <span className="author-name-row">
-          <span className="author-name">@{author}{reputation != null ? ` (${Math.round(reputation)})` : ''}</span>
+          {/* The bare name, as every board draws it (02 creator chip and
+              comments, 20a cards): no "@", no reputation score. */}
+          <span className="author-name">{author}</span>
           <PremiumBadge username={author} size={11} />
         </span>
         {subtitle ? (

@@ -94,6 +94,59 @@ describe('reloadForUpdate', () => {
     await reloadForUpdate()
     expect(reload).toHaveBeenCalled()
   })
+
+  // The "Refresh does nothing" reports: unregister() queues behind an update the
+  // browser is installing (11 s measured on a 4 Mbit/s line). The caches still go
+  // first, and the reload comes after about a second, not after the install.
+  it('does not wait for an unregister that is stuck behind an update', async () => {
+    vi.useFakeTimers()
+    try {
+      const del = vi.fn().mockResolvedValue(true)
+      vi.stubGlobal('caches', { keys: async () => ['precache'], delete: del })
+      const stuck = { scope: 'https://3speak.tv/', unregister: () => new Promise(() => {}) }
+      vi.stubGlobal('navigator', { serviceWorker: { getRegistrations: async () => [stuck] } })
+      const done = reloadForUpdate()
+      await vi.advanceTimersByTimeAsync(900)
+      expect(del).toHaveBeenCalledWith('precache')
+      expect(reload).not.toHaveBeenCalled()
+      await vi.advanceTimersByTimeAsync(200)
+      expect(reload).toHaveBeenCalled()
+      await done
+    } finally {
+      vi.useRealTimers()
+    }
+  })
+
+  it('does not wait for caches that never answer either', async () => {
+    vi.useFakeTimers()
+    try {
+      vi.stubGlobal('caches', { keys: () => new Promise(() => {}) })
+      vi.stubGlobal('navigator', { serviceWorker: { getRegistrations: async () => [] } })
+      const done = reloadForUpdate()
+      await vi.advanceTimersByTimeAsync(2100)
+      expect(reload).toHaveBeenCalledTimes(1)
+      await done
+    } finally {
+      vi.useRealTimers()
+    }
+  })
+
+  it('a second press while it runs does not start it again', async () => {
+    vi.useFakeTimers()
+    try {
+      const keys = vi.fn(async () => [])
+      vi.stubGlobal('caches', { keys, delete: async () => true })
+      vi.stubGlobal('navigator', { serviceWorker: { getRegistrations: () => new Promise(() => {}) } })
+      const first = reloadForUpdate()
+      const second = reloadForUpdate()
+      await vi.advanceTimersByTimeAsync(1100)
+      await Promise.all([first, second])
+      expect(keys).toHaveBeenCalledTimes(1)
+      expect(reload).toHaveBeenCalledTimes(1)
+    } finally {
+      vi.useRealTimers()
+    }
+  })
 })
 
 describe('reloadIfStale (upload gate)', () => {

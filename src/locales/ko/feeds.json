@@ -28,7 +28,16 @@
   },
   "newFromFollowing": {
     "aria": "팔로우하는 크리에이터의 새 콘텐츠",
-    "shorts_other": "쇼츠 {{count}}개"
+    "summary_other": "새 동영상 {{count}}개",
+    "fromFollowing": "팔로우한 사람들이 올렸어요",
+    "shorts_other": "쇼츠 {{count}}개",
+    "show": "보기",
+    "hide": "숨기기",
+    "markSeen": "모두 본 것으로 표시"
+  },
+  "tagMeta": {
+    "videos_other": "동영상 {{num}}개",
+    "thisWeek": "이번 주 {{num}}개"
   },
   "firstUploads": {
     "title": "첫 업로드"
@@ -47,8 +56,16 @@
     "empty": "아직 표시할 내용이 없어요.",
     "viewAll": "모두 보기",
     "dragToReorder": "드래그해서 순서 변경",
+    "customize": "맞춤 설정",
+    "customizeTitle": "홈 맞춤 설정",
+    "customizeHint": "끌어서 순서를 바꾸세요. 필요 없는 섹션은 끄면 돼요.",
     "surfTitle": "채널 서핑: 주제를 고르고 TV처럼 시청하세요",
-    "zapping": "재핑"
+    "zapping": "재핑",
+    "hero": {
+      "spotlightIn": "{{community}}의 스포트라이트",
+      "slide": "스포트라이트 {{count}}개 중 {{index}}번째"
+    },
+    "tabFollowing": "팔로잉"
   },
   "surf": {
     "pageTitle": "채널 서핑",
@@ -74,9 +91,10 @@
     "nextVideoKey": "다음 동영상(→)",
     "zap": "재핑",
     "findingNext": "다음 동영상 찾는 중…",
-    "stop": "서핑 중지",
+    "stop": "중지",
     "stopTitle": "서핑 중지(현재 동영상은 계속 재생)",
-    "guide": "채널 가이드"
+    "guide": "채널 가이드",
+    "guideShort": "가이드"
   },
   "discover": {
     "searchPlaceholder": "동영상, 쇼츠, 오디오, 커뮤니티 검색...",
@@ -114,6 +132,31 @@
     "groupTitle": "{{label}}({{count}})",
     "subscribers_other": "구독자 {{count}}명",
     "authors_other": "작성자 {{count}}명",
-    "views_other": "조회수 {{views}}회"
+    "views_other": "조회수 {{views}}회",
+    "topCreator": "인기 크리에이터",
+    "creators": "크리에이터",
+    "relatedTags": "관련 태그",
+    "trendingTags": "인기 태그",
+    "topCreators": "인기 크리에이터",
+    "categories": "카테고리",
+    "show": "표시",
+    "boostRecentHint": "결과에서 최신 동영상 우선",
+    "showResults_other": "결과 {{count}}개 보기",
+    "resultTypes": "결과 유형"
+  },
+  "activity": {
+    "warmup": "워밍업",
+    "aria": "3Speak 활동",
+    "community": "커뮤니티",
+    "verbs": {
+      "snap": "Snap",
+      "audio": "새 오디오",
+      "playlist": "재생목록",
+      "live": "라이브 중",
+      "group_other": "이번 주 새 동영상 {{count}}개"
+    },
+    "emptyCommunity": "최근 며칠 동안 커뮤니티에 새 소식이 없어요.",
+    "emptyLive": "지금 라이브 중인 사람이 없어요.",
+    "emptyGroups": "이번 주 그룹 활동이 아직 없어요."
   }
 }

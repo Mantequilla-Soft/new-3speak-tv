@@ -9,6 +9,7 @@ import { audioItemPath } from '../AudioItem/AudioItemView';
 import AudioPlaylistTile from '../AudioPlaylistTile/AudioPlaylistTile';
 import BarLoader from '../Loader/BarLoader';
 import ProfileEmptyState from './ProfileEmptyState';
+import { Segmented } from '../v2/ui';
 import './UserAudioList.scss';
 
 // A podcast here = a public playlist of this creator's that holds nothing but
@@ -63,24 +64,19 @@ function UserAudioList({ user, limit = 0, isOwnProfile = false }) {
     params.set('sub', next);
     setSearchParams(params, { replace: true });
   };
-  const subTab = (key, label, count) => (
-    <button
-      type="button"
-      role="tab"
-      aria-selected={sub === key}
-      className={`user-audio-subtab${sub === key ? ' active' : ''}`}
-      onClick={() => selectSub(key)}
-    >
-      {label} ({count})
-    </button>
-  );
-
   return (
     <>
       {grid && (
-        <div className="user-audio-subtabs" role="tablist">
-          {subTab('playlists', t('profile.tabs.playlists'), podcasts.length)}
-          {subTab('audio', t('profile.tabs.audio'), audio.length)}
+        <div className="user-audio-subtabs">
+          <Segmented
+            options={[
+              { value: 'playlists', label: t('profile.tabs.playlists'), count: podcasts.length },
+              { value: 'audio', label: t('profile.tabs.audio'), count: audio.length },
+            ]}
+            value={sub}
+            onChange={selectSub}
+            label={t('profile.tabs.audio')}
+          />
         </div>
       )}
       <section className={`user-audio-section${grid && sub !== 'playlists' ? ' is-sub-hidden' : ''}`}>

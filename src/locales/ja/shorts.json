@@ -16,7 +16,8 @@
       "rep": "評価 {{rep}}",
       "repTitle": "Hive の評価（レピュテーション）",
       "viewProfile": "プロフィールを見る"
-    }
+    },
+    "replyTo": "{{user}} に返信…"
   },
   "errors": {
     "votingUnavailable": "この投稿には投票できません",
@@ -30,7 +31,7 @@
     "interestsTitle": "興味に合ったショートだけを表示",
     "pickInterestsFirst": "先に興味のあるトピックを選んでください",
     "noInterests": "まだ興味のあるトピックを選んでいません。設定から選んでください",
-    "interestsExhausted": "興味に合ったショートはこれで全部です。発見を表示します",
+    "interestsExhausted": "興味に合ったショートはこれで全部です。発見を表示します。",
     "noInterestMatches": "現在、興味に合ったショートはありません。",
     "switchToDiscover": "発見に切り替える",
     "empty": "表示できるショートはありません",
@@ -39,12 +40,18 @@
   "glow": {
     "subtle": "アンビエントライト: 控えめ",
     "vivid": "アンビエントライト: 鮮やか",
-    "off": "アンビエントライト: オフ"
+    "off": "アンビエントライト: オフ",
+    "label": "アンビエントライト",
+    "offShort": "オフ",
+    "subtleShort": "控えめ",
+    "vividShort": "鮮やか"
   },
   "playbackMode": {
     "autoReplay": "自動リプレイ",
     "autoSwipe": "自動スワイプ",
-    "manual": "手動"
+    "manual": "手動",
+    "label": "再生",
+    "options": "再生オプション"
   },
   "subtitles": {
     "off": "オフ"
@@ -82,7 +89,7 @@
     "noUrl": "リミックス用の動画 URL を取得できませんでした",
     "loadFailed": "リミックス用の動画を読み込めませんでした",
     "chainFull": "この動画はすでに {{max}} 本の動画を元にしているため、これ以上リミックスできません。",
-    "chainNoSlots": "このリミックスの連鎖はすでに多くのクリエイターに報酬を分配しているため、Hive 上に新しいリミックスの空きがありません。3Speak Pro ならリミックスできます。"
+    "chainNoSlots": "この連鎖はすでに多くのクリエイターに報酬を分配しているため、リミックスすると Hive 上に空きがなくなります。3Speak Pro ならリミックスできます。"
   },
   "watchLater": {
     "loginRequired": "ショートを保存するにはログイン",
@@ -99,7 +106,7 @@
     "postRemoved": "このショートの元になる Hive の投稿が削除されたため、コメントや投票はできなくなりました。",
     "beFirst": "最初にコメントしましょう！",
     "unavailable": "この投稿にはコメントできません",
-    "addPlaceholder": "コメントを追加...",
+    "addPlaceholder": "ディスカッションに参加…",
     "addPlaceholderBar": "コメントを追加…",
     "loginPlaceholder": "コメントするにはログイン",
     "send": "コメントを送信",
@@ -126,7 +133,7 @@
     "seenNote": "ログイン中で、視聴履歴をオンにしている視聴者です。",
     "seenEmpty": "まだ誰も見ていません。",
     "keep": "ショートとして残す",
-    "keepHint": "24時間後もチャンネルに残ります",
+    "keepHint": "24 時間が過ぎてもチャンネルに残ります。",
     "keepConfirm": "ずっと残しますか？",
     "keepYes": "残す",
     "keeping": "保存中…",
@@ -137,5 +144,9 @@
   "audiogram": {
     "fullEpisode": "エピソード全編",
     "listen": "エピソード全編を聴く: {{title}}"
+  },
+  "panel": {
+    "discussion": "ディスカッション",
+    "upNext": "次に再生"
   }
 }

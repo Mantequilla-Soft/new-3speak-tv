@@ -3,9 +3,10 @@ import { Link, Navigate, useParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
-import { MdChevronLeft, MdChevronRight, MdClose } from 'react-icons/md';
 import HiveAvatar from '../components/HiveAvatar/HiveAvatar';
 import RecapScene from '../components/Recap/RecapScene';
+import { Icon } from '../components/v2/Icon';
+import { Button, IconButton, Progress, StepList, EmptyState } from '../components/v2/ui';
 import { useAppStore } from '../lib/store';
 import { hiveAvatarUrl, cachedProfileImage } from '../utils/avatarCache';
 import { hasWebGL } from '../lib/three3d';
@@ -16,6 +17,7 @@ import { fetchHiveYear, fetchNewFollowers, fetchCommunityPosts, fetchIncomeYear,
 import { fetchUploadsYear, fetchWatchedYear, usableThumb } from '../lib/recapData';
 import { fixVideoThumbnail, fallbackImg } from '../utils/fixThumbnails';
 import { formatDate, formatNumber, formatTimeAgo } from '../i18n';
+import recapMark from '../assets/image/3S_mark.svg';
 import './Recap.scss';
 
 // The recap covers the last 12 months: the checker's 365-day leaderboard window
@@ -423,6 +425,17 @@ export default function Recap() {
   const ready = settledData === sources.length && thumbsReady;
   const step = sources.find((x) => x.q.isLoading)?.key || (thumbsReady ? null : 'thumbnails');
   const sourceCount = sources.length + 1;
+  // The same steps as a list (done / now / next), one row per kind of data.
+  const loadKeys = [...new Set(sources.map((x) => x.key)), 'thumbnails'];
+  const loadSteps = loadKeys.map((key) => {
+    const done = key === 'thumbnails' ? thumbsReady : sources.filter((x) => x.key === key).every((x) => !x.q.isLoading);
+    return {
+      // Thumbnails: the count only once the lists say how many there are.
+      label: key === 'thumbnails' && !expectedThumbs ? t('recap.loadingSteps.thumbnailsWaiting')
+        : t(`recap.loadingSteps.${key}`, { done: thumbProgress.done, total: expectedThumbs }),
+      state: done ? 'done' : key === step ? 'current' : 'next',
+    };
+  });
 
   const slides = useMemo(() => {
     if (!lb.data || !ready) return [{ id: 'intro', mode: 'ring', pending: true }];
@@ -587,7 +600,11 @@ export default function Recap() {
 
   if (raw && raw !== user) return <Navigate to="/recap" replace />;
   if (!user) {
-    return <div className="recap-page"><div className="recap-state">{t('recap.signIn')}</div></div>;
+    return (
+      <div className="recap-page recap-page--plain">
+        <EmptyState className="recap-signin" icon="celebration" title={t('recap.open')}>{t('recap.signIn')}</EmptyState>
+      </div>
+    );
   }
 
   const failed = lb.isError;
@@ -595,7 +612,10 @@ export default function Recap() {
   return (
     <div className="recap-page">
       <Helmet><title>{`3S | ${t('recap.pageTitle', { user })}`}</title></Helmet>
-      <div className={`recap-stage${slide?.pending ? ' is-loading' : ''}`}>
+      {/* The stage is a dark media surface in both themes (like the shorts
+          player): the 3D scene is drawn for a dark ground, so the v2 dark
+          tokens apply inside it. */}
+      <div className={`recap-stage${slide?.pending ? ' is-loading' : ''}`} data-theme="dark">
         <RecapScene
           ref={sceneRef}
           mode={slide?.mode || 'ring'}
@@ -613,19 +633,20 @@ export default function Recap() {
           frozen={!!locked}
         />
 
-        {failed && <div className="recap-state">{t('recap.error')}</div>}
+        {failed && (
+          <div className="recap-state">
+            <div className="v2-failure recap-failure" role="alert"><b>{t('recap.error')}</b></div>
+          </div>
+        )}
 
         {/* Loading: only the loader, nothing else on the stage. A bar that
             fills per source, and what is being counted right now. */}
         {!failed && slide?.pending && (
           <div className="recap-state" role="status">
-            <div className="recap-progress-load">
-              <div className="recap-progress-load-bar">
-                <span style={{ width: `${Math.round((settled / sourceCount) * 100)}%` }} />
-              </div>
-              <p className="recap-note">
-                {step ? t(`recap.loadingSteps.${step}`, { done: thumbProgress.done, total: expectedThumbs }) : t('recap.loading')}
-              </p>
+            <div className="recap-load-card">
+              <b className="recap-load-title">{t('recap.loading')}</b>
+              <Progress value={(settled / sourceCount) * 100} tone="cyan" thin label={t('recap.loading')} />
+              <StepList items={loadSteps} />
               <LoadingTips />
             </div>
           </div>
@@ -637,6 +658,12 @@ export default function Recap() {
               {slides.map((s, i) => (
                 <span key={s.id} className={`recap-progress-bar${i <= at ? ' done' : ''}`} />
               ))}
+            </div>
+            {/* 26c: the story's label under the progress, the 3S mark and the
+                recap's name. */}
+            <div className="recap-brand" aria-hidden="true">
+              <img src={recapMark} alt="" />
+              <span>{t('recap.open')}</span>
             </div>
 
             {/* Tap left / right half to step, like stories. Not where the scene
@@ -733,13 +760,9 @@ export default function Recap() {
             )}
 
             <div className="recap-nav">
-              <button type="button" className="recap-nav-btn" onClick={() => go(-1)} disabled={at === 0} aria-label={t('recap.nav.previous')}>
-                <MdChevronLeft size={22} />
-              </button>
-              <span className="recap-nav-count">{at + 1} / {total}</span>
-              <button type="button" className="recap-nav-btn" onClick={() => go(1)} disabled={at >= total - 1} aria-label={t('recap.nav.next')}>
-                <MdChevronRight size={22} />
-              </button>
+              <IconButton icon="chevron_left" size={36} variant="secondary" className="recap-nav-btn" onClick={() => go(-1)} disabled={at === 0} label={t('recap.nav.previous')} />
+              <span className="recap-nav-count">{t('recap.nav.slide', { n: at + 1, total })}</span>
+              <IconButton icon="chevron_right" size={36} variant="inverse" className="recap-nav-btn" onClick={() => go(1)} disabled={at >= total - 1} label={t('recap.nav.next')} />
             </div>
           </>
         )}
@@ -816,10 +839,9 @@ function VideoCardPanel({ card, locked, onClose }) {
 function PanelCloseButton({ onClose }) {
   const { t } = useTranslation();
   return (
-    <button type="button" className="recap-panel-close-btn" onClick={onClose}>
-      <MdClose size={16} aria-hidden="true" />
+    <Button variant="secondary" size={36} block icon="close" className="recap-panel-close-btn" onClick={onClose}>
       {t('recap.panel.closeAndLook')}
-    </button>
+    </Button>
   );
 }
 
@@ -849,11 +871,15 @@ function Slide({ slide, user, isOwner, fans, onPickRank }) {
   switch (slide.id) {
     case 'empty':
       return (
-        <>
-          <h1 className="recap-title">{t('recap.empty.title')}</h1>
-          <p className="recap-sub">{t('recap.empty.sub')}</p>
-          {isOwner && <Link target="_blank" rel="noopener noreferrer" className="recap-btn" to="/upload">{t('recap.empty.upload')}</Link>}
-        </>
+        <div className="recap-empty-card">
+          <h1 className="recap-empty-title">{t('recap.empty.title')}</h1>
+          <p className="recap-empty-sub">{t('recap.empty.sub')}</p>
+          {isOwner && (
+            <Button as={Link} target="_blank" rel="noopener noreferrer" variant="primary" size={40} icon="upload" className="recap-btn" to="/upload">
+              {t('recap.empty.upload')}
+            </Button>
+          )}
+        </div>
       );
     case 'intro':
       return (
@@ -881,7 +907,7 @@ function Slide({ slide, user, isOwner, fans, onPickRank }) {
       return (
         <>
           <p className="recap-kicker">{t('recap.watch.kicker')}</p>
-          <p className="recap-big">{formatDuration(slide.watchSecs)}</p>
+          <p className="recap-big recap-big--num">{formatDuration(slide.watchSecs)}</p>
           <p className="recap-sub">{slide.peak ? t('recap.watch.graph') : t('recap.watch.sub')}</p>
           {slide.peak && (
             <p className="recap-sub recap-peak">
@@ -981,7 +1007,7 @@ function Slide({ slide, user, isOwner, fans, onPickRank }) {
       return (
         <>
           <p className="recap-kicker">{t('recap.income.kicker')}</p>
-          <p className="recap-big">≈ ${formatNumber(Math.round(slide.total))}</p>
+          <p className="recap-big recap-big--num">≈ ${formatNumber(Math.round(slide.total))}</p>
           <p className="recap-sub">{t('recap.income.sub')}</p>
           {/* The post-rewards pillar is stacked: say what its two colours are. */}
           <p className="recap-legend">
@@ -1067,9 +1093,9 @@ function Slide({ slide, user, isOwner, fans, onPickRank }) {
       return (
         <>
           <p className="recap-kicker">{t('recap.rank.kicker')}</p>
-          <p className="recap-big">#{slide.rank}</p>
+          <p className="recap-big recap-big--num">#{slide.rank}</p>
           <Link target="_blank" rel="noopener noreferrer" className="recap-sub recap-link" to={`/leaderboard?window=${WINDOW}&metric=${slide.metric.id}&user=${encodeURIComponent(user)}`}>
-            {t('recap.rank.board', { board: t(slide.metric.labelKey) })}
+            {t('recap.rank.board', { board: t(slide.metric.labelKey) })} <Icon name="open_in_new" size={14} />
           </Link>
           {slide.allRanks.length > 1 && (
             <ul className="recap-chips recap-chips--ranks">
@@ -1098,7 +1124,9 @@ function Slide({ slide, user, isOwner, fans, onPickRank }) {
           <h1 className="recap-title">{t('recap.outro.title')}</h1>
           <p className="recap-sub">{t('recap.outro.sub')}</p>
           <div className="recap-actions">
-            <Link target="_blank" rel="noopener noreferrer" className="recap-btn" to={`/@${user}`}>{t('recap.outro.channel')}</Link>
+            <Button as={Link} target="_blank" rel="noopener noreferrer" variant="primary" size={48} next className="recap-btn" to={`/@${user}`}>
+              {t('recap.outro.channel')}
+            </Button>
           </div>
         </>
       );

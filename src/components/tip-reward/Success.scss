@@ -1,53 +1,31 @@
-.success-page-content {
-      max-width: 500px;
-      padding: 2.5rem;
-      background: var(--card-bg, #fff);
-      border-radius: 16px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
+// Tip sent (design 19f, middle): an accent wash from the top, the avatar in an
+// accent ring, the eyebrow, the amount and name as one display line, a
+// sentence, and Done pinned at the bottom.
+@use "../../styles/v2" as v2;
 
+.tip-success {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  flex: 1;
+  min-height: 100%;
+  padding: 28px;
+  border: 0;
+  border-radius: 0;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 22%, var(--surface)), var(--surface) 60%);
 
-    .icon {
-      width: 80px;
-      height: 80px;
-      margin: 0 auto 1.5rem;
-      background-color: #32cd32;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-size: 2rem;
-    }
-
-    .title {
-      color: var(--text-primary, #333);
-      font-size: 2rem;
-      margin-bottom: 1rem;
-    }
-
-    .message {
-      color: var(--text-secondary, #666);
-      margin-bottom: 2rem;
-      line-height: 1.6;
-    }
-
-    button {
-      background-color: transparent;
-      color: var(--accent-primary, #e53935);
-      padding: 0.75rem 1.5rem;
-      border-radius: 8px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: transform 0.2s;
-      border: 1px solid var(--accent-primary, #e53935);
-
-      &:hover {
-        transform: translateY(-1px);
-      }
-    }
+  &__avatar { margin-bottom: 20px; }
+  &__title {
+    margin: 0;
+    font-size: 48px;
+    font-weight: 900;
+    letter-spacing: -.02em;
+    line-height: 1.1;
+    overflow-wrap: anywhere;
+    @include v2.mobile { font-size: 40px; }
   }
+  &__msg { margin: 4px 0 0; font-size: 16px; line-height: 1.5; color: var(--muted); }
+  &__btn { margin-top: auto; }
+  @include v2.mobile { min-height: 420px; padding: 24px 18px; }
+}

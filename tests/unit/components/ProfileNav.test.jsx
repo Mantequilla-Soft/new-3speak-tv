@@ -1,8 +1,9 @@
 // @vitest-environment jsdom
-// The account menu the avatar opens (components/nav/ProfileNav.jsx): who is
-// signed in with their voting power and resource credits, the way to their
-// channel, wallet, settings and the other pages they can use, change account and
-// log out, and the ways it closes (Escape, the backdrop, moving to another page).
+// The account menu the avatar opens (components/nav/ProfileNav.jsx, 07d + 42b):
+// who is signed in with a Switch (change account), their voting power and
+// resource credits, their places as tiles, the theme switch, the other pages
+// they can use, the small links with "Hide pages", Settings and Log out, and the
+// ways it closes (Escape, the backdrop, moving to another page).
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { act, screen, waitFor, within } from '@testing-library/react'
 import { useNavigate } from 'react-router-dom'
@@ -17,11 +18,19 @@ vi.mock('../../../src/utils/config', async (importOriginal) => ({ ...(await impo
 vi.mock('../../../src/hooks/useCanImportVideos', () => ({ default: () => false }))
 vi.mock('../../../src/hooks/getUserDetails', () => ({ useGetMyQuery: () => ({ data: null }) }))
 vi.mock('../../../src/utils/avatarCache', () => ({ useAvatarUrl: (u) => `/img/u/${u}/avatar` }))
-vi.mock('../../../src/lib/incubation', () => ({ fetchBackfillSummary: async () => ({ pending: m.backlog }) }))
+vi.mock('../../../src/lib/incubation', () => ({
+  fetchBackfillSummary: async () => ({ pending: m.backlog }),
+  // A warm-up account's goals (the menu's path block): 1 of 2 done, half way.
+  fetchIncubationProgress: async () => ({ tasks: [{ type: 'video', done: false, have: 0, need: 3 }, { type: 'follow', done: true, have: 5, need: 5 }] }),
+  onIncubationProgress: () => () => {},
+  progressFraction: (tasks) => tasks.filter((t) => t.done).length / tasks.length,
+}))
 vi.mock('../../../src/lib/referralLinks', () => ({ fetchMyInviteLinks: async () => ({ links: m.invites }) }))
 vi.mock('../../../src/lib/translatorApi', () => ({ isTranslatorName: async () => m.translator }))
 vi.mock('../../../src/components/LeaderboardBadges/LeaderboardBadges', () => ({ default: () => <a href="/leaderboard?board=views">Top 10 views</a> }))
 vi.mock('../../../src/utils/pwaInstall', () => ({ usePwaInstall: () => m.pwa }))
+vi.mock('../../../src/context/ChatContext', () => ({ useChat: () => ({ ready: false, warmup: false }) }))
+vi.mock('../../../src/hooks/useServerUnread', () => ({ useServerUnread: () => ({ unreadCount: 0 }) }))
 vi.mock('../../../src/components/SettingsModal/SettingsModal', () => ({ default: ({ isOpen }) => (isOpen ? <div role="dialog" aria-label="Settings" /> : null) }))
 
 const { toast } = await import('sonner')
@@ -65,10 +74,24 @@ describe('the account menu', () => {
     expect(await screen.findByText('node.example')).toBeInTheDocument()
   })
 
+  // Issue #563: a followed "Powered by Hive" link to hive.io.
+  it('links to hive.io as "Powered by Hive", followed (no nofollow / ugc / sponsored)', () => {
+    mount()
+    const link = screen.getByRole('link', { name: 'Powered by Hive' })
+    expect(link).toHaveAttribute('href', 'https://hive.io')
+    expect(link.getAttribute('rel')).not.toMatch(/nofollow|ugc|sponsored/)
+  })
+
   it('lists the pages every member gets, as menu items', () => {
     const { menu } = mount()
-    const items = within(menu()).getAllByRole('menuitem').map((el) => el.textContent.trim())
-    expect(items).toEqual(['My Channel', 'Wallet', 'Settings', 'Analytics', 'Rankings', 'About 3Speak', 'FAQ', 'Change account'])
+    // The visible label only: the Material Symbols glyph is ligature text.
+    const label = (el) => (el.querySelector('.pn-label') || el).textContent.trim()
+    const items = within(menu()).getAllByRole('menuitem').map(label)
+    expect(items).toEqual([
+      'Switch', 'Channel', 'Studio', 'Wallet', 'Playlists', 'History', 'Badges',
+      // Settings as a row, About and FAQ along the bottom (owner 2026-11-12).
+      'Analytics', 'Groups', 'Live', 'Chat', 'Rankings', 'Settings', 'About 3Speak', 'FAQ',
+    ])
   })
 
   it('adds Advertise, invite links, the translation editor and the publish backlog for those who have them', async () => {
@@ -92,6 +115,20 @@ describe('the account menu', () => {
     expect(within(menu()).queryByText('VP')).not.toBeInTheDocument()
   })
 
+  it('an account still incubating sees its path to a Hive account instead (owner 2026-11-12)', async () => {
+    act(() => useAppStore.setState({ user: null, incubationHandle: 'newbie' }))
+    const { menu } = mount()
+    expect(await within(menu()).findByText('Your path to a Hive account')).toBeInTheDocument()
+    expect(within(menu()).getByText('1 of 2 done')).toBeInTheDocument()
+    expect(within(menu()).getByText('50%')).toBeInTheDocument()
+    expect(within(menu()).getByRole('link', { name: /Your path to a Hive account/ })).toHaveAttribute('href', '/profile')
+  })
+
+  it('a Hive account has no path block', () => {
+    const { menu } = mount()
+    expect(within(menu()).queryByText('Your path to a Hive account')).not.toBeInTheDocument()
+  })
+
   it('Wallet opens the member\'s wallet and closes the menu', async () => {
     const { user, onclose } = mount()
     await user.click(screen.getByRole('menuitem', { name: 'Wallet' }))
@@ -102,7 +139,8 @@ describe('the account menu', () => {
   it('Settings opens the settings window', async () => {
     const { user, onclose } = mount()
     await user.click(screen.getByRole('menuitem', { name: 'Settings' }))
-    expect(screen.getByRole('dialog', { name: 'Settings' })).toBeInTheDocument()
+    // Settings loads on first open (code-split), so wait for it.
+    expect(await screen.findByRole('dialog', { name: 'Settings' })).toBeInTheDocument()
     expect(onclose).toHaveBeenCalled()
   })
 
@@ -113,13 +151,10 @@ describe('the account menu', () => {
     expect(openLoginModal).toHaveBeenCalledTimes(1)
   })
 
-  it('offers Logout for a Butter Auth login, which signs out and goes home', async () => {
+  it('has no Log out (Switch covers changing account, owner 2026-11-12)', () => {
     localStorage.setItem('manteauth_login', 'true')
-    const { user, onclose } = mount()
-    await user.click(screen.getByRole('menuitem', { name: 'Logout' }))
-    expect(useAppStore.getState().LogOut).toHaveBeenCalledWith('badadib')
-    expect(onclose).toHaveBeenCalled()
-    expect(screen.getByTestId('location')).toHaveTextContent(/^\/$/)
+    mount()
+    expect(screen.queryByRole('menuitem', { name: 'Log out' })).toBeNull()
   })
 
   it('closes on Escape, on the backdrop, and when the page changes, but not on a click inside', async () => {
@@ -153,6 +188,18 @@ describe('the account menu', () => {
     const { user } = mount()
     await user.click(screen.getByRole('menuitem', { name: 'Install App' }))
     expect(m.pwa.promptInstall).toHaveBeenCalledTimes(1)
+  })
+
+  it('has no "Hide pages" switch any more (owner 2026-11-12)', () => {
+    mount()
+    expect(screen.queryByRole('menuitem', { name: /Hide pages|Show pages/ })).toBeNull()
+  })
+
+  it('the theme switch turns dark mode on and off', async () => {
+    act(() => useAppStore.getState().setTheme('dark'))
+    const { user } = mount()
+    await user.click(screen.getByRole('switch', { name: 'Switch to light mode' }))
+    expect(useAppStore.getState().theme).toBe('light')
   })
 
   it('links to 3Speak on Discord, X and Telegram in new tabs', () => {

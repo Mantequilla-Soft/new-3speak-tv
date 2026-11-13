@@ -1,26 +1,27 @@
 import { useAppStore } from "../../lib/store";
 import { useTranslation } from "react-i18next";
-import { FiSun, FiMoon } from "react-icons/fi";
+import { Icon } from "../v2/Icon";
 import "./ThemeToggle.scss";
 
-const ThemeToggle = () => {
+// Light / dark switch: a round icon button showing the theme you are in
+// (designs 07d, 42b: the account menu's header). A real button, so it is
+// reachable from the keyboard.
+const ThemeToggle = ({ className = "" }) => {
   const { theme, toggleTheme } = useAppStore();
   const { t } = useTranslation();
-  const switchLabel = theme === 'dark' ? t('nav.theme.switchToLight') : t('nav.theme.switchToDark');
+  const dark = theme === 'dark';
+  const switchLabel = dark ? t('nav.theme.switchToLight') : t('nav.theme.switchToDark');
 
   return (
-    <div
-      className="theme-toggle"
+    <button
+      type="button"
+      className={`theme-toggle ${className}`.trim()}
       onClick={toggleTheme}
       aria-label={switchLabel}
       title={switchLabel}
     >
-      <div className="toggle-track">
-        <FiSun className="icon sun-icon" />
-        <FiMoon className="icon moon-icon" />
-        <div className={`toggle-thumb ${theme === 'dark' ? 'dark' : ''}`} />
-      </div>
-    </div>
+      <Icon name={dark ? 'dark_mode' : 'light_mode'} size={20} />
+    </button>
   );
 };
 

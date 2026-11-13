@@ -1,8 +1,7 @@
 import { useEffect, useState, useMemo } from 'react';
-import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import { CHECKER_URL } from '../../utils/config';
-import ModalHeader from '../ModalHeader/ModalHeader';
+import { Dialog, Icon } from '../v2/ui';
 import { useTranslation } from 'react-i18next';
 import './SubscriberTicker.scss';
 
@@ -27,13 +26,6 @@ export default function SubscriberTicker() {
     return () => { cancelled = true; };
   }, []);
 
-  useEffect(() => {
-    if (!open) return;
-    const onKey = (e) => { if (e.key === 'Escape') setOpen(false); };
-    document.addEventListener('keydown', onKey);
-    return () => document.removeEventListener('keydown', onKey);
-  }, [open]);
-
   // Duplicate the list so the marquee loops seamlessly.
   const loop = useMemo(() => [...subs, ...subs], [subs]);
   if (subs.length === 0) return null;
@@ -51,7 +43,7 @@ export default function SubscriberTicker() {
         onKeyDown={(e) => { if (e.key === 'Enter') setOpen(true); }}
       >
         <span className="sub-ticker-label">
-          <i className="fa-solid fa-crown" /> {t('profile.subscriberTicker.count', { count: subs.length })}
+          <Icon name="workspace_premium" size={18} /> {t('profile.subscriberTicker.count', { count: subs.length })}
         </span>
         <div className="sub-ticker-viewport">
           <div
@@ -68,27 +60,27 @@ export default function SubscriberTicker() {
         </div>
       </div>
 
-      {open && createPortal(
-        <div className="sub-modal-overlay" onClick={() => setOpen(false)}>
-          <div className="sub-modal" onClick={(e) => e.stopPropagation()}>
-            <ModalHeader closeOnEscape={false} className="sub-modal-header" title={t('profile.subscriberTicker.modalTitle', { n: subs.length })} onClose={() => setOpen(false)} />
-            <div className="sub-modal-list">
-              {subs.map((s) => (
-                <button
-                  type="button"
-                  className="sub-modal-item"
-                  key={s.username}
-                  onClick={() => goProfile(s.username)}
-                >
-                  <img src={avatar(s.username)} alt="" loading="lazy" />
-                  <span className="sub-modal-name">@{s.username}</span>
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>,
-        document.body,
-      )}
+      <Dialog
+        open={open}
+        onClose={() => setOpen(false)}
+        title={t('profile.subscriberTicker.modalTitle', { n: subs.length })}
+        className="sub-modal"
+        bodyClassName="sub-modal-body"
+      >
+        <div className="sub-modal-list">
+          {subs.map((s) => (
+            <button
+              type="button"
+              className="sub-modal-item"
+              key={s.username}
+              onClick={() => goProfile(s.username)}
+            >
+              <img src={avatar(s.username)} alt="" loading="lazy" />
+              <span className="sub-modal-name">@{s.username}</span>
+            </button>
+          ))}
+        </div>
+      </Dialog>
     </>
   );
 }

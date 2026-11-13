@@ -4,9 +4,9 @@
     "saveFailed": "无法保存兴趣",
     "title": "兴趣",
     "loading": "加载中…",
-    "hint": "选择你关心的话题——我们会据此为你推荐更多喜欢的内容。",
+    "hint": "选择你关心的话题。我们会据此为你推荐更多喜欢的内容。",
     "loginHint": "登录后选择你的兴趣。",
-    "save": "保存兴趣"
+    "save": "保存到我的 Hive 资料"
   },
   "ads": {
     "chainNotSaved": "已保存在 3Speak，但未保存到你的 Hive 账号。请重试，以便也保存到那里。",
@@ -16,18 +16,18 @@
     "rollsOnToast": "你的视频已开启视频插播广告",
     "rollsOffToast": "你的视频现在只显示横幅和滚动字幕",
     "audio": "你的音频中的广告",
-    "audioDesc": "你的音频播放时，可能会插入一段赞助商的简短语音消息，并附上听众可以打开的链接。和视频广告一样，你会获得一部分收益。你可以在音频上传器中为每次上传单独更改。",
+    "audioDesc": "一段简短的语音赞助信息，附带听众可以打开的链接。",
     "audioOnToast": "你的音频已开启广告",
     "audioOffToast": "你的音频已关闭广告",
     "splitSaved": "收入分成已保存",
     "title": "你视频中的广告",
     "allow": "允许广告",
-    "allowDesc": "你的视频中可能会播放一段简短的赞助广告。你会获得其收入的一部分，你发布内容所在的社区也会获得一部分。关闭后，你的视频将完全不含广告——它们也会从我们提供给广告主的资源中移除，因此不会出售任何你已选择退出的内容。",
+    "allowDesc": "你的视频中可能会播放一段简短的赞助广告。关闭后，它们会从我们出售给广告主的资源中移除。",
     "allowAria": "允许在你的视频中投放广告",
     "rolls": "视频插播广告",
-    "rollsDesc": "在你的视频播放前或播放中插入的简短视频广告。关闭后只保留横幅和滚动字幕，它们显示在视频上方，不会打断播放。",
+    "rollsDesc": "关闭后只保留横幅和滚动字幕。",
     "shareTitle": "与社区分享",
-    "shareDesc": "广告收入的 {{pool}}% 由你和你发布内容所在的社区分配。选择社区能分到多少——保持为零，你就保留全部 {{pool}}%。",
+    "shareDesc": "广告收入的 {{pool}}% 由你和你发布内容所在的社区分配。",
     "youPct": "你 {{pct}}%",
     "communityPct": "社区 {{pct}}%",
     "shareInputLabel": "社区分成百分比",
@@ -40,14 +40,15 @@
     "saveFailed": "无法保存该设置。",
     "title": "边看边赚",
     "rowTitle": "观众奖励",
-    "desc": "根据你的观看获得一部分广告收入，以 HBD 或 HIVE 支付。你按观看的视频获得报酬，无论是否播放了广告，所以奖励的是观看本身，而不是忍受广告。除 3Speak Pro 订阅者外，所有人都会看到广告。除了“已观看”页面已保存的观看记录外，我们还会记录你观看每个视频的进度，并在你关闭此功能的那一刻将其删除。",
+    "desc": "根据你的观看获得一部分广告收入，以 HBD 或 HIVE 支付。无论是否播放了广告，你都会因观看而获得报酬。关闭此项会删除你的观看数据。",
     "aria": "根据你的观看获得一部分广告收入",
     "titleListen": "边看边听赚收益",
-    "listenDesc": "收听也算数：我们会记录你在 3speak.tv 上收听 3Speak 音频和播客节目的时长。听众奖励将在我们核对数据后开始，从你开启此项的那天起收听的内容都会计入。",
+    "listenDesc": "3speak.tv 上的音频和播客单集",
     "listenAlso": "也计算我的收听",
     "listenOnToast": "你的收听现在计入听众奖励",
     "onToastBoth": "观看和收听奖励已开启",
-    "offToastBoth": "奖励已关闭，你的观看和收听数据已删除"
+    "offToastBoth": "奖励已关闭，你的观看和收听数据已删除",
+    "listenOffToast": "你的收听不再计入听众奖励"
   },
   "postingAuth": {
     "updateFailed": "无法更新你的 posting 权限。",
@@ -59,10 +60,16 @@
     "canPost": "@threespeak 可以代你发帖",
     "cannotPost": "@threespeak 无法代你发帖",
     "checkingStatus": "@threespeak …",
-    "desc": "允许 3Speak 代你发布上传内容和定时帖子，并在保存某些设置时无需每次都弹出钱包确认。它只能发帖、点赞和评论；永远不能转移资金或更改你的密钥。没有它的话，上传时会要求你重新添加。更改此项需要你的 active 密钥。",
+    "desc": "它只能发帖、点赞和评论，永远不能转移资金或更改你的密钥。更改此项需要你的 active 密钥。",
     "checking": "检查中…",
     "removing": "移除中…",
-    "adding": "添加中…"
+    "adding": "添加中…",
+    "letTitle": "让 3Speak 代你发帖",
+    "letDesc": "发布视频和短视频时无需逐个签名。你随时可以收回。",
+    "canPublish": "发布帖子和视频",
+    "canVote": "点赞和评论",
+    "never": "绝不转账或更改密钥",
+    "grantWith": "用 {{wallet}} 授权"
   },
   "notifications": {
     "kinds": {
@@ -95,7 +102,7 @@
         "desc": "有人关注你时。"
       },
       "votes": {
-        "title": "点赞",
+        "title": "点赞（默认关闭）",
         "desc": "有人给你的帖子点赞时。默认关闭——热门帖子会带来大量提醒。"
       },
       "reblogs": {
@@ -117,15 +124,16 @@
     "device": "通知此设备",
     "deviceBlocked": "你的浏览器设置已屏蔽此网站的通知——请先在那里允许通知。",
     "deviceNoWorker": "此版本不可用。",
-    "deviceDesc": "即使没有打开 3Speak 也能收到通知。仅适用于此浏览器。",
-    "whatHint": "选择接收哪些通知。这些设置适用于你开启了通知的所有设备。"
+    "deviceDesc": "即使没有打开 3Speak",
+    "whatHint": "选择接收哪些通知。这些设置适用于你开启了通知的所有设备。",
+    "iosNote": "在 iPhone 和 iPad 上，需要先把 3Speak 添加到主屏幕，通知才能使用。"
   },
   "tabs": {
     "general": "通用",
     "content": "内容",
     "connections": "关联",
     "rewards": "广告与奖励",
-    "about": "关于 / 版本"
+    "about": "关于"
   },
   "contentTabs": {
     "feed": "信息流",
@@ -142,51 +150,51 @@
     "title": "外观",
     "darkMode": {
       "title": "深色模式",
-      "desc": "在整个应用中使用深色主题。"
+      "desc": "在整个应用中使用深色主题"
     },
     "largeCards": {
       "title": "大卡片",
-      "desc": "在首页、个人主页和播放列表页面显示更大的视频卡片。关闭后显示更小、更紧凑的卡片。"
+      "desc": "在首页、个人主页和播放列表中显示更大的视频卡片"
     },
     "previews": {
       "title": "视频预览",
-      "desc": "鼠标悬停在视频卡片上时播放静音预览（在手机上的大卡片模式下，滚动时居中的卡片会自动播放）。"
+      "desc": "悬停时播放静音预览；在手机上，居中的卡片会自动播放"
     },
-    "simpleFeeds": {
-      "title": "简洁信息流",
-      "desc": "关闭推荐算法——发现、兴趣和热门将变成按时间从新到旧排列的普通列表，而不是排序后的推荐。"
+    "heroPreviews": {
+      "title": "焦点视频预览",
+      "desc": "在首页焦点中播放静音片段。关闭后只显示静态图片。"
     }
   },
   "shorts": {
     "commentBar": {
       "title": "短视频评论栏",
-      "desc": "在短视频下方显示评论输入框。默认关闭——你随时可以通过评论按钮打开评论面板。"
+      "desc": "在每个短视频下方显示评论输入框"
     },
     "openOnStart": {
       "title": "启动时打开短视频",
-      "desc": "打开 3Speak 时直接进入短视频，而不是首页信息流。"
+      "desc": "打开 3Speak 时直接进入短视频"
     },
     "inFeeds": {
       "title": "在信息流中显示短视频",
-      "desc": "在首页信息流的视频之间以及观看页的推荐中显示短视频行。关闭后这些列表只显示视频。"
+      "desc": "在视频之间显示短视频行"
     }
   },
   "feed": {
     "nsfw": {
       "title": "显示 NSFW 内容",
-      "desc": "显示标记为不适合工作场合（NSFW）的视频和音频。默认关闭。"
+      "desc": "默认关闭"
     },
     "hideWatched": {
       "title": "隐藏已看过的视频",
-      "desc": "在首页、热门和推荐信息流中不显示你已经看过的视频。"
+      "desc": "在首页、热门和推荐中"
     },
     "hideAi": {
       "title": "隐藏 AI 生成的视频",
-      "desc": "在所有信息流中不显示标记为 AI 生成的视频和短视频。该标记来自自动检测，因此可能会有漏网之鱼。"
+      "desc": "来自自动检测，可能会有漏网之鱼"
     },
     "privateMode": {
       "title": "隐私模式",
-      "desc": "不让你的国家/地区出现在创作者的统计数据中。我们从不存储任何人的 IP 地址——你按下播放的那一刻，它就会被转换成国家/地区代码，然后丢弃。开启此项后，你的观看连国家/地区都不会被记录。"
+      "desc": "不让你的国家/地区出现在创作者的统计中。我们从不存储你的 IP。"
     }
   },
   "about": {
@@ -194,7 +202,8 @@
     "version": "应用版本",
     "rpcNode": "Hive RPC 节点",
     "yourData": "你的数据",
-    "privacyLink": "3Speak 如何处理你的数据"
+    "privacyLink": "3Speak 如何处理你的数据",
+    "getOrDelete": "获取或删除"
   },
   "dataRequest": {
     "emailRequired": "请输入邮箱地址，以便我们回复你",
@@ -204,13 +213,13 @@
     "dataReceived": "已收到数据请求",
     "sendFailed": "无法发送你的请求",
     "doneTitle": "已收到请求",
-    "doneBody": "你的参考编号是 <b>{{ref}}</b>。我们最迟会在 <b>{{dueBy}}</b> 之前回复到 <b>{{contact}}</b>。",
+    "doneBody": "你的参考编号是 <b>{{ref}}</b>。我们最迟会在 {{dueBy}} 之前回复到 {{contact}}。",
     "keepRef": "请保留此参考编号，以便后续跟进。",
     "signIn": "请登录后再申请获取或删除你的数据——请求仅适用于你当前登录的账号。",
     "requestFor": "为 <b>@{{username}}</b> 提交请求",
     "typeAria": "请求类型",
-    "getData": "获取我的数据",
-    "deleteData": "删除我的账号数据",
+    "getData": "导出我的数据",
+    "deleteData": "删除我的账号",
     "ledeDelete": "我们将删除 3Speak 在自有数据库中存储的所有关于你的数据。",
     "ledeExport": "我们将以 JSON 文件的形式，把 3Speak 在自有数据库中存储的所有关于你的数据发送给你。",
     "covers": "范围包括：",
@@ -220,13 +229,14 @@
     "cannotExport": "你的链上数据本来就是公开的，可通过任意 Hive API 以机器可读的方式获取——我们会告诉你在哪里获取。我们发送给你的是在此之外我们额外持有的数据。",
     "emailLabel": "用于回复的邮箱",
     "emailPlaceholder": "you@example.com",
-    "messageLabel": "还有什么要补充的吗？（可选）",
+    "messageLabel": "还有什么需要我们知道的吗（可选）",
     "messagePlaceholder": "关于你请求的补充说明（可选）",
     "confirmLabel": "我了解我在 Hive 区块链上的内容是永久的，无法被 3Speak 或任何其他人删除。",
     "sending": "发送中…",
     "requestDeletion": "申请删除",
-    "requestData": "申请获取我的数据",
-    "foot": "我们会在一个月内回复。你也可以直接发邮件至 <mail>privacy@3speak.tv</mail>。"
+    "requestData": "发送申请",
+    "foot": "我们会在一个月内回复。你也可以直接发邮件至 <mail>privacy@3speak.tv</mail>。",
+    "intro": "申请获取 3Speak 保存的关于你的数据副本，或申请删除这些数据。Hive 上的帖子是公开的，无法删除。"
   },
   "lightning": {
     "title": "Lightning 打赏",
@@ -240,14 +250,14 @@
     "useV4v": "改回使用 v4v.app",
     "savedOwn": "Lightning 打赏现在发到你自己的地址",
     "savedV4v": "Lightning 打赏重新经由 v4v.app",
-    "badAddress": "这不是 Lightning 地址，格式类似 name@wallet.com。",
+    "badAddress": "这不是 Lightning 地址。格式类似 name@wallet.com。",
     "unreachable": "这个地址没有作为 Lightning 地址响应。请检查后重试。",
     "saveFailed": "无法保存到你的 Hive 资料。",
-    "supportersNote": "发到你自己地址的打赏不经过 Hive，所以不会显示在支持者中。",
-    "publicNote": "你的闪电网络地址会保存在你的 Hive 账户中，任何人都可以看到。"
+    "supportersNote": "发到你自己地址的打赏不会显示在支持者中。",
+    "publicNote": "保存在你的 Hive 账号中，任何人都可以看到。"
   },
   "supportLinks": {
-    "title": "支持你的其他方式",
+    "title": "支持链接",
     "desc": "你在 {{sites}} 上的页面。观众会在你的打赏窗口中看到这些链接。",
     "placeholder": "https://ko-fi.com/yourname",
     "add": "添加",
@@ -268,12 +278,12 @@
     "shareTip": "放进你的个人简介、邮件签名，或者印在 T 恤上。我们不会评判你。",
     "earnTitle": "你能获得什么",
     "bonusValue": "{{pct}}%",
-    "bonusLabel": "其广告奖励",
+    "bonusLabel": "其广告奖励（作为创作者、观众或听众）",
     "bonusDesc": "作为创作者、观众或听众",
     "timeValue": "{{months}} 个月",
     "timeLabel": "从注册当天起",
     "adsValue": "{{pct}}%",
-    "adsLabel": "其广告活动收入",
+    "adsLabel": "其广告活动（如果他们预订广告）",
     "adsDesc": "如果对方投放广告",
     "earnOnTop": "这部分由 3Speak 额外支付。你邀请的人可以保留他们的全部收入。",
     "rules": "只有通过你的链接注册的新账户才计算在内。奖励会随常规广告收益一起发放，并标注为推荐奖励。"

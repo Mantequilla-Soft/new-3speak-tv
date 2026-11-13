@@ -2,7 +2,7 @@
   "drafts": {
     "title": "Borradores de videos",
     "filters": {
-      "all": "Todos los videos",
+      "all": "Todo",
       "published": "Publicados",
       "scheduled": "programados",
       "failed": "Fallidos"
@@ -30,7 +30,7 @@
   },
   "preview": {
     "playVideo": "Reproducir video",
-    "cannotPreviewHevc": "Tu navegador no puede mostrar una vista previa de este video; es común con clips HEVC/H.265 (p. ej. grabaciones de iPhone en “Alta eficiencia”). No pasa nada: se subirá igual y se convertirá para que todos puedan verlo."
+    "cannotPreviewHevc": "Tu navegador no puede previsualizar este clip HEVC. Se subirá igualmente y todos podrán verlo."
   },
   "rc": {
     "title": "No tienes suficientes Resource Credits",
@@ -58,8 +58,10 @@
   },
   "progress": {
     "uploadedFinishDetails": "Video subido: completa los detalles para publicarlo.",
+    "uploaded": "Subido",
+    "uploading": "Subiendo",
     "backgroundFailed": "La subida en segundo plano no terminó; se reintentará cuando publiques.",
-    "uploadingPct": "Subiendo tu video… {{pct}}%",
+    "uploadingPct": "Subiendo · {{pct}}%",
     "methodReliable": "Subida confiable",
     "methodResumable": "Subida reanudable",
     "attempt": "intento {{attempt}}/{{attempts}}",
@@ -70,15 +72,15 @@
     "waitingOn": "Esperando: {{what}}",
     "uploadServer": "Servidor de subida: {{host}}",
     "cancelled": "Subida cancelada.",
-    "connectionUnstable": "Conexión inestable: reintentando…",
-    "connectionUnstableAttempt": "Conexión inestable: reintentando… ({{attempt}}/{{attempts}})",
+    "connectionUnstable": "Conexión inestable, reintentando…",
+    "connectionUnstableAttempt": "Conexión inestable, reintentando… ({{attempt}}/{{attempts}})",
     "uploadingVideoPct": "Subiendo video... {{pct}}%",
     "uploadingSinglePct": "Subiendo en una sola solicitud… {{pct}}%",
     "checkingConnection": "Revisando tu conexión...",
     "startingUpload": "Iniciando subida…",
     "tryingSingleRequest": "Probando un último método: enviando en una sola solicitud…",
     "stillStuck": "Sigue trabado: probando un último método de subida.",
-    "patchBlockedSwitching": "Tu red bloqueó la subida reanudable; cambiando a un método más compatible.",
+    "patchBlockedSwitching": "Tu red bloqueó la subida reanudable, así que cambiamos a un método más compatible.",
     "switchingMethod": "Cambiando el método de subida…",
     "uploadingBackground": "Subiendo el video en segundo plano…",
     "phase": {
@@ -107,7 +109,7 @@
       "frame": "Encuadre",
       "text": "Texto",
       "pickFrame": "Elegir fotograma",
-      "stickers": "Stickers"
+      "stickers": "Sticker"
     },
     "frame": {
       "zoom": "Zoom",
@@ -161,8 +163,9 @@
     "editor": {
       "open": "Editor de miniatura",
       "openHint": "Texto, stickers, zoom, cualquier fotograma",
-      "title": "Editor de miniatura",
+      "title": "Miniatura",
       "done": "Listo",
+      "useThumbnail": "Usar miniatura",
       "sources": "Imágenes de partida",
       "pickPrompt": "Elige un fotograma de tu video",
       "download": "Descargar",
@@ -199,7 +202,7 @@
     "invalidVideo": "Selecciona un archivo de video válido",
     "tooLarge": "El video es demasiado grande. El tamaño máximo es 5 GB.",
     "shortTooLong": "Los Shorts deben durar {{max}} o menos. Tu video dura {{seconds}} s.",
-    "shortNotVertical": "Los Shorts deben grabarse en formato vertical. Tu video parece ser horizontal.",
+    "shortNotVertical": "Los Shorts deben ser verticales. Este parece horizontal.",
     "thumbnailGenFailed": "No se pudo generar automáticamente una miniatura para este archivo; puedes subir la tuya en el siguiente paso.",
     "processFailed": "No se pudo procesar el video.",
     "selectFirst": "Primero selecciona un archivo de video.",
@@ -215,9 +218,9 @@
     "backgroundInfo": "Info: tu video empieza a subirse en segundo plano cuando llegas al paso de detalles.",
     "noRc": "Tu cuenta no tiene suficientes <b>Resource Credits</b> para publicar en este momento.",
     "whyCantUpload": "¿Por qué no puedo subir?",
-    "needsAuth": "Para subir, permite que <b>@threespeak</b> publique en tu nombre.",
+    "needsAuth": "Para subir, permite que <b>@threespeak</b> publique en tu nombre. Solo lo haces una vez.",
     "authorizing": "Autorizando…",
-    "authorize": "Autorizar a @threespeak",
+    "authorize": "Autorizar",
     "selectVideo": "Elige un video",
     "selfieTeleprompter": "Teleprompter selfie",
     "beta": "beta",
@@ -226,7 +229,7 @@
     "replace": "Reemplazar video",
     "editVideo": "Editar este video",
     "asStory": "Publicar como historia de 24 h",
-    "asStoryHint": "Encabeza el feed de Shorts y tus seguidores reciben una notificación. Mientras esté activa, aún puedes conservarla como short."
+    "asStoryHint": "Encabeza el feed de Shorts y avisa a tus seguidores. Mientras esté activa, aún puedes conservarla como Short."
   },
   "details": {
     "guests": {
@@ -283,24 +286,24 @@
       "none": "Ninguno"
     },
     "remix": {
-      "label": "Permitir remix/clip",
+      "label": "Permitir remix y clip",
       "info": "Permite que otros creen remixes y clips de este video. Aparecerás como autor original y recibirás como mínimo un 5% como beneficiario.",
-      "hint": "Deja que otros hagan remix."
+      "hint": "Recibes al menos el 5% de cada remix"
     },
     "nsfw": {
       "label": "Marcar como NSFW",
       "info": "Marca este video como contenido para adultos. Se ocultará en feeds y búsquedas para los espectadores que no hayan activado NSFW, y se etiquetará como <code>nsfw</code> en todo Hive.",
-      "hint": "Contenido para adultos."
+      "hint": "Oculto salvo que quien lo vea haya permitido NSFW"
     },
     "addToBlog": {
       "label": "Agregar a mi blog",
-      "hint": "Muéstralo en tu blog y en el feed de tus seguidores.",
+      "hint": "Lo rebloguea para que tus seguidores lo vean en su feed",
       "info": "3Speak publica cada video en una comunidad, y Hive deja las publicaciones de comunidades fuera de tu blog y del feed de tus seguidores a menos que las compartas. Con esta opción activada, 3Speak comparte (rebloguea) el video en tu blog justo después de publicarlo."
     },
     "ads": {
       "label": "Anuncios en este video",
       "info": "Tu cuenta muestra anuncios, así que este video también, a menos que los desactives aquí. Solo afecta a este video; tus otros videos y el ajuste de tu cuenta no cambian.",
-      "hintOn": "Puede haber anuncios en este video.",
+      "hintOn": "Solo este video, tu cuenta no cambia",
       "hintOff": "Sin anuncios en este video."
     },
     "rolls": {
@@ -315,21 +318,33 @@
       "withGuests_one": "Suscriptores Pro + {{count}} invitado.",
       "withGuests_many": "Suscriptores Pro + {{count}} invitados.",
       "withGuests_other": "Suscriptores Pro + {{count}} invitados.",
-      "hint": "Solo suscriptores Pro."
+      "hint": "Cifrado para suscriptores Pro. No se puede cambiar después de subirlo."
     },
     "trailer": {
       "label": "Tráiler del canal",
       "info": "Se reproduce automáticamente arriba de la pestaña <b>Resumen</b> de tu perfil y reemplaza cualquier tráiler que hayas configurado antes.",
-      "hint": "Se reproduce solo en tu perfil."
+      "hint": "Se reproduce solo en la parte superior de tu perfil"
     },
     "schedule": {
       "label": "Programar esta publicación",
       "info": "Pone la publicación en cola y la publica automáticamente a la hora que elijas, al menos 15 minutos desde ahora y hasta 90 días después. La transmite @threespeak en tu nombre, así que se te pedirá autorizarlo una vez.",
       "immediately": "Publicar de inmediato.",
       "changeTime": "Cambiar hora",
-      "note": "Al menos 15 minutos desde ahora, hasta 90 días. Lo publica automáticamente @threespeak en tu nombre; se te pedirá autorizarlo una vez."
+      "note": "Al menos 15 minutos desde ahora, hasta 90 días. Lo publica automáticamente @threespeak en tu nombre; se te pedirá autorizarlo una vez.",
+      "short": "Programar",
+      "publishLater": "Publicar más tarde",
+      "scheduleFor": "Programar para {{when}}",
+      "publishNow": "Publicar ahora mismo"
     },
-    "proceed": "Continuar"
+    "proceed": "Continuar",
+    "nextStep": "Siguiente: {{step}}",
+    "tagsCount_one": "{{count}} etiqueta",
+    "tagsCount_many": "{{count}} etiquetas",
+    "tagsCount_other": "{{count}} etiquetas",
+    "shareRewards": "Compartir recompensas",
+    "shareRewardsSub": "Repartir con colaboradores",
+    "advanced": "NSFW / pago",
+    "advancedSub": "Avanzado"
   },
   "review": {
     "payoutDeclined": "Rechazado (recompensas quemadas)",
@@ -346,20 +361,21 @@
     "editPost": "Editar publicación",
     "watchAdToPublish": "Mira el anuncio para publicar",
     "watchSponsorFirst": "Primero mira el mensaje del patrocinador",
+    "gateNote": "Las cuentas nuevas ven un breve mensaje de patrocinio antes de publicar. Paga tu cuenta gratuita.",
     "postShort": "Publicar short",
     "postStory": "Publicar historia",
     "postVideo": "Publicar video",
     "backToTimeline": "Volver a la línea de tiempo"
   },
   "publishing": {
-    "titleShort": "Publicando short",
+    "titleShort": "Publicando Short",
     "titleStory": "Publicando historia",
     "titleVideo": "Publicando video",
-    "subtitle": "Espera mientras procesamos tu contenido...",
+    "subtitle": "Quédate en esta página hasta que termine.",
     "starting": "Iniciando...",
     "stayOnPage": "Quédate en esta página hasta que termine la publicación.",
     "activityLog": "Registro de actividad",
-    "support": "Para soporte, escríbenos en <discordLink>Discord</discordLink>",
+    "support": "¿Atascado? Escríbenos en <discordLink>Discord</discordLink>.",
     "finishingUpload": "Terminando la subida del video…",
     "preparing": "Preparando la publicación...",
     "finalizing": "Finalizando…",
@@ -414,17 +430,17 @@
     }
   },
   "done": {
-    "title": "¡Subida terminada!",
+    "title": "¡Subida completada!",
     "shortPublished": "Tu short se publicó en 3Speak. Tardará unos 5 minutos en aparecer en tu perfil.",
     "storyPublished": "Tu historia estará visible en 3Speak durante las próximas 24 horas.",
-    "videoPublished": "¡Tu video se publicó!<br/>Ahora se está codificando en segundo plano, lo que puede tardar unos minutos.",
-    "promote": "Promocionar este video",
-    "goToProfile": "Ir a mi perfil →",
+    "videoPublished": "Tu video está publicado. Se está codificando en segundo plano, lo que puede tardar unos minutos.",
+    "promote": "Promocionar",
+    "goToProfile": "Mi perfil",
     "feedback": "¿Qué tal tu subida?"
   },
   "record": {
     "speechErrors": {
-      "network": "No se puede acceder al servicio de voz; el reconocimiento necesita conexión a internet (Chrome envía el audio a Google para transcribirlo).",
+      "network": "El desplazamiento por voz necesita internet. Desplaza el guion a mano.",
       "audioCapture": "No llegó audio al reconocimiento; puede que el micrófono esté ocupado. Prueba con audífonos con micrófono.",
       "notAllowed": "El permiso del micrófono está bloqueado para el reconocimiento de voz.",
       "generic": "Error de reconocimiento de voz: {{err}}"
@@ -440,11 +456,12 @@
     "portrait": "Vertical",
     "landscape": "Horizontal",
     "autoDetect": "Detectar automáticamente ({{lang}})",
+    "layout": "Diseño",
     "presets": {
       "frontcam": "Cámara frontal",
-      "frontcamTitle": "Franja pequeña bajo la lente selfie: lo menos evidente para que no se note que estás leyendo",
+      "frontcamTitle": "Franja estrecha bajo la lente",
       "max": "Tamaño máximo",
-      "maxTitle": "Letra grande para leer a distancia",
+      "maxTitle": "Letra grande para leer de lejos",
       "top": "Líneas arriba",
       "topTitle": "Varias líneas en la parte superior"
     },
@@ -465,11 +482,11 @@
     "startingMic": "Iniciando micrófono…",
     "leave": {
       "title": "¿Salir de la cámara?",
-      "sub": "Vuelve a tu guion, quédate aquí o cierra (no se guarda nada).",
+      "sub": "Aún no se ha guardado nada.",
       "backToScript": "Volver al guion",
       "stay": "Quedarme"
     },
-    "experimentalTitle": "Teleprompter experimental",
+    "experimentalTitle": "Teleprompter",
     "scriptPlaceholder": "Escribe o pega tu guion aquí. Durante la grabación se desplaza automáticamente mientras lo lees en voz alta.",
     "orientation": "Orientación",
     "continueToCamera": "Continuar a la cámara",
@@ -482,14 +499,14 @@
     "cameraN": "Cámara {{n}}",
     "flipRotationTitle": "Si la imagen está al revés, invierte la rotación de 90°",
     "flipRotation": "Invertir rotación",
-    "stopVoiceTest": "Detener prueba de voz",
+    "stopVoiceTest": "Detener prueba",
     "testVoice": "Probar voz",
     "stopRecording": "Detener grabación",
     "startRecording": "Empezar a grabar",
     "script": "Guion",
     "reRecord": "Volver a grabar",
     "preparing": "Preparando…",
-    "useThisVideo": "Usar este video"
+    "useThisVideo": "Usar video"
   },
   "errors": {
     "patchBlocked": "PATCH parece estar bloqueado (no se confirmó ningún fragmento)",
@@ -598,6 +615,13 @@
     "streakNext_one": "Con esta, tu racha de historias llega a {{count}} día.",
     "streakNext_many": "Con esta, tu racha de historias llega a {{count}} días.",
     "streakNext_other": "Con esta, tu racha de historias llega a {{count}} días.",
-    "streakStart": "Publica una historia cada día para crear una racha."
+    "streakStart": "Publica una historia cada día para crear una racha.",
+    "keepGoing": "Publica una historia cada día para mantener la racha"
+  },
+  "originalOnly": {
+    "title": "Sube solo contenido hecho por ti.",
+    "body": "3Speak es para contenido original. El material con derechos de autor no debe generar recompensas, así que no lo subas o pon Recompensas en «Rechazar pago».",
+    "decline": "Rechazar pago",
+    "declined": "Pago rechazado"
   }
 }

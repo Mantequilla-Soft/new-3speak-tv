@@ -40,11 +40,11 @@ function open(props = {}) {
 }
 
 describe('ThumbnailEditorModal', () => {
-  it('is the video thumbnail editor by default: Done closes', async () => {
+  it('is the video thumbnail editor by default: Use thumbnail closes', async () => {
     const { user, onClose } = open()
     const dialog = screen.getByRole('dialog')
     expect(dialog.className).not.toMatch(/thumb-modal--square/)
-    await user.click(screen.getByRole('button', { name: 'Done' }))
+    await user.click(screen.getByRole('button', { name: 'Use thumbnail' }))
     expect(onClose).toHaveBeenCalledTimes(1)
   })
 

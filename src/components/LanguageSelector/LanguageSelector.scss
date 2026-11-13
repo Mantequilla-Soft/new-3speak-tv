@@ -1,26 +1,20 @@
+@use "../../styles/v2" as v2;
+
+// Target language for translations: a small select with the translate glyph.
 .language-selector {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  font-size: 13px;
-  color: var(--text-secondary, #9ca3af);
+  gap: 6px;
+  font-size: 12px;
+  color: var(--muted);
 
-  svg {
-    flex-shrink: 0;
-  }
+  .material-symbols-rounded { flex: none; }
 
-  select {
-    background: var(--bg-secondary, #1a1a2e);
-    color: var(--text-primary, #fff);
-    border: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
-    border-radius: 6px;
-    padding: 3px 6px;
+  select.v2-input {
+    height: 32px;
+    width: auto;
+    border-radius: var(--r-md);
     font-size: 12px;
-    cursor: pointer;
-    outline: none;
-
-    &:focus {
-      border-color: var(--accent-primary, #e53935);
-    }
+    padding-left: 10px;
   }
 }

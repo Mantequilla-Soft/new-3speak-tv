@@ -7,7 +7,8 @@
     "feeds": "信息流",
     "groups": "圈子",
     "audio": "音频",
-    "login": "登录"
+    "login": "登录",
+    "you": "我"
   },
   "installApp": "安装应用",
   "iosInstallHint": "点击<b>分享</b>，然后选择<b>添加到主屏幕</b>",
@@ -28,7 +29,9 @@
     "shortsTooltip": "竖屏短视频，一个接一个",
     "audioTooltip": "在 3Speak 上发布的播客、音乐和其他音频",
     "groupsTooltip": "你可以加入的社区，以及大家获得的徽章",
-    "rankingsTooltip": "当前收益最多、观看最多的创作者"
+    "rankingsTooltip": "当前收益最多、观看最多的创作者",
+    "live": "直播",
+    "liveTooltip": "正在进行的直播和房间"
   },
   "aboutLink": "关于 3Speak",
   "faqLink": "常见问题",
@@ -38,6 +41,8 @@
     "myChannelAria": "我的频道",
     "vpTooltip": "投票权重（Voting Power）：你下一次点赞的分量",
     "rcTooltip": "资源积分（Resource Credits）：你在 Hive 上操作所消耗的资源",
+    "votingPower": "投票权重",
+    "resourceCredits": "资源积分",
     "myChannel": "我的频道",
     "publishBacklog": "待发布内容",
     "analytics": "数据分析",
@@ -47,14 +52,20 @@
     "logout": "退出登录",
     "onDiscord": "3Speak 的 Discord",
     "onX": "3Speak 的 X",
-    "onTelegram": "3Speak 的 Telegram"
+    "onTelegram": "3Speak 的 Telegram",
+    "switch": "切换",
+    "tiles": {
+      "channel": "频道",
+      "history": "历史"
+    },
+    "darkTheme": "深色主题"
   },
   "notifications": {
     "pushOff": "已关闭此设备的通知",
-    "pushOn": "你关注的创作者发布内容时，你会收到通知",
+    "pushOn": "你关注的创作者发布内容时，你会收到通知。",
     "pushFailed": "无法更改通知设置",
     "ariaUnread": "通知（{{count}} 条未读）",
-    "pushBlocked": "你的浏览器设置已屏蔽此网站的通知",
+    "pushBlocked": "你的浏览器设置已屏蔽此网站的通知。",
     "pushNoWorker": "此版本没有 service worker，因此无法在此注册通知",
     "pushStop": "停止向此设备发送通知",
     "pushStart": "你关注的创作者发布内容时通知我",
@@ -87,6 +98,13 @@
       "heading": "你关注的播客的新单集",
       "newEpisode": "{{show}} 有新单集",
       "type": "播客"
+    },
+    "tabs": {
+      "all": "全部",
+      "mentions": "提及",
+      "follows": "关注",
+      "uploads": "上传",
+      "pods": "Pods"
     }
   },
   "search": {
@@ -121,6 +139,17 @@
     "views_other": "{{formatted}} 次观看",
     "tags": "标签",
     "titles": "标题",
-    "placeholder": "搜索..."
-  }
+    "placeholder": "搜索...",
+    "recent": "最近",
+    "allResultsFor": "“{{term}}”的所有结果",
+    "kinds": {
+      "creator": "创作者",
+      "community": "社区",
+      "video": "视频",
+      "short": "短视频",
+      "audio": "音频",
+      "playlist": "播放列表"
+    }
+  },
+  "create": "创建"
 }

@@ -28,10 +28,25 @@
   },
   "newFromFollowing": {
     "aria": "Nowości od obserwowanych twórców",
+    "summary_one": "{{count}} nowy film",
+    "summary_few": "{{count}} nowe filmy",
+    "summary_many": "{{count}} nowych filmów",
+    "summary_other": "{{count}} nowego filmu",
+    "fromFollowing": "od osób, które obserwujesz",
     "shorts_one": "{{count}} short",
     "shorts_few": "{{count}} shorty",
     "shorts_many": "{{count}} shortów",
-    "shorts_other": "{{count}} shorta"
+    "shorts_other": "{{count}} shorta",
+    "show": "Pokaż",
+    "hide": "Ukryj",
+    "markSeen": "Oznacz wszystko jako obejrzane"
+  },
+  "tagMeta": {
+    "videos_one": "{{num}} film",
+    "videos_few": "{{num}} filmy",
+    "videos_many": "{{num}} filmów",
+    "videos_other": "{{num}} filmu",
+    "thisWeek": "{{num}} w tym tygodniu"
   },
   "firstUploads": {
     "title": "Pierwsze filmy"
@@ -50,8 +65,16 @@
     "empty": "Nic tu jeszcze nie ma.",
     "viewAll": "Zobacz wszystko",
     "dragToReorder": "Przeciągnij, aby zmienić kolejność",
+    "customize": "Dostosuj",
+    "customizeTitle": "Dostosuj stronę główną",
+    "customizeHint": "Przeciągnij, aby zmienić kolejność. Wyłącz sekcje, których nie chcesz.",
     "surfTitle": "Skakanie po kanałach: wybierz temat i oglądaj jak telewizję",
-    "zapping": "Zapping"
+    "zapping": "Zapping",
+    "hero": {
+      "spotlightIn": "Wyróżnione w {{community}}",
+      "slide": "Wyróżnione {{index}} z {{count}}"
+    },
+    "tabFollowing": "Obserwowani"
   },
   "surf": {
     "pageTitle": "Skakanie po kanałach",
@@ -77,9 +100,10 @@
     "nextVideoKey": "Następny film (→)",
     "zap": "Zap",
     "findingNext": "Szukam następnego…",
-    "stop": "Zakończ skakanie",
+    "stop": "Stop",
     "stopTitle": "Zakończ skakanie (ten film gra dalej)",
-    "guide": "Przewodnik po kanałach"
+    "guide": "Przewodnik po kanałach",
+    "guideShort": "Przewodnik"
   },
   "discover": {
     "searchPlaceholder": "Szukaj filmów, Shorts, audio, społeczności...",
@@ -126,6 +150,37 @@
     "views_one": "{{views}} wyświetlenie",
     "views_few": "{{views}} wyświetlenia",
     "views_many": "{{views}} wyświetleń",
-    "views_other": "{{views}} wyświetlenia"
+    "views_other": "{{views}} wyświetlenia",
+    "topCreator": "Najlepszy twórca",
+    "creators": "Twórcy",
+    "relatedTags": "Powiązane tagi",
+    "trendingTags": "Popularne tagi",
+    "topCreators": "Najlepsi twórcy",
+    "categories": "Kategorie",
+    "show": "Pokaż",
+    "boostRecentHint": "Preferuj nowsze filmy w wynikach",
+    "showResults_one": "Pokaż {{count}} wynik",
+    "showResults_few": "Pokaż {{count}} wyniki",
+    "showResults_many": "Pokaż {{count}} wyników",
+    "showResults_other": "Pokaż {{count}} wyniku",
+    "resultTypes": "Typy wyników"
+  },
+  "activity": {
+    "warmup": "Rozgrzewka",
+    "aria": "Aktywność na 3Speak",
+    "community": "Społeczność",
+    "verbs": {
+      "snap": "snap",
+      "audio": "nowe audio",
+      "playlist": "playlista",
+      "live": "nadaje na żywo",
+      "group_one": "{{count}} nowy film w tym tygodniu",
+      "group_few": "{{count}} nowe filmy w tym tygodniu",
+      "group_many": "{{count}} nowych filmów w tym tygodniu",
+      "group_other": "{{count}} nowego filmu w tym tygodniu"
+    },
+    "emptyCommunity": "Nic nowego w społeczności w ostatnich dniach.",
+    "emptyLive": "Nikt teraz nie nadaje na żywo.",
+    "emptyGroups": "W tym tygodniu nie ma jeszcze aktywności grup."
   }
 }

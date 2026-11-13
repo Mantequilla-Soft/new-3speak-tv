@@ -28,8 +28,19 @@
   },
   "newFromFollowing": {
     "aria": "Takip ettiğin içerik üreticilerinden yeni",
+    "summary_one": "{{count}} yeni video",
+    "summary_other": "{{count}} yeni video",
+    "fromFollowing": "takip ettiğin kişilerden",
     "shorts_one": "{{count}} short",
-    "shorts_other": "{{count}} short"
+    "shorts_other": "{{count}} short",
+    "show": "Göster",
+    "hide": "Gizle",
+    "markSeen": "Tümünü görüldü işaretle"
+  },
+  "tagMeta": {
+    "videos_one": "{{num}} video",
+    "videos_other": "{{num}} video",
+    "thisWeek": "Bu hafta {{num}}"
   },
   "firstUploads": {
     "title": "İlk Yüklemeler"
@@ -48,8 +59,16 @@
     "empty": "Burada henüz gösterilecek bir şey yok.",
     "viewAll": "Tümünü gör",
     "dragToReorder": "Sıralamak için sürükle",
+    "customize": "Özelleştir",
+    "customizeTitle": "Ana sayfayı özelleştir",
+    "customizeHint": "Sıralamak için sürükle. İstemediğin bölümleri kapat.",
     "surfTitle": "Kanal Gezintisi: bir konu seç ve TV gibi izle",
-    "zapping": "Zapping"
+    "zapping": "Zapping",
+    "hero": {
+      "spotlightIn": "{{community}} içinde öne çıkan",
+      "slide": "Öne çıkan {{index}} / {{count}}"
+    },
+    "tabFollowing": "Takip edilenler"
   },
   "surf": {
     "pageTitle": "Kanal Gezintisi",
@@ -75,9 +94,10 @@
     "nextVideoKey": "Sonraki video (→)",
     "zap": "Zap",
     "findingNext": "Sıradaki bulunuyor…",
-    "stop": "Gezintiyi bitir",
+    "stop": "Durdur",
     "stopTitle": "Gezintiyi bitir (bu video oynamaya devam eder)",
-    "guide": "Kanal rehberi"
+    "guide": "Kanal rehberi",
+    "guideShort": "Rehber"
   },
   "discover": {
     "searchPlaceholder": "Video, Shorts, ses, topluluk ara...",
@@ -118,6 +138,33 @@
     "authors_one": "{{count}} yazar",
     "authors_other": "{{count}} yazar",
     "views_one": "{{views}} görüntülenme",
-    "views_other": "{{views}} görüntülenme"
+    "views_other": "{{views}} görüntülenme",
+    "topCreator": "En iyi üretici",
+    "creators": "İçerik üreticileri",
+    "relatedTags": "İlgili etiketler",
+    "trendingTags": "Trend etiketler",
+    "topCreators": "En iyi üreticiler",
+    "categories": "Kategoriler",
+    "show": "Göster",
+    "boostRecentHint": "Sonuçlarda yeni videolara öncelik ver",
+    "showResults_one": "{{count}} sonucu göster",
+    "showResults_other": "{{count}} sonucu göster",
+    "resultTypes": "Sonuç türleri"
+  },
+  "activity": {
+    "warmup": "Isınma",
+    "aria": "3Speak'teki etkinlik",
+    "community": "Topluluk",
+    "verbs": {
+      "snap": "snap",
+      "audio": "yeni ses",
+      "playlist": "oynatma listesi",
+      "live": "canlı yayında",
+      "group_one": "bu hafta {{count}} yeni video",
+      "group_other": "bu hafta {{count}} yeni video"
+    },
+    "emptyCommunity": "Son birkaç günde topluluktan yeni bir şey yok.",
+    "emptyLive": "Şu an kimse canlı yayında değil.",
+    "emptyGroups": "Bu hafta henüz grup etkinliği yok."
   }
 }

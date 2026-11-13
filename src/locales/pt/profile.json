@@ -23,6 +23,7 @@
     "followers_many": "{{num}} seguidores",
     "followers_other": "{{num}} seguidores",
     "popularTitle": "Criadores populares",
+    "suggestedTitle": "Criadores para seguir",
     "scrollLeft": "Rolar para a esquerda",
     "scrollRight": "Rolar para a direita",
     "mostlyPosts": "Publica mais sobre {{topic}}"
@@ -80,7 +81,8 @@
     "views_one": "{{num}} visualização",
     "views_many": "{{num}} visualizações",
     "views_other": "{{num}} visualizações",
-    "readMore": "Ler mais"
+    "readMore": "Ler mais",
+    "label": "Trailer"
   },
   "snaps": {
     "readMore": "Ler mais",
@@ -185,7 +187,8 @@
       "text": "Agrupe seus vídeos em uma playlist que as pessoas podem assistir em ordem.",
       "cta": "Criar sua primeira playlist",
       "visitor": "@{{user}} não tem playlists públicas."
-    }
+    },
+    "visitorPreview": "Visitantes veem: “{{text}}”"
   },
   "links": {
     "button": "Links",
@@ -204,7 +207,8 @@
     "shorts": "Shorts",
     "audio": "Áudio",
     "community": "Comunidade",
-    "playlists": "Playlists"
+    "playlists": "Playlists",
+    "latestSnap": "Último snap"
   },
   "streams": {
     "loading": "Carregando transmissões…",
@@ -235,6 +239,7 @@
     "messageTitle": "Mandar mensagem para @{{user}}",
     "messageLogin": "Entre na sua conta para enviar uma mensagem",
     "message": "Mensagem",
+    "messageShort": "DM",
     "unhideTitle": "Mostrar de novo os vídeos de @{{user}} nos seus feeds",
     "hideTitle": "Ocultar os vídeos de @{{user}} de todos os seus feeds",
     "unhide": "Mostrar",
@@ -248,7 +253,11 @@
     "loginToUpload": "Entre para enviar vídeos",
     "linkExternalTitle": "Vincular um perfil externo",
     "addProfile": "Adicionar perfil",
-    "editTitle": "Edite sua foto, nome, bio e localização"
+    "editTitle": "Edite sua foto, nome, bio e localização",
+    "more": "Mais",
+    "moreActions": "Mais ações para @{{user}}",
+    "copyProfileLink": "Copiar link do perfil",
+    "podcastFeed": "Feed do podcast (RSS)"
   },
   "tabs": {
     "overview": "Visão geral",
@@ -283,11 +292,7 @@
     "tip": "Gorjeta",
     "tipCreator": "Dar gorjeta ao criador",
     "latestVideo": "Último vídeo",
-    "watchLatestVideo": "Assistir ao último vídeo",
-    "latestShort": "Último Short",
-    "watchLatestShort": "Assistir ao último Short",
-    "closeMenu": "Fechar menu",
-    "openActions": "Abrir ações"
+    "latestShort": "Último Short"
   },
   "uploads": {
     "processing": "Processando seus vídeos",
@@ -315,7 +320,11 @@
     "hiddenToast": "Gorjeta ocultada do seu perfil",
     "unhiddenToast": "A gorjeta voltou a aparecer no seu perfil",
     "hideFailed": "Não foi possível alterar esta gorjeta. Tente novamente.",
-    "hideWalletPrompt": "Assine para mudar quais gorjetas aparecem no seu perfil"
+    "hideWalletPrompt": "Assine para mudar quais gorjetas aparecem no seu perfil",
+    "whoTitle": "@{{user}} apoia",
+    "tipped_one": "{{count}} gorjeta",
+    "tipped_many": "{{count}} gorjetas",
+    "tipped_other": "{{count}} gorjetas"
   },
   "layout": {
     "customize": "Personalizar perfil",
@@ -430,5 +439,14 @@
   },
   "audioTab": {
     "files": "Arquivos de áudio"
+  },
+  "search": {
+    "placeholder": "Pesquisar neste canal",
+    "clear": "Limpar pesquisa",
+    "results_one": "{{count}} resultado para “{{query}}”",
+    "results_many": "{{count}} resultados para “{{query}}”",
+    "results_other": "{{count}} resultados para “{{query}}”",
+    "empty": "Nada neste canal corresponde a “{{query}}”.",
+    "older": "Pesquisar envios mais antigos"
   }
 }

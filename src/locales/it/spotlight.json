@@ -208,7 +208,7 @@
       "imageUploadFailed": "Caricamento dell'immagine non riuscito: {{error}}",
       "tryAgain": "riprova",
       "styleApplied": "Stile applicato a tutti i blocchi {{type}}",
-      "templateApplied": "“{{name}}” applicato — personalizzalo o annulla",
+      "templateApplied": "“{{name}}” applicato. Personalizzalo o annulla.",
       "reverted": "Ripristinato il tuo design precedente",
       "saved": "Spotlight salvato nel tuo profilo Hive",
       "saveFailed": "Impossibile salvare",
@@ -224,7 +224,7 @@
       "phone": "Telefono",
       "platformGroup": "Piattaforma",
       "yourname": "tuonome",
-      "platformIconHint": "L'icona è il logo di {{platform}} — passa a “Sito web / URL” per scegliere un'icona personalizzata.",
+      "platformIconHint": "L'icona è il logo di {{platform}}. Passa a “Sito web / URL” per scegliere un'icona personalizzata.",
       "icon": "Icona",
       "iconColor": "Colore icona",
       "iconBg": "Sfondo icona"
@@ -265,9 +265,9 @@
       "showPosts_other": "Mostra {{count}} post",
       "perRow": "{{value}} per riga",
       "hiveRecentHint": "I tuoi post principali più recenti (niente reblog o cross-post). Si aggiorna automaticamente.",
-      "linkPlaceholder": "Incolla qualsiasi link — post Hive, Instagram, X, YouTube, articolo…",
+      "linkPlaceholder": "Incolla qualsiasi link: post Hive, Instagram, X, YouTube, articolo…",
       "fetching": "Recupero anteprima…",
-      "noPreview": "Nessuna anteprima trovata — verrà comunque mostrato come scheda link.",
+      "noPreview": "Nessuna anteprima trovata. Verrà comunque mostrato come scheda link.",
       "pasteHint": "Incolla un link e recupereremo titolo, descrizione e immagine."
     },
     "style": {
@@ -296,8 +296,8 @@
     "openPage": "Apri pagina",
     "templates": {
       "title": "Modelli",
-      "hint": "Scegli un design per compilare tutto — la tua bio resta, e puoi annullare.",
-      "undo": "Annulla modello — torna al mio design"
+      "hint": "Scegli un design per compilare tutto. La tua bio resta, e puoi annullare.",
+      "undo": "Annulla modello, torna al mio design"
     },
     "profile": {
       "title": "Profilo",

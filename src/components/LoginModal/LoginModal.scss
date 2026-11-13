@@ -1,309 +1,292 @@
-// Global styles to inject email button into aioha modal
-#aioha-modal {
-  // We flow the extra-buttons container inline after the provider list
-  // (no absolute positioning), so no bottom padding reservation is needed.
+@use "../../styles/v2" as v2;
 
-  // Hide the "Popular" badge next to Keychain
-  ul li a span.bg-gray-200,
-  ul li a span.bg-gray-200.dark\:bg-gray-700 {
-    display: none !important;
-  }
+// The login window (07e, 42a): a split dialog, the community on the left and
+// the login on the right. The chooser ("Welcome to 3Speak", "You're signed in",
+// "Opening sign up…") is our own <Dialog>; the wallet list after it is aioha's
+// modal in the same frame (aioha-v2.scss), so going from one to the other
+// keeps the window where it is and the same size.
 
-  // Render the wallet provider list as a 2×2 grid on desktop/tablet, and
-  // fall back to a single column on phones where half-width is too cramped.
-  ul {
-    display: grid !important;
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    gap: 8px !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    list-style: none !important;
+// Above every other layer, like the wallet modal it leads to.
+.v2-dialog:has(> .login-split) { z-index: 100000; }
 
-    @media (max-width: 540px) {
-      grid-template-columns: 1fr !important;
-      gap: 6px !important;
-    }
+.v2-dialog__panel.login-split {
+  height: min(500px, calc(100vh - 48px));
+  height: min(500px, calc(100dvh - 48px));
+  @include v2.mobile { height: auto; }
+}
 
-    li {
-      width: 100% !important;
-      margin: 0 !important;
+.v2-dialog__body.login-split__body {
+  flex-direction: row;
+  gap: 0;
+  padding: 0;
+  overflow: hidden;
+  @include v2.mobile { flex-direction: column; overflow: visible; }
+}
 
-      // Provider link fills the grid cell with icon-left, text-left
-      > a {
-        display: flex !important;
-        align-items: center !important;
-        justify-content: flex-start !important;
-        width: 100% !important;
-        height: 100% !important;
-        padding: 12px !important;
-        text-align: left !important;
-      }
+.login-split__main {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
 
-      // Shrink the aioha provider icons on phones so they match the
-      // butrauth/email buttons below (and aioha's own min-width: 32px
-      // rule in index.css).
-      @media (max-width: 540px) {
-        > a img,
-        > a svg,
-        > a span.bg-gray-100,
-        > a span.dark\:bg-gray-700 {
-          width: 28px !important;
-          height: 28px !important;
-          min-width: 28px !important;
-          min-height: 28px !important;
-        }
-      }
-    }
-  }
-
-  // Lay the two extra buttons out as a 2-column grid directly after the
-  // wallet-provider grid so they inherit the exact same parent width —
-  // no absolute positioning, no guessing the modal's horizontal padding.
-  // ── ButrAuth: the recommended option, a single wide button above the grid ──
-  .login-top-section {
-    width: 100%;
-    margin: 0 0 0.5rem;
-  }
-
-  // Neutral styling (no accent/red) — its full width + top placement is what
-  // makes it prominent.
-  .login-top-section .butrauth-login-btn {
-    display: flex;
+// 07e: the close button alone on the top row, the title under it.
+.login-split__head {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  padding: 16px 16px 6px 24px;
+  flex: none;
+  > .v2-iconbtn { align-self: flex-end; }
+  @include v2.mobile {
+    flex-direction: row-reverse;
     align-items: center;
-    justify-content: flex-start;
-    width: 100%;
-    padding: 0.5rem 1rem !important;
-    background-color: var(--bg-secondary) !important;
-    color: var(--text-primary) !important;
-    border: 1px solid var(--border-color) !important;
-    border-radius: 0.5rem !important;
-    font-size: 16px;
-    font-weight: 700;
-    text-align: left;
-    cursor: pointer;
-    transition: all 0.2s ease;
-
-    &:hover {
-      background-color: var(--bg-hover) !important;
-      border-color: var(--accent-primary) !important;
-    }
-
-    img, svg {
-      flex-shrink: 0;
-      width: 32px !important;
-      height: 32px !important;
-      min-width: 32px !important;
-      min-height: 32px !important;
-      margin-right: 0.75rem !important;
-    }
-    // Stacked title + explainer subtitle.
-    .butrauth-text {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      text-align: left;
-    }
-    .butrauth-title {
-      color: var(--text-primary) !important;
-      font-weight: 700;
-    }
-    // "(Recommended)" suffix — non-bold, slightly muted.
-    .recommended-suffix {
-      font-weight: 400;
-      color: var(--text-secondary, #888);
-    }
-    .butrauth-subtitle {
-      font-weight: 400;
-      font-size: 12.5px;
-      line-height: 1.3;
-      color: var(--text-secondary, #888);
-    }
+    gap: 8px;
+    padding: 12px 12px 4px 16px;
+    > .v2-iconbtn { align-self: center; }
   }
 }
 
-// Dark mode support - separate for clarity
-@media (prefers-color-scheme: dark) {
-}
-
-// ── Sign-up / Log-in chooser (shown before the provider list) ──────────────
-.login-chooser-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 100000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(0, 0, 0, 0.55);
-  padding: 16px;
-}
-
-.login-chooser {
+.login-split__title {
+  flex: 1;
+  min-width: 0;
   width: 100%;
-  max-width: 380px;
-  background: var(--bg-secondary, #fff);
-  color: var(--text-primary);
-  border: 1px solid var(--border-color, rgba(128, 128, 128, 0.2));
-  border-radius: 16px;
-  padding: 22px;
-  box-shadow: var(--shadow-lg, 0 12px 40px rgba(0, 0, 0, 0.3));
-
-  [data-theme="dark"] & { background: #1a1a1a; }
+  margin: 0;
+  @include v2.text(heading-lg);
+  color: var(--text);
+  @include v2.mobile { @include v2.text(title); }
 }
 
-.login-chooser-mark {
-  display: block;
-  width: 48px;
-  height: 48px;
-  margin: 0 auto 14px;
+.login-split__content {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 8px 24px 24px;
+  @include v2.scroll-y;
+  @include v2.mobile { padding: 8px 16px 16px; }
 }
 
-.login-chooser-sub {
-  margin: 0 0 18px;
-  font-size: 13.5px;
+.login-split__sub {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--muted);
+  strong { color: var(--text); font-weight: 700; }
+}
+
+.login-split__spacer { flex: 1; min-height: 0; }
+
+// "Opening sign up…": continue in the Butter Auth window (42a). A cyan line
+// with the spinner, no box.
+.login-split__status {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 12px;
   line-height: 1.4;
-  color: var(--text-secondary, #888);
+  color: var(--cyan);
+  .material-symbols-rounded { flex: none; margin-top: 1px; }
 }
 
-// Prominent sign-up (Butter Auth) button — wide, icon + stacked title/subtitle.
-.login-chooser-signup {
+// Sign-up blocked on this network or VPN (42a): an accent wash on the ground.
+.login-split__blocked {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 10px;
+  border-radius: var(--r-md);
+  background: var(--accent-wash);
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--text);
+  .material-symbols-rounded { flex: none; color: var(--accent); }
+}
+
+// ── The community half (CommunityPanel), also inside aioha's modal ─────────
+.login-community {
+  width: 240px;
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  // 160°, from avatar grey to near black, in both themes (white type on it)
+  background: linear-gradient(160deg,
+    color-mix(in srgb, var(--on-media) 18%, var(--media-black)),
+    color-mix(in srgb, var(--on-media) 4%, var(--media-black)));
+  color: var(--on-media);
+  overflow: hidden;
+  @include v2.mobile { display: none; }
+}
+.login-aside > .login-community { width: 100%; }
+
+.login-community__mark { display: block; width: 36px; height: 36px; }
+
+.login-community__faces {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 24px;
+}
+
+.login-community__face {
+  aspect-ratio: 1;
+  border-radius: 50%;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--on-media) 18%, var(--media-black));
+  border: 2px solid var(--on-media);
+  &.is-accent { border-color: var(--accent); }
+  &.is-muted { border-color: color-mix(in srgb, var(--on-media) 64%, var(--media-black)); }
+  img { display: block; width: 100%; height: 100%; object-fit: cover; }
+}
+
+.login-community__tagline {
+  margin: auto 0 0;
+  font-size: 24px;
+  font-weight: 900;
+  line-height: 1.05;
+  letter-spacing: -.02em;
+  color: var(--on-media);
+  text-wrap: balance;
+}
+
+// ── Chooser options: sign up (recommended) and log in (42a) ────────────────
+// A bold line over a muted one, no icons; the recommended one outlined in red.
+.login-option {
   display: flex;
   align-items: center;
+  gap: 10px;
   width: 100%;
-  padding: 0.6rem 1rem;
-  margin-bottom: 10px;
-  background: var(--bg-tertiary, #242424);
-  color: var(--text-primary);
-  border: 1px solid var(--border-color);
-  border-radius: 0.6rem;
-  font-size: 16px;
-  font-weight: 700;
+  padding: 12px;
+  border: 2px solid transparent;
+  border-radius: var(--r-lg);
+  background: var(--surface-2);
+  color: var(--text);
+  font: inherit;
   text-align: left;
   cursor: pointer;
-  transition: all 0.15s ease;
+  flex: none;
+  transition: background var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
 
-  &:hover { background: var(--bg-hover); border-color: var(--accent-primary); }
+  &:hover { background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); }
+  &:active { transform: scale(.98); }
 
-  img { width: 32px; height: 32px; margin-right: 0.75rem; flex-shrink: 0; }
-  // No icon here anymore — center the stacked title/subtitle in the button.
-  .butrauth-text { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px; text-align: center; }
-  .butrauth-title { font-weight: 700; color: var(--text-primary); }
-  .recommended-suffix { font-weight: 400; color: var(--text-secondary, #888); }
-  .butrauth-subtitle { font-weight: 400; font-size: 12.5px; line-height: 1.3; color: var(--text-secondary, #888); }
+  .login-option__body {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    b { font-size: 13px; font-weight: 700; line-height: 1.3; }
+    > span { font-size: 11px; line-height: 1.35; color: var(--muted); }
+  }
+  .login-option__aside { font-weight: 500; color: var(--muted); }
+
+  &.is-recommended {
+    border-color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 12%, transparent);
+    &:hover { background: color-mix(in srgb, var(--accent) 20%, transparent); }
+  }
 }
 
-.login-chooser-login {
-  display: block;
-  width: 100%;
-  padding: 0.6rem 1rem;
-  margin-bottom: 6px;
-  background: transparent;
-  color: var(--text-primary);
-  border: 1px solid var(--border-color);
-  border-radius: 0.6rem;
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.15s ease;
+// ── "Switch to" (42a, 23b): the account in use outlined in red with a check,
+// the others in a 2px border, each removable; "Add another account" dashed.
+.login-switch { display: flex; flex-direction: column; gap: 8px; }
 
-  &:hover { background: var(--bg-hover); }
-}
-
-// "Switch to": wallet accounts aioha remembers + Butter Auth accounts used here.
-.login-switch { margin: 0 0 12px; }
-.login-switch__label {
-  margin: 0 0 6px;
-  font-size: 12px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: var(--text-secondary, #888);
-}
 .login-switch__list {
   list-style: none;
   margin: 0;
   padding: 0;
-  max-height: 240px;
-  overflow-y: auto;
-  border: 1px solid var(--border-color, rgba(128, 128, 128, 0.25));
-  border-radius: 0.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
+
 .login-switch__row {
   display: flex;
   align-items: center;
-  & + & { border-top: 1px solid var(--border-color, rgba(128, 128, 128, 0.2)); }
+  gap: 4px;
+  padding-right: 6px;
+  border: 2px solid var(--border);
+  border-radius: var(--r-lg);
+  background: transparent;
+
+  &.is-current { border-color: var(--accent); padding-right: 10px; }
 }
+
 .login-switch__item {
   flex: 1;
   min-width: 0;
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 9px 12px;
-  min-height: 48px;
-  background: transparent;
+  min-height: 52px;
+  padding: 6px;
   border: 0;
-  color: var(--text-primary);
+  border-radius: var(--r-md);
+  background: transparent;
+  color: var(--text);
+  font: inherit;
   text-align: left;
   cursor: pointer;
-  font: inherit;
-
-  &:hover { background: var(--bg-hover, rgba(128, 128, 128, 0.12)); }
+  &:hover { background: var(--bg-hover); }
+  &:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 }
+.login-switch__row.is-current .login-switch__item { cursor: default; &:hover { background: transparent; } }
+
 .login-switch__avatar {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  flex: none;
+  border-radius: var(--r-md);
   object-fit: cover;
-  flex-shrink: 0;
+  background: var(--avatar);
 
   &--initial {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--bg-tertiary, #333);
-    font-weight: 700;
+    display: inline-grid;
+    place-items: center;
     font-size: 14px;
+    font-weight: 900;
+    color: var(--text);
   }
 }
+
+.login-switch__text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
 .login-switch__name {
-  flex: 1;
-  min-width: 0;
-  font-weight: 600;
-  font-size: 14.5px;
+  font-size: 14px;
+  font-weight: 700;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 .login-switch__via {
-  flex-shrink: 0;
-  font-size: 12px;
-  color: var(--text-secondary, #888);
+  font-size: 11px;
+  color: var(--muted);
+  &.is-active { color: var(--cyan); }
 }
-.login-switch__forget {
-  flex-shrink: 0;
-  width: 40px;
-  height: 48px;
-  display: inline-flex;
+.login-switch__check { flex: none; color: var(--accent); }
+.login-switch__forget { flex: none; }
+
+.login-switch__add {
+  display: flex;
   align-items: center;
-  justify-content: center;
-  background: transparent;
-  border: 0;
-  color: var(--text-secondary, #888);
-  cursor: pointer;
-
-  &:hover { color: var(--text-primary); }
-}
-
-.login-chooser-cancel {
-  display: block;
+  gap: 8px;
   width: 100%;
-  padding: 0.5rem;
+  height: 52px;
+  padding: 0 14px;
+  border: 2px dashed var(--border);
+  border-radius: var(--r-lg);
   background: transparent;
-  color: var(--text-secondary, #888);
-  border: none;
-  cursor: pointer;
+  color: var(--muted);
+  font: inherit;
   font-size: 14px;
-
-  &:hover { color: var(--text-primary); }
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
+  &:hover { background: var(--bg-hover); color: var(--text); }
+  &:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 }

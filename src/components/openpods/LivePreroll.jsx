@@ -2,11 +2,11 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import Hls from 'hls.js';
 import { useTranslation } from 'react-i18next';
-import { MdVolumeUp } from 'react-icons/md';
 import { CHECKER_URL } from '../../utils/config';
 import { rememberAdSeen } from '../../lib/adBreak';
 import AdOverlay from '../ads/AdOverlay';
 import AdSkip from '../ads/AdSkip';
+import { Icon } from '../v2/ui';
 import './LivePreroll.scss';
 
 // No progress for this long while the spot should be playing: give up and let the
@@ -198,7 +198,7 @@ export default function LivePreroll({ ad, sid, onDone }) {
       </div>
       {needsSound && (
         <button type="button" className="live-preroll__sound" onClick={unmute}>
-          <MdVolumeUp aria-hidden="true" />
+          <Icon name="volume_up" size={18} />
           {t('ads.overlay.tapForSound')}
         </button>
       )}

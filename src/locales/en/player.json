@@ -77,6 +77,11 @@
     }
   },
   "reactionUpload": {
+    "title": "Post a video reaction",
+    "rec": "REC {{time}}",
+    "mic": "Mic",
+    "camera": "Camera",
+    "restart": "Restart",
     "authorized": "@threespeak authorized — you can now post your reaction",
     "authFailed": "Authorization failed. Please try again.",
     "webcamDenied": "Could not access webcam",
@@ -90,7 +95,7 @@
     "uploadVideo": "Upload Video",
     "recordVideo": "Record Video",
     "startRecording": "Start Recording",
-    "stopRecording": "Stop Recording",
+    "stopRecording": "Stop and review",
     "recordedVideo": "Recorded video",
     "descriptionPlaceholder": "Add a description for your video reaction...",
     "showInShorts": "Show in 3Speak Shorts",

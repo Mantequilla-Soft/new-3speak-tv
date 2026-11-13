@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { IoClose, IoLocationOutline } from "react-icons/io5";
-import { CiCalendarDate } from "react-icons/ci";
+import DialogShell from "./DialogShell";
+import { Button, StatTile } from "../v2/ui";
+import { Icon } from "../v2/Icon";
 import {  getHiveUserProfile, getRelationshipBetweenAccounts } from "../../hive-api/api";
 import "./ProfileModal.scss";
 import { useNavigate } from "react-router-dom";
@@ -31,10 +32,7 @@ function ProfileModal({ username = "kesolink", onClose }) {
     loadProfile();
   }, [username, activeUser]);
 
-  useEffect(() => {
-  document.body.style.overflow = "hidden";
-  return () => { document.body.style.overflow = "auto"; };
-}, []);
+  // (DialogShell locks the page behind it while it is open.)
 
  
   // check follow status using real API data
@@ -99,149 +97,102 @@ function ProfileModal({ username = "kesolink", onClose }) {
   
 
   
-// .skeleton {
-//   animation: shimmer 2s infinite linear;
-//   background: linear-gradient(to right, #f0f0f0 4%, #e0e0e0 25%, #f0f0f0 36%);
-//   background-size: 1000px 100%;
-//   border-radius: 4px;
-// }
+  const go = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    handleProfileNavigation(username);
+  };
+
+  // A creator's card over the feed (design 44b profile fields, read-only): the
+  // v2 dialog with the banner, the avatar over its edge, name and reputation,
+  // Follow, three stat tiles, joined and location, and the bio.
   return (
-    <div className="Profile-modal-overlay">
-      <div className="modal-backdrop" onClick={onClose}></div>
-
-      <div className="profile-card-container">
-        <button className="btn-close" onClick={onClose}>
-          <IoClose className="icon" size={18} />
-        </button>
-
-        {loading ? (
-          // Skeleton Loader
-          <>
-            <div className="header-gradient skeleton-shimmer"></div>
-
-            <div className="profile-content">
-              <div className=" avatar-wrap">
-                <div className=" skeleton avatar skeleton-shimmer"></div>
-              </div>
-
-              <div className="user-header">
-                <div className="name-wrap">
-                  <div className=" skeleton skeleton-shimmer skeleton-username"></div>
-                  {/* <div className="skeleton-shimmer skeleton-reputation"></div> */}
-                </div>
-                <div className=" skeleton  skeleton-shimmer skeleton-button"></div>
-              </div>
-
-              <div className="stats-grid">
-                {[1, 2, 3].map((i) => (
-                  <div className="stat" key={i}>
-                    <div className=" skeleton  skeleton-shimmer skeleton-stat-value"></div>
-                    {/* <div className="skeleton-shimmer skeleton-stat-label"></div> */}
-                  </div>
-                ))}
-              </div>
-
-              <div className="meta-info">
-                {[1, 2].map((i) => (
-                  <div className="meta-item" key={i}>
-                    <div className="skeleton  skeleton-shimmer skeleton-icon"></div>
-                    <div className=" skeleton  skeleton-shimmer skeleton-text"></div>
-                  </div>
-                ))}
-              </div>
-
-              <div className="about">
-                <div className=" skeleton  skeleton-shimmer skeleton-about-title"></div>
-                <div className=" skeleton  skeleton-shimmer skeleton-about-text"></div>
-              </div>
+    <DialogShell
+      onClose={onClose}
+      title={`@${username}`}
+      width={440}
+      zIndex={1100}
+      isolate
+      overlayClassName="Profile-modal-overlay"
+      className="profile-card-container"
+      bodyClassName="profile-card-body"
+    >
+      {loading ? (
+        <div className="profile-skeleton" aria-busy="true">
+          <div className="header-gradient v2-skeleton" />
+          <div className="profile-content">
+            <div className="avatar v2-skeleton" />
+            <div className="v2-skeleton is-line skeleton-username" />
+            <div className="v2-stats">
+              {[1, 2, 3].map((i) => <div className="v2-skeleton skeleton-stat" key={i} />)}
             </div>
-          </>
-        ) : (
-          // Actual Content
-          <>
-            <div
-              className="header-gradient"
-              style={{
-                backgroundImage: `url(https://images.hive.blog/u/${profile?.name}/cover)`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-              }}
-            ></div>
+            <div className="v2-skeleton is-line skeleton-text" />
+            <div className="v2-skeleton is-line skeleton-text is-short" />
+          </div>
+        </div>
+      ) : (
+        <>
+          <div
+            className="header-gradient"
+            style={profile?.name ? { backgroundImage: `url(https://images.hive.blog/u/${profile.name}/cover)` } : undefined}
+          />
 
-            <div className="profile-content">
-              <div
-                className="avatar-wrap"
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  handleProfileNavigation(username);
-                }}
-                style={{ cursor: 'pointer' }}
-              >
-                <div className="avatar">
-                  <img
-                    src={profile?.metadata?.profile?.profile_image || "/default.png"}
-                    alt={t('modals.profile.avatarAlt')}
-                  />
-                </div>
-              </div>
-
-              <div className="user-header">
-                <div
-                  className="name-wrap"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    handleProfileNavigation(username);
-                  }}
+          <div className="profile-content">
+            <div className="profile-top">
+              <button type="button" className="avatar" onClick={go} aria-label={t('modals.profile.avatarAlt')}>
+                <img
+                  src={profile?.metadata?.profile?.profile_image || "/default.png"}
+                  alt={t('modals.profile.avatarAlt')}
+                />
+              </button>
+              {activeUser && activeUser.toLowerCase() !== username?.toLowerCase() && (
+                <Button
+                  variant={isFollowing ? "secondary" : "primary"}
+                  size={36}
+                  icon={isFollowing ? "check" : "person_add"}
+                  className="btn-follow"
+                  onClick={handleFollow}
+                  disabled={fetchingFollow}
                 >
-                  <h2 className="username">{profile?.name}</h2>
-                  <span>({Math.floor(profile?.reputation || 0)})</span>
-                </div>
-                {activeUser && activeUser.toLowerCase() !== username?.toLowerCase() && (
-                  <button className="btn-follow" onClick={handleFollow}>{isFollowing ? t('common.actions.unfollow') : t('common.actions.follow')}</button>
-                )}
-              </div>
-
-              <div className="stats-grid">
-                <div className="stat">
-                  <span className="value">{profile?.post_count}</span>
-                  <span className="label">{t('modals.profile.posts')}</span>
-                </div>
-                <div className="stat">
-                  <span className="value">{profile?.stats?.followers}</span>
-                  <span className="label">{t('modals.profile.followers')}</span>
-                </div>
-                <div className="stat">
-                  <span className="value">{profile?.stats?.following}</span>
-                  <span className="label">{t('common.actions.following')}</span>
-                </div>
-              </div>
-
-              <div className="meta-info">
-                <div className="meta-item">
-                  <CiCalendarDate />
-                  <span>{t('modals.profile.joined', { date: profile?.created?.substring(0, 10) })}</span>
-                </div>
-                {profile?.metadata?.profile?.location && (
-                  <div className="meta-item">
-                    <IoLocationOutline />
-                    <span>{profile.metadata.profile.location}</span>
-                  </div>
-                )}
-              </div>
-
-              <div className="about">
-                <h3>{t('modals.profile.about')}</h3>
-                <div className="text">
-                  {profile?.metadata?.profile?.about || t('modals.profile.noBio')}
-                </div>
-              </div>
+                  {isFollowing ? t('common.actions.unfollow') : t('common.actions.follow')}
+                </Button>
+              )}
             </div>
-          </>
-        )}
-      </div>
-    </div>
+
+            <button type="button" className="name-wrap" onClick={go}>
+              <span className="username">{profile?.metadata?.profile?.name || profile?.name}</span>
+              <span className="rep num">{Math.floor(profile?.reputation || 0)}</span>
+            </button>
+
+            <div className="v2-stats stats-grid">
+              <StatTile label={t('modals.profile.posts')} value={profile?.post_count ?? 0} />
+              <StatTile label={t('modals.profile.followers')} value={profile?.stats?.followers ?? 0} />
+              <StatTile label={t('common.actions.following')} value={profile?.stats?.following ?? 0} />
+            </div>
+
+            <div className="meta-info">
+              <span className="meta-item">
+                <Icon name="calendar_month" size={16} />
+                {t('modals.profile.joined', { date: profile?.created?.substring(0, 10) })}
+              </span>
+              {profile?.metadata?.profile?.location && (
+                <span className="meta-item">
+                  <Icon name="location_on" size={16} />
+                  {profile.metadata.profile.location}
+                </span>
+              )}
+            </div>
+
+            <div className="about">
+              <div className="v2-eyebrow">{t('modals.profile.about')}</div>
+              <p className="text">
+                {profile?.metadata?.profile?.about || t('modals.profile.noBio')}
+              </p>
+            </div>
+          </div>
+        </>
+      )}
+    </DialogShell>
   );
 }
 

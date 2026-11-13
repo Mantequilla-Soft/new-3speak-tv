@@ -1,30 +1,188 @@
-// Boost button on the live surfaces. The `rail` variant borrows the
-// shorts action-rail classes wholesale, so it needs nothing here.
+// Boost button on the live surfaces. The `rail` variant borrows the shorts
+// action-rail classes and the `button` variant is a v2 DockTile, so only the
+// over-the-player chip is styled here.
 
-.stream-boost-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-}
-
-// Floats over the player next to the viewer count, on the watch page's live
-// player. Dark chip so it stays readable over any frame.
+// Floats over the player, on the watch page's live player: a media scrim pill.
 .stream-boost-btn--overlay {
   position: absolute;
-  right: 0.6rem;
-  bottom: 0.6rem;
+  right: 10px;
+  bottom: 10px;
   z-index: 6;
-  padding: 0.35rem 0.7rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  padding: 0 12px;
   border: none;
-  border-radius: 999px;
-  background: rgba(0, 0, 0, 0.62);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  color: #fff;
-  font-size: 0.8rem;
-  font-weight: 600;
+  border-radius: var(--r-md);
+  background: var(--media-scrim);
+  color: var(--on-media);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
   cursor: pointer;
-  transition: background 0.15s ease;
+  transition: background var(--t-fast) var(--ease);
 
-  &:hover { background: rgba(0, 0, 0, 0.8); }
+  &:hover { background: var(--media-scrim-strong); }
+}
+
+// The clip tile spins while the clip is being cut.
+.stream-clip.is-busy .material-symbols-rounded { animation: v2-spin 1s linear infinite; }
+
+/* The SDK's boost dialog (SendBoostDialog, portalled to <body>) in the v2 sheet
+   look: it only opens from these buttons. */
+div.hh-boost-dialog__overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: var(--overlay);
+  backdrop-filter: none;
+  animation: v2-fade var(--t-base) var(--ease);
+
+  @media (max-width: 767px) { place-items: end stretch; padding: 0; }
+}
+
+div.hh-boost-dialog {
+  width: min(440px, 100%);
+  max-height: calc(100dvh - 48px);
+  overflow-y: auto;
+  box-sizing: border-box;
+  border-radius: var(--r-3xl);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: var(--shadow-sheet);
+  font-family: var(--font-sans);
+
+  @media (max-width: 767px) {
+    width: 100%;
+    max-height: 88dvh;
+    border-radius: 28px 28px 0 0;
+    border-bottom: 0;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .hh-boost-dialog__header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 18px 16px 6px 20px;
+    border: 0;
+    background: transparent;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .hh-boost-dialog__close {
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    margin-left: auto;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--text);
+    font-size: 16px;
+    cursor: pointer;
+    &:hover { background: var(--bg-hover); }
+  }
+
+  .hh-boost-dialog__body {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 6px 20px 16px;
+    color: var(--text);
+  }
+
+  // Money: a mono amount in a bg well, the asset beside it (STYLE_GUIDE §11).
+  .hh-boost-dialog__amount-row { display: flex; gap: 8px; }
+
+  .hh-boost-dialog__amount {
+    flex: 1;
+    min-width: 0;
+    height: 56px;
+    box-sizing: border-box;
+    padding: 0 14px;
+    border: 2px solid transparent;
+    border-radius: var(--r-xl);
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 28px;
+    font-weight: 900;
+    &:focus { outline: none; border-color: var(--accent); }
+  }
+
+  .hh-boost-dialog__asset {
+    height: 56px;
+    padding: 0 12px;
+    border: 2px solid transparent;
+    border-radius: var(--r-xl);
+    background: var(--surface-2);
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 700;
+    &:focus { outline: none; border-color: var(--accent); }
+    option { background: var(--surface); color: var(--text); }
+  }
+
+  .hh-boost-dialog__message {
+    min-height: 88px;
+    box-sizing: border-box;
+    padding: 10px 12px;
+    border: 2px solid transparent;
+    border-radius: var(--r-md);
+    background: var(--bg);
+    color: var(--text);
+    font: inherit;
+    font-size: 14px;
+    &::placeholder { color: var(--muted); }
+    &:focus { outline: none; border-color: var(--accent); }
+  }
+
+  .hh-boost-dialog__rate-hint,
+  .hh-boost-dialog__hint,
+  .hh-boost-dialog__char-count { margin: 0; font-size: 11px; color: var(--muted); }
+  .hh-boost-dialog__error { margin: 0; font-size: 11px; color: var(--accent); }
+
+  .hh-boost-dialog__recipient {
+    height: 28px;
+    padding: 0 10px;
+    border: 0;
+    border-radius: var(--r-sm);
+    background: var(--surface-2);
+    color: var(--text);
+    font-size: 12px;
+    font-weight: 700;
+    &.is-active { background: var(--text); color: var(--bg); }
+  }
+
+  .hh-boost-dialog__footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    padding: 12px 20px 20px;
+    border-top: 1px solid var(--border);
+  }
+
+  .hh-btn {
+    min-height: 40px;
+    padding: 0 14px;
+    border: 0;
+    border-radius: var(--r-md);
+    box-shadow: none;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    &:hover:not(:disabled) { transform: none; box-shadow: none; }
+  }
+  .hh-btn--primary { background: var(--accent); color: var(--on-accent); font-weight: 900; }
+  .hh-btn--secondary { background: var(--surface-2); color: var(--text); }
 }

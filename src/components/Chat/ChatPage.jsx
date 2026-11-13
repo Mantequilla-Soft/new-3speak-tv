@@ -1,5 +1,7 @@
-import { useState, useRef, useEffect, useMemo } from 'react'
-import { ArrowLeft, Send, MessageCirclePlus, Loader2, MoreHorizontal, X, Users, Hash, LogOut, Maximize2, Minimize2 } from 'lucide-react'
+import { useState, useRef, useEffect, useMemo, useId } from 'react'
+import { createPortal } from 'react-dom'
+import { Icon } from '../v2/Icon'
+import { Button, IconButton, Dialog, ConfirmBar } from '../v2/ui'
 import {
   useConversations,
   useChatMessages,
@@ -122,39 +124,85 @@ function renderMessageText(text) {
   return buildNodes(text.split('\n').map(lineDepth))
 }
 
+// Spinner glyph for buttons and rows that are waiting on the chat server.
+const spinner = (size = 18) => <Icon name="progress_activity" size={size} className="v2-spin" />
+
+// Square-rounded picture for a conversation: the peer's avatar for a DM, a
+// cyan tile (community colour) with # or a group icon for channels and rooms.
+function ConvAvatar({ conv, title, className }) {
+  if (conv.type === 'dm') {
+    return (
+      <img
+        className={className}
+        src={avatar(title)}
+        alt=""
+        onError={(e) => { e.currentTarget.style.visibility = 'hidden' }}
+      />
+    )
+  }
+  return (
+    <span className={`${className} is-room`} aria-hidden="true">
+      <Icon name={conv.type === 'group' ? 'forum' : 'tag'} size={20} />
+    </span>
+  )
+}
+
+// The confirm bar (07f) for small confirmations, in place of window.confirm:
+// the card variant, an accent icon tile and the question as its title.
+// Portalled so a transformed or clipped chat panel can't trap the fixed bar.
+function ChatConfirm({ text, icon, confirmLabel, onConfirm, onCancel }) {
+  const { t } = useTranslation()
+  const cancelRef = useRef(onCancel)
+  useEffect(() => { cancelRef.current = onCancel }, [onCancel])
+  useEffect(() => {
+    const onKey = (e) => { if (e.key === 'Escape') cancelRef.current?.() }
+    document.addEventListener('keydown', onKey)
+    return () => document.removeEventListener('keydown', onKey)
+  }, [])
+  return createPortal(
+    <ConfirmBar
+      icon={icon}
+      title={text}
+      actions={(
+        <>
+          <Button variant="secondary" size={44} onClick={onCancel}>{t('common.actions.cancel')}</Button>
+          <Button variant="primary" size={44} icon={icon} onClick={onConfirm}>{confirmLabel}</Button>
+        </>
+      )}
+    />,
+    document.body
+  )
+}
+
 /** Shown when the client isn't authenticated to the Snapie chat backend yet. */
 function ConnectGate() {
   const { t } = useTranslation()
   const { connect, connecting, error, canConnect } = useChat()
   return (
     <div className="chat-gate">
-      <div className="chat-gate-icon">
-        <MessageCirclePlus size={44} />
-      </div>
-      <h3>{t('chat.gate.connectTitle')}</h3>
-      <p>
-        {t('chat.gate.connectBody')}
-      </p>
-      {error && <p className="chat-gate-error">{error}</p>}
-      <button
-        type="button"
-        className="chat-btn-primary"
-        onClick={connect}
-        disabled={connecting || !canConnect}
-      >
-        {connecting ? (
-          <>
-            <Loader2 size={16} className="chat-spin" /> {t('chat.gate.connecting')}
-          </>
-        ) : (
-          t('chat.gate.connectButton')
+      <div className="chat-gate-card">
+        <span className="chat-gate-icon"><Icon name="forum" size={28} /></span>
+        <h3>{t('chat.gate.connectTitle')}</h3>
+        <p>{t('chat.gate.connectBody')}</p>
+        {error && <p className="chat-gate-error" role="alert">{error}</p>}
+        <Button
+          variant="cyan"
+          size={48}
+          block
+          className="is-next chat-gate-btn"
+          trailing="key"
+          loading={connecting}
+          onClick={connect}
+          disabled={connecting || !canConnect}
+        >
+          {connecting ? t('chat.gate.connecting') : t('chat.gate.connectButton')}
+        </Button>
+        {!canConnect && (
+          <p className="chat-gate-hint">
+            {t('chat.gate.cannotSign')}
+          </p>
         )}
-      </button>
-      {!canConnect && (
-        <p className="chat-gate-hint">
-          {t('chat.gate.cannotSign')}
-        </p>
-      )}
+      </div>
     </div>
   )
 }
@@ -188,18 +236,24 @@ function NewDmForm() {
 
   return (
     <form className="chat-newdm" onSubmit={submit}>
-      <span className="chat-newdm-at">@</span>
+      <Icon name="alternate_email" size={18} className="chat-newdm-at" />
       <input
         type="text"
         placeholder={t('chat.newDm.placeholder')}
+        aria-label={t('chat.newDm.placeholder')}
         value={value}
         onChange={(e) => setValue(e.target.value)}
         spellCheck={false}
         autoCapitalize="none"
       />
-      <button type="submit" disabled={!value.trim() || busy} aria-label={t('chat.newDm.start')}>
-        {busy ? <Loader2 size={16} className="chat-spin" /> : <Send size={16} />}
-      </button>
+      <IconButton
+        type="submit"
+        size={32}
+        variant={value.trim() ? 'primary' : 'ghost'}
+        icon={busy ? spinner(16) : 'arrow_forward'}
+        disabled={!value.trim() || busy}
+        label={t('chat.newDm.start')}
+      />
     </form>
   )
 }
@@ -223,6 +277,7 @@ function NewRoomForm() {
   const [members, setMembers] = useState([]) // validated Hive handles
   const [checking, setChecking] = useState(false)
   const [busy, setBusy] = useState(false)
+  const formId = useId()
 
   const close = () => {
     setOpen(false)
@@ -302,52 +357,71 @@ function NewRoomForm() {
     }
   }
 
-  if (!open) {
-    return (
-      <button type="button" className="chat-newroom-toggle" onClick={() => setOpen(true)}>
-        <Users size={16} /> {t('chat.newRoom.toggle')}
-      </button>
-    )
-  }
-
   return (
-    <form className="chat-newroom" onSubmit={submit}>
-      <input
-        type="text"
-        placeholder={t('chat.newRoom.namePlaceholder')}
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        autoFocus
-      />
-      <div className="chat-newroom-members">
-        {members.map((m) => (
-          <span key={m} className="chat-member-chip">
-            @{m}
-            <button type="button" onClick={() => removeMember(m)} aria-label={t('chat.newRoom.removeMember', { user: m })}>
-              <X size={12} />
-            </button>
-          </span>
-        ))}
-        <input
-          type="text"
-          placeholder={members.length ? t('chat.newRoom.addMore') : t('chat.newRoom.invitePlaceholder')}
-          value={memberInput}
-          onChange={onMemberChange}
-          onKeyDown={onMemberKeyDown}
-          spellCheck={false}
-          autoCapitalize="none"
-        />
-        {checking && <Loader2 size={14} className="chat-spin" />}
-      </div>
-      <div className="chat-newroom-actions">
-        <button type="button" className="chat-newroom-cancel" onClick={close} disabled={busy}>
-          {t('common.actions.cancel')}
-        </button>
-        <button type="submit" disabled={!name.trim() || busy}>
-          {busy ? <Loader2 size={16} className="chat-spin" /> : t('chat.newRoom.create')}
-        </button>
-      </div>
-    </form>
+    <>
+      <Button size={36} icon="group_add" className="chat-newroom-toggle" onClick={() => setOpen(true)}>
+        {t('chat.newRoom.toggle')}
+      </Button>
+      {/* A dialog (a bottom sheet on phones), so the list under the button
+          keeps its size while a room is being set up. */}
+      <Dialog
+        open={open}
+        onClose={busy ? undefined : close}
+        tone="cyan" // 32: the "New room" sheet's cyan bar
+        title={t('chat.newRoom.toggle')}
+        closeLabel={t('common.actions.close')}
+        footer={(
+          <>
+            <Button variant="secondary" onClick={close} disabled={busy}>
+              {t('common.actions.cancel')}
+            </Button>
+            <Button
+              variant="cyan"
+              type="submit"
+              form={formId}
+              trailing="add"
+              loading={busy}
+              disabled={!name.trim() || busy}
+            >
+              {t('chat.newRoom.create')}
+            </Button>
+          </>
+        )}
+      >
+        <form id={formId} className="chat-newroom" onSubmit={submit}>
+          <input
+            type="text"
+            className="v2-input"
+            placeholder={t('chat.newRoom.namePlaceholder')}
+            aria-label={t('chat.newRoom.namePlaceholder')}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            autoFocus
+          />
+          <div className="chat-newroom-members">
+            {members.map((m) => (
+              <span key={m} className="chat-member-chip">
+                @{m}
+                <button type="button" onClick={() => removeMember(m)} aria-label={t('chat.newRoom.removeMember', { user: m })}>
+                  <Icon name="close" size={14} />
+                </button>
+              </span>
+            ))}
+            <input
+              type="text"
+              placeholder={members.length ? t('chat.newRoom.addMore') : t('chat.newRoom.invitePlaceholder')}
+              aria-label={t('chat.newRoom.invitePlaceholder')}
+              value={memberInput}
+              onChange={onMemberChange}
+              onKeyDown={onMemberKeyDown}
+              spellCheck={false}
+              autoCapitalize="none"
+            />
+            {checking && spinner(16)}
+          </div>
+        </form>
+      </Dialog>
+    </>
   )
 }
 
@@ -406,6 +480,8 @@ function BrowseChannels() {
     setJoining(ch._id)
     try {
       await joinChannel(ch) // joins, then opens the channel thread
+      // The browser is a dialog now: get it out of the way of that thread.
+      setOpen(false)
     } catch (err) {
       toast.error(err?.message || t('chat.errors.joinChannel'))
     } finally {
@@ -413,37 +489,44 @@ function BrowseChannels() {
     }
   }
 
-  if (!open) {
-    return (
-      <button type="button" className="chat-newroom-toggle" onClick={() => setOpen(true)}>
-        <Hash size={16} /> {t('chat.channels.browse')}
-      </button>
-    )
-  }
-
   return (
-    <div className="chat-browse">
-      <div className="chat-browse-head">
-        <span>{t('chat.channels.publicTitle')}</span>
-        <button type="button" onClick={() => setOpen(false)} aria-label={t('chat.channels.closeBrowser')}>
-          <X size={14} />
-        </button>
-      </div>
-      {loading && <div className="chat-empty">{t('chat.channels.loading')}</div>}
-      {!loading && channels.length === 0 && (
-        <div className="chat-empty">{t('chat.channels.empty')}</div>
-      )}
-      <ul className="chat-browse-ul">
-        {channels.map((ch) => (
-          <li key={ch._id} className="chat-browse-row">
-            <span className="chat-browse-name"># {ch.name}</span>
-            <button type="button" onClick={() => join(ch)} disabled={joining === ch._id}>
-              {joining === ch._id ? <Loader2 size={14} className="chat-spin" /> : t('chat.channels.join')}
-            </button>
-          </li>
-        ))}
-      </ul>
-    </div>
+    <>
+      <Button size={36} icon="tag" className="chat-newroom-toggle" onClick={() => setOpen(true)}>
+        {t('chat.channels.browse')}
+      </Button>
+      <Dialog
+        open={open}
+        onClose={() => setOpen(false)}
+        title={t('chat.channels.publicTitle')}
+        closeLabel={t('chat.channels.closeBrowser')}
+        bodyClassName="chat-browse"
+      >
+        {loading && <div className="chat-empty">{spinner(20)}<span>{t('chat.channels.loading')}</span></div>}
+        {!loading && channels.length === 0 && (
+          <div className="chat-empty">{t('chat.channels.empty')}</div>
+        )}
+        {!loading && channels.length > 0 && (
+          <ul className="chat-browse-ul">
+            {channels.map((ch) => (
+              <li key={ch._id} className="chat-browse-row">
+                <span className="chat-browse-icon" aria-hidden="true"><Icon name="tag" size={18} /></span>
+                <span className="chat-browse-name">{ch.name}</span>
+                <Button
+                  size={32}
+                  variant="ghost"
+                  className="chat-browse-join"
+                  loading={joining === ch._id}
+                  disabled={joining === ch._id}
+                  onClick={() => join(ch)}
+                >
+                  {t('chat.channels.join')}
+                </Button>
+              </li>
+            ))}
+          </ul>
+        )}
+      </Dialog>
+    </>
   )
 }
 
@@ -457,7 +540,9 @@ function ConversationList() {
   // Counts come from the server on every check, never from a locally kept
   // tally that can drift (see useServerUnread). markRead still comes from the
   // SDK hook; we resync straight after using it.
-  const { markRead } = useUnreadCount()
+  // Mounted for the SDK's unread subscription; markRead itself is used per
+  // thread (see Thread) and through the raw client below.
+  useUnreadCount()
   const { unreadCount, byConversation, refresh: refreshUnread } = useServerUnread()
   const [clearing, setClearing] = useState(false)
   const groups = useGroups()
@@ -588,76 +673,90 @@ function ConversationList() {
   return (
     <div className="chat-list">
       {shareDraft && (
-        <div className="chat-share-banner">{t('chat.list.chooseTarget')}</div>
-      )}
-      <NewDmForm />
-      {/* Side by side while collapsed; an opened form drops below, full width. */}
-      <div className="chat-list-actions">
-        <NewRoomForm />
-        <BrowseChannels />
-      </div>
-      {hasUnread && (
-        <button
-          type="button"
-          className="chat-mark-all-read"
-          onClick={markAllRead}
-          disabled={clearing}
-        >
-          {clearing
-            ? t('chat.markRead.marking')
-            : (unreadCount > 0 ? t('chat.markRead.buttonCount', { count: unreadCount }) : t('chat.markRead.button'))}
-        </button>
-      )}
-      {loading && merged.length === 0 && (
-        <div className="chat-empty">{t('chat.list.loading')}</div>
-      )}
-      {!loading && merged.length === 0 && (
-        <div className="chat-empty">
-          {t('chat.list.empty')}
+        <div className="chat-share-banner" role="status">
+          <Icon name="forward_to_inbox" size={18} />
+          <span>{t('chat.list.chooseTarget')}</span>
         </div>
       )}
-      <ul className="chat-conv-ul">
-        {merged.map((conv) => {
-          const title = convTitle(conv)
-          const isDm = conv.type === 'dm'
-          const active = activeConversation?._id === conv._id
-          // Fall back to the server flag until the first snapshot lands, so dots
-          // do not blink off on load.
-          const unread = byConversation
-            ? (byConversation[conv._id] ?? 0) > 0
-            : !!conv.unread
-          return (
-            <li
-              key={conv._id}
-              className={`chat-conv-row${unread ? ' unread' : ''}${active ? ' active' : ''}`}
-              onClick={() => openConversation(conv)}
-            >
-              <img
-                className="chat-conv-avatar"
-                src={isDm ? avatar(title) : avatar(conv.owner || 'spknetwork')}
-                alt=""
-                onError={(e) => {
-                  e.currentTarget.style.visibility = 'hidden'
-                }}
-              />
-              <div className="chat-conv-meta">
-                <div className="chat-conv-name">
-                  {isDm ? `@${title}` : `# ${title}`}
-                </div>
-                {conv.lastMessage && (
-                  <div className="chat-conv-last">
-                    {conv.lastMessage.sender
-                      ? `${conv.lastMessage.sender}: `
-                      : ''}
-                    {conv.lastMessage.content}
+      <div className="chat-list-top">
+        <NewDmForm />
+        <div className="chat-list-actions">
+          <NewRoomForm />
+          <BrowseChannels />
+        </div>
+      </div>
+      {/* The only part that scrolls: the list never pushes the panel taller. */}
+      <div className="chat-conv-scroll">
+        {loading && merged.length === 0 && (
+          <div className="chat-empty">{spinner(20)}<span>{t('chat.list.loading')}</span></div>
+        )}
+        {!loading && merged.length === 0 && (
+          <div className="chat-empty">
+            {t('chat.list.empty')}
+          </div>
+        )}
+        <ul className="chat-conv-ul">
+          {merged.map((conv) => {
+            const title = convTitle(conv)
+            const isDm = conv.type === 'dm'
+            const active = activeConversation?._id === conv._id
+            // Fall back to the server flag until the first snapshot lands, so dots
+            // do not blink off on load.
+            const count = byConversation ? Number(byConversation[conv._id] ?? 0) : 0
+            const unread = byConversation ? count > 0 : !!conv.unread
+            const when = conv.lastMessage?.createdAt ? timeAgo(conv.lastMessage.createdAt) : ''
+            return (
+              <li
+                key={conv._id}
+                className={`chat-conv-row${unread ? ' unread' : ''}${active ? ' active' : ''}`}
+                onClick={() => openConversation(conv)}
+                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openConversation(conv) } }}
+                role="button"
+                tabIndex={0}
+                aria-current={active || undefined}
+              >
+                <ConvAvatar conv={conv} title={title} className="chat-conv-avatar" />
+                <div className="chat-conv-meta">
+                  <div className="chat-conv-top">
+                    <span className="chat-conv-name">{isDm ? `@${title}` : title}</span>
+                    {when && <span className="chat-conv-age">{when}</span>}
                   </div>
+                  {conv.lastMessage && (
+                    <div className="chat-conv-last">
+                      {conv.lastMessage.sender
+                        ? `${conv.lastMessage.sender}: `
+                        : ''}
+                      {conv.lastMessage.content}
+                    </div>
+                  )}
+                </div>
+                {unread && (
+                  <span className={`chat-conv-dot${count > 0 ? ' has-count' : ''}`}>
+                    {count > 0 ? (count > 99 ? '99+' : count) : null}
+                  </span>
                 )}
-              </div>
-              {unread && <span className="chat-conv-dot" />}
-            </li>
-          )
-        })}
-      </ul>
+              </li>
+            )
+          })}
+        </ul>
+      </div>
+      {hasUnread && (
+        <div className="chat-list-foot">
+          <Button
+            block
+            size={44}
+            className="is-next chat-mark-all-read"
+            trailing={clearing ? null : 'done_all'}
+            loading={clearing}
+            onClick={markAllRead}
+            disabled={clearing}
+          >
+            {clearing
+              ? t('chat.markRead.marking')
+              : (unreadCount > 0 ? t('chat.markRead.buttonCount', { count: unreadCount }) : t('chat.markRead.button'))}
+          </Button>
+        </div>
+      )}
     </div>
   )
 }
@@ -667,9 +766,10 @@ function LeaveButton({ conv }) {
   const { t } = useTranslation()
   const { leaveConversation, backToList } = useChat()
   const [busy, setBusy] = useState(false)
+  const [asking, setAsking] = useState(false)
   const kind = conv.type === 'group' ? 'room' : 'channel'
   const leave = async () => {
-    if (!window.confirm(kind === 'room' ? t('chat.leave.confirmRoom') : t('chat.leave.confirmChannel'))) return
+    setAsking(false)
     setBusy(true)
     try {
       await leaveConversation(conv)
@@ -680,17 +780,27 @@ function LeaveButton({ conv }) {
       setBusy(false)
     }
   }
+  const label = kind === 'room' ? t('chat.leave.titleRoom') : t('chat.leave.titleChannel')
   return (
-    <button
-      type="button"
-      className="chat-thread-leave"
-      onClick={leave}
-      disabled={busy}
-      title={kind === 'room' ? t('chat.leave.titleRoom') : t('chat.leave.titleChannel')}
-    >
-      {busy ? <Loader2 size={15} className="chat-spin" /> : <LogOut size={16} />}
-      <span>{t('chat.leave.button')}</span>
-    </button>
+    <>
+      <IconButton
+        className="chat-thread-leave"
+        icon={busy ? spinner(18) : 'logout'}
+        size={36}
+        onClick={() => setAsking(true)}
+        disabled={busy}
+        label={label}
+      />
+      {asking && (
+        <ChatConfirm
+          icon="logout"
+          text={kind === 'room' ? t('chat.leave.confirmRoom') : t('chat.leave.confirmChannel')}
+          confirmLabel={t('chat.leave.button')}
+          onConfirm={leave}
+          onCancel={() => setAsking(false)}
+        />
+      )}
+    </>
   )
 }
 
@@ -733,7 +843,9 @@ function Thread({ conv, headerActions = null }) {
   const [menuDir, setMenuDir] = useState('up')
   const [quoteTarget, setQuoteTarget] = useState(null)
   const [editTarget, setEditTarget] = useState(null)
-  const [lightboxUrl, setLightboxUrl] = useState(null)
+  const [deleteTarget, setDeleteTarget] = useState(null)
+  // { url, sender, createdAt } of the image open in the lightbox.
+  const [lightbox, setLightbox] = useState(null)
   const [attachments, setAttachments] = useState([]) // {id, status, url, previewUrl}
 
   // Pasted images → upload via the background service; show as removable thumbs.
@@ -831,8 +943,9 @@ function Thread({ conv, headerActions = null }) {
   }
 
   // Soft delete — the SDK has no real delete, so replace the body with a marker.
+  // Asked first in the confirm bar (deleteTarget), then run from there.
   const deleteMessage = async (m) => {
-    if (!window.confirm(t('chat.thread.deleteConfirm'))) return
+    setDeleteTarget(null)
     if (editTarget?._id === m._id) { setEditTarget(null); updateDraft('') }
     try {
       await editMessage(m._id, '[deleted]')
@@ -873,28 +986,33 @@ function Thread({ conv, headerActions = null }) {
 
   const others = typingUsers.filter((u) => u !== me)
   const isDm = conv.type === 'dm'
+  // Rooms and channels read as a list of posts with names and avatars (32a);
+  // a DM is a bubble conversation (26a).
+  const room = !isDm
   const title = convTitle(conv)
 
   return (
     <div className="chat-thread">
       <header className="chat-thread-header">
-        <button
-          type="button"
-          className="chat-icon-btn chat-thread-back"
-          onClick={backToList}
-          aria-label={t('chat.thread.back')}
-        >
-          <ArrowLeft size={20} />
-        </button>
-        <img className="chat-thread-avatar" src={avatar(isDm ? title : conv.owner || 'spknetwork')} alt="" />
-        <span className="chat-thread-title">{isDm ? `@${title}` : `# ${title}`}</span>
-        {!isDm && <LeaveButton conv={conv} />}
-        {headerActions}
+        <div className={`chat-thread-card${room ? ' is-room' : ''}`}>
+          <IconButton
+            className="chat-thread-back"
+            icon="arrow_back"
+            variant="ghost"
+            size={36}
+            onClick={backToList}
+            label={t('chat.thread.back')}
+          />
+          <ConvAvatar conv={conv} title={title} className="chat-thread-avatar" />
+          <span className="chat-thread-title">{isDm ? `@${title}` : title}</span>
+          {!isDm && <LeaveButton conv={conv} />}
+          {headerActions}
+        </div>
       </header>
 
       <div className="chat-messages" ref={scrollRef}>
-        {loading && <div className="chat-empty">{t('chat.thread.loading')}</div>}
-        {error && <div className="chat-gate-error">{error}</div>}
+        {loading && <div className="chat-empty">{spinner(20)}<span>{t('chat.thread.loading')}</span></div>}
+        {error && <div className="chat-gate-error" role="alert">{error}</div>}
         {!loading && messages.length === 0 && (
           <div className="chat-empty">{t('chat.thread.empty')}</div>
         )}
@@ -913,61 +1031,79 @@ function Thread({ conv, headerActions = null }) {
           const isDeleted = text === '[deleted]'
           const hasBubble = !!text || images.length > 0
           const imageOnly = !text && images.length > 0
+          const time = m.createdAt && (
+            <span className="chat-msg-time" title={new Date(m.createdAt).toLocaleString()}>
+              {timeAgo(m.createdAt)}{m.editedAt ? t('chat.thread.editedSuffix') : ''}
+            </span>
+          )
           return (
-            <div key={m._id} className={`chat-msg${mine ? ' mine' : ''}`}>
-              {!mine && conv.type !== 'dm' && (
-                <span className="chat-msg-sender">@{m.sender}</span>
+            <div key={m._id} className={`chat-msg${mine ? ' mine' : ''}${room ? ' chat-msg--room' : ''}`}>
+              {room && (
+                <img
+                  className="chat-msg-avatar"
+                  src={avatar(m.sender)}
+                  alt=""
+                  loading="lazy"
+                  onError={(e) => { e.currentTarget.style.visibility = 'hidden' }}
+                />
               )}
-              <div className="chat-msg-row">
-                <div className="chat-msg-content">
-                  {hasBubble && (
-                    <div className={`chat-msg-bubble${imageOnly ? ' image-only' : ''}${isDeleted ? ' chat-msg-deleted' : ''}`}>
-                      {text && renderMessageText(text)}
-                      {images.map((url) => (
-                        <button
-                          key={url}
-                          type="button"
-                          className="chat-image-btn"
-                          onClick={(e) => { e.stopPropagation(); setLightboxUrl(url) }}
-                        >
-                          <img className="chat-msg-image" src={url} alt="" loading="lazy" />
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                  {postLink && <ChatLinkCard link={postLink} />}
-                  {m.createdAt && (
-                    <span className="chat-msg-time" title={new Date(m.createdAt).toLocaleString()}>
-                      {timeAgo(m.createdAt)}{m.editedAt ? t('chat.thread.editedSuffix') : ''}
-                    </span>
-                  )}
-                </div>
-                <div className="chat-msg-actions">
-                  <button
-                    type="button"
-                    className="chat-msg-menu-btn"
-                    aria-label={t('chat.thread.messageActions')}
-                    onClick={(e) => { e.stopPropagation(); toggleMenu(e, m._id) }}
-                  >
-                    <MoreHorizontal size={15} />
-                  </button>
+              <div className="chat-msg-main">
+                {room && (
+                  <div className="chat-msg-head">
+                    <b className="chat-msg-sender">@{m.sender}</b>
+                    {time}
+                  </div>
+                )}
+                <div className="chat-msg-row">
+                  <div className="chat-msg-content">
+                    {hasBubble && (
+                      <div className={`chat-msg-bubble${imageOnly ? ' image-only' : ''}${isDeleted ? ' chat-msg-deleted' : ''}`}>
+                        {text && renderMessageText(text)}
+                        {images.map((url) => (
+                          <button
+                            key={url}
+                            type="button"
+                            className="chat-image-btn"
+                            onClick={(e) => { e.stopPropagation(); setLightbox({ url, sender: m.sender, createdAt: m.createdAt }) }}
+                          >
+                            <img className="chat-msg-image" src={url} alt="" loading="lazy" />
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                    {postLink && <ChatLinkCard link={postLink} />}
+                    {!room && time}
+                  </div>
+                  <div className="chat-msg-actions">
+                    <button
+                      type="button"
+                      className="chat-msg-menu-btn"
+                      aria-label={t('chat.thread.messageActions')}
+                      aria-expanded={menuFor === m._id}
+                      onClick={(e) => { e.stopPropagation(); toggleMenu(e, m._id) }}
+                    >
+                      <Icon name="more_horiz" size={18} />
+                    </button>
+                  </div>
+                  {/* Hangs off the row, not the button, so it lines up with
+                      the bubble's edge and stays inside the scroll area. */}
                   {menuFor === m._id && (
-                    <div className={`chat-msg-menu chat-msg-menu--${menuDir}`}>
-                      <button type="button" onClick={(e) => { e.stopPropagation(); startQuote(m); setMenuFor(null) }}>
-                        {t('chat.thread.quote')}
+                    <div className={`chat-msg-menu chat-msg-menu--${menuDir}`} role="menu">
+                      {mine && (
+                        <button type="button" role="menuitem" onClick={(e) => { e.stopPropagation(); setMenuFor(null); startEdit(m) }}>
+                          <Icon name="edit" size={16} />{t('common.actions.edit')}
+                        </button>
+                      )}
+                      <button type="button" role="menuitem" onClick={(e) => { e.stopPropagation(); setMenuFor(null); startQuote(m) }}>
+                        <Icon name="format_quote" size={16} />{t('chat.thread.quote')}
                       </button>
-                      <button type="button" onClick={(e) => { e.stopPropagation(); forwardMessage(m); setMenuFor(null) }}>
-                        {t('chat.thread.forward')}
+                      <button type="button" role="menuitem" onClick={(e) => { e.stopPropagation(); setMenuFor(null); forwardMessage(m) }}>
+                        <Icon name="forward" size={16} />{t('chat.thread.forward')}
                       </button>
                       {mine && (
-                        <>
-                          <button type="button" onClick={(e) => { e.stopPropagation(); startEdit(m); setMenuFor(null) }}>
-                            {t('common.actions.edit')}
-                          </button>
-                          <button type="button" className="chat-msg-menu-danger" onClick={(e) => { e.stopPropagation(); setMenuFor(null); deleteMessage(m) }}>
-                            {t('common.actions.delete')}
-                          </button>
-                        </>
+                        <button type="button" role="menuitem" className="chat-msg-menu-danger" onClick={(e) => { e.stopPropagation(); setMenuFor(null); setDeleteTarget(m) }}>
+                          <Icon name="delete" size={16} />{t('common.actions.delete')}
+                        </button>
                       )}
                     </div>
                   )}
@@ -977,7 +1113,7 @@ function Thread({ conv, headerActions = null }) {
           )
         })}
         {others.length > 0 && (
-          <div className="chat-typing">
+          <div className="chat-typing" aria-live="polite">
             {t('chat.thread.typing', { count: others.length, users: others.join(', ') })}
           </div>
         )}
@@ -986,24 +1122,36 @@ function Thread({ conv, headerActions = null }) {
       <form className="chat-composer" onSubmit={submit}>
         {editTarget && (
           <div className="chat-quote-preview chat-edit-preview">
+            <Icon name="edit" size={18} className="chat-quote-preview-icon" />
             <div className="chat-quote-preview-main">
               <span className="chat-quote-preview-label">{t('chat.thread.editing')}</span>
               <blockquote className="chat-quote chat-quote-preview-text">{quoteSnippet(editTarget.content)}</blockquote>
             </div>
-            <button type="button" className="chat-quote-preview-close" aria-label={t('chat.thread.cancelEdit')} onClick={() => { setEditTarget(null); updateDraft('') }}>
-              <X size={16} />
-            </button>
+            <IconButton
+              className="chat-quote-preview-close"
+              icon="close"
+              size={28}
+              variant="ghost"
+              label={t('chat.thread.cancelEdit')}
+              onClick={() => { setEditTarget(null); updateDraft('') }}
+            />
           </div>
         )}
         {quoteTarget && (
           <div className="chat-quote-preview">
+            <Icon name="format_quote" size={18} className="chat-quote-preview-icon" />
             <div className="chat-quote-preview-main">
               <span className="chat-quote-preview-label">{t('chat.thread.quoting', { user: quoteTarget.sender })}</span>
               <blockquote className="chat-quote chat-quote-preview-text">{quoteSnippet(quoteTarget.content)}</blockquote>
             </div>
-            <button type="button" className="chat-quote-preview-close" aria-label={t('chat.thread.cancelQuote')} onClick={() => setQuoteTarget(null)}>
-              <X size={16} />
-            </button>
+            <IconButton
+              className="chat-quote-preview-close"
+              icon="close"
+              size={28}
+              variant="ghost"
+              label={t('chat.thread.cancelQuote')}
+              onClick={() => setQuoteTarget(null)}
+            />
           </div>
         )}
         {attachments.length > 0 && (
@@ -1012,11 +1160,13 @@ function Thread({ conv, headerActions = null }) {
               <div key={a.id} className={`chat-attachment chat-attachment-${a.status}`}>
                 <img src={a.url || a.previewUrl} alt="" />
                 {a.status === 'uploading' && (
-                  <span className="chat-attachment-overlay"><Loader2 size={18} className="chat-spin" /></span>
+                  <span className="chat-attachment-overlay">{spinner(20)}</span>
                 )}
-                {a.status === 'error' && <span className="chat-attachment-overlay chat-attachment-err">!</span>}
+                {a.status === 'error' && (
+                  <span className="chat-attachment-overlay chat-attachment-err"><Icon name="error" size={20} fill /></span>
+                )}
                 <button type="button" className="chat-attachment-x" aria-label={t('chat.thread.removeImage')} onClick={() => removeAttachment(a.id)}>
-                  <X size={12} />
+                  <Icon name="close" size={14} />
                 </button>
               </div>
             ))}
@@ -1026,10 +1176,12 @@ function Thread({ conv, headerActions = null }) {
           <ChatComposerTools
             onPickEmoji={(e) => updateDraft((d) => d + e)}
             onPickGif={(url) => { sendMessage(url) }}
+            onPickImages={handlePasteFiles}
           />
           <EmojiTextInput
             className="chat-msg-input"
-            placeholder={t('chat.thread.placeholder')}
+            // 26a / 32a: "Message pancasona", "Message #sightings".
+            placeholder={title ? t('chat.thread.placeholderTo', { name: conv.type === 'channel' ? `#${title}` : title }) : t('chat.thread.placeholder')}
             value={draft}
             onChange={(v) => { updateDraft(v); setTyping(v.length > 0) }}
             onSubmit={send}
@@ -1038,18 +1190,38 @@ function Thread({ conv, headerActions = null }) {
           />
           <button
             type="submit"
+            className="chat-send"
             disabled={
               attachments.some((a) => a.status === 'uploading') ||
               (!draft.trim() && !quoteTarget && !attachments.some((a) => a.status === 'done'))
             }
             aria-label={t('common.actions.send')}
+            title={t('common.actions.send')}
           >
-            <Send size={18} />
+            <Icon name={editTarget ? 'check' : 'send'} size={20} />
           </button>
         </div>
       </form>
 
-      <ChatImageLightbox url={lightboxUrl} onClose={() => setLightboxUrl(null)} />
+      {deleteTarget && (
+        <ChatConfirm
+          icon="delete"
+          text={t('chat.thread.deleteConfirm')}
+          confirmLabel={t('common.actions.delete')}
+          onConfirm={() => deleteMessage(deleteTarget)}
+          onCancel={() => setDeleteTarget(null)}
+        />
+      )}
+
+      <ChatImageLightbox
+        url={lightbox?.url}
+        sender={lightbox?.sender}
+        createdAt={lightbox?.createdAt}
+        // 19e: every image in this conversation, as the strip under the photo.
+        items={lightbox ? messages.flatMap((m) => findImageUrls(m.content).map((u) => ({ url: u, sender: m.sender, createdAt: m.createdAt }))) : []}
+        onPick={setLightbox}
+        onClose={() => setLightbox(null)}
+      />
     </div>
   )
 }
@@ -1064,38 +1236,36 @@ function OverlayActions({ expanded, onToggleExpand }) {
   const hoverOnly = !overlayOpen && peek?.shown && !peek.open
   return (
     <div className="chat-overlay-actions">
-      <button
-        type="button"
-        className="chat-icon-btn"
+      <IconButton
+        icon={expanded ? 'close_fullscreen' : 'open_in_full'}
+        size={36}
+        variant="ghost"
+        round
         onClick={onToggleExpand}
-        aria-label={expanded ? t('chat.overlay.exitFullscreen') : t('chat.overlay.fullscreen')}
-        title={expanded ? t('chat.overlay.exitFullscreen') : t('chat.overlay.fullscreen')}
-      >
-        {expanded ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
-      </button>
+        label={expanded ? t('chat.overlay.exitFullscreen') : t('chat.overlay.fullscreen')}
+      />
       {!hoverOnly && (
-        <button
-          type="button"
-          className="chat-icon-btn"
+        <IconButton
+          icon="close"
+          size={36}
+          variant="ghost"
+          round
           onClick={closeOverlay}
-          aria-label={t('chat.overlay.close')}
-          title={t('chat.overlay.close')}
-        >
-          <X size={18} />
-        </button>
+          label={t('chat.overlay.close')}
+        />
       )}
     </div>
   )
 }
 
-function Gate({ title, children }) {
+function Gate({ title, icon = 'forum', children }) {
   return (
     <div className="chat-gate">
-      <div className="chat-gate-icon">
-        <MessageCirclePlus size={44} />
+      <div className="chat-gate-card">
+        <span className="chat-gate-icon"><Icon name={icon} size={28} /></span>
+        <h3>{title}</h3>
+        {children}
       </div>
-      <h3>{title}</h3>
-      {children}
     </div>
   )
 }
@@ -1128,7 +1298,7 @@ export function ChatPanel({ overlay = false, expanded = false, onToggleExpand })
   // a typed URL or an old link: the entry points are hidden for them then.
   if (warmup && !ready && !connecting) {
     return shell(
-      <Gate title={t('chat.gate.needsAccountTitle')}>
+      <Gate title={t('chat.gate.needsAccountTitle')} icon="key">
         <p>
           {t('chat.gate.needsAccountBody')}
         </p>
@@ -1138,7 +1308,7 @@ export function ChatPanel({ overlay = false, expanded = false, onToggleExpand })
 
   if (!authenticated) {
     return shell(
-      <Gate title={t('chat.gate.loginTitle')}>
+      <Gate title={t('chat.gate.loginTitle')} icon="login">
         <p>{t('chat.gate.loginBody')}</p>
       </Gate>
     )
@@ -1150,8 +1320,10 @@ export function ChatPanel({ overlay = false, expanded = false, onToggleExpand })
     return shell(
       connecting ? (
         <div className="chat-gate">
-          <Loader2 size={40} className="chat-spin" />
-          <p>{t('chat.gate.connectingToChat')}</p>
+          <div className="chat-gate-card is-busy" role="status">
+            <span className="chat-gate-icon">{spinner(28)}</span>
+            <p>{t('chat.gate.connectingToChat')}</p>
+          </div>
         </div>
       ) : (
         <ConnectGate />
@@ -1172,14 +1344,30 @@ export function ChatPanel({ overlay = false, expanded = false, onToggleExpand })
   const panes = (
     <>
       <div className="chat-page-sidebar">
+        {!overlay && (
+          <div className="chat-page-head">
+            <h1 className="chat-page-title">{t('chat.button.label')}</h1>
+            {/* 26a: the accent "new chat" square; it takes you to the
+                "Message a Hive user" field below. */}
+            <IconButton
+              icon="edit_square"
+              size={40}
+              variant="primary"
+              label={t('chat.newDm.start')}
+              className="chat-page-new"
+              onClick={(e) => e.currentTarget.closest('.chat-page-sidebar')?.querySelector('.chat-newdm input')?.focus()}
+            />
+          </div>
+        )}
         <ConversationList />
       </div>
       <div className="chat-page-main">
         {activeConversation ? (
           <Thread key={activeConversation._id} conv={activeConversation} />
         ) : (
-          <div className="chat-empty chat-page-placeholder">
-            {shareDraft ? t('chat.page.chooseTarget') : t('chat.page.selectConversation')}
+          <div className="chat-page-placeholder">
+            <span className="chat-gate-icon"><Icon name={shareDraft ? 'forward_to_inbox' : 'forum'} size={28} /></span>
+            <p>{shareDraft ? t('chat.page.chooseTarget') : t('chat.page.selectConversation')}</p>
           </div>
         )}
       </div>

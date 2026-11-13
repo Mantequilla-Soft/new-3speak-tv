@@ -17,7 +17,8 @@
     "loginFailed": "Login gagal: {{error}}",
     "logoAlt": "Logo 3Speak",
     "title": "Masuk dengan nama penggunamu",
-    "usernamePlaceholder": "Nama pengguna"
+    "usernamePlaceholder": "Nama pengguna",
+    "continueWith": "Lanjutkan dengan {{method}}"
   },
   "socialLink": {
     "hashCopied": "Hash tersalin",
@@ -54,8 +55,8 @@
     "verify": "Verifikasi"
   },
   "auth": {
-    "title": "Beri izin 3Speak!",
-    "text": "Untuk mengunggah video di 3Speak, kami butuh otoritas posting-mu. Ini memungkinkan kami menerbitkan video yang kamu unggah ke Hive. Kamu cukup memberi kami otoritas posting sekali saja.",
+    "title": "Beri izin 3Speak",
+    "text": "Untuk mengunggah, kami butuh otoritas posting-mu agar bisa menerbitkan videomu ke Hive. Kamu cukup memberikannya sekali.",
     "authorize": "Beri izin"
   },
   "beneficiary": {
@@ -69,20 +70,25 @@
       "duplicate": "Akun ini sudah ada di daftar.",
       "invalidAccount": "Nama pengguna atau ID komunitas tidak valid.",
       "cannotIncrease": "Tidak bisa dinaikkan melebihi sisa {{percent}}%",
-      "pendingRow": "@{{account}} belum ditambahkan — klik + untuk menambahkannya, atau kosongkan kolomnya.",
+      "pendingRow": "@{{account}} belum ditambahkan. Klik + untuk menambahkannya, atau kosongkan kolomnya.",
       "atLeastOne": "Persentase reward minimal 1%",
       "maxCount": "Hive mengizinkan paling banyak {{max}} penerima manfaat per postingan."
     },
     "title": "Penerima manfaat",
+    "shareRewards": "Bagikan reward",
+    "you": "kamu",
+    "toYou": "untukmu",
+    "addCollaborator": "Tambahkan kolaborator",
+    "saveSplit": "Simpan pembagian",
     "intro": "Tambahkan pengguna yang akan otomatis menerima sebagian reward dari postingan ini.",
     "minPercent": "% (min {{percent}}%)",
     "usernamePlaceholder": "Masukkan nama pengguna",
     "minimumReward": "Reward minimal <strong>1%</strong>",
     "checking": "Memeriksa <strong>@{{account}}</strong> di Hive…",
-    "notExisting": "⚠️ <strong>@{{account}}</strong> bukan akun Hive yang ada.",
-    "notAdded": "⚠️ <strong>@{{account}}</strong> belum ditambahkan — klik <strong>+</strong> untuk menambahkannya, atau kosongkan kolomnya.",
-    "infrastructure": "10% === Infrastruktur",
-    "videoEncoding": "Encoding Video === 1%",
+    "notExisting": "<strong>@{{account}}</strong> bukan akun Hive yang ada.",
+    "notAdded": "<strong>@{{account}}</strong> belum ditambahkan. Klik <strong>+</strong> untuk menambahkannya, atau kosongkan kolomnya.",
+    "infrastructure": "Infrastruktur: 10%",
+    "videoEncoding": "Encoding Video: 1%",
     "defaults": "Penerima Manfaat Default ({{count}})"
   },
   "qr": {
@@ -99,8 +105,8 @@
     "gotIt": "Mengerti"
   },
   "verifyAuth": {
-    "title": "Memverifikasi Otorisasi",
-    "text": "Mohon tunggu, kami sedang memverifikasi bahwa otorisasi sudah diberikan..."
+    "title": "Memverifikasi otorisasi",
+    "text": "Memeriksa bahwa otorisasi sudah diberikan…"
   },
   "editor": {
     "confirmLeave": "Editor masih terbuka. Meninggalkan halaman ini akan menutup editor dan perubahan yang belum disimpan akan hilang.\n\nOK = Tutup editor & keluar\nBatal = Tetap di halaman ini",
@@ -176,7 +182,9 @@
     "details": "Detail tambahan (opsional)",
     "detailsPlaceholder": "Berikan konteks lebih lanjut...",
     "submitting": "Mengirim...",
-    "submit": "Kirim Laporan"
+    "submit": "Kirim Laporan",
+    "intro": "Laporan dikirim ke tim 3Speak. Kreator tidak akan melihat siapa yang melapor.",
+    "nextDetails": "Berikutnya: tambahkan detail"
   },
   "upload": {
     "missingInfo": "Informasi video atau thumbnail tidak lengkap.",

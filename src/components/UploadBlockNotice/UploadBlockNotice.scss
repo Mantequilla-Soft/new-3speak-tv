@@ -1,86 +1,93 @@
-// Flat card like the rest of 3Speak (Audio page cards): no gradients, accent
-// red only on the icon, outlined buttons.
+@use "../../styles/v2" as v2;
+
+// The upload block banner (UploadBlockNotice.jsx), design 23d "upload limits":
+// an accent wash card, the accent icon box, the admin's note, then the two
+// contact buttons.
 .upload-block-notice {
   margin: 12px 0 16px;
-  padding: 14px 16px;
-  background: var(--card-bg);
-  border: 1px solid var(--border-light);
-  border-left: 3px solid var(--accent-primary);
-  border-radius: 12px;
-  color: var(--text-primary);
+  padding: 20px;
+  border-radius: var(--r-3xl);
+  background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+  border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+  color: var(--text);
   min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .ubn-head {
   display: flex;
-  align-items: center;
-  gap: 8px;
+  align-items: flex-start;
+  gap: 12px;
+
+  @include v2.mobile { flex-wrap: wrap; }
+}
+
+.ubn-head__text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
 }
 
 .ubn-icon {
+  display: grid;
+  place-items: center;
   flex: none;
-  color: var(--accent-primary);
+  width: 48px;
+  height: 48px;
+  border-radius: v2.radius-for(48);
+  background: var(--accent);
+  color: var(--on-accent);
 }
 
 .ubn-title {
   margin: 0;
-  font-size: 16px;
-  font-weight: 600;
-  line-height: 1.3;
-}
-
-.ubn-note {
-  margin: 10px 0 0;
-  padding: 8px 12px;
-  border: 1px solid var(--border-light);
-  border-radius: 8px;
-}
-
-.ubn-note-label {
-  display: block;
-  margin-bottom: 2px;
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--text-secondary);
-}
-
-.ubn-note-text {
-  margin: 0;
-  font-size: 14px;
-  line-height: 1.5;
-  white-space: pre-wrap;
-  overflow-wrap: anywhere;
+  @include v2.text(title);
 }
 
 .ubn-body {
-  margin: 10px 0 0;
-  font-size: 14px;
+  margin: 0;
+  @include v2.text(body-sm);
   line-height: 1.5;
-  color: var(--text-secondary);
+  color: var(--muted);
 }
 
+.ubn-note { min-width: 0; }
+
+// The contact buttons: a row on the head's right; their own row under the
+// title on phones, half each.
 .ubn-actions {
+  flex: none;
   display: flex;
-  flex-wrap: wrap;
   gap: 8px;
-  margin-top: 10px;
+  align-self: center;
+
+  @include v2.mobile {
+    flex-basis: 100%;
+    > .ubn-tile { flex: 1; justify-content: center; }
+  }
 }
 
-.ubn-btn {
+// A way forward: a 36px surface button, the icon, the name, the out arrow.
+.ubn-tile {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 6px 12px;
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text-primary);
+  gap: 8px;
+  min-height: 36px;
+  padding: 0 12px;
+  border-radius: var(--r-md);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
   text-decoration: none;
-  transition: border-color 0.15s ease, color 0.15s ease;
+  transition: background var(--t-fast) var(--ease);
 
-  &:hover {
-    border-color: var(--accent-primary);
-    color: var(--accent-primary);
-  }
+  b { @include v2.text(body-sm); font-weight: 700; white-space: nowrap; }
+  &:hover { background: color-mix(in srgb, var(--text) 5%, var(--surface)); color: var(--text); }
+  &:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .ubn-tile__out { color: var(--muted); }
 }

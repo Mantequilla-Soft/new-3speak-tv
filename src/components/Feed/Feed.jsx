@@ -1,5 +1,7 @@
 
 import "./Feed.scss"
+import "../../page/FirstUploads.scss"
+import { FeedPageHeader, FollowFeedIcon } from "../FeedIcons"
 import CommunitiesTags from "../communities-tags/CommunitiesTags"
 import { useEffect, useState } from "react"
 import { has3SpeakPostAuth } from '../../utils/hiveUtils';
@@ -40,7 +42,7 @@ const fetchHomeVideos = async ({ pageParam = 0 }) => {
 
 function Feed() {
   const { t } = useTranslation()
-  const [isOpen, setIsOpen] = useState(false)
+  const [, setIsOpen] = useState(false)
   const {authenticated, user, showNsfw, hideWatched} = useAppStore();
 
   useEffect(()=>{
@@ -114,15 +116,19 @@ function Feed() {
 
   return (
     <>
-    <>
+    <div className="firstupload-container home-feed-page">
+    <FeedPageHeader
+      icon={<FollowFeedIcon />}
+      title={authenticated ? t('feeds.home.sections.follow') : t('feeds.home.sections.home')}
+    />
     <CommunitiesTags />
 
     {isLoading ? <CardSkeleton /> :  <Card3 windowed videos={videos} loading={isFetchingNextPage} getContentForVideo={getContentForVideo} isWatched={isWatched} hideWatched={hideWatched} watchedVersion={watchedVersion} getViewCount={getViewCount} />}
-    {isError && <p>{t('feeds.errors.fetchVideos')}</p>}
+    {isError && <p className="feed-error" role="alert">{t('feeds.errors.fetchVideos')}</p>}
       {isFetchingNextPage && (
-        <p style={{ textAlign: "center" }}>{t('feeds.loadingMore')}</p>
+        <p className="feed-loading-more">{t('feeds.loadingMore')}</p>
       )}
-    </>
+    </div>
     {/* {isOpen && <Auth_modal  isOpen={isOpen} close={toggleUploadModal} />} */}
     </>
   );

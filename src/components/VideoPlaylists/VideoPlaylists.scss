@@ -1,92 +1,85 @@
-@use "../../mixins.scss" as mix;
+@use "../../styles/v2" as v2;
 
+// "Included in N playlists" under a video (28d): a card with the playlists as
+// bg-filled rows. On phones it folds to its header.
 .video-playlists {
   margin-top: 16px;
   padding: 16px;
-  background: var(--card-bg, #1a1a2e);
-  border-radius: 12px;
-  border: 1px solid var(--border-light, #333);
+  @include v2.card;
+
+  @include v2.mobile { padding: 12px 14px; border-radius: var(--r-xl); }
 
   .playlists-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin: 0 0 12px;
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--text-primary, #fff);
+    width: 100%;
+    margin: 0 0 10px;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--text);
+    font: inherit;
+    @include v2.text(title-sm);
+    text-align: left;
+    cursor: default;
 
-    @include mix.respond(phone) {
-      cursor: pointer;
-      margin: 0;
-    }
+    @include v2.mobile { margin: 0; min-height: 44px; cursor: pointer; }
 
     .playlists-header-left {
       display: flex;
       align-items: center;
       gap: 8px;
 
-      svg {
-        font-size: 20px;
-        color: var(--accent-primary, #e53935);
-      }
+      .material-symbols-rounded { color: var(--cyan); }
     }
 
     .playlists-toggle {
       display: none;
-      color: var(--text-secondary);
+      color: var(--muted);
 
-      @include mix.respond(phone) {
-        display: flex;
-        align-items: center;
-      }
+      @include v2.mobile { display: flex; align-items: center; }
     }
   }
 
   .playlist-chips {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 6px;
 
-    @include mix.respond(phone) {
-      display: none;
-    }
+    @include v2.mobile { display: none; }
 
     .playlist-chip {
-      display: flex;
-      flex-direction: column;
-      padding: 10px 14px;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid var(--border-light, #333);
-      border-radius: 8px;
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      grid-template-rows: auto auto;
+      column-gap: 8px;
+      align-items: center;
+      padding: 8px 12px;
+      border-radius: var(--r-md);
+      background: var(--bg);
       text-decoration: none;
-      transition: all 0.2s ease;
+      transition: background var(--t-fast) var(--ease);
 
-      &:hover {
-        background: rgba(255, 255, 255, 0.1);
-        border-color: var(--accent-primary, #e53935);
-        transform: translateY(-2px);
-      }
+      &:hover { background: var(--surface-2); }
+
+      .playlist-chip-icon { grid-row: 1 / span 2; color: var(--muted); }
 
       .name {
-        font-size: 13px;
-        font-weight: 500;
-        color: var(--text-primary, #fff);
-        margin-bottom: 2px;
+        @include v2.text(body-sm);
+        font-weight: 700;
+        color: var(--text);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
 
-      .owner {
-        font-size: 11px;
-        color: var(--text-secondary, #aaa);
-      }
+      .owner { @include v2.text(meta-sm); color: var(--muted); }
     }
   }
 
-  // When expanded on mobile, show the chips
+  // When expanded on mobile, show the playlists.
   &.expanded .playlist-chips {
-    @include mix.respond(phone) {
-      display: flex;
-      margin-top: 12px;
-    }
+    @include v2.mobile { display: grid; grid-template-columns: 1fr; margin-top: 8px; }
   }
 }

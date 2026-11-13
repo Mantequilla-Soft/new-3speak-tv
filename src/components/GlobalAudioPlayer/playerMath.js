@@ -56,8 +56,30 @@ export const formatSpeed = (v) => `${Number(v).toString()}×`;
 
 // ─── Skip buttons ─────────────────────────────────────────────────────────────
 
-export const SKIP_BACK = 15;
-export const SKIP_FORWARD = 15;
+export const SKIP_BACK = 10;
+export const SKIP_FORWARD = 10;
+
+// Swipes on the phone player (owner 2026-11-12). On the bar: sideways moves
+// the track by SWIPE_SKIP (left = back, right = forward; not on a live stream),
+// up opens the full player, down closes the player. On the full player: down
+// collapses it again. A swipe has to travel a fair way and mostly in one
+// direction, so a tap, a wobble or a scroll does not count.
+export const SWIPE_SKIP = 15;
+export const SWIPE_MIN_X = 48;
+export const SWIPE_MIN_Y = 32;
+
+/** What a swipe on the bar means: 'back' | 'forward' | 'open' | 'close' | null. */
+export function barSwipe(dx, dy, { live = false } = {}) {
+  const ax = Math.abs(dx);
+  const ay = Math.abs(dy);
+  if (ax >= SWIPE_MIN_X && ax > ay * 1.5) return live ? null : (dx < 0 ? 'back' : 'forward');
+  if (ay >= SWIPE_MIN_Y && ay > ax) return dy < 0 ? 'open' : 'close';
+  return null;
+}
+
+/** A swipe down on the full player that collapses it (longer than on the bar:
+ * the panel also holds buttons and lists). */
+export const fullSwipeCollapses = (dx, dy) => dy >= 80 && Math.abs(dx) < dy * 0.6;
 
 /** Where a skip by `delta` seconds lands, kept inside 0..duration (when known). */
 export function skipTarget(current, delta, duration) {

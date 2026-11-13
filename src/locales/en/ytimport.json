@@ -22,7 +22,8 @@
     "step1": "Open this video in",
     "step2": "Click the three dots menu and choose Download.",
     "step3": "Pick the downloaded file below.",
-    "pickFile": "Pick the downloaded file"
+    "pickFile": "Pick the downloaded file",
+    "title": "Couldn't fetch this one"
   },
   "errors": {
     "signIn": "Sign in to import your videos.",
@@ -133,7 +134,8 @@
     },
     "stopConfirm": "Stop this import? Videos that are not published yet are cancelled, including ones already scheduled. Published videos stay.",
     "stopYes": "Yes, stop",
-    "stopKeep": "Keep importing"
+    "stopKeep": "Keep importing",
+    "countOf": "{{done}} of {{total}}"
   },
   "bitchute": {
     "noLink": "You have not linked a BitChute account yet. Link and verify it on your profile first, then come back here.",

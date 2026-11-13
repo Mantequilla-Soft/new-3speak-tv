@@ -7,7 +7,8 @@
     "feeds": "Kanały",
     "groups": "Grupy",
     "audio": "Audio",
-    "login": "Zaloguj"
+    "login": "Zaloguj",
+    "you": "Ty"
   },
   "installApp": "Zainstaluj aplikację",
   "iosInstallHint": "Dotknij <b>Udostępnij</b>, a potem <b>Do ekranu początkowego</b>",
@@ -28,7 +29,9 @@
     "shortsTooltip": "Krótkie pionowe filmy, jeden po drugim",
     "audioTooltip": "Podcasty, muzyka i inne audio opublikowane na 3Speak",
     "groupsTooltip": "Społeczności, do których możesz dołączyć, i odznaki przyznawane ludziom",
-    "rankingsTooltip": "Twórcy, którzy teraz najwięcej zarabiają i są najczęściej oglądani"
+    "rankingsTooltip": "Twórcy, którzy teraz najwięcej zarabiają i są najczęściej oglądani",
+    "live": "Na żywo",
+    "liveTooltip": "Transmisje i pokoje na żywo w tej chwili"
   },
   "aboutLink": "O 3Speak",
   "faqLink": "FAQ",
@@ -38,6 +41,8 @@
     "myChannelAria": "Mój kanał",
     "vpTooltip": "Voting Power: jaką wagę będzie miał twój następny głos",
     "rcTooltip": "Resource Credits: ile kosztują twoje działania na Hive",
+    "votingPower": "Voting Power",
+    "resourceCredits": "Resource Credits",
     "myChannel": "Mój kanał",
     "publishBacklog": "Opublikuj zaległe",
     "analytics": "Statystyki",
@@ -47,14 +52,20 @@
     "logout": "Wyloguj się",
     "onDiscord": "3Speak na Discordzie",
     "onX": "3Speak na X",
-    "onTelegram": "3Speak na Telegramie"
+    "onTelegram": "3Speak na Telegramie",
+    "switch": "Przełącz",
+    "tiles": {
+      "channel": "Kanał",
+      "history": "Historia"
+    },
+    "darkTheme": "Ciemny motyw"
   },
   "notifications": {
     "pushOff": "Powiadomienia wyłączone na tym urządzeniu",
-    "pushOn": "Dostaniesz powiadomienie, gdy obserwowani twórcy coś opublikują",
+    "pushOn": "Dostaniesz powiadomienie, gdy obserwowani twórcy coś opublikują.",
     "pushFailed": "Nie udało się zmienić ustawień powiadomień",
     "ariaUnread": "Powiadomienia (nieprzeczytane: {{count}})",
-    "pushBlocked": "Powiadomienia z tej strony są zablokowane w ustawieniach przeglądarki",
+    "pushBlocked": "Powiadomienia z tej strony są zablokowane w ustawieniach przeglądarki.",
     "pushNoWorker": "Ta wersja nie ma service workera, więc nie można tu zarejestrować powiadomień",
     "pushStop": "Przestań powiadamiać to urządzenie",
     "pushStart": "Otrzymuj powiadomienia, gdy obserwowani twórcy coś opublikują",
@@ -99,6 +110,13 @@
       "heading": "Nowe odcinki obserwowanych podcastów",
       "newEpisode": "Nowy odcinek: {{show}}",
       "type": "Podcast"
+    },
+    "tabs": {
+      "all": "Wszystkie",
+      "mentions": "Wzmianki",
+      "follows": "Obserwacje",
+      "uploads": "Przesłane",
+      "pods": "Pods"
     }
   },
   "search": {
@@ -142,6 +160,17 @@
     "views_other": "{{formatted}} wyświetlenia",
     "tags": "Tagi",
     "titles": "Tytuły",
-    "placeholder": "Szukaj..."
-  }
+    "placeholder": "Szukaj...",
+    "recent": "Ostatnie",
+    "allResultsFor": "Wszystkie wyniki dla „{{term}}”",
+    "kinds": {
+      "creator": "Twórca",
+      "community": "Społeczność",
+      "video": "Film",
+      "short": "Short",
+      "audio": "Audio",
+      "playlist": "Playlista"
+    }
+  },
+  "create": "Utwórz"
 }

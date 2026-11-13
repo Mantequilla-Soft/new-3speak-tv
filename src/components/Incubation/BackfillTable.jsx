@@ -1,11 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import {
-  FaFilm, FaBolt, FaRegCommentDots, FaThumbsUp, FaUserPlus, FaCheck, FaRegClock, FaLayerGroup,
-  FaCloudUploadAlt,
-} from 'react-icons/fa';
 import BarLoader from '../Loader/BarLoader';
-import HiveAvatar from '../HiveAvatar/HiveAvatar';
 import { toastIn } from '../../utils/toast';
 import { checkPostingRc, formatDuration } from '../../utils/rcCheck';
 import { useAppStore } from '../../lib/store';
@@ -14,6 +9,7 @@ import {
 } from '../../lib/incubation';
 import { useTranslation, Trans } from 'react-i18next';
 import { formatDate } from '../../i18n';
+import { Button, Icon, Segmented, StatusPill } from '../v2/ui';
 import './BackfillTable.scss';
 
 const toast = toastIn('Publish to Hive');
@@ -56,6 +52,20 @@ function previewHref(item, username) {
 
 const MODE_KEY = 'backfill_group_mode';
 
+/** "Today" / "Yesterday" / "12 Nov" for a row's own date (46d). */
+function rowDate(iso, t) {
+  const d = iso ? new Date(iso) : null;
+  if (!d || Number.isNaN(d.getTime())) return t('incubation.backfill.noDate');
+  const startOfDay = (x) => new Date(x.getFullYear(), x.getMonth(), x.getDate()).getTime();
+  const diffDays = Math.round((startOfDay(new Date()) - startOfDay(d)) / 86400000);
+  if (diffDays === 0) return t('incubation.backfill.today');
+  if (diffDays === 1) return t('incubation.backfill.yesterday');
+  return formatDate(d, { day: 'numeric', month: 'short' });
+}
+
+/** The type icon a row wears (46d): the same icons as the "By type" sections. */
+const rowIcon = (item) => GROUPS.find((g) => g.match(item))?.icon || 'more_horiz';
+
 /** "Today" / "Yesterday" / "4 September 2026" for a YYYY-MM-DD key. */
 function dayLabel(key, t) {
   const d = new Date(`${key}T00:00:00`);
@@ -83,13 +93,17 @@ function dayLabel(key, t) {
  * container, so anything keying off `kind` files shorts under comments.
  */
 const GROUPS = [
-  { id: 'video', titleKey: 'incubation.backfill.groups.video', Icon: FaFilm, match: i => i.contentType === 'video',
+  { id: 'video', titleKey: 'incubation.backfill.groups.video', icon: 'smart_display', match: i => i.contentType === 'video',
     noteKey: 'incubation.backfill.groups.videoNote' },
-  { id: 'short', titleKey: 'incubation.backfill.groups.short', Icon: FaBolt, match: i => i.contentType === 'short' },
-  { id: 'comment', titleKey: 'incubation.backfill.groups.comment', Icon: FaRegCommentDots, match: i => i.contentType === 'comment' },
-  { id: 'vote', titleKey: 'incubation.backfill.groups.vote', Icon: FaThumbsUp, match: i => i.type === 'vote' },
-  { id: 'follow', titleKey: 'incubation.backfill.groups.follow', Icon: FaUserPlus, match: i => i.type === 'follow' },
+  { id: 'short', titleKey: 'incubation.backfill.groups.short', icon: 'view_day', match: i => i.contentType === 'short' },
+  { id: 'comment', titleKey: 'incubation.backfill.groups.comment', icon: 'chat_bubble', match: i => i.contentType === 'comment' },
+  { id: 'vote', titleKey: 'incubation.backfill.groups.vote', icon: 'thumb_up', match: i => i.type === 'vote' },
+  { id: 'follow', titleKey: 'incubation.backfill.groups.follow', icon: 'person_add', match: i => i.type === 'follow' },
 ];
+
+// Status per row (STYLE_GUIDE §2): success = cyan, failed = accent, pending
+// or not yet = muted. Publishing is system work in progress, so cyan too.
+const STATUS_TONE = { done: 'cyan', publishing: 'cyan', error: 'accent', idle: 'muted' };
 
 const STATUS_KEY = {
   done: 'incubation.backfill.status.done',
@@ -202,7 +216,7 @@ export default function BackfillTable() {
       return { ...g, rows };
     }).filter(g => g.rows.length > 0);
     const rest = items.filter(i => !seen.has(i.id));
-    if (rest.length) out.push({ id: 'other', titleKey: 'incubation.backfill.groups.other', Icon: FaCheck, rows: rest });
+    if (rest.length) out.push({ id: 'other', titleKey: 'incubation.backfill.groups.other', icon: 'more_horiz', rows: rest });
     return out;
   }, [items]);
 
@@ -230,12 +244,16 @@ export default function BackfillTable() {
     return keys.map(key => ({
       id: key,
       title: key === 'unknown' ? t('incubation.backfill.noDate') : dayLabel(key, t),
-      Icon: FaRegClock,
+      icon: 'calendar_today',
       rows: buckets.get(key).sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt)),
     }));
   }, [items, t]);
 
-  const grouped = mode === 'day' ? byDay : byType;
+  // The timeline is one list (46d), each row carrying its own date; by type
+  // keeps its sections, each with its own "Select all".
+  const grouped = mode === 'day'
+    ? [{ id: 'all', flat: true, rows: byDay.flatMap((g) => g.rows) }]
+    : byType;
 
   // Only a definite "cannot afford it" blocks. Unknown stays out of the way.
   const rcBlocked = !!rc && rc.unknown === false && rc.ok === false;
@@ -281,39 +299,35 @@ export default function BackfillTable() {
     }
   }
 
-  // Both of these used to render bare, OUTSIDE the .backfill wrapper, so they
-  // escaped the page's own centring and sat hard against the left edge with no
-  // sign of which app they belonged to.
+  // Loading and error keep the page's own width and padding, so the switch to
+  // the loaded list is not a jump.
   if (state === 'loading') {
     return (
       <div className="backfill backfill-state">
         <BarLoader />
-        <p className="desc">{t('incubation.backfill.loading')}</p>
+        <p className="backfill-desc">{t('incubation.backfill.loading')}</p>
       </div>
     );
   }
   if (state === 'error') {
     return (
       <div className="backfill backfill-state">
-        <p className="backfill-error">{errors._load}</p>
+        <div className="v2-failure backfill-error" role="alert">
+          <b>{errors._load}</b>
+        </div>
       </div>
     );
   }
 
   if (state === 'empty') {
+    // Nothing left (design 46d "nothing left"): the §11 success card.
     return (
-      <div className="backfill">
-        <header className="backfill-hero">
-          <span className="backfill-hero-icon is-done" aria-hidden="true">
-            <FaCheck />
-          </span>
-          <div className="backfill-hero-text">
+      <div className="backfill backfill--empty">
+        <section className="v2-success backfill-done">
+          <span className="backfill-done-icon" aria-hidden="true"><Icon name="check_circle" size={28} fill /></span>
           <h2>{t('incubation.backfill.emptyTitle')}</h2>
-          <p className="desc">
-            {t('incubation.backfill.emptyText')}
-          </p>
-          </div>
-        </header>
+          <p>{t('incubation.backfill.emptyText')}</p>
+        </section>
         {excluded.length > 0 && <Excluded excluded={excluded} />}
         {waiting.length > 0 && <Waiting waiting={waiting} />}
       </div>
@@ -322,195 +336,188 @@ export default function BackfillTable() {
 
   return (
     <div className="backfill">
-      <header className="backfill-hero">
-        <span className="backfill-hero-icon" aria-hidden="true">
-          <FaCloudUploadAlt />
-        </span>
-        <div className="backfill-hero-text">
-        <h2>{t('incubation.backfill.title')}</h2>
-        <p className="desc">
-          <Trans i18nKey="incubation.backfill.intro" values={{ user }} components={{ b: <strong /> }} />
-        </p>
-        </div>
-      </header>
+      <div className="backfill-main">
+        <header className="backfill-hero">
+          <h2>{t('incubation.backfill.title')}</h2>
+          <p className="backfill-desc">
+            <Trans i18nKey="incubation.backfill.intro" values={{ user }} components={{ b: <strong /> }} />
+          </p>
+        </header>
 
-      {/* The cost, stated before they click rather than discovered as errors.
-          Both limits are consensus rules, not our policy. */}
-      <div className="backfill-note">
-        <Trans i18nKey="incubation.backfill.note" components={{ b: <strong /> }} />
-      </div>
-
-      {/* Sticky: the list is long enough to scroll past, and the count and the
-          publish button are what the reader is scrolling in service of. */}
-      <div className="backfill-modes" role="tablist" aria-label={t('incubation.backfill.groupBy')}>
-        <button
-          type="button"
-          role="tab"
-          aria-selected={mode === 'day'}
-          className={`backfill-mode${mode === 'day' ? ' is-on' : ''}`}
-          onClick={() => chooseMode('day')}
-        >
-          <FaRegClock aria-hidden="true" /> {t('incubation.backfill.timeline')}
-        </button>
-        <button
-          type="button"
-          role="tab"
-          aria-selected={mode === 'type'}
-          className={`backfill-mode${mode === 'type' ? ' is-on' : ''}`}
-          onClick={() => chooseMode('type')}
-        >
-          <FaLayerGroup aria-hidden="true" /> {t('incubation.backfill.byType')}
-        </button>
-      </div>
-
-      {rcBlocked ? (
-        <div className="backfill-rc">
-          {rcWait
-            ? <Trans i18nKey="incubation.backfill.rcBlockedIn" values={{ wait: rcWait }} components={{ b: <strong /> }} />
-            : <Trans i18nKey="incubation.backfill.rcBlockedLater" components={{ b: <strong /> }} />}
-        </div>
-      ) : (
-      <div className="backfill-bar">
-        <div className="backfill-bar-count">
-          <Trans i18nKey="incubation.backfill.selected" values={{ count: chosen.length }} components={{ b: <strong /> }} />
-          {chosenRootPosts > 1 && (
-            <span className="backfill-bar-sub">
-              {t('incubation.backfill.rootPostsTime', { count: chosenRootPosts, minutes: chosenRootPosts * 5 })}
-            </span>
-          )}
-          {wait > 0 && (
-            <span className="backfill-bar-sub">
-              {t('incubation.backfill.nextVideo', { wait: fmtWait(wait, t) })}
-            </span>
-          )}
-        </div>
-        <div className="backfill-bar-actions">
-          <button
-            type="button"
-            className="btn-ghost btn-small"
-            onClick={() => setSelected(new Set(pending.map(i => i.id)))}
-            disabled={running}
-          >
-            {t('incubation.backfill.selectAll')}
-          </button>
-          <button
-            type="button"
-            className="btn-ghost btn-small"
-            onClick={() => setSelected(new Set())}
-            disabled={running || !selected.size}
-          >
-            {t('incubation.backfill.clear')}
-          </button>
-          <button
-            type="button"
-            className="btn-primary"
-            onClick={run}
-            disabled={running || !chosen.length}
-          >
-            {running ? t('incubation.backfill.status.publishing') : t('incubation.backfill.publishSelected')}
-          </button>
-        </div>
-      </div>
-      )}
-
-      {grouped.map(group => {
-        const selectable = group.rows.filter(r => status[r.id] !== 'done');
-        const allOn = selectable.length > 0 && selectable.every(r => selected.has(r.id));
-        return (
-          <section key={group.id} className="backfill-group">
-            <header className="backfill-group-head">
-              <group.Icon aria-hidden="true" />
-              <h3>{group.titleKey ? t(group.titleKey) : group.title}</h3>
-              <span className="backfill-group-count">{group.rows.length}</span>
-              {group.noteKey && <span className="backfill-group-note">{t(group.noteKey)}</span>}
-              {selectable.length > 0 && (
-                <button
-                  type="button"
-                  className="btn-ghost btn-small backfill-group-all"
-                  onClick={() => setGroup(selectable, !allOn)}
-                  disabled={running}
-                >
-                  {allOn ? t('incubation.backfill.clear') : t('incubation.backfill.selectAll')}
-                </button>
+        {/* Sticky on a wide screen: the list is long enough to scroll past, and
+            the count and the publish button are what the reader is scrolling in
+            service of. The grouping switch sits in the same row (design 46d). */}
+        <div className="backfill-bar">
+          <div className="backfill-bar-row">
+            <Segmented
+              block={false}
+              size={32}
+              label={t('incubation.backfill.groupBy')}
+              value={mode}
+              onChange={chooseMode}
+              className="backfill-modes"
+              options={[
+                { value: 'day', label: t('incubation.backfill.timeline') },
+                { value: 'type', label: t('incubation.backfill.byType') },
+              ]}
+            />
+            {!rcBlocked && (
+              <>
+                <span className="backfill-bar-count">
+                  <Trans i18nKey="incubation.backfill.selected" values={{ count: chosen.length }} components={{ b: <strong className="num" /> }} />
+                </span>
+                <div className="backfill-bar-actions">
+                  <span className="backfill-bar-links">
+                    <button
+                      type="button"
+                      onClick={() => setSelected(new Set(pending.map(i => i.id)))}
+                      disabled={running}
+                    >
+                      {t('incubation.backfill.selectAll')}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setSelected(new Set())}
+                      disabled={running || !selected.size}
+                    >
+                      {t('incubation.backfill.clear')}
+                    </button>
+                  </span>
+                  <Button
+                    variant="primary"
+                    size={40}
+                    className="backfill-publish"
+                    onClick={run}
+                    disabled={running || !chosen.length}
+                    loading={running}
+                  >
+                    {running ? t('incubation.backfill.status.publishing') : t('incubation.backfill.publishSelected')}
+                  </Button>
+                </div>
+              </>
+            )}
+          </div>
+          {!rcBlocked && (chosenRootPosts > 1 || wait > 0) && (
+            <p className="backfill-bar-sub">
+              {chosenRootPosts > 1 && (
+                <span>{t('incubation.backfill.rootPostsTime', { count: chosenRootPosts, minutes: chosenRootPosts * 5 })}</span>
               )}
-            </header>
+              {wait > 0 && (
+                <span>{t('incubation.backfill.nextVideo', { wait: fmtWait(wait, t) })}</span>
+              )}
+            </p>
+          )}
+        </div>
 
-            <ul className="backfill-rows">
-              {group.rows.map(item => {
-                const st = status[item.id] || 'idle';
-                const done = st === 'done';
-                return (
-                  <li key={item.id} className={`backfill-row is-${st}`}>
-                    {/* The whole row is the click target, not a 13px box. */}
-                    <label className="backfill-row-inner">
-                      <input
-                        type="checkbox"
-                        checked={selected.has(item.id)}
-                        onChange={() => toggle(item.id)}
-                        disabled={running || done}
-                        aria-label={t('incubation.backfill.selectItem', { label: item.label })}
-                      />
-                      {/* A face beats another line of "Follow @name": the
-                          decision is about a person, and people are recognised
-                          by picture far faster than by handle. */}
-                      {item.account && (
-                        <HiveAvatar
-                          username={item.account}
-                          size="small"
-                          className="backfill-row-avatar"
-                          alt=""
+        {grouped.map(group => {
+          const selectable = group.rows.filter(r => status[r.id] !== 'done');
+          const allOn = selectable.length > 0 && selectable.every(r => selected.has(r.id));
+          return (
+            <section key={group.id} className={`backfill-group${group.flat ? ' is-flat' : ''}`}>
+              {!group.flat && (
+              <header className="backfill-group-head">
+                <Icon name={group.icon} size={18} />
+                <h3>{group.titleKey ? t(group.titleKey) : group.title}</h3>
+                <span className="backfill-group-count num">{group.rows.length}</span>
+                {group.noteKey && <span className="backfill-group-note">{t(group.noteKey)}</span>}
+                {selectable.length > 0 && (
+                  <Button
+                    variant="ghost"
+                    size={28}
+                    className="backfill-group-all"
+                    onClick={() => setGroup(selectable, !allOn)}
+                    disabled={running}
+                  >
+                    {allOn ? t('incubation.backfill.clear') : t('incubation.backfill.selectAll')}
+                  </Button>
+                )}
+              </header>
+              )}
+
+              <ul className="backfill-rows">
+                {group.rows.map(item => {
+                  const st = status[item.id] || 'idle';
+                  const done = st === 'done';
+                  return (
+                    <li key={item.id} className={`backfill-row is-${st}`}>
+                      {/* The whole row is the click target, not an 18px box. */}
+                      <label className="backfill-row-inner">
+                        <input
+                          type="checkbox"
+                          checked={selected.has(item.id)}
+                          onChange={() => toggle(item.id)}
+                          disabled={running || done}
+                          aria-label={t('incubation.backfill.selectItem', { label: item.label })}
                         />
-                      )}
-                      <span className="backfill-row-main">
-                        {/* Videos and shorts link to themselves. Deciding what
-                            belongs on a permanent record is hard from a title
-                            alone, and until it is published this page is the
-                            only way to reach the post at all.
-                            stopPropagation: the whole row is a <label> that
-                            toggles the checkbox, so a bare link would select the
-                            row on the way out. */}
-                        {previewHref(item, user) ? (
-                          <Link
-                            className="backfill-row-label is-link"
-                            to={previewHref(item, user)}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            onClick={(e) => e.stopPropagation()}
-                          >
-                            {item.label}
-                          </Link>
-                        ) : (
-                          <span className="backfill-row-label">{item.label}</span>
-                        )}
-                        {/* What the reply actually said. "Reply to @someone" is
-                            not enough to decide whether you want it on your
-                            permanent record. */}
-                        {item.excerpt && (
-                          <span className="backfill-row-excerpt">{item.excerpt}</span>
-                        )}
-                        <span className="backfill-row-meta">
-                          {item.createdAt ? new Date(item.createdAt).toLocaleDateString() : '—'}
-                          {item.isRootPost && <span className="backfill-tag">{t('incubation.backfill.fiveMin')}</span>}
+                        {/* What kind of thing it is, as its icon (46d). */}
+                        <Icon name={rowIcon(item)} size={18} className="backfill-row-icon" />
+                        <span className="backfill-row-main">
+                          {/* Videos and shorts link to themselves: until it is
+                              published this page is the only way to reach the
+                              post at all. stopPropagation: the whole row is a
+                              <label> that toggles the checkbox, so a bare link
+                              would select the row on the way out. */}
+                          {previewHref(item, user) ? (
+                            <Link
+                              className="backfill-row-label is-link"
+                              to={previewHref(item, user)}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              {item.label}
+                            </Link>
+                          ) : (
+                            <span className="backfill-row-label">{item.label}</span>
+                          )}
+                          {/* What the reply actually said. "Reply to @someone" is
+                              not enough to decide whether you want it on your
+                              permanent record. */}
+                          {item.excerpt && (
+                            <span className="backfill-row-excerpt">{item.excerpt}</span>
+                          )}
+                          {errors[item.id] && (
+                            <span className="backfill-row-error">{errors[item.id]}</span>
+                          )}
                         </span>
-                        {errors[item.id] && (
-                          <span className="backfill-row-error">{errors[item.id]}</span>
-                        )}
-                      </span>
-                      <span className={`backfill-status is-${st}`}>
-                        {done && <FaCheck aria-hidden="true" />}
-                        {t(STATUS_KEY[st])}
-                      </span>
-                    </label>
-                  </li>
-                );
-              })}
-            </ul>
-          </section>
-        );
-      })}
+                        <span className="backfill-row-date">{rowDate(item.createdAt, t)}</span>
+                        {/* 46d: sentence-case pills, the word only ("Publishing…", "On 3Speak only"). */}
+                        <StatusPill
+                          tone={STATUS_TONE[st]}
+                          caps={false}
+                          className={`backfill-status is-${st}`}
+                        >
+                          {t(STATUS_KEY[st])}
+                        </StatusPill>
+                      </label>
+                    </li>
+                  );
+                })}
+              </ul>
+            </section>
+          );
+        })}
+      </div>
 
-      {excluded.length > 0 && <Excluded excluded={excluded} />}
-      {waiting.length > 0 && <Waiting waiting={waiting} />}
+      {/* The side column (design 46d): why it is slow, what waits on someone
+          else, and what does not come across. Under the list on a phone. */}
+      <aside className="backfill-aside">
+        <div className="backfill-card backfill-note">
+          <Trans i18nKey="incubation.backfill.note" components={{ b: <strong /> }} />
+        </div>
+        {/* Out of resource credits (design 46d): the accent wash in the side
+            column, said as a wait rather than a failure. The publish controls
+            step aside while it shows. */}
+        {rcBlocked && (
+          <div className="backfill-rc" role="status">
+            {rcWait
+              ? <Trans i18nKey="incubation.backfill.rcBlockedIn" values={{ wait: rcWait }} components={{ b: <strong /> }} />
+              : <Trans i18nKey="incubation.backfill.rcBlockedLater" components={{ b: <strong /> }} />}
+          </div>
+        )}
+        {waiting.length > 0 && <Waiting waiting={waiting} />}
+        {excluded.length > 0 && <Excluded excluded={excluded} />}
+      </aside>
     </div>
   );
 }
@@ -523,9 +530,9 @@ export default function BackfillTable() {
 function Waiting({ waiting }) {
   const { t } = useTranslation();
   return (
-    <div className="backfill-excluded">
+    <div className="backfill-card backfill-excluded">
       <h3>{t('incubation.backfill.waitingTitle')}</h3>
-      <p className="desc">
+      <p className="backfill-desc">
         {t('incubation.backfill.waitingText')}
       </p>
       <ul>
@@ -545,13 +552,13 @@ function Waiting({ waiting }) {
 function Excluded({ excluded }) {
   const { t } = useTranslation();
   return (
-    <div className="backfill-excluded">
+    <div className="backfill-card backfill-excluded">
       <h3>{t('incubation.backfill.excludedTitle')}</h3>
       <ul>
         {excluded.map(e => (
           <li key={e.type}>
             <strong>{e.type === 'vote' ? t('incubation.graduation.items.like', { count: e.count }) : `${e.count} ${e.type}`}</strong>
-            {' — '}{e.reason}
+            {': '}{e.reason}
           </li>
         ))}
       </ul>

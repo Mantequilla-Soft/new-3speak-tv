@@ -1,16 +1,16 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import { MdAdd } from 'react-icons/md';
 import { BADGES_URL } from '../../utils/config';
 import GroupSort, { sortBy } from '../Groups/GroupSort';
 import { useAppStore } from '../../lib/store';
 import fetchHiveBadges from '../../utils/hiveBadges';
 import { cachedProfileImage } from '../../utils/avatarCache';
-import CreateCommunity from '../modal/CreateCommunity';
 import SkeletonLoader from '../Communities/SkeletonLoader';
 import { useTranslation, Trans } from 'react-i18next';
 import { formatNumber } from '../../i18n';
+import { EmptyState } from '../v2/ui';
+import { Icon } from '../v2/Icon';
 import './BadgesRender.scss';
 
 /**
@@ -29,9 +29,7 @@ function BadgesRender() {
   // "biggest", and the order that puts the recognisable ones at the top.
   const [sortField, setSortField] = useState('recipients');
   const [sortDir, setSortDir] = useState('desc');
-  const [creating, setCreating] = useState(false);
   const user = useAppStore((st) => st.user);
-  const incubationHandle = useAppStore((st) => st.incubationHandle);
   // Badges this person HOLDS. Only a Hive account can hold one -- a badge is
   // held by the badge account following you -- so an incubating user has none
   // and this stays empty for them rather than fetching nothing.
@@ -78,86 +76,65 @@ function BadgesRender() {
 
   return (
     <div className="badges-render">
-      <div className="badges-head">
-        <h1>{t('badges.directory.title')}</h1>
-        <p>
-          <Trans i18nKey="badges.directory.intro" components={{ b: <strong /> }} />
-        </p>
-      </div>
+      <p className="groups-intro">
+        <Trans i18nKey="badges.directory.intro" components={{ b: <strong /> }} />
+      </p>
 
-      {/* Same bar as the communities tab: search left, sort and create right. */}
-      <div className="communities-bar">
-        <div className="search-wrapper">
+      {/* Same row as the communities tab: the sorts, then the search. */}
+      <div className="groups-filters">
+        <GroupSort
+          options={SORTS}
+          field={sortField}
+          direction={sortDir}
+          onFieldChange={setSortField}
+          onDirectionChange={setSortDir}
+        />
+        <label className="groups-search">
+          <Icon name="search" size={18} />
           <input
             type="text"
             placeholder={t('badges.directory.searchPlaceholder')}
+            aria-label={t('badges.directory.searchPlaceholder')}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
           />
-        </div>
-        <div className="communities-bar-actions">
-          <GroupSort
-            options={SORTS}
-            field={sortField}
-            direction={sortDir}
-            onFieldChange={setSortField}
-            onDirectionChange={setSortDir}
-          />
-          {/* Same gate as the community button: an account_create paid from a
-              Hive account with an active key. */}
-          <button
-            type="button"
-            className={`group-create-btn${incubationHandle ? ' is-locked' : ''}`}
-            onClick={incubationHandle ? undefined : () => setCreating(true)}
-            aria-disabled={incubationHandle ? true : undefined}
-            title={incubationHandle
-              ? t('badges.directory.createLocked')
-              : undefined}
-          >
-            <MdAdd size={17} /> {t('badges.directory.create')}
-          </button>
-        </div>
+        </label>
       </div>
 
       {loading ? (
-        <SkeletonLoader />
+        <SkeletonLoader height={96} />
       ) : error ? (
-        <p className="badges-error">{t('badges.directory.loadError')}</p>
+        <div className="v2-failure badges-error"><b>{t('badges.directory.loadError')}</b></div>
       ) : filtered.length === 0 ? (
-        <p className="badges-error">{t('badges.directory.noMatch')}</p>
+        <EmptyState icon="search_off" title={t('badges.directory.noMatch')} className="badges-error" />
       ) : (
-        <div className="badges-grid">
+        <div className="groups-grid badges-grid">
           {sortBy(filtered, SORTS, sortField, sortDir, { ids: mine, idOf: (b) => b.account }).map(badge => (
-            <Link className="badge-card" to={`/b/${badge.account}`} key={badge.account}>
-              <div className="badge-card-img">
+            // 41c: a row per badge: the medal, the name over the recipient
+            // count, and "Held" at the end when you hold it.
+            <Link className="badge-card" to={`/b/${badge.account}`} key={badge.account} title={badge.description || undefined}>
+              <span className="badge-card-img">
                 {/* The badge's OWN picture, which the directory already
-                    carries, served from our /img/ cache: art hosted on
-                    images.3speak.tv goes through /img/a/ (Hive's proxy answers
-                    it with a grey placeholder), everything else through
-                    /img/u/, resized, instead of the raw original. */}
+                    carries, served from our /img/ cache. */}
                 <img
                   src={cachedProfileImage(badge.account, badge.image, 'medium')}
-                  alt={badge.title}
+                  alt=""
                   loading="lazy"
                 />
-              </div>
-              <h3 className="badge-card-title">
-                {badge.title}
-                {/* Says why it is at the top, and it is the right word: a badge
-                    is awarded, never joined. */}
-                {mine.has(badge.account) && <span className="badge-mine">{t('badges.directory.held')}</span>}
-              </h3>
-              {badge.description ? (
-                <p className="badge-card-desc">{badge.description}</p>
-              ) : null}
-              <span className="badge-card-count">
-                {t('badges.directory.recipients', { count: badge.recipients, num: formatNumber(badge.recipients) })}
               </span>
+              <span className="badge-card-text">
+                <b className="badge-card-title">{badge.title}</b>
+                <span className="badge-card-count num">
+                  {t('badges.directory.recipients', { count: badge.recipients, num: formatNumber(badge.recipients) })}
+                </span>
+              </span>
+              {/* Says why it is at the top, and it is the right word: a badge
+                  is awarded, never joined. */}
+              {mine.has(badge.account) && <span className="badge-mine">{t('badges.directory.held')}</span>}
             </Link>
           ))}
         </div>
       )}
-      {creating && <CreateCommunity isOpen={creating} close={() => setCreating(false)} kind="badge" />}
     </div>
   );
 }

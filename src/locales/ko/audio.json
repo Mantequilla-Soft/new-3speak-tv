@@ -46,7 +46,7 @@
     "curated": "큐레이션",
     "noCues": "큐가 없어요.",
     "clearQueue": "대기열 비우기",
-    "clearAll": "모두 지우기",
+    "clearAll": "지우기",
     "queueMoveUp": "{{title}} 위로 이동",
     "queueMoveDown": "{{title}} 아래로 이동",
     "queueRemove": "대기열에서 {{title}} 삭제",
@@ -57,7 +57,7 @@
     "collapse": "플레이어 접기",
     "skipBack": "{{seconds}}초 뒤로",
     "skipForward": "{{seconds}}초 앞으로",
-    "speed": "재생 속도",
+    "speed": "속도",
     "speedValue": "재생 속도: {{speed}}",
     "sleep": "수면 타이머",
     "sleepOff": "끄기",
@@ -74,8 +74,8 @@
     "effectsChecking": "이 에피소드가 지원하는지 확인하고 있어요…",
     "timeSaved": "절약한 시간: {{time}}",
     "cast": "다른 기기에서 재생",
-    "download": "오프라인용으로 저장",
-    "downloading": "저장 중: {{pct}}%",
+    "download": "다운로드",
+    "downloading": "오프라인용으로 저장 중: {{pct}}%",
     "downloaded": "오프라인용으로 저장됨",
     "downloadDone": "오프라인으로 들을 수 있게 저장했어요",
     "downloadFailed": "이 에피소드를 저장하지 못했어요",
@@ -99,8 +99,17 @@
     "nextChapter": "다음 챕터",
     "chapterLink": "챕터 링크",
     "upNext": "다음 재생",
-    "hideIdle": "숨기기 (대기열은 유지됨)",
-    "continueAt": "{{time}}부터 계속"
+    "hideIdle": "숨기기 · 대기열은 유지",
+    "continueAt": "{{time}}부터 계속",
+    "position": "{{current}} / {{total}}",
+    "playingFrom": "{{name}}에서 재생 중",
+    "atThisMoment": "지금 이 순간",
+    "goTo": "{{name}}(으)로 이동",
+    "shuffle": "셔플",
+    "repeat": "이 트랙 반복",
+    "sleepMinutesShort": "{{minutes}}분",
+    "swipeUp": "위로 밀어 플레이어 열기",
+    "commentAt": "{{time}}에 댓글…"
   },
   "share": {
     "failed": "실패",
@@ -110,7 +119,16 @@
     "copied3speak": "3Speak 링크를 복사했어요!",
     "copyAudioPlayer": "오디오 플레이어 링크 복사",
     "copiedAudioPlayer": "오디오 플레이어 링크를 복사했어요!",
-    "searchingHive": "Hive 검색 중…"
+    "searchingHive": "Hive 검색 중…",
+    "title": "트랙 공유",
+    "atTime": "{{time}}부터",
+    "peakd": "PeakD",
+    "player": "플레이어 링크",
+    "x": "X",
+    "telegram": "Telegram",
+    "email": "이메일",
+    "qr": "QR",
+    "episode": "에피소드 링크"
   },
   "post": {
     "notFound": "게시물을 찾을 수 없어요",
@@ -124,6 +142,8 @@
     "vote": "투표",
     "signInToTip": "팁을 보내려면 로그인하세요",
     "tip": "팁",
+    "albumLabel": "앨범",
+    "notes": "노트",
     "stillIndexing": "이 게시물의 오디오를 아직 인덱싱하는 중이에요. 몇 분 후 다시 시도하세요."
   },
   "page": {
@@ -155,7 +175,7 @@
     "tracks_other": "트랙 {{count}}개",
     "noTracks": "트랙을 찾을 수 없어요.",
     "creators": "크리에이터",
-    "albumsPlaylists": "앨범 및 재생목록",
+    "albumsPlaylists": "오디오 재생목록",
     "noAudioForFilters": "이 필터에 해당하는 오디오가 없어요.",
     "tabsLabel": "오디오 보기",
     "tabExplore": "탐색",
@@ -168,6 +188,21 @@
   "upload": {
     "title": "오디오 업로드",
     "publishing": "게시 중…",
+    "nextTo": "다음: {{step}}",
+    "publishAlbum_other": "앨범 게시 · 트랙 {{count}}개",
+    "publishWithShorts_other": "오디오 + 쇼츠 {{count}}개 게시",
+    "side": {
+      "publishTo": "게시 위치",
+      "shortsTitle": "오디오그램 쇼츠",
+      "clips_other": "클립 {{count}}개",
+      "tracks_other": "트랙 {{count}}개",
+      "audio": "오디오",
+      "shorts": "쇼츠",
+      "snaps": "Snaps",
+      "community": "커뮤니티",
+      "rss": "RSS 피드",
+      "clipLabel": "쇼츠 {{n}} 썸네일: {{title}}"
+    },
     "failed": "실패",
     "unknown": "알 수 없음",
     "unknownError": "알 수 없는 오류",
@@ -188,7 +223,7 @@
       "review": "검토"
     },
     "trackTypes": {
-      "voiceSnap": "음성 / Snap"
+      "voiceSnap": "음성 메모"
     },
     "toasts": {
       "pickImage": "이미지 파일을 선택하세요",
@@ -226,13 +261,14 @@
       "discard": "삭제"
     },
     "source": {
-      "dropHere": "오디오 파일을 여기에 놓거나 클릭해서 찾아보세요",
-      "formats": "MP3, WAV, OGG, WEBM, M4A, FLAC, AAC — 여러 개 가능",
+      "dropHere": "오디오 파일을 놓거나 찾아보세요",
+      "formats": "MP3, WAV, OGG, WEBM, M4A, FLAC, AAC · 여러 개 한 번에",
       "stop": "중지",
       "orRecord": "또는 라이브로 녹음",
       "recordLimit": "녹음당 최대 {{minutes}}분",
       "record": "녹음",
-      "added": "추가됨({{count}})"
+      "added": "추가됨({{count}})",
+      "filesTitle": "오디오 파일"
     },
     "titles": {
       "help": "각 트랙에 제목을 붙이고 유형을 고르세요. 음악 트랙에는 장르와 BPM 항목이 추가돼요."
@@ -241,7 +277,10 @@
       "trackTitle": "트랙 제목",
       "genre": "장르",
       "bpm": "BPM",
-      "descriptionOptional": "설명(선택)"
+      "descriptionOptional": "설명(선택)",
+      "track": "트랙",
+      "category": "카테고리",
+      "musicGenre": "음악 장르"
     },
     "playlist": {
       "helpRequired": "필수 — 재생목록을 선택하거나 만드세요. 앨범 게시물은 재생목록 안에 있어서 트랙들이 3Speak 앨범으로 묶여요. 노출이 늘고 오디오 페이지에서 더 눈에 띄게 배치돼요.",
@@ -254,6 +293,7 @@
       "empty": "아직 재생목록이 없어요.",
       "items_other": "{{count}}개 항목",
       "newPlaylist": "새 오디오 재생목록",
+      "newAlbum": "새 앨범",
       "namePlaceholder": "재생목록 이름",
       "public": "공개",
       "private": "비공개",
@@ -261,6 +301,9 @@
       "creditsPlaceholder": "크레딧(선택)",
       "yearPlaceholder": "연도",
       "labelPlaceholder": "레이블(선택)",
+      "fieldYear": "연도",
+      "fieldLabel": "레이블",
+      "fieldCredits": "크레딧",
       "thumbAlt": "앨범 썸네일",
       "removeThumb": "썸네일 제거",
       "creating": "만드는 중…",
@@ -283,20 +326,21 @@
       "help_other": "트랙 {{count}}개를 추가했어요. 게시 방식을 선택하세요.",
       "howPublished": "어떻게 게시할까요?",
       "snapsTitle": "Snap 댓글",
-      "snapsDesc": "각 오디오가 최신 peak.snaps 컨테이너 아래에 답글로 게시돼요. Snaps 피드에 표시돼요(기본값).",
+      "snapsDesc": "각 오디오가 최신 Snaps 스레드 아래에 답글로 게시돼요. Snaps 피드에 표시돼요.",
       "singleTitle": "단독 게시물",
       "singleTitleSingleOnly": "단독 게시물(파일 1개만)",
-      "singleDesc": "오디오 하나를 제목, 커뮤니티, 태그, 커버가 있는 독립된 Hive 게시물로 게시해요.",
+      "singleDesc": "오디오 하나를 제목, 커뮤니티, 태그, 커버가 있는 자체 게시물로 게시해요.",
       "albumTitle": "앨범 게시물",
       "albumTitleNeeds2": "앨범 게시물(파일 2개 이상 필요)",
-      "albumDesc": "메인 게시물(오디오 없음)이 랜딩 페이지 역할을 하고, 각 트랙은 자체 커버, 설명, 보상, 수혜자를 가진 댓글 답글로 게시돼요.",
-      "howEarn": "이 오디오로 어떻게 수익을 받을까요?",
-      "postRewardsTitle": "게시물 보상(1회)",
-      "postRewardsDesc": "일반적인 Hive 작성자 보상을 받아요. 게시 후 약 7일 뒤에 한 번 지급돼요.",
-      "pplTitle": "청취당 지급(평생)",
-      "pplDesc": "오디오 게시물의 모든 보상은 @{{account}}에게 가요. 한 번 지급받는 대신, 3Speak 프로그램이 트랙이 존재하는 동안 청취할 때마다 보상을 지급해요.",
+      "albumDesc": "메인 랜딩 게시물이 있고, 각 트랙은 자체 커버와 보상을 가진 답글로 게시돼요.",
+      "howEarn": "어떻게 수익을 받을까요?",
+      "postRewardsTitle": "게시물 보상",
+      "postRewardsDesc": "일반 Hive 보상, 게시 후 약 7일 뒤 한 번",
+      "pplTitle": "청취당 지급",
+      "pplDesc": "트랙이 있는 동안 3Speak 프로그램이 청취할 때마다 지급해요. 게시물 보상은 @{{account}}에게 가요.",
       "adsTitle": "이 오디오의 광고",
-      "adsHint": "이 오디오 재생 중에 스폰서의 짧은 음성 메시지가 나올 수 있고, 수익의 일부를 받아요. 계정 설정에서 시작하며, 여기서 이 업로드에만 바꿀 수 있어요."
+      "adsHint": "이 오디오 재생 중에 스폰서의 짧은 음성 메시지가 나올 수 있고, 수익의 일부를 받아요. 계정 설정에서 시작하며, 여기서 이 업로드에만 바꿀 수 있어요.",
+      "adsSpoken": "이 오디오에 음성 스폰서 메시지"
     },
     "reward": {
       "distribution": "보상 분배",
@@ -322,6 +366,7 @@
       "helpAlbum": "각 트랙은 메인 게시물 아래 댓글로 게시돼요. 공통 값을 한 번 설정해 모두에 적용한 다음, 트랙별로 바꿀 수 있어요.",
       "helpSnaps": "각 트랙은 개별 Snap으로 게시돼요. 공통 값을 한 번 설정해 모두에 적용한 다음, 트랙별로 바꿀 수 있어요.",
       "applyToAllHeading": "모든 트랙에 적용",
+      "applyNote_other": "<b>트랙 {{count}}개 모두에 적용:</b> 설명과 커버를 함께 쓰고, 트랙별로 따로 바꿀 수도 있어요.",
       "sharedDescription": "공통 설명(선택)",
       "sharedCover": "공통 커버 이미지",
       "applyToAll_other": "트랙 {{count}}개 모두에 적용",
@@ -385,11 +430,37 @@
       "couldNotLoad": "오디오그램을 불러올 수 없습니다: {{error}}",
       "rowTitle": "쇼츠: {{title}}",
       "withAudio": "이 오디오와 함께 게시됩니다"
+    },
+    "transcript": {
+      "make": "스크립트 만들기",
+      "again": "스크립트 다시 만들기",
+      "hint": "말한 내용({{language}})을 받아 적어 내 글 아래에 넣어요. 넣은 뒤에도 고칠 수 있어요.",
+      "reading": "오디오 읽는 중...",
+      "writing": "받아 적는 중... {{percent}}%",
+      "added": "내 글 아래에 스크립트를 넣었어요. 일부 단어가 틀릴 수 있으니 읽어 보세요.",
+      "shortened": "스크립트를 넣었어요. 게시물에 맞게 줄였어요.",
+      "empty": "이 오디오에서 말소리를 찾지 못했어요.",
+      "failed": "스크립트를 만들 수 없어요. 다시 시도해 주세요.",
+      "heading": "스크립트",
+      "language": "오디오 언어",
+      "waitPublish": "아직 스크립트를 만드는 중이에요. 기다리거나 먼저 취소해 주세요."
+    },
+    "teleprompter": {
+      "title": "프롬프터",
+      "subtitle": "할 말을 적고 녹음하면서 읽어요",
+      "placeholder": "할 말을 적거나 붙여 넣으세요. 녹음하는 동안 크게 보여요.",
+      "followsVoice": "목소리를 따라가요",
+      "steady": "일정한 속도로 넘어가요",
+      "voiceStopped": "목소리 따라가기가 멈췄어요. 일정한 속도로 넘어가요",
+      "wpm": "분당 {{n}}단어",
+      "slower": "느리게",
+      "faster": "빠르게"
     }
   },
   "podcasts": {
     "chip": "외부",
     "chipHint": "3Speak 밖의 모든 RSS 피드 팟캐스트",
+    "on3speak": "3Speak에서",
     "follow": "팔로우",
     "following": "팔로잉",
     "unfollow": "언팔로우",
@@ -416,6 +487,7 @@
     "allPodcasts": "모든 팟캐스트",
     "openShow": "팟캐스트 열기",
     "play": "에피소드 재생",
+    "playTrack": "트랙 재생",
     "pause": "일시정지",
     "episodePage": "에피소드 페이지",
     "website": "웹사이트",
@@ -432,6 +504,7 @@
     "notifyOnDone": "새 에피소드가 나오면 알려 드릴게요",
     "notifyOffDone": "이 팟캐스트 알림을 더 이상 보내지 않아요",
     "notifyHint": "새 에피소드가 나오면 알림 받기",
+    "notifyLabel": "새 에피소드 알림",
     "search": {
       "button": "검색",
       "results_other": "팟캐스트 {{count}}개를 찾았어요",
@@ -464,14 +537,15 @@
       "internal": "3Speak 채널이에요. 다른 오디오 유형에서 찾을 수 있어요.",
       "disabled": "외부 팟캐스트 기능이 지금은 꺼져 있어요.",
       "generic": "문제가 발생했어요. 다시 시도해 주세요.",
-      "closedPlatform": "{{platform}}은(는) 프로그램 피드를 공개하지 않아요. 프로그램 이름으로 검색해 보세요.",
+      "closedPlatform": "{{platform}}은(는) 프로그램 피드를 공개하지 않아요. 대신 프로그램 이름으로 검색하세요.",
       "appleOnly": "이 프로그램은 Apple 팟캐스트에서만 들을 수 있어요.",
       "directoryNotFound": "이 프로그램의 피드를 찾지 못했어요. RSS 피드를 입력하거나 이름으로 검색해 보세요.",
       "directoryDown": "이 팟캐스트 디렉터리가 지금 응답하지 않아요. 다시 시도해 주세요."
     },
     "tip": {
       "button": "이 팟캐스트 후원하기",
-      "heading": "{{show}} 후원하기",
+      "heading": "{{show}}에 팁 보내기",
+      "support": "{{show}} 후원하기",
       "hive": "@{{account}} 님에게 Hive 팁",
       "messageLabel": "팟캐스터에게 보내는 메시지(선택):",
       "messagePlaceholder": "멋진 에피소드였어요!",
@@ -567,7 +641,7 @@
     "downloads": {
       "title": "다운로드",
       "download": "오프라인 청취용으로 다운로드",
-      "short": "다운로드",
+      "short": "저장",
       "downloading": "다운로드 중 {{pct}}%",
       "cancel": "다운로드 취소",
       "saved": "오프라인 저장됨",
@@ -576,7 +650,7 @@
       "removed": "다운로드를 삭제했어요",
       "done": "오프라인으로 들을 수 있게 저장했어요",
       "total": "{{size}} 저장됨",
-      "storage": "이 사이트가 이 브라우저에서 {{quota}} 중 {{used}} 사용 중",
+      "storage": "이 브라우저에서 {{quota}} 중 {{used}} 사용",
       "perBrowser": "다운로드는 누가 로그인하든 이 브라우저에 남아요.",
       "errors": {
         "tooLarge": "이 에피소드는 너무 커서 저장할 수 없어요.",
@@ -588,7 +662,7 @@
     },
     "autoQueue": {
       "label": "새 에피소드를 대기열에 자동 추가",
-      "hint": "이 프로그램의 새 에피소드가 나오면 대기열 맨 끝에 추가돼요",
+      "hint": "대기열 맨 끝에 추가돼요",
       "onDone": "이 프로그램의 새 에피소드가 대기열에 추가돼요",
       "offDone": "이 프로그램의 새 에피소드가 더 이상 대기열에 추가되지 않아요",
       "added_other": "새 에피소드 {{count}}개를 대기열에 추가했어요"
@@ -625,6 +699,7 @@
       "startsAt": "시작: {{time}}"
     },
     "private": {
+      "title": "비공개 피드 추가",
       "toggle": "비공개 피드예요 (로그인 필요)",
       "username": "사용자 이름",
       "password": "비밀번호",
@@ -660,7 +735,7 @@
       "hide": "동영상 숨기기"
     },
     "signInToFollow": "팟캐스트를 팔로우하려면 로그인하세요",
-    "addExternal": "외부 팟캐스트 추가",
+    "addExternal": "외부 RSS 피드 추가",
     "continue": {
       "title": "이어 듣기",
       "left": "{{minutes}}분 남음",

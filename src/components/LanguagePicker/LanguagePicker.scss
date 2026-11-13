@@ -1,47 +1,82 @@
-.language-picker {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 6px 16px;
-  align-items: center;
-  padding: 10px 0;
+@use "../../styles/v2" as v2;
 
-  &-text {
+// Interface language (29b): the hint, then the select as one filled field with
+// the translate icon and a trailing expand_more (STYLE_GUIDE §6, Select). The
+// card around it (Settings) carries the "Language" title, so the label is for
+// screen readers only.
+.language-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+
+  &-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  &-hint {
+    margin: 0;
+    @include v2.text(meta);
+    line-height: 1.5;
+    color: var(--muted);
+  }
+
+  &-field {
+    position: relative;
     display: flex;
-    flex-direction: column;
-    gap: 3px;
+    align-items: center;
     min-width: 0;
   }
 
+  &-icon,
+  &-chev {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: var(--muted);
+  }
+
+  &-icon { left: 14px; }
+  &-chev { right: 12px; }
+
   &-select {
-    min-width: 170px;
-    max-width: 100%;
-    padding: 8px 10px;
-    border-radius: 8px;
-    border: 1px solid var(--input-border, var(--border-color));
-    background: var(--input-bg, transparent);
-    color: var(--text-primary);
+    width: 100%;
+    min-width: 0;
+    height: 44px;
+    padding: 0 40px 0 42px;
+    border: 2px solid transparent;
+    border-radius: v2.radius-for(44);
+    background: var(--bg);
+    color: var(--text);
     font: inherit;
     font-size: 14px;
+    font-weight: 700;
+    appearance: none;
     cursor: pointer;
+    text-overflow: ellipsis;
 
-    &:focus-visible {
-      outline: 2px solid var(--accent-primary);
-      outline-offset: 1px;
-    }
+    &:focus { outline: none; border-color: var(--accent); }
+    &:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   }
 
   &-contribute {
-    grid-column: 1 / -1;
-    font-size: 12px;
-    color: var(--accent-primary);
+    align-self: flex-start;
+    @include v2.text(meta);
+    font-weight: 700;
+    color: var(--cyan);
     text-decoration: none;
 
-    &:hover { text-decoration: underline; }
+    &:hover { color: var(--cyan); text-decoration: underline; }
   }
 
-  @media (max-width: 520px) {
-    grid-template-columns: 1fr;
-
-    &-select { width: 100%; }
-  }
+  &--compact { gap: 6px; }
 }

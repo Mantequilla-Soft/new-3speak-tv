@@ -17,7 +17,8 @@
       "rep": "Rep {{rep}}",
       "repTitle": "Hive reputation",
       "viewProfile": "View profile"
-    }
+    },
+    "replyTo": "Reply to {{user}}…"
   },
   "errors": {
     "votingUnavailable": "Voting isn't available for this post",
@@ -31,7 +32,7 @@
     "interestsTitle": "Only shorts matching your interests",
     "pickInterestsFirst": "Pick some interests first",
     "noInterests": "You haven't picked any interests yet — choose them in Settings",
-    "interestsExhausted": "That's all the shorts for your interests — showing Discover",
+    "interestsExhausted": "That's all the shorts for your interests. Showing Discover.",
     "noInterestMatches": "No shorts match your interests right now.",
     "switchToDiscover": "Switch to Discover",
     "empty": "No shorts available",
@@ -40,12 +41,18 @@
   "glow": {
     "subtle": "Ambient light: subtle",
     "vivid": "Ambient light: vivid",
-    "off": "Ambient light: off"
+    "off": "Ambient light: off",
+    "label": "Ambient light",
+    "offShort": "Off",
+    "subtleShort": "Subtle",
+    "vividShort": "Vivid"
   },
   "playbackMode": {
     "autoReplay": "Auto-Replay",
     "autoSwipe": "Auto-Swipe",
-    "manual": "Manual"
+    "manual": "Manual",
+    "label": "Playback",
+    "options": "Playback options"
   },
   "subtitles": {
     "off": "Off"
@@ -83,13 +90,13 @@
     "noUrl": "Could not resolve video URL for remix",
     "loadFailed": "Failed to load video for remix",
     "chainFull": "This video already builds on {{max}} earlier videos, so it can't be remixed anymore.",
-    "chainNoSlots": "This remix chain already pays so many creators that a remix would leave no room on Hive. With 3Speak Pro you can still remix it."
+    "chainNoSlots": "This chain already pays so many creators that a remix would leave no room on Hive. With 3Speak Pro you can still remix it."
   },
   "watchLater": {
     "loginRequired": "Login to save shorts",
     "cantSave": "This short can't be saved",
     "removed": "Removed from Watch Later",
-    "saved": "Saved to Watch Later",
+    "saved": "Saved to Watch later",
     "failed": "Failed: {{message}}"
   },
   "comments": {
@@ -100,7 +107,7 @@
     "postRemoved": "The Hive post behind this short was removed, so it can no longer take comments or votes.",
     "beFirst": "Be the first to comment!",
     "unavailable": "Comments aren't available for this post",
-    "addPlaceholder": "Add a comment...",
+    "addPlaceholder": "Join the discussion…",
     "addPlaceholderBar": "Add a comment…",
     "loginPlaceholder": "Login to comment",
     "send": "Send comment",
@@ -130,7 +137,7 @@
     "seenNote": "Signed-in viewers who keep their watch history on.",
     "seenEmpty": "Nobody has seen it yet.",
     "keep": "Keep as short",
-    "keepHint": "It stays on your channel after the 24 hours",
+    "keepHint": "It stays on your channel after the 24 hours.",
     "keepConfirm": "Keep it for good?",
     "keepYes": "Keep it",
     "keeping": "Keeping…",
@@ -141,5 +148,9 @@
   "audiogram": {
     "fullEpisode": "Full episode",
     "listen": "Listen to the full episode: {{title}}"
+  },
+  "panel": {
+    "discussion": "Discussion",
+    "upNext": "Up next"
   }
 }

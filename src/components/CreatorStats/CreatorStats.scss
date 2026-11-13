@@ -1,376 +1,581 @@
+@use "../../styles/v2" as v2;
+
+// Creator stats (31a, 45a). "Channel stats" with the range on the right, then a
+// three-column grid of cards: the tiles + trend (two columns) next to viewer
+// locations; when they watch, audience and top content; the picked video in
+// depth next to compare videos. Chart series: accent = this / the first,
+// cyan = the previous / the other.
 .creator-stats {
   display: flex;
   flex-direction: column;
-  gap: 22px;
-  padding: 4px 2px 24px;
-  color: var(--text-primary, #111);
+  gap: 14px;
+  color: var(--text);
 
-  .cs-empty,
-  .cs-chart-empty {
-    color: var(--text-secondary, #666);
-    font-size: 14px;
-    text-align: center;
-    padding: 28px 12px;
+  // ── Head: title, ranges, compare ────────────────────────────
+  .cs-head {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
   }
 
-  // ── Filters ─────────────────────────────────────────────────
-  .cs-filters {
-    display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
+  .cs-title {
+    flex: 1;
+    min-width: 0;
+    margin: 0;
+    font-size: 32px;
+    font-weight: 900;
+    letter-spacing: -.03em;
+    line-height: 1.15;
+  }
+
+  .cs-controls {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    min-width: 0;
+  }
+
+  // On the page ground the track is a surface (31a: radius 16, options 12).
+  .cs-seg.v2-seg {
+    background: var(--surface);
+    border-radius: var(--r-lg);
+
+    .v2-seg__opt { padding: 0 12px; }
+  }
+
+  .cs-compare-btn.v2-btn {
+    font-size: 13px;
+
+    &.is-off { background: transparent; color: var(--muted); box-shadow: inset 0 0 0 1px var(--border); }
   }
 
   .cs-recap-link {
-    margin-left: auto;
-    padding: 6px 12px;
-    border-radius: 8px;
-    border: 1px solid var(--accent-primary);
-    color: var(--text-primary);
-    font-size: 13px;
-    font-weight: 600;
+    @include v2.btn(secondary, 36);
     text-decoration: none;
-
-    &:hover { background: var(--bg-hover); }
   }
 
-  // ── Stat tiles ──────────────────────────────────────────────
-  .cs-tiles {
+  // ── Grid of cards ───────────────────────────────────────────
+  .cs-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-    gap: 12px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+    align-items: stretch;
 
-    @media (max-width: 640px) { grid-template-columns: repeat(2, 1fr); }
+    @include v2.below-wide { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    @include v2.mobile { grid-template-columns: minmax(0, 1fr); gap: 12px; }
   }
-  .cs-subtotals {
-    font-size: 12px; color: var(--text-secondary, #666); margin: -10px 0 0; text-align: center;
+
+  .cs-span2 {
+    grid-column: span 2;
+
+    @include v2.mobile { grid-column: auto; }
   }
-  .cs-tile {
-    background: var(--card-bg, #fff);
-    border: 1px solid var(--border-light, rgba(0, 0, 0, 0.08));
-    border-radius: 12px;
-    padding: 14px 16px;
+
+  .cs-card {
+    @include v2.card;
+    padding: 16px;
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 12px;
+    min-width: 0;
 
-    span { font-size: 22px; font-weight: 800; line-height: 1.1; }
-    label { font-size: 12px; color: var(--text-secondary, #666); font-weight: 600; }
+    @include v2.mobile { padding: 14px; }
   }
 
-  // ── Section ─────────────────────────────────────────────────
-  .cs-section {
-    background: var(--card-bg, #fff);
-    border: 1px solid var(--border-light, rgba(0, 0, 0, 0.08));
-    border-radius: 14px;
-    padding: 16px;
-  }
-  .cs-section-head {
+  .cs-card-head {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    margin-bottom: 14px;
+    gap: 8px;
+    min-width: 0;
 
-    h4 { font-size: 15px; font-weight: 700; margin: 0; }
+    .cs-card-title { flex: 1; }
   }
 
-  // Segmented control (metric switch)
-  .cs-seg {
-    display: inline-flex;
-    background: var(--bg-tertiary, rgba(0, 0, 0, 0.05));
-    border-radius: 999px;
-    padding: 3px;
-
-    &.cs-seg-scroll { max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
-    &.cs-seg-scroll button { flex: 0 0 auto; }
-
-    button {
-      border: 0;
-      background: transparent;
-      color: var(--text-secondary, #666);
-      font-size: 12.5px;
-      font-weight: 600;
-      padding: 5px 12px;
-      border-radius: 999px;
-      cursor: pointer;
-      transition: background 0.15s, color 0.15s;
-
-      &.active {
-        background: var(--card-bg, #fff);
-        color: var(--text-primary, #111);
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
-      }
-    }
-  }
-
-  // ── Best-performing list ────────────────────────────────────
-  .cs-list { display: flex; flex-direction: column; gap: 4px; }
-  .cs-item {
-    display: grid;
-    grid-template-columns: 22px 64px 1fr auto;
-    align-items: center;
-    gap: 12px;
-    width: 100%;
-    text-align: left;
-    background: transparent;
-    border: 0;
-    border-radius: 10px;
-    padding: 6px 8px;
-    cursor: pointer;
-    transition: background 0.15s;
-
-    &:hover { background: var(--bg-hover, rgba(0, 0, 0, 0.04)); }
-    &.selected { background: var(--bg-tertiary, rgba(0, 0, 0, 0.06)); }
-
-    .cs-rank { color: var(--text-muted, #999); font-weight: 700; font-size: 13px; text-align: center; }
-    .cs-item-thumb { width: 64px; height: 36px; object-fit: cover; border-radius: 6px; background: #000; }
-    .cs-item-info { min-width: 0; display: flex; flex-direction: column; gap: 1px; }
-    .cs-item-title {
-      font-size: 13.5px; font-weight: 600; color: var(--text-primary, #111);
-      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-      // It's a link now (opens the video in a new tab) — keep the row look, add a
-      // hover affordance so it's clear the title itself is clickable.
-      text-decoration: none; display: block; width: fit-content; max-width: 100%;
-      &:hover { color: var(--accent-primary, #e53935); text-decoration: underline; }
-    }
-    .cs-item-date { font-size: 11.5px; color: var(--text-muted, #999); }
-    .cs-item-metric { font-size: 13.5px; font-weight: 800; color: var(--text-primary, #111); }
-  }
-
-  // ── Per-video detail ────────────────────────────────────────
-  .cs-detail {
-    margin-top: 12px;
-    border-top: 1px solid var(--border-light, rgba(0, 0, 0, 0.08));
-    padding-top: 14px;
-  }
-  .cs-detail-head {
-    display: flex; align-items: center; gap: 10px; margin-bottom: 12px;
-
-    .cs-detail-thumb { width: 72px; height: 40px; object-fit: cover; border-radius: 6px; background: #000; }
-    .cs-detail-title {
-      display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1;
-      strong { font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-      span { font-size: 12px; color: var(--text-secondary, #666); }
-    }
-    .cs-detail-close {
-      border: 0; background: var(--bg-tertiary, rgba(0, 0, 0, 0.06));
-      color: var(--text-secondary, #666); width: 26px; height: 26px; border-radius: 50%;
-      cursor: pointer; font-size: 12px; flex-shrink: 0;
-    }
-  }
-  .cs-detail-stats {
-    display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-bottom: 16px;
-    @media (max-width: 640px) { grid-template-columns: repeat(3, 1fr); }
-
-    div { display: flex; flex-direction: column; gap: 2px; }
-    span { font-size: 16px; font-weight: 800; }
-    label { font-size: 11px; color: var(--text-secondary, #666); font-weight: 600; }
-  }
-
-  .cs-chart-block {
-    margin-top: 14px;
-    h5 {
-      display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap;
-      font-size: 13px; font-weight: 700; margin: 0 0 8px;
-      em { font-style: normal; font-weight: 500; font-size: 11.5px; color: var(--text-muted, #999); }
-    }
-  }
-
-  // ── Position chart (retention / most-replayed) ──────────────
-  .cs-poschart {
-    position: relative;
-    height: 96px;
-    background: var(--bg-tertiary, rgba(0, 0, 0, 0.04));
-    border-radius: 8px;
+  .cs-card-title {
+    margin: 0;
+    min-width: 0;
+    @include v2.text(title-sm);
     overflow: hidden;
-    cursor: crosshair;
-  }
-  .cs-poschart-svg {
-    position: absolute; inset: 0; width: 100%; height: 100%;
-    path { fill-opacity: 0.28; stroke-width: 0; }
-  }
-  .cs-poschart-cursor {
-    position: absolute; top: 0; bottom: 0; width: 1px;
-    background: var(--text-primary, #111); opacity: 0.35; pointer-events: none;
-  }
-  .cs-poschart-tip {
-    position: absolute; top: 6px; transform: translateX(-50%);
-    background: var(--text-primary, #111); color: var(--text-inverse, #fff);
-    border-radius: 6px; padding: 3px 7px; font-size: 11px; pointer-events: none;
-    display: flex; flex-direction: column; align-items: center; line-height: 1.3; white-space: nowrap;
-    strong { font-weight: 700; }
-    span { opacity: 0.7; font-size: 10px; }
-  }
-  .cs-poschart-axis {
-    position: absolute; left: 8px; right: 8px; bottom: 4px;
-    display: flex; justify-content: space-between;
-    font-size: 10px; color: var(--text-muted, #999); pointer-events: none;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    &.is-sm { font-size: 14px; }
   }
 
-  // ── Demographics ────────────────────────────────────────────
-  .cs-demo-bars { display: flex; flex-direction: column; gap: 8px; }
-  .cs-demo-row {
-    display: grid; grid-template-columns: 140px 1fr 44px; align-items: center; gap: 10px;
-    @media (max-width: 640px) { grid-template-columns: 110px 1fr 40px; }
+  .cs-skeleton {
+    height: 330px;
+    border-radius: var(--r-2xl);
 
-    .cs-demo-label {
-      font-size: 13px; font-weight: 400;
-      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    &.is-short { height: 300px; }
+  }
+
+  .cs-chart-empty,
+  .cs-empty {
+    @include v2.text(body-sm);
+    color: var(--muted);
+    padding: 20px 12px;
+    border-radius: var(--r-md);
+    background: var(--bg);
+
+    &.is-sm { @include v2.text(meta-sm); padding: 10px; }
+  }
+
+  .cs-empty { @include v2.card; padding: 20px 16px; border-style: dashed; border-width: 2px; }
+  .cs-chart-empty--error { background: var(--accent-wash); color: var(--text); }
+
+  // ── Overview: four tiles (2px border, the picked one in the accent) ──
+  .cs-tiles {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+
+    @include v2.mobile { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+
+  .cs-tile {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-width: 0;
+    padding: 12px;
+    border-radius: var(--r-lg);
+    border: 2px solid var(--border);
+    background: transparent;
+    color: var(--text);
+    font: inherit;
+    text-align: left;
+
+    &:is(button) {
+      cursor: pointer;
+      transition: background var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease);
+
+      &:hover { background: var(--bg-hover); }
+      &:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
     }
-    .cs-demo-track { height: 10px; background: var(--bg-tertiary, rgba(0, 0, 0, 0.06)); border-radius: 999px; overflow: hidden; }
-    .cs-demo-fill { display: block; height: 100%; background: rgba(140, 145, 155, 0.85); border-radius: 999px; }
-    .cs-demo-val { font-size: 12.5px; font-weight: 700; text-align: right; color: var(--text-secondary, #666); }
-  }
-  .cs-demo-cities {
-    margin-top: 16px;
-    h5 { font-size: 12px; font-weight: 700; color: var(--text-secondary, #666); margin: 0 0 6px; }
-    .cs-demo-city {
-      display: flex; justify-content: space-between; font-size: 13px;
-      padding: 3px 0; border-bottom: 1px solid var(--border-light, rgba(0, 0, 0, 0.05));
-      span:last-child { color: var(--text-secondary, #666); font-weight: 600; }
-    }
-  }
-  .cs-demo-note { font-size: 11.5px; color: var(--text-muted, #999); margin: 10px 0 0; }
 
-  // ── Watch-time trend ────────────────────────────────────────
+    &.is-on,
+    &.is-on:hover { border-color: var(--accent); background: var(--accent-tint-strong); }
+  }
+
+  .cs-tile-l { @include v2.text(meta-sm); color: var(--muted); }
+
+  .cs-tile-v {
+    max-width: 100%;
+    font-size: 24px;
+    font-weight: 900;
+    line-height: 1.2;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    @include v2.mobile { font-size: 20px; }
+  }
+
+  .cs-tile-d { @include v2.mono(11, 700); color: var(--cyan); }
+
+  // ── Trend: lines straight on the card, 180 tall ─────────────
   .cs-trend {
-    position: relative; height: 120px;
-    background: var(--bg-tertiary, rgba(0, 0, 0, 0.04));
-    border-radius: 8px; cursor: crosshair; touch-action: none;
+    position: relative;
+    height: 180px;
+    margin-top: 4px;
+    cursor: crosshair;
+    touch-action: none;
+
+    @include v2.mobile { height: 140px; }
+
+    &--empty {
+      display: grid;
+      place-items: center;
+      cursor: default;
+      border-radius: var(--r-md);
+      background: var(--bg);
+      @include v2.text(body-sm);
+      color: var(--muted);
+    }
   }
+
   .cs-trend-svg {
-    position: absolute; inset: 0; width: 100%; height: 100%;
-    .cs-trend-area { fill: var(--accent-primary, #e53935); fill-opacity: 0.16; stroke: none; }
-    .cs-trend-line { fill: none; stroke: var(--accent-primary, #e53935); stroke-width: 2px; }
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+
+    .cs-trend-line { fill: none; stroke: var(--accent); stroke-width: 3px; stroke-linejoin: round; }
+    .cs-trend-prev { fill: none; stroke: var(--cyan); stroke-width: 2px; stroke-dasharray: 8 6; }
   }
-  .cs-trend-cursor { position: absolute; top: 0; bottom: 16px; width: 1px; background: var(--text-primary, #111); opacity: 0.3; pointer-events: none; }
+
+  .cs-trend-cursor {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: var(--text);
+    opacity: .3;
+    pointer-events: none;
+  }
+
   .cs-trend-tip {
-    position: absolute; top: 6px; transform: translateX(-50%);
-    background: var(--text-primary, #111); color: var(--text-inverse, #fff);
-    border-radius: 6px; padding: 3px 8px; font-size: 11px; pointer-events: none; white-space: nowrap;
-    display: flex; flex-direction: column; align-items: center; line-height: 1.3;
-    strong { font-weight: 700; } span { opacity: 0.7; font-size: 10px; }
-  }
-  .cs-trend-axis {
-    position: absolute; left: 8px; right: 8px; bottom: 4px;
-    display: flex; justify-content: space-between; font-size: 10px; color: var(--text-muted, #999); pointer-events: none;
+    position: absolute;
+    top: 0;
+    transform: translateX(-50%);
+    background: var(--text);
+    color: var(--bg);
+    border-radius: var(--r-xs);
+    padding: 2px 8px;
+    font-size: 11px;
+    pointer-events: none;
+    white-space: nowrap;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1.3;
+
+    strong { font-family: var(--font-mono); font-weight: 700; }
+    span { opacity: .7; font-size: 10px; }
   }
 
-  // ── Demographics layout ─────────────────────────────────────
-  .cs-demo { display: flex; flex-direction: column; gap: 20px; }
+  .cs-legend {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 16px;
+    @include v2.text(meta);
+    color: var(--muted);
 
-  // Desktop: breakdown bars on the left, 50% map on the right.
-  .cs-demo-main {
+    > span { display: inline-flex; align-items: center; gap: 6px; }
+    i { width: 14px; height: 3px; flex: none; }
+    i.is-a { background: var(--accent); }
+    i.is-b { background: var(--cyan); }
+  }
+
+  .cs-subtotals {
+    margin-left: auto;
+    @include v2.mono(11, 400);
+    color: var(--muted);
+  }
+
+  // ── Viewer locations (45a) ──────────────────────────────────
+  // Map and breakdown share one fixed-height well, so switching never moves the card.
+  .cs-loc-body {
+    position: relative;
+    height: 160px;
+    border-radius: var(--r-md);
+    background: var(--bg);
+    overflow: hidden;
+
+    > .cs-chart-empty { height: 100%; }
+  }
+
+  .cs-loc-scroll {
+    height: 100%;
+    padding: 10px 12px;
+    @include v2.scroll-y;
+  }
+
+  .cs-map {
+    position: relative;
+    height: 100%;
+    max-width: 100%;
+    aspect-ratio: 2 / 1;
+    margin: 0 auto;
+  }
+
+  .cs-map-svg { display: block; width: 100%; height: 100%; }
+  .cs-map-land { fill: var(--surface-2); opacity: .6; }
+  .cs-map-bubble { fill: color-mix(in srgb, var(--accent) 55%, transparent); stroke: var(--accent); stroke-width: .6px; }
+
+  .cs-map-label {
+    position: absolute;
+    transform: translate(-50%, 8px);
+    padding: 2px 6px;
+    border-radius: var(--r-xs);
+    background: var(--text);
+    color: var(--bg);
+    font-size: 10px;
+    font-weight: 700;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+
+  .cs-note {
+    margin: 0;
+    font-size: 10px;
+    color: var(--muted);
+  }
+
+  .cs-split {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .cs-split-head {
+    display: flex;
+    gap: 8px;
+    font-size: 11px;
+
+    b { flex: 1; font-weight: 700; }
+    span { color: var(--muted); }
+  }
+
+  .cs-split-bar {
+    display: flex;
+    height: 8px;
+    margin-top: 4px;
+    border-radius: 4px;
+    overflow: hidden;
+    background: var(--cyan);
+
+    span { display: block; height: 100%; background: var(--accent); }
+  }
+
+  .cs-split-legend {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    margin-top: 3px;
+    font-size: 10px;
+    color: var(--muted);
+  }
+
+  // Countries / Devices / Browsers: chips without a track.
+  .cs-seg-mini.v2-seg { background: var(--bg); padding: 3px; }
+  .cs-seg-chips.v2-seg { align-self: flex-start; background: transparent; padding: 0; }
+
+  // Sorted bars (31a "Where views come from" look): label + share, then the bar.
+  .cs-bars { display: flex; flex-direction: column; gap: 10px; }
+  .cs-bar-row { display: flex; gap: 8px; font-size: 13px; }
+
+  .cs-bar-label {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .cs-bar-val { @include v2.mono(12, 700); }
+
+  .cs-bar-track {
+    display: block;
+    height: 8px;
+    margin-top: 5px;
+    border-radius: 4px;
+    background: var(--surface-2);
+    overflow: hidden;
+  }
+
+  .cs-bar-fill {
+    display: block;
+    height: 100%;
+    border-radius: 4px;
+    background: var(--text);
+
+    &.is-accent { background: var(--accent); }
+    &.is-cyan { background: var(--cyan); }
+  }
+
+  // ── When your viewers watch (31a): 12 two-hour cells a day ──
+  .cs-when-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 24px;
-    align-items: start;
-  }
-  .cs-demo-bars-side { display: flex; flex-direction: column; gap: 18px; min-width: 0; }
-  .cs-demo-map-side { min-width: 0; }
-
-  // Mobile tab switcher — hidden on desktop.
-  .cs-demo-tabs { display: none; }
-
-  @media (max-width: 768px) {
-    .cs-demo-tabs { display: inline-flex; align-self: flex-start; }
-    .cs-demo-main { display: block; }
-    .cs-demo-main.tab-map .cs-demo-bars-side { display: none; }
-    .cs-demo-main.tab-bars .cs-demo-map-side { display: none; }
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 3px;
   }
 
-  .cs-demo-col h5 {
-    font-size: 12.5px; font-weight: 700; margin: 0 0 8px;
-    display: flex; align-items: baseline; gap: 8px;
-    em { font-style: normal; font-weight: 500; font-size: 11px; color: var(--text-muted, #999); }
-  }
-
-  // World bubble map
-  .cs-map { border-radius: 10px; overflow: hidden; }
-  .cs-map-svg { display: block; width: 100%; height: auto; }
-  .cs-map-bg { fill: var(--bg-tertiary, rgba(0, 0, 0, 0.05)); }
-  .cs-map-land { fill: rgba(140, 145, 155, 0.28); stroke: rgba(140, 145, 155, 0.45); stroke-width: 0.3px; }
-  .cs-map-grid { stroke: var(--border-light, rgba(0, 0, 0, 0.08)); stroke-width: 0.5px; }
-  .cs-map-bubble { fill: rgba(120, 170, 255, 0.55); stroke: rgba(120, 170, 255, 0.95); stroke-width: 0.5px; }
-
-  // When-heatmap
-  .cs-when-grid { display: flex; flex-direction: column; gap: 2px; }
-  .cs-when-row { display: flex; align-items: center; gap: 3px; }
-  .cs-when-day { width: 14px; flex: 0 0 auto; font-size: 10px; color: var(--text-muted, #999); }
   .cs-when-cell {
-    flex: 1 1 0; height: 12px; border-radius: 2px;
-    background: var(--accent-primary, #e53935);
-  }
-  .cs-when-hours {
-    display: flex; justify-content: space-between; margin: 4px 0 0 17px;
-    font-size: 10px; color: var(--text-muted, #999);
+    aspect-ratio: 1;
+    border-radius: var(--r-xs);
+
+    &.is-best { background: var(--accent); }
   }
 
-  // New vs returning
-  .cs-nr h5 { font-size: 12.5px; font-weight: 700; margin: 0 0 8px; }
-  .cs-nr-bar { display: flex; height: 12px; border-radius: 999px; overflow: hidden; background: var(--bg-tertiary, rgba(0,0,0,0.06)); }
-  .cs-nr-new { background: rgba(140, 145, 155, 0.85); }
-  .cs-nr-ret { background: rgba(140, 145, 155, 0.32); }
-  .cs-nr-legend {
-    display: flex; gap: 16px; margin-top: 8px; font-size: 12.5px; color: var(--text-secondary, #666);
-    span { display: inline-flex; align-items: center; gap: 6px; }
-    .dot { width: 9px; height: 9px; border-radius: 50%; }
-    .dot.new { background: rgba(140, 145, 155, 0.85); }
-    .dot.ret { background: rgba(140, 145, 155, 0.32); }
+  .cs-when-best {
+    margin: 0;
+    @include v2.text(meta);
+    color: var(--muted);
+
+    b { color: var(--cyan); font-weight: 700; }
   }
 
-  // ── Best-performing + compare row ───────────────────────────
-  .cs-perf-row {
+  // ── Audience: 2 × 2 wells ───────────────────────────────────
+  .cs-wells {
     display: grid;
-    grid-template-columns: 1fr 280px;
-    gap: 20px;
-    align-items: start;
-
-    @media (max-width: 768px) { grid-template-columns: 1fr; gap: 16px; }
-  }
-  // Left column: the KPI (sort) switch sits above the list — not over the compare picker.
-  .cs-list-col {
-    min-width: 0; display: flex; flex-direction: column; gap: 10px;
-    > .cs-seg { align-self: flex-start; max-width: 100%; }
-  }
-  .cs-perf-compare {
-    h5 { font-size: 12.5px; font-weight: 700; margin: 0 0 8px; }
-    // stack the two pickers vertically in the narrow right column
-    .cs-compare-picks { flex-direction: column; align-items: stretch; gap: 8px; margin-bottom: 0; }
-    .cs-compare-picks select { flex: none; width: 100%; }
-    .cs-compare-vs { align-self: center; }
-  }
-  .cs-compare-result {
-    margin-top: 14px; border-top: 1px solid var(--border-light, rgba(0, 0, 0, 0.08)); padding-top: 14px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
   }
 
-  // ── Compare videos ──────────────────────────────────────────
+  .cs-well {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    padding: 10px;
+    border-radius: var(--r-lg);
+    background: var(--bg);
+
+    span { @include v2.text(meta-sm); color: var(--muted); }
+
+    b {
+      @include v2.text(title-sm);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  // ── Top content ─────────────────────────────────────────────
+  .cs-top > .v2-seg { align-self: flex-start; max-width: 100%; }
+
+  // The list scrolls inside; its length never sets the card's height.
+  .cs-list {
+    flex: 1 1 auto;
+    height: 0;
+    min-height: 200px;
+    margin: 0 -8px;
+    @include v2.scroll-y;
+  }
+
+  // Rows: rank (first in the accent) · 64 thumb · title · metric (mono, right).
+  .cs-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 44px;
+    padding: 8px;
+    border-radius: var(--r-md);
+    cursor: pointer;
+    transition: background var(--t-fast) var(--ease);
+
+    &:hover { background: var(--bg-hover); }
+    &:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+    &.selected { background: var(--cyan-tint); }
+  }
+
+  .cs-rank {
+    width: 28px;
+    height: 28px;
+    border-radius: var(--r-sm);
+    background: var(--surface-2);
+    display: grid;
+    place-items: center;
+    flex: none;
+    @include v2.mono(12, 900);
+
+    &.is-first { background: var(--accent); color: var(--on-accent); }
+  }
+
+  .cs-item-thumb {
+    width: 64px;
+    aspect-ratio: 16 / 9;
+    flex: none;
+  }
+
+  .cs-item-info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .cs-item-title {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    min-width: 0;
+    @include v2.text(body-sm);
+    font-weight: 700;
+    color: var(--text);
+    text-decoration: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    &:hover { color: var(--text); text-decoration: underline; }
+    .cs-item-short { color: var(--muted); }
+  }
+
+  .cs-item-date { font-size: 10px; color: var(--muted); }
+
+  .cs-item-metric {
+    @include v2.mono(12, 700);
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  // ── Per video (45a) ─────────────────────────────────────────
+  .cs-detail { gap: 10px; }
+
+  .cs-detail-sub {
+    margin-top: -6px;
+    @include v2.text(meta);
+    color: var(--muted);
+  }
+
+  // ── Compare videos (45a) ────────────────────────────────────
+  .cs-compare { gap: 10px; }
+
   .cs-compare-picks {
-    display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+  }
 
-    select {
-      flex: 1 1 40%; min-width: 0; max-width: 100%;
-      background: var(--bg-tertiary, rgba(0, 0, 0, 0.05));
-      border: 1px solid var(--border-light, rgba(0, 0, 0, 0.08));
-      color: var(--text-primary, #111);
-      border-radius: 8px; padding: 8px 10px; font-size: 13px; cursor: pointer;
-    }
-    .cs-compare-vs { font-size: 12px; color: var(--text-muted, #999); font-weight: 700; }
+  // The two picks wear their series color as a 2px border.
+  .cs-pick.v2-input {
+    flex: 1;
+    min-width: 0;
+    height: 36px;
+    padding-left: 8px;
+    background-color: transparent;
+    font-size: 12px;
+    font-weight: 700;
+
+    &.is-a { border-color: var(--accent); }
+    &.is-b { border-color: var(--cyan); }
   }
-  .cs-compare-legend {
-    display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 8px;
-    span { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--text-secondary, #666); max-width: 45%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    i { width: 10px; height: 10px; border-radius: 2px; flex: 0 0 auto; }
+
+  .cs-compare-vs {
+    font-size: 11px;
+    color: var(--muted);
   }
+
   .cs-compare-chart {
-    position: relative; height: 120px;
-    background: var(--bg-tertiary, rgba(0, 0, 0, 0.04)); border-radius: 8px;
+    position: relative;
+    height: 130px;
+    border-radius: var(--r-md);
+    background: var(--bg);
+    overflow: hidden;
+
     svg { position: absolute; inset: 0; width: 100%; height: 100%; }
-    .cs-cmp-a { fill: none; stroke: var(--accent-primary, #e53935); stroke-width: 2px; }
-    .cs-cmp-b { fill: none; stroke: rgba(120, 170, 255, 0.95); stroke-width: 2px; }
-    .cs-cmp-axis {
-      position: absolute; left: 8px; right: 8px; bottom: 4px;
-      display: flex; justify-content: space-between; font-size: 10px; color: var(--text-muted, #999);
-    }
   }
 
-  .cs-footnote { font-size: 11.5px; color: var(--text-muted, #999); text-align: center; margin: 0; }
+  .cs-cmp-a, .cs-cmp-b { fill: none; stroke-width: 2px; }
+  .cs-cmp-a { stroke: var(--accent); }
+  .cs-cmp-b { stroke: var(--cyan); }
+
+  .cs-cmp-axis {
+    display: flex;
+    gap: 8px;
+    margin-top: -4px;
+    font-size: 10px;
+    color: var(--muted);
+
+    span:nth-child(2) { flex: 1; text-align: center; }
+  }
+
+  .cs-footnote {
+    margin: 0;
+    font-size: 10px;
+    color: var(--muted);
+  }
+
+  @include v2.mobile {
+    .cs-title { font-size: 28px; }
+    .cs-controls { width: 100%; }
+    .cs-seg.v2-seg { @include v2.scroll-x; }
+    .cs-compare-btn.v2-btn { height: 44px; }
+    .cs-subtotals { margin-left: 0; }
+  }
 }

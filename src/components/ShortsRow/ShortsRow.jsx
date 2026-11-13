@@ -1,6 +1,8 @@
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
+import { Icon } from '../v2/Icon';
 import CardThumbnail from '../Cards/CardThumbnail';
 import { fixVideoThumbnail, fallbackImg } from '../../utils/fixThumbnails';
 import { parseEmbedUrl, bodyToPlaintext } from '../../hive-api/hiveApi';
@@ -9,6 +11,7 @@ import { aiKey, useAiFlags } from '../../utils/aiFlags';
 import { hiveAuthorOf, isAiShort } from '../../hooks/useAiFilteredShorts';
 import './ShortsRow.scss';
 import { shortHeading } from '../../utils/shortTitle';
+import { formatNumber } from '../../i18n';
 
 /**
  * ONE FULL ROW of shorts dropped INTO the video grid every few rows (see
@@ -19,8 +22,8 @@ import { shortHeading } from '../../utils/shortTitle';
  * hands us exactly that many, plus the column count — so the row fills the width
  * edge-to-edge with no overflow and no second line.
  *
- * No heading and no "see all" — it should read as part of the feed, not as a
- * separate widget.
+ * v2 (28b): a short "Shorts" heading with an accent bar and a way to all
+ * shorts, then 9:16 tiles with the caption over the picture.
  */
 
 /**
@@ -58,7 +61,8 @@ function shortTitle(s) {
   return '';
 }
 
-function ShortsRow({ shorts, columns }) {
+function ShortsRow({ shorts, columns, heading = true }) {
+  const { t } = useTranslation();
   // "Hide AI-generated" is applied by the CALLER to the whole pool before slicing
   // (useAiFilteredShorts), so the row refills instead of leaving an empty slot.
   // Here we only subscribe so the AI pill appears once the flags land.
@@ -71,6 +75,16 @@ function ShortsRow({ shorts, columns }) {
   if (!shorts?.length) return null;
 
   return (
+    <section className="shorts-row-section">
+    {heading && (
+      <div className="shorts-row-head">
+        <span className="shorts-row-bar" aria-hidden="true" />
+        <h3>{t('feeds.tabs.shorts')}</h3>
+        <Link to="/shorts" className="shorts-row-more" aria-label={t('common.actions.seeAll')} title={t('common.actions.seeAll')}>
+          <Icon name="chevron_right" size={20} />
+        </Link>
+      </div>
+    )}
     <div
       className="shorts-row"
       // The column count is computed from the live container width, so the row is
@@ -99,21 +113,26 @@ function ShortsRow({ shorts, columns }) {
                 alt={title}
               />
               {isAiShort(s) && <AiPill className="ai-badge--on-thumb" />}
-            </div>
-            <div className="shorts-row-meta">
-              <h2>{title || `@${finalAuthor}`}</h2>
-              <span className="shorts-row-author">@{finalAuthor}</span>
+              <div className="shorts-row-meta">
+                <h2>{title || `@${finalAuthor}`}</h2>
+                {/* 28b: the view count under the caption; the creator when there is none */}
+                <span className="shorts-row-author">
+                  {s.views > 0 ? formatNumber(s.views, { compact: true }) : `@${finalAuthor}`}
+                </span>
+              </div>
             </div>
           </Link>
         );
       })}
     </div>
+    </section>
   );
 }
 
 ShortsRow.propTypes = {
   shorts: PropTypes.array,
   columns: PropTypes.number,
+  heading: PropTypes.bool,
 };
 
 export default ShortsRow;

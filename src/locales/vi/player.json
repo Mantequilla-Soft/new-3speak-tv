@@ -76,6 +76,11 @@
     }
   },
   "reactionUpload": {
+    "title": "Đăng video phản ứng",
+    "rec": "REC {{time}}",
+    "mic": "Micrô",
+    "camera": "Camera",
+    "restart": "Làm lại",
     "authorized": "Đã cấp quyền cho @threespeak — giờ bạn có thể đăng phản ứng",
     "authFailed": "Cấp quyền thất bại. Vui lòng thử lại.",
     "webcamDenied": "Không thể truy cập webcam",
@@ -89,7 +94,7 @@
     "uploadVideo": "Tải video lên",
     "recordVideo": "Quay video",
     "startRecording": "Bắt đầu quay",
-    "stopRecording": "Dừng quay",
+    "stopRecording": "Dừng và xem lại",
     "recordedVideo": "Video đã quay",
     "descriptionPlaceholder": "Thêm mô tả cho video phản ứng của bạn...",
     "showInShorts": "Hiển thị trong 3Speak Shorts",

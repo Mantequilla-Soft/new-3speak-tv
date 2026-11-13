@@ -6,9 +6,6 @@ import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async';
 import { useQuery } from '@tanstack/react-query';
 import { Trans, useTranslation } from 'react-i18next';
-import {
-  MdClose, MdExpandLess, MdExpandMore, MdMusicNote, MdMusicOff, MdOndemandVideo, MdRedo, MdTune, MdUndo,
-} from 'react-icons/md';
 import HiveAvatar from '../components/HiveAvatar/HiveAvatar';
 import GalaxyScene from '../components/Galaxy/GalaxyScene';
 import { useAppStore } from '../lib/store';
@@ -18,6 +15,10 @@ import {
 } from '../lib/hiveGalaxy';
 import { createAmbient } from '../lib/galaxyAmbient';
 import { formatNumber } from '../i18n';
+import {
+  Button, Checkbox, Eyebrow, Icon, IconButton, Segmented,
+} from '../components/v2/ui';
+import { cx } from '../components/v2/helpers';
 import './Galaxy.scss';
 
 const ACCOUNT_RE = /^[a-z][a-z0-9.-]{2,15}$/;
@@ -48,21 +49,22 @@ function GalaxyProgress({ progress }) {
     : done < total ? t('galaxy.progress') : t('galaxy.progressDetails');
   return (
     <div className="galaxy-progress">
-      <span className="galaxy-progress-label">{label}</span>
       <div className="galaxy-progress-row">
-        <div
-          className={`galaxy-progress-bar${total ? '' : ' is-sweeping'}`}
-          role="progressbar"
-          aria-label={label}
-          aria-valuemin={0}
-          aria-valuemax={total || undefined}
-          aria-valuenow={total ? done : undefined}
-        >
-          <i style={total ? { width: `${(done / total) * 100}%` } : undefined} />
-        </div>
+        <Icon name="progress_activity" size={16} className="v2-spin galaxy-progress-spin" />
+        <span className="galaxy-progress-label">{label}</span>
         <span className="galaxy-progress-count">
           {total ? `${formatNumber(done)} / ${formatNumber(total)}` : '…'}
         </span>
+      </div>
+      <div
+        className={cx('v2-progress is-thin galaxy-progress-bar', !total && 'is-sweeping')}
+        role="progressbar"
+        aria-label={label}
+        aria-valuemin={0}
+        aria-valuemax={total || undefined}
+        aria-valuenow={total ? done : undefined}
+      >
+        <span className="is-cyan" style={total ? { width: `${(done / total) * 100}%` } : undefined} />
       </div>
     </div>
   );
@@ -140,11 +142,11 @@ function useCollapsed() {
 function GalaxyPanel({ id, title, className, collapsed, onToggle, children }) {
   const open = !collapsed[id];
   return (
-    <section className={`${className}${open ? '' : ' is-collapsed'}`}>
+    <section className={cx('galaxy-panel', className, !open && 'is-collapsed')}>
       <h2 className="galaxy-panel-head">
         <button type="button" aria-expanded={open} aria-controls={`galaxy-panel-${id}`} onClick={() => onToggle(id)}>
           <span>{title}</span>
-          {open ? <MdExpandLess size={20} /> : <MdExpandMore size={20} />}
+          <Icon name={open ? 'expand_less' : 'expand_more'} size={18} />
         </button>
       </h2>
       {open && <div id={`galaxy-panel-${id}`} className="galaxy-panel-body">{children}</div>}
@@ -179,13 +181,16 @@ export default function Galaxy() {
   if (fits) return <GalaxyView />;
   const user = cleanName(params.username);
   return (
-    <div className="galaxy-page">
+    <div className="galaxy-page galaxy-page--small">
       <Helmet><title>{`3S | ${t('galaxy.title')}`}</title></Helmet>
-      <div className="galaxy-state">
-        <p>{t('galaxy.desktopOnly.title')}</p>
-        <p className="galaxy-state-sub">{t('galaxy.desktopOnly.text')}</p>
+      <div className="galaxy-small">
+        <span className="galaxy-small__icon" aria-hidden="true"><Icon name="desktop_windows" size={24} /></span>
+        <h1>{t('galaxy.desktopOnly.title')}</h1>
+        <p>{t('galaxy.desktopOnly.text')}</p>
         {ACCOUNT_RE.test(user) && (
-          <Link className="galaxy-btn galaxy-btn--ghost" to={`/@${user}`}>{t('galaxy.desktopOnly.back', { user })}</Link>
+          <Button as={Link} variant="secondary" size={44} icon="arrow_back" to={`/@${user}`}>
+            {t('galaxy.desktopOnly.back', { user })}
+          </Button>
         )}
       </div>
     </div>
@@ -462,122 +467,146 @@ function GalaxyView() {
   const ready = data && data.ring.length > 0;
 
   return (
-    <div className="galaxy-page">
+    // The sky is dark in either site theme, so the panels are too: the subtree
+    // takes the dark tokens (design-system.scss) and every control follows.
+    <div className="galaxy-page" data-theme="dark">
       <Helmet><title>{`3S | ${t('galaxy.title')}`}</title></Helmet>
 
-      {/* Panels float over the full-bleed galaxy. */}
+      {/* Left column: title and controls, then the legend. Panels float over
+          the full-bleed galaxy; the space between them stays draggable sky. */}
       <div className="galaxy-overlay galaxy-top">
-      <h1 className="galaxy-sr-only">{t('galaxy.title')}</h1>
-
-      {collapsed.toolbar ? (
-        <button type="button" className="galaxy-toolbar-open" aria-expanded={false} onClick={() => toggleCollapsed('toolbar')}>
-          <MdTune size={18} />
-          <span>{t('galaxy.controls')}</span>
-          <span className="galaxy-toolbar-open-mode">{t(`galaxy.mode.${mode}`)}</span>
-        </button>
-      ) : (
-      <div className="galaxy-toolbar">
-        <div className="galaxy-seg" role="group" aria-label={t('galaxy.modeLabel')}>
-          {MODES.map((m) => (
-            <button
-              key={m}
-              type="button"
-              className={mode === m ? 'active' : ''}
-              aria-pressed={mode === m}
-              onClick={() => setParam('mode', m, 'following')}
-            >
-              {t(`galaxy.mode.${m}`)}
+        {collapsed.toolbar ? (
+          <>
+            <h1 className="galaxy-sr-only">{t('galaxy.title')}</h1>
+            <button type="button" className="galaxy-toolbar-open" aria-expanded={false} onClick={() => toggleCollapsed('toolbar')}>
+              <Icon name="tune" size={18} />
+              <span>{t('galaxy.controls')}</span>
+              <span className="galaxy-toolbar-open-mode">{t(`galaxy.mode.${mode}`)}</span>
             </button>
-          ))}
-        </div>
-        <label className="galaxy-select">
-          <span>{t('galaxy.depth.label')}</span>
-          <select value={depth} onChange={(e) => setParam('depth', e.target.value, DEFAULT_DEPTH)}>
-            {Object.entries(SCAN_DEPTHS).map(([k, n]) => (
-              <option key={k} value={k}>{t(`galaxy.depth.${k}`, { n: formatNumber(n) })}</option>
-            ))}
-          </select>
-        </label>
-        {!isLoading && (
-          <form className="galaxy-find" onSubmit={findIn}>
-            <input
-              value={find}
-              onChange={(e) => { setFind(e.target.value); setFindNote(null); }}
-              placeholder={t('galaxy.find.placeholder')}
-              aria-label={t('galaxy.find.label')}
-              list="galaxy-names"
-              autoCapitalize="off"
-              autoCorrect="off"
-              spellCheck={false}
+          </>
+        ) : (
+          <div className="galaxy-toolbar">
+            <div className="galaxy-toolbar-head">
+              <h1 className="galaxy-title">{t('galaxy.title')}</h1>
+              <IconButton
+                icon="expand_less"
+                size={32}
+                variant="ghost"
+                label={t('galaxy.collapse')}
+                aria-expanded
+                onClick={() => toggleCollapsed('toolbar')}
+              />
+            </div>
+            <Segmented
+              size={28}
+              label={t('galaxy.modeLabel')}
+              value={mode}
+              onChange={(m) => setParam('mode', m, 'following')}
+              options={MODES.map((m) => ({ value: m, label: t(`galaxy.mode.${m}`) }))}
             />
-            <datalist id="galaxy-names">
-              {shown.map((n) => <option key={`s-${n}`} value={n} />)}
-              {ring.map((n) => <option key={`r-${n}`} value={n} />)}
-            </datalist>
-            <button type="submit">{t('galaxy.find.go')}</button>
-            {findNote && (
-              <span className="galaxy-find-note" role="status">
-                {findNote.text}
-                {findNote.explore && (
-                  <>
-                    {' '}
-                    <Link to={`/galaxy/${findNote.explore}${qs}`}>{t('galaxy.find.explore', { user: findNote.explore })}</Link>
-                  </>
+            <label className="galaxy-depth">
+              <span className="galaxy-depth-label">{t('galaxy.depth.label')}</span>
+              <select value={depth} onChange={(e) => setParam('depth', e.target.value, DEFAULT_DEPTH)}>
+                {Object.entries(SCAN_DEPTHS).map(([k, n]) => (
+                  <option key={k} value={k}>{t(`galaxy.depth.${k}`, { n: formatNumber(n) })}</option>
+                ))}
+              </select>
+              <Icon name="expand_more" size={18} className="galaxy-depth-caret" />
+            </label>
+            {!isLoading && (
+              <form className="galaxy-find" onSubmit={findIn}>
+                <div className="galaxy-find-row">
+                  <span className="galaxy-find-field">
+                    <Icon name="search" size={18} />
+                    <input
+                      value={find}
+                      onChange={(e) => { setFind(e.target.value); setFindNote(null); }}
+                      placeholder={t('galaxy.find.placeholder')}
+                      aria-label={t('galaxy.find.label')}
+                      list="galaxy-names"
+                      autoCapitalize="off"
+                      autoCorrect="off"
+                      spellCheck={false}
+                    />
+                  </span>
+                  <datalist id="galaxy-names">
+                    {shown.map((n) => <option key={`s-${n}`} value={n} />)}
+                    {ring.map((n) => <option key={`r-${n}`} value={n} />)}
+                  </datalist>
+                  <Button type="submit" variant="inverse" size={36}>{t('galaxy.find.go')}</Button>
+                </div>
+                {findNote && (
+                  <span className="galaxy-find-note" role="status">
+                    {findNote.text}
+                    {findNote.explore && (
+                      <>
+                        {' '}
+                        <Link to={`/galaxy/${findNote.explore}${qs}`}>{t('galaxy.find.explore', { user: findNote.explore })}</Link>
+                      </>
+                    )}
+                  </span>
                 )}
-              </span>
+              </form>
             )}
-          </form>
-        )}
-        {ready && (
-          <button
-            type="button"
-            className={`galaxy-panel-toggle${panelOpen ? ' active' : ''}`}
-            aria-expanded={panelOpen}
-            onClick={() => setPanelOpen((v) => !v)}
-          >
-            {t('galaxy.panelToggle', { count: filtered.length })}
-          </button>
-        )}
-        <button
-          type="button"
-          className="galaxy-collapse"
-          aria-expanded
-          aria-label={t('galaxy.collapse')}
-          title={t('galaxy.collapse')}
-          onClick={() => toggleCollapsed('toolbar')}
-        >
-          <MdExpandLess size={20} />
-        </button>
-      </div>
-      )}
-
-      {ready && (
-        <div className="galaxy-tools">
-        <div className="galaxy-pill" role="group" aria-label={t('galaxy.history.label')}>
-          <button type="button" className="galaxy-collapse" disabled={!canUndo} onClick={() => stepTo(-1)} aria-label={t('galaxy.history.undo')} title={t('galaxy.history.undoKey')}>
-            <MdUndo size={20} />
-          </button>
-          <button type="button" className="galaxy-collapse" disabled={!canRedo} onClick={() => stepTo(1)} aria-label={t('galaxy.history.redo')} title={t('galaxy.history.redoKey')}>
-            <MdRedo size={20} />
-          </button>
-        </div>
-        {musicSupported && (
-          <div className="galaxy-pill">
-            <button
-              type="button"
-              className={`galaxy-collapse${musicOn ? ' is-on' : ''}`}
-              aria-pressed={musicOn}
-              onClick={toggleMusic}
-              aria-label={t('galaxy.music')}
-              title={t('galaxy.music')}
-            >
-              {musicOn ? <MdMusicNote size={20} /> : <MdMusicOff size={20} />}
-            </button>
+            {ready && (
+              <Button
+                className={cx('galaxy-panel-toggle', panelOpen && 'is-on')}
+                variant="secondary"
+                size={36}
+                icon="filter_alt"
+                aria-expanded={panelOpen}
+                onClick={() => setPanelOpen((v) => !v)}
+              >
+                {t('galaxy.panelToggle', { count: filtered.length })}
+              </Button>
+            )}
           </div>
         )}
+
+        {ready && (
+          <div className="galaxy-legend">
+            <span><i className="dot dot--center" />{t('galaxy.legend.center', { user: center })}</span>
+            {data.followersKnown ? (
+              <>
+                <span><i className="dot dot--follow" />{t('galaxy.legend.mutual', { count: mutualCount })}</span>
+                {mode !== 'mutuals' && (
+                  <span><i className="dot dot--oneway" />{t('galaxy.legend.oneWay', { count: data.ring.length - mutualCount })}</span>
+                )}
+              </>
+            ) : (
+              <span><i className="dot dot--follow" />{t('galaxy.legend.follows', { count: data.ring.length })}</span>
+            )}
+            <span><i className="dot dot--suggest" />{t('galaxy.legend.suggestions', { count: shown.length, total: data.suggestions.length })}</span>
+            {data.ring.length > ring.length && (
+              <span className="galaxy-legend-note">{t('galaxy.legend.capped', { shown: ring.length, total: data.ring.length })}</span>
+            )}
+          </div>
+        )}
+        {ready && <p className="galaxy-hint">{t('galaxy.hint')}</p>}
+      </div>
+
+      {/* Bottom left: back and forward, and the music. */}
+      {ready && (
+        <div className="galaxy-overlay galaxy-tools">
+          <div className="galaxy-pill" role="group" aria-label={t('galaxy.history.label')}>
+            <IconButton icon="undo" variant="ghost" size={36} disabled={!canUndo} onClick={() => stepTo(-1)} label={t('galaxy.history.undo')} title={t('galaxy.history.undoKey')} />
+            <IconButton icon="redo" variant="ghost" size={36} disabled={!canRedo} onClick={() => stepTo(1)} label={t('galaxy.history.redo')} title={t('galaxy.history.redoKey')} />
+          </div>
+          {musicSupported && (
+            <div className="galaxy-pill">
+              <IconButton
+                icon={musicOn ? 'music_note' : 'music_off'}
+                variant="ghost"
+                size={36}
+                className={cx(musicOn && 'is-on')}
+                aria-pressed={musicOn}
+                onClick={toggleMusic}
+                label={t('galaxy.music')}
+              />
+            </div>
+          )}
         </div>
       )}
-      </div>
 
       <div className="galaxy-body">
         <div className="galaxy-stage">
@@ -588,59 +617,43 @@ function GalaxyView() {
                 <span className="galaxy-loader-orbit"><i /></span>
                 <span className="galaxy-loader-orbit galaxy-loader-orbit--outer"><i /></span>
               </div>
-              <p>{t('galaxy.loading', { user: center })}</p>
+              <p className="galaxy-state-title">{t('galaxy.loading', { user: center })}</p>
               <GalaxyProgress progress={progress?.key === galaxyKey ? progress : null} />
             </div>
           )}
-          {isError && <div className="galaxy-state">{t('galaxy.error')}</div>}
-          {data && !data.ring.length && <div className="galaxy-state">{t(`galaxy.empty.${mode}`, { user: center })}</div>}
+          {isError && (
+            <div className="galaxy-state">
+              <div className="galaxy-state-card is-error" role="alert">
+                <Icon name="error" size={20} />
+                <span>{t('galaxy.error')}</span>
+              </div>
+            </div>
+          )}
+          {data && !data.ring.length && (
+            <div className="galaxy-state">
+              <div className="galaxy-state-card">
+                <Icon name="hub" size={20} />
+                <span>{t(`galaxy.empty.${mode}`, { user: center })}</span>
+              </div>
+            </div>
+          )}
 
           {ready && (
-            <>
-              <GalaxyScene
-                key={galaxyKey}
-                data={data}
-                shown={shown}
-                top={top}
-                selected={selected?.name || null}
-                links={links}
-                circles={sceneCircles}
-                circle={circle?.id || null}
-                onCircle={chooseCircle}
-                onHover={setHover}
-                onSelect={(hit) => pick(hit && hit.kind !== 'center' ? hit.name : null)}
-                onMoved={moved}
-                cameraRef={cameraRef}
-              />
-              <div className="galaxy-legend">
-                <span><i className="dot dot--center" />{t('galaxy.legend.center', { user: center })}</span>
-                {data.followersKnown ? (
-                  <>
-                    <span><i className="dot dot--follow" />{t('galaxy.legend.mutual', { count: mutualCount })}</span>
-                    {mode !== 'mutuals' && (
-                      <span><i className="dot dot--oneway" />{t('galaxy.legend.oneWay', { count: data.ring.length - mutualCount })}</span>
-                    )}
-                  </>
-                ) : (
-                  <span><i className="dot dot--follow" />{t('galaxy.legend.follows', { count: data.ring.length })}</span>
-                )}
-                <span><i className="dot dot--suggest" />{t('galaxy.legend.suggestions', { count: shown.length, total: data.suggestions.length })}</span>
-                {data.ring.length > ring.length && (
-                  <span className="galaxy-legend-note">{t('galaxy.legend.capped', { shown: ring.length, total: data.ring.length })}</span>
-                )}
-              </div>
-              <p className="galaxy-hint">{t('galaxy.hint')}</p>
-              <p className="galaxy-credit">
-                <Trans
-                  i18nKey="galaxy.credit"
-                  values={{ user: HAFSQL_MAINTAINER }}
-                  components={{
-                    src: <a href="https://mahdiyari.gitlab.io/hafsql" target="_blank" rel="noopener noreferrer" />,
-                    user: <a href={`https://peakd.com/@${HAFSQL_MAINTAINER}`} target="_blank" rel="noopener noreferrer" />,
-                  }}
-                />
-              </p>
-            </>
+            <GalaxyScene
+              key={galaxyKey}
+              data={data}
+              shown={shown}
+              top={top}
+              selected={selected?.name || null}
+              links={links}
+              circles={sceneCircles}
+              circle={circle?.id || null}
+              onCircle={chooseCircle}
+              onHover={setHover}
+              onSelect={(hit) => pick(hit && hit.kind !== 'center' ? hit.name : null)}
+              onMoved={moved}
+              cameraRef={cameraRef}
+            />
           )}
 
           {hover && (
@@ -655,14 +668,20 @@ function GalaxyView() {
 
           {selected && selected.name !== center && (
             <div className="galaxy-card">
-              <button type="button" className="galaxy-card-close" onClick={() => pick(null)} aria-label={t('galaxy.close')}>
-                <MdClose size={18} />
-              </button>
+              <IconButton
+                icon="close"
+                variant="ghost"
+                size={28}
+                round
+                className="galaxy-card-close"
+                onClick={() => pick(null)}
+                label={t('galaxy.close')}
+              />
               <div className="galaxy-card-who">
                 <HiveAvatar username={selected.name} size="small" className="galaxy-card-avatar" />
                 <span className="galaxy-card-names">
-                  {suggestion?.displayName && <span className="galaxy-card-display">{suggestion.displayName}</span>}
                   <strong>@{selected.name}</strong>
+                  {suggestion?.displayName && <span className="galaxy-card-display">{suggestion.displayName}</span>}
                 </span>
               </div>
               {suggestion ? (
@@ -679,7 +698,7 @@ function GalaxyView() {
                 </>
               ) : (
                 <>
-                  <p>{relation(selected.name)}</p>
+                  <p className="galaxy-card-relation">{relation(selected.name)}</p>
                   {data.sampled.includes(selected.name) && (
                     <p className="galaxy-card-sub">{t('galaxy.leadsTo', { count: leadsOnMap(selected.name) })}</p>
                   )}
@@ -695,152 +714,177 @@ function GalaxyView() {
                 )}
               </div>
               <div className="galaxy-card-actions">
-                <Link className="galaxy-btn" to={`/@${selected.name}`} target="_blank" rel="noopener noreferrer">{t('galaxy.openChannel')}</Link>
-                <Link className="galaxy-btn galaxy-btn--ghost" to={`/galaxy/${selected.name}${qs}`}>{t('galaxy.exploreHere')}</Link>
+                <Button as={Link} variant="secondary" size={32} center to={`/@${selected.name}`} target="_blank" rel="noopener noreferrer">{t('galaxy.openChannel')}</Button>
+                <Button as={Link} variant="primary" size={32} center to={`/galaxy/${selected.name}${qs}`}>{t('galaxy.exploreHere')}</Button>
               </div>
             </div>
           )}
         </div>
 
-        {data && data.ring.length > 0 && (
-          <aside className={`galaxy-overlay galaxy-side${panelOpen ? ' is-open' : ''}`}>
-            <GalaxyPanel id="filters" className="galaxy-filters" title={t('galaxy.filters.title')} collapsed={collapsed} onToggle={toggleCollapsed}>
+        {ready && (
+          <aside className={cx('galaxy-overlay galaxy-side', panelOpen && 'is-open')}>
+            <div className="galaxy-side-scroll">
+              <GalaxyPanel id="filters" className="galaxy-filters" title={t('galaxy.filters.title')} collapsed={collapsed} onToggle={toggleCollapsed}>
 
-              <label className="galaxy-range">
-                <span>{t('galaxy.filters.overlap', { count: minNeeded, total: data.sampled.length })}</span>
-                <input
-                  type="range"
-                  min={1}
-                  max={maxCount}
-                  value={minNeeded}
-                  disabled={maxCount < 2}
-                  onChange={(e) => setMinCount(Number(e.target.value))}
-                />
-              </label>
-
-              <label className="galaxy-select">
-                <span>{t('galaxy.filters.active')}</span>
-                <select value={activeDays} disabled={!profilesOk} onChange={(e) => setActiveDays(Number(e.target.value))}>
-                  {ACTIVE_CHOICES.map((d) => (
-                    <option key={d} value={d}>{d ? t('galaxy.filters.activeWithin', { count: d }) : t('galaxy.filters.any')}</option>
-                  ))}
-                </select>
-              </label>
-
-              <label className="galaxy-select">
-                <span>{t('galaxy.filters.rep')}</span>
-                <select value={minRep} disabled={!profilesOk} onChange={(e) => setMinRep(Number(e.target.value))}>
-                  {REP_CHOICES.map((r) => (
-                    <option key={r} value={r}>{r ? t('galaxy.filters.repAtLeast', { rep: r }) : t('galaxy.filters.any')}</option>
-                  ))}
-                </select>
-              </label>
-
-              <label className="galaxy-check">
-                <input type="checkbox" checked={creatorsOnly} disabled={!creatorsOk} onChange={(e) => setCreatorsOnly(e.target.checked)} />
-                <span>{t('galaxy.filters.creators')}</span>
-              </label>
-
-              {otherGalaxy && (
-                <label className="galaxy-check">
-                  <input type="checkbox" checked={hideMine} onChange={(e) => setHideMine(e.target.checked)} />
-                  <span>{t('galaxy.filters.hideMine')}</span>
+                <label className="galaxy-range">
+                  <span>{t('galaxy.filters.overlap', { count: minNeeded, total: data.sampled.length })}</span>
+                  <input
+                    type="range"
+                    min={1}
+                    max={maxCount}
+                    value={minNeeded}
+                    disabled={maxCount < 2}
+                    onChange={(e) => setMinCount(Number(e.target.value))}
+                  />
                 </label>
+
+                <div className="galaxy-selects">
+                  <label className="galaxy-select">
+                    <Eyebrow as="span">{t('galaxy.filters.active')}</Eyebrow>
+                    <select className="v2-input is-select h32" value={activeDays} disabled={!profilesOk} onChange={(e) => setActiveDays(Number(e.target.value))}>
+                      {ACTIVE_CHOICES.map((d) => (
+                        <option key={d} value={d}>{d ? t('galaxy.filters.activeWithin', { count: d }) : t('galaxy.filters.any')}</option>
+                      ))}
+                    </select>
+                  </label>
+
+                  <label className="galaxy-select">
+                    <Eyebrow as="span">{t('galaxy.filters.rep')}</Eyebrow>
+                    <select className="v2-input is-select h32" value={minRep} disabled={!profilesOk} onChange={(e) => setMinRep(Number(e.target.value))}>
+                      {REP_CHOICES.map((r) => (
+                        <option key={r} value={r}>{r ? t('galaxy.filters.repAtLeast', { rep: r }) : t('galaxy.filters.any')}</option>
+                      ))}
+                    </select>
+                  </label>
+                </div>
+
+                <Checkbox
+                  className="galaxy-check"
+                  checked={creatorsOnly}
+                  disabled={!creatorsOk}
+                  onChange={(e) => setCreatorsOnly(e.target.checked)}
+                  label={t('galaxy.filters.creators')}
+                />
+
+                {otherGalaxy && (
+                  <Checkbox
+                    className="galaxy-check"
+                    checked={hideMine}
+                    onChange={(e) => setHideMine(e.target.checked)}
+                    label={t('galaxy.filters.hideMine')}
+                  />
+                )}
+
+                {(!profilesOk || !creatorsOk) && <p className="galaxy-filters-note">{t('galaxy.filters.partial')}</p>}
+              </GalaxyPanel>
+
+              {circles.length > 0 && (
+                <GalaxyPanel
+                  id="circles"
+                  className="galaxy-list galaxy-circles"
+                  title={`${t('galaxy.circles.title')} (${circles.length})`}
+                  collapsed={collapsed}
+                  onToggle={toggleCollapsed}
+                >
+                  <p className="galaxy-filters-note">{t('galaxy.circles.note')}</p>
+                  <ul>
+                    {circles.map((c) => (
+                      <li key={c.id}>
+                        <button
+                          type="button"
+                          className={cx('galaxy-circle-row', circle?.id === c.id && 'is-on')}
+                          aria-pressed={circle?.id === c.id}
+                          onClick={() => chooseCircle(c.id)}
+                        >
+                          <HiveAvatar username={c.lead} size="small" className="galaxy-list-avatar" />
+                          <span className="galaxy-list-text">
+                            <span className="galaxy-list-name">{t('galaxy.circles.name', { user: c.lead })}</span>
+                            <span className="galaxy-list-via">{circleSize(c)}</span>
+                          </span>
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </GalaxyPanel>
               )}
 
-              {(!profilesOk || !creatorsOk) && <p className="galaxy-filters-note">{t('galaxy.filters.partial')}</p>}
-              <p className="galaxy-filters-note">{t('galaxy.scanInfo', { count: data.sampled.length, total: data.ring.length })}</p>
-              {data.mapRing && <p className="galaxy-filters-note">{t('galaxy.scanSkip', { n: formatNumber(MASS_FOLLOWING) })}</p>}
-            </GalaxyPanel>
-
-            {circles.length > 0 && (
               <GalaxyPanel
-                id="circles"
-                className="galaxy-list galaxy-circles"
-                title={`${t('galaxy.circles.title')} (${circles.length})`}
+                id="list"
+                className="galaxy-list"
+                title={`${t('galaxy.discover')} (${formatNumber(listed.length)})`}
                 collapsed={collapsed}
                 onToggle={toggleCollapsed}
               >
-                <p className="galaxy-filters-note">{t('galaxy.circles.note')}</p>
-                <ul>
-                  {circles.map((c) => (
-                    <li key={c.id}>
-                      <button
-                        type="button"
-                        className={circle?.id === c.id ? 'active' : ''}
-                        aria-pressed={circle?.id === c.id}
-                        onClick={() => chooseCircle(c.id)}
-                      >
-                        <HiveAvatar username={c.lead} size="small" className="galaxy-list-avatar" />
-                        <span className="galaxy-list-text">
-                          <span className="galaxy-list-name">{t('galaxy.circles.name', { user: c.lead })}</span>
-                          <span className="galaxy-list-via">{circleSize(c)}</span>
-                        </span>
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              </GalaxyPanel>
-            )}
-
-            <GalaxyPanel
-              id="list"
-              className="galaxy-list"
-              title={`${t('galaxy.discover')} (${formatNumber(listed.length)})`}
-              collapsed={collapsed}
-              onToggle={toggleCollapsed}
-            >
-              {circle && (
-                <button type="button" className="galaxy-list-chip" onClick={() => chooseCircle(null)}>
-                  <span>{t('galaxy.circles.in', { user: circle.lead })}</span>
-                  <MdClose size={14} aria-label={t('galaxy.circles.clear')} />
-                </button>
-              )}
-              {circle?.ring.length > 0 && (
-                <div className="galaxy-circle-ring">
-                  <p className="galaxy-filters-note">{t(`galaxy.circles.ringTitle.${mode}`, { count: circle.ring.length, user: center })}</p>
-                  <div className="galaxy-circle-faces">
-                    {circle.ring.slice(0, CIRCLE_FACES).map((n) => (
-                      <button key={n} type="button" title={`@${n}`} aria-label={`@${n}`} onClick={() => pick(n)}>
-                        <HiveAvatar username={n} size="small" className="galaxy-list-avatar" />
-                      </button>
-                    ))}
-                    {circle.ring.length > CIRCLE_FACES && (
-                      <span className="galaxy-circle-more">+{formatNumber(circle.ring.length - CIRCLE_FACES)}</span>
+                {circle && (
+                  <button type="button" className="v2-chip is-cyan is-on h28 galaxy-list-chip" onClick={() => chooseCircle(null)} aria-label={t('galaxy.circles.clear')}>
+                    <span>{t('galaxy.circles.in', { user: circle.lead })}</span>
+                    <Icon name="close" size={16} />
+                  </button>
+                )}
+                {circle?.ring.length > 0 && (
+                  <div className="galaxy-circle-ring">
+                    <p className="galaxy-filters-note">{t(`galaxy.circles.ringTitle.${mode}`, { count: circle.ring.length, user: center })}</p>
+                    <div className="galaxy-circle-faces">
+                      {circle.ring.slice(0, CIRCLE_FACES).map((n) => (
+                        <button key={n} type="button" title={`@${n}`} aria-label={`@${n}`} onClick={() => pick(n)}>
+                          <HiveAvatar username={n} size="small" className="galaxy-list-avatar" />
+                        </button>
+                      ))}
+                      {circle.ring.length > CIRCLE_FACES && (
+                        <span className="galaxy-circle-more">+{formatNumber(circle.ring.length - CIRCLE_FACES)}</span>
+                      )}
+                    </div>
+                  </div>
+                )}
+                {listed.length === 0 && circle?.ring.length > 0 ? null : listed.length === 0 ? (
+                  <div className="galaxy-list-empty">
+                    <p>{data.suggestions.length ? t('galaxy.filters.none') : t('galaxy.noSuggestions')}</p>
+                    {data.suggestions.length > 0 && (
+                      <Button variant="secondary" size={32} icon="restart_alt" onClick={resetFilters}>{t('galaxy.filters.reset')}</Button>
                     )}
                   </div>
-                </div>
-              )}
-              {listed.length === 0 && circle?.ring.length > 0 ? null : listed.length === 0 ? (
-                <div className="galaxy-list-empty">
-                  <p>{data.suggestions.length ? t('galaxy.filters.none') : t('galaxy.noSuggestions')}</p>
-                  {data.suggestions.length > 0 && (
-                    <button type="button" className="galaxy-btn galaxy-btn--plain" onClick={resetFilters}>{t('galaxy.filters.reset')}</button>
-                  )}
-                </div>
-              ) : (
-                <ul>
-                  {listed.slice(0, LIST_SIZE).map((s) => (
-                    <li key={s.name}>
-                      <button
-                        type="button"
-                        className={selected?.name === s.name ? 'active' : ''}
-                        onClick={() => pick(s.name)}
-                      >
-                        <HiveAvatar username={s.name} size="small" className="galaxy-list-avatar" />
-                        <span className="galaxy-list-text">
-                          <span className="galaxy-list-name">@{s.name}</span>
-                          <span className="galaxy-list-via">{t('galaxy.via', { count: s.count, total: data.sampled.length })}</span>
-                        </span>
-                        {(s.videos || 0) + (s.shorts || 0) > 0 && (
-                          <MdOndemandVideo className="galaxy-list-badge" size={16} title={t('galaxy.stats.videos', { videos: s.videos, shorts: s.shorts })} />
-                        )}
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </GalaxyPanel>
+                ) : (
+                  <ul>
+                    {listed.slice(0, LIST_SIZE).map((s) => (
+                      <li key={s.name}>
+                        <button
+                          type="button"
+                          className={cx('galaxy-list-row', selected?.name === s.name && 'is-on')}
+                          onClick={() => pick(s.name)}
+                        >
+                          <HiveAvatar username={s.name} size="small" className="galaxy-list-avatar" />
+                          <span className="galaxy-list-text">
+                            <span className="galaxy-list-name">@{s.name}</span>
+                            <span className="galaxy-list-via">{t('galaxy.via', { count: s.count, total: data.sampled.length })}</span>
+                          </span>
+                          {(s.videos || 0) + (s.shorts || 0) > 0 && (
+                            <span className="galaxy-list-badge" title={t('galaxy.stats.videos', { videos: s.videos, shorts: s.shorts })}>
+                              <Icon name="smart_display" size={16} />
+                            </span>
+                          )}
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </GalaxyPanel>
+
+              {/* What the map is made of, and whose data it is. */}
+              <div className="galaxy-side-foot">
+                <p>{t('galaxy.scanInfo', { count: data.sampled.length, total: data.ring.length })}</p>
+                {data.mapRing && <p>{t('galaxy.scanSkip', { n: formatNumber(MASS_FOLLOWING) })}</p>}
+                <p className="galaxy-credit">
+                  <Trans
+                    i18nKey="galaxy.credit"
+                    values={{ user: HAFSQL_MAINTAINER }}
+                    components={{
+                      src: <a href="https://mahdiyari.gitlab.io/hafsql" target="_blank" rel="noopener noreferrer" />,
+                      user: <a href={`https://peakd.com/@${HAFSQL_MAINTAINER}`} target="_blank" rel="noopener noreferrer" />,
+                    }}
+                  />
+                </p>
+              </div>
+            </div>
           </aside>
         )}
       </div>

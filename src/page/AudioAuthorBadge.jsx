@@ -5,14 +5,16 @@ import { followWithAioha, isLoggedIn } from '../hive-api/aioha';
 import { useAppStore } from '../lib/store';
 import { toastIn } from '../utils/toast';
 import HiveAvatar from '../components/HiveAvatar/HiveAvatar';
+import { Button } from '../components/v2/ui';
 
 // Every toast from this module is headed "Profile"; the message becomes the
 // line under it. See utils/toast.js.
 const toast = toastIn('Profile');
 
 /**
- * Compact vertical author card for the Audio page creators row.
- * Layout: avatar left | username + follow button + track count right
+ * Creator chip of the Audio page's Creators row (28e, v2): a surface tile with
+ * the avatar, @name, the track count in mono and a Follow button.
+ * Layout: avatar left | username + track count, follow on the right
  */
 function AudioAuthorBadge({ author, tracks, isFollowing: isFollowingProp, onClick }) {
   const { t } = useTranslation();
@@ -47,7 +49,13 @@ function AudioAuthorBadge({ author, tracks, isFollowing: isFollowingProp, onClic
   const showFollowBtn = user && author !== user;
 
   return (
-    <div className="audio-author-badge" onClick={onClick}>
+    <div
+      className="audio-author-badge"
+      onClick={onClick}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => { if ((e.key === 'Enter' || e.key === ' ') && e.target === e.currentTarget) { e.preventDefault(); onClick?.(); } }}
+    >
       <HiveAvatar
         username={author}
         size="small"
@@ -58,17 +66,21 @@ function AudioAuthorBadge({ author, tracks, isFollowing: isFollowingProp, onClic
       />
       <div className="audio-author-info">
         <span className="audio-author-name">@{author}</span>
-        {showFollowBtn && (
-          <button
-            className={`audio-author-follow-btn${following ? ' following' : ''}`}
-            onClick={handleFollow}
-            disabled={loading}
-          >
-            {loading ? '...' : following ? t('common.actions.following') : t('common.actions.follow')}
-          </button>
-        )}
-        {tracks != null && <span className="audio-author-tracks">{t('audio.author.tracks', { count: tracks })}</span>}
+        {tracks != null && <span className="audio-author-tracks num">{t('audio.author.tracks', { count: tracks })}</span>}
       </div>
+      {showFollowBtn && (
+        <Button
+          size={28}
+          // A row of creators: Follow is secondary (never a fill per tile), Following quiet.
+          variant={following ? 'ghost' : 'secondary'}
+          className={`audio-author-follow-btn${following ? ' following' : ''}`}
+          onClick={handleFollow}
+          disabled={loading}
+          loading={loading}
+        >
+          {following ? t('common.actions.following') : t('common.actions.follow')}
+        </Button>
+      )}
     </div>
   );
 }

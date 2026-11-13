@@ -7,7 +7,8 @@
     "feeds": "Feeds",
     "groups": "Grupos",
     "audio": "Áudio",
-    "login": "Entrar"
+    "login": "Entrar",
+    "you": "Você"
   },
   "installApp": "Instalar app",
   "iosInstallHint": "Toque em <b>Compartilhar</b> e depois em <b>Adicionar à Tela de Início</b>",
@@ -28,7 +29,9 @@
     "shortsTooltip": "Vídeos curtos na vertical, um atrás do outro",
     "audioTooltip": "Podcasts, músicas e outros áudios publicados no 3Speak",
     "groupsTooltip": "Comunidades das quais você pode participar e selos que as pessoas recebem",
-    "rankingsTooltip": "Os criadores que mais ganham e são mais assistidos agora"
+    "rankingsTooltip": "Os criadores que mais ganham e são mais assistidos agora",
+    "live": "Ao vivo",
+    "liveTooltip": "Transmissões e salas ao vivo agora"
   },
   "aboutLink": "Sobre o 3Speak",
   "faqLink": "Perguntas frequentes",
@@ -38,6 +41,8 @@
     "myChannelAria": "Meu canal",
     "vpTooltip": "Poder de voto: quanto peso seu próximo voto terá",
     "rcTooltip": "Resource Credits: quanto custam suas ações na Hive",
+    "votingPower": "Poder de voto",
+    "resourceCredits": "Resource Credits",
     "myChannel": "Meu canal",
     "publishBacklog": "Publicar pendentes",
     "analytics": "Estatísticas",
@@ -47,14 +52,20 @@
     "logout": "Sair",
     "onDiscord": "3Speak no Discord",
     "onX": "3Speak no X",
-    "onTelegram": "3Speak no Telegram"
+    "onTelegram": "3Speak no Telegram",
+    "switch": "Trocar",
+    "tiles": {
+      "channel": "Canal",
+      "history": "Histórico"
+    },
+    "darkTheme": "Tema escuro"
   },
   "notifications": {
     "pushOff": "Notificações desativadas neste dispositivo",
-    "pushOn": "Você será avisado quando criadores que você segue publicarem",
+    "pushOn": "Você será avisado quando os criadores que você segue publicarem.",
     "pushFailed": "Não foi possível alterar as configurações de notificação",
     "ariaUnread": "Notificações ({{count}} não lidas)",
-    "pushBlocked": "As notificações deste site estão bloqueadas nas configurações do seu navegador",
+    "pushBlocked": "As notificações deste site estão bloqueadas nas configurações do seu navegador.",
     "pushNoWorker": "Esta versão não tem service worker, então as notificações não podem ser registradas aqui",
     "pushStop": "Parar de notificar este dispositivo",
     "pushStart": "Seja avisado quando criadores que você segue publicarem",
@@ -76,8 +87,8 @@
       "followMany_other": "@{{a}} e mais {{count}} pessoas começaram a seguir você",
       "other": "{{count}} notificações de {{type}}",
       "typeCount": "{{count}} {{type}}",
-      "includesWhale": "Inclui conta(s) baleia 🐋",
-      "includesOrca": "Inclui conta(s) orca 🐬",
+      "includesWhale": "Inclui contas baleia 🐋",
+      "includesOrca": "Inclui contas orca 🐬",
       "andMore": "e mais {{count}}…"
     },
     "stories": {
@@ -95,6 +106,13 @@
       "heading": "Novos episódios dos podcasts que você segue",
       "newEpisode": "Novo episódio de {{show}}",
       "type": "Podcast"
+    },
+    "tabs": {
+      "all": "Todas",
+      "mentions": "Menções",
+      "follows": "Seguidores",
+      "uploads": "Envios",
+      "pods": "Pods"
     }
   },
   "search": {
@@ -135,6 +153,17 @@
     "views_other": "{{formatted}} visualizações",
     "tags": "Tags",
     "titles": "Títulos",
-    "placeholder": "Pesquisar..."
-  }
+    "placeholder": "Pesquisar...",
+    "recent": "Recentes",
+    "allResultsFor": "Todos os resultados para “{{term}}”",
+    "kinds": {
+      "creator": "Criador",
+      "community": "Comunidade",
+      "video": "Vídeo",
+      "short": "Short",
+      "audio": "Áudio",
+      "playlist": "Playlist"
+    }
+  },
+  "create": "Criar"
 }

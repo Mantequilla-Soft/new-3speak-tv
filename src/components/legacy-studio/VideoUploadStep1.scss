@@ -1,393 +1,309 @@
-@use "../../mixins.scss" as mix;
-.upload-step {
-  .header {
-    text-align: center;
-    margin-bottom: 1.5rem; 
+@use "../../styles/v2" as v2;
 
-    .title {
-      font-size: 1.5rem; 
-      font-weight: 700;
-      color: var(--text-primary); 
-      margin-bottom: 0.5rem; 
-    }
-    P{
-      @include mix.respond(phone) {
-        font-size: 14px;
-      }
-    }
+// Upload step 1: pick a video (embed-studio/EmbedVideoUploadStep1.jsx), design
+// 35b / 44c. Scoped to `.upload-select`: the drop zone is a dashed card, the
+// gates (authorize @threespeak, not enough RC) are cards of their own, a picked
+// file shows as preview + next steps side by side.
+.upload-select {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
 
-    .subtitle {
-      color: var(--text-secondary); 
-    }
-  }
-
-  .content {
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .actions {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    button {
-      padding: 0.5rem 1rem; 
-      border-radius: 0.5rem;
-      background-color: transparent; 
-      color: var(--accent-primary, #e53935); 
-      border: 1px solid var(--accent-primary, #e53935);
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-      &:disabled {
-        background-color: var(--text-muted); 
-        cursor: not-allowed;
-      }
-    }
-  }
-}
-
-.file-upload {
-  background: #ffffff;
-  border: 2px dashed #e5e7eb; 
-  border-radius: 0.5rem;
-  padding: 1rem;
-  transition: border-color 0.3s ease, background-color 0.3s ease;
-  width: 700px;
-  @include mix.respond(phone) {
-        width: 90%;
-      }
-
-  [data-theme="dark"] & {
-    background: #1a1a1a;
-    border-color: #3d3d3d;
-  }
-
-  &:hover {
-    border-color: red;
-  }
-
-  // Drag & drop hover state
-  &.is-dragging {
-    border-color: red;
-    background: color-mix(in srgb, red 6%, transparent);
-  }
-
-  .content {
+  // The 24h story switch above the picker (35b: "Post as a 24h story").
+  .upload-story-card {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    gap: 10px;
+    margin: 0 0 16px;
+    padding: 18px;
+    transition: border-color var(--t-base) var(--ease);
+
+    &.is-on { border-color: color-mix(in srgb, var(--cyan) 40%, transparent); }
+
+    .upload-story-card__head { display: flex; align-items: center; gap: 10px; }
+    .upload-story-card__bar { width: 4px; height: 22px; flex: none; border-radius: var(--r-bar); background: var(--cyan); }
+    .upload-story-card__title { flex: 1; min-width: 0; font-size: 16px; font-weight: 700; }
+    .upload-story-card__hint { margin: 0; @include v2.text(meta); line-height: 1.5; color: var(--muted); }
+  }
+
+  .upload-step { width: 100%; }
+
+  .file-upload {
+    width: 100%;
+    min-height: 320px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    border-radius: var(--r-2xl);
+    border: 2px dashed var(--border);
+    background: var(--surface);
+    transition: border-color var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
+
+    &.is-dragging {
+      border-color: var(--accent);
+      background: color-mix(in srgb, var(--accent) 6%, var(--surface));
+    }
+
+    &.has-file {
+      border-style: solid;
+      border-width: 1px;
+      min-height: 0;
+    }
+
+    > .input { display: none; }
+  }
+
+  // Empty state: icon well, title, hints, the pick button.
+  .content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
     justify-content: center;
-    padding: 2rem; 
-    gap: 1rem; 
+    gap: 14px;
+    padding: 32px;
+    min-width: 0;
 
-    .icon {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 4rem; 
-      height: 4rem;
-      background: red; 
-      border-radius: 50%;
-      color: #fff;
+    @include v2.mobile { padding: 20px 16px; }
+  }
+
+  .icon {
+    display: grid;
+    place-items: center;
+    width: 64px;
+    height: 64px;
+    border-radius: var(--r-xl);
+    background: var(--accent-tint-strong);
+    color: var(--accent);
+    cursor: pointer;
+    transition: transform var(--t-fast) var(--ease);
+    &:active { transform: scale(.98); }
+  }
+
+  .text {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    .title {
+      margin: 0;
+      @include v2.text(heading);
+      color: var(--text);
     }
-    .arrow-in{
-      width: 50px;
-    }
+  }
 
-    .text {
-      text-align: center;
+  .formats {
+    margin: 0;
+    @include v2.text(body-sm);
+    color: var(--muted);
+    text-wrap: pretty;
+    strong { color: var(--text); }
+  }
 
-      .title {
-        font-size: 1.125rem; 
-        font-weight: 600;
-        color: var(--text-primary); 
-        margin-bottom: 0.5rem; 
-      }
+  .drag-hint { color: var(--text); }
 
-      .description {
-        color: var(--text-secondary); 
-        font-size: 0.875rem; 
-        margin-bottom: 1rem; 
-      }
+  // Check rows (35b): what the file has to be, and the last file refused.
+  .upload-checks {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    width: 100%;
+    max-width: 560px;
+  }
 
-      .formats {
-        font-size: 0.75rem;
-        color: var(--text-secondary);
-      }
+  .upload-check {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 10px;
+    border-radius: var(--r-md);
+    @include v2.text(meta);
+    line-height: 1.4;
+    color: var(--text);
 
-      .drag-hint {
-        font-size: 0.8rem;
-        font-weight: 500;
-        color: var(--text-primary);
-      }
+    .formats { @include v2.text(meta); color: var(--text); }
+    &.is-info { background: var(--cyan-tint); .material-symbols-rounded { color: var(--cyan); } }
+    &.is-error { background: var(--accent-tint); .material-symbols-rounded { color: var(--accent); } }
+  }
 
-      .short-hint {
-        margin-top: 0.5rem;
-        color: var(--accent-primary, #e53935);
-        font-weight: 600;
-      }
-    }
-    .isselected-wrap{
-      display: flex;
+  .button-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+
+    @include v2.mobile {
+      width: 100%;
       flex-direction: column;
-      align-items: center;
-      text-align: center;
-      span{
-        margin-bottom: 4px;
-      }
-      .upload-info-note {
-        margin: 8px 0 12px;
-        padding: 8px 12px;
-        border: 1px solid var(--border-color, rgba(128, 128, 128, 0.3));
-        border-radius: 8px;
-        font-size: 0.75rem;
-        color: var(--text-secondary);
-        max-width: 320px;
-      }
-      img{
-        @include mix.respond(phone) {
-        width: 40px;
-      }
-      }
-    }
-
-    .button-group {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      align-items: center;
-
-      // Replace + Proceed side by side once a file is picked; they wrap onto two
-      // lines only where the row is too narrow for both.
-      &--row {
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: center;
-      }
-    }
-
-    .button {
-      background-color: transparent;
-      color: var(--accent-primary, #e53935);
-      padding: 0.5rem 1rem;
-      border: 1px solid var(--accent-primary, #e53935);
-      border-radius: 0.375rem;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      font-size: 14px;
-
-      &:hover {
-        background-color: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent);
-        border-color: var(--accent-primary, #e53935);
-        color: var(--accent-primary, #e53935);
-        filter: brightness(0.9);
-      }
-
-      &--outline, &-secondary {
-        background-color: transparent;
-        color: var(--text-secondary, #6b7280);
-        border: 1px solid var(--text-secondary, #6b7280);
-
-        &:hover {
-          background-color: var(--bg-secondary, #f3f4f6);
-          filter: none;
-        }
-      }
+      .v2-btn { width: 100%; }
     }
   }
 
-  .input {
-    display: none;
+  .upload-select__spinner {
+    display: inline-grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    color: var(--cyan);
   }
 
-  // "beta" pill trailing the Selfie teleprompter button label
-  .beta-badge {
-    display: inline-block;
-    margin-left: 6px;
-    padding: 1px 6px;
-    border-radius: 10px;
-    background: rgba(255, 255, 255, 0.22);
-    border: 1px solid currentColor;
-    font-size: 0.62rem;
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    vertical-align: middle;
-    opacity: 0.85;
+  // Gates: authorize @threespeak (cyan) or not enough RC (accent).
+  .threespeak-auth-gate {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    width: 100%;
+    max-width: 480px;
   }
-}
 
-.video-preview-container {
-  width: 700px;
-  margin: 1rem auto 0;
+  .upload-gate__icon {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: v2.radius-for(44);
+    background: var(--cyan-tint-strong);
+    color: var(--cyan);
 
-  @include mix.respond(phone) {
-    width: 90%;
+    &.is-accent {
+      background: var(--accent-tint-strong);
+      color: var(--accent);
+    }
+  }
+
+  .upload-gate__title {
+    @include v2.text(title-sm);
+    color: var(--text);
+  }
+
+  .upload-gate__btn { min-width: 240px; }
+
+  // A file is picked: the clip and the next steps side by side.
+  .upload-picked {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(280px, 1fr);
+    gap: 20px;
+    padding: 16px;
+    align-items: start;
+
+    @include v2.mobile {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 14px;
+      padding: 12px;
+    }
+  }
+
+  .video-preview-container {
+    width: 100%;
+    min-width: 0;
   }
 
   .video-preview {
+    display: block;
     width: 100%;
-    max-height: 400px;
-    border-radius: 0.5rem;
-    background: #000;
-    object-fit: contain;
+    max-height: 60vh;
+    border-radius: var(--r-md);
+    background: var(--media-black);
   }
 
-  // Shown when the browser can't decode the file for an inline preview
-  // (e.g. some .MOV/QuickTime files). The upload still works.
   .video-preview-fallback {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 0.75rem;
-    width: 100%;
-    min-height: 160px;
-    padding: 1.5rem;
-    border-radius: 0.5rem;
-    background: var(--bg-secondary);
-    border: 1px dashed var(--border-light, #444);
-    text-align: center;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 12px;
+    border-radius: var(--r-md);
+    background: var(--cyan-tint);
+    color: var(--text);
 
-    .video-preview-fallback-icon {
-      width: 40px;
-      height: 40px;
-      color: var(--text-secondary);
-    }
-
+    .video-preview-fallback-icon { color: var(--cyan); }
     p {
       margin: 0;
-      max-width: 420px;
-      font-size: 0.85rem;
-      color: var(--text-secondary);
+      @include v2.text(meta);
+      line-height: 1.45;
     }
+  }
+
+  .isselected-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    min-width: 0;
+  }
+
+  .upload-picked__check {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: v2.radius-for(44);
+    background: var(--cyan);
+    color: var(--bg);
+  }
+
+  .upload-picked__title {
+    margin: 0;
+    @include v2.text(title);
+    color: var(--text);
   }
 
   .video-preview-name {
-    margin-top: 0.5rem;
-    font-size: 0.85rem;
-    color: var(--text-secondary);
-    text-align: center;
-    word-break: break-all;
+    margin: 0;
+    @include v2.mono(12, 500);
+    color: var(--muted);
+    overflow-wrap: anywhere;
   }
-}
 
-.file-preview {
-  background: var(--bg-secondary);
-  border-radius: 0.5rem;
-  padding: 1rem; // spacing-4
-
-  .file-preview__content {
+  .upload-info-note {
     display: flex;
-    align-items: center;
-    gap: 0.75rem; // spacing-3
-
-    .file-preview__icon {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 2.5rem; // spacing-10
-      height: 2.5rem;
-      background-color: var(--accent-light);
-      border-radius: 0.625rem; // --radius + 2px
-      color: var(--accent-primary);
-    }
-
-    .file-preview__info {
-      flex: 1;
-
-      .file-preview__name {
-        font-weight: 500;
-        color: var(--text-primary);
-      }
-
-      .file-preview__size {
-        font-size: 0.875rem; // sm
-        color: var(--text-secondary);
-      }
-    }
-  }
-}
-
-.progress-bar {
-  position: relative;
-  width: 100%; // Adjust width as needed
-  height: 20px; // Adjust height for desired thickness
-  background-color: var(--bg-tertiary); // Light gray for the background
-  border-radius: 10px; // Rounded corners
-  overflow: hidden; // Ensure content doesn’t spill outside
-  margin: 10px 0;
-
-  .progress-bar-fill {
-    height: 100%; // Matches the height of the container
-    background-color: var(--success-color, #4caf50); // Green for the filled portion
-    width: 0; 
-    transition: width 0.4s ease-in-out; 
-    display: flex;
-    align-items: center; 
-    justify-content: center; 
-    color: #fff; 
-    font-size: 14px; 
-    font-weight: bold;
-    border-radius: 10px; 
+    align-items: flex-start;
+    gap: 8px;
+    padding: 10px 12px;
+    border-radius: var(--r-md);
+    background: var(--bg);
+    @include v2.text(meta);
+    line-height: 1.45;
+    color: var(--muted);
+    .material-symbols-rounded { color: var(--cyan); }
   }
 
-  .progress-bar-text {
-    position: absolute; 
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%); 
-    color: var(--text-primary); 
-    font-size: 14px; 
-    font-weight: bold;
-  }
-}
+  .button-group--row { margin-top: 4px; }
 
-// HiveSigner @threespeak inline gate — centered prompt + button.
-.threespeak-auth-gate {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  width: 100%;
-  text-align: center;
-
-  .button {
-    align-self: center;
-    margin: 0 auto;
-  }
-}
-
-/* "Post as a 24h story" on the shorts uploader (EmbedVideoUploadStep1). */
-.story-switch {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  margin: 0 0 12px;
-  padding: 10px 12px;
-  border: 1px solid var(--border-color);
-  border-radius: 10px;
-  background: var(--bg-secondary);
-  cursor: pointer;
-
-  input {
-    flex: none;
-    margin-top: 3px;
-    accent-color: var(--accent-primary);
+  .yt-import-entry {
+    margin-top: 2px;
+    @include v2.mobile { width: 100%; }
   }
 
-  .story-switch__text {
+  // Owner-only upload test mode: the admin-only dashed card (STYLE_GUIDE §11).
+  .upload-fault-panel {
     display: flex;
     flex-direction: column;
-    gap: 2px;
-    color: var(--text-primary);
-    font-size: 14px;
+    gap: 8px;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px;
+    @include v2.text(meta);
+    line-height: 1.4;
+    color: var(--text);
 
-    small {
-      color: var(--text-secondary);
-      font-size: 12px;
-    }
+    code { @include v2.mono(11, 500); }
+  }
+
+  .upload-fault-panel__title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    @include v2.text(label);
+  }
+
+  .upload-fault-panel__row {
+    align-items: flex-start;
+    @include v2.text(meta);
+    line-height: 1.4;
+  }
+
+  .upload-fault-panel__note {
+    margin: 0;
+    color: var(--muted);
   }
 }

@@ -44,7 +44,8 @@ let root
 let container
 const wrapper = () => container.querySelector('.notif-bell-wrapper')
 const bell = () => container.querySelector('.notif-bell-btn')
-const list = () => container.querySelector('.notif-dropdown')
+// The sheet is portalled to <body> (the bar's blur would otherwise contain it).
+const list = () => document.querySelector('.notif-dropdown')
 const advance = async (ms) => { await act(async () => { await vi.advanceTimersByTimeAsync(ms) }) }
 function pointer(type, el, pointerType = 'mouse') {
   const ev = new MouseEvent(type, { bubbles: true, relatedTarget: document.body })

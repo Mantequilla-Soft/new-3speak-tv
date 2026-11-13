@@ -1,7 +1,6 @@
 import  { useEffect, useRef, useState } from "react"
 import { generatePassword, getPrivateKeys, genCommuninityName, genBadgeName, accountExists, finalizeNewAccount, createHiveCommunityWithKeychain, createHiveCommunityKY } from "../../hive-api/api";
 import { uploadThumbnail } from "../../utils/uploadThumbnail";
-import { Camera, Loader2, TriangleAlert } from "lucide-react";
 import { createHiveCommunity, getCommunity,  } from "../../hive-api/api";
 import { Providers, getCurrentProvider } from '../../hive-api/aioha';
 import { Link } from "react-router-dom";
@@ -9,9 +8,9 @@ import { rememberCreatedBadge, indexNewCommunity } from '../../utils/badgeAwards
 import { useAppStore } from '../../lib/store';
 // import Loader from "../components/loader/Loader";
 import "./CreateCommunity.scss"
-import ModalHeader from "../ModalHeader/ModalHeader";
-import { MdOutlineContentCopy } from "react-icons/md";
-import { FaDownload, FaCheck } from "react-icons/fa";
+import DialogShell from "./DialogShell";
+import { Button, Segmented } from "../v2/ui";
+import { Icon } from "../v2/Icon";
 import { toastIn } from '../../utils/toast';
 import { useTranslation, Trans } from 'react-i18next';
 import { getLanguage } from '../../i18n';
@@ -24,24 +23,26 @@ const toast = toastIn('Community');
 // The wallets that can sign an ACTIVE-key operation. HiveSigner is deliberately
 // absent: its OAuth grant covers posting only, so it cannot create an account.
 const SIGN_PROVIDERS = [
-  { id: Providers.Keychain, label: 'Hive Keychain' },
-  { id: Providers.HiveAuth, label: 'HiveAuth' },
-  { id: Providers.PeakVault, label: 'Peak Vault' },
-  { id: Providers.Ledger, label: 'Ledger' },
+  { id: Providers.Keychain, label: 'Hive Keychain', icon: 'extension' },
+  { id: Providers.HiveAuth, label: 'HiveAuth', icon: 'qr_code_2' },
+  { id: Providers.PeakVault, label: 'Peak Vault', icon: 'key' },
+  { id: Providers.Ledger, label: 'Ledger', icon: 'usb' },
 ];
 
-const CreateCommunity = ({ isOpen, close, kind = 'community'}) => {
+const CreateCommunity = ({ isOpen, close, kind: initialKind = 'community'}) => {
   // Everything below is shared. A badge IS a Hive account created the same way,
   // for the same 3 HIVE, with the same generated keys -- only its name follows
   // `badge-<digits>` instead of `hive-1<digits>`, and it is not registered as a
   // community afterwards. Duplicating 400 lines to change a prefix and a noun
   // would have been two flows to keep in step.
   const { t } = useTranslation();
+  // 40c: the first step can switch between the two (same flow, other noun).
+  const [kind, setKind] = useState(initialKind);
   const isBadge = kind === 'badge';
 
   const [communityTitle, setCommunityTitle] = useState("");
   const [aboutCommunity, setAboutCommunity] = useState("");
-  const [message, setMessage] = useState("");
+  const [, setMessage] = useState("");
   const [step, setStep] = useState(1);
   const [error, setError] = useState(false);
   const [communityName, setCommunityName] = useState("");
@@ -67,6 +68,13 @@ const CreateCommunity = ({ isOpen, close, kind = 'community'}) => {
 
   const usernamee = communityName === "" ? (isBadge ? genBadgeName() : genCommuninityName()) : communityName;
 
+  // Switching the kind on step 1 draws a fresh name with the other prefix.
+  const switchKind = (next) => {
+    if (next === kind) return;
+    setKind(next);
+    setCommunityName(next === 'badge' ? genBadgeName() : genCommuninityName());
+  };
+
   useEffect(() => {
     setCommunityName(usernamee);
     if (step === 2) {
@@ -82,7 +90,7 @@ const CreateCommunity = ({ isOpen, close, kind = 'community'}) => {
       setCommunityPassword(password);
       const keys = getPrivateKeys(communityName, password);
       setCommunityKeys(keys);
-    } catch (error) {
+    } catch {
       toast.error(t('communities.create.errors.generateInfo'));
     }
   };
@@ -357,71 +365,124 @@ const CreateCommunity = ({ isOpen, close, kind = 'community'}) => {
   const createTitle = isBadge ? t('communities.create.badge.title') : t('communities.create.community.title');
   const headerTitle = step === 2 ? t('communities.create.saveKeysTitle') : step === 3 ? t('communities.create.signTitle') : createTitle;
 
-  return (
-    <div className={`modal ${isOpen ? "open" : ""}`}>
-      <div className="overlay" onClick={close}></div>
-      <div
-        className={`modal-content video-upload-moadal-size create-com ${
-          isOpen ? "open" : ""
-        }`}
-        onClick={(e) => e.stopPropagation()}
-      >
-        <ModalHeader title={headerTitle} onClose={close} />
-          <div className="create-community-container">
-            {/* {isLoading && <div>Loading</div>} */}
+  const spin = <Icon name="progress_activity" size={16} className="v2-spin" />;
+  const failed = step === 4 && !!error;
 
-            
-            {/* {message && step === 2 && (
-              <span className="success-message">{message}</span>
-            )} */}
+  // The 17g sheet foot: an optional note line over one full-width main action
+  // (cyan: community), with Back beside it on the middle steps.
+  const footer = step === 1 ? (
+    <>
+      <div className="dlg-note">{t('communities.create.feeNote')}</div>
+      <Button variant="cyan" size={56} block next className="dlg-main cc-primary" onClick={() => handleCommuntiyInfo()} disabled={!!uploading}>
+        {t('common.actions.continue')}
+      </Button>
+    </>
+  ) : step === 2 ? (
+    <div className="dlg-row">
+      <Button variant="secondary" size={56} className="cc-secondary" onClick={() => setStep(1)}>{t('common.actions.back')}</Button>
+      <Button variant="cyan" size={56} next className="dlg-main cc-primary" disabled={!isDownloaded} onClick={() => setStep(3)}>
+        {t('common.actions.continue')}
+      </Button>
+    </div>
+  ) : step === 3 ? (
+    <Button variant="secondary" size={56} block className="cc-secondary" onClick={() => setStep(2)}>{t('common.actions.back')}</Button>
+  ) : failed ? (
+    <Button variant="cyan" size={56} block next className="dlg-main cc-primary" onClick={() => setStep(1)}>{t('common.actions.tryAgain')}</Button>
+  ) : (
+    <Button
+      as={Link}
+      variant="cyan"
+      size={56}
+      block
+      next
+      className="dlg-main cc-primary cc-primary-link"
+      to={isBadge ? `/b/${communityName}` : `/community/${communityName}`}
+      onClick={close}
+    >
+      {isBadge ? t('communities.create.badge.open') : t('communities.create.community.open')}
+    </Button>
+  );
+
+  // Design 17g / 40c: the 17 sheet (docked right on desktop, a bottom sheet on
+  // phones) with a cyan bar and a step bar. The look (kind, banner, picture,
+  // name), save the keys, sign with the active key and the 3 HIVE fee, then
+  // done (success card) or failed (accent wash).
+  return (
+    <DialogShell
+      open={isOpen}
+      onClose={close}
+      busy={isLoading}
+      title={headerTitle}
+      side
+      tone="cyan"
+      steps={4}
+      step={step - 1}
+      width={480}
+      zIndex={1100}
+      className="create-com"
+      bodyClassName="create-community-container"
+      footer={footer}
+    >
             {step === 1 && (
               <div className="cc-step">
-                <header className="cc-head">
-                  <p>
-                    {isBadge ? t('communities.create.badge.intro') : t('communities.create.community.intro')}
-                  </p>
-                </header>
+                <Segmented
+                  className="cc-kind"
+                  label={createTitle}
+                  options={[
+                    { value: 'community', label: t('communities.page.fallbackTitle') },
+                    { value: 'badge', label: t('badges.page.fallbackTitle') },
+                  ]}
+                  value={kind}
+                  onChange={switchKind}
+                />
+                <p className="cc-head">
+                  {isBadge ? t('communities.create.badge.intro') : t('communities.create.community.intro')}
+                </p>
 
-                {/* Banner first: it is the biggest thing on the finished page,
-                    so it reads as the headline choice rather than an
-                    afterthought under the text fields. */}
-                <button
-                  type="button"
-                  className="cc-banner"
-                  style={banner ? { backgroundImage: `url(${banner})` } : undefined}
-                  onClick={() => bannerInput.current?.click()}
-                  disabled={!!uploading}
-                >
-                  <span className="cc-banner-action">
-                    {uploading === 'banner' ? <Loader2 size={15} className="cc-spin" /> : <Camera size={15} />}
-                    {banner ? t('communities.create.changeBanner') : t('communities.create.addBanner')}
-                  </span>
-                </button>
-                <input ref={bannerInput} type="file" accept="image/*" onChange={pickImage('banner')} hidden />
-
-                <div className="cc-avatar-row">
+                {/* The preview card (17g): the banner, the picture riding over
+                    its lower edge, and the name as the directory will show it.
+                    Both images upload on tap. */}
+                <div className="cc-cover">
                   <button
                     type="button"
-                    className="cc-avatar"
-                    onClick={() => avatarInput.current?.click()}
+                    className={`cc-banner${banner ? ' has-image' : ''}`}
+                    style={banner ? { backgroundImage: `url(${banner})` } : undefined}
+                    onClick={() => bannerInput.current?.click()}
                     disabled={!!uploading}
-                    aria-label={t('communities.create.uploadPicture')}
                   >
-                    {avatar ? <img src={avatar} alt="" /> : null}
-                    <span className="cc-avatar-badge">
-                      {uploading === 'avatar' ? <Loader2 size={14} className="cc-spin" /> : <Camera size={14} />}
+                    <span className="cc-banner-action">
+                      {uploading === 'banner' ? spin : <Icon name="add_a_photo" size={16} />}
+                      {banner ? t('communities.create.changeBanner') : t('communities.create.addBanner')}
                     </span>
                   </button>
-                  <div className="cc-avatar-text">
-                    <strong>{t('communities.create.picture')}</strong>
-                    <span>{t('communities.create.pictureHint')}</span>
+                  <input ref={bannerInput} type="file" accept="image/*" onChange={pickImage('banner')} hidden />
+
+                  <div className="cc-avatar-row">
+                    <button
+                      type="button"
+                      className={`cc-avatar${avatar ? ' has-image' : ''}`}
+                      onClick={() => avatarInput.current?.click()}
+                      disabled={!!uploading}
+                      aria-label={t('communities.create.uploadPicture')}
+                      title={t('communities.create.pictureHint')}
+                    >
+                      {avatar ? <img src={avatar} alt="" /> : <Icon name="add_a_photo" size={20} />}
+                      {uploading === 'avatar' && <span className="cc-avatar-badge">{spin}</span>}
+                    </button>
+                    <div className="cc-avatar-text">
+                      <strong className={communityTitle.trim() ? undefined : 'is-empty'}>
+                        {communityTitle.trim() || (isBadge ? t('communities.create.badge.namePlaceholder') : t('communities.create.community.namePlaceholder'))}
+                      </strong>
+                      <span>{avatar ? t('communities.create.picture') : t('communities.create.pictureHint')}</span>
+                    </div>
+                    <input ref={avatarInput} type="file" accept="image/*" onChange={pickImage('avatar')} hidden />
                   </div>
-                  <input ref={avatarInput} type="file" accept="image/*" onChange={pickImage('avatar')} hidden />
                 </div>
 
-                <label className="cc-field">
-                  <span className="cc-label">{t('communities.create.name')}</span>
+                <label className="v2-field cc-field">
+                  <span className="v2-eyebrow cc-label">{t('communities.create.name')}</span>
                   <input
+                    className="v2-input cc-name"
                     type="text"
                     value={communityTitle}
                     maxLength={32}
@@ -430,21 +491,23 @@ const CreateCommunity = ({ isOpen, close, kind = 'community'}) => {
                   />
                 </label>
 
-                <label className="cc-field">
-                  <span className="cc-label">{t('communities.create.description')}</span>
+                <label className="v2-field cc-field">
+                  <span className="v2-eyebrow cc-label">{t('communities.create.description')}</span>
                   <input
+                    className="v2-input"
                     type="text"
                     value={aboutCommunity}
                     maxLength={120}
                     placeholder={isBadge ? t('communities.create.badge.descriptionPlaceholder') : t('communities.create.community.descriptionPlaceholder')}
                     onChange={(e) => setAboutCommunity(e.target.value)}
                   />
-                  <span className="cc-hint">{t('communities.create.descriptionHint')}</span>
+                  <span className="v2-field__hint cc-hint">{t('communities.create.descriptionHint')}</span>
                 </label>
 
-                <label className="cc-field">
-                  <span className="cc-label"><Trans i18nKey="communities.create.bioLabel" components={{ em: <em /> }} /></span>
+                <label className="v2-field cc-field">
+                  <span className="v2-eyebrow cc-label"><Trans i18nKey="communities.create.bioLabel" components={{ em: <em /> }} /></span>
                   <textarea
+                    className="v2-input is-area"
                     rows={4}
                     value={bio}
                     maxLength={1000}
@@ -452,179 +515,123 @@ const CreateCommunity = ({ isOpen, close, kind = 'community'}) => {
                     onChange={(e) => setBio(e.target.value)}
                   />
                 </label>
-
-                <div className="cc-actions">
-                  <button type="button" className="cc-secondary" onClick={close}>{t('common.actions.cancel')}</button>
-                  <button
-                    type="button"
-                    className="cc-primary"
-                    onClick={() => handleCommuntiyInfo()}
-                    disabled={!!uploading}
-                  >
-                    {t('common.actions.continue')}
-                  </button>
-                </div>
               </div>
             )}
             {step === 2 && (
               <div className="cc-step">
-                <header className="cc-head">
-                  <p>
-                    {isBadge ? t('communities.create.badge.saveKeysText') : t('communities.create.community.saveKeysText')}
-                  </p>
-                </header>
+                <p className="cc-head">
+                  {isBadge ? t('communities.create.badge.saveKeysText') : t('communities.create.community.saveKeysText')}
+                </p>
 
-                <div className="cc-meta">
-                  <div className="cc-meta-item">
-                    <span className="cc-label">{t('communities.create.creator')}</span>
-                    <span className="cc-meta-value">
-                      <img src={`/img/u/${user}/avatar/small`} alt="" />
-                      @{user}
-                    </span>
-                  </div>
-                  <div className="cc-meta-item">
-                    <span className="cc-label">{t('communities.create.creationFee')}</span>
-                    <span className="cc-meta-value">3.000 HIVE</span>
-                  </div>
-                </div>
-
-                <label className="cc-field">
-                  <span className="cc-label">{isBadge ? t('communities.create.badge.username') : t('communities.create.community.username')}</span>
+                <label className="v2-field cc-field">
+                  <span className="v2-eyebrow cc-label">{isBadge ? t('communities.create.badge.username') : t('communities.create.community.username')}</span>
                   <input
+                    className="v2-input cc-mono"
                     type="text"
                     value={communityName}
                     onChange={(e) => setCommunityName(e.target.value)}
                   />
-                  {/* A class, not an inline colour: green on #0f0f0f and green on
-                      #f9f9f9 are not the same green. */}
                   {check && (
                     <span className={`cc-check${check === 'Available' ? ' is-ok' : ' is-bad'}`}>
+                      <Icon name={check === 'Available' ? 'check' : 'error'} size={14} />
                       {check === 'Available' ? t('communities.create.available') : t('communities.create.notAvailable')}
                     </span>
                   )}
                 </label>
 
-                <div className="cc-field">
-                  <span className="cc-label">{isBadge ? t('communities.create.badge.password') : t('communities.create.community.password')}</span>
-                  <div className="cc-copy-row">
-                    <input type="text" value={communityPassword} readOnly />
-                    <button
-                      type="button"
-                      className="cc-copy"
-                      onClick={() => copyToClipboard(communityPassword)}
-                      aria-label={t('communities.create.copyPassword')}
-                      title={t('communities.create.copyPassword')}
-                    >
-                      <MdOutlineContentCopy size={16} />
-                    </button>
-                  </div>
+                {/* 40c: the password in a mono well, then Copy | Download. */}
+                <div className="v2-field cc-field">
+                  <span className="v2-eyebrow cc-label">{isBadge ? t('communities.create.badge.password') : t('communities.create.community.password')}</span>
+                  <output className="cc-password">{communityPassword}</output>
                 </div>
 
-                {/* Was a remote icons8 PNG, which loaded a black glyph from another
-                    origin into a dark panel. An inline icon themes itself. */}
-                <div className="cc-warn">
-                  <TriangleAlert size={18} aria-hidden="true" />
-                  <span>
-                    {t('communities.create.passwordWarning')}
-                  </span>
-                </div>
-
-                <button
-                  type="button"
-                  className="cc-download"
-                  onClick={downloadKeys}
-                  disabled={!!error}
-                >
-                  <FaDownload /> {t('communities.create.downloadKeys')}
-                </button>
-
-                <div className="cc-actions">
-                  <button type="button" className="cc-secondary" onClick={() => setStep(1)}>
-                    {t('common.actions.back')}
-                  </button>
-                  <button
-                    type="button"
-                    className="cc-primary"
-                    disabled={!isDownloaded}
-                    onClick={() => setStep(3)}
+                <div className="cc-key-actions">
+                  <Button
+                    variant="secondary"
+                    icon="content_copy"
+                    onClick={() => copyToClipboard(communityPassword)}
                   >
-                    {t('common.actions.continue')}
-                  </button>
+                    {t('communities.create.copyPassword')}
+                  </Button>
+                  <Button
+                    variant="cyan"
+                    icon={isDownloaded ? 'check' : 'download'}
+                    className="cc-download"
+                    onClick={downloadKeys}
+                    disabled={!!error}
+                  >
+                    {t('communities.create.downloadKeys')}
+                  </Button>
                 </div>
+                <p className="cc-fine">{t('communities.create.passwordWarning')}</p>
               </div>
             )}
             {step === 3 && (
               <div className="cc-step">
-                <header className="cc-head">
-                  <p>
-                    <Trans i18nKey="communities.create.signText" values={{ user }} components={{ strong: <strong /> }} />
-                  </p>
-                </header>
+                <p className="cc-head">
+                  <Trans i18nKey="communities.create.signText" values={{ user }} components={{ strong: <strong /> }} />
+                </p>
 
-                {/* Every wallet aioha can sign an ACTIVE operation with, not just
-                    Keychain -- which is all the old screen offered, and was wrong
-                    for anyone signed in with something else. HiveSigner is absent
-                    on purpose: it authorises posting only, so it can never sign
-                    account creation. */}
-                <div className="cc-providers">
-                  {SIGN_PROVIDERS.map((prov) => (
-                    <button
-                      type="button"
-                      key={prov.id}
-                      className={`cc-provider${currentProvider === prov.id ? ' is-current' : ''}`}
-                      disabled={isLoading || !isDownloaded || !canSignWith(prov.id)}
-                      title={canSignWith(prov.id) ? undefined : t('communities.create.signInToUse', { provider: prov.label })}
-                      onClick={() => signWithProvider(prov.id)}
-                    >
-                      <span className="cc-provider-name">{prov.label}</span>
-                      {currentProvider === prov.id && (
-                        <span className="cc-provider-tag">{t('communities.create.signedIn')}</span>
-                      )}
-                      {currentProvider !== prov.id && prov.id === Providers.Keychain && hasKeychain && (
-                        <span className="cc-provider-tag">{t('communities.create.installed')}</span>
-                      )}
-                    </button>
-                  ))}
+                {/* Every wallet aioha can sign an ACTIVE operation with.
+                    HiveSigner is absent on purpose: it authorises posting
+                    only, so it can never sign account creation. */}
+                <div className="v2-choices cc-providers">
+                  {SIGN_PROVIDERS.map((prov) => {
+                    const current = currentProvider === prov.id;
+                    const sub = current
+                      ? t('communities.create.signedIn')
+                      : prov.id === Providers.Keychain && hasKeychain
+                        ? t('communities.create.installed')
+                        : canSignWith(prov.id) ? null : t('communities.create.signInToUse', { provider: prov.label });
+                    return (
+                      <button
+                        type="button"
+                        key={prov.id}
+                        className={`v2-choice is-accent cc-provider${current ? ' is-on is-current' : ''}`}
+                        disabled={isLoading || !isDownloaded || !canSignWith(prov.id)}
+                        onClick={() => signWithProvider(prov.id)}
+                      >
+                        <Icon name={isLoading && current ? 'progress_activity' : prov.icon} size={18} className={`v2-choice__icon${isLoading && current ? ' v2-spin' : ''}`} />
+                        <b className="cc-provider-name">{prov.label}</b>
+                        {sub && <span className="cc-provider-tag">{sub}</span>}
+                      </button>
+                    );
+                  })}
                 </div>
 
                 <div className="cc-or"><span>{t('communities.create.or')}</span></div>
 
-                <label className="cc-field">
-                  <span className="cc-label">{t('communities.create.pasteKey')}</span>
+                <label className="v2-field cc-field">
+                  <span className="v2-eyebrow cc-label">{t('communities.create.pasteKey')}</span>
                   <div className="cc-copy-row">
                     <input
+                      className="v2-input cc-mono"
                       type="password"
                       placeholder="5K…"
                       value={selectedKey}
                       onChange={(e) => setSelectedKey(e.target.value)}
                     />
-                    <button
-                      type="button"
+                    <Button
+                      variant="primary"
                       className="cc-primary"
                       disabled={isLoading || !selectedKey.trim()}
+                      loading={isLoading}
                       onClick={() => handleCreateCommuntiyWithKey()}
                     >
                       {t('communities.create.sign')}
-                    </button>
+                    </Button>
                   </div>
-                  <span className="cc-hint">
+                  <span className="v2-field__hint cc-hint">
                     {t('communities.create.pasteKeyHint')}
                   </span>
                 </label>
-
-                <div className="cc-actions">
-                  <button type="button" className="cc-secondary" onClick={() => setStep(2)}>
-                    {t('common.actions.back')}
-                  </button>
-                </div>
               </div>
             )}
             {step === 4 && !error && (
-              <div className="cc-step cc-done">
-                <span className="cc-done-icon" aria-hidden="true"><FaCheck /></span>
+              <div className="cc-step cc-done v2-success">
                 {/* `Noun`, not the word "community": this same modal makes badges,
                     and it congratulated people on a community they had not made. */}
-                <h2>{isBadge ? t('communities.create.badge.created') : t('communities.create.community.created')}</h2>
+                <h3>{isBadge ? t('communities.create.badge.created') : t('communities.create.community.created')}</h3>
                 <p className="cc-done-name">@{communityName}</p>
 
                 {isBadge ? (
@@ -640,37 +647,17 @@ const CreateCommunity = ({ isOpen, close, kind = 'community'}) => {
                 <p className="cc-done-note">
                   {t('communities.create.doneNote')}
                 </p>
-
-                <div className="cc-actions">
-                  <button type="button" className="cc-secondary" onClick={close}>{t('common.actions.close')}</button>
-                  <Link
-                    className="cc-primary cc-primary-link"
-                    to={isBadge ? `/b/${communityName}` : `/community/${communityName}`}
-                    onClick={close}
-                  >
-                    {isBadge ? t('communities.create.badge.open') : t('communities.create.community.open')}
-                  </Link>
-                </div>
               </div>
             )}
             {step === 4 && error && (
-              <div className="cc-step cc-done">
-                <span className="cc-done-icon is-bad" aria-hidden="true"><TriangleAlert /></span>
-                <h2>{isBadge ? t('communities.create.badge.createFailed') : t('communities.create.community.createFailed')}</h2>
+              <div className="cc-step cc-done cc-failed">
                 <p className="cc-done-text">
+                  <b>{isBadge ? t('communities.create.badge.createFailed') : t('communities.create.community.createFailed')}</b>{' '}
                   {t('communities.create.failedText')}
                 </p>
-                <div className="cc-actions">
-                  <button type="button" className="cc-secondary" onClick={close}>{t('common.actions.close')}</button>
-                  <button type="button" className="cc-primary" onClick={() => setStep(1)}>
-                    {t('common.actions.tryAgain')}
-                  </button>
-                </div>
               </div>
             )}
-          </div>
-      </div>
-    </div>
+    </DialogShell>
   );
 }
 

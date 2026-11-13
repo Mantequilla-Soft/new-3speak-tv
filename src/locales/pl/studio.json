@@ -7,11 +7,19 @@
     "createNewDesc": "Prześlij i udostępnij swoje treści światu"
   },
   "preview": {
-    "cannotPreview": "Twoja przeglądarka nie może wyświetlić podglądu tego filmu — to częste w przypadku klipów HEVC/H.265 (np. nagrań iPhone'a w trybie „Wysoka wydajność”). Nic nie szkodzi: film i tak zostanie przesłany i przekonwertowany, aby każdy mógł go odtworzyć."
+    "cannotPreview": "<b>Nie można wyświetlić podglądu tego filmu.</b> To częste w klipach HEVC/H.265, np. nagraniach iPhone'a w trybie „Wysoka wydajność”. Film i tak zostanie przesłany i przekonwertowany, aby każdy mógł go odtworzyć."
   },
   "drafts": {
     "untitled": "(bez tytułu)",
-    "empty": "Brak filmów dla wybranego filtra."
+    "empty": "Brak filmów dla wybranego filtra.",
+    "title": "Studio",
+    "create": "Utwórz",
+    "views28": "Wyświetlenia, 28 dni",
+    "newFollowers": "Nowi obserwujący",
+    "views": "wyświetleń",
+    "stats": "Statystyki",
+    "more": "Więcej",
+    "public": "Publiczny"
   },
   "schedule": {
     "days": {
@@ -30,6 +38,7 @@
     "am": "AM",
     "pm": "PM",
     "pastWarning": "Ta data i godzina są w przeszłości. Wybierz przyszłą datę i godzinę.",
+    "pickDay": "Wybierz dzień",
     "publishAt": "Twój film zostanie automatycznie opublikowany {{when}}"
   },
   "scheduled": {
@@ -99,6 +108,7 @@
     "insertTable": "Wstaw tabelę",
     "spoiler": "Spoiler/ukryty tekst",
     "emoji": "Emoji",
+    "gifs": "GIF-y",
     "searchEmoji": "Szukaj emoji",
     "searchGifs": "Szukaj GIF-ów…",
     "noGifs": "Nie znaleziono GIF-ów.",

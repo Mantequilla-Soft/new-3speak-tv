@@ -22,6 +22,8 @@
     "noOtherPlaylists": "你还没有其他播放列表",
     "createFirst": "创建播放列表",
     "createNew": "新建播放列表",
+    "newPlaylist": "新建播放列表",
+    "savedTo_other": "已保存到 {{count}} 个播放列表",
     "name": "名称",
     "namePlaceholder": "我的超棒播放列表",
     "privacy": "隐私",
@@ -52,6 +54,7 @@
     "items_other": "{{count}} 项",
     "created": "创建于 {{when}}",
     "podcastFeed": "播客订阅源",
+    "playAll": "全部播放",
     "podcastFeedTitle": "在任意播客应用中关注 {{name}}（RSS 订阅源）",
     "album": {
       "genre": "<strong>流派：</strong>{{value}}",
@@ -90,12 +93,15 @@
     "creditsPlaceholder": "制作人：…",
     "description": "简介",
     "descriptionPlaceholder": "关于这张专辑（可选）",
-    "filterCount_other": "{{shown}} / {{count}} 项"
+    "filterCount_other": "{{shown}} / {{count}} 项",
+    "shuffle": "随机播放"
   },
   "type": {
     "label": "类型",
     "video": "视频",
     "audio": "音频",
+    "videoSub": "长视频",
+    "audioSub": "曲目和播客",
     "kindLabel": "什么类型的音频？",
     "kinds": {
       "podcast": "播客",
@@ -103,5 +109,30 @@
       "voice": "语音笔记",
       "sounds": "其他声音"
     }
+  },
+  "feeds": {
+    "button": "外部节目",
+    "title": "外部节目",
+    "intro": "从任何地方添加整档播客节目。节目的单集会和你的内容一起按最新排序显示在这个播放列表中，新单集会自动加入。",
+    "searchLabel": "搜索节目或粘贴订阅链接",
+    "searchPlaceholder": "节目名称、RSS 订阅源或 Apple Podcasts 链接",
+    "add": "添加",
+    "checking": "正在检查...",
+    "searching": "正在搜索...",
+    "noResults": "没有找到节目。",
+    "inList": "已在播放列表中",
+    "inPlaylist": "此播放列表中",
+    "none": "还没有外部节目。",
+    "remove": "移除 {{title}}",
+    "already": "这个节目已经在播放列表里了。",
+    "limit": "一个播放列表最多可包含 {{max}} 档外部节目。",
+    "ownFeed": "这是这个播放列表自己的订阅源。",
+    "privateFeed": "需要密码的订阅源不能放入播放列表，因为播放列表是公开的。",
+    "tooBig": "超出了播放列表的容量。请先移除一档节目。",
+    "saved": "外部节目已保存。播放列表将在几秒内更新。",
+    "saveFailed": "保存失败：{{error}}",
+    "fromShows": "来自其他节目：",
+    "video": "视频",
+    "pending_other": "仍有 {{count}} 档节目正在读取，单集会在几分钟内出现。"
   }
 }

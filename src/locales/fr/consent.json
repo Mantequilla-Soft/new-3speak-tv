@@ -10,7 +10,7 @@
     "optional": "Le seul élément facultatif : nous pouvons mémoriser <b>où vous vous êtes arrêté dans chaque vidéo</b> pour reprendre la lecture. Cette information ne quitte jamais votre appareil."
   },
   "details": {
-    "essentialTitle": "Essentiel — toujours activé",
+    "essentialTitle": "Essentiel (toujours activé)",
     "essential": {
       "login": "Votre session de connexion",
       "settings": "Les paramètres que vous définissez : thème, volume, langue, sous-titres, préférences du fil",

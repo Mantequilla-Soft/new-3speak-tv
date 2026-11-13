@@ -1,20 +1,16 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { MdCheckCircle, MdRadioButtonUnchecked, MdExpandMore } from 'react-icons/md';
-import {
-  FaRocket, FaVideo, FaMobileAlt, FaComments, FaUserPlus, FaClock, FaHourglassHalf,
-  FaUsers, FaIdCard, FaEnvelope, FaMicrophone, FaHeadphones,
-} from 'react-icons/fa';
 import AdvertiserContactForm from './AdvertiserContactForm';
 import AddSocialLink_modal from '../modal/AddSocialLink_modal';
 import { warmupSocial, platformLabel } from '../../utils/socialVerifier';
 import BrandProfileForm from './BrandProfileForm';
 import { TRACK_QUESTION_ID } from './TrackQuestion';
 import { trackTitleKey } from './tracks';
+import { Button, Eyebrow, Icon, Progress } from '../v2/ui';
 import { useTranslation } from 'react-i18next';
 import { formatDate } from '../../i18n';
 import {
-  fetchIncubationProgress, progressHue, progressFraction, taskFraction, onIncubationProgress,
+  fetchIncubationProgress, progressFraction, taskFraction, onIncubationProgress,
   fetchGraduationStatus, canCreateAccount,
 } from '../../lib/incubation';
 
@@ -42,7 +38,6 @@ function watchLabel(seconds, t, type = 'watch') {
 // goal's `need` as its count, `countsKeys` are the "what counts" bullets.
 const TASK_COPY = {
   video: {
-    Icon: FaVideo,
     labelKey: 'incubation.progress.tasks.video.label',
     hintKey: 'incubation.progress.tasks.video.hint',
     whyKey: 'incubation.progress.tasks.video.why',
@@ -53,7 +48,6 @@ const TASK_COPY = {
     cta: { labelKey: 'incubation.progress.tasks.video.cta', to: '/embed-studio' },
   },
   short: {
-    Icon: FaMobileAlt,
     labelKey: 'incubation.progress.tasks.short.label',
     hintKey: 'incubation.progress.tasks.short.hint',
     whyKey: 'incubation.progress.tasks.short.why',
@@ -64,7 +58,6 @@ const TASK_COPY = {
     cta: { labelKey: 'incubation.progress.tasks.short.cta', to: '/embed-studio?from=shorts' },
   },
   follow: {
-    Icon: FaUserPlus,
     labelKey: 'incubation.progress.tasks.follow.label',
     hintKey: 'incubation.progress.tasks.follow.hint',
     whyKey: 'incubation.progress.tasks.follow.why',
@@ -78,13 +71,11 @@ const TASK_COPY = {
   // number, so it is built in taskHint below rather than written twice. Its
   // "what counts" list is built in taskCounts for the same reason.
   comment: {
-    Icon: FaComments,
     labelKey: 'incubation.progress.tasks.comment.label',
     whyKey: 'incubation.progress.tasks.comment.why',
     cta: { labelKey: 'incubation.progress.tasks.comment.cta', to: '/discover' },
   },
   watch: {
-    Icon: FaClock,
     // Label built by watchLabel (hours or minutes).
     hintKey: 'incubation.progress.tasks.watch.hint',
     whyKey: 'incubation.progress.tasks.watch.why',
@@ -100,7 +91,6 @@ const TASK_COPY = {
   // Musicians and podcasters: their own audio. The upload window is a modal, so
   // the call to action opens it (App.jsx listens for the event) instead of a page.
   audio: {
-    Icon: FaMicrophone,
     labelKey: 'incubation.progress.tasks.audio.label',
     hintKey: 'incubation.progress.tasks.audio.hint',
     whyKey: 'incubation.progress.tasks.audio.why',
@@ -112,7 +102,6 @@ const TASK_COPY = {
   },
   // Viewers and listeners: watching and listening together toward one target.
   watchListen: {
-    Icon: FaClock,
     // Label built by watchLabel (hours or minutes).
     hintKey: 'incubation.progress.tasks.watchListen.hint',
     whyKey: 'incubation.progress.tasks.watchListen.why',
@@ -123,7 +112,6 @@ const TASK_COPY = {
     cta: { labelKey: 'incubation.progress.tasks.watchListen.cta', to: '/' },
   },
   listen: {
-    Icon: FaHeadphones,
     // Label built by watchLabel (hours or minutes).
     hintKey: 'incubation.progress.tasks.listen.hint',
     whyKey: 'incubation.progress.tasks.listen.why',
@@ -137,13 +125,11 @@ const TASK_COPY = {
   // and do, which is the whole point of it. Its "what counts" list is built in
   // taskCounts so it can name the actual date from the server.
   time: {
-    Icon: FaHourglassHalf,
     labelKey: 'incubation.progress.tasks.time.label',
     hintKey: 'incubation.progress.tasks.time.hint',
     whyKey: 'incubation.progress.tasks.time.why',
   },
   subscription: {
-    Icon: FaUsers,
     labelKey: 'incubation.progress.tasks.subscription.label',
     hintKey: 'incubation.progress.tasks.subscription.hint',
     whyKey: 'incubation.progress.tasks.subscription.why',
@@ -157,7 +143,6 @@ const TASK_COPY = {
   // ones server/warmup.cjs counts; whether they fit the brand is the team's call.
   // Filled in right inside the goal (BrandProfileForm).
   profile: {
-    Icon: FaIdCard,
     labelKey: 'incubation.progress.tasks.profile.label',
     hintKey: 'incubation.progress.tasks.profile.hint',
     whyKey: 'incubation.progress.tasks.profile.why',
@@ -165,7 +150,6 @@ const TASK_COPY = {
   // For advertisers: how the team reaches the business. Email and address are
   // PRIVATE and off-chain; the form says so (AdvertiserContactForm).
   contact: {
-    Icon: FaEnvelope,
     labelKey: 'incubation.progress.tasks.contact.label',
     hintKey: 'incubation.progress.tasks.contact.hint',
     whyKey: 'incubation.progress.tasks.contact.why',
@@ -267,14 +251,6 @@ function taskCounts(task, minCommentChars, t) {
   return (TASK_COPY[task.type]?.countsKeys || []).map((k) => t(k));
 }
 
-/** How far along one task is, 0-100, for the fill behind its card. */
-function taskPct(t) {
-  // Shared with the nav pill and the overall bar, so a goal cannot be drawn as
-  // one amount here and counted as another there. It is also what makes the
-  // time goal move smoothly instead of in thirds.
-  return Math.max(0, Math.min(100, taskFraction(t) * 100));
-}
-
 function taskAmount(task, t) {
   if (task.unit === 'seconds') return `${asDuration(Math.min(task.have, task.need), t)} / ${asDuration(task.need, t)}`;
   // A percentage, not a day count. The server floors days so that "three days"
@@ -312,6 +288,10 @@ const OPEN_KEY = 'inc_progress_open';
 function readOpen() {
   try { return localStorage.getItem(OPEN_KEY) !== '0'; } catch { return true; }
 }
+
+// The goal wording, shared with the compact goals list in Home's side panel
+// (HomeActivity's Warm-up tab), so both read the same.
+export { labelOf as goalLabel, taskAmount as goalAmount, taskHint as goalHint };
 
 export default function IncubationProgressPanel() {
   const { t } = useTranslation();
@@ -377,23 +357,23 @@ export default function IncubationProgressPanel() {
   if (!progress) return null;
 
   // Nothing to count until they say what they are here for. The question itself
-  // is in the main column (TrackQuestion): three tiles do not fit in here.
+  // is in the main column (TrackQuestion): its tiles need the width.
   if (progress.needsTrack) {
     return (
       <section className="inc-panel inc-progress">
-        <header>
-          <h2><FaRocket size={14} aria-hidden="true" /> {t('incubation.progress.title')}</h2>
+        <header className="inc-progress-head">
+          <h2>{t('incubation.progress.title')}</h2>
         </header>
         <p className="inc-track-intro">
           {t('incubation.progress.needsTrack')}
         </p>
-        <button
-          type="button"
-          className="inc-task-cta"
+        <Button
+          variant="primary"
+          next
           onClick={() => document.getElementById(TRACK_QUESTION_ID)?.scrollIntoView({ behavior: 'smooth', block: 'center' })}
         >
           {t('incubation.progress.choosePath')}
-        </button>
+        </Button>
       </section>
     );
   }
@@ -406,84 +386,62 @@ export default function IncubationProgressPanel() {
 
   return (
     <section className="inc-panel inc-progress">
-      <header>
-        <h2><FaRocket size={14} aria-hidden="true" /> {t('incubation.progress.title')}</h2>
-        {progress.track && (
-          <span className="inc-track-current">{trackTitleKey(progress.track) ? t(trackTitleKey(progress.track)) : null}</span>
-        )}
-        <span
-          className="inc-progress-count"
-          style={{ '--bar-hue': progressHue(filled) }}
-        >
+      {/* "Your path to a Hive account" (design 46b): title, the count in mono
+          accent, one accent bar, then the path they picked. */}
+      <header className="inc-progress-head">
+        <h2>{t('incubation.progress.title')}</h2>
+        <span className="inc-progress-count num">
           {t('incubation.progress.doneCount', { done: doneCount, total: totalTasks })}
         </span>
       </header>
-      {/* The bar stays put whatever the list does: it is the one thing
-          worth seeing at a glance, and collapsing it would leave the
-          panel saying nothing. */}
-      {/* One bar, filled to the SAME proportional figure the pill in
-          the nav shows: an equal share per goal, and a part-finished
-          goal counts for its part. So a single comment lengthens it.
-          It is drawn as one track rather than one stub per goal,
-          because stubs read as separate errands instead of one
-          journey. The share per goal comes from the server's task
-          list rather than a number written here, so adding a goal
-          does not silently leave this bar measuring the wrong thing. */}
-      <div
-        className="inc-progress-bar"
-        role="progressbar"
-        aria-label={t('incubation.progress.overallAria')}
-        aria-valuenow={Math.round(filled * 100)}
-        aria-valuemin={0}
-        aria-valuemax={100}
-      >
-        <span
-          style={{
-            width: `${Math.min(100, filled * 100)}%`,
-            '--bar-hue': progressHue(filled),
-          }}
-        />
-      </div>
+      {/* The bar stays put whatever the list does: it is the one thing worth
+          seeing at a glance. One bar, filled to the SAME proportional figure the
+          ring in the nav shows: an equal share per goal, and a part-finished
+          goal counts for its part. The share per goal comes from the server's
+          task list, so adding a goal does not leave it measuring the wrong thing. */}
+      <Progress value={Math.min(100, filled * 100)} label={t('incubation.progress.overallAria')} />
 
-      <button
-        type="button"
-        className={`inc-tasks-toggle${tasksOpen ? ' is-open' : ''}`}
-        onClick={toggleTasks}
-        aria-expanded={tasksOpen}
-        aria-controls="inc-task-list"
-      >
-        <MdExpandMore size={18} aria-hidden="true" />
-        {tasksOpen ? t('incubation.progress.hideDetails') : t('incubation.progress.showLeft')}
-      </button>
+      <div className="inc-progress-meta">
+        {progress.track && trackTitleKey(progress.track) && (
+          <span className="inc-track-current">{t(trackTitleKey(progress.track))}</span>
+        )}
+        <button
+          type="button"
+          className="inc-tasks-toggle"
+          onClick={toggleTasks}
+          aria-expanded={tasksOpen}
+          aria-controls="inc-task-list"
+        >
+          {tasksOpen ? t('incubation.progress.hideDetails') : t('incubation.progress.showLeft')}
+        </button>
+      </div>
 
       {tasksOpen && (
         <div id="inc-task-list">
-          {/* Groups side by side on a wide screen, stacked on a phone (.inc-goal-groups). */}
+          {/* Groups side by side on a wide screen, stacked on a phone. */}
           <div className="inc-goal-groups">
           {groupTasks(progress.tasks).map((group) => {
             const groupDone = group.tasks.filter((task) => task.done).length;
             return (
               <section key={group.id} className="inc-goal-group" aria-labelledby={`inc-goal-group-${group.id}`}>
                 {group.titleKey && (
-                  <h3 id={`inc-goal-group-${group.id}`}>
+                  <h3 id={`inc-goal-group-${group.id}`} className="v2-eyebrow">
                     {t(group.titleKey)}
-                    <span className="inc-goal-group-count">{groupDone}/{group.tasks.length}</span>
+                    <span className="inc-goal-group-count num">{groupDone}/{group.tasks.length}</span>
                   </h3>
                 )}
                 <ul className="inc-goal-tiles">
                   {group.tasks.map((task) => {
                     const copy = TASK_COPY[task.type] || {};
-                    const Icon = copy.Icon;
                     const open = openTasks.has(task.type);
                     const counts = taskCounts(task, progress.minCommentChars, t);
+                    const statusIcon = task.done ? 'check_circle' : task.type === 'time' ? 'schedule' : 'radio_button_unchecked';
                     return (
                       <li
                         key={task.type}
-                        // An open tile spans the whole row: its rules, and an
-                        // advertiser's form, need the width a tile does not have.
                         className={`inc-goal-tile${task.done ? ' is-done' : ''}${open ? ' is-open' : ''}`}
                       >
-                        {/* The whole tile is the control: a phone needs a big target. */}
+                        {/* The whole row is the control: a phone needs a big target. */}
                         <button
                           type="button"
                           className="inc-goal-head"
@@ -491,50 +449,55 @@ export default function IncubationProgressPanel() {
                           aria-expanded={open}
                           aria-controls={`inc-task-${task.type}`}
                         >
-                          <span className="inc-goal-top">
-                            {Icon ? <Icon size={15} className="inc-goal-type" aria-hidden="true" /> : null}
-                            <span className="inc-goal-count">{taskAmount(task, t)}</span>
-                            {task.done ? <MdCheckCircle size={18} className="inc-task-icon done" aria-label={t('incubation.progress.goalDone')} />
-                              : <MdRadioButtonUnchecked size={18} className="inc-task-icon" aria-hidden="true" />}
+                          <Icon
+                            name={statusIcon}
+                            size={20}
+                            fill={task.done}
+                            className="inc-goal-status"
+                            aria-hidden={task.done ? undefined : 'true'}
+                            aria-label={task.done ? t('incubation.progress.goalDone') : undefined}
+                            role={task.done ? 'img' : undefined}
+                          />
+                          <span className="inc-goal-body">
+                            <span className="inc-goal-top">
+                              <strong className="inc-goal-label">{labelOf(task, t)}</strong>
+                              <span className="inc-goal-count num">{taskAmount(task, t)}</span>
+                            </span>
+                            <span className="inc-goal-hint">{task.done && !open ? t('incubation.progress.goalDone') : taskHint(task, progress.minCommentChars, t)}</span>
                           </span>
-                          <strong className="inc-goal-label">{labelOf(task, t)}</strong>
-                          <span className="inc-goal-hint">{taskHint(task, progress.minCommentChars, t)}</span>
-                          {/* Neutral, not coloured (owner 2026-10-01: too many colours);
-                              the count above says the same in numbers. */}
-                          <span className="inc-goal-bar" aria-hidden="true"><span style={{ width: `${taskPct(task)}%` }} /></span>
                         </button>
+
+                        {/* The next step as a cyan text link under the hint (46b).
+                            None on a finished goal: it would invite work that
+                            earns nothing. */}
+                        {copy.cta && !task.done && (copy.cta.event ? (
+                          <button
+                            type="button"
+                            className="inc-goal-cta"
+                            onClick={() => window.dispatchEvent(new CustomEvent(copy.cta.event))}
+                          >
+                            {t(copy.cta.labelKey)}
+                          </button>
+                        ) : (
+                          <Link className="inc-goal-cta" to={copy.cta.to}>{t(copy.cta.labelKey)}</Link>
+                        ))}
 
                         {open && (
                           <div className="inc-task-detail inc-goal-detail" id={`inc-task-${task.type}`}>
-                            {copy.whyKey && <p className="inc-task-why">{t(copy.whyKey)}</p>}
                             {counts.length > 0 && (
                               <>
-                                <h5>{t('incubation.progress.whatCounts')}</h5>
+                                <Eyebrow as="h5" tone="accent">{t('incubation.progress.whatCounts')}</Eyebrow>
                                 <ul>
                                   {counts.map((c) => <li key={c}>{c}</li>)}
                                 </ul>
                               </>
                             )}
-                            {/* The contact goal is filled in right here: there is no
-                                other page for private details. Kept open when done, so
-                                they can still be corrected. */}
+                            {copy.whyKey && <p className="inc-task-why">{t(copy.whyKey)}</p>}
+                            {/* The brand and contact goals are filled in right here:
+                                there is no other page for private details. Kept open
+                                when done, so they can still be corrected. */}
                             {task.type === 'profile' && <BrandProfileForm />}
                             {task.type === 'contact' && <AdvertiserContactForm />}
-                            {/* No call to action on a finished goal: it would
-                                invite work that earns nothing. */}
-                            {copy.cta && !task.done && (copy.cta.event ? (
-                              <button
-                                type="button"
-                                className="inc-task-cta"
-                                onClick={() => window.dispatchEvent(new CustomEvent(copy.cta.event))}
-                              >
-                                {t(copy.cta.labelKey)}
-                              </button>
-                            ) : (
-                              <Link className="inc-task-cta" to={copy.cta.to}>
-                                {t(copy.cta.labelKey)}
-                              </Link>
-                            ))}
                           </div>
                         )}
                       </li>
@@ -571,7 +534,6 @@ export default function IncubationProgressPanel() {
 function WarmupSocialTask() {
   const { t } = useTranslation();
   const [links, setLinks] = useState(null);
-  const [open, setOpen] = useState(false);
   const [dialog, setDialog] = useState(false);
   const load = useCallback(() => {
     warmupSocial.load().then((d) => setLinks(d?.links || [])).catch(() => setLinks([]));
@@ -582,39 +544,21 @@ function WarmupSocialTask() {
   const done = verified.length > 0;
   return (
     <>
-      <h5 className="inc-optional-title">{t('incubation.progress.optional.title')}</h5>
-      <ul className="inc-tasks inc-tasks--optional">
-        <li className={`${done ? 'is-done' : ''}${open ? ' is-open' : ''}`.trim()} style={{ '--task-fill': done ? '100%' : '0%' }}>
-          <button
-            type="button"
-            className="inc-task-head"
-            onClick={() => setOpen((o) => !o)}
-            aria-expanded={open}
-            aria-controls="inc-task-social"
-          >
-            {done ? <MdCheckCircle size={20} className="inc-task-icon done" />
-              : <MdRadioButtonUnchecked size={20} className="inc-task-icon" />}
-            <span className="inc-task-text">
-              <strong>{t('incubation.progress.optional.social.label')}</strong>
-              <span>
-                {done
-                  ? t('incubation.progress.optional.social.linked', { platforms: [...new Set(verified.map((l) => platformLabel(l.platform)))].join(', ') })
-                  : t('incubation.progress.optional.social.hint')}
-              </span>
-            </span>
-            <span className="inc-task-count">{done ? verified.length : 0}/1</span>
-            <MdExpandMore size={18} className="inc-task-chevron" aria-hidden="true" />
-          </button>
-          {open && (
-            <div className="inc-task-detail" id="inc-task-social">
-              <p className="inc-task-why">{t('incubation.progress.optional.social.why')}</p>
-              <button type="button" className="inc-task-cta" onClick={() => setDialog(true)}>
-                {t('incubation.progress.optional.social.cta')}
-              </button>
-            </div>
+      <Eyebrow as="h5" className="inc-optional-title">{t('incubation.progress.optional.title')}</Eyebrow>
+      {/* One well row (design 46b "Optional"): link icon, what it is, and the
+          way to do it as a cyan text button on the right. */}
+      <div className={`inc-optional${done ? ' is-done' : ''}`}>
+        <Icon name={done ? 'check_circle' : 'link'} size={18} fill={done} className="inc-optional-icon" />
+        <span className="inc-optional-text" title={t('incubation.progress.optional.social.why')}>
+          <strong>{t('incubation.progress.optional.social.label')}</strong>
+          {done && (
+            <span>{t('incubation.progress.optional.social.linked', { platforms: [...new Set(verified.map((l) => platformLabel(l.platform)))].join(', ') })}</span>
           )}
-        </li>
-      </ul>
+        </span>
+        <button type="button" className="inc-optional-cta" onClick={() => setDialog(true)}>
+          {t('incubation.progress.optional.social.cta')}
+        </button>
+      </div>
       <AddSocialLink_modal isOpen={dialog} onClose={() => setDialog(false)} onChange={load} warmup />
     </>
   );

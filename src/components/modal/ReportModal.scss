@@ -1,117 +1,82 @@
-@use "../../mixins.scss" as mix;
+@use "../../styles/v2" as v2;
 
-.report-modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.6);
-  z-index: 1100;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+// Report (design 07c, 07g; reasons per type in 43b) on the v2 side sheet:
+// what is reported, a short note, reason tiles in two columns, then one
+// follow-up step for the details. "1 / 2" sits in the head.
+.report-modal-overlay { z-index: 1100; }
 
-  @include mix.respond(phone) {
-    align-items: flex-end;
-  }
-}
+.report-step { @include v2.mono(12, 700); color: var(--muted); flex: none; }
+.report-back { margin-left: -6px; }
+.report-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
-.report-modal-content {
-  background: var(--card-bg, #fff);
-  color: var(--text-primary, #000);
-  border-radius: 12px;
-  padding: 24px;
-  width: 420px;
-  max-width: 95vw;
-  position: relative;
-
-  @include mix.respond(phone) {
-    width: 100%;
-    max-width: 100%;
-    border-radius: 16px 16px 0 0;
-    padding: 20px 16px;
-    padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px));
-    animation: modal-slide-up 0.3s ease forwards;
-  }
-}
-
-.report-target {
-  font-size: 13px;
-  color: var(--text-secondary, #666);
-  margin: 0 0 16px;
-  word-break: break-all;
-}
+.report-target .dlg-ctx__title { @include v2.mono(12, 500); }
 
 .report-form {
   display: flex;
   flex-direction: column;
+  gap: 16px;
+}
+
+.report-intro {
+  margin: 0;
+  @include v2.text(body-sm);
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.report-reasons {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px;
-  text-align: left;
 }
 
-.report-label {
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--text-secondary, #666);
-}
-
-.report-select {
-  width: 100%;
-  padding: 10px 12px;
-  border-radius: 8px;
-  border: 1px solid var(--border-color, #ddd);
-  background: var(--input-bg, #f9f9f9);
-  color: var(--text-primary, #000);
-  font-size: 14px;
-  appearance: auto;
-
-  &:focus {
-    outline: none;
-    border-color: var(--accent-color, #e31337);
-  }
-}
-
-.report-textarea {
-  width: 100%;
-  padding: 10px 12px;
-  border-radius: 8px;
-  border: 1px solid var(--border-color, #ddd);
-  background: var(--input-bg, #f9f9f9);
-  color: var(--text-primary, #000);
-  font-size: 14px;
-  resize: vertical;
-  font-family: inherit;
-  box-sizing: border-box;
-
-  &:focus {
-    outline: none;
-    border-color: var(--accent-color, #e31337);
-  }
-}
-
-.report-submit-btn {
-  padding: 10px 20px;
-  border: 1px solid var(--accent-primary, #e53935);
-  border-radius: 8px;
+.report-reason {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  min-height: 104px;
+  padding: 14px;
+  border: 2px solid var(--border);
+  border-radius: var(--r-xl);
   background: transparent;
-  color: var(--accent-primary, #e53935);
-  font-size: 14px;
-  font-weight: 500;
+  color: var(--text);
+  font: inherit;
+  text-align: left;
   cursor: pointer;
-  margin-top: 4px;
+  transition: border-color var(--t-fast) var(--ease), background var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
 
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-
-  &:hover:not(:disabled) {
-    opacity: 0.9;
+  .material-symbols-rounded { color: var(--muted); }
+  b { margin-top: auto; @include v2.text(body); font-weight: 700; line-height: 1.25; }
+  &:hover { background: var(--bg-hover); }
+  &:active { transform: scale(.98); }
+  &.is-on {
+    border-color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 12%, transparent);
+    .material-symbols-rounded { color: var(--accent); }
   }
 }
 
-@keyframes modal-slide-up {
-  from { transform: translateY(100%); }
-  to { transform: translateY(0); }
+.report-picked {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: var(--r-lg);
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  color: var(--accent);
+  b { @include v2.text(body); font-weight: 700; color: var(--text); }
+}
+
+// The phone sheet (07g): filled tiles, no border; picked = accent tint and ink.
+@include v2.mobile {
+  .report-reasons { gap: 10px; }
+  .report-reason {
+    min-height: 92px;
+    gap: 8px;
+    border: 0;
+    background: var(--surface-2);
+    .material-symbols-rounded { color: var(--text); }
+    &.is-on { color: var(--accent); .material-symbols-rounded { color: var(--accent); } }
+  }
 }

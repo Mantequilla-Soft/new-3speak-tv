@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { MdPlaylistPlay, MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/md';
+import { Icon } from '../v2/Icon';
 import { useVideoPlaylists } from '../../hooks/useVideoPlaylists';
 import { useTranslation } from 'react-i18next';
 import './VideoPlaylists.scss';
@@ -15,14 +15,20 @@ function VideoPlaylists({ author, permlink }) {
 
   return (
     <div className={`video-playlists${expanded ? ' expanded' : ''}`}>
-      <h4 className="playlists-header" onClick={() => setExpanded(prev => !prev)}>
+      {/* A button so the phone fold works from the keyboard too. */}
+      <button
+        type="button"
+        className="playlists-header"
+        aria-expanded={expanded}
+        onClick={() => setExpanded(prev => !prev)}
+      >
         <span className="playlists-header-left">
-          <MdPlaylistPlay /> {t('playlists.includedIn', { count: playlists.length })}
+          <Icon name="playlist_play" size={20} /> {t('playlists.includedIn', { count: playlists.length })}
         </span>
         <span className="playlists-toggle">
-          {expanded ? <MdKeyboardArrowUp size={18} /> : <MdKeyboardArrowDown size={18} />}
+          <Icon name={expanded ? 'expand_less' : 'expand_more'} size={20} />
         </span>
-      </h4>
+      </button>
       <div className="playlist-chips">
         {playlists.map((playlist, index) => (
           <Link
@@ -30,6 +36,7 @@ function VideoPlaylists({ author, permlink }) {
             to={`/playlist/${playlist.id}`}
             className="playlist-chip"
           >
+            <Icon name="playlist_play" size={18} className="playlist-chip-icon" />
             <span className="name">{playlist.name}</span>
             <span className="owner">@{playlist.owner}</span>
           </Link>

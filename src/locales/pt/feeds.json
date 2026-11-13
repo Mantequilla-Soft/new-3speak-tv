@@ -28,9 +28,22 @@
   },
   "newFromFollowing": {
     "aria": "Novidades de criadores que você segue",
+    "summary_one": "{{count}} vídeo novo",
+    "summary_many": "{{count}} vídeos novos",
+    "summary_other": "{{count}} vídeos novos",
+    "fromFollowing": "de quem você segue",
     "shorts_one": "{{count}} Short",
     "shorts_many": "{{count}} Shorts",
-    "shorts_other": "{{count}} Shorts"
+    "shorts_other": "{{count}} Shorts",
+    "show": "Mostrar",
+    "hide": "Ocultar",
+    "markSeen": "Marcar tudo como visto"
+  },
+  "tagMeta": {
+    "videos_one": "{{num}} vídeo",
+    "videos_many": "{{num}} vídeos",
+    "videos_other": "{{num}} vídeos",
+    "thisWeek": "{{num}} nesta semana"
   },
   "firstUploads": {
     "title": "Primeiros envios"
@@ -49,8 +62,16 @@
     "empty": "Nada para mostrar aqui ainda.",
     "viewAll": "Ver tudo",
     "dragToReorder": "Arraste para reordenar",
+    "customize": "Personalizar",
+    "customizeTitle": "Personalizar o Início",
+    "customizeHint": "Arraste para reordenar. Desative as seções que você não quer.",
     "surfTitle": "Zapear canais: escolha um tema e assista como TV",
-    "zapping": "Zapeando"
+    "zapping": "Zapeando",
+    "hero": {
+      "spotlightIn": "Destaque em {{community}}",
+      "slide": "Destaque {{index}} de {{count}}"
+    },
+    "tabFollowing": "Seguindo"
   },
   "surf": {
     "pageTitle": "Zapear canais",
@@ -76,9 +97,10 @@
     "nextVideoKey": "Próximo vídeo (→)",
     "zap": "Zap",
     "findingNext": "Procurando o próximo…",
-    "stop": "Parar de zapear",
+    "stop": "Parar",
     "stopTitle": "Parar de zapear (este vídeo continua tocando)",
-    "guide": "Guia de canais"
+    "guide": "Guia de canais",
+    "guideShort": "Guia"
   },
   "discover": {
     "searchPlaceholder": "Pesquise vídeos, Shorts, áudios, comunidades...",
@@ -122,6 +144,35 @@
     "authors_other": "{{count}} autores",
     "views_one": "{{views}} visualização",
     "views_many": "{{views}} visualizações",
-    "views_other": "{{views}} visualizações"
+    "views_other": "{{views}} visualizações",
+    "topCreator": "Criador em destaque",
+    "creators": "Criadores",
+    "relatedTags": "Tags relacionadas",
+    "trendingTags": "Tags em alta",
+    "topCreators": "Criadores em destaque",
+    "categories": "Categorias",
+    "show": "Mostrar",
+    "boostRecentHint": "Priorizar vídeos mais novos nos resultados",
+    "showResults_one": "Mostrar {{count}} resultado",
+    "showResults_many": "Mostrar {{count}} resultados",
+    "showResults_other": "Mostrar {{count}} resultados",
+    "resultTypes": "Tipos de resultado"
+  },
+  "activity": {
+    "warmup": "Aquecimento",
+    "aria": "Atividade no 3Speak",
+    "community": "Comunidade",
+    "verbs": {
+      "snap": "snap",
+      "audio": "novo áudio",
+      "playlist": "playlist",
+      "live": "está ao vivo",
+      "group_one": "{{count}} vídeo novo nesta semana",
+      "group_many": "{{count}} vídeos novos nesta semana",
+      "group_other": "{{count}} vídeos novos nesta semana"
+    },
+    "emptyCommunity": "Nada de novo da comunidade nos últimos dias.",
+    "emptyLive": "Ninguém está ao vivo agora.",
+    "emptyGroups": "Ainda não há atividade de grupos nesta semana."
   }
 }

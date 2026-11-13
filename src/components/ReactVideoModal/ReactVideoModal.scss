@@ -1,210 +1,161 @@
-.react-video-tab {
-  // Source selection cards
-  .rvt-source-cards {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 12px;
-  }
+@use "../../styles/v2" as v2;
 
-  .rvt-source-card {
-    flex: 1;
+/* Post a video reaction, in the comment composer's React tab beside the
+   original on the watch page.
+   48b: a 16/700 title, Record Video / Upload Video as a segmented track, the
+   accent Start Recording, the description field, Show in 3Speak Shorts, and
+   the @threespeak authorization as a cyan wash with the link inline.
+   22b while recording: the camera in a 2px accent frame (radius 20) with the
+   accent REC timer pill top-left, Mic / Camera / Restart as 64 tiles, and the
+   accent Stop and review with its stop icon on the right. */
+.react-video-tab {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+
+  // Inside the fixed-height panel the tab scrolls; nothing in it shrinks.
+  > * { flex-shrink: 0; }
+
+  .rvt-title { @include v2.text(title-sm); color: var(--text); }
+
+  .rvt-preview {
     display: flex;
     flex-direction: column;
-    align-items: center;
     gap: 6px;
-    padding: 14px 8px;
-    border: 2px solid var(--border-light, rgba(255, 255, 255, 0.1));
-    border-radius: 10px;
-    background: transparent;
-    color: var(--text-secondary, #aaa);
-    cursor: pointer;
-    font-size: 12px;
-    font-weight: 600;
-    font-family: inherit;
-    transition: all 0.2s ease;
-
-    &:hover:not(:disabled) {
-      border-color: var(--accent-primary, #e53935);
-      color: var(--accent-primary, #e53935);
-    }
-
-    &.active {
-      border-color: var(--accent-primary, #e53935);
-      color: var(--accent-primary, #e53935);
-      background: rgba(229, 57, 53, 0.08);
-    }
-
-    &:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-  }
-
-  // Preview
-  .rvt-preview {
-    margin-bottom: 10px;
   }
 
   .rvt-video {
+    display: block;
     width: 100%;
-    border-radius: 8px;
-    background: #000;
     max-height: 240px;
+    border-radius: var(--r-md);
+    background: var(--media-black);
     object-fit: contain;
   }
 
-  .rvt-filename {
-    font-size: 11px;
-    color: var(--text-secondary, #888);
-    margin: 6px 0 0;
-    text-align: center;
+  // The live camera (22b): an avatar-grey frame, accent-bordered while recording.
+  .rvt-cam {
+    position: relative;
+    border: 2px solid transparent;
+    border-radius: var(--r-xl);
+    background: var(--avatar);
     overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+
+    .rvt-video { max-height: 180px; border-radius: 0; background: transparent; object-fit: cover; aspect-ratio: 16 / 10; }
+
+    &.is-rec { border-color: var(--accent); }
   }
 
-  // Recording controls
-  .rvt-record-controls {
+  .rvt-rec {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 9px;
+    border-radius: var(--r-sm);
+    background: var(--accent);
+    color: var(--on-accent);
+    @include v2.mono(11, 900);
+
+    &__dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+  }
+
+  .rvt-filename {
+    margin: 0;
+    @include v2.text(meta-sm);
+    color: var(--muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  // Mic / Camera / Restart (22b): 64 tiles, radius 20, icon 24 over an 11/700
+  // label, and Stop and review filling the rest of the row.
+  .rvt-row {
     display: flex;
-    justify-content: center;
-    margin-top: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+
+    .v2-dock {
+      width: 64px;
+      height: 64px;
+      flex: none;
+      border-radius: var(--r-xl);
+      gap: 3px;
+      font-size: 11px;
+      &:disabled { opacity: .45; cursor: not-allowed; transform: none; }
+    }
+
+    // Beside the tiles when it fits, otherwise a full-width row under them.
+    .rvt-rec-btn--stop { flex: 1 1 160px; min-width: 0; padding: 0 14px 0 16px; }
+    @include v2.mobile { .v2-dock { width: 56px; height: 56px; } .rvt-rec-btn--stop { height: 56px; } }
   }
 
   .rvt-rec-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    padding: 6px 14px;
-    border: none;
-    border-radius: 6px;
-    font-size: 12px;
-    font-weight: 600;
-    font-family: inherit;
-    cursor: pointer;
-    color: #fff;
-    transition: all 0.2s ease;
-
-    &--start {
-      background: transparent;
-      border: 1px solid var(--accent-primary, #e53935);
-      color: var(--accent-primary, #e53935);
-      &:hover { opacity: 0.9; }
-    }
-
-    &--stop {
-      background: #555;
-      &:hover { background: #666; }
-    }
+    @include v2.mobile { height: 44px; border-radius: var(--r-lg); }
+  }
+  // Stop and review: the label flush left, the stop icon (24) at the far right (22b).
+  .rvt-rec-btn--stop {
+    justify-content: space-between;
+    .v2-btn__label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    > .material-symbols-rounded:last-child { font-size: 24px !important; }
   }
 
-  // Description textarea
+  .rvt-pick { align-self: flex-start; }
+
   .rvt-description {
-    width: 100%;
-    min-height: 60px;
-    padding: 8px 10px;
-    margin-bottom: 10px;
-    font-size: 13px;
-    font-family: inherit;
-    color: var(--text-primary);
-    background: var(--card-bg, #1a1a2e);
-    border: 1px solid var(--border-light, rgba(255, 255, 255, 0.1));
-    border-radius: 8px;
+    min-height: 56px;
     resize: vertical;
-    outline: none;
-    transition: border-color 0.15s ease;
-
-    &:focus {
-      border-color: var(--accent-primary, #e53935);
-    }
-
-    &:disabled {
-      opacity: 0.6;
-    }
+    @include v2.mobile { font-size: 16px; }
   }
 
-  // Short toggle
-  .rvt-toggle {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 10px;
-    cursor: pointer;
+  .rvt-toggle { color: var(--text); min-height: 32px; }
 
-    input[type="checkbox"] {
-      width: 16px;
-      height: 16px;
-      accent-color: var(--accent-primary, #e53935);
-      cursor: pointer;
-    }
-
-    .rvt-toggle-label {
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--text-secondary, #aaa);
-    }
-  }
-
-  // Progress bar
   .rvt-progress {
-    margin-bottom: 10px;
-  }
-
-  .rvt-progress-bar {
-    width: 100%;
-    height: 6px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 3px;
-    overflow: hidden;
-    margin-bottom: 4px;
-  }
-
-  .rvt-progress-fill {
-    height: 100%;
-    background: var(--accent-primary, #e53935);
-    border-radius: 3px;
-    transition: width 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
   }
 
   .rvt-progress-text {
-    font-size: 11px;
-    color: var(--text-secondary, #aaa);
+    @include v2.mono(11, 700);
+    color: var(--muted);
   }
 
-  // Submit button
-  .rvt-submit {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid var(--accent-primary, #e53935);
-    border-radius: 8px;
-    font-size: 13px;
-    font-weight: 700;
-    font-family: inherit;
-    color: var(--accent-primary, #e53935);
-    background: transparent;
-    cursor: pointer;
-    transition: all 0.2s ease;
-
-    &:hover:not(:disabled) {
-      opacity: 0.9;
-    }
-
-    &:disabled {
-      opacity: 0.4;
-      cursor: not-allowed;
-    }
-  }
-
+  // 48b: a 10% cyan wash on bg, the note in text, "Authorize @threespeak" in cyan.
   .rvt-auth-gate {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-    text-align: center;
-
-    .rvt-auth-note {
-      margin: 0;
-      font-size: 0.85rem;
-      opacity: 0.85;
-    }
+    padding: 10px 12px;
+    border-radius: var(--r-md);
+    background: var(--cyan-wash);
+    @include v2.text(body-sm);
+    line-height: 1.4;
+    color: var(--text);
+    strong { font-weight: 700; }
   }
+
+  .rvt-auth-link {
+    display: inline;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--cyan);
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    &:hover:not(:disabled) { text-decoration: underline; }
+    &:disabled { opacity: .45; cursor: progress; }
+  }
+}
+
+// In the watch page's side panel the composer is pinned under the list: with
+// the React tab open it may take up to three quarters of the panel and
+// scrolls inside, so the panel never grows.
+.vid-comment-wrap.is-panel > .comment-composer:has(.react-video-tab) {
+  flex: none;
+  max-height: 75%;
+  @include v2.scroll-y;
 }

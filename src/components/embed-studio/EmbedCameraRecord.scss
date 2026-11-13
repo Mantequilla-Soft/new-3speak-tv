@@ -1,14 +1,16 @@
-@use "../../mixins.scss" as mix;
+@use "../../styles/v2" as v2;
 
-// Full-screen mobile camera recorder with a voice-driven teleprompter.
-// The camera fills the screen; all controls are floating, draggable widgets so
-// they never cover the self-view (important in landscape).
+// Selfie teleprompter (EmbedCameraRecord.jsx), design 35a.
+// Script phase: a themed card (script well, layout tiles, orientation, text
+// style, "Continue to camera"). Camera phase: the camera fills the screen and
+// every control floats over it as a draggable widget, white on media scrims in
+// both themes, so nothing covers the self-view (important in landscape).
 .camera-record {
   position: fixed;
   inset: 0;
   z-index: 3000;
-  background: #000;
-  color: #fff;
+  background: var(--media-black);
+  color: var(--on-media);
   overflow: hidden;
 
   // ---- full-screen camera stage ----
@@ -18,13 +20,13 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #000;
+    background: var(--media-black);
     overflow: hidden;
 
     .cr-frame {
       position: relative;
       overflow: hidden;
-      background: #000;
+      background: var(--media-black);
       margin: auto;
 
       &--portrait { height: 100%; aspect-ratio: 9 / 16; max-width: 100%; }
@@ -35,7 +37,7 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      background: #000;
+      background: var(--media-black);
 
       &--mirror { transform: scaleX(-1); }
       &--contain { object-fit: contain; }
@@ -57,15 +59,22 @@
     canvas.cr-video { display: block; }
   }
 
+  // Camera / mic problems (35a): an accent card with the icon.
   .cr-error {
     position: absolute;
-    inset: auto 16px 90px;
-    padding: 12px 14px;
-    background: rgba(180, 30, 30, 0.92);
-    border-radius: 10px;
-    font-size: 0.85rem;
-    text-align: center;
+    inset: auto 16px 100px;
     z-index: 16;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px;
+    border-radius: var(--r-xl);
+    background: color-mix(in srgb, var(--accent) 22%, var(--media-black));
+    border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
+    @include v2.text(meta);
+    line-height: 1.4;
+    color: var(--on-media);
+    .material-symbols-rounded { color: var(--accent); }
   }
 
   // ---- floating close (top-right) ----
@@ -74,12 +83,12 @@
     top: calc(env(safe-area-inset-top) + 10px);
     right: 12px;
     z-index: 3060;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    border-radius: v2.radius-for(48);
     border: none;
-    background: rgba(0, 0, 0, 0.5);
-    color: #fff;
+    background: var(--media-scrim);
+    color: var(--on-media);
     display: grid;
     place-items: center;
     cursor: pointer;
@@ -91,48 +100,48 @@
   // a REC badge up there would cover the first line.
   .cr-topbar {
     position: absolute;
-    bottom: calc(env(safe-area-inset-bottom) + 54px);
+    bottom: calc(env(safe-area-inset-bottom) + 56px);
     left: 14px;
     z-index: 15;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     pointer-events: none;
 
     .cr-rec-badge, .cr-listen {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 5px 10px;
-      border-radius: 20px;
-      background: rgba(0, 0, 0, 0.6);
-      font-size: 0.78rem;
-      font-weight: 600;
-      font-variant-numeric: tabular-nums;
+      height: 28px;
+      padding: 0 10px;
+      border-radius: v2.radius-for(28);
+      @include v2.mono(12, 900);
     }
+    .cr-rec-badge { background: var(--accent); color: var(--on-accent); }
     .cr-rec-dot {
-      width: 9px; height: 9px; border-radius: 50%;
-      background: #ff3b30;
+      width: 8px; height: 8px; border-radius: 50%;
+      background: currentColor;
       animation: cr-pulse 1.2s ease-in-out infinite;
     }
-    .cr-listen { opacity: 0.75; &--on { opacity: 1; color: #7CFC9B; } }
+    .cr-listen { background: var(--media-scrim); color: var(--on-media); opacity: 0.8; &--on { opacity: 1; color: var(--cyan); } }
   }
 
+  // Phones in portrait only. Flush left and clear of the record button's
+  // column on the right (80 + 16 gutter), so the two never overlap.
   .cr-rotate-hint {
     position: absolute;
-    left: 50%;
-    bottom: 90px;
-    transform: translateX(-50%);
+    left: 16px;
+    bottom: 96px;
+    max-width: calc(100% - 128px);
     z-index: 14;
     display: inline-flex;
     align-items: center;
     gap: 6px;
+    @include v2.scrim-pill;
     padding: 6px 12px;
-    border-radius: 20px;
-    background: rgba(0, 0, 0, 0.62);
-    font-size: 0.78rem;
-    white-space: nowrap;
-    text-transform: capitalize;
+    border-radius: v2.radius-for(32);
+    @include v2.text(meta);
+    .material-symbols-rounded { flex: none; }
   }
 
   // ---- draggable + resizable teleprompter box ----
@@ -141,9 +150,8 @@
     z-index: 12;
     display: flex;
     flex-direction: column;
-    border-radius: 12px;
+    border-radius: var(--r-lg);
     overflow: hidden;
-    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.45);
 
     // Corner grip instead of a header bar: no UI strip above the text, so the
     // script can sit flush under the selfie lens and stay inconspicuous.
@@ -151,17 +159,17 @@
       position: absolute;
       top: 0;
       right: 0;
-      width: 26px;
-      height: 26px;
+      width: 28px;
+      height: 28px;
       display: grid;
       place-items: center;
       cursor: grab;
       touch-action: none; // only the grip disables touch scrolling
-      color: rgba(255, 255, 255, 0.6);
-      background: rgba(0, 0, 0, 0.22);
-      border-bottom-left-radius: 10px;
+      color: color-mix(in srgb, var(--on-media) 60%, transparent);
+      background: var(--media-scrim);
+      border-bottom-left-radius: var(--r-md);
       user-select: none;
-      &:active { cursor: grabbing; color: #fff; }
+      &:active { cursor: grabbing; color: var(--on-media); }
     }
 
     .cr-tp-scroll {
@@ -172,16 +180,22 @@
       // Keep in sync with SCROLL_PAD_Y (8 + 16) in the component.
       padding: 8px 14px 16px;
       line-height: 1.7;
-      font-weight: 600;
+      font-weight: 700;
       text-align: left;
-      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
     }
 
+    // Read words fade, the next one to say is marked cyan (35a).
     .cr-word {
-      opacity: 0.7;
-      transition: opacity 0.15s ease;
-      &--read { opacity: 0.35; }
-      &--current { opacity: 1; font-weight: 800; text-decoration: underline; text-underline-offset: 3px; }
+      opacity: 0.8;
+      transition: opacity var(--t-fast) var(--ease);
+      &--read { opacity: 0.45; }
+      &--current {
+        opacity: 1;
+        background: var(--cyan);
+        color: var(--media-black);
+        border-radius: 4px;
+        box-shadow: 0 0 0 2px var(--cyan);
+      }
     }
 
     .cr-tp-resize {
@@ -190,8 +204,17 @@
       width: 28px; height: 28px;
       cursor: nwse-resize;
       touch-action: none;
-      background:
-        linear-gradient(135deg, transparent 50%, rgba(255, 255, 255, 0.55) 50%, rgba(255, 255, 255, 0.55) 62%, transparent 62%, transparent 74%, rgba(255, 255, 255, 0.55) 74%, rgba(255, 255, 255, 0.55) 86%, transparent 86%);
+      &::after {
+        content: "";
+        position: absolute;
+        right: 6px;
+        bottom: 6px;
+        width: 10px;
+        height: 10px;
+        border-right: 2px solid color-mix(in srgb, var(--on-media) 60%, transparent);
+        border-bottom: 2px solid color-mix(in srgb, var(--on-media) 60%, transparent);
+        border-bottom-right-radius: 3px;
+      }
     }
   }
 
@@ -204,240 +227,284 @@
     align-items: center;
     justify-content: center;
     gap: 6px;
+    min-height: 32px;
     padding: 6px 12px;
-    border-radius: 20px;
-    background: rgba(0, 0, 0, 0.62);
-    font-size: 0.78rem;
+    border-radius: var(--r-lg);
+    background: var(--media-scrim-strong);
+    @include v2.text(meta);
     text-align: center;
     span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .material-symbols-rounded { color: var(--cyan); }
   }
-  .cr-tp-warn { color: #ffd27a; background: rgba(60, 40, 0, 0.7); }
+  .cr-tp-warn .material-symbols-rounded { color: var(--accent); }
 
-  // ---- portrait/landscape toggle ----
-  .cr-orient {
-    display: inline-flex;
-    border: 1px solid rgba(255, 255, 255, 0.22);
-    border-radius: 9px;
-    overflow: hidden;
-    button {
-      background: transparent;
-      color: rgba(255, 255, 255, 0.7);
-      border: none;
-      padding: 7px 12px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      cursor: pointer;
-      &.is-on { background: rgba(0, 0, 0, 0.6); border: 1px solid var(--accent-primary, #e53935); color: var(--accent-primary, #e53935); }
+  // ---- portrait/landscape: the segmented track ----
+  .cr-orient { flex: none; }
+
+  // ---- "Text style" button ----
+  .cr-gear {
+    @include v2.btn(secondary, 40);
+    &.is-on { background: var(--text); color: var(--bg); }
+  }
+
+  // Over the camera the track and buttons go on scrims.
+  &:not(.cr-script-phase) {
+    .cr-orient {
+      background: var(--media-scrim);
+      .v2-seg__opt { color: color-mix(in srgb, var(--on-media) 70%, transparent); }
+      .v2-seg__opt.is-on { background: color-mix(in srgb, var(--on-media) 18%, transparent); color: var(--on-media); }
+    }
+    .cr-gear {
+      background: color-mix(in srgb, var(--on-media) 12%, transparent);
+      color: var(--on-media);
+      &.is-on { background: var(--on-media); color: var(--media-black); }
     }
   }
 
-  // ---- "Text style" gear button ----
-  .cr-gear {
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    padding: 8px 12px;
-    border-radius: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.22);
-    background: rgba(255, 255, 255, 0.06);
-    color: #fff;
-    font-size: 0.82rem;
-    font-weight: 600;
-    cursor: pointer;
-    &.is-on { background: var(--accent-primary, #e53935); border-color: transparent; }
-  }
-
-  // ---- floating, collapsible, draggable menu ----
+  // ---- floating, collapsible, draggable menu (35a: the tool column) ----
   .cr-menu {
     position: fixed;
     z-index: 3040;
     width: max-content;
     max-width: min(82vw, 320px);
-    background: rgba(20, 20, 20, 0.92);
-    border: 1px solid rgba(255, 255, 255, 0.14);
-    border-radius: 12px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(6px);
+    background: var(--media-scrim-strong);
+    border-radius: var(--r-xl);
+    box-shadow: var(--shadow-float);
     overflow: hidden;
+    color: var(--on-media);
 
     .cr-menu-head {
       display: flex;
       align-items: center;
-      gap: 7px;
-      padding: 7px 10px;
-      background: rgba(255, 255, 255, 0.1);
+      gap: 6px;
+      padding: 8px 10px;
       cursor: grab;
       touch-action: none;
       user-select: none;
-      font-size: 0.75rem;
+      @include v2.text(eyebrow);
       &:active { cursor: grabbing; }
-      .cr-menu-title { flex: 1; font-weight: 600; }
-      .cr-menu-collapse { background: none; border: none; color: #fff; cursor: pointer; display: grid; place-items: center; padding: 0; }
+      .cr-menu-title { flex: 1; }
+      .cr-menu-collapse {
+        width: 32px; height: 32px;
+        border-radius: v2.radius-for(32);
+        background: none; border: none; color: var(--on-media); cursor: pointer;
+        display: grid; place-items: center; padding: 0;
+      }
     }
 
     .cr-menu-body {
-      padding: 10px;
+      padding: 4px 10px 10px;
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 6px;
 
       .cr-menu-line {
         display: flex;
         align-items: center;
         justify-content: space-between;
         gap: 10px;
-        font-size: 0.8rem;
+        @include v2.text(meta);
       }
 
       .cr-menu-btn {
         display: inline-flex;
         align-items: center;
-        gap: 7px;
-        padding: 8px 10px;
-        border-radius: 8px;
-        background: rgba(255, 255, 255, 0.08);
-        color: #fff;
+        gap: 8px;
+        height: 48px;
+        padding: 0 14px;
+        border-radius: v2.radius-for(48);
+        background: color-mix(in srgb, var(--on-media) 12%, transparent);
+        color: var(--on-media);
         border: none;
-        font-size: 0.82rem;
-        font-weight: 600;
+        @include v2.text(label);
         cursor: pointer;
-        &.is-on { color: #7CFC9B; }
+        &.is-on { background: var(--cyan-tint-strong); color: var(--cyan); }
       }
 
       .cr-cam-select {
         display: flex;
         align-items: center;
         gap: 8px;
-        background: #161616;
-        border: 1px solid rgba(255, 255, 255, 0.18);
-        border-radius: 8px;
-        padding: 7px 10px;
-        color: rgba(255, 255, 255, 0.85);
+        height: 48px;
+        padding: 0 12px;
+        border-radius: v2.radius-for(48);
+        background: color-mix(in srgb, var(--on-media) 12%, transparent);
+        color: var(--on-media);
         select {
           flex: 1;
           background: transparent;
-          color: #fff;
+          color: var(--on-media);
           border: none;
-          font-size: 0.82rem;
+          font: inherit;
+          font-size: 13px;
           outline: none;
           max-width: 150px;
-          option { color: #000; }
+          option { color: var(--text); background: var(--surface); }
         }
       }
     }
   }
 
-  // ---- floating draggable record / stop button ----
+  // ---- floating draggable record / stop button (35a: 80, radius 28) ----
   .cr-fab {
     position: fixed;
     z-index: 3050;
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    border: 4px solid rgba(255, 255, 255, 0.85);
-    background: rgba(0, 0, 0, 0.25);
+    width: 80px;
+    height: 80px;
+    border-radius: 28px;
+    border: 4px solid var(--on-media);
+    background: var(--media-scrim);
     display: grid;
     place-items: center;
     padding: 0;
     cursor: pointer;
     touch-action: none;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
 
     .cr-fab-inner {
-      width: 34px;
-      height: 34px;
-      border-radius: 50%;
-      background: #ff3b30;
-      transition: width 0.2s ease, height 0.2s ease, border-radius 0.2s ease;
+      width: 52px;
+      height: 52px;
+      border-radius: 20px;
+      background: var(--accent);
+      transition: width var(--t-base) var(--ease), height var(--t-base) var(--ease), border-radius var(--t-base) var(--ease);
     }
     &--recording .cr-fab-inner {
-      width: 22px;
-      height: 22px;
-      border-radius: 5px; // square = stop
+      width: 32px;
+      height: 32px;
+      border-radius: 8px; // square = stop
     }
   }
 
-  // ---- movable, compact settings popup ----
+  // ---- movable, compact text style popup (35a: Text style) ----
   .cr-settings-pop {
     position: fixed;
     z-index: 3100;
-    width: 244px;
+    width: 300px;
     max-width: calc(100vw - 24px);
-    background: #161616;
-    border: 1px solid rgba(255, 255, 255, 0.16);
-    border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.55);
+    max-height: calc(100vh - 24px);
+    max-height: calc(100dvh - 24px);
+    display: flex;
+    flex-direction: column;
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: var(--r-2xl);
+    box-shadow: var(--shadow-float);
     overflow: hidden;
 
     .cr-pop-header {
       display: flex;
       align-items: center;
-      gap: 7px;
-      padding: 8px 10px;
-      background: rgba(255, 255, 255, 0.08);
+      gap: 6px;
+      padding: 10px 10px 6px 12px;
       cursor: grab;
       touch-action: none; // header only, so body sliders still respond to touch
       user-select: none;
-      font-size: 0.78rem;
+      color: var(--muted);
       &:active { cursor: grabbing; }
-      .cr-pop-title { flex: 1; font-weight: 600; }
-      .cr-pop-close { background: none; border: none; color: #fff; cursor: pointer; display: grid; place-items: center; padding: 0; }
+      .cr-pop-title { flex: 1; @include v2.text(title-sm); color: var(--text); }
+      .cr-pop-close {
+        width: 32px; height: 32px;
+        border-radius: 50%;
+        background: none; border: none; color: var(--text); cursor: pointer;
+        display: grid; place-items: center; padding: 0;
+        &:hover { background: var(--bg-hover); }
+      }
     }
 
     .cr-pop-body {
-      padding: 10px 12px 12px;
+      padding: 4px 12px 12px;
       display: flex;
       flex-direction: column;
-      gap: 9px;
-      font-size: 0.78rem;
+      gap: 8px;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+    }
 
-      // One-tap layout presets for the script overlay.
-      .cr-presets {
-        display: flex;
-        gap: 6px;
+    .cr-presets { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .cr-preset { min-height: 72px; span { display: none; } }
+  }
 
-        button {
-          flex: 1;
-          padding: 7px 4px;
-          border-radius: 8px;
-          border: 1px solid rgba(255, 255, 255, 0.2);
-          background: rgba(255, 255, 255, 0.07);
-          color: #fff;
-          font-size: 0.7rem;
-          font-weight: 600;
-          line-height: 1.15;
-          cursor: pointer;
-          &:active { background: rgba(0, 0, 0, 0.6); color: var(--accent-primary, #e53935); border-color: var(--accent-primary, #e53935); }
-        }
-      }
+  // Layout presets as tiles: icon, name, what it is for.
+  .cr-set-label {
+    @include v2.text(eyebrow);
+    color: var(--muted);
+  }
 
-      .cr-set-row {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        > span:first-child { min-width: 62px; opacity: 0.8; }
-        input[type="range"] { flex: 1; accent-color: var(--accent-primary, #e53935); }
-        .cr-set-val { width: 40px; text-align: right; font-variant-numeric: tabular-nums; opacity: 0.75; }
-      }
-      .cr-set-colors { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-      .cr-set-color {
-        display: flex; align-items: center; gap: 6px;
-        input[type="color"] {
-          width: 30px; height: 24px; padding: 0;
-          border: 1px solid rgba(255, 255, 255, 0.2);
-          border-radius: 5px; background: none; cursor: pointer;
-        }
-      }
-      .cr-set-opacity { flex: 1 1 100%; }
-      .cr-lang-select {
-        flex: 1;
-        background: #0d0d0d; color: #fff;
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        border-radius: 7px; padding: 5px 7px; font-size: 0.78rem;
-        option { color: #000; }
-      }
+  .cr-presets {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  .cr-preset {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    min-height: 84px;
+    padding: 10px;
+    border-radius: var(--r-lg);
+    border: 2px solid var(--border);
+    background: transparent;
+    color: var(--text);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition: border-color var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
+
+    .material-symbols-rounded { color: var(--muted); margin-bottom: auto; }
+    b { @include v2.text(label); font-size: 12px; }
+    span { font-size: 10px; line-height: 1.3; color: var(--muted); }
+
+    &:hover { background: var(--bg-hover); }
+    &.is-on {
+      border-color: var(--accent);
+      background: var(--accent-tint-strong);
+      .material-symbols-rounded { color: var(--accent); }
     }
   }
+
+  // The style values as wells (35a: Font size, Text, Background, BG opacity).
+  .cr-set-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
+
+  .cr-set-well {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 10px;
+    border-radius: var(--r-lg);
+    background: var(--bg);
+    min-width: 0;
+
+    &--wide { grid-column: 1 / -1; }
+
+    .cr-set-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      font-size: 10px;
+      color: var(--muted);
+      > span { display: inline-flex; align-items: center; gap: 4px; }
+      b { @include v2.mono(13, 900); color: var(--text); }
+    }
+    input[type="range"] { width: 100%; height: 6px; accent-color: var(--accent); }
+    input[type="color"] {
+      width: 100%;
+      height: 28px;
+      padding: 0;
+      border: 1px solid var(--border);
+      border-radius: v2.radius-for(28);
+      background: none;
+      cursor: pointer;
+    }
+  }
+
+  .cr-lang-select { width: 100%; background-color: var(--surface); }
 
   // ---- review action bar (bottom, not draggable) ----
   .cr-review-actions {
@@ -446,112 +513,94 @@
     bottom: 0;
     z-index: 3050;
     display: flex;
+    flex-wrap: wrap;
     gap: 8px;
-    padding: 12px 16px calc(env(safe-area-inset-bottom) + 12px);
-    background: linear-gradient(0deg, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.55) 70%, transparent 100%);
-    .cr-btn { flex: 1; padding-left: 10px; padding-right: 10px; }
-  }
+    padding: 24px 16px calc(env(safe-area-inset-bottom) + 14px);
+    background: linear-gradient(0deg, var(--media-scrim-strong), transparent);
 
-  // ---- close-confirmation modal ----
-  .cr-confirm {
-    position: fixed;
-    inset: 0;
-    z-index: 4000;
-    background: rgba(0, 0, 0, 0.6);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 24px;
-
-    .cr-confirm-box {
-      background: #1b1b1b;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 16px;
-      padding: 20px;
-      width: 100%;
-      max-width: 340px;
-      text-align: center;
-      .cr-confirm-title { font-size: 1.05rem; font-weight: 700; margin: 0 0 6px; }
-      .cr-confirm-sub { font-size: 0.85rem; opacity: 0.7; margin: 0 0 16px; }
-      .cr-confirm-actions {
-        display: flex;
-        gap: 10px;
-        .cr-btn { flex: 1; }
-
-        &--stack { flex-direction: column; }
-      }
-      .cr-confirm-row { display: flex; gap: 10px; .cr-btn { flex: 1; } }
+    .v2-btn { flex: 1 1 0; min-width: 0; }
+    // "Use video": the white button on the camera (35a).
+    .cr-btn--use {
+      background: var(--on-media);
+      color: var(--media-black);
+      font-weight: 900;
+      &:hover { background: var(--on-media); color: var(--media-black); filter: brightness(.92); }
     }
   }
 
-  // ---- shared buttons ----
-  .cr-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    padding: 14px 18px;
-    border-radius: 12px;
-    border: none;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: filter 0.2s ease, opacity 0.2s ease;
-    &:disabled { opacity: 0.5; cursor: not-allowed; }
-    &--record { background: rgba(0, 0, 0, 0.6); border: 1px solid var(--accent-primary, #e53935); color: var(--accent-primary, #e53935); &:not(:disabled):hover { filter: brightness(0.92); } }
-    &--outline { background: transparent; color: #fff; border: 1px solid rgba(255, 255, 255, 0.35); }
-    &--ghost { background: rgba(255, 255, 255, 0.08); color: #fff; }
-  }
-
-  // ---- fullscreen script editor phase ----
+  // ---- fullscreen script editor phase (35a, the left card) ----
   &.cr-script-phase {
     display: flex;
-    flex-direction: column;
+    justify-content: center;
+    background: var(--bg);
+    color: var(--text);
+    overflow-y: auto;
+
+    .cr-script-card {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+      max-width: 560px;
+      min-height: 100%;
+      box-sizing: border-box;
+      padding: calc(env(safe-area-inset-top) + 16px) 16px calc(env(safe-area-inset-bottom) + 16px);
+    }
 
     .cr-script-head {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      padding: calc(env(safe-area-inset-top) + 8px) 12px 8px;
-      .cr-title { font-weight: 700; font-size: 1rem; }
+      gap: 10px;
+      .cr-mark { width: 4px; height: 22px; border-radius: 2px; background: var(--accent); flex: none; }
+      .cr-title { @include v2.text(title); }
+      .cr-script-head__spacer { flex: 1; }
     }
-    .cr-icon-btn {
-      width: 40px; height: 40px; border-radius: 50%; border: none;
-      background: rgba(255, 255, 255, 0.08); color: #fff;
-      display: grid; place-items: center; cursor: pointer;
-    }
+
     .cr-script-full {
       flex: 1;
-      min-height: 0;
+      min-height: 200px;
       width: 100%;
+      box-sizing: border-box;
       resize: none;
-      border: none;
-      background: #0b0b0b;
-      color: #fff;
-      padding: 14px 16px;
-      font-size: 1.1rem;
-      line-height: 1.5;
-      font-family: inherit;
+      border: 1px solid var(--border);
+      border-radius: var(--r-xl);
+      background: var(--surface);
+      color: var(--text);
+      padding: 14px;
+      font: inherit;
+      font-size: 16px;
+      line-height: 1.6;
       outline: none;
-      &::placeholder { color: rgba(255, 255, 255, 0.4); }
+      &::placeholder { color: var(--muted); }
+      &:focus { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
     }
+
     .cr-script-bar {
-      flex-shrink: 0;
       display: flex;
+      flex-wrap: wrap;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
-      padding: 10px 16px;
-      background: #111;
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
-      .cr-orient-line { display: flex; align-items: center; gap: 10px; font-size: 0.85rem; }
+      gap: 10px;
+      .cr-orient-line { display: flex; align-items: center; gap: 10px; }
     }
-    .cr-controls {
-      flex-shrink: 0;
-      padding: 12px 16px calc(env(safe-area-inset-bottom) + 14px);
-      background: #0b0b0b;
-      .cr-btn { width: 100%; }
-    }
+
+    .cr-continue { margin-top: 4px; }
+  }
+}
+
+// Leave the camera? (DialogShell, over the recorder).
+.cr-confirm-box {
+  .cr-confirm-sub {
+    margin: 0;
+    @include v2.text(body-sm);
+    color: var(--muted);
+  }
+  .cr-confirm-actions {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+    width: 100%;
+    .v2-btn { font-size: 12px; padding: 0 8px; }
   }
 }
 

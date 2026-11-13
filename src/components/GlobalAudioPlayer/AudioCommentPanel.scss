@@ -1,21 +1,17 @@
-@use "../../mixins.scss" as mix;
+@use "../../styles/v2" as v2;
 
-// Comment box of the audio player: the top section of the player card, above
-// the controls. No overlay, so the player stays usable while writing. The
-// floating card is anchored at the bottom, so it simply grows upwards.
+// Comment box of the audio player (design 27b): at the foot of the full
+// player's Comments panel. No overlay, so the player stays usable while
+// writing. A filled field, the moment as a cyan chip, the post button in accent.
 .audio-np-comment {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  margin-top: 8px;
   padding: 10px 12px 12px;
-  border-bottom: 1px solid var(--border-light);
-  background: transparent; // the player's own background shows through
-  color: var(--text-primary);
-}
-
-.audio-now-playing.audio-np-docked .audio-np-comment {
-  order: -1;
-  padding: 0 0 12px;
+  border-radius: var(--r-xl);
+  background: var(--surface);
+  color: var(--text);
 }
 
 .audio-np-comment-head {
@@ -24,99 +20,69 @@
   gap: 8px;
   min-width: 0;
 }
-
-.audio-np-comment-label {
-  flex: 0 0 auto;
-  font-size: 13px;
-  font-weight: 600;
-}
-
+.audio-np-comment-label { flex: none; }
 .audio-np-comment-on {
-  flex: 1 1 auto;
+  flex: 1;
   min-width: 0;
-  font-size: 11px;
-  color: var(--text-secondary);
+  font-size: 12px;
+  color: var(--muted);
+  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
 }
-
 .audio-np-comment-close {
-  flex: 0 0 auto;
+  @include v2.control(28);
+  width: 28px;
+  padding: 0;
+  justify-content: center;
   margin-left: auto;
-  display: inline-flex;
-  padding: 4px;
-  border: none;
-  border-radius: 4px;
-  background: none;
-  color: var(--text-secondary);
-  cursor: pointer;
-  &:hover:not(:disabled) { color: var(--text-primary); }
-  &:disabled { opacity: 0.5; cursor: default; }
+  background: transparent;
+  color: var(--muted);
+  &:hover { background: var(--bg-hover); color: var(--text); }
 }
 
 .audio-np-comment-input {
-  width: 100%;
-  box-sizing: border-box;
+  @include v2.field(40);
+  height: auto;
+  min-height: 88px;
+  padding: 10px 12px;
+  line-height: 1.45;
   resize: vertical;
-  min-height: 104px;
-  max-height: 34vh;
-  padding: 6px 8px;
-  border: 1px solid var(--border-light);
-  border-radius: 8px;
-  background: transparent;
-  color: var(--text-primary);
-  font: inherit;
-  font-size: 13px;
-  line-height: 1.4;
-  &::placeholder { color: var(--text-secondary); }
-  &:focus { outline: none; border-color: var(--accent-primary); }
+  width: 100%;
+  &:disabled { opacity: .6; }
 }
 
 .audio-np-comment-foot {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 12px;
+  gap: 8px;
+  flex-wrap: wrap;
 }
-
 .audio-np-comment-tools {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
+  flex: 1;
   min-width: 0;
 }
-
+// "at 1:42": a chip that ties the comment to the moment.
 .audio-np-comment-at {
+  position: relative;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  font-size: 11px;
-  color: var(--text-secondary);
-  cursor: pointer;
-}
-
-// Outline, never a red background (house rule).
-.audio-np-comment-post {
+  gap: 4px;
   height: 32px;
-  padding: 0 12px;
-  border-radius: 8px;
-  border: 1px solid var(--accent-primary);
-  background: transparent;
-  color: var(--accent-primary);
+  padding: 0 10px;
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+  color: var(--muted);
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 700;
+  font-family: var(--font-mono);
   cursor: pointer;
-  &:hover:not(:disabled) { background: color-mix(in srgb, var(--accent-primary) 10%, transparent); }
-  &:disabled { opacity: 0.5; cursor: default; }
+  user-select: none;
+  input { position: absolute; opacity: 0; width: 1px; height: 1px; pointer-events: none; }
+  &:focus-within { outline: 2px solid var(--accent); outline-offset: 2px; }
+  &.is-on { background: var(--cyan-tint); color: var(--cyan); }
 }
-
-// The floating card must still fit on the screen with the box open: the
-// expanded area under the controls gives up the room.
-.audio-now-playing.has-comment:not(.audio-np-docked) .audio-np-expanded-area {
-  max-height: 36vh;
-  @include mix.respond(phone) { max-height: 24vh; }
-}
-
-// The bar's comment button stays lit while the box is open (it also closes it).
-.audio-np-playlist-btn.audio-np-comment-btn.active { color: var(--accent-primary); }
+.audio-np-comment-post { margin-left: auto; }

@@ -29,6 +29,12 @@ vi.mock('../../../src/components/AudioTile/AudioTile', () => ({ default: ({ item
 vi.mock('../../../src/components/Podcasts/PlaylistEpisodeTile', () => ({
   default: ({ item, number, onOpen }) => <li><button type="button" onClick={onOpen}>{`${number}. ${item.title}`}</button></li>,
 }))
+vi.mock('../../../src/components/Podcasts/EpisodeTile', () => ({
+  EpisodeTile: ({ ep, feed }) => <li>{`${feed?.title}: ${ep.title}`}</li>,
+}))
+vi.mock('../../../src/components/Podcasts/PlaylistFeedsModal', () => ({
+  default: ({ onClose }) => <div role="dialog" aria-label="External shows editor"><button type="button" onClick={onClose}>Close editor</button></div>,
+}))
 vi.mock('../../../src/components/Podcasts/PlaylistFollowButton', () => ({ default: () => <button type="button">Follow</button> }))
 vi.mock('../../../src/components/AddToPlaylistModal/AddToPlaylistModal', () => ({ default: () => null }))
 vi.mock('../../../src/components/AudioItem/AudioItemView', () => ({ audioItemPath: (i) => `/audio?play=${i.owner}/${i.permlink}` }))
@@ -317,5 +323,61 @@ describe('an all-audio playlist', () => {
     await user.click(await screen.findByRole('button', { name: /Embed/ }))
     const dialog = screen.getByRole('dialog', { name: 'Embed this playlist' })
     expect(within(dialog).getByRole('textbox', { name: 'Embed code' }).value).toContain('play?list=pl-1')
+  })
+})
+
+describe('a playlist with external shows in it', () => {
+  const SHOW_URL = 'https://feeds.example/show.xml'
+  const dated = (n, createdAt) => ({ ...track(n), audioDoc: { ...track(n).audioDoc, createdAt } })
+  let bundle
+  beforeEach(() => {
+    m.playlist = { ...PLAYLIST, name: 'Mixed Show', json_metadata: JSON.stringify({ tags: [], feeds: [{ url: SHOW_URL, title: 'Show' }] }) }
+    m.videos = vi.fn(async () => [dated(1, '2026-11-03T00:00:00.000Z'), dated(2, '2026-10-01T00:00:00.000Z')])
+    bundle = {
+      success: true,
+      feeds: [{ id: 'f1', url: SHOW_URL, title: 'Outside Show' }],
+      episodes: [{ id: 'f1:aaaaaaaaaaaaaaaa', feed_id: 'f1', title: 'Outside ep', audio_url: 'https://cdn.example/1.mp3', published_at: '2026-11-02T00:00:00.000Z' }],
+      total: 1, next_cursor: null, missing: [],
+    }
+    vi.stubGlobal('fetch', vi.fn(async (url) => ({ ok: true, status: 200, json: async () => (String(url).endsWith('/podcasts/bundle') ? bundle : {}) })))
+  })
+
+  it('merges the show\'s episodes by date with the playlist\'s own, and links the show', async () => {
+    mount()
+    expect(await screen.findByText('Outside Show: Outside ep')).toBeInTheDocument()
+    const rows = screen.getAllByRole('listitem').map((li) => li.textContent)
+    expect(rows).toEqual([expect.stringContaining('Track 1'), 'Outside Show: Outside ep', expect.stringContaining('Track 2')])
+    expect(screen.getByText('3 episodes')).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Outside Show' })).toHaveAttribute('href', '/audio?type=external&podcast=f1')
+    const call = fetch.mock.calls.find((c) => String(c[0]).endsWith('/podcasts/bundle'))
+    expect(JSON.parse(call[1].body)).toEqual({ urls: [SHOW_URL] })
+  })
+
+  it('Play goes through the merged list', async () => {
+    const { user } = mount()
+    await screen.findByText('Outside Show: Outside ep')
+    await user.click(screen.getByRole('button', { name: /^Play$/ }))
+    expect(useAppStore.getState().audioAutoplayList.map((t) => t._id)).toEqual(['t1', 'f1:aaaaaaaaaaaaaaaa', 't2'])
+  })
+
+  it('says when a show is still being read, and shows a playlist of shows only', async () => {
+    m.playlist = { ...m.playlist, items: [] }
+    bundle = { ...bundle, missing: ['https://later.example/feed'] }
+    mount()
+    expect(await screen.findByText('Outside Show: Outside ep')).toBeInTheDocument()
+    expect(screen.getByText('1 show is still being read. Its episodes appear within a few minutes.')).toBeInTheDocument()
+  })
+
+  it('the owner opens the editor for the shows', async () => {
+    signIn('badadib')
+    const { user } = mount()
+    await user.click(await screen.findByRole('button', { name: 'External shows' }))
+    expect(screen.getByRole('dialog', { name: 'External shows editor' })).toBeInTheDocument()
+  })
+
+  it('strangers get no editor', async () => {
+    mount()
+    await screen.findByText('Outside Show: Outside ep')
+    expect(screen.queryByRole('button', { name: 'External shows' })).not.toBeInTheDocument()
   })
 })

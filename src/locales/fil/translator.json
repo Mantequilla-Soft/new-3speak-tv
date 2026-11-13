@@ -8,7 +8,7 @@
     "contribute": "Paano mag-ambag ng salin"
   },
   "verify": {
-    "body": "Kumpirmahin ang Hive account mo para mabuksan ang editor. Hihilingin ng wallet mo na aprubahan ang pag-sign in.",
+    "body": "Inimbitahan ka? Kumpirmahin ang Hive account mo para mabuksan ang editor.",
     "button": "Kumpirmahin ang account",
     "failed": "Hindi makumpirma ang account mo."
   },
@@ -51,9 +51,9 @@
   "add": {
     "title": "Magdagdag ng wika",
     "code": "Language code",
-    "codeHint": "Dalawa o tatlong maliliit na titik (ISO 639), puwedeng may rehiyon: nl, fil, pt-BR",
+    "codeHint": "Dalawa o tatlong maliliit na titik (ISO 639), puwedeng may rehiyon",
     "native": "Pangalan sa mismong wika",
-    "nativeHint": "Ito ang makikita ng mga tao sa language menu, hal. Nederlands",
+    "nativeHint": "Ang makikita ng mga tao sa language menu",
     "english": "Pangalan sa English",
     "rtl": "Isinusulat mula kanan pakaliwa (Arabic, Hebrew, Persian, Urdu…)",
     "submit": "Idagdag ang wika",
@@ -67,6 +67,7 @@
     "checkboxFor": "Markahan ang {{key}} bilang na-proofread",
     "checkedBy": "Sinuri ni @{{user}}, {{when}}",
     "notChecked": "I-check kapag nasuri mo na ang salin na ito",
+    "notCheckedShort": "Hindi pa na-check",
     "noText": "Walang ipo-proofread: wala pang salin ang string na ito",
     "saveFirst": "I-save muna ang edit mo. Kapag nag-save ka, mamarkahan ang string bilang na-proofread.",
     "changed": "nagbago mula nang suriin",

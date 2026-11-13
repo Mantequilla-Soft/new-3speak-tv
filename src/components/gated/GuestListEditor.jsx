@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useTranslation } from 'react-i18next';
 import { toastIn } from '../../utils/toast';
+import { Banner, Button, Card } from '../v2/ui';
+import { Icon } from '../v2/Icon';
 import './GuestListEditor.scss';
 
 // Every toast from this module is headed "Gated video"; the message becomes the
@@ -86,32 +88,35 @@ export default function GuestListEditor({ permlink }) {
   const remove = (name) => save(guests.filter((n) => n !== name));
 
   return (
-    <div className="guest-list-editor">
+    <Card className="guest-list-editor">
       <div className="guest-list-editor__head">
-        <span className="guest-list-editor__title">{t('engagement.guestList.title')}</span>
-        <span className="guest-list-editor__hint">
-          {t('engagement.guestList.hint')}
-        </span>
+        <span className="guest-list-editor__icon" aria-hidden="true"><Icon name="group" size={20} /></span>
+        <div>
+          <b className="guest-list-editor__title">{t('engagement.guestList.title')}</b>
+          <span className="guest-list-editor__hint">{t('engagement.guestList.hint')}</span>
+        </div>
       </div>
 
       {!registered && (
-        <p className="guest-list-editor__warn">
+        <Banner tone="warn" className="guest-list-editor__warn">
           {t('engagement.guestList.notRegistered')}
-        </p>
+        </Banner>
       )}
 
       <div className="guest-list-editor__row">
         <input
           type="text"
+          className="v2-input"
           value={draft}
           placeholder={t('engagement.guestList.placeholder')}
+          aria-label={t('engagement.guestList.placeholder')}
           disabled={loading || saving}
           onChange={(e) => setDraft(e.target.value)}
           onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); addNames(); } }}
         />
-        <button type="button" onClick={addNames} disabled={loading || saving || !draft.trim()}>
+        <Button variant="secondary" icon="person_add" loading={saving} onClick={addNames} disabled={loading || saving || !draft.trim()}>
           {saving ? t('common.actions.saving') : t('common.actions.add')}
-        </button>
+        </Button>
       </div>
 
       {loading ? (
@@ -123,11 +128,13 @@ export default function GuestListEditor({ permlink }) {
           {guests.map((name) => (
             <span className="guest-list-editor__chip" key={name}>
               @{name}
-              <button type="button" aria-label={t('engagement.guestList.removeAria', { name })} disabled={saving} onClick={() => remove(name)}>×</button>
+              <button type="button" aria-label={t('engagement.guestList.removeAria', { name })} disabled={saving} onClick={() => remove(name)}>
+                <Icon name="close" size={16} />
+              </button>
             </span>
           ))}
         </div>
       )}
-    </div>
+    </Card>
   );
 }

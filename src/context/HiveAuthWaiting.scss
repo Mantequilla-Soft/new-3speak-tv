@@ -1,56 +1,74 @@
+@use "../styles/v2" as v2;
+
+// "HiveAuth approval required" (design 44a): a small dialog card over the page
+// while the HiveAuth app is asked to approve. A sheet from the bottom on phones.
 .hiveauth-waiting-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.7);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  inset: 0;
   z-index: 10000;
-  backdrop-filter: blur(4px);
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: var(--overlay);
+  animation: v2-fade var(--t-base) var(--ease);
+
+  @include v2.mobile {
+    place-items: end stretch;
+    padding: 0;
+  }
 }
 
 .hiveauth-waiting-modal {
-  background-color: var(--bg-secondary);
-  border-radius: 12px;
-  padding: 2rem;
-  text-align: center;
-  max-width: 400px;
-  width: 90%;
-  box-shadow: var(--shadow-lg);
+  @include v2.floating;
+  width: min(400px, 100%);
+  padding: 14px 16px;
+  border-radius: var(--r-2xl);
+  box-shadow: var(--shadow-sheet);
+  // 44a: one row, the cyan "waiting" mark on the left, then what to do.
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr);
+  column-gap: 12px;
+  row-gap: 2px;
+  align-items: start;
+  color: var(--text);
+  text-align: left;
+  animation: v2-pop var(--t-base) var(--ease);
+
+  > * { grid-column: 2; }
 
   h3 {
-    color: var(--text-primary);
-    margin: 1rem 0 0.5rem;
-    font-size: 1.25rem;
+    margin: 0;
+    @include v2.text(body-sm);
+    font-weight: 700;
   }
 
   p {
-    color: var(--text-secondary);
-    margin: 0.5rem 0;
-    font-size: 0.95rem;
+    margin: 0;
+    @include v2.text(meta);
+    line-height: 1.45;
+    color: var(--muted);
   }
 
-  .hiveauth-hint {
-    color: var(--text-muted);
-    font-size: 0.85rem;
-    margin-top: 1rem;
+  .hiveauth-hint { color: var(--muted); }
+
+  @include v2.mobile {
+    width: 100%;
+    border-radius: var(--r-3xl) var(--r-3xl) 0 0;
+    border-bottom: 0;
+    padding: 20px 16px calc(20px + env(safe-area-inset-bottom, 0px));
+    animation: v2-up var(--t-slow) var(--ease);
   }
 }
 
+// The phone's place: a cyan ring spinning (system work, waiting on the app).
 .hiveauth-spinner {
-  width: 50px;
-  height: 50px;
-  margin: 0 auto;
-  border: 4px solid var(--border-color);
-  border-top: 4px solid var(--accent-primary);
+  grid-column: 1;
+  grid-row: 1 / span 3;
+  width: 28px;
+  height: 28px;
+  margin-top: 2px;
   border-radius: 50%;
-  animation: hiveauth-spin 1s linear infinite;
-}
-
-@keyframes hiveauth-spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  border: 3px solid var(--cyan-tint-strong);
+  border-top-color: var(--cyan);
+  animation: v2-spin 1s linear infinite;
 }

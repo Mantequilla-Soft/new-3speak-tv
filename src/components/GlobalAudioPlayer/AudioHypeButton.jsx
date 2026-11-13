@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Flame } from 'lucide-react';
+import { Icon } from '../v2/Icon';
+import { cx } from '../v2/helpers';
 import { useAppStore } from '../../lib/store';
 import { recordReshare, getResharesForVideo } from '../../utils/reshares';
 import { toastIn } from '../../utils/toast';
@@ -13,11 +14,17 @@ const toast = toastIn('Audio');
  * track in the audio Popular list and sort (checker routes/audio.js hypeStages).
  * Not on your own track: those are left out of the count anyway.
  *
+ * Three looks (design 27b, hype states): `tile` a dock tile under the player
+ * (Hype on surface-2, Hyped on an accent tint, the count beside the label),
+ * `icon` a square icon button for the bar (the flame in accent), and `row`
+ * a menu row.
+ *
  * @param {string} author     the track's owner
  * @param {string} permlink   the Hive post permlink
- * @param {number} size       icon size
+ * @param {'tile'|'icon'|'row'} variant
+ * @param {number} size       button height for the icon look (40 or 48)
  */
-export default function AudioHypeButton({ author, permlink, size = 16 }) {
+export default function AudioHypeButton({ author, permlink, variant = 'tile', size = 40, className }) {
   const { t } = useTranslation();
   const user = useAppStore((s) => s.user);
   const incubationHandle = useAppStore((s) => s.incubationHandle);
@@ -56,17 +63,36 @@ export default function AudioHypeButton({ author, permlink, size = 16 }) {
     }
   };
 
+  const title = !authenticated ? t('common.hype.loginRequired') : hyped ? t('common.hype.hyped') : t('common.hype.title');
+  const label = hyped ? t('common.hype.hyped') : t('common.hype.hype');
+
+  if (variant === 'icon') {
+    return (
+      <button
+        type="button"
+        className={cx('v2-iconbtn v2-btn--secondary gap-hype-icon', `h${size}`, hyped && 'is-on', className)}
+        onClick={hype}
+        disabled={busy}
+        title={title}
+        aria-label={count > 0 ? t('common.hype.withCount', { count }) : label}
+        aria-pressed={hyped}
+      >
+        <Icon name="local_fire_department" size={size >= 48 ? 24 : 20} fill />
+      </button>
+    );
+  }
+
   return (
     <button
       type="button"
-      className={`audio-np-playlist-btn audio-np-hype-btn${hyped ? ' active' : ''}`}
+      className={cx(variant === 'row' ? 'v2-menu__row' : 'v2-dock gap-tile', 'audio-np-hype-btn', hyped && 'is-on is-accent', className)}
       onClick={hype}
       disabled={busy}
-      title={!authenticated ? t('common.hype.loginRequired') : hyped ? t('common.hype.hyped') : t('common.hype.title')}
+      title={title}
       aria-pressed={hyped}
     >
-      <Flame size={size} />
-      {count > 0 && <span className="audio-np-hype-count">{count}</span>}
+      <Icon name="local_fire_department" size={variant === 'row' ? 18 : 24} fill={hyped} />
+      <span>{label}{count > 0 && <span className="audio-np-hype-count num"> · {count}</span>}</span>
     </button>
   );
 }

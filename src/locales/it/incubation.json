@@ -29,7 +29,7 @@
     },
     "searchSlash": {
       "title": "Premi / per cercare",
-      "body": "Da qualsiasi punto del sito, il tasto slash ti porta nella casella di ricerca. Cerca tra video, creator e community."
+      "body": "Da qualsiasi punto del sito, il tasto slash ti porta nella casella di ricerca."
     },
     "communities": {
       "title": "Le community riuniscono persone attorno a un argomento",
@@ -51,7 +51,7 @@
     },
     "timestamps": {
       "title": "Commenta un momento preciso",
-      "body": "Mentre un video è in riproduzione, un commento può includere il minuto in cui eri. Chi legge riceve un link diretto a quel secondo."
+      "body": "Mentre un video è in riproduzione, un commento può riportare il minuto in cui eri."
     },
     "badges": {
       "title": "I badge si ricevono, non si rivendicano",
@@ -65,7 +65,7 @@
     },
     "backlog": {
       "title": "Niente di ciò che pubblichi ora va sprecato",
-      "body": "Tutto ciò che pubblichi durante il warm-up può essere ripubblicato su Hive a tuo nome quando arriva il tuo account, e scegli tu cosa portare con te."
+      "body": "Tutto ciò che pubblichi durante il warm-up può essere ripubblicato su Hive con il tuo nome."
     }
   },
   "trackChooser": {
@@ -74,8 +74,8 @@
   },
   "trackQuestion": {
     "title": "Cosa ti porta su 3Speak?",
-    "intro": "Da questo dipende il tuo percorso verso un account Hive: spettatori e ascoltatori guardano, ascoltano e partecipano, i creator pubblicano video, musicisti e podcaster pubblicano audio, e gli inserzionisti preparano il loro brand.",
-    "introNoAdvertisers": "Da questo dipende il tuo percorso verso un account Hive: spettatori e ascoltatori guardano, ascoltano e partecipano, i creator pubblicano video, e musicisti e podcaster pubblicano audio."
+    "intro": "Da questo dipende il tuo percorso verso un account Hive.",
+    "introNoAdvertisers": "Da questo dipende il tuo percorso verso un account Hive."
   },
   "tipCard": {
     "aria": "Suggerimento",
@@ -100,7 +100,7 @@
         "label_one": "Pubblica uno short",
         "label_many": "Pubblica {{count}} Shorts",
         "label_other": "Pubblica {{count}} Shorts",
-        "hint": "Partecipa agli Shorts di 3Speak e carica qualche momento della tua vita quotidiana o qualche storia che vuoi condividere.",
+        "hint": "Gli Shorts arrivano a persone che non ti seguono ancora.",
         "why": "Gli Shorts sono il modo più rapido per farsi trovare. Vengono riprodotti in un feed di creator che le persone non seguono ancora, quindi uno short arriva oltre il tuo canale.",
         "counts": {
           "0": "Video verticali pubblicati dal caricamento Shorts.",
@@ -112,7 +112,7 @@
         "label_one": "Segui un creator",
         "label_many": "Segui {{count}} creator",
         "label_other": "Segui {{count}} creator",
-        "hint": "Costruisci una rete di persone con i tuoi stessi interessi, o di creator che trovi interessanti.",
+        "hint": "Chi segui trasforma il feed della home nel tuo feed.",
         "why": "L'elenco di chi segui è ciò che trasforma il feed Home nel tuo feed. Viene con te su Hive quando verrai promosso.",
         "counts": {
           "0": "I creator che segui in questo momento.",
@@ -124,7 +124,7 @@
         "label_one": "Scrivi un commento",
         "label_many": "Scrivi {{count}} commenti",
         "label_other": "Scrivi {{count}} commenti",
-        "why": "I commenti sono il modo in cui le persone ti scoprono prima che tu abbia un pubblico. Una risposta sincera sotto il video di qualcun altro farà di più per te di un caricamento che nessuno ha ancora visto.",
+        "why": "Una risposta vera sotto il video di qualcun altro ti dà più di un caricamento che nessuno ha ancora visto.",
         "cta": "Trova qualcosa a cui rispondere",
         "hint_one": "I commenti contano se hanno almeno {{count}} carattere. Un pensiero vero, non solo “bello”.",
         "hint_many": "I commenti contano se hanno almeno {{count}} caratteri. Un pensiero vero, non solo “bello”.",
@@ -134,7 +134,7 @@
           "minChars_many": "Almeno {{count}} caratteri scritti da te.",
           "minChars_other": "Almeno {{count}} caratteri scritti da te.",
           "realThought": "Un pensiero vero, non una sola parola.",
-          "othersPost": "Sul post di qualcun altro. Le risposte sotto i tuoi video, o ai tuoi commenti, sono una conversazione con te stesso e non contano."
+          "othersPost": "Sul post di qualcun altro. Le risposte sotto i tuoi video non contano."
         }
       },
       "watch": {
@@ -325,23 +325,23 @@
     "unlocks": {
       "earn": {
         "title": "I tuoi post iniziano a guadagnare.",
-        "body": "I video su Hive possono essere ricompensati in HIVE e HBD da chiunque li guardi, e possono contenere annunci di cui ricevi una parte."
+        "body": "In HIVE e HBD, più una quota degli annunci."
       },
       "publish": {
         "title": "Pubblica tutto ciò che hai creato qui.",
-        "body": "I video, gli Shorts e i follow di questa pagina possono essere pubblicati su Hive a tuo nome, e scegli tu quali."
+        "body": "Scegli tu cosa."
       },
       "buttons": {
         "title": "Vota, manda mance, segui e crea playlist.",
-        "body": "Tutti i pulsanti che oggi per te sono disattivati."
+        "body": "I pulsanti oggi disattivati."
       },
       "keys": {
         "title": "Chiavi che possiedi solo tu.",
-        "body": "Nessuno può bloccarti fuori, e lo stesso accesso funziona su tutte le app Hive, non solo su 3Speak."
+        "body": "Nessuno può chiuderti fuori."
       },
       "ecosystem": {
         "title": "Entra nell'ecosistema globale di Hive.",
-        "body": "3Speak è una delle tante app di un'intera rete: blog, community, giochi, marketplace e altro, che condividono un unico account e lo stesso elenco di persone seguite."
+        "body": "Un account per ogni app Hive."
       }
     },
     "advertiserUnlocks": {
@@ -388,9 +388,9 @@
       "graduated": "Ora su Hive come <userLink>@{{user}}</userLink>. Tutto ciò che segue è stato creato prima.",
       "advertiser": "Questa è la pagina del tuo brand su 3Speak. Completa i passaggi qui sotto e il team valuterà il tuo brand. Una volta approvato ricevi un account Hive: è il tuo account inserzionista, quello con cui prenoti gli annunci e da cui paghi.",
       "own": "Ecco come ti vedono gli altri. I tuoi post vivono su 3Speak e non sono ancora su Hive, quindi non guadagnano ricompense. Le cose cambieranno quando riceverai il tuo account dopo aver completato tutte le attività qui sotto.",
-      "ownCreator": "I tuoi post sono conservati in uno spazio di riscaldamento, ma sono visibili e messi in evidenza sulla piattaforma principale. Finché restano lì, non generano ancora ricompense. Questo cambia quando ricevi il tuo account, dopo aver completato tutte le attività qui sotto e trasferito i tuoi video in pochi semplici passaggi.",
+      "ownCreator": "I tuoi post sono conservati in uno spazio di warm-up, ma sono visibili e in evidenza sulla piattaforma principale. Finché restano lì, non guadagnano ancora ricompense. Questo cambia quando ricevi il tuo account.",
       "ownViewer": "Sei nel riscaldamento. I tuoi commenti e follow sono conservati per ora in uno spazio di riscaldamento e non generano ancora ricompense. Quando avrai completato tutte le attività qui sotto, ricevi il tuo account Hive e da quel momento tutto va direttamente sulla piattaforma principale.",
-      "visitor": "Nuovo qui, non ancora su Hive. Questi post vivono su 3Speak, quindi per ora non guadagnano ricompense. Segui e commenta comunque: l'incoraggiamento iniziale è ciò che aiuta qualcuno a superare le prime settimane. Quando riceverà il suo account Hive te lo diremo, così potrai seguirlo anche lì."
+      "visitor": "Nuovo qui, non ancora su Hive. Per ora questi post non guadagnano ricompense. Segui e commenta comunque: l'incoraggiamento iniziale è ciò che aiuta qualcuno a superare le prime settimane."
     },
     "tabs": {
       "aria": "Sezioni del profilo",
@@ -445,8 +445,8 @@
     "caughtUp": "Il tuo account Hive è pronto, quindi questo dispositivo si è aggiornato.",
     "openFailed": "Impossibile aprire Butter Auth",
     "title": "Riconnetti la tua sessione",
-    "lede": "Questo dispositivo ha perso la connessione al tuo account, quindi 3Speak non può caricare i tuoi post, i tuoi progressi o le notifiche finché non si ricollega.",
-    "text": "Non è andato perso nulla. Tutto ciò che hai creato vive nel tuo account, non in questo browser. Di solito la riconnessione richiede un secondo e niente da digitare.",
+    "lede": "Questo dispositivo ha perso la connessione al tuo account.",
+    "text": "Non è andato perso nulla. Riconnettersi di solito richiede un secondo e niente da digitare.",
     "opening": "Apertura…",
     "reconnect": "Riconnetti"
   },
@@ -487,7 +487,7 @@
   "contact": {
     "savedComplete": "Salvato. Solo il team di 3Speak può vederlo.",
     "savedIncomplete": "Salvato. Aggiungi il tuo indirizzo, o un sito web nel profilo, per completare questo passaggio.",
-    "privateNote": "<b>Privato.</b> La tua email e il tuo indirizzo non vengono mai pubblicati su Hive né mostrati sul tuo profilo o altrove. Solo il team di 3Speak li vede, per contattarti riguardo ai tuoi annunci.",
+    "privateNote": "<b>Privato.</b> Mai pubblicato su Hive né mostrato da nessuna parte. Lo vede solo il team di 3Speak, per contattarti sui tuoi annunci.",
     "email": "Email",
     "required": "obbligatoria",
     "emailPlaceholder": "tu@iltuobrand.com",
@@ -516,7 +516,7 @@
     "uploadLogo": "Carica logo",
     "logoHint": "Viene mostrato come un cerchio accanto ai tuoi annunci, quindi un'immagine quadrata funziona meglio.",
     "website": "Sito web",
-    "websiteOptional": "facoltativo se ci fornisci il tuo indirizzo",
+    "websiteOptional": "facoltativo se indichi un indirizzo",
     "websitePlaceholder": "https://iltuobrand.com",
     "websiteInvalid": "Usa un indirizzo completo che inizia con https://",
     "save": "Salva il profilo del brand"
@@ -529,7 +529,10 @@
     "approvedAdvertiser": "Il team ha approvato il tuo brand. Crea il tuo account Hive, gratis, per prenotare e pagare gli annunci.",
     "approved": "Il team ti ha approvato. Crea il tuo account Hive, gratis: è solo tuo.",
     "createAdvertiser": "Crea il mio account inserzionista",
-    "create": "Crea il mio account Hive"
+    "create": "Crea il mio account Hive",
+    "handleLabel": "Handle",
+    "nextLabel": "Avanti",
+    "nextKeys": "Salva le tue chiavi"
   },
   "graduatedFollows": {
     "message": "@{{handle}} ora ha un account Hive: @{{hiveUsername}}.",
@@ -541,9 +544,9 @@
   },
   "backlog": {
     "title": "I tuoi post precedenti sono ancora qui",
-    "lede_one": "Hai creato <b>{{count}} contenuto</b> prima di avere un account Hive. Esiste solo su 3Speak. Puoi pubblicarlo su Hive come <b>@{{user}}</b> quando vuoi.",
-    "lede_many": "Hai creato <b>{{count}} contenuti</b> prima di avere un account Hive. Esistono solo su 3Speak. Puoi pubblicarli su Hive come <b>@{{user}}</b> quando vuoi.",
-    "lede_other": "Hai creato <b>{{count}} contenuti</b> prima di avere un account Hive. Esistono solo su 3Speak. Puoi pubblicarli su Hive come <b>@{{user}}</b> quando vuoi.",
+    "lede_one": "Hai creato <b>{{count}} contenuto</b> prima di avere un account Hive. Pubblicalo su Hive come <b>@{{user}}</b> quando vuoi.",
+    "lede_many": "Hai creato <b>{{count}} contenuti</b> prima di avere un account Hive. Pubblicali su Hive come <b>@{{user}}</b> quando vuoi.",
+    "lede_other": "Hai creato <b>{{count}} contenuti</b> prima di avere un account Hive. Pubblicali su Hive come <b>@{{user}}</b> quando vuoi.",
     "text": "Scegli tu cosa trasferire, uno per uno. Tutto ciò che lasci resta su 3Speak esattamente com'è, e puoi tornare al resto in qualsiasi momento.",
     "later": "Più tardi"
   },
@@ -577,7 +580,7 @@
       "watchedListened": "hai guardato e ascoltato per {{time}}"
     },
     "advertiser": {
-      "lede": "Il team ha valutato <b>{{name}}</b>. Crea il tuo <b>account Hive</b>, gratis: diventerà il tuo account inserzionista.",
+      "lede": "Il team ha esaminato <b>{{name}}</b>. Crea il tuo account inserzionista.",
       "text": "Con questo account prenoti annunci su tutto 3Speak, dagli spot nei video ai banner fino ai ticker, e li paghi direttamente dal suo wallet, in HBD o HIVE. La chiave è solo tua, quindi nessuno può bloccarti fuori.",
       "note": "Il profilo del tuo brand viene con te. La tua email aziendale e il tuo indirizzo restano privati presso 3Speak e non vengono mai pubblicati su Hive.",
       "noteMoving": "Anche i tuoi <b>{{moving}}</b> vengono con te, pubblicati gradualmente nell'arco di qualche giorno."
@@ -588,7 +591,7 @@
       "lede": "Trasforma <b>@{{handle}}</b> in un <b>account Hive</b> che ti appartiene, gratis.",
       "text": "Con questo account puoi votare e mandare mance ai video che ti piacciono, guadagnare con i tuoi commenti, aderire alle ricompense per gli spettatori per ciò che guardi e creare playlist. Lo stesso accesso e gli stessi follow funzionano su tutte le app Hive, e la chiave è solo tua."
     },
-    "createMyAccount": "Crea il mio account",
+    "createMyAccount": "Crea il mio account Hive",
     "creator": {
       "title": "Ora puoi creare il tuo account",
       "lede": "Finora hai pubblicato come <b>@{{handle}}</b>. Trasformalo in un vero <b>account Hive</b> che ti appartiene, gratis.",
@@ -607,9 +610,9 @@
   "handleTaken": {
     "openFailed": "Impossibile aprire la scelta del nome",
     "title": "Il nome @{{handle}} è già stato preso",
-    "lede": "Qualcuno l'ha registrato su <b>Hive</b>, quindi non può diventare il tuo account quando sarai pronto. Sceglierne uno nuovo ora richiede un attimo.",
-    "text": "Scegliere un nome qui non l'ha mai riservato. Hive non ha modo di bloccare un nome se non creando l'account, e questo è proprio il passaggio che non hai ancora pagato, che è il motivo per cui si parte senza.",
-    "note": "Non hai perso nulla di ciò che hai creato. I tuoi video, Shorts, commenti e follow restano con te e verranno trasferiti con il nome che sceglierai.",
+    "lede": "Qualcuno l'ha registrato su <b>Hive</b>.",
+    "text": "Scegliere un nome qui non l'ha mai riservato.",
+    "note": "Niente di ciò che hai creato va perso: passa sotto il nome che scegli.",
     "pick": "Scegli un nuovo nome"
   },
   "backfill": {
@@ -618,7 +621,7 @@
     "yesterday": "Ieri",
     "groups": {
       "video": "Video",
-      "videoNote": "Uno ogni 5 minuti — questa è la parte lenta.",
+      "videoNote": "Uno ogni 5 minuti: questa è la parte lenta.",
       "short": "Shorts",
       "comment": "Commenti",
       "vote": "Mi piace",
@@ -644,13 +647,13 @@
     "emptyTitle": "Non resta nulla da pubblicare",
     "emptyText": "Tutto ciò che hai creato prima di avere un account Hive è già stato pubblicato oppure non è qualcosa che si può ripubblicare.",
     "title": "Pubblica ciò che hai creato prima",
-    "intro": "Hai creato questi contenuti su 3Speak prima di avere un account Hive, quindi esistono solo qui. Scegli cosa vuoi nel tuo profilo pubblico come <b>@{{user}}</b> e pubblicalo. Tutto ciò che lasci resta su 3Speak esattamente com'è.",
-    "note": "<b>La pubblicazione richiede un po' di tempo, ed è normale.</b> Hive consente un post ogni 5 minuti per account, e un account nuovo ha una piccola dotazione per pubblicare che si ricarica nell'arco di qualche giorno. Follow, mi piace e profilo costano poco e passano rapidamente. Pubblica pochi elementi alla volta e torna più tardi.",
+    "intro": "Li hai creati su 3Speak prima di avere un account Hive. Scegli cosa vuoi nel tuo registro pubblico come <b>@{{user}}</b>. Ciò che lasci resta su 3Speak così com'è.",
+    "note": "<b>La pubblicazione richiede un po' di tempo, ed è normale.</b> Hive consente un post ogni 5 minuti per account, e un account nuovo ha una piccola quota di pubblicazione che si ricarica in pochi giorni.",
     "groupBy": "Raggruppa l'elenco per",
     "timeline": "Cronologia",
     "byType": "Per tipo",
-    "rcBlockedIn": "<b>Per il momento il tuo account ha esaurito i Resource Credits.</b> Hive dà a ogni account una piccola dotazione per pubblicare, che si ricarica da sola. Non si perde nulla: torna tra circa {{wait}} e riprendi da dove avevi lasciato.",
-    "rcBlockedLater": "<b>Per il momento il tuo account ha esaurito i Resource Credits.</b> Hive dà a ogni account una piccola dotazione per pubblicare, che si ricarica da sola. Non si perde nulla: torna un po' più tardi e riprendi da dove avevi lasciato.",
+    "rcBlockedIn": "<b>Per ora il tuo account ha finito i Resource Credits.</b> Non si perde nulla: torna tra circa {{wait}} e riprendi da dove avevi lasciato.",
+    "rcBlockedLater": "<b>Per ora il tuo account ha finito i Resource Credits.</b> Non si perde nulla: torna un po' più tardi e riprendi da dove avevi lasciato.",
     "selected": "<b>{{count}}</b> selezionati",
     "rootPostsTime_one": "{{count}} video, quindi servono circa {{minutes}} minuti",
     "rootPostsTime_many": "{{count}} video, quindi servono circa {{minutes}} minuti",
@@ -662,8 +665,8 @@
     "selectItem": "Seleziona {{label}}",
     "fiveMin": "5 min",
     "waitingTitle": "In attesa di qualcun altro",
-    "waitingText": "Questi vengono pubblicati da soli quando il post a cui fanno riferimento va su Hive. Nel frattempo non si perde nulla.",
-    "waitingFor": "<b>{{label}}</b> — in attesa di {{target}}",
+    "waitingText": "Si pubblicano da soli non appena il post a cui rimandano compare su Hive.",
+    "waitingFor": "<b>{{label}}</b>: in attesa di {{target}}",
     "andMore": "e altri {{count}}",
     "excludedTitle": "Non verranno trasferiti"
   }

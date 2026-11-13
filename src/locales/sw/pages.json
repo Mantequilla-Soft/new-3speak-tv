@@ -93,12 +93,13 @@
   "legal": {
     "pageTitle": "Jinsi 3Speak inavyoshughulikia data yako · 3Speak",
     "englishOnly": "Ukurasa huu unapatikana kwa Kiingereza tu. Toleo la Kiingereza ndilo linalofunga kisheria.",
-    "back": "← Rudi 3Speak"
+    "back": "← Rudi 3Speak",
+    "onThisPage": "Kwenye ukurasa huu"
   },
   "notFound": {
     "imageAlt": "404",
-    "title": "SAMAHANI! UKURASA HAUKUPATIKANA",
+    "title": "Samahani, ukurasa haukupatikana",
     "message": "Kwa bahati mbaya, ukurasa unaoutafuta haupatikani.",
-    "goHome": "NENDA KWENYE UKURASA WA NYUMBANI"
+    "goHome": "Nenda kwenye ukurasa wa nyumbani"
   }
 }

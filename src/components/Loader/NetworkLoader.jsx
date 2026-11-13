@@ -1,25 +1,16 @@
-import React from 'react'
 import { useTranslation } from 'react-i18next';
-import { WifiLoader } from "react-awesome-loaders";
+import { Icon } from '../v2/Icon';
 import "./NetworkLoader.scss"
 
+// Waiting on the network: the cyan progress glyph and one muted line.
 function NetworkLoader() {
   const { t } = useTranslation();
   return (
-    <div className='networkloader-container'>
-        <WifiLoader
-        background={"transparent"}
-        desktopSize={"150px"}
-        mobileSize={"150px"}
-        text={t('app.loaders.wifi')}
-        // backColor="#E8F2FC"
-        backColor="#FF0000"
-        frontColor="#FF0000"
-      />
+    <div className="networkloader-container" role="status" aria-busy="true">
+      <Icon name="progress_activity" size={32} className="v2-spin networkloader-icon" />
+      <span className="networkloader-text">{t('app.loaders.wifi')}</span>
     </div>
   )
 }
-
-// link for awesome loaders => https://awesome-loaders.netlify.app/docs/loaders/wifiloader/
 
 export default NetworkLoader

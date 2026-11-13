@@ -6,6 +6,7 @@ import { getHiveUrl } from '../../utils/hiveNode';
 import Card3 from '../Cards/Card3';
 import { isShowablePlaylist } from '../../lib/profileLayout';
 import { useTranslation } from 'react-i18next';
+import { Button } from '../v2/ui';
 
 /**
  * The playlists' actual contents at the foot of the Overview tab: one rail of
@@ -111,7 +112,9 @@ export function PlaylistRail({ playlist, count = ITEM_CAP, title, view = 'row', 
         <section className={`pov-section pov-section--${view}`}>
           <div className="pov-head">
             <h3>{title || playlist.name}</h3>
-            <Link className="pov-more" to={`/playlist/${playlist.id}`}>{t('profile.overview.viewAll')}</Link>
+            <Button as={Link} variant="ghost" size={32} trailing="arrow_forward" className="pov-more" to={`/playlist/${playlist.id}`}>
+              {t('profile.overview.viewAll')}
+            </Button>
           </div>
           <Card3
             videos={videos}

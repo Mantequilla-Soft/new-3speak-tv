@@ -1,20 +1,24 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
-import { Smile, Loader2 } from 'lucide-react'
-import EmojiPicker from 'emoji-picker-react'
+import EmojiPicker from '../common/LazyEmojiPicker'
 import { useAppStore } from '../../lib/store'
 import { useTranslation } from 'react-i18next'
+import { Icon } from '../v2/Icon'
+import { Segmented } from '../v2/ui'
 
 // Giphy API key — set VITE_GIPHY_API_KEY per environment (it's a client-side
 // key, baked into the bundle). Without it, GIF search returns nothing.
 const GIPHY_KEY = import.meta.env.VITE_GIPHY_API_KEY || ''
 
-export default function ChatComposerTools({ onPickEmoji, onPickGif }) {
+// onPickImages (optional): an "add image" tool that hands picked files to the
+// same upload path as pasting an image into the composer.
+export default function ChatComposerTools({ onPickEmoji, onPickGif, onPickImages }) {
   const { t } = useTranslation()
   const [open, setOpen] = useState(null) // 'emoji' | 'gif' | null
   const [query, setQuery] = useState('')
   const [gifs, setGifs] = useState([])
   const [loading, setLoading] = useState(false)
   const wrapRef = useRef(null)
+  const fileRef = useRef(null)
   const reqRef = useRef(0)
   const appTheme = useAppStore((s) => s.theme)
 
@@ -66,59 +70,99 @@ export default function ChatComposerTools({ onPickEmoji, onPickGif }) {
 
   return (
     <div className="chat-tools" ref={wrapRef}>
-      <button
-        type="button"
-        className={`chat-tool-btn${open === 'emoji' ? ' active' : ''}`}
-        onClick={() => setOpen(open === 'emoji' ? null : 'emoji')}
-        aria-label={t('chat.tools.emoji')}
-        title={t('chat.tools.emoji')}
-      >
-        <Smile size={20} />
-      </button>
+      {onPickImages && (
+        <>
+          <button
+            type="button"
+            className="chat-tool-btn"
+            onClick={() => fileRef.current?.click()}
+            aria-label={t('chat.tools.image')}
+            title={t('chat.tools.image')}
+          >
+            <Icon name="image" size={20} />
+          </button>
+          <input
+            ref={fileRef}
+            type="file"
+            accept="image/*"
+            multiple
+            hidden
+            onChange={(e) => {
+              const files = [...(e.target.files || [])].filter((f) => f.type.startsWith('image/'))
+              e.target.value = ''
+              if (files.length) onPickImages(files)
+            }}
+          />
+        </>
+      )}
       <button
         type="button"
         className={`chat-tool-btn chat-tool-gif${open === 'gif' ? ' active' : ''}`}
         onClick={() => setOpen(open === 'gif' ? null : 'gif')}
         aria-label="GIF"
+        aria-expanded={open === 'gif'}
         title="GIF"
       >
-        GIF
+        <Icon name="gif_box" size={20} />
+      </button>
+      <button
+        type="button"
+        className={`chat-tool-btn${open === 'emoji' ? ' active' : ''}`}
+        onClick={() => setOpen(open === 'emoji' ? null : 'emoji')}
+        aria-label={t('chat.tools.emoji')}
+        aria-expanded={open === 'emoji'}
+        title={t('chat.tools.emoji')}
+      >
+        <Icon name="mood" size={20} />
       </button>
 
-      {open === 'emoji' && (
-        <div className="chat-popover chat-emoji-popover">
-          <EmojiPicker
-            onEmojiClick={(d) => onPickEmoji(d.emoji)}
-            theme={appTheme === 'light' ? 'light' : 'dark'}
-            lazyLoadEmojis
-            width="100%"
-            height={420}
-            previewConfig={{ showPreview: false }}
-            searchPlaceholder={t('chat.tools.searchEmoji')}
-          />
-        </div>
-      )}
-
-      {open === 'gif' && (
-        <div className="chat-popover chat-gif-popover">
-          <input
-            className="chat-gif-search"
-            type="text"
-            placeholder={t('chat.tools.searchGifs')}
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            autoFocus
-          />
-          <div className="chat-gif-grid">
-            {loading && <div className="chat-gif-loading"><Loader2 size={20} className="chat-spin" /></div>}
-            {!loading && gifs.length === 0 && <div className="chat-gif-empty">{t('chat.tools.noGifs')}</div>}
-            {!loading && gifs.map((g) => (
-              <button key={g.id} type="button" className="chat-gif-item" onClick={() => pickGif(g)}>
-                <img src={g.images?.fixed_height?.url || g.images?.fixed_height_small?.url} alt={g.title || 'gif'} loading="lazy" />
-              </button>
-            ))}
+      {/* 19e: one picker card with an Emoji / GIF track on top; the tool
+          that opened it picks the tab. */}
+      {open && (
+        <div className={`chat-popover chat-picker ${open === 'emoji' ? 'chat-emoji-popover' : 'chat-gif-popover'}`}>
+          <div className="chat-picker-head">
+            <Segmented
+              size={32}
+              block={false}
+              value={open}
+              onChange={(k) => setOpen(k)}
+              label={t('chat.tools.emoji')}
+              options={[{ value: 'emoji', label: t('app.emojiGif.emoji') }, { value: 'gif', label: 'GIF' }]}
+            />
           </div>
-          <div className="chat-gif-attribution">{t('chat.tools.poweredByGiphy')}</div>
+          {open === 'emoji' ? (
+            <EmojiPicker
+              onEmojiClick={(d) => onPickEmoji(d.emoji)}
+              theme={appTheme === 'light' ? 'light' : 'dark'}
+              lazyLoadEmojis
+              width="100%"
+              height={360}
+              previewConfig={{ showPreview: false }}
+              searchPlaceholder={t('chat.tools.searchEmoji')}
+            />
+          ) : (
+            <>
+              <input
+                className="chat-gif-search v2-input"
+                type="text"
+                placeholder={t('chat.tools.searchGifs')}
+                aria-label={t('chat.tools.searchGifs')}
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                autoFocus
+              />
+              <div className="chat-gif-grid">
+                {loading && <div className="chat-gif-loading"><Icon name="progress_activity" size={20} className="v2-spin" /></div>}
+                {!loading && gifs.length === 0 && <div className="chat-gif-empty">{t('chat.tools.noGifs')}</div>}
+                {!loading && gifs.map((g) => (
+                  <button key={g.id} type="button" className="chat-gif-item" onClick={() => pickGif(g)}>
+                    <img src={g.images?.fixed_height?.url || g.images?.fixed_height_small?.url} alt={g.title || 'gif'} loading="lazy" />
+                  </button>
+                ))}
+              </div>
+              <div className="chat-gif-attribution">{t('chat.tools.poweredByGiphy')}</div>
+            </>
+          )}
         </div>
       )}
     </div>

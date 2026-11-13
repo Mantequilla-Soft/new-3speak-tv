@@ -2,10 +2,11 @@
 // Uploads through the shared image pipeline: the @threespeak backend signs the
 // hive.blog challenge server-side (works for every login, no pasted keys), with
 // fallbacks to user-signed hive.blog / the 3Speak image server.
-import React, { useState, useRef } from 'react';
+import { useState, useRef } from 'react';
 import './HiveImageUploader.scss';
 import { uploadThumbnail } from '../utils/uploadThumbnail';
 import { useTranslation } from 'react-i18next';
+import { Button, Icon } from '../components/v2/ui';
 
 const HiveImageUploader = () => {
   const { t } = useTranslation();
@@ -73,24 +74,33 @@ const HiveImageUploader = () => {
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
+  const pick = () => fileInputRef.current?.click();
+
+  // 29d: one card. A cyan-barred title, the dashed drop zone (the preview once
+  // a file is picked), the actions, then the hosted URL with Copy.
   return (
     <div className="hive-image-uploader">
       <div className="uploader-container">
-        <h2>{t('posts.imageUploader.title')}</h2>
+        <div className="uploader-head">
+          <span className="uploader-head__bar" aria-hidden="true" />
+          <h2>{t('posts.imageUploader.title')}</h2>
+        </div>
 
         {/* File Upload Section */}
         <div className="upload-section">
           <div
             className={`drop-zone ${selectedImage ? 'has-image' : ''}`}
-            onClick={() => fileInputRef.current?.click()}
+            onClick={pick}
+            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(); } }}
+            role="button"
+            tabIndex={0}
+            aria-label={t('posts.imageUploader.clickToSelect')}
           >
             {preview ? (
               <img src={preview} alt={t('posts.imageUploader.previewAlt')} className="preview-image" />
             ) : (
               <div className="drop-zone-content">
-                <svg className="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                </svg>
+                <Icon name="add_photo_alternate" size={32} className="upload-icon" />
                 <p>{t('posts.imageUploader.clickToSelect')}</p>
                 <span>{t('posts.imageUploader.formats')}</span>
               </div>
@@ -117,54 +127,56 @@ const HiveImageUploader = () => {
 
         {/* Error Message */}
         {error && (
-          <div className="error-message">
-            <span>❌</span> {error}
+          <div className="error-message" role="alert">
+            <Icon name="error" size={18} /> <span>{error}</span>
           </div>
         )}
 
         {/* Upload Button */}
         <div className="button-group">
-          <button
-            className="btn btn-primary"
+          <Button
+            variant="primary"
+            size={48}
+            className="btn-primary is-next"
+            trailing="cloud_upload"
+            loading={uploading}
             onClick={handleUpload}
             disabled={!selectedImage || uploading}
           >
-            {uploading ? (
-              <>
-                <span className="spinner"></span>
-                {t('posts.imageUploader.uploading')}
-              </>
-            ) : (
-              t('posts.imageUploader.upload')
-            )}
-          </button>
+            {uploading ? t('posts.imageUploader.uploading') : t('posts.imageUploader.upload')}
+          </Button>
 
           {selectedImage && (
-            <button className="btn btn-secondary" onClick={handleReset}>
+            <Button variant="secondary" size={48} icon="restart_alt" className="btn-secondary" onClick={handleReset}>
               {t('common.actions.reset')}
-            </button>
+            </Button>
           )}
         </div>
 
         {/* Success Result */}
         {uploadedUrl && (
           <div className="success-section">
-            <div className="success-message">
-              <span>✅</span> {t('posts.imageUploader.success')}
+            <div className="success-message" role="status">
+              <Icon name="check_circle" size={18} /> <span>{t('posts.imageUploader.success')}</span>
             </div>
             <div className="url-display">
-              <input
-                type="text"
-                value={uploadedUrl}
-                readOnly
-                className="url-input"
-              />
-              <button className="btn btn-copy" onClick={copyToClipboard}>
+              <div className="uploaded-preview">
+                <img src={uploadedUrl} alt={t('posts.imageUploader.uploadedAlt')} />
+              </div>
+              <div className="url-display__body">
+                {selectedImage && <b>{selectedImage.name}</b>}
+                <input
+                  type="text"
+                  value={uploadedUrl}
+                  readOnly
+                  className="url-input"
+                  aria-label={t('posts.imageUploader.success')}
+                  onFocus={(e) => e.target.select()}
+                />
+              </div>
+              <Button variant="cyan" size={40} trailing="content_copy" className="btn-copy" onClick={copyToClipboard}>
                 {t('common.actions.copy')}
-              </button>
-            </div>
-            <div className="uploaded-preview">
-              <img src={uploadedUrl} alt={t('posts.imageUploader.uploadedAlt')} />
+              </Button>
             </div>
           </div>
         )}

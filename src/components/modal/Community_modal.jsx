@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from "react";
 import "./Community_modal.scss";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { Users, PenLine, ChevronDown, Loader2 } from "lucide-react";
 import { CHECKER_URL } from "../../utils/config";
 import { getSubscriptions } from "../../hive-api/hiveApi";
 import { getHiveUrl } from "../../utils/hiveNode";
@@ -10,7 +9,9 @@ import { useAppStore } from "../../lib/store";
 import { useTranslation } from "react-i18next";
 import { getHiveRenderer } from '../../lib/hiveRenderer';
 import AccountImg from '../HiveAvatar/AccountImg';
-import ModalHeader from '../ModalHeader/ModalHeader';
+import DialogShell from './DialogShell';
+import { Button } from '../v2/ui';
+import { Icon } from '../v2/Icon';
 
 // Debounce hook
 const useDebounce = (value, delay = 300) => {
@@ -54,7 +55,7 @@ function MarkdownText({ text }) {
   return <div className="community-card-text markdown-view" dangerouslySetInnerHTML={{ __html: html }} />;
 }
 
-function CommunityCard({ community, onSelect }) {
+function CommunityCard({ community, onSelect, selected = false, joined = false }) {
   const { t } = useTranslation();
   const [expanded, setExpanded] = useState(false);
   const cardRef = useRef(null);
@@ -86,11 +87,17 @@ function CommunityCard({ community, onSelect }) {
   });
 
   const subs = community.subscribers ?? detail?.subscribers;
-  const authors = community.num_authors ?? detail?.num_authors;
   const bio = community.about || detail?.about;
 
+  // 32c: a 2px-outlined row: the picture, the name, "Joined · 4.2K members",
+  // and a cyan check on the one already picked. The about text sits in the
+  // folded detail.
+  const sub = [
+    joined ? t('communities.directory.joined') : null,
+    subs != null ? t('communities.picker.members', { count: subs, n: formatCount(subs) }) : null,
+  ].filter(Boolean).join(' · ');
   return (
-    <div ref={cardRef} className={`community-card${expanded ? " expanded" : ""}`}>
+    <div ref={cardRef} className={`community-card${expanded ? " expanded" : ""}${selected ? " is-on" : ""}`} title={bio || undefined}>
       <div className="community-card-main" onClick={() => onSelect(community)}>
         <AccountImg
           className="community-card-avatar"
@@ -101,16 +108,9 @@ function CommunityCard({ community, onSelect }) {
         />
         <div className="community-card-info">
           <span className="community-card-title">{community.title || community.name}</span>
-          <span className="community-card-stats">
-            {subs != null && (
-              <span className="community-card-stat"><Users size={13} /> {formatCount(subs)}</span>
-            )}
-            {authors != null && (
-              <span className="community-card-stat"><PenLine size={13} /> {formatCount(authors)}</span>
-            )}
-          </span>
-          {bio && <span className="community-card-bio">{bio}</span>}
+          {sub && <span className="community-card-sub">{sub}</span>}
         </div>
+        {selected && <Icon name="check_circle" size={20} className="community-card-check" />}
         <button
           type="button"
           className="community-card-toggle"
@@ -118,14 +118,15 @@ function CommunityCard({ community, onSelect }) {
           aria-expanded={expanded}
           onClick={(e) => { e.stopPropagation(); setExpanded((v) => !v); }}
         >
-          <ChevronDown size={18} className={expanded ? "rot" : ""} />
+          <Icon name="expand_more" size={20} className={expanded ? "rot" : ""} />
         </button>
       </div>
 
       {expanded && (
         <div className="community-card-detail">
+          {bio && <p className="community-card-text">{bio}</p>}
           {isFetching && (
-            <div className="community-card-loading"><Loader2 size={15} className="spin" /> {t('common.status.loading')}</div>
+            <div className="community-card-loading"><Icon name="progress_activity" size={16} className="v2-spin" /> {t('common.status.loading')}</div>
           )}
           {detail?.description && (
             <div className="community-card-section">
@@ -139,12 +140,12 @@ function CommunityCard({ community, onSelect }) {
               <MarkdownText text={toBulletList(detail.rules)} />
             </div>
           )}
-          {!isFetching && !detail?.description && !detail?.rules && (
+          {!isFetching && !bio && !detail?.description && !detail?.rules && (
             <div className="community-card-loading">{t('communities.picker.noExtraInfo')}</div>
           )}
-          <button type="button" className="community-card-select" onClick={() => onSelect(community)}>
+          <Button variant="secondary" size={36} icon="check" className="community-card-select" onClick={() => onSelect(community)}>
             {t('communities.picker.selectThis')}
-          </button>
+          </Button>
         </div>
       )}
     </div>
@@ -227,14 +228,7 @@ function CommunitieModal({ isOpen, data, close, setCommunity, selected }) {
     staleTime: 30 * 60_000,
   });
 
-  // Lock the page behind the modal so touch-scrolling moves the modal (the
-  // mobile bottom sheet), not the page underneath it.
-  useEffect(() => {
-    if (!isOpen) return;
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => { document.body.style.overflow = prev; };
-  }, [isOpen]);
+  // (DialogShell locks the page behind it, so touch-scrolling moves the sheet.)
 
   // Default (no search) shows a single card: the already-selected community if
   // there is one, otherwise the 3Speak community. The rest appear on search.
@@ -285,6 +279,10 @@ function CommunitieModal({ isOpen, data, close, setCommunity, selected }) {
     .slice(0, POPULAR_LIMIT);
   const showPopular = noSubs && popular.length > 0;
 
+  const selectedName = typeof selected === "string" ? selected : selected?.name;
+  const joinedSet = new Set(subscriptions.map((c) => c.name));
+  const cardProps = (community) => ({ selected: !!selectedName && community.name === selectedName, joined: joinedSet.has(community.name) });
+
   if (!isOpen) return null;
 
   const onSelect = (community) => {
@@ -292,29 +290,35 @@ function CommunitieModal({ isOpen, data, close, setCommunity, selected }) {
     close();
   };
 
+  // Design 29c / 40: the v2 dialog with a search field and a fixed-height
+  // list of community rows that scrolls inside.
   return (
-    <div className={`modal ${isOpen ? "open" : ""}`}>
-      <div className="overlay" onClick={close}></div>
-
-      <div className={`modal-content community-modal ${isOpen ? "open" : ""}`} onClick={(e) => e.stopPropagation()}>
-        <ModalHeader title={t('communities.picker.title')} onClose={close} />
-
-        <div className="modal-body">
-
+    <DialogShell
+      onClose={close}
+      title={t('communities.picker.title')}
+      side
+      tone="cyan"
+      width={420}
+      zIndex={1100}
+      className="community-modal"
+      bodyClassName="community-modal__body"
+    >
           {/* SEARCH INPUT */}
-          <div className="search-container">
+          <label className="search-container">
+            <Icon name="search" size={18} />
             <input
               type="text"
               placeholder={t('communities.picker.searchPlaceholder')}
+              aria-label={t('communities.picker.searchPlaceholder')}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="search-input"
             />
-          </div>
+          </label>
 
           {/* LOADING */}
           {(isLoading || isFetching) && debouncedQuery.trim().length >= 2 && (
-            <div className="loading-message">{t('communities.picker.searching')}</div>
+            <div className="loading-message"><Icon name="progress_activity" size={16} className="v2-spin" /> {t('communities.picker.searching')}</div>
           )}
 
           {/* LIST */}
@@ -326,10 +330,11 @@ function CommunitieModal({ isOpen, data, close, setCommunity, selected }) {
                     key={community.name || index}
                     community={community}
                     onSelect={onSelect}
+                    {...cardProps(community)}
                   />
                 ))
               ) : (
-                !isLoading && <p>{t('communities.picker.noneFound')}</p>
+                !isLoading && <p className="community-none">{t('communities.picker.noneFound')}</p>
               )
             ) : (
               <>
@@ -338,6 +343,7 @@ function CommunitieModal({ isOpen, data, close, setCommunity, selected }) {
                   key={defaultCommunity.name}
                   community={defaultCommunity}
                   onSelect={onSelect}
+                  {...cardProps(defaultCommunity)}
                 />
 
                 {/* The user's own subscriptions, listed up front so posting to
@@ -347,7 +353,7 @@ function CommunitieModal({ isOpen, data, close, setCommunity, selected }) {
                 )}
                 {user && subsPending && (
                   <div className="community-card-loading">
-                    <Loader2 size={15} className="spin" /> {t('communities.picker.loadingYours')}
+                    <Icon name="progress_activity" size={16} className="v2-spin" /> {t('communities.picker.loadingYours')}
                   </div>
                 )}
                 {mySubs.map((community, index) => (
@@ -355,6 +361,7 @@ function CommunitieModal({ isOpen, data, close, setCommunity, selected }) {
                     key={community.name || index}
                     community={community}
                     onSelect={onSelect}
+                    {...cardProps(community)}
                   />
                 ))}
                 {user && !subsPending && subsError && (
@@ -371,6 +378,7 @@ function CommunitieModal({ isOpen, data, close, setCommunity, selected }) {
                         key={community.name || index}
                         community={community}
                         onSelect={onSelect}
+                        {...cardProps(community)}
                       />
                     ))}
                   </>
@@ -382,10 +390,7 @@ function CommunitieModal({ isOpen, data, close, setCommunity, selected }) {
           {!searching && (
             <p className="community-search-hint">{t('communities.picker.searchHint')}</p>
           )}
-
-        </div>
-      </div>
-    </div>
+    </DialogShell>
   );
 }
 

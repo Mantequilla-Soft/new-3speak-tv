@@ -19,6 +19,7 @@
     "pleaseTryAgain": "โปรดลองอีกครั้ง",
     "followers_other": "ผู้ติดตาม {{num}} คน",
     "popularTitle": "ครีเอเตอร์ยอดนิยม",
+    "suggestedTitle": "ครีเอเตอร์ที่น่าติดตาม",
     "scrollLeft": "เลื่อนไปทางซ้าย",
     "scrollRight": "เลื่อนไปทางขวา",
     "mostlyPosts": "โพสต์เรื่อง {{topic}} เป็นส่วนใหญ่"
@@ -52,7 +53,8 @@
     "upload": "อัปโหลดตัวอย่างช่อง",
     "tapForSound": "แตะเพื่อเปิดเสียง",
     "views_other": "การดู {{num}} ครั้ง",
-    "readMore": "อ่านเพิ่มเติม"
+    "readMore": "อ่านเพิ่มเติม",
+    "label": "ตัวอย่าง"
   },
   "snaps": {
     "readMore": "อ่านเพิ่มเติม",
@@ -149,7 +151,8 @@
       "text": "รวมวิดีโอของคุณเป็นเพลย์ลิสต์ให้ผู้คนดูตามลำดับ",
       "cta": "สร้างเพลย์ลิสต์แรกของคุณ",
       "visitor": "@{{user}} ไม่มีเพลย์ลิสต์สาธารณะ"
-    }
+    },
+    "visitorPreview": "ผู้เยี่ยมชมจะเห็น: “{{text}}”"
   },
   "links": {
     "button": "ลิงก์",
@@ -168,7 +171,8 @@
     "shorts": "Shorts",
     "audio": "เสียง",
     "community": "ชุมชน",
-    "playlists": "เพลย์ลิสต์"
+    "playlists": "เพลย์ลิสต์",
+    "latestSnap": "Snap ล่าสุด"
   },
   "streams": {
     "loading": "กำลังโหลดไลฟ์…",
@@ -199,6 +203,7 @@
     "messageTitle": "ส่งข้อความหา @{{user}}",
     "messageLogin": "โปรดเข้าสู่ระบบเพื่อส่งข้อความ",
     "message": "ข้อความ",
+    "messageShort": "แชท",
     "unhideTitle": "แสดงวิดีโอของ @{{user}} ในฟีดของคุณอีกครั้ง",
     "hideTitle": "ซ่อนวิดีโอของ @{{user}} จากฟีดทั้งหมดของคุณ",
     "unhide": "เลิกซ่อน",
@@ -212,7 +217,11 @@
     "loginToUpload": "เข้าสู่ระบบเพื่ออัปโหลดวิดีโอ",
     "linkExternalTitle": "เชื่อมโยงโปรไฟล์ภายนอก",
     "addProfile": "เพิ่มโปรไฟล์",
-    "editTitle": "แก้ไขรูปภาพ ชื่อ ไบโอ และที่อยู่ของคุณ"
+    "editTitle": "แก้ไขรูปภาพ ชื่อ ไบโอ และที่อยู่ของคุณ",
+    "more": "เพิ่มเติม",
+    "moreActions": "การดำเนินการเพิ่มเติมสำหรับ @{{user}}",
+    "copyProfileLink": "คัดลอกลิงก์โปรไฟล์",
+    "podcastFeed": "ฟีดพอดแคสต์ (RSS)"
   },
   "tabs": {
     "overview": "ภาพรวม",
@@ -247,11 +256,7 @@
     "tip": "ทิป",
     "tipCreator": "ส่งทิปให้ครีเอเตอร์",
     "latestVideo": "วิดีโอล่าสุด",
-    "watchLatestVideo": "ดูวิดีโอล่าสุด",
-    "latestShort": "Shorts ล่าสุด",
-    "watchLatestShort": "ดู Shorts ล่าสุด",
-    "closeMenu": "ปิดเมนู",
-    "openActions": "เปิดการทำงาน"
+    "latestShort": "Shorts ล่าสุด"
   },
   "uploads": {
     "processing": "กำลังประมวลผลวิดีโอของคุณ",
@@ -277,7 +282,9 @@
     "hiddenToast": "ซ่อนทิปจากโปรไฟล์ของคุณแล้ว",
     "unhiddenToast": "ทิปแสดงบนโปรไฟล์ของคุณอีกครั้งแล้ว",
     "hideFailed": "เปลี่ยนทิปนี้ไม่ได้ โปรดลองอีกครั้ง",
-    "hideWalletPrompt": "ลงนามเพื่อเปลี่ยนว่าทิปใดจะแสดงบนโปรไฟล์ของคุณ"
+    "hideWalletPrompt": "ลงนามเพื่อเปลี่ยนว่าทิปใดจะแสดงบนโปรไฟล์ของคุณ",
+    "whoTitle": "@{{user}} สนับสนุน",
+    "tipped_other": "ทิป {{count}} ครั้ง"
   },
   "layout": {
     "customize": "ปรับแต่งโปรไฟล์",
@@ -388,5 +395,12 @@
   },
   "audioTab": {
     "files": "ไฟล์เสียง"
+  },
+  "search": {
+    "placeholder": "ค้นหาในช่องนี้",
+    "clear": "ล้างการค้นหา",
+    "results_other": "{{count}} ผลลัพธ์สำหรับ “{{query}}”",
+    "empty": "ไม่มีอะไรในช่องนี้ที่ตรงกับ “{{query}}”",
+    "older": "ค้นหาการอัปโหลดที่เก่ากว่า"
   }
 }

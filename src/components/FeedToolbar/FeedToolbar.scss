@@ -1,81 +1,85 @@
-@use "../../mixins.scss" as mix;
+@use "../../styles/v2" as v2;
 
+// Feed toolbar (19c): one surface card (padding 8, radius 20). The content
+// types are 40px chips on the left, the filters filled chips on the right, the
+// pages after them. On a phone the filters drop to a second row.
 .feed-toolbar-wrap {
   display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-bottom: 16px;
-  padding: 0 10px;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 8px;
+  border-radius: var(--r-xl);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  min-width: 0;
 }
 
 .feed-toolbar-tabs {
   display: flex;
   gap: 8px;
+  min-width: 0;
+  @include v2.scroll-x;
 
   .tab-btn {
-    padding: 8px 20px;
-    border: 1px solid var(--border-light);
+    @include v2.control(40);
+    @include v2.text(label);
+    padding: 0 14px;
     background: transparent;
-    color: var(--text-secondary);
-    border-radius: 20px;
-    font-size: 13px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s ease;
+    color: var(--text);
+    white-space: nowrap;
+    flex: none;
 
-    &:hover {
-      background: var(--card-bg-hover, rgba(255, 255, 255, 0.05));
-      color: var(--text-primary);
-    }
+    &:hover { background: var(--bg-hover); }
 
-    &.active {
-      background: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent);
-      border-color: var(--accent-primary, #e53935);
-      color: var(--accent-primary, #e53935);
-    }
+    // Selected = ink fill (19c)
+    &.active { background: var(--text); color: var(--bg); }
   }
+
+  @include v2.mobile { flex: 1 1 100%; }
 }
 
 .feed-toolbar-right {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 12px;
+  gap: 8px;
+  margin-left: auto;
   flex-wrap: wrap;
+  min-width: 0;
 
-  @include mix.respond(phone) {
-    flex-direction: column;
-    align-items: stretch;
-  }
+  @include v2.mobile { margin-left: 0; }
 }
 
-.feed-toolbar-date-filters {
-  display: flex;
+// A filter as a filled chip (19c "Any language"): icon + the current value. The
+// value is a native select laid over the chip's text, so it opens the system
+// picker (a sheet on phones) and keeps its keyboard behaviour.
+.feed-toolbar-chip {
+  @include v2.control(40);
+  padding: 0 12px;
   gap: 6px;
-  flex-wrap: wrap;
+  background: var(--surface-2);
+  color: var(--text);
+  font-size: 13px;
+  &:active { transform: none; }
+  &:hover { background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); }
+  &:focus-within { outline: 2px solid var(--accent); outline-offset: 2px; }
 
-  .date-filter-btn {
-    padding: 6px 14px;
-    border: 1px solid var(--border-light);
+  > .material-symbols-rounded { color: var(--muted); }
+  &.is-set > .material-symbols-rounded { color: var(--text); }
+
+  .feed-toolbar-select {
+    appearance: none;
+    border: 0;
     background: transparent;
-    color: var(--text-secondary);
-    border-radius: 16px;
-    font-size: 12px;
-    font-weight: 500;
+    color: inherit;
+    font: inherit;
+    padding: 0;
+    margin: 0;
     cursor: pointer;
-    transition: all 0.2s ease;
-    white-space: nowrap;
+    outline: none;
+    field-sizing: content; // as wide as the chosen value, like the board's chip
 
-    &:hover {
-      background: var(--card-bg-hover, rgba(255, 255, 255, 0.05));
-      color: var(--text-primary);
-    }
-
-    &.active {
-      background: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent);
-      border-color: var(--accent-primary, #e53935);
-      color: var(--accent-primary, #e53935);
-    }
+    option { background: var(--surface); color: var(--text); }
   }
 }
 
@@ -85,40 +89,24 @@
   gap: 4px;
 
   .page-btn {
+    @include v2.control(32);
     min-width: 32px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     padding: 0 8px;
-    border: 1px solid var(--border-light);
-    background: transparent;
-    color: var(--text-secondary);
-    border-radius: 6px;
-    font-size: 13px;
-    cursor: pointer;
-    transition: all 0.15s ease;
+    justify-content: center;
+    background: var(--surface-2);
+    color: var(--text);
+    @include v2.mono(12, 700);
 
-    &:hover:not(:disabled):not(.active) {
-      background: var(--card-bg-hover, rgba(255, 255, 255, 0.05));
-      color: var(--text-primary);
-    }
+    &:hover:not(:disabled):not(.active) { background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); }
 
-    &.active {
-      background: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent);
-      border-color: var(--accent-primary, #e53935);
-      color: var(--accent-primary, #e53935);
-    }
+    &.active { background: var(--text); color: var(--bg); }
 
-    &:disabled {
-      opacity: 0.3;
-      cursor: not-allowed;
-    }
+    &--arrow { padding: 0; width: 32px; }
   }
 
   .page-ellipsis {
     padding: 0 4px;
-    color: var(--text-secondary);
-    font-size: 13px;
+    color: var(--muted);
+    font-size: 12px;
   }
 }

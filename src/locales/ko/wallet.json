@@ -28,7 +28,16 @@
     "recipientPlaceholder": "Hive 사용자 이름 입력",
     "memoLabel": "메모",
     "memoPlaceholder": "메모 입력",
-    "confirm": "송금 확인"
+    "confirm": "송금 확인",
+    "sendTo": "@{{to}}님에게 {{amount}} {{coin}} 보내기",
+    "sendAmount": "{{amount}} {{coin}} 보내기",
+    "recent": "최근",
+    "activeKey": "액티브 키가 필요해요",
+    "available": "사용 가능: {{balance}}",
+    "scan": "QR 코드 스캔",
+    "scanHint": "상대방의 QR 코드에 카메라를 맞춰 주세요.",
+    "scanNoAccount": "이 QR 코드에는 Hive 계정이 없어요. 다른 코드를 시도해 보세요.",
+    "scanNoCamera": "카메라를 열 수 없어요. 3Speak가 카메라를 사용할 수 있는지 확인해 주세요."
   },
   "history": {
     "loadFailed": "거래 내역을 불러오지 못했어요",
@@ -46,5 +55,50 @@
       "received": "받음"
     },
     "claimedRewards": "수령한 보상"
+  },
+  "total": "총 잔액",
+  "rate": "1 HIVE = {{price}}",
+  "pro": "Pro",
+  "coins": {
+    "hp": "Hive Power",
+    "savings": "HBD 저축"
+  },
+  "claim": {
+    "ready": "{{amount}} 수령 가능",
+    "readyShort": "{{amount}} 수령 가능",
+    "button": "수령",
+    "done": "보상을 수령했어요",
+    "failed": "수령 실패: {{error}}"
+  },
+  "activity": {
+    "title": "활동",
+    "filters": {
+      "all": "전체",
+      "rewards": "보상",
+      "received": "받음",
+      "sent": "보냄"
+    },
+    "from": "@{{user}}님에게서",
+    "sentTo": "@{{user}}님에게 보냄",
+    "emptyTitle": "아직 아무것도 없어요",
+    "empty": "송금 내역과 수령한 보상이 여기에 표시돼요."
+  },
+  "earnings": {
+    "title": "수익, 30일",
+    "sub": "수령한 보상과 받은 HIVE 또는 HBD"
+  },
+  "rc": {
+    "title": "리소스 크레딧",
+    "sub": "Hive에서 하는 모든 작업에 조금씩 쓰여요. 약 5일이면 다시 채워져요.",
+    "posts_other": "지금 약 {{count}}개의 게시물을 올릴 수 있어요"
+  },
+  "receive": {
+    "title": "받기",
+    "sub": "누구나 어떤 Hive 지갑에서든 이 계정 이름으로 HIVE나 HBD를 보낼 수 있어요. 메모는 필요 없어요.",
+    "amountLabel": "금액 요청하기 (선택)",
+    "memoLabel": "메모 (선택)",
+    "memoPlaceholder": "용도, 예: 청구서 번호",
+    "subRequest": "이 코드를 스캔하면 {{amount}} {{coin}}을(를) 요청해요. 3Speak와 결제 코드를 읽는 Hive 지갑이 자동으로 채워요.",
+    "subMemo": "이 코드를 스캔하면 3Speak와 결제 코드를 읽는 Hive 지갑에서 계정 이름과 메모가 채워져요."
   }
 }

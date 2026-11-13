@@ -19,7 +19,8 @@
       "rep": "Rep. {{rep}}",
       "repTitle": "Reputacja na Hive",
       "viewProfile": "Zobacz profil"
-    }
+    },
+    "replyTo": "Odpowiedz {{user}}…"
   },
   "errors": {
     "votingUnavailable": "Głosowanie nie jest dostępne dla tego posta",
@@ -33,7 +34,7 @@
     "interestsTitle": "Tylko Shorts pasujące do twoich zainteresowań",
     "pickInterestsFirst": "Najpierw wybierz zainteresowania",
     "noInterests": "Nie wybrano jeszcze zainteresowań — wybierz je w Ustawieniach",
-    "interestsExhausted": "To wszystkie Shorts dla twoich zainteresowań — pokazujemy Odkrywaj",
+    "interestsExhausted": "To wszystkie Shorts dla twoich zainteresowań. Pokazujemy Odkrywaj.",
     "noInterestMatches": "Żadne Shorts nie pasują teraz do twoich zainteresowań.",
     "switchToDiscover": "Przełącz na Odkrywaj",
     "empty": "Brak dostępnych Shorts",
@@ -42,12 +43,18 @@
   "glow": {
     "subtle": "Podświetlenie otoczenia: subtelne",
     "vivid": "Podświetlenie otoczenia: intensywne",
-    "off": "Podświetlenie otoczenia: wył."
+    "off": "Podświetlenie otoczenia: wył.",
+    "label": "Podświetlenie otoczenia",
+    "offShort": "Wył.",
+    "subtleShort": "Subtelne",
+    "vividShort": "Intensywne"
   },
   "playbackMode": {
     "autoReplay": "Autopowtarzanie",
     "autoSwipe": "Autoprzewijanie",
-    "manual": "Ręcznie"
+    "manual": "Ręcznie",
+    "label": "Odtwarzanie",
+    "options": "Opcje odtwarzania"
   },
   "subtitles": {
     "off": "Wył."
@@ -85,7 +92,7 @@
     "noUrl": "Nie udało się ustalić adresu URL filmu do remiksu",
     "loadFailed": "Nie udało się wczytać filmu do remiksu",
     "chainFull": "Ten film opiera się już na {{max}} wcześniejszych filmach, więc nie można go już remiksować.",
-    "chainNoSlots": "Ten łańcuch remiksów opłaca już tylu twórców, że na Hive nie zmieściłby się kolejny remiks. Z 3Speak Pro nadal możesz go zremiksować."
+    "chainNoSlots": "Ten łańcuch opłaca już tylu twórców, że na Hive nie zmieściłby się kolejny remiks. Z 3Speak Pro nadal możesz go zremiksować."
   },
   "watchLater": {
     "loginRequired": "Zaloguj się, aby zapisywać Shorts",
@@ -102,7 +109,7 @@
     "postRemoved": "Post Hive powiązany z tym shortem został usunięty, więc nie można już go komentować ani na niego głosować.",
     "beFirst": "Dodaj pierwszy komentarz!",
     "unavailable": "Komentarze nie są dostępne dla tego posta",
-    "addPlaceholder": "Dodaj komentarz...",
+    "addPlaceholder": "Dołącz do dyskusji…",
     "addPlaceholderBar": "Dodaj komentarz…",
     "loginPlaceholder": "Zaloguj się, aby komentować",
     "send": "Wyślij komentarz",
@@ -138,7 +145,7 @@
     "seenNote": "Zalogowani widzowie, którzy mają włączoną historię oglądania.",
     "seenEmpty": "Nikt jej jeszcze nie obejrzał.",
     "keep": "Zachowaj jako shorta",
-    "keepHint": "Zostanie na Twoim kanale po 24 godzinach",
+    "keepHint": "Zostanie na twoim kanale po 24 godzinach.",
     "keepConfirm": "Zachować ją na stałe?",
     "keepYes": "Zachowaj",
     "keeping": "Zachowywanie…",
@@ -149,5 +156,9 @@
   "audiogram": {
     "fullEpisode": "Cały odcinek",
     "listen": "Posłuchaj całego odcinka: {{title}}"
+  },
+  "panel": {
+    "discussion": "Dyskusja",
+    "upNext": "Następne"
   }
 }

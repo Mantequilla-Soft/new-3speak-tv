@@ -1,151 +1,214 @@
+@use "../styles/v2" as v2;
+@use "../components/openpods/hangouts-skin" as hh;
+
+/* Stream Studio (/openpods), design 39a: a page title with the New stream /
+   Templates segmented tabs, then the SDK's stepped create form in a v2 card.
+   Templates (39b) get a wider two-column page. */
 .openpods-page {
-  padding: 24px;
-  min-height: calc(100vh - 80px);
+  @include hh.tokens;
+  @include hh.buttons;
+  @include hh.create-form;
+  box-sizing: border-box;
+  min-height: calc(100vh - var(--topbar-h));
+  // The app column (.container, App.css) already gives the page padding.
+  padding: 0;
+  color: var(--text);
 
-  // Map SDK CSS vars to 3speak TV theme (theme-aware — works in light and dark)
-  --hh-bg:               var(--bg-primary);
-  --hh-bg-secondary:     var(--card-bg);
-  --hh-bg-hover:         var(--bg-hover);
-  --hh-text:             var(--text-primary);
-  --hh-text-secondary:   var(--text-secondary);
-  --hh-text-muted:       var(--text-muted, var(--text-secondary));
-  --hh-border:           var(--border-color);
-  --hh-border-light:     var(--border-light);
-  --hh-input-border:     var(--border-color);
-  --hh-primary:          var(--accent-primary, #e53935);
-  --hh-primary-hover:    #c62828;
-  --hh-danger:           #e53935;
-  --hh-success:          #43a047;
-  --hh-btn-secondary-bg: var(--bg-tertiary);
-  --hh-btn-secondary-text: var(--text-primary);
-  --hh-btn-secondary-hover: var(--bg-hover);
-  --hh-shadow:           var(--card-shadow, 0 4px 16px rgba(0, 0, 0, 0.2));
-}
-
-.openpods-connecting {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 40vh;
-  color: var(--text-secondary, rgba(255,255,255,0.5));
-  font-size: 15px;
-}
-
-.openpods-login-gate {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 40vh;
-  gap: 16px;
-  text-align: center;
-
-  h2 {
-    font-size: 24px;
-    font-weight: 700;
-    color: var(--text-primary);
+  // One column for the create form; the SDK lobby and our extras share it.
+  > .openpods-studio-head,
+  > .openpods-template-pick,
+  > .hh-lobby,
+  > .openpods-guest-cta {
+    max-width: 760px;
+    margin-inline: auto;
   }
 
-  p {
-    color: var(--text-secondary, rgba(255,255,255,0.6));
-    font-size: 15px;
-  }
 }
 
-.openpods-guest-cta {
+.openpods-page--templates > .openpods-studio-head { max-width: 1180px; }
+
+/* Title + tabs (39a): heading on the left, the segmented track on the right. */
+.openpods-studio-head {
   display: flex;
-  // Column, so the failure hint sits UNDER the button rather than beside it.
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  margin-top: 16px;
-}
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
 
-.openpods-login-btn {
-  background: transparent;
-  color: var(--accent-primary, #e53935);
-  border: 1px solid var(--accent-primary, #e53935);
-  border-radius: 8px;
-  padding: 10px 28px;
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.15s;
+  h1 {
+    flex: 1;
+    min-width: 0;
+    margin: 0;
+    @include v2.text(heading-lg);
+    @include v2.tablet-up { font-size: 32px; }
+  }
+  // On the page ground the track is a surface, so it reads as a control.
+  .v2-seg { background: var(--surface); }
 
-  &:hover { background: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent); border-color: var(--accent-primary, #e53935); color: var(--accent-primary, #e53935); }
-}
-
-// Shown when the automatic @threespeak handover failed — usually because the
-// user never granted posting authority. Explains the fix instead of leaving
-// them clicking a button that keeps failing.
-.openpods-guest-cta__hint {
-  margin: 8px auto 0;
-  max-width: 44ch;
-  font-size: 12px;
-  line-height: 1.45;
-  text-align: center;
-  color: var(--text-secondary, rgba(255, 255, 255, 0.65));
-}
-
-/* Stream Studio tabs ("New stream" / "Templates") on top of the create form,
-   at the SDK lobby's width so they read as part of the same card. */
-.openpods-studio-tabs {
-  display: flex;
-  gap: 4px;
-  max-width: 640px;
-  margin: 0 auto 4px;
-  padding: 0 1.5rem;
-  border-bottom: 1px solid var(--border-color);
-
-  button {
-    padding: 10px 14px;
-    border: none;
-    border-bottom: 2px solid transparent;
-    margin-bottom: -1px;
-    background: transparent;
-    color: var(--text-secondary);
-    font-size: 0.95rem;
-    font-weight: 600;
-    cursor: pointer;
-
-    &:hover { color: var(--text-primary); }
-
-    &.is-active {
-      color: var(--accent-primary, #e53935);
-      border-bottom-color: var(--accent-primary, #e53935);
-    }
+  @include v2.mobile {
+    .v2-seg { width: 100%; display: flex; }
   }
 }
 
 .openpods-studio-panel {
-  max-width: 640px;
+  max-width: 1180px;
   margin: 0 auto;
-  padding: 1.25rem 1.5rem 1.5rem;
-}
-
-@media (max-width: 767px) {
-  .openpods-studio-tabs { padding: 0 0.25rem; }
-  .openpods-studio-panel {
-    padding: 1rem 0.25rem calc(88px + env(safe-area-inset-bottom, 0px));
-  }
 }
 
 /* The stepped stream form opens straight on its stepper: the SDK's "Stream
-   Studio" heading and explainer above it are dropped here (the tab row already
-   says where you are). Group chats keep theirs. */
+   Studio" heading and explainer above it are dropped here (the page title
+   already says where you are). Group chats keep theirs. */
 .openpods-page .hh-cd--stepped .hh-cd__intro {
   display: none;
 }
 
-/* "Start from a template" above the New stream form: the same column as the
-   tabs and the form. Empty (no templates) it takes no room. */
+/* "Start from a template" above the New stream form. Empty (no templates) it
+   takes no room. */
 .openpods-template-pick {
-  max-width: 640px;
-  margin: 0 auto;
-  padding: 1rem 1.5rem 0;
-
+  margin-bottom: 12px;
   &:empty { display: none; }
 }
-@media (max-width: 767px) {
-  .openpods-template-pick { padding: 0.75rem 0.25rem 0; }
+
+/* No hangouts session yet: signing in progress, hand the 3Speak login over, or
+   log in first. A surface row under the lobby, never blocking it. */
+.openpods-guest-cta {
+  margin-top: 16px;
+}
+
+.openpods-guest-cta__card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  border-radius: var(--r-2xl);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  font-size: 13px;
+
+  @include v2.mobile { &:has(> .v2-btn) { flex-wrap: wrap; } }
+}
+
+.openpods-guest-cta__icon,
+.openpods-guest-cta__spin { color: var(--cyan); }
+
+.openpods-guest-cta__body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+
+  b { font-size: 13px; font-weight: 700; }
+}
+
+.openpods-guest-cta__sub { @include v2.text(meta); color: var(--muted); }
+
+// Shown when the automatic @threespeak handover failed: usually because the
+// user never granted posting authority. Explains the fix.
+.openpods-guest-cta__hint {
+  margin: 0;
+  max-width: 60ch;
+  @include v2.text(meta);
+  color: var(--muted);
+}
+
+.openpods-connecting__action { color: var(--text); font-weight: 700; }
+
+/* ── Stream Studio, wide (39a) ────────────────────────────────────────────
+   From 1280 up the New stream form is a page of its own: the steps under the
+   title, the template picker, the step's fields on the page ground, and the
+   step buttons in a 420px column on the right (Next on top, 56 tall, Back or
+   Cancel under it, "Save as template" below them on the last step). The SDK's
+   lobby wrapper and form become `display: contents` so their parts can be
+   placed on this grid; the form element itself still submits as before. */
+@include v2.wide {
+  .openpods-page.openpods-page--studio {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 420px;
+    column-gap: 20px;
+    align-content: start;
+    max-width: var(--content-max);
+    margin-inline: auto;
+
+    > * { grid-column: 1; min-width: 0; max-width: none; margin-inline: 0; }
+    > .openpods-studio-head { order: -3; margin-bottom: 0; }
+    > .openpods-template-pick { order: -1; margin: 12px 0 0; }
+    > .openpods-guest-cta { margin-top: 16px; }
+
+    .hh-lobby--direct,
+    .hh-cd--stepped { display: contents; }
+
+    .hh-cd--stepped > * { grid-column: 1; min-width: 0; margin-top: 14px; }
+    .hh-cd--stepped > .hh-cd-steps { order: -2; }
+    .hh-cd-steps__caption { display: none; }
+    .hh-cd__actions--top { display: none; }
+
+    // The step's controls sit on the page ground: rows and the announce box
+    // become surfaces, the fields inside them bg fills.
+    .hh-cd__switch,
+    .hh-cd__check,
+    .hh-cd__reccheck { background: var(--surface); }
+    .hh-cd__announce { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-2xl); padding: 16px; }
+    .hh-cd__announce .hh-announce-opts {
+      .hh-announce-opts__selector,
+      .hh-announce-opts__select.v2-input,
+      .hh-announce-opts__bene { background-color: var(--bg); }
+    }
+    .hh-cd__tags { background: var(--surface); }
+    .hh-cd__input,
+    .hh-cd__select,
+    .hh-cd__textarea { background: var(--surface); }
+
+    // The right column: Next (or Open Stream Studio) on top, Back or Cancel under it.
+    .hh-cd__actions--bottom {
+      grid-column: 2;
+      grid-row: 1 / span 40;
+      align-self: start;
+      display: flex;
+      flex-direction: column-reverse;
+      gap: 8px;
+      margin-top: 0;
+      padding-top: 0;
+      border-top: 0;
+
+      > span:empty { display: none; }
+      .hh-btn {
+        width: 100%;
+        min-width: 0;
+        min-height: 48px;
+        height: 48px;
+        justify-content: flex-start;
+        padding: 0 16px;
+        border-radius: var(--r-lg);
+        font-size: 13px;
+      }
+      .hh-btn--primary {
+        min-height: 56px;
+        height: 56px;
+        padding: 0 18px;
+        border-radius: var(--r-xl);
+        font-size: 16px;
+        font-weight: 900;
+      }
+      // "📡 Open Stream Studio": a block so its leading emoji can be dropped
+      // (::first-letter). "Creating…" is disabled and keeps every letter.
+      .hh-cd__submit:not(:disabled) {
+        display: block;
+        line-height: 56px;
+        text-align: left;
+        &::first-letter { font-size: 0; margin-right: -4px; }
+      }
+    }
+
+    // Last step: "Save as template" under the buttons (56 + 8 + 48 + 12).
+    .hh-cd--stepped > .st-save {
+      grid-column: 2;
+      grid-row: 1 / span 40;
+      align-self: start;
+      margin-top: 124px;
+      padding-top: 0;
+      border-top: 0;
+    }
+  }
 }

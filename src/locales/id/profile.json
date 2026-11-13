@@ -10,7 +10,7 @@
     "unknownError": "Kesalahan tidak diketahui"
   },
   "authorBadge": {
-    "followers_other": "{{count}} Pengikut"
+    "followers_other": "{{count}} pengikut"
   },
   "creators": {
     "loginRequired": "Silakan masuk untuk mengikuti kreator",
@@ -19,6 +19,7 @@
     "pleaseTryAgain": "silakan coba lagi",
     "followers_other": "{{num}} pengikut",
     "popularTitle": "Kreator populer",
+    "suggestedTitle": "Kreator untuk diikuti",
     "scrollLeft": "Gulir ke kiri",
     "scrollRight": "Gulir ke kanan",
     "mostlyPosts": "Kebanyakan memposting {{topic}}"
@@ -52,7 +53,8 @@
     "upload": "Unggah trailer channel",
     "tapForSound": "Ketuk untuk suara",
     "views_other": "{{num}} tayangan",
-    "readMore": "Baca selengkapnya"
+    "readMore": "Baca selengkapnya",
+    "label": "Trailer"
   },
   "snaps": {
     "readMore": "Baca selengkapnya",
@@ -149,7 +151,8 @@
       "text": "Kelompokkan videomu ke dalam playlist yang bisa ditonton orang secara berurutan.",
       "cta": "Buat playlist pertamamu",
       "visitor": "@{{user}} tidak punya playlist publik."
-    }
+    },
+    "visitorPreview": "Pengunjung melihat: “{{text}}”"
   },
   "links": {
     "button": "Tautan",
@@ -168,7 +171,8 @@
     "shorts": "Shorts",
     "audio": "Audio",
     "community": "Komunitas",
-    "playlists": "Playlist"
+    "playlists": "Playlist",
+    "latestSnap": "Snap terbaru"
   },
   "streams": {
     "loading": "Memuat siaran…",
@@ -199,6 +203,7 @@
     "messageTitle": "Kirim pesan ke @{{user}}",
     "messageLogin": "Silakan masuk untuk mengirim pesan",
     "message": "Pesan",
+    "messageShort": "DM",
     "unhideTitle": "Tampilkan lagi video @{{user}} di feed-mu",
     "hideTitle": "Sembunyikan video @{{user}} dari semua feed-mu",
     "unhide": "Tampilkan",
@@ -212,7 +217,11 @@
     "loginToUpload": "Masuk untuk mengunggah video",
     "linkExternalTitle": "Tautkan profil eksternal",
     "addProfile": "Tambah profil",
-    "editTitle": "Edit foto, nama, bio, dan lokasimu"
+    "editTitle": "Edit foto, nama, bio, dan lokasimu",
+    "more": "Lainnya",
+    "moreActions": "Tindakan lain untuk @{{user}}",
+    "copyProfileLink": "Salin tautan profil",
+    "podcastFeed": "Feed podcast (RSS)"
   },
   "tabs": {
     "overview": "Ringkasan",
@@ -247,11 +256,7 @@
     "tip": "Tip",
     "tipCreator": "Beri tip kreator",
     "latestVideo": "Video Terbaru",
-    "watchLatestVideo": "Tonton video terbaru",
-    "latestShort": "Shorts Terbaru",
-    "watchLatestShort": "Tonton Shorts terbaru",
-    "closeMenu": "Tutup menu",
-    "openActions": "Buka aksi"
+    "latestShort": "Shorts Terbaru"
   },
   "uploads": {
     "processing": "Memproses videomu",
@@ -277,7 +282,9 @@
     "hiddenToast": "Tip disembunyikan dari profilmu",
     "unhiddenToast": "Tip kembali ditampilkan di profilmu",
     "hideFailed": "Tidak bisa mengubah tip ini. Silakan coba lagi.",
-    "hideWalletPrompt": "Tanda tangani untuk mengubah tip mana yang tampil di profilmu"
+    "hideWalletPrompt": "Tanda tangani untuk mengubah tip mana yang tampil di profilmu",
+    "whoTitle": "@{{user}} mendukung",
+    "tipped_other": "Memberi tip {{count}}×"
   },
   "layout": {
     "customize": "Sesuaikan profil",
@@ -388,5 +395,12 @@
   },
   "audioTab": {
     "files": "File audio"
+  },
+  "search": {
+    "placeholder": "Cari di channel ini",
+    "clear": "Hapus pencarian",
+    "results_other": "{{count}} hasil untuk “{{query}}”",
+    "empty": "Tidak ada yang cocok dengan “{{query}}” di channel ini.",
+    "older": "Cari unggahan lama"
   }
 }

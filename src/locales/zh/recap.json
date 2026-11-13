@@ -95,7 +95,7 @@
       "tips": "打赏"
     },
     "legendOurs": "在 3Speak",
-    "legendOther": "在 Hive 其他地方",
+    "legendOther": "其他地方",
     "segments": {
       "ours": "3Speak 上的帖子奖励",
       "other": "Hive 其他地方的帖子奖励",
@@ -120,7 +120,8 @@
     "communities": "正在走访你的社区…",
     "followers": "正在查看谁关注了你…",
     "watched": "正在回顾你看过的内容…",
-    "thumbnails": "正在加载缩略图… {{done}} / {{total}}"
+    "thumbnails": "正在加载缩略图… {{done}} / {{total}}",
+    "thumbnailsWaiting": "正在加载你的缩略图…"
   },
   "tips": {
     "label": "提示：",

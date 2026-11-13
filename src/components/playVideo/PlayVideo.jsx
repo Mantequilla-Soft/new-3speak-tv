@@ -2,12 +2,8 @@ import PropTypes from "prop-types";
 import { getHiveUrl } from '../../utils/hiveNode';
 import "./PlayVideo.scss";
 import VideoControls from "../VideoControls/VideoControls";
-import ViewCount from "../ViewCount/ViewCount";
-import { LuTimer } from "react-icons/lu";
-import { MdReplay, MdPlayArrow } from "react-icons/md";
-import UpvoteCount from "../UpvoteCount/UpvoteCount";
 import PayoutAmount from "../PayoutAmount/PayoutAmount";
-import { useEffect, useLayoutEffect, useState, useCallback, useMemo, useRef } from "react";
+import { useEffect, useState, useCallback, useMemo, useRef } from "react";
 import { fetchHiveProfile, fetchPlaySource } from "../../lib/videoData";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
@@ -20,10 +16,8 @@ import ShareChooserModal from "../Chat/ShareChooserModal";
 import { useAppStore } from '../../lib/store';
 import { fetchIncubationLikes, voteIncubation } from '../../lib/incubation';
 import { estimate, getUersContent, getVotePower } from "../../utils/hiveUtils";
-import { getUserReputation } from "../../utils/reputation";
 import ToolTip from "../tooltip/ToolTip";
 import BeneficiariesTooltip from "../tooltip/BeneficiariesTooltip";
-import { ImSpinner9 } from "react-icons/im";
 import { useNavigate } from "react-router-dom";
 import BarLoader from "../Loader/BarLoader";
 import TipModal from "../../components/tip-reward/TipModal";
@@ -38,7 +32,6 @@ import axios from "axios";
 import { useTranslation, Trans } from "react-i18next";
 import { formatTimeAgo } from "../../i18n";
 import mantequillaLogo from "../../assets/mantequilla-logo.png";
-import threespeakLogo from "../../assets/image/3S_logo.svg";
 import threespeakLogoDark from "../../assets/image/3S_logodark.png";
 import { HIVE_API_URL, CHECKER_URL, FEATURE_EDITOR } from '../../utils/config';
 import { getViewerTags, getMyViewerTag } from '../../utils/viewerTag';
@@ -51,19 +44,14 @@ const SHOW_TOPIC_TAGS =
   String(import.meta.env.VITE_SHOW_TOPIC_TAGS).toLowerCase() !== 'false';
 import { fixVideoThumbnail, fallbackImg } from '../../utils/fixThumbnails';
 import { isLoggedIn, followWithAioha } from "../../hive-api/aioha";
-import { MdPlaylistAdd, MdWatchLater, MdKeyboardArrowDown, MdKeyboardArrowUp, MdAdd, MdClose, MdShare, MdAttachMoney, MdPersonAdd, MdInfo, MdBarChart } from "react-icons/md";
-import { FaHeart, FaPlay, FaPause } from "react-icons/fa";
-import { TbRewindBackward10, TbRewindForward10, TbPlayerTrackNextFilled } from "react-icons/tb";
-import { IoPricetagOutline } from "react-icons/io5";
 import AddToPlaylistModal from "../AddToPlaylistModal/AddToPlaylistModal";
 import VideoPlaylists from "../VideoPlaylists/VideoPlaylists";
 import PlaylistBar from "../PlaylistBar/PlaylistBar";
 import { useMyPlaylists, isVideoInPlaylist } from "../../hooks/useMyPlaylists";
 import { removeFromPlaylist } from "../../utils/playlistOperations";
+import { hideVideo, unhideVideo, hideCreator, unhideCreator, refreshRailsAfterHide } from "../../utils/userFilters";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import AuthorBadge from "../AuthorBadge/AuthorBadge";
-import Button from "../Button/Button";
-import { Repeat2, Scissors, Tornado, Film, Music, Rocket, Gift, Flame } from 'lucide-react';
 import useReblog from '../../hooks/useReblog';
 import PromoteModal from '../Promote/PromoteModal';
 import { recordReshare, getResharesForVideo } from '../../utils/reshares';
@@ -74,12 +62,21 @@ import SubtitleOverlay from '../SubtitleOverlay/SubtitleOverlay';
 import TimelineToasters from './TimelineToasters';
 import ReportModal, { isReported } from '../modal/ReportModal';
 import EditVideoModal from './EditVideoModal';
-import { MdFlag, MdEdit, MdAutoAwesome } from 'react-icons/md';
 import useTitleMeta from '../../hooks/useTitleMeta';
 import TitleTranslate from '../TitleTranslate/TitleTranslate';
 import SummaryModal from '../SummaryModal/SummaryModal';
 import AccountImg from '../HiveAvatar/AccountImg';
 import useUnstickPlayerWhileTyping from '../../hooks/useUnstickPlayerWhileTyping';
+import Transcript from './Transcript';
+import WatchTabs, { useWideWatch, useSideTab } from './WatchTabs';
+import WatchDock from './WatchDock';
+import { SupportersPane, VotersPane, ChapterCards, ChapterList, UpNextList, MediaState, compactNumber } from './WatchPanels';
+import { listSubtitleLanguages } from '../../hooks/useSubtitles';
+import { canSubscribe, setCommunitySubscription } from '../Communities/communitySubscribe';
+import { Button as UiButton, Segmented, StatusPill } from '../v2/ui';
+import { Icon } from '../v2/Icon';
+import { cx } from '../v2/helpers';
+import { SUPPORTED_LANGUAGES } from '../../utils/translate';
 
 // Every toast from this module is headed "Video"; the message becomes the
 // line under it. See utils/toast.js.
@@ -87,7 +84,10 @@ const toast = toastIn('Video');
 
 dayjs.extend(relativeTime);
 
-const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, mediaBlocked = false, onRetryPlayback = null, mediaLoading = false, playlistData, onClosePlaylist, videoControls, mobileReactionPanel, cinemaReactionPanel, videoRef, wrapperRef, onVideoEdited, overrideBody, scheduled = false, scheduledOn = null, mediaScheduledOn = null, onEditScheduled, v2 = false, isLive = false, streamRoom = null, liveChatSlot = null, onLiveChatSent = null, vodAssetPending = false, onStreamRoomMeta = null, belowPlayerSlot = null, sponsorLabel = null, adCountdown = null, bannerHit = null, tickerSlot = null, adSkip = null, adPlaying = false, adLocked = false, timelineLinks = null, timelineResetKey = null, tickerShown = false, surfActive = false }) => {
+// Stable identity for "no chapters", so memo deps don't change every render.
+const EMPTY_CHAPTERS = [];
+
+const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, mediaBlocked = false, onRetryPlayback = null, mediaLoading = false, playlistData, onClosePlaylist, videoControls, cinemaReactionPanel, videoRef, wrapperRef, onVideoEdited, overrideBody, scheduled = false, scheduledOn = null, mediaScheduledOn = null, onEditScheduled, isLive = false, streamRoom = null, liveChatSlot = null, onLiveChatSent = null, vodAssetPending = false, onStreamRoomMeta = null, belowPlayerSlot = null, sponsorLabel = null, adCountdown = null, bannerHit = null, tickerSlot = null, adSkip = null, adPlaying = false, adLocked = false, timelineLinks = null, timelineResetKey = null, tickerShown = false, surfActive = false, onReact = null, upNext = null, playerOverlay = null }) => {
   const { t } = useTranslation();
   const { user, authenticated } = useAppStore();
   const isPremium = !!usePremiumStatus(user)?.premium;
@@ -180,8 +180,6 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
     : {};
   const interests = useAppStore((s) => s.interests);
   const setInterests = useAppStore((s) => s.setInterests);
-  const theme = useAppStore((s) => s.theme);
-  const isDarkTheme = theme !== 'light'; // dark is the default (matches EmergencyScreen)
 
   // Add a topic to the user's interests (from the topic popup), persisting to Hive.
   const addToInterests = useCallback(async (tag) => {
@@ -250,11 +248,8 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
   };
   useEffect(() => () => clearTimeout(flashTimerRef.current), []);
 
-  // Mobile collapsible details
-  const [mobileDetailsExpanded, setMobileDetailsExpanded] = useState(false);
   const [summaryOpen, setSummaryOpen] = useState(false);
   const titleMeta = useTitleMeta(author, permlink);
-  const [descriptionExpanded, setDescriptionExpanded] = useState(false);
   const [videoStatsOpen, setVideoStatsOpen] = useState(false);
   const [videoHasStats, setVideoHasStats] = useState(false);
   // Watch-page stats show to the video's owner and to admins (tibfox/badadib)...
@@ -400,6 +395,9 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
   flashActionRef.current = flashAction;
   const adLockedRef = useRef(adLocked);
   adLockedRef.current = adLocked || adPlaying;
+  // S saves, Shift+S shares: the keys the action menu shows on its tiles (07d).
+  // Filled in below, once the handlers exist.
+  const menuKeysRef = useRef({});
   // Frame length, measured from the decoder while the video plays (the smallest
   // gap between two presented frames: a dropped frame only makes a gap larger).
   const frameSecRef = useRef(1 / 30);
@@ -463,6 +461,14 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
           vc.onTogglePlay?.();
           break;
         }
+        case 's':
+        case 'S': {
+          const run = e.shiftKey ? menuKeysRef.current.share : menuKeysRef.current.save;
+          if (!run) break;
+          e.preventDefault();
+          run();
+          break;
+        }
         case ',':
         case '.': {
           e.preventDefault();
@@ -508,20 +514,16 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
   }, [isStatsViewer, author, permlink]);
 
   // State
-  const [openTooltip, setOpenToolTip] = useState(false);
-  const [pinnedTooltip, setPinnedTooltip] = useState(false);
   const [tooltipVoters, setTooltipVoters] = useState([]);
   const [beneficiaries, setBeneficiaries] = useState([]);
   const [payoutInfo, setPayoutInfo] = useState(null);
   const [showBeneficiaries, setShowBeneficiaries] = useState(false);
   const [pinnedBeneficiaries, setPinnedBeneficiaries] = useState(false);
-  const voteCountRef = useRef(null);
   const payoutRef = useRef(null);
   const [isTipModalOpen, setIsTipModalOpen] = useState(false);
   const [tipNudgeVisible, setTipNudgeVisible] = useState(false);
   const tipNudgeShownRef = useRef(false);
   const [isVoted, setIsVoted] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [followData, setFollowData] = useState(null);
   const [showTooltip, setShowTooltip] = useState(false);
   const [optimisticVoteCount, setOptimisticVoteCount] = useState(0);
@@ -535,24 +537,10 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
   const [promoteOpen, setPromoteOpen] = useState(false);
   const [isRemovingWatchLater, setIsRemovingWatchLater] = useState(false);
   const [communityData, setCommunityData] = useState(null);
-  const [authorReputation, setAuthorReputation] = useState(null);
-  const [fabOpen, setFabOpen] = useState(false);
+  const [communitySubscribed, setCommunitySubscribed] = useState(false);
+  const [joinBusy, setJoinBusy] = useState(false);
   // Phones: the sticky player gives way while a comment is being typed.
   useUnstickPlayerWhileTyping();
-  // The speed dial can hold more actions (up to 11 for the owner) than a short
-  // phone screen fits in one column. Measured before the first paint: if the
-  // column would reach above the top bar, it opens as the compact wrapped grid
-  // (the landscape layout) instead. No scroll area on purpose: it clipped the
-  // Remix dropdown and fought the actions' slide-in animation.
-  const fabActionsRef = useRef(null);
-  const [fabCompact, setFabCompact] = useState(false);
-  useLayoutEffect(() => {
-    if (!fabOpen) { setFabCompact(false); return; }
-    const el = fabActionsRef.current;
-    if (!el) return;
-    const navTop = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--nav-top-offset')) || 56;
-    if (el.getBoundingClientRect().top < navTop + 8) setFabCompact(true);
-  }, [fabOpen]);
   const [shareChooserOpen, setShareChooserOpen] = useState(false);
   const [isFollowingCreator, setIsFollowingCreator] = useState(null);
   const [followLoading, setFollowLoading] = useState(false);
@@ -792,6 +780,10 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
             return {
               username: vote.voter,
               reward: +reward.toFixed(3),
+              // The voter's own weight (10000 = 100%) and when, for the
+              // voters list beside the description.
+              weight: vote.percent != null ? Number(vote.percent) / 100 : null,
+              time: vote.time || null,
             };
           });
 
@@ -895,7 +887,6 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
     speakWatchData();
     if (!detailsReady || postIsOffChain) return;
     getFollowersCount(author);
-    getUserReputation(author).then(rep => setAuthorReputation(rep)).catch(() => {});
 
     // Check follow relationship for FAB button
     if (user && author !== user) {
@@ -924,19 +915,20 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
         const response = await axios.post(getHiveUrl(), {
           jsonrpc: '2.0',
           method: 'bridge.get_community',
-          params: { name: community_id },
+          params: { name: community_id, observer: user || '' },
           id: 1,
         });
         const data = response.data?.result;
         if (data) {
           setCommunityData({ subscribers: data.subscribers, title: data.title });
+          setCommunitySubscribed(!!data.context?.subscribed);
         }
       } catch (err) {
         console.error('Error fetching community data:', err);
       }
     };
     fetchCommunity();
-  }, [community_id]);
+  }, [community_id, user]);
 
   // Effect: Recalculate vote value when weight changes
   useEffect(() => {
@@ -1144,81 +1136,480 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
     navigate(`/community/${community}`);
   }, [navigate]);
 
+  // ── Watch v2 layout (02) ────────────────────────────────────────────────────
+  // Wide: the player and a side panel side by side, the dock, chapters and the
+  // description below, supporters and voters in a card beside them. Narrow: one
+  // column, and every panel is a chip tab above one fixed scroll area.
+  const wide = useWideWatch();
+  const isOwner = !!user && user.toLowerCase() === String(author || '').toLowerCase();
+  const loggedInOnChain = authenticated && isLoggedIn();
+  // The live chat's portal target, when Watch did not hand one in.
+  const [chatSlotEl, setChatSlotEl] = useState(null);
+  const sidePanelRef = useRef(null);
+  const creditsRef = useRef(null);
+  const [creditTab, setCreditTab] = useState('supporters');
+
+  // One cheap list call decides whether there's a transcript to offer; the
+  // panel itself only mounts once its tab is chosen.
+  const [hasSubtitles, setHasSubtitles] = useState(false);
+  useEffect(() => {
+    setHasSubtitles(false);
+    if (isLive || scheduled || !author || !permlink) return undefined;
+    let alive = true;
+    listSubtitleLanguages(author, permlink)
+      .then((list) => { if (alive) setHasSubtitles(list.length > 0); })
+      .catch(() => {});
+    return () => { alive = false; };
+  }, [author, permlink, isLive, scheduled]);
+
+  const chapters = videoControls?.chapters || EMPTY_CHAPTERS;
+  const nowSec = videoControls?.currentTime || 0;
+  const chapterAt = chapters.findIndex((c) => nowSec >= c.start && nowSec < c.end);
+  const sideIds = [
+    isLive && 'chat',
+    'discussion',
+    hasSubtitles && 'transcript',
+    !wide && chapters.length > 0 && 'chapters',
+    !wide && !scheduled && 'supporters',
+    !wide && !scheduled && 'voters',
+    !wide && upNext?.length > 0 && 'upnext',
+  ].filter(Boolean);
+  const [sideTab, pickSideTab] = useSideTab(sideIds);
+
+  // A chip below the player opens its panel; on a narrow screen the panel is
+  // further down the page, so bring it into view (under the sticky player).
+  const openSide = useCallback((id, { remember = true } = {}) => {
+    pickSideTab(id, { remember });
+    if (!wide) sidePanelRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, [pickSideTab, wide]);
+  const openDiscussion = useCallback(() => {
+    openSide('discussion');
+    setTimeout(() => {
+      sidePanelRef.current?.querySelector('.add-comment-wrap .textarea-box')?.focus({ preventScroll: true });
+    }, 350);
+  }, [openSide]);
+  const showVoters = useCallback(() => {
+    if (wide) {
+      setCreditTab('voters');
+      creditsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    } else {
+      openSide('voters', { remember: false });
+    }
+  }, [wide, openSide]);
+  // A chapter (card, list or summary sheet): jump there and play.
+  const seekChapter = useCallback((sec) => {
+    if (!videoControls?.onSeek) return;
+    videoControls.onSeek(sec);
+    if (videoControls.isPlaying === false) videoControls.onTogglePlay?.();
+  }, [videoControls]);
+
+  // The creator chip on the player shows with the controls (and while paused),
+  // never over a spot, the preload cover or a media state.
+  const creatorShown = !adPlaying && !mediaLoading && !mediaUnavailable && !mediaBlocked
+    && (videoControls ? (videoControls.isVisible || !videoControls.isPlaying) : true);
+
+  // Join the community it was posted in, right from the strip (same write as the
+  // community page: on-chain subscribe, or off-chain while incubating).
+  const handleJoinCommunity = useCallback(async () => {
+    if (!community_id || joinBusy) return;
+    if (!canSubscribe({ authenticated, incubationHandle })) {
+      toast.error(t('communities.page.loginToSubscribe'));
+      return;
+    }
+    const next = !communitySubscribed;
+    const label = comunity_name || community_id;
+    setJoinBusy(true);
+    try {
+      const { onChain } = await setCommunitySubscription({
+        id: community_id,
+        next,
+        incubationHandle,
+        prompt: next ? t('communities.page.subscribeTo', { label }) : t('communities.page.unsubscribeFrom', { label }),
+      });
+      setCommunitySubscribed(next);
+      if (onChain) {
+        setCommunityData((d) => (d && typeof d.subscribers === 'number'
+          ? { ...d, subscribers: Math.max(0, d.subscribers + (next ? 1 : -1)) }
+          : d));
+      }
+      toast.success(next ? t('communities.page.subscribedTo', { label }) : t('communities.page.unsubscribedFrom', { label }));
+    } catch (err) {
+      toast.error(t('communities.page.subscriptionFailed', { error: err?.message || t('communities.page.unknownError') }));
+    } finally {
+      setJoinBusy(false);
+    }
+  }, [community_id, joinBusy, authenticated, incubationHandle, communitySubscribed, comunity_name, t]);
+
   // Loading state - show loader if essential data is missing
   if (!videoDetails) {
     return <BarLoader />;
   }
 
-  // Views/age + payout/votes. In v2 this is rendered on the right of the title
-  // (stacked); in the classic layout it sits as its own row below the buttons.
-  // Defined once so the refs/tooltips only ever attach to a single instance.
-  const statsRow = (
-    <div className="info-stats-row">
-      <div className="wrap-left">
-        <ViewCount views={view} author={author} permlink={permlink} size={13} />
-        <div className="wrap">
-          <LuTimer />
-          <span>{formatRelativeTime(videoDetails?.created_at)}</span>
-        </div>
-      </div>
-      <div className="wrap-right-stats">
-        {/* An off-chain post has no payout and no beneficiaries: there is no
-            Hive post to reward. "$0.00" beside it read as "this earned
-            nothing", which is a different and much worse statement. */}
-        {!postIsOffChain && <span
-          ref={payoutRef}
-          onMouseEnter={() => setShowBeneficiaries(true)}
-          onMouseLeave={() => setShowBeneficiaries(false)}
-          onClick={() => setPinnedBeneficiaries(prev => !prev)}
-          style={{ cursor: 'pointer' }}
-        >
-          <PayoutAmount amount={videoDetails?.stats?.total_hive_reward ?? 0} size={13} />
-        </span>}
-        {!postIsOffChain && (showBeneficiaries || pinnedBeneficiaries) && beneficiaries.length > 0 && (
-          <BeneficiariesTooltip
-            beneficiaries={beneficiaries}
-            payoutInfo={payoutInfo}
-            displayTotal={videoDetails?.stats?.total_hive_reward ?? 0}
-            anchorRef={payoutRef}
-            pinned={pinnedBeneficiaries}
-            onClose={() => setPinnedBeneficiaries(false)}
-          />
-        )}
-        <span className="wrap" ref={voteCountRef}>
-          <UpvoteCount
-            // Off-chain posts have no Hive votes to count, so the stored ones
-            // are the only ones there are. A Hive post keeps its own count:
-            // mixing the two would report a number that matches neither.
-            count={postIsOffChain ? (offChainVotes ?? 0) : optimisticVoteCount}
-            voted={postIsOffChain ? offChainVoted : isVoted}
-            onClick={toggleTooltip}
-            loading={isLoading}
-            onCountEnter={() => setOpenToolTip(true)}
-            onCountLeave={() => setOpenToolTip(false)}
-            onCountClick={() => setPinnedTooltip(prev => !prev)}
-            size={13}
-          >
-            <div className="loader-circle">
-              <TailChase className="loader-circle" size="15" speed="1.5" color="red" />
-            </div>
-          </UpvoteCount>
-          {(openTooltip || pinnedTooltip) && (
-            <ToolTip
-              tooltipVoters={tooltipVoters}
-              anchorRef={voteCountRef}
-              pinned={pinnedTooltip}
-              onClose={() => setPinnedTooltip(false)}
-            />
-          )}
-        </span>
-      </div>
-    </div>
+  // ── The dock (02): vote, comment, tip, save, share, react, more ─────────────
+  const voteCount = postIsOffChain ? (offChainVotes ?? 0) : optimisticVoteCount;
+  const tagMode = votingClosed && !voteIsOffChain;
+  const voted = voteIsOffChain ? offChainVoted : isVoted;
+  const signInToVote = () => toast.info(t('watch.actions.signInToVote'));
+  let onVote;
+  if (voteIsOffChain) onVote = authenticated ? handleOffChainVote : signInToVote;
+  else if (!loggedInOnChain) onVote = signInToVote;
+  // You can't vote for yourself, and a tag is one-shot: the tile shows who voted.
+  else if (isOwner || (tagMode && alreadyTagged)) onVote = showVoters;
+  else onVote = toggleTooltip;
+  // Once the payout window has closed a vote only tags (CommentVoteTooltip).
+  const canTag = tagMode && loggedInOnChain && !alreadyTagged && !isOwner && !scheduled;
+  const hypeDisabled = !authenticated || (!isLoggedIn() && !incubationHandle);
+  const needPlaylistLogin = () => toast.error(t('playlists.loginToAdd'));
+
+  // The dock (02): vote, comments, reblog, save, tip, More. Vote is the dock's
+  // primary, always in the accent tint; Reblog falls back to Share when this
+  // viewer can't reblog (signed out, their own video). On a phone the dock is
+  // five tiles: Tip moves into More.
+  const reblogInDock = !!reblog.canReblog;
+  const reblogTile = reblogInDock && {
+    id: 'reblog',
+    icon: 'repeat',
+    label: reblog.label,
+    active: reblog.reblogged || reblog.armed,
+    tone: reblog.armed ? 'cyan' : 'accent',
+    disabled: reblog.busy,
+    title: reblog.reblogged ? t('common.reblog.reblogged') : t('common.reblog.title'),
+    onClick: () => { reblog.press(); },
+  };
+  const shareTile = { id: 'share', icon: 'share', label: t('common.actions.share'), onClick: () => setShareChooserOpen(true) };
+  const tipTile = isOwner ? {
+    id: 'edit',
+    icon: 'edit',
+    label: t('common.actions.edit'),
+    title: t('watch.actions.editTitle'),
+    onClick: () => { videoControls?.onPause?.(); setIsEditOpen(true); },
+  } : {
+    // Nobody tips themselves. Signed out, the tip window opens on Lightning,
+    // which needs no Hive account.
+    id: 'tip',
+    icon: 'volunteer_activism',
+    label: t('watch.actions.tip'),
+    title: t('watch.actions.tipTitle'),
+    lock: lockProps,
+    onClick: () => setIsTipModalOpen(true),
+  };
+
+  const dockTiles = [
+    {
+      id: 'vote',
+      icon: tagMode ? 'sell' : 'arrow_upward',
+      label: voteCount > 0 ? compactNumber(voteCount) : (tagMode ? t('watch.actions.tag') : t('watch.actions.vote')),
+      active: !!voted,
+      primary: true,
+      fill: true,
+      title: voteIsOffChain
+        ? (authenticated ? t('watch.actions.voteOffChain') : t('watch.actions.signInToVote'))
+        : (tagMode ? t('watch.actions.tagVideo') : t('watch.actions.voteVideo')),
+      ariaLabel: tagMode ? t('watch.actions.tagVideo') : t('watch.actions.voteVideo'),
+      onClick: onVote,
+    },
+    {
+      id: 'comment',
+      icon: 'chat_bubble',
+      label: videoDetails?.stats?.num_comments > 0 ? compactNumber(videoDetails.stats.num_comments) : t('comments.section.commentTab'),
+      ariaLabel: t('comments.section.commentTab'),
+      onClick: openDiscussion,
+    },
+    reblogTile || shareTile,
+    {
+      id: 'save',
+      icon: 'bookmark',
+      label: t('common.actions.save'),
+      active: isInWatchLater,
+      fill: isInWatchLater,
+      title: t('watch.actions.addToPlaylist'),
+      lock: loggedInOnChain ? lockProps : undefined,
+      onClick: loggedInOnChain ? () => setIsPlaylistModalOpen(true) : needPlaylistLogin,
+    },
+    { ...tipTile, wideOnly: true },
+  ].filter(Boolean);
+
+  // The video action menu (07d): Save and Share first, with their keys, then
+  // the extras as tiles; then the feed-tuning rows and Report.
+  const saveAction = loggedInOnChain ? () => setIsPlaylistModalOpen(true) : needPlaylistLogin;
+  menuKeysRef.current = {
+    save: () => {
+      if (loggedInOnChain && lockedForIncubation) { toast.info(LOCKED_TITLE); return; }
+      saveAction();
+    },
+    share: () => setShareChooserOpen(true),
+  };
+  // "Not interested" and "Don't show @creator": the card menu's feed tuning
+  // (CardOptionsMenu), here for the video being watched.
+  const feedTuningOk = () => {
+    if (isLoggedIn() && user) return true;
+    toast.error(t('engagement.cardMenu.loginToPersonalize'));
+    return false;
+  };
+  const onNotInterested = () => {
+    if (!feedTuningOk()) return;
+    hideVideo(user, author, permlink);
+    toast.success(t('engagement.cardMenu.notInterestedToast'), {
+      action: { label: t('engagement.cardMenu.undo'), onClick: () => unhideVideo(user, author, permlink) },
+    });
+  };
+  const onHideCreator = () => {
+    if (!feedTuningOk()) return;
+    hideCreator(user, author).then((ok) => { if (ok) refreshRailsAfterHide(queryClient); });
+    toast.success(t('engagement.cardMenu.hidingCreatorToast', { author }), {
+      action: {
+        label: t('engagement.cardMenu.undo'),
+        onClick: () => { unhideCreator(user, author).then((ok) => { if (ok) refreshRailsAfterHide(queryClient); }); },
+      },
+    });
+  };
+  const moreTiles = [
+    {
+      id: 'save',
+      icon: 'playlist_add',
+      label: t('common.actions.save'),
+      kbd: isLive ? null : 'S',
+      keys: isLive ? null : 'S',
+      title: t('watch.actions.addToPlaylist'),
+      lock: loggedInOnChain ? lockProps : undefined,
+      onClick: saveAction,
+    },
+    { ...shareTile, kbd: isLive ? null : '⇧S', keys: isLive ? null : 'Shift+S' },
+    { ...tipTile, narrowOnly: true },
+    !isLive && { id: 'react', icon: 'videocam', label: t('comments.section.reactTab'), title: t('player.controls.reactToMoment'), onClick: () => { openSide('discussion'); onReact?.(); } },
+    titleMeta.hasSummary && { id: 'summary', icon: 'auto_awesome', label: t('watch.summary.title'), title: t('watch.summary.buttonTitle'), onClick: () => setSummaryOpen(true) },
+    {
+      id: 'hype',
+      icon: 'local_fire_department',
+      label: reshareCount > 0 ? t('common.hype.withCount', { count: reshareCount }) : t('common.hype.hype'),
+      active: hasReshared,
+      disabled: hypeDisabled,
+      title: !authenticated ? t('common.hype.loginRequired') : hasReshared ? t('common.hype.hyped') : t('common.hype.title'),
+      onClick: handleReshare,
+    },
+    loggedInOnChain && { id: 'promote', icon: 'rocket_launch', label: t('watch.actions.promote'), title: t('watch.actions.promoteTitle'), lock: lockProps, onClick: () => setPromoteOpen(true) },
+    FEATURE_EDITOR && canRemixClip && {
+      id: 'clip',
+      icon: 'content_cut',
+      label: t('watch.clip.label'),
+      active: !!clipMode,
+      disabled: !authenticated,
+      title: !authenticated ? t('watch.clip.loginRequired') : clipMode ? t('watch.clip.cancel') : t('watch.clip.clipVideo'),
+      lock: lockProps,
+      onClick: clipMode ? handleCancelClip : handleStartClipMode,
+    },
+    canSeeVideoStats && {
+      id: 'stats',
+      icon: 'bar_chart',
+      label: t('watch.actions.analytics'),
+      title: t('watch.actions.analyticsTitle'),
+      active: videoStatsOpen,
+      tone: 'cyan',
+      onClick: () => setVideoStatsOpen((o) => !o),
+    },
+    loggedInOnChain && isFollowingCreator === false && !isOwner && {
+      id: 'follow',
+      icon: 'person_add',
+      label: t('common.actions.follow'),
+      title: t('watch.actions.followCreator'),
+      lock: lockProps,
+      onClick: handleFabFollow,
+    },
+  ];
+  const moreRows = [
+    isInWatchLater && {
+      id: 'watch-later',
+      icon: 'bookmark_remove',
+      label: t('watch.watchLater.removeTitle'),
+      disabled: isRemovingWatchLater,
+      onClick: handleRemoveFromWatchLater,
+    },
+    !isOwner && { id: 'not-interested', icon: 'block', label: t('engagement.cardMenu.notInterested'), muted: true, onClick: onNotInterested },
+    !isOwner && { id: 'hide-creator', icon: 'person_off', label: t('engagement.cardMenu.dontShowCreator', { author }), muted: true, onClick: onHideCreator },
+    {
+      id: 'report',
+      icon: 'flag',
+      active: isReported('post', `${author}/${permlink}`),
+      label: t('common.actions.report'),
+      title: t('watch.actions.reportTitle'),
+      danger: true,
+      onClick: () => setIsReportOpen(true),
+    },
+  ];
+
+  // "Support @creator" under supporters and voters (02): the tip window.
+  const supportButton = !isOwner ? (
+    <UiButton variant="danger" size={44} block next className="wv2-support-btn" title={t('watch.actions.tipTitle')} onClick={() => setIsTipModalOpen(true)} {...lockProps}>
+      {t('watch.actions.support', { name: videoDetails?.author?.id || author })}
+    </UiButton>
+  ) : null;
+  const votersPane = (
+    <VotersPane
+      voters={tooltipVoters}
+      total={videoDetails?.stats?.total_hive_reward ?? 0}
+      offChain={postIsOffChain}
+      offChainCount={offChainVotes}
+    />
   );
+
+  const sideTabs = [
+    isLive && {
+      id: 'chat',
+      label: t('watch.liveChat'),
+      icon: 'sensors',
+      keepMounted: true,
+      flush: true,
+      // The portal target <LiveStreamPlayer> draws the room's chat into, so it
+      // shares the player's single LiveKit connection. Empty until it connects.
+      content: <div className="wv2-chat" ref={setChatSlotEl} />,
+    },
+    {
+      id: 'discussion',
+      label: t('communities.page.tabs.discussion'),
+      count: videoDetails?.stats?.num_comments || null,
+      keepMounted: true,
+      flush: true,
+      content: (
+        <CommentSection
+          panel
+          videoDetails={videoDetails}
+          author={author}
+          permlink={permlink}
+          setIsVoted={setIsVoted}
+          currentTime={videoControls?.currentTime}
+          duration={videoControls?.duration}
+          onSeek={isLive ? videoControls?.onSeek : seekFromText}
+          onRefreshReactions={videoControls?.onRefreshReactions}
+          onPause={videoControls?.onPause}
+          pinnedComments={extendedDetails?.pinned_comments}
+          pinnable={!isLive && !scheduled}
+        />
+      ),
+    },
+    hasSubtitles && {
+      id: 'transcript',
+      label: t('comments.tabs.transcript'),
+      flush: true,
+      content: (
+        <Transcript
+          author={author}
+          permlink={permlink}
+          currentTime={videoControls?.currentTime || 0}
+          onSeek={videoControls?.onSeek}
+          embedded
+        />
+      ),
+    },
+    !wide && chapters.length > 0 && {
+      id: 'chapters',
+      label: t('audio.player.chapters'),
+      count: chapters.length,
+      content: <ChapterList chapters={chapters} current={chapterAt} onSeek={seekChapter} />,
+    },
+    !wide && !scheduled && {
+      id: 'supporters',
+      label: t('profile.tabs.supporters'),
+      content: (
+        <>
+          <SupportersPane author={author} avatars />
+          {supportButton}
+        </>
+      ),
+    },
+    !wide && !scheduled && {
+      id: 'voters',
+      label: t('watch.voters.title'),
+      count: postIsOffChain ? (offChainVotes || null) : (tooltipVoters.length || null),
+      content: votersPane,
+    },
+    !wide && upNext?.length > 0 && {
+      id: 'upnext',
+      label: t('audio.player.upNext'),
+      content: <UpNextList videos={upNext} />,
+    },
+  ];
+
+  // The supporters-only paywall and the creator's guest list (from Watch), then
+  // the clip bar. Between the player and the title on purpose: they comment on
+  // the thing just above them.
+  const clipBar = FEATURE_EDITOR && clipMode ? (
+    <div className={cx('wv2-clipbar', wide && 'is-over')} role="status">
+      <Icon name="content_cut" size={24} className="wv2-clipbar__icon" />
+      <span className="wv2-clipbar__label">
+        {clipMode === 'start' && t('watch.clip.barStart')}
+        {clipMode === 'end' && t('watch.clip.barEnd', { start: formatTime(clipStart) })}
+        {clipMode === 'done' && t('watch.clip.barDone', { start: formatTime(clipStart), end: formatTime(clipEnd) })}
+      </span>
+      {clipMode === 'start' && <UiButton variant="primary" size={36} onClick={handleSetClipStart}>{t('watch.clip.setStart')}</UiButton>}
+      {clipMode === 'end' && <UiButton variant="primary" size={36} onClick={handleSetClipEnd}>{t('watch.clip.setEnd')}</UiButton>}
+      {clipMode === 'done' && <UiButton variant="primary" size={36} onClick={handleCreateClip}>{t('watch.clip.createClip')}</UiButton>}
+      <UiButton variant={wide ? 'media' : 'secondary'} size={36} onClick={handleCancelClip}>{t('common.actions.cancel')}</UiButton>
+    </div>
+  ) : null;
 
   return (
     <>
-      <div className="play-video">
-        <div className="top-container">
+      <div className={cx('play-video', 'wv2', wide ? 'is-wide' : 'is-narrow', isLive && 'is-live')}>
+        {/* Where it was posted (02 community strip), with Join, the playlist
+            this video is part of, and the title's translation (22a). Above the
+            player and the side panel on a wide screen, under the player on a
+            narrow one. */}
+        {(community_id || playlistData?.playlist || titleMeta.selectedLang) && (
+          <div className="wv2-community">
+            {community_id ? (
+              <button type="button" className="wv2-community__link" onClick={() => handleCommunityNavigate(community_id)}>
+                {/* The community's letter, under its picture (shown when there is none). */}
+                <span className="wv2-community__mark" aria-hidden="true">
+                  {String(comunity_name || community_id).replace(/^hive-/, '').slice(0, 1).toUpperCase()}
+                  <AccountImg account={community_id} alt="" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
+                </span>
+                <span className="wv2-community__text">
+                  <span className="is-muted is-posted">{t('watch.community.postedIn')}</span>{' '}
+                  <b>{comunity_name || community_id}</b>
+                  {communityData?.subscribers != null && (
+                    <span className="is-muted is-members"> · {t('watch.community.members', { count: communityData.subscribers })}</span>
+                  )}
+                  {playlistData?.playlist && Array.isArray(playlistData.videos) && playlistData.currentIndex != null && (
+                    <span className="is-narrow-only"> · {playlistData.playlist.name || playlistData.playlist.title} {playlistData.currentIndex + 1}/{playlistData.videos.length}</span>
+                  )}
+                </span>
+              </button>
+            ) : <span className="wv2-community__spacer" />}
+            {playlistData?.playlist && (
+              <span className="wv2-community__playlist">
+                <Icon name="playlist_play" size={18} />
+                <span>{t('watch.community.partOf')}</span>
+                <b>{playlistData.playlist.name || playlistData.playlist.title}</b>
+                {Array.isArray(playlistData.videos) && playlistData.currentIndex != null && (
+                  <span>· {t('watch.community.position', { current: playlistData.currentIndex + 1, total: playlistData.videos.length })}</span>
+                )}
+              </span>
+            )}
+            {titleMeta.selectedLang && (
+              <button type="button" className="wv2-community__translated" onClick={() => titleMeta.selectLanguage(null)}>
+                <Icon name="translate" size={16} />
+                <span>{t('watch.summary.translatedTo', { language: SUPPORTED_LANGUAGES.find((l) => l.code === titleMeta.selectedLang)?.native || titleMeta.selectedLang.toUpperCase() })}</span>
+                <span aria-hidden="true">·</span>
+                <span>{t('watch.summary.showOriginal')}</span>
+              </button>
+            )}
+            {community_id && !scheduled && (
+              <UiButton
+                variant={communitySubscribed ? 'secondary' : 'cyan'}
+                size={32}
+                className="wv2-community__join"
+                onClick={handleJoinCommunity}
+                loading={joinBusy}
+                aria-pressed={communitySubscribed}
+              >
+                {communitySubscribed ? t('communities.page.subscribed') : t('chat.channels.join')}
+              </UiButton>
+            )}
+          </div>
+        )}
+
+        <div className="wv2-stage">
+          <span className="wv2-glow" aria-hidden="true" />
           {(author && permlink) ? (
             <div className="video-iframe-wrapper" ref={wrapperRef}>
               {/* Live OpenPods stream: the WebRTC live player takes the player
@@ -1227,7 +1618,7 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
               {isLive && streamRoom && (
                 <LiveStreamPlayer
                   roomName={streamRoom}
-                  chatSlot={liveChatSlot}
+                  chatSlot={liveChatSlot || chatSlotEl}
                   onChatSent={onLiveChatSent}
                   vodAssetPending={vodAssetPending}
                   onRoomMeta={onStreamRoomMeta}
@@ -1256,21 +1647,27 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
               {bannerHit}
               {/* The ticker crawl, drawn above the controls bar. */}
               {tickerSlot}
-              <video
-                ref={attachVideo}
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "contain",
-                  background: "#000",
-                }}
-                playsInline
-              />
+              <video ref={attachVideo} className="wv2-video" playsInline />
+              {/* The creator on the video (02): who made this, and Follow. Shown
+                  with the controls, so it never sits on a playing picture. */}
+              {!isLive && (
+                <div className={cx('wv2-creator', creatorShown && 'is-shown')}>
+                  <AuthorBadge
+                    author={videoDetails?.author?.id || author}
+                    followersCount={followData?.follower_count}
+                    showFollow
+                    // A follow of an author with no Hive account is stored
+                    // off-chain, and they are told when it lands.
+                    offChainAuthor={!!postIsOffChain}
+                    // Left to the badge for an off-chain author: it reads that
+                    // state from the incubation store.
+                    isFollowing={postIsOffChain ? undefined : isFollowingCreator}
+                    onFollow={(_, willFollow) => setIsFollowingCreator(willFollow)}
+                  />
+                </div>
+              )}
               {/* Branded preload cover — the SAME splash as the site's initial load
-                  (EmergencyScreen "checking": 3Speak logo + TailChase). Opaque, so it
+                  (EmergencyScreen "checking"): 3Speak logo + TailChase. Opaque, so it
                   HIDES the black player until the first frame is ready (driven by the
                   onReady gate in Watch.jsx). Cleared the moment playback is ready, and
                   suppressed once a video is known unavailable so the overlays don't stack. */}
@@ -1278,66 +1675,44 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                 <div className="video-preload-overlay" aria-hidden="true">
                   <img
                     className="video-preload-logo"
-                    src={isDarkTheme ? threespeakLogoDark : threespeakLogo}
+                    // The player is a media surface in both themes (STYLE_GUIDE §2),
+                    // so its splash is the dark one: the light-on-dark mark.
+                    src={threespeakLogoDark}
                     alt="3Speak"
                   />
-                  <TailChase size="42" speed="1.75" color="var(--accent-primary, #e0594b)" />
+                  <TailChase size="42" speed="1.75" color="var(--accent)" />
                 </div>
               )}
-              {/* Media gone (old upload whose IPFS content is unpinned). The player
-                  exhausted every gateway; show an honest hint over the black frame
-                  instead of a stuck spinner. The post itself still loads below. */}
-              {mediaUnavailable && (
-                <div style={{
-                  position: 'absolute', inset: 0, zIndex: 6, background: '#000',
-                  display: 'flex', flexDirection: 'column', alignItems: 'center',
-                  justifyContent: 'center', textAlign: 'center', padding: '24px', gap: '10px',
-                }}>
-                  {/* The checker says the post is scheduled for a future date (Watch
-                      looks that up before showing this), so it is not gone, just
-                      not published yet. */}
-                  <div style={{ fontSize: '2.2rem', lineHeight: 1 }}>{mediaScheduledOn ? '🗓️' : '🚫'}</div>
-                  <div style={{ fontSize: '1.05rem', fontWeight: 600, color: '#f0f0f0' }}>
-                    {mediaScheduledOn ? t('watch.media.scheduledTitle') : t('watch.media.unavailableTitle')}
-                  </div>
-                  <div style={{ fontSize: '0.85rem', color: '#aaa', maxWidth: '440px', lineHeight: 1.5 }}>
-                    {mediaScheduledOn
-                      ? t('watch.media.scheduledBody', { date: new Date(mediaScheduledOn).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' }) })
-                      : t('watch.media.unavailableBody')}
-                  </div>
-                </div>
-              )}
+              {/* Media gone (old upload whose IPFS content is unpinned), or a post
+                  scheduled for later (Watch looks that up first): an honest state
+                  over the black frame instead of a stuck spinner. The post itself
+                  still loads below. */}
+              {mediaUnavailable && (mediaScheduledOn ? (
+                <MediaState icon="event" tone="cyan" title={t('watch.media.scheduledTitle')}>
+                  {t('watch.media.scheduledBody', { date: new Date(mediaScheduledOn).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' }) })}
+                </MediaState>
+              ) : (
+                <MediaState icon="cloud_off" title={t('watch.media.unavailableTitle')}>
+                  {t('watch.media.unavailableBody')}
+                </MediaState>
+              ))}
               {/* Recoverable transport failure — a gateway that couldn't be read
                   (CORS), a network drop, a 5xx or a timeout. The media is very
                   likely fine, so say so and offer a retry rather than claiming
                   the video is gone. Nothing is reported to the checker. */}
+              {/* A lock drawn over the video (31c), handed in by Watch. */}
+              {playerOverlay}
               {mediaBlocked && !mediaUnavailable && (
-                <div style={{
-                  position: 'absolute', inset: 0, zIndex: 6, background: '#000',
-                  display: 'flex', flexDirection: 'column', alignItems: 'center',
-                  justifyContent: 'center', textAlign: 'center', padding: '24px', gap: '10px',
-                }}>
-                  <div style={{ fontSize: '2.2rem', lineHeight: 1 }}>📡</div>
-                  <div style={{ fontSize: '1.05rem', fontWeight: 600, color: '#f0f0f0' }}>
-                    {t('watch.media.blockedTitle')}
-                  </div>
-                  <div style={{ fontSize: '0.85rem', color: '#aaa', maxWidth: '440px', lineHeight: 1.5 }}>
-                    {t('watch.media.blockedBody')}
-                  </div>
-                  {onRetryPlayback && (
-                    <button
-                      onClick={onRetryPlayback}
-                      style={{
-                        marginTop: '6px', padding: '7px 16px', fontSize: '0.85rem',
-                        borderRadius: '7px', cursor: 'pointer', background: 'transparent',
-                        border: '1px solid var(--accent-primary, #e0594b)',
-                        color: 'var(--accent-primary, #e0594b)',
-                      }}
-                    >
-                      {t('common.actions.tryAgain')}
-                    </button>
+                <MediaState
+                  icon="dns"
+                  tone="accent"
+                  title={t('watch.media.blockedTitle')}
+                  action={onRetryPlayback && (
+                    <UiButton variant="media" size={36} next onClick={onRetryPlayback}>{t('common.actions.tryAgain')}</UiButton>
                   )}
-                </div>
+                >
+                  {t('watch.media.blockedBody')}
+                </MediaState>
               )}
               {/* Not over the spot. contentTime() clamps to the cut point while the
                   break runs, so without this the last cue before the ad would sit
@@ -1370,15 +1745,16 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                   />
                 );
               })()}
+              {/* The tip nudge (33a), at 90% of someone else's video. */}
               {tipNudgeVisible && !isTipModalOpen && user !== author && (
-                <div className="tip-nudge">
-                  <FaHeart className="tip-nudge-emoji hide-mobile" style={{ color: '#e53935' }} />
+                <div className="tip-nudge" role="status">
+                  <Icon name="volunteer_activism" size={24} className="tip-nudge-icon" />
                   <span className="tip-nudge-text"><Trans i18nKey="watch.tipNudge.text" values={{ author }} components={{ hide: <span className="hide-mobile" />, b: <strong /> }} /></span>
                   <button type="button" className="tip-nudge-btn" onClick={() => { setTipNudgeVisible(false); setIsTipModalOpen(true); }}>
                     {t('watch.actions.tip')}
                   </button>
                   <button type="button" className="tip-nudge-close" onClick={() => setTipNudgeVisible(false)} aria-label={t('watch.tipNudge.dismiss')}>
-                    <MdClose size={14} />
+                    <Icon name="close" size={16} />
                   </button>
                 </div>
               )}
@@ -1433,8 +1809,8 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                     {suggestions.length > 0 && (
                       <div className="video-ended-mobile-card">{renderCard(suggestions[0], 0)}</div>
                     )}
-                    <button type="button" className="video-replay-btn" onClick={videoControls.onReplay} title={t('player.overlay.replay')}>
-                      <MdReplay size={48} />
+                    <button type="button" className="video-replay-btn" onClick={videoControls.onReplay} title={t('player.overlay.replay')} aria-label={t('player.overlay.replay')}>
+                      <Icon name="replay" size={40} />
                     </button>
                     {/* Mobile: 1 card right of replay */}
                     {suggestions.length > 1 && (
@@ -1451,11 +1827,12 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
               })()}
               {videoControls?.autoplayBlocked && !videoControls?.videoEnded && (
                 <div className="video-replay-overlay" onClick={videoControls.onAutoplayTap}>
-                  <button type="button" className="video-replay-btn" title={t('common.actions.play')}>
-                    <MdPlayArrow size={48} />
+                  <button type="button" className="video-replay-btn" title={t('common.actions.play')} aria-label={t('common.actions.play')}>
+                    <Icon name="play_arrow" size={40} fill />
                   </button>
                 </div>
               )}
+              {wide && clipBar}
               {videoControls && (
                 <>
                   <div
@@ -1504,15 +1881,15 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                   {speedBadge && (
                     <div className={`video-speed-badge${speedBadge.holding ? '' : ' video-speed-badge--leaving'}`} aria-live="polite">
                       <span className="video-speed-badge__rate">{speedBadge.rate === FRAME_STEP ? '1 fps' : `${speedBadge.rate}x`}</span>
-                      {speedBadge.holding && <TbPlayerTrackNextFilled className="video-speed-badge__icon" aria-hidden="true" />}
+                      {speedBadge.holding && <Icon name="fast_forward" size={16} fill className="video-speed-badge__icon" />}
                     </div>
                   )}
                   {actionFlash && (
                     <div key={actionFlash.n} className="video-action-flash" aria-hidden="true">
-                      {actionFlash.kind === 'play' && <FaPlay className="video-action-flash__icon video-action-flash__icon--play" />}
-                      {actionFlash.kind === 'pause' && <FaPause className="video-action-flash__icon" />}
-                      {actionFlash.kind === 'back' && <TbRewindBackward10 className="video-action-flash__icon" />}
-                      {actionFlash.kind === 'forward' && <TbRewindForward10 className="video-action-flash__icon" />}
+                      {actionFlash.kind === 'play' && <Icon name="play_arrow" fill className="video-action-flash__icon video-action-flash__icon--play" />}
+                      {actionFlash.kind === 'pause' && <Icon name="pause" fill className="video-action-flash__icon" />}
+                      {actionFlash.kind === 'back' && <Icon name="replay_10" className="video-action-flash__icon" />}
+                      {actionFlash.kind === 'forward' && <Icon name="forward_10" className="video-action-flash__icon" />}
                     </div>
                   )}
                   <VideoControls
@@ -1539,9 +1916,10 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                     previewVideoId={videoControls.previewVideoId}
                     getPlaybackHeight={videoControls.getPlaybackHeight}
                     onMarkerSelect={videoControls.onMarkerSelect}
-                    onReactToMoment={videoControls.onReactToMoment}
+                    onReactToMoment={() => { openSide('discussion'); videoControls.onReactToMoment?.(); }}
                     onCycleReactionSize={videoControls.onCycleReactionSize}
                     reactionSizeLabel={videoControls.reactionSizeLabel}
+                    reactionSizeShort={videoControls.reactionSizeShort}
                     onTogglePip={videoControls.onTogglePip}
                     qualityLevels={videoControls.qualityLevels}
                     currentQuality={videoControls.currentQuality}
@@ -1566,117 +1944,123 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
             </div>
           ) : (
             <div className="video-loader">
-              <ImSpinner9 className="spinner" />
+              <Icon name="progress_activity" size={40} className="v2-spin" />
             </div>
           )}
+        </div>
 
+        <WatchTabs
+          tabs={sideTabs}
+          active={sideTab}
+          onChange={(id) => pickSideTab(id)}
+          wide={wide}
+          label={t('watch.side.label')}
+          panelRef={sidePanelRef}
+        />
+
+        <div className="wv2-main">
           {/* Notices that belong to the video rather than the page — the
-              supporters-only paywall, and the creator's guest list. Between the
-              player and the title on purpose: above the player they read as a
-              site-wide banner and push the video down the page, when what they
-              are actually commenting on is the thing just above them. */}
+              supporters-only paywall, the creator's guest list, channel surfing. */}
           {belowPlayerSlot}
+          {!wide && clipBar}
 
-          <div className={`video-title-row${!mobileDetailsExpanded ? ' title-collapsed' : ''}`}>
-            <div className="video-title-col">
-              <div className="video-title-line">
-                <h3>{titleMeta.translatedTitle || videoDetails?.title}</h3>
+          {/* Title, meta and tags on the left, the dock on the right (02);
+              stacked when the column is narrow. */}
+          <div className={cx('wv2-headrow', scheduled && 'is-solo')}>
+            <div className="wv2-head">
+              {isLive && (
+                <div className="wv2-head__pills">
+                  <StatusPill tone="live">{t('cards.badges.live')}</StatusPill>
+                </div>
+              )}
+              <div className="wv2-title-row">
+                <h1 className="wv2-title">{titleMeta.translatedTitle || videoDetails?.title}</h1>
+                <AiBadge key={`${author}/${permlink}`} author={author} permlink={permlink} />
                 <TitleTranslate
                   languages={titleMeta.availableLangs}
                   selectedLang={titleMeta.selectedLang}
                   onSelect={titleMeta.selectLanguage}
                 />
-                <AiBadge key={`${author}/${permlink}`} author={author} permlink={permlink} />
               </div>
-              <div className="mobile-title-meta">
-                <AuthorBadge
-                  author={videoDetails?.author?.id}
-                  reputation={authorReputation}
-                  followersCount={followData?.follower_count}
-                />
-                {community_id && (
-                  <div className="community-title-wrap" onClick={() => handleCommunityNavigate(community_id)}>
-                    <AccountImg account={community_id} alt="" />
-                    <div className="community-text">
-                      <span className="community-name">{comunity_name}</span>
-                    </div>
-                  </div>
+
+              {/* Views · age · payout (02 meta line). The payout opens who shares it. */}
+              <div className="wv2-meta">
+                <span>{t('nav.search.views', { count: view || 0, formatted: compactNumber(view || 0) })}</span>
+                <span aria-hidden="true">·</span>
+                <span>{formatRelativeTime(videoDetails?.created_at)}</span>
+                {!postIsOffChain && !scheduled && (
+                  <>
+                    <span aria-hidden="true">·</span>
+                    {/* An off-chain post has no payout and no beneficiaries: there is
+                        no Hive post to reward. "$0.00" beside it read as "this earned
+                        nothing", which is a different and much worse statement. */}
+                    <span
+                      ref={payoutRef}
+                      className="wv2-meta__payout"
+                      onMouseEnter={() => setShowBeneficiaries(true)}
+                      onMouseLeave={() => setShowBeneficiaries(false)}
+                    >
+                      <PayoutAmount amount={videoDetails?.stats?.total_hive_reward ?? 0} size={12} onClick={() => setPinnedBeneficiaries(prev => !prev)} />
+                    </span>
+                    {(showBeneficiaries || pinnedBeneficiaries) && beneficiaries.length > 0 && (
+                      <BeneficiariesTooltip
+                        beneficiaries={beneficiaries}
+                        payoutInfo={payoutInfo}
+                        displayTotal={videoDetails?.stats?.total_hive_reward ?? 0}
+                        anchorRef={payoutRef}
+                        pinned={pinnedBeneficiaries}
+                        onClose={() => setPinnedBeneficiaries(false)}
+                      />
+                    )}
+                  </>
                 )}
-              </div>
-            </div>
-            {v2 && <div className="pv2-title-meta">{statsRow}</div>}
-            <button
-              type="button"
-              className="mobile-title-toggle"
-              onClick={() => setMobileDetailsExpanded(prev => !prev)}
-            >
-              {mobileDetailsExpanded ? <MdKeyboardArrowUp size={20} /> : <MdKeyboardArrowDown size={20} />}
-            </button>
-          </div>
-
-          <div className={`video-details-collapsible${mobileDetailsExpanded ? '' : ' collapsed'}`}>
-          <div className="badges-row">
-            <AuthorBadge
-              author={videoDetails?.author?.id}
-              reputation={authorReputation}
-              followersCount={followData?.follower_count}
-              showFollow
-              // No longer locked for an author with no Hive account. A follow
-              // of one is stored off-chain instead of being broadcast at an
-              // account that does not exist, and they are told when it does.
-              offChainAuthor={!!postIsOffChain}
-              // Left to the badge for an off-chain author: it reads that state
-              // from the incubation store, and the Hive lookup this holds would
-              // always answer "no".
-              isFollowing={postIsOffChain ? undefined : isFollowingCreator}
-              onFollow={(_, willFollow) => setIsFollowingCreator(willFollow)}
-            />
-            {community_id && (<div className="community-title-wrap" onClick={() => handleCommunityNavigate(community_id)}>
-              <AccountImg account={community_id} alt="" />
-              <div className="community-text">
-                <span className="community-name">{comunity_name}</span>
-                {communityData?.subscribers != null && (
-                  <span className="community-members">{t('watch.community.members', { count: communityData.subscribers })}</span>
-                )}
-              </div>
-            </div>)}
-          </div>
-
-          <div className="community-tags-row">
-            <div className="tag-wrapper">
-              {extendedDetails?.mantecurated && (
-                <span className="curated-tag" onClick={() => handleSelectTag('mantecurated')}>
-                  <img src={mantequillaLogo} alt="" className="curated-tag-icon" />
-                  {t('watch.tags.curated')}
-                </span>
-              )}
-              {tags.map((tag, index) => (
-                <span key={index} onClick={() => handleSelectTag(tag)}>{tag}</span>
-              ))}
-            </div>
-
-            {/* Topic consensus (viewer votes + auto tags, each with its %). Siblings
-                of the author tags: on desktop they share the row and wrap together
-                (.topic-chips is display:contents); on mobile they drop to their own
-                line. Hover shows who tagged it; click pins that list. */}
-            {SHOW_TOPIC_TAGS && topicTags?.counts?.length > 0 && (
-              <div className="topic-chips">
-                {topicTags.counts.map((c) => (
-                  <span
-                    key={c.tag}
-                    className={`tag--topic${c.auto ? ' tag--topic-auto' : ''}${c.count > 0 ? ' tag--topic-voted' : ''}`}
-                    onMouseEnter={(e) => { if (!tagTipPinned) setTagTipHover({ tag: c.tag, el: e.currentTarget }); }}
-                    onMouseLeave={() => { if (!tagTipPinned) setTagTipHover(null); }}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setTagTipPinned((prev) => (prev?.tag === c.tag ? null : { tag: c.tag, el: e.currentTarget }));
-                    }}
-                  >
-                    {displayTag(c.tag)} <b>{c.pct}%</b>
-                  </span>
+                {/* The author's tags, as chips in the meta line (02). */}
+                {tags.map((tag) => (
+                  <button type="button" key={tag} className="wv2-tag" onClick={() => handleSelectTag(tag)}>#{tag}</button>
                 ))}
               </div>
-            )}
+
+              {/* Curated, then the crowd's topics with their share, then "Tag this
+                  video" once voting has closed (33a): a row of 36px chips. */}
+              {(extendedDetails?.mantecurated || (SHOW_TOPIC_TAGS && topicTags?.counts?.length > 0) || canTag) && (
+                <div className="wv2-topics">
+                  {extendedDetails?.mantecurated && (
+                    <button type="button" className="wv2-topic is-curated" onClick={() => handleSelectTag('mantecurated')}>
+                      <img src={mantequillaLogo} alt="" className="wv2-topic__logo" />
+                      {t('watch.tags.curated')}
+                    </button>
+                  )}
+                  {SHOW_TOPIC_TAGS && topicTags?.counts?.map((c) => {
+                    const mine = (interests || []).includes(c.tag);
+                    return (
+                      <button
+                        type="button"
+                        key={`topic-${c.tag}`}
+                        className={cx('wv2-topic', c.count > 0 && 'is-voted', c.auto && 'is-auto', mine && 'is-mine')}
+                        onMouseEnter={(e) => { if (!tagTipPinned) setTagTipHover({ tag: c.tag, el: e.currentTarget }); }}
+                        onMouseLeave={() => { if (!tagTipPinned) setTagTipHover(null); }}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setTagTipPinned((prev) => (prev?.tag === c.tag ? null : { tag: c.tag, el: e.currentTarget }));
+                        }}
+                      >
+                        <Icon name={mine ? 'check' : 'sell'} size={16} />
+                        {displayTag(c.tag)}
+                        <span className="wv2-topic__n num">{c.pct}%</span>
+                      </button>
+                    );
+                  })}
+                  {canTag && (
+                    <button type="button" className="wv2-topic is-add" onClick={toggleTooltip}>
+                      <Icon name="sell" size={16} />
+                      {t('watch.actions.tagVideo')}
+                    </button>
+                  )}
+                </div>
+              )}
+
+            </div>
+            {!scheduled && <WatchDock tiles={dockTiles} moreTiles={moreTiles} moreRows={moreRows} wide={wide} />}
           </div>
 
           {/* Voters list for the hovered/pinned topic chip. */}
@@ -1725,398 +2109,153 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
             );
           })()}
 
-          <div className="play-video-info">
-            {scheduled && (
-              <div className="scheduled-notice">
-                <LuTimer />
-                <span>
-                  <Trans
-                    i18nKey="watch.scheduled.notice"
-                    values={{ date: scheduledOn ? new Date(scheduledOn).toLocaleString() : t('watch.scheduled.futureDate') }}
-                    components={{ b: <strong /> }}
-                  />
-                  {(authenticated && user === author) && onEditScheduled && (
-                    <>
-                      {' '}
-                      <button type="button" className="scheduled-notice-edit" onClick={() => onEditScheduled()}>
-                        {t('watch.scheduled.edit')}
-                      </button>
-                    </>
-                  )}
+          {/* A scheduled post isn't public yet: no dock, only the owner's way to
+              edit, reschedule or cancel it (33a). */}
+          {scheduled ? (
+            <div className="wv2-state is-cyan">
+              <span className="wv2-state__icon"><Icon name="event" size={24} /></span>
+              <div className="wv2-state__body">
+                <span className="wv2-state__text">
+                  <b>
+                    <Trans
+                      i18nKey="watch.scheduled.notice"
+                      values={{ date: scheduledOn ? new Date(scheduledOn).toLocaleString(undefined, { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) : t('watch.scheduled.futureDate') }}
+                      components={{ b: <span /> }}
+                    />
+                  </b>
+                  <span>{t('watch.scheduled.notPublished')}</span>
                 </span>
-              </div>
-            )}
-            {!v2 && statsRow}
-
-            <div className="info-buttons-row">
-              {FEATURE_EDITOR && canRemixClip && (
-                <div className="info-buttons-left">
-                  <button
-                    type="button"
-                    className={`pv-btn clip-btn${clipMode ? ' active' : ''}`}
-                    onClick={clipMode ? handleCancelClip : handleStartClipMode}
-                    title={!authenticated ? t('watch.clip.loginRequired') : clipMode ? t('watch.clip.cancel') : t('watch.clip.clipVideo')}
-                    disabled={!authenticated}
-                    {...lockProps}
-                  >
-                    <Scissors size={16} />
-                    <span className="tools-row-label">{t('watch.clip.label')}</span>
-                  </button>
-                  {clipMode && (
-                    <div className="clip-bar-inline">
-                      <span className="clip-bar-inline-label">
-                        {clipMode === 'start' && t('watch.clip.seekToStart')}
-                        {clipMode === 'end' && `${formatTime(clipStart)} →`}
-                        {clipMode === 'done' && `${formatTime(clipStart)} – ${formatTime(clipEnd)}`}
-                      </span>
-                      {clipMode === 'start' && (
-                        <button type="button" className="clip-action-btn" onClick={handleSetClipStart}>{t('watch.clip.setStart')}</button>
-                      )}
-                      {clipMode === 'end' && (
-                        <button type="button" className="clip-action-btn" onClick={handleSetClipEnd}>{t('watch.clip.setEnd')}</button>
-                      )}
-                      {clipMode === 'done' && (
-                        <button type="button" className="clip-action-btn" onClick={handleCreateClip}>{t('watch.clip.createClip')}</button>
-                      )}
-                    </div>
-                  )}
-                </div>
-              )}
-
-              <div className="info-buttons-right">
-                {/* A scheduled post isn't public yet — vote/share/reshare/tip/etc.
-                    don't apply. Only the owner's edit (pen) control is shown,
-                    routed to the scheduled-post editor. */}
-                {scheduled ? (
-                  (authenticated && user === author) && (
-                    <button
-                      type="button"
-                      className="pv-btn edit-video-btn"
-                      onClick={() => onEditScheduled?.()}
-                      title={t('watch.scheduled.editTitle')}
-                    >
-                      <MdEdit size={16} />
-                    </button>
-                  )
-                ) : (
-                <>
-                {titleMeta.hasSummary && (
-                  <button
-                    type="button"
-                    className="pv-btn summary-btn"
-                    onClick={() => setSummaryOpen(true)}
-                    title={t('watch.summary.buttonTitle')}
-                  >
-                    <MdAutoAwesome size={15} />
-                    <span>{t('watch.summary.title')}</span>
-                  </button>
-                )}
-                {authenticated && isLoggedIn() && !isVoted && user?.toLowerCase() !== author?.toLowerCase() && !(votingClosed && alreadyTagged) && (
-                  // Hidden on your own video (you can't vote for yourself).
-                  // Sits to the left of the share button; opens the
-                  // same vote tooltip the upvote count uses, so the
-                  // existing weight-picker / submit flow still drives
-                  // the actual broadcast. Hidden once the user has
-                  // already voted — and, once voting is closed, once the
-                  // user has already tagged (the tag is one-shot).
-                  <button
-                    type="button"
-                    className={`pv-btn vote-btn${voteIsOffChain && offChainVoted ? ' voted' : ''}`}
-                    onClick={voteIsOffChain ? handleOffChainVote : toggleTooltip}
-                    title={voteIsOffChain
-                      ? (authenticated
-                        ? t('watch.actions.voteOffChain')
-                        : t('watch.actions.signInToVote'))
-                      : (votingClosed ? t('watch.actions.tagVideo') : t('watch.actions.voteVideo'))}
-                    {...(voteIsOffChain ? {} : lockProps)}
-                    {...(voteIsOffChain && !authenticated
-                      ? { 'aria-disabled': true, onClick: (e) => { e.preventDefault(); } }
-                      : {})}
-                  >
-                    {votingClosed && !voteIsOffChain ? <IoPricetagOutline size={14} /> : <FaHeart size={14} />}
-                    <span>
-                      {votingClosed && !voteIsOffChain ? t('watch.actions.tag') : t('watch.actions.vote')}
-                      {voteIsOffChain && offChainVotes ? ` ${offChainVotes}` : ''}
-                    </span>
-                  </button>
-                )}
-                {canSeeVideoStats && (
-                  <button
-                    type="button"
-                    className={`pv-btn stats-btn${videoStatsOpen ? ' active' : ''}`}
-                    onClick={() => setVideoStatsOpen((o) => !o)}
-                    title={t('watch.actions.analyticsTitle')}
-                    aria-expanded={videoStatsOpen}
-                  >
-                    <MdBarChart size={16} />
-                    <span>{t('watch.actions.analytics')}</span>
-                  </button>
-                )}
-                <button
-                  type="button"
-                  className="pv-btn share-btn"
-                  onClick={() => setShareChooserOpen(true)}
-                  title={t('common.actions.share')}
-                >
-                  <MdShare size={16} />
-                  <span>{t('common.actions.share')}</span>
-                </button>
-
-                <button
-                  type="button"
-                  className={`pv-btn reshare-btn${hasReshared ? ' reshared' : ''}`}
-                  onClick={handleReshare}
-                  disabled={!authenticated || (!isLoggedIn() && !incubationHandle)}
-                  title={!authenticated ? t('common.hype.loginRequired') : hasReshared ? t('common.hype.hyped') : t('common.hype.title')}
-                >
-                  <Flame size={16} />
-                  <span>{t('common.hype.hype')}</span>
-                  {reshareCount > 0 && <span className="reshare-count">{reshareCount}</span>}
-                </button>
-
-                {reblog.canReblog && (
-                  <button
-                    type="button"
-                    className={`pv-btn reblog-btn${reblog.reblogged ? ' reshared' : ''}${reblog.armed ? ' active' : ''}${reblog.busy ? ' loading' : ''}`}
-                    onClick={reblog.press}
-                    disabled={reblog.busy}
-                    title={reblog.reblogged ? t('common.reblog.reblogged') : t('common.reblog.title')}
-                  >
-                    <Repeat2 size={16} />
-                    <span>{reblog.label}</span>
-                  </button>
-                )}
-
-                {authenticated && isLoggedIn() && (
-                  <button
-                    type="button"
-                    className="pv-btn promote-btn"
-                    onClick={() => setPromoteOpen(true)}
-                    title={t('watch.actions.promoteTitle')}
-                    {...lockProps}
-                  >
-                    <Rocket size={15} />
-                    <span>{t('watch.actions.promote')}</span>
-                  </button>
-                )}
-
-                {authenticated && user === author && (
-                  <button
-                    type="button"
-                    className="pv-btn edit-video-btn"
-                    onClick={() => {
-                      videoControls?.onPause?.();
-                      setIsEditOpen(true);
-                    }}
-                    title={t('watch.actions.editTitle')}
-                  >
-                    <MdEdit size={16} />
-                    <span>{t('common.actions.edit')}</span>
-                  </button>
-                )}
-
-                <button
-                  type="button"
-                  className={`pv-btn report-btn${isReported('post', `${author}/${permlink}`) ? ' reported' : ''}`}
-                  onClick={() => setIsReportOpen(true)}
-                  title={t('watch.actions.reportTitle')}
-                >
-                  <MdFlag size={16} />
-                  <span>{t('common.actions.report')}</span>
-                </button>
-
-                {isInWatchLater && (
-                  <button
-                    type="button"
-                    className={`pv-btn watch-later-remove-btn ${isRemovingWatchLater ? 'loading' : ''}`}
-                    onClick={handleRemoveFromWatchLater}
-                    disabled={isRemovingWatchLater}
-                    title={t('watch.watchLater.removeTitle')}
-                  >
-                    <span className="watch-later-icon-wrap">
-                      <MdWatchLater />
-                      <span className="x-badge">&times;</span>
-                    </span>
-                  </button>
-                )}
-
-                {authenticated && isLoggedIn() && (
-                  <button type="button" className="pv-btn playlist-btn" onClick={() => setIsPlaylistModalOpen(true)} title={t('watch.actions.addToPlaylist')} {...lockProps}>
-                    <MdPlaylistAdd />
-                    <span>{t('watch.actions.playlist')}</span>
-                  </button>
-                )}
-                {/* Nobody tips themselves: no gift button on your own post. Signed
-                    out, the tip window opens on Lightning, which needs no Hive account. */}
-                {user !== author && (
-                  <button type="button" className="pv-btn tip-btn" onClick={() => setIsTipModalOpen(true)} title={t('watch.actions.tipTitle')} {...lockProps}>
-                    <Gift size={16} />
-                    <span>{t('watch.actions.tip')}</span>
-                  </button>
-                )}
-
-                {authenticated && isLoggedIn() && (
-                  <CommentVoteTooltip
-                    showTooltip={showTooltip}
-                    setShowTooltip={setShowTooltip}
-                    author={author}
-                    permlink={permlink}
-                    weight={weight}
-                    setWeight={setWeight}
-                    voteValue={voteValue}
-                    setVoteValue={setVoteValue}
-                    accountData={accountData}
-                    setAccountData={setAccountData}
-                    compact
-                    enableViewerTag
-                    postCreatedAt={videoDetails?.created || videoDetails?.created_at}
-                    onVoteSuccess={(a, p, isNewVote) => {
-                      setIsVoted(true);
-                      if (isNewVote) setOptimisticVoteCount(prev => prev + 1);
-                      refreshTopicTags();
-                    }}
-                  />
-                )}
-                </>
+                {(authenticated && user === author) && onEditScheduled && (
+                  <UiButton variant="secondary" size={36} next onClick={() => onEditScheduled()} title={t('watch.scheduled.editTitle')}>
+                    {t('watch.scheduled.edit')}
+                  </UiButton>
                 )}
               </div>
             </div>
-          </div>
+          ) : null}
 
-          {/* Mobile-only tools row (Clip hidden from info-buttons-left on mobile) */}
-          {FEATURE_EDITOR && canRemixClip && (
-            <div className="tools-row mobile-only">
-              <button
-                type="button"
-                className={`pv-btn clip-btn${clipMode ? ' active' : ''}`}
-                onClick={clipMode ? handleCancelClip : handleStartClipMode}
-                title={!authenticated ? t('watch.clip.loginRequired') : clipMode ? t('watch.clip.cancel') : t('watch.clip.clipVideo')}
-                disabled={!authenticated}
-                {...lockProps}
-              >
-                <Scissors size={16} />
-                <span className="tools-row-label">{t('watch.clip.label')}</span>
-              </button>
+          {/* Why value-moving actions are off for this viewer or this post (33a). */}
+          {lockedForIncubation && !scheduled && (
+            <div className="wv2-state is-cyan is-compact">
+              <span className="wv2-state__icon"><Icon name="lock_clock" size={24} /></span>
+              <div className="wv2-state__body"><b>{LOCKED_TITLE}</b></div>
             </div>
           )}
 
-        {/* Clip mode bar */}
-        {FEATURE_EDITOR && clipMode && (
-          <div className="clip-bar">
-            <div className="clip-bar-info">
-              <Scissors size={16} />
-              <span className="clip-bar-label">
-                {clipMode === 'start' && t('watch.clip.barStart')}
-                {clipMode === 'end' && t('watch.clip.barEnd', { start: formatTime(clipStart) })}
-                {clipMode === 'done' && t('watch.clip.barDone', { start: formatTime(clipStart), end: formatTime(clipEnd) })}
-              </span>
-            </div>
-            <div className="clip-bar-actions">
-              {clipMode === 'start' && (
-                <button type="button" className="clip-action-btn" onClick={handleSetClipStart}>{t('watch.clip.setStart')}</button>
-              )}
-              {clipMode === 'end' && (
-                <button type="button" className="clip-action-btn" onClick={handleSetClipEnd}>{t('watch.clip.setEnd')}</button>
-              )}
-              {clipMode === 'done' && (
-                <button type="button" className="clip-action-btn" onClick={handleCreateClip}>{t('watch.clip.createClip')}</button>
-              )}
-              <button type="button" className="clip-cancel-btn" onClick={handleCancelClip}>{t('common.actions.cancel')}</button>
-            </div>
-          </div>
-        )}
+          {authenticated && isLoggedIn() && !scheduled && (
+            <CommentVoteTooltip
+              showTooltip={showTooltip}
+              setShowTooltip={setShowTooltip}
+              author={author}
+              permlink={permlink}
+              weight={weight}
+              setWeight={setWeight}
+              voteValue={voteValue}
+              setVoteValue={setVoteValue}
+              accountData={accountData}
+              setAccountData={setAccountData}
+              compact
+              enableViewerTag
+              post={{
+                title: titleMeta.translatedTitle || videoDetails?.title,
+                thumbnail: fixVideoThumbnail(videoDetails),
+                payout: videoDetails?.stats?.total_hive_reward ?? 0,
+                votes: voteCount,
+              }}
+              postCreatedAt={videoDetails?.created || videoDetails?.created_at}
+              onVoteSuccess={(a, p, isNewVote) => {
+                setIsVoted(true);
+                if (isNewVote) setOptimisticVoteCount(prev => prev + 1);
+                refreshTopicTags();
+                getTooltipVoters();
+              }}
+            />
+          )}
 
-        {/* Show PlaylistBar when watching from a playlist, otherwise show VideoPlaylists */}
-        {playlistData ? (
-          <PlaylistBar
-            playlist={playlistData.playlist}
-            videos={playlistData.videos}
-            currentIndex={playlistData.currentIndex}
-            onClose={onClosePlaylist}
-          />
-        ) : (
-          <VideoPlaylists author={author} permlink={permlink} />
-        )}
+          {/* Show PlaylistBar when watching from a playlist, otherwise show VideoPlaylists */}
+          {playlistData ? (
+            <PlaylistBar
+              playlist={playlistData.playlist}
+              videos={playlistData.videos}
+              currentIndex={playlistData.currentIndex}
+              onClose={onClosePlaylist}
+            />
+          ) : (
+            <VideoPlaylists author={author} permlink={permlink} />
+          )}
 
-        {/* Video-stats panel (owner/admins) — toggled by the Stats button, full-width row between the buttons and the description */}
-        {canSeeVideoStats && videoStatsOpen && (
-          <div className="watch-stats-panel">
-            <VideoStats username={author} permlink={permlink} compact onSeek={videoControls?.onSeek} />
-          </div>
-        )}
-
-        <div className="description-wrap">
-          <div className={`description-collapsible${descriptionExpanded ? '' : ' collapsed'}`}>
-            <div className="blog-content">
-              {/* BlogContent falls back to fetching the post from Hive, which has
-                  never heard of an off-chain one — that is the "No content
-                  available" it was showing. Hand it the body we already have. */}
-              <BlogContent
-                author={author}
-                permlink={permlink}
-                // A scheduled post is not on Hive yet: its text comes from the
-                // checker's scheduled-post record (Watch buildScheduledVideoDetails),
-                // never from a Hive lookup that can only come back empty.
-                description={overrideBody ?? ((postIsOffChain || scheduled) ? (videoDetails?.body || undefined) : undefined)}
-                duration={videoControls?.duration}
-                onSeek={isLive ? null : seekFromText}
-              />
+          {/* Video-stats panel (owner/admins), toggled from the More menu. */}
+          {canSeeVideoStats && videoStatsOpen && (
+            <div className="watch-stats-panel">
+              <VideoStats username={author} permlink={permlink} compact onSeek={videoControls?.onSeek} />
             </div>
+          )}
+
+          {wide && <ChapterCards chapters={chapters} current={chapterAt} onSeek={seekChapter} />}
+
+          <div className="wv2-desc">
+            {/* BlogContent falls back to fetching the post from Hive, which has
+                never heard of an off-chain one — that is the "No content
+                available" it was showing. Hand it the body we already have. */}
+            <BlogContent
+              author={author}
+              permlink={permlink}
+              // A scheduled post is not on Hive yet: its text comes from the
+              // checker's scheduled-post record (Watch buildScheduledVideoDetails),
+              // never from a Hive lookup that can only come back empty.
+              description={overrideBody ?? ((postIsOffChain || scheduled) ? (videoDetails?.body || undefined) : undefined)}
+              duration={videoControls?.duration}
+              onSeek={isLive ? null : seekFromText}
+            />
           </div>
-          <button
-            type="button"
-            className="description-toggle-btn"
-            onClick={() => setDescriptionExpanded(prev => !prev)}
-          >
-            {descriptionExpanded ? t('watch.description.hide') : t('watch.description.show')}
-          </button>
+
+          {/* Cinema reaction size: the reactions run full width under the description. */}
+          {cinemaReactionPanel && (
+            <div className="cinema-reactions-slot">
+              {cinemaReactionPanel}
+            </div>
+          )}
         </div>
-        </div>{/* end video-details-collapsible */}
-        </div>{/* end top-container */}
 
-        {/* Mobile reactions slot — between description and comments */}
-        {mobileReactionPanel && (
-          <div className="mobile-reactions-slot">
-            {mobileReactionPanel}
-          </div>
+        {wide && !scheduled && (
+          <aside className="wv2-aside" ref={creditsRef}>
+            <div className="v2-card wv2-credits">
+              <Segmented
+                size={32}
+                value={creditTab}
+                onChange={setCreditTab}
+                label={t('watch.voters.cardLabel')}
+                options={[
+                  { value: 'supporters', label: t('profile.tabs.supporters') },
+                  { value: 'voters', label: t('watch.voters.title'), count: postIsOffChain ? (offChainVotes || undefined) : (tooltipVoters.length || undefined) },
+                ]}
+              />
+              <div className="wv2-credits__body">
+                {creditTab === 'supporters' ? <SupportersPane author={author} avatars /> : votersPane}
+              </div>
+              {supportButton}
+            </div>
+          </aside>
         )}
-
-        {/* Cinema mode reactions slot — between description and comments (desktop) */}
-        {cinemaReactionPanel && (
-          <div className="cinema-reactions-slot">
-            {cinemaReactionPanel}
-          </div>
-        )}
-
-        <ShareChooserModal
-          open={shareChooserOpen}
-          url={`${window.location.origin}/@${author}/${permlink}`}
-          title={videoDetails?.title}
-          /* Embed code is offered only for something a stranger's page can
-             actually play: a scheduled post isn't public yet, and a live stream
-             has no VOD asset for the player to resolve. */
-          embed={!scheduled && !isLive ? { author, permlink } : null}
-          /* Not for a scheduled post: the link would be dead in a post until it publishes. */
-          hivePost={!scheduled ? { author, permlink } : null}
-          onClose={() => setShareChooserOpen(false)}
-          onGeneralShare={handleShare}
-        />
-
-        <CommentSection
-          videoDetails={videoDetails}
-          author={author}
-          permlink={permlink}
-          setIsVoted={setIsVoted}
-          currentTime={videoControls?.currentTime}
-          duration={videoControls?.duration}
-          onSeek={isLive ? videoControls?.onSeek : seekFromText}
-          onRefreshReactions={videoControls?.onRefreshReactions}
-          onPause={videoControls?.onPause}
-          pinnedComments={extendedDetails?.pinned_comments}
-          pinnable={!isLive && !scheduled}
-        />
       </div>
-      
+
+      <ShareChooserModal
+        open={shareChooserOpen}
+        url={`${window.location.origin}/@${author}/${permlink}`}
+        title={videoDetails?.title}
+        /* Embed code is offered only for something a stranger's page can
+           actually play: a scheduled post isn't public yet, and a live stream
+           has no VOD asset for the player to resolve. */
+        embed={!scheduled && !isLive ? { author, permlink } : null}
+        /* Not for a scheduled post: the link would be dead in a post until it publishes. */
+        hivePost={!scheduled ? { author, permlink } : null}
+        // 07b: "Start at" the moment you are at, and the Clip tab (when clipping is on).
+        startAt={!isLive && !scheduled ? videoControls?.currentTime : undefined}
+        onClip={FEATURE_EDITOR && canRemixClip && authenticated && !lockedForIncubation && !clipMode ? handleStartClipMode : undefined}
+        onClose={() => setShareChooserOpen(false)}
+        onGeneralShare={handleShare}
+      />
+
       {isTipModalOpen && (
         <TipModal
           recipient={author}
@@ -2160,6 +2299,9 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
         onClose={() => setSummaryOpen(false)}
         summary={titleMeta.summary}
         title={titleMeta.translatedTitle || videoDetails?.title}
+        chapters={chapters}
+        currentChapter={chapterAt}
+        onSeek={(s) => { setSummaryOpen(false); seekChapter(s); }}
       />
 
       <EditVideoModal
@@ -2176,196 +2318,6 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
         author={author}
         permlink={permlink}
       />
-
-      {/* Mobile FAB — speed-dial for quick actions */}
-      {!videoControls?.isFullscreen && fabOpen && (
-        <div className="fab-backdrop" onClick={() => setFabOpen(false)} />
-      )}
-      {!videoControls?.isFullscreen && (
-        <div className={`fab-speed-dial${fabOpen ? ' open' : ''}`}>
-          {fabOpen && (
-            <div className={`fab-actions${fabCompact ? ' fab-actions--compact' : ''}`} ref={fabActionsRef}>
-              {canSeeVideoStats && (
-                <div className="fab-action">
-                  <span className="fab-action-label">{t('watch.actions.analytics')}</span>
-                  <button
-                    className={`fab-action-btn${videoStatsOpen ? ' fab-action-btn--active' : ''}`}
-                    onClick={() => {
-                      const nv = !videoStatsOpen;
-                      setVideoStatsOpen(nv);
-                      if (nv) setMobileDetailsExpanded(true); // panel lives inside the collapsible details
-                      setFabOpen(false);
-                    }}
-                    aria-label={t('watch.actions.videoStats')}
-                  >
-                    <MdBarChart size={20} />
-                  </button>
-                </div>
-              )}
-
-              {authenticated && user === author && (
-                <div className="fab-action">
-                  <span className="fab-action-label">{t('common.actions.edit')}</span>
-                  <button
-                    className="fab-action-btn"
-                    onClick={() => { videoControls?.onPause?.(); setIsEditOpen(true); setFabOpen(false); }}
-                    aria-label={t('watch.actions.editTitle')}
-                    title={t('watch.actions.editTitle')}
-                  >
-                    <MdEdit size={20} />
-                  </button>
-                </div>
-              )}
-
-              <div className="fab-action">
-                <span className="fab-action-label">{t('common.actions.share')}</span>
-                <button
-                  className="fab-action-btn"
-                  onClick={() => { setShareChooserOpen(true); setFabOpen(false); }}
-                  aria-label={t('common.actions.share')}
-                >
-                  <MdShare size={20} />
-                </button>
-              </div>
-
-              <div className="fab-action">
-                <span className="fab-action-label">{t('watch.actions.details')}</span>
-                <button
-                  className={`fab-action-btn${mobileDetailsExpanded ? ' fab-action-btn--active' : ''}`}
-                  onClick={() => { setMobileDetailsExpanded(prev => !prev); setFabOpen(false); }}
-                  aria-label={t('watch.actions.toggleDetails')}
-                >
-                  <MdInfo size={20} />
-                </button>
-              </div>
-
-              {authenticated && isLoggedIn() && (
-                <div className="fab-action">
-                  <span className="fab-action-label">{t('watch.actions.playlist')}</span>
-                  <button
-                    className="fab-action-btn"
-                    onClick={() => { setIsPlaylistModalOpen(true); setFabOpen(false); }}
-                    aria-label={t('watch.actions.addToPlaylist')}
-                    title={t('watch.actions.addToPlaylist')}
-                    {...lockProps}
-                  >
-                    <MdPlaylistAdd size={20} />
-                  </button>
-                </div>
-              )}
-
-              {authenticated && isLoggedIn() && !isFollowingCreator && author !== user && (
-                <div className="fab-action">
-                  <span className="fab-action-label">{t('common.actions.follow')}</span>
-                  <button
-                    className="fab-action-btn"
-                    onClick={() => { handleFabFollow(); setFabOpen(false); }}
-                    aria-label={t('watch.actions.followCreator')}
-                    title={t('watch.actions.followCreator')}
-                    {...lockProps}
-                  >
-                    <MdPersonAdd size={20} />
-                  </button>
-                </div>
-              )}
-
-              {author !== user && (
-                <div className="fab-action">
-                  <span className="fab-action-label">{t('watch.actions.tip')}</span>
-                  <button
-                    className="fab-action-btn"
-                    onClick={() => { setIsTipModalOpen(true); setFabOpen(false); }}
-                    aria-label={t('watch.actions.tip')}
-                    title={t('watch.actions.tipTitle')}
-                    {...lockProps}
-                  >
-                    <MdAttachMoney size={20} />
-                  </button>
-                </div>
-              )}
-
-              {authenticated && isLoggedIn() && (
-                <div className="fab-action">
-                  <span className="fab-action-label">{t('watch.actions.promote')}</span>
-                  <button
-                    className="fab-action-btn"
-                    onClick={() => { setPromoteOpen(true); setFabOpen(false); }}
-                    aria-label={t('watch.actions.promoteTitle')}
-                    title={t('watch.actions.promoteTitle')}
-                    {...lockProps}
-                  >
-                    <Rocket size={18} />
-                  </button>
-                </div>
-              )}
-
-              {FEATURE_EDITOR && canRemixClip && authenticated && isLoggedIn() && (
-                <div className="fab-action">
-                  <span className="fab-action-label">{t('watch.clip.label')}</span>
-                  <button
-                    className={`fab-action-btn${clipMode ? ' fab-action-btn--active' : ''}`}
-                    onClick={() => { setMobileDetailsExpanded(true); handleStartClipMode(); setFabOpen(false); }}
-                    aria-label={t('watch.clip.clip')}
-                    title={t('watch.clip.clipVideo')}
-                    {...lockProps}
-                  >
-                    <Scissors size={18} />
-                  </button>
-                </div>
-              )}
-
-              {authenticated && isLoggedIn() && author !== user && (
-                <div className="fab-action">
-                  <span className="fab-action-label">{reshareCount > 0 ? t('common.hype.withCount', { count: reshareCount }) : t('common.hype.hype')}</span>
-                  <button
-                    className={`fab-action-btn${hasReshared ? ' fab-action-btn--voted' : ''}`}
-                    onClick={() => { handleReshare(); setFabOpen(false); }}
-                    aria-label={t('common.hype.title')}
-                  >
-                    <Flame size={20} />
-                  </button>
-                </div>
-              )}
-
-              {reblog.canReblog && (
-                <div className="fab-action">
-                  <span className="fab-action-label">{reblog.label}</span>
-                  <button
-                    className={`fab-action-btn${reblog.reblogged ? ' fab-action-btn--voted' : ''}${reblog.armed ? ' fab-action-btn--active' : ''}`}
-                    // The first tap only arms it, so the menu stays open for the second.
-                    onClick={async () => { if (await reblog.press()) setFabOpen(false); }}
-                    disabled={reblog.busy}
-                    aria-label={t('common.reblog.title')}
-                  >
-                    <Repeat2 size={20} />
-                  </button>
-                </div>
-              )}
-
-              {authenticated && isLoggedIn() && author !== user && !(votingClosed && alreadyTagged) && (
-                <div className="fab-action">
-                  <span className="fab-action-label">{votingClosed ? t('watch.actions.tag') : t('watch.actions.vote')}</span>
-                  <button
-                    className={`fab-action-btn${isVoted ? ' fab-action-btn--voted' : ''}`}
-                    onClick={() => { setMobileDetailsExpanded(true); setShowTooltip(true); setFabOpen(false); }}
-                    aria-label={votingClosed ? t('watch.actions.tag') : t('watch.actions.vote')}
-                  >
-                    {votingClosed ? <IoPricetagOutline size={18} /> : <FaHeart size={18} />}
-                  </button>
-                </div>
-              )}
-            </div>
-          )}
-
-          <button
-            className="fab-main"
-            onClick={() => setFabOpen(prev => !prev)}
-            aria-label={fabOpen ? t('watch.actions.closeMenu') : t('watch.actions.openActions')}
-          >
-            {fabOpen ? <MdClose size={24} /> : <MdAdd size={24} />}
-          </button>
-        </div>
-      )}
     </>
   );
 };
@@ -2405,7 +2357,6 @@ PlayVideo.propTypes = {
     currentIndex: PropTypes.number,
   }),
   onClosePlaylist: PropTypes.func,
-  mobileReactionPanel: PropTypes.node,
   cinemaReactionPanel: PropTypes.node,
   videoRef: PropTypes.oneOfType([PropTypes.func, PropTypes.object]),
   wrapperRef: PropTypes.oneOfType([PropTypes.func, PropTypes.object]),

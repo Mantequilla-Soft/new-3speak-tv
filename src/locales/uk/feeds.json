@@ -28,10 +28,25 @@
   },
   "newFromFollowing": {
     "aria": "Нове від авторів, на яких ви підписані",
+    "summary_one": "{{count}} нове відео",
+    "summary_few": "{{count}} нові відео",
+    "summary_many": "{{count}} нових відео",
+    "summary_other": "{{count}} нового відео",
+    "fromFollowing": "від тих, на кого ви підписані",
     "shorts_one": "{{count}} Shorts",
     "shorts_few": "{{count}} Shorts",
     "shorts_many": "{{count}} Shorts",
-    "shorts_other": "{{count}} Shorts"
+    "shorts_other": "{{count}} Shorts",
+    "show": "Показати",
+    "hide": "Сховати",
+    "markSeen": "Позначити все як переглянуте"
+  },
+  "tagMeta": {
+    "videos_one": "{{num}} відео",
+    "videos_few": "{{num}} відео",
+    "videos_many": "{{num}} відео",
+    "videos_other": "{{num}} відео",
+    "thisWeek": "{{num}} цього тижня"
   },
   "firstUploads": {
     "title": "Перші завантаження"
@@ -50,8 +65,16 @@
     "empty": "Тут поки нічого немає.",
     "viewAll": "Усі",
     "dragToReorder": "Перетягніть, щоб змінити порядок",
+    "customize": "Налаштувати",
+    "customizeTitle": "Налаштувати головну",
+    "customizeHint": "Перетягуйте, щоб змінити порядок. Вимкніть розділи, які вам не потрібні.",
     "surfTitle": "Перемикання каналів: виберіть тему й дивіться, як телевізор",
-    "zapping": "Перемикання"
+    "zapping": "Перемикання",
+    "hero": {
+      "spotlightIn": "У фокусі: {{community}}",
+      "slide": "У фокусі: {{index}} з {{count}}"
+    },
+    "tabFollowing": "Підписки"
   },
   "surf": {
     "pageTitle": "Перемикання каналів",
@@ -77,9 +100,10 @@
     "nextVideoKey": "Наступне відео (→)",
     "zap": "Далі",
     "findingNext": "Шукаємо наступне…",
-    "stop": "Зупинити перемикання",
+    "stop": "Зупинити",
     "stopTitle": "Зупинити перемикання (це відео продовжить грати)",
-    "guide": "Програма каналів"
+    "guide": "Програма каналів",
+    "guideShort": "Програма"
   },
   "discover": {
     "searchPlaceholder": "Пошук відео, Shorts, аудіо, спільнот...",
@@ -126,6 +150,37 @@
     "views_one": "{{views}} перегляд",
     "views_few": "{{views}} перегляди",
     "views_many": "{{views}} переглядів",
-    "views_other": "{{views}} перегляду"
+    "views_other": "{{views}} перегляду",
+    "topCreator": "Топ-автор",
+    "creators": "Автори",
+    "relatedTags": "Схожі теги",
+    "trendingTags": "Популярні теги",
+    "topCreators": "Топ-автори",
+    "categories": "Категорії",
+    "show": "Показати",
+    "boostRecentHint": "Віддавати перевагу новішим відео в результатах",
+    "showResults_one": "Показати {{count}} результат",
+    "showResults_few": "Показати {{count}} результати",
+    "showResults_many": "Показати {{count}} результатів",
+    "showResults_other": "Показати {{count}} результату",
+    "resultTypes": "Типи результатів"
+  },
+  "activity": {
+    "warmup": "Розминка",
+    "aria": "Активність на 3Speak",
+    "community": "Спільнота",
+    "verbs": {
+      "snap": "snap",
+      "audio": "нове аудіо",
+      "playlist": "плейлист",
+      "live": "в ефірі",
+      "group_one": "{{count}} нове відео цього тижня",
+      "group_few": "{{count}} нові відео цього тижня",
+      "group_many": "{{count}} нових відео цього тижня",
+      "group_other": "{{count}} нового відео цього тижня"
+    },
+    "emptyCommunity": "За останні кілька днів у спільноті нічого нового.",
+    "emptyLive": "Зараз ніхто не в ефірі.",
+    "emptyGroups": "Цього тижня в групах ще немає активності."
   }
 }

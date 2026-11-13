@@ -5,10 +5,12 @@
   "topicTitle": "Paksa: {{topic}}",
   "watchingNow_one": "{{count}} ang nanonood ngayon",
   "watchingNow_other": "{{count}} ang nanonood ngayon",
+  "previewMuted": "Preview · naka-mute",
   "badges": {
-    "gatedTitle": "Para lang sa mga miyembro. Binubuksan ng 3Speak Pro ang buong video",
+    "gatedTitle": "Para lang sa mga miyembro",
     "pro": "PRO",
     "new": "BAGO",
+    "first": "Una",
     "live": "● LIVE",
     "liveChat": "● LIVE CHAT",
     "spotlight": "Tampok"
@@ -16,17 +18,17 @@
   "status": {
     "scheduled": "Naka-schedule",
     "mobile": "Mobile",
-    "mobileTitle": "In-upload gamit ang mobile app",
+    "mobileTitle": "Mula sa mobile app",
     "processing": "Pinoproseso",
-    "processingTitle": "Pinoproseso pa ang video",
+    "processingTitle": "Pinoproseso pa",
     "draft": "Draft",
-    "draftTitle": "Draft - hindi pa naka-publish",
+    "draftTitle": "Hindi pa naka-publish",
     "deleted": "Binura",
-    "deletedTitle": "Binura na ang video na ito",
+    "deletedTitle": "Nabura na",
     "failed": "Pumalya",
-    "failedTitle": "Pumalya ang pagproseso ng video",
+    "failedTitle": "Pumalya ang pagproseso",
     "unlisted": "Unlisted",
-    "unlistedTitle": "Unlisted — nakatago sa feeds at search, mabubuksan lang gamit ang direktang link"
+    "unlistedTitle": "Direktang link lang"
   },
   "playlist": {
     "loading": "Naglo-load ng mga playlist...",
@@ -34,7 +36,11 @@
     "items_other": "{{count}} items",
     "openAria": "Buksan ang playlist na {{name}}",
     "tag": "Playlist",
-    "updated": "Na-update {{when}}"
+    "updated": "Na-update {{when}}",
+    "public": "public",
+    "private": "pribado",
+    "history": "history",
+    "audio": "audio"
   },
   "watchLater": {
     "title": "Panoorin Mamaya",
@@ -48,5 +54,13 @@
     "label": "Baguhin ang laki",
     "small": "Maliit",
     "medium": "Katamtaman"
+  },
+  "payout": {
+    "title": "Payout",
+    "author": "Author",
+    "curators": "Mga curator",
+    "paysOutIn": "Mababayaran sa loob ng",
+    "days_one": "{{count}} araw",
+    "days_other": "{{count}} araw"
   }
 }

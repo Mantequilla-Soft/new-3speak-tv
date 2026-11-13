@@ -1,85 +1,43 @@
-// 3Speak Pro inline crown badge. Painted with the brand primary red
-// (var(--accent-primary)) — both light and dark themes define it.
-// SVG path uses currentColor, so callers can still override via `color`
-// on a parent.
+@use "../../styles/v2" as v2;
+
+// 3Speak Pro mark (30c): the workspace_premium symbol in accent. It takes
+// `currentColor`, so chip variants (.hive-avatar__badge and friends) can set
+// their own colours around it.
 .hh-premium-badge {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  flex: none;
   vertical-align: middle;
-  margin-left: 0.25rem;
-  // Default: red rocket on transparent background — fits inline uses
-  // (next to a username, etc.). Chip variants (.hive-avatar__badge,
-  // .bottom-nav-avatar-premium, …) set their own red background and
-  // override this color back to white.
-  color: var(--accent-primary, #e53935);
-  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.25));
-  flex-shrink: 0;
-  // The badge's own position is set by the callsite (absolute on
-  // .hive-avatar__badge etc.) — `position: relative` here is a no-op
-  // in that case (already absolute) and only kicks in for inline use.
-  position: relative;
+  margin-left: 4px;
+  color: var(--accent);
+  line-height: 1;
 
-  svg {
-    display: block;
-    // FontAwesome's rocket sits in the top-right of its 0-512 viewBox
-    // (empty space toward the bottom-left), so the optical center is
-    // off. Nudge the path itself down-left inside the chip — chip stays
-    // round, rocket looks centered.
-    transform: translate(-7%, 7%);
-  }
+  .material-symbols-rounded { display: block; }
 
-  // Branded hover tooltip. Pops instantly (no 500ms native delay) and
-  // is themed to match the chip itself. We rely on a CSS pseudo so we
-  // don't need a tooltip library / portal — caveat: ancestors with
-  // overflow:hidden will clip it. The native `title` attr on the span
-  // is the fallback for those callsites + assistive tech.
+  // Instant tooltip (no native 500ms delay), a small surface card. Ancestors
+  // with overflow:hidden clip it; aria-label covers assistive tech.
   &::after {
     content: attr(data-tooltip);
     position: absolute;
     bottom: calc(100% + 6px);
     left: 50%;
     transform: translateX(-50%);
-    padding: 5px 9px;
-    // Theme tokens, not a hardcoded black chip. On a light page the black
-    // bubble was the only piece of pure black on screen, and it did not match
-    // the app's own popups (see .votes-tooltip, which uses these same tokens).
-    background: var(--bg-elevated);
-    border: 1px solid var(--border-color);
-    box-shadow: var(--shadow-md);
-    color: var(--text-primary);
+    padding: 4px 8px;
+    border-radius: var(--r-sm);
+    @include v2.floating;
+    color: var(--text);
     font-size: 11px;
-    font-weight: 600;
-    line-height: 1;
-    letter-spacing: 0.02em;
-    border-radius: 4px;
+    font-weight: 700;
+    line-height: 1.2;
     white-space: nowrap;
     pointer-events: none;
     opacity: 0;
-    transform-origin: 50% calc(100% + 6px);
-    transition: opacity 0.12s ease;
-    z-index: 100;
-  }
-
-  // Small arrow below the tooltip.
-  &::before {
-    content: '';
-    position: absolute;
-    bottom: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    border: 4px solid transparent;
-    border-top-color: var(--border-color);
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.12s ease;
+    transition: opacity var(--t-fast) var(--ease);
     z-index: 100;
   }
 
   &:hover::after,
-  &:hover::before,
-  &:focus-visible::after,
-  &:focus-visible::before {
-    opacity: 1;
-  }
+  &:focus-visible::after { opacity: 1; }
 }

@@ -1,138 +1,112 @@
-@use "../../mixins.scss" as mix;
+@use "../../styles/v2" as v2;
 
-// Upload wizard stepper (StepProgress.jsx). Spans the same width as the step
-// pages' content (the Timeline step is 1100 px wide), so the row lines up with
-// what is below it. A page can narrow it with --step-progress-max.
+// Upload wizard stepper (StepProgress.jsx), design 21c: a row of 44px step
+// tiles. With `actions` the row is the wizard's top bar: tiles on the left,
+// Back and Next on the right, wrapping under the tiles when they don't fit.
 .step-progress {
   width: 100%;
-  max-width: var(--step-progress-max, 1100px);
-  margin: 0 auto 1.25rem;
-  padding: 0 4px;
-  box-sizing: border-box;
+  min-width: 0;
+  margin: 0 0 16px;
+
+  &--bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
 }
 
 .step-progress__container {
   display: flex;
   align-items: center;
+  gap: 6px;
   list-style: none;
   margin: 0;
   padding: 0;
   min-width: 0;
+  @include v2.scroll-x;
 }
 
-// A step plus the line after it. The last item has no line and does not grow,
-// so the last step ends exactly on the right edge.
 .step-progress__item {
   display: flex;
-  align-items: center;
-  flex: 1 1 0;
+  flex: none;
   min-width: 0;
-
-  &:last-child { flex: 0 0 auto; }
 }
 
 .step-progress__step {
   display: flex;
   align-items: center;
-  gap: 10px;
-  flex: 0 0 auto;
-  min-width: 0;
+  gap: 8px;
+  height: 44px;
+  padding: 0 14px 0 4px;
+  border-radius: v2.radius-for(44);
+  border: 2px solid var(--border);
+  background: transparent;
+  color: var(--muted);
+  @include v2.text(label);
+  white-space: nowrap;
+  position: relative;
+  transition: background var(--t-base) var(--ease), border-color var(--t-base) var(--ease);
 }
 
 .step-progress__circle {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  display: grid;
+  place-items: center;
   width: 32px;
   height: 32px;
-  border-radius: 50%;
-  border: 2px solid var(--border-color, #3a3a3a);
-  background: transparent;
-  color: var(--text-muted, #8a8a8a);
-  font-size: 0.85rem;
-  font-weight: 700;
-  font-variant-numeric: tabular-nums;
-  box-sizing: border-box;
-  flex-shrink: 0;
-  transition: border-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
+  flex: none;
+  border-radius: v2.radius-for(32);
+  background: var(--surface-2);
+  color: var(--muted);
+  .num { @include v2.mono(13, 700); }
 }
 
 .step-progress__label {
-  font-size: 0.85rem;
-  font-weight: 500;
-  color: var(--text-muted, #8a8a8a);
-  white-space: nowrap;
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
-  transition: color 0.25s ease;
 }
 
-// Done: outlined in the accent with a tick, label in normal text colour.
 .step-progress__step.is-done {
-  .step-progress__circle {
-    border-color: var(--accent-primary, #e0594b);
-    color: var(--accent-primary, #e0594b);
-  }
-  .step-progress__label { color: var(--text-secondary, #b5b5b5); }
+  border-color: transparent;
+  color: var(--text);
+  .step-progress__circle { background: var(--cyan); color: var(--bg); }
 }
 
-// Current: accent outline, a faint accent wash inside and a soft halo.
 .step-progress__step.is-active {
-  .step-progress__circle {
-    border-color: var(--accent-primary, #e0594b);
-    color: var(--accent-primary, #e0594b);
-    background: color-mix(in srgb, var(--accent-primary, #e0594b) 12%, transparent);
-    box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent-primary, #e0594b) 16%, transparent);
+  border-color: var(--accent);
+  background: var(--accent-tint-strong);
+  color: var(--text);
+  .step-progress__circle { background: var(--accent); color: var(--on-accent); }
+}
+
+.step-progress__actions {
+  margin-left: auto;
+  min-width: 0;
+}
+
+// Below the full layout only the current step keeps its name on screen.
+@include v2.below-wide {
+  .step-progress__step:not(.is-active) {
+    padding-right: 4px;
+    .step-progress__label {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+    }
   }
-  .step-progress__label {
-    color: var(--text-primary, #f2f2f2);
-    font-weight: 700;
-  }
 }
 
-// The line between two steps fills the remaining space; accent once passed.
-.step-progress__line {
-  flex: 1 1 auto;
-  min-width: 16px;
-  height: 2px;
-  margin: 0 14px;
-  border-radius: 2px;
-  background: var(--border-color, #3a3a3a);
-  transition: background-color 0.25s ease;
-
-  &.is-done { background: var(--accent-primary, #e0594b); }
-}
-
-// Phones only: a single line under the row with the current step's name.
-.step-progress__caption {
-  display: none;
-}
-
-// Tablets: keep the row, show only the current step's label so five German
-// labels never squeeze the lines to nothing.
-@media screen and (min-width: 768px) and (max-width: 1024px) {
-  .step-progress__step:not(.is-active) .step-progress__label { display: none; }
-  .step-progress__line { margin: 0 10px; }
-}
-
-@include mix.respond(phone) {
+@include v2.mobile {
   .step-progress {
-    margin-bottom: 1rem;
-    padding: 0 8px;
+    margin-bottom: 12px;
+    &--bar { gap: 10px; padding-bottom: 12px; }
   }
-  .step-progress__circle {
-    width: 28px;
-    height: 28px;
-    font-size: 0.78rem;
-  }
-  .step-progress__label { display: none; }
-  .step-progress__line { margin: 0 6px; min-width: 8px; }
-  .step-progress__caption {
-    display: block;
-    margin-top: 10px;
-    text-align: center;
-    font-size: 0.85rem;
-    font-weight: 700;
-    color: var(--text-primary, #f2f2f2);
-  }
+  .step-progress__container { width: 100%; }
+  .step-progress__actions { width: 100%; margin-left: 0; }
 }

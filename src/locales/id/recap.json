@@ -95,7 +95,7 @@
       "tips": "Tip"
     },
     "legendOurs": "di 3Speak",
-    "legendOther": "di tempat lain di Hive",
+    "legendOther": "di tempat lain",
     "segments": {
       "ours": "Hadiah postingan di 3Speak",
       "other": "Hadiah postingan di tempat lain di Hive",
@@ -120,7 +120,8 @@
     "communities": "Mengunjungi komunitasmu…",
     "followers": "Memeriksa siapa yang mengikutimu…",
     "watched": "Menelusuri apa yang kamu tonton…",
-    "thumbnails": "Memuat thumbnail… {{done}} dari {{total}}"
+    "thumbnails": "Memuat thumbnail… {{done}} dari {{total}}",
+    "thumbnailsWaiting": "Memuat thumbnail-mu…"
   },
   "tips": {
     "label": "Tips:",

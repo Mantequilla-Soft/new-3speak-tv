@@ -4,9 +4,9 @@
     "saveFailed": "İlgi alanları kaydedilemedi",
     "title": "İlgi alanları",
     "loading": "yükleniyor…",
-    "hint": "Önem verdiğin konuları seç; sana beğendiğin türden daha çok içerik göstermek için bunları kullanırız.",
+    "hint": "Önem verdiğin konuları seç. Sana beğendiğin türden daha çok içerik göstermek için bunları kullanırız.",
     "loginHint": "İlgi alanlarını seçmek için giriş yap.",
-    "save": "İlgi alanlarını kaydet"
+    "save": "Hive profilime kaydet"
   },
   "ads": {
     "chainNotSaved": "3Speak'e kaydedildi ama Hive hesabına kaydedilmedi. Oraya da kaydetmek için tekrar dene.",
@@ -16,18 +16,18 @@
     "rollsOnToast": "Videolarında video reklamları açık",
     "rollsOffToast": "Artık videolarında yalnızca bannerlar ve kayan yazılar var",
     "audio": "Seslerinde reklamlar",
-    "audioDesc": "Sesinin sırasında bir sponsordan kısa, seslendirilmiş bir mesaj çalabilir; dinleyicilerin açabileceği bir bağlantıyla birlikte. Video reklamlarında olduğu gibi bir pay alırsın. Bunu ses yükleyicide her yükleme için ayrı ayrı değiştirebilirsin.",
+    "audioDesc": "Dinleyicilerin açabileceği bir bağlantıyla kısa, seslendirilmiş bir sponsor mesajı.",
     "audioOnToast": "Seslerinde reklamlar açık",
     "audioOffToast": "Seslerinde reklamlar kapalı",
     "splitSaved": "Gelir paylaşımı kaydedildi",
     "title": "Videolarındaki reklamlar",
     "allow": "Reklamlara izin ver",
-    "allowDesc": "Videolarının içinde kısa bir sponsor spotu oynatılabilir. Elde edilen gelirden sen de, paylaşım yaptığın topluluk da pay alır. Bunu kapatırsan videolarında hiç reklam olmaz; ayrıca reklamverenlere sunduklarımızdan da çıkarılırlar, böylece devre dışı bıraktığın hiçbir şey satılmaz.",
+    "allowDesc": "Videolarının içinde kısa bir sponsor spotu oynatılabilir. Kapatırsan reklamverenlere sattıklarımızdan çıkarılırlar.",
     "allowAria": "Videolarında reklamlara izin ver",
     "rolls": "Video reklamları",
-    "rollsDesc": "Videolarından önce veya video sırasında oynayan kısa video reklamlar. Kapatırsan yalnızca videoyu durdurmadan üstünde görünen bannerlar ve kayan yazılar kalır.",
+    "rollsDesc": "Kapalıysa yalnızca bannerlar ve kayan yazılar kalır.",
     "shareTitle": "Toplulukla paylaş",
-    "shareDesc": "Bir reklamın kazandığının %{{pool}} kadarı sen ve paylaşım yaptığın topluluk arasında bölünür. Topluluğun ne kadarını alacağını seç; sıfırda bırakırsan %{{pool}} payın tamamı sende kalır.",
+    "shareDesc": "Reklam gelirinin %{{pool}} kadarı sen ve paylaşım yaptığın topluluk arasında bölünür.",
     "youPct": "Sen %{{pct}}",
     "communityPct": "Topluluk %{{pct}}",
     "shareInputLabel": "Topluluk payı, yüzde",
@@ -40,14 +40,15 @@
     "saveFailed": "Bu ayar kaydedilemedi.",
     "title": "İzlerken kazan",
     "rowTitle": "İzleyici ödülleri",
-    "desc": "İzlediklerin için reklam gelirinden pay kazan; ödeme HBD veya HIVE olarak yapılır. Ödeme, reklam oynatılmış olsun ya da olmasın izlenen videolar üzerinden yapılır; yani reklamlara katlanmayı değil, izlemeyi ödüllendirir. Reklamların kendisi 3Speak Pro aboneleri dışında herkese oynatılır. İzlenenler sayfasının zaten tuttuğu izleme geçmişine ek olarak her videonun ne kadarını izlediğini kaydederiz ve bunu kapattığın anda sileriz.",
+    "desc": "İzlediklerin için reklam gelirinden pay, HBD veya HIVE olarak ödenir. Reklam oynatılmış olsun ya da olmasın izlediğin için ödeme alırsın. Bunu kapatmak izleme verilerini siler.",
     "aria": "İzlediklerin için reklam gelirinden pay kazan",
     "titleListen": "İzlerken ve dinlerken kazan",
-    "listenDesc": "Dinlemek de sayılır: 3speak.tv’de 3Speak seslerini ve podcast bölümlerini ne kadar dinlediğini kaydediyoruz. Dinleyici ödülleri rakamları kontrol ettikten sonra başlayacak ve bunu açtığın günden itibaren dinlediklerin sayılır.",
+    "listenDesc": "3speak.tv'deki ses ve podcast bölümleri",
     "listenAlso": "Dinlediklerimi de say",
     "listenOnToast": "Dinlediklerin artık dinleyici ödüllerine sayılıyor",
     "onToastBoth": "İzleme ve dinleme ödülleri açık",
-    "offToastBoth": "Ödüller kapalı, izleme ve dinleme verilerin silindi"
+    "offToastBoth": "Ödüller kapalı, izleme ve dinleme verilerin silindi",
+    "listenOffToast": "Dinlemelerin artık dinleyici ödüllerine sayılmıyor"
   },
   "postingAuth": {
     "updateFailed": "Posting yetkin güncellenemedi.",
@@ -59,10 +60,16 @@
     "canPost": "@threespeak senin adına paylaşım yapabilir",
     "cannotPost": "@threespeak senin adına paylaşım yapamaz",
     "checkingStatus": "@threespeak …",
-    "desc": "3Speak'in yüklemelerini ve planlanmış gönderilerini senin adına yayınlamasını ve bazı ayarları her seferinde cüzdan onayı istemeden kaydetmesini sağlar. Yalnızca paylaşım yapabilir, oy verebilir ve yorum yazabilir; asla para aktaramaz veya anahtarlarını değiştiremez. Bu yetki olmadan, yüklemeler senden onu yeniden eklemeni ister. Bunu değiştirmek için active anahtarın gerekir.",
+    "desc": "Yalnızca paylaşım yapabilir, oy verebilir ve yorum yazabilir. Asla para aktaramaz veya anahtarlarını değiştiremez. Değiştirmek için active anahtarın gerekir.",
     "checking": "Kontrol ediliyor…",
     "removing": "Kaldırılıyor…",
-    "adding": "Ekleniyor…"
+    "adding": "Ekleniyor…",
+    "letTitle": "3Speak senin adına paylaşsın",
+    "letDesc": "Videoları ve Shorts'ları tek tek imzalamadan yayınlamak için gerekli. İstediğin zaman geri alabilirsin.",
+    "canPublish": "Gönderi ve video yayınlar",
+    "canVote": "Oy verir ve yorum yapar",
+    "never": "Asla token göndermez veya anahtar değiştirmez",
+    "grantWith": "{{wallet}} ile izin ver"
   },
   "notifications": {
     "kinds": {
@@ -95,7 +102,7 @@
         "desc": "Biri seni takip ettiğinde."
       },
       "votes": {
-        "title": "Upvote'lar",
+        "title": "Upvote'lar (varsayılan olarak kapalı)",
         "desc": "Biri gönderine upvote verdiğinde. Varsayılan olarak kapalı; popüler bir gönderi çok fazla bildirim demek."
       },
       "reblogs": {
@@ -117,15 +124,16 @@
     "device": "Bu cihaza bildir",
     "deviceBlocked": "Bu site için tarayıcı ayarlarında engellenmiş; önce orada bildirimlere izin ver.",
     "deviceNoWorker": "Bu sürümde kullanılamıyor.",
-    "deviceDesc": "3Speak açık olmasa bile bildirim al. Yalnızca bu tarayıcı için geçerlidir.",
-    "whatHint": "Neler için bildirim alacağın. Bunlar açtığın tüm cihazlar için geçerlidir."
+    "deviceDesc": "3Speak açık olmasa bile",
+    "whatHint": "Neler için bildirim alacağın. Bunlar açtığın tüm cihazlar için geçerlidir.",
+    "iosNote": "iPhone ve iPad'de bildirimler yalnızca 3Speak'i Ana Ekrana ekledikten sonra çalışır."
   },
   "tabs": {
     "general": "Genel",
     "content": "İçerik",
     "connections": "Bağlantılar",
     "rewards": "Reklamlar ve ödüller",
-    "about": "Hakkında / Sürüm"
+    "about": "Hakkında"
   },
   "contentTabs": {
     "feed": "Akış",
@@ -142,51 +150,51 @@
     "title": "Görünüm",
     "darkMode": {
       "title": "Koyu mod",
-      "desc": "Uygulama genelinde koyu renk temasını kullan."
+      "desc": "Uygulama genelinde koyu renk teması"
     },
     "largeCards": {
       "title": "Büyük kartlar",
-      "desc": "Ana sayfa, profil ve oynatma listesi sayfalarında daha büyük video kartları göster. Daha küçük, daha sıkı kartlar için kapat."
+      "desc": "Ana sayfa, profil ve oynatma listelerinde daha büyük video kartları"
     },
     "previews": {
       "title": "Video önizlemeleri",
-      "desc": "Bir video kartının üzerine geldiğinde sessiz bir önizleme oynat (mobilde büyük modda, kaydırdıkça ortadaki kart otomatik oynar)."
+      "desc": "Üzerine gelince sessiz önizleme; mobilde ortadaki kart oynar"
     },
-    "simpleFeeds": {
-      "title": "Basit akışlar",
-      "desc": "Öneri algoritmasını kapat; Keşfet, İlgi Alanları ve Trendler sıralı listeler yerine en yeniden eskiye düz listeler olur."
+    "heroPreviews": {
+      "title": "Spotlight video önizlemeleri",
+      "desc": "Ana sayfadaki Spotlight’ta sessiz klipler. Kapalıyken sabit görseller gösterilir."
     }
   },
   "shorts": {
     "commentBar": {
       "title": "Shorts'ta yorum çubuğu",
-      "desc": "Shorts videosunun altında bir yorum alanı göster. Varsayılan olarak kapalı; yorum paneline her zaman yorum düğmesiyle ulaşabilirsin."
+      "desc": "Her Short'un altında bir yorum alanı"
     },
     "openOnStart": {
       "title": "Açılışta Shorts'u aç",
-      "desc": "3Speak'i açtığında ana akış yerine doğrudan Shorts'a git."
+      "desc": "3Speak'i açtığında doğrudan Shorts'a git"
     },
     "inFeeds": {
       "title": "Akışlarda Shorts",
-      "desc": "Ana akışlardaki videoların ve izleme sayfasındaki önerilerin arasında Shorts satırları göster. Bu listeleri yalnızca videolardan oluşacak şekilde tutmak için kapat."
+      "desc": "Videoların arasında Shorts satırları"
     }
   },
   "feed": {
     "nsfw": {
       "title": "NSFW içeriği göster",
-      "desc": "İş yerinde uygun değil (NSFW) olarak işaretlenmiş video ve sesleri göster. Varsayılan olarak kapalı."
+      "desc": "Varsayılan olarak kapalı"
     },
     "hideWatched": {
       "title": "İzlenen videoları gizle",
-      "desc": "Zaten izlediğin videoları ana sayfa, trendler ve önerilen akışlardan çıkar."
+      "desc": "Ana sayfada, trendlerde ve önerilenlerde"
     },
     "hideAi": {
       "title": "Yapay zekâ ile üretilmiş videoları gizle",
-      "desc": "Yapay zekâ ile üretilmiş olarak işaretlenen video ve Shorts'ları tüm akışlardan çıkar. İşaret otomatik bir kontrolden gelir, bu yüzden bazıları gözden kaçabilir."
+      "desc": "Otomatik bir kontrole dayanır, bazıları gözden kaçabilir"
     },
     "privateMode": {
       "title": "Gizli mod",
-      "desc": "Ülkeni içerik üreticilerinin istatistiklerinin dışında tut. IP adresini asla kimse için saklamayız. Oynat'a bastığın anda bir ülke koduna dönüştürülür ve ardından atılır. Bu açıkken izlemelerin için o ülke bile kaydedilmez."
+      "desc": "Ülkeni içerik üreticilerinin istatistiklerinin dışında tut. IP adresini asla saklamayız."
     }
   },
   "about": {
@@ -194,7 +202,8 @@
     "version": "Uygulama sürümü",
     "rpcNode": "Hive RPC düğümü",
     "yourData": "Verilerin",
-    "privacyLink": "3Speak verilerini nasıl işler"
+    "privacyLink": "3Speak verilerini nasıl işler",
+    "getOrDelete": "Al veya sil"
   },
   "dataRequest": {
     "emailRequired": "Sana yanıt verebilmemiz için bir e-posta adresi gir",
@@ -204,13 +213,13 @@
     "dataReceived": "Veri talebi alındı",
     "sendFailed": "Talebin gönderilemedi",
     "doneTitle": "Talep alındı",
-    "doneBody": "Referans numaran <b>{{ref}}</b>. <b>{{contact}}</b> adresine en geç <b>{{dueBy}}</b> tarihine kadar yanıt vereceğiz.",
+    "doneBody": "Referans numaran <b>{{ref}}</b>. {{contact}} adresine en geç {{dueBy}} tarihine kadar yanıt vereceğiz.",
     "keepRef": "Takip etmen gerekirse diye referans numarasını sakla.",
     "signIn": "Verilerini talep etmek veya silmek için lütfen giriş yap; talep, giriş yaptığın hesap için geçerlidir.",
     "requestFor": "<b>@{{username}}</b> için talep",
     "typeAria": "Talep türü",
-    "getData": "Verilerimi al",
-    "deleteData": "Hesap verilerimi sil",
+    "getData": "Verilerimi dışa aktar",
+    "deleteData": "Hesabımı sil",
     "ledeDelete": "3Speak'in kendi veritabanında seninle ilgili sakladığı her şeyi sileceğiz.",
     "ledeExport": "3Speak'in kendi veritabanında seninle ilgili sakladığı her şeyi sana JSON dosyası olarak göndereceğiz.",
     "covers": "Kapsam:",
@@ -220,13 +229,14 @@
     "cannotExport": "Zincir üzerindeki verilerin zaten herkese açıktır ve herhangi bir Hive API'si üzerinden makinece okunabilir; seni oraya yönlendireceğiz. Sana gönderdiğimiz, buna ek olarak bizde tutulanlardır.",
     "emailLabel": "Yanıt verilecek e-posta",
     "emailPlaceholder": "sen@ornek.com",
-    "messageLabel": "Eklemek istediğin bir şey var mı? (isteğe bağlı)",
+    "messageLabel": "Bilmemiz gereken bir şey (isteğe bağlı)",
     "messagePlaceholder": "Talebinle ilgili isteğe bağlı ayrıntılar",
     "confirmLabel": "Hive blokzincirindeki içeriğimin kalıcı olduğunu ve 3Speak veya başka biri tarafından silinemeyeceğini anlıyorum.",
     "sending": "Gönderiliyor…",
     "requestDeletion": "Silme talep et",
-    "requestData": "Verilerimi talep et",
-    "foot": "Bir ay içinde yanıt veririz. Doğrudan <mail>privacy@3speak.tv</mail> adresine de e-posta gönderebilirsin."
+    "requestData": "Talebi gönder",
+    "foot": "Bir ay içinde yanıt veririz. Doğrudan <mail>privacy@3speak.tv</mail> adresine de e-posta gönderebilirsin.",
+    "intro": "3Speak'in senin hakkında sakladıklarının bir kopyasını ya da silinmesini iste. Hive'daki gönderiler herkese açıktır ve silinemez."
   },
   "lightning": {
     "title": "Lightning bahşişleri",
@@ -243,11 +253,11 @@
     "badAddress": "Bu bir Lightning adresi değil. ad@cuzdan.com gibi görünür.",
     "unreachable": "Bu adres bir Lightning adresi olarak yanıt vermedi. Kontrol edip yeniden dene.",
     "saveFailed": "Hive profiline kaydedilemedi.",
-    "supportersNote": "Kendi adresine gelen bahşişler hiç Hive'dan geçmez, bu yüzden Destekçiler altında görünmez.",
-    "publicNote": "Lightning adresin Hive hesabına kaydedilir ve orada herkes tarafından görülebilir."
+    "supportersNote": "Kendi adresine gelen bahşişler Destekçiler altında görünmez.",
+    "publicNote": "Hive hesabına kaydedilir, orada herkes görebilir."
   },
   "supportLinks": {
-    "title": "Seni desteklemenin başka yolları",
+    "title": "Destek bağlantıları",
     "desc": "{{sites}} üzerindeki sayfan. İzleyiciler bu bağlantıları bahşiş pencerende görür.",
     "placeholder": "https://ko-fi.com/adin",
     "add": "Ekle",
@@ -268,12 +278,12 @@
     "shareTip": "Biyografine, e-posta imzana ekle ya da bir tişörte bastır. Yargılamayız.",
     "earnTitle": "Ne kazanırsın",
     "bonusValue": "%{{pct}}",
-    "bonusLabel": "reklam ödüllerinden",
+    "bonusLabel": "reklam ödüllerinden, içerik üreticisi, izleyici ya da dinleyici olarak",
     "bonusDesc": "içerik üreticisi, izleyici veya dinleyici olarak",
     "timeValue": "{{months}} ay",
     "timeLabel": "kaydoldukları günden itibaren",
     "adsValue": "%{{pct}}",
-    "adsLabel": "reklam kampanyalarından",
+    "adsLabel": "reklam rezervasyonu yaparlarsa kampanyalarından",
     "adsDesc": "reklam verirlerse",
     "earnOnTop": "Bunu 3Speak ayrıca öder. Davet ettiğin kişiler kazandıklarının hepsini alır.",
     "rules": "Yalnızca bağlantın üzerinden kaydolan yeni hesaplar sayılır. Ödüller normal reklam ödemeleriyle birlikte, davet bonusu olarak işaretlenmiş şekilde gelir."

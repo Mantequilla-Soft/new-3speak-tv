@@ -3,41 +3,42 @@ import {
   DndContext, DragOverlay, useDraggable, useDroppable,
   PointerSensor, KeyboardSensor, useSensor, useSensors, pointerWithin,
 } from '@dnd-kit/core';
-import { RxDragHandleDots2 } from 'react-icons/rx';
 import { useTranslation } from 'react-i18next';
-import { iconForSlug, layoutToRows, rowsToSections, SECTION_TYPES } from '../../utils/spotlight';
+import { iconForSlug, layoutToRows, rowsToSections } from '../../utils/spotlight';
+import { Icon } from '../v2/Icon';
+
+// App-chrome icons per block type (a link keeps the brand logo its page shows).
+const TYPE_ICON = { link: 'link', video: 'smart_display', embed: 'article', image: 'image', header: 'title' };
 
 // Compact representation of a block for the arrange tiles.
 function TileMini({ s }) {
   const { t } = useTranslation();
   if (s.type === 'link') {
-    const Icon = iconForSlug(s.icon);
-    return <><span className="ag-mini-ic"><Icon size={13} /></span><span className="ag-mini-lbl">{s.title || s.url || t('spotlight.sectionTypes.link')}</span></>;
+    const BrandIcon = iconForSlug(s.icon);
+    return <><span className="ag-mini-ic"><BrandIcon size={14} /></span><span className="ag-mini-lbl">{s.title || s.url || t('spotlight.sectionTypes.link')}</span></>;
   }
-  if (s.type === 'header') return <span className="ag-mini-lbl ag-mini-hd">{s.text || t('spotlight.arrange.title')}</span>;
+  if (s.type === 'header') return <><span className="ag-mini-ic"><Icon name="title" size={16} /></span><span className="ag-mini-lbl ag-mini-hd">{s.text || t('spotlight.arrange.title')}</span></>;
   if (s.type === 'image') return s.src
     ? <img className="ag-mini-thumb" src={s.src} alt="" />
-    : <span className="ag-mini-lbl">{t('spotlight.sectionTypes.image')}</span>;
+    : <><span className="ag-mini-ic"><Icon name="image" size={16} /></span><span className="ag-mini-lbl">{t('spotlight.sectionTypes.image')}</span></>;
   if (s.type === 'video') return (
     <span className="ag-mini-vid">
       {s.thumbnail ? <img className="ag-mini-thumb" src={s.thumbnail} alt="" /> : <span className="ag-mini-lbl">{s.title || t('spotlight.arrange.video')}</span>}
-      <span className="ag-mini-play">▶</span>
+      <span className="ag-mini-play"><Icon name="play_arrow" size={12} fill /></span>
     </span>
   );
   if (s.type === 'embed') {
-    const EIcon = (SECTION_TYPES.find((st) => st.type === 'embed') || SECTION_TYPES[0]).Icon;
     const label = s.source === 'hive-recent'
       ? (s.account ? t('spotlight.arrange.latestPostsBy', { account: s.account }) : t('spotlight.arrange.latestPosts'))
       : (s.title || s.siteName || t('spotlight.sectionTypes.embed'));
     return (
       <>
-        {s.image && s.source !== 'hive-recent' ? <img className="ag-mini-thumb" src={s.image} alt="" /> : <span className="ag-mini-ic"><EIcon size={13} /></span>}
+        {s.image && s.source !== 'hive-recent' ? <img className="ag-mini-thumb" src={s.image} alt="" /> : <span className="ag-mini-ic"><Icon name="article" size={16} /></span>}
         <span className="ag-mini-lbl">{label}</span>
       </>
     );
   }
-  const T = (SECTION_TYPES.find((st) => st.type === s.type) || SECTION_TYPES[0]).Icon;
-  return <span className="ag-mini-lbl"><T size={13} /> {t(`spotlight.blockNames.${s.type}`, { defaultValue: s.type })}</span>;
+  return <span className="ag-mini-lbl"><Icon name={TYPE_ICON[s.type] || 'link'} size={16} /> {t(`spotlight.blockNames.${s.type}`, { defaultValue: s.type })}</span>;
 }
 
 function Tile({ s, selected, onSelect }) {
@@ -48,9 +49,12 @@ function Tile({ s, selected, onSelect }) {
   return (
     <div ref={ref}
       className={`ag-tile ag-tile--${s.type}${isDragging ? ' dragging' : ''}${isOver ? ' over' : ''}${selected ? ' selected' : ''}`}
-      onClick={() => onSelect(selected ? null : s.id)}>
+      role="button" tabIndex={0} aria-pressed={selected}
+      onClick={() => onSelect(selected ? null : s.id)}
+      /* Enter / Space on the tile itself (not on its grip, which drags) opens it. */
+      onKeyDown={(e) => { if (e.target === e.currentTarget && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); onSelect(selected ? null : s.id); } }}>
       <span className="ag-grip" {...listeners} {...attributes} title={t('spotlight.arrange.dragToArrange')} onClick={(e) => e.stopPropagation()}>
-        <RxDragHandleDots2 size={15} />
+        <Icon name="drag_indicator" size={18} />
       </span>
       <TileMini s={s} />
     </div>

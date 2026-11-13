@@ -1,517 +1,372 @@
-@use "../../mixins.scss" as *;
+@use "../../styles/v2" as v2;
 
-// About / landing page — styled with 3Speak's design tokens (theme-aware,
-// red accent on neutral surfaces) so it matches the rest of the app in both
-// light and dark mode instead of the old hard-coded navy/blue palette.
-.landing-page {
-  min-height: 100vh;
-  background: var(--bg-primary);
-  color: var(--text-primary);
-  overflow-x: hidden;
+// About 3Speak (26d, 43c): a hero card with the three pillars and one action,
+// then Hive, features, guidelines and FAQ, quotes, and where to find us.
+.about {
+  max-width: var(--content-max);
+  margin: 0 auto;
+  // The app column (.container, App.css) already gives the page padding.
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 16px;
+  color: var(--text);
 
-  // Hero Section
-  .hero-section {
-    position: relative;
-    min-height: 100vh;
+  > * { grid-column: span 6; min-width: 0; }
+  > .about-hero { grid-column: span 4; }
+  > .about-hive { grid-column: span 2; }
+  > .about-link-card { grid-column: span 3; }
+
+  @media (max-width: 1023px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    > *, > .about-hero, > .about-hive { grid-column: span 2; }
+    > .about-link-card { grid-column: span 1; }
+  }
+
+  @include v2.mobile {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+    > *, > .about-hero, > .about-hive, > .about-link-card { grid-column: auto; }
+  }
+
+}
+
+:where(.about) p { margin: 0; }
+
+.about-card {
+  @include v2.card(28);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+// Section head: a short colour bar and a 20px title (26d).
+.about-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+
+  .about-head__bar {
+    flex: none;
+    width: 4px;
+    height: 22px;
+    margin-top: 2px;
+    border-radius: var(--r-bar);
+    background: var(--cyan);
+    &.is-accent { background: var(--accent); }
+  }
+
+  .about-head__text {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+  }
+
+  h2 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.25;
+  }
+
+  p {
+    @include v2.text(body-sm);
+    color: var(--muted);
+  }
+}
+
+/* Hero */
+.about-hero {
+  padding: 28px;
+  gap: 0;
+
+  @include v2.mobile { padding: 20px; }
+}
+
+.about-hero__eyebrow {
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--cyan);
+}
+
+.about-hero__title {
+  margin: 10px 0 0;
+  display: flex;
+  flex-direction: column;
+  font-size: 48px;
+  font-weight: 900;
+  letter-spacing: var(--tracking-title);
+  line-height: 1;
+  overflow-wrap: anywhere;
+
+  span + span { color: var(--muted); }
+
+  @media (max-width: 1279px) { font-size: 40px; }
+  @include v2.mobile { font-size: 28px; line-height: 1.1; }
+}
+
+.about-hero__desc {
+  margin-top: 14px;
+  max-width: 64ch;
+  @include v2.text(body);
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.about-hero__how {
+  margin-top: 22px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 10px;
+}
+
+.about-hero__howsub { @include v2.text(meta); color: var(--muted); }
+
+.about-pillars {
+  margin-top: 10px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+
+  @include v2.mobile { grid-template-columns: minmax(0, 1fr); }
+}
+
+.about-hero__cta {
+  margin-top: 18px;
+  align-self: flex-start;
+  min-width: 280px;
+  gap: 28px;
+
+  @include v2.mobile { align-self: stretch; min-width: 0; }
+}
+
+// A tile on the page ground: tinted icon, title, one muted sentence.
+.about-tile {
+  padding: 14px;
+  border-radius: var(--r-xl);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+
+  p {
+    @include v2.text(meta);
+    line-height: 1.45;
+    color: var(--muted);
+  }
+
+  // Phones: icon on the left, so the stack stays short.
+  @include v2.mobile {
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr);
+    column-gap: 12px;
+    row-gap: 2px;
+    padding: 12px;
+    border-radius: var(--r-lg);
+
+    .about-tile__icon { grid-row: span 2; margin-bottom: 0; }
+  }
+}
+
+.about-tile__icon {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--r-lg);
+  display: grid;
+  place-items: center;
+  margin-bottom: 8px;
+  background: var(--accent-tint-strong);
+  color: var(--accent);
+
+  &.is-cyan { background: var(--cyan-tint-strong); color: var(--cyan); }
+}
+
+.about-tile__title { @include v2.text(title-sm); }
+
+.about-tile__eyebrow {
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--accent);
+  &.is-cyan { color: var(--cyan); }
+}
+
+/* Powered by Hive */
+.about-hive { gap: 12px; }
+.about-hive__link { align-self: flex-start; } // hive.io, a followed link (issue #563)
+
+.about-hive__logos {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  img {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--r-md);
+    object-fit: contain;
+    background: var(--bg);
+    &.is-round { border-radius: 50%; object-fit: cover; }
+  }
+
+  .about-hive__x { color: var(--muted); }
+}
+
+.about-hive__title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.about-hive__desc {
+  @include v2.text(body-sm);
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.about-hive__points {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  li {
     display: flex;
     align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 0 2rem;
-    overflow: hidden;
-
-    .hero-content {
-      position: relative;
-      // z-index: 10;
-      max-width: 64rem;
-      opacity: 0;
-      transform: translateY(3rem);
-      transition: all 1s ease-out;
-      transition-delay: 0.5s;
-
-      &.visible {
-        opacity: 1;
-        transform: translateY(0);
-      }
-
-      .main-title {
-        margin-bottom: 2rem;
-
-        .brand-name {
-          display: block;
-          font-size: clamp(3rem, 8vw, 5rem);
-          font-weight: 900;
-          color: var(--accent-primary);
-          margin-bottom: 1rem;
-          filter: drop-shadow(0 25px 25px rgba(0, 0, 0, 0.15));
-        }
-
-        .tagline {
-          display: block;
-          font-size: clamp(1.25rem, 3vw, 1.5rem);
-          font-weight: 600;
-          color: var(--text-secondary);
-          margin-bottom: 0.5rem;
-          letter-spacing: 0.1em;
-        }
-      }
-
-      .description {
-        font-size: clamp(1rem, 2.5vw, 1.25rem);
-        line-height: 1.6;
-        margin-bottom: 3rem;
-        color: var(--text-secondary);
-        max-width: 48rem;
-        margin-left: auto;
-        margin-right: auto;
-      }
-
-      .cta-button {
-        background: transparent;
-        color: var(--accent-primary, #e53935);
-        padding: 1rem 3rem;
-        font-size: 1.125rem;
-        font-weight: 600;
-        border-radius: 9999px;
-        border: 1px solid var(--accent-primary, #e53935);
-        cursor: pointer;
-        transition: all 0.3s ease;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        box-shadow: 0 20px 45px -12px var(--accent-light);
-        @include respond(phone) {
-          font-size: 16px;
-        }
-
-        &:hover {
-          transform: scale(1.05);
-          box-shadow: 0 24px 50px -10px var(--accent-light);
-        }
-      }
-    }
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: var(--r-lg);
+    background: var(--bg);
   }
 
-  // Section base styles
-  .section {
-    padding: 6rem 0;
+  div { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+  b { @include v2.text(label); }
+  span { @include v2.text(meta); color: var(--muted); }
+}
 
-    &.dark-bg {
-      background: var(--bg-secondary);
-    }
+.about-hive__picon {
+  flex: none;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--r-md);
+  display: grid;
+  place-items: center;
+  background: var(--cyan-tint);
+  color: var(--cyan);
+}
 
-    &.darker-bg {
-      background: var(--bg-tertiary);
-    }
+/* Features */
+.about-features {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 10px;
+}
 
-    &.gradient-bg {
-      background: var(--bg-tertiary);
-    }
+/* Guidelines and FAQ */
+.about-link-card {
+  justify-content: space-between;
 
-    .container-ab {
-      max-width: 80rem;
-      margin: 0 auto;
-      padding: 0 2rem;
-    }
+  .v2-btn { max-width: 360px; }
+}
 
-    .section-header {
-      text-align: center;
-      margin-bottom: 3rem;
+/* Quotes */
+// Voices of freedom: one row that scrolls sideways (owner 2026-11-12), fixed
+// 300px cards (260 on phones), snapping to a card; round prev / next buttons
+// over the edges on desktop, like Who to follow on Home.
+.about-quotes-rail { position: relative; min-width: 0; }
 
-      .section-title {
-        font-size: clamp(2.5rem, 5vw, 3rem);
-        font-weight: 700;
-        margin-bottom: 1rem;
-        background: linear-gradient(135deg, var(--accent-primary), var(--accent-hover));
-        -webkit-background-clip: text;
-        background-clip: text;
-        color: transparent;
-      }
+.about-quotes {
+  display: flex;
+  gap: 10px;
+  @include v2.scroll-x;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+}
 
-      .section-subtitle {
-        font-size: 1.25rem;
-        color: var(--text-secondary);
-        max-width: 48rem;
-        margin: 0 auto;
-        text-align: center;
-      }
-    }
-    .feature-title-ns {
-      text-align: center;
-      margin-bottom: 20px;
-      font-size: 2.9rem;
-      font-weight: 700;
-      // margin-bottom: 1rem;
+.about-quotes-rail__btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  box-shadow: var(--shadow-float);
+  &.is-left { left: -8px; }
+  &.is-right { right: -8px; }
+  @include v2.mobile { display: none; }
+}
 
-      &.red-text {
-        color: var(--accent-primary);
-      }
-    }
+.about-quote {
+  flex: 0 0 300px;
+  scroll-snap-align: start;
+  margin: 0;
+  padding: 14px;
+  border-radius: var(--r-lg);
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  blockquote {
+    margin: 0;
+    flex: 1;
+    @include v2.text(body);
+    line-height: 1.5;
+    color: var(--text);
   }
 
-  // Grid layouts
-  .grid {
-    display: grid;
-    gap: 2rem;
+  figcaption {
+    @include v2.text(meta);
+    font-weight: 700;
+    color: var(--muted);
+  }
+}
 
-    &.grid-3 {
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    }
+.about-quote__mark { color: var(--accent); }
+.about-quotes .about-quote { @include v2.mobile { flex-basis: 260px; } }
 
-    &.grid-2 {
-      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-    }
+/* Ready to own your content */
+.about-cta {
+  @include v2.card(28);
+  padding: 20px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 16px 24px;
+  align-items: center;
+
+  @media (max-width: 1023px) { grid-template-columns: minmax(0, 1fr); }
+
+  h2 {
+    margin: 0;
+    @include v2.text(heading);
   }
 
-  // Feature cards
-  .feature-card {
-    background: var(--card-bg);
-    border: 1px solid var(--border-light);
-    border-radius: 1.5rem;
-    padding: 2rem;
-    text-align: center;
-    box-shadow: var(--shadow-sm);
-    transition: all 0.3s ease;
-
-    &:hover {
-      transform: scale(1.05);
-      border-color: var(--accent-primary);
-      box-shadow: var(--shadow-lg);
-    }
-
-    // The old blue variant now shares the brand accent — kept as a hook so the
-    // markup doesn't need to change.
-    &.blue-accent {
-      border-color: var(--border-light);
-
-      &:hover {
-        border-color: var(--accent-primary);
-        box-shadow: var(--shadow-lg);
-      }
-    }
-
-    .feature-icon {
-      display: flex;
-      justify-content: center;
-      margin-bottom: 1.5rem;
-
-      .icon-container-ab {
-        width: 5rem;
-        height: 5rem;
-        background: var(--bg-tertiary);
-        border: 2px solid var(--border-light);
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.3s ease;
-
-        &.blue-border {
-          border-color: var(--border-light);
-        }
-
-        // Icons stay neutral — only headline text carries the brand red.
-        // (The old text-red-400/text-blue-400 utility classes were never defined.)
-        svg {
-          color: var(--text-secondary);
-        }
-
-        svg,
-        img {
-          width: 2rem;
-          height: 2rem;
-          filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
-        }
-      }
-    }
-
-    .feature-title {
-      font-size: 1.5rem;
-      font-weight: 700;
-      // Tile headings in the normal text colour: red on every tile was too much.
-      margin-bottom: 1rem;
-
-      &.red-text {
-        color: var(--text-primary);
-      }
-
-      &.blue-text {
-        color: var(--text-primary);
-      }
-    }
-
-    .feature-description {
-      color: var(--text-secondary);
-      line-height: 1.6;
-    }
+  .about-cta__text p {
+    margin-top: 6px;
+    @include v2.text(body);
+    color: var(--muted);
   }
+}
 
-  // Link buttons (FAQ, guidelines): red outline, used by more than one section.
-  .faq-cta-wrap {
-    display: flex;
-    justify-content: center;
-  }
+.about-cta__connect {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
 
-  // Red outline, never a red fill (3Speak convention).
-  .faq-cta {
-    display: inline-flex;
-    align-items: center;
-    padding: 0.8rem 2.2rem;
-    border-radius: 9999px;
-    border: 1px solid var(--accent-primary, #e53935);
-    background: transparent;
-    color: var(--accent-primary, #e53935);
-    font-weight: 600;
-    text-decoration: none;
-    transition: background-color 0.2s ease;
-
-    &:hover {
-      background: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent);
-    }
-  }
-
-  // Guidelines section
-  .guidelines-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-    gap: 2rem;
-
-    .guideline-card {
-      background: var(--card-bg);
-      border: 1px solid var(--border-light);
-      border-left: 4px solid var(--border-light);
-      border-radius: 1rem;
-      padding: 2rem;
-
-      &.blue-border {
-        border-left-color: var(--border-light);
-      }
-
-      .guideline-title {
-        font-size: 1.5rem;
-        font-weight: 700;
-        margin-bottom: 1rem;
-
-        &.red-text {
-          color: var(--text-primary);
-        }
-
-        &.blue-text {
-          color: var(--text-primary);
-        }
-      }
-
-      .guideline-list {
-        list-style: none;
-        padding: 0;
-
-        li {
-          display: flex;
-          align-items: flex-start;
-          margin-bottom: 0.75rem;
-          color: var(--text-secondary);
-
-          &::before {
-            content: "•";
-            margin-right: 0.5rem;
-            color: var(--text-secondary);
-          }
-
-          &.blue-bullet::before {
-            color: var(--text-secondary);
-          }
-        }
-      }
-    }
-  }
-
-  // FAQ section
-  .faq-container-ab {
-    max-width: 64rem;
-    margin: 0 auto;
-    padding: 0 2rem;
-
-  }
-
-  // Quotes section
-  .quotes-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: 2rem;
-
-    .quote-card {
-      background: var(--card-bg);
-      border: 1px solid var(--border-light);
-      border-left: 4px solid var(--border-light);
-      border-radius: 1rem;
-      padding: 2rem;
-      transition: all 0.3s ease;
-
-      &:hover {
-        transform: translateX(0.5rem);
-        background: var(--bg-hover);
-      }
-
-      .quote-text {
-        font-size: 1.125rem;
-        font-style: italic;
-        line-height: 1.6;
-        margin-bottom: 1rem;
-        color: var(--text-primary);
-      }
-
-      .quote-author {
-        color: var(--text-secondary);
-        font-weight: 600;
-        font-size: 0.875rem;
-      }
-    }
-  }
-
-  // Hive section
-  .hive-section {
-    .hive-logo-container-ab {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin-bottom: 2rem;
-
-      .logo-box {
-        background: var(--card-bg);
-        border: 2px solid var(--border-light);
-        border-radius: 1.5rem;
-        padding: 2rem;
-        transition: all 0.3s ease;
-
-        &:hover {
-          border-color: var(--accent-primary);
-        }
-
-        .logo-content {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 1.5rem;
-
-          img {
-            width: 4rem;
-            height: 4rem;
-          }
-
-          .times-symbol {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: var(--text-secondary);
-          }
-
-          .hive-logo {
-            width: 4rem;
-            height: 4rem;
-            background: linear-gradient(135deg, var(--accent-primary), var(--accent-hover));
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-
-            span {
-              color: #fff;
-              font-weight: 700;
-              font-size: 1.25rem;
-            }
-
-          }
-        }
-      }
-    }
-
-    .section-subtitle-ns {
-      text-align: center;
-      line-height: 29px;
-      margin-bottom: 20px;
-      font-size: 18px;
-      color: var(--text-secondary);
-    }
-  }
-
-  // Social icons
-  .social-icons {
-    display: flex;
-    justify-content: center;
-    gap: 2rem;
-    @include respond(phone) {
-          gap:7px ;
-        }
-
-    .social-link {
-      background: var(--card-bg);
-      border: 2px solid var(--border-light);
-      border-radius: 50%;
-      padding: 1rem;
-      color: var(--text-primary);
-      transition: all 0.3s ease;
-      @include respond(phone) {
-          padding: 10px;
-        }
-
-      &:hover {
-        border-color: var(--accent-primary);
-        color: var(--accent-primary);
-        transform: scale(1.1);
-      }
-      &.spk{
-        img{
-        width: 30px;
-      }
-        // The spk.network mark is a flat PNG, so it can't inherit currentColor
-        // like the sibling SVG icons. Mask it and fill with the foreground colour
-        // (currentColor = the link's --text-primary, --accent-primary on hover).
-        .spk-mark {
-          display: inline-block;
-          width: 30px;
-          height: 30px;
-          background-color: currentColor;
-          -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
-          -webkit-mask-position: center; mask-position: center;
-          -webkit-mask-size: contain; mask-size: contain;
-        }
-      }
-
-
-      &.red-accent {
-        border-color: var(--border-light);
-
-        &:hover {
-          border-color: var(--accent-primary);
-        }
-      }
-
-      svg {
-        width: 2rem;
-        height: 2rem;
-      }
-    }
-  }
-
-  // Responsive design
-  @media (max-width: 768px) {
-    .grid {
-      grid-template-columns: 1fr;
-    }
-
-    .guidelines-grid {
-      grid-template-columns: 1fr;
-    }
-
-    .quotes-grid {
-      grid-template-columns: 1fr;
-    }
-
-    .hero-section {
-      padding: 0 1rem;
-    }
-
-    .section .container-ab {
-      padding: 0 1rem;
-    }
-  }
+.about-socials {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
 }

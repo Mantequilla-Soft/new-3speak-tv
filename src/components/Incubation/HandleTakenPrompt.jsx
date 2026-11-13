@@ -5,11 +5,10 @@ import { handleStateOnHive } from '../../hive-api/api';
 import { fetchGraduationStatus } from '../../lib/incubation';
 import { openButrauthPopup } from '../../utils/butrauthPopup';
 import { toastIn } from '../../utils/toast';
-import ModalHeader from '../ModalHeader/ModalHeader';
 import { useTranslation, Trans } from 'react-i18next';
-// Reuses the shared dialog shape rather than duplicating it, as the graduation
-// prompt does. That file is the app's one modal-dialog shape.
-import '../AdsPrompt/AdsPrompt.scss';
+// The shared v2 dialog, with the same warm-up prompt pieces as graduation.
+import { Button, Dialog } from '../v2/ui';
+import './GraduationPrompt.scss';
 
 // Every toast from this module is headed "Your name"; the message becomes the
 // line under it. See utils/toast.js.
@@ -103,41 +102,39 @@ export default function HandleTakenPrompt() {
   };
 
   return (
-    <div className="ads-prompt-overlay">
-      <div
-        className="ads-prompt"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="handle-taken-title"
-      >
-        <ModalHeader
-          title={t('incubation.handleTaken.title', { handle: incubationHandle })}
-          titleId="handle-taken-title"
-          onClose={later}
-        />
-        <p className="ads-prompt-lede">
-          <Trans i18nKey="incubation.handleTaken.lede" components={{ b: <strong /> }} />
-        </p>
-
-        <p className="ads-prompt-text">
-          {t('incubation.handleTaken.text')}
-        </p>
-
-        {/* Said plainly, because the thing people fear here is losing what they
-            made under the old name. */}
-        <p className="ads-prompt-note">
-          {t('incubation.handleTaken.note')}
-        </p>
-
-        <div className="ads-prompt-actions">
-          <button type="button" className="ads-prompt-ghost" onClick={later}>
+    // "The name @x has been taken" (design 46c): what happened, that nothing is
+    // lost, and the one way forward.
+    <Dialog
+      open
+      onClose={later}
+      title={t('incubation.handleTaken.title', { handle: incubationHandle })}
+      closeLabel={t('common.actions.close')}
+      width={480}
+      className="inc-prompt"
+      footer={(
+        <>
+          <Button variant="secondary" onClick={later}>
             {t('incubation.backlog.later')}
-          </button>
-          <button type="button" className="ads-prompt-primary" onClick={goChange} disabled={busy}>
+          </Button>
+          <Button variant="primary" next className="inc-prompt-primary" onClick={goChange} disabled={busy} loading={busy}>
             {busy ? t('incubation.sessionSync.opening') : t('incubation.handleTaken.pick')}
-          </button>
-        </div>
-      </div>
-    </div>
+          </Button>
+        </>
+      )}
+    >
+      <p className="inc-prompt-lede">
+        <Trans i18nKey="incubation.handleTaken.lede" components={{ b: <strong /> }} />
+      </p>
+
+      <p className="inc-prompt-text">
+        {t('incubation.handleTaken.text')}
+      </p>
+
+      {/* Said plainly, because the thing people fear here is losing what they
+          made under the old name. */}
+      <p className="inc-prompt-note">
+        {t('incubation.handleTaken.note')}
+      </p>
+    </Dialog>
   );
 }

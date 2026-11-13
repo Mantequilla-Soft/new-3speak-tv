@@ -46,7 +46,7 @@
     "curated": "精选",
     "noCues": "没有字幕。",
     "clearQueue": "清空队列",
-    "clearAll": "全部清空",
+    "clearAll": "清空",
     "queueMoveUp": "上移 {{title}}",
     "queueMoveDown": "下移 {{title}}",
     "queueRemove": "从队列中移除 {{title}}",
@@ -57,7 +57,7 @@
     "collapse": "收起播放器",
     "skipBack": "后退 {{seconds}} 秒",
     "skipForward": "前进 {{seconds}} 秒",
-    "speed": "播放速度",
+    "speed": "速度",
     "speedValue": "播放速度：{{speed}}",
     "sleep": "睡眠定时",
     "sleepOff": "关闭",
@@ -74,8 +74,8 @@
     "effectsChecking": "正在检查本集是否支持…",
     "timeSaved": "已节省时间：{{time}}",
     "cast": "在其他设备上播放",
-    "download": "离线保存",
-    "downloading": "正在保存：{{pct}}%",
+    "download": "下载",
+    "downloading": "正在离线保存：{{pct}}%",
     "downloaded": "已离线保存",
     "downloadDone": "已保存，可离线收听",
     "downloadFailed": "无法保存本集",
@@ -99,8 +99,17 @@
     "nextChapter": "下一章节",
     "chapterLink": "章节链接",
     "upNext": "接下来",
-    "hideIdle": "隐藏 (队列会保留)",
-    "continueAt": "从 {{time}} 继续"
+    "hideIdle": "隐藏 · 队列保留",
+    "continueAt": "从 {{time}} 继续",
+    "position": "{{current}} / {{total}}",
+    "playingFrom": "正在播放：{{name}}",
+    "atThisMoment": "此刻",
+    "goTo": "前往 {{name}}",
+    "shuffle": "随机播放",
+    "repeat": "单曲循环",
+    "sleepMinutesShort": "{{minutes}} 分钟",
+    "swipeUp": "上滑打开播放器",
+    "commentAt": "在 {{time}} 处评论…"
   },
   "share": {
     "failed": "失败",
@@ -110,7 +119,16 @@
     "copied3speak": "3Speak 链接已复制！",
     "copyAudioPlayer": "复制音频播放器链接",
     "copiedAudioPlayer": "音频播放器链接已复制！",
-    "searchingHive": "正在搜索 Hive…"
+    "searchingHive": "正在搜索 Hive…",
+    "title": "分享曲目",
+    "atTime": "从 {{time}} 开始",
+    "peakd": "PeakD",
+    "player": "播放器链接",
+    "x": "X",
+    "telegram": "Telegram",
+    "email": "电子邮件",
+    "qr": "二维码",
+    "episode": "单集链接"
   },
   "post": {
     "notFound": "找不到帖子",
@@ -124,6 +142,8 @@
     "vote": "点赞",
     "signInToTip": "登录后打赏",
     "tip": "打赏",
+    "albumLabel": "专辑",
+    "notes": "笔记",
     "stillIndexing": "这条帖子的音频仍在索引中——请几分钟后再试。"
   },
   "page": {
@@ -155,7 +175,7 @@
     "tracks_other": "{{count}} 首曲目",
     "noTracks": "没有找到曲目。",
     "creators": "创作者",
-    "albumsPlaylists": "专辑与播放列表",
+    "albumsPlaylists": "音频播放列表",
     "noAudioForFilters": "没有符合这些筛选条件的音频。",
     "tabsLabel": "音频视图",
     "tabExplore": "浏览",
@@ -168,6 +188,21 @@
   "upload": {
     "title": "上传音频",
     "publishing": "发布中…",
+    "nextTo": "下一步：{{step}}",
+    "publishAlbum_other": "发布专辑 · {{count}} 首曲目",
+    "publishWithShorts_other": "发布音频 + {{count}} 个短视频",
+    "side": {
+      "publishTo": "发布到",
+      "shortsTitle": "音频波形短视频",
+      "clips_other": "{{count}} 个片段",
+      "tracks_other": "{{count}} 首曲目",
+      "audio": "音频",
+      "shorts": "短视频",
+      "snaps": "Snaps",
+      "community": "社区",
+      "rss": "RSS 订阅源",
+      "clipLabel": "短视频 {{n}} 的缩略图：{{title}}"
+    },
     "failed": "失败",
     "unknown": "未知",
     "unknownError": "未知错误",
@@ -188,7 +223,7 @@
       "review": "确认"
     },
     "trackTypes": {
-      "voiceSnap": "语音 / Snap"
+      "voiceSnap": "语音笔记"
     },
     "toasts": {
       "pickImage": "请选择一个图片文件",
@@ -226,13 +261,14 @@
       "discard": "放弃"
     },
     "source": {
-      "dropHere": "把音频文件拖到这里，或点击浏览",
-      "formats": "MP3、WAV、OGG、WEBM、M4A、FLAC、AAC——可选多个",
+      "dropHere": "拖入音频文件，或点击浏览",
+      "formats": "MP3、WAV、OGG、WEBM、M4A、FLAC、AAC · 可同时选多个",
       "stop": "停止",
       "orRecord": "或者现场录制",
       "recordLimit": "每段录音最长 {{minutes}} 分钟",
       "record": "录制",
-      "added": "已添加（{{count}}）"
+      "added": "已添加（{{count}}）",
+      "filesTitle": "音频文件"
     },
     "titles": {
       "help": "为每首曲目填写标题并选择类型。音乐曲目会有流派和 BPM 字段。"
@@ -241,7 +277,10 @@
       "trackTitle": "曲目标题",
       "genre": "流派",
       "bpm": "BPM",
-      "descriptionOptional": "简介（可选）"
+      "descriptionOptional": "简介（可选）",
+      "track": "曲目",
+      "category": "类别",
+      "musicGenre": "音乐流派"
     },
     "playlist": {
       "helpRequired": "必填——选择或创建一个播放列表。专辑帖子位于播放列表中，这样它的曲目会集中在一张 3Speak 专辑里。这有助于提高曝光，并在音频页面获得更显眼的位置。",
@@ -254,6 +293,7 @@
       "empty": "你还没有任何播放列表。",
       "items_other": "{{count}} 项",
       "newPlaylist": "新建音频播放列表",
+      "newAlbum": "新专辑",
       "namePlaceholder": "播放列表名称",
       "public": "公开",
       "private": "私密",
@@ -261,6 +301,9 @@
       "creditsPlaceholder": "制作人员（可选）",
       "yearPlaceholder": "年份",
       "labelPlaceholder": "厂牌（可选）",
+      "fieldYear": "年份",
+      "fieldLabel": "厂牌",
+      "fieldCredits": "制作人员",
       "thumbAlt": "专辑缩略图",
       "removeThumb": "移除缩略图",
       "creating": "创建中…",
@@ -283,20 +326,21 @@
       "help_other": "已添加 {{count}} 首曲目。选择发布方式。",
       "howPublished": "要如何发布？",
       "snapsTitle": "Snap 评论",
-      "snapsDesc": "每段音频作为回复发布在最新的 peak.snaps 容器下——显示在 Snaps 信息流中（默认）。",
+      "snapsDesc": "每段音频作为回复发布在最新的 snaps 帖子下。显示在 Snaps 信息流中。",
       "singleTitle": "独立帖子",
       "singleTitleSingleOnly": "独立帖子（仅限单个文件）",
-      "singleDesc": "一段音频单独发布为一条顶层 Hive 帖子，带有标题、社区、标签和封面。",
+      "singleDesc": "一段音频单独发布为一条帖子，带有标题、社区、标签和封面。",
       "albumTitle": "专辑帖子",
       "albumTitleNeeds2": "专辑帖子（需要 2 个以上文件）",
-      "albumDesc": "一条主帖（不含音频）作为落地页；每首曲目以评论回复的形式发布，各自拥有封面、简介、收益设置和受益人。",
-      "howEarn": "这段音频要如何获得收益？",
-      "postRewardsTitle": "帖子奖励（一次性）",
-      "postRewardsDesc": "你会获得正常的 Hive 作者收益——一次性发放，约在发布后 7 天。",
-      "pplTitle": "按收听付费（永久）",
-      "pplDesc": "所有音频帖子的奖励都归 @{{account}}。你不会收到一次性收益，而是由 3Speak 的计划在曲目的整个生命周期内按收听次数向你付费。",
+      "albumDesc": "一条主帖作为落地页，每首曲目作为回复发布，各自拥有封面和收益。",
+      "howEarn": "要如何获得收益？",
+      "postRewardsTitle": "帖子奖励",
+      "postRewardsDesc": "正常的 Hive 收益，一次性发放，约在发布后 7 天",
+      "pplTitle": "按收听付费",
+      "pplDesc": "3Speak 的计划会在曲目的整个生命周期内按收听次数向你付费。帖子奖励归 @{{account}}。",
       "adsTitle": "此音频中的广告",
-      "adsHint": "此音频播放时可能会插入一段赞助商的简短语音消息，你会获得一部分收益。默认沿用你的账号设置；在这里更改只对本次上传有效。"
+      "adsHint": "此音频播放时可能会插入一段赞助商的简短语音消息，你会获得一部分收益。默认沿用你的账号设置；在这里更改只对本次上传有效。",
+      "adsSpoken": "此音频中的语音赞助信息"
     },
     "reward": {
       "distribution": "奖励分配",
@@ -322,6 +366,7 @@
       "helpAlbum": "每首曲目都会作为主帖下的评论发布。共享的设置只需填写一次并应用到全部，然后再按曲目单独修改。",
       "helpSnaps": "每首曲目都会作为单独的 Snap 发布。共享的设置只需填写一次并应用到全部，然后再按曲目单独修改。",
       "applyToAllHeading": "应用到所有曲目",
+      "applyNote_other": "<b>应用到全部 {{count}} 首曲目：</b>共享描述和封面，之后可单独修改任意曲目。",
       "sharedDescription": "共享简介（可选）",
       "sharedCover": "共享封面图片",
       "applyToAll_other": "应用到全部 {{count}} 首曲目",
@@ -385,11 +430,37 @@
       "couldNotLoad": "无法加载音频波形视频：{{error}}",
       "rowTitle": "短视频：{{title}}",
       "withAudio": "随此音频一起发布"
+    },
+    "transcript": {
+      "make": "生成文字稿",
+      "again": "重新生成文字稿",
+      "hint": "把说的话（{{language}}）写下来，放在你的文字下方，之后仍可修改。",
+      "reading": "正在读取音频...",
+      "writing": "正在转写... {{percent}}%",
+      "added": "文字稿已添加到你的文字下方。请通读一遍：有些词可能不准确。",
+      "shortened": "文字稿已添加，并已缩短以放入一篇帖子。",
+      "empty": "这段音频中没有找到语音。",
+      "failed": "无法生成文字稿，请重试。",
+      "heading": "文字稿",
+      "language": "音频语言",
+      "waitPublish": "文字稿仍在生成中。请等待完成或先取消。"
+    },
+    "teleprompter": {
+      "title": "提词器",
+      "subtitle": "写下要说的话，录音时照着读",
+      "placeholder": "写下或粘贴你要说的话。录音时会大字显示。",
+      "followsVoice": "跟随你的声音",
+      "steady": "以固定速度前进",
+      "voiceStopped": "已停止跟随声音，以固定速度前进",
+      "wpm": "每分钟 {{n}} 个词",
+      "slower": "慢一点",
+      "faster": "快一点"
     }
   },
   "podcasts": {
     "chip": "外部",
     "chipHint": "来自 3Speak 之外任意 RSS 订阅源的播客",
+    "on3speak": "在 3Speak 上",
     "follow": "关注",
     "following": "已关注",
     "unfollow": "取消关注",
@@ -416,6 +487,7 @@
     "allPodcasts": "全部播客",
     "openShow": "打开播客",
     "play": "播放单集",
+    "playTrack": "播放曲目",
     "pause": "暂停",
     "episodePage": "单集页面",
     "website": "网站",
@@ -432,6 +504,7 @@
     "notifyOnDone": "有新单集时会通知你",
     "notifyOffDone": "不再接收此播客的通知",
     "notifyHint": "有新单集发布时接收通知",
+    "notifyLabel": "新单集通知",
     "search": {
       "button": "搜索",
       "results_other": "找到 {{count}} 个播客",
@@ -471,7 +544,8 @@
     },
     "tip": {
       "button": "支持这个播客",
-      "heading": "支持 {{show}}",
+      "heading": "打赏 {{show}}",
+      "support": "支持 {{show}}",
       "hive": "用 Hive 打赏 @{{account}}",
       "messageLabel": "给播主的留言（可选）：",
       "messagePlaceholder": "这一集太棒了！",
@@ -567,7 +641,7 @@
     "downloads": {
       "title": "下载",
       "download": "下载以离线收听",
-      "short": "下载",
+      "short": "保存",
       "downloading": "正在下载 {{pct}}%",
       "cancel": "取消下载",
       "saved": "已离线保存",
@@ -576,7 +650,7 @@
       "removed": "已移除下载",
       "done": "已保存，可离线收听",
       "total": "已保存 {{size}}",
-      "storage": "本网站在此浏览器中已使用 {{used}}，共 {{quota}}",
+      "storage": "在此浏览器中已用 {{used}} / {{quota}}",
       "perBrowser": "下载内容保存在此浏览器中，与登录的账号无关。",
       "errors": {
         "tooLarge": "此单集太大，无法保存。",
@@ -588,7 +662,7 @@
     },
     "autoQueue": {
       "label": "自动将新单集加入队列",
-      "hint": "此节目有新单集发布时，会自动加到你的队列末尾",
+      "hint": "会加到你的队列末尾",
       "onDone": "此节目的新单集将加入你的队列",
       "offDone": "此节目的新单集将不再加入你的队列",
       "added_other": "已将 {{count}} 个新单集加入你的队列"
@@ -625,6 +699,7 @@
       "startsAt": "开始时间：{{time}}"
     },
     "private": {
+      "title": "添加私密订阅源",
       "toggle": "这是私密订阅源（需要登录）",
       "username": "用户名",
       "password": "密码",
@@ -660,7 +735,7 @@
       "hide": "隐藏视频"
     },
     "signInToFollow": "登录后即可关注播客",
-    "addExternal": "添加外部播客",
+    "addExternal": "添加外部 RSS 订阅源",
     "continue": {
       "title": "继续收听",
       "left": "还剩 {{minutes}} 分钟",

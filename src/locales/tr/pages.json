@@ -93,12 +93,13 @@
   "legal": {
     "pageTitle": "3Speak verilerini nasıl işler · 3Speak",
     "englishOnly": "Bu sayfa yalnızca İngilizce olarak mevcuttur. Bağlayıcı olan İngilizce sürümdür.",
-    "back": "← 3Speak'e dön"
+    "back": "← 3Speak'e dön",
+    "onThisPage": "Bu sayfada"
   },
   "notFound": {
     "imageAlt": "404",
-    "title": "ÜZGÜNÜZ! SAYFA BULUNAMADI",
+    "title": "Üzgünüz, sayfa bulunamadı",
     "message": "Maalesef aradığın sayfa mevcut değil.",
-    "goHome": "ANA SAYFAYA GİT"
+    "goHome": "Ana sayfaya git"
   }
 }

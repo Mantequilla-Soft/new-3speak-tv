@@ -18,7 +18,8 @@
       "rep": "Rép. {{rep}}",
       "repTitle": "Réputation Hive",
       "viewProfile": "Voir le profil"
-    }
+    },
+    "replyTo": "Répondre à {{user}}…"
   },
   "errors": {
     "votingUnavailable": "Le vote n'est pas disponible pour cette publication",
@@ -32,7 +33,7 @@
     "interestsTitle": "Uniquement les Shorts qui correspondent à vos centres d'intérêt",
     "pickInterestsFirst": "Choisissez d'abord des centres d'intérêt",
     "noInterests": "Vous n'avez pas encore choisi de centres d'intérêt — faites-le dans les Paramètres",
-    "interestsExhausted": "C'est tout pour vos centres d'intérêt — affichage de Découvrir",
+    "interestsExhausted": "C'étaient tous les Shorts de vos centres d'intérêt. Place à Découvrir.",
     "noInterestMatches": "Aucun Short ne correspond à vos centres d'intérêt pour le moment.",
     "switchToDiscover": "Passer à Découvrir",
     "empty": "Aucun Short disponible",
@@ -41,12 +42,18 @@
   "glow": {
     "subtle": "Lumière ambiante : subtile",
     "vivid": "Lumière ambiante : vive",
-    "off": "Lumière ambiante : désactivée"
+    "off": "Lumière ambiante : désactivée",
+    "label": "Lumière ambiante",
+    "offShort": "Désactivée",
+    "subtleShort": "Subtile",
+    "vividShort": "Vive"
   },
   "playbackMode": {
     "autoReplay": "Relecture auto",
     "autoSwipe": "Défilement auto",
-    "manual": "Manuel"
+    "manual": "Manuel",
+    "label": "Lecture",
+    "options": "Options de lecture"
   },
   "subtitles": {
     "off": "Désactivés"
@@ -84,13 +91,13 @@
     "noUrl": "Impossible de trouver l'URL de la vidéo pour le remix",
     "loadFailed": "Impossible de charger la vidéo pour le remix",
     "chainFull": "Cette vidéo s'appuie déjà sur {{max}} vidéos précédentes, elle ne peut plus être remixée.",
-    "chainNoSlots": "Cette chaîne de remix rémunère déjà tant de créateurs qu'un remix ne trouverait plus de place sur Hive. Avec 3Speak Pro, tu peux quand même la remixer."
+    "chainNoSlots": "Cette chaîne rémunère déjà tant de créateurs qu'un remix ne trouverait plus de place sur Hive. Avec 3Speak Pro, vous pouvez quand même la remixer."
   },
   "watchLater": {
     "loginRequired": "Connectez-vous pour enregistrer des Shorts",
     "cantSave": "Ce Short ne peut pas être enregistré",
     "removed": "Retiré de « À regarder plus tard »",
-    "saved": "Ajouté à « À regarder plus tard »",
+    "saved": "Ajouté à « À regarder plus tard »",
     "failed": "Échec : {{message}}"
   },
   "comments": {
@@ -101,7 +108,7 @@
     "postRemoved": "La publication Hive derrière ce Short a été supprimée : il ne peut plus recevoir de commentaires ni de votes.",
     "beFirst": "Soyez le premier à commenter !",
     "unavailable": "Les commentaires ne sont pas disponibles pour cette publication",
-    "addPlaceholder": "Ajouter un commentaire...",
+    "addPlaceholder": "Participez à la discussion…",
     "addPlaceholderBar": "Ajouter un commentaire…",
     "loginPlaceholder": "Connectez-vous pour commenter",
     "send": "Envoyer le commentaire",
@@ -134,7 +141,7 @@
     "seenNote": "Spectateurs connectés qui gardent leur historique de visionnage activé.",
     "seenEmpty": "Personne ne l’a encore vue.",
     "keep": "Garder comme Short",
-    "keepHint": "Elle reste sur votre chaîne après les 24 heures",
+    "keepHint": "Elle reste sur votre chaîne après les 24 heures.",
     "keepConfirm": "La garder pour de bon ?",
     "keepYes": "La garder",
     "keeping": "Enregistrement…",
@@ -145,5 +152,9 @@
   "audiogram": {
     "fullEpisode": "Épisode complet",
     "listen": "Écouter l'épisode complet : {{title}}"
+  },
+  "panel": {
+    "discussion": "Discussion",
+    "upNext": "À suivre"
   }
 }

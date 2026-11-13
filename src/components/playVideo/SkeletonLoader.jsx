@@ -1,5 +1,5 @@
 import React from 'react'
-import "./SkeletonLoader"
+import "./SkeletonLoader.scss"
 
 function SkeletonLoader() {
   return (

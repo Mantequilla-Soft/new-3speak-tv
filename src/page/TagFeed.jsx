@@ -1,6 +1,6 @@
 import { useState, useMemo, useCallback } from 'react';
 import CardSkeleton from '../components/Cards/CardSkeleton';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import Card3 from '../components/Cards/Card3';
@@ -13,7 +13,10 @@ import useViewCounts from '../hooks/useViewCounts';
 import PullToRefresh from '../components/PullToRefresh/PullToRefresh';
 import { getSinceTimestamp } from '../utils/dateFilters';
 import { FeedToolbar, Pagination } from '../components/FeedToolbar/FeedToolbar';
+import NewFromFollowing from '../components/NewFromFollowing/NewFromFollowing';
 import { useTranslation } from 'react-i18next';
+import { formatNumber } from '../i18n';
+import './FirstUploads.scss';
 import './TagFeed.scss';
 
 const LIMIT = 20;
@@ -21,6 +24,9 @@ const LIMIT = 20;
 function TagFeed() {
   const { t } = useTranslation();
   const { tag } = useParams();
+  // A community picked from the tag strip arrives with its display name.
+  const location = useLocation();
+  const communityName = location.state?.commuintyName || null;
   const queryClient = useQueryClient();
 
   // Videos, shorts or both, as last picked on any tag page.
@@ -60,6 +66,31 @@ function TagFeed() {
     staleTime: 60 * 1000,
   });
 
+  // What was tagged in the past 7 days, for the "· 312 this week" in the header
+  // (19c). The same counts call with the week's start, so with the Week filter
+  // on it is the query above, served once.
+  const weekSince = useMemo(() => getSinceTimestamp('week'), []);
+  const { data: weekCounts } = useQuery({
+    queryKey: ['tagCounts', tag, weekSince],
+    queryFn: async () => {
+      const res = await axios.get(`${TAG_FEED_URL}/videos/tag/${tag}/counts?since=${weekSince}`);
+      return res.data;
+    },
+    staleTime: 60 * 1000,
+  });
+  // And everything ever tagged, whatever the date filter says (with "all time"
+  // picked this is the counts query above: same key, one request).
+  const { data: allCounts } = useQuery({
+    queryKey: ['tagCounts', tag, 0],
+    queryFn: async () => {
+      const res = await axios.get(`${TAG_FEED_URL}/videos/tag/${tag}/counts`);
+      return res.data;
+    },
+    staleTime: 60 * 1000,
+  });
+  const sumOf = (c) => c.total ?? (c.videos || 0) + (c.shorts || 0);
+  const allTimeTotal = allCounts ? sumOf(allCounts) : null;
+
   // Always pass type — avoids the expensive merged "all" path on the backend
   const { data, isLoading, isFetching, isError } = useQuery({
     queryKey: ['tagFeed', tag, activeTab, since, currentPage, hideWatched, feedUser],
@@ -92,6 +123,7 @@ function TagFeed() {
 
   const renderVideos = (items) => (
     <Card3 windowed
+      variant="bare"
       videos={items}
       error={isError ? t('feeds.errors.loadVideos') : ''}
       loading={isFetching}
@@ -103,6 +135,7 @@ function TagFeed() {
 
   const renderShorts = (items) => (
     <Card3 windowed
+      variant="bare"
       videos={items}
       error={isError ? t('feeds.errors.loadShorts') : ''}
       loading={isFetching}
@@ -116,17 +149,35 @@ function TagFeed() {
 
   return (
     <PullToRefresh onRefresh={handleRefresh}>
-    <div className="firstupload-container">
+    <div className="firstupload-container tag-feed">
+      {/* The tag as the page title (19c): a cyan eyebrow, the big #tag, and
+          how much is tagged with it. Not here: "Follow tag" and how many
+          creators use it, which nothing on 3Speak tracks yet. */}
+      <header className="tag-feed-head">
+        <div className="tag-feed-head__text">
+          <span className="tag-feed-eyebrow">{communityName ? t('feeds.discover.community') : t('feeds.discover.tag')}</span>
+          <h1 className="tag-feed-title">{communityName || `#${tag}`}</h1>
+          {(allTimeTotal != null || weekCounts) && (
+            <p className="tag-feed-meta">
+              {[
+                allTimeTotal != null && t('feeds.tagMeta.videos', { count: allTimeTotal, num: formatNumber(allTimeTotal) }),
+                weekCounts && t('feeds.tagMeta.thisWeek', { num: formatNumber(sumOf(weekCounts)) }),
+              ].filter(Boolean).join(' · ')}
+            </p>
+          )}
+        </div>
+      </header>
+
       <FeedToolbar
         activeTab={activeTab}
         onTabChange={handleTabChange}
         dateFilter={dateFilter}
         onDateFilterChange={handleDateFilterChange}
         tabs={tabs}
-        page={currentPage}
-        totalPages={totalPages}
-        onPageChange={setCurrentPage}
       />
+
+      {/* Signed in with something unwatched from people you follow; nothing otherwise */}
+      <NewFromFollowing />
 
       {isLoading ? (
         <CardSkeleton />

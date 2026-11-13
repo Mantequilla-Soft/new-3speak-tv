@@ -208,7 +208,7 @@
       "imageUploadFailed": "Przesyłanie obrazu nie powiodło się: {{error}}",
       "tryAgain": "spróbuj ponownie",
       "styleApplied": "Styl zastosowano do wszystkich bloków typu {{type}}",
-      "templateApplied": "Zastosowano „{{name}}” — dopracuj lub cofnij",
+      "templateApplied": "Zastosowano „{{name}}”. Dopracuj lub cofnij.",
       "reverted": "Przywrócono twój poprzedni wygląd",
       "saved": "Spotlight zapisany w twoim profilu Hive",
       "saveFailed": "Nie udało się zapisać",
@@ -224,7 +224,7 @@
       "phone": "Telefon",
       "platformGroup": "Platforma",
       "yourname": "twojanazwa",
-      "platformIconHint": "Ikona to logo {{platform}} — przełącz na „Strona WWW / URL”, aby wybrać własną ikonę.",
+      "platformIconHint": "Ikona to logo {{platform}}. Przełącz na „Strona WWW / URL”, aby wybrać własną ikonę.",
       "icon": "Ikona",
       "iconColor": "Kolor ikony",
       "iconBg": "Tło ikony"
@@ -266,9 +266,9 @@
       "showPosts_other": "Pokaż {{count}} posta",
       "perRow": "{{value}} w rzędzie",
       "hiveRecentHint": "Twoje najnowsze posty główne (bez reblogów i cross-postów). Aktualizują się automatycznie.",
-      "linkPlaceholder": "Wklej dowolny link — post Hive, Instagram, X, YouTube, artykuł…",
+      "linkPlaceholder": "Wklej dowolny link: post Hive, Instagram, X, YouTube, artykuł…",
       "fetching": "Pobieranie podglądu…",
-      "noPreview": "Nie znaleziono podglądu — nadal wyświetli się jako karta linku.",
+      "noPreview": "Nie znaleziono podglądu. Nadal wyświetli się jako karta linku.",
       "pasteHint": "Wklej link, a pobierzemy jego tytuł, opis i obraz."
     },
     "style": {
@@ -297,8 +297,8 @@
     "openPage": "Otwórz stronę",
     "templates": {
       "title": "Szablony",
-      "hint": "Wybierz wygląd, który wypełni wszystko — twój opis zostanie zachowany, a zmianę można cofnąć.",
-      "undo": "Cofnij szablon — wróć do mojego wyglądu"
+      "hint": "Wybierz wygląd, który wypełni wszystko. Twój opis zostanie zachowany, a zmianę możesz cofnąć.",
+      "undo": "Cofnij szablon i wróć do mojego wyglądu"
     },
     "profile": {
       "title": "Profil",

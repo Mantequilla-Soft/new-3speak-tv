@@ -16,7 +16,7 @@
       "upload": "Comment s'est passée votre mise en ligne ?",
       "stream": "Comment s'est passé votre live ?",
       "watch": "Comment s'est passé votre visionnage sur 3Speak ?",
-      "global": "Que pensez-vous de 3Speak ?",
+      "global": "Que pensez-vous du nouveau 3Speak ?",
       "fallback": "Aidez-nous à améliorer 3Speak"
     },
     "stars": {
@@ -50,7 +50,7 @@
   },
   "live": {
     "vodProcessing": "L'enregistrement est en cours de traitement…",
-    "vodProcessingHint": "Ce live est terminé. La vidéo le remplacera ici dès la fin de l'encodage — inutile de recharger.",
+    "vodProcessingHint": "La vidéo le remplacera ici dès la fin de l'encodage. Inutile de recharger.",
     "watching_one": "👁 {{count}} spectateur",
     "watching_many": "👁 {{count}} spectateurs",
     "watching_other": "👁 {{count}} spectateurs",
@@ -111,13 +111,20 @@
     "atTime": "à {{time}}",
     "commentPlaceholder": "Écrivez votre commentaire ici...",
     "replyPlaceholder": "Écrivez votre réponse ici...",
+    "joinPlaceholder": "Participez à la discussion…",
     "commentButton": "Commenter",
     "count_one": "{{count}} commentaire",
     "count_many": "{{count}} commentaires",
     "count_other": "{{count}} commentaires",
+    "replies_one": "{{count}} réponse",
+    "replies_many": "{{count}} réponses",
+    "replies_other": "{{count}} réponses",
     "edited": "(modifié)",
     "hideComment": "Masquer le commentaire",
     "showComment": "Afficher le commentaire de @{{user}}",
+    "hiddenComment": "Commentaire masqué",
+    "hiddenLowScore": "Commentaire masqué par la communauté · score faible",
+    "show": "Afficher",
     "saving": "Enregistrement...",
     "translation": "Traduction",
     "translationFailed": "La traduction a échoué. Le service de traduction est-il actif ?",
@@ -142,6 +149,9 @@
     "uploadingImage": "Envoi de l'image",
     "write": "Écrire",
     "preview": "Aperçu",
-    "nothingToPreview": "Rien à prévisualiser pour l'instant"
+    "nothingToPreview": "Rien à prévisualiser pour l'instant",
+    "creator": "Créateur",
+    "empty": "Aucun commentaire pour l'instant",
+    "emptyHint": "Les commentaires liés à un moment apparaissent sur la timeline de la vidéo."
   }
 }

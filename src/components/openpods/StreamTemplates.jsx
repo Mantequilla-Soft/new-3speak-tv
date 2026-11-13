@@ -1,8 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Copy, Eye, EyeOff, Pencil, Plus, RefreshCw, Trash2, ImagePlus, Radio, ChevronDown, Clapperboard, MessageSquare, Crown } from 'lucide-react';
 import { ENABLE_SUBS } from '../../utils/config';
 import { toastIn } from '../../utils/toast';
 import { getLanguage } from '../../i18n';
@@ -16,12 +14,18 @@ import {
 } from '../../utils/streamTemplates';
 import AnnounceOptions from './AnnounceOptions';
 import MarkdownComposer from '../studio/MarkdownComposer';
-import ModalHeader from '../ModalHeader/ModalHeader';
+import {
+  Banner, Button, ChoiceCard, Dialog, EmptyState, Icon, IconButton, SettingRow, StatusPill, Toggle,
+} from '../v2/ui';
+import { cx } from '../v2/helpers';
 import './StreamTemplates.scss';
 
 const toast = toastIn('Live');
 const IMAGE_KEY = import.meta.env.VITE_IMAGE_SERVER_API_KEY;
 const STATUS_POLL_MS = 5000;
+// From 1280 up the OBS guide stands open beside the templates (39b); on smaller
+// screens it starts folded under them.
+const WIDE_QUERY = () => typeof window !== 'undefined' && !!window.matchMedia?.('(min-width: 1280px)').matches;
 
 // Same broadcast languages as the browser create-stream form (stored as the
 // short code). Names come from Intl in the reader's own language.
@@ -49,22 +53,12 @@ async function copyText(text) {
   }
 }
 
-/** Centred dialog on desktop, bottom sheet on phones. Portalled to <body>. */
+/** Centred dialog on desktop, bottom sheet on phones (the v2 Dialog). */
 function Sheet({ title, onClose, children, footer, wide = false }) {
-  useEffect(() => {
-    const onKey = (e) => { if (e.key === 'Escape') onClose?.(); };
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  }, [onClose]);
-  return createPortal(
-    <div className="st-sheet-overlay" onMouseDown={(e) => { if (e.target === e.currentTarget) onClose?.(); }}>
-      <div className={`st-sheet${wide ? ' st-sheet--wide' : ''}`} role="dialog" aria-modal="true" aria-label={title}>
-        <ModalHeader closeOnEscape={false} className="st-sheet__header" title={title} onClose={onClose} />
-        <div className="st-sheet__body">{children}</div>
-        {footer && <div className="st-sheet__foot">{footer}</div>}
-      </div>
-    </div>,
-    document.body,
+  return (
+    <Dialog open onClose={onClose} title={title} footer={footer} width={wide ? 680 : 440} className="st-sheet">
+      {children}
+    </Dialog>
   );
 }
 
@@ -76,10 +70,10 @@ function ConfirmSheet({ title, text, confirmLabel, danger = false, busy = false,
       onClose={onCancel}
       footer={(
         <>
-          <button type="button" className="st-btn st-btn--ghost" onClick={onCancel} disabled={busy}>{t('common.actions.cancel')}</button>
-          <button type="button" className={`st-btn ${danger ? 'st-btn--danger' : 'st-btn--primary'}`} onClick={onConfirm} disabled={busy}>
+          <Button variant="secondary" onClick={onCancel} disabled={busy}>{t('common.actions.cancel')}</Button>
+          <Button variant={danger ? 'danger' : 'primary'} icon={danger ? 'delete' : undefined} onClick={onConfirm} disabled={busy} loading={busy}>
             {confirmLabel}
-          </button>
+          </Button>
         </>
       )}
     >
@@ -147,28 +141,29 @@ function SecretBox({ token }) {
   };
 
   return (
-    <section className="st-secret">
-      <div className="st-secret__text">
-        <h2>{t('live.obs.secret.title')}</h2>
-        <p>{t('live.obs.secret.desc')}</p>
-      </div>
-      <div className="st-secret__row">
-        <code className={`st-secret__value${revealed ? '' : ' is-masked'}`}>
-          {revealed && secret ? secret : '••••••••••••••••••••••••'}
-        </code>
+    <section className="st-card-box st-secret">
+      {/* One row (39b): the key, the name and the masked secret, then the actions. */}
+      <div className="st-secret__head">
+        <Icon name="key" size={24} className="st-secret__icon" />
+        <div className="st-secret__text">
+          <h2>{t('live.obs.secret.title')}</h2>
+          <code className={cx('st-secret__value', !revealed && 'is-masked')}>
+            {revealed && secret ? secret : '•••• •••• •••• •••• ••••'}
+          </code>
+        </div>
         <div className="st-secret__actions">
-          <button type="button" className="st-btn st-btn--ghost" onClick={reveal} disabled={busy}>
-            {revealed ? <EyeOff size={15} /> : <Eye size={15} />}
-            <span>{revealed ? t('live.obs.secret.hide') : t('live.obs.secret.reveal')}</span>
-          </button>
-          <button type="button" className="st-btn st-btn--ghost" onClick={copy} disabled={busy}>
-            <Copy size={15} /><span>{t('common.actions.copy')}</span>
-          </button>
-          <button type="button" className="st-btn st-btn--danger" onClick={() => setConfirmReset(true)} disabled={busy}>
-            <RefreshCw size={15} /><span>{t('common.actions.reset')}</span>
-          </button>
+          <Button variant="secondary" onClick={reveal} disabled={busy}>
+            {revealed ? t('live.obs.secret.hide') : t('live.obs.secret.reveal')}
+          </Button>
+          <Button variant="secondary" onClick={copy} disabled={busy}>
+            {t('common.actions.copy')}
+          </Button>
+          <Button variant="danger" onClick={() => setConfirmReset(true)} disabled={busy}>
+            {t('common.actions.reset')}
+          </Button>
         </div>
       </div>
+      <p className="st-secret__desc">{t('live.obs.secret.desc')}</p>
       {confirmReset && (
         <ConfirmSheet
           title={t('live.obs.secret.resetTitle')}
@@ -199,16 +194,13 @@ function ChatUrlBox({ overlayKey }) {
     else toast.error(t('live.obs.copyFailed'));
   };
   return (
-    <section className="st-secret st-chatbox">
-      <div className="st-secret__text">
-        <h2>{t('live.obs.chatBox.title')}</h2>
-        <p>{t('live.obs.chatBox.desc')}</p>
-      </div>
-      <div className="st-secret__actions">
-        <button type="button" className="st-btn st-btn--ghost" onClick={copy}>
-          <MessageSquare size={15} /><span>{t('live.obs.chatBox.copy')}</span>
-        </button>
-      </div>
+    <section className="st-chatbox">
+      <Icon name="forum" size={24} className="st-chatbox__icon" />
+      <p className="st-chatbox__text">
+        <b>{t('live.obs.chatBox.title')}</b>
+        <span> · {t('live.obs.chatBox.desc')}</span>
+      </p>
+      <Button variant="cyan" size={36} onClick={copy}>{t('live.obs.chatBox.copy')}</Button>
     </section>
   );
 }
@@ -222,16 +214,17 @@ function ChatUrlBox({ overlayKey }) {
 function ObsProNotice({ user }) {
   const { t } = useTranslation();
   return (
-    <section className="st-secret st-pro">
-      <div className="st-secret__text">
-        <h2>{t('live.obs.pro.title')}</h2>
-        <p>{t('live.obs.pro.desc')}</p>
+    <section className="st-pro">
+      <Icon name="workspace_premium" size={24} className="st-pro__icon" />
+      <div className="st-pro__text">
+        <b>{t('live.obs.pro.title')}</b>
+        <span>{t('live.obs.pro.desc')}</span>
+        {ENABLE_SUBS && user && (
+          <Button as={Link} to={`/wallet/${user}#pro`} variant="primary" icon="workspace_premium" next className="st-pro__cta">
+            {t('live.obs.pro.cta')}
+          </Button>
+        )}
       </div>
-      {ENABLE_SUBS && user && (
-        <Link to={`/wallet/${user}#pro`} className="st-btn st-btn--primary">
-          <Crown size={15} /><span>{t('live.obs.pro.cta')}</span>
-        </Link>
-      )}
     </section>
   );
 }
@@ -243,34 +236,32 @@ function ObsGuide({ isPremium, defaultOpen }) {
   // reader toggles it themselves.
   const [openPick, setOpen] = useState(null);
   const open = openPick ?? defaultOpen;
+  const steps = ['step1', 'step2', 'step3', 'step4', 'step5'];
+  const output = ['keyframe', 'bitrate', 'encoder', 'audio', 'bframes'];
+  const chat = ['chatCopy', 'chat2', 'chat3'];
   return (
-    <section className={`st-guide${open ? ' is-open' : ''}`}>
+    <section className={cx('st-guide', open && 'is-open')}>
       <button type="button" className="st-guide__toggle" onClick={() => setOpen(!open)} aria-expanded={open}>
-        <span>{t('live.obs.guide.title')}</span>
-        <ChevronDown size={18} />
+        <span className="st-bar is-cyan" aria-hidden="true" />
+        <span className="st-guide__title">{t('live.obs.guide.title')}</span>
+        <Icon name="expand_more" size={20} className="st-guide__chevron" />
       </button>
       {open && (
         <div className="st-guide__body">
           <ol className="st-guide__steps">
-            <li>{t('live.obs.guide.step1')}</li>
-            <li>{t('live.obs.guide.step2')}</li>
-            <li>{t('live.obs.guide.step3')}</li>
-            <li>{t('live.obs.guide.step4')}</li>
-            <li>{t('live.obs.guide.step5')}</li>
+            {steps.map((k, i) => (
+              <li key={k}><span className="st-guide__n">{i + 1}</span><span>{t(`live.obs.guide.${k}`)}</span></li>
+            ))}
           </ol>
-          <h4>{t('live.obs.guide.outputTitle')}</h4>
-          <ul className="st-guide__list">
-            <li>{t('live.obs.guide.keyframe')}</li>
-            <li>{t('live.obs.guide.bitrate')}</li>
-            <li>{t('live.obs.guide.encoder')}</li>
-            <li>{t('live.obs.guide.audio')}</li>
-            <li>{t('live.obs.guide.bframes')}</li>
+          <h4 className="v2-eyebrow">{t('live.obs.guide.outputTitle')}</h4>
+          <ul className="st-guide__chips">
+            {output.map((k) => <li key={k}>{t(`live.obs.guide.${k}`)}</li>)}
           </ul>
-          <h4>{t('live.obs.guide.chatTitle')}</h4>
+          <h4 className="v2-eyebrow">{t('live.obs.guide.chatTitle')}</h4>
           <ol className="st-guide__steps">
-            <li>{t('live.obs.guide.chatCopy')}</li>
-            <li>{t('live.obs.guide.chat2')}</li>
-            <li>{t('live.obs.guide.chat3')}</li>
+            {chat.map((k, i) => (
+              <li key={k}><span className="st-guide__n">{i + 1}</span><span>{t(`live.obs.guide.${k}`)}</span></li>
+            ))}
           </ol>
           <p className="st-guide__limits">{t('live.obs.guide.chatOptions')}</p>
           <p className="st-guide__limits">
@@ -300,6 +291,9 @@ function TemplateCard({ tpl, token, obsAllowed, onEdit, onDelete, onUse }) {
   const ref = useRef(null);
   const visible = useVisible(ref);
   const [status, setStatus] = useState(null);
+  // The address is copied with a button; it is only spelled out when copying
+  // failed, so it can be selected by hand.
+  const [showUrl, setShowUrl] = useState(false);
 
   useEffect(() => {
     if (!visible || !token) return undefined;
@@ -320,74 +314,81 @@ function TemplateCard({ tpl, token, obsAllowed, onEdit, onDelete, onUse }) {
 
   const copyUrl = async () => {
     if (await copyText(tpl.whipUrl || '')) toast.success(t('live.obs.card.urlCopied'));
-    else toast.error(t('live.obs.copyFailed'));
+    else { setShowUrl(true); toast.error(t('live.obs.copyFailed')); }
   };
 
+  // Offline / Connecting / Live / Ending (39b): live is the solid pill,
+  // connecting is cyan (system work), the rest are quiet.
+  const pillTone = state === 'live' ? 'live' : state === 'connecting' ? 'cyan' : 'muted';
+  const warn = (status?.announced && status.announced.ok === false
+    && tpl.announce?.enabled && tpl.visibility !== 'unlisted')
+    ? (status.announced.reason === 'no_posting_authority'
+      ? t('live.obs.card.notAnnouncedAuth')
+      : t('live.obs.card.notAnnounced'))
+    : null;
+
   return (
-    <article ref={ref} className={`st-card st-card--${state}`}>
-      <div className="st-card__thumb">
-        {tpl.thumbnail ? <img src={tpl.thumbnail} alt="" loading="lazy" /> : <Radio size={28} />}
-        <span className={`st-badge st-badge--${state}`}>{t(`live.obs.state.${state}`, { defaultValue: state })}</span>
-      </div>
-      <div className="st-card__body">
-        <div className="st-card__name">{tpl.name}</div>
-        <div className="st-card__title">{tpl.title}</div>
-        {obsAllowed && <code className="st-card__url" title={tpl.whipUrl}>{tpl.whipUrl}</code>}
-        {state === 'live' && ingress && (
-          <div className="st-card__ingress">
-            {[ingress.width && ingress.height ? `${ingress.width}×${ingress.height}` : null,
-              ingress.bitrate ? `${Math.round(ingress.bitrate / 1000)} kbps` : null,
-              ingress.fps ? `${Math.round(ingress.fps)} fps` : null].filter(Boolean).join(' · ')}
+    <article ref={ref} className={cx('st-card', `st-card--${state}`)}>
+      <div className="st-card__top">
+        <div className="st-card__thumb">
+          {tpl.thumbnail ? <img src={tpl.thumbnail} alt="" loading="lazy" /> : null}
+        </div>
+        <div className="st-card__head">
+          <div className="st-card__name" title={tpl.title || undefined}>{tpl.name}</div>
+          <div className="st-card__meta">
+            {state === 'live'
+              ? t('feeds.live.title')
+              : lastLive
+                ? t('live.obs.card.lastLive', { date: lastLive.toLocaleDateString(getLanguage(), { day: 'numeric', month: 'short' }) })
+                : t('live.obs.card.neverLive')}
           </div>
+        </div>
+        <StatusPill tone={pillTone} className={cx('st-badge', `st-badge--${state}`)}>
+          {t(`live.obs.state.${state}`, { defaultValue: state })}
+        </StatusPill>
+      </div>
+      {obsAllowed && showUrl && <code className="st-card__url" title={tpl.whipUrl}>{tpl.whipUrl}</code>}
+      {state === 'live' && ingress && (
+        <div className="st-card__ingress">
+          {[ingress.width && ingress.height ? `${ingress.width}×${ingress.height}` : null,
+            ingress.bitrate ? `${Math.round(ingress.bitrate / 1000)} kbps` : null,
+            ingress.fps ? `${Math.round(ingress.fps)} fps` : null].filter(Boolean).join(' · ')}
+        </div>
+      )}
+      {warn && <div className="st-card__warn">{warn}</div>}
+      {/* We gave up on the session, but OBS may still think it is live. */}
+      {state === 'idle' && status?.lastEnd?.reason === 'never_published' && (
+        <div className="st-card__warn">{t('live.obs.card.stuck')}</div>
+      )}
+      {/* OBS was refused at connect: a free account's one stream a day is used up.
+          OBS itself only shows a generic connection error. */}
+      {state === 'idle' && status?.lastEnd?.reason === 'daily_limit' && (
+        <div className="st-card__warn">{t('live.obs.card.dailyLimit')}</div>
+      )}
+      {/* OBS was refused at connect because the account has no 3Speak Pro. */}
+      {state === 'idle' && status?.lastEnd?.reason === 'pro_required' && (
+        <div className="st-card__warn">{t('live.obs.card.proRequired')}</div>
+      )}
+      {/* One row (39b): copy the server URL, then the small square actions. */}
+      <div className="st-card__actions">
+        {obsAllowed ? (
+          <Button variant="secondary" size={36} center className="st-card__copy" onClick={copyUrl}>
+            {t('live.obs.card.copyUrl')}
+          </Button>
+        ) : onUse && (
+          <Button variant="secondary" size={36} center className="st-card__copy" onClick={() => onUse(tpl)}>
+            {t('live.obs.card.useInStudio')}
+          </Button>
+        )}
+        {/* The browser studio, no OBS: fills "New stream" from this template. */}
+        {obsAllowed && onUse && (
+          <IconButton icon="videocam" label={t('live.obs.card.useInStudio')} className="st-card__use" onClick={() => onUse(tpl)} />
         )}
         {state === 'live' && status?.room && (
-          <Link className="st-card__watch" to={`/watch/${encodeURIComponent(status.room)}`}>{t('live.obs.card.watch')}</Link>
+          <IconButton as={Link} icon="play_arrow" label={t('live.obs.card.watch')} className="st-card__watch" to={`/watch/${encodeURIComponent(status.room)}`} />
         )}
-        {status?.announced && status.announced.ok === false
-          && tpl.announce?.enabled && tpl.visibility !== 'unlisted' && (
-          <div className="st-card__warn">
-            {status.announced.reason === 'no_posting_authority'
-              ? t('live.obs.card.notAnnouncedAuth')
-              : t('live.obs.card.notAnnounced')}
-          </div>
-        )}
-        {/* We gave up on the session, but OBS may still think it is live. */}
-        {state === 'idle' && status?.lastEnd?.reason === 'never_published' && (
-          <div className="st-card__warn">{t('live.obs.card.stuck')}</div>
-        )}
-        {/* OBS was refused at connect: a free account's one stream a day is used up.
-            OBS itself only shows a generic connection error. */}
-        {state === 'idle' && status?.lastEnd?.reason === 'daily_limit' && (
-          <div className="st-card__warn">{t('live.obs.card.dailyLimit')}</div>
-        )}
-        {/* OBS was refused at connect because the account has no 3Speak Pro. */}
-        {state === 'idle' && status?.lastEnd?.reason === 'pro_required' && (
-          <div className="st-card__warn">{t('live.obs.card.proRequired')}</div>
-        )}
-        <div className="st-card__meta">
-          {lastLive
-            ? t('live.obs.card.lastLive', { date: lastLive.toLocaleString(getLanguage(), { dateStyle: 'medium', timeStyle: 'short' }) })
-            : t('live.obs.card.neverLive')}
-        </div>
-        <div className="st-card__actions">
-          {/* The browser studio, no OBS: fills "New stream" from this template. */}
-          {onUse && (
-            <button type="button" className="st-btn st-btn--ghost" onClick={() => onUse(tpl)}>
-              <Clapperboard size={15} /><span>{t('live.obs.card.useInStudio')}</span>
-            </button>
-          )}
-          {obsAllowed && (
-            <button type="button" className="st-btn st-btn--ghost" onClick={copyUrl}>
-              <Copy size={15} /><span>{t('live.obs.card.copyUrl')}</span>
-            </button>
-          )}
-          <button type="button" className="st-btn st-btn--ghost" onClick={() => onEdit(tpl)}>
-            <Pencil size={15} /><span>{t('common.actions.edit')}</span>
-          </button>
-          <button type="button" className="st-btn st-btn--danger" onClick={() => onDelete(tpl)} disabled={state === 'live'}>
-            <Trash2 size={15} /><span>{t('common.actions.delete')}</span>
-          </button>
-        </div>
+        <IconButton icon="edit" label={t('common.actions.edit')} onClick={() => onEdit(tpl)} />
+        <IconButton icon="delete" label={t('common.actions.delete')} onClick={() => onDelete(tpl)} disabled={state === 'live'} />
       </div>
     </article>
   );
@@ -398,21 +399,30 @@ function TemplateCard({ tpl, token, obsAllowed, onEdit, onDelete, onUse }) {
 function NameField({ value, onChange, whipBase, user, error, autoFocus = false, onEnter }) {
   const { t } = useTranslation();
   const slug = slugifyTemplateName(value);
+  const inputRef = useRef(null);
+  // The Dialog focuses its panel when it opens (after our own mount), so an
+  // autofocus has to wait a tick to land in the field.
+  useEffect(() => {
+    if (!autoFocus) return undefined;
+    const id = setTimeout(() => inputRef.current?.focus(), 0);
+    return () => clearTimeout(id);
+  }, [autoFocus]);
   return (
-    <label className="st-field">
-      <span className="st-field__label">{t('live.obs.form.name')}</span>
+    <label className={cx('v2-field st-field', error && 'is-error')}>
+      <span className="v2-eyebrow">{t('live.obs.form.name')}</span>
       <input
-        className="st-input"
+        ref={inputRef}
+        className="v2-input"
         value={value}
         maxLength={TEMPLATE_LIMITS.name}
         placeholder={t('live.obs.form.namePlaceholder')}
-        autoFocus={autoFocus}
+        aria-invalid={!!error}
         onChange={(e) => onChange(e.target.value)}
         onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); onEnter?.(); } }}
       />
-      <span className="st-field__hint">{t('live.obs.form.nameHint')}</span>
+      <span className="v2-field__hint">{t('live.obs.form.nameHint')}</span>
       <code className="st-field__preview">{`${whipBase || ''}/${user}/${slug || '…'}`}</code>
-      {error && <span className="st-field__error">{error}</span>}
+      {error && <span className="v2-field__err" role="alert">{error}</span>}
     </label>
   );
 }
@@ -472,11 +482,11 @@ function PostingAuthNotice({ user }) {
 
   return (
     <div className="st-notice">
-      <p>{t('live.obs.form.authNeeded')}</p>
-      <button type="button" className="st-btn st-btn--primary" onClick={grant} disabled={busy}>
+      <Banner tone="warn">{t('live.obs.form.authNeeded')}</Banner>
+      <Button variant="primary" size={36} icon="key" onClick={grant} disabled={busy} loading={busy}>
         {busy ? t('settings.postingAuth.adding') : t('live.obs.form.authGrant')}
-      </button>
-      {error && <p className="st-field__error">{error}</p>}
+      </Button>
+      {error && <p className="v2-field__err" role="alert">{error}</p>}
     </div>
   );
 }
@@ -578,6 +588,8 @@ function TemplateEditor({ token, user, whipBase, existing, isPremium, onSaved, o
     { id: 'unlisted', label: t('live.obs.form.visUnlisted'), desc: t('live.obs.form.visUnlistedDesc') },
   ];
 
+  const visIcons = { public: 'public', 'hive-internal': 'key', unlisted: 'link' };
+
   return (
     <Sheet
       wide
@@ -585,11 +597,11 @@ function TemplateEditor({ token, user, whipBase, existing, isPremium, onSaved, o
       onClose={onClose}
       footer={(
         <>
-          {formError && <span className="st-field__error st-sheet__foot-error">{formError}</span>}
-          <button type="button" className="st-btn st-btn--ghost" onClick={onClose} disabled={saving}>{t('common.actions.cancel')}</button>
-          <button type="button" className="st-btn st-btn--primary" onClick={save} disabled={saving || uploading}>
+          {formError && <span className="v2-field__err st-sheet__foot-error" role="alert">{formError}</span>}
+          <Button variant="secondary" onClick={onClose} disabled={saving}>{t('common.actions.cancel')}</Button>
+          <Button variant="primary" icon="check" onClick={save} disabled={saving || uploading} loading={saving}>
             {saving ? t('common.actions.saving') : t('common.actions.save')}
-          </button>
+          </Button>
         </>
       )}
     >
@@ -606,10 +618,10 @@ function TemplateEditor({ token, user, whipBase, existing, isPremium, onSaved, o
           error={nameError}
         />
 
-        <label className="st-field">
-          <span className="st-field__label">{t('live.obs.form.title')}</span>
+        <label className="v2-field st-field">
+          <span className="v2-eyebrow">{t('live.obs.form.title')}</span>
           <input
-            className="st-input"
+            className="v2-input"
             value={form.title}
             maxLength={TEMPLATE_LIMITS.title}
             placeholder={t('live.obs.form.titlePlaceholder')}
@@ -617,8 +629,8 @@ function TemplateEditor({ token, user, whipBase, existing, isPremium, onSaved, o
           />
         </label>
 
-        <div className="st-field">
-          <span className="st-field__label">{t('live.obs.form.description')}</span>
+        <div className="v2-field st-field">
+          <span className="v2-eyebrow">{t('live.obs.form.description')}</span>
           <MarkdownComposer
             value={form.description}
             onChange={(v) => set({ description: String(v ?? '').slice(0, TEMPLATE_LIMITS.description) })}
@@ -626,37 +638,39 @@ function TemplateEditor({ token, user, whipBase, existing, isPremium, onSaved, o
           />
         </div>
 
-        <div className="st-field">
-          <span className="st-field__label">{t('live.obs.form.thumbnail')}</span>
+        <div className="v2-field st-field">
+          <span className="v2-eyebrow">{t('live.obs.form.thumbnail')}</span>
           <div className="st-thumb">
             {form.thumbnail
               ? <img src={form.thumbnail} alt="" />
-              : <div className="st-thumb__empty"><ImagePlus size={24} /></div>}
+              : <div className="st-thumb__empty"><Icon name="add_photo_alternate" size={24} /></div>}
             <div className="st-thumb__actions">
               {IMAGE_KEY && (
-                <button type="button" className="st-btn st-btn--ghost" onClick={() => fileRef.current?.click()} disabled={uploading}>
+                <Button variant="secondary" size={36} icon="upload" onClick={() => fileRef.current?.click()} disabled={uploading} loading={uploading}>
                   {uploading ? t('live.obs.form.uploading') : t('live.obs.form.upload')}
-                </button>
+                </Button>
               )}
               {form.thumbnail && (
-                <button type="button" className="st-btn st-btn--ghost" onClick={() => set({ thumbnail: '' })}>
+                <Button variant="ghost" size={36} icon="close" onClick={() => set({ thumbnail: '' })}>
                   {t('common.actions.remove')}
-                </button>
+                </Button>
               )}
               <input ref={fileRef} type="file" accept="image/*" hidden onChange={onImage} />
             </div>
           </div>
         </div>
 
-        <div className="st-field">
-          <span className="st-field__label">
-            {t('live.obs.form.tags')} <em>({form.tags.length}/{TEMPLATE_LIMITS.tags})</em>
+        <div className="v2-field st-field">
+          <span className="v2-eyebrow">
+            {t('live.obs.form.tags')} <span className="v2-field__opt num">({form.tags.length}/{TEMPLATE_LIMITS.tags})</span>
           </span>
           <div className="st-tags">
             {form.tags.map((tag) => (
               <span key={tag} className="st-tag">
                 {tag}
-                <button type="button" onClick={() => set({ tags: form.tags.filter((x) => x !== tag) })} aria-label={t('common.actions.remove')}>×</button>
+                <button type="button" onClick={() => set({ tags: form.tags.filter((x) => x !== tag) })} aria-label={t('common.actions.remove')}>
+                  <Icon name="close" size={14} />
+                </button>
               </span>
             ))}
             {form.tags.length < TEMPLATE_LIMITS.tags && (
@@ -675,42 +689,44 @@ function TemplateEditor({ token, user, whipBase, existing, isPremium, onSaved, o
           </div>
         </div>
 
-        <label className="st-field">
-          <span className="st-field__label">{t('live.obs.form.language')}</span>
-          <select className="st-input" value={form.language} onChange={(e) => set({ language: e.target.value })}>
+        <label className="v2-field st-field">
+          <span className="v2-eyebrow">{t('live.obs.form.language')}</span>
+          <select className="v2-input is-select" value={form.language} onChange={(e) => set({ language: e.target.value })}>
             {LANGUAGE_CODES.map((c) => <option key={c} value={c}>{languageName(c)}</option>)}
           </select>
         </label>
 
-        <div className="st-field">
-          <span className="st-field__label">{t('live.obs.form.visibility')}</span>
-          <div className="st-tiles">
+        <div className="v2-field st-field">
+          <span className="v2-eyebrow">{t('live.obs.form.visibility')}</span>
+          <div className="st-tiles" role="radiogroup" aria-label={t('live.obs.form.visibility')}>
             {visibilities.map((v) => (
-              <button
+              <ChoiceCard
                 key={v.id}
-                type="button"
-                className={`st-tile${form.visibility === v.id ? ' is-active' : ''}`}
+                tone="cyan"
+                icon={visIcons[v.id]}
+                title={v.label}
+                sub={v.desc}
+                selected={form.visibility === v.id}
+                className={cx('st-tile', form.visibility === v.id && 'is-active')}
                 onClick={() => set({ visibility: v.id })}
-              >
-                <strong>{v.label}</strong>
-                <span>{v.desc}</span>
-              </button>
+              />
             ))}
           </div>
         </div>
 
         {/* Boost */}
-        <div className="st-field">
-          <label className="st-check">
-            <input type="checkbox" checked={!!form.boost.enabled} onChange={(e) => setIn('boost', { enabled: e.target.checked })} />
-            <span>{t('live.obs.form.boost')}</span>
-          </label>
+        <div className="st-group">
+          <SettingRow
+            icon="rocket_launch"
+            title={t('live.obs.form.boost')}
+            control={<Toggle checked={!!form.boost.enabled} label={t('live.obs.form.boost')} onChange={(on) => setIn('boost', { enabled: on })} />}
+          />
           {form.boost.enabled && (
             <div className="st-row">
-              <label className="st-field">
-                <span className="st-field__label">{t('live.obs.form.minBoost')}</span>
+              <label className="v2-field st-field">
+                <span className="v2-eyebrow">{t('live.obs.form.minBoost')}</span>
                 <input
-                  className="st-input"
+                  className="v2-input num"
                   type="number"
                   min="0"
                   step="0.01"
@@ -718,10 +734,10 @@ function TemplateEditor({ token, user, whipBase, existing, isPremium, onSaved, o
                   onChange={(e) => setIn('boost', { minBoostUsd: e.target.value })}
                 />
               </label>
-              <label className="st-field">
-                <span className="st-field__label">{t('live.obs.form.payoutAccount')}</span>
+              <label className="v2-field st-field">
+                <span className="v2-eyebrow">{t('live.obs.form.payoutAccount')}</span>
                 <input
-                  className="st-input"
+                  className="v2-input"
                   maxLength={16}
                   value={form.boost.creatorPayoutAccount}
                   placeholder={t('live.obs.form.payoutPlaceholder')}
@@ -733,48 +749,52 @@ function TemplateEditor({ token, user, whipBase, existing, isPremium, onSaved, o
         </div>
 
         {/* Recording: Pro perks */}
-        <div className="st-field">
-          <span className="st-field__label">{t('live.obs.form.whenEnds')}</span>
+        <div className="st-group">
+          <span className="v2-eyebrow">{t('live.obs.form.whenEnds')}</span>
           {/* Everyone may publish the recording; a free one is as long as a free
               stream (the server stops it there). Clips stay Pro. */}
-          <label className="st-check">
-            <input
-              type="checkbox"
-              checked={!!form.recording.publishVod}
-              onChange={(e) => setIn('recording', { publishVod: e.target.checked })}
-            />
-            <span>
-              {t('live.obs.form.publishVod')}
-              {!isPremium && <em className="st-pro-hint">{t('live.obs.form.publishVodFree')}</em>}
-            </span>
-          </label>
-          <label className={`st-check${isPremium ? '' : ' is-locked'}`}>
-            <input
-              type="checkbox"
-              disabled={!isPremium}
-              checked={isPremium && !!form.recording.allowClips}
-              onChange={(e) => setIn('recording', { allowClips: e.target.checked })}
-            />
-            <span>
-              {t('live.obs.form.allowClips')}
-              {!isPremium && <em className="st-pro-hint">{t('live.obs.form.proOnly')}</em>}
-            </span>
-          </label>
+          <SettingRow
+            icon="video_library"
+            title={t('live.obs.form.publishVod')}
+            sub={!isPremium ? t('live.obs.form.publishVodFree') : undefined}
+            control={(
+              <Toggle
+                checked={!!form.recording.publishVod}
+                label={t('live.obs.form.publishVod')}
+                onChange={(on) => setIn('recording', { publishVod: on })}
+              />
+            )}
+          />
+          <SettingRow
+            icon="content_cut"
+            className={isPremium ? undefined : 'is-locked'}
+            title={t('live.obs.form.allowClips')}
+            sub={!isPremium ? t('live.obs.form.proOnly') : undefined}
+            control={(
+              <Toggle
+                checked={isPremium && !!form.recording.allowClips}
+                disabled={!isPremium}
+                label={t('live.obs.form.allowClips')}
+                onChange={(on) => setIn('recording', { allowClips: on })}
+              />
+            )}
+          />
         </div>
 
         {/* Hive announcement */}
-        <div className="st-field st-announce">
-          <label className="st-check">
-            <input
-              type="checkbox"
-              checked={!!form.announce.enabled}
-              onChange={(e) => setIn('announce', { enabled: e.target.checked })}
-            />
-            <span>{t('live.obs.form.announce')}</span>
-          </label>
-          {form.announce.enabled && form.visibility === 'unlisted' && (
-            <p className="st-field__hint">{t('live.obs.form.announceUnlisted')}</p>
-          )}
+        <div className="st-group st-announce">
+          <SettingRow
+            icon="campaign"
+            title={t('live.obs.form.announce')}
+            sub={form.announce.enabled && form.visibility === 'unlisted' ? t('live.obs.form.announceUnlisted') : undefined}
+            control={(
+              <Toggle
+                checked={!!form.announce.enabled}
+                label={t('live.obs.form.announce')}
+                onChange={(on) => setIn('announce', { enabled: on })}
+              />
+            )}
+          />
           {form.announce.enabled && (
             <>
               <PostingAuthNotice user={user} />
@@ -855,59 +875,83 @@ export function StreamTemplatesPanel({ token, user, isPremium, premiumKnown = tr
     }
   };
 
-  if (!token) return <p className="st-empty">{t('live.obs.connectNeeded')}</p>;
+  if (!token) {
+    return (
+      <EmptyState icon="link_off" title={t('live.obs.tabs.templates')} className="st-empty-state">
+        {t('live.obs.connectNeeded')}
+      </EmptyState>
+    );
+  }
 
   const atLimit = data.templates.length >= TEMPLATE_LIMITS.templates;
+  const newButton = (
+    <Button
+      variant="primary"
+      icon="add"
+      onClick={() => setEditing('new')}
+      disabled={atLimit || data.status !== 'ready'}
+      title={atLimit ? t('live.obs.limitReached', { max: TEMPLATE_LIMITS.templates }) : undefined}
+    >
+      {t('live.obs.newTemplate')}
+    </Button>
+  );
+  const obsReady = premiumKnown && isPremium;
 
   return (
-    <div className="stream-templates">
-      <p className="st-intro">{t('live.obs.pageIntro')}</p>
+    <div className={cx('stream-templates', obsReady && 'has-guide')}>
+      <div className="st-main">
+        <p className="st-intro">{t('live.obs.pageIntro')}</p>
 
-      {premiumKnown && (isPremium ? (
-        <>
-          <SecretBox token={token} />
-          <ChatUrlBox overlayKey={data.chatOverlayKey} />
-          <ObsGuide isPremium={isPremium} defaultOpen={data.status === 'ready' && data.templates.length === 0} />
-        </>
-      ) : (
-        <ObsProNotice user={user} />
-      ))}
+        {premiumKnown && (isPremium ? (
+          <>
+            <SecretBox token={token} />
+            <ChatUrlBox overlayKey={data.chatOverlayKey} />
+          </>
+        ) : (
+          <ObsProNotice user={user} />
+        ))}
 
-      <div className="st-list-head">
-        <h2>{t('live.obs.yourTemplates')}</h2>
-        <button
-          type="button"
-          className="st-btn st-btn--primary"
-          onClick={() => setEditing('new')}
-          disabled={atLimit || data.status !== 'ready'}
-          title={atLimit ? t('live.obs.limitReached', { max: TEMPLATE_LIMITS.templates }) : undefined}
-        >
-          <Plus size={16} /><span>{t('live.obs.newTemplate')}</span>
-        </button>
+        <div className="st-list-head">
+          <h2>{t('live.obs.yourTemplates')}</h2>
+          {newButton}
+        </div>
+
+        {data.status === 'idle' && (
+          <p className="st-loading" role="status">
+            <Icon name="progress_activity" size={18} className="v2-spin" />{t('live.obs.loading')}
+          </p>
+        )}
+        {data.status === 'error' && (
+          <div className="v2-failure st-gate" role="alert">
+            <b>{t('live.obs.loadFailed')}</b>
+            <Button
+              variant="secondary"
+              size={36}
+              icon="refresh"
+              onClick={() => { setData((d) => ({ ...d, status: 'idle' })); load(); }}
+            >
+              {t('common.actions.retry')}
+            </Button>
+          </div>
+        )}
+        {data.status === 'ready' && data.templates.length === 0 && (
+          <EmptyState icon="sensors" title={t('live.obs.yourTemplates')} className="st-empty-state">
+            {t('live.obs.empty')}
+          </EmptyState>
+        )}
+        {data.status === 'ready' && data.templates.length > 0 && (
+          <div className="st-grid">
+            {data.templates.map((tpl) => (
+              <TemplateCard key={tpl.id} tpl={tpl} token={token} obsAllowed={obsReady} onEdit={setEditing} onDelete={setDeleting} onUse={onUse} />
+            ))}
+          </div>
+        )}
       </div>
 
-      {data.status === 'idle' && <p className="st-empty">{t('live.obs.loading')}</p>}
-      {data.status === 'error' && (
-        <div className="st-gate">
-          <p>{t('live.obs.loadFailed')}</p>
-          <button
-            type="button"
-            className="st-btn st-btn--ghost"
-            onClick={() => { setData((d) => ({ ...d, status: 'idle' })); load(); }}
-          >
-            {t('common.actions.retry')}
-          </button>
-        </div>
-      )}
-      {data.status === 'ready' && data.templates.length === 0 && (
-        <p className="st-empty">{t('live.obs.empty')}</p>
-      )}
-      {data.status === 'ready' && data.templates.length > 0 && (
-        <div className="st-grid">
-          {data.templates.map((tpl) => (
-            <TemplateCard key={tpl.id} tpl={tpl} token={token} obsAllowed={premiumKnown && isPremium} onEdit={setEditing} onDelete={setDeleting} onUse={onUse} />
-          ))}
-        </div>
+      {obsReady && (
+        <aside className="st-aside">
+          <ObsGuide isPremium={isPremium} defaultOpen={WIDE_QUERY() || (data.status === 'ready' && data.templates.length === 0)} />
+        </aside>
       )}
 
       {editing && (
@@ -945,6 +989,8 @@ export function StreamTemplatesPanel({ token, user, isPremium, premiumKnown = tr
 export function TemplatePicker({ token, onPick }) {
   const { t } = useTranslation();
   const [templates, setTemplates] = useState([]);
+  // The template last loaded into the form, named in the bar (39a).
+  const [picked, setPicked] = useState('');
   useEffect(() => {
     if (!token) return undefined;
     let alive = true;
@@ -954,14 +1000,21 @@ export function TemplatePicker({ token, onPick }) {
     return () => { alive = false; };
   }, [token]);
   if (!templates.length) return null;
+  // One 48px bar: the native select covers it (invisible), so it keeps the
+  // keyboard and screen reader behaviour of a select.
   return (
     <label className="st-picker">
-      <span>{t('live.obs.pickTemplate')}</span>
+      <Icon name="bookmarks" size={18} className="st-picker__icon" />
+      <span className="st-picker__text">
+        {t('live.obs.pickTemplate')}: <b>{picked || t('live.obs.pickTemplatePlaceholder')}</b>
+      </span>
+      <Icon name="expand_more" size={18} className="st-picker__chev" />
       <select
+        className="st-picker__select"
         value=""
         onChange={(e) => {
           const tpl = templates.find((x) => x.id === e.target.value);
-          if (tpl) onPick(tpl);
+          if (tpl) { setPicked(tpl.name); onPick(tpl); }
         }}
       >
         <option value="">{t('live.obs.pickTemplatePlaceholder')}</option>
@@ -1066,20 +1119,21 @@ function SaveAsTemplateSheet({ draft, token, user, isPremium, getAnnounceConfig,
         onClose={onClose}
         footer={(
           <>
-            <button type="button" className="st-btn st-btn--ghost" onClick={onManage}>{t('live.obs.save.manage')}</button>
-            <button type="button" className="st-btn st-btn--primary" onClick={onClose}>{t('common.actions.done')}</button>
+            <Button variant="secondary" icon="bookmarks" onClick={onManage}>{t('live.obs.save.manage')}</Button>
+            <Button variant="primary" icon="check" onClick={onClose}>{t('common.actions.done')}</Button>
           </>
         )}
       >
         <div className="stream-templates st-saved">
-          <p className="st-intro">{t('live.obs.save.savedIntro', { name: saved.name })}</p>
-          <div className="st-field">
-            <span className="st-field__label">{t('live.obs.save.serverUrl')}</span>
-            <div className="st-secret__row">
-              <code className="st-secret__value">{saved.whipUrl}</code>
-              <button type="button" className="st-btn st-btn--ghost" onClick={copyUrl}>
-                <Copy size={15} /><span>{t('common.actions.copy')}</span>
-              </button>
+          <div className="v2-success st-saved__intro">
+            <Icon name="check_circle" size={24} className="st-saved__ok" />
+            <p className="st-intro">{t('live.obs.save.savedIntro', { name: saved.name })}</p>
+          </div>
+          <div className="v2-field st-field">
+            <span className="v2-eyebrow">{t('live.obs.save.serverUrl')}</span>
+            <div className="st-copyrow">
+              <code className="st-copyrow__value">{saved.whipUrl}</code>
+              <Button variant="secondary" icon="content_copy" onClick={copyUrl}>{t('common.actions.copy')}</Button>
             </div>
           </div>
           <SecretBox token={token} />
@@ -1095,17 +1149,17 @@ function SaveAsTemplateSheet({ draft, token, user, isPremium, getAnnounceConfig,
       onClose={onClose}
       footer={(
         <>
-          {error && <span className="st-field__error st-sheet__foot-error">{error}</span>}
-          <button type="button" className="st-btn st-btn--ghost" onClick={onClose} disabled={saving}>{t('common.actions.cancel')}</button>
-          <button type="button" className="st-btn st-btn--primary" onClick={save} disabled={saving || !hasTitle}>
+          {error && <span className="v2-field__err st-sheet__foot-error" role="alert">{error}</span>}
+          <Button variant="secondary" onClick={onClose} disabled={saving}>{t('common.actions.cancel')}</Button>
+          <Button variant="primary" icon="bookmark_add" onClick={save} disabled={saving || !hasTitle} loading={saving}>
             {saving ? t('common.actions.saving') : t('live.obs.save.submit')}
-          </button>
+          </Button>
         </>
       )}
     >
       <div className="stream-templates st-form">
         <p className="st-intro">{t('live.obs.save.intro')}</p>
-        {!hasTitle && <p className="st-field__error">{t('live.obs.save.needTitle')}</p>}
+        {!hasTitle && <Banner tone="warn">{t('live.obs.save.needTitle')}</Banner>}
         <NameField
           value={name}
           onChange={(v) => { setName(v); setNameError(null); }}
@@ -1132,14 +1186,17 @@ export function SaveAsTemplate({ draft, token, user, isPremium, getAnnounceConfi
   const [snapshot, setSnapshot] = useState(null);
   return (
     <div className="stream-templates st-save">
-      <button
-        type="button"
-        className="st-btn st-btn--ghost"
+      <Button
+        variant="secondary"
+        size={48}
+        block
+        trailing="bookmark_add"
+        className="st-save__btn"
         onClick={() => setSnapshot(draft)}
         disabled={!token}
       >
-        <Radio size={15} /><span>{t('live.obs.save.button')}</span>
-      </button>
+        {t('live.obs.save.button')}
+      </Button>
       <span className="st-save__hint">{t('live.obs.save.hint')}</span>
       {snapshot && (
         <SaveAsTemplateSheet

@@ -105,7 +105,7 @@
       "tips": "Tips"
     },
     "legendOurs": "op 3Speak",
-    "legendOther": "elders op Hive",
+    "legendOther": "elders",
     "segments": {
       "ours": "Postbeloningen op 3Speak",
       "other": "Postbeloningen elders op Hive",
@@ -132,7 +132,8 @@
     "communities": "Je communities bezoeken…",
     "followers": "Nagaan wie jou is gaan volgen…",
     "watched": "Doornemen wat je hebt bekeken…",
-    "thumbnails": "Je thumbnails laden… {{done}} van {{total}}"
+    "thumbnails": "Je thumbnails laden… {{done}} van {{total}}",
+    "thumbnailsWaiting": "Je thumbnails worden geladen…"
   },
   "tips": {
     "label": "Tip:",

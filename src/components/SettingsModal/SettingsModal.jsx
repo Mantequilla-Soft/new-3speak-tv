@@ -1,6 +1,7 @@
-import { useState, useEffect, useLayoutEffect, useMemo, useRef } from 'react';
+import { useState, useEffect, useMemo, useRef, useSyncExternalStore } from 'react';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 import { toastIn } from '../../utils/toast';
 import { useAppStore } from '../../lib/store';
 import { APP_VERSION } from '../../version';
@@ -19,15 +20,18 @@ import {
   waitForThreespeakPostingAuth,
 } from '../../utils/postingAuthority';
 import { LIGHTNING_ADDRESS_RE, checkLightningAddress, readOwnLightningAddress, saveOwnLightningAddress } from '../../lib/lightningTip';
+import { TAG_OPTIONS, TAG_CATEGORIES, getTagLabel } from '../../utils/tagsV2';
 import TagsV2Picker from '../tooltip/TagsV2Picker';
+import { friendlyProviderName } from '../../utils/aiohaProviderUi';
+import { useGetMyQuery } from '../../hooks/getUserDetails';
 import DataRequestForm from './DataRequestForm';
 import LanguagePicker from '../LanguagePicker/LanguagePicker';
-import ModalHeader from '../ModalHeader/ModalHeader';
 import useDialog from '../../hooks/useDialog';
 import AddSocialLink_modal from '../modal/AddSocialLink_modal';
-import { SUPPORT_SITE_ICONS } from '../tip-reward/OtherWays';
+import AccountImg from '../HiveAvatar/AccountImg';
 import { parseSupportLink, readSupportLinks, saveSupportLinks, SUPPORT_LINK_MAX, SUPPORT_SITE_NAMES } from '../../lib/supportLinks';
-import { IoClose, IoGiftOutline, IoCalendarOutline, IoMegaphoneOutline, IoCheckmarkCircleOutline } from 'react-icons/io5';
+import { Banner, Button, Icon, IconButton, Segmented, SettingRow, Toggle } from '../v2/ui';
+import { cx } from '../v2/helpers';
 import './SettingsModal.scss';
 import useCardSize, { useIsCardSizeMobile } from '../../hooks/useCardSize';
 
@@ -37,6 +41,54 @@ const toast = toastIn('Settings');
 
 const sameSet = (a, b) =>
   JSON.stringify([...(a || [])].sort()) === JSON.stringify([...(b || [])].sort());
+
+// One card of settings (38a-c): a 4px bar in the section's tone and its title,
+// then the rows. On/off rows are SettingRow + Toggle, divided by 1px lines
+// (STYLE_GUIDE §11). `aside` sits at the right of the title.
+function Section({ title, tone = 'accent', aside, children, className, id }) {
+  return (
+    <section className={cx('settings-section', className)} id={id}>
+      {(title || aside) && (
+        <div className="settings-section-head">
+          {title && <h3 className={cx('settings-section-title', tone === 'cyan' && 'is-cyan')}>{title}</h3>}
+          {aside}
+        </div>
+      )}
+      {children}
+    </section>
+  );
+}
+
+// A switch row: the title doubles as the switch's accessible name (or `label`).
+// `variant`: rows divided by 1px lines (default, 38b), each row in its own well
+// ('well', the ads card in 38a), or title-only rows without lines ('plain', the
+// notification kinds in 38b). `tone="cyan"` for the feed and notification
+// switches the boards draw in cyan.
+function Row({ title, desc, checked, onChange, disabled, icon, tone, variant, label }) {
+  return (
+    <SettingRow
+      title={title}
+      sub={desc}
+      icon={icon}
+      className={cx('settings-row', variant && `is-${variant}`)}
+      control={<Toggle checked={!!checked} onChange={onChange} label={label || title} disabled={disabled} tone={tone} />}
+    />
+  );
+}
+
+// Loading / saving, or why a save failed (an accent wash with the reason, 38c).
+function Status({ error, children }) {
+  if (error) {
+    return (
+      <div className="settings-error" role="alert">
+        <Icon name="error" size={18} className="settings-error-icon" />
+        <span>{error}</span>
+      </div>
+    );
+  }
+  if (!children) return null;
+  return <p className="settings-status">{children}</p>;
+}
 
 // Interests picker — canonical copy lives in the user's Hive posting_json_metadata.
 // Rendered only while the modal is open, so its hooks mount/unmount with it.
@@ -83,37 +135,63 @@ function InterestsSection() {
     }
   };
 
+  // The same picker as the interests popup (owner 2026-11-12): search, the
+  // categories as tiles with their topics, partial fills and Clear. Any older
+  // pick that is no longer in the taxonomy stays below as a chip, so it can
+  // still be taken off.
+  const picked = interests || [];
+  const known = new Set([...TAG_OPTIONS.map((o) => o.id), ...TAG_CATEGORIES.flatMap((c) => [c.slug, ...c.topics.map((x) => x.slug)])]);
+  const legacy = picked.filter((id) => !known.has(id));
+  const change = (next) => {
+    setJustSaved(false);
+    setInterests(next);
+  };
+
   return (
-    <div className="settings-section">
-      <h4 className="settings-section-title">
-        {t('settings.interests.title')}{hydrating && <span className="settings-interests-status"> · {t('settings.interests.loading')}</span>}
-      </h4>
-      <p className="settings-interests-hint">
-        {t('settings.interests.hint')}
-        {!user && ` ${t('settings.interests.loginHint')}`}
-      </p>
-      <TagsV2Picker
-        multi
-        searchable
-        value={interests || []}
-        onChange={(next) => { setJustSaved(false); setInterests(next); }}
-        disabled={!user || saving}
-      />
+    <Section
+      tone="cyan"
+      title={<>{t('settings.interests.title')}{hydrating && <span className="settings-title-status"> · {t('settings.interests.loading')}</span>}</>}
+    >
+      {!user && (
+        <p className="settings-note">{t('settings.interests.hint')} {t('settings.interests.loginHint')}</p>
+      )}
+      {/* Compact tiles here (owner 2026-11-12): icon and name side by side. */}
+      <div className="settings-interests-picker">
+        <TagsV2Picker multi searchable layout="tiles" value={picked} onChange={change} disabled={!user || saving} />
+      </div>
+      {legacy.length > 0 && (
+        <div className="settings-interests" role="group" aria-label={t('settings.interests.title')}>
+          {legacy.map((id) => (
+            <button
+              key={id}
+              type="button"
+              className="settings-interest is-on"
+              aria-pressed
+              disabled={!user || saving}
+              onClick={() => change(picked.filter((x) => x !== id))}
+            >
+              {getTagLabel(id) || id}
+            </button>
+          ))}
+        </div>
+      )}
       {/* Only shown when there's something to save, while saving, or right after
           a save (the transient "Saved" confirmation). Hidden otherwise. */}
       {user && (dirty || saving || justSaved) && (
-        <div className="settings-interests-actions">
-          <button
-            type="button"
-            className="settings-interests-save"
-            onClick={save}
-            disabled={!dirty || saving}
-          >
-            {saving ? t('common.actions.saving') : dirty ? t('settings.interests.save') : t('common.actions.saved')}
-          </button>
-        </div>
+        <Button
+          variant="cyan"
+          size={44}
+          block
+          className="settings-interests-save"
+          onClick={save}
+          disabled={!dirty || saving}
+          loading={saving}
+          trailing={!dirty && !saving ? 'check' : null}
+        >
+          {saving ? t('common.actions.saving') : dirty ? t('settings.interests.save') : t('common.actions.saved')}
+        </Button>
       )}
-    </div>
+    </Section>
   );
 }
 
@@ -228,100 +306,67 @@ function AdsSection() {
 
   if (!user || !visible) return null;
 
+  const youPct = draftValid ? split.poolPct - parsedDraft : split?.creatorPct;
+  const communityPct = draftValid ? parsedDraft : split?.communityPct;
+  const youShare = split && split.poolPct > 0 ? Math.max(0, Math.min(100, (youPct / split.poolPct) * 100)) : 100;
+  const statusError = error || (split && !draftValid ? t('settings.ads.invalidPct', { max: split.poolPct }) : null);
+
   return (
-    <div className="settings-section">
-      <h4 className="settings-section-title">{t('settings.ads.title')}</h4>
-      <div className="settings-modal-row">
-        <div className="settings-row-text">
-          <span className="settings-row-title">{t('settings.ads.allow')}</span>
-          <span className="settings-row-desc">
-            {t('settings.ads.allowDesc')}
-          </span>
-        </div>
-        <Switch
-          checked={adsEnabled}
-          onChange={onToggle}
-          ariaLabel={t('settings.ads.allowAria')}
-        />
-      </div>
+    <Section title={t('settings.ads.title')}>
+      <Row variant="well" title={t('settings.ads.allow')} desc={t('settings.ads.allowDesc')} checked={adsEnabled} onChange={onToggle} label={t('settings.ads.allowAria')} />
       {adsEnabled && (
-        <div className="settings-modal-row">
-          <div className="settings-row-text">
-            <span className="settings-row-title">{t('settings.ads.rolls')}</span>
-            <span className="settings-row-desc">
-              {t('settings.ads.rollsDesc')}
-            </span>
-          </div>
-          <Switch
-            checked={rollsEnabled}
-            onChange={onToggleRolls}
-            ariaLabel={t('settings.ads.rolls')}
-          />
-        </div>
+        <Row variant="well" title={t('settings.ads.rolls')} desc={t('settings.ads.rollsDesc')} checked={rollsEnabled} onChange={onToggleRolls} />
       )}
       {adsEnabled && (
-        <div className="settings-modal-row">
-          <div className="settings-row-text">
-            <span className="settings-row-title">{t('settings.ads.audio')}</span>
-            <span className="settings-row-desc">
-              {t('settings.ads.audioDesc')}
-            </span>
-          </div>
-          <Switch
-            checked={audioEnabled}
-            onChange={onToggleAudio}
-            ariaLabel={t('settings.ads.audio')}
-          />
-        </div>
+        <Row variant="well" title={t('settings.ads.audio')} desc={t('settings.ads.audioDesc')} checked={audioEnabled} onChange={onToggleAudio} />
       )}
       {adsEnabled && split && (
-        <div className="settings-modal-row settings-ads-split">
-          <div className="settings-row-text">
-            <span className="settings-row-title">{t('settings.ads.shareTitle')}</span>
-            <span className="settings-row-desc">
-              {t('settings.ads.shareDesc', { pool: split.poolPct })}
-            </span>
-            <span className="settings-ads-breakdown">
-              {t('settings.ads.youPct', { pct: draftValid ? split.poolPct - parsedDraft : split.creatorPct })}
-              <span aria-hidden="true"> · </span>
-              {t('settings.ads.communityPct', { pct: draftValid ? parsedDraft : split.communityPct })}
-            </span>
-          </div>
-          <div className="settings-ads-share-control">
-            <label className="settings-visually-hidden" htmlFor="settings-community-share">
-              {t('settings.ads.shareInputLabel')}
-            </label>
-            <div className="settings-ads-input">
-              <input
-                id="settings-community-share"
-                type="number"
-                min="0"
-                max={split.poolPct}
-                step="1"
-                inputMode="numeric"
-                value={draftCommunity}
-                onChange={(e) => setDraftCommunity(e.target.value)}
-                onKeyDown={(e) => { if (e.key === 'Enter') onSaveShare(); }}
-                aria-invalid={!draftValid}
-              />
-              <span aria-hidden="true">%</span>
+        <div className="settings-split v2-well">
+          <div className="settings-split-head">
+            <div className="settings-split-text">
+              <b>{t('settings.ads.shareTitle')}</b>
+              <span>{t('settings.ads.shareDesc', { pool: split.poolPct })}</span>
             </div>
-            {draftChanged && (
-              <button type="button" className="settings-ads-save" onClick={onSaveShare} disabled={saving}>
-                {t('common.actions.save')}
-              </button>
-            )}
+            <div className="settings-split-control">
+              <label className="settings-visually-hidden" htmlFor="settings-community-share">
+                {t('settings.ads.shareInputLabel')}
+              </label>
+              <div className={cx('settings-split-input', !draftValid && 'is-error')}>
+                <input
+                  id="settings-community-share"
+                  type="number"
+                  min="0"
+                  max={split.poolPct}
+                  step="1"
+                  inputMode="numeric"
+                  value={draftCommunity}
+                  onChange={(e) => setDraftCommunity(e.target.value)}
+                  onKeyDown={(e) => { if (e.key === 'Enter') onSaveShare(); }}
+                  aria-invalid={!draftValid}
+                />
+                <span aria-hidden="true">%</span>
+              </div>
+              {draftChanged && (
+                <Button variant="primary" size={36} onClick={onSaveShare} disabled={saving}>
+                  {t('common.actions.save')}
+                </Button>
+              )}
+            </div>
+          </div>
+          {/* You (accent) and the community (cyan), as parts of the pool */}
+          <div className="settings-split-bar" aria-hidden="true"><span style={{ width: `${youShare}%` }} /></div>
+          <div className="settings-split-legend">
+            <span className="is-you">{t('settings.ads.youPct', { pct: youPct })}</span>
+            <span className="is-community">{t('settings.ads.communityPct', { pct: communityPct })}</span>
           </div>
         </div>
       )}
-      {(loading || saving || error || (split && !draftValid)) && (
-        <p className={`settings-ads-status${(error || (split && !draftValid)) ? ' error' : ''}`}>
-          {error
-            || (split && !draftValid ? t('settings.ads.invalidPct', { max: split.poolPct }) : null)
-            || (saving ? t('common.actions.saving') : t('settings.ads.loadingSetting'))}
-        </p>
+      {(loading || saving || statusError) && (
+        <Status error={statusError}>
+          {saving ? t('common.actions.saving') : t('settings.ads.loadingSetting')}
+        </Status>
       )}
-    </div>
+    </Section>
   );
 }
 
@@ -335,7 +380,9 @@ function AdsSection() {
  * is really "may we store your username against what you watch" — and the copy
  * says that plainly rather than hiding it behind the word "rewards".
  */
-function ViewerRewardsSection() {
+// `children`: the posting authority row, which the board (38a) draws inside this
+// card: the switches here are saved without a wallet prompt once it is granted.
+function ViewerRewardsSection({ children }) {
   const { t } = useTranslation();
   const user = useAppStore((s) => s.user);
   const [enabled, setEnabled] = useState(false);
@@ -397,36 +444,43 @@ function ViewerRewardsSection() {
     }, () => setListen(false));
   }
 
+  // Listening on its own (38a: "Count my listening too" as a switch). Off is the
+  // same listener record the main switch writes when it turns everything off.
+  function onToggleListen(next) {
+    if (next) return addListening();
+    setListen(false);
+    return save(async () => {
+      await setListenerAdPrefs(user, { listenEnabled: false });
+      toast.success(t('settings.viewerRewards.listenOffToast'));
+    }, () => setListen(true));
+  }
+
   return (
-    <div className="settings-modal-section">
-      <h3 className="settings-section-title">{t('settings.viewerRewards.titleListen')}</h3>
-      <div className="settings-modal-row">
-        <div className="settings-row-text">
-          <span className="settings-row-title">{t('settings.viewerRewards.rowTitle')}</span>
-          <span className="settings-row-desc">
-            {t('settings.viewerRewards.desc')}
-          </span>
-          <span className="settings-row-desc">
-            {t('settings.viewerRewards.listenDesc')}
-          </span>
-          {enabled && !listen && !loading && (
-            <button type="button" className="settings-inline-btn" onClick={addListening} disabled={saving}>
-              {t('settings.viewerRewards.listenAlso')}
-            </button>
-          )}
+    <Section
+      tone="cyan"
+      title={t('settings.viewerRewards.titleListen')}
+      aside={<Toggle tone="cyan" checked={enabled} onChange={onToggle} label={t('settings.viewerRewards.aria')} />}
+    >
+      <p className="settings-note">{t('settings.viewerRewards.desc')}</p>
+      <div className="settings-well-row v2-well">
+        <Icon name="headphones" size={20} className="settings-well-icon" />
+        <div className="settings-well-body">
+          <b>{t('settings.viewerRewards.listenAlso')}</b>
+          <span>{t('settings.viewerRewards.listenDesc')}</span>
         </div>
-        <Switch
-          checked={enabled}
-          onChange={onToggle}
-          ariaLabel={t('settings.viewerRewards.aria')}
+        <Toggle
+          tone="cyan"
+          checked={enabled && listen}
+          onChange={onToggleListen}
+          label={t('settings.viewerRewards.listenAlso')}
+          disabled={!enabled || loading || saving}
         />
       </div>
+      {children}
       {(loading || saving || error) && (
-        <p className={`settings-ads-status${error ? ' error' : ''}`}>
-          {error || (saving ? t('common.actions.saving') : t('settings.ads.loadingSetting'))}
-        </p>
+        <Status error={error}>{saving ? t('common.actions.saving') : t('settings.ads.loadingSetting')}</Status>
       )}
-    </div>
+    </Section>
   );
 }
 
@@ -436,8 +490,11 @@ function ViewerRewardsSection() {
  * there was nowhere to see whether it is granted or to take it back.
  *
  * Both directions are an account_update2 signed with the ACTIVE key.
+ *
+ * `variant="row"`: one well row inside the rewards card (38a). Otherwise its own
+ * card, "Let 3Speak post for you" with what it can and cannot do (32g).
  */
-function PostingAuthoritySection() {
+function PostingAuthoritySection({ variant = 'card' }) {
   const { t } = useTranslation();
   const user = useAppStore((s) => s.user);
   // null = checking, true/false = on chain, 'unavailable' = no Hive account to read
@@ -492,31 +549,61 @@ function PostingAuthoritySection() {
     }
   }
 
-  return (
-    <div className="settings-section">
-      <h4 className="settings-section-title">{t('settings.postingAuth.title')}</h4>
-      <div className="settings-modal-row">
-        <div className="settings-row-text">
-          <span className="settings-row-title">
-            {granted === true ? t('settings.postingAuth.canPost') : granted === false ? t('settings.postingAuth.cannotPost') : t('settings.postingAuth.checkingStatus')}
-          </span>
-          <span className="settings-row-desc">
-            {t('settings.postingAuth.desc')}
-          </span>
+  const status = granted === true ? t('settings.postingAuth.canPost') : granted === false ? t('settings.postingAuth.cannotPost') : t('settings.postingAuth.checkingStatus');
+  const removeButton = granted === true && (
+    <Button variant="secondary" size={36} onClick={() => change(false)} disabled={!!busy} loading={!!busy}>
+      {busy === 'confirming' ? t('settings.postingAuth.checking') : busy ? t('settings.postingAuth.removing') : t('common.actions.remove')}
+    </Button>
+  );
+  const addLabel = busy === 'confirming' ? t('settings.postingAuth.checking') : busy ? t('settings.postingAuth.adding') : t('common.actions.add');
+
+  if (variant === 'row') {
+    return (
+      <>
+        <div className="settings-well-row v2-well">
+          <Icon name="verified_user" size={20} className="settings-well-icon" />
+          <div className="settings-well-body">
+            <b>{t('settings.postingAuth.title')}</b>
+            <span className={cx(granted === true && 'is-cyan')}>{status}</span>
+          </div>
+          {removeButton}
+          {granted === false && (
+            <Button variant="cyan" size={36} onClick={() => change(true)} disabled={!!busy} loading={!!busy}>{addLabel}</Button>
+          )}
         </div>
-        {granted === true && (
-          <button type="button" className="settings-auth-btn" onClick={() => change(false)} disabled={busy}>
-            {busy === 'confirming' ? t('settings.postingAuth.checking') : busy ? t('settings.postingAuth.removing') : t('common.actions.remove')}
-          </button>
-        )}
-        {granted === false && (
-          <button type="button" className="settings-auth-btn settings-auth-add" onClick={() => change(true)} disabled={busy}>
-            {busy === 'confirming' ? t('settings.postingAuth.checking') : busy ? t('settings.postingAuth.adding') : t('common.actions.add')}
-          </button>
-        )}
+        <p className="settings-hint">{t('settings.postingAuth.desc')}</p>
+        {error && <Status error={error} />}
+      </>
+    );
+  }
+
+  // The wallet the grant is signed with, named on the button when we know it.
+  const wallet = friendlyProviderName(getCurrentProvider());
+  return (
+    <section className="settings-section settings-auth-card">
+      <div className="settings-auth-head">
+        <span className="settings-auth-icon"><Icon name="verified_user" size={24} /></span>
+        <h3 className="settings-auth-title">{t('settings.postingAuth.letTitle')}</h3>
       </div>
-      {error && <p className="settings-ads-status error">{error}</p>}
-    </div>
+      <p className="settings-note">{t('settings.postingAuth.letDesc')}</p>
+      <ul className="settings-auth-list">
+        <li><Icon name="check" size={18} className="is-cyan" />{t('settings.postingAuth.canPublish')}</li>
+        <li><Icon name="check" size={18} className="is-cyan" />{t('settings.postingAuth.canVote')}</li>
+        <li><Icon name="block" size={18} className="is-accent" />{t('settings.postingAuth.never')}</li>
+      </ul>
+      {granted !== false && (
+        <div className="settings-well-row v2-well">
+          <div className="settings-well-body"><b className={cx(granted === true && 'is-cyan')}>{status}</b></div>
+          {removeButton}
+        </div>
+      )}
+      {granted === false && (
+        <Button variant="cyan" size={48} block trailing="key" onClick={() => change(true)} disabled={!!busy} loading={!!busy}>
+          {busy ? addLabel : wallet ? t('settings.postingAuth.grantWith', { wallet }) : t('common.actions.add')}
+        </Button>
+      )}
+      {error && <Status error={error} />}
+    </section>
   );
 }
 
@@ -577,48 +664,55 @@ function LightningReceiveSection() {
     }
   }
 
+  // 38c / 31e: the address in a well with its label inside, outlined in accent
+  // when it is wrong and in cyan while it is the saved own address; under it
+  // either why it was refused or where tips go now.
   return (
-    <div className="settings-section">
-      <h4 className="settings-section-title">{t('settings.lightning.title')}</h4>
-      <div className="settings-modal-row settings-lightning">
-        <div className="settings-row-text">
-          <span className="settings-row-title">
-            {saved === null ? t('settings.lightning.checking')
-              : saved ? t('settings.lightning.toOwn', { address: saved })
-              : t('settings.lightning.toV4v', { account: user })}
-          </span>
-          <span className="settings-row-desc">{saved ? t('settings.lightning.ownDesc') : t('settings.lightning.v4vDesc')}</span>
-          <form
-            className="settings-lightning-form"
-            onSubmit={(e) => { e.preventDefault(); if (changed) save(next); }}
-          >
-            <input
-              type="text"
-              inputMode="email"
-              autoComplete="off"
-              autoCapitalize="none"
-              spellCheck={false}
-              aria-label={t('settings.lightning.inputLabel')}
-              placeholder={t('settings.lightning.placeholder')}
-              value={draft}
-              onChange={(e) => { setDraft(e.target.value); setError(null); }}
-              disabled={busy || saved === null}
-            />
-            <button type="submit" className="settings-ads-save" disabled={busy || !changed}>
-              {busy ? t('common.actions.saving') : t('common.actions.save')}
-            </button>
-          </form>
-          {saved && (
-            <button type="button" className="settings-lightning-reset" onClick={() => save('')} disabled={busy}>
-              {t('settings.lightning.useV4v')}
-            </button>
-          )}
-          <span className="settings-row-desc">{t('settings.lightning.supportersNote')}</span>
-          <span className="settings-row-desc">{t('settings.lightning.publicNote')}</span>
-        </div>
-      </div>
-      {error && <p className="settings-ads-status error">{error}</p>}
-    </div>
+    <Section title={t('settings.lightning.title')}>
+      <p className="settings-note">{saved ? t('settings.lightning.ownDesc') : t('settings.lightning.v4vDesc')}</p>
+      <form
+        className="settings-inline-form"
+        onSubmit={(e) => { e.preventDefault(); if (changed) save(next); }}
+      >
+        <label className={cx('settings-addr', error && 'is-error', saved && !changed && !error && 'is-ok')} htmlFor="settings-ln-address">
+          <span className="settings-addr-label">{t('settings.lightning.inputLabel')}</span>
+          <input
+            id="settings-ln-address"
+            className="settings-addr-input"
+            type="text"
+            inputMode="email"
+            autoComplete="off"
+            autoCapitalize="none"
+            spellCheck={false}
+            aria-label={t('settings.lightning.inputLabel')}
+            aria-invalid={!!error}
+            placeholder={t('settings.lightning.placeholder')}
+            value={draft}
+            onChange={(e) => { setDraft(e.target.value); setError(null); }}
+            disabled={busy || saved === null}
+          />
+        </label>
+        {error ? <Status error={error} /> : (
+          <p className="settings-ok-line">
+            <Icon name={saved === null ? 'progress_activity' : 'check_circle'} size={18} className={cx(saved === null && 'v2-spin')} />
+            <span className="settings-ln-where">
+              {saved === null ? t('settings.lightning.checking')
+                : saved ? t('settings.lightning.toOwn', { address: saved })
+                : t('settings.lightning.toV4v', { account: user })}
+            </span>
+          </p>
+        )}
+        <Button type="submit" variant="primary" size={44} block className="is-next" trailing={busy ? null : 'check'} disabled={busy || !changed} loading={busy}>
+          {busy ? t('common.actions.saving') : t('common.actions.save')}
+        </Button>
+      </form>
+      <p className="settings-hint">{t('settings.lightning.publicNote')} {t('settings.lightning.supportersNote')}</p>
+      {saved && (
+        <Button variant="secondary" size={44} block trailing="swap_horiz" className="is-next" onClick={() => save('')} disabled={busy}>
+          {t('settings.lightning.useV4v')}
+        </Button>
+      )}
+    </Section>
   );
 }
 
@@ -649,53 +743,38 @@ function ReferralSection() {
     }
   }
 
+  // 38a: the link in a well with Copy, what a referral earns as three tiles,
+  // and the fine print.
   return (
-    <div className="settings-section">
-      <h4 className="settings-section-title">{t('settings.referrals.title')}</h4>
-      <div className="settings-modal-row">
-        <div className="settings-row-text">
-          <span className="settings-row-desc">{t('settings.referrals.intro')}</span>
-          <span className="settings-row-title">{t('settings.referrals.earnTitle')}</span>
-          <ul className="settings-referral-tiles">
-            {[
-              { Icon: IoGiftOutline, value: t('settings.referrals.bonusValue', { pct: REFERRAL_BONUS_PCT }), label: t('settings.referrals.bonusLabel'), desc: t('settings.referrals.bonusDesc') },
-              { Icon: IoCalendarOutline, value: t('settings.referrals.timeValue', { months: REFERRAL_BONUS_MONTHS }), label: t('settings.referrals.timeLabel') },
-              { Icon: IoMegaphoneOutline, value: t('settings.referrals.adsValue', { pct: ADVERTISER_REFERRAL_PCT }), label: t('settings.referrals.adsLabel'), desc: t('settings.referrals.adsDesc') },
-            ].map(({ Icon, value, label, desc }) => (
-              <li key={value + label} className="settings-referral-tile">
-                <Icon className="settings-referral-tile-icon" aria-hidden="true" />
-                <span className="settings-referral-tile-value">{value}</span>
-                <span className="settings-referral-tile-label">{label}</span>
-                {desc && <span className="settings-referral-tile-desc">{desc}</span>}
-              </li>
-            ))}
-          </ul>
-          <span className="settings-referral-ontop">
-            <IoCheckmarkCircleOutline aria-hidden="true" />
-            {t('settings.referrals.earnOnTop')}
-          </span>
-          <span className="settings-row-desc">{t('settings.referrals.rules')}</span>
-        </div>
+    <Section title={t('settings.referrals.title')}>
+      <div className="settings-copy-well v2-well">
+        <input
+          id="settings-referral-link"
+          type="text"
+          readOnly
+          value={link.replace(/^https?:\/\//, '')}
+          aria-label={t('settings.referrals.linkLabel')}
+          title={t('settings.referrals.shareTip')}
+          onFocus={(e) => e.target.select()}
+        />
+        <Button variant="primary" size={36} onClick={copy}>
+          {t('settings.referrals.copy')}
+        </Button>
       </div>
-      <div className="settings-modal-row settings-lightning">
-        <div className="settings-row-text">
-          <span className="settings-row-title">{t('settings.referrals.linkLabel')}</span>
-          <div className="settings-lightning-form">
-            <input
-              type="text"
-              readOnly
-              value={link}
-              aria-label={t('settings.referrals.linkLabel')}
-              onFocus={(e) => e.target.select()}
-            />
-            <button type="button" className="settings-ads-save" onClick={copy}>
-              {t('settings.referrals.copy')}
-            </button>
-          </div>
-          <span className="settings-row-desc">{t('settings.referrals.shareTip')}</span>
-        </div>
-      </div>
-    </div>
+      <ul className="settings-referral-tiles" aria-label={t('settings.referrals.earnTitle')}>
+        {[
+          { tone: 'accent', value: t('settings.referrals.bonusValue', { pct: REFERRAL_BONUS_PCT }), label: t('settings.referrals.bonusLabel') },
+          { tone: 'cyan', value: t('settings.referrals.timeValue', { months: REFERRAL_BONUS_MONTHS }), label: t('settings.referrals.timeLabel') },
+          { tone: 'accent', value: t('settings.referrals.adsValue', { pct: ADVERTISER_REFERRAL_PCT }), label: t('settings.referrals.adsLabel') },
+        ].map(({ tone, value, label }) => (
+          <li key={value + label} className={cx('settings-referral-tile', `is-${tone}`)}>
+            <b className="settings-referral-tile-value">{value}</b>
+            <span className="settings-referral-tile-label">{label}</span>
+          </li>
+        ))}
+      </ul>
+      <p className="settings-hint">{t('settings.referrals.earnOnTop')}</p>
+    </Section>
   );
 }
 
@@ -753,76 +832,69 @@ function SupportLinksSection() {
 
   const loading = links === null;
   return (
-    <div className="settings-section">
-      <h4 className="settings-section-title">{t('settings.supportLinks.title')}</h4>
-      <div className="settings-modal-row settings-lightning">
-        <div className="settings-row-text">
-          <span className="settings-row-desc">
-            {t('settings.supportLinks.desc', { sites: SUPPORT_SITE_NAMES.join(', ') })}
-          </span>
-          {Array.isArray(links) && links.length > 0 && (
-            <ul className="settings-support-links">
-              {links.map((l) => {
-                const Icon = SUPPORT_SITE_ICONS[l.site.id];
-                return (
-                  <li key={l.url}>
-                    {Icon && <Icon />}
-                    <a href={l.url} target="_blank" rel="noopener noreferrer">{l.url.replace(/^https:\/\//, '')}</a>
-                    <button
-                      type="button"
-                      onClick={() => save(links.filter((x) => x.url !== l.url))}
-                      disabled={busy}
-                      aria-label={t('settings.supportLinks.remove', { site: l.site.label })}
-                      title={t('settings.supportLinks.remove', { site: l.site.label })}
-                    >
-                      <IoClose />
-                    </button>
-                  </li>
-                );
-              })}
-            </ul>
-          )}
-          {(loading || links.length < SUPPORT_LINK_MAX) && (
-            <form className="settings-lightning-form" onSubmit={(e) => { e.preventDefault(); add(); }}>
-              <input
-                type="text"
-                inputMode="url"
-                autoComplete="off"
-                autoCapitalize="none"
-                spellCheck={false}
-                aria-label={t('settings.supportLinks.title')}
-                placeholder={t('settings.supportLinks.placeholder')}
-                value={draft}
-                onChange={(e) => { setDraft(e.target.value); setError(null); }}
-                disabled={busy || loading}
+    <Section tone="cyan" title={t('settings.supportLinks.title')}>
+      <p className="settings-note">
+        {t('settings.supportLinks.desc', { sites: SUPPORT_SITE_NAMES.join(', ') })}
+      </p>
+      {Array.isArray(links) && links.length > 0 && (
+        <ul className="settings-support-links">
+          {links.map((l) => (
+            <li key={l.url} className="v2-well">
+              <Icon name={SUPPORT_SITE_ICON[l.site.id] || 'link'} size={20} className="settings-support-icon" />
+              <b className="settings-support-site">{l.site.label}</b>
+              <a className="settings-support-url" href={l.url} target="_blank" rel="noopener noreferrer">{l.url.replace(/^https:\/\//, '')}</a>
+              <IconButton
+                icon="close"
+                size={32}
+                variant="ghost"
+                round
+                onClick={() => save(links.filter((x) => x.url !== l.url))}
+                disabled={busy}
+                label={t('settings.supportLinks.remove', { site: l.site.label })}
               />
-              <button type="submit" className="settings-ads-save" disabled={busy || loading || !draft.trim()}>
-                {busy ? t('common.actions.saving') : t('settings.supportLinks.add')}
-              </button>
-            </form>
-          )}
-          <span className="settings-row-desc">{t('settings.supportLinks.publicNote')}</span>
-        </div>
-      </div>
-      {error && <p className="settings-ads-status error">{error}</p>}
-    </div>
+            </li>
+          ))}
+        </ul>
+      )}
+      {(loading || links.length < SUPPORT_LINK_MAX) && (
+        <form className="settings-inline-form" onSubmit={(e) => { e.preventDefault(); add(); }}>
+          <div className="settings-inline-form-row">
+            <input
+              className={cx('v2-input', error && 'is-error')}
+              type="text"
+              inputMode="url"
+              autoComplete="off"
+              autoCapitalize="none"
+              spellCheck={false}
+              aria-label={t('settings.supportLinks.title')}
+              aria-invalid={!!error}
+              placeholder={t('settings.supportLinks.placeholder')}
+              value={draft}
+              onChange={(e) => { setDraft(e.target.value); setError(null); }}
+              disabled={busy || loading}
+            />
+            <Button type="submit" variant="secondary" size={40} icon="add" disabled={busy || loading || !draft.trim()}>
+              {busy ? t('common.actions.saving') : t('settings.supportLinks.add')}
+            </Button>
+          </div>
+        </form>
+      )}
+      {error && <Status error={error} />}
+      <p className="settings-hint">{t('settings.supportLinks.publicNote')}</p>
+    </Section>
   );
 }
 
-function Switch({ checked, onChange, ariaLabel }) {
-  return (
-    <button
-      type="button"
-      role="switch"
-      aria-checked={checked}
-      aria-label={ariaLabel}
-      className={`settings-switch${checked ? ' on' : ''}`}
-      onClick={() => onChange(!checked)}
-    >
-      <span className="settings-switch-knob" />
-    </button>
-  );
-}
+// Material Symbols for the payment sites (lib/supportLinks.js); `link` otherwise.
+const SUPPORT_SITE_ICON = {
+  kofi: 'local_cafe',
+  buymeacoffee: 'coffee',
+  patreon: 'favorite',
+  paypal: 'payments',
+  github: 'code',
+  liberapay: 'volunteer_activism',
+  opencollective: 'groups',
+};
 
 /**
  * Browser push notifications.
@@ -902,10 +974,9 @@ function NotificationsSection() {
 
   if (!user) {
     return (
-      <div className="settings-section">
-        <h4 className="settings-section-title">{t('common.nav.notifications')}</h4>
+      <Section tone="cyan" title={t('common.nav.notifications')}>
         <p className="settings-note">{t('settings.notifications.loginHint')}</p>
-      </div>
+      </Section>
     );
   }
 
@@ -913,27 +984,33 @@ function NotificationsSection() {
   const noWorker = state.worker === false;
 
   return (
-    <div className="settings-section">
-      <h4 className="settings-section-title">{t('common.nav.notifications')}</h4>
-
+    <Section tone="cyan" title={t('common.nav.notifications')}>
       {!pushSupported() ? (
-        <p className="settings-note">{t('settings.notifications.unsupported')}</p>
+        <Banner tone="info" icon="notifications_off">{t('settings.notifications.unsupported')}</Banner>
       ) : (
         <>
-          <Row
-            title={t('settings.notifications.device')}
-            desc={blocked
-              ? t('settings.notifications.deviceBlocked')
-              : noWorker
-                ? t('settings.notifications.deviceNoWorker')
-                : t('settings.notifications.deviceDesc')}
-            checked={state.subscribed}
-            onChange={busy || blocked || noWorker ? () => {} : toggleDevice}
-          />
+          <div className="settings-well-row v2-well">
+            <Icon name="devices" size={20} className="settings-well-icon" />
+            <div className="settings-well-body">
+              <b>{t('settings.notifications.device')}</b>
+              <span>
+                {blocked
+                  ? t('settings.notifications.deviceBlocked')
+                  : noWorker
+                    ? t('settings.notifications.deviceNoWorker')
+                    : t('settings.notifications.deviceDesc')}
+              </span>
+            </div>
+            <Toggle
+              tone="cyan"
+              checked={state.subscribed}
+              onChange={busy || blocked || noWorker ? () => {} : toggleDevice}
+              label={t('settings.notifications.device')}
+              disabled={blocked || noWorker}
+            />
+          </div>
 
-          <p className="settings-note">
-            {t('settings.notifications.whatHint')}
-          </p>
+          {/* 38b: the kinds as title-only switches under their group, in cyan. */}
           {KIND_GROUPS.map(({ labelKey, kinds: group }) => {
             // Only offer what the server actually supports, so an older backend
             // can't leave dead switches on the page.
@@ -941,12 +1018,13 @@ function NotificationsSection() {
             if (!available.length) return null;
             return (
               <div key={labelKey} className="settings-kind-group">
-                <span className="settings-kind-group-label">{t(labelKey)}</span>
+                <div className="v2-eyebrow settings-kind-group-label">{t(labelKey)}</div>
                 {available.map((k) => (
                   <Row
                     key={k}
+                    variant="plain"
+                    tone="cyan"
                     title={t(KIND_COPY[k].titleKey)}
-                    desc={t(KIND_COPY[k].descKey)}
                     checked={prefs[k] !== false}
                     onChange={(v) => toggleKind(k, v)}
                   />
@@ -954,63 +1032,42 @@ function NotificationsSection() {
               </div>
             );
           })}
+          <p className="settings-hint">{t('settings.notifications.iosNote')}</p>
         </>
       )}
-    </div>
+    </Section>
   );
 }
 
-function Row({ title, desc, checked, onChange }) {
-  return (
-    <div className="settings-modal-row">
-      <div className="settings-row-text">
-        <span className="settings-row-title">{title}</span>
-        <span className="settings-row-desc">{desc}</span>
-      </div>
-      <Switch checked={checked} onChange={onChange} ariaLabel={title} />
-    </div>
-  );
-}
-
+// The tabs as in 38a. Notifications sit on General (38b), next to Appearance
+// and Language. `tone` colours the section tile on a phone (18d).
 const TABS = [
-  { id: 'general', labelKey: 'settings.tabs.general' },
-  // Shorts and Interests are sub-tabs of this one now. Seven top-level tabs
-  // overflowed the row even on desktop, and the three of them were all answering
-  // "what shows up in my feeds" from separate pages.
-  { id: 'content', labelKey: 'settings.tabs.content' },
+  { id: 'general', labelKey: 'settings.tabs.general', icon: 'tune', tone: 'accent' },
+  // Shorts, Feed and Interests: what shows up in my feeds.
+  { id: 'content', labelKey: 'settings.tabs.content', icon: 'play_circle', tone: 'accent' },
   // What the Hive account is tied to outside 3Speak: the Lightning address tips
-  // go to, and verified channels on other platforms. Hive accounts only.
-  { id: 'connections', labelKey: 'settings.tabs.connections' },
-  // Hive accounts only: every setting behind it is about notifications that come
-  // from the chain, so for anyone else it was a page of switches that could not
-  // do anything.
-  { id: 'notifications', labelKey: 'common.nav.notifications' },
-  // Its own page rather than a tail on Content. Both halves are about money moving
-  // between advertisers, creators and viewers, and they were the two longest things on
-  // a page otherwise made of one-line switches. Only shown to those who have it.
-  { id: 'rewards', labelKey: 'settings.tabs.rewards' },
-  { id: 'about', labelKey: 'settings.tabs.about' },
+  // go to, other ways to support, and verified channels. Hive accounts only.
+  { id: 'connections', labelKey: 'settings.tabs.connections', icon: 'link', tone: 'cyan' },
+  // Its own page: both halves are about money moving between advertisers,
+  // creators and viewers. Only shown to those who have it.
+  { id: 'rewards', labelKey: 'settings.tabs.rewards', icon: 'account_balance_wallet', tone: 'accent' },
+  { id: 'about', labelKey: 'settings.tabs.about', icon: 'info', tone: 'muted' },
 ];
 
-// The panels behind Connections: their referral link (first, and what the tab
-// opens on), where money reaches the creator, and their verified channels.
-const CONNECTIONS_TABS = [
-  { id: 'referrals', labelKey: 'settings.connectionsTabs.referrals' },
-  { id: 'support', labelKey: 'settings.connectionsTabs.support' },
-  { id: 'profiles', labelKey: 'settings.connectionsTabs.profiles' },
-];
-
-// The three panels behind Content. Kept as data so the sub-tab bar and the
-// panels below cannot fall out of step.
-const CONTENT_TABS = [
-  { id: 'feed', labelKey: 'settings.contentTabs.feed' },
-  { id: 'shorts', labelKey: 'common.nav.shorts' },
-  { id: 'interests', labelKey: 'settings.interests.title' },
-];
+// Phones get the sheet with the sections as tiles (18d); a tile opens its
+// section, the back arrow returns to the tiles.
+const PHONE_QUERY = '(max-width: 767px)';
+const subscribePhone = (cb) => {
+  const mq = typeof window !== 'undefined' && window.matchMedia ? window.matchMedia(PHONE_QUERY) : null;
+  mq?.addEventListener?.('change', cb);
+  return () => mq?.removeEventListener?.('change', cb);
+};
+const readPhone = () => (typeof window !== 'undefined' && !!window.matchMedia?.(PHONE_QUERY)?.matches);
 
 /**
- * Settings popup — the toggles that used to live inline in the profile
- * side menu, now grouped with headers + explanations and compact switches.
+ * Settings: the toggles that used to live inline in the profile side menu,
+ * grouped into cards (38a-c). Tabs are a segmented track on desktop; on a phone
+ * the sheet opens on the sections as tiles.
  */
 // `dropdown` ({ rect, held }): the hover peek from the top bar's gear (Nav.jsx,
 // hooks/useHoverPeek.js). Hung under `rect` instead of centred, no backdrop, and
@@ -1021,11 +1078,11 @@ const CONTENT_TABS = [
 // fading out.
 const DROPDOWN_GAP = 8;
 const DROPDOWN_EDGE = 8;
-const DROPDOWN_WIDTH = 520;
+const DROPDOWN_WIDTH = 600;
 
 export default function SettingsModal({ isOpen, onClose, dropdown = null, leaving = false, hoverProps, typingProps }) {
   const { t } = useTranslation();
-  const { theme, showNsfw, setShowNsfw, toggleTheme, homeCardSize, setHomeCardSize, previewEnabled, setPreviewEnabled, shortsCommentBar, setShortsCommentBar, openShortsOnStart, setOpenShortsOnStart, inlineShorts, setInlineShorts, hideWatched, setHideWatched, hideAi, setHideAi, privateMode, setPrivateMode, simpleFeed, setSimpleFeed } = useAppStore();
+  const { theme, showNsfw, setShowNsfw, toggleTheme, homeCardSize, setHomeCardSize, previewEnabled, setPreviewEnabled, shortsCommentBar, setShortsCommentBar, openShortsOnStart, setOpenShortsOnStart, inlineShorts, setInlineShorts, hideWatched, setHideWatched, hideAi, setHideAi, privateMode, setPrivateMode, heroPreviewEnabled, setHeroPreviewEnabled } = useAppStore();
   const cardSize = useCardSize();
   const cardSizeMobile = useIsCardSizeMobile();
   /* Whether the Ads & rewards page exists at all.
@@ -1061,22 +1118,35 @@ export default function SettingsModal({ isOpen, onClose, dropdown = null, leavin
   const visibleTabs = useMemo(
     () => TABS.filter((tb) => {
       if (tb.id === 'rewards') return rewardsVisible;
-      if (tb.id === 'notifications') return notificationsVisible;
       if (tb.id === 'connections') return notificationsVisible;
       return true;
     }),
     [rewardsVisible, notificationsVisible],
   );
   const [tab, setTab] = useState('general');
-  const [contentTab, setContentTab] = useState('feed');
-  const [connectionsTab, setConnectionsTab] = useState('referrals');
   // Losing the group (or logging out) while standing on that page would leave the modal
   // with no tab selected and nothing rendered.
   useEffect(() => {
     if (tab === 'rewards' && !rewardsVisible) setTab('general');
-    if (tab === 'notifications' && !notificationsVisible) setTab('general');
     if (tab === 'connections' && !notificationsVisible) setTab('general');
   }, [tab, rewardsVisible, notificationsVisible]);
+  // The phone's account card (18d): the name on the Hive profile, the handle and
+  // the wallet the session signs with.
+  const my = useGetMyQuery();
+  const profileName = (settingsUser && my?.profile?.username === settingsUser && my.profile.name) || settingsUser;
+  const walletName = settingsUser ? friendlyProviderName(getCurrentProvider()) : null;
+
+  // Phone sheet: the tiles first, a section once one is tapped. Every opening
+  // starts on the tiles again.
+  const phone = useSyncExternalStore(subscribePhone, readPhone, () => false);
+  const tiles = phone && !dropdown;
+  const [sectionOpen, setSectionOpen] = useState(false);
+  const [wasOpen, setWasOpen] = useState(isOpen);
+  if (wasOpen !== isOpen) {
+    setWasOpen(isOpen);
+    if (!isOpen) setSectionOpen(false);
+  }
+  const openSection = (id) => { setTab(id); setSectionOpen(true); };
 
   // Lock background page scroll while the modal is open (restore on close).
   useEffect(() => {
@@ -1086,15 +1156,9 @@ export default function SettingsModal({ isOpen, onClose, dropdown = null, leavin
     return () => { document.body.style.overflow = prev; };
   }, [isOpen]);
 
-  // ── Pin the dialog's top-left corner where it lands on open ──
-  // The overlay flex-CENTRES the dialog, so a taller tab pushes the top edge
-  // upward and the whole thing visibly jumps as you switch tabs. We let it centre
-  // once, measure where it landed, then switch to fixed top/left so it only ever
-  // grows/shrinks DOWNWARD from that spot.
-  //
-  // Not on mobile: there it's a bottom sheet and must stay pinned to the bottom.
+  // The window has a fixed height and its body scrolls, so switching tabs never
+  // moves or resizes it (STYLE_GUIDE §1.5).
   const modalRef = useRef(null);
-  const [anchor, setAnchor] = useState(null);
 
   // Hidden soft-launch unlock: 5 quick taps on the Hive RPC node row force-enables
   // Butter Auth (login + signup) via localStorage, even when VITE_ENABLE_BUTRAUTH
@@ -1114,24 +1178,6 @@ export default function SettingsModal({ isOpen, onClose, dropdown = null, leavin
     }
   };
 
-  useLayoutEffect(() => {
-    if (!isOpen || dropdown) { setAnchor(null); return undefined; }
-    // Bottom sheet (<=640px, see the SCSS) must not be anchored.
-    if (!window.matchMedia('(min-width: 641px)').matches) { setAnchor(null); return undefined; }
-
-    // anchor===null → currently centred, so this measurement is the "opened" spot.
-    if (!anchor && modalRef.current) {
-      const r = modalRef.current.getBoundingClientRect();
-      setAnchor({ top: r.top, left: r.left });
-    }
-
-    // On resize the stored coords are stale — drop the anchor so it re-centres and
-    // the effect measures the new spot on the next pass.
-    const onResize = () => setAnchor(null);
-    window.addEventListener('resize', onResize);
-    return () => window.removeEventListener('resize', onResize);
-  }, [isOpen, anchor, dropdown]);
-
   // A dropdown closes on Escape, like the other top-bar menus.
   useEffect(() => {
     if (!isOpen || !dropdown) return undefined;
@@ -1143,12 +1189,27 @@ export default function SettingsModal({ isOpen, onClose, dropdown = null, leavin
   // The centred window is a dialog of its own, Escape included.
   const dialog = useDialog(onClose, { active: isOpen && !dropdown, ref: modalRef });
 
+  // About: copy the version (for bug reports), and "Your data" brings the
+  // request card into view (it is the next card on a desktop, below on a phone).
+  const copyVersion = async () => {
+    try {
+      await navigator.clipboard.writeText(`v${APP_VERSION}`);
+      toast.success(t('common.actions.copied'));
+    } catch { /* nothing to copy into; the version stays readable */ }
+  };
+  const showDataCard = () => {
+    const card = modalRef.current?.querySelector('#settings-your-data');
+    card?.scrollIntoView?.({ behavior: 'smooth', block: 'nearest' });
+    card?.querySelector('input, button')?.focus({ preventScroll: true });
+  };
+
   if (!isOpen) return null;
 
   // Previews only work on touch devices in large mode, so hide the toggle when
   // a touch user has small cards selected (it would have no effect).
   const isTouch = !window.matchMedia('(hover: hover)').matches;
   const showPreviewSetting = !isTouch || cardSize === 'large';
+  const showHeroPreviewSetting = !!window.matchMedia?.('(min-width: 769px) and (hover: hover)').matches;
   // The shorts comment bar is rendered only under 768px (see Short.scss), so its
   // toggle would do nothing on desktop/tablet. Gate it on the SAME breakpoint —
   // `isDesktop` (>=1025px) would wrongly still show it on a tablet.
@@ -1173,226 +1234,238 @@ export default function SettingsModal({ isOpen, onClose, dropdown = null, leavin
     leaving && 'settings-modal-overlay--leaving',
   ].filter(Boolean).join(' ');
 
+  const current = visibleTabs.find((tb) => tb.id === tab) || visibleTabs[0];
+  const showTiles = tiles && !sectionOpen;
+  const closable = !(dropdown && !dropdown.held);
+
+  // Each tab is a grid of cards (38a-c): three across on a desktop window, two on
+  // a tablet, one in the peek and on a phone. Posting authority sits in the
+  // rewards card when that tab exists (38a), else on General as its own card
+  // (32g); the referral card likewise on Ads & rewards, else on Connections.
+  const panels = {
+    general: (
+      <>
+        {/* Order (owner 2026-11-12): language, appearance, notifications. */}
+        <Section tone="cyan" title={t('common.language.label')} className="settings-language">
+          <LanguagePicker onNavigate={onClose} />
+        </Section>
+        <Section title={t('settings.appearance.title')}>
+          <Row
+            title={t('settings.appearance.darkMode.title')}
+            desc={t('settings.appearance.darkMode.desc')}
+            checked={theme === 'dark'}
+            onChange={(wantDark) => { if ((theme === 'dark') !== wantDark) toggleTheme(); }}
+          />
+          {/* Large cards are a phone thing: desktop always uses small ones (hooks/useCardSize). */}
+          {cardSizeMobile && (
+            <Row
+              title={t('settings.appearance.largeCards.title')}
+              desc={t('settings.appearance.largeCards.desc')}
+              checked={homeCardSize === 'large'}
+              onChange={(large) => setHomeCardSize(large ? 'large' : 'small')}
+            />
+          )}
+          {showPreviewSetting && (
+            <Row
+              title={t('settings.appearance.previews.title')}
+              desc={t('settings.appearance.previews.desc')}
+              checked={previewEnabled !== false}
+              onChange={(v) => setPreviewEnabled(v)}
+            />
+          )}
+          {/* Where the Spotlight can play clips at all: desktop with a mouse. */}
+          {showHeroPreviewSetting && (
+            <Row
+              title={t('settings.appearance.heroPreviews.title')}
+              desc={t('settings.appearance.heroPreviews.desc')}
+              checked={heroPreviewEnabled !== false}
+              onChange={(v) => setHeroPreviewEnabled(v)}
+            />
+          )}
+        </Section>
+        {settingsUser && <NotificationsSection />}
+        {!rewardsVisible && <PostingAuthoritySection />}
+      </>
+    ),
+    content: (
+      <>
+        {/* Order (owner 2026-11-12): feed, shorts, interests. */}
+        <Section tone="cyan" title={t('settings.contentTabs.feed')}>
+          <Row
+            tone="cyan"
+            title={t('settings.feed.nsfw.title')}
+            desc={t('settings.feed.nsfw.desc')}
+            checked={showNsfw}
+            onChange={(v) => setShowNsfw(v)}
+          />
+          <Row
+            tone="cyan"
+            title={t('settings.feed.hideWatched.title')}
+            desc={t('settings.feed.hideWatched.desc')}
+            checked={!!hideWatched}
+            onChange={(v) => setHideWatched(v)}
+          />
+          <Row
+            tone="cyan"
+            title={t('settings.feed.hideAi.title')}
+            desc={t('settings.feed.hideAi.desc')}
+            checked={!!hideAi}
+            onChange={(v) => setHideAi(v)}
+          />
+          <Row
+            tone="cyan"
+            title={t('settings.feed.privateMode.title')}
+            desc={t('settings.feed.privateMode.desc')}
+            checked={!!privateMode}
+            onChange={(v) => setPrivateMode(v)}
+          />
+        </Section>
+        <Section title={t('common.nav.shorts')}>
+          {/* Comment bar is only rendered under 768px, so it's hidden on desktop. */}
+          {showShortsCommentBarSetting && (
+            <Row
+              title={t('settings.shorts.commentBar.title')}
+              desc={t('settings.shorts.commentBar.desc')}
+              checked={!!shortsCommentBar}
+              onChange={(v) => setShortsCommentBar(v)}
+            />
+          )}
+          <Row
+            title={t('settings.shorts.openOnStart.title')}
+            desc={t('settings.shorts.openOnStart.desc')}
+            checked={!!openShortsOnStart}
+            onChange={(v) => setOpenShortsOnStart(v)}
+          />
+          <Row
+            title={t('settings.shorts.inFeeds.title')}
+            desc={t('settings.shorts.inFeeds.desc')}
+            checked={inlineShorts !== false}
+            onChange={(v) => setInlineShorts(v)}
+          />
+        </Section>
+        <InterestsSection />
+      </>
+    ),
+    connections: (
+      <>
+        {/* Order (owner 2026-11-12): linked profiles, support links, Lightning. */}
+        {settingsUser && <AddSocialLink_modal isOpen inline hiveUsername={settingsUser} onClose={() => {}} />}
+        <SupportLinksSection />
+        <LightningReceiveSection />
+        {!rewardsVisible && <ReferralSection />}
+      </>
+    ),
+    rewards: (
+      <>
+        <AdsSection />
+        <ViewerRewardsSection>
+          <PostingAuthoritySection variant="row" />
+        </ViewerRewardsSection>
+        <ReferralSection />
+      </>
+    ),
+    about: (
+      <>
+        <Section tone="cyan" title={t('settings.about.title')}>
+          <div className="settings-kv v2-well">
+            <span>{t('settings.about.version')}</span>
+            <b className="mono">v{APP_VERSION}</b>
+            <IconButton icon="content_copy" size={28} variant="ghost" label={t('common.actions.copy')} onClick={copyVersion} />
+          </div>
+          <div className="settings-kv v2-well" onClick={handleButrUnlockTap}>
+            <span>{t('settings.about.rpcNode')}</span>
+            <b className="mono">{getHiveUrl()}</b>
+          </div>
+          <button type="button" className="settings-kv v2-well is-link" onClick={showDataCard}>
+            <span>{t('settings.about.yourData')}</span>
+            <b>{t('settings.about.getOrDelete')}</b>
+            <Icon name="chevron_right" size={16} />
+          </button>
+          <Button
+            as="a"
+            href="/privacy"
+            target="_blank"
+            rel="noopener noreferrer"
+            variant="secondary"
+            size={44}
+            block
+            className="is-next"
+            trailing="open_in_new"
+          >
+            {t('settings.about.privacyLink')}
+          </Button>
+        </Section>
+
+        <Section tone="cyan" title={t('settings.about.yourData')} className="settings-data" id="settings-your-data">
+          <DataRequestForm />
+        </Section>
+      </>
+    ),
+  };
+
   return createPortal(
     <div className={overlayClass} onClick={onClose}>
       <div
-        className="settings-modal"
+        className={cx('settings-modal', dropdown && 'is-dropdown', tiles && 'is-sheet', showTiles && 'is-tiles')}
         ref={modalRef}
         onClick={(e) => e.stopPropagation()}
         {...(dropdown ? { ...hoverProps, ...typingProps } : dialog.props)}
-        style={dropdownStyle || (anchor ? {
-          position: 'fixed',
-          top: anchor.top,
-          left: anchor.left,
-          // Anchored at a fixed top, a tall tab would otherwise run off the bottom
-          // of the screen — cap it to the room actually left below the anchor and
-          // let the content scroll inside.
-          maxHeight: `calc(100vh - ${Math.round(anchor.top)}px - 16px)`,
-        } : undefined)}
+        style={dropdownStyle}
       >
-        <ModalHeader title={t('common.nav.settings')} titleId={dialog.titleId} onClose={dropdown && !dropdown.held ? undefined : onClose} />
-
-        <div className="settings-tabs" role="tablist">
-          {visibleTabs.map(({ id, labelKey }) => (
-            <button
-              key={id}
-              type="button"
-              role="tab"
-              aria-selected={tab === id}
-              className={`settings-tab${tab === id ? ' active' : ''}`}
-              onClick={() => setTab(id)}
-            >
-              {t(labelKey)}
-            </button>
-          ))}
+        <div className="settings-grab" aria-hidden="true" />
+        <div className="settings-head">
+          {tiles && sectionOpen && (
+            <IconButton icon="arrow_back" label={t('common.actions.back')} size={36} variant="ghost" round onClick={() => setSectionOpen(false)} />
+          )}
+          <h2 className="settings-head-title" id={dialog.titleId}>
+            {tiles && sectionOpen ? t(current.labelKey) : t('common.nav.settings')}
+          </h2>
+          {!tiles && (
+            <Segmented
+              className="settings-tabs"
+              label={t('common.nav.settings')}
+              scroll
+              block={false}
+              value={tab}
+              onChange={setTab}
+              options={visibleTabs.map(({ id, labelKey }) => ({ value: id, label: t(labelKey) }))}
+            />
+          )}
+          {closable && (
+            <IconButton icon="close" label={t('common.actions.close')} size={36} variant="ghost" round onClick={onClose} />
+          )}
         </div>
 
-        {tab === 'general' && (
-          <div className="settings-section">
-            <LanguagePicker onNavigate={onClose} />
-          </div>
-        )}
-        {tab === 'general' && (
-          <div className="settings-section">
-            <h4 className="settings-section-title">{t('settings.appearance.title')}</h4>
-            <Row
-              title={t('settings.appearance.darkMode.title')}
-              desc={t('settings.appearance.darkMode.desc')}
-              checked={theme === 'dark'}
-              onChange={(wantDark) => { if ((theme === 'dark') !== wantDark) toggleTheme(); }}
-            />
-            {/* Large cards are a phone thing: desktop always uses small ones (hooks/useCardSize). */}
-            {cardSizeMobile && (
-              <Row
-                title={t('settings.appearance.largeCards.title')}
-                desc={t('settings.appearance.largeCards.desc')}
-                checked={homeCardSize === 'large'}
-                onChange={(large) => setHomeCardSize(large ? 'large' : 'small')}
-              />
-            )}
-            {showPreviewSetting && (
-              <Row
-                title={t('settings.appearance.previews.title')}
-                desc={t('settings.appearance.previews.desc')}
-                checked={previewEnabled !== false}
-                onChange={(v) => setPreviewEnabled(v)}
-              />
-            )}
-            <Row
-              title={t('settings.appearance.simpleFeeds.title')}
-              desc={t('settings.appearance.simpleFeeds.desc')}
-              checked={!!simpleFeed}
-              onChange={(v) => setSimpleFeed(v)}
-            />
-          </div>
-        )}
-        {tab === 'general' && <PostingAuthoritySection />}
-        {tab === 'connections' && (
-          <div className="settings-subtabs" role="tablist" aria-label={t('settings.connectionsTabs.aria')}>
-            {CONNECTIONS_TABS.map((ct) => (
-              <button
-                key={ct.id}
-                type="button"
-                role="tab"
-                aria-selected={connectionsTab === ct.id}
-                className={`settings-subtab${connectionsTab === ct.id ? ' is-active' : ''}`}
-                onClick={() => setConnectionsTab(ct.id)}
-              >
-                {t(ct.labelKey)}
-              </button>
-            ))}
-          </div>
-        )}
-        {tab === 'connections' && connectionsTab === 'support' && <LightningReceiveSection />}
-        {tab === 'connections' && connectionsTab === 'support' && <SupportLinksSection />}
-        {tab === 'connections' && connectionsTab === 'referrals' && <ReferralSection />}
-        {tab === 'connections' && connectionsTab === 'profiles' && settingsUser && (
-          <AddSocialLink_modal isOpen inline hiveUsername={settingsUser} onClose={() => {}} />
-        )}
-
-        {tab === 'content' && (
-          <div className="settings-subtabs" role="tablist" aria-label={t('settings.contentTabs.aria')}>
-            {CONTENT_TABS.map((ct) => (
-              <button
-                key={ct.id}
-                type="button"
-                role="tab"
-                aria-selected={contentTab === ct.id}
-                className={`settings-subtab${contentTab === ct.id ? ' is-active' : ''}`}
-                onClick={() => setContentTab(ct.id)}
-              >
-                {t(ct.labelKey)}
-              </button>
-            ))}
-          </div>
-        )}
-
-        {tab === 'content' && contentTab === 'shorts' && (
-          <div className="settings-section">
-            <h4 className="settings-section-title">{t('common.nav.shorts')}</h4>
-            {/* Comment bar is only rendered under 768px, so it's hidden on desktop. */}
-            {showShortsCommentBarSetting && (
-              <Row
-                title={t('settings.shorts.commentBar.title')}
-                desc={t('settings.shorts.commentBar.desc')}
-                checked={!!shortsCommentBar}
-                onChange={(v) => setShortsCommentBar(v)}
-              />
-            )}
-            <Row
-              title={t('settings.shorts.openOnStart.title')}
-              desc={t('settings.shorts.openOnStart.desc')}
-              checked={!!openShortsOnStart}
-              onChange={(v) => setOpenShortsOnStart(v)}
-            />
-            <Row
-              title={t('settings.shorts.inFeeds.title')}
-              desc={t('settings.shorts.inFeeds.desc')}
-              checked={inlineShorts !== false}
-              onChange={(v) => setInlineShorts(v)}
-            />
-          </div>
-        )}
-
-        {tab === 'content' && contentTab === 'feed' && (
-          <>
-          <div className="settings-section">
-            <h4 className="settings-section-title">{t('settings.contentTabs.feed')}</h4>
-            <Row
-              title={t('settings.feed.nsfw.title')}
-              desc={t('settings.feed.nsfw.desc')}
-              checked={showNsfw}
-              onChange={(v) => setShowNsfw(v)}
-            />
-            <Row
-              title={t('settings.feed.hideWatched.title')}
-              desc={t('settings.feed.hideWatched.desc')}
-              checked={!!hideWatched}
-              onChange={(v) => setHideWatched(v)}
-            />
-            <Row
-              title={t('settings.feed.hideAi.title')}
-              desc={t('settings.feed.hideAi.desc')}
-              checked={!!hideAi}
-              onChange={(v) => setHideAi(v)}
-            />
-            <Row
-              title={t('settings.feed.privateMode.title')}
-              desc={t('settings.feed.privateMode.desc')}
-              checked={!!privateMode}
-              onChange={(v) => setPrivateMode(v)}
-            />
-          </div>
-          </>
-        )}
-
-        {tab === 'rewards' && (
-          <>
-            <AdsSection />
-            <ViewerRewardsSection />
-          </>
-        )}
-
-        {tab === 'content' && contentTab === 'interests' && <InterestsSection />}
-        {tab === 'notifications' && <NotificationsSection />}
-
-        {tab === 'about' && (
-          <>
-            <div className="settings-section">
-              <h4 className="settings-section-title">{t('settings.about.title')}</h4>
-              <div className="settings-modal-row">
-                <div className="settings-row-text">
-                  <span className="settings-row-title">{t('settings.about.version')}</span>
-                  <span className="settings-row-desc">v{APP_VERSION}</span>
-                </div>
-              </div>
-              <div className="settings-modal-row" onClick={handleButrUnlockTap}>
-                <div className="settings-row-text">
-                  <span className="settings-row-title">{t('settings.about.rpcNode')}</span>
-                  <span className="settings-row-desc">{getHiveUrl()}</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="settings-section">
-              <h4 className="settings-section-title">{t('settings.about.yourData')}</h4>
-              <DataRequestForm />
-            </div>
-
-            <div className="settings-section">
-              <div className="settings-modal-row">
-                <div className="settings-row-text">
-                  <span className="settings-row-title">{t('settings.about.yourData')}</span>
-                  <span className="settings-row-desc">
-                    <a href="/privacy" target="_blank" rel="noopener noreferrer">
-                      {t('settings.about.privacyLink')}
-                    </a>
+        <div className="settings-body">
+          {showTiles && (
+            <>
+              {settingsUser && (
+                <Link to={`/p/${encodeURIComponent(settingsUser)}`} className="settings-account" onClick={onClose}>
+                  <span className="v2-avatar settings-account-avatar"><AccountImg account={settingsUser} alt="" /></span>
+                  <span className="settings-account-text">
+                    <b>{profileName}</b>
+                    <span>@{settingsUser}{walletName ? ` · ${walletName}` : ''}</span>
                   </span>
-                </div>
+                  <Icon name="chevron_right" size={20} className="settings-account-chev" />
+                </Link>
+              )}
+              <div className="settings-tiles">
+                {visibleTabs.map((tb) => (
+                  <button key={tb.id} type="button" className="settings-tile" onClick={() => openSection(tb.id)}>
+                    <span className={cx('settings-tile-icon', `is-${tb.tone}`)}><Icon name={tb.icon} size={20} /></span>
+                    <b>{t(tb.labelKey)}</b>
+                  </button>
+                ))}
               </div>
+            </>
+          )}
+
+          {!showTiles && (
+            <div className="settings-grid" role="tabpanel" aria-label={t(current.labelKey)}>
+              {panels[current.id]}
             </div>
-          </>
-        )}
+          )}
+        </div>
       </div>
     </div>,
     document.body,

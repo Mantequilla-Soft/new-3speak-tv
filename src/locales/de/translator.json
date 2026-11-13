@@ -8,7 +8,7 @@
     "contribute": "So trägst du Übersetzungen bei"
   },
   "verify": {
-    "body": "Bestätige dein Hive-Konto, um den Editor zu öffnen. Deine Wallet bittet dich, eine Anmeldung zu genehmigen.",
+    "body": "Eingeladen? Bestätige dein Hive-Konto, um den Editor zu öffnen.",
     "button": "Konto bestätigen",
     "failed": "Dein Konto konnte nicht bestätigt werden."
   },
@@ -51,9 +51,9 @@
   "add": {
     "title": "Sprache hinzufügen",
     "code": "Sprachcode",
-    "codeHint": "Zwei oder drei Kleinbuchstaben (ISO 639), optional mit Region: nl, fil, pt-BR",
+    "codeHint": "Zwei oder drei Kleinbuchstaben (ISO 639), optional mit Region",
     "native": "Name in der Sprache selbst",
-    "nativeHint": "So erscheint sie im Sprachmenü, z. B. Nederlands",
+    "nativeHint": "Was Leute im Sprachmenü sehen",
     "english": "Name auf Englisch",
     "rtl": "Wird von rechts nach links geschrieben (Arabisch, Hebräisch, Persisch, Urdu…)",
     "submit": "Sprache hinzufügen",
@@ -67,6 +67,7 @@
     "checkboxFor": "{{key}} als korrekturgelesen markieren",
     "checkedBy": "Geprüft von @{{user}}, {{when}}",
     "notChecked": "Abhaken, sobald du diese Übersetzung geprüft hast",
+    "notCheckedShort": "Nicht geprüft",
     "noText": "Nichts zu prüfen: Dieser Text hat noch keine Übersetzung",
     "saveFirst": "Speichere zuerst deine Änderung. Beim Speichern wird sie als geprüft markiert.",
     "changed": "seit der Prüfung geändert",

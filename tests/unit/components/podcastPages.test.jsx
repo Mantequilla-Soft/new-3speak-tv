@@ -64,11 +64,13 @@ describe('podcast pages', () => {
     expect(html).toContain('In progress')
   })
 
-  it('Discover keeps the search, link and OPML box folded behind a button', async () => {
+  it('Discover shows the search, Add by link and the OPML and private feed cards (36c)', async () => {
     const html = await render('/audio?type=external&view=discover', (qc) => {
       qc.setQueryData(['podcasts', 'config'], { enabled: true, search: true })
     })
-    expect(html).toContain('Add external podcast')
-    expect(html).not.toContain('Podcasts from anywhere')
+    expect(html).toContain('Show name, host or topic')
+    expect(html).toContain('Add by link')
+    expect(html).toContain('Import OPML')
+    expect(html).toContain('Add a private feed')
   })
 })

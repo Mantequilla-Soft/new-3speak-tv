@@ -8,7 +8,7 @@
     "contribute": "Cách đóng góp bản dịch"
   },
   "verify": {
-    "body": "Xác nhận tài khoản Hive của bạn để mở trình chỉnh sửa. Ví của bạn sẽ yêu cầu bạn chấp thuận một lần đăng nhập.",
+    "body": "Được mời? Xác nhận tài khoản Hive của bạn để mở trình chỉnh sửa.",
     "button": "Xác nhận tài khoản",
     "failed": "Không thể xác nhận tài khoản của bạn."
   },
@@ -49,9 +49,9 @@
   "add": {
     "title": "Thêm ngôn ngữ",
     "code": "Mã ngôn ngữ",
-    "codeHint": "Hai hoặc ba chữ cái thường (ISO 639), có thể kèm khu vực: nl, fil, pt-BR",
+    "codeHint": "Hai hoặc ba chữ cái thường (ISO 639), có thể kèm khu vực",
     "native": "Tên bằng chính ngôn ngữ đó",
-    "nativeHint": "Đây là tên mọi người thấy trong menu ngôn ngữ, ví dụ Nederlands",
+    "nativeHint": "Tên mọi người thấy trong menu ngôn ngữ",
     "english": "Tên bằng tiếng Anh",
     "rtl": "Viết từ phải sang trái (tiếng Ả Rập, Do Thái, Ba Tư, Urdu…)",
     "submit": "Thêm ngôn ngữ",
@@ -65,6 +65,7 @@
     "checkboxFor": "Đánh dấu {{key}} là đã soát",
     "checkedBy": "Đã được @{{user}} kiểm tra, {{when}}",
     "notChecked": "Đánh dấu khi bạn đã kiểm tra bản dịch này",
+    "notCheckedShort": "Chưa kiểm tra",
     "noText": "Không có gì để soát: chuỗi này chưa có bản dịch",
     "saveFirst": "Hãy lưu chỉnh sửa của bạn trước. Việc lưu sẽ đánh dấu chuỗi là đã soát.",
     "changed": "đã thay đổi sau khi kiểm tra",

@@ -57,19 +57,12 @@ vi.mock('../../../src/lib/supportLinks', async (importOriginal) => ({
 }))
 vi.mock('../../../src/hooks/useCardSize', () => ({ default: () => 'small', useIsCardSizeMobile: () => m.cardMobile }))
 vi.mock('../../../src/utils/hiveNode', () => ({ getHiveUrl: () => 'https://api.hive.example' }))
+vi.mock('../../../src/hooks/getUserDetails', () => ({ useGetMyQuery: () => undefined }))
 vi.mock('../../../src/version', () => ({ APP_VERSION: '9.8.7' }))
 vi.mock('../../../src/components/tip-reward/OtherWays', () => ({ SUPPORT_SITE_ICONS: {} }))
 vi.mock('../../../src/components/LanguagePicker/LanguagePicker', () => ({ default: () => <p>Language picker</p> }))
 vi.mock('../../../src/components/SettingsModal/DataRequestForm', () => ({ default: () => <p>Data request form</p> }))
 vi.mock('../../../src/components/modal/AddSocialLink_modal', () => ({ default: ({ hiveUsername }) => <p>Linked profiles of {hiveUsername}</p> }))
-vi.mock('../../../src/components/tooltip/TagsV2Picker', () => ({
-  default: ({ value, onChange, disabled }) => (
-    <div>
-      <span>Picked: {value.join(', ') || 'none'}</span>
-      <button type="button" disabled={disabled} onClick={() => onChange([...value, 'music'])}>Pick music</button>
-    </div>
-  ),
-}))
 
 const { toast } = await import('sonner')
 const { useAppStore } = await import('../../../src/lib/store')
@@ -117,7 +110,7 @@ beforeEach(() => {
   })
   useAppStore.setState({
     user: null, authenticated: false, theme: 'light', showNsfw: false, hideWatched: true, hideAi: true,
-    privateMode: false, simpleFeed: false, previewEnabled: true, openShortsOnStart: false, inlineShorts: true,
+    privateMode: false, previewEnabled: true, openShortsOnStart: false, inlineShorts: true,
     shortsCommentBar: false, interests: [], homeCardSize: 'small',
   })
 })
@@ -135,7 +128,7 @@ describe('the settings window', () => {
   it('opens on General, with the tabs a signed-out visitor can use', () => {
     mount()
     expect(screen.getByRole('heading', { name: 'Settings' })).toBeInTheDocument()
-    expect(tabs()).toEqual(['General', 'Content', 'About / Version'])
+    expect(tabs()).toEqual(['General', 'Content', 'About'])
     expect(screen.getByRole('tab', { name: 'General' })).toHaveAttribute('aria-selected', 'true')
     expect(screen.getByText('Language picker')).toBeInTheDocument()
   })
@@ -143,7 +136,7 @@ describe('the settings window', () => {
   it('adds the account tabs once signed in', () => {
     signIn()
     mount()
-    expect(tabs()).toEqual(['General', 'Content', 'Connections', 'Notifications', 'About / Version'])
+    expect(tabs()).toEqual(['General', 'Content', 'Connections', 'About'])
   })
 
   it('shows "Ads & rewards" only when the checker lets the account in', async () => {
@@ -165,8 +158,8 @@ describe('the settings window', () => {
 
   it('switches tabs, marking the chosen one', async () => {
     const { user } = mount()
-    await user.click(screen.getByRole('tab', { name: 'About / Version' }))
-    expect(screen.getByRole('tab', { name: 'About / Version' })).toHaveAttribute('aria-selected', 'true')
+    await user.click(screen.getByRole('tab', { name: 'About' }))
+    expect(screen.getByRole('tab', { name: 'About' })).toHaveAttribute('aria-selected', 'true')
     expect(screen.getByRole('tab', { name: 'General' })).toHaveAttribute('aria-selected', 'false')
     expect(screen.getByText('v9.8.7')).toBeInTheDocument()
     expect(screen.getByText('https://api.hive.example')).toBeInTheDocument()
@@ -229,10 +222,9 @@ describe('settings: General and Content', () => {
     expect(sw('Dark mode')).toHaveAttribute('aria-checked', 'true')
   })
 
-  it('simple feeds and video previews write to the store', async () => {
+  it('video previews write to the store; there is no Simple feeds switch any more', async () => {
     const { user } = mount()
-    await user.click(sw('Simple feeds'))
-    expect(useAppStore.getState().simpleFeed).toBe(true)
+    expect(screen.queryByRole('switch', { name: /Simple feeds/ })).toBeNull()
     await user.click(sw('Video previews'))
     expect(useAppStore.getState().previewEnabled).toBe(false)
   })
@@ -255,10 +247,10 @@ describe('settings: General and Content', () => {
     expect(screen.queryByRole('switch', { name: 'Video previews' })).not.toBeInTheDocument()
   })
 
-  it('Content opens on Feed, whose switches change what the feeds leave out', async () => {
+  it('Content shows the Feed card, whose switches change what the feeds leave out', async () => {
     const { user } = mount()
     await user.click(screen.getByRole('tab', { name: 'Content' }))
-    expect(screen.getByRole('tab', { name: 'Feed' })).toHaveAttribute('aria-selected', 'true')
+    expect(screen.getByRole('heading', { name: 'Feed' })).toBeInTheDocument()
     expect(sw('Hide watched videos')).toHaveAttribute('aria-checked', 'true')
     await user.click(sw('Show NSFW content'))
     await user.click(sw('Hide watched videos'))
@@ -267,12 +259,11 @@ describe('settings: General and Content', () => {
     expect(useAppStore.getState()).toMatchObject({ showNsfw: true, hideWatched: false, hideAi: false, privateMode: true })
   })
 
-  it('the Shorts panel sets how shorts open and whether they show in feeds', async () => {
+  it('the Shorts card sets how shorts open and whether they show in feeds', async () => {
     const { user } = mount()
     await user.click(screen.getByRole('tab', { name: 'Content' }))
-    await user.click(screen.getByRole('tab', { name: 'Shorts' }))
     expect(screen.queryByRole('switch', { name: 'Comment bar on shorts' })).not.toBeInTheDocument()
-    await user.click(sw('Open shorts on start'))
+    await user.click(sw('Open Shorts on start'))
     await user.click(sw('Shorts inside the feeds'))
     expect(useAppStore.getState()).toMatchObject({ openShortsOnStart: true, inlineShorts: false })
   })
@@ -281,17 +272,27 @@ describe('settings: General and Content', () => {
     stubMatchMedia((q) => q === '(max-width: 768px)' || q === '(hover: hover)')
     const { user } = mount()
     await user.click(screen.getByRole('tab', { name: 'Content' }))
-    await user.click(screen.getByRole('tab', { name: 'Shorts' }))
     await user.click(sw('Comment bar on shorts'))
     expect(useAppStore.getState().shortsCommentBar).toBe(true)
   })
 
-  it('Interests: signed out, the picker is disabled with a hint to log in', async () => {
+  // The same tile picker as the interests popup (owner 2026-11-12): categories
+  // as tiles, their topics under the open one.
+  it('the Spotlight video previews switch writes to the store (desktop with a mouse)', async () => {
+    const mm = window.matchMedia
+    window.matchMedia = (q) => ({ matches: q.includes('min-width: 769px') && q.includes('hover: hover'), media: q, addEventListener() {}, removeEventListener() {}, addListener() {}, removeListener() {} })
+    try {
+      const { user } = mount()
+      await user.click(sw('Spotlight video previews'))
+      expect(useAppStore.getState().heroPreviewEnabled).toBe(false)
+    } finally { window.matchMedia = mm }
+  })
+
+  it('Interests: signed out, the tiles are disabled with a hint to log in', async () => {
     const { user } = mount()
     await user.click(screen.getByRole('tab', { name: 'Content' }))
-    await user.click(screen.getByRole('tab', { name: 'Interests' }))
     expect(screen.getByText(/Log in to choose your interests/)).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'Pick music' })).toBeDisabled()
+    expect(screen.getByRole('button', { name: /^Entertainment/ })).toBeDisabled()
   })
 
   it('Interests: loads the saved topics from Hive and saves a change back', async () => {
@@ -299,12 +300,14 @@ describe('settings: General and Content', () => {
     signIn()
     const { user } = mount()
     await user.click(screen.getByRole('tab', { name: 'Content' }))
-    await user.click(screen.getByRole('tab', { name: 'Interests' }))
-    await waitFor(() => expect(screen.getByText('Picked: gaming')).toBeInTheDocument())
-    expect(screen.queryByRole('button', { name: 'Save interests' })).not.toBeInTheDocument()
+    // A category with a pick opens on its own, its topics below it.
+    await waitFor(() => expect(screen.getByRole('button', { name: 'Gaming' })).toHaveAttribute('aria-pressed', 'true'))
+    expect(screen.getByRole('button', { name: /^Entertainment/ })).toHaveAttribute('aria-pressed', 'mixed')
+    expect(screen.getByRole('button', { name: 'Music' })).toHaveAttribute('aria-pressed', 'false')
+    expect(screen.queryByRole('button', { name: 'Save to my Hive profile' })).not.toBeInTheDocument()
 
-    await user.click(screen.getByRole('button', { name: 'Pick music' }))
-    await user.click(screen.getByRole('button', { name: 'Save interests' }))
+    await user.click(screen.getByRole('button', { name: 'Music' }))
+    await user.click(screen.getByRole('button', { name: 'Save to my Hive profile' }))
     expect(m.saveInterestsToHive).toHaveBeenCalledWith('listener', ['gaming', 'music'])
     await waitFor(() => expect(screen.getByRole('button', { name: 'Saved' })).toBeDisabled())
     expect(toastMessages(toast.success)).toContain('Interests saved to your Hive profile')
@@ -315,16 +318,16 @@ describe('settings: General and Content', () => {
     signIn()
     const { user } = mount()
     await user.click(screen.getByRole('tab', { name: 'Content' }))
-    await user.click(screen.getByRole('tab', { name: 'Interests' }))
-    await user.click(screen.getByRole('button', { name: 'Pick music' }))
-    await user.click(screen.getByRole('button', { name: 'Save interests' }))
+    await user.click(screen.getByRole('button', { name: /^Entertainment/ }))   // the whole category
+    await user.click(screen.getByRole('button', { name: 'Save to my Hive profile' }))
+    expect(m.saveInterestsToHive).toHaveBeenCalledWith('listener', ['entertainment'])
     await waitFor(() => expect(toastMessages(toast.error)).toContain('Keychain said no'))
-    expect(screen.getByRole('button', { name: 'Save interests' })).toBeEnabled()
+    expect(screen.getByRole('button', { name: 'Save to my Hive profile' })).toBeEnabled()
   })
 
   it('About: five quick taps on the node row unlock Butter Auth', async () => {
     const { user } = mount()
-    await user.click(screen.getByRole('tab', { name: 'About / Version' }))
+    await user.click(screen.getByRole('tab', { name: 'About' }))
     const row = screen.getByText('Hive RPC node')
     // The unlock reloads the page 600 ms later; that timer is dropped unrun.
     vi.useFakeTimers({ shouldAdvanceTime: true })
@@ -346,13 +349,24 @@ describe('settings: posting authority', () => {
   it('shows that @threespeak may post and removes it after the chain confirms', async () => {
     signIn()
     const { user } = mount()
+    expect(screen.getByRole('heading', { name: 'Let 3Speak post for you' })).toBeInTheDocument()
     await screen.findByText('@threespeak can post for you')
     await user.click(screen.getByRole('button', { name: 'Remove' }))
     expect(m.removeAuth).toHaveBeenCalledWith('listener', { signWindow: null })
-    await screen.findByText('@threespeak cannot post for you')
+    expect(await screen.findByRole('button', { name: 'Add' })).toBeEnabled()
     expect(m.waitAuth).toHaveBeenCalledWith('listener', false)
     expect(toastMessages(toast.success)).toContain('@threespeak removed from your posting authority')
-    expect(screen.getByRole('button', { name: 'Add' })).toBeEnabled()
+  })
+
+  it('sits in the rewards card as one row when that tab exists (38a)', async () => {
+    m.adsFor = () => true
+    signIn()
+    const { user } = mount()
+    await user.click(await screen.findByRole('tab', { name: 'Ads & rewards' }))
+    expect(screen.getByText('Posting authority')).toBeInTheDocument()
+    expect(await screen.findByText('@threespeak can post for you')).toBeInTheDocument()
+    await user.click(screen.getByRole('tab', { name: 'General' }))
+    expect(screen.queryByRole('heading', { name: 'Let 3Speak post for you' })).not.toBeInTheDocument()
   })
 
   it('says when the chain does not show the change yet', async () => {
@@ -378,24 +392,23 @@ describe('settings: posting authority', () => {
     m.hasAuth = vi.fn(async () => { throw new Error('no account') })
     signIn()
     mount()
-    await waitFor(() => expect(screen.queryByText('Posting authority')).not.toBeInTheDocument())
+    await waitFor(() => expect(screen.queryByRole('heading', { name: 'Let 3Speak post for you' })).not.toBeInTheDocument())
   })
 })
 
 describe('settings: Connections', () => {
   beforeEach(() => signIn('listener'))
 
-  async function openConnections(user, sub) {
+  // Every card of the tab shows at once (38c), so there is no sub-tab to pick.
+  async function openConnections(user) {
     await user.click(screen.getByRole('tab', { name: 'Connections' }))
-    if (sub) await user.click(screen.getByRole('tab', { name: sub }))
   }
 
-  it('opens on Referrals with the member\'s own link and what it earns', async () => {
+  it('shows the referral card, without the Ads & rewards tab, with the member\'s own link and what it earns', async () => {
     const { user } = mount()
     await openConnections(user)
-    expect(screen.getByRole('tab', { name: 'Referrals' })).toHaveAttribute('aria-selected', 'true')
     expect(screen.getByRole('heading', { name: 'Invite people to 3Speak' })).toBeInTheDocument()
-    expect(screen.getByRole('textbox', { name: 'Your referral link' })).toHaveValue(`${window.location.origin}/?ref=listener`)
+    expect(screen.getByRole('textbox', { name: 'Your referral link' })).toHaveValue(`${window.location.host}/?ref=listener`)
     expect(screen.getByText('3 months')).toBeInTheDocument()
   })
 
@@ -424,36 +437,36 @@ describe('settings: Connections', () => {
     signIn('a b&c')
     const { user } = mount()
     await openConnections(user)
-    expect(screen.getByRole('textbox', { name: 'Your referral link' })).toHaveValue(`${window.location.origin}/?ref=a%20b%26c`)
+    expect(screen.getByRole('textbox', { name: 'Your referral link' })).toHaveValue(`${window.location.host}/?ref=a%20b%26c`)
   })
 
   it('Linked profiles shows the profile links of the account', async () => {
     const { user } = mount()
-    await openConnections(user, 'Linked profiles')
+    await openConnections(user)
     expect(screen.getByText('Linked profiles of listener')).toBeInTheDocument()
   })
 
   describe('Support: the Lightning address', () => {
     it('tips go to v4v.app by default', async () => {
       const { user } = mount()
-      await openConnections(user, 'Support')
+      await openConnections(user)
       expect(await screen.findByText('Tips go to listener@v4v.app')).toBeInTheDocument()
       expect(screen.getByRole('button', { name: 'Save' })).toBeDisabled()
     })
 
     it('refuses something that is not a Lightning address', async () => {
       const { user } = mount()
-      await openConnections(user, 'Support')
+      await openConnections(user)
       const input = await screen.findByRole('textbox', { name: 'Your Lightning address' })
       await waitFor(() => expect(input).toBeEnabled())
       await user.type(input, 'not-an-address{Enter}')
-      expect(screen.getByText(/That is not a Lightning address/)).toBeInTheDocument()
+      expect(screen.getByText(/That's not a Lightning address/)).toBeInTheDocument()
       expect(m.saveLn).not.toHaveBeenCalled()
     })
 
     it('checks an address answers before saving it, lower-cased', async () => {
       const { user } = mount()
-      await openConnections(user, 'Support')
+      await openConnections(user)
       const input = await screen.findByRole('textbox', { name: 'Your Lightning address' })
       await waitFor(() => expect(input).toBeEnabled())
       await user.type(input, 'Me@Wallet.example')
@@ -467,7 +480,7 @@ describe('settings: Connections', () => {
     it('does not save an address that does not answer', async () => {
       m.checkLn = vi.fn(async () => { throw new Error('404') })
       const { user } = mount()
-      await openConnections(user, 'Support')
+      await openConnections(user)
       const input = await screen.findByRole('textbox', { name: 'Your Lightning address' })
       await waitFor(() => expect(input).toBeEnabled())
       await user.type(input, 'me@wallet.example{Enter}')
@@ -478,7 +491,7 @@ describe('settings: Connections', () => {
     it('goes back to v4v.app from an own address', async () => {
       m.readLn = vi.fn(async () => 'me@wallet.example')
       const { user } = mount()
-      await openConnections(user, 'Support')
+      await openConnections(user)
       await user.click(await screen.findByRole('button', { name: 'Use v4v.app again' }))
       expect(m.checkLn).not.toHaveBeenCalled()
       expect(m.saveLn).toHaveBeenCalledWith('listener', '')
@@ -489,8 +502,8 @@ describe('settings: Connections', () => {
   describe('Support: other ways to support', () => {
     it('adds a supported page, normalised, and clears the box', async () => {
       const { user } = mount()
-      await openConnections(user, 'Support')
-      const input = await screen.findByRole('textbox', { name: 'Other ways to support you' })
+      await openConnections(user)
+      const input = await screen.findByRole('textbox', { name: 'Support links' })
       await waitFor(() => expect(input).toBeEnabled())
       await user.type(input, 'www.ko-fi.com/badadib/')
       await user.click(screen.getByRole('button', { name: 'Add' }))
@@ -503,8 +516,8 @@ describe('settings: Connections', () => {
     it('refuses a link to a site it does not know, and a duplicate', async () => {
       m.readLinks = vi.fn(async () => [{ site: { id: 'kofi', label: 'Ko-fi' }, url: 'https://ko-fi.com/badadib' }])
       const { user } = mount()
-      await openConnections(user, 'Support')
-      const input = await screen.findByRole('textbox', { name: 'Other ways to support you' })
+      await openConnections(user)
+      const input = await screen.findByRole('textbox', { name: 'Support links' })
       await waitFor(() => expect(input).toBeEnabled())
       await user.type(input, 'https://example.com/me{Enter}')
       expect(screen.getByText(/Paste the full link to your page/)).toBeInTheDocument()
@@ -517,7 +530,7 @@ describe('settings: Connections', () => {
     it('removes a link from its named button', async () => {
       m.readLinks = vi.fn(async () => [{ site: { id: 'kofi', label: 'Ko-fi' }, url: 'https://ko-fi.com/badadib' }])
       const { user } = mount()
-      await openConnections(user, 'Support')
+      await openConnections(user)
       await user.click(await screen.findByRole('button', { name: 'Remove the Ko-fi link' }))
       expect(m.saveLinks).toHaveBeenCalledWith('listener', [])
       await waitFor(() => expect(screen.queryByRole('link', { name: 'ko-fi.com/badadib' })).not.toBeInTheDocument())
@@ -529,8 +542,7 @@ describe('settings: Notifications', () => {
   beforeEach(() => signIn('listener'))
 
   it('says when this browser cannot show notifications', async () => {
-    const { user } = mount()
-    await user.click(screen.getByRole('tab', { name: 'Notifications' }))
+    mount()
     expect(screen.getByText(/This browser can.t show notifications/)).toBeInTheDocument()
   })
 
@@ -538,12 +550,15 @@ describe('settings: Notifications', () => {
     m.pushSupported = () => true
     m.getPushPrefs = vi.fn(async () => ({ kinds: ['videos', 'replies', 'votes'], prefs: { votes: false } }))
     const { user } = mount()
-    await user.click(screen.getByRole('tab', { name: 'Notifications' }))
-    await screen.findByRole('switch', { name: 'Upvotes' })
+    // Until the server's list arrives every kind shows (Upvotes included), so
+    // wait for the LOADED list, not just for a switch: under load the test
+    // used to look in the gap (CI flake, 2026-11-12).
+    await waitFor(() => {
+      expect(screen.queryByRole('switch', { name: 'New shorts' })).not.toBeInTheDocument()
+      expect(sw('Upvotes (off by default)')).toHaveAttribute('aria-checked', 'false')
+    })
     expect(screen.getByText('From creators you follow')).toBeInTheDocument()
     expect(screen.getByText('About you')).toBeInTheDocument()
-    expect(screen.queryByRole('switch', { name: 'New shorts' })).not.toBeInTheDocument()
-    expect(sw('Upvotes')).toHaveAttribute('aria-checked', 'false')
     expect(sw('Replies')).toHaveAttribute('aria-checked', 'true')
 
     m.getPushState = vi.fn(async () => ({ supported: true, worker: true, permission: 'granted', subscribed: true }))
@@ -557,7 +572,6 @@ describe('settings: Notifications', () => {
     m.pushSupported = () => true
     m.setPushPrefs = vi.fn(async () => { throw new Error('offline') })
     const { user } = mount()
-    await user.click(screen.getByRole('tab', { name: 'Notifications' }))
     await user.click(await screen.findByRole('switch', { name: 'Replies' }))
     expect(m.setPushPrefs).toHaveBeenCalledWith('listener', { replies: false })
     await waitFor(() => expect(sw('Replies')).toHaveAttribute('aria-checked', 'true'))
@@ -568,7 +582,6 @@ describe('settings: Notifications', () => {
     m.pushSupported = () => true
     m.setPushPrefs = vi.fn(async () => { throw Object.assign(new Error('raw'), { code: 'not_confirmed' }) })
     const { user } = mount()
-    await user.click(screen.getByRole('tab', { name: 'Notifications' }))
     await user.click(await screen.findByRole('switch', { name: 'Replies' }))
     await waitFor(() => expect(sw('Replies')).toHaveAttribute('aria-checked', 'true'))
     expect(toastMessages(toast.error)).toContain('Could not confirm it is you. Log out and back in, then try again.')
@@ -578,7 +591,6 @@ describe('settings: Notifications', () => {
     m.pushSupported = () => true
     m.getPushState = vi.fn(async () => ({ supported: true, worker: true, permission: 'denied', subscribed: false }))
     const { user } = mount()
-    await user.click(screen.getByRole('tab', { name: 'Notifications' }))
     expect(await screen.findByText(/Blocked in your browser settings/)).toBeInTheDocument()
     await user.click(sw('Notify this device'))
     expect(m.enablePush).not.toHaveBeenCalled()
@@ -647,9 +659,33 @@ describe('settings: Ads & rewards', () => {
     m.fetchViewerAdPrefs = vi.fn(async () => ({ rewardsEnabled: true, listenEnabled: false }))
     const { user } = mount()
     await openRewards(user)
-    await user.click(await screen.findByRole('button', { name: 'Count my listening too' }))
+    const listen = await screen.findByRole('switch', { name: 'Count my listening too' })
+    await waitFor(() => expect(listen).toBeEnabled())
+    expect(listen).toHaveAttribute('aria-checked', 'false')
+    await user.click(listen)
     expect(m.setListenerAdPrefs).toHaveBeenCalledWith('listener', { listenEnabled: true })
-    await waitFor(() => expect(screen.queryByRole('button', { name: 'Count my listening too' })).not.toBeInTheDocument())
+    await waitFor(() => expect(listen).toHaveAttribute('aria-checked', 'true'))
+    expect(toastMessages(toast.success)).toContain('Your listening now counts toward listener rewards')
+  })
+
+  it('viewer rewards: listening can be switched off on its own', async () => {
+    m.fetchViewerAdPrefs = vi.fn(async () => ({ rewardsEnabled: true, listenEnabled: true }))
+    const { user } = mount()
+    await openRewards(user)
+    const listen = await screen.findByRole('switch', { name: 'Count my listening too' })
+    await waitFor(() => expect(listen).toHaveAttribute('aria-checked', 'true'))
+    await user.click(listen)
+    expect(m.setListenerAdPrefs).toHaveBeenCalledWith('listener', { listenEnabled: false })
+    expect(m.setViewerAdPrefs).not.toHaveBeenCalled()
+    await waitFor(() => expect(listen).toHaveAttribute('aria-checked', 'false'))
+    expect(sw('Earn a share of ad revenue for what you watch')).toHaveAttribute('aria-checked', 'true')
+  })
+
+  it('viewer rewards: the listening switch waits for viewer rewards to be on', async () => {
+    const { user } = mount()
+    await openRewards(user)
+    await waitFor(() => expect(m.fetchViewerAdPrefs).toHaveBeenCalled())
+    expect(await screen.findByRole('switch', { name: 'Count my listening too' })).toBeDisabled()
   })
 
   it('viewer rewards: a failed save is rolled back with the reason', async () => {

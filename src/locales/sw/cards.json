@@ -5,10 +5,12 @@
   "topicTitle": "Mada: {{topic}}",
   "watchingNow_one": "{{count}} anatazama sasa",
   "watchingNow_other": "{{count}} wanatazama sasa",
+  "previewMuted": "Onyesho · bila sauti",
   "badges": {
-    "gatedTitle": "Kwa wanachama pekee. 3Speak Pro hufungua video nzima",
+    "gatedTitle": "Kwa wanachama pekee",
     "pro": "PRO",
     "new": "MPYA",
+    "first": "Ya kwanza",
     "live": "● MUBASHARA",
     "liveChat": "● GUMZO MUBASHARA",
     "spotlight": "Kivutio"
@@ -16,17 +18,17 @@
   "status": {
     "scheduled": "Imeratibiwa",
     "mobile": "Simu",
-    "mobileTitle": "Imepakiwa kupitia programu ya simu",
+    "mobileTitle": "Kupitia programu ya simu",
     "processing": "Inachakatwa",
-    "processingTitle": "Video inachakatwa",
+    "processingTitle": "Inachakatwa",
     "draft": "Rasimu",
-    "draftTitle": "Rasimu - bado haijachapishwa",
+    "draftTitle": "Bado haijachapishwa",
     "deleted": "Imefutwa",
-    "deletedTitle": "Video hii imefutwa",
+    "deletedTitle": "Imefutwa",
     "failed": "Imeshindwa",
-    "failedTitle": "Uchakataji wa video umeshindwa",
+    "failedTitle": "Uchakataji umeshindwa",
     "unlisted": "Haijaorodheshwa",
-    "unlistedTitle": "Haijaorodheshwa — imefichwa kwenye milisho na utafutaji, inafikiwa kwa kiungo cha moja kwa moja tu"
+    "unlistedTitle": "Kwa kiungo cha moja kwa moja tu"
   },
   "playlist": {
     "loading": "Inapakia orodha za kucheza...",
@@ -34,7 +36,11 @@
     "items_other": "vipengee {{count}}",
     "openAria": "Fungua orodha ya kucheza {{name}}",
     "tag": "Orodha ya kucheza",
-    "updated": "Imesasishwa {{when}}"
+    "updated": "Imesasishwa {{when}}",
+    "public": "ya umma",
+    "private": "binafsi",
+    "history": "historia",
+    "audio": "sauti"
   },
   "watchLater": {
     "title": "Tazama Baadaye",
@@ -48,5 +54,13 @@
     "label": "Badilisha ukubwa",
     "small": "Ndogo",
     "medium": "Wastani"
+  },
+  "payout": {
+    "title": "Malipo",
+    "author": "Mwandishi",
+    "curators": "Wateuzi",
+    "paysOutIn": "Inalipwa baada ya",
+    "days_one": "siku {{count}}",
+    "days_other": "siku {{count}}"
   }
 }

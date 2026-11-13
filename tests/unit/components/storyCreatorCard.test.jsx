@@ -71,6 +71,7 @@ beforeEach(async () => {
   story.creators = [{
     username: 'badadib', story_count: 1, unseen_count: 1,
     latest_at: new Date(NOW - 3 * HOUR).toISOString(), latest_expires_at: new Date(NOW + 21 * HOUR).toISOString(),
+    streak: 12,
   }]
   container = document.createElement('div')
   document.body.appendChild(container)
@@ -89,16 +90,17 @@ afterEach(() => {
 })
 
 describe('the creator card', () => {
-  it('opens while the avatar turns, with the story time, profile and counts', async () => {
+  it('opens while the avatar turns, with the story, its streak, the time, profile and counts', async () => {
     hover(item('badadib'))
     await settle(100)
     expect(card()).toBeNull()
     await settle(100)
     const text = card()?.textContent || ''
+    // 45b: "<name>'s story" with the streak under it, then when and reputation
+    expect(text).toContain("badadib's story")
+    expect(text).toContain('12-day story streak')
     expect(text).toContain('Story posted 3 hours ago')
     expect(text).toContain('21h left')
-    expect(text).toContain('Badadib')
-    expect(text).toContain('@badadib')
     expect(text).toContain('Rep 72')
     expect(text).toContain('Making videos about everything.')
     expect(text).toMatch(/1\.2K\s*followers/)
@@ -108,9 +110,11 @@ describe('the creator card', () => {
     expect(card().querySelector('a').getAttribute('href')).toBe('/@badadib')
   })
 
-  it('a shorts creator shows when their newest short went up', async () => {
+  it('a shorts creator shows their name and when their newest short went up', async () => {
     hover(item('badadib-shorts'))
     await settle(700)
+    expect(card()?.textContent).toContain('Badadib')
+    expect(card()?.textContent).toContain('@badadib-shorts')
     expect(card()?.textContent).toContain('Last short 2 days ago')
     expect(card()?.textContent).not.toContain('left')
   })

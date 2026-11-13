@@ -5,10 +5,12 @@
   "topicTitle": "Topic: {{topic}}",
   "watchingNow_one": "{{count}} watching now",
   "watchingNow_other": "{{count}} watching now",
+  "previewMuted": "Preview · muted",
   "badges": {
-    "gatedTitle": "Members only. 3Speak Pro unlocks the full video",
+    "gatedTitle": "Members only",
     "pro": "PRO",
     "new": "NEW",
+    "first": "First",
     "live": "● LIVE",
     "liveChat": "● LIVE CHAT",
     "spotlight": "Spotlight"
@@ -16,17 +18,17 @@
   "status": {
     "scheduled": "Scheduled",
     "mobile": "Mobile",
-    "mobileTitle": "Uploaded via mobile app",
+    "mobileTitle": "Via mobile app",
     "processing": "Processing",
-    "processingTitle": "Video is being processed",
+    "processingTitle": "Being processed",
     "draft": "Draft",
-    "draftTitle": "Draft - not published yet",
+    "draftTitle": "Not published yet",
     "deleted": "Deleted",
-    "deletedTitle": "This video has been deleted",
+    "deletedTitle": "Has been deleted",
     "failed": "Failed",
-    "failedTitle": "Video processing failed",
+    "failedTitle": "Processing failed",
     "unlisted": "Unlisted",
-    "unlistedTitle": "Unlisted — hidden from feeds & search, only reachable by direct link"
+    "unlistedTitle": "Direct link only"
   },
   "playlist": {
     "loading": "Loading playlists...",
@@ -34,7 +36,11 @@
     "items_other": "{{count}} items",
     "openAria": "Open playlist {{name}}",
     "tag": "Playlist",
-    "updated": "Updated {{when}}"
+    "updated": "Updated {{when}}",
+    "public": "public",
+    "private": "private",
+    "history": "history",
+    "audio": "audio"
   },
   "watchLater": {
     "title": "Watch Later",
@@ -48,5 +54,13 @@
     "label": "Change size",
     "small": "Small",
     "medium": "Medium"
+  },
+  "payout": {
+    "title": "Payout",
+    "author": "Author",
+    "curators": "Curators",
+    "paysOutIn": "Pays out in",
+    "days_one": "{{count}} day",
+    "days_other": "{{count}} days"
   }
 }

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { FaYoutube, FaSoundcloud, FaTiktok, FaInstagram, FaPlayCircle } from 'react-icons/fa';
 import { SiRumble } from 'react-icons/si';
-import { IoClose } from 'react-icons/io5';
+import { Icon as MsIcon } from '../v2/Icon';
 import { toastIn } from '../../utils/toast';
 import {
   getLinks,
@@ -24,6 +24,17 @@ export const PLATFORM_ICONS = {
   bitchute: FaPlayCircle,
   rumble: SiRumble,
   soundcloud: FaSoundcloud,
+};
+
+// What the profile header draws (37b): Material Symbols, like the rest of the
+// screen. PLATFORM_ICONS above stays for the other screens that import it.
+const PLATFORM_SYMBOLS = {
+  youtube: 'smart_display',
+  tiktok: 'music_note',
+  instagram: 'photo_camera',
+  bitchute: 'play_circle',
+  rumble: 'videocam',
+  soundcloud: 'cloud',
 };
 
 export default function SocialLinks({ hiveUsername, refreshKey = 0, canDelete = false, onChange, column = false }) {
@@ -85,9 +96,9 @@ export default function SocialLinks({ hiveUsername, refreshKey = 0, canDelete = 
   return (
     <span className={`social-links${column ? ' social-links--column' : ''}`}>
       {links.map((link) => {
-        const Icon = PLATFORM_ICONS[link.platform];
+        const symbol = PLATFORM_SYMBOLS[link.platform];
         const url = platformProfileUrl(link.platform, link.platform_username);
-        if (!Icon || !url) return null;
+        if (!symbol || !url) return null;
         const key = `${link.platform}:${link.platform_username}`;
         const removing = removingKey === key;
         return (
@@ -98,8 +109,9 @@ export default function SocialLinks({ hiveUsername, refreshKey = 0, canDelete = 
               target="_blank"
               rel="noopener noreferrer"
               title={t('profile.social.verified', { platform: platformLabel(link.platform) })}
+              aria-label={t('profile.social.verified', { platform: platformLabel(link.platform) })}
             >
-              <Icon />
+              <MsIcon name={symbol} size={18} />
             </a>
             {canDelete && (
               <button
@@ -114,7 +126,7 @@ export default function SocialLinks({ hiveUsername, refreshKey = 0, canDelete = 
                 title={t('profile.social.removeLink', { platform: platformLabel(link.platform) })}
                 aria-label={t('profile.social.removeLink', { platform: platformLabel(link.platform) })}
               >
-                <IoClose />
+                <MsIcon name="close" size={12} />
               </button>
             )}
           </span>

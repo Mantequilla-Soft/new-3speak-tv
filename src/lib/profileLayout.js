@@ -41,12 +41,15 @@ export const SECTION_DEFS = {
   links: { labelKey: 'profile.layout.types.links', side: 'right' },
 };
 
-// Today's Overview, in today's order. Audio playlists are new, so they start
-// switched off for everyone rather than appearing on every profile at once.
+// The Overview a creator gets until they arrange their own: the channel of
+// design 20b (the trailer with the latest snap beside it, then the newest
+// videos as a grid of two rows of four), then the rest of the channel. Audio
+// playlists are new, so they start switched off for everyone rather than
+// appearing on every profile at once.
 export const DEFAULT_SECTIONS = [
   { id: 'trailer', type: 'trailer' },
   { id: 'live', type: 'live' },
-  { id: 'videos', type: 'videos' },
+  { id: 'videos', type: 'videos', view: 'grid', count: 8 },
   { id: 'shorts', type: 'shorts' },
   { id: 'audio', type: 'audio' },
   { id: 'community', type: 'community' },

@@ -25,10 +25,11 @@ const doc = {
   playlist_id: 'pl-123456789', playlist_name: 'Season One',
 }
 
-async function render(path, item) {
+async function render(path, item, playlist) {
   const { default: AudioItemView } = await import('../../../src/components/AudioItem/AudioItemView.jsx')
   const qc = new QueryClient()
   qc.setQueryData(['audio-item', 'epodcaster', 'f48l7vyi'], item)
+  if (playlist) qc.setQueryData(['playlist', 'pl-123456789'], playlist)
   qc.setQueryData(['audio-item-post', 'epodcaster', 'my-show-ep-1'], { active_votes: [{ voter: 'a' }, { voter: 'b' }], children: 3, pending_payout_value: '1.234 HBD' })
   return renderToString(
     <QueryClientProvider client={qc}><MemoryRouter initialEntries={[path]}><AudioItemView owner="epodcaster" id="f48l7vyi" onBack={() => {}} /></MemoryRouter></QueryClientProvider>,
@@ -55,6 +56,18 @@ describe('a 3Speak audio page', () => {
   it('offers the shared clip on the Play button', async () => {
     const html = await render('/audio?play=epodcaster/f48l7vyi&t=754&end=800', doc)
     expect(html).toContain('Play 12:34 to 13:20')
+  })
+
+  it('says Play episode for a podcast and Play track in a music playlist', async () => {
+    expect(await render('/audio?play=epodcaster/f48l7vyi', doc)).toContain('Play episode')
+    const music = { type: 'audio', audio_kind: 'music', json_metadata: '{"type":"audio","audio_kind":"music"}' }
+    const html = await render('/audio?play=epodcaster/f48l7vyi', { ...doc, category: 'voice_message' }, music)
+    expect(html).toContain('Play track')
+    expect(html).not.toContain('Play episode')
+    // No kind saved on the playlist: the track's own category decides.
+    expect(await render('/audio?play=epodcaster/f48l7vyi', { ...doc, category: 'song' }, { type: 'video' })).toContain('Play track')
+    const podcast = { type: 'audio', audio_kind: 'podcast' }
+    expect(await render('/audio?play=epodcaster/f48l7vyi', { ...doc, category: 'song' }, podcast)).toContain('Play episode')
   })
 
   it('says so when the audio is gone', async () => {

@@ -7,11 +7,19 @@
     "createNewDesc": "Pakia na ushiriki maudhui yako na ulimwengu"
   },
   "preview": {
-    "cannotPreview": "Kivinjari chako hakiwezi kuonyesha video hii — hili ni la kawaida kwa klipu za HEVC/H.265 (k.m. rekodi za iPhone za “High Efficiency”). Hakuna tatizo: bado itapakiwa na kubadilishwa ili icheze kwa kila mtu."
+    "cannotPreview": "<b>Haiwezi kuonyesha video hii.</b> Ni kawaida kwa klipu za HEVC / H.265 kama rekodi za iPhone za High Efficiency. Bado itapakiwa na kubadilishwa ili icheze kwa kila mtu."
   },
   "drafts": {
     "untitled": "(bila kichwa)",
-    "empty": "Hakuna video zilizopatikana kwa kichujio ulichochagua."
+    "empty": "Hakuna video zilizopatikana kwa kichujio ulichochagua.",
+    "title": "Studio",
+    "create": "Unda",
+    "views28": "Mitazamo, siku 28",
+    "newFollowers": "Wafuasi wapya",
+    "views": "mitazamo",
+    "stats": "Takwimu",
+    "more": "Zaidi",
+    "public": "Ya umma"
   },
   "schedule": {
     "days": {
@@ -30,6 +38,7 @@
     "am": "AM",
     "pm": "PM",
     "pastWarning": "Tarehe na saa hii imeshapita. Tafadhali chagua tarehe na saa ijayo.",
+    "pickDay": "Chagua siku",
     "publishAt": "Video yako itachapishwa kiotomatiki tarehe {{when}}"
   },
   "scheduled": {
@@ -99,6 +108,7 @@
     "insertTable": "Weka jedwali",
     "spoiler": "Maandishi yaliyofichwa",
     "emoji": "Emoji",
+    "gifs": "GIF",
     "searchEmoji": "Tafuta emoji",
     "searchGifs": "Tafuta GIF…",
     "noGifs": "Hakuna GIF zilizopatikana.",

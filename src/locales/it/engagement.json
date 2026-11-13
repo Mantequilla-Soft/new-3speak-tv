@@ -11,6 +11,8 @@
       "transferFailed": "Trasferimento non riuscito: {{message}}"
     },
     "heading": "Invia una mancia a @{{recipient}}",
+    "pageTitle": "Mancia a @{{recipient}}",
+    "pageSub": "Aperto da un overlay della diretta o da un link",
     "methodHive": "HIVE / HBD",
     "methodLightning": "Lightning",
     "methodMore": "Altri modi",
@@ -22,6 +24,17 @@
     "memoPlaceholder": "es. Grazie per questo contenuto fantastico!",
     "memoLinkNote": "Questo link viene aggiunto al memo: {{link}}",
     "send": "Invia mancia",
+    "sendAmount": "Invia {{amount}} {{currency}}",
+    "paidIn": "Pagato in {{currency}} · nessuna commissione",
+    "forTitle": "per “{{title}}”",
+    "presets": {
+      "coffee": "Un caffè",
+      "popular": "Il più popolare",
+      "thanks": "Grazie mille",
+      "superFan": "Superfan"
+    },
+    "sentEyebrow": "Mancia inviata",
+    "sentTo": "{{amount}} a @{{recipient}}",
     "lightning": {
       "amountLabel": "Importo (sats):",
       "messageLabel": "Messaggio (facoltativo):",
@@ -65,6 +78,8 @@
     "monthly": {
       "label": "Ogni quanto",
       "once": "Una volta",
+      "oneTime": "Una tantum",
+      "monthly": "Mensile",
       "until": "Ogni mese, fino a {{date}}",
       "note": "Hive lo invia da solo ogni 30 giorni, il primo subito. Puoi fermarlo quando vuoi.",
       "replaces": "Questo sostituisce il sostegno mensile che già invii a @{{recipient}}.",
@@ -79,7 +94,7 @@
   },
   "cardMenu": {
     "loginToPersonalize": "Accedi per personalizzare il tuo feed",
-    "notInterestedToast": "Non ti interessa — nasconderemo questo video",
+    "notInterestedToast": "Non ti interessa. Nasconderemo questo video",
     "undo": "Annulla",
     "cantHideOwn": "Non puoi nascondere i tuoi video",
     "hidingCreatorToast": "Nascondiamo i video di @{{author}}",
@@ -89,7 +104,8 @@
     "addToPlaylist": "Aggiungi a playlist",
     "addTag": "Aggiungi tag",
     "notInterested": "Non mi interessa",
-    "dontShowCreator": "Non mostrare @{{author}}"
+    "dontShowCreator": "Non mostrare @{{author}}",
+    "saveToPlaylist": "Salva in playlist"
   },
   "guestList": {
     "loadFailed": "Impossibile caricare l'elenco ospiti attuale",
@@ -134,26 +150,33 @@
     "tagged": "Taggato “{{tag}}”.",
     "vote": "Vota",
     "tagThisVideo": "Tagga questo video",
-    "tagOptional": "— facoltativo —",
+    "tagOptional": "Facoltativo",
     "pickTopicFirst": "Prima scegli un argomento",
     "taggedNoDot": "Taggato “{{tag}}”",
     "tagFailed": "Tag non riuscito: {{message}}",
-    "taggedAlreadyVoted": "Taggato “{{tag}}” — il tuo voto al {{weight}}% era già stato espresso.",
-    "votingClosed": "Votazioni chiuse — tagga questo video",
+    "taggedAlreadyVoted": "Taggato “{{tag}}”. Il tuo voto al {{weight}}% era già stato espresso.",
+    "votingClosed": "Votazioni chiuse: tagga questo video",
     "youTagged": "Hai taggato questo video come <b>{{tag}}</b>.",
-    "pickTopic": "Scegli un argomento (vale come voto al 100%)",
+    "pickTopic": "Scegliere un argomento vale come voto al 100%.",
     "submitTag": "Invia tag",
     "tagThisVideoFull": "Tagga questo video (vale come voto al 100%)",
-    "justTag": "Non votare — tagga e basta"
+    "justTag": "Non votare, tagga e basta",
+    "justTagShort": "Solo tag",
+    "voteAndTag": "Vota e tagga",
+    "addsAbout": "aggiunge circa {{value}}",
+    "postSoFar_one": "{{value}} finora · {{count}} voto",
+    "postSoFar_many": "{{value}} finora · {{count}} voti",
+    "postSoFar_other": "{{value}} finora · {{count}} voti"
   },
   "tagsPicker": {
     "autoTagged": "Tag automatici: {{tags}}",
     "searchPlaceholder": "Cerca argomenti…",
     "searchAria": "Cerca argomenti",
     "noMatches": "Nessun argomento corrisponde a “{{query}}”.",
-    "allSelected": "Tutta la categoria {{category}} è selezionata. Aggiungi singoli argomenti solo per restringere:",
+    "allSelected": "Tutto {{category}} è scelto. Tocca un argomento per escluderlo.",
     "orPickTopics": "Oppure scegli singoli argomenti:",
-    "goodEnough": "Va bene così — oppure sii più specifico (facoltativo):",
+    "clear": "Cancella",
+    "goodEnough": "Va bene così, oppure sii più specifico (facoltativo)",
     "moreSpecific": "Più specifico:"
   }
 }

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, ImagePlus, Pause, Play } from 'lucide-react';
+import { Button } from '../../../v2/ui';
 import { Hint, Slider, ToolButton } from './controls';
 import { captureVideoFrame } from '../../../../utils/frameCapture';
 import { reportClientError } from '../../../../utils/reportClientError';
@@ -119,23 +119,26 @@ export default function PickFrameTool({ videoFile, onPickFrame }) {
         </div>
 
         <div className="thumb-tool-row">
-          <ToolButton icon={playing ? Pause : Play} onClick={togglePlay} disabled={!duration}
+          <ToolButton icon={playing ? 'pause' : 'play_arrow'} onClick={togglePlay} disabled={!duration}
             title={playing ? t('upload.thumbnail.pickFrame.pause') : t('upload.thumbnail.pickFrame.play')} />
-          <ToolButton icon={ChevronsLeft} onClick={() => seek(time - 1)} disabled={!duration} title={t('upload.thumbnail.pickFrame.back1s')} />
-          <ToolButton icon={ChevronLeft} onClick={() => seek(time - FRAME_SEC)} disabled={!duration} title={t('upload.thumbnail.pickFrame.prevFrame')} />
-          <ToolButton icon={ChevronRight} onClick={() => seek(time + FRAME_SEC)} disabled={!duration} title={t('upload.thumbnail.pickFrame.nextFrame')} />
-          <ToolButton icon={ChevronsRight} onClick={() => seek(time + 1)} disabled={!duration} title={t('upload.thumbnail.pickFrame.forward1s')} />
+          <ToolButton icon="keyboard_double_arrow_left" onClick={() => seek(time - 1)} disabled={!duration} title={t('upload.thumbnail.pickFrame.back1s')} />
+          <ToolButton icon="chevron_left" onClick={() => seek(time - FRAME_SEC)} disabled={!duration} title={t('upload.thumbnail.pickFrame.prevFrame')} />
+          <ToolButton icon="chevron_right" onClick={() => seek(time + FRAME_SEC)} disabled={!duration} title={t('upload.thumbnail.pickFrame.nextFrame')} />
+          <ToolButton icon="keyboard_double_arrow_right" onClick={() => seek(time + 1)} disabled={!duration} title={t('upload.thumbnail.pickFrame.forward1s')} />
         </div>
 
-        <button
-          type="button"
-          className="thumb-btn thumb-btn--primary thumb-btn--block"
+        <Button
+          variant="primary"
+          size={44}
+          block
+          icon="add_photo_alternate"
+          loading={busy}
+          className="thumb-btn--block"
           onClick={takeFrame}
           disabled={!duration || busy}
         >
-          <ImagePlus size={16} aria-hidden="true" />
           {t('upload.thumbnail.pickFrame.use')}
-        </button>
+        </Button>
 
         {failed
           ? <Hint>{t('upload.thumbnail.pickFrame.failed')}</Hint>

@@ -95,7 +95,7 @@
       "tips": "ทิป"
     },
     "legendOurs": "บน 3Speak",
-    "legendOther": "ที่อื่นบน Hive",
+    "legendOther": "ที่อื่น",
     "segments": {
       "ours": "รางวัลโพสต์บน 3Speak",
       "other": "รางวัลโพสต์ที่อื่นบน Hive",
@@ -120,7 +120,8 @@
     "communities": "กำลังแวะชุมชนของคุณ…",
     "followers": "กำลังดูว่าใครติดตามคุณ…",
     "watched": "กำลังไล่ดูสิ่งที่คุณดู…",
-    "thumbnails": "กำลังโหลดภาพปกของคุณ… {{done}} จาก {{total}}"
+    "thumbnails": "กำลังโหลดภาพปกของคุณ… {{done}} จาก {{total}}",
+    "thumbnailsWaiting": "กำลังโหลดภาพปกของคุณ…"
   },
   "tips": {
     "label": "เคล็ดลับ:",

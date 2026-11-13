@@ -28,10 +28,11 @@ describe('feedParams', () => {
     expect(withState({ hideWatched: true })).toBe('')
   })
 
-  it('asks for newest-first when the simple feed is on', () => {
-    expect(withState({ simpleFeed: true })).toBe('&chrono=1')
+  // "Simple feeds" is gone (owner 2026-11-12): an old saved flag changes nothing.
+  it('never asks for newest-first on its own, even with an old simpleFeed flag', () => {
+    expect(withState({ simpleFeed: true })).toBe('')
     expect(withState({ interests: ['news'], user: 'bob', hideWatched: true, simpleFeed: true }))
-      .toBe('&interests=news&currentuser=bob&hidewatched=1&chrono=1')
+      .toBe('&interests=news&currentuser=bob&hidewatched=1')
   })
 
   it('encodes values so they cannot add parameters', () => {

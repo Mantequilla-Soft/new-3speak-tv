@@ -1,11 +1,13 @@
-import { useState } from 'react';
-import { createPortal } from 'react-dom';
+import { useId, useState } from 'react';
 import { toastIn } from '../../utils/toast';
 import { useAppStore } from '../../lib/store';
 import { REPORT_API_URL, REPORT_API_SECRET } from '../../utils/config';
 import { useTranslation } from 'react-i18next';
-import ModalHeader from '../ModalHeader/ModalHeader';
-import useDialog from '../../hooks/useDialog';
+import DialogShell, { SheetContext } from './DialogShell';
+import usePostThumb from './usePostThumb';
+import { Avatar, Button, Field, IconButton } from '../v2/ui';
+import { Icon } from '../v2/Icon';
+import { cx } from '../v2/helpers';
 import './ReportModal.scss';
 
 // Every toast from this module is headed "Report"; the message becomes the
@@ -59,6 +61,19 @@ const REPORT_REASONS = {
   ],
 };
 
+// Material Symbols per reason (design 07c: reason tiles with an icon).
+const REASON_ICONS = {
+  spam: 'campaign',
+  harassment: 'sentiment_dissatisfied',
+  hate_speech: 'block',
+  violence: 'warning',
+  sexual: 'visibility_off',
+  copyright: 'copyright',
+  scam: 'gpp_bad',
+  impersonation: 'person_off',
+  other: 'more_horiz',
+};
+
 /**
  * ReportModal - report videos, comments, or users
  *
@@ -73,6 +88,9 @@ export default function ReportModal({ isOpen, onClose, type = 'video', target })
   const [reason, setReason] = useState('');
   const [comment, setComment] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  // 07c: step 1 picks the reason (tiles), step 2 adds the details and sends.
+  const [step, setStep] = useState(0);
+  const thumb = usePostThumb(target?.author, target?.permlink, isOpen && type !== 'user' && !!target?.permlink);
 
   const reasons = REPORT_REASONS[type] || REPORT_REASONS.video;
 
@@ -135,63 +153,91 @@ export default function ReportModal({ isOpen, onClose, type = 'video', target })
   const handleClose = () => {
     setReason('');
     setComment('');
+    setStep(0);
     onClose();
   };
 
-  const dialog = useDialog(handleClose, { active: isOpen });
-  const reasonId = `${dialog.titleId}-reason`;
-  const detailsId = `${dialog.titleId}-details`;
-
+  const uid = useId();
   if (!isOpen) return null;
 
   const title = type === 'user' ? t('modals.report.titles.user') : type === 'comment' ? t('modals.report.titles.comment') : type === 'short' ? t('modals.report.titles.short') : type === 'post' ? t('modals.report.titles.post') : t('modals.report.titles.video');
+  const formId = `${uid}-form`;
+  const reasonLabelId = `${uid}-reason`;
+  const targetLine = target?.author ? `@${target.author}${target.permlink ? ` / ${target.permlink}` : ''}` : '';
 
-  return createPortal(
-    <div className="report-modal-overlay" onClick={handleClose}>
-      <div className="report-modal-content" {...dialog.props} onClick={(e) => e.stopPropagation()}>
-        <ModalHeader title={title} titleId={dialog.titleId} onClose={handleClose} />
+  return (
+    <DialogShell
+      open
+      onClose={handleClose}
+      side
+      tone="accent"
+      title={title}
+      width={430}
+      overlayClassName="report-modal-overlay"
+      className="report-modal-content"
+      leading={step === 1 ? (
+        <IconButton icon="arrow_back" label={t('common.actions.back')} size={32} variant="ghost" round className="report-back" onClick={() => setStep(0)} disabled={submitting} />
+      ) : undefined}
+      headExtra={<span className="report-step num" aria-hidden="true">{step + 1} / 2</span>}
+      footer={step === 0 ? (
+        <Button variant="inverse" size={48} block next className="dlg-main report-next" disabled={!reason} onClick={() => setStep(1)}>
+          {t('modals.report.nextDetails')}
+        </Button>
+      ) : (
+        <Button variant="primary" size={48} block trailing="flag" className="dlg-main" type="submit" form={formId} disabled={submitting || !reason} loading={submitting}>
+          {submitting ? t('modals.report.submitting') : t('modals.report.submit')}
+        </Button>
+      )}
+    >
+      {targetLine && (
+        <SheetContext
+          className="report-target"
+          avatar={type === 'user' ? <Avatar size={40} name={target.author} src={`https://images.hive.blog/u/${target.author}/avatar/small`} /> : undefined}
+          thumb={thumb.thumbnail}
+          title={targetLine}
+        />
+      )}
 
-        {target?.author && (
-          <p className="report-target">
-            @{target.author}{target.permlink ? ` / ${target.permlink}` : ''}
-          </p>
+      <form id={formId} onSubmit={handleSubmit} className="report-form">
+        {step === 0 ? (
+          <>
+            <p className="report-intro">{t('modals.report.intro')}</p>
+            <span id={reasonLabelId} className="report-sr">{t('modals.report.reason')}</span>
+            <div className="report-reasons" role="radiogroup" aria-labelledby={reasonLabelId}>
+              {reasons.map((r) => (
+                <button
+                  key={r.value}
+                  type="button"
+                  role="radio"
+                  aria-checked={reason === r.value}
+                  className={cx('report-reason', reason === r.value && 'is-on')}
+                  onClick={() => setReason(r.value)}
+                >
+                  <Icon name={REASON_ICONS[r.value] || 'flag'} size={24} />
+                  <b>{t(r.labelKey)}</b>
+                </button>
+              ))}
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="report-picked">
+              <Icon name={REASON_ICONS[reason] || 'flag'} size={20} />
+              <b>{t(reasons.find((r) => r.value === reason)?.labelKey || 'modals.report.reason')}</b>
+            </div>
+            <Field
+              as="textarea"
+              label={t('modals.report.details')}
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+              placeholder={t('modals.report.detailsPlaceholder')}
+              rows={4}
+              maxLength={500}
+              autoFocus
+            />
+          </>
         )}
-
-        <form onSubmit={handleSubmit} className="report-form">
-          <label className="report-label" htmlFor={reasonId}>{t('modals.report.reason')}</label>
-          <select
-            id={reasonId}
-            className="report-select"
-            value={reason}
-            onChange={(e) => setReason(e.target.value)}
-          >
-            <option value="">{t('modals.report.selectReason')}</option>
-            {reasons.map((r) => (
-              <option key={r.value} value={r.value}>{t(r.labelKey)}</option>
-            ))}
-          </select>
-
-          <label className="report-label" htmlFor={detailsId}>{t('modals.report.details')}</label>
-          <textarea
-            id={detailsId}
-            className="report-textarea"
-            value={comment}
-            onChange={(e) => setComment(e.target.value)}
-            placeholder={t('modals.report.detailsPlaceholder')}
-            rows={3}
-            maxLength={500}
-          />
-
-          <button
-            type="submit"
-            className="report-submit-btn"
-            disabled={submitting || !reason}
-          >
-            {submitting ? t('modals.report.submitting') : t('modals.report.submit')}
-          </button>
-        </form>
-      </div>
-    </div>,
-    document.body
+      </form>
+    </DialogShell>
   );
 }

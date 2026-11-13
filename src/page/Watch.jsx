@@ -6,7 +6,7 @@ import PlayVideo from '../components/playVideo/PlayVideo';
 import SEOHead from '../components/SEOHead';
 import Card3 from '../components/Cards/Card3';
 import { useContentBatch } from '../hooks/useContentBatch';
-import { useSearchParams, useLocation, useNavigate } from 'react-router-dom';
+import { useSearchParams, useLocation, useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { fetchVideoDetails, fetchPlaySource, fetchTrendingFeed, fetchAuthorVideos, fetchRelatedFeed } from '../lib/videoData';
@@ -28,10 +28,10 @@ import { useGridColumns, useShortsPerRow } from '../hooks/useGridMetrics';
 import { useStreamChatMirror } from '../hooks/useStreamChatMirror';
 import { getFeedSeed } from '../utils/feedSeed';
 import ReactionPlayer from '../components/ReactionPlayer/ReactionPlayer';
-import WatchTabs from '../components/playVideo/WatchTabs';
 import { parseChapters } from '../utils/timestamps';
 import { readTimeline, chaptersWithEnds } from '../utils/videoTimeline';
-import { MdVideocam, MdChatBubble } from 'react-icons/md';
+import { Button, EmptyState } from '../components/v2/ui';
+import { Icon } from '../components/v2/Icon';
 import { batchGetReputations, LOW_REP_THRESHOLD } from '../utils/reputation';
 import { batchCheckHidden, isCreatorHidden } from '../utils/hiddenCreators';
 import { usePlayer } from '@mantequilla-soft/3speak-player/react';
@@ -43,7 +43,7 @@ import SurfBar from '../components/SurfBar/SurfBar';
 import { SURF_PARAM, getChannel } from '../utils/surf';
 import { ThreeSpeakApi } from '@mantequilla-soft/3speak-player';
 import { recordView } from '../lib/recordView';
-import { fixVideoThumbnail } from '../utils/fixThumbnails';
+import { fixVideoThumbnail, fallbackImg } from '../utils/fixThumbnails';
 import { reportVideoUnavailable } from '../lib/reportUnavailable';
 import { useDeadVideos, videoKey } from '../lib/deadVideos';
 import { notifyMediaPlay, onMediaPlay } from '../utils/mediaCoordinator';
@@ -1195,14 +1195,6 @@ function Watch({ v2 = false, routeV = null }) {
     localStorage.setItem('3speak-reactions-visible', String(visible));
   }, []);
 
-  const handleAddReaction = useCallback(() => {
-    const textarea = document.querySelector('.add-comment-wrap .textarea-box');
-    if (textarea) {
-      textarea.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      setTimeout(() => textarea.focus(), 400);
-    }
-  }, []);
-
   const handleReactToMoment = useCallback(() => {
     // Exit fullscreen first if active
     const wrapper = wrapperRef.current;
@@ -1213,8 +1205,12 @@ function Watch({ v2 = false, routeV = null }) {
       setIsFullscreen(false);
     }
 
-    // Activate the React tab in the comment section
-    const reactTab = document.querySelector('.comment-tabs .comment-tab:nth-child(2)');
+    // Activate the React tab in the comment section's composer (PlayVideo has
+    // already opened the Discussion panel it lives in).
+    // Scoped to the main composer: an open reply box has the same switch, and
+    // in panel mode the list (and its replies) comes before the composer.
+    const reactTab = document.querySelector('.vid-comment-wrap > .add-comment-wrap .comment-mode-seg .v2-seg__opt:nth-child(2)')
+      || document.querySelector('.add-comment-wrap .comment-mode-seg .v2-seg__opt:nth-child(2)');
     if (reactTab) reactTab.click();
     // Wait for React to render the tab content, then scroll it into view
     setTimeout(() => {
@@ -1225,8 +1221,14 @@ function Watch({ v2 = false, routeV = null }) {
     }, 100);
   }, []);
 
-  const REACTION_SIZES = ['medium', 'standard', 'big', 'cinema'];
-  const REACTION_SIZE_LABEL_KEYS = { medium: 'player.reactions.sizeNames.medium', standard: 'player.reactions.sizeNames.standard', big: 'player.reactions.sizeNames.big', cinema: 'player.reactions.sizeNames.cinema' };
+  // The player sizes beside the reactions (48b: S / M / Std / Big / Cin).
+  const REACTION_SIZES = ['small', 'medium', 'standard', 'big', 'cinema'];
+  const REACTION_SIZE_LABEL_KEYS = { small: 'player.reactions.sizeNames.small', medium: 'player.reactions.sizeNames.medium', standard: 'player.reactions.sizeNames.standard', big: 'player.reactions.sizeNames.big', cinema: 'player.reactions.sizeNames.cinema' };
+  // A size picked straight from the reactions panel's size track.
+  const chooseReactionSize = useCallback((next) => {
+    setReactionSize(next);
+    localStorage.setItem('3speak-reaction-size', next);
+  }, []);
   const cycleReactionSize = useCallback(() => {
     setReactionSize(prev => {
       const idx = REACTION_SIZES.indexOf(prev);
@@ -1540,11 +1542,6 @@ function Watch({ v2 = false, routeV = null }) {
   const liveUnknown = livePending && !liveChecked;
   useEffect(() => { isLiveRef.current = livePending; }, [livePending]);
 
-  // Live chat takes the reaction panel's place in the right column. The panel
-  // itself is rendered by <LiveStreamPlayer> and portalled in here, so it can
-  // share the player's single LiveKit connection — hence a DOM element in
-  // state (a plain ref wouldn't re-render the player once it's attached).
-  const [liveChatSlot, setLiveChatSlot] = useState(null);
   // Reported by <LiveStreamPlayer>, which already resolves the room's endpoint.
   const [streamRoomMeta, setStreamRoomMeta] = useState(null);
   const mirrorChatToHive = useStreamChatMirror({
@@ -1871,9 +1868,8 @@ function Watch({ v2 = false, routeV = null }) {
     const commentCount = reactions.length - videoCount;
     return (
       <>
-        {videoCount > 0 && <><MdVideocam size={14} /> {videoCount}</>}
-        {videoCount > 0 && commentCount > 0 && <span style={{ margin: '0 4px' }}>·</span>}
-        {commentCount > 0 && <><MdChatBubble size={12} /> {commentCount}</>}
+        {videoCount > 0 && <span className="watch-reaction-count"><Icon name="videocam" size={16} />{videoCount}</span>}
+        {commentCount > 0 && <span className="watch-reaction-count"><Icon name="chat_bubble" size={16} />{commentCount}</span>}
       </>
     );
   }, [reactions]);
@@ -1912,14 +1908,41 @@ function Watch({ v2 = false, routeV = null }) {
     setReactionsVisible(true);
   }, [reactions, searchParams]);
 
+  // The reaction player (another creator's take, synced to this video), or the
+  // way to bring it back once hidden.
+  const reactionPanel = reactions.length > 0 ? (
+    isReactionPlayerVisible ? (
+      <ReactionPlayer
+        reactions={reactions}
+        selectedIndex={selectedReactionIndex}
+        onSelectReaction={handleSelectReaction}
+        onClose={() => setReactionsVisible(false)}
+        size={reactionSize}
+        onSetSize={chooseReactionSize}
+        currentTime={playerState.currentTime}
+        duration={playerState.duration}
+        mainIsPlaying={!playerState.paused}
+        onReactionPlay={pause}
+      />
+    ) : (
+      <Button variant="secondary" block className="show-reactions-btn" icon="smart_display" onClick={() => setReactionsVisible(true)}>
+        {t('watch.reactions.show')}
+        <span className="watch-reaction-counts">{reactionCountLabel}</span>
+      </Button>
+    )
+  ) : null;
+
   const isNetworkError = videoIsError && !videoDetails;
   const isLoading = scheduled ? scheduledLoading : videoLoading;
 
   if (authorHidden) {
     return (
       <div className="watch-error">
-        <p>{t('watch.errors.notAvailable')}</p>
-        <button className="watch-error-retry" onClick={() => navigate('/')}>{t('watch.errors.goHome')}</button>
+        <EmptyState
+          icon="visibility_off"
+          title={t('watch.errors.notAvailable')}
+          action={<Button variant="inverse" next onClick={() => navigate('/')}>{t('watch.errors.goHome')}</Button>}
+        />
       </div>
     );
   }
@@ -1941,18 +1964,21 @@ function Watch({ v2 = false, routeV = null }) {
   if (!isLoading && !videoDetails) {
     return (
       <div className="watch-error">
-        <p>{scheduled
-          ? t('watch.errors.scheduledNotFound')
-          : (isNetworkError ? t('watch.errors.network') : t('watch.errors.notFound'))}</p>
-        {scheduled
-          ? <button className="watch-error-retry" onClick={() => navigate('/profile')}>{t('watch.errors.backToProfile')}</button>
-          : <button className="watch-error-retry" onClick={() => refetchVideo()}>{t('common.actions.retry')}</button>}
+        <EmptyState
+          icon={scheduled ? 'event_busy' : (isNetworkError ? 'wifi_off' : 'search_off')}
+          title={scheduled
+            ? t('watch.errors.scheduledNotFound')
+            : (isNetworkError ? t('watch.errors.network') : t('watch.errors.notFound'))}
+          action={scheduled
+            ? <Button variant="secondary" onClick={() => navigate('/profile')}>{t('watch.errors.backToProfile')}</Button>
+            : <Button variant="inverse" icon="refresh" onClick={() => refetchVideo()}>{t('common.actions.retry')}</Button>}
+        />
       </div>
     );
   }
 
   return (
-    <div className={`play-container${isReactionPlayerVisible && reactions.length > 0 ? ` reaction-${reactionSize}` : ''}${v2 ? ' watch-v2' : ''}`}>
+    <div className={`play-container watch-page${isReactionPlayerVisible && reactions.length > 0 ? ` reaction-${reactionSize}` : ''}${v2 ? ' watch-v2' : ''}`}>
       {/* Put the video's title in the browser tab (Helmet → <title>). SEOHead
           appends " | 3Speak"; falls back to the default title when unknown. */}
       {videoDetails?.title && (
@@ -1983,35 +2009,37 @@ function Watch({ v2 = false, routeV = null }) {
         {isGatedPost && user && author && user.toLowerCase() === String(author).toLowerCase() && (
           <GuestListEditor permlink={gateVideoId || permlink} />
         )}
-        {/* 🔐 Paywall banner for supporters-only posts. Below the player rather
-            than covering it: what is playing above is the free preview, and
-            hiding that would remove the very thing meant to sell the
-            subscription. */}
-        {isGatedPost && gatedPlayback.isLocked && (
+        {/* 🔐 Supporters-only posts. With a free preview playing above, a state
+            card (33a "You're watching a free preview"); with nothing to play, the
+            lock is drawn over the player (31c) and this is its one action. */}
+        {isGatedPost && gatedPlayback.isLocked && (gatedPlayback.previewUrl || gatedPlayback.state === 'error' ? (
           <div className="gated-paywall" role="status">
-            <div className="gated-paywall__lock" aria-hidden="true">🔒</div>
+            <span className="gated-paywall__icon" aria-hidden="true"><Icon name="workspace_premium" size={24} /></span>
             <div className="gated-paywall__text">
-              <strong>{t('watch.gated.title')}</strong>
+              <strong>{gatedPlayback.state === 'error' ? t('watch.gated.title') : t('watch.gated.preview')}</strong>
               <span>
-                {gatedPlayback.state === 'error'
-                  ? t('watch.gated.checkFailed')
-                  : gatedPlayback.previewUrl
-                    ? t('watch.gated.preview')
-                    : t('watch.gated.subscribersOnly')}
+                {gatedPlayback.state === 'error' ? t('watch.gated.checkFailed') : t('watch.gated.previewSub')}
               </span>
+              <Button as="a" href="/wallet" variant="primary" size={36} next className="gated-paywall__cta">{t('watch.gated.cta')}</Button>
             </div>
-            <a className="gated-paywall__cta" href="/wallet">{t('watch.gated.cta')}</a>
           </div>
-        )}
+        ) : (
+          <Button as="a" href="/wallet" variant="primary" size={48} block trailing="workspace_premium" className="gated-lock-cta">{t('watch.gated.cta')}</Button>
+        ))}
           </>
         )}
-        v2={v2}
+        playerOverlay={isGatedPost && gatedPlayback.isLocked && !gatedPlayback.previewUrl && gatedPlayback.state !== 'error' ? (
+          <div className="gated-lock" role="status">
+            <span className="gated-lock__icon" aria-hidden="true"><Icon name="workspace_premium" size={28} /></span>
+            <b>{t('watch.gated.title')}</b>
+            <span>{t('watch.gated.subscribersOnly')}</span>
+          </div>
+        ) : null}
         videoDetails={videoDetails}
         author={author}
         permlink={permlink}
         isLive={isLive}
         streamRoom={videoDetails?.roomName}
-        liveChatSlot={isLive ? liveChatSlot : null}
         onLiveChatSent={mirrorChatToHive}
         vodAssetPending={vodProcessing}
         onStreamRoomMeta={setStreamRoomMeta}
@@ -2121,6 +2149,8 @@ function Watch({ v2 = false, routeV = null }) {
           onMarkerSelect: handleSelectReaction,
           onCycleReactionSize: isReactionPlayerVisible && reactions.length > 0 ? cycleReactionSize : null,
           reactionSizeLabel: REACTION_SIZE_LABEL_KEYS[reactionSize] ? t(REACTION_SIZE_LABEL_KEYS[reactionSize]) : reactionSize,
+          // The button's own short label (19a: "Std"); the full name is its tooltip.
+          reactionSizeShort: t(`player.reactions.sizes.${reactionSize}`, { defaultValue: '' }),
           onTogglePip: handleTogglePip,
           videoEnded,
           onReplay: handleReplay,
@@ -2164,146 +2194,89 @@ function Watch({ v2 = false, routeV = null }) {
           onHoldControls: holdControls,
           onReleaseControls: releaseControls,
         }}
-        mobileReactionPanel={
-          <>
-            {isReactionPlayerVisible && reactions.length > 0 && (
-              <ReactionPlayer
-                reactions={reactions}
-                selectedIndex={selectedReactionIndex}
-                onSelectReaction={handleSelectReaction}
-                onClose={() => setReactionsVisible(false)}
-                size={reactionSize}
-                onCycleSize={cycleReactionSize}
-                currentTime={playerState.currentTime}
-                duration={playerState.duration}
-                mainIsPlaying={!playerState.paused}
-                onReactionPlay={pause}
-                mobile
-              />
-            )}
-            {!isReactionPlayerVisible && reactions.length > 0 && (
-              <button className="show-reactions-btn" onClick={() => setReactionsVisible(true)}>
-                {t('watch.reactions.show')} ({reactionCountLabel})
-              </button>
-            )}
-            {reactions.length === 0 && (
-              <button className="show-reactions-btn" onClick={handleAddReaction}>
-                {t('watch.reactions.add')}
-              </button>
-            )}
-          </>
-        }
-        cinemaReactionPanel={reactionSize === 'cinema' ? (
-          <>
-            {isReactionPlayerVisible && reactions.length > 0 && (
-              <ReactionPlayer
-                reactions={reactions}
-                selectedIndex={selectedReactionIndex}
-                onSelectReaction={handleSelectReaction}
-                onClose={() => setReactionsVisible(false)}
-                size={reactionSize}
-                onCycleSize={cycleReactionSize}
-                currentTime={playerState.currentTime}
-                duration={playerState.duration}
-                mainIsPlaying={!playerState.paused}
-                onReactionPlay={pause}
-              />
-            )}
-            {!isReactionPlayerVisible && reactions.length > 0 && (
-              <button className="show-reactions-btn" onClick={() => setReactionsVisible(true)}>
-                {t('watch.reactions.show')} ({reactionCountLabel})
-              </button>
-            )}
-            {reactions.length === 0 && (
-              <button className="show-reactions-btn" onClick={handleAddReaction}>
-                {t('watch.reactions.add')}
-              </button>
-            )}
-          </>
-        ) : null}
+        // The reactions on the timeline: full width under the description at
+        // the cinema size. No tab in the side panel (owner 2026-11-12).
+        onReact={handleReactToMoment}
+        upNext={suggestedVideos.slice(0, 10)}
+        cinemaReactionPanel={reactionSize === 'cinema' && reactions.length > 0 ? reactionPanel : null}
       />
 
-      {/* Right column: Reaction Player (or, while live, the chat) + Recommended */}
-      <div className="right-column">
-        {/* A live stream has nothing to react TO yet, and the chat is the whole
-            point of watching one — so it takes the reaction panel's slot until
-            the recording is published, at which point this reverts to reactions
-            and the page becomes an ordinary watch page. Filled by a portal from
-            <LiveStreamPlayer>; empty until the room connects. */}
-        {isLive && (
-          <div className="live-chat-column">
-            <div className="live-chat-column__head">{t('watch.liveChat')}</div>
-            <div className="live-chat-column__body" ref={setLiveChatSlot} />
-          </div>
-        )}
-        {/* Reactions and the transcript share the top of this column. With no
-            transcript to offer (or on a phone, where it just gets in the way)
-            this renders the reaction panel alone, exactly as it did before. */}
-        {!isLive && (
-          <WatchTabs
-            author={author}
-            permlink={permlink}
-            /* CONTENT time, like the progress bar and the subtitles. The player's own
-             * clock counts a stitched ad's seconds, so the transcript ran ahead during
-             * the spot and stayed off by its length afterwards. contentTime() pins to
-             * the cut point while the ad plays, so the transcript holds still. */
-            currentTime={adBreakRef.current.contentTime(playerState.currentTime)}
-            // A cue's start is a content second; seek where it lives in the file,
-            // with the same ad lock the progress bar respects.
-            onSeek={(tSec) => {
-              const ab = adBreakRef.current;
-              const to = ab.playerTimeFor(tSec);
-              if (ab.lockedSeekTarget(to, playerState.currentTime) != null) return;
-              seek(to);
-            }}
-            reactionPanel={
-              <>
-                {isReactionPlayerVisible && reactions.length > 0 && (
-                  <ReactionPlayer
-                    reactions={reactions}
-                    selectedIndex={selectedReactionIndex}
-                    onSelectReaction={handleSelectReaction}
-                    onClose={() => setReactionsVisible(false)}
-                    size={reactionSize}
-                    currentTime={playerState.currentTime}
-                    duration={playerState.duration}
-                    mainIsPlaying={!playerState.paused}
-                    onReactionPlay={pause}
-                  />
-                )}
-                {!isReactionPlayerVisible && reactions.length > 0 && (
-                  <button className="show-reactions-btn" onClick={() => setReactionsVisible(true)}>
-                    {t('watch.reactions.show')} ({reactionCountLabel})
-                  </button>
-                )}
-                {reactions.length === 0 && (
-                  <button className="show-reactions-btn" onClick={handleAddReaction}>
-                    {t('watch.reactions.add')}
-                  </button>
-                )}
-              </>
-            }
-          />
-        )}
+      {/* Next in the playlist (02): the next five from the same playlist, then
+          the playlist page behind the chevron. */}
+      {showPlaylist && playlistData?.playlist && Array.isArray(playlistData.videos) && playlistData.currentIndex != null
+        && playlistData.videos.length > playlistData.currentIndex + 1 && (() => {
+        const { playlist, videos, currentIndex } = playlistData;
+        const first = currentIndex + 1;
+        const next = videos.slice(first, first + 5);
+        const name = playlist.name || playlist.title;
+        // The community's name; a bare id (hive-123456) says nothing, so leave it out.
+        const fromTitle = videoDetails?.community?.title;
+        const from = fromTitle && !/^hive-\d+$/.test(fromTitle) ? fromTitle : null;
+        return (
+          <section className="watch-more watch-next" aria-label={t('watch.nextIn', { name })}>
+            <div className="watch-more__head">
+              <h2>{t('watch.nextIn', { name })}</h2>
+              <span className="watch-more__count num">{first + 1} / {videos.length}</span>
+              <span className="watch-more__rule" aria-hidden="true" />
+              {from && <span className="watch-more__from">{t('watch.fromCommunity', { name: from })}</span>}
+              {playlist.id && (
+                <Link to={`/playlist/${playlist.id}`} className="watch-more__all" aria-label={name} title={name}>
+                  <Icon name="chevron_right" size={20} />
+                </Link>
+              )}
+            </div>
+            <div className="watch-next__grid">
+              {next.map((v, i) => {
+                const pos = first + i;
+                const d = Number(v.duration) || 0;
+                return (
+                  <Link
+                    key={`${v.author}-${v.permlink}`}
+                    to={`/@${v.author}/${v.permlink}?playlist=${playlist.id}&pos=${pos}`}
+                    state={{ playlist, videos, currentIndex: pos }}
+                    className="watch-next__card"
+                  >
+                    <span className="watch-next__thumb">
+                      <img src={fixVideoThumbnail(v)} alt="" loading="lazy" onError={(e) => { e.currentTarget.src = fallbackImg; }} />
+                      <span className="watch-next__n num">{String(pos + 1).padStart(2, '0')}</span>
+                      {d > 0 && <span className="watch-next__d num">{Math.floor(d / 60)}:{String(Math.floor(d % 60)).padStart(2, '0')}</span>}
+                    </span>
+                    <b className="watch-next__title">{v.title}</b>
+                    <span className="watch-next__author">{v.author}</span>
+                  </Link>
+                );
+              })}
+            </div>
+          </section>
+        );
+      })()}
 
-        {suggestedVideos.length > 0 && (
-          <div className="right-column-videos" ref={desktopRecRef}>
-            <h4>{t('watch.moreVideos')}</h4>
-            <Card3
-              videos={suggestedVideos}
-              loading={false}
-              shortTimeAgo={false}
-              getContentForVideo={getSuggestedContent}
-              interleaveEvery={desktopCols > 0 && relatedShorts.length ? desktopCols * WATCH_ROWS_PER_SHORTS_RAIL : 0}
-              renderInterleave={relatedShorts.length ? renderDesktopRail : null}
-            />
+      {/* More videos (02 "what's next" shelf), with a shorts rail every few rows.
+          The wide grid and the phone grid are BOTH mounted (CSS picks one), so
+          each measures its own columns for the rails. */}
+      {suggestedVideos.length > 0 && (
+        <section className="watch-more watch-more--wide" ref={desktopRecRef} aria-label={t('watch.moreVideos')}>
+          <div className="watch-more__head">
+            <h2>{t('watch.moreVideos')}</h2>
+            <span className="watch-more__rule" aria-hidden="true" />
           </div>
-        )}
-      </div>
+          <Card3
+            videos={suggestedVideos}
+            loading={false}
+            shortTimeAgo={false}
+            getContentForVideo={getSuggestedContent}
+            interleaveEvery={desktopCols > 0 && relatedShorts.length ? desktopCols * WATCH_ROWS_PER_SHORTS_RAIL : 0}
+            renderInterleave={relatedShorts.length ? renderDesktopRail : null}
+          />
+        </section>
+      )}
 
       {suggestedVideos.length > 0 && (
-        <div className="mobile-recommended" ref={mobileRecRef}>
-          <h4>{t('watch.moreVideos')}</h4>
+        <section className="watch-more watch-more--narrow mobile-recommended" ref={mobileRecRef} aria-label={t('watch.moreVideos')}>
+          <div className="watch-more__head">
+            <h2>{t('watch.moreVideos')}</h2>
+            <span className="watch-more__rule" aria-hidden="true" />
+          </div>
           <Card3
             videos={suggestedVideos.slice(0, 12)}
             loading={false}
@@ -2312,7 +2285,7 @@ function Watch({ v2 = false, routeV = null }) {
             interleaveEvery={mobileCols > 0 && relatedShorts.length ? mobileCols * WATCH_ROWS_PER_SHORTS_RAIL : 0}
             renderInterleave={relatedShorts.length ? renderMobileRail : null}
           />
-        </div>
+        </section>
       )}
 
       {/* Scheduled-post editor popup — opened by the pen on the watch page so the

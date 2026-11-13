@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, useCallback } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { getHiveUrl } from '../utils/hiveNode';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -31,6 +31,8 @@ import PodcastNotifications from '../components/nav/PodcastNotifications';
 import { usePodcastNotifications, markPodcastNotificationsSeen } from '../lib/podcasts';
 import './Notifications.scss';
 import { useTranslation } from 'react-i18next';
+import { Icon } from '../components/v2/Icon';
+import { notifTypeIcon } from '../components/nav/notifTypeIcon';
 
 const MAX_STACKED_AVATARS = 5;
 
@@ -104,7 +106,6 @@ function Notifications() {
     loadMore,
     unreadCount,
     markAllAsRead,
-    markAsRead,
     markingAsRead,
     isUnread,
   } = useHiveNotifications(authenticated ? user : null, { limit: 50 });
@@ -327,52 +328,56 @@ function Notifications() {
   if (!authenticated || !user) {
     return (
       <div className="notifications-page">
-        <div className="notifications-empty">{t('notifications.loginRequired')}</div>
+        <div className="notifications-empty v2-empty">
+          <Icon name="notifications" size={28} />
+          <p>{t('notifications.loginRequired')}</p>
+        </div>
       </div>
     );
   }
 
   return (
     <div className="notifications-page">
+      {/* Design 41d: title with the "N new" pill, then the actions on the right. */}
       <header className="notifications-header">
         <h1 className="notifications-title">
           {t('common.nav.notifications')}
-          {unreadCount > 0 && <span className="notifications-unread-chip">{t('notifications.unreadChip', { count: unreadCount })}</span>}
+          {unreadCount > 0 && <span className="v2-pill is-accent notifications-unread-chip">{t('notifications.unreadChip', { count: unreadCount })}</span>}
         </h1>
         <div className="notifications-header-actions">
           {anythingUnread && (
             <button
               type="button"
-              className="notifications-mark-all"
+              className="v2-btn v2-btn--ghost h36 notifications-mark-all"
               onClick={markEverythingRead}
               disabled={markingAsRead}
               title={t('notifications.markAllTitle')}
             >
-              {markingAsRead
-                ? <><i className="fa-solid fa-spinner fa-spin" /> {t('notifications.marking')}</>
-                : <><i className="fa-solid fa-check-double" /> {t('notifications.markAllRead')}</>
-              }
+              <Icon name={markingAsRead ? 'progress_activity' : 'done_all'} size={18} className={markingAsRead ? 'v2-spin' : undefined} />
+              <span className="v2-btn__label">{markingAsRead ? t('notifications.marking') : t('notifications.markAllRead')}</span>
             </button>
           )}
           <button
             type="button"
-            className="notifications-refresh"
+            className="v2-btn v2-btn--secondary h36 notifications-refresh"
             onClick={() => refetch()}
             disabled={loading}
           >
-            {loading ? t('notifications.refreshing') : t('common.actions.refresh')}
+            <Icon name="refresh" size={18} className={loading ? 'v2-spin' : undefined} />
+            <span className="v2-btn__label">{loading ? t('notifications.refreshing') : t('common.actions.refresh')}</span>
           </button>
         </div>
       </header>
 
-      <div className="notifications-filters" role="tablist">
+      {/* Categories as filter chips (41d); the one picked is text-filled. */}
+      <div className="notifications-filters v2-chips" role="tablist" aria-label={t('common.nav.notifications')}>
         {Object.entries(NOTIF_CATEGORIES).map(([key, cat]) => (
           <button
             key={key}
             type="button"
             role="tab"
             aria-selected={filter === key}
-            className={`notifications-filter-btn${filter === key ? ' active' : ''}`}
+            className={`v2-chip notifications-filter-btn${filter === key ? ' is-on active' : ''}`}
             onClick={() => setFilter(key)}
           >
             {t(cat.labelKey)}
@@ -382,11 +387,12 @@ function Notifications() {
           type="button"
           role="tab"
           aria-selected={filter === 'unread'}
-          className={`notifications-filter-btn notifications-filter-unread${filter === 'unread' ? ' active' : ''}`}
+          className={`v2-chip notifications-filter-btn notifications-filter-unread${filter === 'unread' ? ' is-on active' : ''}`}
           onClick={() => setFilter('unread')}
         >
-          <i className="fa-solid fa-circle" /> {t('notifications.unread')}
-          {unreadCount > 0 && <span className="notifications-filter-count">{unreadCount}</span>}
+          <span className="notifications-filter-dot" aria-hidden="true" />
+          {t('notifications.unread')}
+          {unreadCount > 0 && <span className="v2-chip__n notifications-filter-count num">{unreadCount}</span>}
         </button>
       </div>
 
@@ -400,31 +406,24 @@ function Notifications() {
       {authenticated && user && (
         <div className="notif-summary-section">
           <div className="notif-summary-header">
-            <h2 className="notif-summary-title"><i className="fa-solid fa-chart-simple" /> {t('notifications.summary.title')}</h2>
-            <div className="notif-summary-tabs">
-              <button
-                type="button"
-                className={`notif-summary-tab${summaryTab === 'today' ? ' active' : ''}`}
-                onClick={() => setSummaryTab('today')}
-              >
-                {t('notifications.summary.today')}
-              </button>
-              <button
-                type="button"
-                className={`notif-summary-tab${summaryTab === 'week' ? ' active' : ''}`}
-                onClick={() => setSummaryTab('week')}
-              >
-                {t('notifications.summary.week')}
-              </button>
-              <button
-                type="button"
-                className={`notif-summary-tab${summaryTab === 'month' ? ' active' : ''}`}
-                onClick={() => setSummaryTab('month')}
-              >
-                {t('notifications.summary.month')} {monthLoading && <i className="fa-solid fa-spinner fa-spin notif-summary-tab-spin" />}
-              </button>
+            <h2 className="notif-summary-title"><Icon name="insights" size={18} /> {t('notifications.summary.title')}</h2>
+            {/* A segmented track; plain buttons, as each one swaps the period. */}
+            <div className="v2-seg notif-summary-tabs">
+              {[['today', t('notifications.summary.today')], ['week', t('notifications.summary.week')], ['month', t('notifications.summary.month')]].map(([key, label]) => (
+                <button
+                  key={key}
+                  type="button"
+                  aria-pressed={summaryTab === key}
+                  className={`v2-seg__opt h28 notif-summary-tab${summaryTab === key ? ' is-on active' : ''}`}
+                  onClick={() => setSummaryTab(key)}
+                >
+                  {label}
+                  {key === 'month' && monthLoading && <Icon name="progress_activity" size={14} className="v2-spin notif-summary-tab-spin" />}
+                </button>
+              ))}
             </div>
           </div>
+          <div className="notif-summary-body">
 
           {summaryTab === 'today' && (
             todaySummary.total > 0
@@ -454,26 +453,43 @@ function Notifications() {
               <div className="notif-summary-empty">{t('notifications.summary.emptyMonth')}</div>
             )
           )}
+          </div>
         </div>
       )}
 
       {error && (
-        <div className="notifications-error">
-          {t('notifications.loadError')} <button onClick={() => refetch()}>{t('common.actions.retry')}</button>
+        <div className="notifications-error v2-banner is-warn" role="alert">
+          <Icon name="error" size={18} className="v2-banner__icon" />
+          <div className="v2-banner__body">{t('notifications.loadError')}</div>
+          <button type="button" className="v2-btn v2-btn--secondary h32" onClick={() => refetch()}>{t('common.actions.retry')}</button>
         </div>
       )}
 
       {!error && loading && filtered.length === 0 && (
-        <div className="notifications-empty">{t('common.status.loading')}</div>
+        <div className="notifications-loading" aria-busy="true">
+          <span className="notifications-sr">{t('common.status.loading')}</span>
+          {[0, 1, 2, 3].map((i) => (
+            <div key={i} className="notifications-skeleton-row" aria-hidden="true">
+              <span className="v2-skeleton notifications-skeleton-avatar" />
+              <span className="notifications-skeleton-lines">
+                <span className="v2-skeleton is-line" />
+                <span className="v2-skeleton is-line is-short" />
+              </span>
+            </div>
+          ))}
+        </div>
       )}
 
       {!error && !loading && filtered.length === 0 && (
-        <div className="notifications-empty">
+        <div className="notifications-empty v2-empty">
+          <Icon name="notifications_none" size={28} />
+          <p>
           {filter === 'all'
             ? t('notifications.empty.all')
             : filter === 'unread'
               ? t('notifications.empty.unread')
               : t(`notifications.empty.${filter}`)}
+          </p>
         </div>
       )}
 
@@ -505,6 +521,7 @@ function Notifications() {
                     const tier = getWhaleTier(actor);
                     const unread = isUnread(n);
                     const is3Speak = getIs3Speak(n);
+                    const kind = notifTypeIcon(n.type);
                     return (
                       <li
                         key={group.id}
@@ -522,7 +539,7 @@ function Notifications() {
                               badgeSize={10}
                             />
                           )}
-                          {tier && <span className={`notifications-tier-badge tier-${tier}`}>{tier === 'whale' ? '🐋' : '🐬'}</span>}
+                          <span className={`notif-kind is-${kind.tone}`} aria-hidden="true"><Icon name={kind.icon} size={13} fill /></span>
                         </div>
                         <div className="notifications-body">
                           <div className="notifications-msg">
@@ -532,6 +549,7 @@ function Notifications() {
                             <span className="notifications-type">{getNotificationTypeLabel(n.type)}</span>
                             <span className="notifications-dot">·</span>
                             <span className="notifications-time">{formatNotifTime(n.date)}</span>
+                            {tier && <span className={`notifications-meta-tier tier-${tier}`}>{tier === 'whale' ? '🐋' : '🐬'}</span>}
                           </div>
                         </div>
                         {is3Speak && (
@@ -550,7 +568,7 @@ function Notifications() {
             <div className="notifications-load-more-wrap">
               <button
                 type="button"
-                className="notifications-load-more"
+                className="v2-btn v2-btn--secondary h40 notifications-load-more"
                 onClick={() => {
                   const oldestId = mergedNotifications[mergedNotifications.length - 1]?.id;
                   loadMore(oldestId);
@@ -581,7 +599,7 @@ function SummaryCards({ summary, onFilter }) {
   const cards = [
     summary.votes > 0 && {
       key: 'votes',
-      icon: 'fa-solid fa-thumbs-up',
+      icon: 'thumb_up',
       value: summary.votes,
       label: t('notifications.cards.votes'),
       sub: summary.totalEarnings > 0 ? `$${summary.totalEarnings.toFixed(2)}` : null,
@@ -591,7 +609,7 @@ function SummaryCards({ summary, onFilter }) {
     },
     summary.replies > 0 && {
       key: 'replies',
-      icon: 'fa-solid fa-comment-dots',
+      icon: 'chat_bubble',
       value: summary.replies,
       label: t('notifications.cards.replies'),
       filter: 'replies',
@@ -599,7 +617,7 @@ function SummaryCards({ summary, onFilter }) {
     },
     summary.follows > 0 && {
       key: 'follows',
-      icon: 'fa-solid fa-user-plus',
+      icon: 'person_add',
       value: summary.follows,
       label: t('notifications.cards.newFollowers'),
       filter: 'follows',
@@ -607,7 +625,7 @@ function SummaryCards({ summary, onFilter }) {
     },
     summary.mentions > 0 && {
       key: 'mentions',
-      icon: 'fa-solid fa-at',
+      icon: 'alternate_email',
       value: summary.mentions,
       label: t('notifications.cards.mentions'),
       filter: 'mentions',
@@ -615,7 +633,7 @@ function SummaryCards({ summary, onFilter }) {
     },
     summary.reblogs > 0 && {
       key: 'reblogs',
-      icon: 'fa-solid fa-retweet',
+      icon: 'repeat',
       value: summary.reblogs,
       label: t('notifications.cards.reblogs'),
       filter: 'reblogs',
@@ -623,7 +641,7 @@ function SummaryCards({ summary, onFilter }) {
     },
     summary.transfers > 0 && {
       key: 'transfers',
-      icon: 'fa-solid fa-arrow-right-arrow-left',
+      icon: 'swap_horiz',
       value: summary.transfers,
       label: t('notifications.cards.transfers'),
       filter: 'transfers',
@@ -642,10 +660,10 @@ function SummaryCards({ summary, onFilter }) {
           className={`btn-reset notif-summary-card notif-summary-${c.color}`}
           onClick={() => onFilter(c.filter)}
         >
-          <i className={`${c.icon} notif-summary-card-icon`} />
-          <span className="notif-summary-card-value">{c.value}</span>
+          <Icon name={c.icon} size={18} className="notif-summary-card-icon" />
+          <span className="notif-summary-card-value num">{c.value}</span>
           <span className="notif-summary-card-label">{c.label}</span>
-          {c.sub && <span className="notif-summary-card-sub">{c.sub}</span>}
+          {c.sub && <span className="notif-summary-card-sub money">{c.sub}</span>}
           {c.detail && <span className="notif-summary-card-detail">{c.detail}</span>}
         </button>
       ))}
@@ -701,6 +719,7 @@ function GroupRow({ group, isUnread, is3Speak, getWhaleTier, onOpen }) {
         }}
       >
         <div className="notifications-avatar-stack">
+          <span className={`notif-kind is-${notifTypeIcon(notifType).tone}`} aria-hidden="true"><Icon name={notifTypeIcon(notifType).icon} size={13} fill /></span>
           {topActors.map((actor, i) => (
             <HiveAvatar
               key={actor}
@@ -723,7 +742,11 @@ function GroupRow({ group, isUnread, is3Speak, getWhaleTier, onOpen }) {
             <span className="notifications-time">{formatNotifTime(date)}</span>
             {topTier && <span className="notifications-meta-tier">{topTier === 'whale' ? '🐋' : '🐬'}</span>}
             {items.length > 1 && (
-              <span className="notifications-expand-hint">{expanded ? t('notifications.group.collapse') : t('notifications.group.expand')}</span>
+              <span className="notifications-expand-hint">
+                {/* A Material chevron instead of the ▸/▾ glyph the string starts with */}
+                <Icon name={expanded ? 'expand_less' : 'expand_more'} size={16} />
+                <span>{(expanded ? t('notifications.group.collapse') : t('notifications.group.expand')).replace(/^[▸▾►▼]\s*/, '')}</span>
+              </span>
             )}
           </div>
         </div>
@@ -753,12 +776,12 @@ function GroupRow({ group, isUnread, is3Speak, getWhaleTier, onOpen }) {
                   badgeSize={10}
                 />
               )}
-              {tier && <span className={`notifications-tier-badge tier-${tier}`}>{tier === 'whale' ? '🐋' : '🐬'}</span>}
             </div>
             <div className="notifications-body">
               <div className="notifications-msg">{formatNotificationMsg(n.msg)}</div>
               <div className="notifications-meta">
                 <span className="notifications-time">{formatNotifTime(n.date)}</span>
+                {tier && <span className={`notifications-meta-tier tier-${tier}`}>{tier === 'whale' ? '🐋' : '🐬'}</span>}
               </div>
             </div>
           </li>

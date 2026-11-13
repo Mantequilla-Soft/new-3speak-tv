@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { createPortal } from 'react-dom';
 import { useTranslation, Trans } from 'react-i18next';
 import { useQueryClient } from '@tanstack/react-query';
 import { toastIn } from '../../utils/toast';
@@ -9,7 +8,7 @@ import { fetchMyIncubationProfile, saveIncubationProfile } from '../../lib/incub
 import { usePromptsActive, setPromptActive } from '../../utils/welcomeGate';
 import { refreshHomeFeeds } from '../../utils/feedSeed';
 import TagsV2Picker from '../tooltip/TagsV2Picker';
-import ModalHeader from '../ModalHeader/ModalHeader';
+import { Button, Dialog } from '../v2/ui';
 import './InterestsPrompt.scss';
 
 // Every toast from this module is headed "Settings"; the message becomes the
@@ -137,37 +136,52 @@ export default function InterestsPrompt() {
     }
   };
 
-  return createPortal(
-    <div className="interests-prompt-overlay" onClick={close}>
-      <div className="interests-prompt" onClick={(e) => e.stopPropagation()}>
-        <ModalHeader title={t('app.interests.title')} onClose={saving ? undefined : close} />
-        <p className="interests-prompt-text">
-          <Trans i18nKey="app.interests.body" components={{ b: <strong /> }} />
-        </p>
-        {/* Same picker (and search box) as Settings → Interests, so the two
-            screens look and behave identically. Values are topic slugs. */}
-        <TagsV2Picker
-          multi
-          searchable
-          value={selected}
-          onChange={setSelected}
-          disabled={saving}
-        />
-        <div className="interests-prompt-actions">
-          <button type="button" className="interests-prompt-cancel" onClick={decline} disabled={saving}>
+  // "What are you into?" (design 44b / 23a) on the shared v2 Dialog: a click
+  // outside or Escape just close it (see close above); only "Not now" is an
+  // answer. Under 768px a full-screen step page (.v2-onboard, 23a), so the
+  // title is a headline in the body rather than a dialog head.
+  return (
+    <Dialog
+      open
+      onClose={close}
+      dismissible={!saving}
+      head={false}
+      title={t('app.interests.title')}
+      closeLabel={t('common.actions.close')}
+      width={520}
+      className="interests-prompt v2-onboard"
+      footer={(
+        <>
+          <Button variant="secondary" className="interests-prompt-cancel v2-onboard__skip" onClick={decline} disabled={saving}>
             {t('app.interests.notNow')}
-          </button>
-          <button
-            type="button"
+          </Button>
+          <Button
+            variant="primary"
             className="interests-prompt-save"
             onClick={save}
             disabled={saving || selected.length === 0}
+            loading={saving}
           >
             {saving ? t('common.actions.saving') : t('app.interests.save')}
-          </button>
-        </div>
-      </div>
-    </div>,
-    document.body,
+          </Button>
+        </>
+      )}
+    >
+      <h2 className="interests-prompt-title">{t('app.interests.title')}</h2>
+      <p className="interests-prompt-text">
+        <Trans i18nKey="app.interests.body" components={{ b: <strong /> }} />
+      </p>
+      {/* Same picker (and search box) as Settings → Interests, drawn as the
+          23a tiles: the areas in two columns, the open one's topics under
+          them. Values are topic (or whole-area) slugs. */}
+      <TagsV2Picker
+        multi
+        searchable
+        layout="tiles"
+        value={selected}
+        onChange={setSelected}
+        disabled={saving}
+      />
+    </Dialog>
   );
 }

@@ -7,7 +7,8 @@
     "feeds": "Bảng tin",
     "groups": "Nhóm",
     "audio": "Âm thanh",
-    "login": "Đăng nhập"
+    "login": "Đăng nhập",
+    "you": "Bạn"
   },
   "installApp": "Cài ứng dụng",
   "iosInstallHint": "Chạm <b>Chia sẻ</b> rồi chọn <b>Thêm vào MH chính</b>",
@@ -28,7 +29,9 @@
     "shortsTooltip": "Video dọc ngắn, xem liên tục",
     "audioTooltip": "Podcast, nhạc và các nội dung âm thanh khác được đăng trên 3Speak",
     "groupsTooltip": "Các cộng đồng bạn có thể tham gia, và huy hiệu mọi người được trao",
-    "rankingsTooltip": "Các nhà sáng tạo đang kiếm được nhiều nhất và được xem nhiều nhất hiện nay"
+    "rankingsTooltip": "Các nhà sáng tạo đang kiếm được nhiều nhất và được xem nhiều nhất hiện nay",
+    "live": "Trực tiếp",
+    "liveTooltip": "Buổi phát và phòng đang trực tiếp ngay lúc này"
   },
   "aboutLink": "Giới thiệu về 3Speak",
   "faqLink": "FAQ",
@@ -38,6 +41,8 @@
     "myChannelAria": "Kênh của tôi",
     "vpTooltip": "Voting Power: mức ảnh hưởng của lượt vote tiếp theo của bạn",
     "rcTooltip": "Resource Credits: chi phí cho các thao tác của bạn trên Hive",
+    "votingPower": "Voting Power",
+    "resourceCredits": "Resource Credits",
     "myChannel": "Kênh của tôi",
     "publishBacklog": "Xuất bản video tồn đọng",
     "analytics": "Phân tích",
@@ -47,14 +52,20 @@
     "logout": "Đăng xuất",
     "onDiscord": "3Speak trên Discord",
     "onX": "3Speak trên X",
-    "onTelegram": "3Speak trên Telegram"
+    "onTelegram": "3Speak trên Telegram",
+    "switch": "Chuyển",
+    "tiles": {
+      "channel": "Kênh",
+      "history": "Lịch sử"
+    },
+    "darkTheme": "Giao diện tối"
   },
   "notifications": {
     "pushOff": "Đã tắt thông báo trên thiết bị này",
-    "pushOn": "Bạn sẽ được thông báo khi nhà sáng tạo bạn theo dõi đăng bài",
+    "pushOn": "Bạn sẽ được thông báo khi nhà sáng tạo bạn theo dõi đăng bài.",
     "pushFailed": "Không thể thay đổi cài đặt thông báo",
     "ariaUnread": "Thông báo ({{count}} chưa đọc)",
-    "pushBlocked": "Thông báo cho trang này đã bị chặn trong cài đặt trình duyệt của bạn",
+    "pushBlocked": "Thông báo cho trang này đã bị chặn trong cài đặt trình duyệt của bạn.",
     "pushNoWorker": "Bản dựng này không có service worker, nên không thể đăng ký thông báo tại đây",
     "pushStop": "Ngừng thông báo trên thiết bị này",
     "pushStart": "Nhận thông báo khi nhà sáng tạo bạn theo dõi đăng bài",
@@ -87,6 +98,13 @@
       "heading": "Tập mới của podcast bạn theo dõi",
       "newEpisode": "Tập mới của {{show}}",
       "type": "Podcast"
+    },
+    "tabs": {
+      "all": "Tất cả",
+      "mentions": "Lượt nhắc",
+      "follows": "Lượt theo dõi",
+      "uploads": "Tải lên",
+      "pods": "Pods"
     }
   },
   "search": {
@@ -121,6 +139,17 @@
     "views_other": "{{formatted}} lượt xem",
     "tags": "Thẻ",
     "titles": "Tiêu đề",
-    "placeholder": "Tìm kiếm..."
-  }
+    "placeholder": "Tìm kiếm...",
+    "recent": "Gần đây",
+    "allResultsFor": "Tất cả kết quả cho “{{term}}”",
+    "kinds": {
+      "creator": "Nhà sáng tạo",
+      "community": "Cộng đồng",
+      "video": "Video",
+      "short": "Short",
+      "audio": "Âm thanh",
+      "playlist": "Danh sách phát"
+    }
+  },
+  "create": "Tạo"
 }

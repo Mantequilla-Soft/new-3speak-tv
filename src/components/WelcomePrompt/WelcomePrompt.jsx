@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react';
-import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation, Trans } from 'react-i18next';
-import { Video, Zap, Radio, Users, MessageCircle, Sparkles, Megaphone, Wallet, Crosshair, BarChart3 } from 'lucide-react';
 import { useAppStore } from '../../lib/store';
 import { isManteAuthLogin } from '../../hive-api/aioha';
 import { fetchProfile, isProfileEmpty } from '../../utils/profileMeta';
@@ -12,6 +10,7 @@ import TagsV2Picker from '../tooltip/TagsV2Picker';
 import { reconcileAvatarOverride } from '../../utils/avatarCache';
 import { setWelcomeActive } from '../../utils/welcomeGate';
 import ProfileFields, { useProfileEditor } from './ProfileFields';
+import { Button, Dialog, Icon, StepBar } from '../v2/ui';
 import './WelcomePrompt.scss';
 
 // Per-account "already welcomed" flag (browser storage), so nobody gets the
@@ -42,24 +41,24 @@ const isForced = () => {
 };
 
 const THINGS_YOU_CAN_DO = [
-  { Icon: Video, titleKey: 'app.welcome.things.postVideos.title', textKey: 'app.welcome.things.postVideos.text' },
-  { Icon: Zap, titleKey: 'app.welcome.things.filmShorts.title', textKey: 'app.welcome.things.filmShorts.text' },
-  { Icon: Radio, titleKey: 'app.welcome.things.goLive.title', textKey: 'app.welcome.things.goLive.text' },
-  { Icon: Users, titleKey: 'app.welcome.things.buildCommunity.title', textKey: 'app.welcome.things.buildCommunity.text' },
-  { Icon: MessageCircle, titleKey: 'app.welcome.things.makeFriends.title', textKey: 'app.welcome.things.makeFriends.text' },
-  { Icon: Sparkles, titleKey: 'app.welcome.things.getInspired.title', textKey: 'app.welcome.things.getInspired.text' },
+  { icon: 'smart_display', titleKey: 'app.welcome.things.postVideos.title', textKey: 'app.welcome.things.postVideos.text' },
+  { icon: 'view_day', titleKey: 'app.welcome.things.filmShorts.title', textKey: 'app.welcome.things.filmShorts.text' },
+  { icon: 'sensors', titleKey: 'app.welcome.things.goLive.title', textKey: 'app.welcome.things.goLive.text' },
+  { icon: 'groups', titleKey: 'app.welcome.things.buildCommunity.title', textKey: 'app.welcome.things.buildCommunity.text' },
+  { icon: 'forum', titleKey: 'app.welcome.things.makeFriends.title', textKey: 'app.welcome.things.makeFriends.text' },
+  { icon: 'volunteer_activism', titleKey: 'app.welcome.things.getInspired.title', textKey: 'app.welcome.things.getInspired.text' },
 ];
 
 // The same welcome for someone who came to ADVERTISE: what their account is for
 // is booking ads, so that is what it shows them. Talking to customers is in the
 // list, as the optional extra it is for them.
 const THINGS_AN_ADVERTISER_CAN_DO = [
-  { Icon: Megaphone, titleKey: 'app.welcome.advertiserThings.bookAds.title', textKey: 'app.welcome.advertiserThings.bookAds.text' },
-  { Icon: Wallet, titleKey: 'app.welcome.advertiserThings.payFromWallet.title', textKey: 'app.welcome.advertiserThings.payFromWallet.text' },
-  { Icon: Crosshair, titleKey: 'app.welcome.advertiserThings.chooseWhere.title', textKey: 'app.welcome.advertiserThings.chooseWhere.text' },
-  { Icon: BarChart3, titleKey: 'app.welcome.advertiserThings.seeDelivered.title', textKey: 'app.welcome.advertiserThings.seeDelivered.text' },
-  { Icon: MessageCircle, titleKey: 'app.welcome.advertiserThings.talkToCustomers.title', textKey: 'app.welcome.advertiserThings.talkToCustomers.text' },
-  { Icon: Users, titleKey: 'app.welcome.advertiserThings.oneAccount.title', textKey: 'app.welcome.advertiserThings.oneAccount.text' },
+  { icon: 'campaign', titleKey: 'app.welcome.advertiserThings.bookAds.title', textKey: 'app.welcome.advertiserThings.bookAds.text' },
+  { icon: 'account_balance_wallet', titleKey: 'app.welcome.advertiserThings.payFromWallet.title', textKey: 'app.welcome.advertiserThings.payFromWallet.text' },
+  { icon: 'my_location', titleKey: 'app.welcome.advertiserThings.chooseWhere.title', textKey: 'app.welcome.advertiserThings.chooseWhere.text' },
+  { icon: 'insights', titleKey: 'app.welcome.advertiserThings.seeDelivered.title', textKey: 'app.welcome.advertiserThings.seeDelivered.text' },
+  { icon: 'forum', titleKey: 'app.welcome.advertiserThings.talkToCustomers.title', textKey: 'app.welcome.advertiserThings.talkToCustomers.text' },
+  { icon: 'hub', titleKey: 'app.welcome.advertiserThings.oneAccount.title', textKey: 'app.welcome.advertiserThings.oneAccount.text' },
 ];
 
 export default function WelcomePrompt() {
@@ -208,141 +207,149 @@ export default function WelcomePrompt() {
     if (thenBook) navigate('/advertise');
   };
 
-  return createPortal(
-    <div className="welcome-overlay" role="dialog" aria-modal="true" aria-label={t('app.welcome.title')}>
-      <div className="welcome-modal">
-        {step === 0 ? (
+  // Welcome (design 44b / 23a): a step bar on top (§11), the six things, the
+  // profile, then interests. No close button and no click-outside: a stray
+  // click would burn the one welcome this account ever gets. Escape still
+  // closes it (the listener above). Under 768px it is a full-screen step page
+  // (.v2-onboard, 23a): cyan bar and eyebrow, a big headline, the primary at
+  // the bottom and the way out as a text link under it.
+  const steps = advertiser ? 2 : 3;
+  const skipCls = 'welcome-skip v2-onboard__skip';
+
+  return (
+    <Dialog
+      open
+      dismissible={false}
+      head={false}
+      title={t('app.welcome.title')}
+      width={600}
+      className={`welcome-modal v2-onboard is-step-${step}`}
+      footer={step === 0 ? (
+        <>
+          <Button variant="secondary" className={skipCls} onClick={finish}>{t('app.welcome.maybeLater')}</Button>
+          <Button variant="primary" next className="welcome-primary" onClick={() => setStep(1)}>
+            {advertiser ? t('app.welcome.checkBrandProfile') : t('app.welcome.setUpProfile')}
+          </Button>
+        </>
+      ) : step === 1 ? (
+        advertiser ? (
+          // No interests step for an advertiser: they came to book ads, and
+          // their feed is not what this account is for.
           <>
-            <div className="welcome-hero">
-              <span className="welcome-wave" aria-hidden="true">👋</span>
-              <h2>{advertiser && form.name ? t('app.welcome.titleNamed', { name: form.name }) : t('app.welcome.title')}</h2>
-              <p className="welcome-hero-sub">
-                {advertiser ? (
-                  <Trans i18nKey="app.welcome.advertiserReady" values={{ user }} components={{ b: <strong /> }} />
-                ) : (
-                  <Trans i18nKey="app.welcome.heyUser" values={{ user }} components={{ b: <strong /> }} />
-                )}
-              </p>
-            </div>
-
-            <div className="welcome-grid">
-              {(advertiser ? THINGS_AN_ADVERTISER_CAN_DO : THINGS_YOU_CAN_DO).map(({ Icon, titleKey, textKey }) => (
-                <div className="welcome-card" key={titleKey}>
-                  <span className="welcome-card-icon"><Icon size={18} /></span>
-                  <div>
-                    <h4>{t(titleKey)}</h4>
-                    <p>{t(textKey)}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <p className="welcome-note">
-              {advertiser
-                ? t('app.welcome.noteAdvertiser')
-                : t('app.welcome.note')}
-            </p>
-
-            <div className="welcome-actions">
-              <button type="button" className="welcome-skip" onClick={finish}>{t('app.welcome.maybeLater')}</button>
-              <button type="button" className="welcome-primary" onClick={() => setStep(1)}>
-                {advertiser ? t('app.welcome.checkBrandProfile') : t('app.welcome.setUpProfile')}
-              </button>
-            </div>
-          </>
-        ) : step === 1 ? (
-          <>
-            <div className="welcome-head">
-              <h2>{advertiser ? t('app.welcome.brandProfileTitle') : t('app.welcome.profileTitle')}</h2>
-              <p>
-                {advertiser
-                  ? t('app.welcome.brandProfileHint')
-                  : t('app.welcome.profileHint')}
-              </p>
-            </div>
-
-            <ProfileFields
-              username={user}
-              form={form}
-              setField={setField}
-              pickImage={pickImage}
-              uploading={uploading}
-              saving={saving}
-            />
-
-            {/* Split off the topics, which used to sit under all of this. The
-                two together were taller than a phone screen, so the save button
-                fell below the fold on exactly the devices most people sign up
-                on. Nothing is written until the last step, so moving between
-                them costs nothing. */}
-            {advertiser ? (
-              // No interests step for an advertiser: they came to book ads, and
-              // their feed is not what this account is for.
-              <div className="welcome-actions">
-                <button type="button" className="welcome-skip" onClick={finish} disabled={saving}>
-                  {t('app.welcome.skipForNow')}
-                </button>
-                <button type="button" className="welcome-back" onClick={() => submitBrand()} disabled={saving || uploading}>
-                  {saving ? t('common.actions.saving') : t('common.actions.save')}
-                </button>
-                <button type="button" className="welcome-primary" onClick={() => submitBrand({ thenBook: true })} disabled={saving || uploading}>
-                  {saving ? t('common.actions.saving') : t('app.welcome.saveAndBook')}
-                </button>
-              </div>
-            ) : (
-            <div className="welcome-actions">
-              <button type="button" className="welcome-skip" onClick={finish} disabled={saving}>
-                {t('app.welcome.skipForNow')}
-              </button>
-              <button
-                type="button"
-                className="welcome-primary"
-                onClick={() => setStep(2)}
-                disabled={uploading}
-              >
-                {uploading ? t('app.welcome.uploading') : t('common.actions.next')}
-              </button>
-            </div>
-            )}
+            <Button variant="ghost" className={skipCls} onClick={finish} disabled={saving}>
+              {t('app.welcome.skipForNow')}
+            </Button>
+            <Button variant="secondary" className="welcome-back" onClick={() => submitBrand()} disabled={saving || uploading}>
+              {saving ? t('common.actions.saving') : t('common.actions.save')}
+            </Button>
+            <Button variant="primary" next className="welcome-primary" onClick={() => submitBrand({ thenBook: true })} disabled={saving || uploading} loading={saving}>
+              {saving ? t('common.actions.saving') : t('app.welcome.saveAndBook')}
+            </Button>
           </>
         ) : (
           <>
-            <div className="welcome-head">
-              <h2>{t('app.interests.title')}</h2>
-              <p>
-                {t('app.welcome.interestsHint')}
-              </p>
-            </div>
-
-            {/* The SAME picker as Settings → Interests and the interests prompt.
-                An earlier version rendered utils/interests INTERESTS, which is a
-                different, older vocabulary: the stored topics are v2 slugs like
-                "tech-science", so nothing a user had actually chosen could ever
-                appear ticked. One picker, one taxonomy. */}
-            <TagsV2Picker
-              multi
-              searchable
-              value={interests}
-              onChange={setInterests}
-              disabled={saving}
-            />
-
-            <p className="welcome-fineprint">
-              {t('app.welcome.interestsFineprint')}
-            </p>
-
-            <div className="welcome-actions">
-              <button type="button" className="welcome-back" onClick={() => setStep(1)} disabled={saving}>
-                {t('common.actions.back')}
-              </button>
-              <button type="button" className="welcome-primary" onClick={submit} disabled={saving || uploading}>
-                {saving ? t('common.actions.saving') : t('app.welcome.saveAndExplore')}
-              </button>
-            </div>
+            <Button variant="secondary" className={skipCls} onClick={finish} disabled={saving}>
+              {t('app.welcome.skipForNow')}
+            </Button>
+            <Button variant="primary" next className="welcome-primary" onClick={() => setStep(2)} disabled={uploading} loading={uploading}>
+              {uploading ? t('app.welcome.uploading') : t('common.actions.next')}
+            </Button>
           </>
-        )}
+        )
+      ) : (
+        <>
+          <Button variant="secondary" className={`welcome-back ${skipCls}`} onClick={() => setStep(1)} disabled={saving}>
+            {t('common.actions.back')}
+          </Button>
+          <Button variant="primary" next className="welcome-primary" onClick={submit} disabled={saving || uploading} loading={saving}>
+            {saving ? t('common.actions.saving') : t('app.welcome.saveAndExplore')}
+          </Button>
+        </>
+      )}
+    >
+      <StepBar steps={steps} current={step} />
+      <div className="v2-onboard__eyebrow">
+        {step === 0 ? t('app.welcome.eyebrow') : t('app.welcome.stepOf', { n: step + 1, total: steps })}
       </div>
-    </div>,
-    document.body,
+      {step === 0 ? (
+        <>
+          <div className="welcome-hero">
+            <h2>{form.name ? t('app.welcome.titleNamed', { name: form.name }) : t('app.welcome.title')}</h2>
+            <p className="welcome-hero-sub">
+              {advertiser ? (
+                <Trans i18nKey="app.welcome.advertiserReady" values={{ user }} components={{ b: <strong /> }} />
+              ) : (
+                <Trans i18nKey="app.welcome.heyUser" values={{ user }} components={{ b: <strong /> }} />
+              )}
+            </p>
+          </div>
+
+          <div className="welcome-grid">
+            {(advertiser ? THINGS_AN_ADVERTISER_CAN_DO : THINGS_YOU_CAN_DO).map(({ icon, titleKey, textKey }) => (
+              <div className="welcome-card" key={titleKey}>
+                <Icon name={icon} size={20} className="welcome-card-icon" />
+                <h4>{t(titleKey)}</h4>
+                <p>{t(textKey)}</p>
+              </div>
+            ))}
+          </div>
+
+          <p className="welcome-note">
+            {advertiser
+              ? t('app.welcome.noteAdvertiser')
+              : t('app.welcome.note')}
+          </p>
+        </>
+      ) : step === 1 ? (
+        <>
+          <div className="welcome-head">
+            <h2>{advertiser ? t('app.welcome.brandProfileTitle') : t('app.welcome.profileTitle')}</h2>
+            <p>
+              {advertiser
+                ? t('app.welcome.brandProfileHint')
+                : t('app.welcome.profileHint')}
+            </p>
+          </div>
+
+          {/* Split off the topics, which used to sit under all of this. The
+              two together were taller than a phone screen. Nothing is written
+              until the last step, so moving between them costs nothing. */}
+          <ProfileFields
+            username={user}
+            form={form}
+            setField={setField}
+            pickImage={pickImage}
+            uploading={uploading}
+            saving={saving}
+          />
+
+          {!advertiser && <p className="welcome-fineprint">{t('app.welcome.profileFineprint')}</p>}
+        </>
+      ) : (
+        <>
+          <div className="welcome-head">
+            <h2>{t('app.interests.title')}</h2>
+            <p>
+              {t('app.welcome.interestsHint')}
+            </p>
+          </div>
+
+          {/* The SAME picker as Settings → Interests and the interests prompt:
+              one picker, one taxonomy (v2 topic slugs), drawn as the 23a tiles. */}
+          <TagsV2Picker
+            multi
+            searchable
+            layout="tiles"
+            value={interests}
+            onChange={setInterests}
+            disabled={saving}
+          />
+
+          <p className="welcome-fineprint">
+            {t('app.welcome.interestsFineprint')}
+          </p>
+        </>
+      )}
+    </Dialog>
   );
 }

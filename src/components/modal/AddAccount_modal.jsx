@@ -1,24 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import './AddAccount_modal.scss';
-import '../../page/Login/KeyChainLogin.scss';
-import '../../page/Login/Login.scss';
 import axios from "axios";
-import logo from '../../assets/image/3S_logo.svg';
-import logoDark from '../../assets/image/3S_logodark.png';
-import keychainImg from '../../assets/image/keychain.png';
-import hiveauthImg from '../../../public/images/hiveauth.jpeg';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { LOCAL_STORAGE_ACCESS_TOKEN_KEY, LOCAL_STORAGE_USER_ID_KEY } from '../../hooks/localStorageKeys';
 import { useAppStore } from '../../lib/store';
-import { LuLogOut } from 'react-icons/lu';
 import { toastIn } from '../../utils/toast';
-import 'react-toastify/dist/ReactToastify.css';
 import { QRCodeSVG } from 'qrcode.react';
 import   {KeyTypes, Providers } from '@aioha/aioha'
-import QrCode_modal from '../../components/modal/QrCode_modal';
 import aioha from "../../hive-api/aioha";
 import { useTranslation } from 'react-i18next';
-import ModalHeader from '../ModalHeader/ModalHeader';
+import { Dialog, Button, Icon } from '../v2/ui';
 
 // Every toast from this module is headed "Sign in"; the message becomes the
 // line under it. See utils/toast.js.
@@ -27,19 +18,15 @@ const toast = toastIn('Sign in');
 function AddAccount_modal({ isOpen, close}) {
     const { t } = useTranslation();
     const location = useLocation();
-    const client = axios.create({});
-    const { initializeAuth, switchAccount, clearAccount, theme } = useAppStore();
-    const studioEndPoint = "https://studio.3speak.tv";
+    const { initializeAuth } = useAppStore();
     const [username, setUsername] = useState('');
-    const [accountList, setAccountList] = useState([]);
     const [qrCode, setQrCode] = useState('');
-    const [isWaitingHiveAuth, setIsWaitingHiveAuth] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const navigate = useNavigate();
     const [hasKeychain, setHasKeychain] = useState(false);
+    // The wallet to log in with: Keychain when it is installed, else HiveAuth.
+    const [method, setMethod] = useState(null);
 
-    const isMobile = window.innerWidth <= 768;
-    const isIphone = /iPhone/.test(navigator.userAgent);
 
     useEffect(() => {
       if (window.hive_keychain) {
@@ -204,59 +191,64 @@ function AddAccount_modal({ isOpen, close}) {
   };
 
 
+  // 07e: the "@ handle" field, the wallets as tiles three across (icon over
+  // the name, the chosen one outlined in red), then "Continue with …". While
+  // HiveAuth waits for the phone, its QR sits in a well (42a, Keychain QR).
+  const methods = [
+    ...(hasKeychain ? [{ id: 'keychain', icon: 'key', label: 'Keychain', run: logMe }] : []),
+    { id: 'hiveauth', icon: 'qr_code_2', label: 'HiveAuth', run: handleLoginWithHiveAuth },
+  ];
+  const chosen = methods.find((m) => m.id === method) || methods[0];
   return (
-    <div className={`modal ${isOpen ? "open" : ""}`}>
-      <div className="overlay" onClick={close}></div>
-      <div
-        className={`modal-content  ${isOpen ? "open" : ""}`}
-        onClick={(e) => e.stopPropagation()} // Prevent click on modal from closing it
-      >
-        <ModalHeader title={t('modals.addAccount.title')} onClose={close} />
-        <div className="modal-body ">
-          <div className="login-container">
+    <Dialog open={!!isOpen} onClose={close} title={t('modals.addAccount.title')} width={440} className="addacct"
+      footer={(
+        <Button variant="primary" size={48} block next onClick={() => chosen.run()}>
+          {t('modals.addAccount.continueWith', { method: chosen.label })}
+        </Button>
+      )}
+    >
+      <label className="addacct-handle">
+        <span className="addacct-handle__at" aria-hidden="true">@</span>
+        <input
+          type="text"
+          className="addacct-handle__input"
+          placeholder={t('modals.addAccount.usernamePlaceholder')}
+          aria-label={t('modals.addAccount.usernamePlaceholder')}
+          autoCapitalize="off"
+          autoCorrect="off"
+          spellCheck={false}
+          value={username}
+          onChange={(e) => setUsername(e.target.value.toLowerCase())}
+          onKeyDown={(e) => { if (e.key === 'Enter' && username) chosen.run(); }}
+        />
+      </label>
 
-        <div className="main-login-keywrapper-add">
-          {theme === "light" ? <img src={logo} alt={t('modals.addAccount.logoAlt')} /> :
-                    <img src={logoDark} alt={t('modals.addAccount.logoAlt')} />}
-
-          <input
-            type="text"
-            placeholder={t('modals.addAccount.usernamePlaceholder')}
-            value={username}
-            onChange={(e) => setUsername(e.target.value.toLowerCase())}
-            style={{
-                  fontSize: isMobile ? (isIphone ? '16px' : '14px') : undefined
-                }}
-          />
-
-          <div className="wrap-btn">
-           {hasKeychain && <div className="wrap keychain-down" onClick={logMe}>
-              <img src={keychainImg} alt="keychain" />
-              <span>Keychain</span>
-            </div>}
-            <div className="wrap keychain-down" onClick={handleLoginWithHiveAuth}>
-              <img src={hiveauthImg} alt="HiveAuth" />
-              <span>HiveAuth</span>
-            </div>
-          </div>
-        </div>
- 
-    </div>
-        { qrCode && showModal && 
-        <div style={{ marginTop: '1.5rem', textAlign: 'center' }}>
-                          <p>{t('modals.qr.scan')}</p>
-                          <div onClick={openKeychainApp} style={{ cursor: 'pointer', display: 'inline-block' }}>
-                              <QRCodeSVG value={qrCode} size={180} />
-                              <p style={{ fontSize: '0.8rem', marginTop: '0.5rem', color: '#007bff' }}>
-                                  {t('modals.qr.click')}
-                              </p>
-                          </div>
-                      </div>}
-    
-          
-        </div>
+      <div className="addacct-wallets" role="radiogroup" aria-label={t('modals.addAccount.title')}>
+        {methods.map((m) => (
+          <button
+            key={m.id}
+            type="button"
+            role="radio"
+            aria-checked={chosen.id === m.id}
+            className={`addacct-wallet${chosen.id === m.id ? ' is-on' : ''}`}
+            onClick={() => setMethod(m.id)}
+          >
+            <Icon name={m.icon} size={24} />
+            <span>{m.label}</span>
+          </button>
+        ))}
       </div>
-    </div>
+
+      {qrCode && showModal && (
+        <button type="button" className="v2-well addacct-qr" onClick={openKeychainApp}>
+          <span className="addacct-qr__code"><QRCodeSVG value={qrCode} size={120} /></span>
+          <span className="addacct-qr__text">
+            <b>{t('modals.qr.title')}</b>
+            <span>{t('modals.qr.scan')} {t('modals.qr.click')}</span>
+          </span>
+        </button>
+      )}
+    </Dialog>
   )
 }
 

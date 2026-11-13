@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react';
-import { createPortal } from 'react-dom';
 import { useLocation } from 'react-router-dom';
 import { useTranslation, Trans } from 'react-i18next';
 import HiveAvatar from '../HiveAvatar/HiveAvatar';
-import ModalHeader from '../ModalHeader/ModalHeader';
+import { Dialog, Button, IconButton } from '../v2/ui';
 import { useAppStore } from '../../lib/store';
 import { fetchInvite } from '../../lib/referralLinks';
 import { rememberInvite, takeQueuedInvitePopup } from '../../utils/referral';
@@ -46,13 +45,6 @@ export default function InvitePopup({ openLoginModal }) {
     return () => { alive = false; };
   }, [location.pathname]);
 
-  useEffect(() => {
-    if (!invite) return undefined;
-    const onKey = (e) => { if (e.key === 'Escape') setInvite(null); };
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  }, [invite]);
-
   if (!invite || user) return null;
 
   const close = () => setInvite(null);
@@ -74,29 +66,30 @@ export default function InvitePopup({ openLoginModal }) {
   }
   const showSignUp = !incubationHandle || invite.fastTrack;
 
-  return createPortal(
-    <div className="invite-popup-overlay" onClick={close}>
-      <div className="invite-popup" role="dialog" aria-modal="true" aria-labelledby="invite-popup-title" onClick={(e) => e.stopPropagation()}>
-        <ModalHeader closeOnEscape={false}
-          className="invite-popup-header"
-          title={<Trans i18nKey="app.invite.title" values={{ referrer: invite.referrer }} components={{ who: <span /> }} />}
-          titleId="invite-popup-title"
-          onClose={close}
-        />
-        <div className="invite-from">
-          <HiveAvatar username={invite.referrer} size="medium" className="invite-avatar" />
-          <p className="invite-text">{text}</p>
-        </div>
-        <div className="invite-actions">
-          {showSignUp && (
-            <button type="button" className="invite-btn primary" onClick={signUp}>
-              {incubationHandle ? t('app.invite.createHiveAccount') : invite.fastTrack ? t('app.invite.createAccount') : t('common.actions.signUp')}
-            </button>
-          )}
-          <button type="button" className="invite-btn" onClick={close}>{t('app.invite.lookAround')}</button>
-        </div>
+  // 44b: the inviter's face (a 52 rounded square), "@alice invited you to
+  // 3Speak", what signing up gets you, then create the account (primary) or
+  // just look around, both 40 tall with the label flush left.
+  const plainTitle = t('app.invite.title', { referrer: invite.referrer }).replace(/<\/?who>/g, '');
+  return (
+    <Dialog open onClose={close} title={plainTitle} head={false} width={400} className="invite-pop">
+      <div className="invite-pop__head">
+        <HiveAvatar username={invite.referrer} size="medium" className="invite-pop__avatar" />
+        <IconButton icon="close" label={t('common.actions.close')} size={32} variant="ghost" round onClick={close} />
       </div>
-    </div>,
-    document.body
+      <h2 className="invite-pop__title">
+        <Trans i18nKey="app.invite.title" values={{ referrer: invite.referrer }} components={{ who: <span className="invite-pop__who" /> }} />
+      </h2>
+      {!incubationHandle && <p className="invite-pop__text">{text}</p>}
+      <div className="invite-pop__actions">
+        {showSignUp && (
+          <Button variant="primary" size={40} block onClick={signUp}>
+            {incubationHandle ? t('app.invite.createHiveAccount') : invite.fastTrack ? t('app.invite.createAccount') : t('common.actions.signUp')}
+          </Button>
+        )}
+        <Button variant="secondary" size={40} block onClick={close}>{t('app.invite.lookAround')}</Button>
+      </div>
+      {/* Already warming up: the note sits under the buttons (44b) */}
+      {incubationHandle && <p className="v2-well invite-pop__note">{text}</p>}
+    </Dialog>
   );
 }

@@ -1,5 +1,5 @@
 import { useRef, useState, useCallback, useEffect } from 'react'
-import { emojiSuggestions, convertClosedShortcode, insertPickedEmoji } from '../../lib/emojiShortcodes'
+import { emojiSuggestions, convertClosedShortcode, insertPickedEmoji, loadEmojiData } from '../../lib/emojiShortcodes'
 
 /**
  * Multiline chat composer with inline `:shortcode:` emoji support.
@@ -12,6 +12,9 @@ export default function EmojiTextInput({ value, onChange, onSubmit, onPasteFiles
   const internalRef = useRef(null)
   const ref = inputRef || internalRef
   const [ta, setTa] = useState(null) // { items: [{emoji,name}], index }
+
+  // The emoji names load on demand (lib/emojiShortcodes.js); chat is open, so now.
+  useEffect(() => { loadEmojiData().catch(() => {}) }, [])
 
   // Auto-grow the textarea to fit its content (capped).
   useEffect(() => {

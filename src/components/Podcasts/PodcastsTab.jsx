@@ -1,38 +1,35 @@
+import { Icon } from '../v2/Icon';
+import { Segmented, Chip, Toggle } from '../v2/ui';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import {
-  MdPlayArrow, MdPause, MdAdd, MdRssFeed, MdNotificationsActive, MdNotificationsOff, MdArrowBack, MdOpenInNew,
-  MdUploadFile, MdDownload, MdSearch, MdClose, MdCheck, MdPodcasts, MdTrendingUp, MdHistory, MdWhatshot, MdLink, MdExplore, MdLibraryMusic,
-  MdLeaderboard, MdLock, MdLockOpen, MdQueueMusic, MdFiberNew, MdCode,
-} from 'react-icons/md';
-import { BiDollar } from 'react-icons/bi';
 import { useAppStore } from '../../lib/store';
 import { toastIn } from '../../utils/toast';
 import {
   usePodcastConfig, usePodcastSubscriptions, usePodcastLatest, usePodcastFeed, usePodcastDiscover, useInvalidatePodcasts,
   followFeeds, unfollowFeed, setFeedNotify, followErrorText, fetchOlderEpisodes, searchPodcasts, searchPeople,
   usePodcastTrending, usePodcastCharts, TRENDING_CATEGORIES, CHART_COUNTRIES, feedKey,
-  episodeToTrack, parseOpml, downloadOpml, buildPrivateFeedUrl,
+  episodeToTrack, liveToTrack, parseOpml, downloadOpml, buildPrivateFeedUrl,
 } from '../../lib/podcasts';
+import { PODCAST_PRESETS, tipOptions, splitSats, canTipEpisode, hasWebln } from '../../lib/podcastTips';
 import PodcastTipModal from './PodcastTipModal';
 import PodcastArt from './PodcastArt';
 import EpisodeView from './EpisodeView';
-import { fmtDuration, useDateFormat } from '../../lib/podcastFormat';
+import { useDateFormat } from '../../lib/podcastFormat';
 import { getLanguage } from '../../i18n';
 import { LANGUAGES as UI_LANGUAGES } from '../../i18n/languages';
-import { canTipEpisode } from '../../lib/podcastTips';
 import { usePodcastProgress, progressOf } from '../../lib/podcastProgress';
 import { isDownloaded, useDownloads } from '../../lib/podcastDownloads';
 import {
   matchesListenFilter, isInboxEpisode, readMineVisit, markMineVisit, seasonsOf, trailerOf,
-  readAutoQueue, setAutoQueue, markAutoQueued, pickAutoQueue, isLiveNow,
+  readAutoQueue, setAutoQueue, markAutoQueued, pickAutoQueue, isLiveNow, fmtClock, fmtBytes,
 } from '../../lib/podcastLibrary';
 import { EpisodeBadges, DownloadButton, PersonsRow, LiveBanner, PrivateBadge } from './PodcastBits';
 import DownloadsSection from './DownloadsSection';
 import ContinueListening, { useContinueListening } from './ContinueListening';
 import useOnline from '../../hooks/useOnline';
 import { openEmbedCode } from '../Embed/EmbedCodeModal';
+import { EpisodeTile, EpisodeRow } from './EpisodeTile';
 import './PodcastsTab.scss';
 
 // ─── Filters: date range and listening state ──────────────────────────────────
@@ -74,6 +71,9 @@ function inRange(ep, { since, until }) {
 
 const matchesListen = (ep, listen, lastVisit = 0) => matchesListenFilter(ep, listen, { progressOf, isDownloaded, lastVisit });
 
+/** A 3Speak playlist's own RSS feed, followed like an outside show ("On 3Speak" on its cover). */
+const isOn3Speak = (url) => /^https?:\/\/([a-z0-9-]+\.)?3speak\.tv\/rss\//i.test(url || '');
+
 /**
  * Listening state on the left, date range on the right, the 3Speak audio filter
  * look. `inbox` (Mine) adds "New" with how many there are.
@@ -83,30 +83,30 @@ function EpisodeFilters({ days, onDays, listen, onListen, range, onRange, inbox 
   const today = new Date().toISOString().slice(0, 10);
   return (
     <div className="pod-filters">
-      <div className="audio-type-filter pod-filter-listen" role="group" aria-label={t('audio.podcasts.filters.listenLabel')}>
+      <div className="audio-type-filter pod-filter-listen v2-chips" role="group" aria-label={t('audio.podcasts.filters.listenLabel')}>
         {LISTEN_FILTERS.filter((f) => inbox != null || !f.mineOnly).map((f) => (
-          <button key={f.key} type="button" className={`audio-type-chip${listen === f.key ? ' active' : ''}`} aria-pressed={listen === f.key} onClick={() => onListen(f.key)}>
+          <Chip key={f.key} selected={listen === f.key} onClick={() => onListen(f.key)} count={f.key === 'new' && inbox > 0 ? inbox : undefined}>
             {t(f.labelKey)}
-            {f.key === 'new' && inbox > 0 && <span className="pod-chip-count">{inbox}</span>}
-          </button>
+          </Chip>
         ))}
       </div>
-      <div className="audio-date-presets pod-filter-dates" role="group" aria-label={t('audio.podcasts.filters.dateLabel')}>
-        {DATE_FILTERS.map((f) => (
-          <button key={f.days} type="button" className={`audio-date-btn${days === f.days ? ' active' : ''}`} onClick={() => onDays(f.days)}>
-            {t(f.labelKey)}
-          </button>
-        ))}
-      </div>
+      <Segmented
+        className="audio-date-presets pod-filter-dates"
+        block={false}
+        label={t('audio.podcasts.filters.dateLabel')}
+        value={days}
+        onChange={onDays}
+        options={DATE_FILTERS.map((f) => ({ value: f.days, label: t(f.labelKey) }))}
+      />
       {days === 'custom' && (
         <div className="pod-filter-range">
           <label>
             <span>{t('audio.podcasts.filters.from')}</span>
-            <input type="date" value={range.from} max={range.to || today} onChange={(e) => onRange({ ...range, from: e.target.value })} />
+            <input className="v2-input h32" type="date" value={range.from} max={range.to || today} onChange={(e) => onRange({ ...range, from: e.target.value })} />
           </label>
           <label>
             <span>{t('audio.podcasts.filters.to')}</span>
-            <input type="date" value={range.to} min={range.from || undefined} max={today} onChange={(e) => onRange({ ...range, to: e.target.value })} />
+            <input className="v2-input h32" type="date" value={range.to} min={range.from || undefined} max={today} onChange={(e) => onRange({ ...range, to: e.target.value })} />
           </label>
         </div>
       )}
@@ -116,108 +116,58 @@ function EpisodeFilters({ days, onDays, listen, onListen, range, onRange, inbox 
 
 // ─── One episode ──────────────────────────────────────────────────────────────
 
-function EpisodeTile({ ep, feed, showShow = true, onOpenShow, onOpenEpisode }) {
-  const { t } = useTranslation();
-  const fmtDate = useDateFormat();
-  const audioCurrent = useAppStore((s) => s.audioCurrent);
-  const audioIsPlaying = useAppStore((s) => s.audioIsPlaying);
-  const audioPlayQueued = useAppStore((s) => s.audioPlayQueued);
-  const audioRequestToggle = useAppStore((s) => s.audioRequestToggle);
-  const [tipping, setTipping] = useState(false);
-  const track = useMemo(() => episodeToTrack(ep, feed), [ep, feed]);
-  const isCurrent = audioCurrent?._id === ep.id;
-  const playing = isCurrent && audioIsPlaying;
-  const progress = progressOf(ep.id);
-  const started = progress && (progress.done || progress.pct > 0);
-
-  const play = () => {
-    if (isCurrent) { audioRequestToggle(); return; }
-    if (useAppStore.getState().audioQueueIfPlaying(track)) return;
-    audioPlayQueued(track);
-  };
-
-  return (
-    <li className={`pod-tile${isCurrent ? ' pod-tile--current' : ''}${progress?.done ? ' pod-tile--done' : ''}`}>
-      <div className="pod-tile-top">
-        <button type="button" className="pod-tile-cover" onClick={play} aria-label={playing ? t('audio.podcasts.pause') : t('audio.podcasts.play')}>
-          <PodcastArt art={ep.art || feed?.art} px={128} />
-          <span className={`pod-tile-play${playing ? ' pod-tile-play--on' : ''}`}>{playing ? <MdPause size={24} /> : <MdPlayArrow size={24} />}</span>
-        </button>
-        <div className="pod-tile-head">
-          {showShow && feed && (
-            <button type="button" className="pod-tile-show" onClick={() => onOpenShow?.(ep.feed_id)}>{feed.title}</button>
-          )}
-          <button type="button" className="pod-tile-title" title={ep.title} onClick={() => onOpenEpisode?.(ep.id)}>{ep.title || t('audio.untitled')}</button>
-          <div className="pod-tile-meta">
-            <EpisodeBadges ep={ep} />
-            {ep.published_at && <span>{fmtDate(ep.published_at)}</span>}
-            {ep.duration > 0 && <span className="pod-tile-dur">{fmtDuration(ep.duration)}</span>}
-            {progress?.done && <span className="pod-tile-listened"><MdCheck size={13} /> {t('audio.podcasts.listened')}</span>}
-            {started && !progress.done && <span className="pod-tile-pct">{t('audio.podcasts.listenedPct', { pct: progress.pct })}</span>}
-          </div>
-        </div>
-      </div>
-      {/* Cropped here; the whole show notes are on the episode page. */}
-      {ep.summary && (
-        <button type="button" className="pod-tile-summary" onClick={() => onOpenEpisode?.(ep.id)} title={t('audio.podcasts.openEpisode')}>{ep.summary}</button>
-      )}
-      <div className="pod-tile-actions">
-        <DownloadButton track={track} />
-        {canTipEpisode(track) && (
-          <button type="button" className="pod-icon-btn pod-icon-btn--tip" onClick={() => setTipping(true)} title={t('audio.podcasts.tip.button')} aria-label={t('audio.podcasts.tip.button')}>
-            <BiDollar size={18} />
-          </button>
-        )}
-        {ep.link && (
-          <a className="pod-icon-btn" href={ep.link} target="_blank" rel="noopener noreferrer nofollow" title={t('audio.podcasts.episodePage')} aria-label={t('audio.podcasts.episodePage')}>
-            <MdOpenInNew size={16} />
-          </a>
-        )}
-      </div>
-      {started && (
-        <div
-          className="pod-tile-bar"
-          role="progressbar"
-          aria-valuemin={0}
-          aria-valuemax={100}
-          aria-valuenow={progress.pct}
-          aria-label={t('audio.podcasts.listenedPct', { pct: progress.pct })}
-        >
-          <span style={{ width: `${progress.pct}%` }} />
-        </div>
-      )}
-      {tipping && <PodcastTipModal track={track} onClose={() => setTipping(false)} />}
-    </li>
-  );
-}
-
 // ─── Show cards ───────────────────────────────────────────────────────────────
 
-/** A show as a cover card; `rank` adds the big number of the top-10 row. */
-function ShowCard({ feed, onOpen, rank, note, fallbackArt }) {
+/**
+ * A show as a cover card (36c): on its cover the rank of a top list, where it
+ * comes from (On 3Speak / External), live and private. `follow` adds the Follow
+ * link under it, for a show not on 3Speak yet (trending).
+ */
+function ShowCard({ feed, onOpen, rank, note, fallbackArt, follow }) {
   const { t } = useTranslation();
-  return (
-    <button type="button" className={`pod-card${feed.status === 'error' ? ' pod-card--error' : ''}`} onClick={() => onOpen(feed.id)} title={feed.title || feed.url || undefined}>
-      <span className="pod-card-art">
-        <PodcastArt art={feed.art} fallback={fallbackArt} px={256} />
+  const art = (
+    <span className="pod-card-art">
+      <PodcastArt art={feed.art} fallback={fallbackArt} px={256} />
+      <span className="pod-card-chips">
         {rank && <span className="pod-card-rank">{rank}</span>}
-        {isLiveNow(feed) && <span className="pod-card-live">{t('audio.podcasts.live.badge')}</span>}
-        {feed.private && <span className="pod-card-lock"><PrivateBadge /></span>}
+        {feed.url && <span className="pod-card-chip">{isOn3Speak(feed.url) ? t('audio.podcasts.on3speak') : t('audio.podcasts.chip')}</span>}
       </span>
+      {isLiveNow(feed) && <span className="pod-card-live">{t('audio.podcasts.live.badge')}</span>}
+      {feed.private && <span className="pod-card-lock"><PrivateBadge /></span>}
+    </span>
+  );
+  const text = (
+    <>
       <span className="pod-card-title">{feed.title || feed.url || t('audio.podcasts.private.badge')}</span>
       <span className="pod-card-meta">
         {note || (feed.subscribers ? t('audio.podcasts.followers', { count: feed.subscribers }) : feed.author)}
       </span>
+    </>
+  );
+  if (follow) {
+    return (
+      <div className="pod-card" title={feed.title || undefined}>
+        {art}
+        {text}
+        {follow}
+      </div>
+    );
+  }
+  return (
+    <button type="button" className={`pod-card${feed.status === 'error' ? ' pod-card--error' : ''}`} onClick={() => onOpen(feed.id)} title={feed.title || feed.url || undefined}>
+      {art}
+      {text}
     </button>
   );
 }
 
-function ShowRail({ icon, title, feeds, onOpen, ranked = false, noteFor, artFor }) {
+/** A row of covers, five across beside the side column (Discover), the rest a scroll away. */
+function ShowRail({ title, feeds, onOpen, ranked = false, noteFor, artFor, tone, five = true }) {
   if (!feeds?.length) return null;
   return (
     <section className="pod-section">
-      <h2 className="pod-section-title">{icon}{title}</h2>
-      <div className="pod-rail">
+      <h2 className={`pod-app-title${tone ? ` is-${tone}` : ''}`}>{title}</h2>
+      <div className={`pod-rail${five ? ' pod-rail--five' : ''}`}>
         {feeds.map((f, i) => <ShowCard key={f.id} feed={f} onOpen={onOpen} rank={ranked ? i + 1 : null} note={noteFor?.(f)} fallbackArt={artFor?.(f)} />)}
       </div>
     </section>
@@ -226,10 +176,15 @@ function ShowRail({ icon, title, feeds, onOpen, ranked = false, noteFor, artFor 
 
 // ─── Following from a list (search, trending) ─────────────────────────────────
 
-/** Follow one feed URL or a whole OPML list, with the toasts that go with it. */
+/**
+ * Follow one feed URL or a whole OPML list, with the toasts that go with it.
+ * `note` keeps the last outcome for the side cards (36c): an OPML import's
+ * count, or why a pasted link could not be followed.
+ */
 function useFollowFeeds(user, onFollowed) {
   const { t } = useTranslation();
   const [busy, setBusy] = useState(false);
+  const [note, setNote] = useState(null);
   const follow = async (urls, titles, priv) => {
     if (!user) { toastIn('Podcasts').error(t('audio.podcasts.errors.signIn')); return false; }
     setBusy(true);
@@ -240,12 +195,17 @@ function useFollowFeeds(user, onFollowed) {
       if (urls.length === 1) {
         if (ok.length) {
           toastIn('Podcasts').success(ok[0].already ? t('audio.podcasts.alreadyFollowing') : t('audio.podcasts.followed'));
+          setNote(null);
           onFollowed?.(ok[0].feed_id);
         } else {
-          toastIn('Podcasts').error(followErrorText(failed[0]?.code, failed[0]));
+          const text = followErrorText(failed[0]?.code, failed[0]);
+          toastIn('Podcasts').error(text);
+          setNote({ tone: 'warn', text });
         }
       } else {
-        toastIn('Podcasts').success(t('audio.podcasts.opml.imported', { count: ok.length, failed: failed.length }));
+        const text = t('audio.podcasts.opml.imported', { count: ok.length, failed: failed.length });
+        toastIn('Podcasts').success(text);
+        setNote({ tone: 'info', text });
         onFollowed?.(null);
       }
       return ok.length > 0;
@@ -256,13 +216,22 @@ function useFollowFeeds(user, onFollowed) {
       setBusy(false);
     }
   };
-  return { busy, follow };
+  return { busy, follow, note, setNote };
+}
+
+/** Follow (cyan) or Following (a check), for a show from a directory. */
+function FollowLink({ url, followed, busy, onFollow }) {
+  const { t } = useTranslation();
+  return followed.has(feedKey(url))
+    ? <span className="pod-following"><Icon name="check" size={14} /> {t('audio.podcasts.following')}</span>
+    : <button type="button" className="pod-follow-link" disabled={busy} onClick={() => onFollow([url])}>{t('audio.podcasts.follow')}</button>;
 }
 
 /**
- * Shows from Podcast Index (search, a person search, trending): not on 3Speak
- * yet, so the action is Follow. A person search adds how many of their episodes
- * the show has, and the newest one.
+ * Shows from Podcast Index / Apple (search, a person search, top charts): not
+ * on 3Speak yet, so the action is Follow. Two rows across (36c "Top charts");
+ * a chart's rank in the number tile, the first in accent. A person search adds
+ * how many of their episodes the show has, and the newest one.
  */
 function PiResults({ list, followed, busy, onFollow }) {
   const { t } = useTranslation();
@@ -270,23 +239,19 @@ function PiResults({ list, followed, busy, onFollow }) {
     <div className="pod-results">
       {list.map((r) => (
         <div key={r.url} className="pod-result">
-          <span className="pod-result-cover">
-            <PodcastArt art={r.art} px={256} className="pod-result-art" />
-            {r.rank > 0 && <span className="pod-result-rank">{r.rank}</span>}
-          </span>
+          {r.rank > 0 && <span className={`pod-result-rank${r.rank === 1 ? ' is-first' : ''}`}>{r.rank}</span>}
+          <PodcastArt art={r.art} px={128} className="pod-result-art" />
           <div className="pod-result-body">
             <div className="pod-result-title" title={r.title}>{r.title}</div>
-            <div className="pod-result-meta">{r.author}</div>
+            {r.author && <div className="pod-result-meta">{r.author}</div>}
             {r.matches > 0 ? (
               <>
                 <div className="pod-result-meta pod-result-meta--accent">{t('audio.podcasts.search.appearsIn', { count: r.matches })}</div>
                 {r.sample && <div className="pod-result-meta" title={r.sample}>{t('audio.podcasts.search.latestMatch', { title: r.sample })}</div>}
               </>
-            ) : r.episodes > 0 && <div className="pod-result-meta">{t('audio.podcasts.episodes', { count: r.episodes })}</div>}
+            ) : !(r.rank > 0) && r.episodes > 0 && <div className="pod-result-meta">{t('audio.podcasts.episodes', { count: r.episodes })}</div>}
           </div>
-          {followed.has(feedKey(r.url))
-            ? <span className="pod-following"><MdCheck size={15} /> {t('audio.podcasts.following')}</span>
-            : <button type="button" className="pod-btn pod-btn--primary pod-result-follow" disabled={busy} onClick={() => onFollow([r.url])}><MdAdd size={16} /> {t('audio.podcasts.follow')}</button>}
+          <FollowLink url={r.url} followed={followed} busy={busy} onFollow={onFollow} />
         </div>
       ))}
     </div>
@@ -299,10 +264,11 @@ function useFollowedKeys(subscriptions) {
   return useMemo(() => new Set((subscriptions || []).flatMap((s) => (s.url ? [feedKey(s.url), ...(s.keys || [])] : []))), [subscriptions]);
 }
 
-// ─── Discover: Apple's charts and Podcast Index's trending ────────────────────
+// ─── Trends: Podcast Index's trending and Apple's charts ──────────────────────
 
 const DISCOVER_KEY = 'pod-discover';
-const DISCOVER_SHOWN = 9;
+const CHARTS_SHOWN = 10;
+const TRENDING_SHOWN = 10;
 
 // A language's usual Apple storefront, when the browser names no country.
 const LANG_COUNTRY = {
@@ -311,36 +277,44 @@ const LANG_COUNTRY = {
 };
 
 /**
- * What Discover starts with: the listener's last choice, else their country (from
+ * What Trends starts with: the listener's last choice, else their country (from
  * the browser's language list, e.g. de-AT) and the page's language.
  */
 function discoverPrefs() {
   try {
     const saved = JSON.parse(localStorage.getItem(DISCOVER_KEY) || 'null');
-    if (saved && typeof saved.country === 'string') return { tab: 'charts', lang: '', cat: '', ...saved };
+    if (saved && typeof saved.country === 'string') return { lang: '', cat: '', chartCat: '', ...saved };
   } catch { /* storage off */ }
   const ui = String(getLanguage() || '').split('-')[0];
   const region = (typeof navigator !== 'undefined' ? navigator.languages || [navigator.language] : [])
     .map((l) => String(l || '').split('-')[1]?.toLowerCase())
     .find((c) => c && CHART_COUNTRIES.includes(c));
   return {
-    tab: 'charts',
     country: region || LANG_COUNTRY[ui] || 'us',
     lang: UI_LANGUAGES.some((l) => l.code === ui) ? ui : '',
     cat: '',
+    chartCat: '',
   };
 }
 
-function DiscoverSection({ user, subscriptions, onFollowed, config }) {
+/** A select drawn like the board's "English ▾" pills (36 tall, on surface). */
+function PodSelect({ value, onChange, label, children }) {
+  return (
+    <select className="pod-pill-select" value={value} onChange={(e) => onChange(e.target.value)} aria-label={label}>
+      {children}
+    </select>
+  );
+}
+
+function TrendsSection({ user, subscriptions, onFollowed, config }) {
   const { t } = useTranslation();
   const hasTrending = !!config?.trending;
+  const hasCharts = config?.charts !== false;
   const countries = config?.chart_countries?.length ? config.chart_countries : CHART_COUNTRIES;
   const [pick, setPick] = useState(discoverPrefs);
   const [all, setAll] = useState(false);
-  const tab = pick.tab === 'trending' && hasTrending ? 'trending' : 'charts';
-  const charts = usePodcastCharts(pick.country, pick.cat, tab === 'charts');
-  const trending = usePodcastTrending(pick.lang, pick.cat, tab === 'trending');
-  const { data: list = [], isLoading, isError } = tab === 'charts' ? charts : trending;
+  const charts = usePodcastCharts(pick.country, pick.chartCat, hasCharts);
+  const trending = usePodcastTrending(pick.lang, pick.cat, hasTrending);
   const { busy, follow } = useFollowFeeds(user, onFollowed);
   const followed = useFollowedKeys(subscriptions);
   // Country and language names in the page's own language.
@@ -360,88 +334,111 @@ function DiscoverSection({ user, subscriptions, onFollowed, config }) {
     setAll(false);
     try { localStorage.setItem(DISCOVER_KEY, JSON.stringify(value)); } catch { /* storage off */ }
   };
+  const categoryOptions = (
+    <>
+      <option value="">{t('audio.podcasts.trending.allCategories')}</option>
+      {TRENDING_CATEGORIES.map((c) => <option key={c} value={c}>{t(`audio.podcasts.categories.${c.replace(/\s+/g, '')}`)}</option>)}
+    </>
+  );
+  const status = (q, kind) => (
+    <>
+      {q.isLoading && <p className="pod-empty">{t('common.status.loading')}</p>}
+      {q.isError && <p className="pod-empty">{t(`audio.podcasts.${kind}.failed`)}</p>}
+      {!q.isLoading && !q.isError && (q.data || []).length === 0 && <p className="pod-empty">{t(`audio.podcasts.${kind}.none`)}</p>}
+    </>
+  );
+  const chartList = charts.data || [];
+  const shownCharts = all ? chartList : chartList.slice(0, CHARTS_SHOWN);
 
-  const tabs = [
-    { key: 'charts', icon: <MdLeaderboard size={17} />, label: t('audio.podcasts.charts.title') },
-    ...(hasTrending ? [{ key: 'trending', icon: <MdWhatshot size={17} />, label: t('audio.podcasts.trending.title') }] : []),
-  ];
-  const shown = all ? list : list.slice(0, DISCOVER_SHOWN);
   return (
-    <section className="pod-section pod-discover">
-      <div className="pod-section-head pod-section-head--filters">
-        <div className="pod-discover-tabs" role="tablist">
-          {tabs.map((x) => (
-            <button
-              key={x.key}
-              type="button"
-              role="tab"
-              aria-selected={tab === x.key}
-              className={`pod-discover-tab${tab === x.key ? ' active' : ''}`}
-              onClick={() => choose({ tab: x.key })}
-            >
-              {x.icon}{x.label}
-            </button>
-          ))}
-        </div>
-        <div className="pod-trending-filters">
-          {tab === 'charts' ? (
-            <select className="pod-select" value={pick.country} onChange={(e) => choose({ country: e.target.value })} aria-label={t('audio.podcasts.charts.country')}>
-              {sortedCountries.map((c) => <option key={c} value={c}>{countryName(c)}</option>)}
-            </select>
-          ) : (
-            <select className="pod-select" value={pick.lang} onChange={(e) => choose({ lang: e.target.value })} aria-label={t('audio.podcasts.trending.language')}>
+    <>
+      {hasTrending && (
+        <section className="pod-section">
+          <div className="pod-app-head">
+            <h2 className="pod-app-title">{t('audio.podcasts.trending.title')}</h2>
+            <PodSelect value={pick.lang} onChange={(v) => choose({ lang: v })} label={t('audio.podcasts.trending.language')}>
               <option value="">{t('audio.podcasts.trending.allLanguages')}</option>
               {UI_LANGUAGES.map((l) => <option key={l.code} value={l.code}>{langName(l.code)}</option>)}
-            </select>
+            </PodSelect>
+            <PodSelect value={pick.cat} onChange={(v) => choose({ cat: v })} label={t('audio.podcasts.trending.category')}>{categoryOptions}</PodSelect>
+          </div>
+          {status(trending, 'trending')}
+          {(trending.data || []).length > 0 && (
+            <div className="pod-rail pod-rail--five">
+              {trending.data.slice(0, TRENDING_SHOWN).map((r) => (
+                <ShowCard
+                  key={r.url}
+                  feed={{ id: r.url, url: r.url, title: r.title, art: r.art, author: r.author }}
+                  note={r.author}
+                  follow={<FollowLink url={r.url} followed={followed} busy={busy} onFollow={follow} />}
+                />
+              ))}
+            </div>
           )}
-          <select className="pod-select" value={pick.cat} onChange={(e) => choose({ cat: e.target.value })} aria-label={t('audio.podcasts.trending.category')}>
-            <option value="">{t('audio.podcasts.trending.allCategories')}</option>
-            {TRENDING_CATEGORIES.map((c) => <option key={c} value={c}>{t(`audio.podcasts.categories.${c.replace(/\s+/g, '')}`)}</option>)}
-          </select>
-        </div>
-      </div>
-      {isLoading && <p className="pod-empty">{t('common.status.loading')}</p>}
-      {isError && <p className="pod-empty">{t(tab === 'charts' ? 'audio.podcasts.charts.failed' : 'audio.podcasts.trending.failed')}</p>}
-      {!isLoading && !isError && list.length === 0 && (
-        <p className="pod-empty">{t(tab === 'charts' ? 'audio.podcasts.charts.none' : 'audio.podcasts.trending.none')}</p>
+        </section>
       )}
-      <PiResults list={shown} followed={followed} busy={busy} onFollow={follow} />
-      {!all && list.length > DISCOVER_SHOWN && (
-        <button type="button" className="pod-btn pod-more" onClick={() => setAll(true)}>{t('audio.podcasts.more')}</button>
+      {hasCharts && (
+        <section className="pod-section">
+          <div className="pod-app-head">
+            <h2 className="pod-app-title">{t('audio.podcasts.charts.title')}</h2>
+            <PodSelect value={pick.country} onChange={(v) => choose({ country: v })} label={t('audio.podcasts.charts.country')}>
+              {sortedCountries.map((c) => <option key={c} value={c}>{countryName(c)}</option>)}
+            </PodSelect>
+            <PodSelect value={pick.chartCat} onChange={(v) => choose({ chartCat: v })} label={t('audio.podcasts.trending.category')}>{categoryOptions}</PodSelect>
+          </div>
+          {status(charts, 'charts')}
+          <PiResults list={shownCharts} followed={followed} busy={busy} onFollow={follow} />
+          {!all && chartList.length > CHARTS_SHOWN && (
+            <button type="button" className="pod-btn pod-more" onClick={() => setAll(true)}>{t('audio.podcasts.more')}</button>
+          )}
+        </section>
       )}
-    </section>
+    </>
   );
 }
 
-// ─── The header: search, RSS, OPML ────────────────────────────────────────────
+// ─── Search, add by link, OPML, private feed (36c) ────────────────────────────
 
 const SEARCH_MODES = [
   { key: 'shows', labelKey: 'audio.podcasts.search.modeShows', placeholderKey: 'audio.podcasts.search.placeholder' },
   { key: 'people', labelKey: 'audio.podcasts.search.modePeople', placeholderKey: 'audio.podcasts.search.placeholderPeople' },
 ];
 
-function PodcastHero({ user, searchEnabled, personEnabled, subscriptions, onFollowed }) {
+/** A notice's first sentence in bold, the rest muted (36c "Spotify doesn't share its shows' feeds."). */
+function LeadSentence({ text }) {
+  const m = String(text || '').match(/^(.+?[.!?])\s+(.+)$/);
+  if (!m) return <b>{text}</b>;
+  return <><b>{m[1]}</b> <span className="pod-side-muted">{m[2]}</span></>;
+}
+
+/**
+ * The podcast app around Discover and Trends (36c): find a show (by name, by
+ * host, or by pasting its link) over the view's own sections, and on the side
+ * your podcasts (OPML in and out), a private feed's login, and why the last
+ * pasted link did not work.
+ */
+function PodcastFinder({ user, searchEnabled, personEnabled, subscriptions, onFollowed, children }) {
   const { t } = useTranslation();
   const [query, setQuery] = useState('');
   const [mode, setMode] = useState('shows');
-  const [feedUrl, setFeedUrl] = useState('');
+  // Paste a link instead of searching (always, when search is off).
+  const [linkMode, setLinkMode] = useState(false);
   // A private feed (a supporters' feed, a paid show): its login goes into the link.
   const [priv, setPriv] = useState({ on: false, username: '', password: '' });
-  const { busy, follow } = useFollowFeeds(user, onFollowed);
+  const { busy, follow, note } = useFollowFeeds(user, onFollowed);
   const [searching, setSearching] = useState(false);
   const [results, setResults] = useState(null);
-  // Folded behind "Add external podcast" until asked for.
-  const [open, setOpen] = useState(false);
   const fileRef = useRef(null);
+  const inputRef = useRef(null);
   const followed = useFollowedKeys(subscriptions);
+  const asLink = linkMode || !searchEnabled;
 
-  const search = async (e) => {
-    e.preventDefault();
+  const search = async () => {
     const q = query.trim();
     if (q.length < 2) return;
     setSearching(true);
     try {
-      // Apple's results come from the store of the country Discover shows.
+      // Apple's results come from the store of the country Trends shows.
       const found = mode === 'people' && personEnabled ? await searchPeople(q) : await searchPodcasts(q, discoverPrefs().country);
       setResults({ q, list: found.results || [] });
     } catch {
@@ -451,19 +448,23 @@ function PodcastHero({ user, searchEnabled, personEnabled, subscriptions, onFoll
     }
   };
 
-  const addFeed = async (e) => {
-    e.preventDefault();
-    const url = feedUrl.trim();
+  const addFeed = async () => {
+    const url = query.trim();
     if (!url) return;
     if (!/^https?:\/\//i.test(url)) { toastIn('Podcasts').error(t('audio.podcasts.errors.badUrl')); return; }
     if (priv.on) {
       if (await follow([buildPrivateFeedUrl(url, priv.username, priv.password)], [], [true])) {
-        setFeedUrl('');
+        setQuery('');
         setPriv({ on: false, username: '', password: '' });
       }
       return;
     }
-    if (await follow([url])) setFeedUrl('');
+    if (await follow([url])) setQuery('');
+  };
+
+  const submit = (e) => {
+    e.preventDefault();
+    if (asLink) addFeed(); else search();
   };
 
   const exportOpml = () => {
@@ -484,137 +485,119 @@ function PodcastHero({ user, searchEnabled, personEnabled, subscriptions, onFoll
     }
   };
 
-  if (!open) {
-    return (
-      <div className="pod-add-row">
-        <button type="button" className="pod-btn pod-btn--solid" onClick={() => setOpen(true)} aria-expanded={false}>
-          <MdAdd size={18} /> {t('audio.podcasts.addExternal')}
-        </button>
-      </div>
-    );
-  }
+  const busyNow = asLink ? busy : searching;
+  const canSubmit = asLink ? !!query.trim() : query.trim().length >= 2;
 
   return (
-    <>
-      <header className="pod-hero">
-        <div className="pod-hero-intro">
-          <span className="pod-hero-icon"><MdPodcasts size={28} /></span>
-          <div>
-            <h2 className="pod-hero-title">{t('audio.podcasts.introTitle')}</h2>
-            <p className="pod-hero-sub">{user ? t('audio.podcasts.heroSub') : t('audio.podcasts.introSignedOut')}</p>
-          </div>
-          <button type="button" className="pod-icon-btn pod-hero-close" onClick={() => setOpen(false)} aria-expanded aria-label={t('common.actions.close')} title={t('common.actions.close')}>
-            <MdClose size={18} />
-          </button>
-        </div>
-
-        {user && (
-          <div className="pod-hero-body">
-            <div className={`pod-hero-fields${searchEnabled ? '' : ' pod-hero-fields--single'}`}>
-              {searchEnabled && (
-                <form className="pod-field" onSubmit={search}>
-                  <div className="pod-field-head">
-                  <label className="pod-field-label" htmlFor="pod-search">{t('audio.podcasts.search.label')}</label>
-                  {personEnabled && <div className="pod-search-modes" role="group" aria-label={t('audio.podcasts.search.label')}>
-                    {SEARCH_MODES.map((m) => (
-                      <button
-                        key={m.key}
-                        type="button"
-                        className={`pod-search-mode${mode === m.key ? ' active' : ''}`}
-                        aria-pressed={mode === m.key}
-                        onClick={() => { setMode(m.key); setResults(null); }}
-                      >
-                        {t(m.labelKey)}
-                      </button>
-                    ))}
-                  </div>}
-                </div>
-                  <div className="pod-field-row">
-                    <MdSearch className="pod-field-icon" size={18} />
-                    <input
-                      id="pod-search"
-                      type="search"
-                      value={query}
-                      onChange={(e) => { setQuery(e.target.value); if (!e.target.value) setResults(null); }}
-                      placeholder={t(SEARCH_MODES.find((m) => m.key === mode).placeholderKey)}
-                      autoComplete="off"
-                    />
-                    <button type="submit" className="pod-btn pod-btn--primary" disabled={searching || query.trim().length < 2}>
-                      {searching ? t('common.status.loading') : t('audio.podcasts.search.button')}
-                    </button>
-                  </div>
-                </form>
-              )}
-              <form className="pod-field" onSubmit={addFeed}>
-                <label className="pod-field-label" htmlFor="pod-rss">{t('audio.podcasts.rss.labelLink')}</label>
-                <div className="pod-field-row">
-                  <MdLink className="pod-field-icon" size={18} />
-                  <input
-                    id="pod-rss"
-                    type="url"
-                    inputMode="url"
-                    value={feedUrl}
-                    onChange={(e) => setFeedUrl(e.target.value)}
-                    placeholder={t('audio.podcasts.rss.placeholderLink')}
-                    autoComplete="off"
-                  />
-                  <button type="submit" className="pod-btn pod-btn--primary" disabled={busy || !feedUrl.trim()}>
-                    <MdAdd size={16} /> {t('audio.podcasts.follow')}
-                  </button>
-                </div>
+    <div className="pod-app">
+      <div className="pod-app-main">
+        {user ? (
+          <form className="pod-finder" onSubmit={submit}>
+            {searchEnabled && personEnabled && !asLink && (
+              <Segmented
+                className="pod-finder-modes"
+                block={false}
+                size={36}
+                label={t('audio.podcasts.search.label')}
+                value={mode}
+                onChange={(v) => { setMode(v); setResults(null); }}
+                options={SEARCH_MODES.map((m) => ({ value: m.key, label: t(m.labelKey) }))}
+              />
+            )}
+            <label className="pod-finder-field">
+              <Icon name={asLink ? 'link' : 'search'} size={18} />
+              <input
+                ref={inputRef}
+                type={asLink ? 'url' : 'search'}
+                inputMode={asLink ? 'url' : undefined}
+                value={query}
+                onChange={(e) => { setQuery(e.target.value); if (!e.target.value) setResults(null); }}
+                placeholder={asLink ? t('audio.podcasts.rss.placeholderLink') : t(SEARCH_MODES.find((m) => m.key === mode).placeholderKey)}
+                aria-label={asLink ? t('audio.podcasts.rss.labelLink') : t('audio.podcasts.search.label')}
+                autoComplete="off"
+              />
+              {query.trim() && (
                 <button
-                  type="button"
-                  className="pod-link-btn pod-private-toggle"
-                  aria-expanded={priv.on}
-                  aria-controls="pod-private-fields"
-                  onClick={() => setPriv((p) => ({ ...p, on: !p.on }))}
+                  type="submit"
+                  className="pod-finder-go"
+                  disabled={busyNow || !canSubmit}
+                  aria-label={asLink ? t('audio.podcasts.follow') : t('audio.podcasts.search.button')}
+                  title={asLink ? t('audio.podcasts.follow') : t('audio.podcasts.search.button')}
                 >
-                  {priv.on ? <MdLock size={15} /> : <MdLockOpen size={15} />} {t('audio.podcasts.private.toggle')}
-                </button>
-                {priv.on && (
-                  <div className="pod-private" id="pod-private-fields">
-                    <div className="pod-private-fields">
-                      <label className="pod-field">
-                        <span className="pod-field-label">{t('audio.podcasts.private.username')}</span>
-                        <input className="pod-input" type="text" autoComplete="off" value={priv.username} onChange={(e) => setPriv((p) => ({ ...p, username: e.target.value }))} />
-                      </label>
-                      <label className="pod-field">
-                        <span className="pod-field-label">{t('audio.podcasts.private.password')}</span>
-                        <input className="pod-input" type="password" autoComplete="new-password" value={priv.password} onChange={(e) => setPriv((p) => ({ ...p, password: e.target.value }))} />
-                      </label>
-                    </div>
-                    <p className="pod-private-hint">{t('audio.podcasts.private.hint')}</p>
-                  </div>
-                )}
-              </form>
-            </div>
-
-            <div className="pod-hero-tools">
-              <button type="button" className="pod-link-btn" onClick={() => fileRef.current?.click()} disabled={busy}>
-                <MdUploadFile size={15} /> {t('audio.podcasts.opml.import')}
-              </button>
-              {subscriptions?.length > 0 && (
-                <button type="button" className="pod-link-btn" onClick={exportOpml}>
-                  <MdDownload size={15} /> {t('audio.podcasts.opml.export')}
+                  <Icon name={busyNow ? 'progress_activity' : asLink ? 'add' : 'arrow_forward'} size={18} className={busyNow ? 'v2-spin' : undefined} />
                 </button>
               )}
+            </label>
+            {searchEnabled && (
+              <button
+                type="button"
+                className={`pod-finder-link${asLink ? ' is-on' : ''}`}
+                aria-pressed={asLink}
+                onClick={() => { setLinkMode((v) => !v); setResults(null); inputRef.current?.focus(); }}
+              >
+                <Icon name="rss_feed" size={18} /> {t('audio.podcasts.rss.labelLink')}
+              </button>
+            )}
+          </form>
+        ) : (
+          <p className="pod-empty">{t('audio.podcasts.introSignedOut')}</p>
+        )}
+
+        {results && (
+          <section className="pod-section">
+            <div className="pod-app-head">
+              <h2 className="pod-app-title">{t('audio.podcasts.search.results', { count: results.list.length })}</h2>
+              <button type="button" className="pod-icon-btn" onClick={() => setResults(null)} aria-label={t('common.actions.close')}><Icon name="close" size={18} /></button>
+            </div>
+            {results.list.length === 0 && <p className="pod-empty">{t('audio.podcasts.search.none')}</p>}
+            <PiResults list={results.list} followed={followed} busy={busy} onFollow={follow} />
+          </section>
+        )}
+
+        {children}
+      </div>
+
+      {user && (
+        <aside className="pod-app-side">
+          <div className="pod-side-card">
+            <h2 className="pod-side-title is-barred">{t('audio.podcasts.yourPodcasts', { count: subscriptions?.length || 0 })}</h2>
+            <div className="pod-opml">
+              <button type="button" className="pod-opml-btn" onClick={() => fileRef.current?.click()} disabled={busy}>
+                {t('audio.podcasts.opml.import')}<Icon name="upload_file" size={18} />
+              </button>
+              <button type="button" className="pod-opml-btn" onClick={exportOpml} disabled={!subscriptions?.length}>
+                {t('audio.podcasts.opml.export')}<Icon name="download" size={18} />
+              </button>
               <input ref={fileRef} type="file" accept=".opml,.xml,text/xml,text/x-opml,application/xml" hidden onChange={(e) => importOpml(e.target.files?.[0])} />
             </div>
+            {note?.tone === 'info' && <p className="pod-side-info" role="status">{note.text}</p>}
           </div>
-        )}
-      </header>
 
-      {results && (
-        <section className="pod-section">
-          <div className="pod-section-head">
-            <h2 className="pod-section-title"><MdSearch size={18} />{t('audio.podcasts.search.results', { count: results.list.length })}</h2>
-            <button type="button" className="pod-icon-btn" onClick={() => setResults(null)} aria-label={t('common.actions.close')}><MdClose size={18} /></button>
+          <div className="pod-side-card">
+            <h2 className="pod-side-title">{t('audio.podcasts.private.title')}</h2>
+            <div className="pod-side-switch">
+              <Toggle
+                checked={priv.on}
+                label={t('audio.podcasts.private.toggle')}
+                onChange={(on) => { setPriv((p) => ({ ...p, on })); if (on) { setLinkMode(true); setResults(null); } }}
+              />
+              <span>{t('audio.podcasts.private.toggle')}</span>
+            </div>
+            {priv.on && (
+              <div className="pod-private-fields" id="pod-private-fields">
+                <input className="pod-input" type="text" autoComplete="off" placeholder={t('audio.podcasts.private.username')} aria-label={t('audio.podcasts.private.username')} value={priv.username} onChange={(e) => setPriv((p) => ({ ...p, username: e.target.value }))} />
+                <input className="pod-input" type="password" autoComplete="new-password" placeholder={t('audio.podcasts.private.password')} aria-label={t('audio.podcasts.private.password')} value={priv.password} onChange={(e) => setPriv((p) => ({ ...p, password: e.target.value }))} />
+              </div>
+            )}
+            <p className="pod-private-hint">{t('audio.podcasts.private.hint')}</p>
           </div>
-          {results.list.length === 0 && <p className="pod-empty">{t('audio.podcasts.search.none')}</p>}
-          <PiResults list={results.list} followed={followed} busy={busy} onFollow={follow} />
-        </section>
+
+          {note?.tone === 'warn' && (
+            <div className="pod-side-alert" role="alert"><LeadSentence text={note.text} /></div>
+          )}
+        </aside>
       )}
-    </>
+    </div>
   );
 }
 
@@ -630,7 +613,64 @@ function useDebounced(value, ms) {
   return v;
 }
 
-function ShowView({ feedId, user, subscription, onBack, onOpenEpisode }) {
+const COMPACT = (n) => (n >= 1000 ? `${Number((n / 1000).toFixed(1))}K` : String(n));
+
+/** A show as something to tip (the feed's value block, Hive account or funding links). */
+const showTrack = (feed) => ({
+  _id: `show:${feed.id}`,
+  title: feed.title || '',
+  show: feed.title || '',
+  value: feed.value || null,
+  funding: feed.funding || [],
+  feed_url: feed.url || '',
+  link: feed.link || '',
+});
+
+/**
+ * "Support <show>" on the show page (36d): the amount, how the feed splits it,
+ * then the tip window (PodcastTipModal) with that amount, which pays it.
+ */
+function SupportCard({ feed }) {
+  const { t } = useTranslation();
+  const track = useMemo(() => showTrack(feed), [feed]);
+  const { recipients, payable } = useMemo(() => tipOptions(feed.value), [feed.value]);
+  const [sats, setSats] = useState(PODCAST_PRESETS[1]);
+  const [open, setOpen] = useState(false);
+  if (!canTipEpisode(track)) return null;
+  // Each recipient's share in percent, the way the tip window splits the sats.
+  const shares = payable
+    ? splitSats(recipients, 10000).map((r) => ({ name: r.name || r.address, pct: Math.round(r.sats / 100) })).sort((a, b) => b.pct - a.pct)
+    : [];
+  return (
+    <div className="pod-side-card pod-support">
+      <h2 className="pod-side-title">{t('audio.podcasts.tip.support', { show: feed.title || '' })}</h2>
+      {payable && (
+        <div className="pod-support-amounts" role="radiogroup" aria-label={t('engagement.tip.lightning.amountLabel')}>
+          {PODCAST_PRESETS.map((p) => (
+            <button key={p} type="button" role="radio" aria-checked={sats === p} className={`pod-support-amount${sats === p ? ' is-on' : ''}`} onClick={() => setSats(p)}>
+              {COMPACT(p)}
+            </button>
+          ))}
+        </div>
+      )}
+      {shares.length > 1 && (
+        <>
+          <div className="pod-side-eyebrow">{t('audio.podcasts.tip.splitLabel').replace(/:\s*$/, '')}</div>
+          <ul className="pod-support-split">
+            {shares.map((r, i) => <li key={i}><span>{r.name}</span><b className="num">{r.pct}%</b></li>)}
+          </ul>
+        </>
+      )}
+      <button type="button" className="pod-support-send" onClick={() => setOpen(true)}>
+        {payable && hasWebln() ? t('audio.podcasts.tip.sendWebln') : t('audio.podcasts.tip.button')}
+        <Icon name="bolt" size={20} />
+      </button>
+      {open && <PodcastTipModal track={track} initialSats={sats} onClose={() => setOpen(false)} />}
+    </div>
+  );
+}
+
+function ShowView({ feedId, user, subscription, onBack, onOpenEpisode, onOpenDownloads }) {
   const { t } = useTranslation();
   const [days, setDays] = useState(0);
   const [range, setRange] = useState({ from: '', to: '' });
@@ -643,8 +683,14 @@ function ShowView({ feedId, user, subscription, onBack, onOpenEpisode }) {
   const { since, until } = bounds;
   const { data, isLoading, error } = usePodcastFeed(feedId, since, until, q, user);
   usePodcastProgress(user, { feedId });
-  useDownloads();
+  const { items: savedItems, usedBytes, estimate } = useDownloads();
+  const online = useOnline();
   const audioPlayQueued = useAppStore((s) => s.audioPlayQueued);
+  const audioPlay = useAppStore((s) => s.audioPlay);
+  const audioPlayAt = useAppStore((s) => s.audioPlayAt);
+  const audioCurrent = useAppStore((s) => s.audioCurrent);
+  const audioIsPlaying = useAppStore((s) => s.audioIsPlaying);
+  const audioRequestToggle = useAppStore((s) => s.audioRequestToggle);
   const invalidate = useInvalidatePodcasts();
   const [older, setOlder] = useState([]);
   const [olderState, setOlderState] = useState({ loading: false, done: false });
@@ -700,7 +746,7 @@ function ShowView({ feedId, user, subscription, onBack, onOpenEpisode }) {
   if (error || !feed) {
     return (
       <div className="pod-show">
-        <button type="button" className="pod-back" onClick={onBack}><MdArrowBack size={18} /> {t('common.actions.back')}</button>
+        <button type="button" className="pod-back" onClick={onBack}><Icon name="arrow_back" size={18} /> {t('common.actions.back')}</button>
         <p className="pod-empty">{t('audio.podcasts.showMissing')}</p>
       </div>
     );
@@ -720,136 +766,228 @@ function ShowView({ feedId, user, subscription, onBack, onOpenEpisode }) {
     const tracks = list();
     if (tracks.length) audioPlayQueued(tracks[0]);
   };
+  // Live now: the big button plays the stream (36d "Listen live").
+  const liveNow = (feed.live || []).find((l) => l?.url && l.status === 'live');
+  const liveTrack = liveNow ? liveToTrack(liveNow, feed) : null;
+  const liveCurrent = liveTrack && audioCurrent?._id === liveTrack._id;
+  const following = !!(user && subscription);
+  // The highlights (podcast:soundbite) of the loaded episodes, newest first.
+  const highlights = episodes.flatMap((ep) => (ep.soundbites || []).filter((b) => b.duration > 0).map((b) => ({ ep, b }))).slice(0, 3);
+  const playHighlight = ({ ep, b }) => audioPlayAt(episodeToTrack(ep, feed), b.start, b.start + b.duration);
+  const meta = [
+    feed.author,
+    feed.item_count > 0 ? t('audio.podcasts.episodes', { count: feed.item_count }) : null,
+    t('audio.podcasts.followers', { count: feed.subscribers || 0 }),
+  ].filter(Boolean).join(' · ');
+  const listenFilters = [...LISTEN_FILTERS.filter((f) => !f.mineOnly && f.key !== 'all'), LISTEN_FILTERS.find((f) => f.key === 'all')];
+  const today = new Date().toISOString().slice(0, 10);
 
   return (
-    <div className="pod-show">
-      <button type="button" className="pod-back" onClick={onBack}><MdArrowBack size={18} /> {t('audio.podcasts.allPodcasts')}</button>
-      <header className="pod-show-head">
-        <PodcastArt art={feed.art} fallback={episodeArt} px={512} className="pod-show-cover" />
-        <div className="pod-show-info">
-          <span className="pod-show-kicker"><MdPodcasts size={14} /> {t('audio.podcasts.kicker')}{feed.private && <PrivateBadge withText />}</span>
-          <h2 className="pod-show-title">{feed.title || feed.url}</h2>
-          {feed.author && <div className="pod-show-author">{feed.author}</div>}
-          <div className="pod-show-meta">
-            {feed.categories?.map((c) => <span key={c} className="pod-chip">{c}</span>)}
-            <span>{t('audio.podcasts.followers', { count: feed.subscribers || 0 })}</span>
-            {feed.item_count > 0 && <span>{t('audio.podcasts.episodes', { count: feed.item_count })}</span>}
-          </div>
-          {feed.description && <p className="pod-show-desc">{feed.description}</p>}
-          {feed.status === 'error' && <p className="pod-show-error">{t('audio.podcasts.feedError', { reason: followErrorText(feed.error) })}</p>}
-          <div className="pod-show-actions">
-            {episodes.length > 0 && (
-              <button type="button" className="pod-btn pod-btn--solid" onClick={playLatest}><MdPlayArrow size={18} /> {t('audio.podcasts.playLatest')}</button>
-            )}
-            {user && (subscription ? (
-              <>
-                <button
-                  type="button"
-                  className={`pod-btn${subscription.notify ? ' pod-btn--on' : ''}`}
-                  disabled={busy}
-                  onClick={() => run(() => setFeedNotify(user, feed.id, !subscription.notify), subscription.notify ? t('audio.podcasts.notifyOffDone') : t('audio.podcasts.notifyOnDone'))}
-                  title={t('audio.podcasts.notifyHint')}
-                >
-                  {subscription.notify ? <MdNotificationsActive size={16} /> : <MdNotificationsOff size={16} />}
-                  {subscription.notify ? t('audio.podcasts.notifyOn') : t('audio.podcasts.notifyOff')}
-                </button>
-                <button
-                  type="button"
-                  className={`pod-btn${autoQueue ? ' pod-btn--on' : ''}`}
-                  aria-pressed={autoQueue}
-                  onClick={toggleAutoQueue}
-                  title={t('audio.podcasts.autoQueue.hint')}
-                >
-                  <MdQueueMusic size={16} /> {t('audio.podcasts.autoQueue.label')}
-                </button>
-                <button type="button" className="pod-btn" disabled={busy} onClick={() => run(() => unfollowFeed(user, feed.id), t('audio.podcasts.unfollowed'))}>
-                  <MdCheck size={16} /> {t('audio.podcasts.unfollow')}
-                </button>
-              </>
-            ) : feed.url && (
-              <button type="button" className="pod-btn pod-btn--primary" disabled={busy} onClick={() => run(async () => {
-                const [r] = await followFeeds(user, [feed.url]);
-                if (!r?.ok) throw new Error(followErrorText(r?.code, r));
-              }, t('audio.podcasts.followed'))}>
-                <MdAdd size={16} /> {t('audio.podcasts.follow')}
-              </button>
-            ))}
-            {feed.link && (
-              <a className="pod-btn" href={feed.link} target="_blank" rel="noopener noreferrer nofollow"><MdOpenInNew size={16} /> {t('audio.podcasts.website')}</a>
-            )}
-            {/* A private feed's link is never handed out (it carries the login). */}
-            {feed.url && !feed.private && (
-              <a className="pod-btn" href={feed.url} target="_blank" rel="noopener noreferrer nofollow"><MdRssFeed size={16} /> RSS</a>
-            )}
-            {/* The show in one player on another site; an embed is anonymous, so never a private feed */}
-            {!feed.private && episodes.length > 0 && (
-              <button
-                type="button"
-                className="pod-btn"
-                onClick={() => openEmbedCode({ kind: 'podcast', id: feed.id, title: feed.title })}
-                title={t('chat.share.embedOnWebsite')}
-              >
-                <MdCode size={16} /> {t('misc.embed.embed')}
-              </button>
-            )}
-          </div>
-        </div>
-      </header>
+    <div className="pod-show pod-show--app">
+      <button type="button" className="pod-back" onClick={onBack}><Icon name="arrow_back" size={18} /> {t('audio.podcasts.allPodcasts')}</button>
+      <div className="pod-app">
+        <div className="pod-app-main">
+          <header className="pod-showhead">
+            <PodcastArt art={feed.art} fallback={episodeArt} px={512} className="pod-showhead-art" />
+            <div className="pod-showhead-info">
+              <div className="pod-showhead-badges">
+                <span className="pod-badge">{isOn3Speak(feed.url) ? t('audio.podcasts.on3speak') : t('audio.podcasts.chip')}</span>
+                {liveNow && <span className="pod-badge pod-badge--live">● {t('audio.podcasts.live.now')}</span>}
+                {feed.private && <PrivateBadge withText />}
+                {feed.categories?.slice(0, 2).map((c) => <span key={c} className="pod-badge">{c}</span>)}
+              </div>
+              <h2 className="pod-showhead-title">{feed.title || feed.url}</h2>
+              <div className="pod-showhead-meta">{meta}</div>
+              {feed.description && <p className="pod-showhead-desc">{feed.description}</p>}
+              {feed.status === 'error' && <p className="pod-show-error">{t('audio.podcasts.feedError', { reason: followErrorText(feed.error) })}</p>}
+              <div className="pod-showhead-actions">
+                {liveTrack ? (
+                  <button type="button" className="pod-show-play" onClick={() => (liveCurrent ? audioRequestToggle() : audioPlay(liveTrack))}>
+                    {liveCurrent && audioIsPlaying ? t('audio.podcasts.pause') : t('audio.podcasts.live.listen')}
+                    <Icon name={liveCurrent && audioIsPlaying ? 'pause' : 'sensors'} size={20} fill={liveCurrent && audioIsPlaying} />
+                  </button>
+                ) : episodes.length > 0 && (
+                  <button type="button" className="pod-show-play" onClick={playLatest}>
+                    {t('audio.podcasts.playLatest')}<Icon name="play_arrow" size={20} fill />
+                  </button>
+                )}
+                {user && (following ? (
+                  <button
+                    type="button"
+                    className={`pod-show-tile${subscription.notify ? ' is-on' : ''}`}
+                    disabled={busy}
+                    aria-pressed={!!subscription.notify}
+                    onClick={() => run(() => setFeedNotify(user, feed.id, !subscription.notify), subscription.notify ? t('audio.podcasts.notifyOffDone') : t('audio.podcasts.notifyOnDone'))}
+                    title={subscription.notify ? t('audio.podcasts.notifyOn') : t('audio.podcasts.notifyOff')}
+                    aria-label={t('audio.podcasts.notifyLabel')}
+                  >
+                    <Icon name={subscription.notify ? 'notifications_active' : 'notifications_off'} size={24} />
+                  </button>
+                ) : feed.url && (
+                  <button type="button" className="pod-show-follow" disabled={busy} onClick={() => run(async () => {
+                    const [r] = await followFeeds(user, [feed.url]);
+                    if (!r?.ok) throw new Error(followErrorText(r?.code, r));
+                  }, t('audio.podcasts.followed'))}>
+                    <Icon name="add" size={20} /> {t('audio.podcasts.follow')}
+                  </button>
+                ))}
+                {feed.link && (
+                  <a className="pod-show-tile" href={feed.link} target="_blank" rel="noopener noreferrer nofollow" title={t('audio.podcasts.website')} aria-label={t('audio.podcasts.website')}>
+                    <Icon name="open_in_new" size={24} />
+                  </a>
+                )}
+                {/* A private feed's link is never handed out (it carries the login). */}
+                {feed.url && !feed.private && (
+                  <a className="pod-show-tile" href={feed.url} target="_blank" rel="noopener noreferrer nofollow" title="RSS" aria-label="RSS">
+                    <Icon name="rss_feed" size={24} />
+                  </a>
+                )}
+                {/* The show in one player on another site; an embed is anonymous, so never a private feed */}
+                {!feed.private && episodes.length > 0 && (
+                  <button
+                    type="button"
+                    className="pod-show-tile"
+                    onClick={() => openEmbedCode({ kind: 'podcast', id: feed.id, title: feed.title })}
+                    title={t('chat.share.embedOnWebsite')}
+                    aria-label={t('misc.embed.embed')}
+                  >
+                    <Icon name="code" size={24} />
+                  </button>
+                )}
+                {following && (
+                  <button type="button" className="pod-show-tile" disabled={busy} onClick={() => run(() => unfollowFeed(user, feed.id), t('audio.podcasts.unfollowed'))} title={t('audio.podcasts.unfollow')} aria-label={t('audio.podcasts.unfollow')}>
+                    <Icon name="person_remove" size={24} />
+                  </button>
+                )}
+              </div>
+            </div>
+          </header>
 
-      <LiveBanner feed={feed} />
-      <PersonsRow persons={feed.persons} />
+          <LiveBanner feed={feed} upcomingOnly={!!liveTrack} />
 
-      {trailer && (
-        <section className="pod-section">
-          <h2 className="pod-section-title"><MdFiberNew size={18} />{t('audio.podcasts.startHere')}</h2>
-          <ul className="pod-tile-grid">
-            <EpisodeTile ep={trailer} feed={feed} showShow={false} onOpenEpisode={onOpenEpisode} />
-          </ul>
-        </section>
-      )}
-
-      <section className="pod-section">
-        <div className="pod-section-head pod-section-head--filters">
-          <h2 className="pod-section-title">
-            {t('audio.podcasts.episodesTitle')}
-            {data.total > 0 && <span className="audio-section-count">{data.total}</span>}
-          </h2>
-          <EpisodeFilters days={days} onDays={changeDays} listen={listen} onListen={setListen} range={range} onRange={changeRange} />
-        </div>
-        <div className="pod-show-tools">
-          <label className="pod-field-row pod-episode-search">
-            <MdSearch className="pod-field-icon" size={18} />
-            <input
-              type="search"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder={t('audio.podcasts.episodeSearch.placeholder')}
-              aria-label={t('audio.podcasts.episodeSearch.label')}
-              autoComplete="off"
+          <div className="pod-show-filters">
+            {seasons.length > 0 && (
+              <select className="pod-show-select" value={season} onChange={(e) => setSeason(Number(e.target.value))} aria-label={t('audio.podcasts.seasons.label')}>
+                <option value={0}>{t('audio.podcasts.seasons.all')}</option>
+                {seasons.map((n) => <option key={n} value={n}>{t('audio.podcasts.seasons.season', { n })}</option>)}
+              </select>
+            )}
+            <Segmented
+              className="pod-show-listen"
+              block={false}
+              size={28}
+              scroll
+              label={t('audio.podcasts.filters.listenLabel')}
+              value={listen}
+              onChange={setListen}
+              options={listenFilters.map((f) => ({ value: f.key, label: t(f.labelKey) }))}
             />
-          </label>
-          {seasons.length > 0 && (
-            <select className="pod-select" value={season} onChange={(e) => setSeason(Number(e.target.value))} aria-label={t('audio.podcasts.seasons.label')}>
-              <option value={0}>{t('audio.podcasts.seasons.all')}</option>
-              {seasons.map((n) => <option key={n} value={n}>{t('audio.podcasts.seasons.season', { n })}</option>)}
+            <select
+              className="pod-show-select"
+              value={String(days)}
+              onChange={(e) => changeDays(e.target.value === 'custom' ? 'custom' : Number(e.target.value))}
+              aria-label={t('audio.podcasts.filters.dateLabel')}
+            >
+              {DATE_FILTERS.map((f) => <option key={String(f.days)} value={String(f.days)}>{t(f.labelKey)}</option>)}
             </select>
+            <label className="pod-show-search">
+              <Icon name="search" size={16} />
+              <input
+                type="search"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder={t('audio.podcasts.episodeSearch.label')}
+                aria-label={t('audio.podcasts.episodeSearch.label')}
+                autoComplete="off"
+              />
+            </label>
+          </div>
+          {days === 'custom' && (
+            <div className="pod-filter-range pod-show-range">
+              <label>
+                <span>{t('audio.podcasts.filters.from')}</span>
+                <input className="v2-input h32" type="date" value={range.from} max={range.to || today} onChange={(e) => changeRange({ ...range, from: e.target.value })} />
+              </label>
+              <label>
+                <span>{t('audio.podcasts.filters.to')}</span>
+                <input className="v2-input h32" type="date" value={range.to} min={range.from || undefined} max={today} onChange={(e) => changeRange({ ...range, to: e.target.value })} />
+              </label>
+            </div>
+          )}
+
+          <ul className="pod-rows">
+            {trailer && <EpisodeRow ep={trailer} feed={feed} onOpenEpisode={onOpenEpisode} pinned />}
+            {shown.map((ep) => <EpisodeRow key={ep.id} ep={ep} feed={feed} onOpenEpisode={onOpenEpisode} />)}
+          </ul>
+          {episodes.length === 0 && (
+            <p className="pod-empty">
+              {q ? t('audio.podcasts.episodeSearch.none', { q }) : since || until ? t('audio.podcasts.filters.none') : t('audio.podcasts.noEpisodes')}
+            </p>
+          )}
+          {episodes.length > 0 && shown.length === 0 && !trailer && <p className="pod-empty">{t('audio.podcasts.filters.none')}</p>}
+          {olderAvailable && (
+            <button type="button" className="pod-btn pod-more" onClick={loadOlder} disabled={olderState.loading}>
+              {olderState.loading ? t('common.status.loading') : t('audio.podcasts.loadOlder')}
+            </button>
           )}
         </div>
-        <ul className="pod-tile-grid">
-          {shown.map((ep) => <EpisodeTile key={ep.id} ep={ep} feed={feed} showShow={false} onOpenEpisode={onOpenEpisode} />)}
-        </ul>
-        {episodes.length === 0 && (
-          <p className="pod-empty">
-            {q ? t('audio.podcasts.episodeSearch.none', { q }) : since || until ? t('audio.podcasts.filters.none') : t('audio.podcasts.noEpisodes')}
-          </p>
-        )}
-        {episodes.length > 0 && shown.length === 0 && !trailer && <p className="pod-empty">{t('audio.podcasts.filters.none')}</p>}
-        {olderAvailable && (
-          <button type="button" className="pod-btn pod-more" onClick={loadOlder} disabled={olderState.loading}>
-            {olderState.loading ? t('common.status.loading') : t('audio.podcasts.loadOlder')}
-          </button>
-        )}
-      </section>
+
+        <aside className="pod-app-side">
+          <PersonsRow persons={feed.persons} card />
+          {(following || highlights.length > 0) && (
+            <div className="pod-side-card">
+              {following && (
+                <>
+                  <div className="pod-side-toggle">
+                    <Icon name="notifications" size={20} />
+                    <div><b>{t('audio.podcasts.notifyLabel')}</b><span>{t('audio.podcasts.notifyHint')}</span></div>
+                    <Toggle
+                      checked={!!subscription.notify}
+                      disabled={busy}
+                      label={t('audio.podcasts.notifyLabel')}
+                      onChange={(on) => run(() => setFeedNotify(user, feed.id, on), on ? t('audio.podcasts.notifyOnDone') : t('audio.podcasts.notifyOffDone'))}
+                    />
+                  </div>
+                  <div className="pod-side-toggle">
+                    <Icon name="queue_music" size={20} />
+                    <div><b>{t('audio.podcasts.autoQueue.label')}</b><span>{t('audio.podcasts.autoQueue.hint')}</span></div>
+                    <Toggle checked={autoQueue} label={t('audio.podcasts.autoQueue.label')} onChange={toggleAutoQueue} />
+                  </div>
+                </>
+              )}
+              {highlights.length > 0 && (
+                <>
+                  <div className="pod-side-eyebrow">{t('audio.podcasts.highlights.title')}</div>
+                  {highlights.map((h) => (
+                    <button key={`${h.ep.id}-${h.b.start}`} type="button" className="pod-side-highlight" onClick={() => playHighlight(h)} title={t('audio.podcasts.highlights.play')}>
+                      <Icon name="play_circle" size={18} fill />
+                      <b>{h.b.title || t('audio.podcasts.highlights.untitled', { time: fmtClock(h.b.start) })}</b>
+                      <span className="num">{fmtClock(h.b.start)}</span>
+                    </button>
+                  ))}
+                </>
+              )}
+            </div>
+          )}
+          <SupportCard feed={feed} />
+          {savedItems.length > 0 && (
+            <div className="pod-side-note">
+              <Icon name="sd_storage" size={20} />
+              <span>
+                {t('audio.podcasts.downloads.total', { size: fmtBytes(usedBytes) })}
+                {estimate?.quota > 0 && ` · ${t('audio.podcasts.downloads.storage', { used: fmtBytes(estimate.usage), quota: fmtBytes(estimate.quota) })}`}
+              </span>
+            </div>
+          )}
+          {!online && (
+            <div className="pod-side-note is-offline">
+              <Icon name="wifi_off" size={20} />
+              <span>{savedItems.length ? t('audio.offline.notice') : t('audio.offline.noticeNoDownloads')}</span>
+              {savedItems.length > 0 && <button type="button" onClick={onOpenDownloads}>{t('audio.offline.open')}</button>}
+            </div>
+          )}
+        </aside>
+      </div>
     </div>
   );
 }
@@ -974,6 +1112,7 @@ export default function PodcastsTab({ view: viewProp, hideNav = false }) {
 
   const showView = (v) => {
     const next = new URLSearchParams(params);
+    for (const k of ['podcast', 'episode', 't', 'end']) next.delete(k);
     next.set('type', 'external');
     next.set('view', v);
     setParams(next);
@@ -989,7 +1128,7 @@ export default function PodcastsTab({ view: viewProp, hideNav = false }) {
 
   if (feedId) {
     // Keyed by show, so "load older" starts over for each one.
-    return <ShowView key={feedId} feedId={feedId} user={me} subscription={subsById.get(feedId)} onBack={() => openShow(null)} onOpenEpisode={openEpisode} />;
+    return <ShowView key={feedId} feedId={feedId} user={me} subscription={subsById.get(feedId)} onBack={() => openShow(null)} onOpenEpisode={openEpisode} onOpenDownloads={() => showView('mine')} />;
   }
 
   if (config && config.enabled === false) {
@@ -1007,27 +1146,23 @@ export default function PodcastsTab({ view: viewProp, hideNav = false }) {
 
   const followed = (id) => { invalidate(); if (id) openShow(id); };
   const views = [
-    { key: 'mine', icon: <MdLibraryMusic size={18} />, label: t('audio.podcasts.views.mine') },
-    { key: 'discover', icon: <MdExplore size={18} />, label: t('audio.podcasts.views.discover') },
-    { key: 'trends', icon: <MdWhatshot size={18} />, label: t('audio.podcasts.views.trends') },
+    { key: 'mine', label: t('audio.podcasts.views.mine') },
+    { key: 'discover', label: t('audio.podcasts.views.discover') },
+    { key: 'trends', label: t('audio.podcasts.views.trends') },
   ];
 
   return (
     <div className="pod-tab">
-      {!hideNav && <nav className="pod-views" role="tablist" aria-label={t('audio.podcasts.kicker')}>
-        {views.map((v) => (
-          <button
-            key={v.key}
-            type="button"
-            role="tab"
-            aria-selected={view === v.key}
-            className={`pod-view${view === v.key ? ' active' : ''}`}
-            onClick={() => showView(v.key)}
-          >
-            {v.icon}<span>{v.label}</span>
-          </button>
-        ))}
-      </nav>}
+      {!hideNav && (
+        <Segmented
+          className="pod-views"
+          block={false}
+          label={t('audio.podcasts.kicker')}
+          value={view}
+          onChange={showView}
+          options={views.map((v) => ({ value: v.key, label: v.label }))}
+        />
+      )}
 
       {view === 'mine' && (
         <>
@@ -1037,29 +1172,32 @@ export default function PodcastsTab({ view: viewProp, hideNav = false }) {
           {me && online && <ContinueListening user={me} />}
           {me && subsLoaded && subscriptions.length === 0 && !continueItems.length && (
             <div className="pod-mine-empty">
-              <MdPodcasts size={40} />
+              <Icon name="podcasts" size={40} />
               <p>{t('audio.podcasts.views.mineEmpty')}</p>
               <div className="pod-mine-empty-actions">
-                <button type="button" className="pod-btn pod-btn--primary" onClick={() => showView('discover')}><MdExplore size={16} /> {t('audio.podcasts.views.discover')}</button>
-                <button type="button" className="pod-btn" onClick={() => showView('trends')}><MdWhatshot size={16} /> {t('audio.podcasts.views.trends')}</button>
+                <button type="button" className="pod-btn pod-btn--primary" onClick={() => showView('discover')}><Icon name="explore" size={16} /> {t('audio.podcasts.views.discover')}</button>
+                <button type="button" className="pod-btn" onClick={() => showView('trends')}><Icon name="local_fire_department" size={16} /> {t('audio.podcasts.views.trends')}</button>
               </div>
             </div>
           )}
           {/* Offline only the saved episodes play: they come first. */}
           {me && !online && <DownloadsSection onOpenEpisode={openEpisode} />}
           <ShowRail
-            icon={<MdPodcasts size={18} />}
+            tone="eyebrow"
+            five={false}
             title={t('audio.podcasts.yourPodcasts', { count: subscriptions.length })}
             feeds={mine}
             onOpen={openShow}
             artFor={artFor}
             noteFor={(f) => (f.status === 'pending' ? t('audio.podcasts.pending') : f.status === 'error' ? t('audio.podcasts.cantRead') : f.author)}
           />
+          {/* What is saved in this browser, before the long list of the latest (24b). */}
+          {me && online && <DownloadsSection onOpenEpisode={openEpisode} />}
 
           {episodes.length > 0 && (
             <section className="pod-section">
               <div className="pod-section-head pod-section-head--filters">
-                <h2 className="pod-section-title"><MdPlayArrow size={18} />{t('audio.podcasts.latest')}</h2>
+                <h2 className="pod-app-title is-eyebrow">{t('audio.podcasts.latest')}</h2>
                 <EpisodeFilters
                   days={latestDays}
                   onDays={setLatestDays}
@@ -1085,27 +1223,33 @@ export default function PodcastsTab({ view: viewProp, hideNav = false }) {
               )}
             </section>
           )}
-          {me && online && <DownloadsSection onOpenEpisode={openEpisode} />}
         </>
       )}
 
-      {view === 'discover' && (
-        <>
-          <PodcastHero user={me} searchEnabled={!!config?.search} personEnabled={!!config?.person || config?.person === undefined && !!config?.search} subscriptions={subscriptions} onFollowed={followed} />
-          <ShowRail icon={<MdTrendingUp size={18} />} title={t('audio.podcasts.topTitle')} feeds={discover?.top} onOpen={openShow} ranked artFor={artFor} />
-          <ShowRail
-            icon={<MdHistory size={18} />}
-            title={t('audio.podcasts.recentTitle')}
-            feeds={discover?.recent}
-            onOpen={openShow}
-            artFor={artFor}
-            noteFor={(f) => (f.last_followed_at ? t('audio.podcasts.followedOn', { date: fmtDate(f.last_followed_at) }) : f.author)}
-          />
-        </>
-      )}
-
-      {view === 'trends' && (config?.charts || config?.trending) && (
-        <DiscoverSection user={me} config={config} subscriptions={subscriptions} onFollowed={followed} />
+      {(view === 'discover' || view === 'trends') && (
+        <PodcastFinder
+          user={me}
+          searchEnabled={!!config?.search}
+          personEnabled={!!config?.person || (config?.person === undefined && !!config?.search)}
+          subscriptions={subscriptions}
+          onFollowed={followed}
+        >
+          {view === 'discover' && (
+            <>
+              <ShowRail title={t('audio.podcasts.topTitle')} feeds={discover?.top} onOpen={openShow} ranked artFor={artFor} />
+              <ShowRail
+                title={t('audio.podcasts.recentTitle')}
+                feeds={discover?.recent}
+                onOpen={openShow}
+                artFor={artFor}
+                noteFor={(f) => (f.last_followed_at ? t('audio.podcasts.followedOn', { date: fmtDate(f.last_followed_at) }) : f.author)}
+              />
+            </>
+          )}
+          {view === 'trends' && (config?.charts || config?.trending) && (
+            <TrendsSection user={me} config={config} subscriptions={subscriptions} onFollowed={followed} />
+          )}
+        </PodcastFinder>
       )}
     </div>
   );

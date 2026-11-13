@@ -31,7 +31,7 @@
   },
   "directory": {
     "title": "バッジ",
-    "intro": "バッジは、イベントや貢献、節目の記念として、Hive 上で<b>ほかの人から贈られる</b>賞です。自分から参加することはできず、誰かが授与します。バッジを開くと、受け取った人がここで公開している動画を見られます。",
+    "intro": "バッジは、イベントや貢献、節目に Hive 上で<b>ほかの人から贈られる</b>賞です。自分から参加することはできず、誰かが授与します。",
     "searchPlaceholder": "バッジを検索...",
     "sort": {
       "recipients": "受け取った人",
@@ -54,6 +54,7 @@
     "awarding": "授与中…",
     "held": "所持中",
     "award": "授与",
+    "awardNamed": "「{{title}}」を授与",
     "note": "バッジが Hive 上で相手をフォローします。これがバッジを持っているということです。バッジのページから取り消すこともできます。"
   },
   "hive": {
@@ -80,8 +81,9 @@
     "noActivity": "この期間にはまだアクティビティがありません",
     "otherTopics": "その他",
     "title": "ランキング",
-    "subtitle": "{{blurb}} — 3Speak のトップクリエイター。",
-    "subtitleTopic": "{{blurb}} — {{topic}} のトップクリエイター。",
+    "subtitle": "{{blurb}}: 3Speak のトップクリエイター。",
+    "explain": "{{label}}: {{blurb}}。",
+    "subtitleTopic": "{{blurb}}: {{topic}} のトップクリエイター。",
     "allTopics": "すべてのトピック",
     "finding": "このランキングで @{{user}} さんを探しています…",
     "notInTop": "@{{user}} さんはこのランキングの上位 {{n}} 位に入っていません。",

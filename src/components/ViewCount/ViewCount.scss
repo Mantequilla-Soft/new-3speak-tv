@@ -1,15 +1,14 @@
+// Views: eye + count in mono, muted. A video you watched fills the eye in cyan.
 .view-count-badge {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 4px;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
   font-size: 12px;
-  color: var(--text-secondary);
+  color: var(--muted);
+  white-space: nowrap;
+  flex: none;
 
-  &.watched {
-    color: var(--accent-primary, #e53935);
-
-    svg {
-      color: var(--accent-primary, #e53935);
-    }
-  }
+  &.watched .view-icon { color: var(--cyan); }
 }

@@ -1,9 +1,9 @@
-import { useRef, useEffect, useCallback, useState } from 'react';
+import { useEffect, useCallback, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import { usePlayer } from '@mantequilla-soft/3speak-player/react';
-import { MdClose, MdPlayArrow, MdPause } from 'react-icons/md';
+import { Icon } from '../v2/Icon';
 import { useAppStore } from '../../lib/store';
 import { hasConsent } from '../../lib/consent';
 import { getPlayerUrl } from '../../utils/playerUrl';
@@ -17,7 +17,7 @@ const MiniPlayer = () => {
   const location = useLocation();
   const miniPlayer = useAppStore((s) => s.miniPlayer);
   const clearMiniPlayer = useAppStore((s) => s.clearMiniPlayer);
-  const [loaded, setLoaded] = useState(false);
+  const [, setLoaded] = useState(false);
 
   // Hide mini player on the watch page, shorts, upload, and profile pages
   const hiddenPaths = ['/shorts', '/upload', '/upload-video', '/studio'];
@@ -86,11 +86,11 @@ const MiniPlayer = () => {
         <span className="mini-player-author">@{miniPlayer.author}</span>
       </div>
       <div className="mini-player-controls">
-        <button className="mini-player-btn" onClick={handleTogglePlay} aria-label={playerState.paused ? t('common.actions.play') : t('common.actions.pause')}>
-          {playerState.paused ? <MdPlayArrow size={24} /> : <MdPause size={24} />}
+        <button type="button" className="mini-player-btn" onClick={handleTogglePlay} aria-label={playerState.paused ? t('common.actions.play') : t('common.actions.pause')}>
+          <Icon name={playerState.paused ? 'play_arrow' : 'pause'} size={24} fill />
         </button>
-        <button className="mini-player-btn" onClick={handleClose} aria-label={t('common.actions.close')}>
-          <MdClose size={20} />
+        <button type="button" className="mini-player-btn" onClick={handleClose} aria-label={t('common.actions.close')}>
+          <Icon name="close" size={20} />
         </button>
       </div>
       <div className="mini-player-progress">

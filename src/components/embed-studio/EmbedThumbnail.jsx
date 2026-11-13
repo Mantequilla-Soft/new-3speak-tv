@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { Upload, Check, Film, WandSparkles } from "lucide-react";
+import { Icon } from "../v2/ui";
 import "../legacy-studio/VideoUploadStep2.scss";
 import "./thumbnail-editor/ThumbnailEditor.scss";
 import { toastIn } from '../../utils/toast';
@@ -241,17 +241,16 @@ function EmbedThumbnail() {
           <h1>{fromStories ? t(isStory ? "upload.page.shareStory" : "upload.page.shareShort") : t("upload.page.shareVideo")}</h1>
         </div>
 
-        <StepProgress step={step} short={fromStories} />
+        <StepProgress step={step} short={fromStories} actions={actions} />
         {/* Shows only once the background upload runs (it starts on Details),
             i.e. after coming back here: it keeps going, and this says so. */}
         <EmbedUploadProgressBar />
 
         <div className="studio-page-content">
-          <StepActions placement="top" {...actions} />
           <div className="upload-step">
-            <div className="upload-step__header">
-              <h2 className="upload-step__title">{t("upload.thumbnail.title")}</h2>
-              <p className="upload-step__subtitle">
+            <div className="wizard-head upload-step__header">
+              <h2 className="wizard-head__title upload-step__title">{t("upload.thumbnail.title")}</h2>
+              <p className="wizard-head__sub upload-step__subtitle">
                 {t("upload.thumbnail.subtitle")}
               </p>
             </div>
@@ -271,7 +270,7 @@ function EmbedThumbnail() {
                       >
                         <img src={thumbnail} alt={t("upload.thumbnail.thumbAlt", { n: index + 1 })} />
                         {!designInUse && outputSrc === thumbnail && (
-                          <span className="thumb-option__check"><Check size={14} aria-hidden="true" /></span>
+                          <span className="thumb-option__check"><Icon name="check" size={14} /></span>
                         )}
                       </button>
                     ))}
@@ -292,7 +291,7 @@ function EmbedThumbnail() {
                     />
                   ) : videoFile ? (
                     <button type="button" className="thumb-studio__empty thumb-studio__empty--action" onClick={openEditor}>
-                      <span className="thumb-option__icon"><Film size={18} aria-hidden="true" /></span>
+                      <span className="thumb-option__icon"><Icon name="photo_library" size={22} /></span>
                       {t("upload.thumbnail.editor.pickPrompt")}
                     </button>
                   ) : (
@@ -307,7 +306,7 @@ function EmbedThumbnail() {
                     tile last. Both tiles stay, whatever has been done already. */}
                 <div className="thumb-studio__side thumb-studio__side--actions">
                   <button type="button" className="thumb-action thumb-action--editor" onClick={openEditor}>
-                    <span className="thumb-option__icon"><WandSparkles size={16} aria-hidden="true" /></span>
+                    <span className="thumb-option__icon"><Icon name="brush" size={22} /></span>
                     <span className="thumb-option__label">{t("upload.thumbnail.editor.open")}</span>
                     <span className="thumb-option__hint">{t("upload.thumbnail.editor.openHint")}</span>
                   </button>
@@ -326,7 +325,7 @@ function EmbedThumbnail() {
                           label={t("upload.thumbnail.useDesign")}
                         />
                         {designInUse && (
-                          <span className="thumb-option__check"><Check size={14} aria-hidden="true" /></span>
+                          <span className="thumb-option__check"><Icon name="check" size={14} /></span>
                         )}
                         <span className="thumb-option__badge">{t("upload.thumbnail.editedBadge")}</span>
                       </div>
@@ -342,7 +341,7 @@ function EmbedThumbnail() {
                       >
                         <img src={src} alt={t("upload.thumbnail.thumbAlt", { n: generatedThumbnail.length + index + 1 })} />
                         {!designInUse && outputSrc === src && (
-                          <span className="thumb-option__check"><Check size={14} aria-hidden="true" /></span>
+                          <span className="thumb-option__check"><Icon name="check" size={14} /></span>
                         )}
                         <span className="thumb-option__badge">{t("upload.thumbnail.customBadge")}</span>
                       </button>
@@ -363,7 +362,7 @@ function EmbedThumbnail() {
                       className="thumb-option__input"
                       id="embed-thumbnail-upload"
                     />
-                    <span className="thumb-option__icon"><Upload size={16} aria-hidden="true" /></span>
+                    <span className="thumb-option__icon"><Icon name="upload" size={22} /></span>
                     <span className="thumb-option__label">{t("upload.thumbnail.uploadCustom")}</span>
                     <span className="thumb-option__hint">{t("upload.thumbnail.orDragDrop")}</span>
                   </label>

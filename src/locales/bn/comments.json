@@ -16,7 +16,7 @@
       "upload": "আপনার আপলোড কেমন হলো?",
       "stream": "আপনার লাইভস্ট্রিম কেমন হলো?",
       "watch": "3Speak-এ দেখা কেমন লাগলো?",
-      "global": "3Speak আপনার কেমন লাগছে?",
+      "global": "নতুন 3Speak কেমন লাগছে?",
       "fallback": "3Speak আরও ভালো করতে আমাদের সাহায্য করুন"
     },
     "stars": {
@@ -49,7 +49,7 @@
   },
   "live": {
     "vodProcessing": "রেকর্ডিংটি প্রসেস হচ্ছে…",
-    "vodProcessingHint": "এই স্ট্রিমটি শেষ হয়েছে। এনকোডার কাজ শেষ করলেই ভিডিওটি এখানে চলে আসবে — রিলোড করার দরকার নেই।",
+    "vodProcessingHint": "এনকোডার শেষ হলেই ভিডিওটি এখানে এর জায়গা নেবে। রিলোড করার দরকার নেই।",
     "watching_one": "👁 {{count}} জন দেখছেন",
     "watching_other": "👁 {{count}} জন দেখছেন",
     "signInRaiseHand": "হাত তুলতে সাইন ইন করুন",
@@ -107,12 +107,18 @@
     "atTime": "{{time}}-এ",
     "commentPlaceholder": "এখানে আপনার কমেন্ট লিখুন...",
     "replyPlaceholder": "এখানে আপনার রিপ্লাই লিখুন...",
+    "joinPlaceholder": "আলোচনায় যোগ দিন…",
     "commentButton": "কমেন্ট",
-    "count_one": "{{count}}টি কমেন্ট",
-    "count_other": "{{count}}টি কমেন্ট",
+    "count_one": "{{count}}টি মন্তব্য",
+    "count_other": "{{count}}টি মন্তব্য",
+    "replies_one": "{{count}}টি রিপ্লাই",
+    "replies_other": "{{count}}টি রিপ্লাই",
     "edited": "(এডিট করা)",
     "hideComment": "কমেন্ট লুকান",
     "showComment": "@{{user}}-এর কমেন্ট দেখান",
+    "hiddenComment": "লুকানো মন্তব্য",
+    "hiddenLowScore": "কমিউনিটি মন্তব্যটি লুকিয়েছে · কম স্কোর",
+    "show": "দেখান",
     "saving": "সেভ হচ্ছে...",
     "translation": "অনুবাদ",
     "translationFailed": "অনুবাদ ব্যর্থ হয়েছে। অনুবাদ সার্ভিস কি চালু আছে?",
@@ -137,6 +143,9 @@
     "uploadingImage": "ছবি আপলোড হচ্ছে",
     "write": "লিখুন",
     "preview": "প্রিভিউ",
-    "nothingToPreview": "এখনো প্রিভিউ করার মতো কিছু নেই"
+    "nothingToPreview": "এখনো প্রিভিউ করার মতো কিছু নেই",
+    "creator": "ক্রিয়েটর",
+    "empty": "এখনো কোনো মন্তব্য নেই",
+    "emptyHint": "কোনো মুহূর্তের সঙ্গে যুক্ত মন্তব্যগুলো ভিডিওর টাইমলাইনে দেখা যায়।"
   }
 }

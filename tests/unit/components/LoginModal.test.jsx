@@ -7,7 +7,7 @@
 // account or log out.
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { useState } from 'react'
-import { screen, waitFor, within } from '@testing-library/react'
+import { screen, waitFor, within, fireEvent } from '@testing-library/react'
 import { renderWithProviders, toastMessages } from './_render.jsx'
 
 const m = vi.hoisted(() => ({ butrauth: true, metamask: false }))
@@ -45,6 +45,8 @@ vi.mock('../../../src/utils/butrauthAccounts', () => ({
 vi.mock('../../../src/utils/referral', () => ({ withReferrer: (u) => `${u}&ref=badadib`, getStoredInvite: () => 'INVITE1' }))
 vi.mock('../../../src/utils/butrauthPopup', () => ({ withLocale: (u) => u }))
 vi.mock('../../../src/components/HiveAvatar/AccountImg', () => ({ default: () => <span /> }))
+// The community half of the window shows creators from the leaderboard.
+vi.mock('../../../src/lib/leaderboardData', () => ({ fetchLeaderboard: async () => ({ entries: [] }) }))
 
 const { toast } = await import('sonner')
 const { useAppStore } = await import('../../../src/lib/store')
@@ -69,6 +71,7 @@ beforeEach(() => {
     switchUser: vi.fn(() => true),
     getCurrentProvider: vi.fn(() => 'keychain'),
     login: vi.fn(async () => ({ success: true, username: 'badadib' })),
+    removeOtherLogin: vi.fn(),
   }
   m.fetch = vi.fn(async () => ({ ok: true, json: async () => ({ url: 'https://butrauth.example/authorize?x=1' }) }))
   vi.stubGlobal('fetch', (...a) => m.fetch(...a))
@@ -96,12 +99,12 @@ describe('the login window: sign up or log in', () => {
     expect(screen.queryByRole('dialog', { name: 'Wallet login' })).not.toBeInTheDocument()
   })
 
-  it('closes from Cancel, the X and a click on the backdrop', async () => {
+  it('closes from the X and a click on the backdrop (07e: no Cancel button)', async () => {
     const { user, onClose } = mount()
-    await user.click(screen.getByRole('button', { name: 'Cancel' }))
+    expect(screen.queryByRole('button', { name: 'Cancel' })).not.toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Close' }))
-    await user.click(document.querySelector('.login-chooser-overlay'))
-    expect(onClose).toHaveBeenCalledTimes(3)
+    fireEvent.mouseDown(document.querySelector('.v2-dialog'))
+    expect(onClose).toHaveBeenCalledTimes(2)
   })
 
   it('does not close from a click inside the chooser', async () => {
@@ -203,10 +206,9 @@ describe('the login window: sign up or log in', () => {
     await waitFor(() => expect(onLogin).toHaveBeenCalledWith({ success: true, username: 'badadib' }))
   })
 
-  // BUG: the chooser is a plain <div> overlay: no role="dialog", no aria-modal
-  // and no Escape key (LoginModal.jsx:342-343 and :447-448), unlike aioha's own
-  // wallet modal behind it.
-  it('BUG: the chooser is a named dialog that closes on Escape', async () => {
+  // The chooser is the shared v2 Dialog: role="dialog", named by its title,
+  // Escape closes it.
+  it('the chooser is a named dialog that closes on Escape', async () => {
     const { user, onClose } = mount()
     expect(screen.getByRole('dialog', { name: 'Welcome to 3Speak' })).toBeInTheDocument()
     await user.keyboard('{Escape}')
@@ -244,6 +246,16 @@ describe('the login window: signed in with Butter Auth', () => {
     await user.click(row)
     expect(m.aioha.switchUser).toHaveBeenCalledWith('second-acct')
     expect(onLogin).toHaveBeenCalledWith({ success: true, username: 'second-acct', provider: 'keychain' })
+  })
+
+  it('shows the account in use first and can forget a wallet account', async () => {
+    m.aioha.getOtherLogins.mockReturnValue({ 'second-acct': 'keychain' })
+    const { user } = mount()
+    // The account in use: not a button, marked active (42a)
+    expect(screen.getByText('Active · Butter Auth')).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: /@badadib/ })).not.toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Remove from this list' }))
+    expect(m.aioha.removeOtherLogin).toHaveBeenCalledWith('second-acct')
   })
 
   it('asks to log in again when that wallet login has expired', async () => {

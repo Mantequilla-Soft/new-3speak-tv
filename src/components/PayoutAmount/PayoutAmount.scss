@@ -1,15 +1,24 @@
+// Reward on cards, audio rows and the watch page. Money is always the accent
+// color and Roboto Mono (STYLE_GUIDE §2).
 .payout-amount-badge {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 4px;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
   font-size: 12px;
-  color: var(--text-secondary);
+  font-weight: 700;
+  color: var(--accent);
+  white-space: nowrap;
+  flex: none;
+
+  .payout-amount-mark { flex: none; }
 
   &.clickable {
+    border: 0;
+    background: transparent;
+    padding: 0;
     cursor: pointer;
-
-    &:hover {
-      color: var(--text-primary);
-    }
+    &:hover { text-decoration: underline; }
   }
 }

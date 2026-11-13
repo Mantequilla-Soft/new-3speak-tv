@@ -24,6 +24,10 @@
     "noOtherPlaylists": "Non hai ancora altre playlist",
     "createFirst": "Crea una playlist",
     "createNew": "Crea nuova playlist",
+    "newPlaylist": "Nuova playlist",
+    "savedTo_one": "Salvato in {{count}} playlist",
+    "savedTo_many": "Salvato in {{count}} playlist",
+    "savedTo_other": "Salvato in {{count}} playlist",
     "name": "Nome",
     "namePlaceholder": "La mia fantastica playlist",
     "privacy": "Privacy",
@@ -58,6 +62,7 @@
     "items_other": "{{count}} elementi",
     "created": "Creata {{when}}",
     "podcastFeed": "Feed podcast",
+    "playAll": "Riproduci tutto",
     "podcastFeedTitle": "Segui {{name}} in qualsiasi app di podcast (feed RSS)",
     "album": {
       "genre": "<strong>Genere:</strong> {{value}}",
@@ -100,12 +105,15 @@
     "descriptionPlaceholder": "Informazioni su questo album (facoltativo)",
     "filterCount_one": "{{shown}} di {{count}} elemento",
     "filterCount_many": "{{shown}} di {{count}} elementi",
-    "filterCount_other": "{{shown}} di {{count}} elementi"
+    "filterCount_other": "{{shown}} di {{count}} elementi",
+    "shuffle": "Casuale"
   },
   "type": {
     "label": "Tipo",
     "video": "Video",
     "audio": "Audio",
+    "videoSub": "Formato lungo",
+    "audioSub": "Tracce e podcast",
     "kindLabel": "Che tipo di audio?",
     "kinds": {
       "podcast": "Podcast",
@@ -113,5 +121,32 @@
       "voice": "Note vocali",
       "sounds": "Altri suoni"
     }
+  },
+  "feeds": {
+    "button": "Programmi esterni",
+    "title": "Programmi esterni",
+    "intro": "Aggiungi interi podcast da qualsiasi fonte. I loro episodi compaiono in questa playlist accanto ai tuoi, i più recenti per primi, e i nuovi arrivano da soli.",
+    "searchLabel": "Cerca programmi o incolla un link al feed",
+    "searchPlaceholder": "Nome del programma, feed RSS o link di Apple Podcasts",
+    "add": "Aggiungi",
+    "checking": "Verifica in corso...",
+    "searching": "Ricerca in corso...",
+    "noResults": "Nessun programma trovato.",
+    "inList": "Nella playlist",
+    "inPlaylist": "In questa playlist",
+    "none": "Ancora nessun programma esterno.",
+    "remove": "Rimuovi {{title}}",
+    "already": "Questo programma è già in questa playlist.",
+    "limit": "Una playlist può contenere fino a {{max}} programmi esterni.",
+    "ownFeed": "Questo è il feed di questa stessa playlist.",
+    "privateFeed": "I feed protetti da password non possono entrare in una playlist, perché le playlist sono pubbliche.",
+    "tooBig": "È più di quanto una playlist possa contenere. Rimuovi prima un programma.",
+    "saved": "Programmi esterni salvati. La playlist si aggiorna tra pochi secondi.",
+    "saveFailed": "Salvataggio non riuscito: {{error}}",
+    "fromShows": "Da altri programmi:",
+    "video": "Video",
+    "pending_one": "{{count}} programma è ancora in lettura. I suoi episodi compariranno entro pochi minuti.",
+    "pending_many": "{{count}} programmi sono ancora in lettura. I loro episodi compariranno entro pochi minuti.",
+    "pending_other": "{{count}} programmi sono ancora in lettura. I loro episodi compariranno entro pochi minuti."
   }
 }

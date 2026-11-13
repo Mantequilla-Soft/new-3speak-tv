@@ -1,195 +1,159 @@
-@use "../../mixins.scss" as *;
+@use "../../styles/v2" as v2;
 
-.welcome-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 1500; // above the other app-root prompts
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  background: rgba(0, 0, 0, 0.62);
-  backdrop-filter: blur(4px);
-
-  @include respond(phone) {
-    align-items: flex-end;
-    padding: 0;
-  }
-}
+/* The new-account welcome (design 44b "Welcome for creators and for
+   advertisers", 23a on mobile) and the profile editor it shares with "Edit
+   profile". Both sit on the shared v2 Dialog (a bottom sheet under 768px). */
 
 .welcome-modal {
-  position: relative;
-  box-sizing: border-box;
-  width: 100%;
-  max-width: 560px;
-  max-height: 90vh;
-  overflow-y: auto;
-  padding: 26px 26px 22px;
-  background: var(--bg-secondary, #1a1a1a);
-  color: var(--text-primary, #f1f1f1);
-  border: 1px solid var(--border-light, #2d2d2d);
-  border-radius: 18px;
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
-  animation: welcome-pop 0.24s ease-out;
-
-  @include respond(phone) {
-    max-width: 100%;
-    max-height: 92vh;
-    border-radius: 18px 18px 0 0;
-    padding: 22px 18px calc(18px + env(safe-area-inset-bottom, 0px));
-    animation: welcome-slide-up 0.28s ease forwards;
-  }
+  .v2-dialog__body { gap: 14px; }
 }
 
-@keyframes welcome-pop {
-  from { opacity: 0; transform: translateY(12px) scale(0.98); }
-  to   { opacity: 1; transform: none; }
-}
-
-@keyframes welcome-slide-up {
-  from { transform: translateY(100%); }
-  to   { transform: none; }
-}
+// The welcome has no dialog head (the step bar leads), so it starts lower.
+.welcome-modal:not(.profile-edit-modal) .v2-dialog__body { padding-top: 20px; }
 
 .welcome-loading {
-  margin: 0 0 16px;
-  padding: 26px 0;
-  text-align: center;
-  font-size: 13px;
-  color: var(--text-secondary, #aaa);
+  margin: 0;
+  padding: 24px 0;
+  @include v2.text(body-sm);
+  color: var(--muted);
 }
 
 /* ---------- step 1: the welcome ---------- */
 
 .welcome-hero {
-  text-align: center;
-  margin-bottom: 20px;
-
-  .welcome-wave {
-    display: inline-block;
-    font-size: 34px;
-    line-height: 1;
-    margin-bottom: 8px;
-  }
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 
   h2 {
-    margin: 0 0 8px;
-    font-size: 24px;
-    font-weight: 800;
-    letter-spacing: -0.02em;
+    margin: 0;
+    @include v2.text(title);
+    color: var(--text);
   }
 }
 
 .welcome-hero-sub {
-  margin: 0 auto;
-  max-width: 44ch;
-  font-size: 14px;
-  line-height: 1.55;
-  color: var(--text-secondary, #aaa);
+  margin: 0;
+  @include v2.text(body-sm);
+  line-height: 1.5;
+  color: var(--muted);
 
-  strong { color: var(--accent-primary, #ff5252); font-weight: 700; }
+  strong { color: var(--text); font-weight: 700; }
 }
 
+// Six things, three across (two on a phone): bg wells with an accent icon.
 .welcome-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin-bottom: 16px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
 
-  @include respond(phone) {
-    grid-template-columns: 1fr;
-    gap: 8px;
-  }
+  @include v2.mobile { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 .welcome-card {
   display: flex;
-  gap: 10px;
-  padding: 12px;
-  border-radius: 12px;
-  background: var(--bg-tertiary, #242424);
-  border: 1px solid var(--border-light, #2d2d2d);
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 12px;
+  border-radius: var(--r-lg);
+  background: var(--bg);
 
   h4 {
-    margin: 0 0 3px;
-    font-size: 13.5px;
+    margin: 2px 0 0;
+    @include v2.text(body-sm);
     font-weight: 700;
-    color: var(--text-primary, #f1f1f1);
+    color: var(--text);
   }
 
   p {
     margin: 0;
-    font-size: 12.5px;
-    line-height: 1.45;
-    color: var(--text-secondary, #aaa);
+    @include v2.text(meta-sm);
+    line-height: 1.4;
+    color: var(--muted);
   }
 }
 
-.welcome-card-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex: 0 0 32px;
-  width: 32px;
-  height: 32px;
-  border-radius: 9px;
-  background: var(--accent-light, rgba(255, 82, 82, 0.15));
-  color: var(--accent-primary, #ff5252);
-}
+.welcome-card-icon { color: var(--accent); }
 
 .welcome-note {
-  margin: 0 0 18px;
-  text-align: center;
-  font-size: 13px;
-  color: var(--text-secondary, #aaa);
+  margin: 0;
+  @include v2.text(meta);
+  color: var(--muted);
 }
 
 /* ---------- step 2: the profile form ---------- */
 
 .welcome-head {
-  margin-bottom: 18px;
-  padding-right: 40px; // clears the close button when there is one
-
   h2 {
-    margin: 0 0 6px;
-    font-size: 20px;
-    font-weight: 800;
-    letter-spacing: -0.01em;
+    margin: 0 0 4px;
+    @include v2.text(title);
+    color: var(--text);
   }
 
   p {
     margin: 0;
-    font-size: 13px;
+    @include v2.text(body-sm);
     line-height: 1.5;
-    color: var(--text-secondary, #aaa);
+    color: var(--muted);
   }
 }
 
+.welcome-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
 // Banner picker. 4:1 preview, so what you see here is what the profile header
-// gets (minus the crop on narrow screens, which the hint explains).
+// gets (minus the crop on narrow screens, which the hint explains). Empty, it
+// is a dashed drop area (design 44b).
 .welcome-cover-row {
-  margin-bottom: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.welcome-cover-wrap {
+  position: relative;
+  margin-bottom: 26px;   // room for the picture hanging under the banner
 }
 
 .welcome-cover {
-  display: block;
+  position: relative;
+  display: grid;
+  place-items: center;
   width: 100%;
   aspect-ratio: 4 / 1;
   padding: 0;
-  border: 1px solid var(--border-color, #3d3d3d);
-  border-radius: 12px;
-  background-color: #22262b;
+  border: 2px dashed var(--border);
+  border-radius: var(--r-lg);
+  background: transparent;
   background-size: cover;
   background-position: center;
+  color: var(--muted);
+  font: inherit;
   cursor: pointer;
-  position: relative;
   overflow: hidden;
-  transition: border-color 0.2s ease;
+  transition: border-color var(--t-fast) var(--ease), background-color var(--t-fast) var(--ease);
 
-  &:hover:not(:disabled) { border-color: var(--accent-primary, #e53935); }
-  &:disabled { cursor: default; opacity: 0.8; }
+  &:hover:not(:disabled) { border-color: var(--muted); background-color: var(--bg-hover); }
+  &:disabled { cursor: default; opacity: .8; }
+
+  &.has-image {
+    border: 0;
+    &:hover:not(:disabled) { background-color: transparent; }
+  }
 }
 
+.welcome-cover-empty {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  @include v2.text(meta);
+  font-weight: 700;
+}
+
+// Over the picture: a media scrim pill, in both themes.
 .welcome-cover-action {
   position: absolute;
   right: 8px;
@@ -197,118 +161,67 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 5px 10px;
-  border-radius: 999px;
-  background: rgba(2, 6, 23, 0.72);
-  backdrop-filter: blur(6px);
-  color: #fff;
-  font-size: 12px;
-  font-weight: 600;
+  height: 28px;
+  padding: 0 10px;
+  border-radius: var(--r-sm);
+  background: var(--media-scrim);
+  color: var(--on-media);
+  @include v2.text(meta);
+  font-weight: 700;
 }
 
 .welcome-cover-hint {
   display: block;
-  margin-top: 6px;
-  font-size: 11.5px;
+  @include v2.text(meta-sm);
   line-height: 1.45;
-  color: var(--text-muted, #717171);
+  color: var(--muted);
 
-  strong { color: var(--text-secondary, #aaa); }
-}
-
-.welcome-avatar-row {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 12px;
-  margin-bottom: 16px;
-  border-radius: 12px;
-  background: var(--bg-tertiary, #242424);
-  border: 1px solid var(--border-light, #2d2d2d);
+  strong { color: var(--text); font-family: var(--font-mono); }
 }
 
 .welcome-avatar {
-  position: relative;
-  flex: 0 0 72px;
+  position: absolute;
+  left: 16px;
+  bottom: -26px;
+  flex: none;
   width: 72px;
   height: 72px;
   padding: 0;
-  border: 2px solid var(--border-color, #3d3d3d);
+  border: 3px solid var(--surface);
   border-radius: 50%;
-  background: var(--bg-elevated, #2d2d2d);
+  background: var(--surface-2);
   cursor: pointer;
-  overflow: visible;
-  transition: border-color 0.2s ease;
 
-  &:hover:not(:disabled) { border-color: var(--accent-primary, #ff5252); }
-  &:disabled { cursor: default; opacity: 0.8; }
+  &:disabled { cursor: default; opacity: .8; }
 
   img {
+    display: block;
     width: 100%;
     height: 100%;
     border-radius: 50%;
     object-fit: cover;
-    display: block;
   }
 }
 
 .welcome-avatar-badge {
   position: absolute;
-  right: -2px;
-  bottom: -2px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 26px;
-  height: 26px;
+  right: -4px;
+  bottom: -4px;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
-  background: var(--accent-primary, #ff5252);
-  color: #fff;
-  border: 2px solid var(--bg-secondary, #1a1a1a);
+  border: 3px solid var(--surface);
+  background: var(--surface-2);
+  color: var(--text);
 }
 
-.welcome-spin { animation: welcome-rotate 0.9s linear infinite; }
-@keyframes welcome-rotate { to { transform: rotate(360deg); } }
-
-.welcome-avatar-text {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-  min-width: 0;
-
-  strong { font-size: 14px; font-weight: 700; }
-  span { font-size: 12.5px; line-height: 1.4; color: var(--text-secondary, #aaa); }
-}
-
+// Eyebrow label above a filled field; the counter or "optional" on the right.
 .welcome-field {
-  display: block;
-  margin-bottom: 14px;
+  display: flex;
 
-  input,
-  textarea {
-    width: 100%;
-    box-sizing: border-box;
-    padding: 10px 12px;
-    font-size: 14px;
-    font-family: inherit;
-    color: var(--text-primary, #f1f1f1);
-    background: var(--input-bg, #2d2d2d);
-    border: 1px solid var(--input-border, #3d3d3d);
-    border-radius: 10px;
-    outline: none;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
-
-    &::placeholder { color: var(--text-muted, #717171); }
-
-    &:focus {
-      border-color: var(--accent-primary, #ff5252);
-      box-shadow: 0 0 0 3px var(--input-focus, rgba(255, 82, 82, 0.3));
-    }
-
-    &:disabled { opacity: 0.6; }
-  }
-
-  textarea { resize: vertical; line-height: 1.5; }
+  .v2-input.is-area { min-height: 88px; }
 }
 
 .welcome-label {
@@ -316,203 +229,91 @@
   align-items: baseline;
   justify-content: space-between;
   gap: 8px;
-  margin-bottom: 6px;
-  font-size: 12.5px;
-  font-weight: 600;
-  color: var(--text-secondary, #aaa);
 
   em {
     font-style: normal;
-    font-weight: 500;
-    font-size: 11.5px;
-    color: var(--text-muted, #717171);
+    font-weight: 400;
+    letter-spacing: 0;
+    text-transform: none;
   }
-}
-
-.welcome-input-icon {
-  position: relative;
-  display: flex;
-  align-items: center;
-
-  svg {
-    position: absolute;
-    left: 11px;
-    color: var(--text-muted, #717171);
-    pointer-events: none;
-  }
-
-  input { padding-left: 34px; }
 }
 
 .welcome-fineprint {
-  margin: 0 0 16px;
-  font-size: 11.5px;
-  color: var(--text-muted, #717171);
+  margin: 0;
+  @include v2.text(meta-sm);
+  color: var(--muted);
 }
 
-/* ---------- shared actions ---------- */
+/* ---------- footers ---------- */
 
-.welcome-actions {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 10px;
+// 44b: the actions sit under the content, flush left, with no divider and no
+// arrows: "Maybe later" and "Set up my profile" at their own width, the
+// profile and interests steps as two equal halves.
+@include v2.tablet-up {
+  .welcome-modal .v2-dialog__foot {
+    border-top: 0;
+    padding-top: 4px;
+    justify-content: flex-start;
 
-  @include respond(phone) {
-    flex-direction: column-reverse;
-    align-items: stretch;
+    .v2-btn.is-next { justify-content: flex-start; }
+    .v2-btn.is-next > .material-symbols-rounded:last-child { display: none; }
   }
-}
-
-.welcome-skip,
-.welcome-back,
-.welcome-primary {
-  padding: 11px 18px;
-  font-size: 14px;
-  font-weight: 600;
-  font-family: inherit;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: background 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
-
-  &:disabled { opacity: 0.6; cursor: default; }
-}
-
-.welcome-skip,
-.welcome-back {
-  background: transparent;
-  color: var(--text-secondary, #aaa);
-  border: 1px solid var(--border-color, #3d3d3d);
-
-  &:hover:not(:disabled) {
-    color: var(--text-primary, #f1f1f1);
-    background: var(--bg-hover, rgba(255, 255, 255, 0.08));
-  }
-}
-
-.welcome-primary {
-  background: transparent;
-  color: var(--accent-primary, #e53935);
-  border: 1px solid var(--accent-primary, #e53935);
-
-  &:hover:not(:disabled) {
-    background: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent);
-    color: var(--accent-primary, #e53935);
-    border-color: var(--accent-primary, #e53935);
-  }
-}
-
-/* Interests carried over from the warm-up. Chips rather than a fresh list: they
-   are already chosen, so the job here is confirming and adjusting, not picking
-   from scratch. */
-.welcome-interests {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.welcome-interests-label {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--text-muted);
-}
-
-.welcome-interests-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 7px;
-  /* A long vocabulary must not push the save button off a short screen. */
-  max-height: 132px;
-  overflow-y: auto;
-}
-
-.welcome-interest {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 5px 11px;
-  border: 1px solid var(--border-color);
-  border-radius: 999px;
-  background: transparent;
-  color: var(--text-secondary);
-  font: inherit;
-  font-size: 12.5px;
-  cursor: pointer;
-
-  &:hover:not(:disabled) {
-    border-color: var(--text-muted);
-    color: var(--text-primary);
-  }
-
-  &:disabled { opacity: 0.6; cursor: default; }
-
-  /* Selected reads as selected without shouting: an outline in the accent
-     rather than a block of it, since most of these will be on at once. */
-  &.is-on {
-    border-color: var(--accent-primary);
-    color: var(--accent-primary);
-    background: color-mix(in srgb, var(--accent-primary) 10%, transparent);
-  }
+  .welcome-modal:not(.is-step-0) .v2-dialog__foot .v2-btn { flex: 1; }
 }
 
 /* ------------------------------------------------- phone trims --- */
 
-/* Step one carries three blocks of guidance that are genuinely useful on a
-   desktop and simply push the buttons off a phone: the banner spec, the picture
-   spec, and the roomy gaps between fields. The CONTROLS are unchanged — only
-   the prose that explains them goes, since the pickers are self-evident once
-   tapped, and step one was 718px tall in a 780px viewport. */
-@include respond(phone) {
-  .welcome-cover-hint { display: none; }
+/* On a phone (23a) every step is a full-screen page: a 32 headline, the
+   muted line under it, then tiles with a 2px outline. The prose that explains
+   the pickers goes, so the step fits: the pickers are self-evident once tapped. */
+@include v2.mobile {
+  .welcome-modal .v2-dialog__body { gap: 0; }
+  .welcome-modal .v2-steps { margin-bottom: 0; }
 
-  /* Keep the "Profile picture" label; drop the pixel advice under it. */
-  .welcome-avatar-text span { display: none; }
-
+  .welcome-hero,
   .welcome-head {
-    h2 { font-size: 19px; }
-    p { font-size: 13px; }
+    margin-top: 8px;
+
+    h2 {
+      font-size: 32px;
+      font-weight: 900;
+      letter-spacing: -.03em;
+      line-height: 1.02;
+    }
   }
 
-  .welcome-avatar-row { padding: 9px 11px; }
-
-  /* A 3-row bio is comfortable on a desktop and is the single tallest block on
-     a phone. Two rows still shows a short bio in full and is what finally puts
-     the whole step on screen without scrolling. */
-  .welcome-field textarea { min-height: 0; height: 4.4em; }
-
-  .welcome-field { margin-bottom: 10px; }
-}
-
-/* The intro step was the worst offender on a phone: six cards stacked one per
-   row, each with a sentence under its title, pushed the content to 937px in a
-   718px card — so "Set up my profile" sat off screen and the step looked like a
-   wall of text with no way forward.
-   Two columns, titles only. Six short labels scan faster than six sentences
-   nobody reads on a phone anyway, and the button comes back into view. */
-@include respond(phone) {
-  .welcome-grid {
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
+  .welcome-hero-sub,
+  .welcome-head p {
+    margin-top: 10px;
+    @include v2.text(body);
+    line-height: 1.5;
   }
 
+  .welcome-grid,
+  .welcome-fields,
+  .welcome-modal .tagsv2-picker,
+  .welcome-modal .welcome-fineprint { margin-top: 20px; }
+
+  // Six tiles two across: a 2px outline, the icon on top, the title at the bottom.
   .welcome-card {
-    flex-direction: column;
+    min-height: 84px;
+    padding: 12px;
     gap: 6px;
-    padding: 10px;
+    border: 2px solid var(--border);
+    border-radius: var(--r-xl);
+    background: transparent;
 
-    /* Titles stay; the explanatory sentence goes. */
+    h4 { margin-top: auto; @include v2.text(body); font-weight: 700; }
     p { display: none; }
-
-    h4 { margin: 0; font-size: 12.5px; line-height: 1.3; }
   }
+  .welcome-card-icon { font-size: 24px !important; } // the Icon sets its size inline
 
-  .welcome-hero {
-    h2 { font-size: 21px; }
-    .welcome-wave { font-size: 26px; }
-  }
-
-  .welcome-hero-sub { font-size: 13px; }
-
-  /* The button underneath already says "Set up my profile". */
+  .welcome-cover-hint { display: none; }
+  .welcome-field .v2-input.is-area { min-height: 64px; }
+  .welcome-cover-wrap { margin-bottom: 22px; }
+  .welcome-avatar { width: 52px; height: 52px; left: 12px; bottom: -22px; }
+  .v2-onboard .welcome-avatar,
+  .v2-onboard .welcome-avatar-badge { border-color: var(--bg); }
+  .v2-onboard .tagsv2-search { background: var(--surface); }
   .welcome-note { display: none; }
 }

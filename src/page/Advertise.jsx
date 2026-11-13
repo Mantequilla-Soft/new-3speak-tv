@@ -1,14 +1,12 @@
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslation, Trans } from 'react-i18next';
-import { MdCampaign, MdInfoOutline, MdCheckCircle, MdSchedule, MdCancel, MdReplay } from 'react-icons/md';
-import { FaRocket, FaLayerGroup, FaUsers, FaVideo, FaTv } from 'react-icons/fa';
+import { Icon } from '../components/v2/Icon';
 import { toastIn } from '../utils/toast';
 import { useAppStore } from '../lib/store';
 import { transferWithAioha, getOperationUser } from '../hive-api/aioha';
 import { adsEnabledFor, tickerEnabledFor, adsBetaUserFor, ENABLE_BUTRAUTH, adWizardEnabledFor } from '../utils/config';
 import { createPortal } from 'react-dom';
-import { X as CloseIcon } from 'lucide-react';
 import AdWizardFrame from '../components/ads/AdWizardFrame';
 import { formatDate } from '../i18n';
 import SEOHead from '../components/SEOHead';
@@ -54,22 +52,19 @@ import {
   slotLabel,
   countryName,
 } from '../lib/advertiseData';
-import { InventoryPanel, RateCard, FormatTabs } from '../components/ads/AdMarketPanels';
+import { InventoryPanel, RateCard } from '../components/ads/AdMarketPanels';
 import {
   SHOW_MARKETS,
   SITE_ONLY_SURFACES,
-  EXAMPLE_SECONDS,
-  EXAMPLE_DAYS,
   flightPrice,
   hivePayable,
   hiveEquivalent,
   youSupply,
   bannerAdvice,
   savingAt,
-  groupByFormat,
   tickerMinSeconds,
-  formatTabsFor,
 } from '../lib/adMarket';
+import AudioClip from '../components/AudioClip/AudioClip';
 import './Advertise.scss';
 
 // Every toast from this module is headed "Advertising"; the message becomes the
@@ -238,14 +233,14 @@ function CopyButton({ value }) {
 function StatusBadge({ status }) {
   const { t } = useTranslation();
   const map = {
-    pending: { Icon: MdSchedule, label: t('ads.status.underReview') },
-    approved: { Icon: MdCheckCircle, label: t('ads.status.approved') },
-    rejected: { Icon: MdCancel, label: t('ads.status.notAccepted') },
+    pending: { icon: 'schedule', label: t('ads.status.underReview') },
+    approved: { icon: 'check_circle', label: t('ads.status.approved') },
+    rejected: { icon: 'cancel', label: t('ads.status.notAccepted') },
   };
-  const { Icon, label } = map[status] || map.pending;
+  const { icon, label } = map[status] || map.pending;
   return (
     <span className={`mkt-status mkt-status-${status}`}>
-      <Icon aria-hidden="true" /> {label}
+      <Icon name={icon} size={14} /> {label}
     </span>
   );
 }
@@ -269,6 +264,8 @@ const AD_TYPE_FORMAT = { video: 'video_roll', banner: 'video_banner', shorts: 's
 // Types with their own "Your ad" panel instead of the file upload, and nothing for us to
 // make: the ticker (a message and a link) and the audio spot (an audio file and a link).
 const ownAdPanel = (t) => t === 'ticker' || t === 'audio';
+// The icon on each "What are you running?" tile (47b).
+const AD_TYPE_ICON = { video: 'smart_display', banner: 'wallpaper', shorts: 'view_day', ticker: 'subtitles', upload: 'upload', audio: 'graphic_eq' };
 // The other way round, for "Book again": a finished flight knows its format, the page asks for a type.
 const FORMAT_AD_TYPE = Object.fromEntries(Object.entries(AD_TYPE_FORMAT).map(([k, v]) => [v, k]));
 // Types that run a video spot, and so carry the label overlay and the "we make it" offer.
@@ -328,20 +325,19 @@ function AdTypePicker({ value, onChange, pricing }) {
     { id: 'banner', title: t('ads.adType.banner.title'), blurb: t('ads.adType.banner.blurb') },
     { id: 'shorts', title: t('ads.adType.shorts.title'), blurb: t('ads.adType.shorts.blurb') },
     { id: 'ticker', title: t('ads.adType.ticker.title'), blurb: t('ads.adType.ticker.blurb') },
-    { id: 'audio', title: t('ads.adType.audio.title'), blurb: t('ads.adType.audio.blurb') },
     { id: 'upload', title: t('ads.adType.upload.title'), blurb: t('ads.adType.upload.blurb') },
+    { id: 'audio', title: t('ads.adType.audio.title'), blurb: t('ads.adType.audio.blurb') },
   // Only what the rate card offers right now (a beta format only to its testers).
   ].filter((o) => !pricing?.formats?.length || pricing.formats.some((f) => f.key === AD_TYPE_FORMAT[o.id]));
   const name = `mkt-adtype-${useId()}`;
+  const qid = `${name}-q`;
+  // 47b: one list of choice tiles, each with its icon, in the board's order.
   return (
     <>
-      <div className="mkt-field mkt-field-wide mkt-adtype">
-        <span className="mkt-label">{t('ads.adType.question')}</span>
-        {groupByFormat(options, (o) => AD_TYPE_FORMAT[o.id]).map((g) => (
-        <div key={g.id} className="mkt-adtype-group">
-        <span className="mkt-adtype-group-title">{t(g.title)}</span>
+      <div className="mkt-field mkt-field-wide mkt-adtype" role="radiogroup" aria-labelledby={qid}>
+        <span className="mkt-adtype-q" id={qid}>{t('ads.adType.question')}</span>
         <div className="mkt-adtype-row">
-          {g.items.map((o) => (
+          {options.map((o) => (
             <label key={o.id} className={`mkt-adtype-opt${value === o.id ? ' selected' : ''}`}>
               <input
                 type="radio"
@@ -350,6 +346,7 @@ function AdTypePicker({ value, onChange, pricing }) {
                 checked={value === o.id}
                 onChange={() => onChange(o.id)}
               />
+              <Icon name={AD_TYPE_ICON[o.id]} size={20} className="mkt-adtype-icon" />
               <span>
                 <strong>{o.title}</strong>
                 <span className="mkt-hint">{o.blurb}</span>
@@ -357,8 +354,6 @@ function AdTypePicker({ value, onChange, pricing }) {
             </label>
           ))}
         </div>
-        </div>
-        ))}
       </div>
       <p className="mkt-fine">
         {value === 'ticker'
@@ -1048,7 +1043,7 @@ function CampaignPanel({
           drift the same way twice. */}
       {prefill && prefillSeen === prefill.key && (
         <div className="mkt-note mkt-rebook-note">
-          <MdReplay aria-hidden="true" />
+          <Icon name="replay" size={18} />
           <div>
             <span>{t('ads.rebook.notice', { name: prefill.name })}</span>
             {reusable && (
@@ -1077,18 +1072,10 @@ function CampaignPanel({
         </div>
       )}
 
-      {awaitingApproval && (
-        <p className="mkt-note">
-          <MdInfoOutline aria-hidden="true" />
-          <span>
-            {pricing?.slotHoldHours
-              ? t('ads.book.awaitingApprovalHours', { hours: pricing.slotHoldHours })
-              : t('ads.book.awaitingApproval')}
-          </span>
-        </p>
-      )}
-
       <form className="mkt-book" onSubmit={onBook}>
+        {/* 47c: the booking on the left, the forecast, the total and Book this ad in
+            their own column on the right. */}
+        <div className="mkt-book-main">
         {/* The type comes first and the rest of the form follows from it: the three
             products differ in price, in length, in what you supply and in whether a
             position is even yours to choose. */}
@@ -1225,21 +1212,57 @@ function CampaignPanel({
         <fieldset className="mkt-group">
           <legend>{t('ads.inventory.placement')}</legend>
         <div className="mkt-field">
-          <label htmlFor="mkt-slot">{takesAudio ? t('ads.book.whenInTrack') : t('ads.book.whenInVideo')}</label>
-          <select id="mkt-slot" value={chosenSlot} onChange={(e) => setSlotPct(Number(e.target.value))}>
-            {slots.map((p) => (
-              <option key={p} value={p} disabled={slotTaken(p)}>
-                {/* The "not recommended" warning is about a PRE-ROLL: an ad that plays
-                    before the video, to people who were about to leave. A banner at 0%
-                    is not that — it appears with the video, so the caveat does not
-                    apply and neither does the wording. */}
-                {slotLabel({ percent: p, banner: isBanner, audio: takesAudio })}
-                {slotTaken(p)
-                  ? t('ads.book.slotFull')
-                  : (sharingWith(p) > 0 ? t('ads.book.placesLeft', { left: sharesLeft(p), total: slotRow(p).sharesTotal }) : '')}
-              </option>
-            ))}
-          </select>
+          <span className="mkt-label" id="mkt-slot-label">{takesAudio ? t('ads.book.whenInTrack') : t('ads.book.whenInVideo')}</span>
+          {/* One row per position (47c), the places left on the right; a full one is
+              muted and cannot be picked. Arrow keys move between them like a radio group. */}
+          <div
+            id="mkt-slot"
+            className="mkt-slot-rows"
+            role="radiogroup"
+            aria-labelledby="mkt-slot-label"
+            onKeyDown={(e) => {
+              const step = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 }[e.key];
+              if (!step) return;
+              e.preventDefault();
+              const open = slots.filter((p) => !slotTaken(p));
+              const i = open.indexOf(chosenSlot);
+              const next = open[(i + step + open.length) % open.length];
+              if (next != null) {
+                setSlotPct(next);
+                e.currentTarget.querySelector(`[data-slot="${next}"]`)?.focus();
+              }
+            }}
+          >
+            {slots.map((p) => {
+              const full = slotTaken(p);
+              const on = p === chosenSlot;
+              // The count reads on its own on the right, so the brackets the inline
+              // (select) wording needed come off.
+              const left = full
+                ? t('ads.book.slotFull').trim()
+                : (sharingWith(p) > 0 ? t('ads.book.placesLeft', { left: sharesLeft(p), total: slotRow(p).sharesTotal }).trim().replace(/^\((.*)\)$/, '$1') : '');
+              return (
+                <button
+                  key={p}
+                  type="button"
+                  role="radio"
+                  data-slot={p}
+                  aria-checked={on}
+                  tabIndex={on ? 0 : -1}
+                  disabled={full}
+                  className={`mkt-slot-row${on ? ' is-on' : ''}${full ? ' is-full' : ''}`}
+                  onClick={() => setSlotPct(p)}
+                >
+                  {/* The "not recommended" warning is about a PRE-ROLL: an ad that plays
+                      before the video, to people who were about to leave. A banner at 0%
+                      is not that — it appears with the video, so the caveat does not
+                      apply and neither does the wording. */}
+                  <span>{slotLabel({ percent: p, banner: isBanner, audio: takesAudio })}</span>
+                  {left ? <span className="mkt-slot-left">{left}</span> : null}
+                </button>
+              );
+            })}
+          </div>
           <span className="mkt-hint">
             {/* A position is sold to one advertiser at a time, across every format —
                 so this says what is actually for sale, not what exists. */}
@@ -1324,43 +1347,8 @@ function CampaignPanel({
             </span>
           </label>
         ) : null}
+        </div>
         <div className="mkt-book-total">
-          {total != null ? (
-            <span>
-              <Trans i18nKey="ads.book.total" values={{ total }} components={{ b: <strong /> }} />
-              {hiveEquivalent(total, pricing?.hbdPerHive) != null ? (
-                <span className="mkt-hint">
-                  {' '}{t('ads.book.aboutHive', { hive: hiveEquivalent(total, pricing.hbdPerHive) })}
-                </span>
-              ) : null}
-              {productionFee > 0 ? <span className="mkt-hint"> {t('ads.book.feeSplit', { flight, fee: productionFee })}</span> : null}
-              {/* ⚠️ This used to read "{chosenLength}s x {days} days at {rate} HBD per
-                  second per day", which is a multiplication that no longer reproduces
-                  the total: the day rate falls with the length of the flight. Quoting
-                  the EFFECTIVE day rate keeps the line arithmetically honest and shows
-                  the discount at the same time. */}
-              <span className="mkt-hint">
-                {' '}· {fmt ? `${fmt.label}, ` : ''}{t('ads.book.secondsOverDays', { seconds: chosenLength, count: Number(days) })}
-                {fmt?.rateIsCustom ? t('ads.book.atAgreedRate') : ', '}
-                {t('ads.book.perSecondPerDay', { rate: effectiveDayRate != null ? effectiveDayRate : rate })}
-                {daysSaving ? t('ads.book.singleDayRate', { rate, saving: daysSaving }) : ''}
-              </span>
-              {/* What they will actually be asked to transfer. The server spends the
-                  balance when the campaign is created, so quoting only the total
-                  would overstate what this booking costs them. Mirrors the same
-                  min(balance, price) the backend applies — matching `total` works
-                  because priceHbd there is likewise flight + production fee. */}
-              {balanceHbd > 0 ? (
-                <span className="mkt-hint">
-                  {' '}· <Trans
-                    i18nKey="ads.book.creditApplied"
-                    values={{ credit: Math.min(balanceHbd, total), send: Math.round(Math.max(0, total - balanceHbd) * 1000) / 1000 }}
-                    components={{ b: <strong /> }}
-                  />
-                </span>
-              ) : null}
-            </span>
-          ) : null}
           {shownQuote ? (
             <div className={`mkt-forecast${quoteStale ? ' mkt-forecast--stale' : ''}`} aria-live="polite">
               <span className="mkt-forecast-label">{t('ads.book.forecastLabel')}</span>
@@ -1371,6 +1359,46 @@ function CampaignPanel({
               <span className="mkt-hint">{t('ads.book.forecastNote')}</span>
             </div>
           ) : null}
+          {total != null ? (
+            <div className="mkt-book-sum">
+              {/* 47c: the total on its own line in mono, the arithmetic under it, then
+                  the credit in cyan. */}
+              <span className="mkt-book-sum-total">
+                <Trans i18nKey="ads.book.total" values={{ total }} components={{ b: <strong /> }} />
+                {hiveEquivalent(total, pricing?.hbdPerHive) != null ? (
+                  <span className="mkt-book-sum-hive">
+                    {' '}{t('ads.book.aboutHive', { hive: hiveEquivalent(total, pricing.hbdPerHive) })}
+                  </span>
+                ) : null}
+              </span>
+              {productionFee > 0 ? <span className="mkt-hint">{t('ads.book.feeSplit', { flight, fee: productionFee })}</span> : null}
+              {/* ⚠️ This used to read "{chosenLength}s x {days} days at {rate} HBD per
+                  second per day", which is a multiplication that no longer reproduces
+                  the total: the day rate falls with the length of the flight. Quoting
+                  the EFFECTIVE day rate keeps the line arithmetically honest and shows
+                  the discount at the same time. */}
+              <span className="mkt-hint">
+                {fmt ? `${fmt.label}, ` : ''}{t('ads.book.secondsOverDays', { seconds: chosenLength, count: Number(days) })}
+                {fmt?.rateIsCustom ? t('ads.book.atAgreedRate') : ' · '}
+                {t('ads.book.perSecondPerDay', { rate: effectiveDayRate != null ? effectiveDayRate : rate })}
+                {daysSaving ? t('ads.book.singleDayRate', { rate, saving: daysSaving }) : ''}
+              </span>
+              {/* What they will actually be asked to transfer. The server spends the
+                  balance when the campaign is created, so quoting only the total
+                  would overstate what this booking costs them. Mirrors the same
+                  min(balance, price) the backend applies — matching `total` works
+                  because priceHbd there is likewise flight + production fee. */}
+              {balanceHbd > 0 ? (
+                <span className="mkt-book-sum-credit">
+                  <Trans
+                    i18nKey="ads.book.creditApplied"
+                    values={{ credit: Math.min(balanceHbd, total), send: Math.round(Math.max(0, total - balanceHbd) * 1000) / 1000 }}
+                    components={{ b: <strong /> }}
+                  />
+                </span>
+              ) : null}
+            </div>
+          ) : null}
           <button
             type="submit"
             className="mkt-primary"
@@ -1379,6 +1407,13 @@ function CampaignPanel({
           >
             {busy ? t('ads.book.booking') : t('ads.book.bookThis')}
           </button>
+          {awaitingApproval && (
+            <p className="mkt-fine mkt-book-hold">
+              {pricing?.slotHoldHours
+                ? t('ads.book.awaitingApprovalHours', { hours: pricing.slotHoldHours })
+                : t('ads.book.awaitingApproval')}
+            </p>
+          )}
         </div>
       </form>
       {error ? <p className="mkt-upload-error">{error}</p> : null}
@@ -1409,7 +1444,11 @@ function CampaignPanel({
             <li key={c.id}>
               <div className="mkt-campaign-head">
                 <span className="mkt-campaign-name">{c.name}</span>
-                <span className="mkt-creative-status">{c.status.replace(/_/g, ' ')}</span>
+                {/* 47c: a tinted pill in words: cyan while it runs, accent while it
+                    waits on you, muted once it is over. */}
+                <span className={`mkt-flight-status is-${FLIGHT_TONE[c.status] || 'muted'}`}>
+                  {FLIGHT_STATUS.has(c.status) ? t(`ads.flightStatus.${c.status}`) : String(c.status || '').replace(/_/g, ' ')}
+                </span>
               </div>
               <div className="mkt-flight-body">
                 <FlightFacts c={c} />
@@ -1490,7 +1529,7 @@ function CampaignPanel({
                   <div className="mkt-pay-actions">
                     <button
                       type="button"
-                      className="mkt-outline"
+                      className="mkt-primary"
                       disabled={payBusy === c.id}
                       onClick={() => payWithWallet(c)}
                     >
@@ -1656,7 +1695,7 @@ function CampaignPanel({
                 && (pricing?.formats || []).some((f) => f.key === c.format) && (
                 <div className="mkt-rebook-row">
                   <button type="button" className="mkt-outline" onClick={() => onRebook(c)}>
-                    <MdReplay aria-hidden="true" /> {t('ads.rebook.button')}
+                    <Icon name="replay" size={18} /> {t('ads.rebook.button')}
                   </button>
                 </div>
               )}
@@ -1669,6 +1708,11 @@ function CampaignPanel({
 }
 
 // Values are i18n keys.
+// A flight's status as words and a tone (47c). Anything the checker adds later shows
+// as its raw name in muted.
+const FLIGHT_STATUS = new Set(['draft', 'awaiting_payment', 'scheduled', 'running', 'paused', 'complete', 'cancelled', 'rejected']);
+const FLIGHT_TONE = { running: 'cyan', scheduled: 'cyan', awaiting_payment: 'accent', draft: 'accent', rejected: 'accent' };
+
 const CREATIVE_STATUS = {
   pending: 'ads.creativeStatus.pending',
   review: 'ads.creativeStatus.review',
@@ -2044,7 +2088,7 @@ function FlightCreative({ c, account, productName, reference, onChanged }) {
         </>
       ) : cr.kind === 'audio' && cr.audioPath ? (
         <>
-          <audio className="mkt-flight-audio" controls preload="none" src={checkerUrl(cr.audioPath)} />
+          <AudioClip className="mkt-flight-audio" preload="none" src={checkerUrl(cr.audioPath)} />
           {cr.clickUrl ? (
             <span className="mkt-creative-meta">
               {t('ads.flight.linksTo')}{' '}
@@ -2074,7 +2118,7 @@ function FlightCreative({ c, account, productName, reference, onChanged }) {
  * (same voice, chime and music; the very file a listener gets). Asked for on press,
  * never while typing: a render costs the server a second of work. An edit after
  * listening hides the old player, so what is on screen always matches the words. */
-function ListenButton({ reference, message, clickUrl, disabled = false }) {
+function ListenButton({ reference, message, clickUrl, disabled = false, hint = true }) {
   const { t } = useTranslation();
   const key = `${message || ''}\n${clickUrl || ''}`;
   const [heard, setHeard] = useState(null);   // { key, url, text }
@@ -2095,15 +2139,16 @@ function ListenButton({ reference, message, clickUrl, disabled = false }) {
     <div className="mkt-listen">
       {current ? (
         <>
-          <audio controls autoPlay src={current.url} preload="auto" />
+          <AudioClip src={current.url} preload="auto" autoPlay />
           <span className="mkt-hint">{t('ads.ticker.listenSays', { text: current.text })}</span>
         </>
       ) : (
         <div className="mkt-upload-row">
           <button type="button" className="mkt-outline" disabled={disabled || busy || !reference} onClick={onListen}>
+            <Icon name="volume_up" size={18} />
             {busy ? t('ads.ticker.listenBusy') : t('ads.ticker.listen')}
           </button>
-          <span className="mkt-hint">{t('ads.ticker.listenHint')}</span>
+          {hint ? <span className="mkt-hint">{t('ads.ticker.listenHint')}</span> : null}
         </div>
       )}
       {error ? <p className="mkt-upload-error">{error}</p> : null}
@@ -2185,7 +2230,7 @@ function AudioSpotPanel({ reference, format = null, onCreatives }) {
       </div>
       <p className="mkt-fine">{t('ads.audio.howItPlays')}</p>
       <div className="mkt-upload-row">
-        <button type="button" className="mkt-outline" disabled={!canUpload} onClick={onUpload}>
+        <button type="button" className="mkt-primary" disabled={!canUpload} onClick={onUpload}>
           {busy ? t('ads.audio.uploading') : t('ads.audio.upload')}
         </button>
       </div>
@@ -2200,7 +2245,7 @@ function AudioSpotPanel({ reference, format = null, onCreatives }) {
                 {t('ads.audio.seconds', { seconds: Math.ceil(c.durationSeconds || 0) })}
                 {c.note && !rejectedWithNote(c) ? ` · ${c.note}` : ''}
               </span>
-              {c.audioPath ? <audio controls preload="none" src={checkerUrl(c.audioPath)} /> : null}
+              {c.audioPath ? <AudioClip preload="none" src={checkerUrl(c.audioPath)} /> : null}
               {c.clickUrl ? <a href={c.clickUrl} target="_blank" rel="noopener noreferrer">{t('ads.ticker.checkLink')}</a> : null}
             </li>
           ))}
@@ -2296,7 +2341,7 @@ function TickerPanel({ reference, account, productName, format = null, onCreativ
         <span className="mkt-label">{t('ads.ticker.howMoves')}</span>
         <div className="mkt-adtype-row">
           {TICKER_STYLES.map((o) => (
-            <label key={o.id} className={`mkt-adtype-opt${tickerStyle === o.id ? ' selected' : ''}`}>
+            <label key={o.id} className={`mkt-adtype-opt is-cyan${tickerStyle === o.id ? ' selected' : ''}`}>
               <input
                 type="radio"
                 name={styleName}
@@ -2337,20 +2382,22 @@ function TickerPanel({ reference, account, productName, format = null, onCreativ
         caption={t('ads.ticker.alongTop', { seconds: Math.min(needs, maxSeconds) })}
       />
 
-      {/* Spoken in the audio player too. */}
-      <p className="mkt-fine">{t('ads.ticker.audioNote')}</p>
-      <ListenButton
-        reference={reference}
-        message={message.trim()}
-        clickUrl={link.trim()}
-        disabled={!(length > 0 && length <= maxChars && !tooSlowToRead && linkOk)}
-      />
-
-      <div className="mkt-upload-row">
-        <button type="button" className="mkt-outline" disabled={!canSave} onClick={onSave}>
+      {/* Listen and Save side by side under the preview, then what the audio player
+          does with it (47b). */}
+      <div className="mkt-ticker-actions">
+        <ListenButton
+          reference={reference}
+          message={message.trim()}
+          clickUrl={link.trim()}
+          disabled={!(length > 0 && length <= maxChars && !tooSlowToRead && linkOk)}
+          hint={false}
+        />
+        <button type="button" className="mkt-primary" disabled={!canSave} onClick={onSave}>
           {busy ? t('common.actions.saving') : (alreadySaved ? t('common.actions.saved') : t('ads.ticker.saveTicker'))}
         </button>
       </div>
+      {/* Spoken in the audio player too. */}
+      <p className="mkt-fine">{t('ads.ticker.audioNote')}</p>
       {error ? <p className="mkt-upload-error">{error}</p> : null}
 
       {saved.length > 0 && (
@@ -2560,10 +2607,11 @@ function CreativePanel({ reference, account, maxSeconds, bannerSpec, onCreatives
         </div>
       )}
       {wizardOpen && createPortal(
-        <div style={{ position: 'fixed', inset: 0, zIndex: 100050, background: 'var(--bg-primary, #0f0f0f)' }}>
+        <div style={{ position: 'fixed', inset: 0, zIndex: 100050, background: 'var(--bg)' }}>
           <button type="button" onClick={() => setWizardOpen(false)} aria-label={t('common.actions.close')}
-            style={{ position: 'absolute', top: 6, right: 10, zIndex: 2, width: 34, height: 34, borderRadius: '50%', border: '1px solid rgba(128,128,128,.4)', background: 'transparent', color: 'inherit', cursor: 'pointer', display: 'grid', placeItems: 'center' }}>
-            <CloseIcon size={18} />
+            className="v2-iconbtn v2-btn--secondary h36 is-round"
+            style={{ position: 'absolute', top: 6, right: 10, zIndex: 2 }}>
+            <Icon name="close" size={20} />
           </button>
           <AdWizardFrame
             format={adType === 'shorts' ? 'portrait' : 'landscape'}
@@ -2587,33 +2635,37 @@ function CreativePanel({ reference, account, maxSeconds, bannerSpec, onCreatives
             // the length it is multiplied by is chosen.
             <>
               <strong className="mkt-production-title">{t('ads.production.offerAny')}</strong>
+              {/* 47b: one tile per kind (cyan when picked), the price in mono on the
+                  right; "No thanks, I have my own" closes the list as a text choice. */}
               <div className="mkt-production-tiers" role="radiogroup" aria-label={t('ads.production.offerAny')}>
-                <label className="mkt-check">
-                  <input
-                    type="radio"
-                    name={tierName}
-                    checked={!offer.wanted}
-                    onChange={() => offer.onChange({ wanted: false, tier: null, brief: offer.brief })}
-                  />
-                  <span>{t('ads.production.ownAd')}</span>
-                </label>
                 {offer.tiers.map((tier) => (
-                  <label className="mkt-check" key={tier.key}>
+                  <label className={`mkt-tier-row mkt-tier-opt${offer.wanted && offer.tier === tier.key ? ' selected' : ''}`} key={tier.key}>
                     <input
                       type="radio"
                       name={tierName}
                       checked={!!offer.wanted && offer.tier === tier.key}
                       onChange={() => offer.onChange({ wanted: true, tier: tier.key, brief: offer.brief })}
                     />
-                    <span>
+                    <span className="mkt-tier-row__body">
                       <strong>{t(`ads.production.tiers.${tier.key}`)}</strong>
-                      {' '}· {tierPriceText(t, tier)}
-                      <span className="mkt-production-detail">{t(`ads.production.tierDetails.${tier.key}`)}</span>
+                      <span>{t(`ads.production.tierDetails.${tier.key}`)}</span>
                     </span>
+                    <span className="mkt-tier-row__price">{tierPriceText(t, tier)}</span>
                   </label>
                 ))}
+                <p className="mkt-fine mkt-production-foot">
+                  {t('ads.production.rounds')}{' · '}
+                  <label className={`mkt-tier-own${!offer.wanted ? ' selected' : ''}`}>
+                    <input
+                      type="radio"
+                      name={tierName}
+                      checked={!offer.wanted}
+                      onChange={() => offer.onChange({ wanted: false, tier: null, brief: offer.brief })}
+                    />
+                    <span>{t('ads.production.ownAd')}</span>
+                  </label>
+                </p>
               </div>
-              <span className="mkt-fine">{t('ads.production.rounds')}</span>
             </>
           ) : (
           <label className="mkt-check">
@@ -2870,11 +2922,6 @@ export default function Advertise({ openLoginModal }) {
     const showBeta = (f) => (f.key === 'video_ticker' ? tickerEnabledFor(user) : adsBetaUserFor(user));
     return { ...rawPricing, formats: rawPricing.formats.filter((f) => !f.beta || showBeta(f)) };
   }, [rawPricing, user]);
-  // Video / Audio / Upload on the overview: the rate card and the audience follow it.
-  const [formatTab, setFormatTab] = useState('video');
-  const formatTabs = formatTabsFor(pricing);
-  // A tab that disappeared (the audio spot hidden from a non-tester) falls back to Video.
-  const shownFormatTab = formatTabs.some((tb) => tb.id === formatTab) ? formatTab : 'video';
 
   // The page was one long scroll that mixed three unrelated jobs: reading what is
   // for sale, filling in a form, and managing work already in flight. Tabs so each
@@ -3004,13 +3051,9 @@ export default function Advertise({ openLoginModal }) {
                 invited a typo in the one field that decides who owns the application
                 and which wallet the booking is paid from. Stated plainly instead, so
                 nobody has to guess which account they are applying as. */}
-            <div className="mkt-field mkt-field-wide mkt-asaccount">
-              <span className="mkt-label">{t('ads.apply.applyingAs')}</span>
-              <strong>@{user}</strong>
-              <span className="mkt-hint">
-                {t('ads.apply.applyingAsHint')}
-              </span>
-            </div>
+            <p className="mkt-field-wide mkt-asaccount" title={t('ads.apply.applyingAsHint')}>
+              {t('ads.apply.applyingAs')} <strong>@{user}</strong>
+            </p>
 
             <div className="mkt-field">
               <label htmlFor="mkt-project">{t('ads.apply.productName')}</label>
@@ -3032,14 +3075,6 @@ export default function Advertise({ openLoginModal }) {
                 placeholder={t('ads.apply.contactPlaceholder')}
                 required
               />
-            </div>
-
-            <div className="mkt-field">
-              <label htmlFor="mkt-category">{t('ads.apply.category')}</label>
-              <select id="mkt-category" value={form.category} onChange={set('category')} required>
-                <option value="" disabled>{t('ads.attach.chooseOne')}</option>
-                {AD_CATEGORIES.map((c) => <option key={c.id} value={c.id}>{t(c.labelKey)}</option>)}
-              </select>
             </div>
 
             <div className="mkt-field">
@@ -3077,6 +3112,35 @@ export default function Advertise({ openLoginModal }) {
               </div>
             )}
 
+            {/* Categories as chips (47b), cyan when picked. The hidden input carries
+                `required`, so the form still refuses to send without one. */}
+            <div className="mkt-field mkt-field-wide">
+              <span className="mkt-label" id="mkt-category-label">{t('ads.apply.category')}</span>
+              <div className="mkt-chips" role="radiogroup" aria-labelledby="mkt-category-label">
+                {AD_CATEGORIES.map((c) => (
+                  <button
+                    key={c.id}
+                    type="button"
+                    role="radio"
+                    aria-checked={form.category === c.id}
+                    className={`mkt-chip${form.category === c.id ? ' selected' : ''}`}
+                    onClick={() => setForm((f) => ({ ...f, category: c.id }))}
+                  >
+                    {t(c.labelKey)}
+                  </button>
+                ))}
+              </div>
+              <input
+                id="mkt-category"
+                className="mkt-visually-hidden"
+                tabIndex={-1}
+                aria-hidden="true"
+                value={form.category}
+                onChange={() => {}}
+                required
+              />
+            </div>
+
             <div className="mkt-field mkt-field-wide">
               <label htmlFor="mkt-concept">{t('ads.apply.concept')}</label>
               <textarea
@@ -3111,24 +3175,19 @@ export default function Advertise({ openLoginModal }) {
                   knowing roughly what it costs. Which one is picked at booking. */}
               {pricing?.productionTiers?.length ? (
                 <>
-                  <table className="mkt-production-table">
-                    <thead>
-                      <tr>
-                        <th scope="col">{t('ads.production.tableKind')}</th>
-                        <th scope="col">{t('ads.production.tableDetails')}</th>
-                        <th scope="col">{t('ads.production.tablePrice')}</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {pricing.productionTiers.map((tier) => (
-                        <tr key={tier.key}>
-                          <th scope="row">{t(`ads.production.tiers.${tier.key}`)}</th>
-                          <td>{t(`ads.production.tierDetails.${tier.key}`)}</td>
-                          <td>{tierPriceText(t, tier)}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                  {/* One row per kind (47b): name and what it is on the left, the
+                      price in mono on the right. */}
+                  <ul className="mkt-tier-rows" aria-label={t('ads.production.tableKind')}>
+                    {pricing.productionTiers.map((tier) => (
+                      <li key={tier.key} className="mkt-tier-row">
+                        <span className="mkt-tier-row__body">
+                          <strong>{t(`ads.production.tiers.${tier.key}`)}</strong>
+                          <span>{t(`ads.production.tierDetails.${tier.key}`)}</span>
+                        </span>
+                        <span className="mkt-tier-row__price">{tierPriceText(t, tier)}</span>
+                      </li>
+                    ))}
+                  </ul>
                   <span className="mkt-fine">{t('ads.production.rounds')}</span>
                 </>
               ) : null}
@@ -3158,7 +3217,7 @@ export default function Advertise({ openLoginModal }) {
             </div>
 
             <div className="mkt-actions">
-              <button type="submit" className="mkt-outline" disabled={submitting || briefLeft > 0}>
+              <button type="submit" className="mkt-primary" disabled={submitting || briefLeft > 0}>
                 {submitting ? t('ads.apply.sending') : t('ads.apply.register')}
               </button>
               <span className="mkt-fine">{t('ads.apply.reviewedByPerson')}</span>
@@ -3174,38 +3233,40 @@ export default function Advertise({ openLoginModal }) {
         url="https://3speak.tv/advertise"
         image="https://3speak.tv/og-advertise.jpg"
       />
-      <header className="mkt-header">
-        <MdCampaign className="mkt-header-icon" aria-hidden="true" />
-        <div>
-          <h1>{t('ads.page.title')}</h1>
-          <p className="mkt-lede">
-            <Trans i18nKey="ads.page.lede" components={{ b: <strong /> }} />
-          </p>
+      {/* Title and lede on the left, the page's tabs on the right (design 47a). */}
+      <div className="mkt-top">
+        <header className="mkt-header">
+          <div>
+            <h1>{t('ads.page.title')}</h1>
+            <p className="mkt-lede">
+              <Trans i18nKey="ads.page.lede" components={{ b: <strong /> }} />
+            </p>
+          </div>
+        </header>
+
+        <div className="v2-seg mkt-tabs" role="tablist" aria-label={t('ads.page.tablistLabel')}>
+          {TABS.map((tb) => (
+            <button
+              key={tb.id}
+              type="button"
+              role="tab"
+              id={`mkt-tab-${tb.id}`}
+              aria-selected={tab === tb.id}
+              aria-controls={`mkt-panel-${tb.id}`}
+              className={`v2-seg__opt mkt-tab${tab === tb.id ? ' is-on selected' : ''}`}
+              onClick={() => setTab(tb.id)}
+            >
+              {tb.label}
+              {tb.id === 'mine' && myApps?.length ? (
+                <span className="v2-seg__n mkt-tab-count">{myApps.length}</span>
+              ) : null}
+            </button>
+          ))}
         </div>
-      </header>
+      </div>
 
       {/* Only for a signed-in account with an empty wallet: where HIVE comes from. */}
       <FundsNotice user={user} hbdPerHive={pricing?.hbdPerHive} />
-
-      <div className="mkt-tabs" role="tablist" aria-label={t('ads.page.tablistLabel')}>
-        {TABS.map((tb) => (
-          <button
-            key={tb.id}
-            type="button"
-            role="tab"
-            id={`mkt-tab-${tb.id}`}
-            aria-selected={tab === tb.id}
-            aria-controls={`mkt-panel-${tb.id}`}
-            className={`mkt-tab${tab === tb.id ? ' selected' : ''}`}
-            onClick={() => setTab(tb.id)}
-          >
-            {tb.label}
-            {tb.id === 'mine' && myApps?.length ? (
-              <span className="mkt-tab-count">{myApps.length}</span>
-            ) : null}
-          </button>
-        ))}
-      </div>
 
       <div
         role="tabpanel"
@@ -3218,11 +3279,8 @@ export default function Advertise({ openLoginModal }) {
           say what the nouns WERE, and the page is full of them: people could not tell
           whether they were filling in a product, a video or a booking. Numbered
           because the order is real: no booking without a product. */}
-      <section className="mkt-intro">
-        <h2><FaRocket aria-hidden="true" /> {t('ads.general.stepsTitle')}</h2>
-        <p className="mkt-intro-lede">
-          {t('ads.general.stepsLede')}
-        </p>
+      <section className="mkt-intro" aria-labelledby="mkt-steps-title">
+        <h2 id="mkt-steps-title" className="mkt-visually-hidden">{t('ads.general.stepsTitle')}</h2>
         <ol className="mkt-steps">
           <li>
             <strong>{t('ads.general.product.title')}</strong>
@@ -3250,39 +3308,15 @@ export default function Advertise({ openLoginModal }) {
             </span>
           </li>
         </ol>
-        <p className="mkt-fine">
-          {t('ads.general.pricedNote')}
-        </p>
       </section>
 
-      {/* The way in. The overview explains the thing; this is the one control that
-          starts it, so it sits above the detail rather than under it. */}
-      <button type="button" className="mkt-enroll-cta" onClick={() => { setWizStep(wizRef ? 2 : 1); setTab('wizard'); }}>
-        <MdCampaign aria-hidden="true" />
-        {t('ads.general.enrollCta')}
-      </button>
-
-      <section className="mkt-section">
-        <h2><FaLayerGroup aria-hidden="true" /> {t('ads.general.formatsTitle')}</h2>
-        <FormatTabs tabs={formatTabs} value={shownFormatTab} onChange={setFormatTab} />
+      {/* Every format at once, grouped by how the viewer meets it (47a): one card per
+          group in a row. Every number comes from /advertise/pricing rather than the
+          copy: a hardcoded price is a promise the server has no idea it made. */}
+      <section className="mkt-formats-all" aria-labelledby="mkt-formats-title">
+        <h2 id="mkt-formats-title" className="mkt-visually-hidden">{t('ads.general.formatsTitle')}</h2>
         {pricing?.formats?.length ? (
-          <p className="mkt-intro-lede">
-            {savingAt(7, pricing)
-              ? t('ads.general.pricingIntroSaving', { week: savingAt(7, pricing), month: savingAt(30, pricing) })
-              : t('ads.general.pricingIntro')}
-            {/* Named in real numbers rather than described. "Cheaper for longer" is a
-                claim every rate card makes; a week at 25% off is a reason to book a
-                week. Both figures come from the server's own curve, so they cannot
-                drift from what the booking form will quote. */}
-            {' '}{t(pricing.minDays
-              ? (pricing.maxDays ? 'ads.general.examplesFromTo' : 'ads.general.examplesFrom')
-              : (pricing.maxDays ? 'ads.general.examplesTo' : 'ads.general.examples'), {
-              seconds: EXAMPLE_SECONDS,
-              days: Math.max(EXAMPLE_DAYS, pricing.minDays || 0),
-              count: pricing.minDays || 0,
-              max: pricing.maxDays,
-            })}
-          </p>
+          <RateCard pricing={pricing} />
         ) : pricing?.pricePerSecondDayHbd ? (
           // Fallback for a checker too old to send the rate card: one product, one price.
           <p className="mkt-headline-price">
@@ -3301,37 +3335,38 @@ export default function Advertise({ openLoginModal }) {
             ) : null}
           </p>
         ) : null}
-        {/* Every number here comes from /advertise/pricing rather than the copy: a
-            hardcoded price is a promise the server has no idea it made. */}
-        <RateCard pricing={pricing} tab={shownFormatTab} />
-        <p>
-          {t('ads.general.flatBooking')}
-        </p>
-        <p>
-          {t('ads.general.quotedForecast')}
-        </p>
-
-        {/* The audience for the formats on this tab, not the video audience for all three. */}
-        <h2 className="mkt-tab-subhead"><FaUsers aria-hidden="true" /> {t('ads.general.audienceTitle')}</h2>
-        <InventoryPanel data={inventory} isLoading={isLoading} error={error} tab={shownFormatTab} />
       </section>
 
-      {/* Work the price out before booking: any format, any length, every flight
-          length, from the same rate card the booking form quotes from. */}
-      {pricing?.formats?.length ? (
-        <section className="mkt-section mkt-price-explorer">
-          <h2><MdSchedule aria-hidden="true" /> {t('ads.general.explorerTitle')}</h2>
-          <p>{t('ads.general.explorerLede')}</p>
-          <PriceExplorer pricing={pricing} />
+      {/* The audience on the left, the price on the right, and the way in at the foot
+          of the price: the one primary action on the page (47a). */}
+      <div className="mkt-general-pair">
+        <section className="mkt-card mkt-audience-card" aria-labelledby="mkt-audience-title">
+          <h2 id="mkt-audience-title">{t('ads.general.audienceTitle')}</h2>
+          <InventoryPanel
+            data={inventory}
+            isLoading={isLoading}
+            error={error}
+            withAudio={!!pricing?.formats?.some((f) => f.key === 'audio_spot')}
+          />
         </section>
-      ) : null}
+
+        <section className="mkt-card mkt-price-explorer" aria-labelledby="mkt-explorer-title">
+          <h2 id="mkt-explorer-title">{t('ads.general.explorerTitle')}</h2>
+          {pricing?.formats?.length ? <PriceExplorer pricing={pricing} compact /> : null}
+          <p className="mkt-fine">{t('ads.general.flatBookingShort')}</p>
+          <button type="button" className="mkt-enroll-cta" onClick={() => { setWizStep(wizRef ? 2 : 1); setTab('wizard'); }}>
+            <span className="v2-btn__label">{t('ads.general.enrollCta')}</span>
+            <Icon name="arrow_forward" size={18} />
+          </button>
+        </section>
+      </div>
 
       {/* Two audiences who are not buying anything, side by side: the people whose
           videos carry the ads and the people who watch them. Both are paid, and an
           advertiser reading this page should see that the money goes somewhere real. */}
       <div className="mkt-audience-pair">
         <section className="mkt-section mkt-creators">
-          <h2><FaVideo aria-hidden="true" /> {t('ads.general.creatorTitle')}</h2>
+          <h2><Icon name="videocam" size={20} /> {t('ads.general.creatorTitle')}</h2>
           <p>
             {t('ads.prompt.lede')}
           </p>
@@ -3341,7 +3376,7 @@ export default function Advertise({ openLoginModal }) {
         </section>
 
         <section className="mkt-section mkt-viewers">
-          <h2><FaTv aria-hidden="true" /> {t('ads.general.viewerTitle')}</h2>
+          <h2><Icon name="tv" size={20} /> {t('ads.general.viewerTitle')}</h2>
           <p>
             {t('ads.general.viewerText')}
           </p>
@@ -3368,7 +3403,6 @@ export default function Advertise({ openLoginModal }) {
               const state = n < wizAt ? ' done' : (n === wizAt ? ' current' : '');
               return (
                 <li key={label} className={`mkt-wiz-step${state}`} aria-current={n === wizStep ? 'step' : undefined}>
-                  <span className="mkt-wiz-num">{n < wizStep ? '✓' : n}</span>
                   <span>{t(label)}</span>
                 </li>
               );
@@ -3396,7 +3430,7 @@ export default function Advertise({ openLoginModal }) {
               <div className="mkt-wiz-actions">
                 <button
                   type="button"
-                  className="mkt-outline"
+                  className="mkt-danger"
                   disabled={wizKilling}
                   onClick={async () => {
                     setWizKilling(true);
@@ -3517,7 +3551,7 @@ export default function Advertise({ openLoginModal }) {
                     {/* Outline, not a red fill, and only once "Your ad" is complete. */}
                     <button
                       type="button"
-                      className="mkt-outline"
+                      className="mkt-primary"
                       disabled={!!adStepMissing(wizType, wizCreativeList, bookProduction)}
                       onClick={() => goStep(3)}
                     >
@@ -3560,20 +3594,18 @@ export default function Advertise({ openLoginModal }) {
               )}
 
               {wizExit && (
-                <div className="mkt-panel mkt-panel-muted mkt-wiz-exit">
+                // 47b: a cyan wash note with two text actions, not a second form.
+                <div className="mkt-panel mkt-wiz-exit mkt-wiz-saved" role="status">
                   <p style={{ margin: 0 }}>
                     <Trans i18nKey="ads.wiz.savedNotFinished" components={{ b: <strong /> }} />
                   </p>
                   <p className="mkt-fine">
                     <Trans i18nKey="ads.wiz.pickUp" components={{ b: <strong /> }} />
                   </p>
-                  <div className="mkt-wiz-actions">
-                    <button type="button" className="mkt-primary" onClick={() => { setWizExit(false); goStep(3); }}>
-                      {t('ads.wiz.bookNow')}
-                    </button>
+                  <div className="mkt-wiz-links">
                     <button
                       type="button"
-                      className="mkt-secondary"
+                      className="mkt-linkish is-muted"
                       onClick={() => {
                         setWizExit(false);
                         if (wizRef?.reference) { setLookupRef(wizRef.reference); setLookup(wizRef); }
@@ -3581,6 +3613,9 @@ export default function Advertise({ openLoginModal }) {
                       }}
                     >
                       {t('ads.wiz.leaveForNow')}
+                    </button>
+                    <button type="button" className="mkt-linkish" onClick={() => { setWizExit(false); goStep(3); }}>
+                      {t('ads.wiz.bookNow')}
                     </button>
                   </div>
                 </div>
@@ -3746,14 +3781,14 @@ export default function Advertise({ openLoginModal }) {
                 {lookup.note ? <p className="mkt-lookup-note">{lookup.note}</p> : null}
 
                 {(lookup.status === 'pending' || lookup.status === 'approved') && (
-                  <div className="mkt-ptabs" role="tablist" aria-label={t('ads.mine.thisProduct')} ref={ptabsRef}>
+                  <div className="v2-seg is-scroll mkt-ptabs" role="tablist" aria-label={t('ads.mine.thisProduct')} ref={ptabsRef}>
                     {PRODUCT_TABS.map((tb) => (
                       <button
                         key={tb.id}
                         type="button"
                         role="tab"
                         aria-selected={ptab === tb.id}
-                        className={`mkt-ptab${ptab === tb.id ? ' selected' : ''}`}
+                        className={`v2-seg__opt mkt-ptab${ptab === tb.id ? ' is-on selected' : ''}`}
                         onClick={() => setPtab(tb.id)}
                       >
                         {tb.label}
@@ -3773,7 +3808,6 @@ export default function Advertise({ openLoginModal }) {
                           className={`mkt-wiz-step${state}`}
                           aria-current={n === bookStep ? 'step' : undefined}
                         >
-                          <span className="mkt-wiz-num">{n < bookStep ? '✓' : n}</span>
                           <span>{t(label)}</span>
                         </li>
                       );
@@ -3793,7 +3827,7 @@ export default function Advertise({ openLoginModal }) {
                   <div style={{ display: ptab === 'book' && bookStep === 1 ? undefined : 'none' }}>
                   {rebook && (
                     <p className="mkt-note">
-                      <MdReplay aria-hidden="true" />
+                      <Icon name="replay" size={18} />
                       <span>{t('ads.rebook.stepAd', { name: rebook.name })}</span>
                     </p>
                   )}
@@ -3882,7 +3916,7 @@ export default function Advertise({ openLoginModal }) {
                         <>
                           <button
                             type="button"
-                            className="mkt-outline"
+                            className="mkt-primary"
                             disabled={!!missing}
                             onClick={() => setBookStep(2)}
                           >

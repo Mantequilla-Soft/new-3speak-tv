@@ -24,10 +24,11 @@ export const useAppStore = create(
       setWatchHistoryEnabled: (enabled) => a[0]({ watchHistoryEnabled: enabled }),
       showNsfw: false,
       setShowNsfw: (val) => a[0]({ showNsfw: typeof val === 'function' ? val(a[1]().showNsfw) : val }),
-      // Video card size: 'small' | 'large' (default small — a first-time visitor
-      // sees more videos per screen; returning users keep whatever they persisted).
-      // Drives home, profile and playlist card grids.
-      homeCardSize: 'small',
+      // Video card size on a phone: 'small' (two per row) | 'large' (one per
+      // row). Default large since store v3, as design 20a draws the phone feed;
+      // desktop always uses small ones (hooks/useCardSize). Drives home, profile
+      // and playlist card grids.
+      homeCardSize: 'large',
       setHomeCardSize: (val) => a[0]({ homeCardSize: typeof val === 'function' ? val(a[1]().homeCardSize) : val }),
       // Spotlight card width on the Discover tab: 'small' | 'medium' (2 / 3 cards
       // wide). Not used in large-card mode, which keeps 2.
@@ -36,6 +37,9 @@ export const useAppStore = create(
       // Hover/scroll video previews on cards (default on).
       previewEnabled: true,
       setPreviewEnabled: (val) => a[0]({ previewEnabled: typeof val === 'function' ? val(a[1]().previewEnabled) : val }),
+      // The Spotlight's muted clips (owner 2026-11-12); off = pictures only.
+      heroPreviewEnabled: true,
+      setHeroPreviewEnabled: (val) => a[0]({ heroPreviewEnabled: typeof val === 'function' ? val(a[1]().heroPreviewEnabled) : val }),
       // Selected content interests (ids from utils/interests.js). Canonical copy
       // lives in the user's Hive posting_json_metadata; this is a local cache for
       // instant UI, hydrated from Hive on load. Used later to bias served content.
@@ -79,8 +83,6 @@ export const useAppStore = create(
       setPrivateMode: (val) => a[0]({ privateMode: typeof val === 'function' ? val(a[1]().privateMode) : val }),
       // Simple feeds: when ON, discovery feeds skip the ranking algorithm and are
       // just sorted newest-first (chronological). Default OFF (algo on).
-      simpleFeed: false,
-      setSimpleFeed: (val) => a[0]({ simpleFeed: typeof val === 'function' ? val(a[1]().simpleFeed) : val }),
       // Set on startup to the previous app version when the user upgraded (null = first
       // visit or no change). A future changelog / "what's new" prompt reads this.
       // Deliberately NOT persisted — recomputed each load by checkAppVersion().
@@ -95,10 +97,17 @@ export const useAppStore = create(
       // v2: "Hide AI-generated" flipped to default-ON, same reason. A saved `false`
       // was nearly always the untouched old default, since the setting started OFF:
       // the only one it overrides is someone who turned it on and back off again.
-      version: 2,
+      // v3: phone cards default to large (one per row, design 20a). A saved 'small'
+      // was the untouched old default for nearly everyone (the switch started off),
+      // so it becomes 'large'; a saved 'large' was picked and stays.
+      // v4 (owner 2026-11-12): "Simple feeds" is gone; a saved value is dropped,
+      // so everyone is back on the recommended feeds.
+      version: 4,
       migrate: (persistedState, version) => {
         if (version < 1 && persistedState) persistedState.hideWatched = true;
         if (version < 2 && persistedState) persistedState.hideAi = true;
+        if (version < 3 && persistedState && persistedState.homeCardSize !== 'large') persistedState.homeCardSize = 'large';
+        if (version < 4 && persistedState) delete persistedState.simpleFeed;
         return persistedState;
       },
       partialize: (state) => ({
@@ -110,6 +119,7 @@ export const useAppStore = create(
         homeCardSize: state.homeCardSize,
         spotlightSize: state.spotlightSize,
         previewEnabled: state.previewEnabled,
+        heroPreviewEnabled: state.heroPreviewEnabled,
         interests: state.interests,
         shortsFeedMode: state.shortsFeedMode,
         shortsCommentBar: state.shortsCommentBar,
@@ -118,7 +128,6 @@ export const useAppStore = create(
         hideWatched: state.hideWatched,
         hideAi: state.hideAi,
         privateMode: state.privateMode,
-        simpleFeed: state.simpleFeed,
       }),
     }
   )

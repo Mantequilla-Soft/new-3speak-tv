@@ -9,7 +9,7 @@
     },
     "upload": {
       "title": "Naka-disable ang pag-upload sa account mo",
-      "body": "Hindi pinapayagang mag-upload ang 3Speak account mo ngayon. Kung sa tingin mo ay pagkakamali ito, kontakin ang 3Speak support."
+      "body": "Hindi pinapayagang mag-upload ang account mo ngayon. Kung sa tingin mo ay pagkakamali ito, kontakin ang 3Speak support."
     }
   },
   "uploadBlock": {
@@ -18,7 +18,7 @@
   },
   "emergency": {
     "title": "May ilang problema kami sa infrastructure",
-    "body": "Inaayos na ito ng team namin para maibalik agad ang 3Speak. Sumali sa Discord namin para makausap kami at makakuha ng live updates — salamat sa pasensya mo.",
+    "body": "Inaayos na ng team namin para maibalik agad ang 3Speak. Sumali sa Discord namin para sa live updates.",
     "joinDiscord": "Sumali sa Discord namin"
   },
   "changelog": {
@@ -87,7 +87,7 @@
     "lookAround": "Gusto ko lang tumingin-tingin"
   },
   "interests": {
-    "saved": "Na-save ang mga interes — puwede mong baguhin anumang oras sa Settings",
+    "saved": "Na-save ang mga interes. Baguhin anumang oras sa Settings",
     "saveFailed": "Hindi ma-save ang mga interes",
     "title": "Ano ang hilig mo?",
     "body": "Pumili ng ilang paksang gusto mo at magpapakita kami ng mas maraming content na magugustuhan mo. Puwede mo itong baguhin anumang oras sa <b>Settings</b>.",
@@ -105,27 +105,27 @@
     "things": {
       "postVideos": {
         "title": "Mag-post ng video",
-        "text": "Mag-upload ng long-form na video na mananatiling sa iyo, sa chain na walang makakapagbura nito nang palihim."
+        "text": "Long-form na video na mananatiling sa iyo"
       },
       "filmShorts": {
         "title": "Gumawa ng Shorts",
-        "text": "Mabilis, vertical at madaling i-share. Swak para makuha ang mga una mong viewer."
+        "text": "Mabilis, vertical, madaling i-share"
       },
       "goLive": {
         "title": "Mag-live",
-        "text": "Mag-stream para sa mga tao mo, magdala ng guests sa stage, at itago ang recording pagkatapos."
+        "text": "Magdala ng guests sa stage, itago ang recording"
       },
       "buildCommunity": {
         "title": "Bumuo ng komunidad",
-        "text": "Magsimula ng espasyo tungkol sa mga bagay na mahalaga sa iyo, o sumali sa isang buhay na buhay na."
+        "text": "Magsimula ng espasyo o sumali sa isa"
       },
       "makeFriends": {
         "title": "Magkaroon ng totoong kaibigan",
-        "text": "Mag-comment, mag-chat at makipag-collab sa mga totoong tao na nagdadamayan."
+        "text": "Mag-comment, mag-chat at makipag-collab"
       },
       "getInspired": {
         "title": "Ma-inspire, makisali",
-        "text": "Tumuklas ng mga creator, suportahan ang mga gusto mo, at kumita habang ginagawa mo ito."
+        "text": "Suportahan ang mga creator at kumita rin"
       }
     },
     "advertiserThings": {
@@ -174,7 +174,10 @@
     "uploading": "Ina-upload…",
     "interestsHint": "Ginagamit namin ang mga ito para piliin ang lalabas sa home page mo. Pumili ng kahit ilan, o wala, at baguhin kahit kailan mo gusto.",
     "interestsFineprint": "Naka-save sa Hive account mo, kaya pareho ang profile at mga interes na makikita sa lahat ng Hive app.",
-    "saveAndExplore": "I-save at magsimulang mag-explore"
+    "saveAndExplore": "I-save at magsimulang mag-explore",
+    "eyebrow": "Welcome",
+    "stepOf": "Hakbang {{n}} sa {{total}}",
+    "profileFineprint": "Naka-save sa Hive account mo, kaya pareho ang profile na ipinapakita ng bawat Hive app."
   },
   "profileEdit": {
     "updated": "Na-update ang profile",
@@ -193,7 +196,7 @@
     "uploadBanner": "Mag-upload ng profile banner",
     "changeBanner": "Palitan ang banner",
     "addBanner": "Magdagdag ng banner",
-    "bannerHint": "Pinakamaganda sa <b>2800 × 684</b> px (o anumang 4:1 na larawan). Ilagay sa gitna ang mahalagang bahagi: nata-trim ang mga gilid sa makikitid na screen at nasa ibabang kaliwa ang pangalan mo.",
+    "bannerHint": "Ilagay sa gitna ang mahalagang bahagi: nata-trim ang mga gilid sa makikitid na screen at nasa ibabang kaliwa ang pangalan mo.",
     "uploadPicture": "Mag-upload ng profile picture",
     "pictureLabel": "Profile picture",
     "pictureHint": "Pinakamaganda ang mukha o logo. Square, 400 × 400 px o mas malaki. Hanggang 8MB.",
@@ -201,7 +204,7 @@
     "namePlaceholderUser": "Ano ang itatawag namin sa iyo? (@{{username}})",
     "namePlaceholder": "Ano ang itatawag namin sa iyo?",
     "shortBio": "Maikling bio",
-    "bioPlaceholder": "Ano ang ginagawa mo, at ano ang aasahan ng mga tao sa iyo?",
+    "bioPlaceholder": "Ano ang ginagawa mo, at ano ang dapat asahan ng mga tao?",
     "location": "Lokasyon",
     "optional": "opsyonal",
     "locationPlaceholder": "Saan ka sa mundo?"

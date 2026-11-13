@@ -17,7 +17,8 @@
     "loginFailed": "로그인 실패: {{error}}",
     "logoAlt": "3Speak 로고",
     "title": "사용자 이름으로 로그인",
-    "usernamePlaceholder": "사용자 이름"
+    "usernamePlaceholder": "사용자 이름",
+    "continueWith": "{{method}}(으)로 계속"
   },
   "socialLink": {
     "hashCopied": "해시를 복사했어요",
@@ -54,8 +55,8 @@
     "verify": "인증"
   },
   "auth": {
-    "title": "3Speak 권한 부여!",
-    "text": "3Speak에 동영상을 업로드하려면 포스팅 권한이 필요해요. 이 권한으로 업로드한 동영상을 Hive에 게시할 수 있어요. 포스팅 권한은 한 번만 부여하면 돼요.",
+    "title": "3Speak 권한 부여",
+    "text": "업로드하려면 포스팅 권한이 필요해요. 그래야 동영상을 Hive에 게시할 수 있어요. 권한은 한 번만 부여하면 돼요.",
     "authorize": "권한 부여"
   },
   "beneficiary": {
@@ -74,15 +75,20 @@
       "maxCount": "Hive에서는 게시물당 수혜자를 최대 {{max}}명까지 지정할 수 있어요."
     },
     "title": "수혜자",
+    "shareRewards": "보상 나누기",
+    "you": "나",
+    "toYou": "나에게",
+    "addCollaborator": "협업자 추가",
+    "saveSplit": "배분 저장",
     "intro": "이 게시물 보상의 일부를 자동으로 받을 사용자를 추가하세요.",
     "minPercent": "%(최소 {{percent}}%)",
     "usernamePlaceholder": "사용자 이름 입력",
     "minimumReward": "최소 보상은 <strong>1%</strong>예요",
     "checking": "Hive에서 <strong>@{{account}}</strong> 확인 중…",
-    "notExisting": "⚠️ <strong>@{{account}}</strong>은(는) 존재하지 않는 Hive 계정이에요.",
-    "notAdded": "⚠️ <strong>@{{account}}</strong>이(가) 아직 추가되지 않았어요. <strong>+</strong>를 눌러 추가하거나 입력란을 비우세요.",
-    "infrastructure": "10% === 인프라",
-    "videoEncoding": "동영상 인코딩 === 1%",
+    "notExisting": "<strong>@{{account}}</strong>은(는) 존재하지 않는 Hive 계정이에요.",
+    "notAdded": "<strong>@{{account}}</strong>이(가) 아직 추가되지 않았어요. <strong>+</strong>를 눌러 추가하거나 입력란을 비우세요.",
+    "infrastructure": "인프라: 10%",
+    "videoEncoding": "동영상 인코딩: 1%",
     "defaults": "기본 수혜자({{count}})"
   },
   "qr": {
@@ -100,7 +106,7 @@
   },
   "verifyAuth": {
     "title": "권한 확인 중",
-    "text": "권한이 부여되었는지 확인하는 동안 잠시 기다려 주세요..."
+    "text": "권한이 부여되었는지 확인하는 중…"
   },
   "editor": {
     "confirmLeave": "편집기가 아직 열려 있어요. 이 페이지를 나가면 편집기가 닫히고 저장하지 않은 변경 사항이 사라져요.\n\n확인 = 편집기 닫고 나가기\n취소 = 이 페이지에 머물기",
@@ -176,7 +182,9 @@
     "details": "추가 세부 정보(선택)",
     "detailsPlaceholder": "자세한 상황을 알려주세요...",
     "submitting": "제출 중...",
-    "submit": "신고 제출"
+    "submit": "신고 제출",
+    "intro": "신고는 3Speak 팀에 전달돼요. 크리에이터는 누가 신고했는지 볼 수 없어요.",
+    "nextDetails": "다음: 세부 정보 추가"
   },
   "upload": {
     "missingInfo": "동영상 또는 썸네일 정보가 없어요.",

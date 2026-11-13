@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { toastIn } from '../../utils/toast';
-import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { Icon } from '../v2/Icon';
+import { Button } from '../v2/ui';
 import { SUGGESTED_CREATORS_URL } from '../../utils/config';
 import { feedParams } from '../../utils/feedParams';
 import { getFeedSeed } from '../../utils/feedSeed';
@@ -11,11 +12,12 @@ import { getFollowing } from '../../utils/hiveUtils';
 import { getFollowers } from '../../hive-api/api';
 import { followWithAioha, isLoggedIn } from '../../hive-api/aioha';
 import { useAppStore } from '../../lib/store';
-import { getTagLabel, getTagEmoji } from '../../utils/tagsV2';
+import { getTagLabel } from '../../utils/tagsV2';
 import HiveAvatar from '../HiveAvatar/HiveAvatar';
 import { useTranslation } from 'react-i18next';
 import { formatNumber } from '../../i18n';
 import './SuggestedCreators.scss';
+import { fixVideoThumbnail } from '../../utils/fixThumbnails';
 
 // Every toast from this module is headed "Following"; the message becomes the
 // line under it. See utils/toast.js.
@@ -56,7 +58,7 @@ function seededShuffle(arr, seed) {
  * Behaves like the shorts-stories row: a swipe-able scroller with a hidden scrollbar
  * and prev/next arrows on desktop (mobile uses swipe). Hidden entirely when logged out.
  */
-export default function SuggestedCreators({ variant = 'discover' }) {
+export default function SuggestedCreators({ variant = 'discover', perRow = 0 }) {
   const { t } = useTranslation();
   const user = useAppStore((s) => s.user);
   const interests = useAppStore((s) => s.interests);
@@ -66,6 +68,8 @@ export default function SuggestedCreators({ variant = 'discover' }) {
   const [justFollowed, setJustFollowed] = useState({});  // name -> true
   const [pending, setPending] = useState({});
   const [followerCounts, setFollowerCounts] = useState({});
+  // Suggestions closed with the card's X (28b): gone for this visit only.
+  const [dismissed, setDismissed] = useState(() => new Set());
 
   // Horizontal scroller with prev/next arrows — same pattern as ShortsStories.
   const scrollRef = useRef(null);
@@ -114,10 +118,12 @@ export default function SuggestedCreators({ variant = 'discover' }) {
         displayName: c.display_name || c.author,
         avatar: c.avatar,
         basis: c.basisTopic || (Array.isArray(c.matchedTopics) ? c.matchedTopics[0] : null),
+        sample: c.sample || null,
       }))
       .filter((c) => c.name && c.name !== (user || '').toLowerCase())
-      .filter((c) => !followSet.has(c.name) || justFollowed[c.name]);
-  }, [suggested, followSet, user, justFollowed]);
+      .filter((c) => !followSet.has(c.name) || justFollowed[c.name])
+      .filter((c) => !dismissed.has(c.name));
+  }, [suggested, followSet, user, justFollowed, dismissed]);
 
   // What renders: discover reshuffles (seeded, stable per session); interests keeps order.
   const creators = useMemo(() => {
@@ -178,49 +184,74 @@ export default function SuggestedCreators({ variant = 'discover' }) {
   if (!user || !hasInterests || !creators.length) return null;
 
   return (
-    <section className="suggested-creators">
+    <section className="suggested-creators" aria-label={t('profile.creators.suggestedTitle')}>
       <div className="sc-scroll-wrapper">
         {showLeft && (
-          <button className="sc-scroll-btn left" onClick={() => scroll('left')} aria-label={t('profile.creators.scrollLeft')}>
-            <FaChevronLeft />
+          <button type="button" className="sc-scroll-btn left" onClick={() => scroll('left')} aria-label={t('profile.creators.scrollLeft')}>
+            <Icon name="chevron_left" size={20} />
           </button>
         )}
 
-        <div className="sc-row" ref={scrollRef}>
+        {/* As many cards as fit across, edge to edge (HomeGrouped measures). */}
+        <div className="sc-row" ref={scrollRef} style={perRow > 0 ? { '--sc-per-row': perRow } : undefined}>
           {creators.map((c) => {
             const followed = !!justFollowed[c.name];
             const followers = fmtFollowers(followerCounts[c.name]);
             return (
               <div className="sc-card" key={c.name}>
-                <Link to={`/@${c.name}`} className="sc-avatar" title={`@${c.name}`}>
-                  <HiveAvatar username={c.name} size={null} alt="" badgeSize={12} />
-                </Link>
-                <Link to={`/@${c.name}`} className="sc-name" title={`@${c.name}`}>@{c.name}</Link>
-                {c.basis && (
-                  <span className="sc-basis" title={t('profile.creators.mostlyPosts', { topic: getTagLabel(c.basis) })}>
-                    <span className="sc-basis-emoji">{getTagEmoji(c.basis)}</span>
-                    {getTagLabel(c.basis)}
-                  </span>
-                )}
-                <span className="sc-followers">
-                  {followers != null ? t('profile.creators.followers', { count: followerCounts[c.name], num: followers }) : ' '}
+                <div className="sc-who">
+                  <Link to={`/@${c.name}`} className="sc-avatar" title={`@${c.name}`} tabIndex={-1} aria-hidden="true">
+                    <HiveAvatar username={c.name} size={null} alt="" badgeSize={10} />
+                  </Link>
+                  <div className="sc-who-text">
+                    <Link to={`/@${c.name}`} className="sc-name" title={`@${c.name}`}>{c.name}</Link>
+                    <span className="sc-followers">
+                      {followers != null ? t('profile.creators.followers', { count: followerCounts[c.name], num: followers }) : '\u00a0'}
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    className="sc-dismiss"
+                    aria-label={t('common.actions.close')}
+                    title={t('common.actions.close')}
+                    onClick={() => setDismissed((d) => new Set(d).add(c.name))}
+                  >
+                    <Icon name="close" size={18} />
+                  </button>
+                </div>
+                {/* Why suggested: the topic most of their recent videos are in */}
+                <span className="sc-basis">
+                  {c.basis ? t('profile.creators.mostlyPosts', { topic: getTagLabel(c.basis) }) : '\u00a0'}
                 </span>
-                <button
-                  type="button"
+                {/* Their latest video (the one the suggestion came with) */}
+                <Link to={c.sample?.permlink ? `/@${c.name}/${c.sample.permlink}` : `/@${c.name}`} className="sc-thumb" tabIndex={-1} aria-hidden="true">
+                  {/* Through the same helper as every card: Ecency pictures come via
+                      our /img/e/ cache (Ecency's Cloudflare blocks some viewers,
+                      which left these tiles empty), our own via /img/t/. */}
+                  {c.sample?.thumbnail && <img src={fixVideoThumbnail({ thumbnail: c.sample.thumbnail })} alt="" loading="lazy" />}
+                </Link>
+                <Button
+                  // Not red (owner 2026-11-12): a rail of these drowned the page in
+                  // accent fills. Followed reads muted (SuggestedCreators.scss).
+                  variant="secondary"
+                  size={44}
+                  block
                   className={`sc-follow${followed ? ' followed' : ''}`}
+                  trailing={followed ? 'check' : 'person_add'}
                   onClick={() => !followed && handleFollow(c.name)}
                   disabled={followed || !!pending[c.name]}
+                  loading={!!pending[c.name]}
                 >
-                  {followed ? t('common.actions.following') : (pending[c.name] ? '…' : t('common.actions.follow'))}
-                </button>
+                  {followed ? t('common.actions.following') : t('common.actions.follow')}
+                </Button>
               </div>
             );
           })}
         </div>
 
         {showRight && (
-          <button className="sc-scroll-btn right" onClick={() => scroll('right')} aria-label={t('profile.creators.scrollRight')}>
-            <FaChevronRight />
+          <button type="button" className="sc-scroll-btn right" onClick={() => scroll('right')} aria-label={t('profile.creators.scrollRight')}>
+            <Icon name="chevron_right" size={20} />
           </button>
         )}
       </div>

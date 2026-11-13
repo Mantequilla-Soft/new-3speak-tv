@@ -1,53 +1,45 @@
-// Inline schedule picker (ScheduleCalendar.jsx). Same vocabulary as the
-// uploader's details step: Roboto only, 14px for the one label (the month), 12px
-// for everything else, neutral borders, accent OUTLINE for the active choice
-// (never a red fill), flat, no shadows.
+@use "../../styles/v2" as v2;
+
+// Inline schedule picker (ScheduleCalendar.jsx), 44c: month head with two icon
+// buttons, a 7-column day grid (selected = the accent fill, gone and out of
+// range = muted), the time as a field.
 .schedule-calendar {
-  font-family: "Roboto", "Arial", sans-serif;
+  font-family: var(--font-sans);
   font-size: 12px;
-  color: var(--text-primary, #111);
+  color: var(--text);
 
   &__head {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 8px;
     margin-bottom: 8px;
   }
 
   &__month {
+    @include v2.text(label);
     font-size: 14px;
-    font-weight: 600;
     text-transform: capitalize;
   }
 
   &__nav {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+    @include v2.btn(secondary, 32);
     width: 32px;
-    height: 32px;
     padding: 0;
-    border: 1px solid var(--border-color, rgba(0, 0, 0, 0.2));
-    border-radius: 10px;
-    background: transparent;
-    color: inherit;
-    cursor: pointer;
-
-    &:hover:not(:disabled) { background: var(--bg-secondary, #f1f1f3); }
-    &:disabled { opacity: 0.35; cursor: not-allowed; }
+    justify-content: center;
   }
 
   &__grid {
     width: 100%;
     border-collapse: separate;
-    border-spacing: 2px;
+    border-spacing: 3px;
     table-layout: fixed;
 
     th {
       padding: 0 0 4px;
-      font-size: 12px;
-      font-weight: 400;
-      opacity: 0.65;
+      @include v2.text(eyebrow);
+      font-size: 10px;
+      color: var(--muted);
       text-align: center;
     }
 
@@ -57,29 +49,26 @@
   &__day {
     width: 100%;
     max-width: 40px;
-    aspect-ratio: 1;
+    height: 32px;
     padding: 0;
-    border: 1px solid transparent;
-    border-radius: 10px;
+    border: 0;
+    border-radius: var(--r-sm);
     background: transparent;
-    color: inherit;
-    font-family: inherit;
-    font-size: 12px;
+    color: var(--text);
+    @include v2.mono(12, 700);
     cursor: pointer;
-    transition: background-color 0.15s ease, border-color 0.15s ease;
+    transition: background var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
 
-    &:hover:not(:disabled):not(.is-selected) { background: var(--bg-secondary, #f1f1f3); }
+    &:hover:not(:disabled):not(.is-selected) { background: var(--surface-2); }
 
-    &.is-today { font-weight: 700; }
+    &.is-today { box-shadow: inset 0 0 0 1px var(--border); }
 
     &.is-selected {
-      border-color: var(--accent-primary, #e53935);
-      color: var(--accent-primary, #e53935);
-      background: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent);
-      font-weight: 700;
+      background: var(--accent);
+      color: var(--on-accent);
     }
 
-    &:disabled { opacity: 0.3; cursor: not-allowed; }
+    &:disabled { color: var(--muted); opacity: .45; cursor: not-allowed; }
   }
 
   &__time {
@@ -87,14 +76,16 @@
     align-items: center;
     gap: 8px;
     margin-top: 10px;
-    padding: 0 10px;
     height: 40px;
-    border: 1px solid var(--border-color, #333);
-    border-radius: 10px;
-    background: var(--input-bg, rgba(255, 255, 255, 0.04));
+    padding: 0 12px;
+    border: 2px solid transparent;
+    border-radius: var(--r-md);
+    background: var(--bg);
     cursor: text;
 
-    svg { flex-shrink: 0; opacity: 0.65; }
+    &:focus-within { border-color: var(--accent); }
+
+    .material-symbols-rounded { color: var(--muted); }
 
     input {
       flex: 1;
@@ -104,10 +95,144 @@
       border: 0;
       outline: none;
       background: transparent;
-      color: inherit;
-      font-family: inherit;
-      font-size: 14px;
-      color-scheme: light dark;
+      color: var(--text);
+      @include v2.mono(14, 500);
+      // Inherit the app theme's color-scheme (design-system.scss), so the
+      // native picker icon is light on the dark theme. "light dark" followed
+      // the OS instead and drew a dark icon on the dark field.
+      color-scheme: inherit;
     }
+  }
+}
+
+// 17d day strip (ScheduleDayStrip): eyebrow, 48 wide day tiles on bg (picked =
+// cyan with bg ink), then the time and the time zone as two 48 wells.
+.schedule-strip {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  color: var(--text);
+
+  &__label {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+
+  &__days {
+    display: flex;
+    gap: 6px;
+    min-width: 0;
+    @include v2.scroll-x;
+    scroll-snap-type: x proximity;
+  }
+
+  &__day {
+    flex: none;
+    width: 48px;
+    padding: 10px 0;
+    border: 0;
+    border-radius: var(--r-lg);
+    background: var(--bg);
+    color: var(--text);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    font-family: inherit;
+    cursor: pointer;
+    scroll-snap-align: start;
+    transition: background var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
+
+    span { font-size: 11px; line-height: 1.3; }
+    b { font-size: 16px; font-weight: 900; line-height: 1.3; }
+
+    &:hover:not(.is-on) { background: color-mix(in srgb, var(--text) 6%, var(--bg)); }
+    &.is-on { background: var(--cyan); color: var(--bg); }
+  }
+
+  &__row {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  &__well {
+    flex: 1;
+    min-width: 0;
+    height: 48px;
+    border-radius: var(--r-lg);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--text);
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
+    &.is-time {
+      cursor: text;
+      &:focus-within { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+
+      input {
+        width: auto;
+        min-width: 0;
+        max-width: 110px;
+        border: 0;
+        outline: none;
+        padding: 0;
+        background: transparent;
+        color: var(--text);
+        font-family: inherit;
+        font-size: 16px;
+        font-weight: 700;
+        color-scheme: inherit;
+
+        // The well is the control (17d): no second clock icon inside it.
+        &::-webkit-calendar-picker-indicator { display: none; }
+      }
+    }
+
+    &.is-zone { padding: 0 10px; }
+  }
+}
+
+// 44c manual date: five bg wells in a row (day, month, year, time, AM/PM).
+.schedule-manual {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+
+  &__label { @include v2.text(meta); color: var(--muted); }
+
+  &__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1.6fr 1.3fr 1fr;
+    gap: 6px;
+  }
+
+  &__well {
+    min-width: 0;
+    height: 40px;
+    padding: 0 6px;
+    border: 2px solid transparent;
+    border-radius: var(--r-md);
+    background: var(--bg);
+    color: var(--text);
+    text-align: center;
+    @include v2.mono(13, 700);
+    outline: none;
+
+    &::placeholder { color: var(--muted); font-weight: 500; }
+    &:focus { border-color: var(--accent); }
+    &.is-ampm { cursor: pointer; font-family: var(--font-sans); &:hover { background: color-mix(in srgb, var(--text) 6%, var(--bg)); } }
   }
 }

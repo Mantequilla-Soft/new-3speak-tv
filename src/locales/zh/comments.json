@@ -16,7 +16,7 @@
       "upload": "这次上传体验如何？",
       "stream": "这次直播体验如何？",
       "watch": "在 3Speak 上观看体验如何？",
-      "global": "你对 3Speak 的体验如何？",
+      "global": "新版 3Speak 怎么样？",
       "fallback": "帮助我们把 3Speak 做得更好"
     },
     "stars": {
@@ -48,7 +48,7 @@
   },
   "live": {
     "vodProcessing": "录像正在处理中…",
-    "vodProcessingHint": "本场直播已结束。编码完成后，视频会直接在这里替换，无需刷新。",
+    "vodProcessingHint": "编码完成后，视频会在这里替换它，无需刷新。",
     "watching_other": "👁 {{count}} 人在看",
     "signInRaiseHand": "登录后举手",
     "signInChat": "登录后聊天",
@@ -103,11 +103,16 @@
     "atTime": "于 {{time}}",
     "commentPlaceholder": "在这里写下你的评论...",
     "replyPlaceholder": "在这里写下你的回复...",
+    "joinPlaceholder": "加入讨论…",
     "commentButton": "评论",
     "count_other": "{{count}} 条评论",
+    "replies_other": "{{count}} 条回复",
     "edited": "（已编辑）",
     "hideComment": "隐藏评论",
     "showComment": "显示 @{{user}} 的评论",
+    "hiddenComment": "已隐藏的评论",
+    "hiddenLowScore": "评论已被社区隐藏 · 评分过低",
+    "show": "显示",
     "saving": "保存中...",
     "translation": "翻译",
     "translationFailed": "翻译失败。翻译服务是否在运行？",
@@ -132,6 +137,9 @@
     "uploadingImage": "正在上传图片",
     "write": "编写",
     "preview": "预览",
-    "nothingToPreview": "暂无可预览的内容"
+    "nothingToPreview": "暂无可预览的内容",
+    "creator": "创作者",
+    "empty": "还没有评论",
+    "emptyHint": "关联到某个时间点的评论会显示在视频的时间轴上。"
   }
 }

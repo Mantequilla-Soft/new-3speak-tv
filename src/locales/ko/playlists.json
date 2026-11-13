@@ -22,6 +22,8 @@
     "noOtherPlaylists": "아직 다른 재생목록이 없어요",
     "createFirst": "재생목록 만들기",
     "createNew": "새 재생목록 만들기",
+    "newPlaylist": "새 재생목록",
+    "savedTo_other": "재생목록 {{count}}개에 저장됨",
     "name": "이름",
     "namePlaceholder": "나만의 멋진 재생목록",
     "privacy": "공개 범위",
@@ -52,6 +54,7 @@
     "items_other": "{{count}}개 항목",
     "created": "{{when}} 생성",
     "podcastFeed": "팟캐스트 피드",
+    "playAll": "모두 재생",
     "podcastFeedTitle": "어떤 팟캐스트 앱에서든 {{name}} 구독하기 (RSS 피드)",
     "album": {
       "genre": "<strong>장르:</strong> {{value}}",
@@ -90,12 +93,15 @@
     "creditsPlaceholder": "프로듀서…",
     "description": "설명",
     "descriptionPlaceholder": "이 앨범 소개(선택)",
-    "filterCount_other": "{{count}}개 중 {{shown}}개"
+    "filterCount_other": "{{count}}개 중 {{shown}}개",
+    "shuffle": "셔플"
   },
   "type": {
     "label": "유형",
     "video": "동영상",
     "audio": "오디오",
+    "videoSub": "긴 동영상",
+    "audioSub": "트랙 및 팟캐스트",
     "kindLabel": "어떤 오디오인가요?",
     "kinds": {
       "podcast": "팟캐스트",
@@ -103,5 +109,30 @@
       "voice": "음성 메모",
       "sounds": "기타 소리"
     }
+  },
+  "feeds": {
+    "button": "외부 프로그램",
+    "title": "외부 프로그램",
+    "intro": "어디서든 팟캐스트 프로그램 전체를 추가하세요. 에피소드가 이 재생목록에 내 콘텐츠와 함께 최신순으로 표시되고, 새 에피소드는 자동으로 들어옵니다.",
+    "searchLabel": "프로그램을 검색하거나 피드 링크를 붙여넣으세요",
+    "searchPlaceholder": "프로그램 이름, RSS 피드 또는 Apple Podcasts 링크",
+    "add": "추가",
+    "checking": "확인 중...",
+    "searching": "검색 중...",
+    "noResults": "프로그램을 찾지 못했습니다.",
+    "inList": "재생목록에 있음",
+    "inPlaylist": "이 재생목록에 있는 항목",
+    "none": "아직 외부 프로그램이 없습니다.",
+    "remove": "{{title}} 제거",
+    "already": "이 프로그램은 이미 재생목록에 있습니다.",
+    "limit": "재생목록에는 외부 프로그램을 최대 {{max}}개까지 넣을 수 있습니다.",
+    "ownFeed": "이 재생목록 자체의 피드입니다.",
+    "privateFeed": "비밀번호가 필요한 피드는 재생목록에 넣을 수 없습니다. 재생목록은 공개되기 때문입니다.",
+    "tooBig": "재생목록에 담을 수 있는 양을 넘었습니다. 먼저 프로그램 하나를 제거하세요.",
+    "saved": "외부 프로그램을 저장했습니다. 재생목록은 몇 초 뒤에 업데이트됩니다.",
+    "saveFailed": "저장하지 못했습니다: {{error}}",
+    "fromShows": "다른 프로그램:",
+    "video": "동영상",
+    "pending_other": "프로그램 {{count}}개를 아직 읽는 중입니다. 몇 분 안에 에피소드가 표시됩니다."
   }
 }

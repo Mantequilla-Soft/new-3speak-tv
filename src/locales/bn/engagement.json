@@ -11,6 +11,8 @@
       "transferFailed": "ট্রান্সফার ব্যর্থ: {{message}}"
     },
     "heading": "@{{recipient}}-কে টিপ পাঠান",
+    "pageTitle": "@{{recipient}}-কে টিপ দিন",
+    "pageSub": "স্ট্রিম ওভারলে বা লিংক থেকে খোলা হয়েছে",
     "methodHive": "HIVE / HBD",
     "methodLightning": "Lightning",
     "methodMore": "আরও উপায়",
@@ -22,6 +24,17 @@
     "memoPlaceholder": "যেমন: দারুণ কনটেন্টের জন্য ধন্যবাদ!",
     "memoLinkNote": "এই লিংকটি মেমোতে যোগ করা হবে: {{link}}",
     "send": "টিপ পাঠান",
+    "sendAmount": "{{amount}} {{currency}} পাঠান",
+    "paidIn": "{{currency}}-এ পেমেন্ট · কোনো ফি নেই",
+    "forTitle": "“{{title}}”-এর জন্য",
+    "presets": {
+      "coffee": "এক কাপ কফি",
+      "popular": "সবচেয়ে জনপ্রিয়",
+      "thanks": "অনেক ধন্যবাদ",
+      "superFan": "সুপার ফ্যান"
+    },
+    "sentEyebrow": "টিপ পাঠানো হয়েছে",
+    "sentTo": "@{{recipient}}-কে {{amount}}",
     "lightning": {
       "amountLabel": "পরিমাণ (sats):",
       "messageLabel": "বার্তা (ঐচ্ছিক):",
@@ -65,6 +78,8 @@
     "monthly": {
       "label": "কত ঘন ঘন",
       "once": "একবার",
+      "oneTime": "একবার",
+      "monthly": "মাসিক",
       "until": "প্রতি মাসে, {{date}} পর্যন্ত",
       "note": "Hive প্রতি ৩০ দিনে নিজে থেকেই পাঠায়, প্রথমটি এখনই। আপনি যেকোনো সময় এটি বন্ধ করতে পারেন।",
       "replaces": "এটি @{{recipient}}-কে আপনি এখন যে মাসিক সাপোর্ট পাঠান, তার জায়গা নেবে।",
@@ -79,7 +94,7 @@
   },
   "cardMenu": {
     "loginToPersonalize": "আপনার ফিড নিজের মতো সাজাতে লগ ইন করুন",
-    "notInterestedToast": "আগ্রহী নন — আমরা এই ভিডিওটি লুকিয়ে রাখবো",
+    "notInterestedToast": "আগ্রহী নন। আমরা এই ভিডিওটি লুকিয়ে রাখবো",
     "undo": "আগের অবস্থায় ফেরান",
     "cantHideOwn": "আপনি নিজের ভিডিও লুকাতে পারবেন না",
     "hidingCreatorToast": "@{{author}}-এর ভিডিও লুকানো হচ্ছে",
@@ -89,7 +104,8 @@
     "addToPlaylist": "প্লেলিস্টে যোগ করুন",
     "addTag": "ট্যাগ যোগ করুন",
     "notInterested": "আগ্রহী নই",
-    "dontShowCreator": "@{{author}}-কে আর দেখাবেন না"
+    "dontShowCreator": "@{{author}}-কে আর দেখাবেন না",
+    "saveToPlaylist": "প্লেলিস্টে সেভ করুন"
   },
   "guestList": {
     "loadFailed": "বর্তমান গেস্ট লিস্ট লোড করা যায়নি",
@@ -132,26 +148,32 @@
     "tagged": "“{{tag}}” ট্যাগ দেওয়া হয়েছে।",
     "vote": "ভোট",
     "tagThisVideo": "এই ভিডিওটি ট্যাগ করুন",
-    "tagOptional": "— ঐচ্ছিক —",
+    "tagOptional": "ঐচ্ছিক",
     "pickTopicFirst": "আগে একটি বিষয় বেছে নিন",
     "taggedNoDot": "“{{tag}}” ট্যাগ দেওয়া হয়েছে",
     "tagFailed": "ট্যাগ ব্যর্থ: {{message}}",
-    "taggedAlreadyVoted": "“{{tag}}” ট্যাগ দেওয়া হয়েছে — আপনার {{weight}}% ভোট আগেই দেওয়া হয়েছিল।",
-    "votingClosed": "ভোটিং বন্ধ — এই ভিডিওটি ট্যাগ করুন",
+    "taggedAlreadyVoted": "“{{tag}}” ট্যাগ করা হয়েছে। আপনার {{weight}}% ভোট আগেই দেওয়া হয়েছে।",
+    "votingClosed": "ভোট বন্ধ: এই ভিডিওতে ট্যাগ দিন",
     "youTagged": "আপনি এটিকে <b>{{tag}}</b> হিসেবে ট্যাগ করেছেন।",
-    "pickTopic": "একটি বিষয় বেছে নিন (100% ভোট হিসেবে গণ্য হবে)",
+    "pickTopic": "একটি বিষয় বাছাই করা 100% ভোট হিসেবে গণ্য হয়।",
     "submitTag": "ট্যাগ জমা দিন",
     "tagThisVideoFull": "এই ভিডিওটি ট্যাগ করুন (100% ভোট হিসেবে গণ্য হবে)",
-    "justTag": "ভোট নয় — শুধু ট্যাগ"
+    "justTag": "ভোট নয়, শুধু ট্যাগ",
+    "justTagShort": "শুধু ট্যাগ",
+    "voteAndTag": "ভোট ও ট্যাগ",
+    "addsAbout": "প্রায় {{value}} যোগ করে",
+    "postSoFar_one": "এখন পর্যন্ত {{value}} · {{count}}টি ভোট",
+    "postSoFar_other": "এখন পর্যন্ত {{value}} · {{count}}টি ভোট"
   },
   "tagsPicker": {
     "autoTagged": "স্বয়ংক্রিয় ট্যাগ: {{tags}}",
     "searchPlaceholder": "বিষয় খুঁজুন…",
     "searchAria": "বিষয় খুঁজুন",
     "noMatches": "“{{query}}”-এর সাথে মেলে এমন কোনো বিষয় নেই।",
-    "allSelected": "{{category}}-এর সবকিছু বাছাই করা আছে। আরও নির্দিষ্ট করতে চাইলে শুধু আলাদা বিষয় যোগ করুন:",
+    "allSelected": "পুরো {{category}} বেছে নেওয়া হয়েছে। কোনো বিষয় বাদ দিতে সেটিতে ট্যাপ করুন।",
     "orPickTopics": "অথবা আলাদা বিষয় বেছে নিন:",
-    "goodEnough": "এটুকুই যথেষ্ট — অথবা আরও নির্দিষ্ট করুন (ঐচ্ছিক):",
+    "clear": "মুছুন",
+    "goodEnough": "এটুকুই যথেষ্ট, বা আরও নির্দিষ্ট করুন (ঐচ্ছিক)",
     "moreSpecific": "আরও নির্দিষ্ট:"
   }
 }

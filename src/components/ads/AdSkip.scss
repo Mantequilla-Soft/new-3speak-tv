@@ -1,9 +1,7 @@
-/* Skip, bottom-right of the frame.
+/* Skip, bottom-right of the frame (designs 25b, 47d).
  *
- * Sits on the same line as `.watch-ad-countdown` ("Ad in 3") and uses its offsets
- * deliberately: both are transient ad furniture in the same corner, and matching them
- * means neither ever lands somewhere the other has taught people not to look. They
- * cannot appear together — one counts down TO the break, the other runs during it.
+ * Same line and offsets as `.watch-ad-countdown` ("Ad in 3"): both are transient ad
+ * furniture in the same corner, and they never appear together.
  *
  * `bottom` clears the control bar. A skip button under the scrubber is a skip button
  * nobody can press on a phone.
@@ -13,73 +11,58 @@
   right: 12px;
   bottom: 56px;
   /* Above the click-to-play surface (5), which spans the frame: underneath it, a tap
-     here would toggle playback instead, and on touch that handler calls
-     preventDefault() so the tap is swallowed outright. */
+     here would toggle playback instead. */
   z-index: 7;
 
+  /* 25b: a 48px scrim pill, "Skip ad" 14/900 and the skip glyph at 24. */
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  padding: 6px 11px;
-  border-radius: 999px;
-  /* A light tint and no blur, like the disclosure (AdOverlay.scss): the corner it
-     sits in belongs to the advertiser's spot. The halo keeps the text readable on
-     any frame. */
-  background: rgba(0, 0, 0, 0.34);
-  color: #fff;
-  text-shadow:
-    0 0 1px #000,
-    0 0 2px #000,
-    0 0 2px #000,
-    0 1px 4px rgba(0, 0, 0, 0.85),
-    0 0 8px rgba(0, 0, 0, 0.5);
-  font-size: 13px;
-  font-weight: 600;
-  line-height: 1.4;
-  letter-spacing: 0.02em;
+  gap: 14px;
+  height: 48px;
+  padding: 0 12px 0 16px;
+  border-radius: var(--r-lg);
+  background: var(--media-scrim-strong);
+  color: var(--on-media);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1;
   /* So the countdown does not jitter the box width as it ticks. */
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
-
-  svg { font-size: 16px; filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.95)) drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8)); }
+  border: 0;
 
   @media (max-width: 600px) {
     right: 8px;
     bottom: 44px;
-    padding: 5px 9px;
-    font-size: 12px;
-    svg { font-size: 14px; }
+    gap: 8px;
+    height: 40px;
+    padding: 0 10px 0 12px;
+    border-radius: var(--r-md);
+    font-size: 13px;
   }
 }
 
-/* Waiting: present, readable, and plainly not yet pressable. No border, no hover, no
-   pointer — everything that would suggest it does something now. */
+/* Waiting: present, readable, and plainly not yet pressable. */
 .ad-skip-waiting {
   pointer-events: none;
-  opacity: 0.9;
-  border: 1px solid transparent;
+  color: color-mix(in srgb, var(--on-media) 75%, transparent);
 
-  strong { font-weight: 700; }
+  strong { font-family: var(--font-mono); font-weight: 700; }
 }
 
-/* Ready. The border is the whole signal that it became pressable, which is why the
-   waiting state reserves the space for one. */
+/* Ready (25b): full-white ink at 900 and the skip glyph, so "press" reads at once. */
 .ad-skip-ready {
   pointer-events: auto;
   cursor: pointer;
-  border: 1px solid rgba(255, 255, 255, 0.6);
-  transition: background 120ms ease, border-color 120ms ease;
+  color: var(--on-media);
+  font-weight: 900;
+  transition: transform var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
 
-  &:hover,
-  &:focus-visible {
-    background: rgba(0, 0, 0, 0.5);
-    border-color: rgba(255, 255, 255, 0.85);
-  }
-
-  &:focus-visible {
-    outline: 2px solid #fff;
-    outline-offset: 2px;
-  }
+  .material-symbols-rounded { font-size: 24px !important; }
+  &:hover { background: var(--media-black); }
+  &:active { transform: scale(.98); }
+  &:focus-visible { outline: 2px solid var(--on-media); outline-offset: 2px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

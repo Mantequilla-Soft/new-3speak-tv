@@ -5,6 +5,8 @@ import axios from 'axios';
 import { CHECKER_URL, HIVE_API_URL } from '../../utils/config';
 import { useTranslation } from 'react-i18next';
 import { formatNumber } from '../../i18n';
+import { Button, Segmented } from '../v2/ui';
+import { Icon } from '../v2/Icon';
 import './Follower.scss';
 
 const PAGE = 100;
@@ -137,31 +139,35 @@ function Follower({ count = {}, username }) {
 
   return (
     <div className="followers-page">
-      {/* Same treatment as the profile's own tabs: plain text with an accent
-          underline, no button chrome. */}
-      <div className="follower-tabs" role="tablist" aria-label={t('profile.followers.tablistLabel')}>
-        {TABS.map((tab) => (
-          <button
-            key={tab.id}
-            type="button"
-            role="tab"
-            aria-selected={activeTab === tab.id}
-            className={`follower-tab${activeTab === tab.id ? ' active' : ''}`}
-            onClick={() => setActiveTab(tab.id)}
-          >
-            {tab.label}{typeof tab.n === 'number' ? ` (${formatNumber(tab.n)})` : ''}
-          </button>
-        ))}
-      </div>
+      {/* Followers / Following: a segmented track like every v2 tab set (24c). */}
+      <Segmented
+        className="follower-tabs"
+        block={false}
+        label={t('profile.followers.tablistLabel')}
+        value={activeTab}
+        onChange={setActiveTab}
+        options={TABS.map((tab) => ({
+          value: tab.id,
+          label: tab.label,
+          count: typeof tab.n === 'number' ? formatNumber(tab.n) : undefined,
+        }))}
+      />
 
       {isLoading ? (
-        <div className="follower-loading"><div className="spinner" /></div>
+        <div className="follower-loading" role="status" aria-label={t('common.status.loading')}>
+          <Icon name="progress_activity" size={28} className="v2-spin" />
+        </div>
       ) : users.length === 0 ? (
         <p className="follower-empty">
+          <Icon name="group" size={24} />
           {activeTab === 'followers' ? t('profile.followers.noFollowers') : t('profile.followers.noFollowing')}
         </p>
       ) : (
         <>
+          <div className="follower-head v2-eyebrow">
+            <span>{activeTab === 'followers' ? t('profile.followers.tabFollowers') : t('profile.followers.tabFollowing')}</span>
+            {typeof total === 'number' ? <span className="num">{formatNumber(total)}</span> : null}
+          </div>
           <div className="users-grid">
             {users.map((u) => (
               <button
@@ -199,9 +205,9 @@ function Follower({ count = {}, username }) {
               <span className="follower-count-note">{t('profile.followers.showingAll', { num: formatNumber(users.length) })}</span>
             ) : (
               <>
-                <button type="button" className="follower-more-btn" onClick={loadMore} disabled={loadingMore}>
+                <Button variant="secondary" className="follower-more-btn" onClick={loadMore} disabled={loadingMore} loading={loadingMore} trailing="expand_more">
                   {loadingMore ? t('common.status.loading') : t('common.actions.loadMore')}
-                </button>
+                </Button>
                 <span className="follower-count-note">
                   {typeof total === 'number'
                     ? t('profile.followers.showingOf', { num: formatNumber(users.length), total: formatNumber(total) })

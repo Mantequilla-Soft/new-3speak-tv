@@ -11,6 +11,8 @@
       "transferFailed": "Falló la transferencia: {{message}}"
     },
     "heading": "Enviar una propina a @{{recipient}}",
+    "pageTitle": "Dar propina a @{{recipient}}",
+    "pageSub": "Abierto desde un overlay de transmisión o un enlace",
     "methodHive": "HIVE / HBD",
     "methodLightning": "Lightning",
     "methodMore": "Más formas",
@@ -22,6 +24,17 @@
     "memoPlaceholder": "p. ej. ¡Gracias por este contenido increíble!",
     "memoLinkNote": "Este enlace se añade al memo: {{link}}",
     "send": "Enviar propina",
+    "sendAmount": "Enviar {{amount}} {{currency}}",
+    "paidIn": "Se paga en {{currency}} · sin comisiones",
+    "forTitle": "por “{{title}}”",
+    "presets": {
+      "coffee": "Un café",
+      "popular": "El más popular",
+      "thanks": "Muchas gracias",
+      "superFan": "Superfan"
+    },
+    "sentEyebrow": "Propina enviada",
+    "sentTo": "{{amount}} para @{{recipient}}",
     "lightning": {
       "amountLabel": "Cantidad (sats):",
       "messageLabel": "Mensaje (opcional):",
@@ -65,6 +78,8 @@
     "monthly": {
       "label": "Con qué frecuencia",
       "once": "Una vez",
+      "oneTime": "Una vez",
+      "monthly": "Mensual",
       "until": "Cada mes, hasta {{date}}",
       "note": "Hive lo envía solo cada 30 días, el primero ahora mismo. Puedes detenerlo cuando quieras.",
       "replaces": "Esto reemplaza el apoyo mensual que ya envías a @{{recipient}}.",
@@ -79,7 +94,7 @@
   },
   "cardMenu": {
     "loginToPersonalize": "Inicia sesión para personalizar tu feed",
-    "notInterestedToast": "No te interesa: ocultaremos este video",
+    "notInterestedToast": "No te interesa. Ocultaremos este video",
     "undo": "Deshacer",
     "cantHideOwn": "No puedes ocultar tus propios videos",
     "hidingCreatorToast": "Ocultando videos de @{{author}}",
@@ -89,7 +104,8 @@
     "addToPlaylist": "Agregar a playlist",
     "addTag": "Agregar etiqueta",
     "notInterested": "No me interesa",
-    "dontShowCreator": "No mostrar a @{{author}}"
+    "dontShowCreator": "No mostrar a @{{author}}",
+    "saveToPlaylist": "Guardar en playlist"
   },
   "guestList": {
     "loadFailed": "No se pudo cargar la lista de invitados actual",
@@ -134,26 +150,33 @@
     "tagged": "Etiquetado como “{{tag}}”.",
     "vote": "Votar",
     "tagThisVideo": "Etiquetar este video",
-    "tagOptional": "— opcional —",
+    "tagOptional": "Opcional",
     "pickTopicFirst": "Primero elige un tema",
     "taggedNoDot": "Etiquetado como “{{tag}}”",
     "tagFailed": "Falló el etiquetado: {{message}}",
-    "taggedAlreadyVoted": "Etiquetado como “{{tag}}”: tu voto del {{weight}}% ya estaba emitido.",
+    "taggedAlreadyVoted": "Etiquetado como “{{tag}}”. Tu voto del {{weight}}% ya estaba emitido.",
     "votingClosed": "Votación cerrada: etiqueta este video",
     "youTagged": "Etiquetaste esto como <b>{{tag}}</b>.",
-    "pickTopic": "Elige un tema (cuenta como un voto del 100%)",
+    "pickTopic": "Elegir un tema cuenta como un voto del 100%.",
     "submitTag": "Enviar etiqueta",
     "tagThisVideoFull": "Etiquetar este video (cuenta como un voto del 100%)",
-    "justTag": "No votar, solo etiquetar"
+    "justTag": "No votar, solo etiquetar",
+    "justTagShort": "Solo etiquetar",
+    "voteAndTag": "Votar y etiquetar",
+    "addsAbout": "suma unos {{value}}",
+    "postSoFar_one": "{{value}} hasta ahora · {{count}} voto",
+    "postSoFar_many": "{{value}} hasta ahora · {{count}} votos",
+    "postSoFar_other": "{{value}} hasta ahora · {{count}} votos"
   },
   "tagsPicker": {
     "autoTagged": "Etiquetado automático: {{tags}}",
     "searchPlaceholder": "Buscar temas…",
     "searchAria": "Buscar temas",
     "noMatches": "Ningún tema coincide con “{{query}}”.",
-    "allSelected": "Todo {{category}} está seleccionado. Agrega temas individuales solo para afinar más:",
+    "allSelected": "Todo {{category}} está elegido. Toca un tema para dejarlo fuera.",
     "orPickTopics": "O elige temas individuales:",
-    "goodEnough": "Así está bien, o sé más específico (opcional):",
+    "clear": "Borrar",
+    "goodEnough": "Así está bien, o sé más específico (opcional)",
     "moreSpecific": "Más específico:"
   }
 }

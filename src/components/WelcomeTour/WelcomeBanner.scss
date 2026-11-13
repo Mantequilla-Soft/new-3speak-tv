@@ -1,266 +1,114 @@
-@use "../../mixins.scss" as mix;
+@use "../../styles/v2" as v2;
 
-// One row on desktop: mark · text (title, lead, three points) · buttons · close.
-// Below 1100px the buttons drop under the text, so nothing gets squeezed.
+// The welcome for logged-out visitors (design 33d): one card with the accent
+// hero tint (160deg, 22%). The title and its lead with the close on the right,
+// the points two across as tinted wells, then "Take the tour" taking the row
+// and FAQ beside it. On a wide screen it floats in the lower right, 520 wide;
+// narrower, it sits in the page above the feeds.
 .welcome-banner {
   position: relative;
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
-  grid-template-areas: "mark body actions";
-  align-items: center;
-  column-gap: 14px;
-  row-gap: 10px;
-  margin: 2px 24px 12px;
-  padding: 20px 52px 20px 20px;
-  border-radius: 14px;
-  border: 1px solid var(--border-color);
-  background:
-    linear-gradient(110deg, color-mix(in srgb, var(--accent-primary, #e53935) 9%, transparent), transparent 45%),
-    var(--bg-secondary);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin: 0 0 16px;
+  padding: 20px;
+  border-radius: var(--r-3xl);
+  border: 1px solid var(--border);
+  background: linear-gradient(160deg, color-mix(in srgb, var(--accent) 22%, var(--surface)), var(--surface));
+  color: var(--text);
 
-  @media (max-width: 1100px) {
-    grid-template-columns: auto minmax(0, 1fr);
-    grid-template-areas:
-      "mark body"
-      "mark actions";
-    align-items: start;
-  }
-
-  // Phones: the body's children join this grid (body is display: contents), so
-  // the mark and the title share one centred header row above the list. The
-  // header stays clear of the close button, so the padding can be even.
-  @include mix.respond(phone) {
-    grid-template-columns: 1fr auto auto 1fr;
-    grid-template-areas:
-      ".      mark   title  ."
-      "points points points points"
-      "lead   lead   lead   lead"
-      "actions actions actions actions";
-    margin: 2px 10px 10px;
-    padding: 22px 14px 20px;
-    column-gap: 10px;
-    row-gap: 0;
-  }
-
-  .welcome-banner-mark {
-    grid-area: mark;
-    align-self: start;
-    width: 44px;
-    height: 44px;
-
-    // Desktop: as tall as the title + tagline block beside it, and level with it.
-    @media (min-width: 1100px) { align-self: center; width: 65px; height: 65px; }
-    // Scales with the screen so the centred header never runs under the X.
-    @include mix.respond(phone) { align-self: center; width: clamp(34px, 11vw, 46px); height: clamp(34px, 11vw, 46px); }
-  }
-
-  // Stacked below 1100px (title, points, tagline). Desktop: title + tagline on
-  // the left, the points in the middle.
-  .welcome-banner-body {
-    grid-area: body;
-    min-width: 0;
-    display: grid;
-
-    @include mix.respond(phone) { display: contents; }
-    grid-template-areas: "title" "points" "lead";
-
-    @media (min-width: 1100px) {
-      grid-template-columns: minmax(220px, 350px) minmax(0, 1fr);
-      grid-template-areas:
-        "title points"
-        "lead  points";
-      column-gap: 32px;
-      align-items: center;
-
-      h2 { align-self: end; margin-bottom: 4px; }
-      .welcome-banner-lead { align-self: start; margin-top: 4px; }
-    }
-
-    h2 {
-      grid-area: title;
-      margin: 0 0 10px;
-      font-size: 26px;
-      font-weight: 800;
-      line-height: 1.15;
-      color: var(--text-primary);
-
-      @media (min-width: 1100px) { font-size: 32px; }
-      @media (min-width: 1100px) { margin-bottom: 2px; }
-      @include mix.respond(phone) { align-self: center; margin: 0; font-size: clamp(18px, 5.8vw, 25px); }
-    }
-
-    p {
-      margin: 0;
-      font-size: 13.5px;
-      line-height: 1.45;
-      color: var(--text-secondary);
-    }
-
-    .welcome-banner-lead {
-      grid-area: lead;
-      margin: 10px 0 0;
-      font-size: 16.5px;
-      font-weight: 600;
-      color: var(--text-primary);
-
-      @media (min-width: 1100px) { margin-top: 2px; }
-      @include mix.respond(phone) { margin-top: 24px; font-size: 14.5px; text-align: center; }
-    }
-
-    // The "New here?" line under the points (wider screens only).
-    .welcome-banner-text--long { margin-top: 10px; font-size: 14.5px; }
-  }
-
-  // One column on phones, two even columns on tablets. Desktop: one column
-  // again, centred between the title block and the buttons (see the body grid).
-  .welcome-banner-points {
-    grid-area: points;
-    list-style: none;
+  @include v2.wide {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    z-index: 900;
+    width: 520px;
     margin: 0;
-    padding: 0;
-    display: grid;
-    gap: 6px;
-
-    @include mix.respond(phone) { margin-top: 20px; gap: 8px; }
-
-    @media (min-width: 768px) and (max-width: 1099px) {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 10px 24px;
-    }
-    @media (min-width: 1100px) {
-      justify-self: center;
-      gap: 8px;
-    }
-
-    li {
-      display: flex;
-      align-items: flex-start;
-      gap: 9px;
-      font-size: 15.5px;
-      line-height: 1.45;
-      color: var(--text-secondary);
-
-      @include mix.respond(phone) { gap: 8px; font-size: 12.5px; }
-    }
-
-    // The catch words: brighter as well as bolder, so they read at a glance.
-    strong {
-      font-weight: 700;
-      color: var(--text-primary);
-    }
-
-    svg {
-      flex-shrink: 0;
-      margin-top: 2px;
-      font-size: 19px;
-      color: var(--accent-primary, #e53935);
-
-      @include mix.respond(phone) { margin-top: 1px; font-size: 17px; }
-    }
+    box-shadow: var(--shadow-float);
+    animation: v2-pop var(--t-base) var(--ease);
   }
 
-  .welcome-banner-actions {
-    grid-area: actions;
+  @include v2.mobile { padding: 16px; }
+}
+
+// The feedback button shares that corner: it waits until the card is closed.
+@include v2.wide {
+  body:has(.welcome-banner) .review-fab { display: none; }
+}
+
+.welcome-banner-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  min-width: 0;
+}
+
+.welcome-banner-titles {
+  flex: 1;
+  min-width: 0;
+
+  h2 {
+    margin: 0;
+    @include v2.text(heading);
+    color: var(--text);
+  }
+}
+
+.welcome-banner-lead {
+  margin: 4px 0 0;
+  @include v2.text(body-sm);
+  color: var(--muted);
+}
+
+.welcome-banner-close.v2-iconbtn {
+  flex: none;
+  margin: -6px -8px 0 0;
+  color: var(--muted);
+}
+
+.welcome-banner-points {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+
+  @include v2.mobile { grid-template-columns: minmax(0, 1fr); }
+
+  li {
     display: flex;
-    flex-wrap: wrap;
+    align-items: flex-start;
     gap: 8px;
+    padding: 10px;
+    border-radius: var(--r-lg);
+    background: color-mix(in srgb, var(--text) 8%, transparent);
+    @include v2.text(meta);
+    line-height: 1.35;
+    color: var(--text);
 
-    // Centred on the BOX, not the padded area: the box keeps 40px on the right
-    // for the close button against 14px on the left, so the row reaches into
-    // that extra 26px to sit in the middle.
-    @include mix.respond(phone) {
-      justify-content: center;
-      margin-top: 20px;
-    }
-
-    // Desktop: Tour above FAQ, both the same width.
-    @media (min-width: 1100px) {
-      flex-direction: column;
-      align-items: stretch;
-
-      .welcome-banner-btn { justify-content: center; }
-    }
+    // An odd last point takes the whole row.
+    &:last-child:nth-child(odd) { grid-column: 1 / -1; }
   }
 
-  .welcome-banner-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 5px 14px;
-    border-radius: 20px;
-    border: 1px solid var(--border-color);
-    background: transparent;
-    color: var(--text-secondary);
-    font-size: 13.5px;
-    font-weight: 600;
-    white-space: nowrap;
-    text-decoration: none;
-    cursor: pointer;
-    transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  strong { font-weight: 700; }
+  .is-accent { color: var(--accent); }
+  .is-cyan { color: var(--cyan); }
+}
 
-    &:hover {
-      background: var(--bg-hover);
-      color: var(--text-primary);
-      border-color: var(--text-secondary);
-    }
+.welcome-banner-actions {
+  display: flex;
+  gap: 8px;
 
-    // Red outline, never a red fill (3Speak convention).
-    &--primary {
-      border-color: var(--accent-primary, #e53935);
-      color: var(--accent-primary, #e53935);
+  .welcome-banner-btn.v2-btn { justify-content: space-between; gap: 12px; }
+  .welcome-banner-btn--primary.v2-btn { flex: 1; }
+  .welcome-banner-btn:not(.welcome-banner-btn--primary) { font-weight: 700; }
+}
 
-      &:hover {
-        border-color: var(--accent-primary, #e53935);
-        color: var(--accent-primary, #e53935);
-        background: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent);
-      }
-    }
+// Phones get the one-word tour label.
+.welcome-banner-label--short { display: none; }
 
-    svg { font-size: 16px; }
-
-    // Desktop: a little bigger, to match the larger text beside them.
-    @media (min-width: 768px) {
-      padding: 8px 20px;
-      font-size: 15px;
-      svg { font-size: 18px; }
-    }
-
-    // Keeps all three on one row on a phone.
-    @include mix.respond(phone) {
-      padding: 5px 11px;
-      font-size: 13px;
-    }
-  }
-
-  // Phones get the short text and the one-word button label.
-  .welcome-banner-text--short,
-  .welcome-banner-label--short { display: none; }
-
-  @include mix.respond(phone) {
-    .welcome-banner-text--long,
-    .welcome-banner-label--long { display: none; }
-    .welcome-banner-text--short { display: block; }
-    .welcome-banner-label--short { display: inline; }
-  }
-
-  .welcome-banner-close {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 28px;
-    height: 28px;
-    border: none;
-    border-radius: 50%;
-    background: transparent;
-    color: var(--text-muted);
-    font-size: 19px;
-    cursor: pointer;
-
-    &:hover { background: var(--bg-hover); color: var(--text-primary); }
-
-    @include mix.respond(phone) { top: 6px; right: 6px; }
-  }
+@include v2.mobile {
+  .welcome-banner-label--long { display: none; }
+  .welcome-banner-label--short { display: inline; }
 }

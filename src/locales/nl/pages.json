@@ -93,12 +93,13 @@
   "legal": {
     "pageTitle": "Hoe 3Speak met je gegevens omgaat · 3Speak",
     "englishOnly": "Deze pagina is alleen beschikbaar in het Engels. De Engelse versie is bindend.",
-    "back": "← Terug naar 3Speak"
+    "back": "← Terug naar 3Speak",
+    "onThisPage": "Op deze pagina"
   },
   "notFound": {
     "imageAlt": "404",
-    "title": "SORRY! PAGINA NIET GEVONDEN",
+    "title": "Sorry, pagina niet gevonden",
     "message": "Helaas is de pagina die je zoekt niet beschikbaar.",
-    "goHome": "NAAR DE STARTPAGINA"
+    "goHome": "Naar de startpagina"
   }
 }

@@ -3,29 +3,24 @@ import React, { useEffect, useId, useState, useRef, useCallback, useMemo } from 
 import { getHiveClient } from '../../utils/hiveNode';
 import './CommentSection.scss';
 import './BlogContent.scss';
-import { BiDislike } from 'react-icons/bi';
-import { ImSpinner9 } from 'react-icons/im';
-import { TailChase } from 'ldrs/react';
-import { MdVideocam, MdComment, MdKeyboardArrowUp, MdTranslate, MdFlag, MdPushPin } from 'react-icons/md';
+import { Icon } from '../v2/Icon';
+import { Button, IconButton, Segmented, EmptyState } from '../v2/ui';
+import { cx } from '../v2/helpers';
 import ReportModal, { isReported } from '../modal/ReportModal';
 import useTranslation from '../../hooks/useTranslation';
 import { useTranslation as useI18n } from 'react-i18next';
 import TranslateButton from '../TranslateButton/TranslateButton';
 import ReactVideoTab from '../ReactVideoModal/ReactVideoModal';
-import dayjs from 'dayjs';
 import { useAppStore } from '../../lib/store';
 import { handleAvatar, postIncubationContent } from '../../lib/incubation';
 import { mergeOffChainReplies, applyOffChainLikes } from '../../utils/offChainReplies';
-import { Client } from '@hiveio/dhive';
-import UpvoteTooltip from '../tooltip/UpvoteTooltip';
 import CommentVoteTooltip from '../tooltip/CommentVoteTooltip';
 import { toastIn } from '../../utils/toast';
 import { estimate, getVotePower } from '../../utils/hiveUtils';
 import { markByReputation, getUserReputation } from '../../utils/reputation';
 import { markByHidden } from '../../utils/hiddenCreators';
-import Button from '../Button/Button';
 import AuthorBadge from '../AuthorBadge/AuthorBadge';
-import UpvoteCount from '../UpvoteCount/UpvoteCount';
+import AccountImg from '../HiveAvatar/AccountImg';
 import PayoutAmount from '../PayoutAmount/PayoutAmount';
 import { commentWithAioha } from '../../hive-api/aioha';
 import { HIVE_API_NODES } from '../../utils/config';
@@ -87,7 +82,32 @@ function splitRepliedTo(body) {
     : { text: body || '', suffix: '' };
 }
 
-function CommentSection({ videoDetails, author, permlink, currentTime, duration, onSeek, onPause, onRefreshReactions, pinnedComments, pinnable = false }) {
+// The Comment / React switch at the head of every composer: a segmented track,
+// never underlined tabs (STYLE_GUIDE 43a).
+function ComposerModeTabs({ value, onChange }) {
+  const { t } = useI18n();
+  return (
+    <Segmented
+      size={28}
+      block={false}
+      className="comment-mode-seg"
+      value={value}
+      onChange={onChange}
+      options={[
+        { value: 'comment', label: t('comments.section.commentTab') },
+        { value: 'react', label: t('comments.section.reactTab') },
+      ]}
+    />
+  );
+}
+
+/**
+ * `panel`: the watch page's side panel gives this a fixed height. The list then
+ * scrolls inside it and the composer is pinned at the bottom, as in a chat
+ * (design 02 / 43a). Without it (posts, audio) the composer sits on top and the
+ * list flows with the page.
+ */
+function CommentSection({ videoDetails, author, permlink, currentTime, duration, onSeek, onPause, onRefreshReactions, pinnedComments, pinnable = false, panel = false }) {
   const { t } = useI18n();
   const { user, incubationHandle } = useAppStore();
   // The name to SHOW. For an incubating user there is no Hive account, so
@@ -96,6 +116,9 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
   const { translate, getTranslation, clearTranslation, translating } = useTranslation();
   const [commentInfo, setCommentInfo] = useState('');
   const [activeTab, setActiveTab] = useState('comment'); // 'comment' | 'react'
+  // The side panel's composer rests as one line (02: the moment, "Join the
+  // discussion…", send) and opens into the full one (43a) when used.
+  const [composerOpen, setComposerOpen] = useState(false);
   const [replyText, setReplyText] = useState("");
   const [activeReply, setActiveReply] = useState(null);
   const [replyToComment, setReplyToComment] = useState(null);
@@ -104,7 +127,6 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
   const [selectedPost, setSelectedPost] = useState({ author: '', permlink: '' });
   const [showTooltip, setShowTooltip] = useState(false);
   const [activeTooltipPermlink, setActiveTooltipPermlink] = useState(null);
-  const accessToken = localStorage.getItem("access_token");
     const [weight, setWeight] = useState(100);
     const [voteValue, setVoteValue] = useState(0.0);
       const [accountData, setAccountData] = useState(null);
@@ -271,7 +293,7 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
           if (comment?.body) {
             try {
               rendered[comment.permlink] = render(stripTimestampEmbeds(comment.body));
-            } catch (err) {
+            } catch {
               rendered[comment.permlink] = '';
             }
           }
@@ -362,7 +384,7 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
             }
           }
 
-        } catch (_) {}
+        } catch { /* not JSON: no metadata */ }
         return {
           author: {
             username: comment.author,
@@ -539,7 +561,7 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
         try {
           const render = await getHiveRenderer();
           setRenderedBodies(prev => ({ ...prev, [postedPermlink]: render(textToPost) }));
-        } catch (_) { /* fall back to raw body until refetch */ }
+        } catch { /* fall back to raw body until refetch */ }
 
         if (isReplyingToMainPost) {
           setCommentList(prev => [newComment, ...prev]);
@@ -661,7 +683,7 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
   //   }
   // };
 
-  const toggleTooltip = (author, permlink, index) => {
+  const toggleTooltip = (author, permlink) => {
     // console.log('Toggle Tooltip:', author, permlink, index);
     setSelectedPost({ author, permlink });
     setShowTooltip(prev => !prev || activeTooltipPermlink !== permlink);
@@ -677,45 +699,61 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
     }, 0);
   };
 
-  return (
-    <div className="vid-comment-wrap">
-      
-      
-      {/* Tab headers + shared timestamp */}
-      <div className="comment-tabs-bar">
-        <div className="comment-tabs">
-          <button
-            className={`comment-tab${activeTab === 'comment' ? ' active' : ''}`}
-            onClick={() => setActiveTab('comment')}
-          >
-            <MdComment size={14} />
-            {t('comments.section.commentTab')}
-          </button>
-          <button
-            className={`comment-tab${activeTab === 'react' ? ' active' : ''}`}
-            onClick={() => setActiveTab('react')}
-          >
-            <MdVideocam size={14} />
-            {t('comments.section.reactTab')}
-          </button>
-        </div>
-        <div className="comment-timestamp">
-          <label className="comment-timestamp-label" htmlFor={momentId}>{t('comments.section.at')}</label>
-          <input
-            id={momentId}
-            type="text"
-            className="comment-timestamp-input"
-            value={timelineInput}
-            onChange={handleTimelineInputChange}
-            onBlur={handleTimelineInputBlur}
-            placeholder="0:00"
-          />
-        </div>
-      </div>
+  const commentCount = countComments(commentList);
 
-      {/* Comment tab */}
-      {activeTab === 'comment' && (
-        <div className="add-comment-wrap">
+  const composerCompact = panel && !composerOpen && !commentInfo && activeTab === 'comment'
+    && !(commentImages.pending?.length) && !commentImages.uploading;
+  const openComposer = useCallback(() => setComposerOpen(true), []);
+  // Opened from the one-line box: the full box takes the focus over.
+  const wasCompact = useRef(composerCompact);
+  useEffect(() => {
+    if (wasCompact.current && !composerCompact && activeTab === 'comment') {
+      commentInputRef.current?.focus({ preventScroll: true });
+    }
+    wasCompact.current = composerCompact;
+  }, [composerCompact, activeTab]);
+  // Back to one line once focus leaves an empty box (not into its own popovers).
+  const onComposerBlur = (e) => {
+    if (!panel || commentInfo || activeTab !== 'comment') return;
+    const next = e.relatedTarget;
+    if (next && (e.currentTarget.contains(next) || next.closest?.('.egp-emoji-popover, .egp-gif-popover'))) return;
+    setTimeout(() => {
+      const el = commentInputRef.current;
+      if (el && document.activeElement === el) return;
+      if (document.activeElement?.closest?.('.egp-emoji-popover, .egp-gif-popover, .add-comment-wrap')) return;
+      setComposerOpen(false);
+    }, 0);
+  };
+
+  const compactComposer = (
+    // The same hooks as the full box: `add-comment-wrap .textarea-box` (focused
+    // by the dock's Comment tile) and the Comment / React switch (pressed by the
+    // player's "React to this moment"), kept in the DOM while hidden.
+    <div className="comment-composer add-comment-wrap is-compact">
+      <div hidden><ComposerModeTabs value={activeTab} onChange={(v) => { setActiveTab(v); setComposerOpen(true); }} /></div>
+      <button type="button" className="comment-moment-chip num" onClick={openComposer} title={t('comments.section.at')}>
+        {timelineInput || '0:00'}
+      </button>
+      <textarea
+        ref={commentInputRef}
+        rows={1}
+        readOnly
+        placeholder={t('comments.section.joinPlaceholder')}
+        aria-label={t('comments.section.commentPlaceholder')}
+        className="textarea-box"
+        value=""
+        onFocus={() => { handleTextareaFocus(); openComposer(); }}
+        onClick={openComposer}
+      />
+      <IconButton icon="send" round size={40} variant="primary" className="comment-send" label={t('comments.section.commentButton')} onClick={openComposer} />
+    </div>
+  );
+
+  const composer = composerCompact ? compactComposer : (
+    // `add-comment-wrap` stays: PostView's Reply button finds the box through it.
+    <div className={cx('comment-composer add-comment-wrap', activeTab === 'react' && 'is-react')} onBlur={onComposerBlur}>
+      {activeTab === 'comment' ? (
+        <>
           <CommentDropZone
             images={commentImages}
             value={commentInfo}
@@ -723,127 +761,172 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
             toHtml={toPreviewHtml}
             previewClassName="comment-content"
             onPreviewClick={onPreviewClick}
+            tabsLead={<ComposerModeTabs value={activeTab} onChange={setActiveTab} />}
           >
-          <textarea
-            ref={commentInputRef}
-            placeholder={t('comments.section.commentPlaceholder')}
-            className="textarea-box"
-            value={commentInfo}
-            onChange={(e) => {
-              setCommentInfo(commentEmoji.change(e));
-              e.target.style.height = 'auto';
-              e.target.style.height = e.target.scrollHeight + 'px';
-            }}
-            onKeyDown={commentEmoji.keyDown}
-            onBlur={commentEmoji.blur}
-            onFocus={handleTextareaFocus}
-            onPaste={commentImages.onPaste}
-          />
-          {commentEmoji.popup}
+            <textarea
+              ref={commentInputRef}
+              placeholder={t('comments.section.commentPlaceholder')}
+              className="textarea-box"
+              value={commentInfo}
+              onChange={(e) => {
+                setCommentInfo(commentEmoji.change(e));
+                e.target.style.height = 'auto';
+                e.target.style.height = e.target.scrollHeight + 'px';
+              }}
+              onKeyDown={commentEmoji.keyDown}
+              onBlur={commentEmoji.blur}
+              onFocus={handleTextareaFocus}
+              onPaste={commentImages.onPaste}
+            />
+            {commentEmoji.popup}
           </CommentDropZone>
           <div className="comment-form-row">
             <div className="comment-compose-tools">
               <EmojiGifPicker
+                portal={panel}
                 onPickEmoji={(em) => insertAtCursor(commentInputRef.current, commentInfo, em, setCommentInfo)}
                 onPickGif={(url) => insertAtCursor(commentInputRef.current, commentInfo, gifMarkdown(url), setCommentInfo)}
               />
               <CommentImageButton uploading={commentImages.uploading} onFiles={commentImages.upload} />
+              {/* The moment of the video this comment is about: follows the
+                  playhead until typed in by hand. */}
+              <div className="comment-timestamp">
+                <label className="comment-timestamp-label" htmlFor={momentId}>{t('comments.section.at')}</label>
+                <input
+                  id={momentId}
+                  type="text"
+                  inputMode="numeric"
+                  className="comment-timestamp-input"
+                  value={timelineInput}
+                  onChange={handleTimelineInputChange}
+                  onBlur={handleTimelineInputBlur}
+                  placeholder="0:00"
+                />
+              </div>
             </div>
             <div className="btn-wrap">
-              <Button text={t('common.actions.cancel')} onClick={() => {
-                setCommentInfo('');
-                setReplyToComment(null);
-              }} />
-              <Button text={t('comments.section.commentButton')} prominent onClick={() => {
+              {(commentInfo || panel) && (
+                <Button variant="ghost" size={32} onClick={() => {
+                  setCommentInfo('');
+                  setReplyToComment(null);
+                  setComposerOpen(false);
+                }}>{t('common.actions.cancel')}</Button>
+              )}
+              <Button variant="primary" size={32} trailing="send" onClick={() => {
                 setReplyToComment(null);
                 handlePostComment();
-              }} />
+              }}>{t('comments.section.commentButton')}</Button>
             </div>
           </div>
-        </div>
+        </>
+      ) : (
+        <>
+          <div className="comment-write-tabs">
+            <ComposerModeTabs value={activeTab} onChange={setActiveTab} />
+          </div>
+          <div className="comment-react-pane">
+            <ReactVideoTab
+              author={author}
+              permlink={permlink}
+              currentTime={currentTime}
+              formatTime={formatTimeInput}
+              onPosted={() => { setActiveTab('comment'); onRefreshReactions?.(); }}
+              onRecordStart={onPause}
+            />
+          </div>
+        </>
       )}
+    </div>
+  );
 
-      {/* React tab */}
-      {activeTab === 'react' && (
-        <div className="add-comment-wrap">
-          <ReactVideoTab
-            author={author}
-            permlink={permlink}
+  const list = (
+    <div className="comment-list">
+      {loadingComments ? (
+        <div className="comments-loading" aria-busy="true">
+          {[0, 1, 2].map((i) => (
+            <div key={i} className="comment-skeleton" aria-hidden="true">
+              <span className="v2-skeleton comment-skeleton-avatar" />
+              <span className="comment-skeleton-lines">
+                <span className="v2-skeleton is-line" />
+                <span className="v2-skeleton is-line" />
+              </span>
+            </div>
+          ))}
+        </div>
+      ) : displayList.length === 0 ? (
+        <EmptyState icon="forum" title={t('comments.section.empty')} className="comments-empty">
+          {t('comments.section.emptyHint')}
+        </EmptyState>
+      ) : (
+        displayList.map((comment, index) => (
+          <Comment
+            key={`${comment.author?.username}-${comment.permlink || index}`}
+            commentIndex={index}
+            comment={comment}
+            videoAuthor={author}
+            setCommentList={setCommentList}
+            activeReply={activeReply}
+            setActiveReply={setActiveReply}
+            setReplyToComment={setReplyToComment}
+            setCommentInfo={setCommentInfo}
+            setReplyText={setReplyText}
+            replyText={replyText}
+            commentInfo={commentInfo}
+            handlePostComment={handlePostComment}
+            depth={0}
+            processedBody={processedBody}
+            toggleTooltip={toggleTooltip}
+            selectedPost={selectedPost}
+            showTooltip={showTooltip}
+            setShowTooltip={setShowTooltip}
+            activeTooltipPermlink={activeTooltipPermlink}
+            setActiveTooltipPermlink={setActiveTooltipPermlink}
+            weight={weight}
+            setWeight={setWeight}
+            voteValue={voteValue}
+            setVoteValue={setVoteValue}
+            accountData={accountData}
+            setAccountData={setAccountData}
+            onSeek={onSeek}
             currentTime={currentTime}
-            formatTime={formatTimeInput}
-            onPosted={() => { setActiveTab('comment'); onRefreshReactions?.(); }}
-            onRecordStart={onPause}
+            duration={duration}
+            onRefreshReactions={onRefreshReactions}
+            onTranslate={translate}
+            getTranslation={getTranslation}
+            clearTranslation={clearTranslation}
+            translating={translating}
+            editableBy={editableBy}
+            onEditComment={handleEditComment}
+            editableText={editableText}
+            isPinned={pinned.includes(comment.permlink)}
+            onTogglePin={canPin && comment.onChain !== false ? handleTogglePin : null}
+            pinBusy={pinBusy === comment.permlink}
+            currentUser={user}
+            onPause={onPause}
+            toPreviewHtml={toPreviewHtml}
+            panel={panel}
           />
-        </div>
+        ))
       )}
+    </div>
+  );
 
+  return (
+    <div className={cx('vid-comment-wrap', panel ? 'is-panel' : 'is-page')}>
       <div className="comments-header-row">
-        <h4>{t('comments.section.count', { count: countComments(commentList) })}</h4>
+        {/* The panel's tab already carries the count (02). */}
+        <h4 className={cx(panel && 'is-sr')}>{t('comments.section.count', { count: commentCount })}</h4>
         <label className="comment-sort">
+          <Icon name="sort" size={16} />
           <span className="comment-sort-label">{t('comments.section.sortBy')}</span>
-          <select value={sort} onChange={(e) => changeSort(e.target.value)}>
+          <select className="v2-input is-select h32" value={sort} onChange={(e) => changeSort(e.target.value)}>
             <option value="newest">{t('comments.section.sortNewest')}</option>
             <option value="oldest">{t('comments.section.sortOldest')}</option>
             <option value="popular">{t('comments.section.sortPopular')}</option>
           </select>
         </label>
       </div>
-
-      {loadingComments ? (
-        <div className="comments-loading">
-          <div className="loader-center"> 
-            <TailChase size={16} speed={1.5} color="var(--accent-primary)" />
-          </div>
-        </div>
-      ) : (
-        displayList.map((comment, index) => (
-        <Comment
-        key={`${comment.author?.username}-${comment.permlink || index}`}
-          commentIndex={index}
-          comment={comment}
-          setCommentList={setCommentList}
-          activeReply={activeReply}
-          setActiveReply={setActiveReply}
-          setReplyToComment={setReplyToComment}
-          setCommentInfo={setCommentInfo}
-          setReplyText={setReplyText}
-          replyText={replyText}
-          commentInfo={commentInfo}
-          handlePostComment={handlePostComment}
-          depth={0}
-          // handleVote={handleVote}
-          processedBody={processedBody}
-          toggleTooltip={toggleTooltip}
-          selectedPost={selectedPost}
-          showTooltip={showTooltip}
-          setShowTooltip={setShowTooltip}
-          activeTooltipPermlink={activeTooltipPermlink}
-          setActiveTooltipPermlink={setActiveTooltipPermlink}
-          weight={weight}
-      setWeight={setWeight}
-      voteValue={voteValue}
-      setVoteValue={setVoteValue}
-      accountData={accountData}
-      setAccountData={setAccountData}
-      onSeek={onSeek}
-      currentTime={currentTime}
-      duration={duration}
-      onRefreshReactions={onRefreshReactions}
-      onTranslate={translate}
-      getTranslation={getTranslation}
-      clearTranslation={clearTranslation}
-      translating={translating}
-      editableBy={editableBy}
-      onEditComment={handleEditComment}
-      editableText={editableText}
-      isPinned={pinned.includes(comment.permlink)}
-      onTogglePin={canPin && comment.onChain !== false ? handleTogglePin : null}
-      pinBusy={pinBusy === comment.permlink}
-      currentUser={user}
-      onPause={onPause}
-      toPreviewHtml={toPreviewHtml}
-        />
-      )) )}
+      {panel ? <>{list}{composer}</> : <>{composer}{list}</>}
     </div>
   );
 }
@@ -851,6 +934,8 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
 function Comment({
   commentIndex,
   comment,
+  videoAuthor,
+  panel = false,
   setCommentList,
   activeReply,
   setActiveReply,
@@ -940,6 +1025,10 @@ function Comment({
   }, [editing]);
   const [replyTab, setReplyTab] = useState('comment');
   const [collapsed, setCollapsed] = useState(false);
+  const [showReplies, setShowReplies] = useState(false);
+  const [revealHidden, setRevealHidden] = useState(false);
+  // Replying here opens the thread, so the new reply lands in view.
+  useEffect(() => { if (isReplying) setShowReplies(true); }, [isReplying]);
   const [translatedText, setTranslatedText] = useState(null);
   const [translateError, setTranslateError] = useState(false);
   const [isReportOpen, setIsReportOpen] = useState(false);
@@ -968,17 +1057,38 @@ function Comment({
     if (isReplying) setReplyTab('comment');
   }, [isReplying]);
 
-  if (comment.isLowReputation || comment.isHidden) return null;
+  // Hidden (a low score, or a creator you hid): a one-line bar with Show (28a, 43a).
+  if ((comment.isLowReputation || comment.isHidden) && !revealHidden) {
+    return (
+      <div className={cx('comment-container', depth > 0 && 'is-reply')}>
+        <div className="comment-hidden-bar">
+          <Icon name="visibility_off" size={18} />
+          <span>{comment.isLowReputation ? t('comments.section.hiddenLowScore') : t('comments.section.hiddenComment')}</span>
+          <button
+            type="button"
+            className="comment-hidden-show"
+            aria-label={t('comments.section.showComment', { user: comment?.author?.username || '' })}
+            onClick={() => setRevealHidden(true)}
+          >{t('comments.section.show')}</button>
+        </div>
+      </div>
+    );
+  }
+
+  const username = comment?.author?.username;
+  // The video's own creator, marked like the 28a "CREATOR" pill.
+  const isCreator = !!videoAuthor && username === videoAuthor;
+  const reported = isReported('comment', `${username}/${comment.permlink}`);
 
   if (collapsed) {
     return (
-      <div className="comment-container" style={{ marginLeft: depth > 0 ? '40px' : '0px' }}>
+      <div className={cx('comment-container', depth > 0 && 'is-reply')}>
         <div
           className="comment-collapsed-bar"
           role="button"
           tabIndex={0}
           aria-expanded="false"
-          aria-label={t('comments.section.showComment', { user: comment?.author?.username || '' })}
+          aria-label={t('comments.section.showComment', { user: username || '' })}
           onClick={() => setCollapsed(false)}
           onKeyDown={(e) => {
             if (e.key !== 'Enter' && e.key !== ' ') return;
@@ -986,37 +1096,52 @@ function Comment({
             setCollapsed(false);
           }}
         >
-          <AuthorBadge author={comment?.author?.username} reputation={comment?.author?.reputation} noLink compact />
-          <MdKeyboardArrowUp size={18} className="comment-collapsed-chevron" />
+          <AuthorBadge author={username} reputation={comment?.author?.reputation} noLink compact />
+          <Icon name="expand_more" size={18} className="comment-collapsed-chevron" />
         </div>
       </div>
     );
   }
 
+  // Panel (02): replies fold under an "N replies" link; on a page they show.
+  const visibleReplies = (comment.children || []).filter((c) => !c.isLowReputation && !c.isHidden).length;
+
   return (
-    <div className="comment-container" style={{ marginLeft: depth > 0 ? '40px' : '0px' }} >
-      <div className="comment">
+    <div className={cx('comment-container', depth > 0 && 'is-reply')}>
+      <div className={cx('comment', isPinned && 'is-pinned', isCreator && 'is-creator')}>
+        {/* The avatar in its own column, the text beside it (02, 28a). */}
+        <Link to={`/@${username}`} className="comment-avatar" tabIndex={-1} aria-hidden="true">
+          <AccountImg account={username} alt="" loading="lazy" />
+        </Link>
         <div className="comment-content">
+          {isPinned && (
+            <span className="comment-pinned-badge"><Icon name="push_pin" size={12} fill />{t('comments.section.pinnedByCreator')}</span>
+          )}
           <div className="comment-header">
-            <AuthorBadge author={comment?.author?.username} reputation={comment?.author?.reputation} noLink />
+            <Link to={`/@${username}`} className="comment-author">{username}</Link>
+            {isCreator && <span className="v2-pill is-accent comment-creator-pill">{t('comments.section.creator')}</span>}
             <span className="comment-date"><TimeAgo date={comment?.created_at} /></span>
-            {isPinned && (
-              <span className="comment-pinned-badge"><MdPushPin size={12} />{t('comments.section.pinnedByCreator')}</span>
-            )}
             {comment?.edited && <span className="comment-edited">{t('comments.section.edited')}</span>}
             {comment?.parentTimestamp != null && (
-              <span className="comment-timestamp-badge" onClick={() => onSeek?.(comment.parentTimestamp)}>{t('comments.section.atTime', { time: formatTimeInput(comment.parentTimestamp) })}</span>
+              <button
+                type="button"
+                className="comment-timestamp-badge"
+                aria-label={t('comments.section.atTime', { time: formatTimeInput(comment.parentTimestamp) })}
+                title={t('comments.section.atTime', { time: formatTimeInput(comment.parentTimestamp) })}
+                onClick={() => onSeek?.(comment.parentTimestamp)}
+              >{formatTimeInput(comment.parentTimestamp)}</button>
             )}
             <button
               type="button"
               className="btn-reset comment-collapse-chevron"
               aria-expanded="true"
               aria-label={t('comments.section.hideComment')}
+              title={t('comments.section.hideComment')}
               onClick={() => setCollapsed(true)}
-            ><MdKeyboardArrowUp size={18} /></button>
+            ><Icon name="expand_less" size={18} /></button>
           </div>
           {editing ? (
-            <div className="add-comment-wrap comment-edit-wrap">
+            <div className="comment-composer comment-edit-wrap">
               <CommentDropZone
                 images={editImages}
                 value={editText}
@@ -1045,18 +1170,17 @@ function Comment({
               <div className="comment-form-row">
                 <div className="comment-compose-tools">
                   <EmojiGifPicker
+                    portal={panel}
                     onPickEmoji={(em) => insertAtCursor(editInputRef.current, editText, em, setEditText)}
                     onPickGif={(url) => insertAtCursor(editInputRef.current, editText, gifMarkdown(url), setEditText)}
                   />
                   <CommentImageButton uploading={editImages.uploading} onFiles={editImages.upload} />
                 </div>
                 <div className="btn-wrap">
-                  <Button text={t('common.actions.cancel')} onClick={() => setEditing(false)} />
-                  <Button
-                    text={savingEdit ? t('comments.section.saving') : t('common.actions.save')}
-                    prominent
-                    onClick={saveEdit}
-                  />
+                  <Button variant="ghost" size={32} onClick={() => setEditing(false)}>{t('common.actions.cancel')}</Button>
+                  <Button variant="primary" size={32} loading={savingEdit} onClick={saveEdit}>
+                    {savingEdit ? t('comments.section.saving') : t('common.actions.save')}
+                  </Button>
                 </div>
               </div>
             </div>
@@ -1069,119 +1193,121 @@ function Comment({
           {translatedText && (
             <div className="comment-translation">
               <div className="comment-translation-header">
-                <MdTranslate size={13} />
+                <Icon name="translate" size={14} />
                 <span>{t('comments.section.translation')}</span>
-                <button className="comment-translation-dismiss" onClick={handleDismissTranslation}>&times;</button>
+                <button
+                  type="button"
+                  className="comment-translation-dismiss"
+                  onClick={handleDismissTranslation}
+                  aria-label={t('common.actions.close')}
+                  title={t('common.actions.close')}
+                ><Icon name="close" size={16} /></button>
               </div>
               <p>{translatedText}</p>
             </div>
           )}
           {translateError && (
-            <div className="comment-translation comment-translation--error">
+            <div className="comment-translation comment-translation--error" role="alert">
               <p>{t('comments.section.translationFailed')}</p>
             </div>
           )}
           <div className="comment-action">
-            <UpvoteCount
-              count={comment?.stats?.num_likes ?? 0}
-              voted={comment.has_voted}
-              onClick={() => toggleTooltip(comment?.author?.username, comment.permlink, commentIndex)}
-            />
-            <PayoutAmount amount={comment?.stats?.total_hive_reward} />
-            <div className="comment-action-right">
+            <button
+              type="button"
+              className={cx('comment-vote', comment.has_voted && 'is-voted')}
+              aria-label={t('engagement.vote.vote')}
+              aria-pressed={!!comment.has_voted}
+              title={t('engagement.vote.vote')}
+              onClick={() => toggleTooltip(username, comment.permlink, commentIndex)}
+            >
+              <Icon name="arrow_upward" size={16} fill={!!comment.has_voted} />
+              <span className="num">{comment?.stats?.num_likes ?? 0}</span>
+            </button>
+            {Number(comment?.stats?.total_hive_reward) > 0 && <PayoutAmount amount={comment?.stats?.total_hive_reward} />}
+            <Button variant="ghost" size={28} icon="reply" className="comment-act" onClick={() => {
+              setCommentInfo("");
+              setReplyText("");
+              setActiveReply(comment.permlink);
+              setReplyToComment(comment);
+            }}>{t('common.actions.reply')}</Button>
+            {canEdit && !editing && (
+              <Button variant="ghost" size={28} icon="edit" className="comment-act" onClick={startEdit}>{t('common.actions.edit')}</Button>
+            )}
+            {onTogglePin && depth === 0 && (
+              <Button
+                variant="ghost"
+                size={28}
+                icon="push_pin"
+                className={cx('comment-act', isPinned && 'is-on')}
+                onClick={() => onTogglePin(comment)}
+                disabled={pinBusy}
+              >{isPinned ? t('comments.section.unpin') : t('comments.section.pin')}</Button>
+            )}
+            {panel && visibleReplies > 0 && (
               <button
                 type="button"
-                className={`comment-report-btn${isReported('comment', `${comment.author?.username}/${comment.permlink}`) ? ' reported' : ''}`}
-                onClick={() => setIsReportOpen(true)}
-                title={t('comments.section.reportComment')}
+                className="comment-replies-toggle"
+                aria-expanded={showReplies}
+                onClick={() => setShowReplies((v) => !v)}
               >
-                <MdFlag size={14} />
+                {t('comments.section.replies', { count: visibleReplies })}
               </button>
-              <TranslateButton
-                onTranslate={handleTranslate}
-                isTranslating={!!translating?.[comment.permlink]}
-              />
+            )}
+            <div className="comment-action-right">
               {comment.hasVideo && (
                 <Link
-                  to={`/shorts?v=${comment.shortAuthor || comment.author?.username}/${comment.shortPermlink || comment.permlink}`}
+                  to={`/shorts?v=${comment.shortAuthor || username}/${comment.shortPermlink || comment.permlink}`}
                   className="comment-shorts-link"
+                  title={t('comments.section.openInShorts')}
                 >
-                  <MdVideocam size={13} />
+                  <Icon name="smart_display" size={16} />
                   <span className="comment-btn-label">{t('comments.section.openInShorts')}</span>
                 </Link>
               )}
-              {onTogglePin && depth === 0 && (
-                <Button
-                  text={isPinned ? t('comments.section.unpin') : t('comments.section.pin')}
-                  onClick={() => onTogglePin(comment)}
-                  disabled={pinBusy}
-                />
-              )}
-              {canEdit && !editing && (
-                <Button text={t('common.actions.edit')} onClick={startEdit} />
-              )}
-              <Button text={t('common.actions.reply')} onClick={() => {
-                  setCommentInfo("");
-                  setReplyText("")
-                  setActiveReply(comment.permlink);
-                  setReplyToComment(comment);
-                }} />
+              <TranslateButton
+                compact
+                onTranslate={handleTranslate}
+                isTranslating={!!translating?.[comment.permlink]}
+              />
+              <IconButton
+                icon="flag"
+                size={28}
+                variant="ghost"
+                className={cx('comment-report-btn', reported && 'reported')}
+                label={t('comments.section.reportComment')}
+                fill={reported}
+                onClick={() => setIsReportOpen(true)}
+              />
             </div>
             <ReportModal
               isOpen={isReportOpen}
               onClose={() => setIsReportOpen(false)}
               type="comment"
-              target={{ author: comment.author?.username, permlink: comment.permlink }}
+              target={{ author: username, permlink: comment.permlink }}
             />
             <CommentVoteTooltip
-             voteKind="comment"
-             author={comment?.author?.username}
-             permlink={comment.permlink}
-             showTooltip={showTooltip && activeTooltipPermlink === comment.permlink}
-             setShowTooltip={setShowTooltip}
-             setCommentList={setCommentList}
-             setActiveTooltipPermlink={setActiveTooltipPermlink}
-             commemtStyle={commemtStyle}
-             weight={weight}
-             setWeight={setWeight}      
-      voteValue={voteValue}
-      setVoteValue={setVoteValue}
-      accountData={accountData}
-      setAccountData={setAccountData}
-          
+              voteKind="comment"
+              author={username}
+              permlink={comment.permlink}
+              showTooltip={showTooltip && activeTooltipPermlink === comment.permlink}
+              setShowTooltip={setShowTooltip}
+              setCommentList={setCommentList}
+              setActiveTooltipPermlink={setActiveTooltipPermlink}
+              commemtStyle={commemtStyle}
+              weight={weight}
+              setWeight={setWeight}
+              voteValue={voteValue}
+              setVoteValue={setVoteValue}
+              accountData={accountData}
+              setAccountData={setAccountData}
             />
           </div>
         </div>
       </div>
       {isReplying && (
-        <div className="add-comment-wrap sub" style={{ marginLeft: '40px' }}>
-          {/* Tab headers + timestamp */}
-          <div className="comment-tabs-bar">
-            <div className="comment-tabs">
-              <button
-                className={`comment-tab${replyTab === 'comment' ? ' active' : ''}`}
-                onClick={() => setReplyTab('comment')}
-              >
-                <MdComment size={14} />
-                {t('comments.section.commentTab')}
-              </button>
-              <button
-                className={`comment-tab${replyTab === 'react' ? ' active' : ''}`}
-                onClick={() => setReplyTab('react')}
-              >
-                <MdVideocam size={14} />
-                {t('comments.section.reactTab')}
-              </button>
-            </div>
-            {replyTimestamp != null && (
-              <div className="comment-timestamp">
-                <span className="comment-timestamp-label">{t('comments.section.atTime', { time: formatTimeInput(replyTimestamp) })}</span>
-              </div>
-            )}
-          </div>
-
+        <div className="comment-composer is-reply">
           {/* Comment tab */}
-          {replyTab === 'comment' && (
+          {replyTab === 'comment' ? (
             <>
               <CommentDropZone
                 images={replyImages}
@@ -1190,6 +1316,7 @@ function Comment({
                 toHtml={toPreviewHtml}
                 previewClassName="comment-content"
                 onPreviewClick={onBodyClick}
+                tabsLead={<ComposerModeTabs value={replyTab} onChange={setReplyTab} />}
               >
               <textarea
                 ref={replyInputRef}
@@ -1207,40 +1334,53 @@ function Comment({
               <div className="comment-form-row">
                 <div className="comment-compose-tools">
                   <EmojiGifPicker
+                    portal={panel}
                     onPickEmoji={(em) => insertAtCursor(replyInputRef.current, replyText, em, setReplyText)}
                     onPickGif={(url) => insertAtCursor(replyInputRef.current, replyText, gifMarkdown(url), setReplyText)}
                   />
                   <CommentImageButton uploading={replyImages.uploading} onFiles={replyImages.upload} />
+                  {replyTimestamp != null && (
+                    <span className="comment-timestamp comment-timestamp--fixed">{t('comments.section.atTime', { time: formatTimeInput(replyTimestamp) })}</span>
+                  )}
                 </div>
                 <div className="btn-wrap">
-                  <Button text={t('common.actions.cancel')} onClick={() => {setReplyText(""); setActiveReply(null)}} />
-                  <Button text={t('comments.section.commentButton')} prominent onClick={() => handlePostComment(replyTimestamp)} />
+                  <Button variant="ghost" size={32} onClick={() => { setReplyText(""); setActiveReply(null); }}>{t('common.actions.cancel')}</Button>
+                  <Button variant="primary" size={32} trailing="send" onClick={() => handlePostComment(replyTimestamp)}>{t('comments.section.commentButton')}</Button>
                 </div>
               </div>
             </>
-          )}
-
-          {/* React tab */}
-          {replyTab === 'react' && (
-            <ReactVideoTab
-              author={comment?.author?.username}
-              permlink={comment.permlink}
-              currentTime={replyTimestamp ?? currentTime}
-              formatTime={formatTimeInput}
-              onPosted={() => { setReplyTab('comment'); setActiveReply(null); onRefreshReactions?.(); }}
-              onRecordStart={onPause}
-            />
+          ) : (
+            <>
+              <div className="comment-write-tabs">
+                <ComposerModeTabs value={replyTab} onChange={setReplyTab} />
+                {replyTimestamp != null && (
+                  <span className="comment-timestamp comment-timestamp--fixed">{t('comments.section.atTime', { time: formatTimeInput(replyTimestamp) })}</span>
+                )}
+              </div>
+              <div className="comment-react-pane">
+                <ReactVideoTab
+                  author={username}
+                  permlink={comment.permlink}
+                  currentTime={replyTimestamp ?? currentTime}
+                  formatTime={formatTimeInput}
+                  onPosted={() => { setReplyTab('comment'); setActiveReply(null); onRefreshReactions?.(); }}
+                  onRecordStart={onPause}
+                />
+              </div>
+            </>
           )}
         </div>
       )}
 
-      {comment.children && comment.children.length > 0 && (
+      {comment.children && comment.children.length > 0 && (!panel || showReplies) && (
         <div className="nested-comments">
           {comment.children.map((child, index) => (
             <Comment
               key={`${child.permlink}-${index}`}
               commentIndex={index}
               comment={child}
+              videoAuthor={videoAuthor}
+              panel={panel}
               setCommentList={setCommentList}
               activeReply={activeReply}
               setActiveReply={setActiveReply}
@@ -1263,25 +1403,25 @@ function Comment({
               activeTooltipPermlink={activeTooltipPermlink}
               setActiveTooltipPermlink={setActiveTooltipPermlink}
               weight={weight}
-             setWeight={setWeight}
-      voteValue={voteValue}
-      setVoteValue={setVoteValue}
-      accountData={accountData}
-      setAccountData={setAccountData}
-      onSeek={onSeek}
-      currentTime={currentTime}
-      duration={duration}
-      onRefreshReactions={onRefreshReactions}
-      onTranslate={onTranslate}
-      getTranslation={getTranslation}
-      clearTranslation={clearTranslation}
-      translating={translating}
-      editableBy={editableBy}
-      onEditComment={onEditComment}
-      editableText={editableText}
-      currentUser={currentUser}
-      onPause={onPause}
-      toPreviewHtml={toPreviewHtml}
+              setWeight={setWeight}
+              voteValue={voteValue}
+              setVoteValue={setVoteValue}
+              accountData={accountData}
+              setAccountData={setAccountData}
+              onSeek={onSeek}
+              currentTime={currentTime}
+              duration={duration}
+              onRefreshReactions={onRefreshReactions}
+              onTranslate={onTranslate}
+              getTranslation={getTranslation}
+              clearTranslation={clearTranslation}
+              translating={translating}
+              editableBy={editableBy}
+              onEditComment={onEditComment}
+              editableText={editableText}
+              currentUser={currentUser}
+              onPause={onPause}
+              toPreviewHtml={toPreviewHtml}
             />
           ))}
         </div>

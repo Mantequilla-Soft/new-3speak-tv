@@ -4,12 +4,40 @@
 //  - ":fi" filters it, ↑/↓ move, Enter/Tab insert, Esc closes,
 //  - a closing ":" (":fire:") turns the word into the emoji right away.
 // Pure functions on (text, cursor), so both UIs behave the same.
-import { search as searchEmoji, get as getEmoji } from 'node-emoji';
+//
+// The emoji names (node-emoji + emojilib, ~360 KB of JavaScript) are NOT part of
+// the first download: comment boxes sit on most pages, the home page included.
+// loadEmojiData() fetches them, called when a box gets focus or is typed in
+// (hooks/useEmojiShortcodes). Until they are here the functions below answer
+// "nothing to suggest" / "nothing to convert", which is what they say for plain
+// text anyway, and the hook asks again once the data has arrived.
+let nodeEmoji = null;
+let loading = null;
+
+export function loadEmojiData() {
+  if (nodeEmoji) return Promise.resolve(nodeEmoji);
+  if (!loading) {
+    loading = import('node-emoji')
+      .then((m) => {
+        nodeEmoji = m;
+        POPULAR_EMOJIS = POPULAR_NAMES
+          .map((name) => ({ name, emoji: m.get(name) }))
+          .filter((e) => e.emoji);
+        return m;
+      })
+      .catch((err) => { loading = null; throw err; });
+  }
+  return loading;
+}
+
+export const emojiDataReady = () => nodeEmoji !== null;
+
+const getEmoji = (name) => nodeEmoji?.get(name);
 
 // Common emojis shown the moment ":" is typed (before a query is entered).
-export const POPULAR_EMOJIS = ['joy', 'heart', 'fire', '+1', 'pray', 'tada', '100', 'eyes', 'sob', 'rocket']
-  .map((name) => ({ name, emoji: getEmoji(name) }))
-  .filter((e) => e.emoji);
+// Filled in by loadEmojiData().
+const POPULAR_NAMES = ['joy', 'heart', 'fire', '+1', 'pray', 'tada', '100', 'eyes', 'sob', 'rocket'];
+export let POPULAR_EMOJIS = [];
 
 const OPEN_RE = /(?:^|\s):([a-z0-9_+-]*)$/i;
 const CLOSE_RE = /(:([a-z0-9_+-]+):)$/i;
@@ -29,7 +57,7 @@ function rank(name, q) {
 // to repeat"). Escaped, it matches "+1" literally.
 function search(q) {
   try {
-    return searchEmoji(new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
+    return nodeEmoji.search(new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
   } catch {
     return [];
   }
@@ -37,6 +65,7 @@ function search(q) {
 
 // The list to show for the text before the cursor, or null (no open ":word").
 export function emojiSuggestions(value, cursor) {
+  if (!nodeEmoji) { loadEmojiData().catch(() => {}); return null; }
   const m = value.slice(0, cursor).match(OPEN_RE);
   if (!m) return null;
   const q = m[1].toLowerCase();
@@ -53,6 +82,7 @@ export function emojiSuggestions(value, cursor) {
 // A ":word:" just closed at the cursor that names an emoji → { value, cursor } with
 // the emoji in its place; null otherwise (":not-an-emoji:" stays as typed).
 export function convertClosedShortcode(value, cursor) {
+  if (!nodeEmoji) { loadEmojiData().catch(() => {}); return null; }
   const closed = value.slice(0, cursor).match(CLOSE_RE);
   if (!closed) return null;
   const em = getEmoji(closed[2]);

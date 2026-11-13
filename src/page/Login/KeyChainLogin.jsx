@@ -1,16 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import './KeyChainLogin.scss';
-import logo from '../../assets/image/3S_logo.svg';
-import logoDark from '../../assets/image/3S_logodark.png';
-import keychainImg from '../../assets/image/keychain.png';
-import hiveauthImg from '../../../public/images/hiveauth.jpeg';
+import mark from '../../assets/image/3S_mark.svg';
+import { useTranslation } from 'react-i18next';
+import { Card, ChoiceCard, Chip, Button, Eyebrow, IconButton } from '../../components/v2/ui';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { FEED_URL } from '../../utils/config';
 import { LOCAL_STORAGE_USER_ID_KEY } from '../../hooks/localStorageKeys';
 import { useAppStore } from '../../lib/store';
-import { LuLogOut } from 'react-icons/lu';
 import { toastIn } from '../../utils/toast';
-import { QRCodeSVG } from 'qrcode.react';
 import   {KeyTypes, Providers } from '@aioha/aioha'
 import QrCode_modal from '../../components/modal/QrCode_modal';
 import aioha from "../../hive-api/aioha";
@@ -20,19 +17,16 @@ import aioha from "../../hive-api/aioha";
 const toast = toastIn('Sign in');
 
 function KeyChainLogin() {
-  const { initializeAuth, setActiveUser, switchAccount, clearAccount, LogOut, user, theme } = useAppStore();
+  const { t } = useTranslation();
+  const { initializeAuth, switchAccount, clearAccount, LogOut, user } = useAppStore();
 
-console.log(theme)
-  const studioEndPoint = "https://studio.3speak.tv";
   const [username, setUsername] = useState('');
   const [accountList, setAccountList] = useState([]);
   const [qrCode, setQrCode] = useState('');
-  const [isWaitingHiveAuth, setIsWaitingHiveAuth] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const [hasKeychain, setHasKeychain] = useState(false);
-  const isMobile = window.innerWidth <= 768;
 
   useEffect(() => {
     const getAccountlist = JSON.parse(localStorage.getItem("accountsList")) || [];
@@ -57,7 +51,6 @@ useEffect(() => {
 
 
 
-console.log(hasKeychain)
 
   async function logMe() {
     if (!username) {
@@ -182,79 +175,75 @@ const handleSwitchAccount = (user) => {
   }
 
 
-    const login3SpeakEmail = () => {
-  const CLIENT_ID = '28d4e054a65f1fa22ddee25688';
-  const REDIRECT_URI = 'http://localhost:3000/auth/callback';
-  
-    const authUrl = `https://auth.3speak.tv/3/login?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}`;
-
-  // Redirect user to 3Speak auth
-  window.location.href = authUrl;
-};
 
 
   
 
   return (
     <>
-    <div className="login-container">
-      <div className="container-wrapper">
-        <div className="main-login-keywrapper">
-          {theme === "light" ? <img src={logo} alt="3Speak Logo" /> :
-          <img src={logoDark} alt="3Speak Logo" />}
-          <span>Login with your username</span>
+      <div className="kcl-page">
+        <Card large className="kcl-card">
+          <img className="kcl-mark" src={mark} alt="3Speak" />
+          <h1 className="kcl-title">{t('common.actions.login')}</h1>
 
-          <input
-            type="text"
-            placeholder="Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value.toLowerCase())}
-          />
+          <label className="kcl-handle">
+            <span aria-hidden="true">@</span>
+            <input
+              type="text"
+              placeholder={t('modals.addAccount.usernamePlaceholder')}
+              aria-label={t('modals.addAccount.usernamePlaceholder')}
+              autoCapitalize="off"
+              spellCheck={false}
+              value={username}
+              onChange={(e) => setUsername(e.target.value.toLowerCase())}
+            />
+          </label>
 
-          <div className="wrap-btn">
-            {hasKeychain && (
-              <div className="wrap keychain-down" onClick={logMe}>
-                <img src={keychainImg} alt="keychain" />
-                <span>Keychain</span>
-              </div>
-            )}
-            <div className="wrap keychain-down" onClick={handleLoginWithHiveAuth}>
-              <img src={hiveauthImg} alt="HiveAuth" />
-              <span>HiveAuth</span>
-            </div>
+          <div className="v2-choices is-grid kcl-wallets">
+            {hasKeychain && <ChoiceCard role="button" icon="extension" title="Keychain" onClick={logMe} />}
+            <ChoiceCard role="button" icon="qr_code_2" title="HiveAuth" onClick={handleLoginWithHiveAuth} />
           </div>
 
-          <div className="wrap-signup keychain-space">
-              <span onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                window.open(`${FEED_URL}`, "_blank", "noopener,noreferrer");
-              }} className="email-login">
-                Login with email
-              </span>
-          </div>
+          <Button
+            variant="ghost"
+            size={32}
+            icon="mail"
+            className="kcl-email"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              window.open(`${FEED_URL}`, "_blank", "noopener,noreferrer");
+            }}
+          >
+            Login with email
+          </Button>
 
           {accountList.length > 0 && (
-            <div className="switch-acct-wrapper">
-              <h3>Login As</h3>
-              <div className="list-acct-wrap">
+            <div className="kcl-accounts">
+              <Eyebrow>{t('auth.loginModal.switchTo')}</Eyebrow>
+              <div className="kcl-accounts__list">
                 {accountList.map((list, idx) => (
-                  <div key={idx} className='wrap' onClick={() => handleSwitchAccount(list.username)}>
-                    <img src={`/img/u/${list.username}/avatar/small`} alt={list.username} />
-                    <span>{list.username}</span>
-
-                    {/* <LuLogOut size={12} onClick={(e) => { e.stopPropagation(); removeAccount(list.username); }} /> */}
-
-                  </div>
+                  <span key={idx} className="kcl-account">
+                    <Chip onClick={() => handleSwitchAccount(list.username)}>
+                      <img src={`/img/u/${list.username}/avatar/small`} alt="" />
+                      <span>{list.username}</span>
+                    </Chip>
+                    <IconButton
+                      icon="close"
+                      size={32}
+                      variant="ghost"
+                      round
+                      label={t('auth.loginModal.forgetAccount')}
+                      onClick={(e) => handleClearAccount(e, list.username)}
+                    />
+                  </span>
                 ))}
               </div>
             </div>
           )}
-        </div>
+        </Card>
       </div>
-    </div>
-        { qrCode && showModal && <QrCode_modal qrCode={qrCode} openKeychainApp={openKeychainApp} onClose={() => setShowModal(false)} />}
-    
+      { qrCode && showModal && <QrCode_modal qrCode={qrCode} openKeychainApp={openKeychainApp} onClose={() => setShowModal(false)} />}
     </>
   );
 }

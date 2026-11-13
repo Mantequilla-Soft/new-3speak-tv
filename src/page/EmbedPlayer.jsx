@@ -1,9 +1,10 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { usePlayer } from '@mantequilla-soft/3speak-player/react';
 import { getPlayerUrl } from '../utils/playerUrl';
 import { withGatewayFallback } from '../lib/hlsGatewayFallback.js';
 import { useTranslation } from 'react-i18next';
+import { Icon } from '../components/v2/Icon';
 import './EmbedPlayer.scss';
 
 // Bare, chrome-free 3Speak player used INSIDE the Spotlight /links page (iframed).
@@ -18,10 +19,13 @@ export default function EmbedPlayer() {
   const [sp] = useSearchParams();
   const isShort = sp.get('short') === '1';
   const [attached, setAttached] = useState(false);
+  // Until the first play, a big play mark sits in the middle of the poster (49c).
+  const [started, setStarted] = useState(false);
+  const elRef = useRef(null);
 
   const a = String(author || '').toLowerCase();
   const p = String(permlink || '').toLowerCase();
-  const valid = /^[a-z][a-z0-9.\-]{2,15}$/.test(a) && /^[a-z0-9-]{1,255}$/.test(p);
+  const valid = /^[a-z][a-z0-9.-]{2,15}$/.test(a) && /^[a-z0-9-]{1,255}$/.test(p);
 
   const {
     ref: sdkVideoRef,
@@ -52,19 +56,44 @@ export default function EmbedPlayer() {
     } catch {
       /* player already destroyed — nothing left to detach from */
     }
+    elRef.current = el;
     setAttached(!!el);
   }, [sdkVideoRef]);
+
+  useEffect(() => {
+    const el = elRef.current;
+    if (!el) return undefined;
+    const onPlay = () => setStarted(true);
+    el.addEventListener('play', onPlay);
+    return () => el.removeEventListener('play', onPlay);
+  }, [attached]);
 
   useEffect(() => {
     if (!valid || !player || !attached) return;
     loadVideo(`${a}/${p}`).catch(() => {});
   }, [valid, a, p, player, attached, loadVideo]);
 
-  if (!valid) return <div className="emb-player emb-player--err">{t('misc.embedPlayer.unavailable')}</div>;
+  if (!valid) {
+    return (
+      <div className="emb-player emb-player--err" role="status">
+        <span>{t('misc.embedPlayer.unavailable')}</span>
+      </div>
+    );
+  }
 
   return (
     <div className={`emb-player${isShort ? ' short' : ''}`}>
       <video ref={videoRef} playsInline controls loop={isShort} />
+      {!started && (
+        <button
+          type="button"
+          className="emb-player__play"
+          aria-label={t('common.actions.play')}
+          onClick={() => { const pr = elRef.current?.play?.(); if (pr?.catch) pr.catch(() => {}); }}
+        >
+          <Icon name="play_circle" size={isShort ? 40 : 48} />
+        </button>
+      )}
     </div>
   );
 }

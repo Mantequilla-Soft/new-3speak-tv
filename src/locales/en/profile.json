@@ -10,8 +10,8 @@
     "unknownError": "Unknown error"
   },
   "authorBadge": {
-    "followers_one": "{{count}} Follower",
-    "followers_other": "{{count}} Followers"
+    "followers_one": "{{count}} follower",
+    "followers_other": "{{count}} followers"
   },
   "creators": {
     "loginRequired": "Please login to follow creators",
@@ -21,6 +21,7 @@
     "followers_one": "{{num}} follower",
     "followers_other": "{{num}} followers",
     "popularTitle": "Popular creators",
+    "suggestedTitle": "Creators to follow",
     "scrollLeft": "Scroll left",
     "scrollRight": "Scroll right",
     "mostlyPosts": "Mostly posts {{topic}}"
@@ -66,7 +67,8 @@
     "tapForSound": "Tap for sound",
     "views_one": "{{num}} view",
     "views_other": "{{num}} views",
-    "readMore": "Read more"
+    "readMore": "Read more",
+    "label": "Trailer"
   },
   "snaps": {
     "readMore": "Read more",
@@ -167,7 +169,8 @@
       "text": "Group your videos into a playlist people can watch in order.",
       "cta": "Create your first playlist",
       "visitor": "@{{user}} has no public playlists."
-    }
+    },
+    "visitorPreview": "Visitors see: “{{text}}”"
   },
   "links": {
     "button": "Links",
@@ -186,7 +189,8 @@
     "shorts": "Shorts",
     "audio": "Audio",
     "community": "Community",
-    "playlists": "Playlists"
+    "playlists": "Playlists",
+    "latestSnap": "Latest snap"
   },
   "streams": {
     "loading": "Loading streams…",
@@ -217,6 +221,7 @@
     "messageTitle": "Message @{{user}}",
     "messageLogin": "Please login to send a message",
     "message": "Message",
+    "messageShort": "DM",
     "unhideTitle": "Show @{{user}}'s videos in your feeds again",
     "hideTitle": "Hide @{{user}}'s videos from all your feeds",
     "unhide": "Unhide",
@@ -230,7 +235,11 @@
     "loginToUpload": "Login to upload video",
     "linkExternalTitle": "Link an external profile",
     "addProfile": "Add profile",
-    "editTitle": "Edit your picture, name, bio and location"
+    "editTitle": "Edit your picture, name, bio and location",
+    "more": "More",
+    "moreActions": "More actions for @{{user}}",
+    "copyProfileLink": "Copy profile link",
+    "podcastFeed": "Podcast feed (RSS)"
   },
   "tabs": {
     "overview": "Overview",
@@ -264,12 +273,8 @@
   "fab": {
     "tip": "Tip",
     "tipCreator": "Tip creator",
-    "latestVideo": "Latest Video",
-    "watchLatestVideo": "Watch latest video",
-    "latestShort": "Latest Short",
-    "watchLatestShort": "Watch latest short",
-    "closeMenu": "Close menu",
-    "openActions": "Open actions"
+    "latestVideo": "Latest video",
+    "latestShort": "Latest short"
   },
   "uploads": {
     "processing": "Processing your videos",
@@ -296,7 +301,10 @@
     "hiddenToast": "Tip hidden from your profile",
     "unhiddenToast": "Tip shown on your profile again",
     "hideFailed": "Could not change this tip. Please try again.",
-    "hideWalletPrompt": "Sign to change which tips show on your profile"
+    "hideWalletPrompt": "Sign to change which tips show on your profile",
+    "whoTitle": "@{{user}} supports",
+    "tipped_one": "Tipped {{count}}×",
+    "tipped_other": "Tipped {{count}}×"
   },
   "layout": {
     "customize": "Customize profile",
@@ -409,5 +417,13 @@
   },
   "audioTab": {
     "files": "Audio files"
+  },
+  "search": {
+    "placeholder": "Search this channel",
+    "clear": "Clear search",
+    "results_one": "{{count}} result for “{{query}}”",
+    "results_other": "{{count}} results for “{{query}}”",
+    "empty": "Nothing on this channel matches “{{query}}”.",
+    "older": "Search older uploads"
   }
 }
