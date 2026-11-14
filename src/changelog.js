@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.16',
+    category: 'general',
+    date: '2026-11-13',
+    summary: 'A Powered by Hive link to hive.io is now in the site footer on every page.',
+  },
+  {
     version: '2.0.15',
     category: 'live',
     date: '2026-11-13',
