@@ -177,7 +177,6 @@
     },
     "all": "Все",
     "musicGenre": "Музыкальный жанр",
-    "anyGenre": "Любой жанр",
     "tracks_one": "{{count}} трек",
     "tracks_few": "{{count}} трека",
     "tracks_many": "{{count}} треков",
@@ -192,7 +191,7 @@
     "nothingPlaying": "Пока ничего не играет.",
     "goExplore": "Найти, что послушать",
     "exploreViews": "Разделы",
-    "mostPlayed": "Самое популярное"
+    "newUploads": "Новые загрузки"
   },
   "upload": {
     "title": "Загрузить аудио",

@@ -173,7 +173,6 @@
     },
     "all": "Tümü",
     "musicGenre": "Müzik türü",
-    "anyGenre": "Tüm türler",
     "tracks_one": "{{count}} parça",
     "tracks_other": "{{count}} parça",
     "noTracks": "Parça bulunamadı.",
@@ -186,7 +185,7 @@
     "nothingPlaying": "Henüz çalan bir şey yok.",
     "goExplore": "Dinleyecek bir şey bul",
     "exploreViews": "Gezinme",
-    "mostPlayed": "En çok dinlenenler"
+    "newUploads": "Yeni yüklemeler"
   },
   "upload": {
     "title": "Ses yükle",

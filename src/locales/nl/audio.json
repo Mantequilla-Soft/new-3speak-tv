@@ -173,7 +173,6 @@
     },
     "all": "Alles",
     "musicGenre": "Muziekgenre",
-    "anyGenre": "Elk genre",
     "tracks_one": "{{count}} track",
     "tracks_other": "{{count}} tracks",
     "noTracks": "Geen tracks gevonden.",
@@ -186,7 +185,7 @@
     "nothingPlaying": "Er speelt nog niets.",
     "goExplore": "Zoek iets om te luisteren",
     "exploreViews": "Onderdelen",
-    "mostPlayed": "Meest beluisterd"
+    "newUploads": "Nieuwe uploads"
   },
   "upload": {
     "title": "Audio uploaden",

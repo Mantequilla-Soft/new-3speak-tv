@@ -175,7 +175,6 @@
     },
     "all": "Todos",
     "musicGenre": "Gênero musical",
-    "anyGenre": "Qualquer gênero",
     "tracks_one": "{{count}} faixa",
     "tracks_many": "{{count}} faixas",
     "tracks_other": "{{count}} faixas",
@@ -189,7 +188,7 @@
     "nothingPlaying": "Nada está tocando ainda.",
     "goExplore": "Encontre algo para ouvir",
     "exploreViews": "Seções",
-    "mostPlayed": "Mais ouvidos"
+    "newUploads": "Novos envios"
   },
   "upload": {
     "title": "Enviar áudio",

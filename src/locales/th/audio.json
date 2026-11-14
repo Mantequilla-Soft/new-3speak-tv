@@ -171,7 +171,6 @@
     },
     "all": "ทั้งหมด",
     "musicGenre": "แนวเพลง",
-    "anyGenre": "ทุกแนว",
     "tracks_other": "{{count}} แทร็ก",
     "noTracks": "ไม่พบแทร็ก",
     "creators": "ครีเอเตอร์",
@@ -183,7 +182,7 @@
     "nothingPlaying": "ยังไม่มีอะไรเล่นอยู่",
     "goExplore": "หาสิ่งที่จะฟัง",
     "exploreViews": "หมวด",
-    "mostPlayed": "เล่นมากที่สุด"
+    "newUploads": "อัปโหลดใหม่"
   },
   "upload": {
     "title": "อัปโหลดเสียง",

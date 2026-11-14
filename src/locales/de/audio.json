@@ -173,7 +173,6 @@
     },
     "all": "Alle",
     "musicGenre": "Musikgenre",
-    "anyGenre": "Alle Genres",
     "tracks_one": "{{count}} Track",
     "tracks_other": "{{count}} Tracks",
     "noTracks": "Keine Tracks gefunden.",
@@ -186,7 +185,7 @@
     "nothingPlaying": "Noch läuft nichts.",
     "goExplore": "Etwas zum Anhören finden",
     "exploreViews": "Bereiche",
-    "mostPlayed": "Meistgehört"
+    "newUploads": "Neue Uploads"
   },
   "upload": {
     "title": "Audio hochladen",

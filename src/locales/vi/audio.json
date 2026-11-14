@@ -171,7 +171,6 @@
     },
     "all": "Tất cả",
     "musicGenre": "Thể loại nhạc",
-    "anyGenre": "Mọi thể loại",
     "tracks_other": "{{count}} bản nhạc",
     "noTracks": "Không tìm thấy bản nhạc nào.",
     "creators": "Nhà sáng tạo",
@@ -183,7 +182,7 @@
     "nothingPlaying": "Chưa có gì đang phát.",
     "goExplore": "Tìm nội dung để nghe",
     "exploreViews": "Mục",
-    "mostPlayed": "Nghe nhiều nhất"
+    "newUploads": "Tải lên mới"
   },
   "upload": {
     "title": "Tải âm thanh lên",

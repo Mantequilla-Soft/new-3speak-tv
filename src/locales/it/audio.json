@@ -175,7 +175,6 @@
     },
     "all": "Tutti",
     "musicGenre": "Genere musicale",
-    "anyGenre": "Qualsiasi genere",
     "tracks_one": "{{count}} traccia",
     "tracks_many": "{{count}} tracce",
     "tracks_other": "{{count}} tracce",
@@ -189,7 +188,7 @@
     "nothingPlaying": "Ancora niente in riproduzione.",
     "goExplore": "Trova qualcosa da ascoltare",
     "exploreViews": "Sezioni",
-    "mostPlayed": "I più ascoltati"
+    "newUploads": "Nuovi caricamenti"
   },
   "upload": {
     "title": "Carica audio",

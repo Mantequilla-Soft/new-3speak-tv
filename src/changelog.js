@@ -18,6 +18,18 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.19',
+    category: 'audio',
+    date: '2026-11-14',
+    summary: 'Under Music on the Audio page, you now pick a genre with one tap from the genre chips.',
+  },
+  {
+    version: '2.0.18',
+    category: 'audio',
+    date: '2026-11-14',
+    summary: 'The Audio page (/audio) has a new New uploads tab with the latest audio first, and Trends for outside podcasts now sits under the External chip.',
+  },
+  {
     version: '2.0.17',
     category: 'upload',
     date: '2026-11-14',

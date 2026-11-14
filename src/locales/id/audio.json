@@ -171,7 +171,6 @@
     },
     "all": "Semua",
     "musicGenre": "Genre musik",
-    "anyGenre": "Semua genre",
     "tracks_other": "{{count}} lagu",
     "noTracks": "Tidak ada lagu yang ditemukan.",
     "creators": "Kreator",
@@ -183,7 +182,7 @@
     "nothingPlaying": "Belum ada yang diputar.",
     "goExplore": "Cari sesuatu untuk didengarkan",
     "exploreViews": "Bagian",
-    "mostPlayed": "Paling banyak diputar"
+    "newUploads": "Unggahan baru"
   },
   "upload": {
     "title": "Unggah audio",

@@ -175,7 +175,6 @@
     },
     "all": "Tout",
     "musicGenre": "Genre musical",
-    "anyGenre": "Tous les genres",
     "tracks_one": "{{count}} titre",
     "tracks_many": "{{count}} titres",
     "tracks_other": "{{count}} titres",
@@ -189,7 +188,7 @@
     "nothingPlaying": "Rien n'est en lecture pour l'instant.",
     "goExplore": "Trouver quelque chose à écouter",
     "exploreViews": "Rubriques",
-    "mostPlayed": "Les plus écoutés"
+    "newUploads": "Nouveautés"
   },
   "upload": {
     "title": "Mettre en ligne un audio",

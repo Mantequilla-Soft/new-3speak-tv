@@ -171,7 +171,6 @@
     },
     "all": "全部",
     "musicGenre": "音乐流派",
-    "anyGenre": "任意流派",
     "tracks_other": "{{count}} 首曲目",
     "noTracks": "没有找到曲目。",
     "creators": "创作者",
@@ -183,7 +182,7 @@
     "nothingPlaying": "还没有在播放的内容。",
     "goExplore": "找点东西听",
     "exploreViews": "分区",
-    "mostPlayed": "播放最多"
+    "newUploads": "最新上传"
   },
   "upload": {
     "title": "上传音频",

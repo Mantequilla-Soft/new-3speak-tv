@@ -173,7 +173,6 @@
     },
     "all": "Lahat",
     "musicGenre": "Genre ng musika",
-    "anyGenre": "Kahit anong genre",
     "tracks_one": "{{count}} track",
     "tracks_other": "{{count}} tracks",
     "noTracks": "Walang nahanap na track.",
@@ -186,7 +185,7 @@
     "nothingPlaying": "Wala pang tumutugtog.",
     "goExplore": "Maghanap ng mapapakinggan",
     "exploreViews": "Mga seksyon",
-    "mostPlayed": "Pinakamadalas pakinggan"
+    "newUploads": "Mga bagong upload"
   },
   "upload": {
     "title": "Mag-upload ng audio",

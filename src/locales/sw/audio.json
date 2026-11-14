@@ -173,7 +173,6 @@
     },
     "all": "Zote",
     "musicGenre": "Aina ya muziki",
-    "anyGenre": "Aina yoyote",
     "tracks_one": "wimbo {{count}}",
     "tracks_other": "nyimbo {{count}}",
     "noTracks": "Hakuna nyimbo zilizopatikana.",
@@ -186,7 +185,7 @@
     "nothingPlaying": "Bado hakuna kinachocheza.",
     "goExplore": "Tafuta kitu cha kusikiliza",
     "exploreViews": "Sehemu",
-    "mostPlayed": "Zinazosikilizwa zaidi"
+    "newUploads": "Vipakiwa vipya"
   },
   "upload": {
     "title": "Pakia sauti",

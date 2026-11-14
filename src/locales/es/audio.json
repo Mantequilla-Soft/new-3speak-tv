@@ -175,7 +175,6 @@
     },
     "all": "Todo",
     "musicGenre": "Género musical",
-    "anyGenre": "Cualquier género",
     "tracks_one": "{{count}} pista",
     "tracks_many": "{{count}} pistas",
     "tracks_other": "{{count}} pistas",
@@ -189,7 +188,7 @@
     "nothingPlaying": "Todavía no suena nada.",
     "goExplore": "Busca algo para escuchar",
     "exploreViews": "Secciones",
-    "mostPlayed": "Lo más escuchado"
+    "newUploads": "Nuevas subidas"
   },
   "upload": {
     "title": "Subir audio",

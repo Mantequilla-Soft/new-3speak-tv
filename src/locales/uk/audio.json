@@ -177,7 +177,6 @@
     },
     "all": "Усе",
     "musicGenre": "Музичний жанр",
-    "anyGenre": "Будь-який жанр",
     "tracks_one": "{{count}} трек",
     "tracks_few": "{{count}} треки",
     "tracks_many": "{{count}} треків",
@@ -192,7 +191,7 @@
     "nothingPlaying": "Поки нічого не грає.",
     "goExplore": "Знайти, що послухати",
     "exploreViews": "Розділи",
-    "mostPlayed": "Найпопулярніше"
+    "newUploads": "Нові завантаження"
   },
   "upload": {
     "title": "Завантажити аудіо",

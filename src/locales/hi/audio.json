@@ -173,7 +173,6 @@
     },
     "all": "सभी",
     "musicGenre": "संगीत की शैली",
-    "anyGenre": "कोई भी शैली",
     "tracks_one": "{{count}} ट्रैक",
     "tracks_other": "{{count}} ट्रैक",
     "noTracks": "कोई ट्रैक नहीं मिला।",
@@ -186,7 +185,7 @@
     "nothingPlaying": "अभी कुछ नहीं चल रहा है।",
     "goExplore": "सुनने के लिए कुछ ढूंढें",
     "exploreViews": "अनुभाग",
-    "mostPlayed": "सबसे ज़्यादा सुने गए"
+    "newUploads": "नए अपलोड"
   },
   "upload": {
     "title": "ऑडियो अपलोड करें",

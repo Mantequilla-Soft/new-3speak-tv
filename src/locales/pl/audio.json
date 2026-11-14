@@ -177,7 +177,6 @@
     },
     "all": "Wszystko",
     "musicGenre": "Gatunek muzyczny",
-    "anyGenre": "Dowolny gatunek",
     "tracks_one": "{{count}} utwór",
     "tracks_few": "{{count}} utwory",
     "tracks_many": "{{count}} utworów",
@@ -192,7 +191,7 @@
     "nothingPlaying": "Nic jeszcze nie gra.",
     "goExplore": "Znajdź coś do posłuchania",
     "exploreViews": "Sekcje",
-    "mostPlayed": "Najczęściej słuchane"
+    "newUploads": "Nowe przesłane"
   },
   "upload": {
     "title": "Prześlij audio",

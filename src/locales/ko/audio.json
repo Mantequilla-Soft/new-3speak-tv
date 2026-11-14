@@ -171,7 +171,6 @@
     },
     "all": "전체",
     "musicGenre": "음악 장르",
-    "anyGenre": "모든 장르",
     "tracks_other": "트랙 {{count}}개",
     "noTracks": "트랙을 찾을 수 없어요.",
     "creators": "크리에이터",
@@ -183,7 +182,7 @@
     "nothingPlaying": "아직 재생 중인 항목이 없습니다.",
     "goExplore": "들을 거리 찾기",
     "exploreViews": "섹션",
-    "mostPlayed": "가장 많이 재생됨"
+    "newUploads": "새 업로드"
   },
   "upload": {
     "title": "오디오 업로드",

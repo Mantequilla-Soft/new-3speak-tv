@@ -171,7 +171,6 @@
     },
     "all": "すべて",
     "musicGenre": "音楽ジャンル",
-    "anyGenre": "すべてのジャンル",
     "tracks_other": "{{count}} トラック",
     "noTracks": "トラックが見つかりません。",
     "creators": "クリエイター",
@@ -183,7 +182,7 @@
     "nothingPlaying": "まだ何も再生していません。",
     "goExplore": "聴くものを探す",
     "exploreViews": "セクション",
-    "mostPlayed": "よく再生されている"
+    "newUploads": "新着アップロード"
   },
   "upload": {
     "title": "音声をアップロード",

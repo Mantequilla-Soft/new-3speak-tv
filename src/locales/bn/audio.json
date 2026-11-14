@@ -173,7 +173,6 @@
     },
     "all": "সব",
     "musicGenre": "গানের ধরন",
-    "anyGenre": "যেকোনো ধরন",
     "tracks_one": "{{count}}টি ট্র্যাক",
     "tracks_other": "{{count}}টি ট্র্যাক",
     "noTracks": "কোনো ট্র্যাক পাওয়া যায়নি।",
@@ -186,7 +185,7 @@
     "nothingPlaying": "এখনও কিছু বাজছে না।",
     "goExplore": "শোনার মতো কিছু খুঁজুন",
     "exploreViews": "বিভাগ",
-    "mostPlayed": "সবচেয়ে বেশি শোনা"
+    "newUploads": "নতুন আপলোড"
   },
   "upload": {
     "title": "অডিও আপলোড করুন",

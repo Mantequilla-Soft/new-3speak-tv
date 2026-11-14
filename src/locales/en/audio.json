@@ -173,7 +173,6 @@
     },
     "all": "All",
     "musicGenre": "Music genre",
-    "anyGenre": "Any genre",
     "tracks_one": "{{count}} track",
     "tracks_other": "{{count}} tracks",
     "noTracks": "No tracks found.",
@@ -186,7 +185,7 @@
     "nothingPlaying": "Nothing is playing yet.",
     "goExplore": "Find something to listen to",
     "exploreViews": "Explore sections",
-    "mostPlayed": "Most played"
+    "newUploads": "New uploads"
   },
   "upload": {
     "title": "Upload audio",
