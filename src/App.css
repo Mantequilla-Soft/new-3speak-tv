@@ -68,3 +68,22 @@
 .route-suspense-fallback {
   min-height: 60vh;
 }
+
+/* Unobtrusive hive.io credit in the static shell (index.html). It sits
+   outside #root so the SPA mount leaves it in the document. */
+.site-hive-footer {
+  text-align: center;
+  padding: 10px 16px calc(12px + var(--bottom-bar-clearance, 0px));
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--muted, #666);
+}
+.site-hive-footer a {
+  color: inherit;
+  text-decoration: none;
+}
+.site-hive-footer a:hover,
+.site-hive-footer a:focus-visible {
+  color: var(--text, inherit);
+  text-decoration: underline;
+}

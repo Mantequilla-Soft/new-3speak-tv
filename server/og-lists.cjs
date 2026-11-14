@@ -221,6 +221,9 @@ module.exports = function createLists(h) {
   <h1>${escapeHtml(h1)}</h1>
   <p>${escapeHtml(intro || description)}</p>${extraBody}${list}
   <p>More on <a href="${escapeHtml(abs('/'))}">3Speak</a>: ${nav}</p>
+  <footer>
+    <p><a href="https://hive.io" target="_blank" rel="noopener">Powered by Hive</a></p>
+  </footer>
 </body>
 </html>`;
   }

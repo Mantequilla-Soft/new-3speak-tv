@@ -848,6 +848,9 @@ function buildOgHtml({
   <h1>${safeTitle}</h1>${playerFrame}
   <p><a href="${safeUrl}">${safeTitle}</a> by <a href="${escapeHtml(`${origin}/@${author}`)}">@${safeAuthor}</a> on <a href="${escapeHtml(origin)}">3Speak</a></p>
   <p>${safeDesc}</p>${tagLine}${chaptersSection}${transcriptSection}${commentsSection}${relatedSection}
+  <footer>
+    <p><a href="https://hive.io" target="_blank" rel="noopener">Powered by Hive</a></p>
+  </footer>
 </body>
 </html>`;
 }
@@ -964,7 +967,11 @@ function buildGenericHtml(siteUrl, card = GENERIC_CARD, { canonical, noindex = f
   <meta name="twitter:image" content="${image}" />
   <link rel="canonical" href="${escapeHtml(canonicalUrl)}" />
 </head>
-<body><h1>${title}</h1><p>${desc}</p><p><a href="${escapeHtml(`${CANONICAL_ORIGIN}/`)}">3Speak</a></p></body>
+<body><h1>${title}</h1><p>${desc}</p><p><a href="${escapeHtml(`${CANONICAL_ORIGIN}/`)}">3Speak</a></p>
+  <footer>
+    <p><a href="https://hive.io" target="_blank" rel="noopener">Powered by Hive</a></p>
+  </footer>
+</body>
 </html>`;
 }
 
@@ -1002,6 +1009,9 @@ function sendMissing(req, res, origin, url) {
   <h1>This page is not on 3Speak</h1>
   <p>The video or channel may have been removed, or the link is mistyped.</p>
   <p><a href="${escapeHtml(`${CANONICAL_ORIGIN}/`)}">3Speak home</a> · <a href="${escapeHtml(`${CANONICAL_ORIGIN}/trend`)}">Trending videos</a> · <a href="${escapeHtml(`${CANONICAL_ORIGIN}/new`)}">New videos</a></p>
+  <footer>
+    <p><a href="https://hive.io" target="_blank" rel="noopener">Powered by Hive</a></p>
+  </footer>
 </body>
 </html>`;
   return sendHtml(req, res, 404, html);
