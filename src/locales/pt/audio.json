@@ -389,6 +389,7 @@
     "tracks": {
       "helpAlbum": "Cada faixa é publicada como comentário no post principal. Defina os valores comuns uma vez, aplique a todas e depois ajuste faixa por faixa.",
       "helpSnaps": "Cada faixa é publicada como um snap próprio. Defina os valores comuns uma vez, aplique a todas e depois ajuste faixa por faixa.",
+      "helpSnapsSingle": "Seu áudio é publicado como um snap próprio.",
       "applyToAllHeading": "Aplicar a todas as faixas",
       "applyNote_one": "<b>Aplicar a {{count}} faixa:</b> descrição e capa compartilhadas, depois altere qualquer faixa separadamente.",
       "applyNote_many": "<b>Aplicar às {{count}} faixas:</b> descrição e capa compartilhadas, depois altere qualquer faixa separadamente.",
@@ -425,6 +426,10 @@
       "earnings": "Ganhos:",
       "earningsPpl": "Pagamento por audição (@{{account}})",
       "earningsNormal": "Recompensas normais do post",
+      "rewards": "Recompensas:",
+      "beneficiaries": "Beneficiários:",
+      "perTrack": "Definido por faixa",
+      "noBeneficiaries": "Nenhum",
       "playlist": "Playlist:",
       "failedCount_one": "{{count}} faixa falhou.",
       "failedCount_many": "{{count}} faixas falharam.",

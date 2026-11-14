@@ -499,6 +499,21 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     setBeneOpen(true);
   }, [postBeneStr, sharedBeneStr, tracks, isPremium, mode, user]);
 
+  // The Review step's Rewards + Beneficiaries lines: the standalone post's own,
+  // else the tracks' (one value when they all agree, `null` = set per track).
+  const reviewRewards = useMemo(() => {
+    const parse = (json) => {
+      try { return (JSON.parse(json || '[]') || []).filter((b) => b && b.account); } catch { return []; }
+    };
+    if (mode === 'single') return { payout: postPayout || 'default', bene: parse(postBeneStr) };
+    const payouts = new Set(tracks.map((tr) => tr.payout || 'default'));
+    const benes = new Set(tracks.map((tr) => tr.beneStr || '[]'));
+    return {
+      payout: payouts.size === 1 ? [...payouts][0] : null,
+      bene: benes.size === 1 ? parse([...benes][0]) : null,
+    };
+  }, [mode, postPayout, postBeneStr, tracks]);
+
   // Write the modal's beneficiary JSON back to its target.
   const writeBeneToTarget = useCallback((json) => {
     if (beneTarget === 'main') setPostBeneStr(json);
@@ -1762,6 +1777,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
               shortStatus={shortStatus}
               onRetryShort={retryShort}
               showShorts={!warmup}
+              rewards={warmup ? null : reviewRewards}
             />
           )}
           {communityOpen && (
@@ -2906,16 +2922,20 @@ function TracksStep({
   transcriptPropsFor = null,
 }) {
   const { t } = useTranslation();
+  // One track: no "apply to all" box (it would only copy onto that one track),
+  // and its card shows everything (title, rewards) with no Edit / Hide toggle.
+  const single = tracks.length === 1;
   const [openId, setOpenId] = useState(null);
   return (
     <div className="audio-upload-review audio-upload-post-form">
       <p className="audio-upload-step-help">
         {mode === 'album'
           ? t('audio.upload.tracks.helpAlbum')
-          : t('audio.upload.tracks.helpSnaps')}
+          : single ? t('audio.upload.tracks.helpSnapsSingle') : t('audio.upload.tracks.helpSnaps')}
       </p>
       <OriginalContentNotice />
 
+      {!single && (
       <div className="audio-upload-title-card">
         <p className="audio-upload-apply-note">
           <Trans i18nKey="audio.upload.tracks.applyNote" count={tracks.length} components={{ b: <b /> }} />
@@ -2952,29 +2972,32 @@ function TracksStep({
           {t('audio.upload.tracks.applyToAll', { count: tracks.length })}
         </Button>
       </div>
+      )}
 
       {tracks.map((tr, i) => {
-        const expanded = openId === tr.id;
+        const expanded = single || openId === tr.id;
         let beneCount = 0;
         try { beneCount = (JSON.parse(tr.beneStr || '[]') || []).length; } catch { beneCount = 0; }
+        const toggle = single ? {} : {
+          role: 'button',
+          tabIndex: 0,
+          'aria-expanded': expanded,
+          onClick: () => setOpenId(expanded ? null : tr.id),
+          onKeyDown: (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setOpenId(expanded ? null : tr.id); } },
+        };
         return (
           <div key={tr.id} className="audio-upload-title-card">
-            <div
-              className="audio-upload-title-row audio-upload-track-head"
-              role="button"
-              tabIndex={0}
-              aria-expanded={expanded}
-              onClick={() => setOpenId(expanded ? null : tr.id)}
-              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setOpenId(expanded ? null : tr.id); } }}
-            >
+            <div className={cx('audio-upload-title-row audio-upload-track-head', single && 'is-static')} {...toggle}>
               <span className="audio-upload-title-num">{i + 1}</span>
               <span className="audio-upload-track-head-title">
                 {tr.title || tr.filename}
               </span>
-              <span className="audio-upload-community-change">
-                {expanded ? t('audio.upload.tracks.hide') : t('common.actions.edit')}
-                <Icon name={expanded ? 'expand_less' : 'expand_more'} size={18} />
-              </span>
+              {!single && (
+                <span className="audio-upload-community-change">
+                  {expanded ? t('audio.upload.tracks.hide') : t('common.actions.edit')}
+                  <Icon name={expanded ? 'expand_less' : 'expand_more'} size={18} />
+                </span>
+              )}
             </div>
 
             {/* Always shown: every track needs its category, and Next waits for it. */}
@@ -3049,7 +3072,7 @@ function TracksStep({
 function ReviewStep({
   tracks, playlists, playlistChoice, pendingPlaylist, publishStatus = {}, onRetry, onRetryAll, isPublishing,
   mode, rewardMode, community, mainError, onRetryMain, published, onNavigate, shortsCount = 0,
-  shortStatus = {}, onRetryShort = null, showShorts = true,
+  shortStatus = {}, onRetryShort = null, showShorts = true, rewards = null,
 }) {
   const chosen = playlists.find(p => p.id === playlistChoice)
     || (pendingPlaylist && pendingPlaylist.id === playlistChoice ? pendingPlaylist : null);
@@ -3082,6 +3105,26 @@ function ReviewStep({
           <Icon name="payments" size={18} />
           <strong>{t('audio.upload.review.earnings')}</strong> <span>{rewardMode === 'ppl' ? t('audio.upload.review.earningsPpl', { account: PPL_BENEFICIARY }) : t('audio.upload.review.earningsNormal')}</span>
         </div>
+        {rewards && (
+          <>
+            <div className="audio-upload-review-kv">
+              <Icon name="savings" size={18} />
+              <strong>{t('audio.upload.review.rewards')}</strong>{' '}
+              <span>{rewards.payout ? t(`audio.upload.reward.${rewards.payout}`) : t('audio.upload.review.perTrack')}</span>
+            </div>
+            <div className="audio-upload-review-kv">
+              <Icon name="group" size={18} />
+              <strong>{t('audio.upload.review.beneficiaries')}</strong>{' '}
+              <span>
+                {rewards.bene == null
+                  ? t('audio.upload.review.perTrack')
+                  : rewards.bene.length
+                    ? rewards.bene.map((b) => `@${b.account} ${(b.weight || 0) / 100}%`).join(', ')
+                    : t('audio.upload.review.noBeneficiaries')}
+              </span>
+            </div>
+          </>
+        )}
         {chosen && (
           <div className="audio-upload-review-kv">
             <Icon name="queue_music" size={18} />

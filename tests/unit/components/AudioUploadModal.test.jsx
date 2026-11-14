@@ -48,7 +48,14 @@ vi.mock('../../../src/lib/advertiseData', () => ({ fetchCreatorAdPrefs: async ()
 vi.mock('../../../src/lib/uploadGate', () => ({ fetchUploadGateAd: async () => null, confirmUploadGatePost: () => {}, gateSessionId: () => null }))
 vi.mock('../../../src/components/HiveAvatar/AccountImg', () => ({ default: () => null }))
 vi.mock('../../../src/components/modal/Community_modal', () => ({ default: () => null }))
-vi.mock('../../../src/components/modal/Beneficiary_modal', () => ({ default: () => null }))
+// The beneficiaries dialog, reduced to one "add @bob 10%" button that saves like the real one.
+vi.mock('../../../src/components/modal/Beneficiary_modal', () => ({
+  default: ({ setBeneficiaries, close }) => (
+    <div data-testid="bene-modal">
+      <button type="button" onClick={() => { setBeneficiaries(JSON.stringify([{ account: 'bob', weight: 1000 }])); close() }}>Add bob 10%</button>
+    </div>
+  ),
+}))
 vi.mock('../../../src/components/AudioUploadModal/CoverDesigner', () => ({
   default: ({ src, onDone, onClose }) => (
     <div role="dialog" aria-label="Cover editor">
@@ -263,6 +270,68 @@ describe('AudioUploadModal: Edit audio', () => {
     const r = await waitFor(() => row('openpod.ogg'))
     expect(within(r).queryByText('Edited')).toBeNull()
     expect(within(r).getByText('Recorded')).toBeInTheDocument()
+  })
+})
+
+describe('AudioUploadModal: one track vs many on the tracks step', () => {
+  const toTracks = async (user) => {
+    await next(user)
+    await user.click(screen.getByRole('radio', { name: /Snap comments/ }))
+    await next(user)
+    await next(user) // tracks
+  }
+
+  it('one track: no apply-to-all box, and its own rewards are always there to change', async () => {
+    const { user } = openModal()
+    await addFile(user)
+    await toTracks(user)
+    expect(screen.getByText('Your audio is published as its own snap.')).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: /Apply to all/ })).toBeNull()
+    expect(screen.queryByPlaceholderText('Shared description (optional)')).toBeNull()
+    // nothing to fold: no Edit / Hide toggle
+    const head = document.querySelector('.audio-upload-track-head')
+    expect(head.getAttribute('role')).toBeNull()
+    expect(within(head).queryByText(/Edit|Hide/)).toBeNull()
+    // the track's own payout select works
+    const payout = document.querySelector('.audio-upload-post-reward-row select')
+    await user.selectOptions(payout, 'decline')
+    expect(payout).toHaveValue('decline')
+    await user.click(head)
+    expect(document.querySelector('.audio-upload-post-reward-row select')).toHaveValue('decline')
+    // its beneficiaries too
+    await user.click(within(document.querySelector('.audio-upload-post-reward-row')).getByRole('button', { name: /Beneficiaries/ }))
+    await user.click(within(screen.getByTestId('bene-modal')).getByRole('button', { name: 'Add bob 10%' }))
+    expect(within(document.querySelector('.audio-upload-post-reward-row')).getByRole('button', { name: /Beneficiaries \(1\)/ })).toBeInTheDocument()
+    // Review says what goes out, and the snap goes out with it
+    await pickKind(user, 'Music')
+    await next(user) // review
+    expect(screen.getByText('Rewards:').parentElement).toHaveTextContent('Decline payout')
+    expect(screen.getByText('Beneficiaries:').parentElement).toHaveTextContent('@bob 10%')
+    await user.click(screen.getByRole('button', { name: /^Publish/ }))
+    await waitFor(() => expect(aioha.broadcastWithAioha).toHaveBeenCalled())
+    const ops = aioha.broadcastWithAioha.mock.calls.flatMap(([o]) => o)
+    const options = ops.find((o) => o[0] === 'comment_options')
+    expect(options[1].max_accepted_payout).toBe('0.000 HBD')
+    expect(options[1].extensions[0][1].beneficiaries).toEqual(expect.arrayContaining([{ account: 'bob', weight: 1000 }]))
+  })
+
+  it('two tracks: the apply-to-all box is there, the cards start closed', async () => {
+    const { user } = openModal()
+    await addFile(user, 'One.wav')
+    await addFile(user, 'Two.wav')
+    await toTracks(user)
+    expect(screen.getByRole('button', { name: /Apply to all 2 tracks/ })).toBeInTheDocument()
+    expect(screen.getByPlaceholderText('Shared description (optional)')).toBeInTheDocument()
+    const heads = [...document.querySelectorAll('.audio-upload-track-head')]
+    expect(heads.map((h) => h.getAttribute('aria-expanded'))).toEqual(['false', 'false'])
+    // different payouts per track: the review says so
+    const cards = heads.map((h) => h.closest('.audio-upload-title-card'))
+    await user.click(heads[0])
+    await user.selectOptions(cards[0].querySelector('.audio-upload-post-reward-row select'), 'powerup')
+    for (const card of cards) await user.click(within(card).getByRole('radio', { name: 'Music' }))
+    await next(user) // review
+    expect(screen.getByText('Rewards:').parentElement).toHaveTextContent('Set per track')
+    expect(screen.getByText('Beneficiaries:').parentElement).toHaveTextContent('None')
   })
 })
 

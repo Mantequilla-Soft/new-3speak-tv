@@ -365,6 +365,7 @@
     "tracks": {
       "helpAlbum": "每首曲目都会作为主帖下的评论发布。共享的设置只需填写一次并应用到全部，然后再按曲目单独修改。",
       "helpSnaps": "每首曲目都会作为单独的 Snap 发布。共享的设置只需填写一次并应用到全部，然后再按曲目单独修改。",
+      "helpSnapsSingle": "你的音频将作为单独的快拍发布。",
       "applyToAllHeading": "应用到所有曲目",
       "applyNote_other": "<b>应用到全部 {{count}} 首曲目：</b>共享描述和封面，之后可单独修改任意曲目。",
       "sharedDescription": "共享简介（可选）",
@@ -387,6 +388,10 @@
       "earnings": "收益：",
       "earningsPpl": "按收听付费（@{{account}}）",
       "earningsNormal": "普通帖子奖励",
+      "rewards": "奖励：",
+      "beneficiaries": "受益人：",
+      "perTrack": "按音轨分别设置",
+      "noBeneficiaries": "无",
       "playlist": "播放列表：",
       "failedCount_other": "{{count}} 首曲目失败。",
       "retryAllFailed": "重试所有失败项",

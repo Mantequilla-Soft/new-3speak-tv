@@ -365,6 +365,7 @@
     "tracks": {
       "helpAlbum": "各トラックはメイン投稿へのコメントとして公開されます。共通の値を一度設定してすべてに適用し、トラックごとに上書きできます。",
       "helpSnaps": "各トラックは独立した Snap として公開されます。共通の値を一度設定してすべてに適用し、トラックごとに上書きできます。",
+      "helpSnapsSingle": "あなたの音声は単独のスナップとして公開されます。",
       "applyToAllHeading": "すべてのトラックに適用",
       "applyNote_other": "<b>全 {{count}} トラックに適用:</b> 説明とカバーを共通にして、あとで各トラックを個別に変更できます。",
       "sharedDescription": "共通の説明（任意）",
@@ -387,6 +388,10 @@
       "earnings": "報酬:",
       "earningsPpl": "再生ごとの報酬（@{{account}}）",
       "earningsNormal": "通常の投稿報酬",
+      "rewards": "報酬:",
+      "beneficiaries": "受取人:",
+      "perTrack": "トラックごとに設定",
+      "noBeneficiaries": "なし",
       "playlist": "再生リスト:",
       "failedCount_other": "{{count}} トラックが失敗しました。",
       "retryAllFailed": "失敗したものをすべて再試行",

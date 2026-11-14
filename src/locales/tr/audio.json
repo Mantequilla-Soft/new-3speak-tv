@@ -377,6 +377,7 @@
     "tracks": {
       "helpAlbum": "Her parça ana gönderinin altında bir yorum olarak yayınlanır. Ortak değerleri bir kez ayarlayıp hepsine uygula, sonra parça bazında değiştir.",
       "helpSnaps": "Her parça kendi snap'i olarak yayınlanır. Ortak değerleri bir kez ayarlayıp hepsine uygula, sonra parça bazında değiştir.",
+      "helpSnapsSingle": "Sesin kendi snap'i olarak yayımlanır.",
       "applyToAllHeading": "Tüm parçalara uygula",
       "applyNote_one": "<b>{{count}} parçanın tümüne uygula:</b> ortak açıklama ve kapak, sonra istediğin parçayı ayrıca değiştir.",
       "applyNote_other": "<b>{{count}} parçanın tümüne uygula:</b> ortak açıklama ve kapak, sonra istediğin parçayı ayrıca değiştir.",
@@ -406,6 +407,10 @@
       "earnings": "Kazanç:",
       "earningsPpl": "Dinleme başına ödeme (@{{account}})",
       "earningsNormal": "Normal gönderi ödülleri",
+      "rewards": "Ödüller:",
+      "beneficiaries": "Faydalanıcılar:",
+      "perTrack": "Her parça için ayrı",
+      "noBeneficiaries": "Yok",
       "playlist": "Oynatma listesi:",
       "failedCount_one": "{{count}} parça başarısız oldu.",
       "failedCount_other": "{{count}} parça başarısız oldu.",

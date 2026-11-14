@@ -401,6 +401,7 @@
     "tracks": {
       "helpAlbum": "Każdy utwór jest publikowany jako komentarz pod postem głównym. Ustaw wspólne wartości raz i zastosuj je do wszystkich, a potem zmień dla poszczególnych utworów.",
       "helpSnaps": "Każdy utwór jest publikowany jako osobny snap. Ustaw wspólne wartości raz i zastosuj je do wszystkich, a potem zmień dla poszczególnych utworów.",
+      "helpSnapsSingle": "Twoje audio zostanie opublikowane jako osobny snap.",
       "applyToAllHeading": "Zastosuj do wszystkich utworów",
       "applyNote_one": "<b>Zastosuj do {{count}} utworu:</b> wspólny opis i okładka, potem zmień dowolny utwór osobno.",
       "applyNote_few": "<b>Zastosuj do wszystkich {{count}} utworów:</b> wspólny opis i okładka, potem zmień dowolny utwór osobno.",
@@ -444,6 +445,10 @@
       "earnings": "Zarobki:",
       "earningsPpl": "Płatność za odsłuch (@{{account}})",
       "earningsNormal": "Zwykłe nagrody za post",
+      "rewards": "Nagrody:",
+      "beneficiaries": "Beneficjenci:",
+      "perTrack": "Ustawione dla każdego utworu",
+      "noBeneficiaries": "Brak",
       "playlist": "Playlista:",
       "failedCount_one": "{{count}} utwór się nie udał.",
       "failedCount_few": "{{count}} utwory się nie udały.",

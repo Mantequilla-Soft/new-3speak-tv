@@ -365,6 +365,7 @@
     "tracks": {
       "helpAlbum": "Mỗi bản nhạc được xuất bản dưới dạng bình luận trong bài chính. Đặt giá trị chung một lần và áp dụng cho tất cả, rồi chỉnh riêng cho từng bản nhạc.",
       "helpSnaps": "Mỗi bản nhạc được xuất bản thành một snap riêng. Đặt giá trị chung một lần và áp dụng cho tất cả, rồi chỉnh riêng cho từng bản nhạc.",
+      "helpSnapsSingle": "Âm thanh của bạn được đăng thành một snap riêng.",
       "applyToAllHeading": "Áp dụng cho tất cả bản nhạc",
       "applyNote_other": "<b>Áp dụng cho cả {{count}} bản nhạc:</b> mô tả và ảnh bìa chung, sau đó chỉnh riêng từng bản nhạc.",
       "sharedDescription": "Mô tả chung (không bắt buộc)",
@@ -387,6 +388,10 @@
       "earnings": "Thu nhập:",
       "earningsPpl": "Trả theo lượt nghe (@{{account}})",
       "earningsNormal": "Phần thưởng bài đăng thông thường",
+      "rewards": "Phần thưởng:",
+      "beneficiaries": "Người thụ hưởng:",
+      "perTrack": "Đặt riêng từng bản",
+      "noBeneficiaries": "Không có",
       "playlist": "Danh sách phát:",
       "failedCount_other": "{{count}} bản nhạc thất bại.",
       "retryAllFailed": "Thử lại tất cả bản lỗi",

@@ -377,6 +377,7 @@
     "tracks": {
       "helpAlbum": "Jeder Track wird als Kommentar unter dem Hauptpost veröffentlicht. Leg gemeinsame Werte einmal fest, wende sie auf alle an und passe dann einzelne Tracks an.",
       "helpSnaps": "Jeder Track wird als eigener Snap veröffentlicht. Leg gemeinsame Werte einmal fest, wende sie auf alle an und passe dann einzelne Tracks an.",
+      "helpSnapsSingle": "Dein Audio wird als eigener Snap veröffentlicht.",
       "applyToAllHeading": "Auf alle Tracks anwenden",
       "applyNote_one": "<b>Auf {{count}} Track anwenden:</b> gemeinsame Beschreibung und Cover, danach kannst du jeden Track einzeln ändern.",
       "applyNote_other": "<b>Auf alle {{count}} Tracks anwenden:</b> gemeinsame Beschreibung und Cover, danach kannst du jeden Track einzeln ändern.",
@@ -406,6 +407,10 @@
       "earnings": "Einnahmen:",
       "earningsPpl": "Pay-per-Listen (@{{account}})",
       "earningsNormal": "Normale Post-Belohnungen",
+      "rewards": "Belohnungen:",
+      "beneficiaries": "Begünstigte:",
+      "perTrack": "Pro Track festgelegt",
+      "noBeneficiaries": "Keine",
       "playlist": "Playlist:",
       "failedCount_one": "{{count}} Track fehlgeschlagen.",
       "failedCount_other": "{{count}} Tracks fehlgeschlagen.",

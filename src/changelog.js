@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.20',
+    category: 'upload',
+    date: '2026-11-14',
+    summary: 'Uploading one audio is simpler, and the Review step now shows the rewards and beneficiaries your audio goes out with.',
+  },
+  {
     version: '2.0.19',
     category: 'audio',
     date: '2026-11-14',

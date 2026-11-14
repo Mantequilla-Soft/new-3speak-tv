@@ -377,6 +377,7 @@
     "tracks": {
       "helpAlbum": "Elke track wordt gepubliceerd als reactie onder de hoofdpost. Stel gedeelde waarden één keer in en pas ze op alles toe, en pas ze daarna per track aan.",
       "helpSnaps": "Elke track wordt gepubliceerd als een eigen snap. Stel gedeelde waarden één keer in en pas ze op alles toe, en pas ze daarna per track aan.",
+      "helpSnapsSingle": "Je audio wordt als eigen snap gepubliceerd.",
       "applyToAllHeading": "Toepassen op alle tracks",
       "applyNote_one": "<b>Toepassen op {{count}} track:</b> gedeelde beschrijving en cover, daarna kun je elke track apart aanpassen.",
       "applyNote_other": "<b>Toepassen op alle {{count}} tracks:</b> gedeelde beschrijving en cover, daarna kun je elke track apart aanpassen.",
@@ -406,6 +407,10 @@
       "earnings": "Inkomsten:",
       "earningsPpl": "Betalen per luisterbeurt (@{{account}})",
       "earningsNormal": "Normale postbeloningen",
+      "rewards": "Beloningen:",
+      "beneficiaries": "Begunstigden:",
+      "perTrack": "Per track ingesteld",
+      "noBeneficiaries": "Geen",
       "playlist": "Playlist:",
       "failedCount_one": "{{count}} track mislukt.",
       "failedCount_other": "{{count}} tracks mislukt.",

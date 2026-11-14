@@ -377,6 +377,7 @@
     "tracks": {
       "helpAlbum": "Kila wimbo huchapishwa kama maoni chini ya chapisho kuu. Weka thamani za pamoja mara moja na uzitumie kwa zote, kisha ubadilishe kwa kila wimbo.",
       "helpSnaps": "Kila wimbo huchapishwa kama snap yake. Weka thamani za pamoja mara moja na uzitumie kwa zote, kisha ubadilishe kwa kila wimbo.",
+      "helpSnapsSingle": "Sauti yako inachapishwa kama snap yake yenyewe.",
       "applyToAllHeading": "Tumia kwa nyimbo zote",
       "applyNote_one": "<b>Tumia kwa wimbo wote {{count}}:</b> maelezo na jalada la pamoja, kisha badilisha wimbo wowote peke yake.",
       "applyNote_other": "<b>Tumia kwa nyimbo zote {{count}}:</b> maelezo na jalada la pamoja, kisha badilisha wimbo wowote peke yake.",
@@ -406,6 +407,10 @@
       "earnings": "Mapato:",
       "earningsPpl": "Malipo kwa kila usikilizaji (@{{account}})",
       "earningsNormal": "Zawadi za kawaida za chapisho",
+      "rewards": "Zawadi:",
+      "beneficiaries": "Wanufaika:",
+      "perTrack": "Imewekwa kwa kila wimbo",
+      "noBeneficiaries": "Hakuna",
       "playlist": "Orodha ya kucheza:",
       "failedCount_one": "Wimbo {{count}} umeshindwa.",
       "failedCount_other": "Nyimbo {{count}} zimeshindwa.",

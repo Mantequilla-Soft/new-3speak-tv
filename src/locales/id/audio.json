@@ -365,6 +365,7 @@
     "tracks": {
       "helpAlbum": "Setiap lagu diterbitkan sebagai komentar di bawah postingan utama. Atur nilai bersama sekali dan terapkan ke semua, lalu ubah per lagu.",
       "helpSnaps": "Setiap lagu diterbitkan sebagai snap tersendiri. Atur nilai bersama sekali dan terapkan ke semua, lalu ubah per lagu.",
+      "helpSnapsSingle": "Audiomu diterbitkan sebagai snap tersendiri.",
       "applyToAllHeading": "Terapkan ke semua lagu",
       "applyNote_other": "<b>Terapkan ke semua {{count}} lagu:</b> deskripsi dan sampul bersama, lalu ubah lagu mana pun secara terpisah.",
       "sharedDescription": "Deskripsi bersama (opsional)",
@@ -387,6 +388,10 @@
       "earnings": "Penghasilan:",
       "earningsPpl": "Bayar per dengar (@{{account}})",
       "earningsNormal": "Reward postingan biasa",
+      "rewards": "Hadiah:",
+      "beneficiaries": "Penerima manfaat:",
+      "perTrack": "Diatur per trek",
+      "noBeneficiaries": "Tidak ada",
       "playlist": "Playlist:",
       "failedCount_other": "{{count}} lagu gagal.",
       "retryAllFailed": "Coba lagi semua yang gagal",

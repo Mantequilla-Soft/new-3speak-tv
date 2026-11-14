@@ -365,6 +365,7 @@
     "tracks": {
       "helpAlbum": "각 트랙은 메인 게시물 아래 댓글로 게시돼요. 공통 값을 한 번 설정해 모두에 적용한 다음, 트랙별로 바꿀 수 있어요.",
       "helpSnaps": "각 트랙은 개별 Snap으로 게시돼요. 공통 값을 한 번 설정해 모두에 적용한 다음, 트랙별로 바꿀 수 있어요.",
+      "helpSnapsSingle": "오디오가 별도의 스냅으로 게시됩니다.",
       "applyToAllHeading": "모든 트랙에 적용",
       "applyNote_other": "<b>트랙 {{count}}개 모두에 적용:</b> 설명과 커버를 함께 쓰고, 트랙별로 따로 바꿀 수도 있어요.",
       "sharedDescription": "공통 설명(선택)",
@@ -387,6 +388,10 @@
       "earnings": "수익:",
       "earningsPpl": "청취당 지급(@{{account}})",
       "earningsNormal": "일반 게시물 보상",
+      "rewards": "보상:",
+      "beneficiaries": "수혜자:",
+      "perTrack": "트랙별로 설정",
+      "noBeneficiaries": "없음",
       "playlist": "재생목록:",
       "failedCount_other": "트랙 {{count}}개가 실패했어요.",
       "retryAllFailed": "실패한 항목 모두 재시도",

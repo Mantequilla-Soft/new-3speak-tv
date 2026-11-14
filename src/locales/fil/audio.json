@@ -377,6 +377,7 @@
     "tracks": {
       "helpAlbum": "Bawat track ay ipa-publish bilang comment sa ilalim ng main post. Itakda nang isang beses ang mga shared value at i-apply sa lahat, tapos baguhin bawat track kung kailangan.",
       "helpSnaps": "Bawat track ay ipa-publish bilang sarili nitong snap. Itakda nang isang beses ang mga shared value at i-apply sa lahat, tapos baguhin bawat track kung kailangan.",
+      "helpSnapsSingle": "Ilalathala ang audio mo bilang sarili nitong snap.",
       "applyToAllHeading": "I-apply sa lahat ng track",
       "applyNote_one": "<b>Ilapat sa lahat ng {{count}} track:</b> iisang description at cover, tapos baguhin ang alinmang track nang hiwalay.",
       "applyNote_other": "<b>Ilapat sa lahat ng {{count}} track:</b> iisang description at cover, tapos baguhin ang alinmang track nang hiwalay.",
@@ -406,6 +407,10 @@
       "earnings": "Kita:",
       "earningsPpl": "Pay-per-listen (@{{account}})",
       "earningsNormal": "Normal na post rewards",
+      "rewards": "Mga gantimpala:",
+      "beneficiaries": "Mga benepisyaryo:",
+      "perTrack": "Itinakda bawat track",
+      "noBeneficiaries": "Wala",
       "playlist": "Playlist:",
       "failedCount_one": "{{count}} track ang pumalya.",
       "failedCount_other": "{{count}} tracks ang pumalya.",

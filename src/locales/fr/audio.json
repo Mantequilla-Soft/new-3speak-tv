@@ -389,6 +389,7 @@
     "tracks": {
       "helpAlbum": "Chaque titre est publié en commentaire sous la publication principale. Définissez les valeurs communes une fois, appliquez-les à tous, puis ajustez titre par titre.",
       "helpSnaps": "Chaque titre est publié comme son propre Snap. Définissez les valeurs communes une fois, appliquez-les à tous, puis ajustez titre par titre.",
+      "helpSnapsSingle": "Ton audio est publié comme un snap à part.",
       "applyToAllHeading": "Appliquer à tous les titres",
       "applyNote_one": "<b>Appliquer à {{count}} titre :</b> description et couverture communes, puis modifiez chaque titre séparément.",
       "applyNote_many": "<b>Appliquer aux {{count}} titres :</b> description et couverture communes, puis modifiez chaque titre séparément.",
@@ -425,6 +426,10 @@
       "earnings": "Gains :",
       "earningsPpl": "Paiement à l'écoute (@{{account}})",
       "earningsNormal": "Récompenses de publication normales",
+      "rewards": "Récompenses :",
+      "beneficiaries": "Bénéficiaires :",
+      "perTrack": "Défini par piste",
+      "noBeneficiaries": "Aucun",
       "playlist": "Playlist :",
       "failedCount_one": "{{count}} titre a échoué.",
       "failedCount_many": "{{count}} titres ont échoué.",

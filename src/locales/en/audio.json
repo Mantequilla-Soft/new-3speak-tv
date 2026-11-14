@@ -377,6 +377,7 @@
     "tracks": {
       "helpAlbum": "Each track is published as a comment under the main post. Set shared values once and apply them to all, then override per track.",
       "helpSnaps": "Each track is published as its own snap. Set shared values once and apply them to all, then override per track.",
+      "helpSnapsSingle": "Your audio is published as its own snap.",
       "applyToAllHeading": "Apply to all tracks",
       "applyNote_one": "<b>Apply to all {{count}} track:</b> shared description and cover, then change any track on its own.",
       "applyNote_other": "<b>Apply to all {{count}} tracks:</b> shared description and cover, then change any track on its own.",
@@ -406,6 +407,10 @@
       "earnings": "Earnings:",
       "earningsPpl": "Pay-per-listen (@{{account}})",
       "earningsNormal": "Normal post rewards",
+      "rewards": "Rewards:",
+      "beneficiaries": "Beneficiaries:",
+      "perTrack": "Set per track",
+      "noBeneficiaries": "None",
       "playlist": "Playlist:",
       "failedCount_one": "{{count}} track failed.",
       "failedCount_other": "{{count}} tracks failed.",
