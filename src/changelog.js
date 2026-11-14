@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.16',
+    category: 'upload',
+    date: '2026-11-14',
+    summary: 'Fixed audio uploads always being filed as voice notes: the type you pick (music, podcast and so on) is now saved, so your tracks show under the right tab on the Audio page.',
+  },
+  {
     version: '2.0.15',
     category: 'live',
     date: '2026-11-13',

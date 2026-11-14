@@ -64,12 +64,17 @@ async function inMemoryCopy(blob) {
  * Mirrors snapie-io's `uploadAudioTo3Speak` contract:
  *   POST {THREESPEAK_AUDIO_API_URL}/api/audio/upload
  *   Headers: X-API-Key, X-User
- *   Body: multipart/form-data { audio, duration, format, title }
+ *   Body: multipart/form-data { audio, duration, format, title, category? }
+ *   `category` is the track's type (song, podcast, ...). Without it the service
+ *   files the audio as `voice_message`, so it never shows on the Music or
+ *   Podcasts tabs.
  *   Response: { success, permlink, cid, playUrl, apiUrl }
  * Throws with `err.code` 'unreadable' | 'rateLimited' | 'server' for the
  * failures the modal explains in the user's language.
  */
-export async function uploadAudioTo3Speak({ blob, filename, durationSec, username, title }) {
+const AUDIO_CATEGORIES = new Set(['voice_message', 'song', 'podcast', 'audiobook', 'interview']);
+
+export async function uploadAudioTo3Speak({ blob, filename, durationSec, username, title, category }) {
   if (!THREESPEAK_API_KEY) {
     throw new Error('VITE_3SPEAK_API_KEY is not set');
   }
@@ -85,6 +90,7 @@ export async function uploadAudioTo3Speak({ blob, filename, durationSec, usernam
   fd.append('duration', String(Math.max(0, Math.round(durationSec || 0))));
   fd.append('format', format);
   fd.append('title', title || `Audio by ${username}`);
+  if (AUDIO_CATEGORIES.has(category)) fd.append('category', category);
 
   const resp = await fetch(`${THREESPEAK_AUDIO_API_URL}/api/audio/upload`, {
     method: 'POST',

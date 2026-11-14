@@ -1006,7 +1006,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     // audio page read the audio row, not the post.
     const postTitle = (mainTitle || track.title || '').trim() || 'Audio';
     const { permlink: audioPermlink, playUrl } = await uploadAudioTo3Speak({
-      blob: track.blob, filename: track.filename, durationSec: track.durationSec, username: owner, title: postTitle,
+      blob: track.blob, filename: track.filename, durationSec: track.durationSec, username: owner, title: postTitle, category: track.type,
     });
     setTrackStatus(track.id, { state: 'posting', stage: 'post', playUrl });
     // A warm-up post takes the audio's own id as its permlink, as a warm-up video
@@ -1174,7 +1174,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
   const publishTrackComment = useCallback(async (track, parent) => {
     setTrackStatus(track.id, { state: 'uploading', stage: 'upload', message: undefined });
     const { permlink: audioPermlink, playUrl } = await uploadAudioTo3Speak({
-      blob: track.blob, filename: track.filename, durationSec: track.durationSec, username: user, title: track.title,
+      blob: track.blob, filename: track.filename, durationSec: track.durationSec, username: user, title: track.title, category: track.type,
     });
     setTrackStatus(track.id, { state: 'posting', stage: 'post', playUrl });
     const hivePermlink = generatePermlink(track.title) || audioPermlink;
