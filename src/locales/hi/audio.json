@@ -290,6 +290,7 @@
       "descriptionOptional": "विवरण (वैकल्पिक)",
       "track": "ट्रैक",
       "category": "कैटेगरी",
+      "categoryRequired": "एक श्रेणी चुनें, ताकि आपका ऑडियो सही टैब में दिखे।",
       "musicGenre": "संगीत शैली"
     },
     "playlist": {

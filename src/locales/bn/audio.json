@@ -290,6 +290,7 @@
       "descriptionOptional": "বিবরণ (ঐচ্ছিক)",
       "track": "ট্র্যাক",
       "category": "ক্যাটাগরি",
+      "categoryRequired": "একটি বিভাগ বেছে নিন, যাতে আপনার অডিও সঠিক ট্যাবে দেখা যায়।",
       "musicGenre": "সংগীতের ধরন"
     },
     "playlist": {

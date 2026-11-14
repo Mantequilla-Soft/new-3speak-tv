@@ -1738,3 +1738,10 @@
 @media (prefers-reduced-motion: reduce) {
   .audio-upload-overlay, .audio-upload-modal, .audio-upload-confirm, .audio-upload-confirm-card { animation: none; }
 }
+
+// "Pick a category" under the kind tiles / chips until one is chosen
+.audio-upload-kind-required {
+  margin: 0;
+  font-size: 13px;
+  color: var(--muted);
+}

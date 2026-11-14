@@ -300,6 +300,7 @@
       "descriptionOptional": "Descripción (opcional)",
       "track": "Pista",
       "category": "Categoría",
+      "categoryRequired": "Elige una categoría para que tu audio aparezca en la pestaña correcta.",
       "musicGenre": "Género musical"
     },
     "playlist": {

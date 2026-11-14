@@ -561,10 +561,11 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
       durationSec: dur,
       objectUrl: url,
       source,
-      // Optional metadata captured in the Titles step. Caller may
-      // override the auto-derived type — e.g. an OpenPods recording
-      // hand-off pre-fills 'podcast'.
-      type: overrideType ?? playlistTrackTypeRef.current ?? (source === 'record' ? 'voice_message' : 'podcast'),
+      // No default category: the uploader has to pick one (a guessed
+      // 'podcast' / 'voice_message' filed music under the wrong tab). Only a
+      // caller's type (an OpenPods recording = 'podcast') or the chosen
+      // playlist's kind pre-fills it.
+      type: overrideType ?? playlistTrackTypeRef.current ?? null,
       edited: source === 'editor',
       musicCredits: sanitizeMusicCredits(extra.musicCredits),
       genre: '',
@@ -1465,7 +1466,9 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
   const isLastStep = step >= flow.length - 1;
   const canNext = (() => {
     if (stepKey === 'source') return tracks.length > 0 && !isRecording && (!warmup || tracks.length === 1);
-    if (stepKey === 'post') return (tracks[0]?.title || mainTitle || '').trim().length > 0;
+    if (stepKey === 'post') return (tracks[0]?.title || mainTitle || '').trim().length > 0 && !!tracks[0]?.type;
+    // Every track needs its category picked before review.
+    if (stepKey === 'tracks') return tracks.every((tr) => !!tr.type);
     if (stepKey === 'mainpost') return (mainTitle || '').trim().length > 0;
     // Album posts must live inside a playlist so the main post + track
     // comments stay grouped as a single album.
@@ -2477,7 +2480,7 @@ const GENRE_CHIPS = ['Ambient', 'Electronic', 'Hip-Hop', 'Jazz', 'Rock', 'Classi
 // `tiles`: the 24a kind tiles (the post step); otherwise the 34c category chips.
 function TrackTypeFields({ track, patchTrack, disabled, tiles = false }) {
   const { t } = useTranslation();
-  const type = track.type || 'voice_message';
+  const type = track.type || null;
   const genre = String(track.genre || '');
   const setType = (value) => patchTrack(track.id, { type: value });
   return (
@@ -2519,6 +2522,7 @@ function TrackTypeFields({ track, patchTrack, disabled, tiles = false }) {
           </div>
         </>
       )}
+      {!type && <p className="audio-upload-kind-required" role="status">{t('audio.upload.fields.categoryRequired')}</p>}
       {type === 'song' && (
         <>
           <span className="audio-upload-chip-label" id={`genre-${track.id}`}>{t('audio.upload.fields.musicGenre')}</span>
@@ -2973,6 +2977,9 @@ function TracksStep({
               </span>
             </div>
 
+            {/* Always shown: every track needs its category, and Next waits for it. */}
+            <TrackTypeFields track={tr} patchTrack={patchTrack} />
+
             {expanded && (
               <>
                 <input
@@ -2983,7 +2990,6 @@ function TracksStep({
                   onChange={(e) => patchTrack(tr.id, { title: e.target.value })}
                   maxLength={120}
                 />
-                <TrackTypeFields track={tr} patchTrack={patchTrack} />
                 <RewardRow
                   payout={tr.payout || 'default'}
                   setPayout={(v) => patchTrack(tr.id, { payout: v })}

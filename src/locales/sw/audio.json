@@ -290,6 +290,7 @@
       "descriptionOptional": "Maelezo (si lazima)",
       "track": "Wimbo",
       "category": "Kategoria",
+      "categoryRequired": "Chagua kategoria ili sauti yako ionekane kwenye kichupo sahihi.",
       "musicGenre": "Aina ya muziki"
     },
     "playlist": {

@@ -280,6 +280,7 @@
       "descriptionOptional": "설명(선택)",
       "track": "트랙",
       "category": "카테고리",
+      "categoryRequired": "오디오가 알맞은 탭에 표시되도록 카테고리를 선택하세요.",
       "musicGenre": "음악 장르"
     },
     "playlist": {

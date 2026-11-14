@@ -290,6 +290,7 @@
       "descriptionOptional": "Description (optional)",
       "track": "Track",
       "category": "Category",
+      "categoryRequired": "Pick a category so your audio shows up on the right tab.",
       "musicGenre": "Music genre"
     },
     "playlist": {

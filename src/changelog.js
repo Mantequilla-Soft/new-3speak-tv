@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.17',
+    category: 'upload',
+    date: '2026-11-14',
+    summary: 'When you upload audio, you now pick its category (music, podcast and more), so it always shows on the right tab of the Audio page.',
+  },
+  {
     version: '2.0.16',
     category: 'upload',
     date: '2026-11-14',

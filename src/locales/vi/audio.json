@@ -280,6 +280,7 @@
       "descriptionOptional": "Mô tả (không bắt buộc)",
       "track": "Bản nhạc",
       "category": "Danh mục",
+      "categoryRequired": "Chọn một danh mục để âm thanh của bạn hiện đúng tab.",
       "musicGenre": "Thể loại nhạc"
     },
     "playlist": {

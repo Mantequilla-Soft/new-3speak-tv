@@ -310,6 +310,7 @@
       "descriptionOptional": "Opis (opcjonalnie)",
       "track": "Utwór",
       "category": "Kategoria",
+      "categoryRequired": "Wybierz kategorię, aby Twoje audio pojawiło się na właściwej karcie.",
       "musicGenre": "Gatunek muzyczny"
     },
     "playlist": {

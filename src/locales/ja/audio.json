@@ -280,6 +280,7 @@
       "descriptionOptional": "説明（任意）",
       "track": "トラック",
       "category": "カテゴリー",
+      "categoryRequired": "正しいタブに表示されるよう、カテゴリーを選んでください。",
       "musicGenre": "音楽ジャンル"
     },
     "playlist": {

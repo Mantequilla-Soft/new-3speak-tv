@@ -290,6 +290,7 @@
       "descriptionOptional": "Description (opsyonal)",
       "track": "Track",
       "category": "Kategorya",
+      "categoryRequired": "Pumili ng kategorya para lumabas ang audio mo sa tamang tab.",
       "musicGenre": "Genre ng musika"
     },
     "playlist": {

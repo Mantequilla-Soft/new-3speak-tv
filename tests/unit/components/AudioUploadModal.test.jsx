@@ -151,6 +151,8 @@ async function addFile(user, name = 'Episode 12.wav', type = 'audio/wav') {
 
 const next = (user) => user.click(screen.getByRole('button', { name: /Next/ }))
 const back = (user) => user.click(screen.getByRole('button', { name: /Back/ }))
+// The category has no default: the uploader picks one before Next works.
+const pickKind = (user, name = 'Podcast') => user.click(screen.getAllByRole('radio', { name })[0])
 const row = (name) => screen.getByText(name).closest('.audio-upload-track-row')
 const cover = () => document.querySelector('.audio-upload-post-form .audio-upload-album-thumb')
 
@@ -163,6 +165,7 @@ async function toPostStep(user, playlistName) {
   if (playlistName) await user.click(screen.getByRole('radio', { name: new RegExp(playlistName) }))
   await next(user)
   await screen.findByPlaceholderText('Title (required)')
+  await pickKind(user)
 }
 
 const result = (detail) => act(async () => {
@@ -226,6 +229,33 @@ describe('AudioUploadModal: Edit audio', () => {
     openModal({ initialTrack: { blob, filename: 'edited-audio.mp3', type: null, source: 'editor' } })
     const r = await waitFor(() => row('edited-audio.mp3'))
     expect(within(r).getByText('Edited')).toBeInTheDocument()
+  })
+
+  it('starts a file with no category: Next waits until one is picked', async () => {
+    const { user } = openModal()
+    await addFile(user)
+    await next(user)
+    await user.click(screen.getByRole('radio', { name: /Standalone post/ }))
+    await next(user)
+    await next(user)
+    await screen.findByPlaceholderText('Title (required)')
+    expect(screen.getByText('Pick a category so your audio shows up on the right tab.')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /Next/ })).toBeDisabled()
+    await pickKind(user, 'Music')
+    expect(screen.queryByText('Pick a category so your audio shows up on the right tab.')).toBeNull()
+    expect(screen.getByRole('button', { name: /Next/ })).toBeEnabled()
+  })
+
+  it('snap comments: every track needs its category before review', async () => {
+    const { user } = openModal()
+    await addFile(user)
+    await next(user)
+    await user.click(screen.getByRole('radio', { name: /Snap comments/ }))
+    await next(user)
+    await next(user) // tracks
+    expect(screen.getByRole('button', { name: /Next/ })).toBeDisabled()
+    await pickKind(user, 'Music')
+    expect(screen.getByRole('button', { name: /Next/ })).toBeEnabled()
   })
 
   it('keeps an OpenPods hand-off a recording, as before', async () => {
@@ -445,6 +475,7 @@ describe('AudioUploadModal: audiograms as Shorts', () => {
     expect(within(section).getByLabelText('Thumbnail of Short 1').querySelector('img')).toHaveAttribute('src', 'https://images.hive.blog/DQmThumb/short.jpg')
     // every one goes: there is no way to drop one here
     expect(within(section).queryByRole('button', { name: /Don't post/ })).toBeNull()
+    await pickKind(user)
     await next(user) // review
     expect(screen.getByText(/2 from the audio editor, each posted after its audio/)).toBeInTheDocument()
     // the publish list shows them under their track: posted together with it

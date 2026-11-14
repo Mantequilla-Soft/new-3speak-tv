@@ -280,6 +280,7 @@
       "descriptionOptional": "คำอธิบาย (ไม่บังคับ)",
       "track": "แทร็ก",
       "category": "หมวดหมู่",
+      "categoryRequired": "เลือกหมวดหมู่ เพื่อให้เสียงของคุณแสดงในแท็บที่ถูกต้อง",
       "musicGenre": "แนวเพลง"
     },
     "playlist": {

@@ -280,6 +280,7 @@
       "descriptionOptional": "Deskripsi (opsional)",
       "track": "Lagu",
       "category": "Kategori",
+      "categoryRequired": "Pilih kategori agar audiomu muncul di tab yang tepat.",
       "musicGenre": "Genre musik"
     },
     "playlist": {

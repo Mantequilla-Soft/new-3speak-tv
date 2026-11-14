@@ -280,6 +280,7 @@
       "descriptionOptional": "简介（可选）",
       "track": "曲目",
       "category": "类别",
+      "categoryRequired": "请选择一个分类，让你的音频显示在正确的标签页中。",
       "musicGenre": "音乐流派"
     },
     "playlist": {

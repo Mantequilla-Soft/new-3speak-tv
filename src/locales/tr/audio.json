@@ -290,6 +290,7 @@
       "descriptionOptional": "Açıklama (isteğe bağlı)",
       "track": "Parça",
       "category": "Kategori",
+      "categoryRequired": "Sesinin doğru sekmede görünmesi için bir kategori seç.",
       "musicGenre": "Müzik türü"
     },
     "playlist": {
