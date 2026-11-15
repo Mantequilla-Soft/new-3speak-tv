@@ -294,6 +294,24 @@
       "cta": "Obter 3Speak Pro"
     }
   },
+  "phoneSource": {
+    "menuItem": "Tela do celular ou tablet",
+    "menuHint": "Mostre a tela de um iPhone, iPad ou Android, enviada por um app gratuito",
+    "sourceName": "Tela do celular",
+    "title": "Tela do celular ou tablet",
+    "lead": "Mostre na sua transmissão a tela de um iPhone, iPad ou aparelho Android, pela internet. Basta um app gratuito de transmissão de tela nesse aparelho.",
+    "step1": "No celular ou tablet, instale o Larix Screencaster (grátis, App Store ou Google Play).",
+    "step2": "No Larix, adicione uma conexão, escolha WebRTC (WHIP) e cole o endereço abaixo como URL. Deixe o token vazio.",
+    "step3": "Inicie a transmissão no Larix. No iPhone ou iPad, confirme a gravação de tela quando for pedido.",
+    "step4": "A tela aparece aqui como fonte em poucos segundos. Use-a em qualquer cena.",
+    "qrHint": "Escaneie com o celular ou tablet para ter o endereço lá.",
+    "keepPrivate": "Mantenha este endereço em sigilo: quem o tiver pode enviar imagem para a sua transmissão.",
+    "sharedSlot": "Uma fonte externa por vez: ela usa o mesmo espaço do OBS.",
+    "soundNote": "Som: iPhone e iPad enviam o microfone, ou o som dos apps que permitem isso.",
+    "delayNote": "A imagem chega um pouco depois da câmera e do microfone do estúdio.",
+    "waiting": "Aguardando o aparelho se conectar…",
+    "connected": "O aparelho está conectado."
+  },
   "createForm": {
     "beta": "beta",
     "introPhoneTitle": "Ao vivo",

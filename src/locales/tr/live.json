@@ -293,6 +293,24 @@
       "cta": "3Speak Pro edinin"
     }
   },
+  "phoneSource": {
+    "menuItem": "Telefon veya tablet ekranı",
+    "menuHint": "Ücretsiz bir uygulamayla gönderilen iPhone, iPad veya Android cihaz ekranını göster",
+    "sourceName": "Telefon ekranı",
+    "title": "Telefon veya tablet ekranı",
+    "lead": "Bir iPhone, iPad veya Android cihazın ekranını internet üzerinden yayınında göster. Bunun için o cihazda ücretsiz bir ekran yayını uygulaması gerekir.",
+    "step1": "Telefona veya tablete Larix Screencaster'ı kur (ücretsiz, App Store veya Google Play).",
+    "step2": "Larix'te bir bağlantı ekle, WebRTC (WHIP) seç ve aşağıdaki adresi URL olarak yapıştır. Token alanını boş bırak.",
+    "step3": "Yayını Larix'te başlat. iPhone veya iPad'de sorulduğunda ekran kaydını onayla.",
+    "step4": "Ekran birkaç saniye içinde burada kaynak olarak görünür. İstediğin sahnede kullan.",
+    "qrHint": "Adresi oraya almak için bunu telefon veya tabletle tara.",
+    "keepPrivate": "Bu adresi gizli tut: adrese sahip olan herkes yayınına görüntü gönderebilir.",
+    "sharedSlot": "Aynı anda tek dış kaynak: OBS ile aynı yeri kullanır.",
+    "soundNote": "Ses: iPhone ve iPad mikrofonu ya da buna izin veren uygulamaların sesini gönderir.",
+    "delayNote": "Görüntü, stüdyodaki kamera ve mikrofondan biraz daha geç gelir.",
+    "waiting": "Cihazın bağlanması bekleniyor…",
+    "connected": "Cihaz bağlandı."
+  },
   "createForm": {
     "beta": "beta",
     "introPhoneTitle": "Canlı yayına geç",

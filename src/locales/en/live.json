@@ -293,6 +293,24 @@
       "cta": "Get 3Speak Pro"
     }
   },
+  "phoneSource": {
+    "menuItem": "Phone or tablet screen",
+    "menuHint": "Show the screen of an iPhone, iPad or Android device, sent from a free app",
+    "sourceName": "Phone screen",
+    "title": "Phone or tablet screen",
+    "lead": "Show the screen of an iPhone, iPad or Android device in your stream, over the internet. It needs a free screen-broadcast app on that device.",
+    "step1": "On the phone or tablet, install Larix Screencaster (free, App Store or Google Play).",
+    "step2": "In Larix, add a connection, choose WebRTC (WHIP) and paste the address below as the URL. Leave the token empty.",
+    "step3": "Start the broadcast in Larix. On an iPhone or iPad, confirm the screen recording when asked.",
+    "step4": "The screen appears here as a source within a few seconds. Use it in any scene.",
+    "qrHint": "Scan this with the phone or tablet to get the address there.",
+    "keepPrivate": "Keep this address private: anyone who has it can send a picture into your stream.",
+    "sharedSlot": "One outside feed at a time: this uses the same slot as OBS.",
+    "soundNote": "Sound: iPhone and iPad send the microphone, or the sound of apps that allow it.",
+    "delayNote": "The feed arrives a little later than your studio camera and mic.",
+    "waiting": "Waiting for the device to connect…",
+    "connected": "The device is connected."
+  },
   "createForm": {
     "beta": "beta",
     "introPhoneTitle": "Go Live",

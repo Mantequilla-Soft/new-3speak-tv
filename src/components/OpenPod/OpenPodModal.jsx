@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { HangoutsProvider, HangoutsRoom } from '@snapie/hangouts-react';
@@ -59,9 +59,22 @@ function buildOpenPodShareUrl(roomName, origin, mode) {
   return `https://hangout.3speak.tv/room/${roomName}`;
 }
 
+// Text of the studio's "Phone or tablet screen" source (SDK
+// PhoneScreenSourceLabels). Built with a dynamic t() like the create form.
+const PHONE_SOURCE_KEYS = [
+  'menuItem', 'menuHint', 'sourceName', 'title', 'lead', 'step1', 'step2', 'step3', 'step4',
+  'qrHint', 'keepPrivate', 'sharedSlot', 'soundNote', 'delayNote', 'waiting', 'connected',
+];
+
 export default function OpenPodModal({ isOpen, onClose, roomName, sessionToken, username, isAuthenticated }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const phoneSourceLabels = useMemo(() => ({
+    ...Object.fromEntries(PHONE_SOURCE_KEYS.map((k) => [k, t(`live.phoneSource.${k}`)])),
+    copy: t('common.actions.copy'),
+    copied: t('common.actions.copied'),
+    close: t('common.actions.close'),
+  }), [t]);
   useWakeLock(isOpen);
   // Follow the 3speak-selected theme (light/dark/system) instead of
   // forcing the SDK widgets dark.
@@ -273,6 +286,7 @@ export default function OpenPodModal({ isOpen, onClose, roomName, sessionToken, 
                 });
               }}
               canPublishVod={announceEnabled && !isUnlisted}
+              phoneSourceLabels={phoneSourceLabels}
               isUnlisted={isUnlisted}
               renderPostExtras={(
                 <>

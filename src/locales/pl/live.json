@@ -295,6 +295,24 @@
       "cta": "Zdobądź 3Speak Pro"
     }
   },
+  "phoneSource": {
+    "menuItem": "Ekran telefonu lub tabletu",
+    "menuHint": "Pokaż ekran iPhone'a, iPada lub urządzenia z Androidem, wysyłany z darmowej aplikacji",
+    "sourceName": "Ekran telefonu",
+    "title": "Ekran telefonu lub tabletu",
+    "lead": "Pokaż w transmisji ekran iPhone'a, iPada lub urządzenia z Androidem przez internet. Potrzebna jest darmowa aplikacja do transmisji ekranu na tym urządzeniu.",
+    "step1": "Na telefonie lub tablecie zainstaluj Larix Screencaster (za darmo, App Store lub Google Play).",
+    "step2": "W Larix dodaj połączenie, wybierz WebRTC (WHIP) i wklej poniższy adres jako URL. Pole tokenu zostaw puste.",
+    "step3": "Rozpocznij transmisję w Larix. Na iPhonie lub iPadzie potwierdź nagrywanie ekranu, gdy pojawi się pytanie.",
+    "step4": "Ekran pojawi się tu jako źródło w ciągu kilku sekund. Użyj go w dowolnej scenie.",
+    "qrHint": "Zeskanuj kod telefonem lub tabletem, aby mieć tam adres.",
+    "keepPrivate": "Zachowaj ten adres dla siebie: każdy, kto go ma, może wysłać obraz do Twojej transmisji.",
+    "sharedSlot": "Jedno zewnętrzne źródło naraz: korzysta z tego samego miejsca co OBS.",
+    "soundNote": "Dźwięk: iPhone i iPad wysyłają mikrofon lub dźwięk aplikacji, które na to pozwalają.",
+    "delayNote": "Obraz dociera nieco później niż kamera i mikrofon w studiu.",
+    "waiting": "Czekam na połączenie urządzenia…",
+    "connected": "Urządzenie jest połączone."
+  },
   "createForm": {
     "beta": "beta",
     "introPhoneTitle": "Na żywo",

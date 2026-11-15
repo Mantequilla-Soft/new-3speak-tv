@@ -293,6 +293,24 @@
       "cta": "3Speak Pro holen"
     }
   },
+  "phoneSource": {
+    "menuItem": "Handy- oder Tablet-Bildschirm",
+    "menuHint": "Zeige den Bildschirm eines iPhone, iPad oder Android-Geräts, gesendet von einer kostenlosen App",
+    "sourceName": "Handy-Bildschirm",
+    "title": "Handy- oder Tablet-Bildschirm",
+    "lead": "Zeige den Bildschirm eines iPhone, iPad oder Android-Geräts in deinem Stream, über das Internet. Dafür brauchst du auf dem Gerät eine kostenlose App zum Übertragen des Bildschirms.",
+    "step1": "Installiere auf dem Handy oder Tablet Larix Screencaster (kostenlos, App Store oder Google Play).",
+    "step2": "Füge in Larix eine Verbindung hinzu, wähle WebRTC (WHIP) und füge die Adresse unten als URL ein. Lass das Token leer.",
+    "step3": "Starte die Übertragung in Larix. Auf iPhone oder iPad bestätigst du die Bildschirmaufnahme, wenn danach gefragt wird.",
+    "step4": "Der Bildschirm erscheint nach ein paar Sekunden hier als Quelle. Du kannst ihn in jeder Szene nutzen.",
+    "qrHint": "Scanne den Code mit dem Handy oder Tablet, um die Adresse dorthin zu bekommen.",
+    "keepPrivate": "Halte diese Adresse geheim: Wer sie hat, kann ein Bild in deinen Stream senden.",
+    "sharedSlot": "Nur eine externe Quelle gleichzeitig: Sie nutzt denselben Platz wie OBS.",
+    "soundNote": "Ton: iPhone und iPad senden das Mikrofon oder den Ton von Apps, die das erlauben.",
+    "delayNote": "Das Bild kommt etwas später an als Kamera und Mikrofon im Studio.",
+    "waiting": "Warte, bis sich das Gerät verbindet…",
+    "connected": "Das Gerät ist verbunden."
+  },
   "createForm": {
     "beta": "Beta",
     "introPhoneTitle": "Live gehen",

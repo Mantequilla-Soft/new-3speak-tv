@@ -292,6 +292,24 @@
       "cta": "获取 3Speak Pro"
     }
   },
+  "phoneSource": {
+    "menuItem": "手机或平板屏幕",
+    "menuHint": "显示由免费应用发送的 iPhone、iPad 或安卓设备屏幕",
+    "sourceName": "手机屏幕",
+    "title": "手机或平板屏幕",
+    "lead": "通过互联网，在直播中显示 iPhone、iPad 或安卓设备的屏幕。只需在该设备上安装一个免费的屏幕直播应用。",
+    "step1": "在手机或平板上安装 Larix Screencaster（免费，App Store 或 Google Play）。",
+    "step2": "在 Larix 中添加一个连接，选择 WebRTC (WHIP)，把下面的地址粘贴为 URL。令牌留空。",
+    "step3": "在 Larix 中开始直播。在 iPhone 或 iPad 上，出现提示时请确认屏幕录制。",
+    "step4": "几秒内屏幕会作为来源出现在这里，可用于任何场景。",
+    "qrHint": "用手机或平板扫描此码，即可在设备上获得地址。",
+    "keepPrivate": "请勿泄露此地址：任何拿到它的人都能向你的直播发送画面。",
+    "sharedSlot": "同一时间只能有一个外部来源：与 OBS 共用同一位置。",
+    "soundNote": "声音：iPhone 和 iPad 会发送麦克风声音，或允许共享声音的应用的声音。",
+    "delayNote": "画面会比工作室的摄像头和麦克风稍晚到达。",
+    "waiting": "正在等待设备连接…",
+    "connected": "设备已连接。"
+  },
   "createForm": {
     "beta": "测试版",
     "introPhoneTitle": "开播",

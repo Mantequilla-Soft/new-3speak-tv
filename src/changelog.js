@@ -18,6 +18,18 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.71',
+    category: 'live',
+    date: '2026-11-15',
+    summary: 'Show your phone or tablet screen live: in the stream studio, open Add source, then Phone or tablet screen, and use a free app.',
+  },
+  {
+    version: '2.0.70',
+    category: 'live',
+    date: '2026-11-15',
+    summary: 'Live streams now stay smooth for big audiences and weak connections; those viewers see the stream a few seconds later.',
+  },
+  {
     version: '2.0.69',
     category: 'general',
     date: '2026-11-15',

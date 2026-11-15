@@ -293,6 +293,24 @@
       "cta": "3Speak Pro nemen"
     }
   },
+  "phoneSource": {
+    "menuItem": "Scherm van telefoon of tablet",
+    "menuHint": "Toon het scherm van een iPhone, iPad of Android-apparaat, verstuurd met een gratis app",
+    "sourceName": "Telefoonscherm",
+    "title": "Scherm van telefoon of tablet",
+    "lead": "Toon het scherm van een iPhone, iPad of Android-apparaat in je stream, via internet. Je hebt een gratis app voor schermuitzending op dat apparaat nodig.",
+    "step1": "Installeer Larix Screencaster op de telefoon of tablet (gratis, App Store of Google Play).",
+    "step2": "Voeg in Larix een verbinding toe, kies WebRTC (WHIP) en plak het adres hieronder als URL. Laat het token leeg.",
+    "step3": "Start de uitzending in Larix. Op een iPhone of iPad bevestig je de schermopname als daarom wordt gevraagd.",
+    "step4": "Het scherm verschijnt hier binnen een paar seconden als bron. Gebruik het in elke scène.",
+    "qrHint": "Scan dit met de telefoon of tablet om het adres daar te krijgen.",
+    "keepPrivate": "Houd dit adres privé: iedereen die het heeft, kan beeld naar je stream sturen.",
+    "sharedSlot": "Eén externe bron tegelijk: deze gebruikt dezelfde plek als OBS.",
+    "soundNote": "Geluid: iPhone en iPad sturen de microfoon, of het geluid van apps die dat toestaan.",
+    "delayNote": "Het beeld komt iets later binnen dan je studiocamera en microfoon.",
+    "waiting": "Wachten tot het apparaat verbinding maakt…",
+    "connected": "Het apparaat is verbonden."
+  },
   "createForm": {
     "beta": "bèta",
     "introPhoneTitle": "Live gaan",

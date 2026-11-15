@@ -292,6 +292,24 @@
       "cta": "3Speak Pro 받기"
     }
   },
+  "phoneSource": {
+    "menuItem": "휴대폰 또는 태블릿 화면",
+    "menuHint": "무료 앱으로 보내는 iPhone, iPad 또는 Android 기기 화면을 보여 줍니다",
+    "sourceName": "휴대폰 화면",
+    "title": "휴대폰 또는 태블릿 화면",
+    "lead": "iPhone, iPad 또는 Android 기기의 화면을 인터넷을 통해 방송에 보여 줄 수 있어요. 그 기기에 무료 화면 방송 앱만 있으면 됩니다.",
+    "step1": "휴대폰이나 태블릿에 Larix Screencaster를 설치하세요(무료, App Store 또는 Google Play).",
+    "step2": "Larix에서 연결을 추가하고 WebRTC (WHIP)를 선택한 다음, 아래 주소를 URL에 붙여 넣으세요. 토큰은 비워 두세요.",
+    "step3": "Larix에서 방송을 시작하세요. iPhone이나 iPad에서는 물어보면 화면 기록을 허용하세요.",
+    "step4": "몇 초 안에 화면이 여기에 소스로 나타납니다. 어떤 장면에서든 쓸 수 있어요.",
+    "qrHint": "휴대폰이나 태블릿으로 스캔하면 그 기기에서 주소를 받을 수 있어요.",
+    "keepPrivate": "이 주소는 비공개로 유지하세요. 주소를 가진 사람은 누구나 방송에 영상을 보낼 수 있어요.",
+    "sharedSlot": "외부 소스는 한 번에 하나만: OBS와 같은 자리를 사용합니다.",
+    "soundNote": "소리: iPhone과 iPad는 마이크 또는 허용된 앱의 소리를 보냅니다.",
+    "delayNote": "영상은 스튜디오 카메라와 마이크보다 조금 늦게 도착합니다.",
+    "waiting": "기기 연결을 기다리는 중…",
+    "connected": "기기가 연결되었습니다."
+  },
   "createForm": {
     "beta": "베타",
     "introPhoneTitle": "라이브 시작",
