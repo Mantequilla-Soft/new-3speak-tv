@@ -1,5 +1,5 @@
 import { Icon } from '../components/v2/Icon';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { lazy, useEffect, useMemo, useRef, useState } from 'react';
 import { getHiveUrl } from '../utils/hiveNode';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -15,6 +15,7 @@ import PayoutAmount from '../components/PayoutAmount/PayoutAmount';
 import UpvoteCount from '../components/UpvoteCount/UpvoteCount';
 import CommentVoteTooltip from '../components/tooltip/CommentVoteTooltip';
 import TipModal from '../components/tip-reward/TipModal';
+import BoostWall from '../components/boosts/BoostWall';
 import AddToPlaylistModal from '../components/AddToPlaylistModal/AddToPlaylistModal';
 import AccountImg from '../components/HiveAvatar/AccountImg';
 import Waveform from '../components/GlobalAudioPlayer/Waveform';
@@ -28,7 +29,16 @@ import { cx } from '../components/v2/helpers';
 import { canSubscribe, setCommunitySubscription } from '../components/Communities/communitySubscribe';
 import { fixVideoThumbnail, fallbackImg } from '../utils/fixThumbnails';
 import { isLoggedIn } from '../hive-api/aioha';
+import MountWhenOpened from '../components/common/LazyMount';
+import useTimelineScrub from '../hooks/useTimelineScrub';
+import ScrubOverlay from '../components/GlobalAudioPlayer/ScrubOverlay';
+import { seekKeyTarget, timelineSliderProps } from '../lib/sliderKeys';
 import './AudioPost.scss';
+import EpisodeBadge from '../components/Episodes/EpisodeBadge';
+import { episodeNumbersOfMeta } from '../utils/episodeNumbers';
+
+// Only the creator ever opens it, so it loads on the first Edit.
+const EditAudioModal = lazy(() => import('../components/AudioEdit/EditAudioModal'));
 
 // Every toast from this module is headed "Post"; the message becomes the
 // line under it. See utils/toast.js.
@@ -91,8 +101,10 @@ function AudioPost() {
   const [voted, setVoted] = useState(false);
   const [voteCount, setVoteCount] = useState(0);
   const [isTipOpen, setIsTipOpen] = useState(false);
+  const [isBoostOpen, setIsBoostOpen] = useState(false);
   const [playlistOpen, setPlaylistOpen] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
   // The panel beside the player (18b): the queue, or the notes (comments).
   const [sideTab, setSideTab] = useState('queue');
   // The community it was posted in, for the strip on top (18b).
@@ -179,12 +191,12 @@ function AudioPost() {
     else audioPlay(audioDoc, [audioDoc]);
   };
 
-  const onSeek = (e) => {
-    if (!isThisCurrent || !total) return;
-    const rect = e.currentTarget.getBoundingClientRect();
-    const time = ((e.clientX - rect.left) / rect.width) * total;
-    audioRequestSeek(time);
-  };
+  // Press and drag on the progress line (no waveform): the seek lands on release.
+  const scrub = useTimelineScrub({
+    duration: total,
+    disabled: !isThisCurrent,
+    onSeek: (sec) => { if (isThisCurrent && total) audioRequestSeek(sec); },
+  });
 
   // Build a videoDetails-shaped object so CommentSection can consume it
   const videoDetails = useMemo(() => {
@@ -378,7 +390,11 @@ function AudioPost() {
             <img className="audio-post-cover" src={cover} alt="" onError={(e) => { e.currentTarget.src = fallbackImg; }} />
             <div className="audio-post-hero-body">
               <div className="v2-eyebrow is-cyan audio-post-eyebrow">{eyebrow}</div>
-              <h1 className="audio-post-title">{title}</h1>
+              <h1 className="audio-post-title">
+                {/* "S2 E5" from the post itself (utils/episodeNumbers.js) */}
+                <EpisodeBadge {...episodeNumbersOfMeta(post?.json_metadata)} className="audio-post-episode" />
+                {title}
+              </h1>
               <div className="audio-post-by">
                 <Link to={`/@${author}?tab=audio`} className="audio-post-by__who">
                   <img className="audio-post-by__avatar" src={`/img/u/${author}/avatar/small`} alt="" onError={(e) => { e.currentTarget.style.visibility = 'hidden'; }} />
@@ -405,14 +421,27 @@ function AudioPost() {
                     samples={samples}
                     audioRef={clockRef}
                     duration={total}
+                    currentTime={elapsed}
                     playhead={isThisCurrent}
                     pins={pins}
                     onPin={(p) => { seekTo(p.at); setSideTab('notes'); }}
                     onSeek={seekFraction}
                   />
                 ) : (
-                  <div className="audio-post-progress" onClick={onSeek}>
-                    <div className="audio-post-progress-fill" style={{ width: `${total > 0 ? (elapsed / total) * 100 : 0}%` }} />
+                  <div
+                    className={`audio-post-progress${scrub.dragging ? ' is-scrubbing' : ''}`}
+                    {...timelineSliderProps({ value: scrub.dragging ? scrub.time : elapsed, max: total, label: t('playerKeys.seekLabel'), t })}
+                    onKeyDown={(e) => {
+                      if (e.ctrlKey || e.metaKey || e.altKey) return;
+                      const to = seekKeyTarget(e.key, elapsed, total);
+                      if (to === null) return;
+                      e.preventDefault();
+                      seekFraction(to / total);
+                    }}
+                    {...scrub.handlers}
+                  >
+                    <div className="audio-post-progress-fill" style={{ width: `${total > 0 ? Math.min(100, (scrub.dragging ? scrub.fraction : elapsed / total) * 100) : 0}%` }} />
+                    <ScrubOverlay fraction={scrub.fraction} time={scrub.time} />
                   </div>
                 )}
               </div>
@@ -441,7 +470,10 @@ function AudioPost() {
                   <AudioHypeButton author={author} permlink={permlink} variant="tile" />
                   <DockTile icon="chat_bubble" label={String(commentCount)} fill={false} onClick={showComments} aria-label={t('audio.item.comments')} title={t('audio.item.comments')} />
                   {loggedIn && <DockTile icon="playlist_add" label={t('common.actions.save')} fill={false} onClick={() => setPlaylistOpen(true)} title={t('engagement.cardMenu.addToPlaylist')} />}
-                  {!isOwner && <DockTile icon="volunteer_activism" label={t('audio.post.tip')} fill={false} onClick={() => setIsTipOpen(true)} />}
+                  {/* Nobody tips themselves: the creator gets Edit in its place, as on the watch page. */}
+                  {isOwner
+                    ? <DockTile icon="edit" label={t('common.actions.edit')} fill={false} onClick={() => setEditOpen(true)} title={t('audio.edit.editTitle')} />
+                    : <DockTile icon="volunteer_activism" label={t('audio.post.tip')} fill={false} onClick={() => setIsTipOpen(true)} />}
                   <DockTile icon="ios_share" label={t('common.actions.share')} fill={false} active={shareOpen} tone="cyan" onClick={() => setShareOpen(true)} aria-haspopup="dialog" />
                 </div>
               </div>
@@ -531,6 +563,13 @@ function AudioPost() {
         <BlogContent author={author} permlink={permlink} description={post.body} defaultExpanded />
       </div>
 
+      {/* The boost wall (lib/boosts.js): boosts with their messages, and sats
+          streamed while people listened. */}
+      <section className="audio-post-boosts" aria-label={t('boosts.wall.title')}>
+        <h2>{t('boosts.wall.title')}</h2>
+        <BoostWall author={author} permlink={permlink} onBoost={!isOwner ? () => setIsBoostOpen(true) : undefined} />
+      </section>
+
       <div className="audio-post-comments" ref={commentsRef}>
         <CommentSection
           videoDetails={videoDetails}
@@ -561,6 +600,9 @@ function AudioPost() {
       {isTipOpen && (
         <TipModal recipient={author} permlink={permlink} memoLink={`https://3speak.tv/audio/${author}/${permlink}`} isOpen={isTipOpen} onClose={() => setIsTipOpen(false)} />
       )}
+      {isBoostOpen && (
+        <TipModal boost recipient={author} permlink={permlink} memoLink={`https://3speak.tv/audio/${author}/${permlink}`} isOpen onClose={() => setIsBoostOpen(false)} />
+      )}
 
       {playlistOpen && (
         <AddToPlaylistModal
@@ -571,6 +613,27 @@ function AudioPost() {
           videoTitle={title}
           audioCategory={audioDoc?.category || ''}
         />
+      )}
+
+      {isOwner && (
+        <MountWhenOpened when={editOpen} name="edit audio">
+          <EditAudioModal
+            isOpen={editOpen}
+            onClose={() => setEditOpen(false)}
+            author={author}
+            permlink={permlink}
+            rowTitle={audioDoc?.title || ''}
+            onSaved={(changes) => {
+              // Show the edit at once; the chain and the audio row catch up behind it.
+              setPost((p) => (p ? { ...p, title: changes.title, body: changes.body, json_metadata: changes.json_metadata } : p));
+              setAudioDoc((d) => (d ? {
+                ...d,
+                ...(changes.title ? { title: changes.title } : {}),
+                ...(changes.cover ? { thumbnail_url: changes.cover } : {}),
+              } : d));
+            }}
+          />
+        </MountWhenOpened>
       )}
 
       {shareOpen && audioDoc && (

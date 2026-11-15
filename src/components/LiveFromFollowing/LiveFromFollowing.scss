@@ -1,0 +1,46 @@
+@use "../../styles/v2" as v2;
+
+// "Live now from people you follow": the follow strip (NewFromFollowing.scss)
+// with the accent of live (a dot before the summary, a LIVE tag on each chip)
+// instead of cyan, so the two strips never read as one.
+.new-from-following.live-from-following {
+  background: color-mix(in srgb, var(--accent) 6%, var(--surface));
+  border-color: color-mix(in srgb, var(--accent) 25%, transparent);
+
+  .nff-summary {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .lff-dot {
+    flex: none;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .lff-chip {
+    max-width: 280px;
+    .nff-chip-text {
+      min-width: 0;
+      span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    }
+  }
+
+  .lff-tag {
+    flex: none;
+    padding: 0 6px;
+    border-radius: var(--r-sm);
+    background: var(--accent);
+    color: var(--on-accent);
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    line-height: 18px;
+  }
+}
+
+// On Home it sits above the two strips (HomeGrouped.jsx), full width.
+.home-grouped-container > .live-from-following { margin: 20px 0 0; }

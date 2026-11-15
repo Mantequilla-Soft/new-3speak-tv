@@ -43,7 +43,16 @@ vi.mock('../../../src/components/AudioItem/AudioItemView', () => ({ audioItemPat
 // Children with their own data fetching, each tested on its own.
 vi.mock('../../../src/components/PayoutAmount/PayoutAmount', () => ({ default: ({ amount }) => <span>${amount}</span> }))
 vi.mock('../../../src/components/UpvoteCount/UpvoteCount', () => ({ default: ({ count }) => <span>{count} votes</span> }))
-vi.mock('../../../src/components/tooltip/CommentVoteTooltip', () => ({ default: () => null }))
+// The shared vote popup (weight slider, Aioha vote) has its own tests; here it
+// shows what it was opened for and can report a vote that went through.
+vi.mock('../../../src/components/tooltip/CommentVoteTooltip', () => ({
+  default: (p) => (p.showTooltip ? (
+    <div data-testid="vote-popup">
+      {p.author}/{p.permlink}
+      <button type="button" onClick={() => p.onVoteSuccess?.()}>Confirm vote</button>
+    </div>
+  ) : null),
+}))
 vi.mock('../../../src/components/AddToPlaylistModal/AddToPlaylistModal', () => ({ default: () => null }))
 vi.mock('../../../src/components/tip-reward/TipModal', () => ({ default: () => null }))
 vi.mock('../../../src/components/playVideo/BlogContent', () => ({ default: () => <div>Post body</div> }))
@@ -61,6 +70,7 @@ const downloads = await import('../../../src/lib/podcastDownloads')
 const pip = await import('../../../src/components/GlobalAudioPlayer/AudioPip')
 const { CHECKER_URL } = await import('../../../src/utils/config')
 const { useAppStore } = await import('../../../src/lib/store')
+const { _resetListenHistory } = await import('../../../src/lib/listenHistory')
 const { notifyMediaPlay } = await import('../../../src/utils/mediaCoordinator')
 const { default: GlobalAudioPlayer } = await import('../../../src/components/GlobalAudioPlayer/GlobalAudioPlayer.jsx')
 const { default: EmbedCodeHost } = await import('../../../src/components/Embed/EmbedCodeModal.jsx')
@@ -140,8 +150,9 @@ beforeEach(() => {
     audioCurrent: null, audioQueue: [], audioAutoplayList: [], audioLast: null, audioIsPlaying: false,
     audioRestoredAt: null, audioStartAt: null, audioClipEnd: null, audioCurrentTime: 0, audioDuration: 0,
     audioExpanded: false, audioShowQueue: false, audioDock: null, audioDockOpener: null,
-    authenticated: false, user: null,
+    authenticated: false, user: null, watchHistoryEnabled: true,
   })
+  _resetListenHistory()
   axios.get.mockReset().mockResolvedValue({ data: {} })
   axios.post.mockReset().mockResolvedValue({ data: {} })
   aioha.isLoggedIn.mockReturnValue(false)
@@ -315,6 +326,29 @@ describe('the audio player: swipes on a phone', () => {
     expect(audio().currentTime).toBe(40)
   })
 
+  it('a press on the timeline scrubs it and is never taken for a swipe', () => {
+    if (!window.PointerEvent) {
+      window.PointerEvent = class extends MouseEvent {
+        constructor(type, init = {}) { super(type, init); this.pointerId = init.pointerId ?? 1; this.pointerType = init.pointerType ?? 'mouse' }
+      }
+    }
+    mount()
+    play(A)
+    loaded()
+    at(40)
+    const line = bar().querySelector('.audio-np-progress[role="slider"]')
+    swipe(line, -90, 4)
+    expect(audio().currentTime).toBe(40)
+    vi.spyOn(line, 'getBoundingClientRect').mockReturnValue({ left: 0, width: 400, top: 0, height: 4, right: 400, bottom: 4 })
+    fireEvent.pointerDown(line, { clientX: 100, button: 0, pointerId: 3, pointerType: 'touch' })
+    fireEvent.pointerMove(line, { clientX: 300, pointerId: 3 })
+    expect(line.querySelector('.tl-scrub-tip')).toHaveTextContent('1:30')
+    expect(audio().currentTime).toBe(40)
+    fireEvent.pointerUp(line, { clientX: 300, pointerId: 3 })
+    expect(audio().currentTime).toBe(90)
+    expect(store().audioExpanded).toBeFalsy()
+  })
+
   it('up opens the full player, and down on the full player collapses it', () => {
     mount()
     play(A)
@@ -435,7 +469,18 @@ describe('the audio player: previous, next and the end of a track', () => {
     at(31)
     at(40)
     expect(recordWatch).toHaveBeenCalledTimes(1)
-    expect(recordWatch).toHaveBeenCalledWith('listener', 'badadib', 'audio-1')
+    expect(recordWatch).toHaveBeenCalledWith('listener', 'badadib', 'audio-1', { short: false })
+  })
+
+  it('with "Save history" off, a listened track is not recorded', async () => {
+    const { recordWatch } = await import('../../../src/utils/watchHistory')
+    act(() => useAppStore.setState({ user: 'listener', watchHistoryEnabled: false }))
+    mount()
+    play(A)
+    loaded()
+    at(31)
+    at(60)
+    expect(recordWatch).not.toHaveBeenCalled()
   })
 })
 
@@ -870,6 +915,73 @@ describe('the audio player: the opened player and its menus', () => {
   })
 })
 
+// The owner, 2026-11-15: "I can not upvote an audio from the player. There is
+// no upvote button here." A 3Speak track is a Hive post: the full player's row
+// and the bar's menu have Vote, opening the same vote popup as the watch page.
+describe('the audio player: voting on the track post', () => {
+  const posted = track(5, { post_permlink: 'post-5' })
+  const signIn = () => {
+    aioha.isLoggedIn.mockReturnValue(true)
+    act(() => useAppStore.setState({ authenticated: true, user: 'fan' }))
+  }
+
+  it('the full player has a Vote tile next to Hype that opens the vote popup for the post', async () => {
+    signIn()
+    hive.getContent = vi.fn(async () => ({ active_votes: [{ voter: 'x' }], pending_payout_value: '0.10 HBD' }))
+    act(() => useAppStore.setState({ audioExpanded: true }))
+    const { user } = mount()
+    play(posted)
+    const tile = await screen.findByRole('button', { name: 'Vote' })
+    await waitFor(() => expect(tile).toHaveTextContent('1'))
+    expect(tile).toHaveAttribute('aria-pressed', 'false')
+    await user.click(tile)
+    expect(screen.getByTestId('vote-popup')).toHaveTextContent('badadib/post-5')
+    // The vote went through: marked voted, one more vote.
+    await user.click(screen.getByRole('button', { name: 'Confirm vote' }))
+    expect(screen.queryByTestId('vote-popup')).toBeNull()
+    expect(tile).toHaveAttribute('aria-pressed', 'true')
+    expect(tile).toHaveTextContent('2')
+  })
+
+  it('shows as voted when the listener already voted', async () => {
+    signIn()
+    hive.getContent = vi.fn(async () => ({ active_votes: [{ voter: 'fan' }] }))
+    act(() => useAppStore.setState({ audioExpanded: true }))
+    mount()
+    play(posted)
+    await waitFor(() => expect(screen.getByRole('button', { name: 'Vote' })).toHaveAttribute('aria-pressed', 'true'))
+  })
+
+  it('signed out, Vote says how to vote instead', async () => {
+    act(() => useAppStore.setState({ audioExpanded: true }))
+    const { user } = mount()
+    play(posted)
+    await user.click(screen.getByRole('button', { name: 'Vote' }))
+    expect(toastMessages(toast.error)).toContain('Sign in to vote')
+    expect(screen.queryByTestId('vote-popup')).toBeNull()
+  })
+
+  it('the bar\'s menu has Vote too', async () => {
+    signIn()
+    const { user } = mount()
+    play(posted)
+    await user.click(screen.getByRole('button', { name: 'More options' }))
+    const menu = screen.getAllByRole('dialog').find((d) => within(d).queryByRole('button', { name: /Close player/ }))
+    await user.click(within(menu).getByRole('button', { name: /^Vote/ }))
+    expect(screen.getByTestId('vote-popup')).toHaveTextContent('badadib/post-5')
+  })
+
+  it('no Vote for an outside podcast episode (not a Hive post) or a track without its post', async () => {
+    signIn()
+    act(() => useAppStore.setState({ audioExpanded: true }))
+    mount()
+    play({ _id: 'ep-7', external: true, src: 'https://pod.example/ep7.mp3', title: 'Episode seven', show: 'A show', show_id: 'feed-9', duration: 900 })
+    expect(screen.queryByRole('button', { name: 'Vote' })).toBeNull()
+    play(A)
+    expect(screen.queryByRole('button', { name: 'Vote' })).toBeNull()
+  })
+})
+
 describe('the audio player: requests from other pages', () => {
   it('a page can toggle playback and seek without touching the player', () => {
     mount()
@@ -970,6 +1082,34 @@ describe('the audio player: transcripts and chapters', () => {
   })
 })
 
+describe('the audio player: chapters of a 3Speak track', () => {
+  it('reads them from the track\'s own post (the audio editor\'s list) and shows the same chapter tab', async () => {
+    hive.getContent = vi.fn(async () => ({
+      body: 'https://audio.3speak.tv/play?a=audio-7\n\nNotes\n\n0:00 Intro\n1:00 The garden\n2:30 Questions',
+      json_metadata: JSON.stringify({ audio: { type: 'podcast' } }),
+      active_votes: [], children: 0,
+    }))
+    act(() => useAppStore.setState({ audioExpanded: true }))
+    const { user } = mount()
+    play(track(7, { post_permlink: 'garden-talk', duration: 300 }))
+    const list = await screen.findByRole('region', { name: 'Chapters' })
+    expect(hive.getContent).toHaveBeenCalledWith('badadib', 'garden-talk')
+    expect(podcastMedia.fetchChapters).not.toHaveBeenCalled()
+    expect(within(list).getByRole('button', { name: /Intro/ })).toHaveAttribute('aria-current', 'true')
+    await user.click(within(list).getByRole('button', { name: 'Next chapter' }))
+    expect(audio().currentTime).toBe(60)
+  })
+
+  it('a post without a list has no chapter tab', async () => {
+    hive.getContent = vi.fn(async () => ({ body: 'Just notes', json_metadata: '{}', active_votes: [], children: 0 }))
+    act(() => useAppStore.setState({ audioExpanded: true }))
+    mount()
+    play(track(8, { post_permlink: 'plain' }))
+    await waitFor(() => expect(hive.getContent).toHaveBeenCalled())
+    expect(screen.queryByRole('region', { name: 'Chapters' })).not.toBeInTheDocument()
+  })
+})
+
 describe('the audio player: an outside podcast episode', () => {
   const ep = { _id: 'ep-3', external: true, src: 'https://pod.example/ep3.mp3', title: 'Episode three', show: 'A show', show_id: 'feed-9', summary: 'What this one is about', duration: 900 }
 
@@ -992,6 +1132,49 @@ describe('the audio player: an outside podcast episode', () => {
     play(ep)
     loaded(900)
     expect(audio().currentTime).toBe(321)
+  })
+})
+
+describe('the audio player: a video heard as audio (lib/videoAsAudio.js)', () => {
+  const VIDEO = {
+    _id: 'video:badadib/test-stream', video: true, owner: 'badadib', post_permlink: 'test-stream', title: 'Test stream',
+    thumbnail_url: '', duration: 104, src: 'https://play.example/hls?u=480', mime: 'application/vnd.apple.mpegurl',
+  }
+  beforeEach(() => act(() => useAppStore.setState({ audioExpanded: true })))
+  afterEach(() => { HTMLMediaElement.prototype.canPlayType = () => '' })
+
+  it('plays the HLS rendition natively where the browser can and there is no MSE, with no audio download and no effects', async () => {
+    vi.stubGlobal('MediaSource', undefined)
+    vi.stubGlobal('ManagedMediaSource', undefined)
+    HTMLMediaElement.prototype.canPlayType = (type) => (/mpegurl/i.test(type) ? 'maybe' : '')
+    mount()
+    play(VIDEO)
+    expect(audio()).toHaveAttribute('src', 'https://play.example/hls?u=480')
+    expect(screen.getAllByText('Test stream')[0]).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Download' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Audio effects' })).not.toBeInTheDocument()
+  })
+
+  it('says so when neither hls.js nor the browser can play it', async () => {
+    vi.stubGlobal('MediaSource', undefined)
+    vi.stubGlobal('ManagedMediaSource', undefined)
+    mount()
+    play(VIDEO)
+    await waitFor(() => expect(toastMessages(toast.error)).toContain("This browser can't play this video as audio."))
+  })
+
+  it('with MSE, the effects stay (hls.js feeds the element, Web Audio can read it)', () => {
+    vi.stubGlobal('MediaSource', function MediaSource() {})
+    mount()
+    play(VIDEO)
+    expect(screen.getByRole('button', { name: 'Audio effects' })).toBeInTheDocument()
+  })
+
+  it('its Hive post carries the votes and comments', async () => {
+    hive.getContent = vi.fn(async () => null)
+    mount()
+    play(VIDEO)
+    await waitFor(() => expect(hive.getContent).toHaveBeenCalledWith('badadib', 'test-stream'))
   })
 })
 

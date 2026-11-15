@@ -120,6 +120,14 @@ describe('a grid of video cards', () => {
     expect(c.querySelector('.card-body.is-own-channel')).not.toBeNull()
   })
 
+  it('a collab post says who it was made with, on a channel grid with both names', () => {
+    const { unmount } = mount({ videos: [video('badadib', 'lake-day', { collaborators: ['fan'] })] })
+    expect(screen.getByText('with fan')).toBeInTheDocument()
+    unmount()
+    mount({ videos: [video('badadib', 'lake-day', { collaborators: ['fan'] })], hideAuthor: true })
+    expect(screen.getByText('badadib with fan')).toBeInTheDocument()
+  })
+
   it('uses another link form for other prefixes, with the page\'s query', () => {
     mount({ videos: [video('badadib', 'clip')], linkPrefix: '/shorts', linkQuery: '&from=feed' })
     expect(card('Title clip')).toHaveAttribute('href', '/shorts?v=badadib/clip&from=feed')
@@ -307,5 +315,28 @@ describe('a grid of video cards', () => {
     m.canHover = false
     mount({ videos: [video('badadib', 'a')] })
     expect(within(card('Title a')).queryAllByRole('button')).toHaveLength(0)
+  })
+})
+
+describe('where a card was found (creator stats reach)', () => {
+  beforeEach(() => sessionStorage.clear())
+  const stored = () => JSON.parse(sessionStorage.getItem('3speak_open_src'))
+
+  it('a click tells the watch page the surface, from the path', async () => {
+    const { user } = renderWithProviders(<Card3 videos={[video('badadib', 'a')]} />, { route: '/t/music' })
+    await user.click(card('Title a'))
+    expect(stored()).toMatchObject({ k: 'badadib/a', s: 'tag' })
+  })
+
+  it('a Home tab passes its own surface', async () => {
+    const { user } = renderWithProviders(<Card3 videos={[video('badadib', 'a')]} surface="discover" />)
+    await user.click(card('Title a'))
+    expect(stored()).toMatchObject({ s: 'discover' })
+  })
+
+  it('live tiles are not counted', async () => {
+    const { user } = renderWithProviders(<Card3 videos={[video('badadib', 'room', { _liveStream: true, roomName: 'room' })]} />)
+    await user.click(card('Title room'))
+    expect(sessionStorage.getItem('3speak_open_src')).toBeNull()
   })
 })

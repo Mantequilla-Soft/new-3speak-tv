@@ -1,0 +1,110 @@
+{
+  "content": {
+    "streams": "Streams",
+    "audio": "Audio",
+    "podcasts": "Mga podcast"
+  },
+  "reach": {
+    "title": "Reach",
+    "impressions": "Impressions",
+    "ctr": "Click-through rate",
+    "ctrShort": "CTR {{ctr}}",
+    "clicks": "Clicks mula sa cards",
+    "opens": "Opens",
+    "empty": "Wala pang impressions sa panahong ito. Mula ngayon, binibilang ito tuwing nasa screen ng isang tao ang isa sa mga card mo nang isang segundo.",
+    "foundTitle": "Saan ito nakita ng mga manonood",
+    "shownTitle": "Saan ipinakita ang mga card mo",
+    "since": "Binibilang ang impressions mula sa sample ng page views at pinapalaki ayon sa proporsyon. Nagsimula ang pagbilang noong {{date}}.",
+    "sampled": "Binibilang ang impressions mula sa sample ng page views at pinapalaki ayon sa proporsyon.",
+    "detail": "{{impressions}} impressions · CTR {{ctr}}"
+  },
+  "sources": {
+    "home": "Home",
+    "discover": "Discover",
+    "following": "Fina-follow",
+    "new": "Bago",
+    "trending": "Trending",
+    "interests": "Mga Interes",
+    "search": "Search",
+    "channel": "Mga channel page",
+    "related": "Katabi ng ibang video",
+    "shorts": "Shorts",
+    "playlist": "Mga playlist",
+    "tag": "Tags",
+    "community": "Mga Komunidad",
+    "other": "Sa ibang bahagi ng 3Speak",
+    "direct": "Direkta o hindi alam",
+    "search_engine": "Mga search engine",
+    "social": "Social media",
+    "hive_apps": "Ibang Hive app",
+    "external": "Ibang website",
+    "embed": "Naka-embed sa ibang site"
+  },
+  "earnings": {
+    "title": "Kita",
+    "empty": "Wala pang kita sa panahong ito.",
+    "unavailable": "Hindi ma-load ang kita ngayon. Subukan ulit pagkalipas ng isang minuto.",
+    "chartLabel": "Kita bawat araw sa loob ng {{days}} araw, naka-stack ayon sa source",
+    "lastYear": "Ipinapakita ng Lahat ang huling 12 buwan.",
+    "note": "Sa HBD (mga isang US dollar). Ang Hive rewards at HIVE tips ay kinukuwenta sa presyo ng HIVE ngayon, nananatili sa sats ang Lightning.",
+    "sats_one": "{{count}} sat",
+    "sats_other": "{{count}} sats",
+    "sources": {
+      "votes": "Votes",
+      "curation": "Curation",
+      "tips": "Tips",
+      "ads": "Ads",
+      "boosts": "Stream boosts",
+      "lightning": "Lightning"
+    }
+  },
+  "export": {
+    "daily": "I-export ang kita bawat araw (CSV)",
+    "content": "I-export ang content table (CSV)",
+    "cols": {
+      "date": "Petsa",
+      "total": "Kabuuan",
+      "title": "Pamagat",
+      "url": "Link",
+      "published": "Na-publish",
+      "watchSeconds": "Watch time (segundo)",
+      "earned": "Kinita mula sa votes"
+    }
+  },
+  "inbox": {
+    "tab": "Comments",
+    "menu": "Comment inbox",
+    "title": "Comment inbox",
+    "sub_one": "Mga comment sa mga post mo mula sa huling {{count}} araw.",
+    "sub_other": "Mga comment sa mga post mo mula sa huling {{count}} araw.",
+    "filtersLabel": "Ipakita lang",
+    "views": {
+      "unanswered": "Hindi pa nasasagot",
+      "all": "Lahat",
+      "done": "Tapos na"
+    },
+    "flags": {
+      "question": "Mga tanong",
+      "firstTime": "Unang beses",
+      "supporter": "Supporters"
+    },
+    "answered": "Nasagot na",
+    "onPost": "sa",
+    "onReply": "sumagot sa iyo sa",
+    "reply": "Sumagot",
+    "replyVideo": "Sumagot gamit ang video",
+    "replyTo": "Sagutin si @{{author}}",
+    "send": "Ipadala",
+    "replied": "Nasa Hive na ang sagot mo.",
+    "replyFailed": "Hindi ma-post ang sagot. Subukan ulit.",
+    "markDone": "Markahang tapos",
+    "undone": "I-undo",
+    "doneToast": "Minarkahang tapos.",
+    "doneFailed": "Hindi ito ma-save. Subukan ulit.",
+    "error": "Hindi ma-load ang comments.",
+    "retry": "Subukan ulit",
+    "allAnswered": "Nasagot mo na ang lahat.",
+    "empty": "Walang comments dito.",
+    "supportersNote": "Ang supporters ay nag-vote sa mga post mo sa huling 12 buwan o nag-tip sa iyo sa 3Speak. Ang unang beses ay ang una nilang comment sa alinman sa mga post mo."
+  }
+}

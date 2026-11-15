@@ -1,0 +1,27 @@
+{
+  "vote": {
+    "added": "Twój głos dodał około ${{value}} do tego posta i przy wypłacie powinien przynieść ci około ${{earn}} z kuracji.",
+    "addedNoCuration": "Twój głos dodał około ${{value}} do tego posta.",
+    "addedTagged": "Oznaczono „{{tag}}”. Twój głos dodał około ${{value}} i powinien przynieść ci około ${{earn}} z kuracji."
+  },
+  "page": {
+    "title": "Kuracja",
+    "sub": "Twoje wybory w 3Speak, ostatnie dni: {{days}}",
+    "subOther": "Wybory w 3Speak, ostatnie dni: {{days}}",
+    "picks": "Wybory",
+    "earned": "Zarobione na kuracji",
+    "early": "Znalezione wcześnie",
+    "earnedValue": "{{hp}} HP",
+    "rule": "„Znalezione wcześnie” oznacza, że głosy przed twoim miały najwyżej {{share}}% wartości głosów posta, a liczba głosów pod postem doszła potem co najmniej do {{votes}}.",
+    "votedAt": "Głos oddany {{when}}",
+    "weight": "Głos {{weight}}%",
+    "rank": "Głos {{rank}} z {{votes}}",
+    "reward": "+{{hp}} HP",
+    "pending": "Wypłata później",
+    "badge": "Znalezione wcześnie",
+    "empty": "W tym okresie brak głosów na filmy, shorts ani audio w 3Speak.",
+    "loadFailed": "Nie udało się wczytać historii kuracji. Spróbuj ponownie za minutę.",
+    "open": "Kuracja",
+    "note": "Nagrody kuratorskie są wypłacane w Hive Power przy wypłacie posta, 7 dni po jego publikacji."
+  }
+}

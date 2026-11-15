@@ -909,6 +909,7 @@ const KIND_COPY = {
   videos: { titleKey: 'settings.notifications.kinds.videos.title', descKey: 'settings.notifications.kinds.videos.desc' },
   shorts: { titleKey: 'settings.notifications.kinds.shorts.title', descKey: 'settings.notifications.kinds.shorts.desc' },
   audio: { titleKey: 'settings.notifications.kinds.audio.title', descKey: 'settings.notifications.kinds.audio.desc' },
+  live: { titleKey: 'social.push.live.title', descKey: 'social.push.live.desc' },
   podcasts: { titleKey: 'settings.notifications.kinds.podcasts.title', descKey: 'settings.notifications.kinds.podcasts.desc' },
   replies: { titleKey: 'settings.notifications.kinds.replies.title', descKey: 'settings.notifications.kinds.replies.desc' },
   mentions: { titleKey: 'settings.notifications.kinds.mentions.title', descKey: 'settings.notifications.kinds.mentions.desc' },
@@ -920,7 +921,7 @@ const KIND_COPY = {
 // The two groups answer different questions: what other people published, and
 // what happened to you.
 const KIND_GROUPS = [
-  { labelKey: 'settings.notifications.groups.creators', kinds: ['videos', 'shorts', 'audio', 'podcasts'] },
+  { labelKey: 'settings.notifications.groups.creators', kinds: ['videos', 'shorts', 'audio', 'live', 'podcasts'] },
   { labelKey: 'settings.notifications.groups.aboutYou', kinds: ['replies', 'mentions', 'follows', 'votes', 'reblogs'] },
 ];
 
@@ -1349,7 +1350,7 @@ export default function SettingsModal({ isOpen, onClose, dropdown = null, leavin
     connections: (
       <>
         {/* Order (owner 2026-11-12): linked profiles, support links, Lightning. */}
-        {settingsUser && <AddSocialLink_modal isOpen inline hiveUsername={settingsUser} onClose={() => {}} />}
+        {settingsUser && <AddSocialLink_modal isOpen inline hiveUsername={settingsUser} onClose={() => {}} onNavigate={onClose} />}
         <SupportLinksSection />
         <LightningReceiveSection />
         {!rewardsVisible && <ReferralSection />}

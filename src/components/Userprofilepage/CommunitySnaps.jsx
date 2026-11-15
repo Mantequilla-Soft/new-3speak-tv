@@ -19,6 +19,7 @@ import { commentWithAioha } from '../../hive-api/aioha';
 import { fetchIncubationRepliesFor, fetchIncubationLikes } from '../../lib/incubation';
 import { useAppStore } from '../../lib/store';
 import SnapComposer from './SnapComposer';
+import PollCard from '../Polls/PollCard';
 import EmojiGifPicker from '../common/EmojiGifPicker/EmojiGifPicker';
 import { insertAtCursor, gifMarkdown } from '../../utils/composerInsert';
 import useEmojiShortcodes from '../../hooks/useEmojiShortcodes';
@@ -670,6 +671,9 @@ export function SnapCard({ snap, feedMode = false, showAuthor = false, onRemove,
           onReadMore={onOpenTab ? () => onOpenTab(snap.permlink) : undefined}
         />
       )}
+
+      {/* A poll snap: the body above is the question (lib/polls.js). */}
+      {!editing && snap.poll && <PollCard snap={snap} />}
 
       {!editing && tags.length > 0 && (
         <div className="snap-tags">

@@ -12,7 +12,7 @@ import { renderWithProviders } from '../components/_render.jsx'
 const m = vi.hoisted(() => ({}))
 vi.mock('sonner', async () => (await import('../components/_render.jsx')).sonnerModule())
 vi.mock('../../../src/hive-api/aioha', async () => (await import('../components/_render.jsx')).aiohaModule())
-vi.mock('../../../src/utils/hiveNode', () => ({ getHiveClient: () => ({ call: async () => [] }), getHiveUrl: () => 'https://api.hive.example' }))
+vi.mock('../../../src/utils/hiveNode', () => ({ getHiveClient: () => ({ call: async (...a) => (m.hiveCall ? m.hiveCall(...a) : []) }), getHiveUrl: () => 'https://api.hive.example' }))
 vi.mock('@hiveio/dhive', () => ({ Client: class { constructor() { this.database = { call: async () => [] } } } }))
 vi.mock('../../../src/lib/videoData', () => ({
   fetchVideoDetails: (...a) => m.details(...a),
@@ -25,12 +25,14 @@ vi.mock('@mantequilla-soft/3speak-player/react', () => {
   // Stable functions, as the SDK's hook hands out: the page's effects depend on them.
   const noop = () => {}
   const state = { duration: 0, currentTime: 0, paused: true }
+  m.sdkState = state
   const load = (...a) => m.load(...a)
+  const seek = (...a) => m.seek?.(...a)
   return {
     usePlayer: (opts) => {
       m.playerOpts = opts
       return {
-        ref: noop, state, player: m.player, load, pause: noop, togglePlay: noop, seek: noop,
+        ref: noop, state, player: m.player, load, pause: noop, togglePlay: noop, seek,
         setMuted: noop, setVolume: noop, togglePip: noop, setQuality: noop, setPlaybackRate: noop,
       }
     },
@@ -51,7 +53,11 @@ vi.mock('../../../src/hooks/useContentBatch', () => ({ useContentBatch: () => ({
 vi.mock('../../../src/hooks/useAiFilteredShorts', () => ({ useAiFilteredShorts: (list) => list }))
 vi.mock('../../../src/hooks/useGridMetrics', () => ({ useGridColumns: () => 1, useShortsPerRow: () => 3 }))
 vi.mock('../../../src/hooks/useStreamChatMirror', () => ({ useStreamChatMirror: () => null }))
-vi.mock('../../../src/utils/hiddenCreators', () => ({ isCreatorHidden: (...a) => m.hidden(...a), batchCheckHidden: async () => new Set() }))
+vi.mock('../../../src/utils/hiddenCreators', () => ({
+  isCreatorHidden: (...a) => m.hidden(...a),
+  batchCheckHidden: async () => new Set(),
+  batchCheckFlags: async () => ({ hidden: new Set(), muted: new Set(m.muted || []) }),
+}))
 vi.mock('../../../src/utils/reputation', () => ({ batchGetReputations: async () => new Map(), LOW_REP_THRESHOLD: 15 }))
 vi.mock('../../../src/utils/watchHistory', () => ({ recordWatch: vi.fn(), batchCheckWatched: async () => new Map() }))
 vi.mock('../../../src/utils/feedWatched', () => ({ dropWatchedFromFeeds: () => {} }))
@@ -61,9 +67,10 @@ vi.mock('../../../src/lib/recordView', () => ({ recordView: vi.fn() }))
 vi.mock('../../../src/lib/reportUnavailable', () => ({ reportVideoUnavailable: (...a) => m.report(...a) }))
 vi.mock('../../../src/lib/deadVideos', () => ({ useDeadVideos: () => new Set(), videoKey: (a, p) => `${a}/${p}` }))
 vi.mock('../../../src/lib/hiveRenderer', () => ({ getHiveRenderer: async () => (md) => md }))
+vi.mock('../../../src/lib/premieres', async (orig) => ({ ...(await orig()), fetchPremiere: (...a) => m.premiere(...a) }))
 // The page's children, each tested on its own.
 vi.mock('../../../src/components/playVideo/PlayVideo', () => ({
-  default: (p) => (
+  default: (p) => (m.playProps = p) && (
     <section aria-label="Player">
       <h1>{p.videoDetails?.title || 'Untitled while loading'}</h1>
       <video ref={p.videoRef} />
@@ -72,6 +79,9 @@ vi.mock('../../../src/components/playVideo/PlayVideo', () => ({
       {p.mediaBlocked && <button type="button" onClick={p.onRetryPlayback}>Retry playback</button>}
       {p.belowPlayerSlot}
       {p.recommendations}
+      {p.premiereTab && <p>{p.premiereTab.live ? 'Premiere chat live' : 'Premiere chat replay'}</p>}
+      {p.videoControls?.onToggleTheater && <button type="button" onClick={p.videoControls.onToggleTheater}>{p.videoControls.isTheater ? 'Theater on' : 'Theater off'}</button>}
+      {p.videoControls?.onToggleLoop && <button type="button" onClick={p.videoControls.onToggleLoop}>{p.videoControls.loop ? 'Loop on' : 'Loop off'}</button>}
     </section>
   ),
 }))
@@ -115,8 +125,12 @@ beforeEach(() => {
   m.details = vi.fn(async () => POST)
   m.hidden = vi.fn(async () => false)
   m.scheduled = vi.fn(async () => null)
+  m.premiere = vi.fn(async () => ({ premiere: null, skew: 0 }))
   m.report = vi.fn()
   m.load = vi.fn(async () => {})
+  m.hiveCall = null
+  m.muted = []
+  m.sdkState.duration = 0
   vi.stubGlobal('fetch', vi.fn(async () => ({ ok: true, json: async () => ({}) })))
   useAppStore.setState({ user: null, incubationHandle: null, inlineShorts: false })
 })
@@ -190,6 +204,57 @@ describe('the watch page', () => {
     m.scheduled = vi.fn(async () => ({ owner: 'badadib', title: 'Coming soon', body: '', createdAt: '2026-11-01T00:00:00Z' }))
     mount('/watch?v=badadib/later&scheduled=1')
     expect(await screen.findByRole('heading', { name: 'Coming soon' })).toBeInTheDocument()
+  })
+
+  describe('a premiere', () => {
+    const at = (ms) => new Date(Date.now() + ms).toISOString()
+    const premiere = (startMs, extra = {}) => ({
+      owner: 'badadib', permlink: 'lake-day', title: 'Lake premiere', thumbnail: null,
+      startAt: at(startMs), chatUntil: at(startMs + 20 * 60 * 1000), duration: 600, reminders: 0, ...extra,
+    })
+
+    it('before its start the watch address is the countdown, even with no post on Hive yet', async () => {
+      m.details = vi.fn(async () => null)
+      m.premiere = vi.fn(async () => ({ premiere: premiere(3600 * 1000), skew: 0 }))
+      mount()
+      expect(await screen.findByRole('heading', { name: 'Lake premiere' })).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: 'Sign in to get a reminder' })).toBeInTheDocument()
+      expect(screen.queryByText('Video not found or failed to load.')).not.toBeInTheDocument()
+      expect(screen.queryByRole('region', { name: 'Player' })).not.toBeInTheDocument()
+      expect(m.premiere).toHaveBeenCalledWith('badadib', 'lake-day')
+    })
+
+    it('an old post that is no premiere never asks the checker', async () => {
+      m.details = vi.fn(async () => ({ ...POST, created_at: '2020-01-01T00:00:00' }))
+      mount()
+      await screen.findByRole('heading', { name: 'A day at the lake' })
+      expect(m.premiere).not.toHaveBeenCalled()
+    })
+
+    it('running: the page plays it with the live premiere chat, from the shared second', async () => {
+      m.player = fakePlayer()
+      m.details = vi.fn(async () => ({ ...POST, json_metadata: JSON.stringify({ video: { premiere: true } }) }))
+      m.premiere = vi.fn(async () => ({ premiere: premiere(-90 * 1000), skew: 0 }))
+      mount()
+      expect(await screen.findByText('Premiere chat live')).toBeInTheDocument()
+      expect(screen.getByText(/Started 1 minute ago/)).toBeInTheDocument()
+      m.seek = vi.fn()
+      act(() => m.playerOpts.onReady())
+      await waitFor(() => expect(m.seek).toHaveBeenCalledTimes(1))
+      expect(m.seek.mock.calls[0][0]).toBeGreaterThanOrEqual(89)
+      expect(m.seek.mock.calls[0][0]).toBeLessThan(95)
+      expect(m.player.play).toHaveBeenCalled()
+      // Once per video: a second ready does not pull the viewer back.
+      act(() => m.playerOpts.onReady())
+      expect(m.seek).toHaveBeenCalledTimes(1)
+    })
+
+    it('over: the chat stays as the replay tab', async () => {
+      m.details = vi.fn(async () => ({ ...POST, json_metadata: JSON.stringify({ video: { premiere: true } }) }))
+      m.premiere = vi.fn(async () => ({ premiere: premiere(-3 * 3600 * 1000), skew: 0 }))
+      mount()
+      expect(await screen.findByText('Premiere chat replay')).toBeInTheDocument()
+    })
   })
 
   describe('when the player gives up', () => {
@@ -294,6 +359,36 @@ describe('the watch page', () => {
       expect(screen.getByTestId('location')).toHaveTextContent('/@badadib/forest-day?playlist=pl-1&pos=1')
     })
 
+    it('theater mode widens the page and is remembered for the next video', async () => {
+      const { user, container, unmount } = mount()
+      await screen.findByRole('heading', { name: 'A day at the lake' })
+      expect(container.querySelector('.watch-page')).not.toHaveClass('is-theater')
+      await user.click(screen.getByRole('button', { name: 'Theater off' }))
+      expect(container.querySelector('.watch-page')).toHaveClass('is-theater')
+      expect(localStorage.getItem('3speak-watch-theater')).toBe('1')
+      unmount()
+      const again = mount()
+      expect(again.container.querySelector('.watch-page')).toHaveClass('is-theater')
+      await again.user.click(screen.getByRole('button', { name: 'Theater on' }))
+      expect(localStorage.getItem('3speak-watch-theater')).toBeNull()
+    })
+
+    it('with loop on, the end starts the video again instead of moving on', async () => {
+      const playlist = { id: 'pl-1', name: 'Best of' }
+      const videos = [{ author: 'badadib', permlink: 'lake-day' }, { author: 'badadib', permlink: 'forest-day' }]
+      const { user } = renderWithProviders(<Watch />, {
+        route: { pathname: '/watch', search: '?v=badadib/lake-day&playlist=pl-1&pos=0', state: { playlist, videos, currentIndex: 0 } },
+        path: '/watch',
+      })
+      await screen.findByText('Playlist Best of, video 1 of 2')
+      await user.click(screen.getByRole('button', { name: 'Loop off' }))
+      expect(screen.getByRole('button', { name: 'Loop on' })).toBeInTheDocument()
+      m.player.emit('ended')
+      expect(m.player.seek).toHaveBeenCalledWith(0)
+      expect(m.player.play).toHaveBeenCalled()
+      expect(screen.getByTestId('location')).toHaveTextContent('/watch?v=badadib/lake-day')
+    })
+
     it('an "ended" in the middle of a video (an emptied buffer) is not a real end', async () => {
       const playlist = { id: 'pl-1', name: 'Best of' }
       const videos = [{ author: 'badadib', permlink: 'lake-day' }, { author: 'badadib', permlink: 'forest-day' }]
@@ -308,5 +403,30 @@ describe('the watch page', () => {
       m.player.emit('ended')
       expect(screen.getByTestId('location')).toHaveTextContent('/watch?v=badadib/lake-day')
     })
+  })
+})
+
+describe('comment moments on the timeline', () => {
+  const reply = (author, permlink, at) => ({ author, permlink, body: `by ${author}`, children: 0, json_metadata: JSON.stringify({ parentTimestamp: at }) })
+  const markers = () => (m.playProps?.videoControls?.markers || []).map((x) => x.label)
+
+  beforeEach(() => {
+    m.sdkState.duration = 600
+    m.muted = ['ai-agent-hunter']
+    m.hiveCall = async (_api, method) => (method === 'get_content_replies'
+      ? [reply('fan', 'c1', 10), reply('ai-agent-hunter', 'bot1', 20), reply('fan2', 'c2', 30)]
+      : [])
+  })
+  afterEach(() => { m.sdkState.duration = 0 })
+
+  it('leaves no marker for a bot on the comment mutelist', async () => {
+    mount()
+    await waitFor(() => expect(markers()).toEqual(['fan', 'fan2']))
+  })
+
+  it('keeps the viewer\'s own moments even when they are on the list', async () => {
+    useAppStore.setState({ user: 'ai-agent-hunter' })
+    mount()
+    await waitFor(() => expect(markers()).toEqual(['fan', 'ai-agent-hunter', 'fan2']))
   })
 })

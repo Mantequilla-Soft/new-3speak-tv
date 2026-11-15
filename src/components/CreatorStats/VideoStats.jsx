@@ -185,7 +185,7 @@ function deriveInsights(data) {
  * @param {string} title     optional panel title (the video's); defaults to "Video stats"
  * @param {function} onSeek  optional — makes replay timestamps clickable (seek the player)
  */
-export default function VideoStats({ username, permlink, compact = false, variant = 'panel', title = '', onSeek = null }) {
+export default function VideoStats({ username, permlink, compact = false, variant = 'panel', title = '', onSeek = null, kind = null }) {
   const { t } = useTranslation();
   const tPlain = (...args) => String(t(...args)).replace(LEAD_EMOJI, '');
   const [data, setData] = useState(null);
@@ -199,16 +199,17 @@ export default function VideoStats({ username, permlink, compact = false, varian
   useEffect(() => {
     let cancelled = false;
     setLoading(true); setErr(false); setData(null);
-    fetchVideoAnalytics(username, permlink)
+    fetchVideoAnalytics(username, permlink, { kind })
       .then((d) => { if (!cancelled) setData(d); })
       .catch(() => { if (!cancelled) setErr(true); })
       .finally(() => { if (!cancelled) setLoading(false); });
     return () => { cancelled = true; };
-  }, [username, permlink]);
+  }, [username, permlink, kind]);
 
   // The low-res scrub-preview loads by owner/permlink (the SDK resolves either
   // the asset or Hive permlink). Prefer the API's resolved asset permlink.
-  const previewId = username && (data?.permlink || permlink)
+  // Audio has no frames to preview.
+  const previewId = kind !== 'audio' && username && (data?.permlink || permlink)
     ? `${username}/${data?.permlink || permlink}`
     : null;
 

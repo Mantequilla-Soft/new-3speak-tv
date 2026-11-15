@@ -1,0 +1,108 @@
+{
+  "content": {
+    "streams": "配信",
+    "audio": "音声",
+    "podcasts": "ポッドキャスト"
+  },
+  "reach": {
+    "title": "リーチ",
+    "impressions": "インプレッション",
+    "ctr": "クリック率",
+    "ctrShort": "CTR {{ctr}}",
+    "clicks": "カードからのクリック",
+    "opens": "開かれた回数",
+    "empty": "この期間のインプレッションはまだありません。今後は、あなたのカードが誰かの画面に1秒表示されるたびにカウントされます。",
+    "foundTitle": "視聴者が見つけた場所",
+    "shownTitle": "カードが表示された場所",
+    "since": "インプレッションはページビューのサンプルから数え、全体に換算しています。カウントは{{date}}に始まりました。",
+    "sampled": "インプレッションはページビューのサンプルから数え、全体に換算しています。",
+    "detail": "インプレッション {{impressions}} · CTR {{ctr}}"
+  },
+  "sources": {
+    "home": "ホーム",
+    "discover": "発見",
+    "following": "フォロー中",
+    "new": "新着",
+    "trending": "トレンド",
+    "interests": "興味のあるトピック",
+    "search": "検索",
+    "channel": "チャンネルページ",
+    "related": "他の動画の横",
+    "shorts": "ショート",
+    "playlist": "プレイリスト",
+    "tag": "タグ",
+    "community": "コミュニティ",
+    "other": "3Speak内のその他",
+    "direct": "直接または不明",
+    "search_engine": "検索エンジン",
+    "social": "SNS",
+    "hive_apps": "他のHiveアプリ",
+    "external": "他のウェブサイト",
+    "embed": "他サイトへの埋め込み"
+  },
+  "earnings": {
+    "title": "収益",
+    "empty": "この期間の収益はまだありません。",
+    "unavailable": "今は収益を読み込めませんでした。1分後にもう一度お試しください。",
+    "chartLabel": "{{days}}日間の日別収益（ソース別に積み上げ）",
+    "lastYear": "全期間は直近12か月を表示します。",
+    "note": "HBD建て（約1米ドル）。Hive報酬とHIVEのチップは今日のHIVE価格で換算し、Lightningはsatsのまま表示します。",
+    "sats_other": "{{count}} sats",
+    "sources": {
+      "votes": "投票",
+      "curation": "キュレーション",
+      "tips": "チップ",
+      "ads": "広告",
+      "boosts": "配信ブースト",
+      "lightning": "Lightning"
+    }
+  },
+  "export": {
+    "daily": "日別収益をエクスポート（CSV）",
+    "content": "コンテンツ表をエクスポート（CSV）",
+    "cols": {
+      "date": "日付",
+      "total": "合計",
+      "title": "タイトル",
+      "url": "リンク",
+      "published": "公開日",
+      "watchSeconds": "視聴時間（秒）",
+      "earned": "投票による収益"
+    }
+  },
+  "inbox": {
+    "tab": "コメント",
+    "menu": "コメント受信箱",
+    "title": "コメント受信箱",
+    "sub_other": "直近{{count}}日間にあなたの投稿へ寄せられたコメントです。",
+    "filtersLabel": "絞り込み",
+    "views": {
+      "unanswered": "未返信",
+      "all": "すべて",
+      "done": "対応済み"
+    },
+    "flags": {
+      "question": "質問",
+      "firstTime": "初コメント",
+      "supporter": "サポーター"
+    },
+    "answered": "返信済み",
+    "onPost": "投稿:",
+    "onReply": "あなたへの返信:",
+    "reply": "返信",
+    "replyVideo": "動画で返信",
+    "replyTo": "@{{author}} さんに返信",
+    "send": "送信",
+    "replied": "返信がHiveに投稿されました。",
+    "replyFailed": "返信を投稿できませんでした。もう一度お試しください。",
+    "markDone": "対応済みにする",
+    "undone": "元に戻す",
+    "doneToast": "対応済みにしました。",
+    "doneFailed": "保存できませんでした。もう一度お試しください。",
+    "error": "コメントを読み込めませんでした。",
+    "retry": "もう一度試す",
+    "allAnswered": "全員に返信しました。",
+    "empty": "ここにコメントはありません。",
+    "supportersNote": "サポーターとは、直近12か月にあなたの投稿に投票したか、3Speakでチップを送った人です。初コメントは、あなたの投稿への初めてのコメントという意味です。"
+  }
+}

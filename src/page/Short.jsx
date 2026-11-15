@@ -39,6 +39,7 @@ import useEmojiShortcodes from '../hooks/useEmojiShortcodes';
 import { prefetchVideoTagsV2 } from '../utils/tagsV2';
 import AiBadge from '../components/AiBadge/AiBadge';
 import AudiogramEpisodeLink from '../components/AudiogramEpisodeLink/AudiogramEpisodeLink';
+import ShortSeriesBar from '../components/Episodes/ShortSeriesBar';
 import { stripEpisodeLine } from '../utils/audiogramLink';
 
 // Custom Hive Icon Component
@@ -80,7 +81,7 @@ import { fixVideoThumbnail, fallbackImg } from '../utils/fixThumbnails';
 import AuthorBadge from '../components/AuthorBadge/AuthorBadge';
 import ShortsLoadingScreen from '../components/ShortsLoadingScreen/ShortsLoadingScreen';
 import { markByReputation } from '../utils/reputation';
-import { markByHidden } from '../utils/hiddenCreators';
+import { markAndDropMuted } from '../utils/hiddenCreators';
 import { getVotePower, getDynamicProps } from '../utils/hiveUtils';
 import { mergeOffChainReplies, applyOffChainLikes } from '../utils/offChainReplies';
 import { fetchIncubationShorts, handleAvatar, postIncubationContent } from '../lib/incubation';
@@ -105,6 +106,8 @@ import useReblog from '../hooks/useReblog';
 import useLayoutMediaQuery from '../hooks/useLayoutMediaQuery';
 
 import { soundLabel } from '../utils/soundCredits';
+import { reportOpen } from '../lib/cardReach';
+import { soundPathOf } from '../lib/sounds';
 // Every toast from this module is headed "Shorts"; the message becomes the
 // line under it. See utils/toast.js.
 const toast = toastIn('Shorts');
@@ -570,6 +573,13 @@ const VideoShort = () => {
     }
     return null;
   }, []);
+
+  // The short this page opened on: where it was found (lib/cardReach.js). The
+  // ones swiped to after it are the shorts feed's own, not an open.
+  useEffect(() => {
+    const shared = getSharedVideoFromUrl();
+    if (shared) reportOpen(shared.author, shared.permlink);
+  }, [getSharedVideoFromUrl]);
 
   // Update URL when current video changes (without page reload)
   const updateUrlWithCurrentVideo = useCallback((video) => {
@@ -1457,6 +1467,7 @@ const VideoShort = () => {
         caption,
         tags: meta.tags || [],
         audio: soundLabel(meta?.video?.sound, handle),
+        sound: meta?.video?.sound || null, // for the sound chip's page (lib/sounds.js)
         albumArt: avatar,
         // Zeroes, not fabrications: an off-chain short has no payout and its
         // likes live in a different store. Better an honest nought than a
@@ -1533,6 +1544,7 @@ const VideoShort = () => {
       storyExpiresAt: short.storyExpiresAt || null, // 24h story
       tags: short.tags || [],
       audio: soundLabel(short.sound, short.user.username),
+      sound: short.sound || null, // for the sound chip's page (lib/sounds.js)
       albumArt: short.user.avatar,
       stats: {
         likes: short.stats.likes,
@@ -1630,6 +1642,7 @@ const VideoShort = () => {
               audiogramOf: sharedVideoData.audiogramOf || null, // made from an audiogram (utils/audiogramLink.js)
               storyExpiresAt: sharedVideoData.storyExpiresAt || null, // 24h story
               audio: soundLabel(sharedVideoData.sound, sharedVideoData.user.username),
+              sound: sharedVideoData.sound || null, // for the sound chip's page (lib/sounds.js)
               albumArt: sharedVideoData.user.avatar,
               stats: sharedVideoData.stats,
               isLiked: sharedVideoData.isLiked || false,
@@ -1787,6 +1800,7 @@ const VideoShort = () => {
         },
         caption: chainData.title || '',
         audio: soundLabel(chainData.sound, `@${chainData.author}`),
+        sound: chainData.sound || null, // for the sound chip's page (lib/sounds.js)
         albumArt: `/img/u/${chainData.author}/avatar/small`,
         stats: { likes: 0, dislikes: 0, comments: 0, shares: 0, remixes: 0, views: 0, payout: '0.00' },
         isLiked: false,
@@ -1832,6 +1846,7 @@ const VideoShort = () => {
               audiogramOf: shortData.audiogramOf || null, // made from an audiogram (utils/audiogramLink.js)
               storyExpiresAt: shortData.storyExpiresAt || null, // 24h story
               audio: soundLabel(shortData.sound, shortData.user.username),
+              sound: shortData.sound || null, // for the sound chip's page (lib/sounds.js)
               albumArt: shortData.user.avatar,
               stats: shortData.stats,
               isLiked: shortData.isLiked || false,
@@ -1885,6 +1900,7 @@ const VideoShort = () => {
           audiogramOf: shortData.audiogramOf || null, // made from an audiogram (utils/audiogramLink.js)
           storyExpiresAt: shortData.storyExpiresAt || null, // 24h story
           audio: soundLabel(shortData.sound, shortData.user.username),
+          sound: shortData.sound || null, // for the sound chip's page (lib/sounds.js)
           albumArt: shortData.user.avatar,
           stats: shortData.stats,
           isLiked: shortData.isLiked || false,
@@ -1947,6 +1963,7 @@ const VideoShort = () => {
           storyExpiresAt: short.storyExpiresAt || null, // 24h story
           tags: short.tags || [],
           audio: soundLabel(short.sound, short.user.username),
+          sound: short.sound || null, // for the sound chip's page (lib/sounds.js)
           albumArt: short.user.avatar,
           stats: {
             likes: short.stats.likes,
@@ -2026,8 +2043,9 @@ const VideoShort = () => {
       }
       // Marked BEFORE the merge, like the watch page does it: reputation and
       // hidden-creator marking are Hive lookups, and an off-chain handle is not
-      // a Hive account to look up.
-      const marked = await markByHidden(await markByReputation(rawComments));
+      // a Hive account to look up. Bots on the comment mutelist go entirely,
+      // with the replies under them (never the viewer's own comments).
+      const marked = await markAndDropMuted(await markByReputation(rawComments), { viewer: user || incubationHandle });
       const merged = await mergeOffChainReplies(rootPermlink, marked);
       // Off-chain likes on those comments, in one request for the whole thread.
       const comments = await applyOffChainLikes(merged, user || incubationHandle);
@@ -4207,6 +4225,10 @@ const VideoShort = () => {
               {currentVideo.audiogramOf && (
                 <AudiogramEpisodeLink author={currentVideo.audiogramOf.author} permlink={currentVideo.audiogramOf.permlink} />
               )}
+              {/* A part of its creator's series: "Part 3 of 7 · title" and Next part (lib/series.js) */}
+              {currentVideo.author && (currentVideo.hivePermlink || currentVideo.permlink) && (
+                <ShortSeriesBar author={currentVideo.author} permlink={currentVideo.hivePermlink || currentVideo.permlink} />
+              )}
               {/* The creator's `## Title` (utils/shortTitle.js), above the caption. */}
               {currentVideo.heading && <p className="captionTitle">{currentVideo.heading}</p>}
               <p className="captionText">
@@ -4282,10 +4304,19 @@ const VideoShort = () => {
               {!captionExpanded && (currentVideo.tags || []).slice(0, 2).map((tag) => (
                 <Link key={tag} to={`/t/${tag}`} className="shortsChip" onClick={(e) => e.stopPropagation()}>#{tag}</Link>
               ))}
-              <span className="shortsChip audioMarquee">
-                <Icon name="music_note" size={14} />
-                <span className="audioText">{currentVideo.audio}</span>
-              </span>
+              {(() => {
+                // The sound's page (/sound/:id): the Shorts using it, "Use this sound".
+                const soundHref = soundPathOf({ sound: currentVideo.sound, author: currentVideo.author || currentVideo.user?.username, hivePermlink: currentVideo.hivePermlink });
+                const inner = (
+                  <>
+                    <Icon name="music_note" size={14} />
+                    <span className="audioText">{currentVideo.audio}</span>
+                  </>
+                );
+                return soundHref
+                  ? <Link to={soundHref} className="shortsChip audioMarquee" title={t('sounds.openSound')} onClick={(e) => e.stopPropagation()}>{inner}</Link>
+                  : <span className="shortsChip audioMarquee">{inner}</span>;
+              })()}
             </div>
           </div>
         </div>
@@ -4533,6 +4564,7 @@ const VideoShort = () => {
 
         {isTipOpen && (
           <TipModal
+            boost
             recipient={currentVideo.author}
             permlink={currentVideo.permlink}
             memoLink={`https://3speak.tv/shorts?v=${currentVideo.author}/${currentVideo.permlink}`}
@@ -4844,7 +4876,7 @@ const VideoShort = () => {
 };
 
 /* ================= COMMENT ITEM COMPONENT ================= */
-const CommentItem = ({
+export const CommentItem = ({
   comment,
   depth,
   formatNumber,
@@ -4918,7 +4950,7 @@ const CommentItem = ({
       .replace(/\n?<sup>replied to \[.*?\]\([^)]*\)<\/sup>/g, '');
   };
 
-  if (comment.isLowReputation || comment.isHidden) return null;
+  if (comment.isLowReputation || comment.isHidden || comment.isMuted) return null;
 
   if (collapsed) {
     return (

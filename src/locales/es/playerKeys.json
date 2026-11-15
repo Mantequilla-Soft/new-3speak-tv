@@ -1,0 +1,29 @@
+{
+  "valueText": "{{time}} de {{total}}",
+  "seekLabel": "Buscar posición",
+  "loop": "Repetir",
+  "loopOn": "Repetición activada",
+  "loopOff": "Repetir este video",
+  "theater": "Modo cine",
+  "theaterExit": "Vista normal",
+  "title": "Atajos de teclado",
+  "sub": "Funcionan en toda la página, salvo mientras escribes.",
+  "keySpace": "Espacio",
+  "keyShift": "Mayús",
+  "list": {
+    "playPause": "Reproducir o pausar",
+    "back10": "Retroceder 10 segundos",
+    "forward10": "Avanzar 10 segundos",
+    "arrows": "Retroceder o avanzar 10 segundos",
+    "frame": "Un fotograma atrás o adelante",
+    "percent": "Ir del 0 % al 90 % del video",
+    "volume": "Subir o bajar el volumen",
+    "mute": "Silenciar o activar sonido",
+    "captions": "Subtítulos sí o no",
+    "fullscreen": "Pantalla completa",
+    "theater": "Activar o desactivar el modo cine",
+    "save": "Guardar",
+    "share": "Compartir",
+    "help": "Mostrar esta lista"
+  }
+}

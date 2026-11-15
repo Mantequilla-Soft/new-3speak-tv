@@ -1,0 +1,121 @@
+@use "../../styles/v2" as v2;
+
+// Continue watching: the follow strip's look (NewFromFollowing.scss, `nff-*`),
+// with video thumbnails in the stack and video cards in the rail. Each card is
+// the thumbnail with how far in it was left (accent bar on the bottom edge),
+// then title, "@creator · 8 min left" and when it was watched.
+.continue-watching {
+  .cw-stack .cw-stack-thumb {
+    width: 48px;
+    height: 36px;
+    margin-right: -14px;
+    border-radius: var(--r-md);
+    border: 2px solid var(--surface);
+    background: var(--surface-2);
+    object-fit: cover;
+
+    @include v2.mobile { width: 42px; height: 32px; }
+  }
+
+  .cw-rail { gap: 12px; }
+
+  .cw-card {
+    position: relative;
+    flex: 0 0 200px;
+    min-width: 0;
+    scroll-snap-align: start;
+
+    @include v2.mobile { flex-basis: 168px; }
+  }
+
+  .cw-card-link {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    color: var(--text);
+    text-decoration: none;
+    border-radius: var(--r-lg);
+
+    &:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    @media (hover: hover) { &:hover .cw-card-thumb img { opacity: .9; } }
+  }
+
+  .cw-card-thumb {
+    position: relative;
+    display: block;
+    aspect-ratio: 16 / 9;
+    border-radius: var(--r-lg);
+    overflow: hidden;
+    background: var(--surface-2);
+
+    img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  }
+
+  // The timeline: the whole video along the bottom edge, the watched part filled.
+  .cw-card-bar {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 4px;
+    background: color-mix(in srgb, var(--text) 30%, transparent);
+
+    > span { display: block; height: 100%; background: var(--accent); }
+  }
+
+  .cw-card-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+    line-height: 1.3;
+
+    b {
+      font-size: 13px;
+      font-weight: 700;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    span {
+      font-size: 11px;
+      color: var(--muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+
+  // Off the strip: over the thumbnail's corner, on hover or focus with a mouse,
+  // always on a touch screen (nothing to hover there).
+  .cw-card-remove {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 28px;
+    height: 28px;
+    display: grid;
+    place-items: center;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--bg) 80%, transparent);
+    color: var(--text);
+    cursor: pointer;
+
+    // A 44px target around the 28px circle.
+    &::after { content: ''; position: absolute; inset: -8px; }
+    &:hover { background: var(--surface); }
+    &:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+    @media (hover: hover) {
+      opacity: 0;
+      transition: opacity var(--t-fast) var(--ease);
+    }
+  }
+  @media (hover: hover) {
+    .cw-card:hover .cw-card-remove,
+    .cw-card:focus-within .cw-card-remove { opacity: 1; }
+  }
+}

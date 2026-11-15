@@ -150,6 +150,16 @@
     "notes": "Note",
     "stillIndexing": "L'audio di questo post è ancora in fase di indicizzazione — riprova tra qualche minuto."
   },
+  "edit": {
+    "title": "Modifica audio",
+    "editTitle": "Modifica titolo, note, tag e copertina",
+    "cover": "Copertina",
+    "coverAlt": "Anteprima copertina",
+    "coverHint": "Carica un'immagine o incolla un URL diretto. Un'immagine quadrata rende meglio.",
+    "notesPlaceholder": "Racconta agli ascoltatori di questo audio…",
+    "keptNote": "Il link del player e i crediti musicali nel post restano come sono.",
+    "updated": "Audio aggiornato!"
+  },
   "page": {
     "sections": {
       "popular": "Popolari",
@@ -175,7 +185,6 @@
     },
     "all": "Tutti",
     "musicGenre": "Genere musicale",
-    "anyGenre": "Qualsiasi genere",
     "tracks_one": "{{count}} traccia",
     "tracks_many": "{{count}} tracce",
     "tracks_other": "{{count}} tracce",
@@ -189,7 +198,7 @@
     "nothingPlaying": "Ancora niente in riproduzione.",
     "goExplore": "Trova qualcosa da ascoltare",
     "exploreViews": "Sezioni",
-    "mostPlayed": "I più ascoltati"
+    "newUploads": "Nuovi caricamenti"
   },
   "upload": {
     "title": "Carica audio",
@@ -300,6 +309,7 @@
       "descriptionOptional": "Descrizione (facoltativa)",
       "track": "Traccia",
       "category": "Categoria",
+      "categoryRequired": "Scegli una categoria, così il tuo audio compare nella scheda giusta.",
       "musicGenre": "Genere musicale"
     },
     "playlist": {
@@ -389,6 +399,7 @@
     "tracks": {
       "helpAlbum": "Ogni traccia viene pubblicata come commento sotto il post principale. Imposta i valori comuni una volta, applicali a tutte e poi personalizzali per singola traccia.",
       "helpSnaps": "Ogni traccia viene pubblicata come snap a sé. Imposta i valori comuni una volta, applicali a tutte e poi personalizzali per singola traccia.",
+      "helpSnapsSingle": "Il tuo audio viene pubblicato come snap a sé.",
       "applyToAllHeading": "Applica a tutte le tracce",
       "applyNote_one": "<b>Applica a {{count}} traccia:</b> descrizione e copertina condivise, poi modifica ogni traccia singolarmente.",
       "applyNote_many": "<b>Applica a tutte le {{count}} tracce:</b> descrizione e copertina condivise, poi modifica ogni traccia singolarmente.",
@@ -425,6 +436,10 @@
       "earnings": "Guadagni:",
       "earningsPpl": "Pagamento per ascolto (@{{account}})",
       "earningsNormal": "Normali ricompense del post",
+      "rewards": "Ricompense:",
+      "beneficiaries": "Beneficiari:",
+      "perTrack": "Impostato per traccia",
+      "noBeneficiaries": "Nessuno",
       "playlist": "Playlist:",
       "failedCount_one": "{{count}} traccia non riuscita.",
       "failedCount_many": "{{count}} tracce non riuscite.",

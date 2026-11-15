@@ -1,0 +1,165 @@
+@use "../../styles/v2" as v2;
+
+// Comment inbox (profile tab "Comments"): the filters, then one flat card per
+// comment with its replies inline.
+.comment-inbox {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  color: var(--text);
+  min-width: 0;
+
+  .ci-top { display: flex; flex-direction: column; gap: 2px; }
+
+  .ci-title {
+    margin: 0;
+    font-size: 32px;
+    font-weight: 900;
+    letter-spacing: -.03em;
+    line-height: 1.15;
+
+    @include v2.mobile { font-size: 24px; }
+  }
+
+  .ci-sub, .ci-foot {
+    margin: 0;
+    @include v2.text(meta);
+    color: var(--muted);
+  }
+
+  .ci-filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 12px;
+  }
+
+  .ci-seg.v2-seg {
+    background: var(--surface);
+    border-radius: var(--r-lg);
+  }
+
+  .ci-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .ci-list { display: flex; flex-direction: column; gap: 10px; }
+
+  .ci-skeleton { height: 140px; border-radius: var(--r-lg); }
+
+  .ci-item {
+    @include v2.card;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 14px 16px;
+    min-width: 0;
+
+    &.is-done { opacity: .7; }
+
+    @include v2.mobile { padding: 12px; }
+  }
+
+  .ci-head {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    min-width: 0;
+
+    @include v2.mobile { flex-wrap: wrap; }
+  }
+
+  .ci-avatar { flex: none; line-height: 0; }
+
+  .ci-who {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+    gap: 2px;
+  }
+
+  .ci-line { display: flex; align-items: baseline; gap: 8px; min-width: 0; }
+
+  .ci-author {
+    color: var(--text);
+    font-weight: 700;
+    text-decoration: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    &:hover { text-decoration: underline; }
+  }
+
+  .ci-time { @include v2.text(meta-sm); color: var(--muted); flex: none; }
+
+  .ci-on {
+    @include v2.text(meta);
+    color: var(--muted);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .ci-post {
+    color: var(--cyan);
+    text-decoration: none;
+
+    &:hover { text-decoration: underline; }
+  }
+
+  .ci-flags {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 4px;
+
+    @include v2.mobile { justify-content: flex-start; width: 100%; }
+  }
+
+  .ci-body {
+    @include v2.text(body-sm);
+    overflow-wrap: anywhere;
+    min-width: 0;
+
+    img, video, iframe { max-width: 100%; height: auto; border-radius: var(--r-md); }
+    p { margin: 0 0 6px; }
+    p:last-child { margin-bottom: 0; }
+  }
+
+  .ci-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .ci-composer {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .ci-textarea {
+    height: auto;
+    min-height: 84px;
+    padding: 10px 12px;
+    resize: vertical;
+    font: inherit;
+  }
+
+  .ci-composer-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 6px;
+  }
+
+  .ci-react {
+    border-radius: var(--r-lg);
+    background: var(--bg);
+    padding: 12px;
+    min-width: 0;
+  }
+}

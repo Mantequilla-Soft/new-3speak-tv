@@ -1,0 +1,93 @@
+{
+  "actions": {
+    "powerUp": "パワーアップ",
+    "powerDown": "パワーダウン",
+    "savings": "貯蓄",
+    "convert": "変換",
+    "delegate": "委任",
+    "aria": "資金を管理"
+  },
+  "common": {
+    "amount": "金額（{{coin}}）",
+    "available": "利用可能: {{balance}}",
+    "max": "最大",
+    "to": "送り先アカウント",
+    "toHint": "自分のアカウントならそのままにしてください。",
+    "activeKey": "アクティブキーが必要です",
+    "butrauth": "Butter Auth でログイン中: 次のステップで Hive ウォレットまたはアクティブキーで承認します。",
+    "insufficient": "保有額を超えています。",
+    "amountPositive": "0 より大きい金額を入力してください。",
+    "invalidAccount": "その名前の Hive アカウントはありません。",
+    "done": "完了しました。ここに反映されるまで数秒かかることがあります。",
+    "failed": "処理できませんでした: {{error}}",
+    "loading": "ウォレットを読み込み中..."
+  },
+  "powerUp": {
+    "title": "パワーアップ",
+    "note": "Hive Power は投票に重みを与え、キュレーション報酬を得られます。HIVE に戻すには毎週 13 回の支払いが必要です。",
+    "submit": "{{amount}} HIVE をパワーアップ",
+    "submitTo": "@{{to}} に {{amount}} HIVE をパワーアップ"
+  },
+  "powerDown": {
+    "title": "パワーダウン",
+    "note": "Hive Power は毎週 13 回に分けて HIVE として戻ります。1 週間あたり約 {{weekly}} HP です。",
+    "replace": "パワーダウンが進行中です（残り {{left}} HP）。新しく始めると置き換わります。",
+    "submit": "{{amount}} HP をパワーダウン",
+    "stop": "パワーダウンを停止",
+    "stopped": "パワーダウンを停止しました。"
+  },
+  "savings": {
+    "title": "貯蓄",
+    "deposit": "預け入れ",
+    "withdraw": "引き出し",
+    "depositNote": "貯蓄の HBD には年 {{rate}}% の利息がつきます。引き出しには 3 日かかります。",
+    "depositNoteHive": "貯蓄の HIVE には利息がつきません。引き出しには 3 日かかります。",
+    "withdrawNote": "3 日後に届きます。それまではキャンセルできます。",
+    "submitDeposit": "{{amount}} {{coin}} を預け入れ",
+    "submitWithdraw": "{{amount}} {{coin}} を引き出し"
+  },
+  "convert": {
+    "title": "変換",
+    "hbdToHive": "HBD から HIVE へ",
+    "hiveToHbd": "HIVE から HBD へ",
+    "hbdNote": "3.5 日後に、その期間の中央値価格で約 {{amount}} HIVE を受け取ります。最終的な金額は変わることがあります。",
+    "hiveNote": "今すぐ約 {{amount}} HBD を受け取ります。HIVE の半分は担保として預けられ、残りは 3.5 日後に戻ります。5% の手数料がかかります。",
+    "warning": "変換は取り消せません。マーケットで取引する方が安い場合があります。",
+    "submit": "{{amount}} {{coin}} を変換"
+  },
+  "delegate": {
+    "title": "委任",
+    "toLabel": "委任先",
+    "note": "委任した Hive Power はあなたのものですが、その投票力は相手のアカウントが使います。解除すると戻るまで 5 日かかります。",
+    "current": "現在 @{{to}} に {{hp}} HP を委任しています。これで新しい金額に変わります。",
+    "submit": "@{{to}} に {{amount}} HP を委任",
+    "submitNoTo": "{{amount}} HP を委任",
+    "yours": "あなたの委任",
+    "remove": "解除",
+    "removed": "委任を解除しました。HP は 5 日後に戻ります。",
+    "self": "自分自身には委任できません。"
+  },
+  "pending": {
+    "title": "進行中",
+    "powerDown": "パワーダウン: 毎週 {{weekly}} HP、残り {{weeks}} 週",
+    "nextPayment": "次回の支払い {{date}}",
+    "withdrawal": "貯蓄から: {{amount}}",
+    "arrives": "{{date}} に到着",
+    "convertHbd": "{{amount}} を HIVE に変換中",
+    "convertHive": "{{amount}} を担保として保管中",
+    "ready": "{{date}} に完了",
+    "delegation": "@{{to}} に委任: {{hp}} HP",
+    "cancel": "キャンセル",
+    "cancelled": "引き出しをキャンセルしました。資金は貯蓄に残ります。",
+    "stop": "停止",
+    "empty": "進行中のものはありません。"
+  },
+  "activeAuth": {
+    "powerDown": "{{amount}} をパワーダウン",
+    "toSavings": "{{amount}} を貯蓄に移す",
+    "fromSavings": "貯蓄から {{amount}} を引き出す",
+    "cancelSavings": "貯蓄の引き出しをキャンセル",
+    "convert": "{{amount}} を変換",
+    "delegate": "@{{to}} に {{amount}} を委任"
+  }
+}

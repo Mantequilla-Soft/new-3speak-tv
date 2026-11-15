@@ -139,6 +139,13 @@
     "rumble": {
       "placeholder": "https://rumble.com/c/…",
       "help": "Rumble 채널 이름이나 링크를 붙여넣으세요. 해시는 채널 설명 어디에든 넣으면 돼요."
+    },
+    "rss": {
+      "placeholder": "https://example.com/podcast.xml",
+      "help": "팟캐스트 RSS 피드 주소를 붙여 넣으세요. 호스팅 서비스의 쇼 설정이나 배포 페이지에 나와 있습니다.",
+      "flowTitle": "팟캐스트 RSS 피드 연결",
+      "step2": "팟캐스트 호스팅 서비스에서 <strong>쇼 설명이나 최신 에피소드 설명에 붙여 넣으세요</strong>. 변경 사항을 저장하고 게시하세요. 피드가 인증되면 다시 지워도 됩니다.",
+      "step3": "팟캐스트 RSS 피드 주소를 입력하세요:"
     }
   },
   "snaps": {

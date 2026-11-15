@@ -1,0 +1,102 @@
+{
+  "levels": {
+    "button": "Bildirim",
+    "buttonTitle": "@{{user}} bildirimleri: {{level}}",
+    "title": "@{{user}} bildirimleri",
+    "sub": "Ayarlar'daki cihaz anahtarların geçerli olmaya devam eder.",
+    "saveFailed": "Kaydedilemedi. Lütfen tekrar dene.",
+    "all": {
+      "title": "Tümü",
+      "desc": "Videolar, shorts, hikâyeler, ses ve canlı yayına geçtiklerinde.",
+      "saved": "@{{user}} ile ilgili her şeyden haberdar olacaksın."
+    },
+    "highlights": {
+      "title": "Öne çıkanlar",
+      "desc": "Videolar, ses ve canlı yayına geçtiklerinde. Shorts ve hikâye yok.",
+      "saved": "Bundan sonra @{{user}} için yalnızca öne çıkanlar."
+    },
+    "off": {
+      "title": "Kapalı",
+      "desc": "Bu üreticiden bildirim yok. Takip etmeye devam ediyorsun.",
+      "saved": "@{{user}} bildirimleri kapatıldı."
+    }
+  },
+  "live": {
+    "badge": "CANLI",
+    "aria": "Takip ettiklerin şu an canlı yayında",
+    "summary_one": "Takip ettiğin {{count}} kişi şu an canlı yayında",
+    "summary_other": "Takip ettiğin {{count}} kişi şu an canlı yayında"
+  },
+  "notifs": {
+    "heading": "3Speak'ten",
+    "liveNow": "@{{user}} canlı yayında",
+    "wasLive": "@{{user}} canlı yayın açtı",
+    "collabInvite": "@{{user}} seni bir ortak yapıma davet etti",
+    "premiereStarted": "@{{user}} kullanıcısının prömiyeri başladı"
+  },
+  "push": {
+    "live": {
+      "title": "Canlı yayına geçiş",
+      "desc": "Takip ettiğin bir üretici canlı yayın başlattığında."
+    }
+  },
+  "collab": {
+    "accept": "Kabul et",
+    "decline": "Reddet",
+    "acceptedToast": "@{{user}} ile ortak yapım artık kanalında.",
+    "declinedToast": "Davet reddedildi.",
+    "answerFailed": "Yanıtın gönderilemedi. Lütfen tekrar dene.",
+    "row": "Ortak üretici ekle",
+    "rowSub": "Bir ortak üreticiyle paylaş ve kazancı bölüş",
+    "rowSet": "@{{user}} payından %{{split}} alır",
+    "modalTitle": "Ortak üretici ekle",
+    "modalSub": "Bir davet alır. Kabul ettiğinde video iki kanalda da yer alır.",
+    "accountLabel": "Ortak üretici",
+    "accountPlaceholder": "Hive hesap adı",
+    "suggestions": "Eşleşen hesaplar",
+    "splitLabel": "Kazancından onun payı",
+    "splitPreview": "@{{user}} kazancın %{{share}} kısmını alır, %{{mine}} sende kalır.",
+    "inviteNote": "Bölüşüm bir Hive lehtarıdır, bu yüzden reddetse bile geçerlidir.",
+    "someone": "ortak üreticin",
+    "save": "Kaydet",
+    "remove": "Kaldır",
+    "noRoom": "@{{user}} lehtar olarak eklenmedi: gönderide Hive'ın izin verdiği en fazla sayıda lehtar zaten var.",
+    "errors": {
+      "invalid": "Bu geçerli bir Hive hesap adı değil.",
+      "self": "Kendinle ortak yapım yapamazsın.",
+      "notFound": "@{{user}} bir Hive hesabı değil."
+    },
+    "cardWith": "{{users}} ile",
+    "cardBoth": "{{author}}, {{users}} ile",
+    "withLabel": "ile",
+    "invitesTitle": "Ortak yapım davetleri"
+  },
+  "polls": {
+    "aria": "Anket",
+    "addPoll": "Anket",
+    "removePoll": "Anket yok",
+    "editorAria": "Anket seçenekleri",
+    "questionPlaceholder": "Takipçilerine bir soru sor",
+    "optionPlaceholder": "Seçenek {{n}}",
+    "removeOption": "{{n}}. seçeneği kaldır",
+    "addOption": "Seçenek ekle",
+    "duration": "Anket bitişi",
+    "days_one": "{{count}} gün",
+    "days_other": "{{count}} gün",
+    "noEnd": "Bitiş tarihi yok",
+    "invalid": "Bir anket için {{min}} ile {{max}} arasında farklı seçenek gerekir.",
+    "votes_one": "{{count}} oy",
+    "votes_other": "{{count}} oy",
+    "endsInDays_one": "{{count}} gün içinde bitiyor",
+    "endsInDays_other": "{{count}} gün içinde bitiyor",
+    "endsInHours_one": "{{count}} saat içinde bitiyor",
+    "endsInHours_other": "{{count}} saat içinde bitiyor",
+    "closed": "Anket kapandı",
+    "open": "Açık",
+    "changeHint": "Oyunu değiştirmek için başka bir seçeneğe dokun.",
+    "signIn": "Oy vermek için giriş yap.",
+    "closedToast": "Bu anket sona erdi.",
+    "voteFailed": "Oyun kaydedilemedi. Lütfen tekrar dene.",
+    "statsTitle": "Anketler"
+  }
+}

@@ -44,6 +44,7 @@
     "title": "Bağlı harici profiller",
     "intro": "Bir YouTube (veya başka bir) kanalın sahibi olduğunu kanıtlamak için sana özel 3Speak hash'ini herkese açık profil açıklamana yapıştır, sonra burada doğrula.",
     "openProfile": "Profili aç",
+    "importEpisodes": "Bölümleri içe aktar",
     "removeLink": "Bağlantıyı kaldır",
     "empty": "Henüz bağlı harici profil yok.",
     "addPlatform": "Yeni platform ekle",

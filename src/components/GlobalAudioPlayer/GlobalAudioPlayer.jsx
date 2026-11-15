@@ -14,6 +14,8 @@ import UpvoteCount from '../UpvoteCount/UpvoteCount';
 import CommentVoteTooltip from '../tooltip/CommentVoteTooltip';
 import AddToPlaylistModal from '../AddToPlaylistModal/AddToPlaylistModal';
 import TipModal from '../tip-reward/TipModal';
+import StreamSatsModal from '../boosts/StreamSatsModal';
+import useSatStream from '../../hooks/useSatStream';
 import BlogContent from '../playVideo/BlogContent';
 import Waveform from './Waveform';
 import ReportModal from '../modal/ReportModal';
@@ -29,20 +31,22 @@ import { podcastPath, episodePath, artUrl, PODCAST_PLACEHOLDER } from '../../lib
 // build without it must still load (the player then plays track.src).
 import * as podcastsLib from '../../lib/podcasts';
 import { fetchChapters, fetchTranscript, chapterAt } from '../../lib/podcastMedia';
+import { chaptersOfPost } from '../../utils/postChapters';
 import { isDownloaded, localAudioUrl, downloadTrack, useDownloads } from '../../lib/podcastDownloads';
 import { setAudioSrc } from '../../lib/audioCorsMode';
+import { pageAway, onPageAwayChange } from '../../utils/pageAway';
 import { toastIn } from '../../utils/toast';
 import useReblog from '../../hooks/useReblog';
 import AudioCommentPanel from './AudioCommentPanel';
 import AudioHypeButton from './AudioHypeButton';
 import FollowChip from './FollowChip';
 import useAudioComments from './useAudioComments';
-import { recordWatch } from '../../utils/watchHistory';
+import { noteListen } from '../../lib/listenHistory';
 import {
   fmt, SPEEDS, SPEED_KEY, normalizeSpeed, formatSpeed, SKIP_BACK, SKIP_FORWARD, skipTarget,
   SWIPE_SKIP, barSwipe, fullSwipeCollapses,
   SLEEP_OPTIONS, startSleepTimer, sleepRemainingMs, sleepFadeFactor,
-  chapterMarkers, chapterJumps, corsKnown, isHlsTrack,
+  chapterMarkers, chapterJumps, corsKnown, hlsPlayback,
   createSilenceDetector, skipRate, levelDb, savedMs, fmtSaved,
 } from './playerMath';
 import { attach, detach, canRoute, markNoCors, webAudioSupported, warmUp } from './audioEffects';
@@ -58,7 +62,13 @@ import useListenTime from '../../hooks/useListenTime';
 import useAudioAd from '../../hooks/useAudioAd';
 import TickerCrawl from '../ads/TickerCrawl';
 import { audioItemPath } from '../AudioItem/AudioItemView';
+import { mseAvailable, isVideoTrack } from '../../lib/videoAsAudio';
+import { watchPath } from '../../utils/urls';
 import mantequillaLogo from '../../assets/mantequilla-logo.png';
+import { seekKeyTarget, timelineSliderProps } from '../../lib/sliderKeys';
+import useTimelineScrub from '../../hooks/useTimelineScrub';
+import { isLocalSource } from '../../lib/timelineScrub';
+import ScrubOverlay from './ScrubOverlay';
 import '../../page/Audio.scss';
 import './GlobalAudioPlayer.scss';
 
@@ -131,8 +141,16 @@ async function encryptBeat(obj) {
 function pageOf(track) {
   if (!track || track.live) return '';
   if (track.external) return episodePath(track._id);
+  // A video heard as audio: its watch page.
+  if (isVideoTrack(track)) return track.owner && track.post_permlink ? watchPath(track.owner, track.post_permlink) : '';
   return track.owner && track.permlink ? audioItemPath(track) : '';
 }
+
+// 1.2K, the way the watch page's Vote tile counts (playVideo/WatchPanels compactNumber).
+const compactNumber = (n) => {
+  const v = Number(n) || 0;
+  try { return new Intl.NumberFormat(undefined, { notation: 'compact', maximumFractionDigits: 1 }).format(v); } catch { return String(v); }
+};
 
 function audioThumb(item) {
   if (!item) return fallbackImg;
@@ -289,9 +307,6 @@ function GlobalAudioPlayer() {
   // never earn) and send a heartbeat while the audio is actually advancing.
   // The backend credits the wall-clock time it observes between beats, so a
   // listen can't be forged with a single request.
-  // The 3Speak track last put in the listener's watch history (once per track
-  // per page visit; the history counts rewatches itself).
-  const historyRef = useRef(null);
   const listenRef = useRef({ permlink: null, sid: null, token: null, beatMs: 10000, lastBeatAt: 0, credited: false, encrypted: false });
   const beatOnce = useCallback(async () => {
     const L = listenRef.current;
@@ -318,6 +333,17 @@ function GlobalAudioPlayer() {
   const [playlistTarget, setPlaylistTarget] = useState(null);
   const [shareTarget, setShareTarget] = useState(null);
   const [tipTarget, setTipTarget] = useState(null);
+  // Streaming sats to the creator while a native 3Speak track plays (lib/boosts.js):
+  // never for outside podcasts, live audio or your own track.
+  const streamTo = audioCurrent && !audioCurrent.external && !isLive && audioCurrent.post_permlink && user !== audioCurrent.owner
+    ? audioCurrent.owner : null;
+  const satStream = useSatStream({
+    to: streamTo,
+    permlink: streamTo ? audioCurrent.post_permlink : null,
+    playing: audioIsPlaying,
+    link: streamTo ? `https://3speak.tv/audio/${audioCurrent.owner}/${audioCurrent.post_permlink}` : '',
+  });
+  const [streamOpen, setStreamOpen] = useState(false);
   const [podcastTip, setPodcastTip] = useState(null);
   // The comment box at the top of the player: { author, permlink, title, at }.
   const [commentTarget, setCommentTarget] = useState(null);
@@ -331,6 +357,8 @@ function GlobalAudioPlayer() {
   const [npPayout, setNpPayout] = useState(0);
   const [npComments, setNpComments] = useState(0);
   const [npBody, setNpBody] = useState('');
+  // A 3Speak track's own post (body + json_metadata), for its chapters.
+  const [npPost, setNpPost] = useState(null);
   const [npTags, setNpTags] = useState([]);
   const [npMantecurated, setNpMantecurated] = useState(false);
 
@@ -499,17 +527,9 @@ function GlobalAudioPlayer() {
     };
     const onPageHide = () => savePosition();
     window.addEventListener('pagehide', onPageHide);
-    // A 3Speak track joins the watch history (/watched, Audio tab) once it was
-    // really listened to: 30 s, or half of a shorter track, the rule a play uses.
-    const saveHistory = (pos) => {
-      if (!audioCurrent?.permlink || audioCurrent.external || live || historyRef.current === audioCurrent._id) return;
-      const dur = Number(audioCurrent.duration) || el.duration || 0;
-      if (!(pos >= Math.min(30, dur > 0 ? dur / 2 : 30))) return;
-      historyRef.current = audioCurrent._id;
-      const { user: u, incubationHandle, watchHistoryEnabled } = useAppStore.getState();
-      const who = u || incubationHandle;
-      if (who && watchHistoryEnabled !== false) recordWatch(who, audioCurrent.owner, audioCurrent.permlink);
-    };
+    // The track joins the watch history (/watched, Audio tab) once it was really
+    // listened to, once a day: 3Speak audio and outside episodes (lib/listenHistory.js).
+    const saveHistory = (pos) => noteListen(audioCurrent, pos, Number(audioCurrent?.duration) || el.duration || 0);
     const h = {
       timeupdate: () => {
         audioSetCurrentTime(el.currentTime);
@@ -603,12 +623,14 @@ function GlobalAudioPlayer() {
 
   // A live HLS stream through hls.js. A browser that can't do either gets a
   // short note instead of a player that silently does nothing.
-  const attachHls = (el, src, id, play) => {
-    const unsupported = () => toast.error(t('audio.player.liveUnsupported'));
+  // A video heard as audio (lib/videoAsAudio.js) is a VOD: no low-latency mode,
+  // and it starts at `startAt`.
+  const attachHls = (el, src, id, play, { live = true, startAt = 0 } = {}) => {
+    const unsupported = () => toast.error(live ? t('audio.player.liveUnsupported') : t('videoAudio.unsupported'));
     import('hls.js').then(({ default: Hls }) => {
       if (audioRef.current !== el || srcRef.current.id !== id) return;
       if (!Hls?.isSupported?.()) { unsupported(); return; }
-      const hls = new Hls({ lowLatencyMode: true });
+      const hls = new Hls(live ? { lowLatencyMode: true } : { startPosition: startAt > 0 ? startAt : -1, maxBufferLength: 30 });
       hlsRef.current = hls;
       hls.on(Hls.Events.ERROR, (_e, data) => {
         if (!data?.fatal) return;
@@ -629,10 +651,11 @@ function GlobalAudioPlayer() {
     const el = audioRef.current;
     const track = audioCurrent;
     if (!track) { srcRef.current = { id: null, src: null, local: false }; dropHls(); return undefined; }
-    if (!el || !(track.audio_cid || track.external)) return undefined;
+    if (!el || !(track.audio_cid || track.external || isVideoTrack(track))) return undefined;
     let cancelled = false;
-    // Outside podcast episodes play straight from the podcast's own host.
-    const networkSrc = track.external ? track.src : `${AUDIO_CDN}/${track.audio_cid}`;
+    // Outside podcast episodes play straight from the podcast's own host, a video
+    // heard as audio from its HLS rendition.
+    const networkSrc = track.external || isVideoTrack(track) ? track.src : `${AUDIO_CDN}/${track.audio_cid}`;
     const fresh = srcRef.current.id !== track._id;
 
     // A saved copy of an episode no longer playing: let its memory go.
@@ -649,7 +672,13 @@ function GlobalAudioPlayer() {
       if (fresh) {
         const f = fxRef.current;
         const wantFx = (f.boost || f.skip) && !track.live && !fxBlockedRef.current && webAudioSupported();
-        const want = wantFx && corsKnown(src, { storage: lsStorage(), origin: window.location.origin }) === true;
+        // hls.js feeds the element from memory (MSE), which Web Audio can always read.
+        const viaMse = isVideoTrack(track) && mseAvailable();
+        let want = wantFx && (isVideoTrack(track) ? viaMse : corsKnown(src, { storage: lsStorage(), origin: window.location.origin }) === true);
+        // Away (the next track with the screen locked): no swap to the Web Audio
+        // element, which would have to start on its own in the background. The
+        // plain one plays the track; the effects come back with the listener.
+        if (want && !routedRef.current && pageAway()) want = false;
         if (want !== routedRef.current) {
           handoverRef.current = null;
           retiredEls.add(el);
@@ -692,10 +721,14 @@ function GlobalAudioPlayer() {
         setPlayingLocal(local);
         setLoadedSrc(src);
         dropHls();
-        if (track.live && isHlsTrack(track) && !el.canPlayType('application/vnd.apple.mpegurl')) {
+        const hlsWay = local ? null : hlsPlayback(track, { canPlayNative: !!el.canPlayType('application/vnd.apple.mpegurl'), mse: mseAvailable() });
+        if (hlsWay === 'hlsjs') {
           // Safari plays HLS in <audio> natively; elsewhere hls.js does (the app
           // already ships it for the video players), loaded only when needed.
-          attachHls(el, src, track._id, play);
+          el.defaultPlaybackRate = track.live ? 1 : speedRef.current;
+          el.playbackRate = el.defaultPlaybackRate;
+          attachHls(el, src, track._id, play, { live: !!track.live, startAt });
+          if (audioStartAt != null) useAppStore.setState({ audioStartAt: null });
           return;
         }
         setAudioSrc(el, src, routedRef.current);
@@ -792,28 +825,37 @@ function GlobalAudioPlayer() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [audioCurrent?._id, audioCurrent?.audio_cid, elKey]);
 
+  // Whether the listener is away (utils/pageAway.js): the swap below waits
+  // for them to come back.
+  const [away, setAway] = useState(pageAway);
+  useEffect(() => onPageAwayChange(() => setAway(pageAway())), []);
+
   // Effects switched on (or a new track) while the plain element plays: find
   // out whether the source allows CORS, and swap to a routed element if so.
+  // Never while the listener is away: the new element would have to start on
+  // its own in the background, and a phone lets only the playing one go on.
   useEffect(() => {
     const track = audioCurrent;
     if (!fxOn || !track) { setRouteOk(null); return undefined; }
-    if (track.live || fxBlocked || !webAudioSupported()) { setRouteOk(false); return undefined; }
+    if (track.live || fxBlocked || !webAudioSupported() || (isVideoTrack(track) && !mseAvailable())) { setRouteOk(false); return undefined; }
     if (routed) { setRouteOk(true); return undefined; }
+    // A video heard as audio plays through hls.js (MSE): always readable.
+    if (isVideoTrack(track)) { setRouteOk(true); switchElement(true); return undefined; }
     const src = srcRef.current.id === track._id ? srcRef.current.src : null;
     if (!src) return undefined; // the load effect hasn't picked the source yet
     const known = corsKnown(src, { storage: lsStorage(), origin: window.location.origin });
     setRouteOk(known);
-    if (known === true) { switchElement(true); return undefined; }
+    if (known === true) { if (!away) switchElement(true); return undefined; }
     if (known === false) return undefined;
     let gone = false;
     canRoute(src).then((ok) => {
       if (gone || srcRef.current.src !== src) return;
       setRouteOk(ok);
-      if (ok && (fxRef.current.boost || fxRef.current.skip)) switchElement(true);
+      if (ok && (fxRef.current.boost || fxRef.current.skip) && !pageAway()) switchElement(true);
     });
     return () => { gone = true; };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fxOn, fxBlocked, routed, audioCurrent?._id, loadedSrc]);
+  }, [fxOn, fxBlocked, routed, audioCurrent?._id, loadedSrc, away]);
 
   // The routed element joins the Web Audio graph. The browser only lets audio
   // start after a click: if the context still isn't running shortly after play,
@@ -919,6 +961,17 @@ function GlobalAudioPlayer() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [audioCurrent?._id, audioCurrent?.chapters, audioCurrent?.external, audioCurrent?.live]);
 
+  // Chapters of a 3Speak track, from its own post: the timeline's chapters in
+  // its metadata, else the "0:00 Intro" list the audio editor writes into the
+  // text (utils/postChapters.js). The same chapter tab, ticks and skip buttons as
+  // an outside episode's.
+  useEffect(() => {
+    if (audioCurrent?.external || !npPost) return;
+    if (npPost.key !== `${audioCurrent?.owner}/${audioCurrent?.post_permlink}`) return;
+    const duration = audioDuration || Number(audioCurrent?.duration) || 0;
+    setChapters(chaptersOfPost({ body: npPost.body, json_metadata: npPost.json_metadata, duration }));
+  }, [npPost, audioDuration, audioCurrent?.external, audioCurrent?.owner, audioCurrent?.post_permlink, audioCurrent?.duration]);
+
   // Casting: a button only while the browser sees a device. Safari has its own
   // AirPlay picker; the others the Remote Playback API.
   useEffect(() => {
@@ -980,12 +1033,14 @@ function GlobalAudioPlayer() {
   useEffect(() => {
     if (!audioCurrent?.post_permlink) {
       setNpIsVoted(false); setNpVoteCount(0); setNpPayout(0); setNpComments(0);
-      setNpBody(''); setNpTags([]); setNpMantecurated(false);
+      setNpBody(''); setNpTags([]); setNpMantecurated(false); setNpPost(null);
       return;
     }
     let cancelled = false;
+    setNpPost(null);
     getUersContent(audioCurrent.owner, audioCurrent.post_permlink).then(data => {
       if (cancelled || !data) return;
+      setNpPost({ key: `${audioCurrent.owner}/${audioCurrent.post_permlink}`, body: data.body || '', json_metadata: data.json_metadata });
       setNpVoteCount(data.active_votes?.length || 0);
       setNpComments(Number(data.children) || 0);
       setNpIsVoted(data.active_votes?.some(v => v.voter === user) || false);
@@ -1101,13 +1156,10 @@ function GlobalAudioPlayer() {
     el.currentTime = skipTarget(el.currentTime, delta, d);
   }, []);
 
-  const handleSeek = useCallback((e) => {
-    const el = audioRef.current;
-    if (!el || !audioDuration || isLive) return;
-    el.currentTime = ((e.clientX - e.currentTarget.getBoundingClientRect().left) / e.currentTarget.getBoundingClientRect().width) * audioDuration;
-  }, [audioDuration, isLive]);
-
   const playNext = useCallback(() => {
+    // From the store, not this render: the end of a track, the lock screen's
+    // Next and the queue all act on what the queue is at that moment.
+    const { audioCurrent, audioQueue, audioAutoplayList } = useAppStore.getState();
     if (!audioCurrent) return;
     if (audioQueue.length > 0) {
       const i = audioQueue.findIndex(x => x._id === audioCurrent._id);
@@ -1118,7 +1170,7 @@ function GlobalAudioPlayer() {
     // a list of one, and the album or page would stop after it.
     const i = audioAutoplayList.findIndex(x => x._id === audioCurrent._id);
     if (i >= 0 && i < audioAutoplayList.length - 1) audioPlay(audioAutoplayList[i + 1], audioAutoplayList);
-  }, [audioCurrent, audioQueue, audioAutoplayList, audioPlay]);
+  }, [audioPlay]);
 
   const playPrev = useCallback(() => {
     const el = audioRef.current;
@@ -1174,26 +1226,41 @@ function GlobalAudioPlayer() {
     if (ms) ms.playbackState = audioIsPlaying ? 'playing' : 'paused';
   }, [audioIsPlaying]);
 
+  // The buttons are told once and call the latest Next / Previous through a
+  // ref. They used to be taken away and set again on every track change, which
+  // left the lock screen without them for a moment each time a track began.
+  const sessionActionsRef = useRef({ playNext, playPrev });
+  sessionActionsRef.current = { playNext, playPrev };
   useEffect(() => {
     const ms = typeof navigator !== 'undefined' ? navigator.mediaSession : undefined;
     if (!ms?.setActionHandler) return undefined;
     const el = () => audioRef.current;
     // An action a browser does not know throws; it just goes without that button.
     const set = (action, fn) => { try { ms.setActionHandler(action, fn); } catch { /* unsupported */ } };
-    // The same 15 s back / 15 s forward as the player's own buttons. A live
-    // stream can't be skipped through.
     const handlers = {
       play: () => { el()?.play().catch(() => {}); },
       pause: () => { el()?.pause(); },
-      previoustrack: playPrev,
-      nexttrack: playNext,
+      previoustrack: () => sessionActionsRef.current.playPrev(),
+      nexttrack: () => sessionActionsRef.current.playNext(),
+    };
+    for (const [action, fn] of Object.entries(handlers)) set(action, fn);
+    return () => { for (const action of Object.keys(handlers)) set(action, null); };
+  }, []);
+  // The same 15 s back / 15 s forward as the player's own buttons. A live
+  // stream can't be skipped through.
+  useEffect(() => {
+    const ms = typeof navigator !== 'undefined' ? navigator.mediaSession : undefined;
+    if (!ms?.setActionHandler) return undefined;
+    const el = () => audioRef.current;
+    const set = (action, fn) => { try { ms.setActionHandler(action, fn); } catch { /* unsupported */ } };
+    const handlers = {
       seekto: isLive ? null : (d) => { const a = el(); if (a && Number.isFinite(d.seekTime)) a.currentTime = d.seekTime; },
       seekbackward: isLive ? null : () => skipBy(-SKIP_BACK),
       seekforward: isLive ? null : () => skipBy(SKIP_FORWARD),
     };
     for (const [action, fn] of Object.entries(handlers)) set(action, fn);
     return () => { for (const action of Object.keys(handlers)) set(action, null); };
-  }, [playNext, playPrev, skipBy, isLive]);
+  }, [skipBy, isLive]);
 
   // The lock screen's timeline: duration, position and the real rate, told
   // again whenever one of them jumps (the system runs the clock in between).
@@ -1462,6 +1529,16 @@ function GlobalAudioPlayer() {
     </div>
   ) : null;
 
+  // Press and drag on the timelines (hooks/useTimelineScrub.js). Before the early
+  // returns below: a hook must run on every render.
+  const localSrc = isLocalSource(audioRef.current?.currentSrc);
+  const scrub = useTimelineScrub({
+    duration: audioDuration,
+    local: localSrc,
+    disabled: isLive,
+    onSeek: (sec) => { const el = audioRef.current; if (el) el.currentTime = sec; },
+  });
+
   // Every return has the same root (the provider) with {audioEl} first, so React
   // keeps ONE <audio> element from the idle bar to playing. With a Fragment here
   // it was remounted on the first play, and effects bound to the element by elKey
@@ -1480,7 +1557,7 @@ function GlobalAudioPlayer() {
           ref={npRef}
           className="audio-now-playing gap-bar audio-np-idle"
           // A swipe down does what its X does: clear the queue, the bar goes.
-          onTouchStart={(e) => { const p = e.touches[0]; swipeRef.current = p ? { x: p.clientX, y: p.clientY } : null; }}
+          onTouchStart={(e) => { const p = e.touches[0]; swipeRef.current = p && !e.target.closest?.('[role="slider"]') ? { x: p.clientX, y: p.clientY } : null; }}
           onTouchEnd={(e) => {
             const from = swipeRef.current;
             swipeRef.current = null;
@@ -1537,6 +1614,7 @@ function GlobalAudioPlayer() {
       .catch((err) => {
         // The library's own reasons (lib/podcastDownloads.js err.code); a cancel says nothing.
         if (err?.code === 'cancelled') return;
+        if (err?.code === 'cap') { toast.error(t('downloads.errors.cap')); return; }
         const key = DOWNLOAD_ERRORS[err?.code];
         toast.error(key ? t(`audio.podcasts.downloads.errors.${key}`, { defaultValue: t('audio.player.downloadFailed') }) : t('audio.player.downloadFailed'));
       })
@@ -1553,6 +1631,10 @@ function GlobalAudioPlayer() {
       return next;
     });
   };
+  // A video heard as audio: no audio download (Download on the watch page saves
+  // the video), and no effects where Web Audio cannot read it (no MSE).
+  const canDownload = !isLive && !isVideoTrack(nowPlaying);
+  const canEffects = !isLive && !(isVideoTrack(nowPlaying) && !mseAvailable());
   const fxUnavailable = fxOn && (isLive || fxBlocked || !webAudioSupported() || (!routed && routeOk === false));
   const fxChecking = fxOn && !fxUnavailable && !routed && routeOk == null;
 
@@ -1578,10 +1660,19 @@ function GlobalAudioPlayer() {
   };
   const goCreator = (e) => {
     e?.stopPropagation();
-    navigate(nowPlaying.external ? podcastPath(nowPlaying.show_id) : `/@${nowPlaying.owner}?tab=audio`);
+    navigate(nowPlaying.external ? podcastPath(nowPlaying.show_id) : isVideoTrack(nowPlaying) ? `/@${nowPlaying.owner}` : `/@${nowPlaying.owner}?tab=audio`);
     audioSetExpanded(false);
   };
   const openVote = () => { if (!loggedIn) return; setVoteTarget({ author: nowPlaying.owner, permlink: post }); setShowVoteTooltip(!showVoteTooltip); };
+  // The Vote tile and menu row (a 3Speak track is a Hive post): the same vote
+  // popup as the count in the title area and the watch page (CommentVoteTooltip,
+  // weight slider, voted state). Signed out, or signed in without a Hive key,
+  // it says how to vote instead, like the watch page's Vote tile.
+  const pressVote = () => {
+    if (!loggedIn) { toastIn('Post').error(t('audio.post.signInToVote')); return; }
+    openVote();
+  };
+  const voteLabel = npVoteCount > 0 ? compactNumber(npVoteCount) : npIsVoted ? t('audio.post.voted') : t('audio.post.vote');
 
   const shareButton = canShare && (
     <button
@@ -1672,10 +1763,30 @@ function GlobalAudioPlayer() {
   ));
 
   // The seek bar where there is no waveform (outside episodes), with chapter ticks.
+  // A slider for the keyboard and screen readers too (lib/sliderKeys.js); a live
+  // stream has no timeline, so it is a plain bar there.
+  const seekKeys = (e) => {
+    const el = audioRef.current;
+    if (isLive || !el || !(audioDuration > 0) || e.ctrlKey || e.metaKey || e.altKey) return;
+    const to = seekKeyTarget(e.key, el.currentTime, audioDuration);
+    if (to === null) return;
+    e.preventDefault();
+    e.stopPropagation();
+    el.currentTime = to;
+  };
+  // Press and drag scrubs (hooks/useTimelineScrub.js): the time shows above a
+  // thumb while dragging, the seek lands on release (live for a downloaded file).
+  const scrubFill = scrub.dragging ? scrub.fraction : (audioDuration ? audioCurrentTime / audioDuration : 0);
   const progressBar = (
-    <div className={cx('audio-np-progress', isLive && 'is-live')} onClick={isLive ? undefined : handleSeek}>
-      {!isLive && <div className="audio-np-progress-fill" style={{ width: audioDuration ? `${(audioCurrentTime / audioDuration) * 100}%` : '0%' }} />}
+    <div
+      className={cx('audio-np-progress', isLive && 'is-live', scrub.dragging && 'is-scrubbing')}
+      {...(isLive ? {} : timelineSliderProps({ value: scrub.dragging ? scrub.time : audioCurrentTime, max: audioDuration, label: t('playerKeys.seekLabel'), t }))}
+      onKeyDown={seekKeys}
+      {...(isLive ? {} : scrub.handlers)}
+    >
+      {!isLive && <div className="audio-np-progress-fill" style={{ width: `${Math.min(100, scrubFill * 100)}%` }} />}
       {markers.map((f, i) => <span key={i} className="audio-np-progress-marker" style={{ left: `${f * 100}%` }} aria-hidden="true" />)}
+      {!isLive && <ScrubOverlay fraction={scrub.fraction} time={scrub.time} />}
     </div>
   );
 
@@ -1773,7 +1884,7 @@ function GlobalAudioPlayer() {
       className={cx('audio-now-playing gap-bar', isLive && 'is-live', !!transcriptPanel && 'has-panel')}
       // Phones (27c + owner 2026-11-12): up opens the player, down closes it,
       // left / right go back / forward 15 s (not on a live stream).
-      onTouchStart={(e) => { const p = e.touches[0]; swipeRef.current = p ? { x: p.clientX, y: p.clientY } : null; }}
+      onTouchStart={(e) => { const p = e.touches[0]; swipeRef.current = p && !e.target.closest?.('[role="slider"]') ? { x: p.clientX, y: p.clientY } : null; }}
       onTouchEnd={(e) => {
         const from = swipeRef.current;
         swipeRef.current = null;
@@ -1840,6 +1951,8 @@ function GlobalAudioPlayer() {
               audioRef={audioRef}
               duration={audioDuration}
               markers={markers}
+              currentTime={audioCurrentTime}
+              local={localSrc}
               onSeek={(f) => { const el = audioRef.current; if (el && audioDuration > 0) el.currentTime = f * audioDuration; }}
             />
           )}
@@ -1889,7 +2002,7 @@ function GlobalAudioPlayer() {
   const CATEGORY_KEYS = { podcast: 'audio.categories.podcast', voice_message: 'audio.categories.voice', song: 'audio.categories.music', music: 'audio.categories.music', audiobook: 'audio.categories.audiobook', interview: 'audio.categories.interview' };
   const listIdx = audioAutoplayList.findIndex(x => x._id === nowPlaying._id);
   const eyebrow = [
-    nowPlaying.external ? t('audio.categories.podcast') : t(CATEGORY_KEYS[nowPlaying.category] || 'audio.categories.voice'),
+    nowPlaying.external ? t('audio.categories.podcast') : isVideoTrack(nowPlaying) ? t('videoAudio.label') : t(CATEGORY_KEYS[nowPlaying.category] || 'audio.categories.voice'),
     !nowPlaying.external && nowPlaying.genre ? String(nowPlaying.genre) : null,
     listIdx >= 0 && audioAutoplayList.length > 1 ? t('audio.player.position', { current: listIdx + 1, total: audioAutoplayList.length }) : null,
   ].filter(Boolean).join(' · ');
@@ -2021,10 +2134,12 @@ function GlobalAudioPlayer() {
                 audioRef={audioRef}
                 duration={audioDuration}
                 markers={markers}
+                currentTime={audioCurrentTime}
                 playhead
                 pins={pins}
                 onPin={(p) => { seekTo(p.at); setCommentScope('moment'); pickTab('comments'); }}
-                onSeek={(f) => { const el = audioRef.current; if (el && audioDuration > 0) el.currentTime = f * audioDuration; }}
+                local={localSrc}
+              onSeek={(f) => { const el = audioRef.current; if (el && audioDuration > 0) el.currentTime = f * audioDuration; }}
               />
             ) : progressBar}
           </div>
@@ -2060,7 +2175,7 @@ function GlobalAudioPlayer() {
               icon="bedtime"
               text={sleep ? (sleepLabel || t('audio.player.sleepEndShort')) : null}
             />
-            {!isLive && (
+            {canEffects && (
               <ToolChip
                 className={cx(fxOn && 'is-on')}
                 onClick={toggleMenu('effects')}
@@ -2074,7 +2189,7 @@ function GlobalAudioPlayer() {
             {castAvailable && !playingLocal && (
               <ToolChip onClick={castNow} aria-label={t('audio.player.cast')} title={t('audio.player.cast')} icon={HAS_AIRPLAY ? 'airplay' : 'cast'} />
             )}
-            {!isLive && (
+            {canDownload && (
               <ToolChip
                 className={cx(dlSaved && 'is-on')}
                 onClick={startDownload}
@@ -2100,9 +2215,31 @@ function GlobalAudioPlayer() {
             <div className={cx('gap-transport', !isLive && 'has-skip')}>{transport(true)}</div>
             <div className="gap-docks">
               {post && <AudioHypeButton author={nowPlaying.owner} permlink={post} variant="tile" />}
+              {post && (
+                <DockTile
+                  className="gap-tile"
+                  icon="arrow_upward"
+                  label={voteLabel}
+                  active={npIsVoted}
+                  fill
+                  onClick={pressVote}
+                  title={npIsVoted ? t('audio.post.voted') : t('audio.post.vote')}
+                  aria-label={t('audio.post.vote')}
+                />
+              )}
               {post && <DockTile className="gap-tile" icon="chat_bubble" label={String(commentCount || 0)} active={activeTab === 'comments'} tone="cyan" fill={false} onClick={openComments} aria-label={t('audio.item.comments')} />}
-              {canSave && <DockTile className="gap-tile" icon="playlist_add" label={t('common.actions.save')} onClick={openPlaylist} title={t('audio.player.playlist')} />}
+              {canSave && <DockTile className="gap-tile gap-tile--save" icon="playlist_add" label={t('common.actions.save')} onClick={openPlaylist} title={t('audio.player.playlist')} />}
               {canTip && <DockTile className="gap-tile" icon="volunteer_activism" label={t('audio.post.tip')} onClick={openTip} title={nowPlaying.external && !post ? t('audio.podcasts.tip.button') : t('audio.post.tip')} />}
+              {satStream.available && (
+                <DockTile
+                  className="gap-tile"
+                  icon="bolt"
+                  label={satStream.settings.enabled ? t('boosts.stream.tileOn', { sats: satStream.sessionSats }) : t('boosts.stream.tile')}
+                  active={satStream.settings.enabled}
+                  onClick={() => setStreamOpen(true)}
+                  title={t('boosts.stream.title')}
+                />
+              )}
               {canShare && <DockTile className="gap-tile" icon="ios_share" label={t('common.actions.share')} active={shareOpen} tone="cyan" fill={false} onClick={toggleMenu('share')} aria-haspopup="dialog" />}
             </div>
           </div>
@@ -2417,10 +2554,11 @@ function GlobalAudioPlayer() {
                 onClick={() => setMenu({ name: 'sleep', anchor: menu.anchor })}
               />
             )}
+            {post && <PmRow icon="arrow_upward" label={npIsVoted ? t('audio.post.voted') : t('audio.post.vote')} sub={npVoteCount > 0 ? compactNumber(npVoteCount) : null} onClick={() => { closeMenu(); pressVote(); }} />}
             {canSave && <PmRow icon="playlist_add" label={t('engagement.cardMenu.addToPlaylist')} onClick={() => { closeMenu(); openPlaylist(); }} />}
             <PmRow icon={nowPlaying.external ? 'podcasts' : 'person'} label={t('audio.player.goTo', { name: bylineOf(nowPlaying) })} onClick={() => { closeMenu(); goCreator(); }} />
-            {!isLive && <PmRow icon={dlSaved ? 'download_done' : 'download'} label={dlSaved ? t('audio.player.downloaded') : t('audio.player.download')} onClick={startDownload} disabled={dlSaved || dlBusy} sub={dlBusy ? t('audio.player.downloading', { pct: dlPct }) : null} />}
-            {!isLive && <PmRow icon="equalizer" label={t('audio.player.effects')} onClick={() => setMenu({ name: 'effects', anchor: menu.anchor })} />}
+            {canDownload && <PmRow icon={dlSaved ? 'download_done' : 'download'} label={dlSaved ? t('audio.player.downloaded') : t('audio.player.download')} onClick={startDownload} disabled={dlSaved || dlBusy} sub={dlBusy ? t('audio.player.downloading', { pct: dlPct }) : null} />}
+            {canEffects && <PmRow icon="equalizer" label={t('audio.player.effects')} onClick={() => setMenu({ name: 'effects', anchor: menu.anchor })} />}
             {castAvailable && !playingLocal && <PmRow icon={HAS_AIRPLAY ? 'airplay' : 'cast'} label={t('audio.player.cast')} onClick={() => { closeMenu(); castNow(); }} />}
             {canShare && <PmRow icon="ios_share" label={t('common.actions.share')} onClick={() => setMenu({ name: 'share', anchor: menu.anchor })} />}
             {post && <PmRow icon="flag" label={t('common.actions.report')} onClick={() => { closeMenu(); setReportOpen(true); }} danger />}
@@ -2503,8 +2641,13 @@ function GlobalAudioPlayer() {
 
       {podcastTip && <PodcastTipModal track={podcastTip} onClose={() => setPodcastTip(null)} />}
 
+      {streamOpen && satStream.available && (
+        <StreamSatsModal stream={satStream} to={streamTo} onClose={() => setStreamOpen(false)} />
+      )}
+
       {tipTarget && (
         <TipModal
+          boost
           recipient={tipTarget.author}
           permlink={tipTarget.permlink}
           memoLink={`https://3speak.tv/audio/${tipTarget.author}/${tipTarget.permlink}`}

@@ -139,6 +139,13 @@
     "rumble": {
       "placeholder": "https://rumble.com/c/…",
       "help": "粘贴你的 Rumble 频道名称或链接。把哈希放在频道简介的任意位置。"
+    },
+    "rss": {
+      "placeholder": "https://example.com/podcast.xml",
+      "help": "粘贴你的播客 RSS 源地址。播客托管平台会在节目设置或分发页面中显示它。",
+      "flowTitle": "关联你的播客 RSS 源",
+      "step2": "在你的播客托管平台上，<strong>把它粘贴到节目简介或最新一集的简介中</strong>。保存并发布更改。RSS 源验证通过后即可删除。",
+      "step3": "输入你的播客 RSS 源地址："
     }
   },
   "snaps": {

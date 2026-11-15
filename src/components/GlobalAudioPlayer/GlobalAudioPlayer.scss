@@ -671,7 +671,9 @@ $wide: 1025px;   // the side-by-side full player; the bottom nav shows up to 102
   display: flex;
   gap: 8px;
   margin-left: auto;
-  @include one-col { margin-left: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(56px, 1fr)); gap: 6px; }
+  // One row whatever the count (Hype, Vote, comments, Save, Tip, Share: six on a
+  // signed-in phone), each tile an equal share; a long label ends in "…".
+  @include one-col { margin-left: 0; display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 6px; }
 }
 // The dock tiles under the player: 64 square, radius 20 (27a).
 .v2-dock.gap-tile {
@@ -681,7 +683,12 @@ $wide: 1025px;   // the side-by-side full player; the bottom nav shows up to 102
   font-size: 11px;
   gap: 3px;
   @include one-col { width: auto; height: 60px; border-radius: var(--r-lg); }
+  // A 360 px phone: five tiles of about 60 px, the label gets the whole width.
+  @media (max-width: 400px) { padding: 0 2px; font-size: 10px; }
 }
+// Narrow phones keep five tiles in the row (Hype, Vote, comments, Tip, Share),
+// like the watch page's dock: Save stays in the player's ⋯ menu ("Add to playlist").
+@media (max-width: 400px) { .gap-docks .gap-tile--save { display: none; } }
 
 // The side panel: Queue, Comments, Chapters, Transcript, Description.
 .gap-side {
@@ -1510,4 +1517,11 @@ $wide: 1025px;   // the side-by-side full player; the bottom nav shows up to 102
   0% { opacity: 0; scale: .9; }
   15%, 70% { opacity: 1; scale: 1; }
   100% { opacity: 0; }
+}
+
+// The timeline is a slider (keyboard + screen readers): a ring on keyboard focus only.
+.audio-np-progress,
+.audio-np-waveform {
+  &:focus { outline: none; }
+  &:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: var(--r-sm); }
 }

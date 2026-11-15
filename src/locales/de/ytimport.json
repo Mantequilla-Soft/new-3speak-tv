@@ -1,5 +1,5 @@
 {
-  "title": "Deine Videos importieren",
+  "title": "Deine Inhalte importieren",
   "subtitle": "Hol deine Videos von YouTube oder TikTok zu 3Speak. Titel, Beschreibung, Tags und Vorschaubild werden automatisch ausgefüllt.",
   "noChannel": "Du hast noch keinen YouTube-Kanal verknüpft. Verknüpfe und verifiziere ihn zuerst in deinem Profil und komm dann hierher zurück.",
   "linkChannel": "Zu meinem Profil",
@@ -9,6 +9,7 @@
   "openOnYoutube": "Auf YouTube öffnen",
   "import": "Dieses Video importieren",
   "useOwnFile": "Ich habe die Datei schon",
+  "openInUploader": "Bearbeiten und veröffentlichen",
   "cancel": "Abbrechen",
   "retry": "Erneut versuchen",
   "progress": {
@@ -31,9 +32,11 @@
     "blocked": "YouTube hat unserem Server den Download dieses Videos gerade nicht erlaubt.",
     "notVideo": "Diese Datei ist kein Video.",
     "tooLongForShort": "Dieses Video ist länger als {{minutes}} Minuten und damit zu lang für einen Short. Importiere es stattdessen als normales Video.",
-    "proxyPaused": "YouTube-Importe sind gerade pausiert. Bitte versuch es später noch einmal."
+    "proxyPaused": "YouTube-Importe sind gerade pausiert. Bitte versuch es später noch einmal.",
+    "notAudio": "Diese Datei ist keine Audiodatei."
   },
   "entry": "Videos importieren",
+  "menuEntry": "Inhalte importieren",
   "types": {
     "videos": "Videos",
     "shorts": "Shorts",
@@ -60,7 +63,8 @@
     "tiktok": "TikTok",
     "instagram": "Instagram",
     "bitchute": "BitChute",
-    "rumble": "Rumble"
+    "rumble": "Rumble",
+    "rss": "Podcast"
   },
   "tiktok": {
     "noLink": "Du hast noch kein TikTok-Konto verknüpft. Verknüpfe und verifiziere es zuerst in deinem Profil und komm dann hierher zurück.",
@@ -98,7 +102,7 @@
     "selectedCount": "{{count}} ausgewählt",
     "maxHint": "bis zu {{max}}",
     "clear": "Leeren",
-    "importSelected": "Auswahl importieren ({{count}})",
+    "importSelected": "Im Hintergrund veröffentlichen ({{count}})",
     "busy": "Dein vorheriger Sammelimport läuft noch",
     "steps": {
       "content": "Inhalt",
@@ -135,7 +139,16 @@
     "stopConfirm": "Diesen Import stoppen? Noch nicht veröffentlichte Videos werden abgebrochen, auch bereits eingeplante. Veröffentlichte Videos bleiben.",
     "stopYes": "Ja, stoppen",
     "stopKeep": "Weiter importieren",
-    "countOf": "{{done}} von {{total}}"
+    "countOf": "{{done}} von {{total}}",
+    "audio": {
+      "formTitle": "{{count}} Folgen importieren",
+      "contentIntro": "Wähle die Art des Audios und woher Titel, Beschreibung und Tags jedes Beitrags kommen.",
+      "settingsIntro": "Diese Einstellungen gelten für alle ausgewählten Folgen.",
+      "spacing": "Jede Folge wird auf unserem Server importiert und dann einzeln veröffentlicht, im Abstand von {{minutes}} Minuten. Die erste geht ein paar Minuten nach der Fertigstellung raus. Du kannst diese Seite schließen.",
+      "canLeave": "Du kannst diese Seite jetzt schließen. Deine Folgen werden auf unserem Server importiert und veröffentlicht, auch während du weg bist.",
+      "stopConfirm": "Diesen Import stoppen? Noch nicht veröffentlichte Folgen werden abgebrochen, auch bereits eingeplante. Veröffentlichte Folgen bleiben.",
+      "maxReached": "Du kannst bis zu {{max}} Folgen auf einmal auswählen"
+    }
   },
   "bitchute": {
     "noLink": "Du hast noch kein BitChute-Konto verknüpft. Verknüpfe und verifiziere es zuerst in deinem Profil und komm dann hierher zurück.",
@@ -166,5 +179,85 @@
     "empty": "Auf deinem Rumble-Kanal wurden keine öffentlichen Videos gefunden.",
     "olderHint": "Du siehst das gewünschte Video nicht?",
     "olderHintAction": "Füge seinen Link ein"
+  },
+  "rss": {
+    "noLink": "Du hast noch keinen Podcast-RSS-Feed verknüpft. Verknüpfe und verifiziere ihn zuerst in deinem Profil und komm dann hierher zurück.",
+    "latest": "Deine Podcast-Folgen",
+    "empty": "In deinem Podcast-Feed wurden keine Folgen gefunden.",
+    "openOn": "Seite der Folge öffnen",
+    "fallbackIntro": "Du kannst sie trotzdem importieren: Lade die Folge selbst herunter und wähle die Datei hier aus. Alles andere bleibt ausgefüllt.",
+    "fallbackStep1": "Öffne die Folge bei deinem Podcast-Hoster.",
+    "fallbackStep2": "Lade ihre Audiodatei herunter (MP3 oder M4A).",
+    "limits": "Folgen bis {{hours}} Stunden können importiert werden. Sie erscheinen als Audio-Beiträge mit ihren Shownotes und ihrem Cover.",
+    "show": "Podcast",
+    "unreadable": "gerade nicht lesbar",
+    "unreadableAll": "Dein Podcast-Feed kann gerade nicht gelesen werden. Prüfe, ob er online ist, und versuch es später noch einmal.",
+    "import": "Dieses Audio importieren",
+    "progressServer": "Audio wird abgerufen: {{pct}}%",
+    "progressTransfer": "Audio wird in den Uploader geladen: {{pct}}%"
+  },
+  "auto": {
+    "title": "Automatischer Import",
+    "unavailable": "Automatische Importe sind auf diesem Server noch nicht verfügbar.",
+    "off": "Aus. Schalte ihn ein, und jede neue Folge dieser Show wird zu einem Audio-Beitrag auf 3Speak.",
+    "onSince": "An seit {{date}}. Der Feed wird alle {{minutes}} Minuten geprüft.",
+    "pillOn": "An",
+    "pillOff": "Aus",
+    "queued": "Bisher importierte neue Folgen: {{count}}",
+    "lastCheck": "Letzte Prüfung: {{time}}",
+    "waiting": "Warten auf morgen: {{count}} (höchstens {{max}} pro Tag)",
+    "skipped": "Übersprungen, länger als das Importlimit: {{titles}}",
+    "comesAuto": "Neue Folge: Der automatische Import übernimmt sie bei der nächsten Prüfung",
+    "errors": {
+      "noLink": "Dieser Feed ist in deinem Profil nicht mehr verifiziert. Verknüpfe ihn erneut, um weiterzumachen.",
+      "noGrant": "3Speak darf nicht mehr für dich veröffentlichen. Öffne die Einstellungen, um es wieder zu erlauben.",
+      "unreadable": "Dein Feed konnte bei der letzten Prüfung nicht gelesen werden. Wir versuchen es bei der nächsten erneut.",
+      "generic": "Die letzte Prüfung ist fehlgeschlagen. Wir versuchen es bei der nächsten erneut."
+    },
+    "edit": "Einstellungen bearbeiten",
+    "setUp": "Automatischen Import einrichten",
+    "formTitle": "Automatischer Import",
+    "formIntro": "Neue Folgen von <b>{{show}}</b> werden mit diesen Einstellungen zu Audio-Beiträgen, höchstens {{max}} pro Tag, verteilt wie bei einem Sammelimport.",
+    "enabled": "Neue Folgen automatisch importieren",
+    "enabledInfo": "Wir prüfen deinen Feed regelmäßig. Jede Folge, die erscheint, nachdem du das eingeschaltet hast, wird heruntergeladen und von @threespeak mit den Einstellungen unten für dich veröffentlicht. Folgen, die schon im Feed sind, bleiben unberührt.",
+    "enabledOn": "Neue Folgen werden für dich veröffentlicht",
+    "enabledOff": "Die Einstellungen bleiben erhalten, nichts wird veröffentlicht",
+    "sections": {
+      "content": "Titel, Tags und Beschreibung",
+      "post": "Beitragseinstellungen"
+    },
+    "kind": "Art des Audios",
+    "target": "Veröffentlichen als",
+    "targetPost": "Eigener Beitrag",
+    "targetSnap": "Snap-Kommentar",
+    "targetPostHint": "Ein Beitrag mit Titel, in der Community, die du unten wählst.",
+    "targetSnapHint": "Eine Antwort im Snaps-Feed, ohne Titel, wie ein Short. Community und Blog gelten hier nicht.",
+    "fromSource": "Aus der Quelle übernehmen",
+    "fromSourceInfo": "An: Jeder Beitrag übernimmt Titel, Shownotes und die #Hashtags darin so, wie dein Feed sie hat. Aus: Du legst Titelformat, Tags und Beschreibung selbst fest.",
+    "fromSourceOn": "Titel, Beschreibung und Tags kommen aus jeder Folge",
+    "fromSourceOff": "Du legst Titel, Tags und Beschreibung unten fest",
+    "titleLabel": "Titel",
+    "titleHint": "Nutze {title} für den Titel der Folge, {show} für den Namen der Show, {episode} und {season} für ihre Nummern, {date} für das Erscheinungsdatum.",
+    "sampleTitle": "Titel der Folge",
+    "sampleShow": "Meine Show",
+    "titlePreview": "Beispiel: {{title}}",
+    "tagsLabel": "Tags",
+    "tagsHint": "Bis zu 8, durch Leerzeichen getrennt. Werden jedem Beitrag hinzugefügt.",
+    "hashtags": "Auch Hashtags aus den Shownotes verwenden",
+    "hashtagsInfo": "Wörter, die in den Shownotes einer Folge als #tag geschrieben sind, werden zu Tags ihres Beitrags, nach deinen eigenen Tags (höchstens 10 Tags).",
+    "hashtagsHint": "#tags in den Shownotes werden zu Beitrags-Tags",
+    "useNotes": "Shownotes als Beschreibung verwenden",
+    "useNotesInfo": "Der Text des Beitrags sind die Shownotes der Folge aus deinem Feed, mit ihren Links. Schalte es aus, um für jede Folge denselben eigenen Text zu verwenden.",
+    "useNotesOn": "Jeder Beitrag zeigt die Shownotes seiner Folge",
+    "useNotesOff": "Jeder Beitrag nutzt deinen Text unten",
+    "addendumLabel": "Text unter den Shownotes",
+    "addendumHint": "Wird jedem Beitrag nach den Shownotes hinzugefügt, zum Beispiel Links zu deinen anderen Kanälen.",
+    "optional": "optional",
+    "textLabel": "Beschreibung",
+    "textHint": "Wird für jede Folge verwendet. {title}, {show}, {episode}, {season} und {date} funktionieren auch hier.",
+    "textRequired": "Schreib die Beschreibung, die verwendet werden soll, oder nutze die Shownotes.",
+    "onlyNew": "Nur Folgen, die nach dem Einschalten in deinem Feed erscheinen, werden importiert, niemals ältere.",
+    "grantNeeded": "Automatische Importe werden von @threespeak für dich veröffentlicht, daher braucht es die Erlaubnis, auf deinem Konto zu veröffentlichen.",
+    "save": "Speichern"
   }
 }

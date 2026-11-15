@@ -1,0 +1,7 @@
+// "with @fan" in the watch meta line (WatchCollaborators.jsx).
+.wv2-meta .wv2-collab {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  a { color: var(--text); font-weight: 700; text-decoration: none; &:hover { text-decoration: underline; } }
+}

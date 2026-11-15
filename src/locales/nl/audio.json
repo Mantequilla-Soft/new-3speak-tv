@@ -148,6 +148,16 @@
     "notes": "Notities",
     "stillIndexing": "De audio van deze post wordt nog geïndexeerd — probeer het over een paar minuten opnieuw."
   },
+  "edit": {
+    "title": "Audio bewerken",
+    "editTitle": "Titel, shownotes, tags en cover bewerken",
+    "cover": "Cover",
+    "coverAlt": "Covervoorbeeld",
+    "coverHint": "Upload een afbeelding of plak een directe URL. Een vierkante afbeelding ziet er het best uit.",
+    "notesPlaceholder": "Vertel luisteraars over deze audio…",
+    "keptNote": "De spelerlink en eventuele muziekcredits in de post blijven zoals ze zijn.",
+    "updated": "Audio bijgewerkt!"
+  },
   "page": {
     "sections": {
       "popular": "Populair",
@@ -173,7 +183,6 @@
     },
     "all": "Alles",
     "musicGenre": "Muziekgenre",
-    "anyGenre": "Elk genre",
     "tracks_one": "{{count}} track",
     "tracks_other": "{{count}} tracks",
     "noTracks": "Geen tracks gevonden.",
@@ -186,7 +195,7 @@
     "nothingPlaying": "Er speelt nog niets.",
     "goExplore": "Zoek iets om te luisteren",
     "exploreViews": "Onderdelen",
-    "mostPlayed": "Meest beluisterd"
+    "newUploads": "Nieuwe uploads"
   },
   "upload": {
     "title": "Audio uploaden",
@@ -290,6 +299,7 @@
       "descriptionOptional": "Beschrijving (optioneel)",
       "track": "Track",
       "category": "Categorie",
+      "categoryRequired": "Kies een categorie, zodat je audio op het juiste tabblad verschijnt.",
       "musicGenre": "Muziekgenre"
     },
     "playlist": {
@@ -377,6 +387,7 @@
     "tracks": {
       "helpAlbum": "Elke track wordt gepubliceerd als reactie onder de hoofdpost. Stel gedeelde waarden één keer in en pas ze op alles toe, en pas ze daarna per track aan.",
       "helpSnaps": "Elke track wordt gepubliceerd als een eigen snap. Stel gedeelde waarden één keer in en pas ze op alles toe, en pas ze daarna per track aan.",
+      "helpSnapsSingle": "Je audio wordt als eigen snap gepubliceerd.",
       "applyToAllHeading": "Toepassen op alle tracks",
       "applyNote_one": "<b>Toepassen op {{count}} track:</b> gedeelde beschrijving en cover, daarna kun je elke track apart aanpassen.",
       "applyNote_other": "<b>Toepassen op alle {{count}} tracks:</b> gedeelde beschrijving en cover, daarna kun je elke track apart aanpassen.",
@@ -406,6 +417,10 @@
       "earnings": "Inkomsten:",
       "earningsPpl": "Betalen per luisterbeurt (@{{account}})",
       "earningsNormal": "Normale postbeloningen",
+      "rewards": "Beloningen:",
+      "beneficiaries": "Begunstigden:",
+      "perTrack": "Per track ingesteld",
+      "noBeneficiaries": "Geen",
       "playlist": "Playlist:",
       "failedCount_one": "{{count}} track mislukt.",
       "failedCount_other": "{{count}} tracks mislukt.",

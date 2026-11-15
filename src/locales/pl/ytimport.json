@@ -1,5 +1,5 @@
 {
-  "title": "Importuj swoje filmy",
+  "title": "Importuj swoje treści",
   "subtitle": "Przenieś swoje filmy z YouTube lub TikTok do 3Speak. Tytuł, opis, tagi i miniatura zostaną uzupełnione za Ciebie.",
   "noChannel": "Nie połączono jeszcze kanału YouTube. Najpierw połącz go i zweryfikuj w swoim profilu, a potem wróć tutaj.",
   "linkChannel": "Przejdź do mojego profilu",
@@ -9,6 +9,7 @@
   "openOnYoutube": "Otwórz w YouTube",
   "import": "Importuj ten film",
   "useOwnFile": "Mam już plik",
+  "openInUploader": "Edytuj i opublikuj",
   "cancel": "Anuluj",
   "retry": "Spróbuj ponownie",
   "progress": {
@@ -31,9 +32,11 @@
     "blocked": "YouTube nie pozwolił naszemu serwerowi pobrać tego filmu w tej chwili.",
     "notVideo": "Ten plik nie jest filmem.",
     "tooLongForShort": "Ten film jest dłuższy niż {{minutes}} minut, za długi na format Shorts. Zaimportuj go zamiast tego jako zwykły film.",
-    "proxyPaused": "Import z YouTube jest chwilowo wstrzymany. Spróbuj ponownie później."
+    "proxyPaused": "Import z YouTube jest chwilowo wstrzymany. Spróbuj ponownie później.",
+    "notAudio": "Ten plik nie jest plikiem audio."
   },
   "entry": "Importuj filmy",
+  "menuEntry": "Importuj treści",
   "types": {
     "videos": "Filmy",
     "shorts": "Shorts",
@@ -60,7 +63,8 @@
     "tiktok": "TikTok",
     "instagram": "Instagram",
     "bitchute": "BitChute",
-    "rumble": "Rumble"
+    "rumble": "Rumble",
+    "rss": "Podcast"
   },
   "tiktok": {
     "noLink": "Nie połączono jeszcze konta TikTok. Najpierw połącz je i zweryfikuj w swoim profilu, a potem wróć tutaj.",
@@ -98,7 +102,7 @@
     "selectedCount": "Zaznaczono: {{count}}",
     "maxHint": "maks. {{max}}",
     "clear": "Wyczyść",
-    "importSelected": "Importuj zaznaczone ({{count}})",
+    "importSelected": "Opublikuj w tle ({{count}})",
     "busy": "Poprzedni import zbiorczy wciąż trwa",
     "steps": {
       "content": "Treść",
@@ -135,7 +139,16 @@
     "stopConfirm": "Zatrzymać ten import? Filmy jeszcze nieopublikowane zostaną anulowane, także te już zaplanowane. Opublikowane filmy zostają.",
     "stopYes": "Tak, zatrzymaj",
     "stopKeep": "Importuj dalej",
-    "countOf": "{{done}} z {{total}}"
+    "countOf": "{{done}} z {{total}}",
+    "audio": {
+      "formTitle": "Importuj odcinki ({{count}})",
+      "contentIntro": "Wybierz rodzaj audio oraz skąd pochodzą tytuł, opis i tagi każdego posta.",
+      "settingsIntro": "Te ustawienia dotyczą wszystkich wybranych odcinków.",
+      "spacing": "Każdy odcinek jest importowany na naszym serwerze, a potem publikowany osobno, co {{minutes}} minut. Pierwszy pojawi się kilka minut po przygotowaniu. Możesz zamknąć tę stronę.",
+      "canLeave": "Możesz już zamknąć tę stronę. Twoje odcinki są importowane i publikowane na naszym serwerze, także pod twoją nieobecność.",
+      "stopConfirm": "Zatrzymać ten import? Odcinki jeszcze nieopublikowane zostaną anulowane, także te już zaplanowane. Opublikowane odcinki zostają.",
+      "maxReached": "Możesz wybrać naraz do {{max}} odcinków"
+    }
   },
   "bitchute": {
     "noLink": "Nie połączono jeszcze konta BitChute. Najpierw połącz je i zweryfikuj w swoim profilu, a potem wróć tutaj.",
@@ -166,5 +179,85 @@
     "empty": "Na Twoim kanale Rumble nie znaleziono publicznych filmów.",
     "olderHint": "Nie widzisz filmu, którego szukasz?",
     "olderHintAction": "Wklej jego link"
+  },
+  "rss": {
+    "noLink": "Nie połączyłeś jeszcze kanału RSS podcastu. Najpierw połącz go i zweryfikuj w swoim profilu, a potem wróć tutaj.",
+    "latest": "Twoje odcinki",
+    "empty": "W kanale twojego podcastu nie znaleziono odcinków.",
+    "openOn": "Otwórz stronę odcinka",
+    "fallbackIntro": "Nadal możesz go zaimportować: pobierz odcinek samodzielnie i wybierz plik tutaj. Reszta pozostaje wypełniona.",
+    "fallbackStep1": "Otwórz odcinek u swojego hostingu podcastów.",
+    "fallbackStep2": "Pobierz jego plik audio (MP3 lub M4A).",
+    "limits": "Można importować odcinki do {{hours}} godzin. Są publikowane jako posty audio z notatkami i okładką.",
+    "show": "Podcast",
+    "unreadable": "nie można teraz odczytać",
+    "unreadableAll": "Nie można teraz odczytać kanału twojego podcastu. Sprawdź, czy jest dostępny, i spróbuj ponownie później.",
+    "import": "Importuj to audio",
+    "progressServer": "Pobieranie audio: {{pct}}%",
+    "progressTransfer": "Wczytywanie audio do przesyłania: {{pct}}%"
+  },
+  "auto": {
+    "title": "Automatyczny import",
+    "unavailable": "Automatyczne importy nie są jeszcze dostępne na tym serwerze.",
+    "off": "Wyłączony. Włącz go, a każdy nowy odcinek tego programu stanie się postem audio na 3Speak.",
+    "onSince": "Włączony od {{date}}. Kanał jest sprawdzany co {{minutes}} minut.",
+    "pillOn": "Włączony",
+    "pillOff": "Wyłączony",
+    "queued": "Dotąd zaimportowane nowe odcinki: {{count}}",
+    "lastCheck": "Ostatnie sprawdzenie: {{time}}",
+    "waiting": "Czekają na jutro: {{count}} (maks. {{max}} dziennie)",
+    "skipped": "Pominięte, dłuższe niż limit importu: {{titles}}",
+    "comesAuto": "Nowy odcinek: automatyczny import pobierze go przy następnym sprawdzeniu",
+    "errors": {
+      "noLink": "Ten kanał nie jest już zweryfikowany w twoim profilu. Połącz go ponownie, aby kontynuować.",
+      "noGrant": "3Speak nie może już publikować za ciebie. Otwórz ustawienia, aby ponownie na to pozwolić.",
+      "unreadable": "Przy ostatnim sprawdzeniu nie udało się odczytać twojego kanału. Spróbujemy ponownie przy następnym.",
+      "generic": "Ostatnie sprawdzenie nie powiodło się. Spróbujemy ponownie przy następnym."
+    },
+    "edit": "Edytuj ustawienia",
+    "setUp": "Skonfiguruj automatyczny import",
+    "formTitle": "Automatyczny import",
+    "formIntro": "Nowe odcinki <b>{{show}}</b> stają się postami audio z tymi ustawieniami, maks. {{max}} dziennie, rozłożone w czasie jak przy imporcie zbiorczym.",
+    "enabled": "Automatycznie importuj nowe odcinki",
+    "enabledInfo": "Regularnie sprawdzamy twój kanał. Każdy odcinek, który pojawi się po włączeniu tej opcji, zostanie pobrany i opublikowany za ciebie przez @threespeak z poniższymi ustawieniami. Odcinki, które już są w kanale, pozostają nietknięte.",
+    "enabledOn": "Nowe odcinki są publikowane za ciebie",
+    "enabledOff": "Ustawienia zostają zachowane, nic nie jest publikowane",
+    "sections": {
+      "content": "Tytuł, tagi i opis",
+      "post": "Ustawienia posta"
+    },
+    "kind": "Rodzaj audio",
+    "target": "Opublikuj jako",
+    "targetPost": "Osobny post",
+    "targetSnap": "Komentarz snap",
+    "targetPostHint": "Post z tytułem, w społeczności wybranej poniżej.",
+    "targetSnapHint": "Odpowiedź w kanale snapów, bez tytułu, jak short. Społeczność i blog nie mają tu zastosowania.",
+    "fromSource": "Importuj ze źródła",
+    "fromSourceInfo": "Włączone: każdy post bierze tytuł, notatki odcinka i zawarte w nich #hashtagi tak, jak są w twoim kanale. Wyłączone: sam ustawiasz format tytułu, tagi i opis.",
+    "fromSourceOn": "Tytuł, opis i tagi pochodzą z każdego odcinka",
+    "fromSourceOff": "Tytuł, tagi i opis ustawiasz poniżej",
+    "titleLabel": "Tytuł",
+    "titleHint": "Użyj {title} dla tytułu odcinka, {show} dla nazwy programu, {episode} i {season} dla ich numerów, {date} dla daty premiery.",
+    "sampleTitle": "Tytuł odcinka",
+    "sampleShow": "Mój program",
+    "titlePreview": "Przykład: {{title}}",
+    "tagsLabel": "Tagi",
+    "tagsHint": "Do 8, oddzielone spacjami. Dodawane do każdego posta.",
+    "hashtags": "Używaj też hashtagów z notatek do odcinka",
+    "hashtagsInfo": "Słowa zapisane jako #tag w notatkach odcinka stają się tagami jego posta, po twoich własnych tagach (maksymalnie 10 tagów).",
+    "hashtagsHint": "#tags z notatek stają się tagami posta",
+    "useNotes": "Użyj notatek do odcinka jako opisu",
+    "useNotesInfo": "Tekstem posta są notatki odcinka z twojego kanału, razem z linkami. Wyłącz to, aby dla każdego odcinka używać tego samego własnego tekstu.",
+    "useNotesOn": "Każdy post pokazuje notatki swojego odcinka",
+    "useNotesOff": "Każdy post używa twojego tekstu poniżej",
+    "addendumLabel": "Tekst pod notatkami",
+    "addendumHint": "Dodawany do każdego posta po notatkach, na przykład linki do twoich innych kanałów.",
+    "optional": "opcjonalnie",
+    "textLabel": "Opis",
+    "textHint": "Używany dla każdego odcinka. {title}, {show}, {episode}, {season} i {date} działają też tutaj.",
+    "textRequired": "Napisz opis, który ma być używany, albo użyj notatek do odcinka.",
+    "onlyNew": "Importowane są tylko odcinki, które pojawią się w twoim kanale po włączeniu tej opcji, nigdy starsze.",
+    "grantNeeded": "Automatyczne importy publikuje za ciebie @threespeak, dlatego potrzebuje zgody na publikowanie z twojego konta.",
+    "save": "Zapisz"
   }
 }

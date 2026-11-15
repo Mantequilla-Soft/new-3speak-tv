@@ -6,6 +6,8 @@ import { downloadTrack, removeDownload } from '../../lib/podcastDownloads';
 
 /** The message for a failed download (lib/podcastDownloads.js error codes). */
 export function downloadErrorText(err, t) {
+  // Over the storage cap (lib/podcastDownloads.js downloadCap): the Downloads page sets it.
+  if (err?.code === 'cap') return t('downloads.errors.cap');
   const key = {
     too_large: 'tooLarge', rate_limited: 'rateLimited', storage: 'storage', no_source: 'noSource',
   }[err?.code] || 'failed';

@@ -9,8 +9,19 @@
 //   GET  /scheduled-posts/:owner?status=scheduled   → { scheduled_posts: [...] }
 //   POST /scheduled-posts/update                     (used by EditScheduledPost)
 //   POST /scheduled-posts/cancel                     (used by EditScheduledPost)
+//
+// Drafts live in the same store: a post created with `draft: true` has no time
+// and status "draft", and POST /scheduled-posts/publish gives it one (the current
+// time = out at the cron's next run). Video and audio alike: an audio draft
+// names its upload (`audioPermlink`), which the checker keeps out of the audio
+// lists until the post is out.
 
 import axios from 'axios';
+import { CHECKER_API_KEY } from './config';
+
+// Loaded on a write only: the proof brings the wallet code along, which the
+// readers here (cards, the studio list) do not need.
+const prove = async (args) => (await import('./scheduledPostProof')).proveScheduledPost(args);
 
 export const SCHEDULED_CHECKER_BASE = (
   import.meta.env.VITE_SCHEDULED_POSTS_API_URL || 'https://prod-checker.okinoko.io'
@@ -98,4 +109,65 @@ export function normalizeScheduledForCard(doc) {
     scheduledOn: doc.scheduledOn,
     created_at: doc.createdAt,
   };
+}
+
+const authHeaders = () => (CHECKER_API_KEY ? { Authorization: `Bearer ${CHECKER_API_KEY}` } : {});
+
+/** A user's drafts (newest first). [] on any failure. */
+export async function fetchDrafts(owner) {
+  if (!owner) return [];
+  try {
+    const res = await axios.get(
+      `${SCHEDULED_CHECKER_BASE}/scheduled-posts/${encodeURIComponent(owner)}`,
+      { params: { status: 'draft', limit: 100 } },
+    );
+    const list = Array.isArray(res.data?.scheduled_posts) ? res.data.scheduled_posts : [];
+    return [...list].sort((a, b) => new Date(b.updatedAt || b.createdAt || 0) - new Date(a.updatedAt || a.createdAt || 0));
+  } catch (err) {
+    console.warn('[scheduledPosts] fetch drafts failed', err);
+    return [];
+  }
+}
+
+/**
+ * Save a fully built post as a draft (or, with `scheduledOn`, as a scheduled
+ * post). `post` is the create body without owner/permlink/proof:
+ * { title, description, body, tags, jsonMetadata, beneficiaries, payoutOptions,
+ *   thumbnail, parentAuthor, parentPermlink, embedPermlink?, audioPermlink?,
+ *   playlistAdd?, reblog? }. Resolves the checker's answer; throws on failure.
+ */
+export async function saveScheduledPost({ owner, permlink, scheduledOn = null, post }) {
+  const draft = !scheduledOn;
+  const proof = await prove(draft
+    ? { action: 'draft', owner, permlink }
+    : { action: 'create', owner, permlink, scheduledOn });
+  const res = await axios.post(`${SCHEDULED_CHECKER_BASE}/scheduled-posts/create`, {
+    ...proof,
+    ...post,
+    owner,
+    permlink,
+    ...(draft ? { draft: true } : { scheduledOn }),
+  }, { headers: authHeaders() });
+  if (res.status !== 201 || !res.data?.success) throw new Error(res.data?.error || 'not saved');
+  return res.data;
+}
+
+/** A draft goes out: now (scheduledOn = the current time) or at a later time. */
+export async function publishDraft({ owner, permlink, scheduledOn = new Date().toISOString() }) {
+  const proof = await prove({ action: 'publish', owner, permlink, scheduledOn });
+  const res = await axios.post(`${SCHEDULED_CHECKER_BASE}/scheduled-posts/publish`, {
+    ...proof, owner, permlink, scheduledOn,
+  }, { headers: authHeaders() });
+  if (!res.data?.success) throw new Error(res.data?.error || 'not published');
+  return res.data;
+}
+
+/** Throw a draft away (the checker marks it cancelled). */
+export async function deleteDraft({ owner, permlink }) {
+  const proof = await prove({ action: 'cancel', owner, permlink });
+  const res = await axios.post(`${SCHEDULED_CHECKER_BASE}/scheduled-posts/cancel`, {
+    ...proof, owner, permlink,
+  }, { headers: authHeaders() });
+  if (!res.data?.success) throw new Error(res.data?.error || 'not deleted');
+  return res.data;
 }

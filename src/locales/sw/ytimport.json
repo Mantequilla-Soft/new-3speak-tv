@@ -1,5 +1,5 @@
 {
-  "title": "Leta video zako",
+  "title": "Leta maudhui yako",
   "subtitle": "Leta video zako kutoka YouTube au TikTok hadi 3Speak. Kichwa, maelezo, lebo na picha ndogo hujazwa kwa ajili yako.",
   "noChannel": "Bado hujaunganisha kituo cha YouTube. Kiunganishe na ukithibitishe kwenye wasifu wako kwanza, kisha urudi hapa.",
   "linkChannel": "Nenda kwenye wasifu wangu",
@@ -9,6 +9,7 @@
   "openOnYoutube": "Fungua kwenye YouTube",
   "import": "Leta video hii",
   "useOwnFile": "Tayari nina faili",
+  "openInUploader": "Hariri na uchapishe",
   "cancel": "Ghairi",
   "retry": "Jaribu tena",
   "progress": {
@@ -31,9 +32,11 @@
     "blocked": "YouTube haikuruhusu seva yetu kupakua video hii kwa sasa.",
     "notVideo": "Faili hiyo si video.",
     "tooLongForShort": "Video hii ni ndefu kuliko dakika {{minutes}}, ni ndefu mno kwa Short. Iulete kama video ya kawaida badala yake.",
-    "proxyPaused": "Kuleta video kutoka YouTube kumesitishwa kwa muda. Tafadhali jaribu tena baadaye."
+    "proxyPaused": "Kuleta video kutoka YouTube kumesitishwa kwa muda. Tafadhali jaribu tena baadaye.",
+    "notAudio": "Faili hiyo si faili ya sauti."
   },
   "entry": "Leta video",
+  "menuEntry": "Leta maudhui",
   "types": {
     "videos": "Video",
     "shorts": "Shorts",
@@ -60,7 +63,8 @@
     "tiktok": "TikTok",
     "instagram": "Instagram",
     "bitchute": "BitChute",
-    "rumble": "Rumble"
+    "rumble": "Rumble",
+    "rss": "Podikasti"
   },
   "tiktok": {
     "noLink": "Bado hujaunganisha akaunti ya TikTok. Iunganishe na uithibitishe kwenye wasifu wako kwanza, kisha urudi hapa.",
@@ -98,7 +102,7 @@
     "selectedCount": "{{count}} zimechaguliwa",
     "maxHint": "hadi {{max}}",
     "clear": "Futa",
-    "importSelected": "Ingiza zilizochaguliwa ({{count}})",
+    "importSelected": "Chapisha chinichini ({{count}})",
     "busy": "Kundi lako la awali bado linaingizwa",
     "steps": {
       "content": "Maudhui",
@@ -135,7 +139,16 @@
     "stopConfirm": "Usimamishe uingizaji huu? Video ambazo bado hazijachapishwa zitaghairiwa, zikiwemo zilizopangwa tayari. Video zilizochapishwa zitabaki.",
     "stopYes": "Ndiyo, simamisha",
     "stopKeep": "Endelea kuingiza",
-    "countOf": "{{done}} kati ya {{total}}"
+    "countOf": "{{done}} kati ya {{total}}",
+    "audio": {
+      "formTitle": "Ingiza vipindi {{count}}",
+      "contentIntro": "Chagua aina ya sauti, na mahali kichwa, maelezo na lebo za kila chapisho vinatoka.",
+      "settingsIntro": "Mipangilio hii inatumika kwa vipindi vyote ulivyochagua.",
+      "spacing": "Kila kipindi kinaingizwa kwenye seva yetu kisha kinachapishwa peke yake, kwa tofauti ya dakika {{minutes}}. Cha kwanza kinatoka dakika chache baada ya kuwa tayari. Unaweza kufunga ukurasa huu.",
+      "canLeave": "Sasa unaweza kufunga ukurasa huu. Vipindi vyako vinaletwa na kuchapishwa kwenye seva yetu, hata usipokuwepo.",
+      "stopConfirm": "Usimamishe uingizaji huu? Vipindi ambavyo bado havijachapishwa vitaghairiwa, vikiwemo vilivyopangwa tayari. Vipindi vilivyochapishwa vitabaki.",
+      "maxReached": "Unaweza kuchagua hadi vipindi {{max}} kwa mara moja"
+    }
   },
   "bitchute": {
     "noLink": "Bado hujaunganisha akaunti ya BitChute. Iunganishe na uithibitishe kwenye wasifu wako kwanza, kisha urudi hapa.",
@@ -166,5 +179,85 @@
     "empty": "Hakuna video za umma zilizopatikana kwenye chaneli yako ya Rumble.",
     "olderHint": "Huoni video unayotaka?",
     "olderHintAction": "Bandika kiungo chake"
+  },
+  "rss": {
+    "noLink": "Bado hujaunganisha mlisho wa RSS wa podikasti. Uunganishe na uuthibitishe kwanza kwenye wasifu wako, kisha urudi hapa.",
+    "latest": "Vipindi vya podikasti yako",
+    "empty": "Hakuna vipindi vilivyopatikana kwenye mlisho wa podikasti yako.",
+    "openOn": "Fungua ukurasa wa kipindi",
+    "fallbackIntro": "Bado unaweza kukileta: pakua kipindi mwenyewe kisha uchague faili hapa. Kila kitu kingine kinabaki kimejazwa.",
+    "fallbackStep1": "Fungua kipindi kwenye mwenyeji wa podikasti yako.",
+    "fallbackStep2": "Pakua faili lake la sauti (MP3 au M4A).",
+    "limits": "Vipindi vya hadi saa {{hours}} vinaweza kuletwa. Vinachapishwa kama machapisho ya sauti pamoja na maelezo na jalada lake.",
+    "show": "Podikasti",
+    "unreadable": "haisomeki kwa sasa",
+    "unreadableAll": "Mlisho wa podikasti yako hausomeki kwa sasa. Hakikisha uko mtandaoni, kisha ujaribu tena baadaye.",
+    "import": "Leta sauti hii",
+    "progressServer": "Inachukua sauti: {{pct}}%",
+    "progressTransfer": "Inapakia sauti kwenye kipakiaji: {{pct}}%"
+  },
+  "auto": {
+    "title": "Uingizaji wa kiotomatiki",
+    "unavailable": "Uingizaji wa kiotomatiki bado haupatikani kwenye seva hii.",
+    "off": "Umezimwa. Uwashe na kila kipindi kipya cha podikasti hii kitakuwa chapisho la sauti kwenye 3Speak.",
+    "onSince": "Umewashwa tangu {{date}}. Mlisho unakaguliwa kila dakika {{minutes}}.",
+    "pillOn": "Imewashwa",
+    "pillOff": "Imezimwa",
+    "queued": "Vipindi vipya vilivyoletwa hadi sasa: {{count}}",
+    "lastCheck": "Ukaguzi wa mwisho: {{time}}",
+    "waiting": "Vinasubiri kesho: {{count}} (hadi {{max}} kwa siku)",
+    "skipped": "Vimerukwa, ni virefu kuliko kikomo cha uingizaji: {{titles}}",
+    "comesAuto": "Kipindi kipya: uletaji wa kiotomatiki utakichukua ukaguzi ujao",
+    "errors": {
+      "noLink": "Mlisho huu haujathibitishwa tena kwenye wasifu wako. Uunganishe tena ili kuendelea.",
+      "noGrant": "Huenda 3Speak haiwezi tena kuchapisha kwa niaba yako. Fungua mipangilio ili kuiruhusu tena.",
+      "unreadable": "Mlisho wako haukuweza kusomwa kwenye ukaguzi wa mwisho. Tutajaribu tena kwenye ukaguzi unaofuata.",
+      "generic": "Ukaguzi wa mwisho umeshindwa. Tutajaribu tena kwenye ukaguzi unaofuata."
+    },
+    "edit": "Hariri mipangilio",
+    "setUp": "Weka uingizaji wa kiotomatiki",
+    "formTitle": "Uingizaji wa kiotomatiki",
+    "formIntro": "Vipindi vipya vya <b>{{show}}</b> vinakuwa machapisho ya sauti kwa mipangilio hii, hadi {{max}} kwa siku, vikiwa na nafasi kati yake kama uingizaji wa kundi.",
+    "enabled": "Ingiza vipindi vipya kiotomatiki",
+    "enabledInfo": "Tunakagua mlisho wako mara kwa mara. Kila kipindi kinachoonekana baada ya kuwasha hiki kinapakuliwa na kuchapishwa kwa niaba yako na @threespeak, kwa mipangilio iliyo hapa chini. Vipindi ambavyo tayari viko kwenye mlisho haviguswi.",
+    "enabledOn": "Vipindi vipya vinachapishwa kwa niaba yako",
+    "enabledOff": "Mipangilio inahifadhiwa, hakuna kinachochapishwa",
+    "sections": {
+      "content": "Kichwa, lebo na maelezo",
+      "post": "Mipangilio ya chapisho"
+    },
+    "kind": "Aina ya sauti",
+    "target": "Chapisha kama",
+    "targetPost": "Chapisho huru",
+    "targetSnap": "Maoni ya snap",
+    "targetPostHint": "Chapisho lenye kichwa, katika jumuiya utakayochagua hapa chini.",
+    "targetSnapHint": "Jibu kwenye mlisho wa snaps, bila kichwa, kama short. Jumuiya na blogu havihusiki.",
+    "fromSource": "Leta kutoka chanzo",
+    "fromSourceInfo": "Imewashwa: kila chapisho linachukua kichwa, maelezo ya kipindi na #hashtag zilizomo kama zilivyo kwenye mlisho wako. Imezimwa: unaweka mwenyewe muundo wa kichwa, tagi na maelezo.",
+    "fromSourceOn": "Kichwa, maelezo na tagi vinatoka kwenye kila kipindi",
+    "fromSourceOff": "Unaweka kichwa, tagi na maelezo hapa chini",
+    "titleLabel": "Kichwa",
+    "titleHint": "Tumia {title} kwa kichwa cha kipindi, {show} kwa jina la podikasti, {episode} na {season} kwa namba zake, {date} kwa tarehe ya kutolewa.",
+    "sampleTitle": "Kichwa cha kipindi",
+    "sampleShow": "Podikasti Yangu",
+    "titlePreview": "Mfano: {{title}}",
+    "tagsLabel": "Lebo",
+    "tagsHint": "Hadi 8, zikitenganishwa kwa nafasi. Zinaongezwa kwenye kila chapisho.",
+    "hashtags": "Tumia pia hashtag kutoka kwenye maelezo ya kipindi",
+    "hashtagsInfo": "Maneno yaliyoandikwa kama #tag kwenye maelezo ya kipindi yanakuwa lebo za chapisho lake, baada ya lebo zako mwenyewe (hadi lebo 10).",
+    "hashtagsHint": "#tags kwenye maelezo zinakuwa lebo za chapisho",
+    "useNotes": "Tumia maelezo ya kipindi kama maelezo ya chapisho",
+    "useNotesInfo": "Maandishi ya chapisho ni maelezo ya kipindi kutoka kwenye mlisho wako, pamoja na viungo vyake. Zima hiki ili kutumia maandishi yako mwenyewe yale yale kwa kila kipindi.",
+    "useNotesOn": "Kila chapisho linaonyesha maelezo ya kipindi chake",
+    "useNotesOff": "Kila chapisho linatumia maandishi yako hapa chini",
+    "addendumLabel": "Maandishi chini ya maelezo ya kipindi",
+    "addendumHint": "Yanaongezwa kwenye kila chapisho baada ya maelezo, kwa mfano viungo vya chaneli zako nyingine.",
+    "optional": "si lazima",
+    "textLabel": "Maelezo",
+    "textHint": "Yanatumika kwa kila kipindi. {title}, {show}, {episode}, {season} na {date} zinafanya kazi hapa pia.",
+    "textRequired": "Andika maelezo ya kutumia, au tumia maelezo ya kipindi.",
+    "onlyNew": "Vinaletwa tu vipindi vinavyoonekana kwenye mlisho wako baada ya kuwasha hiki, kamwe si vya zamani.",
+    "grantNeeded": "Uingizaji wa kiotomatiki unachapishwa kwa niaba yako na @threespeak, kwa hivyo unahitaji ruhusa ya kuchapisha kwenye akaunti yako.",
+    "save": "Hifadhi"
   }
 }

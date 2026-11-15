@@ -1,0 +1,29 @@
+{
+  "valueText": "{{time}} z {{total}}",
+  "seekLabel": "Przewijanie",
+  "loop": "Zapętlenie",
+  "loopOn": "Zapętlenie włączone",
+  "loopOff": "Zapętl ten film",
+  "theater": "Tryb kinowy",
+  "theaterExit": "Widok domyślny",
+  "title": "Skróty klawiszowe",
+  "sub": "Działają w całej stronie, oprócz pisania.",
+  "keySpace": "Spacja",
+  "keyShift": "Shift",
+  "list": {
+    "playPause": "Odtwórz lub wstrzymaj",
+    "back10": "10 sekund wstecz",
+    "forward10": "10 sekund do przodu",
+    "arrows": "10 sekund wstecz lub do przodu",
+    "frame": "Jedna klatka wstecz lub do przodu",
+    "percent": "Przejdź do 0–90% filmu",
+    "volume": "Głośniej lub ciszej",
+    "mute": "Wycisz lub włącz dźwięk",
+    "captions": "Napisy włącz lub wyłącz",
+    "fullscreen": "Pełny ekran",
+    "theater": "Tryb kinowy włącz lub wyłącz",
+    "save": "Zapisz",
+    "share": "Udostępnij",
+    "help": "Pokaż tę listę"
+  }
+}

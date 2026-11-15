@@ -1249,3 +1249,53 @@
   .hh-obs-panel .hh-obs-panel__copy--copied { background: var(--cyan) !important; color: var(--bg); }
   .hh-obs-panel .hh-obs-panel__hint { color: var(--muted); font-size: 11px; }
 }
+
+// The boost goal bar and the top supporters list (SDK StreamBoostGoal and
+// BoostTopSupporters, 0.26.23), wherever they show: over the video (`overlay`,
+// on the media scrim like the other pills there), in the boost dialog
+// (`inline`, a bg well like the amount field) and in the studio. The bar fills
+// in the accent and turns cyan once reached, the cyan the studio uses for what
+// is done. The SDK lays them out; only the look changes here.
+@mixin boost-goal {
+  .hh-boost-goal { gap: 6px; font-family: var(--font-sans); }
+  .hh-boost-goal--overlay {
+    box-sizing: border-box;
+    padding: 8px 12px 10px;
+    border-radius: var(--r-md);
+    background: var(--media-scrim);
+    color: var(--on-media);
+  }
+  .hh-boost-goal--inline {
+    padding: 12px 14px;
+    border: 0;
+    border-radius: var(--r-md);
+    background: var(--bg);
+    color: var(--text);
+  }
+  .hh-boost-goal__row { font-size: 13px; }
+  .hh-boost-goal__title { font-weight: 700; }
+  .hh-boost-goal__amount { @include v2.mono(12, 700); opacity: .75; }
+  .hh-boost-goal__track { height: 6px; border-radius: var(--r-bar); background: color-mix(in srgb, currentColor 20%, transparent); }
+  .hh-boost-goal__fill { background: var(--accent); }
+  .hh-boost-goal--reached .hh-boost-goal__fill { background: var(--cyan); }
+  .hh-boost-goal__celebrate {
+    padding: 2px 10px;
+    border-radius: var(--r-sm);
+    background: var(--cyan);
+    color: var(--bg);
+    font-size: 12px;
+    font-weight: 900;
+  }
+
+  .hh-boost-top { gap: 6px; font-family: var(--font-sans); }
+  .hh-boost-top__title { @include v2.text(eyebrow); color: var(--muted); opacity: 1; }
+  // As the stream page's Top supporters tab (.ws-supporters): a mono rank,
+  // the first row on the accent tint.
+  .hh-boost-top__list { gap: 2px; }
+  .hh-boost-top__item { gap: 10px; min-height: 36px; padding: 0 10px; border-radius: var(--r-md); font-size: 13px;
+    &:first-child { background: var(--accent-tint); } }
+  .hh-boost-top__rank { width: 16px; height: auto; border-radius: 0; background: none; color: var(--muted); @include v2.mono(12, 900); }
+  .hh-boost-top__item:first-child .hh-boost-top__rank { background: none; color: var(--accent); }
+  .hh-boost-top__name { font-weight: 700; }
+  .hh-boost-top__amount { @include v2.mono(12, 700); }
+}

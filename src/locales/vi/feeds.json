@@ -35,6 +35,14 @@
     "hide": "Ẩn",
     "markSeen": "Đánh dấu tất cả là đã xem"
   },
+  "continueWatching": {
+    "aria": "Xem tiếp",
+    "rest": "để xem tiếp",
+    "remove": "Xóa khỏi Xem tiếp",
+    "removed": "Đã xóa khỏi Xem tiếp",
+    "removeFailed": "Không xóa được. Vui lòng thử lại.",
+    "progress": "Đã xem {{pct}}%"
+  },
   "tagMeta": {
     "videos_other": "{{num}} video",
     "thisWeek": "{{num}} tuần này"

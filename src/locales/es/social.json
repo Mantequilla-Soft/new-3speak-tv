@@ -1,0 +1,107 @@
+{
+  "levels": {
+    "button": "Avisos",
+    "buttonTitle": "Notificaciones de @{{user}}: {{level}}",
+    "title": "Notificaciones de @{{user}}",
+    "sub": "Los interruptores de tu dispositivo en Ajustes siguen aplicándose.",
+    "saveFailed": "No se pudo guardar. Inténtalo de nuevo.",
+    "all": {
+      "title": "Todo",
+      "desc": "Videos, shorts, historias, audio y cuando empiezan un directo.",
+      "saved": "Te avisaremos de todo lo de @{{user}}."
+    },
+    "highlights": {
+      "title": "Destacados",
+      "desc": "Videos, audio y cuando empiezan un directo. Sin shorts ni historias.",
+      "saved": "A partir de ahora, solo lo destacado de @{{user}}."
+    },
+    "off": {
+      "title": "Desactivadas",
+      "desc": "Sin notificaciones de este creador. Lo sigues siguiendo.",
+      "saved": "Las notificaciones de @{{user}} están desactivadas."
+    }
+  },
+  "live": {
+    "badge": "EN VIVO",
+    "aria": "En vivo ahora: personas que sigues",
+    "summary_one": "{{count}} persona que sigues está en vivo ahora",
+    "summary_many": "{{count}} personas que sigues están en vivo ahora",
+    "summary_other": "{{count}} personas que sigues están en vivo ahora"
+  },
+  "notifs": {
+    "heading": "De 3Speak",
+    "liveNow": "@{{user}} está en vivo",
+    "wasLive": "@{{user}} empezó un directo",
+    "collabInvite": "@{{user}} te invitó a una colaboración",
+    "premiereStarted": "Ha empezado el estreno de @{{user}}"
+  },
+  "push": {
+    "live": {
+      "title": "Directos",
+      "desc": "Cuando un creador que sigues empieza una transmisión en vivo."
+    }
+  },
+  "collab": {
+    "accept": "Aceptar",
+    "decline": "Rechazar",
+    "acceptedToast": "La colaboración con @{{user}} ya está en tu canal.",
+    "declinedToast": "Invitación rechazada.",
+    "answerFailed": "No se pudo enviar tu respuesta. Inténtalo de nuevo.",
+    "row": "Añadir un colaborador",
+    "rowSub": "Publícalo con un cocreador y compartan las ganancias",
+    "rowSet": "@{{user}} recibe el {{split}}% de tu parte",
+    "modalTitle": "Añadir un colaborador",
+    "modalSub": "Recibirá una invitación. Cuando la acepte, el video estará en ambos canales.",
+    "accountLabel": "Cocreador",
+    "accountPlaceholder": "Nombre de cuenta de Hive",
+    "suggestions": "Cuentas que coinciden",
+    "splitLabel": "Su parte de tus ganancias",
+    "splitPreview": "@{{user}} recibe el {{share}}% de las ganancias, tú te quedas con el {{mine}}%.",
+    "inviteNote": "El reparto es un beneficiario de Hive, así que se aplica aunque rechace la invitación.",
+    "someone": "tu cocreador",
+    "save": "Guardar",
+    "remove": "Quitar",
+    "noRoom": "@{{user}} no se añadió como beneficiario: la publicación ya tiene el máximo de beneficiarios que permite Hive.",
+    "errors": {
+      "invalid": "Ese no es un nombre de cuenta de Hive válido.",
+      "self": "No puedes colaborar contigo mismo.",
+      "notFound": "@{{user}} no es una cuenta de Hive."
+    },
+    "cardWith": "con {{users}}",
+    "cardBoth": "{{author}} con {{users}}",
+    "withLabel": "con",
+    "invitesTitle": "Invitaciones a colaborar"
+  },
+  "polls": {
+    "aria": "Encuesta",
+    "addPoll": "Encuesta",
+    "removePoll": "Sin encuesta",
+    "editorAria": "Opciones de la encuesta",
+    "questionPlaceholder": "Haz una pregunta a tus seguidores",
+    "optionPlaceholder": "Opción {{n}}",
+    "removeOption": "Quitar opción {{n}}",
+    "addOption": "Añadir opción",
+    "duration": "La encuesta termina",
+    "days_one": "{{count}} día",
+    "days_many": "{{count}} días",
+    "days_other": "{{count}} días",
+    "noEnd": "Sin fecha de fin",
+    "invalid": "Una encuesta necesita de {{min}} a {{max}} opciones distintas.",
+    "votes_one": "{{count}} voto",
+    "votes_many": "{{count}} votos",
+    "votes_other": "{{count}} votos",
+    "endsInDays_one": "Termina en {{count}} día",
+    "endsInDays_many": "Termina en {{count}} días",
+    "endsInDays_other": "Termina en {{count}} días",
+    "endsInHours_one": "Termina en {{count}} hora",
+    "endsInHours_many": "Termina en {{count}} horas",
+    "endsInHours_other": "Termina en {{count}} horas",
+    "closed": "Encuesta cerrada",
+    "open": "Abierta",
+    "changeHint": "Toca otra opción para cambiar tu voto.",
+    "signIn": "Inicia sesión para votar.",
+    "closedToast": "Esta encuesta ha terminado.",
+    "voteFailed": "Tu voto no se registró. Inténtalo de nuevo.",
+    "statsTitle": "Encuestas"
+  }
+}

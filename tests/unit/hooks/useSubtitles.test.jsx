@@ -142,6 +142,23 @@ describe('useSubtitles', () => {
     expect(localStorage.getItem(mod.SUBTITLE_LANG_KEY)).toBeNull()
   })
 
+  it('captions burnt into the picture (the shorts editor\'s) never come on by themselves, but can be picked', async () => {
+    const burnt = [{ lang: 'en', cid: 'QmEn', burnedIn: true }, { lang: 'de', cid: 'QmDe' }]
+    fetchMock.mockImplementation(async (url) => (url.startsWith('https://translate.test') ? { ok: true, json: async () => burnt } : { ok: true, text: async () => SRT }))
+    localStorage.setItem(mod.SUBTITLE_LANG_KEY, 'en')
+    const { result } = renderHook(() => mod.default('badadib', 'p1'))
+    await waitFor(() => expect(result.current.availableLanguages).toEqual(burnt))
+    // the saved English is burnt in: no CC by itself (German is not the viewer's language)
+    expect(result.current.selectedLang).toBeNull()
+    const preview = renderHook(() => mod.default('badadib', 'p1', { autoSelect: true }))
+    await waitFor(() => expect(preview.result.current.availableLanguages).toEqual(burnt))
+    expect(preview.result.current.selectedLang).toBeNull()
+    act(() => result.current.selectLanguage('en'))
+    await waitFor(() => expect(result.current.cues).toHaveLength(2))
+    // the transcript still reads them
+    expect(mod.pickSubtitleLang(burnt, { anyAsLastResort: true })).toBe('en')
+  })
+
   it('choosing a language saves it, turning CC off forgets it', async () => {
     const { result } = renderHook(() => mod.default('badadib', 'p1'))
     await waitFor(() => expect(result.current.availableLanguages).toEqual(LIST))

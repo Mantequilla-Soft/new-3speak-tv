@@ -39,6 +39,14 @@
     "hide": "Ocultar",
     "markSeen": "Marcar todo como visto"
   },
+  "continueWatching": {
+    "aria": "Seguir viendo",
+    "rest": "para seguir viendo",
+    "remove": "Quitar de Seguir viendo",
+    "removed": "Quitado de Seguir viendo",
+    "removeFailed": "No se pudo quitar. Inténtalo de nuevo.",
+    "progress": "{{pct}} % visto"
+  },
   "tagMeta": {
     "videos_one": "{{num}} video",
     "videos_many": "{{num}} videos",

@@ -153,4 +153,22 @@ describe('UploadLinks: Audio editor entry', () => {
     expect(audio.pause).toHaveBeenCalled()
     audio.remove()
   })
+
+  it('offers the video editor for a landscape video under Video, after the Shorts Editor, without the editor feature not at all', async () => {
+    const opened = []
+    const onVideo = (e) => opened.push(e)
+    window.addEventListener('open-video-editor', onVideo)
+    try {
+      const { user } = renderWithProviders(<UploadLinks linkClass="share-link" />)
+      const order = [...document.querySelectorAll('.share-menu-heading, .share-link')]
+        .map((el) => (el.classList.contains('share-menu-heading') ? `# ${el.textContent}` : el.getAttribute('title')))
+      expect(order.indexOf('Video Editor')).toBe(order.indexOf('Shorts Editor') + 1)
+      expect(order.indexOf('Video Editor')).toBeLessThan(order.indexOf('# Audio'))
+      expect(screen.getByTitle('Video Editor')).toHaveTextContent('Edit a landscape video up to 10 minutes')
+      await user.click(screen.getByTitle('Video Editor'))
+      await waitFor(() => expect(opened).toHaveLength(1))
+    } finally {
+      window.removeEventListener('open-video-editor', onVideo)
+    }
+  })
 })

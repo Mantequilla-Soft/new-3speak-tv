@@ -1,0 +1,97 @@
+{
+  "levels": {
+    "button": "Notifikasi",
+    "buttonTitle": "Notifikasi dari @{{user}}: {{level}}",
+    "title": "Notifikasi dari @{{user}}",
+    "sub": "Pengaturan perangkat di Setelan tetap berlaku.",
+    "saveFailed": "Tidak bisa menyimpan. Coba lagi.",
+    "all": {
+      "title": "Semua",
+      "desc": "Video, Shorts, story, audio, dan saat mereka mulai live.",
+      "saved": "Kamu akan tahu semua kabar dari @{{user}}."
+    },
+    "highlights": {
+      "title": "Sorotan",
+      "desc": "Video, audio, dan saat mereka mulai live. Tanpa Shorts atau story.",
+      "saved": "Mulai sekarang hanya sorotan dari @{{user}}."
+    },
+    "off": {
+      "title": "Mati",
+      "desc": "Tidak ada notifikasi dari kreator ini. Kamu tetap mengikutinya.",
+      "saved": "Notifikasi dari @{{user}} dimatikan."
+    }
+  },
+  "live": {
+    "badge": "LIVE",
+    "aria": "Sedang live dari orang yang kamu ikuti",
+    "summary_other": "{{count}} orang yang kamu ikuti sedang live"
+  },
+  "notifs": {
+    "heading": "Dari 3Speak",
+    "liveNow": "@{{user}} sedang live",
+    "wasLive": "@{{user}} mulai live",
+    "collabInvite": "@{{user}} mengundangmu ke kolaborasi",
+    "premiereStarted": "Premiere @{{user}} sudah dimulai"
+  },
+  "push": {
+    "live": {
+      "title": "Mulai live",
+      "desc": "Saat kreator yang kamu ikuti memulai siaran live."
+    }
+  },
+  "collab": {
+    "accept": "Terima",
+    "decline": "Tolak",
+    "acceptedToast": "Kolaborasi dengan @{{user}} kini ada di channel-mu.",
+    "declinedToast": "Undangan ditolak.",
+    "answerFailed": "Tidak bisa mengirim jawabanmu. Coba lagi.",
+    "row": "Tambah kolaborator",
+    "rowSub": "Posting bersama kreator lain dan bagi payout-nya",
+    "rowSet": "@{{user}} mendapat {{split}}% dari bagianmu",
+    "modalTitle": "Tambah kolaborator",
+    "modalSub": "Mereka akan menerima undangan. Setelah diterima, video tampil di kedua channel.",
+    "accountLabel": "Kolaborator",
+    "accountPlaceholder": "Nama akun Hive",
+    "suggestions": "Akun yang cocok",
+    "splitLabel": "Bagian mereka dari payout-mu",
+    "splitPreview": "@{{user}} mendapat {{share}}% dari payout, kamu menyimpan {{mine}}%.",
+    "inviteNote": "Pembagian ini adalah penerima manfaat di Hive, jadi tetap berlaku meski mereka menolak.",
+    "someone": "kolaboratormu",
+    "save": "Simpan",
+    "remove": "Hapus",
+    "noRoom": "@{{user}} tidak ditambahkan sebagai penerima manfaat: postingan ini sudah punya jumlah penerima manfaat maksimum yang diizinkan Hive.",
+    "errors": {
+      "invalid": "Itu bukan nama akun Hive yang valid.",
+      "self": "Kamu tidak bisa berkolaborasi dengan dirimu sendiri.",
+      "notFound": "@{{user}} bukan akun Hive."
+    },
+    "cardWith": "bersama {{users}}",
+    "cardBoth": "{{author}} bersama {{users}}",
+    "withLabel": "bersama",
+    "invitesTitle": "Undangan kolaborasi"
+  },
+  "polls": {
+    "aria": "Polling",
+    "addPoll": "Polling",
+    "removePoll": "Tanpa polling",
+    "editorAria": "Opsi polling",
+    "questionPlaceholder": "Ajukan pertanyaan ke pengikutmu",
+    "optionPlaceholder": "Opsi {{n}}",
+    "removeOption": "Hapus opsi {{n}}",
+    "addOption": "Tambah opsi",
+    "duration": "Polling berakhir",
+    "days_other": "{{count}} hari",
+    "noEnd": "Tanpa tanggal akhir",
+    "invalid": "Polling perlu {{min}} sampai {{max}} opsi yang berbeda.",
+    "votes_other": "{{count}} suara",
+    "endsInDays_other": "Berakhir dalam {{count}} hari",
+    "endsInHours_other": "Berakhir dalam {{count}} jam",
+    "closed": "Polling ditutup",
+    "open": "Terbuka",
+    "changeHint": "Ketuk opsi lain untuk mengubah pilihanmu.",
+    "signIn": "Masuk untuk memberi suara.",
+    "closedToast": "Polling ini sudah berakhir.",
+    "voteFailed": "Suaramu tidak terkirim. Coba lagi.",
+    "statsTitle": "Polling"
+  }
+}

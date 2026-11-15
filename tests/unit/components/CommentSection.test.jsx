@@ -19,7 +19,18 @@ vi.mock('../../../src/utils/reputation', () => ({
   markByReputation: async (list) => list.map((c) => ({ ...c, isLowReputation: c.author.username === 'spammer' })),
   getUserReputation: async () => 60,
 }))
-vi.mock('../../../src/utils/hiddenCreators', () => ({ markByHidden: async (list) => list }))
+vi.mock('../../../src/utils/hiddenCreators', async () => ({
+  // The real dropMuted; markByHidden tags the bots in m.muted (none by default) like the real one.
+  dropMuted: (await vi.importActual('../../../src/utils/hiddenCreators')).dropMuted,
+  markByHidden: async (list, { viewer } = {}) => {
+    const tag = (items) => items.map((c) => ({
+      ...c,
+      ...((m.muted || []).includes(c.author.username) && c.author.username !== viewer ? { isMuted: true } : {}),
+      children: tag(c.children || []),
+    }))
+    return tag(list)
+  },
+}))
 vi.mock('../../../src/utils/offChainReplies', () => ({
   mergeOffChainReplies: async (_p, list) => [...list, ...m.offChain],
   applyOffChainLikes: async (list) => list,
@@ -83,6 +94,7 @@ beforeEach(() => {
   m.pin = vi.fn(async ({ comment, pinned }) => (pinned ? [comment] : []))
   m.storeOffChain = vi.fn(async () => ({ permlink: 'stored-1' }))
   m.offChain = []
+  m.muted = []
   useAppStore.setState({ user: null, incubationHandle: null })
 })
 
@@ -104,6 +116,43 @@ describe('the comments under a video', () => {
     expect(screen.getByText('Comment hidden by the community · low score')).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Show the comment by @spammer' }))
     expect(screen.getByText('Body of c3')).toBeInTheDocument()
+  })
+
+  describe('bots on the comment mutelist', () => {
+    const withBot = () => {
+      m.muted = ['ai-agent-hunter']
+      const thread = {
+        ...THREAD,
+        'badadib/my-video': [...THREAD['badadib/my-video'], raw('ai-agent-hunter', 'bot1')],
+        'ai-agent-hunter/bot1': [raw('viewer-d', 'r9', { parent_author: 'ai-agent-hunter', parent_permlink: 'bot1' })],
+        'viewer-a/c1': [...THREAD['viewer-a/c1'], raw('ai-agent-hunter', 'bot2', { parent_author: 'viewer-a', parent_permlink: 'c1' })],
+      }
+      m.call = vi.fn(async (_api, _method, [a, p]) => thread[`${a}/${p}`] || [])
+    }
+
+    it('removes their comments and the replies under them completely, out of the count, no Show bar', async () => {
+      withBot()
+      mount()
+      await loaded()
+      expect(screen.getByRole('heading', { name: '3 comments' })).toBeInTheDocument()
+      expect(screen.queryByText('Body of bot1')).not.toBeInTheDocument()
+      expect(screen.queryByText('Body of r9')).not.toBeInTheDocument()
+      expect(screen.queryByText('Body of bot2')).not.toBeInTheDocument()
+      expect(screen.queryByRole('button', { name: 'Show the comment by @ai-agent-hunter' })).not.toBeInTheDocument()
+      // Only the low-score bar of @spammer is left.
+      expect(screen.getAllByText(/Comment hidden/)).toHaveLength(1)
+      expect(within(commentOf('Body of c1')).getByText('Body of r1')).toBeInTheDocument()
+    })
+
+    it('still shows a muted account its own comments', async () => {
+      withBot()
+      useAppStore.setState({ user: 'ai-agent-hunter' })
+      mount()
+      await loaded()
+      expect(await screen.findByText('Body of bot1')).toBeInTheDocument()
+      expect(screen.getByText('Body of r9')).toBeInTheDocument()
+      expect(screen.getByRole('heading', { name: '6 comments' })).toBeInTheDocument()
+    })
   })
 
   it('still shows the off-chain replies of a post Hive does not know', async () => {

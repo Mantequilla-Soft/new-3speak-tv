@@ -139,6 +139,13 @@
     "rumble": {
       "placeholder": "https://rumble.com/c/…",
       "help": "Rumble kanalının adını veya bağlantısını yapıştır. Hash'i kanal açıklamasında herhangi bir yere koy."
+    },
+    "rss": {
+      "placeholder": "https://example.com/podcast.xml",
+      "help": "Podcastinin RSS besleme adresini yapıştır. Barındırma hizmetin bunu programın ayarlarında veya dağıtım sayfasında gösterir.",
+      "flowTitle": "Podcast RSS beslemeni bağla",
+      "step2": "<strong>Bunu programının ya da en yeni bölümünün açıklamasına yapıştır</strong>, podcast barındırma hizmetinde. Değişikliği kaydet ve yayınla. Besleme doğrulandıktan sonra kaldırabilirsin.",
+      "step3": "Podcastinin RSS besleme adresini gir:"
     }
   },
   "snaps": {

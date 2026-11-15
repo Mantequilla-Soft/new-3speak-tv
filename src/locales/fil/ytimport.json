@@ -1,5 +1,5 @@
 {
-  "title": "I-import ang iyong mga video",
+  "title": "I-import ang content mo",
   "subtitle": "Dalhin sa 3Speak ang iyong mga video mula sa YouTube o TikTok. Awtomatikong pupunan ang pamagat, paglalarawan, mga tag, at thumbnail.",
   "noChannel": "Wala ka pang naka-link na YouTube channel. I-link at i-verify muna ito sa iyong profile, pagkatapos ay bumalik dito.",
   "linkChannel": "Pumunta sa aking profile",
@@ -9,6 +9,7 @@
   "openOnYoutube": "Buksan sa YouTube",
   "import": "I-import ang video na ito",
   "useOwnFile": "Mayroon na akong file",
+  "openInUploader": "I-edit at i-publish",
   "cancel": "Kanselahin",
   "retry": "Subukan muli",
   "progress": {
@@ -31,9 +32,11 @@
     "blocked": "Hindi pinayagan ng YouTube ang aming server na i-download ang video na ito ngayon.",
     "notVideo": "Hindi video ang file na iyon.",
     "tooLongForShort": "Mas mahaba sa {{minutes}} minuto ang video na ito, masyadong mahaba para sa isang Short. I-import na lang ito bilang regular na video.",
-    "proxyPaused": "Pansamantalang naka-pause ang pag-import mula sa YouTube. Subukan ulit mamaya."
+    "proxyPaused": "Pansamantalang naka-pause ang pag-import mula sa YouTube. Subukan ulit mamaya.",
+    "notAudio": "Hindi audio file ang file na iyan."
   },
   "entry": "I-import ang mga video",
+  "menuEntry": "I-import ang content",
   "types": {
     "videos": "Mga Video",
     "shorts": "Shorts",
@@ -60,7 +63,8 @@
     "tiktok": "TikTok",
     "instagram": "Instagram",
     "bitchute": "BitChute",
-    "rumble": "Rumble"
+    "rumble": "Rumble",
+    "rss": "Podcast"
   },
   "tiktok": {
     "noLink": "Wala ka pang naka-link na TikTok account. I-link at i-verify muna ito sa iyong profile, pagkatapos ay bumalik dito.",
@@ -98,7 +102,7 @@
     "selectedCount": "{{count}} ang napili",
     "maxHint": "hanggang {{max}}",
     "clear": "I-clear",
-    "importSelected": "I-import ang napili ({{count}})",
+    "importSelected": "I-publish sa background ({{count}})",
     "busy": "Inaasikaso pa ang nauna mong batch",
     "steps": {
       "content": "Nilalaman",
@@ -135,7 +139,16 @@
     "stopConfirm": "Ihinto ang import na ito? Kakanselahin ang mga video na hindi pa naipo-post, pati ang mga naka-schedule na. Mananatili ang mga naipo-post na.",
     "stopYes": "Oo, ihinto",
     "stopKeep": "Ituloy ang import",
-    "countOf": "{{done}} sa {{total}}"
+    "countOf": "{{done}} sa {{total}}",
+    "audio": {
+      "formTitle": "I-import ang {{count}} episode",
+      "contentIntro": "Piliin ang uri ng audio, at kung saan kukunin ang pamagat, paglalarawan at tag ng bawat post.",
+      "settingsIntro": "Ang mga setting na ito ay para sa lahat ng episode na pinili mo.",
+      "spacing": "Ini-import ang bawat episode sa aming server at saka ipino-post nang hiwalay, may pagitang {{minutes}} minuto. Lalabas ang una ilang minuto matapos itong maging handa. Puwede mo nang isara ang page na ito.",
+      "canLeave": "Puwede mo nang isara ang page na ito. Ini-import at ipinu-publish ang mga episode mo sa server namin, kahit wala ka.",
+      "stopConfirm": "Ihinto ang import na ito? Kakanselahin ang mga episode na hindi pa naipo-post, pati ang mga naka-schedule na. Mananatili ang mga naipo-post na.",
+      "maxReached": "Hanggang {{max}} episode ang mapipili mo nang sabay"
+    }
   },
   "bitchute": {
     "noLink": "Wala ka pang naka-link na BitChute account. I-link at i-verify muna ito sa iyong profile, pagkatapos ay bumalik dito.",
@@ -166,5 +179,85 @@
     "empty": "Walang nahanap na pampublikong video sa iyong Rumble channel.",
     "olderHint": "Hindi mo makita ang video na hinahanap mo?",
     "olderHintAction": "I-paste ang link nito"
+  },
+  "rss": {
+    "noLink": "Wala ka pang naka-link na podcast RSS feed. I-link at i-verify muna ito sa profile mo, saka bumalik dito.",
+    "latest": "Mga episode ng podcast mo",
+    "empty": "Walang nakitang episode sa podcast feed mo.",
+    "openOn": "Buksan ang page ng episode",
+    "fallbackIntro": "Maaari mo pa rin itong i-import: i-download mo mismo ang episode at piliin ang file dito. Mananatiling nakapuno ang lahat ng iba pa.",
+    "fallbackStep1": "Buksan ang episode sa podcast host mo.",
+    "fallbackStep2": "I-download ang audio file nito (MP3 o M4A).",
+    "limits": "Maaaring i-import ang mga episode na hanggang {{hours}} oras. Ilalathala ang mga ito bilang audio post kasama ang show notes at cover.",
+    "show": "Podcast",
+    "unreadable": "hindi mabasa ngayon",
+    "unreadableAll": "Hindi mabasa ang podcast feed mo ngayon. Tingnan kung online ito, saka subukan ulit mamaya.",
+    "import": "I-import ang audio na ito",
+    "progressServer": "Kinukuha ang audio: {{pct}}%",
+    "progressTransfer": "Nilo-load ang audio sa uploader: {{pct}}%"
+  },
+  "auto": {
+    "title": "Awtomatikong import",
+    "unavailable": "Hindi pa available ang awtomatikong import sa server na ito.",
+    "off": "Naka-off. I-on ito at magiging audio post sa 3Speak ang bawat bagong episode ng show na ito.",
+    "onSince": "Naka-on mula {{date}}. Sinusuri ang feed bawat {{minutes}} minuto.",
+    "pillOn": "On",
+    "pillOff": "Off",
+    "queued": "Mga bagong episode na na-import na: {{count}}",
+    "lastCheck": "Huling pagsuri: {{time}}",
+    "waiting": "Naghihintay para bukas: {{count}} (hanggang {{max}} bawat araw)",
+    "skipped": "Nilaktawan, mas mahaba sa limitasyon ng import: {{titles}}",
+    "comesAuto": "Bagong episode: kukunin ito ng automatic import sa susunod na check",
+    "errors": {
+      "noLink": "Hindi na naka-verify ang feed na ito sa profile mo. I-link ito ulit para magpatuloy.",
+      "noGrant": "Maaaring hindi na makapag-post ang 3Speak para sa iyo. Buksan ang mga setting para payagan ito ulit.",
+      "unreadable": "Hindi nabasa ang feed mo sa huling pagsuri. Susubukan namin ulit sa susunod na pagsuri.",
+      "generic": "Nabigo ang huling pagsuri. Susubukan namin ulit sa susunod na pagsuri."
+    },
+    "edit": "I-edit ang mga setting",
+    "setUp": "I-set up ang awtomatikong import",
+    "formTitle": "Awtomatikong import",
+    "formIntro": "Magiging audio post ang mga bagong episode ng <b>{{show}}</b> gamit ang mga setting na ito, hanggang {{max}} bawat araw, may pagitan gaya ng batch import.",
+    "enabled": "Awtomatikong i-import ang mga bagong episode",
+    "enabledInfo": "Regular naming sinusuri ang feed mo. Ang bawat episode na lalabas matapos mo itong i-on ay ida-download at ipo-post para sa iyo ng @threespeak, gamit ang mga setting sa ibaba. Hindi gagalawin ang mga episode na nasa feed na.",
+    "enabledOn": "Ipino-post para sa iyo ang mga bagong episode",
+    "enabledOff": "Nananatili ang mga setting, walang ipino-post",
+    "sections": {
+      "content": "Pamagat, tag at paglalarawan",
+      "post": "Mga setting ng post"
+    },
+    "kind": "Uri ng audio",
+    "target": "I-publish bilang",
+    "targetPost": "Hiwalay na post",
+    "targetSnap": "Snap comment",
+    "targetPostHint": "Isang post na may title, sa community na pipiliin mo sa ibaba.",
+    "targetSnapHint": "Isang reply sa snaps feed, walang title, tulad ng short. Hindi kasama ang community at blog.",
+    "fromSource": "I-import mula sa source",
+    "fromSourceInfo": "Naka-on: kukunin ng bawat post ang title, show notes, at mga #hashtag nito ayon sa feed mo. Naka-off: ikaw ang magtatakda ng format ng title, tags, at description.",
+    "fromSourceOn": "Galing sa bawat episode ang title, description, at tags",
+    "fromSourceOff": "Ikaw ang magtatakda ng title, tags, at description sa ibaba",
+    "titleLabel": "Pamagat",
+    "titleHint": "Gamitin ang {title} para sa pamagat ng episode, {show} para sa pangalan ng show, {episode} at {season} para sa mga numero nito, {date} para sa petsa ng paglabas.",
+    "sampleTitle": "Pamagat ng episode",
+    "sampleShow": "Ang Show Ko",
+    "titlePreview": "Halimbawa: {{title}}",
+    "tagsLabel": "Mga tag",
+    "tagsHint": "Hanggang 8, hinihiwalay ng espasyo. Idinadagdag sa bawat post.",
+    "hashtags": "Gamitin din ang mga hashtag mula sa show notes",
+    "hashtagsInfo": "Ang mga salitang isinulat bilang #tag sa show notes ng isang episode ay nagiging tag ng post nito, pagkatapos ng sarili mong mga tag (hanggang 10 tag).",
+    "hashtagsHint": "Nagiging tag ng post ang #tags sa notes",
+    "useNotes": "Gamitin ang show notes bilang paglalarawan",
+    "useNotesInfo": "Ang teksto ng post ay ang show notes ng episode mula sa feed mo, kasama ang mga link nito. I-off ito para gamitin ang parehong sarili mong teksto sa bawat episode.",
+    "useNotesOn": "Ipinapakita ng bawat post ang notes ng episode nito",
+    "useNotesOff": "Ginagamit ng bawat post ang teksto mo sa ibaba",
+    "addendumLabel": "Teksto sa ilalim ng show notes",
+    "addendumHint": "Idinadagdag sa bawat post pagkatapos ng notes, halimbawa mga link sa iba mo pang channel.",
+    "optional": "opsyonal",
+    "textLabel": "Paglalarawan",
+    "textHint": "Ginagamit sa bawat episode. Gumagana rin dito ang {title}, {show}, {episode}, {season} at {date}.",
+    "textRequired": "Isulat ang paglalarawang gagamitin, o gamitin ang show notes.",
+    "onlyNew": "Ang mga episode lang na lalabas sa feed mo matapos mo itong i-on ang ii-import, hindi kailanman ang mga luma.",
+    "grantNeeded": "Ipino-post para sa iyo ng @threespeak ang mga awtomatikong import, kaya kailangan nito ng pahintulot na mag-post sa account mo.",
+    "save": "I-save"
   }
 }

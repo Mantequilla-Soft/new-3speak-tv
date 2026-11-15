@@ -1,0 +1,110 @@
+{
+  "content": {
+    "streams": "Streams",
+    "audio": "Audio",
+    "podcasts": "Podcasts"
+  },
+  "reach": {
+    "title": "Bereik",
+    "impressions": "Vertoningen",
+    "ctr": "Doorklikratio",
+    "ctrShort": "CTR {{ctr}}",
+    "clicks": "Klikken via kaarten",
+    "opens": "Openingen",
+    "empty": "Nog geen vertoningen in deze periode. Vanaf nu worden ze geteld zodra een van je kaarten een seconde op iemands scherm staat.",
+    "foundTitle": "Waar kijkers het vonden",
+    "shownTitle": "Waar je kaarten werden getoond",
+    "since": "Vertoningen worden geteld op basis van een steekproef van paginaweergaven en opgeschaald. Het tellen begon op {{date}}.",
+    "sampled": "Vertoningen worden geteld op basis van een steekproef van paginaweergaven en opgeschaald.",
+    "detail": "{{impressions}} vertoningen · CTR {{ctr}}"
+  },
+  "sources": {
+    "home": "Home",
+    "discover": "Ontdekken",
+    "following": "Volgend",
+    "new": "Nieuw",
+    "trending": "Trending",
+    "interests": "Interesses",
+    "search": "Zoeken",
+    "channel": "Kanaalpagina's",
+    "related": "Naast andere video's",
+    "shorts": "Shorts",
+    "playlist": "Afspeellijsten",
+    "tag": "Tags",
+    "community": "Community's",
+    "other": "Elders op 3Speak",
+    "direct": "Direct of onbekend",
+    "search_engine": "Zoekmachines",
+    "social": "Sociale media",
+    "hive_apps": "Andere Hive-apps",
+    "external": "Andere websites",
+    "embed": "Ingesloten op andere sites"
+  },
+  "earnings": {
+    "title": "Inkomsten",
+    "empty": "Nog geen inkomsten in deze periode.",
+    "unavailable": "De inkomsten konden nu niet worden geladen. Probeer het over een minuut opnieuw.",
+    "chartLabel": "Inkomsten per dag over {{days}} dagen, gestapeld per bron",
+    "lastYear": "Alles toont de laatste 12 maanden.",
+    "note": "In HBD (ongeveer een Amerikaanse dollar). Hive-beloningen en HIVE-tips worden gewaardeerd tegen de HIVE-koers van vandaag, Lightning blijft in sats.",
+    "sats_one": "{{count}} sat",
+    "sats_other": "{{count}} sats",
+    "sources": {
+      "votes": "Votes",
+      "curation": "Curatie",
+      "tips": "Tips",
+      "ads": "Advertenties",
+      "boosts": "Streamboosts",
+      "lightning": "Lightning"
+    }
+  },
+  "export": {
+    "daily": "Dagelijkse inkomsten exporteren (CSV)",
+    "content": "Contenttabel exporteren (CSV)",
+    "cols": {
+      "date": "Datum",
+      "total": "Totaal",
+      "title": "Titel",
+      "url": "Link",
+      "published": "Gepubliceerd",
+      "watchSeconds": "Kijktijd (seconden)",
+      "earned": "Verdiend met votes"
+    }
+  },
+  "inbox": {
+    "tab": "Reacties",
+    "menu": "Reactie-inbox",
+    "title": "Reactie-inbox",
+    "sub_one": "Reacties op je posts van de afgelopen {{count}} dag.",
+    "sub_other": "Reacties op je posts van de afgelopen {{count}} dagen.",
+    "filtersLabel": "Alleen tonen",
+    "views": {
+      "unanswered": "Onbeantwoord",
+      "all": "Alle",
+      "done": "Afgehandeld"
+    },
+    "flags": {
+      "question": "Vragen",
+      "firstTime": "Eerste keer",
+      "supporter": "Supporters"
+    },
+    "answered": "Beantwoord",
+    "onPost": "op",
+    "onReply": "reageerde op jou bij",
+    "reply": "Reageren",
+    "replyVideo": "Reageren met een video",
+    "replyTo": "Reageren op @{{author}}",
+    "send": "Versturen",
+    "replied": "Je reactie staat op Hive.",
+    "replyFailed": "De reactie kon niet worden geplaatst. Probeer het opnieuw.",
+    "markDone": "Markeren als afgehandeld",
+    "undone": "Ongedaan maken",
+    "doneToast": "Gemarkeerd als afgehandeld.",
+    "doneFailed": "Kon dat niet opslaan. Probeer het opnieuw.",
+    "error": "De reacties konden niet worden geladen.",
+    "retry": "Probeer opnieuw",
+    "allAnswered": "Je hebt iedereen beantwoord.",
+    "empty": "Geen reacties hier.",
+    "supportersNote": "Supporters hebben de afgelopen 12 maanden op je posts gevotet of je een tip gegeven op 3Speak. Eerste keer betekent hun eerste reactie op een van je posts."
+  }
+}

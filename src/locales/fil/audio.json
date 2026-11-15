@@ -148,6 +148,16 @@
     "notes": "Mga tala",
     "stillIndexing": "Ini-index pa ang audio ng post na ito — subukan ulit pagkalipas ng ilang minuto."
   },
+  "edit": {
+    "title": "I-edit ang audio",
+    "editTitle": "I-edit ang pamagat, show notes, tags at cover",
+    "cover": "Cover",
+    "coverAlt": "Preview ng cover",
+    "coverHint": "Mag-upload ng larawan o mag-paste ng direktang URL. Pinakamaganda ang parisukat na larawan.",
+    "notesPlaceholder": "Ikuwento sa mga tagapakinig ang audio na ito…",
+    "keptNote": "Mananatili ang player link at mga music credit sa post.",
+    "updated": "Na-update ang audio!"
+  },
   "page": {
     "sections": {
       "popular": "Sikat",
@@ -173,7 +183,6 @@
     },
     "all": "Lahat",
     "musicGenre": "Genre ng musika",
-    "anyGenre": "Kahit anong genre",
     "tracks_one": "{{count}} track",
     "tracks_other": "{{count}} tracks",
     "noTracks": "Walang nahanap na track.",
@@ -186,7 +195,7 @@
     "nothingPlaying": "Wala pang tumutugtog.",
     "goExplore": "Maghanap ng mapapakinggan",
     "exploreViews": "Mga seksyon",
-    "mostPlayed": "Pinakamadalas pakinggan"
+    "newUploads": "Mga bagong upload"
   },
   "upload": {
     "title": "Mag-upload ng audio",
@@ -290,6 +299,7 @@
       "descriptionOptional": "Description (opsyonal)",
       "track": "Track",
       "category": "Kategorya",
+      "categoryRequired": "Pumili ng kategorya para lumabas ang audio mo sa tamang tab.",
       "musicGenre": "Genre ng musika"
     },
     "playlist": {
@@ -377,6 +387,7 @@
     "tracks": {
       "helpAlbum": "Bawat track ay ipa-publish bilang comment sa ilalim ng main post. Itakda nang isang beses ang mga shared value at i-apply sa lahat, tapos baguhin bawat track kung kailangan.",
       "helpSnaps": "Bawat track ay ipa-publish bilang sarili nitong snap. Itakda nang isang beses ang mga shared value at i-apply sa lahat, tapos baguhin bawat track kung kailangan.",
+      "helpSnapsSingle": "Ilalathala ang audio mo bilang sarili nitong snap.",
       "applyToAllHeading": "I-apply sa lahat ng track",
       "applyNote_one": "<b>Ilapat sa lahat ng {{count}} track:</b> iisang description at cover, tapos baguhin ang alinmang track nang hiwalay.",
       "applyNote_other": "<b>Ilapat sa lahat ng {{count}} track:</b> iisang description at cover, tapos baguhin ang alinmang track nang hiwalay.",
@@ -406,6 +417,10 @@
       "earnings": "Kita:",
       "earningsPpl": "Pay-per-listen (@{{account}})",
       "earningsNormal": "Normal na post rewards",
+      "rewards": "Mga gantimpala:",
+      "beneficiaries": "Mga benepisyaryo:",
+      "perTrack": "Itinakda bawat track",
+      "noBeneficiaries": "Wala",
       "playlist": "Playlist:",
       "failedCount_one": "{{count}} track ang pumalya.",
       "failedCount_other": "{{count}} tracks ang pumalya.",

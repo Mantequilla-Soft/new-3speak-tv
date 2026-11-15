@@ -13,9 +13,16 @@ globalThis.ResizeObserver = class { observe() {} unobserve() {} disconnect() {} 
 globalThis.fetch = vi.fn(async () => ({ ok: false, status: 404, json: async () => ({}) }))
 window.matchMedia = (q) => ({ matches: q.includes('max-width: 1024px'), media: q, addEventListener() {}, removeEventListener() {} })
 
+// Every GET the page makes, so a test can see what it asked the checker for.
+const gets = vi.hoisted(() => [])
 vi.mock('axios', () => {
   const ok = async () => ({ data: {} })
-  return { default: { get: ok, post: ok, create: () => ({ get: ok, post: ok, interceptors: { request: { use() {} }, response: { use() {} } } }), interceptors: { request: { use() {} }, response: { use() {} } } } }
+  const get = async (url) => {
+    gets.push(String(url))
+    if (/\/audio\/auto-tags/.test(url)) return { data: { tags: [{ name: 'music' }, { name: 'food' }] } }
+    return { data: {} }
+  }
+  return { default: { get, post: ok, create: () => ({ get: ok, post: ok, interceptors: { request: { use() {} }, response: { use() {} } } }), interceptors: { request: { use() {} }, response: { use() {} } } } }
 })
 
 let useAppStore
@@ -32,6 +39,7 @@ afterEach(() => {
   act(() => { useAppStore.getState().audioSetDock(null); useAppStore.getState().audioStop() })
   document.body.innerHTML = ''
   localStorage.clear()
+  gets.length = 0
 })
 
 function open(path) {
@@ -115,10 +123,10 @@ describe('audio page tabs', () => {
     act(() => root.unmount())
   })
 
-  it('has Mine, Discover and Trends above the chips, and leaves an empty Mine for Discover', async () => {
+  it('has Mine, Discover and New uploads above the chips, and leaves an empty Mine for Discover', async () => {
     const { host, root } = open('/audio?view=mine')
     const views = [...host.querySelectorAll('.audio-explore-views [role="tab"]')].map((b) => b.textContent)
-    expect(views).toEqual(['Mine', 'Discover', 'Trends'])
+    expect(views).toEqual(['Mine', 'Discover', 'New uploads'])
     // Signed out with nothing downloaded: Mine is empty, so Discover it is.
     await act(async () => { await new Promise((r) => setTimeout(r, 50)) })
     expect(where).toContain('view=discover')
@@ -126,9 +134,72 @@ describe('audio page tabs', () => {
     act(() => root.unmount())
   })
 
-  it('shows the type chips under Trends', () => {
-    const { host, root } = open('/audio?view=trends')
+  it('New uploads lists 3Speak audio newest first, with the type chips', async () => {
+    const { host, root } = open('/audio?view=new')
     expect(host.querySelector('.audio-type-filter')).toBeTruthy()
+    expect(host.querySelector('.audio-section-title')?.textContent).toContain('New uploads')
+    await act(async () => { await new Promise((r) => setTimeout(r, 20)) })
+    const list = gets.filter((u) => /\/audio\?/.test(u))
+    expect(list.length).toBeGreaterThan(0)
+    expect(list.every((u) => !u.includes('sort=popular'))).toBe(true)
+    act(() => root.unmount())
+  })
+
+  it('under Music, genre chips take the topic tags\' place and filter by genre', async () => {
+    const { host, root } = open('/audio?view=new')
+    const chip = (text) => [...host.querySelectorAll('.audio-type-filter button')].find((b) => b.textContent.includes(text))
+    act(() => chip('Music').click())
+    expect(host.querySelector('select.audio-genre-select')).toBeNull()
+    const genres = [...host.querySelectorAll('.audio-genre-chips button')].map((b) => b.textContent)
+    expect(genres).toContain('Electronic')
+    // the topic tags give way to them
+    expect(host.querySelector('.audio-topic-tags:not(.audio-genre-chips)')).toBeNull()
+    gets.length = 0
+    const electronic = [...host.querySelectorAll('.audio-genre-chips button')].find((b) => b.textContent === 'Electronic')
+    act(() => electronic.click())
+    await act(async () => { await new Promise((r) => setTimeout(r, 20)) })
+    const list = gets.filter((u) => /\/audio\?/.test(u))
+    expect(list.some((u) => u.includes('category=song') && u.includes('genre=Electronic'))).toBe(true)
+    expect(list.some((u) => u.includes('auto_tag='))).toBe(false)
+    expect(electronic.getAttribute('aria-pressed')).toBe('true')
+    // A second click clears it
+    act(() => electronic.click())
+    expect(electronic.getAttribute('aria-pressed')).toBe('false')
+    act(() => root.unmount())
+  })
+
+  it('shows the topic tags without a # in front', async () => {
+    const { host, root } = open('/audio?view=discover')
+    await act(async () => { await new Promise((r) => setTimeout(r, 20)) })
+    const tags = [...host.querySelectorAll('.audio-topic-tags button')].map((b) => b.textContent)
+    expect(tags).toEqual(expect.arrayContaining(['music', 'food']))
+    expect(tags.some((x) => x.startsWith('#'))).toBe(false)
+    act(() => root.unmount())
+  })
+
+  it('has no Upload audio button in the header (uploads live in the Create menu)', () => {
+    const { host, root } = open('/audio?view=discover')
+    expect(host.querySelector('.audio-upload-btn')).toBeNull()
+    act(() => root.unmount())
+  })
+
+  it('opens an old view=trends link on Discover, with no podcast switch outside External', () => {
+    const { host, root } = open('/audio?view=trends')
+    const on = host.querySelector('.audio-explore-views [role="tab"][aria-selected="true"]')
+    expect(on?.textContent).toBe('Discover')
+    expect(host.querySelector('.audio-type-filter')).toBeTruthy()
+    expect(host.querySelector('.audio-external-views')).toBeNull()
+    act(() => root.unmount())
+  })
+
+  it('puts Discover | Trends for the outside podcasts under the External chip', () => {
+    const { host, root } = open('/audio?type=external&view=trends')
+    const tabs = [...host.querySelectorAll('.audio-external-views [role="tab"]')]
+    expect(tabs.map((b) => b.textContent)).toEqual(['Discover', 'Trends'])
+    expect(tabs.find((b) => b.getAttribute('aria-selected') === 'true')?.textContent).toBe('Trends')
+    act(() => tabs[0].click())
+    expect(where).toContain('type=external')
+    expect(where).toContain('view=discover')
     act(() => root.unmount())
   })
 })

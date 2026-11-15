@@ -10,9 +10,12 @@ import { useEmbedUpload } from '../../context/EmbedUploadContext';
 import { usePremiumStatus } from '../../hooks/usePremiumStatus';
 import { getLockedBeneficiaries } from '../../utils/beneficiaries';
 import { remixChainAuthors } from '../../utils/remixChain';
-import { sanitizeMusicCredits, soundAuthorsOf } from '../../utils/soundCredits';
+import { sanitizeMusicCredits, soundAuthorsOf, withSoundCredit } from '../../utils/soundCredits';
 import { sanitizeChapters } from '../../utils/audioChapters';
 import { sanitizeAudiograms, playlistCoversOf } from '../../utils/audiogramShorts';
+import { sanitizeEditorSubtitles } from '../../utils/editorSubtitles';
+import { editorPostKind, editorAspect, editorTitle, editorChapters } from '../../utils/editorFormat';
+import { editorUrlWithLang, useEditorLanguage } from '../../utils/editorLanguage';
 import ShortTextModal from './ShortTextModal';
 
 // The original post a remix goes under, as the editor sends it ({ parentAuthor,
@@ -33,11 +36,17 @@ const audioToast = toastIn('Audio');
 // mode 'audio' opens the same editor as an audio editor (?mode=audio): `audioFile`
 // is loaded into it, and "Use this audio" hands the edited MP3 back to the audio
 // upload, either for its track `audioTrackId` or (from the share menu) as a new one.
-function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStart, clipEnd, originalAuthor, originalPermlink, originalShortPermlink, remixChain, videoFile, mode = 'video', audioFile = null, audioTrackId = null }) {
+// `sound` ({ url, name, credit }, a sound page's "Use this sound", lib/sounds.js): the
+// audio a new Short starts with, on the editor's music track, credited at publish
+// while it is still on the timeline (only an editor that says canLoadSound gets it).
+// `aspect` ('16:9', '4:3', '1:1'; utils/editorFormat.js): the video editor opens
+// as a project of that shape (?aspect=), not a Short; what it renders in a shape
+// other than 9:16 is posted as a normal video, a 9:16 one as a Short.
+function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStart, clipEnd, originalAuthor, originalPermlink, originalShortPermlink, remixChain, videoFile, mode = 'video', audioFile = null, audioTrackId = null, sound = null, aspect = null }) {
   const audioMode = mode === 'audio';
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { setVideoFile, setPrevVideoFile, setGeneratedThumbnail, setVideoDuration, setOriginalAuthor, setOriginalPermlink, setOriginalShortPermlink, setRemixChain, setMusicCredits, setFromStories, setIsStory, pickFirstThumbnail, setList, setRemaingPercent } = useEmbedUpload();
+  const { setVideoFile, setPrevVideoFile, setGeneratedThumbnail, setVideoDuration, setOriginalAuthor, setOriginalPermlink, setOriginalShortPermlink, setRemixChain, setMusicCredits, setEditorSubtitles, setFromStories, setIsStory, setVideoMode, setTitle, setChapters, pickFirstThumbnail, setList, setRemaingPercent } = useEmbedUpload();
   const iframeRef = useRef(null);
   const mediaLoadedRef = useRef(false);
   const [editorReady, setEditorReady] = useState(false);
@@ -48,6 +57,10 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
   // The editor keeps drafts of signed-in users and asks before closing
   // (editor-ready says canSaveDrafts); older editors get the plain confirm.
   const editorDraftsRef = useRef(false);
+  // The sound of "Use this sound": only an editor that says canLoadSound gets it
+  // (it keeps the credit on its music clip and plays an HLS sound).
+  const soundRef = useRef(sound);
+  useEffect(() => { soundRef.current = sound; }, [sound]);
   const isPremium = !!premiumStatus?.premium;
   const [renderStatus, setRenderStatus] = useState(null); // null | 'sending' | 'rendering' | 'complete' | 'error' | 'preparing' | 'choose-target'
   // The editor's "Post to 3Speak" for someone who can post stories: held here
@@ -63,6 +76,9 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
   const [resolvedUrl, setResolvedUrl] = useState(null);
   const [resolving, setResolving] = useState(false);
   const [resolveError, setResolveError] = useState(false);
+  // The language the iframe was opened in (its URL's lang=, see useEditorLanguage below)
+  const [openLang, setOpenLang] = useState(null);
+  const langRef = useRef(null);
 
   // Resolve a working editor URL when the modal opens
   useEffect(() => {
@@ -77,6 +93,7 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
     getEditorUrl().then(url => {
       if (cancelled) return;
       if (url) {
+        setOpenLang(langRef.current);
         setResolvedUrl(url);
       } else {
         setResolveError(true);
@@ -105,6 +122,11 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
       iframeRef.current.contentWindow.postMessage(message, new URL(resolvedUrl).origin);
     }
   }, [resolvedUrl]);
+
+  // The viewer's language: on the iframe URL at open (openLang, so a later switch
+  // does not reload the editor), then as 'set-language' messages while it is open
+  const lang = useEditorLanguage(sendToEditor, editorReady);
+  useEffect(() => { langRef.current = lang; }, [lang]);
 
   // Send theme and desktop flag to editor when ready or when theme changes
   useEffect(() => {
@@ -216,6 +238,16 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
             if (originalAuthor) msg.parentAuthor = originalAuthor;
             if (originalPermlink) msg.parentPermlink = originalPermlink;
             sendToEditor(msg);
+          } else if (sound?.url && !mediaLoadedRef.current) {
+            // "Use this sound": the sound on the music track, with its credit.
+            // An editor that does not say canLoadSound would drop the credit (and
+            // cannot play a Short's HLS sound): say so instead of loading it.
+            mediaLoadedRef.current = true;
+            if (data.canLoadSound) {
+              sendToEditor({ type: 'load-media', url: sound.url, name: sound.name || 'Sound', mediaType: 'audio', music: true, credit: sound.credit });
+            } else {
+              toast.warning(t('editorLink.soundNotSupported'));
+            }
           } else if (videoFile && !mediaLoadedRef.current) {
             // The creator's own file, from the shorts uploader. Posted as the File
             // itself: a blob: URL made here cannot be read from the editor's origin.
@@ -261,15 +293,21 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
         }
 
         case 'post-to-3speak':
+          // The audio editor's video podcast, and any video project that is not
+          // 9:16 (format.short false): a normal 3Speak video, no story choice
+          if (editorPostKind(data) === 'video' && (!audioMode || data.mediaType === 'video')) {
+            handlePostTo3Speak(data.outputUrl, data.musicCredits, false, data.remixSource, data.subtitles, { asVideo: true, title: data.title, chapters: data.chapters });
+            break;
+          }
           if (audioMode) {
             handleAudioResult(data);
             break;
           }
           if (storiesEnabledFor(userRef.current)) {
-            setPendingPost({ outputUrl: data.outputUrl, musicCredits: data.musicCredits, remixSource: data.remixSource });
+            setPendingPost({ outputUrl: data.outputUrl, musicCredits: data.musicCredits, remixSource: data.remixSource, subtitles: data.subtitles });
             setRenderStatus('choose-target');
           } else {
-            handlePostTo3Speak(data.outputUrl, data.musicCredits, false, data.remixSource);
+            handlePostTo3Speak(data.outputUrl, data.musicCredits, false, data.remixSource, data.subtitles);
           }
           break;
 
@@ -302,7 +340,7 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
     // a surprise popup on opening the studio.
     const sendDraftSession = async (interactive) => {
       const who = userRef.current;
-      const hasMedia = !!(videoUrl || videoFile || (audioMode && audioFile));
+      const hasMedia = !!(videoUrl || videoFile || sound?.url || (audioMode && audioFile));
       if (!who) {
         sendToEditor({ type: 'drafts-session', session: null, reason: 'logged-out', hasMedia });
         return;
@@ -364,7 +402,7 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
 
     window.addEventListener('message', handleMessage);
     return () => window.removeEventListener('message', handleMessage);
-  }, [isOpen, resolvedUrl, videoUrl, videoName, videoType, clipStart, clipEnd, sendToEditor, videoFile, audioMode, audioFile, audioTrackId, t]);
+  }, [isOpen, resolvedUrl, videoUrl, videoName, videoType, clipStart, clipEnd, sendToEditor, videoFile, audioMode, audioFile, audioTrackId, sound, t]);
 
   // While the editor is open, keys must not reach the page behind it (the
   // shorts page plays/pauses on Space and switches videos on the arrow keys).
@@ -473,7 +511,11 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
   };
 
   // Handle "Post to 3Speak" from editor — fetch rendered video, navigate to embed-studio
-  const handlePostTo3Speak = async (outputUrl, rawMusicCredits, asStory = false, editorRemix = null) => {
+  // `rawSubtitles`: the editor's auto captions, saved as the Short's subtitles
+  // once it is published (EmbedUploadContext, utils/editorSubtitles.js)
+  // `asVideo`: a normal 3Speak video (the video uploader), with the editor's
+  // `title` and `chapters` when it has them (the video podcast), not a Short
+  const handlePostTo3Speak = async (outputUrl, rawMusicCredits, asStory = false, editorRemix = null, rawSubtitles = null, { asVideo = false, title: rawTitle = null, chapters: rawChapters = null } = {}) => {
     if (!outputUrl) return;
     // The original a remix goes under: the one the remix button opened the editor
     // with, else the one the editor says (a remix draft opened again later)
@@ -493,7 +535,7 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
         throw new Error(`Expected video file but got ${contentType}`);
       }
       const blob = await res.blob();
-      const file = new File([blob], 'rendered-video.mp4', { type: blob.type || 'video/mp4' });
+      const file = new File([blob], asVideo ? 'edited-video.mp4' : 'rendered-video.mp4', { type: blob.type || 'video/mp4' });
       console.log('[EditorModal] Post to 3Speak: fetched', file.size, 'bytes, type:', file.type);
 
       // Calculate video duration
@@ -555,13 +597,27 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
       setRemixChain(chain);
 
       // Songs from the editor's music library: credited in the post body and
-      // metadata, and 3Speak sound creators get a locked 5% like remix authors
-      const musicCredits = sanitizeMusicCredits(rawMusicCredits);
+      // metadata, and 3Speak sound creators get a locked 5% like remix authors.
+      // The editor sends only the songs still on the timeline; the sound of
+      // "Use this sound" goes first when it is one of them (its creator gets the split).
+      const musicCredits = withSoundCredit(rawMusicCredits, soundRef.current?.credit || null);
       setMusicCredits(musicCredits);
+      setEditorSubtitles(sanitizeEditorSubtitles(rawSubtitles));
 
-      // Remix from shorts should use the short upload form (no title/tags)
-      setFromStories(true);
-      setIsStory(asStory);
+      if (asVideo) {
+        // The normal video uploader: title, tags, timeline step
+        setFromStories(false);
+        setIsStory(false);
+        setVideoMode('longform');
+        const suggested = editorTitle(rawTitle);
+        if (suggested) setTitle(suggested);
+        const marks = editorChapters(rawChapters);
+        if (marks.length) setChapters(marks);
+      } else {
+        // Remix from shorts should use the short upload form (no title/tags)
+        setFromStories(true);
+        setIsStory(asStory);
+      }
 
       // Pre-populate beneficiary list with locked minimums. Pro
       // subscribers skip the threespeakfund 10% — but the remix-author
@@ -582,7 +638,8 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
 
       // Navigate to embed-studio thumbnail step (video uploads at publish time).
       // A story goes straight to Post, like one picked in the uploader.
-      if (asStory && pickFirstThumbnail(thumbs)) navigate('/embed-studio/preview');
+      if (asVideo) navigate('/embed-studio/thumbnail');
+      else if (asStory && pickFirstThumbnail(thumbs)) navigate('/embed-studio/preview');
       else navigate('/embed-studio/thumbnail?from=stories');
     } catch (err) {
       console.error('[EditorModal] Post to 3Speak failed:', err);
@@ -674,7 +731,7 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
           {resolvedUrl && (
             <iframe
               ref={iframeRef}
-              src={`${resolvedUrl}?compact=true${audioMode ? '&mode=audio' : ''}`}
+              src={editorUrlWithLang(`${resolvedUrl}?compact=true${audioMode ? '&mode=audio' : editorAspect(aspect) ? `&aspect=${encodeURIComponent(editorAspect(aspect))}` : ''}`, openLang)}
               className="editor-iframe"
               allow="cross-origin-isolated; camera; microphone; fullscreen"
               allowFullScreen
@@ -755,11 +812,11 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
                 <div className="render-status">
                   <span>{t('modals.editor.postAs')}</span>
                   <div className="post-target">
-                    <button type="button" className="v2-choice post-target__btn" onClick={() => handlePostTo3Speak(pendingPost.outputUrl, pendingPost.musicCredits, true, pendingPost.remixSource)}>
+                    <button type="button" className="v2-choice post-target__btn" onClick={() => handlePostTo3Speak(pendingPost.outputUrl, pendingPost.musicCredits, true, pendingPost.remixSource, pendingPost.subtitles)}>
                       <Icon name="auto_stories" size={20} className="v2-choice__icon" />
                       <span className="v2-choice__body"><b>{t('modals.editor.postAsStory')}</b><span>{t('modals.editor.postAsStoryHint')}</span></span>
                     </button>
-                    <button type="button" className="v2-choice post-target__btn" onClick={() => handlePostTo3Speak(pendingPost.outputUrl, pendingPost.musicCredits, false, pendingPost.remixSource)}>
+                    <button type="button" className="v2-choice post-target__btn" onClick={() => handlePostTo3Speak(pendingPost.outputUrl, pendingPost.musicCredits, false, pendingPost.remixSource, pendingPost.subtitles)}>
                       <Icon name="smart_display" size={20} className="v2-choice__icon" />
                       <span className="v2-choice__body"><b>{t('modals.editor.postAsShort')}</b><span>{t('modals.editor.postAsShortHint')}</span></span>
                     </button>

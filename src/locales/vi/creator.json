@@ -1,0 +1,108 @@
+{
+  "content": {
+    "streams": "Buổi phát",
+    "audio": "Âm thanh",
+    "podcasts": "Podcast"
+  },
+  "reach": {
+    "title": "Tiếp cận",
+    "impressions": "Lượt hiển thị",
+    "ctr": "Tỷ lệ nhấp",
+    "ctrShort": "CTR {{ctr}}",
+    "clicks": "Lượt nhấp từ thẻ",
+    "opens": "Lượt mở",
+    "empty": "Chưa có lượt hiển thị trong khoảng này. Từ giờ, mỗi lần một thẻ của bạn nằm trên màn hình của ai đó trong một giây sẽ được tính.",
+    "foundTitle": "Người xem tìm thấy ở đâu",
+    "shownTitle": "Thẻ của bạn được hiển thị ở đâu",
+    "since": "Lượt hiển thị được đếm từ một mẫu lượt xem trang rồi quy đổi theo tỷ lệ. Bắt đầu đếm từ {{date}}.",
+    "sampled": "Lượt hiển thị được đếm từ một mẫu lượt xem trang rồi quy đổi theo tỷ lệ.",
+    "detail": "{{impressions}} lượt hiển thị · CTR {{ctr}}"
+  },
+  "sources": {
+    "home": "Trang chủ",
+    "discover": "Khám phá",
+    "following": "Đang theo dõi",
+    "new": "Mới",
+    "trending": "Thịnh hành",
+    "interests": "Sở thích",
+    "search": "Tìm kiếm",
+    "channel": "Trang kênh",
+    "related": "Bên cạnh video khác",
+    "shorts": "Shorts",
+    "playlist": "Danh sách phát",
+    "tag": "Thẻ",
+    "community": "Cộng đồng",
+    "other": "Nơi khác trên 3Speak",
+    "direct": "Trực tiếp hoặc không rõ",
+    "search_engine": "Công cụ tìm kiếm",
+    "social": "Mạng xã hội",
+    "hive_apps": "Ứng dụng Hive khác",
+    "external": "Trang web khác",
+    "embed": "Nhúng trên trang khác"
+  },
+  "earnings": {
+    "title": "Thu nhập",
+    "empty": "Chưa có thu nhập trong khoảng này.",
+    "unavailable": "Hiện không tải được thu nhập. Hãy thử lại sau một phút.",
+    "chartLabel": "Thu nhập mỗi ngày trong {{days}} ngày, xếp chồng theo nguồn",
+    "lastYear": "Tất cả hiển thị 12 tháng gần nhất.",
+    "note": "Tính bằng HBD (khoảng một đô la Mỹ). Phần thưởng Hive và tiền tip HIVE được quy theo giá HIVE hôm nay, Lightning giữ nguyên bằng sats.",
+    "sats_other": "{{count}} sats",
+    "sources": {
+      "votes": "Lượt vote",
+      "curation": "Curation",
+      "tips": "Tiền tip",
+      "ads": "Quảng cáo",
+      "boosts": "Boost khi phát trực tiếp",
+      "lightning": "Lightning"
+    }
+  },
+  "export": {
+    "daily": "Xuất thu nhập theo ngày (CSV)",
+    "content": "Xuất bảng nội dung (CSV)",
+    "cols": {
+      "date": "Ngày",
+      "total": "Tổng",
+      "title": "Tiêu đề",
+      "url": "Liên kết",
+      "published": "Ngày đăng",
+      "watchSeconds": "Thời gian xem (giây)",
+      "earned": "Kiếm từ lượt vote"
+    }
+  },
+  "inbox": {
+    "tab": "Bình luận",
+    "menu": "Hộp bình luận",
+    "title": "Hộp bình luận",
+    "sub_other": "Bình luận trên bài của bạn trong {{count}} ngày qua.",
+    "filtersLabel": "Chỉ hiện",
+    "views": {
+      "unanswered": "Chưa trả lời",
+      "all": "Tất cả",
+      "done": "Đã xong"
+    },
+    "flags": {
+      "question": "Câu hỏi",
+      "firstTime": "Lần đầu",
+      "supporter": "Người ủng hộ"
+    },
+    "answered": "Đã trả lời",
+    "onPost": "trên",
+    "onReply": "đã trả lời bạn trên",
+    "reply": "Phản hồi",
+    "replyVideo": "Phản hồi bằng video",
+    "replyTo": "Phản hồi @{{author}}",
+    "send": "Gửi",
+    "replied": "Phản hồi của bạn đã lên Hive.",
+    "replyFailed": "Không đăng được phản hồi. Hãy thử lại.",
+    "markDone": "Đánh dấu đã xong",
+    "undone": "Hoàn tác",
+    "doneToast": "Đã đánh dấu xong.",
+    "doneFailed": "Không lưu được. Hãy thử lại.",
+    "error": "Không tải được bình luận.",
+    "retry": "Thử lại",
+    "allAnswered": "Bạn đã trả lời tất cả mọi người.",
+    "empty": "Không có bình luận nào ở đây.",
+    "supportersNote": "Người ủng hộ là người đã vote bài của bạn trong 12 tháng qua hoặc tip cho bạn trên 3Speak. Lần đầu nghĩa là bình luận đầu tiên của họ trên bất kỳ bài nào của bạn."
+  }
+}

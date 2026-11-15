@@ -1,0 +1,19 @@
+{
+  "title": "Shorts uit deze video",
+  "sub": "Gekozen door je kijkers: de stukken die ze terugkijken, waar ze op reageren en over chatten, en zinnen om te citeren.",
+  "empty": "Nog geen suggesties. Ze verschijnen zodra mensen deze video bekijken, terugkijken en erop reageren.",
+  "error": "Suggesties konden nu niet worden geladen.",
+  "range": "{{start}} tot {{end}}",
+  "seconds": "{{seconds}} s",
+  "reasons": {
+    "replay": "Meest teruggekeken",
+    "comments_one": "{{count}} reactie wijst hiernaar",
+    "comments_other": "{{count}} reacties wijzen hiernaar",
+    "chat": "Chat ging los",
+    "quote": "Citeerbare zin"
+  },
+  "preview": "Voorbeeld",
+  "stop": "Stop",
+  "makeShort": "Maak een Short",
+  "foot": "Alleen jij ziet dit. Terugkijken wordt geteld zonder te weten wie er keek."
+}

@@ -139,6 +139,13 @@
     "rumble": {
       "placeholder": "https://rumble.com/c/…",
       "help": "Bandika jina au kiungo cha chaneli yako ya Rumble. Weka hash popote kwenye maelezo ya chaneli."
+    },
+    "rss": {
+      "placeholder": "https://example.com/podcast.xml",
+      "help": "Bandika anwani ya mlisho wa RSS wa podikasti yako. Mwenyeji wa podikasti huionyesha kwenye mipangilio au ukurasa wa usambazaji wa kipindi.",
+      "flowTitle": "Unganisha mlisho wa RSS wa podikasti yako",
+      "step2": "<strong>Ibandike kwenye maelezo ya kipindi chako, au maelezo ya kipindi chako kipya zaidi</strong>, kwa mwenyeji wa podikasti yako. Hifadhi na uchapishe mabadiliko. Unaweza kuiondoa tena mlisho ukishathibitishwa.",
+      "step3": "Weka anwani ya mlisho wa RSS wa podikasti yako:"
     }
   },
   "snaps": {

@@ -1,8 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Icon } from '../v2/Icon';
 import { useAppStore } from '../../lib/store';
 import { getEditorUrl } from '../../utils/config';
 import { mintDraftSession } from '../../utils/editorDraftSession';
+import { useEditorLanguage } from '../../utils/editorLanguage';
 
 // The Ad Wizard (the editor's ?mode=ads) in an iframe, with the page side of its handshake:
 //   editor-ready  -> theme, brand prefill, drafts session (server drafts: 5 ads, 90 days)
@@ -13,6 +14,12 @@ export default function AdWizardFrame({ format = null, maxSeconds = null, brand 
   const { user, getEffectiveTheme } = useAppStore();
   const [src, setSrc] = useState(null);
   const frameRef = useRef(null);
+  // The viewer's language: ?lang= when the wizard opens, 'set-language' when it changes
+  const [ready, setReady] = useState(false);
+  const sendLang = useCallback((msg) => { if (src) frameRef.current?.contentWindow?.postMessage(msg, new URL(src).origin); }, [src]);
+  const lang = useEditorLanguage(sendLang, ready);
+  const langRef = useRef(lang);
+  useEffect(() => { langRef.current = lang; }, [lang]);
   const userRef = useRef(user);
   useEffect(() => { userRef.current = user; }, [user]);
   const latest = useRef({ brand, onUse });
@@ -26,6 +33,8 @@ export default function AdWizardFrame({ format = null, maxSeconds = null, brand 
       if (format) q.set('format', format);
       if (maxSeconds) q.set('max', String(Math.round(maxSeconds)));
       if (onUse) q.set('target', 'booking');
+      if (langRef.current) q.set('lang', langRef.current);
+      setReady(false);
       setSrc(`${u.replace(/\/+$/, '')}/?${q}`);
     });
     return () => { alive = false; };
@@ -40,6 +49,7 @@ export default function AdWizardFrame({ format = null, maxSeconds = null, brand 
       if (e.origin !== origin || e.source !== frameRef.current?.contentWindow || e.data?.source !== '3speak-editor') return;
       const d = e.data;
       if (d.type === 'editor-ready') {
+        setReady(true);
         send({ type: 'set-theme', theme: getEffectiveTheme() });
         const b = latest.current.brand;
         if (b && (b.name || b.logo)) send({ type: 'ad-prefill', brand: { name: b.name || null, logo: b.logo || null } });

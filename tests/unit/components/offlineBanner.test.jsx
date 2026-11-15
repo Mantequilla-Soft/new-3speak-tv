@@ -39,6 +39,7 @@ describe('the offline notice', () => {
     items = [{ id: 'a' }]
     expect(await render('/audio?view=mine')).not.toContain('Open downloads')
     expect(await render('/audio?view=discover')).toContain('Open downloads')
+    expect(await render('/downloads')).not.toContain('Open downloads')
   })
 
   it('without downloads, says how to listen offline', async () => {

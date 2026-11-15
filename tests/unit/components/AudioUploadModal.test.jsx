@@ -42,13 +42,23 @@ vi.mock('../../../src/utils/audioUpload', () => ({
   audioFormatFor: () => 'webm',
 }))
 vi.mock('../../../src/utils/uploadThumbnail', () => ({ uploadThumbnail: vi.fn(async () => 'https://images.hive.blog/DQmMine/mine.jpg') }))
+// Scheduled posts and drafts go to the checker (utils/scheduledPosts.js).
+vi.mock('../../../src/utils/scheduledPosts', () => ({ saveScheduledPost: vi.fn(async () => ({ success: true })) }))
 vi.mock('../../../src/utils/postingAuthority', () => ({ hasThreespeakPostingAuth: async () => true, addThreespeakToPostingAuth: async () => {} }))
 vi.mock('../../../src/utils/rcCheck', async (importOriginal) => ({ ...(await importOriginal()), checkPostingRc: async () => ({ ok: true }) }))
+vi.mock('../../../src/lib/youtubeImport', () => ({ markImportPublished: vi.fn(async () => ({ ok: true })) }))
 vi.mock('../../../src/lib/advertiseData', () => ({ fetchCreatorAdPrefs: async () => ({}), syncAudioAdChoice: async () => {} }))
 vi.mock('../../../src/lib/uploadGate', () => ({ fetchUploadGateAd: async () => null, confirmUploadGatePost: () => {}, gateSessionId: () => null }))
 vi.mock('../../../src/components/HiveAvatar/AccountImg', () => ({ default: () => null }))
 vi.mock('../../../src/components/modal/Community_modal', () => ({ default: () => null }))
-vi.mock('../../../src/components/modal/Beneficiary_modal', () => ({ default: () => null }))
+// The beneficiaries dialog, reduced to one "add @bob 10%" button that saves like the real one.
+vi.mock('../../../src/components/modal/Beneficiary_modal', () => ({
+  default: ({ setBeneficiaries, close }) => (
+    <div data-testid="bene-modal">
+      <button type="button" onClick={() => { setBeneficiaries(JSON.stringify([{ account: 'bob', weight: 1000 }])); close() }}>Add bob 10%</button>
+    </div>
+  ),
+}))
 vi.mock('../../../src/components/AudioUploadModal/CoverDesigner', () => ({
   default: ({ src, onDone, onClose }) => (
     <div role="dialog" aria-label="Cover editor">
@@ -85,6 +95,8 @@ const { uploadThumbnail } = await import('../../../src/utils/uploadThumbnail')
 const { useAppStore } = await import('../../../src/lib/store')
 const { default: AudioUploadModal } = await import('../../../src/components/AudioUploadModal/AudioUploadModal.jsx')
 const { publishAudiogramShorts } = await import('../../../src/utils/audiogramShorts')
+const { markImportPublished } = await import('../../../src/lib/youtubeImport')
+const { saveScheduledPost } = await import('../../../src/utils/scheduledPosts')
 
 // jsdom reads no media: every <audio> reports m.duration as soon as it gets a src.
 let savedSrc
@@ -151,6 +163,8 @@ async function addFile(user, name = 'Episode 12.wav', type = 'audio/wav') {
 
 const next = (user) => user.click(screen.getByRole('button', { name: /Next/ }))
 const back = (user) => user.click(screen.getByRole('button', { name: /Back/ }))
+// The category has no default: the uploader picks one before Next works.
+const pickKind = (user, name = 'Podcast') => user.click(screen.getAllByRole('radio', { name })[0])
 const row = (name) => screen.getByText(name).closest('.audio-upload-track-row')
 const cover = () => document.querySelector('.audio-upload-post-form .audio-upload-album-thumb')
 
@@ -163,6 +177,7 @@ async function toPostStep(user, playlistName) {
   if (playlistName) await user.click(screen.getByRole('radio', { name: new RegExp(playlistName) }))
   await next(user)
   await screen.findByPlaceholderText('Title (required)')
+  await pickKind(user)
 }
 
 const result = (detail) => act(async () => {
@@ -228,11 +243,100 @@ describe('AudioUploadModal: Edit audio', () => {
     expect(within(r).getByText('Edited')).toBeInTheDocument()
   })
 
+  it('starts a file with no category: Next waits until one is picked', async () => {
+    const { user } = openModal()
+    await addFile(user)
+    await next(user)
+    await user.click(screen.getByRole('radio', { name: /Standalone post/ }))
+    await next(user)
+    await next(user)
+    await screen.findByPlaceholderText('Title (required)')
+    expect(screen.getByText('Pick a category so your audio shows up on the right tab.')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /Next/ })).toBeDisabled()
+    await pickKind(user, 'Music')
+    expect(screen.queryByText('Pick a category so your audio shows up on the right tab.')).toBeNull()
+    expect(screen.getByRole('button', { name: /Next/ })).toBeEnabled()
+  })
+
+  it('snap comments: every track needs its category before review', async () => {
+    const { user } = openModal()
+    await addFile(user)
+    await next(user)
+    await user.click(screen.getByRole('radio', { name: /Snap comments/ }))
+    await next(user)
+    await next(user) // tracks
+    expect(screen.getByRole('button', { name: /Next/ })).toBeDisabled()
+    await pickKind(user, 'Music')
+    expect(screen.getByRole('button', { name: /Next/ })).toBeEnabled()
+  })
+
   it('keeps an OpenPods hand-off a recording, as before', async () => {
     openModal({ initialTrack: { blob: new Blob(['x'], { type: 'audio/ogg' }), filename: 'openpod.ogg', type: 'podcast' } })
     const r = await waitFor(() => row('openpod.ogg'))
     expect(within(r).queryByText('Edited')).toBeNull()
     expect(within(r).getByText('Recorded')).toBeInTheDocument()
+  })
+})
+
+describe('AudioUploadModal: one track vs many on the tracks step', () => {
+  const toTracks = async (user) => {
+    await next(user)
+    await user.click(screen.getByRole('radio', { name: /Snap comments/ }))
+    await next(user)
+    await next(user) // tracks
+  }
+
+  it('one track: no apply-to-all box, and its own rewards are always there to change', async () => {
+    const { user } = openModal()
+    await addFile(user)
+    await toTracks(user)
+    expect(screen.getByText('Your audio is published as its own snap.')).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: /Apply to all/ })).toBeNull()
+    expect(screen.queryByPlaceholderText('Shared description (optional)')).toBeNull()
+    // nothing to fold: no Edit / Hide toggle
+    const head = document.querySelector('.audio-upload-track-head')
+    expect(head.getAttribute('role')).toBeNull()
+    expect(within(head).queryByText(/Edit|Hide/)).toBeNull()
+    // the track's own payout select works
+    const payout = document.querySelector('.audio-upload-post-reward-row select')
+    await user.selectOptions(payout, 'decline')
+    expect(payout).toHaveValue('decline')
+    await user.click(head)
+    expect(document.querySelector('.audio-upload-post-reward-row select')).toHaveValue('decline')
+    // its beneficiaries too
+    await user.click(within(document.querySelector('.audio-upload-post-reward-row')).getByRole('button', { name: /Beneficiaries/ }))
+    await user.click(within(screen.getByTestId('bene-modal')).getByRole('button', { name: 'Add bob 10%' }))
+    expect(within(document.querySelector('.audio-upload-post-reward-row')).getByRole('button', { name: /Beneficiaries \(1\)/ })).toBeInTheDocument()
+    // Review says what goes out, and the snap goes out with it
+    await pickKind(user, 'Music')
+    await next(user) // review
+    expect(screen.getByText('Rewards:').parentElement).toHaveTextContent('Decline payout')
+    expect(screen.getByText('Beneficiaries:').parentElement).toHaveTextContent('@bob 10%')
+    await user.click(screen.getByRole('button', { name: /^Publish/ }))
+    await waitFor(() => expect(aioha.broadcastWithAioha).toHaveBeenCalled())
+    const ops = aioha.broadcastWithAioha.mock.calls.flatMap(([o]) => o)
+    const options = ops.find((o) => o[0] === 'comment_options')
+    expect(options[1].max_accepted_payout).toBe('0.000 HBD')
+    expect(options[1].extensions[0][1].beneficiaries).toEqual(expect.arrayContaining([{ account: 'bob', weight: 1000 }]))
+  })
+
+  it('two tracks: the apply-to-all box is there, the cards start closed', async () => {
+    const { user } = openModal()
+    await addFile(user, 'One.wav')
+    await addFile(user, 'Two.wav')
+    await toTracks(user)
+    expect(screen.getByRole('button', { name: /Apply to all 2 tracks/ })).toBeInTheDocument()
+    expect(screen.getByPlaceholderText('Shared description (optional)')).toBeInTheDocument()
+    const heads = [...document.querySelectorAll('.audio-upload-track-head')]
+    expect(heads.map((h) => h.getAttribute('aria-expanded'))).toEqual(['false', 'false'])
+    // different payouts per track: the review says so
+    const cards = heads.map((h) => h.closest('.audio-upload-title-card'))
+    await user.click(heads[0])
+    await user.selectOptions(cards[0].querySelector('.audio-upload-post-reward-row select'), 'powerup')
+    for (const card of cards) await user.click(within(card).getByRole('radio', { name: 'Music' }))
+    await next(user) // review
+    expect(screen.getByText('Rewards:').parentElement).toHaveTextContent('Set per track')
+    expect(screen.getByText('Beneficiaries:').parentElement).toHaveTextContent('None')
   })
 })
 
@@ -382,6 +486,68 @@ describe('AudioUploadModal: chapters from the editor', () => {
   })
 })
 
+describe('AudioUploadModal: a podcast episode from the import page', () => {
+  const prefill = {
+    title: 'Episode 7: Hello', description: 'Full show notes [https://example.com/x]', tags: ['podcasting', 'hive'],
+    coverUrl: 'https://images.hive.blog/DQmCover/cover.jpg', sourceId: 'rss:AAAAAAAAAAAAAAAA',
+  }
+  const episode = () => ({ blob: new File(['ID3'], 'import-rss-AAAAAAAAAAAAAAAA.mp3', { type: 'audio/mpeg' }), filename: 'import-rss-AAAAAAAAAAAAAAAA.mp3', type: 'podcast', source: 'import', prefill })
+
+  it('fills in the title, notes, tags and cover, and reports the post back to the importer', async () => {
+    const { user } = openModal({ initialTrack: episode() })
+    await waitFor(() => row('import-rss-AAAAAAAAAAAAAAAA.mp3'))
+    await toPostStep(user, null)
+    expect(screen.getByPlaceholderText('Title (required)')).toHaveValue('Episode 7: Hello')
+    await next(user)
+    await user.click(screen.getByRole('button', { name: 'Publish' }))
+    await waitFor(() => expect(markImportPublished).toHaveBeenCalled())
+    const ops = aioha.broadcastWithAioha.mock.calls.map(([o]) => o).find((o) => o[0][0] === 'comment')
+    const post = ops[0][1]
+    expect(post.title).toBe('Episode 7: Hello')
+    expect(post.body).toContain('![Episode 7: Hello](https://images.hive.blog/DQmCover/cover.jpg)')
+    expect(post.body).toContain('Full show notes [https://example.com/x]')
+    expect(JSON.parse(post.json_metadata).tags).toEqual(['podcasting', 'hive'])
+    expect(markImportPublished).toHaveBeenCalledWith('rss:AAAAAAAAAAAAAAAA', post.permlink)
+  })
+
+  it('as a snap comment: the track carries the episode, and the snap is reported back', async () => {
+    const seen = []
+    const onPublished = (e) => seen.push(e.detail)
+    window.addEventListener('import-published', onPublished)
+    try {
+      const { user } = openModal({ initialTrack: episode() })
+      await waitFor(() => screen.getByText('import-rss-AAAAAAAAAAAAAAAA.mp3'))
+      await next(user)
+      await user.click(screen.getByRole('radio', { name: /Snap comments/ }))
+      await next(user)
+      await next(user) // tracks: the episode's own title and notes on the track
+      expect(screen.getByDisplayValue('Episode 7: Hello')).toBeInTheDocument()
+      await next(user)
+      await user.click(screen.getByRole('button', { name: /Publish/ }))
+      await waitFor(() => expect(markImportPublished).toHaveBeenCalled())
+      const calls = [...aioha.broadcastWithAioha.mock.calls.map(([o]) => o), ...(aioha.commentWithAioha?.mock?.calls || []).map((c) => [['comment', { permlink: c[2], title: c[3], body: c[4] }]])]
+      const snap = calls.find((o) => o[0][0] === 'comment')
+      expect(markImportPublished).toHaveBeenCalledWith('rss:AAAAAAAAAAAAAAAA', snap[0][1].permlink)
+      expect(snap[0][1].body).toContain('Full show notes')
+      await waitFor(() => expect(seen).toEqual([{ source: 'rss:AAAAAAAAAAAAAAAA', permlink: snap[0][1].permlink }]))
+    } finally {
+      window.removeEventListener('import-published', onPublished)
+    }
+  })
+
+  it('a plain upload reports nothing to the importer', async () => {
+    const blob = new File(['ID3'], 'Episode.mp3', { type: 'audio/mpeg' })
+    const { user } = openModal({ initialTrack: { blob, filename: 'Episode.mp3', type: null, source: 'editor' } })
+    await waitFor(() => row('Episode.mp3'))
+    await toPostStep(user, null)
+    await user.type(screen.getByPlaceholderText('Title (required)'), 'Mine')
+    await next(user)
+    await user.click(screen.getByRole('button', { name: 'Publish' }))
+    await waitFor(() => expect(aioha.broadcastWithAioha).toHaveBeenCalled())
+    expect(markImportPublished).not.toHaveBeenCalled()
+  })
+})
+
 describe('AudioUploadModal: songs from the editor', () => {
   it('credits a library song in the post and gives its 3Speak creator 5%', async () => {
     const blob = new File(['ID3'], 'Episode.mp3', { type: 'audio/mpeg' })
@@ -445,6 +611,7 @@ describe('AudioUploadModal: audiograms as Shorts', () => {
     expect(within(section).getByLabelText('Thumbnail of Short 1').querySelector('img')).toHaveAttribute('src', 'https://images.hive.blog/DQmThumb/short.jpg')
     // every one goes: there is no way to drop one here
     expect(within(section).queryByRole('button', { name: /Don't post/ })).toBeNull()
+    await pickKind(user)
     await next(user) // review
     expect(screen.getByText(/2 from the audio editor, each posted after its audio/)).toBeInTheDocument()
     // the publish list shows them under their track: posted together with it
@@ -577,5 +744,61 @@ describe('AudioUploadModal: transcripts', () => {
     await user.click(screen.getByRole('button', { name: /Make a transcript/ }))
     await act(async () => runs[1].reject(Object.assign(new Error('x'), { code: 'connection' })))
     expect(await screen.findByText('The transcript could not be made. Please try again.')).toBeTruthy()
+  })
+})
+
+describe('AudioUploadModal: season, episode, scheduling and drafts (standalone post)', () => {
+  beforeEach(() => useAppStore.setState({ user: 'badadib' }))
+  const plainTrack = () => ({ blob: new File(['ID3'], 'Episode.mp3', { type: 'audio/mpeg' }), filename: 'Episode.mp3', type: null, source: 'editor' })
+  const postOps = () => aioha.broadcastWithAioha.mock.calls.map(([o]) => o).find((o) => o[0][0] === 'comment')
+
+  it('season and episode ride in the audio block of the post', async () => {
+    const { user } = openModal({ initialTrack: plainTrack() })
+    await waitFor(() => row('Episode.mp3'))
+    await toPostStep(user, null)
+    await user.type(screen.getByPlaceholderText('Title (required)'), 'Garden talk')
+    await user.type(screen.getByTestId('episode-season'), '2')
+    await user.type(screen.getByTestId('episode-episode'), '5')
+    await next(user)
+    await user.click(screen.getByRole('button', { name: 'Publish' }))
+    await waitFor(() => expect(postOps()).toBeDefined())
+    expect(JSON.parse(postOps()[0][1].json_metadata).audio).toMatchObject({ type: 'podcast', season: 2, episode: 5 })
+    expect(saveScheduledPost).not.toHaveBeenCalled()
+  })
+
+  it('saved as a draft: the upload and the built post go to the checker, nothing is broadcast', async () => {
+    const { user } = openModal({ initialTrack: plainTrack() })
+    await waitFor(() => row('Episode.mp3'))
+    await toPostStep(user, 'Show A')
+    await user.type(screen.getByPlaceholderText('Title (required)'), 'Garden talk')
+    await user.click(screen.getByRole('tab', { name: /Draft/ }))
+    await next(user)
+    await user.click(screen.getByRole('button', { name: /Save draft/ }))
+    await waitFor(() => expect(saveScheduledPost).toHaveBeenCalledTimes(1))
+    const { owner, permlink, scheduledOn, post } = saveScheduledPost.mock.calls[0][0]
+    expect(owner).toBe('badadib')
+    expect(scheduledOn).toBeNull()
+    expect(permlink).toMatch(/^garden-talk/)
+    expect(post).toMatchObject({ title: 'Garden talk', audioPermlink: 'aud-1', playlistAdd: { playlist_id: 'p1', position: 0 }, parentAuthor: '' })
+    expect(post.body).toContain('https://audio.3speak.tv/play?a=aud-1')
+    expect(post.jsonMetadata.audio).toMatchObject({ type: 'podcast' })
+    expect(postOps()).toBeUndefined()
+    await screen.findByRole('link', { name: /Open my studio/ })
+    expect(screen.getByRole('link', { name: /Open my studio/ })).toHaveAttribute('href', '/draft?show=unsent')
+  })
+
+  it('scheduled: the same, with the time picked', async () => {
+    const { user } = openModal({ initialTrack: plainTrack() })
+    await waitFor(() => row('Episode.mp3'))
+    await toPostStep(user, null)
+    await user.type(screen.getByPlaceholderText('Title (required)'), 'Garden talk')
+    await user.click(screen.getByRole('tab', { name: /Schedule/ }))
+    await next(user)
+    await user.click(screen.getByRole('button', { name: /^Schedule/ }))
+    await waitFor(() => expect(saveScheduledPost).toHaveBeenCalledTimes(1))
+    const { scheduledOn, post } = saveScheduledPost.mock.calls[0][0]
+    expect(Date.parse(scheduledOn)).toBeGreaterThan(Date.now() + 10 * 60 * 1000)
+    expect(post.playlistAdd).toBeNull()
+    expect(postOps()).toBeUndefined()
   })
 })

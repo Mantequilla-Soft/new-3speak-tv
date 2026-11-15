@@ -1,0 +1,27 @@
+{
+  "vote": {
+    "added": "Dein Vote hat diesem Post etwa ${{value}} hinzugefügt und sollte dir bei der Auszahlung etwa ${{earn}} an Kuration einbringen.",
+    "addedNoCuration": "Dein Vote hat diesem Post etwa ${{value}} hinzugefügt.",
+    "addedTagged": "Getaggt mit „{{tag}}“. Dein Vote hat etwa ${{value}} hinzugefügt und sollte dir etwa ${{earn}} an Kuration einbringen."
+  },
+  "page": {
+    "title": "Kuration",
+    "sub": "Deine Picks auf 3Speak in den letzten {{days}} Tagen",
+    "subOther": "Picks auf 3Speak in den letzten {{days}} Tagen",
+    "picks": "Picks",
+    "earned": "Kuration verdient",
+    "early": "Früh entdeckt",
+    "earnedValue": "{{hp}} HP",
+    "rule": "„Früh entdeckt“ heißt: Die Votes vor deinem brachten höchstens {{share}} % des Vote-Werts des Posts, und der Post bekam danach mindestens {{votes}} Votes.",
+    "votedAt": "Gevotet {{when}}",
+    "weight": "Vote mit {{weight}} %",
+    "rank": "Vote {{rank}} von {{votes}}",
+    "reward": "+{{hp}} HP",
+    "pending": "Wird später ausgezahlt",
+    "badge": "Früh entdeckt",
+    "empty": "In diesem Zeitraum keine Votes auf 3Speak-Videos, -Shorts oder -Audio.",
+    "loadFailed": "Der Kurationsverlauf konnte nicht geladen werden. Versuche es in einer Minute noch mal.",
+    "open": "Kuration",
+    "note": "Kurationsbelohnungen werden in Hive Power ausgezahlt, wenn ein Post auszahlt, 7 Tage nach der Veröffentlichung."
+  }
+}

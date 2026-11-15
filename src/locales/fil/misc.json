@@ -139,6 +139,13 @@
     "rumble": {
       "placeholder": "https://rumble.com/c/…",
       "help": "I-paste ang pangalan o link ng iyong Rumble channel. Ilagay ang hash kahit saan sa paglalarawan ng channel."
+    },
+    "rss": {
+      "placeholder": "https://example.com/podcast.xml",
+      "help": "I-paste ang address ng RSS feed ng podcast mo. Makikita ito sa settings o distribution page ng show sa podcast host mo.",
+      "flowTitle": "I-link ang podcast RSS feed mo",
+      "step2": "<strong>I-paste ito sa description ng show mo, o sa description ng pinakabagong episode mo</strong>, sa podcast host mo. I-save at i-publish ang pagbabago. Maaari mo itong alisin kapag na-verify na ang feed.",
+      "step3": "Ilagay ang address ng RSS feed ng podcast mo:"
     }
   },
   "snaps": {

@@ -9,6 +9,7 @@ import StreamSignInButton from '../openpods/StreamSignInButton';
 import LiveAdLayer from '../openpods/LiveAdLayer';
 import StreamFullscreenButton from '../openpods/StreamFullscreenButton';
 import StreamWatermark from '../openpods/StreamWatermark';
+import { useBoostLabels } from '../openpods/boostLabels';
 import '@snapie/hangouts-react/src/styles/hangouts.css';
 import './LiveStreamPlayer.scss';
 import { Icon } from '../v2/Icon';
@@ -90,6 +91,8 @@ export default function LiveStreamPlayer({ roomName, chatSlot = null, onChatSent
   const { aioha, sessionToken, hangoutsUser, connectReady, joinKey, needsSignIn, canInteract, signIn, signingIn } = useStreamSession();
   // The stream's sound stays off while LiveAdLayer plays a pre-roll over it.
   const [prerollHold, setPrerollHold] = useState(false);
+  // The goal bar <StreamVideo> draws over the picture, in the site language.
+  const boostLabels = useBoostLabels();
 
   if (!roomName) return null;
   return (
@@ -103,7 +106,7 @@ export default function LiveStreamPlayer({ roomName, chatSlot = null, onChatSent
       >
         {connectReady && endpointReady && (
           <StandaloneWatch key={`${joinKey}:${endpoint.api}`} roomName={roomName} audioMuted={prerollHold}>
-            <StreamVideo showLiveBadge />
+            <StreamVideo showLiveBadge boostLabels={boostLabels} />
             {/* A free host's stream from OBS: the page draws the 3Speak mark
                 the browser studio would have burned into the picture. */}
             <StreamWatermark show={!!(roomMeta?.headless && roomMeta?.watermark)} />

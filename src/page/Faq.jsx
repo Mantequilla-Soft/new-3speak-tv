@@ -32,7 +32,7 @@ const TAGS = {
   discord: external('https://discord.com/invite/NSFS2VGj83'),
   telegram: external('https://t.me/threespeak'),
   x: external('https://x.com/3speaktv'),
-  importLink: <Link to="/youtube-import" />,
+  importLink: <Link to="/import" />,
   advertiseLink: <Link to="/advertise" />,
   aboutLink: <Link to="/about" />,
 };

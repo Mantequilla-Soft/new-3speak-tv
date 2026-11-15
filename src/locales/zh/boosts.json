@@ -1,0 +1,35 @@
+{
+  "title": "助力",
+  "button": "助力",
+  "buttonTitle": "给创作者送上附带留言的助力",
+  "messageLabel": "你的助力留言",
+  "messagePlaceholder": "对创作者说点什么",
+  "messageHint": "会和金额一起显示在这篇帖子的助力墙上。",
+  "wall": {
+    "title": "助力",
+    "empty": "还没有助力。成为第一个为这篇帖子助力的人吧。",
+    "lightning": "Lightning 支持者",
+    "streamed": "收听时持续发送",
+    "boost": "助力",
+    "total": "共 {{amount}}",
+    "failed": "无法加载助力墙。",
+    "note": "这里只显示在 Hive 上可见的付款：HIVE 和 HBD，以及通过 v4v.app 的 Lightning。"
+  },
+  "stream": {
+    "tile": "持续发送",
+    "tileOn": "{{sats}} sats",
+    "title": "持续发送 sats",
+    "intro": "收听时，每分钟从浏览器中的 Lightning 钱包给创作者发送少量 sats。",
+    "toggle": "收听时持续发送 sats",
+    "rate": "每分钟 sats",
+    "cap": "每月上限（sats）",
+    "spent": "本月：{{spent}} / {{cap}} sats",
+    "session": "本曲目已发送：{{sats}} sats",
+    "budget": "除非你在钱包中给 3Speak 设定预算，否则钱包会在每次付款前询问。你拒绝或达到每月上限时，付款就会停止。",
+    "capped": "已达到每月上限。持续发送将暂停到下个月。",
+    "stopped": "持续发送已停止：钱包未付款。",
+    "on": "正在每分钟向 @{{to}} 发送 {{sats}} sats。",
+    "off": "持续发送已关闭。",
+    "save": "保存"
+  }
+}

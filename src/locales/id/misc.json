@@ -139,6 +139,13 @@
     "rumble": {
       "placeholder": "https://rumble.com/c/…",
       "help": "Tempel nama atau tautan kanal Rumble-mu. Taruh hash di mana saja di deskripsi kanal."
+    },
+    "rss": {
+      "placeholder": "https://example.com/podcast.xml",
+      "help": "Tempel alamat feed RSS podcast-mu. Layanan hosting menampilkannya di pengaturan atau halaman distribusi acara.",
+      "flowTitle": "Tautkan feed RSS podcast-mu",
+      "step2": "<strong>Tempel di deskripsi acaramu atau deskripsi episode terbarumu</strong>, di layanan hosting podcast-mu. Simpan dan terbitkan perubahannya. Kamu bisa menghapusnya lagi setelah feed terverifikasi.",
+      "step3": "Masukkan alamat feed RSS podcast-mu:"
     }
   },
   "snaps": {

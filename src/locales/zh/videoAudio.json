@@ -1,0 +1,7 @@
+{
+  "playAsAudio": "以音频播放",
+  "listen": "收听",
+  "label": "视频",
+  "failed": "此视频目前无法以音频播放。",
+  "unsupported": "此浏览器无法以音频播放此视频。"
+}

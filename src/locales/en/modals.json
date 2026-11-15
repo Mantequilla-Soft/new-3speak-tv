@@ -44,6 +44,7 @@
     "title": "Linked external profiles",
     "intro": "Prove you own a YouTube (or other) channel by pasting your unique 3Speak hash into your public profile description, then verifying it here.",
     "openProfile": "Open profile",
+    "importEpisodes": "Import episodes",
     "removeLink": "Remove link",
     "empty": "No external profiles linked yet.",
     "addPlatform": "Add a new platform",

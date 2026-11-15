@@ -1,8 +1,11 @@
 import { useState, useEffect, useMemo, useRef, useCallback, memo } from 'react';
 import {
   fetchCreatorOverview, fetchCreatorTimeseries, fetchCreatorDemographics, fetchVideoAnalytics, fetchCreatorFollows,
+  fetchCreatorReach, fetchCreatorEarnings, earnedTotal, fmtHbd, EARNING_SOURCES,
   fmtDuration, fmtCount, timeAgo, countryFlag, countryName, countryLatLng,
 } from '../../lib/creatorStats';
+import { toCsv, downloadCsv } from '../../lib/csvExport';
+import { ReachCard, EarningsCard } from './ReachEarnings';
 import { getFollowers } from '../../hive-api/api';
 import { Segmented, Button, Icon } from '../v2/ui';
 import { Link } from 'react-router-dom';
@@ -10,14 +13,22 @@ import { Link } from 'react-router-dom';
 // The "Your year on 3Speak" link. OFF until the recap launches (planned with a
 // popup around 2026-12-20); /recap itself still works by its address.
 const RECAP_LINK_VISIBLE = false;
+import CreatorPollsCard from '../Polls/CreatorPollsCard';
 import VideoStats from './VideoStats';
+import ShortsFromVideo from '../ShortsFromVideo/ShortsFromVideo';
+import { FEATURE_EDITOR } from '../../utils/config';
 import { WORLD_LAND_PATH } from '../../lib/worldMapPath';
 import './CreatorStats.scss';
 import { useTranslation, Trans } from 'react-i18next';
 import { getLanguage } from '../../i18n';
 
 const RANGES = [{ d: 7, l: 'stats.ranges.d7' }, { d: 28, l: 'stats.ranges.d28' }, { d: 90, l: 'stats.ranges.d90' }, { d: 0, l: 'stats.ranges.all' }];
-const CONTENTS = [{ k: 'all', l: 'stats.content.all' }, { k: 'videos', l: 'stats.content.videos' }, { k: 'shorts', l: 'stats.content.shorts' }];
+const CONTENTS = [
+  { k: 'all', l: 'stats.content.all' }, { k: 'videos', l: 'stats.content.videos' }, { k: 'shorts', l: 'stats.content.shorts' },
+  { k: 'streams', l: 'creator.content.streams' }, { k: 'audio', l: 'creator.content.audio' }, { k: 'podcasts', l: 'creator.content.podcasts' },
+];
+// Listening, not watching: these read the audio sessions and have no video cards.
+const AUDIO_CONTENT = new Set(['audio', 'podcasts']);
 const SORTS = [
   { key: 'watchSeconds', label: 'stats.metrics.watchTime', fmt: fmtDuration },
   { key: 'sessions', label: 'stats.metrics.views', fmt: fmtCount },
@@ -25,6 +36,8 @@ const SORTS = [
   { key: 'votes', label: 'stats.metrics.votes', fmt: fmtCount },
   { key: 'comments', label: 'stats.metrics.comments', fmt: fmtCount },
   { key: 'payout', label: 'stats.metrics.payout', fmt: (v) => `$${Number(v || 0).toFixed(2)}` },
+  { key: 'impressions', label: 'creator.reach.impressions', fmt: fmtCount },
+  { key: 'ctr', label: 'creator.reach.ctr', fmt: (v) => (v == null ? '-' : `${v}%`) },
 ];
 // Translation-key suffixes for the day rows (stats.days.short.* / stats.days.initial.*).
 const DOW = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
@@ -350,7 +363,7 @@ function AudienceCard({ demo, totals }) {
 
 // Overlaid retention curves for two videos (x = % of video, so different lengths
 // compare fairly). 45a: the two picks wear their series color.
-function CompareChart({ username, a, b }) {
+function CompareChart({ username, a, b, kind }) {
   const { t } = useTranslation();
   const [ra, setRa] = useState(null);
   const [rb, setRb] = useState(null);
@@ -360,12 +373,12 @@ function CompareChart({ username, a, b }) {
     if (!ready) { setRa(null); setRb(null); return undefined; }
     let cancelled = false; setLoading(true); setRa(null); setRb(null);
     Promise.all([
-      fetchVideoAnalytics(username, a.permlink).catch(() => null),
-      fetchVideoAnalytics(username, b.permlink).catch(() => null),
+      fetchVideoAnalytics(username, a.permlink, { kind }).catch(() => null),
+      fetchVideoAnalytics(username, b.permlink, { kind }).catch(() => null),
     ]).then(([da, db]) => { if (!cancelled) { setRa(da); setRb(db); } })
       .finally(() => { if (!cancelled) setLoading(false); });
     return () => { cancelled = true; };
-  }, [username, ready, a?.permlink, b?.permlink]);
+  }, [username, ready, a?.permlink, b?.permlink, kind]);
 
   const line = (vals) => {
     if (!vals || vals.length < 2) return '';
@@ -411,6 +424,12 @@ export default function CreatorStats({ user }) {
   const [cmpB, setCmpB] = useState('');
   const [metric, setMetric] = useState('views');
   const [compare, setCompare] = useState(true);
+  // Impressions / CTR (null for audio, which has no cards) and earnings by source.
+  const [reach, setReach] = useState(null);
+  const [earningsFor, setEarnings] = useState(null);
+  const earnDays = days > 0 ? days : 365;
+  const earnings = earningsFor?.days === earnDays ? earningsFor : null;
+  const isAudio = AUDIO_CONTENT.has(content);
 
   useEffect(() => {
     let cancelled = false;
@@ -422,10 +441,11 @@ export default function CreatorStats({ user }) {
       fetchCreatorTimeseries(user, opts).catch(() => null),
       fetchCreatorDemographics(user, opts).catch(() => null),
       longer ? fetchCreatorTimeseries(user, longer).catch(() => null) : null,
-    ]).then(([ov, ts, dm, tsLong]) => {
+      AUDIO_CONTENT.has(content) ? null : fetchCreatorReach(user, opts).catch(() => null),
+    ]).then(([ov, ts, dm, tsLong, rc]) => {
       if (cancelled) return;
       if (!ov) setErr(true);
-      setOverview(ov); setSeries(ts?.series || null); setDemo(dm);
+      setOverview(ov); setSeries(ts?.series || null); setDemo(dm); setReach(rc);
       // The `days` before this range, from the longer daily series.
       const all = tsLong?.series || [];
       const prev = all.length >= days * 2 ? all.slice(all.length - days * 2, all.length - days) : null;
@@ -437,6 +457,16 @@ export default function CreatorStats({ user }) {
     }).finally(() => { if (!cancelled) setLoading(false); });
     return () => { cancelled = true; };
   }, [user, days, content]);
+
+  // Earnings per day and source: channel-wide, so not per content filter. All
+  // time shows the last 12 months (the longest series the checker keeps).
+  useEffect(() => {
+    let cancelled = false;
+    fetchCreatorEarnings(user, { days: earnDays })
+      .then((e) => { if (!cancelled) setEarnings({ ...e, days: earnDays }); })
+      .catch(() => { if (!cancelled) setEarnings({ days: earnDays, error: true }); });
+    return () => { cancelled = true; };
+  }, [user, earnDays]);
 
   // Followers: new follows in the period (and the one before) from the dated
   // follow list; for All, the account's follower count.
@@ -482,6 +512,7 @@ export default function CreatorStats({ user }) {
           block={false}
           value={content}
           onChange={setContent}
+          scroll
           options={CONTENTS.map((c) => ({ value: c.k, label: t(c.l) }))}
         />
         <Button
@@ -518,14 +549,54 @@ export default function CreatorStats({ user }) {
   if (err || !overview) return <div className="creator-stats">{header}<div className="cs-chart-empty cs-chart-empty--error" role="alert">{t('stats.loadError')}</div></div>;
 
   const totals = overview.totals || {};
-  const videos = overview.videos || [];
-  const sortDef = SORTS.find((s) => s.key === sort);
-  const list = [...videos].sort((a, b) => (b[sort] || 0) - (a[sort] || 0)).slice(0, 8);
+  // Each row with its impressions and CTR (reach is keyed by the same permlink).
+  const reachBy = new Map((reach?.videos || []).map((r) => [r.permlink, r]));
+  const videos = (overview.videos || []).map((v) => {
+    const r = reachBy.get(v.permlink);
+    return r ? { ...v, impressions: r.impressions, ctr: r.ctr } : { ...v, impressions: 0, ctr: null };
+  });
+  const sortList = isAudio ? SORTS.filter((m) => m.key !== 'impressions' && m.key !== 'ctr') : SORTS;
+  const earningsOk = earnings && !earnings.error ? earnings : null;
+  const urlOf = (v) => (v.audio
+    ? (v.hivePermlink ? `/audio/${user}/${v.hivePermlink}` : null)
+    : v.short ? `/shorts?v=${user}/${v.permlink}` : `/@${user}/${v.permlink}`);
+
+  // CSV exports: the daily earnings, and every row of the content table.
+  const exportDaily = () => {
+    if (!earningsOk) return;
+    downloadCsv(`3speak-earnings-${user}-${earnDays}d.csv`, toCsv(earningsOk.series, [
+      { key: 'date', label: t('creator.export.cols.date') },
+      ...EARNING_SOURCES.map((k) => ({ key: k, label: `${t(`creator.earnings.sources.${k}`)} (HBD)` })),
+      { label: `${t('creator.export.cols.total')} (HBD)`, value: (r) => Math.round(earnedTotal(r) * 1000) / 1000 },
+      { key: 'lightningSats', label: `${t('creator.earnings.sources.lightning')} (sats)` },
+    ]));
+  };
+  const exportContent = () => {
+    const byPost = earningsOk?.byPost || {};
+    downloadCsv(`3speak-content-${user}-${days || 'all'}-${content}.csv`, toCsv(videos, [
+      { key: 'title', label: t('creator.export.cols.title') },
+      { label: t('creator.export.cols.url'), value: (v) => { const u = urlOf(v); return u ? `${window.location.origin}${u}` : ''; } },
+      { label: t('creator.export.cols.published'), value: (v) => (v.created ? String(v.created).slice(0, 10) : '') },
+      { key: 'sessions', label: t('stats.metrics.views') },
+      { key: 'watchSeconds', label: t('creator.export.cols.watchSeconds') },
+      { key: 'avgPct', label: t('stats.metrics.avgPct') },
+      { key: 'votes', label: t('stats.metrics.votes') },
+      { key: 'comments', label: t('stats.metrics.comments') },
+      { label: `${t('stats.metrics.payout')} (HBD)`, value: (v) => Number(v.payout || 0) },
+      { label: `${t('creator.export.cols.earned')} (HBD)`, value: (v) => (v.hivePermlink && byPost[v.hivePermlink] != null ? byPost[v.hivePermlink] : '') },
+      ...(isAudio ? [] : [
+        { key: 'impressions', label: t('creator.reach.impressions') },
+        { label: `${t('creator.reach.ctr')} (%)`, value: (v) => v.ctr },
+      ]),
+    ]));
+  };
+  const sortDef = sortList.find((s) => s.key === sort) || sortList[0];
+  const list = [...videos].sort((a, b) => (b[sortDef.key] || 0) - (a[sortDef.key] || 0)).slice(0, 8);
   const detail = selected || list[0] || null;
   const cmpAVid = videos.find((v) => v.permlink === cmpA);
   const cmpBVid = videos.find((v) => v.permlink === cmpB);
   const cmpOpts = videos.map((v) => <option key={v.permlink} value={v.permlink}>{v.title}</option>);
-  const sortOptions = SORTS.map((m) => ({ value: m.key, label: t(m.label) }));
+  const sortOptions = sortList.map((m) => ({ value: m.key, label: t(m.label) }));
   const showPrev = compare && days > 0;
 
   // The four headline tiles (31a). Views, watch time and followers have a daily
@@ -540,8 +611,9 @@ export default function CreatorStats({ user }) {
       d: follows ? delta(follows.count, follows.prev) : null,
       chart: !!follows?.perDay,
     },
-    // No daily payouts to compare with, so no change line under earnings.
-    { key: 'earned', label: t('stats.metrics.earned'), value: `$${Number(totals.payout || 0).toFixed(2)}`, d: null, chart: false },
+    // Earned in the range from every source (the Earnings card has the split);
+    // the posts' payouts until that has loaded.
+    { key: 'earned', label: t('stats.metrics.earned'), value: earningsOk ? fmtHbd(earnedTotal(earningsOk.totals)) : `$${Number(totals.payout || 0).toFixed(2)}`, d: null, chart: false },
   ];
   const active = tiles.find((x) => x.key === metric && x.chart) ? metric : 'views';
   const pickSeries = (s) => {
@@ -558,7 +630,19 @@ export default function CreatorStats({ user }) {
       {header}
 
       {!totals.videos ? (
-        <div className="cs-empty">{t('stats.emptyRange')}</div>
+        <>
+          <div className="cs-empty">{t('stats.emptyRange')}</div>
+          {/* Earnings do not depend on watch sessions: they still show. */}
+          <div className="cs-grid">
+            <EarningsCard
+              earnings={earningsOk}
+              error={!!earnings?.error}
+              allTime={days === 0}
+              onExportDaily={exportDaily}
+              onExportContent={exportContent}
+            />
+          </div>
+        </>
       ) : (
         <div className="cs-grid">
           {/* Tiles and the trend under them, one card (31a) */}
@@ -604,6 +688,15 @@ export default function CreatorStats({ user }) {
 
           <LocationsCard demo={demo} />
 
+          <EarningsCard
+            earnings={earningsOk}
+            error={!!earnings?.error}
+            allTime={days === 0}
+            onExportDaily={exportDaily}
+            onExportContent={exportContent}
+          />
+          {!isAudio && <ReachCard reach={reach} />}
+
           <WhenCard matrix={demo?.whenHeatmap} />
           <AudienceCard demo={demo} totals={totals} />
 
@@ -616,7 +709,7 @@ export default function CreatorStats({ user }) {
                 const pick = () => setSelected(v);
                 // Clicking the TITLE opens the video/short in a new tab; clicking the
                 // rest of the row shows its analytics below.
-                const watchUrl = v.short ? `/shorts?v=${user}/${v.permlink}` : `/@${user}/${v.permlink}`;
+                const watchUrl = urlOf(v);
                 return (
                   <div
                     key={v.permlink}
@@ -632,7 +725,7 @@ export default function CreatorStats({ user }) {
                     <span className="cs-item-info">
                       <a
                         className="cs-item-title"
-                        href={watchUrl}
+                        href={watchUrl || undefined}
                         target="_blank"
                         rel="noopener noreferrer"
                         onClick={(e) => e.stopPropagation()}
@@ -642,7 +735,7 @@ export default function CreatorStats({ user }) {
                       </a>
                       {v.created && <span className="cs-item-date">{timeAgo(v.created)}</span>}
                     </span>
-                    <span className="cs-item-metric">{sortDef.fmt(v[sort])}</span>
+                    <span className="cs-item-metric">{sortDef.fmt(v[sortDef.key])}</span>
                   </div>
                 );
               })}
@@ -656,11 +749,17 @@ export default function CreatorStats({ user }) {
               <span className="cs-detail-sub">
                 {t('stats.detail.summary', { votes: fmtCount(detail.votes), comments: fmtCount(detail.comments), payout: Number(detail.payout || 0).toFixed(2) })}
                 {detail.created ? ` · ${timeAgo(detail.created)}` : ''}
+                {!isAudio && reach && ` · ${t('creator.reach.detail', { impressions: fmtCount(detail.impressions || 0), ctr: detail.ctr == null ? '-' : `${detail.ctr}%` })}`}
               </span>
-              <VideoStats username={user} permlink={detail.permlink} variant="detail" />
+              <VideoStats username={user} permlink={detail.permlink} variant="detail" kind={detail.audio ? 'audio' : null} />
+              {/* Clip ranges for a Short, the owner only (links to the watch page). */}
+              {!detail.audio && !detail.short && <ShortsFromVideo owner={user} permlink={detail.permlink} canMake={FEATURE_EDITOR} />}
               <p className="cs-footnote">{t('stats.footnote')}</p>
             </section>
           )}
+
+          {/* Polls on the channel's Community tab and their results. */}
+          <CreatorPollsCard username={user} />
 
           {/* Compare videos (45a) */}
           {videos.length >= 2 && (
@@ -671,7 +770,7 @@ export default function CreatorStats({ user }) {
                 <span className="cs-compare-vs">{t('stats.compare.vs')}</span>
                 <select className="v2-input is-select cs-pick is-b" aria-label={t('stats.compare.pickB')} value={cmpB} onChange={(e) => setCmpB(e.target.value)}><option value="">{t('stats.compare.pickB')}</option>{cmpOpts}</select>
               </div>
-              <CompareChart username={user} a={cmpAVid} b={cmpBVid} />
+              <CompareChart username={user} a={cmpAVid} b={cmpBVid} kind={isAudio ? 'audio' : null} />
             </section>
           )}
         </div>

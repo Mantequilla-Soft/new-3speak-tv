@@ -1,0 +1,19 @@
+{
+  "title": "Shorts from this video",
+  "sub": "Picked by your viewers: the parts they replay, comment on and chat about, and lines worth quoting.",
+  "empty": "No suggestions yet. They show up once people watch, replay and comment on this video.",
+  "error": "Could not load suggestions right now.",
+  "range": "{{start}} to {{end}}",
+  "seconds": "{{seconds}} s",
+  "reasons": {
+    "replay": "Most replayed",
+    "comments_one": "{{count}} comment points here",
+    "comments_other": "{{count}} comments point here",
+    "chat": "Chat lit up",
+    "quote": "Quotable line"
+  },
+  "preview": "Preview",
+  "stop": "Stop",
+  "makeShort": "Make a Short",
+  "foot": "Only you see these. Replays are counted without knowing who watched."
+}

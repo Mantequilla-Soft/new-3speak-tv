@@ -1,0 +1,27 @@
+{
+  "vote": {
+    "added": "내 투표로 이 게시물에 약 ${{value}}가 더해졌고, 보상이 지급되면 큐레이션으로 약 ${{earn}}를 받을 거예요.",
+    "addedNoCuration": "내 투표로 이 게시물에 약 ${{value}}가 더해졌어요.",
+    "addedTagged": "“{{tag}}” 태그를 달았어요. 내 투표로 약 ${{value}}가 더해졌고, 큐레이션으로 약 ${{earn}}를 받을 거예요."
+  },
+  "page": {
+    "title": "큐레이션",
+    "sub": "최근 {{days}}일 동안 3Speak에서 내가 고른 콘텐츠",
+    "subOther": "최근 {{days}}일 동안 3Speak에서 고른 콘텐츠",
+    "picks": "고른 콘텐츠",
+    "earned": "큐레이션 수익",
+    "early": "일찍 발견",
+    "earnedValue": "{{hp}} HP",
+    "rule": "“일찍 발견”은 내 앞의 투표들이 게시물 투표 가치의 {{share}}% 이하였고, 이후 게시물이 {{votes}}표 이상을 받았다는 뜻이에요.",
+    "votedAt": "{{when}} 투표",
+    "weight": "{{weight}}% 투표",
+    "rank": "{{votes}}표 중 {{rank}}번째",
+    "reward": "+{{hp}} HP",
+    "pending": "나중에 지급",
+    "badge": "일찍 발견",
+    "empty": "이 기간에 3Speak 동영상, 쇼츠, 오디오에 투표한 기록이 없어요.",
+    "loadFailed": "큐레이션 기록을 불러오지 못했어요. 잠시 후 다시 시도해 주세요.",
+    "open": "큐레이션",
+    "note": "큐레이션 보상은 게시물이 지급될 때, 즉 게시 7일 후에 Hive Power로 지급돼요."
+  }
+}

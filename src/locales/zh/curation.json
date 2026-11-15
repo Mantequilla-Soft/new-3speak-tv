@@ -1,0 +1,27 @@
+{
+  "vote": {
+    "added": "你的点赞为这篇帖子增加了约 ${{value}}，结算时你应能获得约 ${{earn}} 的策展奖励。",
+    "addedNoCuration": "你的点赞为这篇帖子增加了约 ${{value}}。",
+    "addedTagged": "已标记为“{{tag}}”。你的点赞增加了约 ${{value}}，你应能获得约 ${{earn}} 的策展奖励。"
+  },
+  "page": {
+    "title": "策展",
+    "sub": "你最近 {{days}} 天在 3Speak 上的精选",
+    "subOther": "最近 {{days}} 天在 3Speak 上的精选",
+    "picks": "精选",
+    "earned": "策展收益",
+    "early": "慧眼早识",
+    "earnedValue": "{{hp}} HP",
+    "rule": "“慧眼早识”表示在你之前的点赞最多占帖子点赞价值的 {{share}}%，且该帖子之后获得了至少 {{votes}} 个点赞。",
+    "votedAt": "点赞于 {{when}}",
+    "weight": "{{weight}}% 点赞",
+    "rank": "第 {{rank}} 个点赞，共 {{votes}} 个",
+    "reward": "+{{hp}} HP",
+    "pending": "稍后发放",
+    "badge": "慧眼早识",
+    "empty": "这段时间内没有给 3Speak 视频、短视频或音频点赞。",
+    "loadFailed": "无法加载策展记录。请一分钟后再试。",
+    "open": "策展",
+    "note": "策展奖励在帖子结算时以 Hive Power 发放，即发布 7 天后。"
+  }
+}

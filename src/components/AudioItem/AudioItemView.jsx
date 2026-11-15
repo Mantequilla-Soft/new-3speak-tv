@@ -3,7 +3,7 @@ import { EmptyState } from '../v2/ui';
 import { lazy, useMemo, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { useAppStore } from '../../lib/store';
 import { CHECKER_URL, PLAYLISTS_READ_URL } from '../../utils/config';
@@ -21,10 +21,14 @@ import CommentVoteTooltip from '../tooltip/CommentVoteTooltip';
 import BlogContent from '../playVideo/BlogContent';
 import { LazyBoundary } from '../common/LazyMount';
 import '../Podcasts/PodcastsTab.scss';
+import EpisodeBadge from '../Episodes/EpisodeBadge';
+import { episodeNumbersOf, episodeNumbersOfMeta } from '../../utils/episodeNumbers';
 
 // Opened from a card's Tip / Save buttons only: not part of the first download.
 const TipModal = lazy(() => import('../tip-reward/TipModal'));
 const AddToPlaylistModal = lazy(() => import('../AddToPlaylistModal/AddToPlaylistModal'));
+// Only the creator opens it, from the Edit button.
+const EditAudioModal = lazy(() => import('../AudioEdit/EditAudioModal'));
 
 /** The audio page's own link to one 3Speak audio: `/audio?play=<owner>/<id>`. */
 export const audioItemPath = (item) => `/audio?play=${item.owner}/${item.permlink}`;
@@ -77,6 +81,10 @@ export default function AudioItemView({ owner, id, onBack }) {
   const [deepUsed, setDeepUsed] = useState(false);
   const [tipping, setTipping] = useState(false);
   const [listing, setListing] = useState(false);
+  const [editing, setEditing] = useState(false);
+  // The body as just saved, shown until the chain read catches up.
+  const [savedBody, setSavedBody] = useState('');
+  const queryClient = useQueryClient();
   const [voting, setVoting] = useState(false);
   const [votedNow, setVotedNow] = useState(false);
   const [weight, setWeight] = useState(100);
@@ -144,6 +152,9 @@ export default function AudioItemView({ owner, id, onBack }) {
   const listKind = storedPlaylistType(playlist).kind;
   const isTrack = listKind ? listKind === 'music' : item.category === 'song';
   const genre = item.category === 'song' && item.genre ? item.genre : '';
+  // Season / episode: the post's own (newest), else what the checker copied onto the row
+  const fromPost = episodeNumbersOfMeta(post?.json_metadata);
+  const numbers = fromPost.season != null || fromPost.episode != null ? fromPost : episodeNumbersOf(item);
   const votes = post?.active_votes || [];
   const voted = votedNow || (!!user && votes.some((v) => v.voter === user));
   const voteCount = votes.length + (votedNow && !votes.some((v) => v.voter === user) ? 1 : 0);
@@ -166,6 +177,7 @@ export default function AudioItemView({ owner, id, onBack }) {
           <h2 className="pod-show-title">{title || t('audio.untitled')}</h2>
           <div className="pod-show-meta">
             {item.createdAt && <span>{fmtDate(item.createdAt)}</span>}
+            <EpisodeBadge {...numbers} />
             {item.duration > 0 && <span className="pod-chip">{fmtDuration(item.duration)}</span>}
             {genre && <span className="pod-chip">{genre}</span>}
             {item.plays > 0 && <span>{t('audio.tile.plays', { count: item.plays })}</span>}
@@ -214,6 +226,12 @@ export default function AudioItemView({ owner, id, onBack }) {
                 <Icon name="volunteer_activism" size={16} /> {t('audio.post.tip')}
               </button>
             )}
+            {/* The creator gets Edit in the Tip spot, as on the watch page. */}
+            {postPermlink && loggedIn && user === item.owner && (
+              <button type="button" className="pod-btn" onClick={() => setEditing(true)} title={t('audio.edit.editTitle')}>
+                <Icon name="edit" size={16} /> {t('common.actions.edit')}
+              </button>
+            )}
             {loggedIn && (
               <button type="button" className="pod-btn" onClick={() => setListing(true)}>
                 <Icon name="playlist_play" size={16} /> {t('audio.player.playlist')}
@@ -232,7 +250,7 @@ export default function AudioItemView({ owner, id, onBack }) {
       <section className="pod-section">
         <h2 className="pod-section-title">{t('audio.item.description')}</h2>
         {postPermlink
-          ? <div className="pod-notes"><BlogContent author={item.owner} permlink={postPermlink} alwaysExpanded hideAudioPlayers /></div>
+          ? <div className="pod-notes"><BlogContent author={item.owner} permlink={postPermlink} description={savedBody || undefined} alwaysExpanded hideAudioPlayers /></div>
           : <div className="pod-notes"><p className={item.description ? undefined : 'pod-empty'}>{item.description || t('audio.item.noDescription')}</p></div>}
       </section>
 
@@ -256,6 +274,26 @@ export default function AudioItemView({ owner, id, onBack }) {
           memoLink={`https://3speak.tv/audio/${item.owner}/${postPermlink}`}
           isOpen
           onClose={() => setTipping(false)}
+        /></LazyBoundary>
+      )}
+      {editing && (
+        <LazyBoundary name="edit audio"><EditAudioModal
+          isOpen
+          onClose={() => setEditing(false)}
+          author={item.owner}
+          permlink={postPermlink}
+          rowTitle={item.title || ''}
+          onSaved={(changes) => {
+            // Show the edit at once; the chain and the audio row catch up behind it.
+            setSavedBody(changes.body);
+            queryClient.setQueryData(['audio-item-post', owner, postPermlink], (p) => (p
+              ? { ...p, title: changes.title, body: changes.body, json_metadata: changes.json_metadata } : p));
+            queryClient.setQueryData(['audio-item', owner, id], (a) => (a ? {
+              ...a,
+              ...(changes.title ? { title: changes.title } : {}),
+              ...(changes.cover ? { thumbnail_url: changes.cover } : {}),
+            } : a));
+          }}
         /></LazyBoundary>
       )}
       {listing && (

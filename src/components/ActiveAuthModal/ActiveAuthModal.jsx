@@ -32,6 +32,13 @@ function describeOps(operations, t) {
       if (name === 'transfer_to_vesting') {
         return { line: t('auth.activeAuth.ops.powerUp', { amount: payload.amount }) };
       }
+      // Wallet > Power down / Savings / Convert / Delegate (lib/walletOps.js).
+      if (name === 'withdraw_vesting') return { line: t('walletOps.activeAuth.powerDown', { amount: payload.vesting_shares }) };
+      if (name === 'transfer_to_savings') return { line: t('walletOps.activeAuth.toSavings', { amount: payload.amount }) };
+      if (name === 'transfer_from_savings') return { line: t('walletOps.activeAuth.fromSavings', { amount: payload.amount }) };
+      if (name === 'cancel_transfer_from_savings') return { line: t('walletOps.activeAuth.cancelSavings') };
+      if (name === 'convert' || name === 'collateralized_convert') return { line: t('walletOps.activeAuth.convert', { amount: payload.amount }) };
+      if (name === 'delegate_vesting_shares') return { line: t('walletOps.activeAuth.delegate', { amount: payload.vesting_shares, to: payload.delegatee }) };
       if (name === 'custom_json') {
         return { line: t('auth.activeAuth.ops.customJson', { id: payload.id }) };
       }

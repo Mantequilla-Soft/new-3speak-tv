@@ -1,5 +1,5 @@
 // The owner's proof for a scheduled-post write on the checker
-// (3speakchecks routes/scheduledPosts.js: create, update, cancel).
+// (3speakchecks routes/scheduledPosts.js: create, draft, publish, update, cancel).
 //
 // The checker takes a scheduled post from the public app key, and its cron later
 // publishes the post AS its owner under the posting authority they granted
@@ -15,7 +15,10 @@
 // checks a signature from here against the checker's own verifier.
 const { PrivateKey, cryptoUtils } = require('@hiveio/dhive')
 
-const ACTIONS = new Set(['create', 'update', 'cancel'])
+const ACTIONS = new Set(['create', 'draft', 'publish', 'update', 'cancel'])
+// The actions whose message names the time: create (a scheduled post) and
+// publish (a draft going out, now or later). A draft itself has no time.
+const TIMED = new Set(['create', 'publish'])
 const OWNER_RE = /^[a-z][a-z0-9.-]{2,15}$/
 // Wider than the app's own permlinks ([a-z0-9-]) so an older post can still be
 // edited or cancelled; never `|`, whitespace or anything else that could blur a field.
@@ -26,8 +29,8 @@ const PERMLINK_RE = /^[A-Za-z0-9._-]{1,255}$/
  * string sent in the create body, byte for byte: the checker signs over it as sent.
  */
 function scheduledPostMessage({ action, owner, permlink, scheduledOn, timestamp }) {
-  return action === 'create'
-    ? ['scheduled-post', 'create', owner, permlink, scheduledOn, String(timestamp)].join('|')
+  return TIMED.has(action)
+    ? ['scheduled-post', action, owner, permlink, scheduledOn, String(timestamp)].join('|')
     : ['scheduled-post', action, owner, permlink, String(timestamp)].join('|')
 }
 
@@ -46,7 +49,7 @@ function parseScheduledPostRequest(body) {
   if (!ACTIONS.has(action)) return { error: 'invalid action' }
   if (!OWNER_RE.test(owner)) return { error: 'invalid owner' }
   if (!PERMLINK_RE.test(permlink)) return { error: 'invalid permlink' }
-  if (action !== 'create') return { action, owner, permlink }
+  if (!TIMED.has(action)) return { action, owner, permlink }
   const scheduledOn = typeof b.scheduledOn === 'string' ? b.scheduledOn : ''
   if (!scheduledOn || scheduledOn.length > 64 || scheduledOn.includes('|') || !Number.isFinite(Date.parse(scheduledOn))) {
     return { error: 'invalid scheduledOn' }

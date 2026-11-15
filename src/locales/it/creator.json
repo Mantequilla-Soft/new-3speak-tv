@@ -1,0 +1,112 @@
+{
+  "content": {
+    "streams": "Dirette",
+    "audio": "Audio",
+    "podcasts": "Podcast"
+  },
+  "reach": {
+    "title": "Copertura",
+    "impressions": "Impressioni",
+    "ctr": "Percentuale di clic",
+    "ctrShort": "CTR {{ctr}}",
+    "clicks": "Clic dalle schede",
+    "opens": "Aperture",
+    "empty": "Ancora nessuna impressione in questo periodo. Da ora vengono contate ogni volta che una delle tue schede resta per un secondo sullo schermo di qualcuno.",
+    "foundTitle": "Dove gli spettatori l'hanno trovato",
+    "shownTitle": "Dove sono state mostrate le tue schede",
+    "since": "Le impressioni vengono contate su un campione di visualizzazioni di pagina e poi stimate in proporzione. Il conteggio è iniziato il {{date}}.",
+    "sampled": "Le impressioni vengono contate su un campione di visualizzazioni di pagina e poi stimate in proporzione.",
+    "detail": "{{impressions}} impressioni · CTR {{ctr}}"
+  },
+  "sources": {
+    "home": "Home",
+    "discover": "Scopri",
+    "following": "Seguiti",
+    "new": "Nuovi",
+    "trending": "Di tendenza",
+    "interests": "Interessi",
+    "search": "Ricerca",
+    "channel": "Pagine del canale",
+    "related": "Accanto ad altri video",
+    "shorts": "Shorts",
+    "playlist": "Playlist",
+    "tag": "Tag",
+    "community": "Community",
+    "other": "Altrove su 3Speak",
+    "direct": "Diretto o sconosciuto",
+    "search_engine": "Motori di ricerca",
+    "social": "Social media",
+    "hive_apps": "Altre app Hive",
+    "external": "Altri siti web",
+    "embed": "Incorporato su altri siti"
+  },
+  "earnings": {
+    "title": "Guadagni",
+    "empty": "Ancora nessun guadagno in questo periodo.",
+    "unavailable": "Non è stato possibile caricare i guadagni ora. Riprova tra un minuto.",
+    "chartLabel": "Guadagni al giorno in {{days}} giorni, impilati per fonte",
+    "lastYear": "Tutto mostra gli ultimi 12 mesi.",
+    "note": "In HBD (circa un dollaro USA). Le ricompense Hive e le mance in HIVE sono valutate al prezzo di oggi di HIVE, Lightning resta in sats.",
+    "sats_one": "{{count}} sat",
+    "sats_many": "{{count}} sats",
+    "sats_other": "{{count}} sats",
+    "sources": {
+      "votes": "Voti",
+      "curation": "Curation",
+      "tips": "Mance",
+      "ads": "Annunci",
+      "boosts": "Boost nelle dirette",
+      "lightning": "Lightning"
+    }
+  },
+  "export": {
+    "daily": "Esporta guadagni giornalieri (CSV)",
+    "content": "Esporta tabella dei contenuti (CSV)",
+    "cols": {
+      "date": "Data",
+      "total": "Totale",
+      "title": "Titolo",
+      "url": "Link",
+      "published": "Pubblicato",
+      "watchSeconds": "Tempo di visione (secondi)",
+      "earned": "Guadagnato dai voti"
+    }
+  },
+  "inbox": {
+    "tab": "Commenti",
+    "menu": "Posta commenti",
+    "title": "Posta commenti",
+    "sub_one": "Commenti ai tuoi post dell'ultimo {{count}} giorno.",
+    "sub_many": "Commenti ai tuoi post degli ultimi {{count}} giorni.",
+    "sub_other": "Commenti ai tuoi post degli ultimi {{count}} giorni.",
+    "filtersLabel": "Mostra solo",
+    "views": {
+      "unanswered": "Senza risposta",
+      "all": "Tutti",
+      "done": "Gestiti"
+    },
+    "flags": {
+      "question": "Domande",
+      "firstTime": "Prima volta",
+      "supporter": "Sostenitori"
+    },
+    "answered": "Risposto",
+    "onPost": "su",
+    "onReply": "ti ha risposto su",
+    "reply": "Rispondi",
+    "replyVideo": "Rispondi con un video",
+    "replyTo": "Rispondi a @{{author}}",
+    "send": "Invia",
+    "replied": "La tua risposta è su Hive.",
+    "replyFailed": "Non è stato possibile pubblicare la risposta. Riprova.",
+    "markDone": "Segna come gestito",
+    "undone": "Annulla",
+    "doneToast": "Segnato come gestito.",
+    "doneFailed": "Non è stato possibile salvare. Riprova.",
+    "error": "Non è stato possibile caricare i commenti.",
+    "retry": "Riprova",
+    "allAnswered": "Hai risposto a tutti.",
+    "empty": "Nessun commento qui.",
+    "supportersNote": "I sostenitori hanno votato i tuoi post negli ultimi 12 mesi o ti hanno lasciato una mancia su 3Speak. Prima volta indica il loro primo commento su uno qualsiasi dei tuoi post."
+  }
+}

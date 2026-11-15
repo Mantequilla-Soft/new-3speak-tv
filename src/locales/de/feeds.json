@@ -37,6 +37,14 @@
     "hide": "Ausblenden",
     "markSeen": "Alle als gesehen markieren"
   },
+  "continueWatching": {
+    "aria": "Weiterschauen",
+    "rest": "zum Weiterschauen",
+    "remove": "Aus Weiterschauen entfernen",
+    "removed": "Aus Weiterschauen entfernt",
+    "removeFailed": "Konnte nicht entfernt werden. Bitte versuche es noch einmal.",
+    "progress": "{{pct}} % gesehen"
+  },
   "tagMeta": {
     "videos_one": "{{num}} Video",
     "videos_other": "{{num}} Videos",

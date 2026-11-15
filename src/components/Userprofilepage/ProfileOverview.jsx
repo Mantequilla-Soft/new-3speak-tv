@@ -13,6 +13,7 @@ import ProfileAudioPlaylists from './ProfileAudioPlaylists';
 import { LayoutDnd, EditableSection, LayoutEditBar, FreeCell, RowGap, HiddenTray, DockGuide } from './ProfileLayoutEditor';
 import ProfileLayoutTour from './ProfileLayoutTour';
 import { ProfileLiveNow } from './ProfileStreams';
+import UpcomingPremieres from '../Premiere/UpcomingPremieres';
 import {
   SECTION_DEFS, DEFAULT_SECTIONS, normalizeLayout, useProfileLayout, saveProfileLayout, resetProfileLayout,
   isShowablePlaylist, useProfileAudioPlaylists, newSectionId, withDefaults,
@@ -355,8 +356,13 @@ export default function ProfileOverview({
           />
         );
       case 'live':
-        // Streaming right now. Nothing when not live.
-        return <ProfileLiveNow user={username} />;
+        // Streaming right now, then premieres coming up. Nothing when neither.
+        return (
+          <>
+            <ProfileLiveNow user={username} />
+            <UpcomingPremieres owner={username} />
+          </>
+        );
       case 'videos': {
         const list = videos.slice(0, s.count);
         // The channel's own videos (20b): no creator line on the cards, and on

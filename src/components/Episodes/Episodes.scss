@@ -1,0 +1,46 @@
+@use "../../styles/v2" as v2;
+
+// Season and episode fields (details steps): two narrow fields side by side,
+// the hint under both.
+.episode-numbers {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  max-width: 360px;
+
+  .v2-field { min-width: 0; }
+
+  @include v2.mobile { max-width: none; }
+}
+
+.episode-numbers__hint {
+  grid-column: 1 / -1;
+  margin: 0;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+// "S2 E5": a small flat chip next to an episode's title or on its card.
+.episode-badge {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: var(--r-sm);
+  background: var(--surface-2);
+  color: var(--text);
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+// Before a title on a tile or an episode page.
+.audio-tile-episode,
+.audio-post-episode {
+  margin-right: 6px;
+  vertical-align: middle;
+}
+.audio-post-episode { height: 24px; font-size: 13px; }

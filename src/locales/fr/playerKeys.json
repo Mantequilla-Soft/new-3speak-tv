@@ -1,0 +1,29 @@
+{
+  "valueText": "{{time}} sur {{total}}",
+  "seekLabel": "Position",
+  "loop": "Boucle",
+  "loopOn": "Boucle activée",
+  "loopOff": "Lire en boucle",
+  "theater": "Mode cinéma",
+  "theaterExit": "Vue par défaut",
+  "title": "Raccourcis clavier",
+  "sub": "Ils marchent partout sur la page, sauf pendant que vous écrivez.",
+  "keySpace": "Espace",
+  "keyShift": "Maj",
+  "list": {
+    "playPause": "Lecture ou pause",
+    "back10": "Reculer de 10 secondes",
+    "forward10": "Avancer de 10 secondes",
+    "arrows": "Reculer ou avancer de 10 secondes",
+    "frame": "Une image en arrière ou en avant",
+    "percent": "Aller de 0 % à 90 % de la vidéo",
+    "volume": "Monter ou baisser le volume",
+    "mute": "Couper ou remettre le son",
+    "captions": "Sous-titres activés ou non",
+    "fullscreen": "Plein écran",
+    "theater": "Mode cinéma activé ou non",
+    "save": "Enregistrer",
+    "share": "Partager",
+    "help": "Afficher cette liste"
+  }
+}

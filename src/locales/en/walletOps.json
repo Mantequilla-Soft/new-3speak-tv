@@ -1,0 +1,93 @@
+{
+  "actions": {
+    "powerUp": "Power up",
+    "powerDown": "Power down",
+    "savings": "Savings",
+    "convert": "Convert",
+    "delegate": "Delegate",
+    "aria": "Manage your funds"
+  },
+  "common": {
+    "amount": "Amount ({{coin}})",
+    "available": "Available: {{balance}}",
+    "max": "Max",
+    "to": "To account",
+    "toHint": "Leave as is for your own account.",
+    "activeKey": "Needs your active key",
+    "butrauth": "Signed in with Butter Auth: you approve this with your Hive wallet or your active key in the next step.",
+    "insufficient": "That is more than you have.",
+    "amountPositive": "Enter an amount above zero.",
+    "invalidAccount": "There is no Hive account with that name.",
+    "done": "Done. It can take a few seconds to show here.",
+    "failed": "It did not go through: {{error}}",
+    "loading": "Loading your wallet..."
+  },
+  "powerUp": {
+    "title": "Power up",
+    "note": "Hive Power gives your votes weight and earns curation rewards. Turning it back into HIVE takes 13 weekly payments.",
+    "submit": "Power up {{amount}} HIVE",
+    "submitTo": "Power up {{amount}} HIVE for @{{to}}"
+  },
+  "powerDown": {
+    "title": "Power down",
+    "note": "Hive Power comes back as HIVE in 13 weekly payments, about {{weekly}} HP a week.",
+    "replace": "A power down is running ({{left}} HP left). Starting a new one replaces it.",
+    "submit": "Power down {{amount}} HP",
+    "stop": "Stop the power down",
+    "stopped": "Power down stopped."
+  },
+  "savings": {
+    "title": "Savings",
+    "deposit": "Deposit",
+    "withdraw": "Withdraw",
+    "depositNote": "HBD in savings earns {{rate}}% a year. Taking it out takes 3 days.",
+    "depositNoteHive": "HIVE in savings earns no interest. Taking it out takes 3 days.",
+    "withdrawNote": "Arrives in 3 days. You can cancel it until then.",
+    "submitDeposit": "Deposit {{amount}} {{coin}}",
+    "submitWithdraw": "Withdraw {{amount}} {{coin}}"
+  },
+  "convert": {
+    "title": "Convert",
+    "hbdToHive": "HBD to HIVE",
+    "hiveToHbd": "HIVE to HBD",
+    "hbdNote": "You get about {{amount}} HIVE in 3.5 days, at the median price of those days. The final amount can differ.",
+    "hiveNote": "You get about {{amount}} HBD now. Half of your HIVE is held as collateral and the rest comes back in 3.5 days. A 5% fee applies.",
+    "warning": "A conversion cannot be undone. Trading on a market can be cheaper.",
+    "submit": "Convert {{amount}} {{coin}}"
+  },
+  "delegate": {
+    "title": "Delegate",
+    "toLabel": "Delegate to",
+    "note": "Delegated Hive Power stays yours, but gives its votes to the other account. When you remove it, it takes 5 days to come back.",
+    "current": "You delegate {{hp}} HP to @{{to}} now. This sets a new amount.",
+    "submit": "Delegate {{amount}} HP to @{{to}}",
+    "submitNoTo": "Delegate {{amount}} HP",
+    "yours": "Your delegations",
+    "remove": "Remove",
+    "removed": "Delegation removed. The HP comes back in 5 days.",
+    "self": "You cannot delegate to yourself."
+  },
+  "pending": {
+    "title": "In progress",
+    "powerDown": "Power down: {{weekly}} HP a week, {{weeks}} weeks left",
+    "nextPayment": "Next payment {{date}}",
+    "withdrawal": "From savings: {{amount}}",
+    "arrives": "Arrives {{date}}",
+    "convertHbd": "Converting {{amount}} to HIVE",
+    "convertHive": "{{amount}} held as collateral",
+    "ready": "Done {{date}}",
+    "delegation": "Delegated to @{{to}}: {{hp}} HP",
+    "cancel": "Cancel",
+    "cancelled": "Withdrawal cancelled. The funds stay in savings.",
+    "stop": "Stop",
+    "empty": "Nothing in progress."
+  },
+  "activeAuth": {
+    "powerDown": "Power down {{amount}}",
+    "toSavings": "Move {{amount}} to savings",
+    "fromSavings": "Withdraw {{amount}} from savings",
+    "cancelSavings": "Cancel a savings withdrawal",
+    "convert": "Convert {{amount}}",
+    "delegate": "Delegate {{amount}} to @{{to}}"
+  }
+}

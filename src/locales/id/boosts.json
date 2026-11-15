@@ -1,0 +1,35 @@
+{
+  "title": "Boost",
+  "button": "Boost",
+  "buttonTitle": "Kirim boost dengan pesan untuk kreator",
+  "messageLabel": "Boostagram-mu",
+  "messagePlaceholder": "Sampaikan sesuatu ke kreator",
+  "messageHint": "Ditampilkan bersama jumlahnya di dinding boost postingan ini.",
+  "wall": {
+    "title": "Boost",
+    "empty": "Belum ada boost. Jadilah yang pertama memberi boost pada postingan ini.",
+    "lightning": "Pendukung Lightning",
+    "streamed": "dikirim sambil mendengarkan",
+    "boost": "Boost",
+    "total": "{{amount}} total",
+    "failed": "Dinding boost tidak bisa dimuat.",
+    "note": "Hanya pembayaran yang terlihat di Hive yang muncul di sini: HIVE dan HBD, serta Lightning lewat v4v.app."
+  },
+  "stream": {
+    "tile": "Stream",
+    "tileOn": "{{sats}} sats",
+    "title": "Stream sats",
+    "intro": "Selagi kamu mendengarkan, kirim beberapa sats ke kreator setiap menit dari dompet Lightning di browser-mu.",
+    "toggle": "Stream sats selagi aku mendengarkan",
+    "rate": "Sats per menit",
+    "cap": "Batas bulanan (sats)",
+    "spent": "Bulan ini: {{spent}} dari {{cap}} sats",
+    "session": "Terkirim untuk lagu ini: {{sats}} sats",
+    "budget": "Dompetmu akan bertanya sebelum setiap pembayaran, kecuali kamu memberi 3Speak anggaran di dompet itu. Pembayaran berhenti saat kamu menolak, atau saat batas bulananmu tercapai.",
+    "capped": "Batas bulananmu sudah tercapai. Streaming dijeda sampai bulan depan.",
+    "stopped": "Streaming berhenti: dompet tidak membayar.",
+    "on": "Streaming {{sats}} sats per menit ke @{{to}}.",
+    "off": "Streaming mati.",
+    "save": "Simpan"
+  }
+}

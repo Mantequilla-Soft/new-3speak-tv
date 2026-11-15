@@ -1,0 +1,114 @@
+{
+  "content": {
+    "streams": "Transmisje",
+    "audio": "Audio",
+    "podcasts": "Podcasty"
+  },
+  "reach": {
+    "title": "Zasięg",
+    "impressions": "Wyświetlenia kart",
+    "ctr": "Współczynnik klikalności",
+    "ctrShort": "CTR {{ctr}}",
+    "clicks": "Kliknięcia z kart",
+    "opens": "Otwarcia",
+    "empty": "Brak wyświetleń kart w tym okresie. Od teraz liczymy je za każdym razem, gdy jedna z twoich kart jest przez sekundę na czyimś ekranie.",
+    "foundTitle": "Gdzie widzowie to znaleźli",
+    "shownTitle": "Gdzie wyświetlano twoje karty",
+    "since": "Wyświetlenia kart są liczone na podstawie próbki odsłon i przeskalowane. Liczenie rozpoczęło się {{date}}.",
+    "sampled": "Wyświetlenia kart są liczone na podstawie próbki odsłon i przeskalowane.",
+    "detail": "{{impressions}} wyświetleń kart · CTR {{ctr}}"
+  },
+  "sources": {
+    "home": "Strona główna",
+    "discover": "Odkrywaj",
+    "following": "Obserwowani",
+    "new": "Nowe",
+    "trending": "Na czasie",
+    "interests": "Zainteresowania",
+    "search": "Wyszukiwanie",
+    "channel": "Strony kanałów",
+    "related": "Obok innych filmów",
+    "shorts": "Shorts",
+    "playlist": "Playlisty",
+    "tag": "Tagi",
+    "community": "Społeczności",
+    "other": "Gdzie indziej na 3Speak",
+    "direct": "Bezpośrednio lub nieznane",
+    "search_engine": "Wyszukiwarki",
+    "social": "Media społecznościowe",
+    "hive_apps": "Inne aplikacje Hive",
+    "external": "Inne strony",
+    "embed": "Osadzenia na innych stronach"
+  },
+  "earnings": {
+    "title": "Zarobki",
+    "empty": "Brak zarobków w tym okresie.",
+    "unavailable": "Nie udało się teraz wczytać zarobków. Spróbuj ponownie za minutę.",
+    "chartLabel": "Zarobki dziennie przez {{days}} dni, według źródła",
+    "lastYear": "Wszystko pokazuje ostatnie 12 miesięcy.",
+    "note": "W HBD (około jednego dolara USA). Nagrody Hive i napiwki w HIVE są liczone po dzisiejszym kursie HIVE, Lightning zostaje w sats.",
+    "sats_one": "{{count}} sat",
+    "sats_few": "{{count}} sats",
+    "sats_many": "{{count}} sats",
+    "sats_other": "{{count}} sats",
+    "sources": {
+      "votes": "Głosy",
+      "curation": "Kuracja",
+      "tips": "Napiwki",
+      "ads": "Reklamy",
+      "boosts": "Boosty w transmisjach",
+      "lightning": "Lightning"
+    }
+  },
+  "export": {
+    "daily": "Eksportuj dzienne zarobki (CSV)",
+    "content": "Eksportuj tabelę treści (CSV)",
+    "cols": {
+      "date": "Data",
+      "total": "Suma",
+      "title": "Tytuł",
+      "url": "Link",
+      "published": "Opublikowano",
+      "watchSeconds": "Czas oglądania (sekundy)",
+      "earned": "Zarobione z głosów"
+    }
+  },
+  "inbox": {
+    "tab": "Komentarze",
+    "menu": "Skrzynka komentarzy",
+    "title": "Skrzynka komentarzy",
+    "sub_one": "Komentarze pod twoimi postami z ostatniego {{count}} dnia.",
+    "sub_few": "Komentarze pod twoimi postami z ostatnich {{count}} dni.",
+    "sub_many": "Komentarze pod twoimi postami z ostatnich {{count}} dni.",
+    "sub_other": "Komentarze pod twoimi postami z ostatnich {{count}} dnia.",
+    "filtersLabel": "Pokaż tylko",
+    "views": {
+      "unanswered": "Bez odpowiedzi",
+      "all": "Wszystkie",
+      "done": "Załatwione"
+    },
+    "flags": {
+      "question": "Pytania",
+      "firstTime": "Pierwszy raz",
+      "supporter": "Wspierający"
+    },
+    "answered": "Odpowiedziano",
+    "onPost": "pod postem",
+    "onReply": "odpowiedź dla ciebie pod postem",
+    "reply": "Odpowiedz",
+    "replyVideo": "Odpowiedz filmem",
+    "replyTo": "Odpowiedz @{{author}}",
+    "send": "Wyślij",
+    "replied": "Twoja odpowiedź jest na Hive.",
+    "replyFailed": "Nie udało się opublikować odpowiedzi. Spróbuj ponownie.",
+    "markDone": "Oznacz jako załatwione",
+    "undone": "Cofnij",
+    "doneToast": "Oznaczono jako załatwione.",
+    "doneFailed": "Nie udało się zapisać. Spróbuj ponownie.",
+    "error": "Nie udało się wczytać komentarzy.",
+    "retry": "Spróbuj ponownie",
+    "allAnswered": "Odpowiedziałeś(-aś) wszystkim.",
+    "empty": "Brak komentarzy.",
+    "supportersNote": "Wspierający głosowali na twoje posty w ostatnich 12 miesiącach albo dali ci napiwek na 3Speak. Pierwszy raz oznacza ich pierwszy komentarz pod którymkolwiek z twoich postów."
+  }
+}

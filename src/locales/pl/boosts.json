@@ -1,0 +1,35 @@
+{
+  "title": "Boost",
+  "button": "Boost",
+  "buttonTitle": "Wyślij twórcy boost z wiadomością",
+  "messageLabel": "Twój boostagram",
+  "messagePlaceholder": "Napisz coś do twórcy",
+  "messageHint": "Wyświetlany wraz z kwotą na ścianie boostów tego posta.",
+  "wall": {
+    "title": "Boosty",
+    "empty": "Nie ma jeszcze boostów. Wyślij pierwszy boost do tego posta.",
+    "lightning": "Wsparcie przez Lightning",
+    "streamed": "wysłane podczas słuchania",
+    "boost": "Boost",
+    "total": "Łącznie {{amount}}",
+    "failed": "Nie udało się wczytać ściany boostów.",
+    "note": "Widać tu tylko płatności widoczne w Hive: HIVE i HBD oraz Lightning przez v4v.app."
+  },
+  "stream": {
+    "tile": "Strumień",
+    "tileOn": "{{sats}} sats",
+    "title": "Strumień sats",
+    "intro": "Podczas słuchania co minutę wysyłaj twórcy kilka sats z portfela Lightning w przeglądarce.",
+    "toggle": "Wysyłaj sats, gdy słucham",
+    "rate": "Sats na minutę",
+    "cap": "Limit miesięczny (sats)",
+    "spent": "W tym miesiącu: {{spent}} z {{cap}} sats",
+    "session": "Wysłano za ten utwór: {{sats}} sats",
+    "budget": "Portfel pyta przed każdą płatnością, chyba że ustawisz w nim budżet dla 3Speak. Płatności ustają, gdy odmówisz, lub po osiągnięciu limitu miesięcznego.",
+    "capped": "Osiągnięto limit miesięczny. Strumień wstrzymany do przyszłego miesiąca.",
+    "stopped": "Strumień zatrzymany: portfel nie zapłacił.",
+    "on": "Wysyłasz {{sats}} sats na minutę do @{{to}}.",
+    "off": "Strumień wyłączony.",
+    "save": "Zapisz"
+  }
+}

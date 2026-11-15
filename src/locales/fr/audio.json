@@ -150,6 +150,16 @@
     "notes": "Notes",
     "stillIndexing": "L'audio de cette publication est encore en cours d'indexation — réessayez dans quelques minutes."
   },
+  "edit": {
+    "title": "Modifier l'audio",
+    "editTitle": "Modifier le titre, les notes, les tags et la pochette",
+    "cover": "Pochette",
+    "coverAlt": "Aperçu de la pochette",
+    "coverHint": "Importe une image ou colle une URL directe. Une image carrée rend le mieux.",
+    "notesPlaceholder": "Parle de cet audio à tes auditeurs…",
+    "keptNote": "Le lien du lecteur et les crédits musicaux du post restent tels quels.",
+    "updated": "Audio mis à jour !"
+  },
   "page": {
     "sections": {
       "popular": "Populaires",
@@ -175,7 +185,6 @@
     },
     "all": "Tout",
     "musicGenre": "Genre musical",
-    "anyGenre": "Tous les genres",
     "tracks_one": "{{count}} titre",
     "tracks_many": "{{count}} titres",
     "tracks_other": "{{count}} titres",
@@ -189,7 +198,7 @@
     "nothingPlaying": "Rien n'est en lecture pour l'instant.",
     "goExplore": "Trouver quelque chose à écouter",
     "exploreViews": "Rubriques",
-    "mostPlayed": "Les plus écoutés"
+    "newUploads": "Nouveautés"
   },
   "upload": {
     "title": "Mettre en ligne un audio",
@@ -300,6 +309,7 @@
       "descriptionOptional": "Description (facultatif)",
       "track": "Titre",
       "category": "Catégorie",
+      "categoryRequired": "Choisis une catégorie pour que ton audio apparaisse dans le bon onglet.",
       "musicGenre": "Genre musical"
     },
     "playlist": {
@@ -389,6 +399,7 @@
     "tracks": {
       "helpAlbum": "Chaque titre est publié en commentaire sous la publication principale. Définissez les valeurs communes une fois, appliquez-les à tous, puis ajustez titre par titre.",
       "helpSnaps": "Chaque titre est publié comme son propre Snap. Définissez les valeurs communes une fois, appliquez-les à tous, puis ajustez titre par titre.",
+      "helpSnapsSingle": "Ton audio est publié comme un snap à part.",
       "applyToAllHeading": "Appliquer à tous les titres",
       "applyNote_one": "<b>Appliquer à {{count}} titre :</b> description et couverture communes, puis modifiez chaque titre séparément.",
       "applyNote_many": "<b>Appliquer aux {{count}} titres :</b> description et couverture communes, puis modifiez chaque titre séparément.",
@@ -425,6 +436,10 @@
       "earnings": "Gains :",
       "earningsPpl": "Paiement à l'écoute (@{{account}})",
       "earningsNormal": "Récompenses de publication normales",
+      "rewards": "Récompenses :",
+      "beneficiaries": "Bénéficiaires :",
+      "perTrack": "Défini par piste",
+      "noBeneficiaries": "Aucun",
       "playlist": "Playlist :",
       "failedCount_one": "{{count}} titre a échoué.",
       "failedCount_many": "{{count}} titres ont échoué.",

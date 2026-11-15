@@ -51,6 +51,17 @@ async function mount(props = {}) {
 }
 
 describe('saving changes', () => {
+  it('the premiere listing shows as it is and is saved with the rest', async () => {
+    m.get = vi.fn(async () => ({ data: { scheduled_posts: [{ ...SCHEDULED, premiere: true }] } }))
+    const { user, onSaved } = await mount()
+    const sw = screen.getByRole('switch', { name: 'List as a premiere' })
+    expect(sw).toHaveAttribute('aria-checked', 'true')
+    await user.click(sw)
+    await user.click(screen.getByRole('button', { name: 'Save changes' }))
+    await waitFor(() => expect(onSaved).toHaveBeenCalled())
+    expect(writeTo('/scheduled-posts/update')[0][1].updates.premiere).toBe(false)
+  })
+
   it('signs the update for the owner right before sending it', async () => {
     const { user, onSaved } = await mount()
     await user.click(screen.getByRole('button', { name: 'Save changes' }))

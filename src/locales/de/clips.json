@@ -1,0 +1,19 @@
+{
+  "title": "Shorts aus diesem Video",
+  "sub": "Von deinen Zuschauern ausgewählt: die Stellen, die sie wiederholen, kommentieren und im Chat feiern, und zitierfähige Sätze.",
+  "empty": "Noch keine Vorschläge. Sie erscheinen, sobald Leute dieses Video ansehen, Stellen wiederholen und kommentieren.",
+  "error": "Vorschläge konnten gerade nicht geladen werden.",
+  "range": "{{start}} bis {{end}}",
+  "seconds": "{{seconds}} s",
+  "reasons": {
+    "replay": "Am häufigsten wiederholt",
+    "comments_one": "{{count}} Kommentar zeigt hierher",
+    "comments_other": "{{count}} Kommentare zeigen hierher",
+    "chat": "Chat ging ab",
+    "quote": "Zitierfähiger Satz"
+  },
+  "preview": "Vorschau",
+  "stop": "Stopp",
+  "makeShort": "Short erstellen",
+  "foot": "Nur du siehst das. Wiederholungen werden gezählt, ohne zu wissen, wer zugesehen hat."
+}

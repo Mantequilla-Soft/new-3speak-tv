@@ -49,7 +49,7 @@ const CHECKER_URLS = (import.meta.env.VITE_CHECKER_URLS || '')
 // cannot be verified on this box — it has no H.264 decoder in any browser.
 const SHORTS_ADS_ENABLED = String(import.meta.env.VITE_SHORTS_ADS || '').toLowerCase() === 'true';
 
-// ▶️ Video import (/youtube-import and its entry buttons): OFF unless
+// ▶️ Video import (/import and its entry buttons): OFF unless
 // VITE_VIDEO_IMPORT=true (owner's call 2026-10-06; on for develop/preview).
 const VIDEO_IMPORT_ENABLED = import.meta.env.VITE_VIDEO_IMPORT === 'true';
 // Which platforms can be LINKED on a profile: one switch each,
@@ -63,6 +63,8 @@ const SOCIAL_LINK_ENABLED = {
   instagram: flag(import.meta.env.VITE_SOCIAL_LINK_INSTAGRAM, false),
   rumble: flag(import.meta.env.VITE_SOCIAL_LINK_RUMBLE, false),
   bitchute: flag(import.meta.env.VITE_SOCIAL_LINK_BITCHUTE, false),
+  // A podcast RSS feed: what the podcast import (and its automatic import) works from.
+  rss: flag(import.meta.env.VITE_SOCIAL_LINK_RSS, true),
 };
 const TAG_FEED_URL = CHECKER_URL;
 const PLAYLISTS_API_URL = import.meta.env.VITE_PLAYLISTS_API_URL || 'https://3speak-playlists.okinoko.io/api';

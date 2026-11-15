@@ -639,6 +639,8 @@
 .audio-upload-track-head {
   cursor: pointer;
   border-radius: var(--r-md);
+  // A lone track has nothing to fold, so no pointer.
+  &.is-static { cursor: default; }
 
   .audio-upload-track-head-title {
     flex: 1;
@@ -1737,4 +1739,11 @@
 
 @media (prefers-reduced-motion: reduce) {
   .audio-upload-overlay, .audio-upload-modal, .audio-upload-confirm, .audio-upload-confirm-card { animation: none; }
+}
+
+// "Pick a category" under the kind tiles / chips until one is chosen
+.audio-upload-kind-required {
+  margin: 0;
+  font-size: 13px;
+  color: var(--muted);
 }

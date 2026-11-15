@@ -3,9 +3,11 @@
 //
 // The checker's cron publishes a queued post AS its owner, so it wants each write
 // signed under the owner's posting authority, over:
-//   create: scheduled-post|create|<owner>|<permlink>|<scheduledOn as sent>|<ms>
-//   update: scheduled-post|update|<owner>|<permlink>|<ms>
-//   cancel: scheduled-post|cancel|<owner>|<permlink>|<ms>
+//   create:  scheduled-post|create|<owner>|<permlink>|<scheduledOn as sent>|<ms>
+//   draft:   scheduled-post|draft|<owner>|<permlink>|<ms>      (a create with draft: true)
+//   publish: scheduled-post|publish|<owner>|<permlink>|<scheduledOn as sent>|<ms>
+//   update:  scheduled-post|update|<owner>|<permlink>|<ms>
+//   cancel:  scheduled-post|cancel|<owner>|<permlink>|<ms>
 // with a 5-minute window, so sign right before each POST.
 //
 // Who signs, by login:
@@ -42,9 +44,12 @@ export const SCHEDULED_POST_UNSIGNED_FALLBACK = true;
 const THREESPEAK_API = import.meta.env.VITE_THREESPEAK_API || '/api';
 const SIGN_CAPABLE_PROVIDERS = new Set([Providers.Keychain, Providers.HiveAuth, Providers.PeakVault, Providers.Ledger]);
 
+// The actions whose message names the time (the exact string the body sends).
+const TIMED = new Set(['create', 'publish']);
+
 export const scheduledPostMessage = ({ action, owner, permlink, scheduledOn, timestamp }) => (
-  action === 'create'
-    ? ['scheduled-post', 'create', owner, permlink, scheduledOn, String(timestamp)].join('|')
+  TIMED.has(action)
+    ? ['scheduled-post', action, owner, permlink, scheduledOn, String(timestamp)].join('|')
     : ['scheduled-post', action, owner, permlink, String(timestamp)].join('|')
 );
 
@@ -121,11 +126,11 @@ const canSignLocallyFor = (owner) => !isManteAuthLogin()
 /**
  * { signature, timestamp } for one write. Throws ScheduledPostProofError (with a
  * message to show) when neither our API nor the wallet can sign.
- * `scheduledOn` (create only) must be the exact string the create body sends.
+ * `scheduledOn` (create and publish) must be the exact string the body sends.
  */
 export async function scheduledPostProof({ action, owner, permlink, scheduledOn }) {
   const fields = { action, owner: String(owner || ''), permlink: String(permlink || '') };
-  if (action === 'create') fields.scheduledOn = scheduledOn;
+  if (TIMED.has(action)) fields.scheduledOn = scheduledOn;
   try {
     return await signViaThreespeak(fields);
   } catch (err) {

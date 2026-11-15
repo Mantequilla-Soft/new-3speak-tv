@@ -1,0 +1,35 @@
+{
+  "title": "Boost",
+  "button": "Boost",
+  "buttonTitle": "Stuur de maker een boost met een bericht",
+  "messageLabel": "Je boostagram",
+  "messagePlaceholder": "Zeg iets tegen de maker",
+  "messageHint": "Wordt met het bedrag getoond op de boostmuur van deze post.",
+  "wall": {
+    "title": "Boosts",
+    "empty": "Nog geen boosts. Wees de eerste die deze post boost.",
+    "lightning": "Lightning-supporter",
+    "streamed": "gestreamd tijdens het luisteren",
+    "boost": "Boost",
+    "total": "{{amount}} in totaal",
+    "failed": "De boostmuur kon niet worden geladen.",
+    "note": "Hier staan alleen betalingen die op Hive zichtbaar zijn: HIVE en HBD, en Lightning via v4v.app."
+  },
+  "stream": {
+    "tile": "Stream",
+    "tileOn": "{{sats}} sats",
+    "title": "Sats streamen",
+    "intro": "Stuur de maker tijdens het luisteren elke minuut een paar sats vanuit je Lightning-wallet in de browser.",
+    "toggle": "Sats streamen terwijl ik luister",
+    "rate": "Sats per minuut",
+    "cap": "Maandlimiet (sats)",
+    "spent": "Deze maand: {{spent}} van {{cap}} sats",
+    "session": "Verstuurd voor dit nummer: {{sats}} sats",
+    "budget": "Je wallet vraagt het voor elke betaling, tenzij je 3Speak er een budget in geeft. Betalingen stoppen als je nee zegt, of bij je maandlimiet.",
+    "capped": "Je maandlimiet is bereikt. Streamen is gepauzeerd tot volgende maand.",
+    "stopped": "Streamen gestopt: de wallet heeft niet betaald.",
+    "on": "Je streamt {{sats}} sats per minuut naar @{{to}}.",
+    "off": "Streamen staat uit.",
+    "save": "Opslaan"
+  }
+}

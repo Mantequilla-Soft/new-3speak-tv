@@ -87,3 +87,10 @@
   color: var(--text, inherit);
   text-decoration: underline;
 }
+
+/* Full-height views (map, Shorts, story feed, spotlight) fill the viewport, so
+   the shell footer would add a strip of page scroll under them. The link stays
+   in the HTML for crawlers; it is only hidden on screen there. */
+body:has(.galaxy-page, .short-main, .shorts-story-feed, .spotlight-page) .site-hive-footer {
+  display: none;
+}

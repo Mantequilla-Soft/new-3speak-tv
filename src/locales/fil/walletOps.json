@@ -1,0 +1,93 @@
+{
+  "actions": {
+    "powerUp": "Power up",
+    "powerDown": "Power down",
+    "savings": "Savings",
+    "convert": "I-convert",
+    "delegate": "I-delegate",
+    "aria": "Pamahalaan ang pondo mo"
+  },
+  "common": {
+    "amount": "Halaga ({{coin}})",
+    "available": "Available: {{balance}}",
+    "max": "Max",
+    "to": "Sa account",
+    "toHint": "Hayaan lang kung para sa sarili mong account.",
+    "activeKey": "Kailangan ang active key mo",
+    "butrauth": "Naka-sign in gamit ang Butter Auth: aaprubahan mo ito gamit ang Hive wallet o active key mo sa susunod na hakbang.",
+    "insufficient": "Mas marami iyan kaysa sa mayroon ka.",
+    "amountPositive": "Maglagay ng halagang higit sa zero.",
+    "invalidAccount": "Walang Hive account na may ganyang pangalan.",
+    "done": "Tapos na. Puwedeng umabot ng ilang segundo bago ito lumabas dito.",
+    "failed": "Hindi ito natuloy: {{error}}",
+    "loading": "Nilo-load ang wallet mo..."
+  },
+  "powerUp": {
+    "title": "Power up",
+    "note": "Binibigyan ng Hive Power ng bigat ang mga vote mo at kumikita ito ng curation rewards. Ang pagbalik nito sa HIVE ay inaabot ng 13 lingguhang bayad.",
+    "submit": "Power up {{amount}} HIVE",
+    "submitTo": "Power up {{amount}} HIVE para kay @{{to}}"
+  },
+  "powerDown": {
+    "title": "Power down",
+    "note": "Bumabalik ang Hive Power bilang HIVE sa 13 lingguhang bayad, mga {{weekly}} HP kada linggo.",
+    "replace": "May tumatakbong power down ({{left}} HP na lang). Papalitan ito kapag nagsimula ka ng bago.",
+    "submit": "Power down {{amount}} HP",
+    "stop": "Ihinto ang power down",
+    "stopped": "Nahinto ang power down."
+  },
+  "savings": {
+    "title": "Savings",
+    "deposit": "Magdeposito",
+    "withdraw": "Mag-withdraw",
+    "depositNote": "Kumikita ang HBD sa savings ng {{rate}}% kada taon. Inaabot ng 3 araw ang pag-withdraw.",
+    "depositNoteHive": "Walang interes ang HIVE sa savings. Inaabot ng 3 araw ang pag-withdraw.",
+    "withdrawNote": "Darating sa loob ng 3 araw. Puwede mo itong i-cancel hanggang doon.",
+    "submitDeposit": "Magdeposito ng {{amount}} {{coin}}",
+    "submitWithdraw": "Mag-withdraw ng {{amount}} {{coin}}"
+  },
+  "convert": {
+    "title": "I-convert",
+    "hbdToHive": "HBD papuntang HIVE",
+    "hiveToHbd": "HIVE papuntang HBD",
+    "hbdNote": "Makakakuha ka ng mga {{amount}} HIVE sa loob ng 3.5 araw, sa median na presyo ng mga araw na iyon. Puwedeng mag-iba ang huling halaga.",
+    "hiveNote": "Makakakuha ka ng mga {{amount}} HBD ngayon. Ang kalahati ng HIVE mo ay hawak bilang collateral at babalik ang natitira sa loob ng 3.5 araw. May 5% na fee.",
+    "warning": "Hindi na mababawi ang conversion. Puwedeng mas mura ang pag-trade sa market.",
+    "submit": "I-convert ang {{amount}} {{coin}}"
+  },
+  "delegate": {
+    "title": "I-delegate",
+    "toLabel": "I-delegate kay",
+    "note": "Sa iyo pa rin ang na-delegate na Hive Power, pero ang ibang account ang gagamit ng bigat ng vote nito. Kapag tinanggal mo, 5 araw bago ito bumalik.",
+    "current": "Nagde-delegate ka ngayon ng {{hp}} HP kay @{{to}}. Magtatakda ito ng bagong halaga.",
+    "submit": "I-delegate ang {{amount}} HP kay @{{to}}",
+    "submitNoTo": "I-delegate ang {{amount}} HP",
+    "yours": "Mga delegation mo",
+    "remove": "Tanggalin",
+    "removed": "Natanggal ang delegation. Babalik ang HP sa loob ng 5 araw.",
+    "self": "Hindi ka puwedeng mag-delegate sa sarili mo."
+  },
+  "pending": {
+    "title": "Isinasagawa",
+    "powerDown": "Power down: {{weekly}} HP kada linggo, {{weeks}} linggo pa",
+    "nextPayment": "Susunod na bayad {{date}}",
+    "withdrawal": "Mula sa savings: {{amount}}",
+    "arrives": "Darating {{date}}",
+    "convertHbd": "Kino-convert ang {{amount}} sa HIVE",
+    "convertHive": "{{amount}} na hawak bilang collateral",
+    "ready": "Tapos {{date}}",
+    "delegation": "Na-delegate kay @{{to}}: {{hp}} HP",
+    "cancel": "I-cancel",
+    "cancelled": "Na-cancel ang withdrawal. Mananatili ang pondo sa savings.",
+    "stop": "Ihinto",
+    "empty": "Walang isinasagawa."
+  },
+  "activeAuth": {
+    "powerDown": "Power down {{amount}}",
+    "toSavings": "Ilipat ang {{amount}} sa savings",
+    "fromSavings": "I-withdraw ang {{amount}} mula sa savings",
+    "cancelSavings": "I-cancel ang withdrawal mula sa savings",
+    "convert": "I-convert ang {{amount}}",
+    "delegate": "I-delegate ang {{amount}} kay @{{to}}"
+  }
+}

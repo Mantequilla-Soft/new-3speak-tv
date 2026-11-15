@@ -1,0 +1,110 @@
+{
+  "content": {
+    "streams": "Mitiririko",
+    "audio": "Sauti",
+    "podcasts": "Podikasti"
+  },
+  "reach": {
+    "title": "Ufikiaji",
+    "impressions": "Maonyesho",
+    "ctr": "Kiwango cha kubofya",
+    "ctrShort": "CTR {{ctr}}",
+    "clicks": "Mibofyo kutoka kwa kadi",
+    "opens": "Mafunguo",
+    "empty": "Bado hakuna maonyesho katika kipindi hiki. Kuanzia sasa yanahesabiwa kila mara moja ya kadi zako inapokaa kwenye skrini ya mtu kwa sekunde moja.",
+    "foundTitle": "Watazamaji walikipata wapi",
+    "shownTitle": "Kadi zako zilionyeshwa wapi",
+    "since": "Maonyesho yanahesabiwa kutoka sampuli ya mitazamo ya kurasa na kukadiriwa kwa uwiano. Kuhesabu kulianza {{date}}.",
+    "sampled": "Maonyesho yanahesabiwa kutoka sampuli ya mitazamo ya kurasa na kukadiriwa kwa uwiano.",
+    "detail": "Maonyesho {{impressions}} · CTR {{ctr}}"
+  },
+  "sources": {
+    "home": "Nyumbani",
+    "discover": "Gundua",
+    "following": "Unaowafuata",
+    "new": "Mpya",
+    "trending": "Zinazovuma",
+    "interests": "Mambo unayopenda",
+    "search": "Tafuta",
+    "channel": "Kurasa za chaneli",
+    "related": "Kando ya video nyingine",
+    "shorts": "Shorts",
+    "playlist": "Orodha za kucheza",
+    "tag": "Lebo",
+    "community": "Jumuiya",
+    "other": "Kwingineko kwenye 3Speak",
+    "direct": "Moja kwa moja au haijulikani",
+    "search_engine": "Injini za utafutaji",
+    "social": "Mitandao ya kijamii",
+    "hive_apps": "Programu nyingine za Hive",
+    "external": "Tovuti nyingine",
+    "embed": "Zilizopachikwa kwenye tovuti nyingine"
+  },
+  "earnings": {
+    "title": "Mapato",
+    "empty": "Bado hakuna mapato katika kipindi hiki.",
+    "unavailable": "Mapato hayakuweza kupakiwa sasa hivi. Jaribu tena baada ya dakika moja.",
+    "chartLabel": "Mapato kwa siku katika siku {{days}}, yamepangwa kwa chanzo",
+    "lastYear": "Zote huonyesha miezi 12 iliyopita.",
+    "note": "Kwa HBD (takriban dola moja ya Marekani). Zawadi za Hive na bakshishi za HIVE hukadiriwa kwa bei ya leo ya HIVE, Lightning hubaki kwa sats.",
+    "sats_one": "{{count}} sat",
+    "sats_other": "{{count}} sats",
+    "sources": {
+      "votes": "Kura",
+      "curation": "Curation",
+      "tips": "Bakshishi",
+      "ads": "Matangazo",
+      "boosts": "Boost za mitiririko",
+      "lightning": "Lightning"
+    }
+  },
+  "export": {
+    "daily": "Hamisha mapato ya kila siku (CSV)",
+    "content": "Hamisha jedwali la maudhui (CSV)",
+    "cols": {
+      "date": "Tarehe",
+      "total": "Jumla",
+      "title": "Kichwa",
+      "url": "Kiungo",
+      "published": "Imechapishwa",
+      "watchSeconds": "Muda wa kutazama (sekunde)",
+      "earned": "Mapato kutoka kwa kura"
+    }
+  },
+  "inbox": {
+    "tab": "Maoni",
+    "menu": "Kisanduku cha maoni",
+    "title": "Kisanduku cha maoni",
+    "sub_one": "Maoni kwenye machapisho yako kutoka siku {{count}} iliyopita.",
+    "sub_other": "Maoni kwenye machapisho yako kutoka siku {{count}} zilizopita.",
+    "filtersLabel": "Onyesha tu",
+    "views": {
+      "unanswered": "Hayajajibiwa",
+      "all": "Yote",
+      "done": "Yamekamilika"
+    },
+    "flags": {
+      "question": "Maswali",
+      "firstTime": "Mara ya kwanza",
+      "supporter": "Wafadhili"
+    },
+    "answered": "Limejibiwa",
+    "onPost": "kwenye",
+    "onReply": "amekujibu kwenye",
+    "reply": "Jibu",
+    "replyVideo": "Jibu kwa video",
+    "replyTo": "Mjibu @{{author}}",
+    "send": "Tuma",
+    "replied": "Jibu lako liko kwenye Hive.",
+    "replyFailed": "Jibu halikuweza kuchapishwa. Jaribu tena.",
+    "markDone": "Weka alama ya kukamilika",
+    "undone": "Tendua",
+    "doneToast": "Imewekwa alama ya kukamilika.",
+    "doneFailed": "Haikuweza kuhifadhiwa. Jaribu tena.",
+    "error": "Maoni hayakuweza kupakiwa.",
+    "retry": "Jaribu tena",
+    "allAnswered": "Umemjibu kila mtu.",
+    "empty": "Hakuna maoni hapa.",
+    "supportersNote": "Wafadhili walipigia kura machapisho yako katika miezi 12 iliyopita au walikupa bakshishi kwenye 3Speak. Mara ya kwanza ina maana ni maoni yao ya kwanza kwenye chapisho lako lolote."
+  }
+}

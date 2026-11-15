@@ -139,6 +139,13 @@
     "rumble": {
       "placeholder": "https://rumble.com/c/…",
       "help": "Füge den Namen oder Link deines Rumble-Kanals ein. Setz den Hash irgendwo in deine Kanalbeschreibung."
+    },
+    "rss": {
+      "placeholder": "https://example.com/podcast.xml",
+      "help": "Füge die Adresse des RSS-Feeds deines Podcasts ein. Dein Podcast-Hoster zeigt sie in den Einstellungen oder auf der Verbreitungsseite der Show.",
+      "flowTitle": "Deinen Podcast-RSS-Feed verknüpfen",
+      "step2": "<strong>Füge ihn in die Beschreibung deiner Show oder deiner neuesten Folge ein</strong>, bei deinem Podcast-Hoster. Speichere und veröffentliche die Änderung. Sobald der Feed verifiziert ist, kannst du ihn wieder entfernen.",
+      "step3": "Gib die Adresse des RSS-Feeds deines Podcasts ein:"
     }
   },
   "snaps": {

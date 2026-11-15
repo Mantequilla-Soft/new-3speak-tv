@@ -1,0 +1,23 @@
+{
+  "openSound": "เปิดเสียงนี้",
+  "kindLibrary": "คลังเพลง",
+  "kindOriginal": "เสียงต้นฉบับ",
+  "untitled": "เสียงไม่มีชื่อ",
+  "uses_other": "มี Shorts {{count}} รายการใช้เสียงนี้",
+  "listen": "ฟัง",
+  "pause": "หยุดชั่วคราว",
+  "useThisSound": "ใช้เสียงนี้",
+  "splitNote": "Shorts ที่ทำด้วยเสียงนี้จะแบ่งรางวัล 5% ให้ {{name}}",
+  "license": "สัญญาอนุญาต: {{license}}",
+  "original": "ต้นฉบับ",
+  "shortsUsing": "Shorts ที่ใช้เสียงนี้",
+  "newest": "ใหม่ล่าสุด",
+  "top": "ยอดนิยม",
+  "noUsesTitle": "ยังไม่มี Shorts ที่ใช้เสียงนี้",
+  "noUsesText": "เป็นคนแรก: ใช้เสียงนี้ จะเปิดตัวแก้ไขพร้อมเสียงนี้",
+  "trending": "เสียงที่กำลังมาแรง",
+  "notFound": "ไม่พบเสียงนี้",
+  "toShorts": "ไปที่ Shorts",
+  "signIn": "ลงชื่อเข้าใช้เพื่อทำ Short ด้วยเสียงนี้",
+  "cannotUse": "ขณะนี้ใช้เสียงนี้ไม่ได้"
+}

@@ -1,0 +1,29 @@
+{
+  "valueText": "{{time}} / {{total}}",
+  "seekLabel": "Tua",
+  "loop": "Lặp lại",
+  "loopOn": "Đang lặp lại",
+  "loopOff": "Lặp lại video này",
+  "theater": "Chế độ rạp chiếu",
+  "theaterExit": "Chế độ xem mặc định",
+  "title": "Phím tắt",
+  "sub": "Dùng được ở mọi nơi trên trang, trừ khi đang gõ chữ.",
+  "keySpace": "Dấu cách",
+  "keyShift": "Shift",
+  "list": {
+    "playPause": "Phát hoặc tạm dừng",
+    "back10": "Lùi 10 giây",
+    "forward10": "Tới 10 giây",
+    "arrows": "Lùi hoặc tới 10 giây",
+    "frame": "Lùi hoặc tới một khung hình",
+    "percent": "Chuyển đến 0% đến 90% video",
+    "volume": "Tăng hoặc giảm âm lượng",
+    "mute": "Tắt hoặc bật tiếng",
+    "captions": "Bật hoặc tắt phụ đề",
+    "fullscreen": "Toàn màn hình",
+    "theater": "Bật hoặc tắt chế độ rạp chiếu",
+    "save": "Lưu",
+    "share": "Chia sẻ",
+    "help": "Hiện danh sách này"
+  }
+}

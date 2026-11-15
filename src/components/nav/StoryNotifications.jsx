@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import HiveAvatar from '../HiveAvatar/HiveAvatar';
 import { formatNotifTime } from '../../utils/notificationHelpers';
 import { markStorySeen, storyViewerPath, useStoryClock } from '../../lib/stories';
+import CheckerNotifications from './CheckerNotifications';
 import './StoryNotifications.scss';
 
 /**
@@ -13,11 +14,18 @@ import './StoryNotifications.scss';
  * Props: stories (from useStoryNotifications), onOpen (e.g. close the dropdown),
  * variant: 'dropdown' | 'page'.
  */
-export default function StoryNotifications({ stories, onOpen, variant = 'dropdown' }) {
+export default function StoryNotifications({ stories: all, onOpen, variant = 'dropdown' }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const now = useStoryClock();
-  if (!stories?.length) return null;
+  // The checker's own notifications ("went live", collab invites) come in the
+  // same list (lib/stories.js useStoryNotifications) and get their own rows.
+  const checker = (all || []).filter((s) => s._checker);
+  const stories = (all || []).filter((s) => !s._checker);
+  const checkerSection = checker.length
+    ? <CheckerNotifications items={checker} user={checker[0]._viewer} onOpen={onOpen} variant={variant} />
+    : null;
+  if (!stories.length) return checkerSection;
 
   const open = (s) => {
     markStorySeen(s.owner, s.permlink, s.hive_permlink);
@@ -28,6 +36,8 @@ export default function StoryNotifications({ stories, onOpen, variant = 'dropdow
   // 26a: one row of 52px rounded tiles in a cyan ring (quieter once seen),
   // the name under each and the time it has left (42b).
   return (
+    <>
+    {checkerSection}
     <section className={`story-notifs-section story-notifs-section--${variant}`}>
     <div className="story-notifs-head" aria-hidden="true">{t('nav.notifications.stories.heading')}</div>
     <ul className={`story-notifs story-notifs--${variant}`} aria-label={t('nav.notifications.stories.heading')}>
@@ -53,5 +63,6 @@ export default function StoryNotifications({ stories, onOpen, variant = 'dropdow
       })}
     </ul>
     </section>
+    </>
   );
 }

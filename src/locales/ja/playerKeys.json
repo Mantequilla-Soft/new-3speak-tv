@@ -1,0 +1,29 @@
+{
+  "valueText": "{{time}} / {{total}}",
+  "seekLabel": "シーク",
+  "loop": "ループ",
+  "loopOn": "ループ再生中",
+  "loopOff": "この動画をループ再生",
+  "theater": "シアターモード",
+  "theaterExit": "デフォルト表示",
+  "title": "キーボードショートカット",
+  "sub": "入力中を除き、ページのどこでも使えます。",
+  "keySpace": "スペース",
+  "keyShift": "Shift",
+  "list": {
+    "playPause": "再生または一時停止",
+    "back10": "10秒戻る",
+    "forward10": "10秒進む",
+    "arrows": "10秒戻るまたは進む",
+    "frame": "1フレーム戻るまたは進む",
+    "percent": "動画の0%から90%へ移動",
+    "volume": "音量を上げるまたは下げる",
+    "mute": "ミュートまたは解除",
+    "captions": "字幕のオンまたはオフ",
+    "fullscreen": "全画面",
+    "theater": "シアターモードのオンまたはオフ",
+    "save": "保存",
+    "share": "共有",
+    "help": "この一覧を表示"
+  }
+}

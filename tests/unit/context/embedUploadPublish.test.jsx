@@ -31,6 +31,12 @@ vi.mock('../../../src/lib/advertiseData', () => h.mocks.advertise)
 vi.mock('../../../src/lib/youtubeImport', () => h.mocks.youtubeImport)
 vi.mock('../../../src/lib/stories', () => h.mocks.stories)
 vi.mock('../../../src/hive-api/hiveApi', () => h.mocks.hiveApi)
+// A Short's series (lib/series.js): the playlist add after the post is out.
+const addToPlaylist = vi.hoisted(() => vi.fn(async () => ({ success: true })))
+vi.mock('../../../src/utils/playlistOperations', () => ({ addToPlaylist }))
+// The shorts editor's captions (lib/captionEdit.js): saved after the post is out.
+const saveCaptionEdit = vi.hoisted(() => vi.fn(async () => ({ cid: 'QmCaps', cues: [] })))
+vi.mock('../../../src/lib/captionEdit', () => ({ saveCaptionEdit }))
 // The owner's signature is a fake; the error wording is the real module's (its
 // t() is the same key-echo as the provider's).
 vi.mock('../../../src/i18n', () => h.mocks.appI18n)
@@ -332,6 +338,28 @@ describe('the post\'s community, tags and payout', () => {
       { account: 'threespeakfund', weight: 1000 },
       { account: 'zed', weight: 500 },
     ] }]])
+  })
+
+  it('a collaborator is named in the metadata, gets half the creator\'s share, and is invited', async () => {
+    const { result } = await ready((c) => c.setCollaborator({ account: 'fan', split: 50 }))
+    await publish(result)
+    expect(meta().collaborators).toEqual(['fan'])
+    // 100 % minus the locked 11 % = 89 %, half of it 44.5 %.
+    expect(optionsOp().extensions).toEqual([[0, { beneficiaries: [
+      { account: 'encoder.pay', weight: 100 },
+      { account: 'fan', weight: 4450 },
+      { account: 'threespeakfund', weight: 1000 },
+    ] }]])
+    await waitFor(() => expect(fetchTo('/collabs/register')).toHaveLength(1))
+    expect(JSON.parse(fetchTo('/collabs/register')[0][1].body)).toEqual({ author: 'badadib', permlink: PERMLINK })
+  })
+
+  it('the creator can never be their own collaborator', async () => {
+    const { result } = await ready((c) => c.setCollaborator({ account: 'badadib', split: 50 }))
+    await publish(result)
+    expect(meta().collaborators).toBeUndefined()
+    expect(optionsOp().extensions).toEqual([[0, { beneficiaries: LOCKED_SPLITS }]])
+    expect(fetchTo('/collabs/register')).toHaveLength(0)
   })
 
   it('unreadable beneficiaries fall back to the locked ones', async () => {
@@ -678,7 +706,10 @@ describe('a scheduled post', () => {
       parentPermlink: 'hive-181335',
       embedPermlink: 'asset-1',
       reblog: true,
+      // Listing as a premiere is opt-in: off unless switched on.
+      premiere: false,
     })
+    expect(body.jsonMetadata.video.premiere).toBeUndefined()
     expect(body.body).toContain(h.EMBED_URL)
     expect(body.jsonMetadata.app).toBe('3speak/embed')
     expect(body).toMatchObject({ signature: 'OWNER-SIG', timestamp: 4242 })
@@ -686,6 +717,14 @@ describe('a scheduled post', () => {
     expect(fetchTo('/hive')).toHaveLength(0)
     expect(result.current).toMatchObject({ completed: true, uploading: false, uploadProgress: 100 })
     expect(h.fns.toastSuccess).toHaveBeenCalledWith('upload.publishing.scheduled')
+  })
+
+  it('"List as a premiere" goes to the checker and into the post\'s metadata', async () => {
+    const { result } = await ready((c) => { asScheduled(c); c.setIsPremiere(true) })
+    await publish(result)
+    const [, body] = scheduleCall()
+    expect(body.premiere).toBe(true)
+    expect(body.jsonMetadata.video.premiere).toBe(true)
   })
 
   it('asks once for @threespeak posting authority when it is missing', async () => {
@@ -800,5 +839,87 @@ describe('a prefilled upload (pushed to the embed service by another uploader)',
     expect(meta()).not.toHaveProperty('threespeak.video')
     expect(fetchTo('/video/hangout-rec-1/hive')[0][0]).toBe(`${h.RELIABLE_BASE}/video/hangout-rec-1/hive`)
     expect(result.current.completed).toBe(true)
+  })
+})
+
+describe('season, episode, drafts and a Short\'s series', () => {
+  beforeEach(() => addToPlaylist.mockClear())
+  const draftCall = () => h.fns.axiosPost.mock.calls.find(([url]) => url.endsWith('/scheduled-posts/create'))
+
+  it('season and episode go into the video block as whole numbers, only when set', async () => {
+    const { result } = await ready((c) => { c.setSeasonNum('2'); c.setEpisodeNum('5') })
+    await publish(result)
+    expect(meta().video).toMatchObject({ season: 2, episode: 5 })
+  })
+
+  it('no numbers: no fields', async () => {
+    const { result } = await ready((c) => { c.setEpisodeNum('0') })
+    await publish(result)
+    expect(meta().video).not.toHaveProperty('season')
+    expect(meta().video).not.toHaveProperty('episode')
+  })
+
+  it('a draft is kept on the checker without a time, signed as a draft, and nothing is broadcast', async () => {
+    const { result } = await ready((c) => { c.setSaveAsDraft(true); c.setSeasonNum('1') })
+    await publish(result)
+    const [, body] = draftCall()
+    expect(body).toMatchObject({ owner: 'badadib', permlink: PERMLINK, draft: true, embedPermlink: 'asset-1', title: 'My First Video!' })
+    expect(body).not.toHaveProperty('scheduledOn')
+    expect(body.jsonMetadata.video).toMatchObject({ season: 1 })
+    expect(h.fns.proveScheduledPost).toHaveBeenCalledWith({ action: 'draft', owner: 'badadib', permlink: PERMLINK })
+    nothingPosted()
+    expect(result.current.completed).toBe(true)
+    expect(h.fns.toastSuccess).toHaveBeenCalledWith('episodes.drafts.saved')
+  })
+
+  it('a Short picked for a series is added at its end once it is out', async () => {
+    const { result } = await ready((c) => {
+      c.setFromStories(true); c.setTitle(''); c.setDescription('Sunset at the beach'); c.setTagsPreview([]); c.setSeriesId('pl-garden-1')
+    })
+    await publish(result)
+    expect(addToPlaylist).toHaveBeenCalledWith('pl-garden-1', 'badadib', 'sunset-at-the-beach-42', 100000)
+    expect(addToPlaylist.mock.invocationCallOrder[0]).toBeGreaterThan(h.fns.broadcastViaThreespeak.mock.invocationCallOrder[0])
+  })
+
+  it('a failed series add is a warning: the Short is published', async () => {
+    addToPlaylist.mockRejectedValueOnce(new Error('indexer down'))
+    const { result } = await ready((c) => {
+      c.setFromStories(true); c.setTitle(''); c.setDescription('Sunset'); c.setTagsPreview([]); c.setSeriesId('pl-garden-1')
+    })
+    await publish(result)
+    expect(h.fns.toastError).toHaveBeenCalledWith('episodes.series.addFailed')
+    expect(result.current.completed).toBe(true)
+  })
+})
+
+describe('a Short with the shorts editor\'s auto captions', () => {
+  const CUES = [{ start: 0, end: 1.5, text: 'Hello badadib fans' }]
+  const asEditorShort = (subs) => (c) => {
+    c.setFromStories(true); c.setTitle(''); c.setDescription('Sunset at the beach'); c.setTagsPreview([])
+    c.setEditorSubtitles(subs)
+  }
+  beforeEach(() => saveCaptionEdit.mockClear())
+
+  it('they become its subtitles once it is out, under its Hive permlink, burnt-in ones marked', async () => {
+    const { result } = await ready(asEditorShort({ language: 'de', cues: CUES, burnedIn: true }))
+    await publish(result)
+    expect(saveCaptionEdit).toHaveBeenCalledWith({ author: 'badadib', permlink: 'sunset-at-the-beach-42', lang: 'de', cues: CUES, burnedIn: true })
+    expect(saveCaptionEdit.mock.invocationCallOrder[0]).toBeGreaterThan(h.fns.broadcastViaThreespeak.mock.invocationCallOrder[0])
+    expect(result.current.statusMessages).toContainEqual(expect.objectContaining({ message: 'editorLink.captionsSaved', type: 'success' }))
+    expect(result.current.completed).toBe(true)
+  })
+
+  it('a failed save is a warning: the Short is published', async () => {
+    saveCaptionEdit.mockRejectedValueOnce(new Error('checker down'))
+    const { result } = await ready(asEditorShort({ language: 'en', cues: CUES, burnedIn: false }))
+    await publish(result)
+    expect(result.current.statusMessages).toContainEqual(expect.objectContaining({ message: 'editorLink.captionsFailed', type: 'warning' }))
+    expect(result.current.completed).toBe(true)
+  })
+
+  it('no captions from the editor: nothing is saved', async () => {
+    const { result } = await ready(asEditorShort(null))
+    await publish(result)
+    expect(saveCaptionEdit).not.toHaveBeenCalled()
   })
 })

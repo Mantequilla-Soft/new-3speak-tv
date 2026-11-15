@@ -33,8 +33,6 @@
   &.is-podcasts { font-size: 32px; letter-spacing: -.03em; @include v2.mobile { font-size: 24px; } }
 }
 .audio-page__head .v2-seg { background: var(--surface); }
-// Upload audio (28e): the page's one primary button, label left, icon right.
-.audio-upload-btn.v2-btn { gap: 16px; padding: 0 14px 0 18px; @include v2.mobile { height: 40px; border-radius: v2.radius-for(40); } }
 @media (max-width: 1024px) {
   // Under the Player | Explore tabs, the views take the whole row.
   .audio-page__head .audio-explore-views { order: 3; flex-basis: 100%; display: flex; .v2-seg__opt { flex: 1; } }
@@ -54,7 +52,6 @@
   min-width: 0;
   .material-symbols-rounded { color: inherit; }
 }
-.audio-genre-select.v2-input { width: auto; min-width: 140px; background-color: var(--surface-2); }
 .audio-date-presets { flex: none; background: var(--surface); @include v2.mobile { width: 100%; } }
 
 // Legacy chip classes still used by the podcasts views.

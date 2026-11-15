@@ -1,0 +1,187 @@
+@use "../../styles/v2" as v2;
+@use "../openpods/hangouts-skin" as hh;
+
+/* Premieres: the countdown at the watch address, the bar under the player, the
+   chat (the stream-chat look of the live area) and the Upcoming premieres row. */
+
+// ─── countdown page ──────────────────────────────────────────────────────────
+.premiere-page {
+  display: grid;
+  gap: 16px;
+  max-width: 1100px;
+  margin: 0 auto;
+  min-width: 0;
+}
+
+.premiere-stage {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--r-2xl);
+  overflow: hidden;
+  background: var(--media-black);
+
+  @include v2.mobile {
+    margin: 0 calc(-1 * var(--page-pad));
+    border-radius: 0;
+  }
+}
+
+.premiere-stage__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: .45;
+}
+
+.premiere-stage__over {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 8px;
+  padding: 16px;
+  color: var(--on-media);
+  text-align: center;
+}
+
+.premiere-stage__label { font-size: 15px; font-weight: 700; }
+
+.premiere-stage__clock {
+  font-size: clamp(36px, 8vw, 72px);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -.02em;
+}
+
+.premiere-stage__starting {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 20px;
+}
+
+.premiere-info {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px;
+
+  @include v2.mobile { flex-direction: column; padding: 16px; }
+}
+
+.premiere-info__text { display: grid; gap: 8px; min-width: 0; }
+
+.premiere-info__title {
+  margin: 0;
+  font-size: 22px;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+.premiere-info__by {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text);
+  font-weight: 700;
+  text-decoration: none;
+  &:hover { text-decoration: underline; }
+}
+
+.premiere-info__avatar { width: 32px; height: 32px; border-radius: 50%; }
+
+.premiere-info__when {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.premiere-info__note { margin: 0; color: var(--muted); font-size: 13px; }
+.premiere-info__notify { flex: none; @include v2.mobile { width: 100%; } }
+
+// ─── under the player while it runs ──────────────────────────────────────────
+.premiere-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  padding: 10px 12px;
+  border-radius: var(--r-lg);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 14px;
+}
+
+.premiere-bar__text { color: var(--muted); }
+.premiere-bar__jump { margin-left: auto; }
+
+// ─── chat ────────────────────────────────────────────────────────────────────
+.premiere-chat {
+  @include hh.tokens;
+  @include hh.stream-chat;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  height: 100%;
+
+  .premiere-chat__list {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+  }
+
+  .premiere-chat__msg {
+    position: relative;
+    padding-right: 32px;
+    overflow-wrap: anywhere;
+  }
+
+  &.is-replay .premiere-chat__list > :first-child { margin-top: 0; }
+  &.is-replay .premiere-chat__msg { display: flex; align-items: baseline; gap: 8px; }
+  &.is-replay .hh-chat__msg-body { display: block; min-width: 0; }
+
+  .premiere-chat__time {
+    flex: none;
+    padding: 2px 6px;
+    border: 0;
+    border-radius: var(--r-sm);
+    background: var(--surface-2);
+    color: var(--text);
+    font: inherit;
+    font-size: 12px;
+    font-weight: 700;
+  }
+  button.premiere-chat__time { cursor: pointer; &:hover { background: var(--bg-hover); } }
+
+  .premiere-chat__remove {
+    position: absolute;
+    top: -4px;
+    right: 0;
+    opacity: 0;
+  }
+  .premiere-chat__msg:hover .premiere-chat__remove,
+  .premiere-chat__remove:focus-visible { opacity: 1; }
+  @media (hover: none) { .premiere-chat__remove { opacity: 1; } }
+
+  .premiere-chat__compose { display: flex; border-top: 1px solid var(--border); }
+  .premiere-chat__compose .hh-chat__input { flex: 1; min-width: 0; }
+  .premiere-chat__guest { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+}
+
+// ─── Upcoming premieres row ──────────────────────────────────────────────────
+.upcoming-premieres { margin-bottom: 16px; }
+
+.premiere-card__when {
+  position: absolute;
+  left: 8px;
+  bottom: 8px;
+}

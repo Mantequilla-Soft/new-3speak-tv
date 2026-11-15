@@ -109,9 +109,12 @@ async function signLocally(account, permlink, lang, srtSha256) {
 
 /**
  * Sign and store corrected captions for one language of the author's own video.
+ * A language the video has no captions in yet is added (the author only: the
+ * shorts editor's captions of a Short just published, utils/editorSubtitles.js);
+ * `burnedIn` marks those as burnt into the picture (only read when adding).
  * Resolves to { cid, cues } with the lines exactly as stored.
  */
-export async function saveCaptionEdit({ author, permlink, lang, cues }) {
+export async function saveCaptionEdit({ author, permlink, lang, cues, burnedIn = false }) {
   const clean = normaliseCues(cues);
   if (!clean.length) throw new Error(t('comments.transcript.edit.empty'));
   const srtSha256 = await sha256Hex(cuesToSrt(clean));
@@ -127,7 +130,7 @@ export async function saveCaptionEdit({ author, permlink, lang, cues }) {
   const r = await fetch(`${CHECKER_URL}/subtitles/edit`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ author, permlink, lang, cues: clean, ...signed }),
+    body: JSON.stringify({ author, permlink, lang, cues: clean, ...signed, ...(burnedIn ? { burnedIn: true } : {}) }),
   });
   const d = await r.json().catch(() => ({}));
   if (!r.ok || !d.success) throw new Error(d.error || t('comments.transcript.edit.saveFailed'));

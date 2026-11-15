@@ -19,9 +19,12 @@ import useGalaxyFits from '../../hooks/useGalaxyFits';
 import { getHidden, hideCreator, unhideCreator, refreshRailsAfterHide } from '../../utils/userFilters';
 import Follower from './Follower';
 import PlaylistCard from '../Cards/PlaylistCard';
+import ChannelSeries from '../Episodes/ChannelSeries';
 import { useUserPlaylists } from '../../hooks/useUserPlaylists';
 import { useAppStore } from '../../lib/store';
 import CreatorStats from '../CreatorStats/CreatorStats';
+// Lazy: it carries the video-reply recorder (tus upload), which no other tab needs.
+const CommentInbox = React.lazy(() => import('../CommentInbox/CommentInbox'));
 import { createPlaylist } from '../../utils/playlistOperations';
 import { AUDIO_KINDS } from '../../lib/playlistType';
 import { toastIn } from '../../utils/toast';
@@ -34,6 +37,8 @@ import UserAudioList from './UserAudioList';
 import CommunitySnaps from './CommunitySnaps';
 import SpotlightEditor from '../Spotlight/SpotlightEditor';
 import ProfileStreams, { ProfileLiveNow } from './ProfileStreams';
+import NotifyLevelButton from '../NotifyLevel/NotifyLevelButton';
+import UpcomingPremieres from '../Premiere/UpcomingPremieres';
 import { fetchSnaps } from '../../lib/snaps';
 import SocialLinks from './SocialLinks';
 import LeaderboardBadges from '../LeaderboardBadges/LeaderboardBadges';
@@ -80,6 +85,7 @@ function UserProfilePage({ user: userProp }) {
       if (tab === 'streams') return 'streams';
       if (tab === 'links') return 'links';
       if (tab === 'stats') return 'stats';
+      if (tab === 'comments') return 'comments';
       if (tab === 'video') return 'video';
       if (tab === 'members') return 'members';
       // `supporters` was the members-only shelf's old id; it now means tippers.
@@ -99,6 +105,7 @@ function UserProfilePage({ user: userProp }) {
       else if (tab === 'streams') setShow('streams');
       else if (tab === 'links') setShow('links');
       else if (tab === 'stats') setShow('stats');
+      else if (tab === 'comments') setShow('comments');
       else if (tab === 'video') setShow('video');
       else if (tab === 'members') setShow('members');
       else if (tab === 'supports' || tab === 'supporters') setShow('supports');
@@ -576,6 +583,8 @@ const {
     hasGated && { value: 'members', label: t('profile.tabs.members') },
     isOwnProfile && { value: 'links', label: t('profile.tabs.links') },
     canSeeStats && { value: 'stats', label: t('profile.tabs.analytics') },
+    // The comment inbox: the creator's own, and only for a Hive account (a reply is a Hive post).
+    isOwnProfile && !incubationHandle && { value: 'comments', label: t('creator.inbox.tab') },
   ].filter(Boolean);
 
   return (
@@ -610,6 +619,8 @@ const {
             >
               {followLoading ? t('common.status.loading') : isFollowing ? t('common.actions.following') : t('common.actions.follow')}
             </Button>
+            {/* All / Highlights / Off for this creator, once followed. */}
+            {authenticated && isFollowing && <NotifyLevelButton creator={user} />}
             <ProfileTile
               icon="chat_bubble"
               label={t('profile.page.message')}
@@ -709,6 +720,7 @@ const {
     <>
       {/* A live stream comes first, ahead of the videos. */}
       <ProfileLiveNow user={user} />
+      <UpcomingPremieres owner={user} />
       {isLoading ? (
         <BarLoader />
       ) : videos?.length === 0 ? (
@@ -723,7 +735,11 @@ const {
     ) : shortsVideos.length === 0 ? (
       <ProfileEmptyState kind="shorts" isOwnProfile={isOwnProfile} username={user} />
     ) : (
-      <Card3 windowed videos={shortsVideos} loading={isFetchingNextShortsPage} linkPrefix="/shorts" linkQuery={`&user=${user}`} getViewCount={getViewCount} shortsGrid />
+      <>
+        {/* The channel's series of Shorts (lib/series.js) */}
+        <ChannelSeries owner={user} playlists={playlists} isOwnProfile={isOwnProfile} />
+        <Card3 windowed videos={shortsVideos} loading={isFetchingNextShortsPage} linkPrefix="/shorts" linkQuery={`&user=${user}`} getViewCount={getViewCount} shortsGrid />
+      </>
     )
   ) : show === "audio" ? (
     <UserAudioList user={user} isOwnProfile={isOwnProfile} />
@@ -739,6 +755,8 @@ const {
     <SpotlightEditor username={user} />
   ) : show === "stats" ? (
     canSeeStats ? <CreatorStats user={user} /> : null
+  ) : show === "comments" ? (
+    isOwnProfile && !incubationHandle ? <React.Suspense fallback={<BarLoader />}><CommentInbox user={user} /></React.Suspense> : null
   ) : show === "playlists" ? (
     <>
       {isOwnProfile && (

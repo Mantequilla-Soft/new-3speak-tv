@@ -36,11 +36,11 @@ const CANONICAL_ORIGIN = 'https://3speak.tv';
 // One person's own pages, or a step in a flow: nothing a search result could
 // usefully send anyone else to. Matched as prefixes (subpaths included).
 const PRIVATE = [
-  '/notifications', '/upload', '/publish-backlog', '/youtube-import', '/login', '/newlogin',
+  '/notifications', '/upload', '/publish-backlog', '/import', '/youtube-import', '/login', '/newlogin',
   '/auth', '/callback', '/studio', '/embed-studio', '/draft', '/editvideo', '/edit-scheduled',
   '/profile', '/wallet', '/test', '/image', '/openpods/publish', '/chat', '/translate',
   '/invite-links', '/invite', '/home-feed', '/follow-feed', '/watched', '/egress-stream',
-  '/ad-wizard',
+  '/ad-wizard', '/curation',
 ];
 
 // First match wins. `titleKey` is an i18n key; `title` is a fn of the matched
@@ -81,6 +81,7 @@ const ROUTES = [
   { path: '/b/:account', title: () => null, canonical: (p) => `/b/${String(p.account).toLowerCase()}` },
   { path: '/badge/:account', title: () => null, canonical: (p) => `/b/${String(p.account).toLowerCase()}` },
   { path: '/watched/:username', title: (p) => t('app.routes.watchHistory', { username: p.username }) },
+  { path: '/curation/:user', title: (p) => `${t('curation.page.title')} · @${p.user}` },
   { path: '/post/:author/:permlink', title: (p) => t('app.routes.postBy', { author: p.author }) },
   { path: '/profile', titleKey: 'app.routes.myProfile' },
   { path: '/upload', titleKey: 'common.actions.upload' },

@@ -39,6 +39,14 @@
     "hide": "Nascondi",
     "markSeen": "Segna tutto come visto"
   },
+  "continueWatching": {
+    "aria": "Continua a guardare",
+    "rest": "da continuare a guardare",
+    "remove": "Rimuovi da Continua a guardare",
+    "removed": "Rimosso da Continua a guardare",
+    "removeFailed": "Impossibile rimuoverlo. Riprova.",
+    "progress": "{{pct}}% guardato"
+  },
   "tagMeta": {
     "videos_one": "{{num}} video",
     "videos_many": "{{num}} video",

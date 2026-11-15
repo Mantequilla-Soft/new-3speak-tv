@@ -44,6 +44,7 @@
     "title": "Mga naka-link na external profile",
     "intro": "Patunayan na sa iyo ang isang YouTube (o iba pang) channel sa pag-paste ng natatanging 3Speak hash mo sa public profile description mo, tapos i-verify ito dito.",
     "openProfile": "Buksan ang profile",
+    "importEpisodes": "I-import ang mga episode",
     "removeLink": "Alisin ang link",
     "empty": "Wala pang naka-link na external profile.",
     "addPlatform": "Magdagdag ng bagong platform",

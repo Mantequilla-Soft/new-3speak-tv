@@ -1,0 +1,42 @@
+@use "../../styles/v2" as v2;
+
+// Pending collab invites on your own channel (CollabInvites.jsx): one flat card,
+// a row per invite; on phones the buttons drop under the text.
+.collab-invites {
+  margin: 0 0 16px;
+  padding: 14px 16px;
+
+  ul { list-style: none; margin: 8px 0 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+}
+
+.collab-invites__title {
+  margin: 0;
+  @include v2.text(eyebrow);
+  color: var(--muted);
+}
+
+.collab-invite {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+
+  .hive-avatar, > img { width: 36px; height: 36px; border-radius: 50%; flex: none; }
+}
+
+.collab-invite__text {
+  flex: 1 1 200px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  font-size: 13px;
+  b { font-weight: 700; }
+  a { color: var(--muted); text-decoration: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; &:hover { color: var(--text); } }
+}
+
+.collab-invite__actions {
+  display: flex;
+  gap: 8px;
+  flex: none;
+  @include v2.mobile { width: 100%; .v2-btn { flex: 1 1 0; justify-content: center; } }
+}

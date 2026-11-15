@@ -12,6 +12,7 @@ import AddTagModal from "../AddTagModal/AddTagModal";
 import ReportModal from "../modal/ReportModal";
 import { useQueryClient } from "@tanstack/react-query";
 import { hideVideo, unhideVideo, hideCreator, unhideCreator, refreshRailsAfterHide } from "../../utils/userFilters";
+import { playVideoAsAudio } from "../../lib/videoAsAudio";
 import "./CardOptionsMenu.scss";
 
 // Every toast from this module is headed "Video"; the message becomes the
@@ -90,7 +91,7 @@ function CardOptionsMenu({ author, permlink, title, onDismiss, onOpenChange, cla
     const r = btnRef.current?.getBoundingClientRect();
     if (r) {
       const MENU_W = 220;
-      const MENU_H = 230;
+      const MENU_H = 270;
       // Right-aligned to the trigger (it sits at the card's top-right); flip
       // left / up when we would overflow the viewport.
       const left = Math.min(Math.max(8, r.right - MENU_W), window.innerWidth - MENU_W - 8);
@@ -158,6 +159,13 @@ function CardOptionsMenu({ author, permlink, title, onDismiss, onOpenChange, cla
     setPlaylistOpen(true);
   };
 
+  // "Play as audio": the video in the global audio player (lib/videoAsAudio.js).
+  // Free for everyone, signed in or not.
+  const onPlayAsAudio = () => {
+    playVideoAsAudio({ author, permlink, title }, useAppStore.getState())
+      .catch(() => toastIn('Audio').error(t('videoAudio.failed')));
+  };
+
   // Tagging broadcasts a signed custom_json, so it needs a logged-in account.
   const onAddTag = () => {
     if (!isLoggedIn() || !user) {
@@ -178,6 +186,7 @@ function CardOptionsMenu({ author, permlink, title, onDismiss, onOpenChange, cla
   );
   const items = (
     <div className="card-menu-rows">
+      {row("headphones", t('videoAudio.playAsAudio'), onPlayAsAudio)}
       {row("playlist_add", t('engagement.cardMenu.saveToPlaylist'), onAddToPlaylist)}
       {row("sell", t('engagement.cardMenu.addTag'), onAddTag)}
       {row("block", t('engagement.cardMenu.notInterested'), onNotInterested)}

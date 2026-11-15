@@ -1,0 +1,35 @@
+{
+  "title": "Boost",
+  "button": "Boost",
+  "buttonTitle": "Gửi boost kèm lời nhắn cho nhà sáng tạo",
+  "messageLabel": "Boostagram của bạn",
+  "messagePlaceholder": "Nói gì đó với nhà sáng tạo",
+  "messageHint": "Hiển thị cùng số tiền trên bảng boost của bài này.",
+  "wall": {
+    "title": "Boost",
+    "empty": "Chưa có boost nào. Hãy là người đầu tiên boost bài này.",
+    "lightning": "Người ủng hộ qua Lightning",
+    "streamed": "gửi dần khi đang nghe",
+    "boost": "Boost",
+    "total": "Tổng cộng {{amount}}",
+    "failed": "Không tải được bảng boost.",
+    "note": "Chỉ các khoản thanh toán thấy được trên Hive mới hiện ở đây: HIVE và HBD, cùng Lightning qua v4v.app."
+  },
+  "stream": {
+    "tile": "Stream",
+    "tileOn": "{{sats}} sats",
+    "title": "Stream sats",
+    "intro": "Trong lúc nghe, mỗi phút gửi vài sats cho nhà sáng tạo từ ví Lightning trên trình duyệt của bạn.",
+    "toggle": "Stream sats khi tôi nghe",
+    "rate": "Sats mỗi phút",
+    "cap": "Giới hạn hằng tháng (sats)",
+    "spent": "Tháng này: {{spent}} / {{cap}} sats",
+    "session": "Đã gửi cho bản này: {{sats}} sats",
+    "budget": "Ví sẽ hỏi trước mỗi lần thanh toán, trừ khi bạn cấp cho 3Speak một ngân sách trong ví. Thanh toán dừng khi bạn từ chối hoặc khi chạm giới hạn hằng tháng.",
+    "capped": "Đã đạt giới hạn hằng tháng. Stream tạm dừng đến tháng sau.",
+    "stopped": "Đã dừng stream: ví không thanh toán.",
+    "on": "Đang stream {{sats}} sats mỗi phút cho @{{to}}.",
+    "off": "Stream đang tắt.",
+    "save": "Lưu"
+  }
+}
