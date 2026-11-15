@@ -215,3 +215,122 @@ describe('playing', () => {
     expect(adEls).toHaveLength(0)
   })
 })
+
+// The screen locked (or another app in front): a phone only lets background audio
+// go on in the element that already plays, so nothing may pause the track there.
+// The owner's report: the next track of the queue did not start with the screen
+// locked, and the player sat paused a few seconds into it, "maybe when the ad
+// should play".
+describe('with the listener away', () => {
+  let restore = []
+  const setHidden = (on) => {
+    Object.defineProperty(document, 'visibilityState', { value: on ? 'hidden' : 'visible', configurable: true })
+    document.dispatchEvent(new Event('visibilitychange'))
+  }
+  // A phone that still says "visible" but has lost the focus (screen off).
+  const setTouchUnfocused = () => {
+    const mm = window.matchMedia
+    const hf = document.hasFocus
+    window.matchMedia = (q) => ({ matches: q === '(pointer: coarse)', addEventListener() {}, removeEventListener() {} })
+    document.hasFocus = () => false
+    restore.push(() => { window.matchMedia = mm; document.hasFocus = hf })
+    window.dispatchEvent(new Event('blur'))
+  }
+  afterEach(() => {
+    delete document.visibilityState
+    restore.forEach((r) => r())
+    restore = []
+  })
+
+  it('a track that starts with the screen locked asks for no spot and is never paused', async () => {
+    setHidden(true)
+    const main = fakeMain()
+    const ad = await mount(main, { owner: 'badadib', permlink: 'next' })
+    await act(async () => { await main.play() })
+    await act(async () => {})
+    expect(sessions()).toHaveLength(0)
+    expect(adEls).toHaveLength(0)
+    expect(main.pause).not.toHaveBeenCalled()
+    expect(main.paused).toBe(false)
+    expect(ad.active).toBe(false)
+  })
+
+  it('the same on a phone that still reports the page visible but has lost the focus', async () => {
+    setTouchUnfocused()
+    const main = fakeMain()
+    await mount(main, { owner: 'badadib', permlink: 'next' })
+    await act(async () => { await main.play() })
+    await act(async () => {})
+    expect(sessions()).toHaveLength(0)
+    expect(main.pause).not.toHaveBeenCalled()
+  })
+
+  it('a desktop window in the background (visible, not focused) still gets its spot', async () => {
+    const hf = document.hasFocus
+    document.hasFocus = () => false
+    restore.push(() => { document.hasFocus = hf })
+    const main = fakeMain()
+    await mount(main, { owner: 'badadib', permlink: 'abc' })
+    await act(async () => { await main.play() })
+    expect(adEls[0].paused).toBe(false)
+    expect(main.paused).toBe(true)
+  })
+
+  it('locking the screen during the hold lets the track go on at once, not after the hold timer', async () => {
+    vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout', 'setInterval', 'clearInterval'] })
+    try {
+      let answer
+      const pending = new Promise((r) => { answer = r })
+      fetchMock.mockImplementation(async (url) => (url.endsWith('/m/session')
+        ? { ok: true, json: async () => { await pending; return { ad: null, audioAd: spot } } }
+        : { ok: true, json: async () => ({}) }))
+      const main = fakeMain()
+      await mount(main, { owner: 'badadib', permlink: 'abc' })
+      await act(async () => { await main.play() })
+      expect(main.paused).toBe(true) // held for the answer
+      await act(async () => { setHidden(true) })
+      expect(main.paused).toBe(false) // no timer had to run
+      // The answer comes in late (a slow checker) with the screen still off: passed over.
+      main.currentTime = 7
+      await act(async () => { answer() })
+      await act(async () => {})
+      expect(main.paused).toBe(false)
+      expect(adEls[0].paused).toBe(true)
+    } finally {
+      vi.useRealTimers()
+    }
+  })
+
+  it('a late pre-roll answer that arrives after the screen was locked does not pause the track (stuck at 0:07)', async () => {
+    let answer
+    const pending = new Promise((r) => { answer = r })
+    fetchMock.mockImplementation(async (url) => (url.endsWith('/m/session')
+      ? { ok: true, json: async () => { await pending; return { ad: null, audioAd: spot } } }
+      : { ok: true, json: async () => ({}) }))
+    const main = fakeMain()
+    main.currentTime = 4 // past the opening: not held
+    await mount(main, { owner: 'badadib', permlink: 'abc' })
+    await act(async () => { await main.play() })
+    expect(main.paused).toBe(false)
+    setHidden(true)
+    main.currentTime = 7
+    await act(async () => { answer() })
+    await act(async () => {})
+    main.dispatchEvent(new Event('timeupdate'))
+    expect(main.paused).toBe(false)
+    expect(adEls[0].paused).toBe(true)
+  })
+
+  it('locking the screen while a spot plays ends the spot and the track goes on, unreported', async () => {
+    const main = fakeMain()
+    const ad = await mount(main, { owner: 'badadib', permlink: 'abc' })
+    await act(async () => { await main.play() })
+    expect(ad.active).toBe(true)
+    expect(main.paused).toBe(true)
+    await act(async () => { setHidden(true) })
+    expect(adEls[0].paused).toBe(true)
+    expect(main.paused).toBe(false)
+    expect(shown()).toHaveLength(0)
+    expect(ad.active).toBe(false)
+  })
+})
