@@ -220,6 +220,48 @@ describe('installCheckerRouting', () => {
     expect(mod.getCheckerOrigin()).toBe(EU)
   })
 
+  it('a batch read sent as POST (incubation likes/for) is retried on a gateway failure, body and all', async () => {
+    await load({ stored: { ranking: [US, EU], at: Date.now() } })
+    const calls = []
+    const native = vi.fn(async (url, init) => {
+      calls.push([String(url), init?.body])
+      return String(url).startsWith(US) ? json({ error: 'Incubation service unavailable' }, 502) : json({ items: {} })
+    })
+    vi.stubGlobal('fetch', native)
+    mod._test.reset({ fetchImpl: native })
+    mod.installCheckerRouting()
+    const body = JSON.stringify({ items: [{ author: 'a', permlink: 'p' }] })
+    const res = await fetch(`${EU}/incubation/likes/for`, { method: 'POST', body })
+    expect(res.status).toBe(200)
+    expect(calls).toEqual([[`${US}/incubation/likes/for`, body], [`${EU}/incubation/likes/for`, body]])
+    expect(mod.getCheckerOrigin()).toBe(EU)
+  })
+
+  it('a batch read sent as POST is retried after a network error too', async () => {
+    await load({ stored: { ranking: [US, EU], at: Date.now() } })
+    const native = vi.fn(async (url) => {
+      if (String(url).startsWith(US)) throw new TypeError('Failed to fetch')
+      return json({ authors: {} })
+    })
+    vi.stubGlobal('fetch', native)
+    mod._test.reset({ fetchImpl: native })
+    mod.installCheckerRouting()
+    const res = await fetch(`${EU}/incubation/authors`, { method: 'POST', body: '{"handles":[]}' })
+    expect(res.status).toBe(200)
+    expect(native).toHaveBeenCalledTimes(2)
+  })
+
+  it('isReadPost names only the batch reads, not writes under the same prefix', async () => {
+    await load()
+    expect(mod.isReadPost(`${EU}/incubation/likes/for`)).toBe(true)
+    expect(mod.isReadPost(`${EU}/incubation/replies/for/`)).toBe(true)
+    expect(mod.isReadPost(`${EU}/incubation/authors?x=1`)).toBe(true)
+    expect(mod.isReadPost(`${EU}/incubation/likes`)).toBe(false)
+    expect(mod.isReadPost(`${EU}/incubation/likes/for/extra`)).toBe(false)
+    expect(mod.isReadPost(`${EU}/views`)).toBe(false)
+    expect(mod.isReadPost('not a url')).toBe(false)
+  })
+
   it('an ordinary error answer (404, 500) is the checker speaking: no bench, no retry', async () => {
     await load({ stored: { ranking: [US, EU], at: Date.now() } })
     const native = vi.fn().mockResolvedValue(json({}, 404))
