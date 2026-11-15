@@ -10,7 +10,7 @@ import { useEmbedUpload } from '../../context/EmbedUploadContext';
 import { usePremiumStatus } from '../../hooks/usePremiumStatus';
 import { getLockedBeneficiaries } from '../../utils/beneficiaries';
 import { remixChainAuthors } from '../../utils/remixChain';
-import { sanitizeMusicCredits, soundAuthorsOf } from '../../utils/soundCredits';
+import { sanitizeMusicCredits, soundAuthorsOf, withSoundCredit } from '../../utils/soundCredits';
 import { sanitizeChapters } from '../../utils/audioChapters';
 import { sanitizeAudiograms, playlistCoversOf } from '../../utils/audiogramShorts';
 import ShortTextModal from './ShortTextModal';
@@ -33,7 +33,9 @@ const audioToast = toastIn('Audio');
 // mode 'audio' opens the same editor as an audio editor (?mode=audio): `audioFile`
 // is loaded into it, and "Use this audio" hands the edited MP3 back to the audio
 // upload, either for its track `audioTrackId` or (from the share menu) as a new one.
-function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStart, clipEnd, originalAuthor, originalPermlink, originalShortPermlink, remixChain, videoFile, mode = 'video', audioFile = null, audioTrackId = null }) {
+// `sound` ({ url, name, credit }, a sound page's "Use this sound", lib/sounds.js): the
+// audio a new Short starts with, on the editor's music track, credited at publish.
+function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStart, clipEnd, originalAuthor, originalPermlink, originalShortPermlink, remixChain, videoFile, mode = 'video', audioFile = null, audioTrackId = null, sound = null }) {
   const audioMode = mode === 'audio';
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -48,6 +50,11 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
   // The editor keeps drafts of signed-in users and asks before closing
   // (editor-ready says canSaveDrafts); older editors get the plain confirm.
   const editorDraftsRef = useRef(false);
+  // The editor keeps a loaded sound's credit on its clip and sends it back with
+  // the render (editor-ready says canLoadSound); an older one drops it.
+  const editorKeepsSoundRef = useRef(false);
+  const soundRef = useRef(sound);
+  useEffect(() => { soundRef.current = sound; }, [sound]);
   const isPremium = !!premiumStatus?.premium;
   const [renderStatus, setRenderStatus] = useState(null); // null | 'sending' | 'rendering' | 'complete' | 'error' | 'preparing' | 'choose-target'
   // The editor's "Post to 3Speak" for someone who can post stories: held here
@@ -187,6 +194,7 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
           }
           setEditorReady(true);
           editorDraftsRef.current = !!data.canSaveDrafts;
+          editorKeepsSoundRef.current = !!data.canLoadSound;
           if (data.canSaveDrafts) sendDraftSession(false);
           if (audioMode) {
             // The track from the audio upload, posted as the File itself (a blob:
@@ -216,6 +224,11 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
             if (originalAuthor) msg.parentAuthor = originalAuthor;
             if (originalPermlink) msg.parentPermlink = originalPermlink;
             sendToEditor(msg);
+          } else if (sound?.url && !mediaLoadedRef.current) {
+            // "Use this sound": the sound on the music track, with its credit
+            // (`music` and `credit` are read by editors that say canLoadSound).
+            mediaLoadedRef.current = true;
+            sendToEditor({ type: 'load-media', url: sound.url, name: sound.name || 'Sound', mediaType: 'audio', music: true, credit: sound.credit });
           } else if (videoFile && !mediaLoadedRef.current) {
             // The creator's own file, from the shorts uploader. Posted as the File
             // itself: a blob: URL made here cannot be read from the editor's origin.
@@ -302,7 +315,7 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
     // a surprise popup on opening the studio.
     const sendDraftSession = async (interactive) => {
       const who = userRef.current;
-      const hasMedia = !!(videoUrl || videoFile || (audioMode && audioFile));
+      const hasMedia = !!(videoUrl || videoFile || sound?.url || (audioMode && audioFile));
       if (!who) {
         sendToEditor({ type: 'drafts-session', session: null, reason: 'logged-out', hasMedia });
         return;
@@ -364,7 +377,7 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
 
     window.addEventListener('message', handleMessage);
     return () => window.removeEventListener('message', handleMessage);
-  }, [isOpen, resolvedUrl, videoUrl, videoName, videoType, clipStart, clipEnd, sendToEditor, videoFile, audioMode, audioFile, audioTrackId, t]);
+  }, [isOpen, resolvedUrl, videoUrl, videoName, videoType, clipStart, clipEnd, sendToEditor, videoFile, audioMode, audioFile, audioTrackId, sound, t]);
 
   // While the editor is open, keys must not reach the page behind it (the
   // shorts page plays/pauses on Space and switches videos on the arrow keys).
@@ -556,7 +569,10 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
 
       // Songs from the editor's music library: credited in the post body and
       // metadata, and 3Speak sound creators get a locked 5% like remix authors
-      const musicCredits = sanitizeMusicCredits(rawMusicCredits);
+      // A Short made from a sound credits it (and its creator gets the 5% split)
+      // even where the editor could not carry the credit itself.
+      const fromSound = soundRef.current?.credit && !editorKeepsSoundRef.current ? soundRef.current.credit : null;
+      const musicCredits = withSoundCredit(rawMusicCredits, fromSound);
       setMusicCredits(musicCredits);
 
       // Remix from shorts should use the short upload form (no title/tags)

@@ -56,6 +56,20 @@ describe('useEditorLauncher', () => {
     expect(result.current).toMatchObject({ open: false, mode: 'audio', file: null, audioTrackId: null })
   })
 
+  it('a sound page\'s "Use this sound" opens the shorts editor with the sound, checked', () => {
+    const { result } = renderHook(() => useEditorLauncher())
+    const credit = { id: 'short_badadib_beat-1', title: 'Beat', source: '3speak', account: 'badadib' }
+    fire('open-shorts-editor', { sound: { url: 'https://play.example/hls?u=480', name: 'Beat', credit } })
+    expect(result.current).toMatchObject({ open: true, mode: 'video', sound: { url: 'https://play.example/hls?u=480', name: 'Beat', credit } })
+    fire('open-shorts-editor', { sound: { url: 'javascript:alert(1)', credit } })
+    expect(result.current.sound).toBeNull()
+    fire('open-shorts-editor', { sound: { url: 'https://x.example/a.mp3' } })
+    expect(result.current.sound).toBeNull()
+    fire('open-shorts-editor', { sound: { url: 'https://x.example/a.mp3', credit } })
+    act(() => result.current.close())
+    expect(result.current.sound).toBeNull()
+  })
+
   it('stops listening once unmounted', () => {
     const { result, unmount } = renderHook(() => useEditorLauncher())
     unmount()
