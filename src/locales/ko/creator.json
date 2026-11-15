@@ -1,0 +1,108 @@
+{
+  "content": {
+    "streams": "방송",
+    "audio": "오디오",
+    "podcasts": "팟캐스트"
+  },
+  "reach": {
+    "title": "도달",
+    "impressions": "노출",
+    "ctr": "클릭률",
+    "ctrShort": "CTR {{ctr}}",
+    "clicks": "카드 클릭",
+    "opens": "열람",
+    "empty": "이 기간에는 아직 노출이 없어요. 지금부터 내 카드가 누군가의 화면에 1초 동안 보일 때마다 집계돼요.",
+    "foundTitle": "시청자가 찾은 곳",
+    "shownTitle": "내 카드가 노출된 곳",
+    "since": "노출은 페이지 조회 샘플로 집계한 뒤 전체 규모로 환산해요. {{date}}부터 집계를 시작했어요.",
+    "sampled": "노출은 페이지 조회 샘플로 집계한 뒤 전체 규모로 환산해요.",
+    "detail": "노출 {{impressions}}회 · CTR {{ctr}}"
+  },
+  "sources": {
+    "home": "홈",
+    "discover": "탐색",
+    "following": "팔로잉",
+    "new": "최신",
+    "trending": "인기",
+    "interests": "관심사",
+    "search": "검색",
+    "channel": "채널 페이지",
+    "related": "다른 영상 옆",
+    "shorts": "쇼츠",
+    "playlist": "재생목록",
+    "tag": "태그",
+    "community": "커뮤니티",
+    "other": "3Speak의 다른 곳",
+    "direct": "직접 또는 알 수 없음",
+    "search_engine": "검색 엔진",
+    "social": "소셜 미디어",
+    "hive_apps": "다른 Hive 앱",
+    "external": "다른 웹사이트",
+    "embed": "다른 사이트의 임베드"
+  },
+  "earnings": {
+    "title": "수익",
+    "empty": "이 기간에는 아직 수익이 없어요.",
+    "unavailable": "지금은 수익을 불러올 수 없어요. 잠시 후 다시 시도해 주세요.",
+    "chartLabel": "{{days}}일 동안의 일별 수익, 출처별 누적",
+    "lastYear": "전체는 최근 12개월을 보여줘요.",
+    "note": "HBD 기준(약 1미국 달러). Hive 보상과 HIVE 팁은 오늘의 HIVE 가격으로 환산하고, Lightning은 sats로 표시해요.",
+    "sats_other": "{{count}} sats",
+    "sources": {
+      "votes": "투표",
+      "curation": "큐레이션",
+      "tips": "팁",
+      "ads": "광고",
+      "boosts": "방송 부스트",
+      "lightning": "Lightning"
+    }
+  },
+  "export": {
+    "daily": "일별 수익 내보내기 (CSV)",
+    "content": "콘텐츠 표 내보내기 (CSV)",
+    "cols": {
+      "date": "날짜",
+      "total": "합계",
+      "title": "제목",
+      "url": "링크",
+      "published": "게시일",
+      "watchSeconds": "시청 시간(초)",
+      "earned": "투표 수익"
+    }
+  },
+  "inbox": {
+    "tab": "댓글",
+    "menu": "댓글함",
+    "title": "댓글함",
+    "sub_other": "최근 {{count}}일 동안 내 게시물에 달린 댓글이에요.",
+    "filtersLabel": "다음만 보기",
+    "views": {
+      "unanswered": "답글 없음",
+      "all": "전체",
+      "done": "완료"
+    },
+    "flags": {
+      "question": "질문",
+      "firstTime": "첫 댓글",
+      "supporter": "후원자"
+    },
+    "answered": "답글 완료",
+    "onPost": "게시물:",
+    "onReply": "내 댓글에 단 답글:",
+    "reply": "답글",
+    "replyVideo": "영상으로 답글",
+    "replyTo": "@{{author}}님에게 답글",
+    "send": "보내기",
+    "replied": "답글이 Hive에 올라갔어요.",
+    "replyFailed": "답글을 올리지 못했어요. 다시 시도해 주세요.",
+    "markDone": "완료로 표시",
+    "undone": "실행 취소",
+    "doneToast": "완료로 표시했어요.",
+    "doneFailed": "저장하지 못했어요. 다시 시도해 주세요.",
+    "error": "댓글을 불러오지 못했어요.",
+    "retry": "다시 시도",
+    "allAnswered": "모두에게 답글을 남겼어요.",
+    "empty": "여기에는 댓글이 없어요.",
+    "supportersNote": "후원자는 최근 12개월 동안 내 게시물에 투표했거나 3Speak에서 팁을 보낸 사람이에요. 첫 댓글은 내 게시물에 처음 남긴 댓글이라는 뜻이에요."
+  }
+}

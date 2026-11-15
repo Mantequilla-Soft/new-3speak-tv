@@ -1,0 +1,112 @@
+{
+  "content": {
+    "streams": "Lives",
+    "audio": "Audio",
+    "podcasts": "Podcasts"
+  },
+  "reach": {
+    "title": "Portée",
+    "impressions": "Impressions",
+    "ctr": "Taux de clics",
+    "ctrShort": "CTR {{ctr}}",
+    "clicks": "Clics depuis les cartes",
+    "opens": "Ouvertures",
+    "empty": "Aucune impression sur cette période pour l'instant. Elles sont comptées à partir de maintenant chaque fois qu'une de vos cartes reste une seconde à l'écran de quelqu'un.",
+    "foundTitle": "Où les spectateurs l'ont trouvée",
+    "shownTitle": "Où vos cartes ont été affichées",
+    "since": "Les impressions sont comptées sur un échantillon de pages vues puis extrapolées. Le comptage a commencé le {{date}}.",
+    "sampled": "Les impressions sont comptées sur un échantillon de pages vues puis extrapolées.",
+    "detail": "{{impressions}} impressions · CTR {{ctr}}"
+  },
+  "sources": {
+    "home": "Accueil",
+    "discover": "Découvrir",
+    "following": "Abonnements",
+    "new": "Nouveautés",
+    "trending": "Tendances",
+    "interests": "Centres d'intérêt",
+    "search": "Recherche",
+    "channel": "Pages de chaîne",
+    "related": "À côté d'autres vidéos",
+    "shorts": "Shorts",
+    "playlist": "Playlists",
+    "tag": "Tags",
+    "community": "Communautés",
+    "other": "Ailleurs sur 3Speak",
+    "direct": "Direct ou inconnu",
+    "search_engine": "Moteurs de recherche",
+    "social": "Réseaux sociaux",
+    "hive_apps": "Autres apps Hive",
+    "external": "Autres sites web",
+    "embed": "Intégrations sur d'autres sites"
+  },
+  "earnings": {
+    "title": "Gains",
+    "empty": "Aucun gain sur cette période pour l'instant.",
+    "unavailable": "Impossible de charger les gains pour le moment. Réessayez dans une minute.",
+    "chartLabel": "Gains par jour sur {{days}} jours, empilés par source",
+    "lastYear": "Tout affiche les 12 derniers mois.",
+    "note": "En HBD (environ un dollar américain). Les récompenses Hive et les pourboires en HIVE sont valorisés au cours actuel du HIVE, Lightning reste en sats.",
+    "sats_one": "{{count}} sat",
+    "sats_many": "{{count}} sats",
+    "sats_other": "{{count}} sats",
+    "sources": {
+      "votes": "Votes",
+      "curation": "Curation",
+      "tips": "Pourboires",
+      "ads": "Pubs",
+      "boosts": "Boosts en live",
+      "lightning": "Lightning"
+    }
+  },
+  "export": {
+    "daily": "Exporter les gains par jour (CSV)",
+    "content": "Exporter le tableau des contenus (CSV)",
+    "cols": {
+      "date": "Date",
+      "total": "Total",
+      "title": "Titre",
+      "url": "Lien",
+      "published": "Publié",
+      "watchSeconds": "Durée de visionnage (secondes)",
+      "earned": "Gagné grâce aux votes"
+    }
+  },
+  "inbox": {
+    "tab": "Commentaires",
+    "menu": "Boîte des commentaires",
+    "title": "Boîte des commentaires",
+    "sub_one": "Commentaires sur vos publications du dernier {{count}} jour.",
+    "sub_many": "Commentaires sur vos publications des {{count}} derniers jours.",
+    "sub_other": "Commentaires sur vos publications des {{count}} derniers jours.",
+    "filtersLabel": "Afficher seulement",
+    "views": {
+      "unanswered": "Sans réponse",
+      "all": "Tous",
+      "done": "Traités"
+    },
+    "flags": {
+      "question": "Questions",
+      "firstTime": "Première fois",
+      "supporter": "Soutiens"
+    },
+    "answered": "Répondu",
+    "onPost": "sur",
+    "onReply": "vous a répondu sur",
+    "reply": "Répondre",
+    "replyVideo": "Répondre en vidéo",
+    "replyTo": "Répondre à @{{author}}",
+    "send": "Envoyer",
+    "replied": "Votre réponse est sur Hive.",
+    "replyFailed": "La réponse n'a pas pu être publiée. Réessayez.",
+    "markDone": "Marquer comme traité",
+    "undone": "Annuler",
+    "doneToast": "Marqué comme traité.",
+    "doneFailed": "Impossible d'enregistrer. Réessayez.",
+    "error": "Les commentaires n'ont pas pu être chargés.",
+    "retry": "Réessayer",
+    "allAnswered": "Vous avez répondu à tout le monde.",
+    "empty": "Aucun commentaire ici.",
+    "supportersNote": "Les soutiens ont voté pour vos publications ces 12 derniers mois ou vous ont laissé un pourboire sur 3Speak. Première fois signifie leur premier commentaire sur l'une de vos publications."
+  }
+}

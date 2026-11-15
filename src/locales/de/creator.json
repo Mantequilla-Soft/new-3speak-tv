@@ -1,0 +1,110 @@
+{
+  "content": {
+    "streams": "Streams",
+    "audio": "Audio",
+    "podcasts": "Podcasts"
+  },
+  "reach": {
+    "title": "Reichweite",
+    "impressions": "Impressionen",
+    "ctr": "Klickrate",
+    "ctrShort": "CTR {{ctr}}",
+    "clicks": "Klicks auf Karten",
+    "opens": "Öffnungen",
+    "empty": "In diesem Zeitraum noch keine Impressionen. Ab jetzt wird jedes Mal gezählt, wenn eine deiner Karten eine Sekunde lang auf jemandes Bildschirm ist.",
+    "foundTitle": "Wo Zuschauer es gefunden haben",
+    "shownTitle": "Wo deine Karten angezeigt wurden",
+    "since": "Impressionen werden aus einer Stichprobe der Seitenaufrufe gezählt und hochgerechnet. Die Zählung begann am {{date}}.",
+    "sampled": "Impressionen werden aus einer Stichprobe der Seitenaufrufe gezählt und hochgerechnet.",
+    "detail": "{{impressions}} Impressionen · CTR {{ctr}}"
+  },
+  "sources": {
+    "home": "Startseite",
+    "discover": "Entdecken",
+    "following": "Folge ich",
+    "new": "Neu",
+    "trending": "Trends",
+    "interests": "Interessen",
+    "search": "Suche",
+    "channel": "Kanalseiten",
+    "related": "Neben anderen Videos",
+    "shorts": "Shorts",
+    "playlist": "Playlists",
+    "tag": "Tags",
+    "community": "Communitys",
+    "other": "Woanders auf 3Speak",
+    "direct": "Direkt oder unbekannt",
+    "search_engine": "Suchmaschinen",
+    "social": "Soziale Medien",
+    "hive_apps": "Andere Hive-Apps",
+    "external": "Andere Websites",
+    "embed": "Eingebettet auf anderen Seiten"
+  },
+  "earnings": {
+    "title": "Einnahmen",
+    "empty": "In diesem Zeitraum noch keine Einnahmen.",
+    "unavailable": "Die Einnahmen konnten gerade nicht geladen werden. Versuch es in einer Minute nochmal.",
+    "chartLabel": "Einnahmen pro Tag über {{days}} Tage, gestapelt nach Quelle",
+    "lastYear": "Alle zeigt die letzten 12 Monate.",
+    "note": "In HBD (etwa ein US-Dollar). Hive-Belohnungen und HIVE-Tips werden zum heutigen HIVE-Kurs bewertet, Lightning bleibt in sats.",
+    "sats_one": "{{count}} sat",
+    "sats_other": "{{count}} sats",
+    "sources": {
+      "votes": "Votes",
+      "curation": "Kuration",
+      "tips": "Tips",
+      "ads": "Werbung",
+      "boosts": "Stream-Boosts",
+      "lightning": "Lightning"
+    }
+  },
+  "export": {
+    "daily": "Tägliche Einnahmen exportieren (CSV)",
+    "content": "Inhaltstabelle exportieren (CSV)",
+    "cols": {
+      "date": "Datum",
+      "total": "Gesamt",
+      "title": "Titel",
+      "url": "Link",
+      "published": "Veröffentlicht",
+      "watchSeconds": "Wiedergabezeit (Sekunden)",
+      "earned": "Verdient durch Votes"
+    }
+  },
+  "inbox": {
+    "tab": "Kommentare",
+    "menu": "Kommentar-Postfach",
+    "title": "Kommentar-Postfach",
+    "sub_one": "Kommentare zu deinen Posts vom letzten {{count}} Tag.",
+    "sub_other": "Kommentare zu deinen Posts aus den letzten {{count}} Tagen.",
+    "filtersLabel": "Nur anzeigen",
+    "views": {
+      "unanswered": "Unbeantwortet",
+      "all": "Alle",
+      "done": "Erledigt"
+    },
+    "flags": {
+      "question": "Fragen",
+      "firstTime": "Zum ersten Mal",
+      "supporter": "Unterstützer"
+    },
+    "answered": "Beantwortet",
+    "onPost": "zu",
+    "onReply": "hat dir geantwortet bei",
+    "reply": "Antworten",
+    "replyVideo": "Mit einem Video antworten",
+    "replyTo": "@{{author}} antworten",
+    "send": "Senden",
+    "replied": "Deine Antwort ist auf Hive.",
+    "replyFailed": "Die Antwort konnte nicht gepostet werden. Versuch es nochmal.",
+    "markDone": "Als erledigt markieren",
+    "undone": "Rückgängig",
+    "doneToast": "Als erledigt markiert.",
+    "doneFailed": "Konnte nicht gespeichert werden. Versuch es nochmal.",
+    "error": "Die Kommentare konnten nicht geladen werden.",
+    "retry": "Nochmal versuchen",
+    "allAnswered": "Du hast allen geantwortet.",
+    "empty": "Hier gibt es keine Kommentare.",
+    "supportersNote": "Unterstützer haben in den letzten 12 Monaten für deine Posts gevotet oder dir auf 3Speak ein Tip gegeben. Zum ersten Mal heißt: ihr erster Kommentar unter einem deiner Posts."
+  }
+}

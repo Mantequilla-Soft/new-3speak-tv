@@ -1,0 +1,110 @@
+{
+  "content": {
+    "streams": "Yayınlar",
+    "audio": "Ses",
+    "podcasts": "Podcast’ler"
+  },
+  "reach": {
+    "title": "Erişim",
+    "impressions": "Gösterimler",
+    "ctr": "Tıklama oranı (CTR)",
+    "ctrShort": "CTR {{ctr}}",
+    "clicks": "Kartlardan tıklamalar",
+    "opens": "Açılmalar",
+    "empty": "Bu aralıkta henüz gösterim yok. Bundan sonra kartlarından biri birinin ekranında bir saniye kaldığında sayılıyor.",
+    "foundTitle": "İzleyiciler nerede buldu",
+    "shownTitle": "Kartların nerede gösterildi",
+    "since": "Gösterimler sayfa görüntülemelerinden alınan bir örneklemle sayılıp ölçeklenir. Sayım {{date}} tarihinde başladı.",
+    "sampled": "Gösterimler sayfa görüntülemelerinden alınan bir örneklemle sayılıp ölçeklenir.",
+    "detail": "{{impressions}} gösterim · CTR {{ctr}}"
+  },
+  "sources": {
+    "home": "Ana sayfa",
+    "discover": "Keşfet",
+    "following": "Takip edilenler",
+    "new": "Yeni",
+    "trending": "Trendler",
+    "interests": "İlgi alanları",
+    "search": "Arama",
+    "channel": "Kanal sayfaları",
+    "related": "Diğer videoların yanında",
+    "shorts": "Shorts",
+    "playlist": "Oynatma listeleri",
+    "tag": "Etiketler",
+    "community": "Topluluklar",
+    "other": "3Speak’te başka bir yer",
+    "direct": "Doğrudan veya bilinmiyor",
+    "search_engine": "Arama motorları",
+    "social": "Sosyal medya",
+    "hive_apps": "Diğer Hive uygulamaları",
+    "external": "Diğer web siteleri",
+    "embed": "Diğer sitelere gömülü"
+  },
+  "earnings": {
+    "title": "Kazançlar",
+    "empty": "Bu aralıkta henüz kazanç yok.",
+    "unavailable": "Kazançlar şu anda yüklenemedi. Bir dakika sonra tekrar dene.",
+    "chartLabel": "{{days}} gün boyunca günlük kazançlar, kaynağa göre",
+    "lastYear": "Tümü son 12 ayı gösterir.",
+    "note": "HBD cinsinden (yaklaşık bir ABD doları). Hive ödülleri ve HIVE bahşişleri bugünkü HIVE fiyatıyla hesaplanır, Lightning sats olarak kalır.",
+    "sats_one": "{{count}} sat",
+    "sats_other": "{{count}} sats",
+    "sources": {
+      "votes": "Oylar",
+      "curation": "Küratörlük",
+      "tips": "Bahşişler",
+      "ads": "Reklamlar",
+      "boosts": "Yayın boost’ları",
+      "lightning": "Lightning"
+    }
+  },
+  "export": {
+    "daily": "Günlük kazançları dışa aktar (CSV)",
+    "content": "İçerik tablosunu dışa aktar (CSV)",
+    "cols": {
+      "date": "Tarih",
+      "total": "Toplam",
+      "title": "Başlık",
+      "url": "Bağlantı",
+      "published": "Yayınlanma",
+      "watchSeconds": "İzlenme süresi (saniye)",
+      "earned": "Oylardan kazanılan"
+    }
+  },
+  "inbox": {
+    "tab": "Yorumlar",
+    "menu": "Yorum kutusu",
+    "title": "Yorum kutusu",
+    "sub_one": "Gönderilerine son {{count}} günde gelen yorumlar.",
+    "sub_other": "Gönderilerine son {{count}} günde gelen yorumlar.",
+    "filtersLabel": "Yalnızca göster",
+    "views": {
+      "unanswered": "Yanıtlanmamış",
+      "all": "Tümü",
+      "done": "Tamamlanan"
+    },
+    "flags": {
+      "question": "Sorular",
+      "firstTime": "İlk kez",
+      "supporter": "Destekçiler"
+    },
+    "answered": "Yanıtlandı",
+    "onPost": "şurada:",
+    "onReply": "sana şurada yanıt verdi:",
+    "reply": "Yanıtla",
+    "replyVideo": "Videoyla yanıtla",
+    "replyTo": "@{{author}} kullanıcısına yanıt ver",
+    "send": "Gönder",
+    "replied": "Yanıtın Hive’da.",
+    "replyFailed": "Yanıt gönderilemedi. Tekrar dene.",
+    "markDone": "Tamamlandı olarak işaretle",
+    "undone": "Geri al",
+    "doneToast": "Tamamlandı olarak işaretlendi.",
+    "doneFailed": "Kaydedilemedi. Tekrar dene.",
+    "error": "Yorumlar yüklenemedi.",
+    "retry": "Tekrar dene",
+    "allAnswered": "Herkese yanıt verdin.",
+    "empty": "Burada yorum yok.",
+    "supportersNote": "Destekçiler son 12 ayda gönderilerine oy verdi veya sana 3Speak’te bahşiş gönderdi. İlk kez, gönderilerinden herhangi birine yaptıkları ilk yorum demektir."
+  }
+}
