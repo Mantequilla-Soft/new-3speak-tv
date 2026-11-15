@@ -1338,6 +1338,11 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
   }, [community_id, joinBusy, authenticated, incubationHandle, communitySubscribed, comunity_name, t]);
 
   // Loading state - show loader if essential data is missing
+  // The post's boost wall (lib/boosts.js): a Hive post that is out, not a stream.
+  // A hook, so it stays above the loading return below.
+  const hasBoosts = !scheduled && !isLive && !postIsOffChain;
+  const boostWall = useBoostWall(author, permlink, hasBoosts);
+
   if (!videoDetails) {
     return <BarLoader />;
   }
@@ -1540,9 +1545,6 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
       {t('watch.actions.support', { name: videoDetails?.author?.id || author })}
     </UiButton>
   ) : null;
-  // The post's boost wall (lib/boosts.js): a Hive post that is out, not a stream.
-  const hasBoosts = !scheduled && !isLive && !postIsOffChain;
-  const boostWall = useBoostWall(author, permlink, hasBoosts);
   const boostCount = boostWall.data?.count || undefined;
   const openBoost = () => { videoControls?.onPause?.(); setIsBoostOpen(true); };
   const boostsPane = hasBoosts ? (
