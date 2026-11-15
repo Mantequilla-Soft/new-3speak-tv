@@ -1,0 +1,30 @@
+{
+  "studio": {
+    "title": "ライブ字幕",
+    "toggle": "視聴者にライブ字幕を表示",
+    "hint": "配信中はマイクの音声が文字になります。視聴者は字幕をオンにでき、多くのブラウザが視聴者の言語に翻訳します。",
+    "language": "話す言語",
+    "onlyLanguage": "字幕が認識できるのは{lang}のみです。",
+    "statusOff": "オフ",
+    "statusWaiting": "配信を始めると開始します。",
+    "statusMicOff": "字幕にはマイクをオンにしてください。",
+    "statusStarting": "字幕を開始中…",
+    "statusOn": "字幕はオンです。",
+    "statusFull": "現在、字幕の枠はすべて使用中です。1分後にもう一度試します。",
+    "statusUnavailable": "現在ライブ字幕は利用できません。",
+    "statusError": "音声サービスに接続できないため字幕が止まりました。オフにしてからオンにすると再試行します。"
+  },
+  "viewer": {
+    "translatedFrom": "端末上で{lang}から翻訳",
+    "showOriginal": "原文を表示",
+    "translateTo": "{lang}に翻訳",
+    "noTranslator": "{lang}：このブラウザは字幕を翻訳できません",
+    "label": "字幕",
+    "show": "ライブ字幕を表示",
+    "hide": "ライブ字幕を非表示"
+  },
+  "vod": {
+    "saved": "ライブ字幕がアーカイブに字幕として追加されました。",
+    "failed": "ライブ字幕をアーカイブに追加できませんでした。"
+  }
+}

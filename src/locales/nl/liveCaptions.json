@@ -1,0 +1,30 @@
+{
+  "studio": {
+    "title": "Live ondertiteling",
+    "toggle": "Live ondertiteling tonen aan kijkers",
+    "hint": "Terwijl je live bent, wordt je microfoon omgezet in tekst. Kijkers kunnen ondertiteling aanzetten en veel browsers vertalen die naar de taal van de kijker.",
+    "language": "Taal die je spreekt",
+    "onlyLanguage": "Ondertiteling begrijpt alleen deze taal: {lang}.",
+    "statusOff": "Uit",
+    "statusWaiting": "Start zodra je live gaat.",
+    "statusMicOff": "Zet je microfoon aan voor ondertiteling.",
+    "statusStarting": "Ondertiteling starten…",
+    "statusOn": "Ondertiteling staat aan.",
+    "statusFull": "Alle plekken voor ondertiteling zijn nu bezet. Over een minuut proberen we het opnieuw.",
+    "statusUnavailable": "Live ondertiteling is nu niet beschikbaar.",
+    "statusError": "De ondertiteling is gestopt omdat de spraakdienst niet bereikbaar was. Zet hem uit en weer aan om het opnieuw te proberen."
+  },
+  "viewer": {
+    "translatedFrom": "Op je apparaat vertaald uit het {lang}",
+    "showOriginal": "Origineel tonen",
+    "translateTo": "Vertalen naar het {lang}",
+    "noTranslator": "In het {lang}: deze browser kan ondertiteling niet vertalen",
+    "label": "Ondertiteling",
+    "show": "Live ondertiteling tonen",
+    "hide": "Live ondertiteling verbergen"
+  },
+  "vod": {
+    "saved": "Je live ondertiteling is als ondertitels aan de herhaling toegevoegd.",
+    "failed": "De live ondertiteling kon niet aan de herhaling worden toegevoegd."
+  }
+}

@@ -10,6 +10,7 @@ import LiveAdLayer from '../openpods/LiveAdLayer';
 import StreamFullscreenButton from '../openpods/StreamFullscreenButton';
 import StreamWatermark from '../openpods/StreamWatermark';
 import { useBoostLabels } from '../openpods/boostLabels';
+import { LiveCaptionsOverlay, LiveCaptionsToggle, useCaptionsPref } from '../openpods/LiveCaptions';
 import '@snapie/hangouts-react/src/styles/hangouts.css';
 import './LiveStreamPlayer.scss';
 import { Icon } from '../v2/Icon';
@@ -93,6 +94,8 @@ export default function LiveStreamPlayer({ roomName, chatSlot = null, onChatSent
   const [prerollHold, setPrerollHold] = useState(false);
   // The goal bar <StreamVideo> draws over the picture, in the site language.
   const boostLabels = useBoostLabels();
+  // H11: the viewer's live captions switch (shown only while the host captions).
+  const [captionsOn, toggleCaptions] = useCaptionsPref();
 
   if (!roomName) return null;
   return (
@@ -120,6 +123,8 @@ export default function LiveStreamPlayer({ roomName, chatSlot = null, onChatSent
               <span className="live-stream-player__viewers">{t('comments.live.watching', { count: c })}</span>
             )} />
             <StreamBoostButton variant="overlay" />
+            <LiveCaptionsOverlay show={captionsOn} />
+            <LiveCaptionsToggle variant="overlay" on={captionsOn} onToggle={toggleCaptions} />
             <StreamFullscreenButton />
             <div className="live-stream-player__collab">
               {needsSignIn

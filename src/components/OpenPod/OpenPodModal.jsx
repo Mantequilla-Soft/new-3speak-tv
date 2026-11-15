@@ -16,6 +16,7 @@ import { defaultEndpoint, findRoomEndpoint } from '../../utils/hangoutsEndpoints
 import { storiesEnabledFor } from '../../utils/config';
 import StreamStoryPrompt from '../openpods/StreamStoryPrompt';
 import AnnounceOptions from '../openpods/AnnounceOptions';
+import { useStudioCaptionsOptions, saveStreamCaptions } from '../openpods/studioCaptions';
 import { Button, Icon } from '../v2/ui';
 import './OpenPodModal.scss';
 
@@ -68,6 +69,8 @@ export default function OpenPodModal({ isOpen, onClose, roomName, sessionToken, 
   const hhTheme = useAppStore((s) => s.getEffectiveTheme());
   const premiumStatus = usePremiumStatus(username);
   const isPremium = !!premiumStatus?.premium;
+  // H11: what the studio needs to offer live captions (undefined = not offered).
+  const studioCaptions = useStudioCaptionsOptions(username, isOpen);
   // Owned here so the studio can react: with no announcement there's no post
   // for a VOD to replace, so that option is hidden and inert.
   const [announceEnabled, setAnnounceEnabled] = useState(() => getAnnounceConfig().announceEnabled !== false);
@@ -255,6 +258,8 @@ export default function OpenPodModal({ isOpen, onClose, roomName, sessionToken, 
               // video. Fire-and-forget into a module-level publisher so the
               // upload survives this modal unmounting when the room ends.
               onStreamVod={(file) => {
+                // H11: the live captions become the replay's subtitles.
+                void saveStreamCaptions({ author: username, permlink: file.roomName || roomName, captions: file.captions });
                 // Normal path: the server publishes the VOD itself, even after
                 // the host closes the tab, so there's nothing to show here.
                 if (file.publishStatusUrl) return;
@@ -274,6 +279,8 @@ export default function OpenPodModal({ isOpen, onClose, roomName, sessionToken, 
               }}
               canPublishVod={announceEnabled && !isUnlisted}
               isUnlisted={isUnlisted}
+              // H11 live captions: host opt-in, off by default (studio Settings tab).
+              captions={studioCaptions}
               renderPostExtras={(
                 <>
                 {/* Announce upfront (owner 2026-11-13): a story before going

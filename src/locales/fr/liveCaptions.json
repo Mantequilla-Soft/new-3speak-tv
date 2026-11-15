@@ -1,0 +1,30 @@
+{
+  "studio": {
+    "title": "Sous-titres en direct",
+    "toggle": "Afficher les sous-titres en direct aux spectateurs",
+    "hint": "Pendant que vous êtes en direct, votre micro est transformé en texte. Les spectateurs peuvent activer les sous-titres, et de nombreux navigateurs les traduisent dans leur langue.",
+    "language": "Langue que vous parlez",
+    "onlyLanguage": "Les sous-titres ne comprennent que cette langue : {lang}.",
+    "statusOff": "Désactivés",
+    "statusWaiting": "Démarrent quand vous passez en direct.",
+    "statusMicOff": "Activez votre micro pour les sous-titres.",
+    "statusStarting": "Démarrage des sous-titres…",
+    "statusOn": "Les sous-titres sont activés.",
+    "statusFull": "Toutes les places de sous-titres sont prises pour le moment. Nouvel essai dans une minute.",
+    "statusUnavailable": "Les sous-titres en direct ne sont pas disponibles pour le moment.",
+    "statusError": "Les sous-titres se sont arrêtés car le service vocal est injoignable. Désactivez-les puis réactivez-les pour réessayer."
+  },
+  "viewer": {
+    "translatedFrom": "Traduit de : {lang}, sur votre appareil",
+    "showOriginal": "Voir l'original",
+    "translateTo": "Traduire en {lang}",
+    "noTranslator": "En {lang} : ce navigateur ne peut pas traduire les sous-titres",
+    "label": "Sous-titres",
+    "show": "Afficher les sous-titres en direct",
+    "hide": "Masquer les sous-titres en direct"
+  },
+  "vod": {
+    "saved": "Vos sous-titres en direct ont été ajoutés au replay.",
+    "failed": "Impossible d'ajouter les sous-titres en direct au replay."
+  }
+}

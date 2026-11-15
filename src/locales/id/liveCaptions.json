@@ -1,0 +1,30 @@
+{
+  "studio": {
+    "title": "Teks langsung",
+    "toggle": "Tampilkan teks langsung ke penonton",
+    "hint": "Saat kamu live, suara mikrofonmu diubah menjadi teks. Penonton bisa menyalakan teks, dan banyak browser menerjemahkannya ke bahasa penonton.",
+    "language": "Bahasa yang kamu ucapkan",
+    "onlyLanguage": "Teks hanya memahami bahasa {lang}.",
+    "statusOff": "Mati",
+    "statusWaiting": "Mulai saat kamu live.",
+    "statusMicOff": "Nyalakan mikrofon untuk teks.",
+    "statusStarting": "Memulai teks…",
+    "statusOn": "Teks menyala.",
+    "statusFull": "Semua slot teks sedang terpakai. Dicoba lagi dalam satu menit.",
+    "statusUnavailable": "Teks langsung sedang tidak tersedia.",
+    "statusError": "Teks berhenti karena layanan suara tidak dapat dijangkau. Matikan lalu nyalakan lagi untuk mencoba ulang."
+  },
+  "viewer": {
+    "translatedFrom": "Diterjemahkan dari bahasa {lang} di perangkatmu",
+    "showOriginal": "Lihat asli",
+    "translateTo": "Terjemahkan ke bahasa {lang}",
+    "noTranslator": "Dalam bahasa {lang}: browser ini tidak bisa menerjemahkan teks",
+    "label": "Teks",
+    "show": "Tampilkan teks langsung",
+    "hide": "Sembunyikan teks langsung"
+  },
+  "vod": {
+    "saved": "Teks langsungmu ditambahkan ke rekaman sebagai subtitle.",
+    "failed": "Teks langsung tidak dapat ditambahkan ke rekaman."
+  }
+}

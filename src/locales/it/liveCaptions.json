@@ -1,0 +1,30 @@
+{
+  "studio": {
+    "title": "Sottotitoli dal vivo",
+    "toggle": "Mostra i sottotitoli dal vivo agli spettatori",
+    "hint": "Mentre sei in diretta, il tuo microfono viene trasformato in testo. Gli spettatori possono attivare i sottotitoli e molti browser li traducono nella loro lingua.",
+    "language": "Lingua che parli",
+    "onlyLanguage": "I sottotitoli capiscono solo questa lingua: {lang}.",
+    "statusOff": "Disattivati",
+    "statusWaiting": "Partono quando vai in diretta.",
+    "statusMicOff": "Accendi il microfono per i sottotitoli.",
+    "statusStarting": "Avvio dei sottotitoli…",
+    "statusOn": "I sottotitoli sono attivi.",
+    "statusFull": "Tutti i posti per i sottotitoli sono occupati. Riproviamo tra un minuto.",
+    "statusUnavailable": "I sottotitoli dal vivo non sono disponibili al momento.",
+    "statusError": "I sottotitoli si sono fermati perché il servizio vocale non è raggiungibile. Disattivali e riattivali per riprovare."
+  },
+  "viewer": {
+    "translatedFrom": "Tradotto sul tuo dispositivo (originale: {lang})",
+    "showOriginal": "Mostra originale",
+    "translateTo": "Traduci in {lang}",
+    "noTranslator": "In {lang}: questo browser non può tradurre i sottotitoli",
+    "label": "Sottotitoli",
+    "show": "Mostra sottotitoli dal vivo",
+    "hide": "Nascondi sottotitoli dal vivo"
+  },
+  "vod": {
+    "saved": "I tuoi sottotitoli dal vivo sono stati aggiunti alla replica.",
+    "failed": "Non è stato possibile aggiungere i sottotitoli dal vivo alla replica."
+  }
+}
