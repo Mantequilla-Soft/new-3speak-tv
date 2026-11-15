@@ -334,6 +334,28 @@ describe('the post\'s community, tags and payout', () => {
     ] }]])
   })
 
+  it('a collaborator is named in the metadata, gets half the creator\'s share, and is invited', async () => {
+    const { result } = await ready((c) => c.setCollaborator({ account: 'fan', split: 50 }))
+    await publish(result)
+    expect(meta().collaborators).toEqual(['fan'])
+    // 100 % minus the locked 11 % = 89 %, half of it 44.5 %.
+    expect(optionsOp().extensions).toEqual([[0, { beneficiaries: [
+      { account: 'encoder.pay', weight: 100 },
+      { account: 'fan', weight: 4450 },
+      { account: 'threespeakfund', weight: 1000 },
+    ] }]])
+    await waitFor(() => expect(fetchTo('/collabs/register')).toHaveLength(1))
+    expect(JSON.parse(fetchTo('/collabs/register')[0][1].body)).toEqual({ author: 'badadib', permlink: PERMLINK })
+  })
+
+  it('the creator can never be their own collaborator', async () => {
+    const { result } = await ready((c) => c.setCollaborator({ account: 'badadib', split: 50 }))
+    await publish(result)
+    expect(meta().collaborators).toBeUndefined()
+    expect(optionsOp().extensions).toEqual([[0, { beneficiaries: LOCKED_SPLITS }]])
+    expect(fetchTo('/collabs/register')).toHaveLength(0)
+  })
+
   it('unreadable beneficiaries fall back to the locked ones', async () => {
     const { result } = await ready((c) => c.setBeneficiaries('{not json'))
     await publish(result)

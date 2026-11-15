@@ -1,4 +1,5 @@
 import PropTypes from "prop-types";
+import WatchCollaborators from './WatchCollaborators';
 import { getHiveUrl } from '../../utils/hiveNode';
 import "./PlayVideo.scss";
 import VideoControls from "../VideoControls/VideoControls";
@@ -1988,6 +1989,8 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                 <span>{t('nav.search.views', { count: view || 0, formatted: compactNumber(view || 0) })}</span>
                 <span aria-hidden="true">·</span>
                 <span>{formatRelativeTime(videoDetails?.created_at)}</span>
+                {/* Collab post: "with @fan" once the co-creator accepted. */}
+                {!postIsOffChain && !scheduled && <WatchCollaborators author={author} permlink={permlink} />}
                 {!postIsOffChain && !scheduled && (
                   <>
                     <span aria-hidden="true">·</span>

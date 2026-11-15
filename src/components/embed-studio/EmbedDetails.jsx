@@ -4,6 +4,7 @@ import OriginalContentNotice from '../OriginalContentNotice/OriginalContentNotic
 import { StepProgress } from '../legacy-studio/StepProgress';
 import CommunityModal from "../modal/Community_modal";
 import Beneficiary_modal from '../modal/Beneficiary_modal';
+import CollabModal from './CollabModal';
 import { Navigate } from 'react-router-dom';
 import { useEmbedUpload } from '../../context/EmbedUploadContext';
 import { useAppStore } from '../../lib/store';
@@ -117,6 +118,7 @@ function EmbedDetails() {
     gatedAllowlist, setGatedAllowlist,
     user,
     isChannelTrailer, setIsChannelTrailer,
+    collaborator, setCollaborator,
     originalAuthor, originalPermlink,
     startEarlyUpload,
   } = useEmbedUpload();
@@ -253,6 +255,8 @@ function EmbedDetails() {
   useEffect(() => {
     setStep(3)
   }, [])
+  // "Add a collaborator" dialog (CollabModal.jsx). Above the early return below.
+  const [collabOpen, setCollabOpen] = useState(false);
 
   // 🔧 TEMPORARY DEV HACK — remove with the other ?devstep handling.
   // /embed-studio/details?devstep=3 renders the form with no upload behind it,
@@ -529,6 +533,10 @@ function EmbedDetails() {
   const nextLabel = t('upload.details.nextStep', { step: fromStories ? t('upload.steps.previewUpload') : t('upload.steps.timeline') });
   actions.primary = [{ key: 'proceed', label: nextLabel, onClick: process }];
 
+  // "Add a collaborator" (lib/collabs.js): the creator's own share now, for the
+  // modal's preview of the split.
+  const creatorPercent = Math.max(0, 100 - (list || []).reduce((n, b) => n + (Number(b.percent) || 0), 0));
+
   const settingRows = [
     !fromStories && {
       key: 'schedule',
@@ -549,6 +557,16 @@ function EmbedDetails() {
         : t('upload.details.shareRewardsSub'),
       on: list.length > 0,
       onClick: toggleBeneficiaryModal,
+    },
+    !fromStories && {
+      key: 'collab',
+      icon: 'group_add',
+      title: t('social.collab.row'),
+      sub: collaborator?.account
+        ? t('social.collab.rowSet', { user: collaborator.account, split: collaborator.split })
+        : t('social.collab.rowSub'),
+      on: !!collaborator?.account,
+      onClick: () => setCollabOpen(true),
     },
     {
       key: 'advanced',
@@ -822,6 +840,14 @@ function EmbedDetails() {
         </div>
       </div>
       {isOpen && <CommunityModal isOpen={isOpen} data={communitiesData} close={closeCommunityModal} setCommunity={setCommunity} selected={community} />}
+      <CollabModal
+        open={collabOpen}
+        onClose={() => setCollabOpen(false)}
+        value={collaborator}
+        onSave={setCollaborator}
+        user={user}
+        creatorPercent={creatorPercent}
+      />
       {benficaryOpen && <Beneficiary_modal
         close={toggleBeneficiaryModal}
         isOpen={benficaryOpen}
