@@ -30,6 +30,8 @@ vi.mock('../../../src/components/AddToPlaylistModal/AddToPlaylistModal', () => (
 vi.mock('../../../src/components/modal/ReportModal', () => ({
   default: ({ isOpen, target }) => (isOpen ? <div role="dialog" aria-label="Report video">{`${target.author}/${target.permlink}`}</div> : null),
 }))
+const videoAsAudio = vi.hoisted(() => ({ playVideoAsAudio: vi.fn(async () => ({})) }))
+vi.mock('../../../src/lib/videoAsAudio', () => videoAsAudio)
 vi.mock('../../../src/components/AddTagModal/AddTagModal', () => ({
   default: ({ isOpen }) => (isOpen ? <div role="dialog" aria-label="Tag this video" /> : null),
 }))
@@ -78,13 +80,13 @@ describe('the card options menu', () => {
     expect(screen.queryByRole('menu')).not.toBeInTheDocument()
   })
 
-  it('opens the five actions, naming the creator', async () => {
+  it('opens the six actions, naming the creator', async () => {
     const { user, onOpenChange } = mount()
     const menu = await openMenu(user)
     expect(trigger()).toHaveAttribute('aria-expanded', 'true')
     // Accessible names: the Material Symbols glyphs are aria-hidden ligature text.
     const items = screen.getAllByRole('menuitem').map((b) => computeAccessibleName(b))
-    expect(items).toEqual(['Save to playlist', 'Add tag', 'Not interested', "Don't show @bob", 'Report'])
+    expect(items).toEqual(['Play as audio', 'Save to playlist', 'Add tag', 'Not interested', "Don't show @bob", 'Report'])
     expect(menu.parentElement).toBe(document.body)
     expect(onOpenChange).toHaveBeenLastCalledWith(true)
   })
@@ -137,6 +139,24 @@ describe('the card options menu', () => {
       expect(filters.hideCreator).not.toHaveBeenCalled()
       expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
       expect(screen.queryByRole('menu')).not.toBeInTheDocument()
+    })
+  })
+
+  describe('Play as audio', () => {
+    it('signed out too, puts the video in the audio player', async () => {
+      const { user } = mount()
+      await openMenu(user)
+      await user.click(screen.getByRole('menuitem', { name: 'Play as audio' }))
+      expect(videoAsAudio.playVideoAsAudio).toHaveBeenCalledWith({ author: 'bob', permlink: 'video-1', title: "Bob's video" }, expect.any(Object))
+      expect(screen.queryByRole('menu')).not.toBeInTheDocument()
+    })
+
+    it('says so when the video cannot be played as audio', async () => {
+      videoAsAudio.playVideoAsAudio.mockRejectedValueOnce(Object.assign(new Error('no_source'), { code: 'no_source' }))
+      const { user } = mount()
+      await openMenu(user)
+      await user.click(screen.getByRole('menuitem', { name: 'Play as audio' }))
+      await vi.waitFor(() => expect(toastMessages(toast.error)).toEqual(["This video can't be played as audio right now."]))
     })
   })
 

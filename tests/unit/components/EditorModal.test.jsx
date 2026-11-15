@@ -296,6 +296,56 @@ describe('EditorModal: a remix draft opened again', () => {
   })
 })
 
+describe('EditorModal: a Short made with "Use this sound"', () => {
+  const calls = (name) => m.embed.filter((c) => c[0] === name).map((c) => c.slice(1))
+  const SOUND = {
+    url: 'https://play.test/hls?u=480',
+    name: 'My beat',
+    credit: { id: 'short_badadib_beat-1', title: 'My beat', artist: '@badadib', source: '3speak', account: 'badadib', sourceUrl: 'https://3speak.tv/sound/short_badadib_beat-1' },
+  }
+  let savedSrc
+  beforeEach(() => {
+    const proto = HTMLMediaElement.prototype
+    savedSrc = Object.getOwnPropertyDescriptor(proto, 'src')
+    Object.defineProperty(proto, 'src', {
+      configurable: true,
+      get() { return this.getAttribute('src') || '' },
+      set(v) { this.setAttribute('src', v); queueMicrotask(() => this.onloadedmetadata?.()) },
+    })
+  })
+  afterEach(() => {
+    const proto = HTMLMediaElement.prototype
+    if (savedSrc) Object.defineProperty(proto, 'src', savedSrc); else delete proto.src
+  })
+
+  it('loads the sound on the music track with its credit, once', async () => {
+    await open({ sound: SOUND })
+    await ready()
+    await ready()
+    const loads = posted.filter((p) => p.type === 'load-media')
+    expect(loads).toEqual([{ type: 'load-media', url: SOUND.url, name: 'My beat', mediaType: 'audio', music: true, credit: SOUND.credit }])
+  })
+
+  it('an editor that drops credits: the sound is credited here, and its creator gets the 5% split', async () => {
+    stubMp3({ type: 'video/mp4' })
+    await open({ sound: SOUND })
+    await ready()
+    await fromEditor({ type: 'post-to-3speak', outputUrl: `${EDITOR}/rendered/v.mp4`, musicCredits: [{ id: 'calm', title: 'Calm', artist: 'Kevin MacLeod', source: 'incompetech' }] })
+    await waitFor(() => expect(calls('setMusicCredits')).toHaveLength(1))
+    expect(calls('setMusicCredits')[0][0].map((c) => c.id)).toEqual(['short_badadib_beat-1', 'calm'])
+    expect(calls('setList')[0][0]).toEqual(expect.arrayContaining([expect.objectContaining({ account: 'badadib', percent: 5 })]))
+  })
+
+  it('an editor that keeps credits (canLoadSound) is trusted: a sound taken off the timeline is not credited', async () => {
+    stubMp3({ type: 'video/mp4' })
+    await open({ sound: SOUND })
+    await ready({ canLoadSound: true })
+    await fromEditor({ type: 'post-to-3speak', outputUrl: `${EDITOR}/rendered/v.mp4`, musicCredits: [] })
+    await waitFor(() => expect(calls('setMusicCredits')).toHaveLength(1))
+    expect(calls('setMusicCredits')[0][0]).toEqual([])
+  })
+})
+
 describe('EditorModal: speech-to-text for the editor teleprompter', () => {
   function stubSttFetch() {
     const fetchMock = vi.fn(async (url) => ({

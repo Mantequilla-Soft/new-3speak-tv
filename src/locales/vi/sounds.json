@@ -1,0 +1,23 @@
+{
+  "openSound": "Mở âm thanh này",
+  "kindLibrary": "Thư viện nhạc",
+  "kindOriginal": "Âm thanh gốc",
+  "untitled": "Âm thanh chưa đặt tên",
+  "uses_other": "{{count}} Shorts đang dùng",
+  "listen": "Nghe",
+  "pause": "Tạm dừng",
+  "useThisSound": "Dùng âm thanh này",
+  "splitNote": "Shorts làm từ âm thanh này chia 5% phần thưởng cho {{name}}.",
+  "license": "Giấy phép: {{license}}",
+  "original": "Bản gốc",
+  "shortsUsing": "Shorts dùng âm thanh này",
+  "newest": "Mới nhất",
+  "top": "Nổi bật",
+  "noUsesTitle": "Chưa có Shorts nào dùng âm thanh này",
+  "noUsesText": "Hãy là người đầu tiên: Dùng âm thanh này sẽ mở trình chỉnh sửa với nó.",
+  "trending": "Âm thanh thịnh hành",
+  "notFound": "Không tìm thấy âm thanh này",
+  "toShorts": "Đến Shorts",
+  "signIn": "Đăng nhập để làm Short với âm thanh này.",
+  "cannotUse": "Hiện không thể dùng âm thanh này."
+}

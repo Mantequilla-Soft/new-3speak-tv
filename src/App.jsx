@@ -77,6 +77,8 @@ const FaqPage = lazyRoute(() => import("./page/Faq"), "./page/Faq");
 const AdWizardPage = lazyRoute(() => import("./page/AdWizardPage"), "./page/AdWizardPage");
 const Audio = lazyRoute(() => import("./page/Audio"), "./page/Audio");
 const AudioPost = lazyRoute(() => import("./page/AudioPost"), "./page/AudioPost");
+const Downloads = lazyRoute(() => import("./page/Downloads"), "./page/Downloads");
+const SoundPage = lazyRoute(() => import("./page/SoundPage"), "./page/SoundPage");
 const AuthCallback = lazyRoute(() => import("./page/Login/AuthCallback"), "./page/Login/AuthCallback");
 const ChatPage = lazyRoute(() => import("./components/Chat/ChatPage"), "./components/Chat/ChatPage");
 const CommunityPage = lazyRoute(() => import("./components/Communities/CommunityPage"), "./components/Communities/CommunityPage");
@@ -859,6 +861,8 @@ function App() {
               <Route path="/discover" element={<Discover />} />
               <Route path="/audio" element={<Audio />} />
               <Route path="/audio/:author/:permlink" element={<AudioPost />} />
+              <Route path="/downloads" element={<Downloads />} />
+              <Route path="/sound/:id" element={<SoundPage />} />
               <Route path="/new" element={<NewVideos />} />
               <Route path="/login" element={<LoginRedirect openLoginModal={openLoginModal} />} />
               <Route path="/auth/login" element={<LoginRedirect openLoginModal={openLoginModal} />} />
@@ -1017,6 +1021,7 @@ function App() {
               videoFile={editor.mode === 'video' ? editor.file : null}
               audioFile={editor.mode === 'audio' ? editor.file : null}
               audioTrackId={editor.audioTrackId}
+              sound={editor.mode === 'video' ? editor.sound : null}
             />
           </MountWhenOpened>
         )}

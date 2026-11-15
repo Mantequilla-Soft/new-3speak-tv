@@ -3,6 +3,7 @@
 import { describe, it, expect } from 'vitest'
 import {
   sanitizeMusicCredits, soundAuthorsOf, soundCreditsMarkdown, primarySoundMetadata, soundLabel, MAX_SOUND_AUTHORS,
+  withSoundCredit,
 } from '../../../src/utils/soundCredits.js'
 import { splitSystemTail } from '../../../src/utils/videoTimeline.js'
 
@@ -104,14 +105,20 @@ describe('soundCreditsMarkdown', () => {
 describe('primarySoundMetadata and soundLabel', () => {
   it('stores the first song for the soundtrack ticker', () => {
     const [cc, own] = sanitizeMusicCredits([CC, OWN])
+    // A library song's id becomes its sound id (lib/sounds.js), so its sound page lists the post
     expect(primarySoundMetadata([cc, own])).toEqual({
-      title: 'Sunny Day', artist: 'Kevin', source: 'Free Music Archive', url: 'https://fma.example/sunny', license: 'CC BY 4.0',
+      id: 'lib-song-1', title: 'Sunny Day', artist: 'Kevin', source: 'Free Music Archive', url: 'https://fma.example/sunny', license: 'CC BY 4.0',
     })
     expect(primarySoundMetadata([own])).toEqual({
       title: 'My Beat', artist: '@alice', account: 'alice', source: '3speak', url: 'https://3speak.tv/watch?v=alice/beat',
     })
     expect(primarySoundMetadata([])).toBeNull()
     expect(primarySoundMetadata(null)).toBeNull()
+  })
+
+  it('a Short sound keeps its sound id', () => {
+    const [snd] = sanitizeMusicCredits([{ id: 'short_badadib_beat-1', title: 'Beat', source: '3speak', account: 'badadib', sourceUrl: 'https://3speak.tv/sound/short_badadib_beat-1' }])
+    expect(primarySoundMetadata([snd])).toMatchObject({ id: 'short_badadib_beat-1', account: 'badadib', source: '3speak' })
   })
 
   it('labels a short with its song, or the creator original audio', () => {
@@ -124,5 +131,25 @@ describe('primarySoundMetadata and soundLabel', () => {
 
   it('cleans a label read from untrusted metadata', () => {
     expect(soundLabel({ title: '<b>Hi</b>', artist: '[x](y)' }, 'a')).toBe('bHi/b - xy')
+  })
+})
+
+describe('withSoundCredit (a Short made with "Use this sound")', () => {
+  const SOUND = { id: 'short_badadib_beat-1', title: 'Beat', artist: '@badadib', source: '3speak', account: 'badadib', sourceUrl: 'https://3speak.tv/sound/short_badadib_beat-1' }
+
+  it('puts the sound first, once, so it is the Short\'s sound and its creator gets the split', () => {
+    const credits = withSoundCredit([CC], SOUND)
+    expect(credits.map((c) => c.id)).toEqual(['short_badadib_beat-1', 'song-1'])
+    expect(soundAuthorsOf(credits, 'fan')).toEqual(['badadib'])
+    expect(withSoundCredit([SOUND, CC], SOUND).map((c) => c.id)).toEqual(['short_badadib_beat-1', 'song-1'])
+  })
+
+  it('no sound, or one that does not pass the checks: just the editor credits', () => {
+    expect(withSoundCredit([CC], null).map((c) => c.id)).toEqual(['song-1'])
+    expect(withSoundCredit([CC], { ...SOUND, account: 'NOT VALID!' }).map((c) => c.id)).toEqual(['song-1'])
+  })
+
+  it('the poster using their own sound gets no split from it', () => {
+    expect(soundAuthorsOf(withSoundCredit([], SOUND), 'badadib')).toEqual([])
   })
 })

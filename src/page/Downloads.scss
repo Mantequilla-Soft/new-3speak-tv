@@ -1,0 +1,106 @@
+@use "../styles/v2" as v2;
+
+.dl-page {
+  max-width: 880px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.dl-head {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  h1 { margin: 0; }
+  p { margin: 0; }
+}
+
+.dl-storage {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+  @include v2.card(24);
+  &__line {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 700;
+    > .material-symbols-rounded { color: var(--cyan); }
+  }
+  &__cap {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+    .v2-eyebrow { flex: none; }
+    .v2-seg { min-width: 0; }
+    @include v2.mobile { flex-direction: column; align-items: stretch; gap: 6px; }
+  }
+}
+
+.dl-filter { align-self: flex-start; max-width: 100%; }
+
+.dl-row { min-width: 0; }
+
+.dl-cover {
+  position: relative;
+  flex: none;
+  width: 80px;
+  height: 45px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--r-md);
+  overflow: hidden;
+  background: var(--surface-2);
+  cursor: pointer;
+  img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  &__play {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    color: var(--on-accent);
+    background: color-mix(in srgb, var(--bg) 35%, transparent);
+    opacity: 0;
+    transition: opacity var(--t-fast) var(--ease);
+  }
+  &:hover &__play, &:focus-visible &__play { opacity: 1; }
+  @media (hover: none) { &__play { opacity: 1; background: transparent; } }
+  &__kind {
+    position: absolute;
+    left: 4px;
+    bottom: 4px;
+    display: grid;
+    place-items: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 6px;
+    background: var(--surface);
+    color: var(--text);
+  }
+}
+
+.dl-by { font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.dl-dialog .v2-dialog__body { display: flex; flex-direction: column; gap: 12px; }
+.dl-dialog__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  align-self: flex-start;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--cyan);
+  text-decoration: none;
+}
+
+.dl-player {
+  width: 100%;
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  background: var(--surface-2);
+  &__video { display: block; width: 100%; max-height: 70vh; aspect-ratio: 16 / 9; background: var(--surface-2); }
+  &__note { margin: 0; padding: 24px 16px; font-size: 14px; color: var(--muted); text-align: center; }
+}

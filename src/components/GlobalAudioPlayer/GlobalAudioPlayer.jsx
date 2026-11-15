@@ -46,7 +46,7 @@ import {
   fmt, SPEEDS, SPEED_KEY, normalizeSpeed, formatSpeed, SKIP_BACK, SKIP_FORWARD, skipTarget,
   SWIPE_SKIP, barSwipe, fullSwipeCollapses,
   SLEEP_OPTIONS, startSleepTimer, sleepRemainingMs, sleepFadeFactor,
-  chapterMarkers, chapterJumps, corsKnown, isHlsTrack,
+  chapterMarkers, chapterJumps, corsKnown, hlsPlayback,
   createSilenceDetector, skipRate, levelDb, savedMs, fmtSaved,
 } from './playerMath';
 import { attach, detach, canRoute, markNoCors, webAudioSupported, warmUp } from './audioEffects';
@@ -62,6 +62,8 @@ import useListenTime from '../../hooks/useListenTime';
 import useAudioAd from '../../hooks/useAudioAd';
 import TickerCrawl from '../ads/TickerCrawl';
 import { audioItemPath } from '../AudioItem/AudioItemView';
+import { mseAvailable, isVideoTrack } from '../../lib/videoAsAudio';
+import { watchPath } from '../../utils/urls';
 import mantequillaLogo from '../../assets/mantequilla-logo.png';
 import { seekKeyTarget, timelineSliderProps } from '../../lib/sliderKeys';
 import useTimelineScrub from '../../hooks/useTimelineScrub';
@@ -139,6 +141,8 @@ async function encryptBeat(obj) {
 function pageOf(track) {
   if (!track || track.live) return '';
   if (track.external) return episodePath(track._id);
+  // A video heard as audio: its watch page.
+  if (isVideoTrack(track)) return track.owner && track.post_permlink ? watchPath(track.owner, track.post_permlink) : '';
   return track.owner && track.permlink ? audioItemPath(track) : '';
 }
 
@@ -630,12 +634,14 @@ function GlobalAudioPlayer() {
 
   // A live HLS stream through hls.js. A browser that can't do either gets a
   // short note instead of a player that silently does nothing.
-  const attachHls = (el, src, id, play) => {
-    const unsupported = () => toast.error(t('audio.player.liveUnsupported'));
+  // A video heard as audio (lib/videoAsAudio.js) is a VOD: no low-latency mode,
+  // and it starts at `startAt`.
+  const attachHls = (el, src, id, play, { live = true, startAt = 0 } = {}) => {
+    const unsupported = () => toast.error(live ? t('audio.player.liveUnsupported') : t('videoAudio.unsupported'));
     import('hls.js').then(({ default: Hls }) => {
       if (audioRef.current !== el || srcRef.current.id !== id) return;
       if (!Hls?.isSupported?.()) { unsupported(); return; }
-      const hls = new Hls({ lowLatencyMode: true });
+      const hls = new Hls(live ? { lowLatencyMode: true } : { startPosition: startAt > 0 ? startAt : -1, maxBufferLength: 30 });
       hlsRef.current = hls;
       hls.on(Hls.Events.ERROR, (_e, data) => {
         if (!data?.fatal) return;
@@ -656,10 +662,11 @@ function GlobalAudioPlayer() {
     const el = audioRef.current;
     const track = audioCurrent;
     if (!track) { srcRef.current = { id: null, src: null, local: false }; dropHls(); return undefined; }
-    if (!el || !(track.audio_cid || track.external)) return undefined;
+    if (!el || !(track.audio_cid || track.external || isVideoTrack(track))) return undefined;
     let cancelled = false;
-    // Outside podcast episodes play straight from the podcast's own host.
-    const networkSrc = track.external ? track.src : `${AUDIO_CDN}/${track.audio_cid}`;
+    // Outside podcast episodes play straight from the podcast's own host, a video
+    // heard as audio from its HLS rendition.
+    const networkSrc = track.external || isVideoTrack(track) ? track.src : `${AUDIO_CDN}/${track.audio_cid}`;
     const fresh = srcRef.current.id !== track._id;
 
     // A saved copy of an episode no longer playing: let its memory go.
@@ -676,7 +683,9 @@ function GlobalAudioPlayer() {
       if (fresh) {
         const f = fxRef.current;
         const wantFx = (f.boost || f.skip) && !track.live && !fxBlockedRef.current && webAudioSupported();
-        let want = wantFx && corsKnown(src, { storage: lsStorage(), origin: window.location.origin }) === true;
+        // hls.js feeds the element from memory (MSE), which Web Audio can always read.
+        const viaMse = isVideoTrack(track) && mseAvailable();
+        let want = wantFx && (isVideoTrack(track) ? viaMse : corsKnown(src, { storage: lsStorage(), origin: window.location.origin }) === true);
         // Away (the next track with the screen locked): no swap to the Web Audio
         // element, which would have to start on its own in the background. The
         // plain one plays the track; the effects come back with the listener.
@@ -723,10 +732,14 @@ function GlobalAudioPlayer() {
         setPlayingLocal(local);
         setLoadedSrc(src);
         dropHls();
-        if (track.live && isHlsTrack(track) && !el.canPlayType('application/vnd.apple.mpegurl')) {
+        const hlsWay = local ? null : hlsPlayback(track, { canPlayNative: !!el.canPlayType('application/vnd.apple.mpegurl'), mse: mseAvailable() });
+        if (hlsWay === 'hlsjs') {
           // Safari plays HLS in <audio> natively; elsewhere hls.js does (the app
           // already ships it for the video players), loaded only when needed.
-          attachHls(el, src, track._id, play);
+          el.defaultPlaybackRate = track.live ? 1 : speedRef.current;
+          el.playbackRate = el.defaultPlaybackRate;
+          attachHls(el, src, track._id, play, { live: !!track.live, startAt });
+          if (audioStartAt != null) useAppStore.setState({ audioStartAt: null });
           return;
         }
         setAudioSrc(el, src, routedRef.current);
@@ -835,8 +848,10 @@ function GlobalAudioPlayer() {
   useEffect(() => {
     const track = audioCurrent;
     if (!fxOn || !track) { setRouteOk(null); return undefined; }
-    if (track.live || fxBlocked || !webAudioSupported()) { setRouteOk(false); return undefined; }
+    if (track.live || fxBlocked || !webAudioSupported() || (isVideoTrack(track) && !mseAvailable())) { setRouteOk(false); return undefined; }
     if (routed) { setRouteOk(true); return undefined; }
+    // A video heard as audio plays through hls.js (MSE): always readable.
+    if (isVideoTrack(track)) { setRouteOk(true); switchElement(true); return undefined; }
     const src = srcRef.current.id === track._id ? srcRef.current.src : null;
     if (!src) return undefined; // the load effect hasn't picked the source yet
     const known = corsKnown(src, { storage: lsStorage(), origin: window.location.origin });
@@ -1610,6 +1625,7 @@ function GlobalAudioPlayer() {
       .catch((err) => {
         // The library's own reasons (lib/podcastDownloads.js err.code); a cancel says nothing.
         if (err?.code === 'cancelled') return;
+        if (err?.code === 'cap') { toast.error(t('downloads.errors.cap')); return; }
         const key = DOWNLOAD_ERRORS[err?.code];
         toast.error(key ? t(`audio.podcasts.downloads.errors.${key}`, { defaultValue: t('audio.player.downloadFailed') }) : t('audio.player.downloadFailed'));
       })
@@ -1626,6 +1642,10 @@ function GlobalAudioPlayer() {
       return next;
     });
   };
+  // A video heard as audio: no audio download (Download on the watch page saves
+  // the video), and no effects where Web Audio cannot read it (no MSE).
+  const canDownload = !isLive && !isVideoTrack(nowPlaying);
+  const canEffects = !isLive && !(isVideoTrack(nowPlaying) && !mseAvailable());
   const fxUnavailable = fxOn && (isLive || fxBlocked || !webAudioSupported() || (!routed && routeOk === false));
   const fxChecking = fxOn && !fxUnavailable && !routed && routeOk == null;
 
@@ -1651,7 +1671,7 @@ function GlobalAudioPlayer() {
   };
   const goCreator = (e) => {
     e?.stopPropagation();
-    navigate(nowPlaying.external ? podcastPath(nowPlaying.show_id) : `/@${nowPlaying.owner}?tab=audio`);
+    navigate(nowPlaying.external ? podcastPath(nowPlaying.show_id) : isVideoTrack(nowPlaying) ? `/@${nowPlaying.owner}` : `/@${nowPlaying.owner}?tab=audio`);
     audioSetExpanded(false);
   };
   const openVote = () => { if (!loggedIn) return; setVoteTarget({ author: nowPlaying.owner, permlink: post }); setShowVoteTooltip(!showVoteTooltip); };
@@ -1993,7 +2013,7 @@ function GlobalAudioPlayer() {
   const CATEGORY_KEYS = { podcast: 'audio.categories.podcast', voice_message: 'audio.categories.voice', song: 'audio.categories.music', music: 'audio.categories.music', audiobook: 'audio.categories.audiobook', interview: 'audio.categories.interview' };
   const listIdx = audioAutoplayList.findIndex(x => x._id === nowPlaying._id);
   const eyebrow = [
-    nowPlaying.external ? t('audio.categories.podcast') : t(CATEGORY_KEYS[nowPlaying.category] || 'audio.categories.voice'),
+    nowPlaying.external ? t('audio.categories.podcast') : isVideoTrack(nowPlaying) ? t('videoAudio.label') : t(CATEGORY_KEYS[nowPlaying.category] || 'audio.categories.voice'),
     !nowPlaying.external && nowPlaying.genre ? String(nowPlaying.genre) : null,
     listIdx >= 0 && audioAutoplayList.length > 1 ? t('audio.player.position', { current: listIdx + 1, total: audioAutoplayList.length }) : null,
   ].filter(Boolean).join(' · ');
@@ -2166,7 +2186,7 @@ function GlobalAudioPlayer() {
               icon="bedtime"
               text={sleep ? (sleepLabel || t('audio.player.sleepEndShort')) : null}
             />
-            {!isLive && (
+            {canEffects && (
               <ToolChip
                 className={cx(fxOn && 'is-on')}
                 onClick={toggleMenu('effects')}
@@ -2180,7 +2200,7 @@ function GlobalAudioPlayer() {
             {castAvailable && !playingLocal && (
               <ToolChip onClick={castNow} aria-label={t('audio.player.cast')} title={t('audio.player.cast')} icon={HAS_AIRPLAY ? 'airplay' : 'cast'} />
             )}
-            {!isLive && (
+            {canDownload && (
               <ToolChip
                 className={cx(dlSaved && 'is-on')}
                 onClick={startDownload}
@@ -2548,8 +2568,8 @@ function GlobalAudioPlayer() {
             {post && <PmRow icon="arrow_upward" label={npIsVoted ? t('audio.post.voted') : t('audio.post.vote')} sub={npVoteCount > 0 ? compactNumber(npVoteCount) : null} onClick={() => { closeMenu(); pressVote(); }} />}
             {canSave && <PmRow icon="playlist_add" label={t('engagement.cardMenu.addToPlaylist')} onClick={() => { closeMenu(); openPlaylist(); }} />}
             <PmRow icon={nowPlaying.external ? 'podcasts' : 'person'} label={t('audio.player.goTo', { name: bylineOf(nowPlaying) })} onClick={() => { closeMenu(); goCreator(); }} />
-            {!isLive && <PmRow icon={dlSaved ? 'download_done' : 'download'} label={dlSaved ? t('audio.player.downloaded') : t('audio.player.download')} onClick={startDownload} disabled={dlSaved || dlBusy} sub={dlBusy ? t('audio.player.downloading', { pct: dlPct }) : null} />}
-            {!isLive && <PmRow icon="equalizer" label={t('audio.player.effects')} onClick={() => setMenu({ name: 'effects', anchor: menu.anchor })} />}
+            {canDownload && <PmRow icon={dlSaved ? 'download_done' : 'download'} label={dlSaved ? t('audio.player.downloaded') : t('audio.player.download')} onClick={startDownload} disabled={dlSaved || dlBusy} sub={dlBusy ? t('audio.player.downloading', { pct: dlPct }) : null} />}
+            {canEffects && <PmRow icon="equalizer" label={t('audio.player.effects')} onClick={() => setMenu({ name: 'effects', anchor: menu.anchor })} />}
             {castAvailable && !playingLocal && <PmRow icon={HAS_AIRPLAY ? 'airplay' : 'cast'} label={t('audio.player.cast')} onClick={() => { closeMenu(); castNow(); }} />}
             {canShare && <PmRow icon="ios_share" label={t('common.actions.share')} onClick={() => setMenu({ name: 'share', anchor: menu.anchor })} />}
             {post && <PmRow icon="flag" label={t('common.actions.report')} onClick={() => { closeMenu(); setReportOpen(true); }} danger />}
