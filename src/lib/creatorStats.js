@@ -46,10 +46,28 @@ export function fetchCreatorTimeseries(username, opts) {
   return get(`/creator-stats/timeseries?${qs(username, opts)}`);
 }
 
-// Per-video detail: retention curve + most-replayed buckets + stats.
-export function fetchVideoAnalytics(username, permlink) {
-  return get(`/creator-stats/video?username=${encodeURIComponent(username)}&permlink=${encodeURIComponent(permlink)}`);
+// Per-video detail: retention curve + most-replayed buckets + stats. `kind: 'audio'`
+// reads an audio upload's listening sessions instead.
+export function fetchVideoAnalytics(username, permlink, { kind } = {}) {
+  return get(`/creator-stats/video?username=${encodeURIComponent(username)}&permlink=${encodeURIComponent(permlink)}${kind === 'audio' ? '&kind=audio' : ''}`);
 }
+
+// Impressions, click-through rate and where viewers found the videos
+// (lib/cardReach.js counts them). opts: { days, content }.
+export function fetchCreatorReach(username, opts) {
+  return get(`/creator-stats/reach?${qs(username, opts)}`);
+}
+
+// Earnings per day and source: { series: [{ date, votes, curation, tips, ads,
+// boosts, lightningSats }], totals, byPost, rates }. 7 | 28 | 90 | 365 days.
+export function fetchCreatorEarnings(username, { days = 28 } = {}) {
+  return get(`/creator-stats/earnings?username=${encodeURIComponent(username)}&days=${days}`);
+}
+
+// The sources that are valued in HBD (Lightning stays in sats).
+export const EARNING_SOURCES = ['votes', 'curation', 'tips', 'ads', 'boosts'];
+export const fmtHbd = (v) => `$${Number(v || 0).toFixed(2)}`;
+export const earnedTotal = (row) => EARNING_SOURCES.reduce((n, k) => n + (Number(row?.[k]) || 0), 0);
 
 // Lightweight check: does this video have any watch records? (gates the Stats button)
 export function fetchVideoHasStats(username, permlink) {

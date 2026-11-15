@@ -1,0 +1,110 @@
+{
+  "content": {
+    "streams": "Streams",
+    "audio": "Audio",
+    "podcasts": "Podcasts"
+  },
+  "reach": {
+    "title": "Reach",
+    "impressions": "Impressions",
+    "ctr": "Click-through rate",
+    "ctrShort": "CTR {{ctr}}",
+    "clicks": "Clicks from cards",
+    "opens": "Opens",
+    "empty": "No impressions yet in this range. They are counted from now on whenever one of your cards is on someone's screen for a second.",
+    "foundTitle": "Where viewers found it",
+    "shownTitle": "Where your cards were shown",
+    "since": "Impressions are counted from a sample of page views and scaled up. Counting started on {{date}}.",
+    "sampled": "Impressions are counted from a sample of page views and scaled up.",
+    "detail": "{{impressions}} impressions · CTR {{ctr}}"
+  },
+  "sources": {
+    "home": "Home",
+    "discover": "Discover",
+    "following": "Following",
+    "new": "New",
+    "trending": "Trending",
+    "interests": "Interests",
+    "search": "Search",
+    "channel": "Channel pages",
+    "related": "Next to other videos",
+    "shorts": "Shorts",
+    "playlist": "Playlists",
+    "tag": "Tags",
+    "community": "Communities",
+    "other": "Elsewhere on 3Speak",
+    "direct": "Direct or unknown",
+    "search_engine": "Search engines",
+    "social": "Social media",
+    "hive_apps": "Other Hive apps",
+    "external": "Other websites",
+    "embed": "Embeds on other sites"
+  },
+  "earnings": {
+    "title": "Earnings",
+    "empty": "No earnings in this range yet.",
+    "unavailable": "Earnings could not be loaded right now. Try again in a minute.",
+    "chartLabel": "Earnings per day over {{days}} days, stacked by source",
+    "lastYear": "All time shows the last 12 months.",
+    "note": "In HBD (about a US dollar). Hive rewards and HIVE tips are valued at today's HIVE price, Lightning stays in sats.",
+    "sats_one": "{{count}} sat",
+    "sats_other": "{{count}} sats",
+    "sources": {
+      "votes": "Votes",
+      "curation": "Curation",
+      "tips": "Tips",
+      "ads": "Ads",
+      "boosts": "Stream boosts",
+      "lightning": "Lightning"
+    }
+  },
+  "export": {
+    "daily": "Export daily earnings (CSV)",
+    "content": "Export content table (CSV)",
+    "cols": {
+      "date": "Date",
+      "total": "Total",
+      "title": "Title",
+      "url": "Link",
+      "published": "Published",
+      "watchSeconds": "Watch time (seconds)",
+      "earned": "Earned from votes"
+    }
+  },
+  "inbox": {
+    "tab": "Comments",
+    "menu": "Comment inbox",
+    "title": "Comment inbox",
+    "sub_one": "Comments on your posts from the last {{count}} day.",
+    "sub_other": "Comments on your posts from the last {{count}} days.",
+    "filtersLabel": "Show only",
+    "views": {
+      "unanswered": "Unanswered",
+      "all": "All",
+      "done": "Done"
+    },
+    "flags": {
+      "question": "Questions",
+      "firstTime": "First-time",
+      "supporter": "Supporters"
+    },
+    "answered": "Answered",
+    "onPost": "on",
+    "onReply": "replied to you on",
+    "reply": "Reply",
+    "replyVideo": "Reply with a video",
+    "replyTo": "Reply to @{{author}}",
+    "send": "Send",
+    "replied": "Your reply is on Hive.",
+    "replyFailed": "The reply could not be posted. Try again.",
+    "markDone": "Mark done",
+    "undone": "Undo",
+    "doneToast": "Marked done.",
+    "doneFailed": "Could not save that. Try again.",
+    "error": "The comments could not be loaded.",
+    "retry": "Try again",
+    "allAnswered": "You have answered everyone.",
+    "empty": "No comments here.",
+    "supportersNote": "Supporters voted on your posts in the last 12 months or tipped you on 3Speak. First-time means their first comment on any of your posts."
+  }
+}
