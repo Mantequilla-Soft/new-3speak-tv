@@ -1,0 +1,27 @@
+{
+  "vote": {
+    "added": "Seu voto somou cerca de ${{value}} a este post e deve render cerca de ${{earn}} em curadoria quando ele pagar.",
+    "addedNoCuration": "Seu voto somou cerca de ${{value}} a este post.",
+    "addedTagged": "Marcado como “{{tag}}”. Seu voto somou cerca de ${{value}} e deve render cerca de ${{earn}} em curadoria."
+  },
+  "page": {
+    "title": "Curadoria",
+    "sub": "Suas escolhas no 3Speak nos últimos {{days}} dias",
+    "subOther": "Escolhas no 3Speak nos últimos {{days}} dias",
+    "picks": "Escolhas",
+    "earned": "Curadoria ganha",
+    "early": "Achou cedo",
+    "earnedValue": "{{hp}} HP",
+    "rule": "“Achou cedo” significa que os votos antes do seu somavam no máximo {{share}}% do valor de votos do post, e que o post chegou a ter pelo menos {{votes}} votos.",
+    "votedAt": "Votado {{when}}",
+    "weight": "Voto de {{weight}}%",
+    "rank": "Voto {{rank}} de {{votes}}",
+    "reward": "+{{hp}} HP",
+    "pending": "Paga depois",
+    "badge": "Achou cedo",
+    "empty": "Nenhum voto em vídeos, shorts ou áudios do 3Speak neste período.",
+    "loadFailed": "Não foi possível carregar o histórico de curadoria. Tente de novo em um minuto.",
+    "open": "Curadoria",
+    "note": "As recompensas de curadoria são pagas em Hive Power quando o post paga, 7 dias depois de publicado."
+  }
+}

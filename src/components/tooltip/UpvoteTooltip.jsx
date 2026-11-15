@@ -7,6 +7,7 @@ import { estimate, getUersContent, getVotePower } from '../../utils/hiveUtils';
 import VoteWeightPanel from './VoteWeightPanel';
 import { voteWithAioha, tagVideoWithAioha, isLoggedIn } from '../../hive-api/aioha';
 import { recordViewerTag, VIEWER_TAG_OPTIONS } from '../../utils/viewerTag';
+import { estimateCuration, formatSmallUsd } from '../../lib/curation';
 
 // Every toast from this module is headed "Vote"; the message becomes the
 // line under it. See utils/toast.js.
@@ -157,7 +158,13 @@ const UpvoteTooltip = ({
         setOptimisticVoteCount((prevCount) => prevCount + 1);
       }
 
-      toast.success(tag ? t('engagement.vote.successTagged', { tag, value: voteValue }) : t('engagement.vote.success', { value: voteValue }));
+      // What the vote added and roughly what it earns its voter in curation
+      // (lib/curation.js). A changed vote earns no curation on Hive.
+      const earn = estimateCuration({ value: voteValue, post: data, changed: !!existingVote });
+      const money = { value: formatSmallUsd(voteValue), earn: formatSmallUsd(earn), tag };
+      toast.success(tag
+        ? (earn > 0 ? t('curation.vote.addedTagged', money) : t('engagement.vote.successTagged', { tag, value: voteValue }))
+        : t(earn > 0 ? 'curation.vote.added' : 'curation.vote.addedNoCuration', money));
       setIsVoted(true);
       setShowTooltip(false);
     } catch (err) {

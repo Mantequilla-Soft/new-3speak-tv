@@ -1,0 +1,27 @@
+{
+  "vote": {
+    "added": "Oyun bu gönderiye yaklaşık ${{value}} ekledi ve ödeme yapıldığında sana küratörlükten yaklaşık ${{earn}} kazandırmalı.",
+    "addedNoCuration": "Oyun bu gönderiye yaklaşık ${{value}} ekledi.",
+    "addedTagged": "Etiket: “{{tag}}”. Oyun yaklaşık ${{value}} ekledi ve sana küratörlükten yaklaşık ${{earn}} kazandırmalı."
+  },
+  "page": {
+    "title": "Küratörlük",
+    "sub": "Son {{days}} günde 3Speak'teki seçimlerin",
+    "subOther": "Son {{days}} günde 3Speak'teki seçimler",
+    "picks": "Seçimler",
+    "earned": "Küratörlük kazancı",
+    "early": "Erken bulunan",
+    "earnedValue": "{{hp}} HP",
+    "rule": "“Erken bulundu”, senden önceki oyların gönderinin oy değerinin en fazla %{{share}} kadarını taşıdığı ve gönderinin sonra en az {{votes}} oy aldığı anlamına gelir.",
+    "votedAt": "{{when}} oy verildi",
+    "weight": "%{{weight}} oy",
+    "rank": "Oy {{rank}} / {{votes}}",
+    "reward": "+{{hp}} HP",
+    "pending": "Ödeme daha sonra",
+    "badge": "Erken bulundu",
+    "empty": "Bu sürede 3Speak'te video, short veya ses içeriklerine oy verilmedi.",
+    "loadFailed": "Küratörlük geçmişi yüklenemedi. Bir dakika sonra tekrar dene.",
+    "open": "Küratörlük",
+    "note": "Küratörlük ödülleri, gönderi ödeme aldığında, yani yayınlanmasından 7 gün sonra Hive Power olarak ödenir."
+  }
+}

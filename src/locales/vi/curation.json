@@ -1,0 +1,27 @@
+{
+  "vote": {
+    "added": "Lượt vote của bạn đã thêm khoảng ${{value}} cho bài này và sẽ mang lại cho bạn khoảng ${{earn}} tiền curation khi bài được trả thưởng.",
+    "addedNoCuration": "Lượt vote của bạn đã thêm khoảng ${{value}} cho bài này.",
+    "addedTagged": "Đã gắn thẻ “{{tag}}”. Lượt vote của bạn đã thêm khoảng ${{value}} và sẽ mang lại cho bạn khoảng ${{earn}} tiền curation."
+  },
+  "page": {
+    "title": "Curation",
+    "sub": "Lựa chọn của bạn trên 3Speak trong {{days}} ngày qua",
+    "subOther": "Lựa chọn trên 3Speak trong {{days}} ngày qua",
+    "picks": "Lựa chọn",
+    "earned": "Curation đã nhận",
+    "early": "Phát hiện sớm",
+    "earnedValue": "{{hp}} HP",
+    "rule": "“Phát hiện sớm” nghĩa là các lượt vote trước bạn chiếm tối đa {{share}}% giá trị vote của bài, và sau đó bài nhận được ít nhất {{votes}} lượt vote.",
+    "votedAt": "Đã vote {{when}}",
+    "weight": "Vote {{weight}}%",
+    "rank": "Lượt vote {{rank}} trên {{votes}}",
+    "reward": "+{{hp}} HP",
+    "pending": "Trả thưởng sau",
+    "badge": "Phát hiện sớm",
+    "empty": "Không có lượt vote nào cho video, shorts hoặc audio trên 3Speak trong thời gian này.",
+    "loadFailed": "Không tải được lịch sử curation. Hãy thử lại sau một phút.",
+    "open": "Curation",
+    "note": "Phần thưởng curation được trả bằng Hive Power khi bài được trả thưởng, 7 ngày sau khi đăng."
+  }
+}

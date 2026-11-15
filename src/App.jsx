@@ -145,6 +145,7 @@ const Wallet = lazyRoute(() => import("./page/Wallet"), "./page/Wallet");
 const Watch = lazyRoute(() => import("./page/Watch"), "./page/Watch");
 const WatchStream = lazyRoute(() => import("./page/WatchStream"), "./page/WatchStream");
 const WatchedView = lazyRoute(() => import("./page/WatchedView"), "./page/WatchedView");
+const Curation = lazyRoute(() => import("./page/Curation"), "./page/Curation");
 const Translate = lazyRoute(() => import("./page/Translate/Translate"), "./page/Translate/Translate");
 
 function OpenPodModalMounter() {
@@ -923,6 +924,7 @@ function App() {
               <Route path="/user/:user" element={<LegacyProfileRedirect />} />
               <Route path="/playlist/:playlistId" element={<PlaylistView />} />
               <Route path="/watched/:username" element={<WatchedView />} />
+              <Route path="/curation/:user" element={<Curation />} />
               <Route path="/wallet/:user" element={<Wallet />} />
               <Route path="/test" element={<ProfileModal />} />
               <Route path="/image" element={<HiveImageUploader />} />

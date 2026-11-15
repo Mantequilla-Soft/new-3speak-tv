@@ -1,0 +1,27 @@
+{
+  "vote": {
+    "added": "Je stem voegde ongeveer ${{value}} toe aan deze post en levert je bij de uitbetaling naar verwachting ongeveer ${{earn}} aan curatie op.",
+    "addedNoCuration": "Je stem voegde ongeveer ${{value}} toe aan deze post.",
+    "addedTagged": "Getagd met “{{tag}}”. Je stem voegde ongeveer ${{value}} toe en levert je naar verwachting ongeveer ${{earn}} aan curatie op."
+  },
+  "page": {
+    "title": "Curatie",
+    "sub": "Je keuzes op 3Speak in de afgelopen {{days}} dagen",
+    "subOther": "Keuzes op 3Speak in de afgelopen {{days}} dagen",
+    "picks": "Keuzes",
+    "earned": "Verdiend met curatie",
+    "early": "Vroeg gevonden",
+    "earnedValue": "{{hp}} HP",
+    "rule": "“Vroeg gevonden” betekent dat de stemmen vóór de jouwe samen hooguit {{share}}% van de stemwaarde van de post hadden, en dat de post daarna minstens {{votes}} stemmen kreeg.",
+    "votedAt": "Gestemd {{when}}",
+    "weight": "{{weight}}% stem",
+    "rank": "Stem {{rank}} van {{votes}}",
+    "reward": "+{{hp}} HP",
+    "pending": "Wordt later uitbetaald",
+    "badge": "Vroeg gevonden",
+    "empty": "Geen stemmen op 3Speak-video's, shorts of audio in deze periode.",
+    "loadFailed": "De curatiegeschiedenis kon niet worden geladen. Probeer het over een minuut opnieuw.",
+    "open": "Curatie",
+    "note": "Curatiebeloningen worden in Hive Power uitbetaald wanneer een post uitbetaalt, 7 dagen na publicatie."
+  }
+}

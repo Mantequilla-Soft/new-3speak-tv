@@ -12,6 +12,7 @@ import { voteWithAioha, tagVideoWithAioha, isLoggedIn } from '../../hive-api/aio
 import { recordViewerTag, getViewerTags, getMyViewerTag } from '../../utils/viewerTag';
 import { getVideoTagsV2, getCachedTagsV2, getTagLabel, getCategoryOf } from '../../utils/tagsV2';
 import { getSavedVoteWeight, saveVoteWeight } from '../../utils/voteWeight';
+import { estimateCuration, formatSmallUsd } from '../../lib/curation';
 import TagsV2Picker from './TagsV2Picker';
 import ModalHeader from '../ModalHeader/ModalHeader';
 
@@ -459,7 +460,13 @@ const CommentVoteTooltip = ({
         ? estimateLocal(cachedAccountRef.current, cachedDynamicPropsRef.current, currentWeight)
         : '0.000';
 
-      toast.success(tag ? t('engagement.vote.successTagged', { tag: getTagLabel(tag), value: finalValue }) : t('engagement.vote.success', { value: finalValue }));
+      // What the vote added and roughly what it earns in curation (lib/curation.js).
+      // Comments earn curation too; a changed vote earns none.
+      const earn = estimateCuration({ value: finalValue, post: data, changed: !!existingVote });
+      const money = { value: formatSmallUsd(finalValue), earn: formatSmallUsd(earn), tag: tag ? getTagLabel(tag) : '' };
+      toast.success(tag
+        ? (earn > 0 ? t('curation.vote.addedTagged', money) : t('engagement.vote.successTagged', { tag: getTagLabel(tag), value: finalValue }))
+        : t(earn > 0 ? 'curation.vote.added' : 'curation.vote.addedNoCuration', money));
 
       // Sync back to parent + remember this weight for the next vote of this kind.
       setParentWeight(currentWeight);
