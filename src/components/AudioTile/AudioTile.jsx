@@ -5,6 +5,7 @@ import { Icon } from '../v2/Icon';
 import { cx } from '../v2/helpers';
 import { useAppStore } from '../../lib/store';
 import { fixVideoThumbnail, fallbackImg } from '../../utils/fixThumbnails';
+import EpisodeBadge from '../Episodes/EpisodeBadge';
 // The tile styles live in Audio.scss (shared with the playlist tile and the
 // audio page), so the tile looks the same on every page that shows it.
 import '../../page/Audio.scss';
@@ -177,6 +178,8 @@ function AudioTile({
     <div className="audio-tile-body">
       <span className="audio-tile-title" onClick={onOpen ? (e) => { e.stopPropagation(); onOpen(); } : handlePlay}>
         {trackNumber != null && <span className="audio-tile-track-num num">{trackNumber}.</span>}
+        {/* "S2 E5": the checker copies the post's numbers onto the audio row */}
+        <EpisodeBadge season={item.season} episode={item.episode} className="audio-tile-episode" />
         {item.title || t('audio.untitled')}
       </span>
       {/* The creator and the length on one line (28e). */}

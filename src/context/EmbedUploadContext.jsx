@@ -28,6 +28,9 @@ import { readAddToBlog, writeAddToBlog, reblogOp } from '../utils/addToBlog';
 import { timelineMeta, applyTimelineToDescription } from '../utils/videoTimeline';
 import { registerStory } from '../lib/stories';
 import { dataUrlToBlob } from '../utils/videoThumbnails';
+import { episodeFields } from '../utils/episodeNumbers';
+import { addToPlaylist } from '../utils/playlistOperations';
+import { SERIES_APPEND_POSITION } from '../lib/series';
 
 // The body of a story posted without a caption (see publishToEmbed).
 const STORY_FALLBACK_CAPTION = 'My 24-hour story on 3Speak.';
@@ -207,6 +210,15 @@ export function EmbedUploadProvider({ children }) {
   // "List as a premiere" (opt-in, scheduled posts only): a public countdown page
   // with Notify me, and a shared start with a live chat (checker routes/premieres.js).
   const [isPremiere, setIsPremiere] = useState(false);
+  // "Save as draft": the post is built and kept on the checker without a time
+  // (utils/scheduledPosts.js drafts) instead of going out; published later from
+  // the studio's Drafts. Exclusive with a schedule.
+  const [saveAsDraft, setSaveAsDraft] = useState(false);
+  // Season and episode numbers (utils/episodeNumbers.js), as typed; long-form only.
+  const [seasonNum, setSeasonNum] = useState('');
+  const [episodeNum, setEpisodeNum] = useState('');
+  // A Short's series (lib/series.js): the playlist it is added to as the next part.
+  const [seriesId, setSeriesId] = useState('');
 
   // Community data
   const [communitiesData, setCommunitiesData] = useState([]);
@@ -451,6 +463,10 @@ export function EmbedUploadProvider({ children }) {
     SetDeclineRewards(false);
     setRewardPowerup(false);
     setIsScheduled(false);
+    setSaveAsDraft(false);
+    setSeasonNum('');
+    setEpisodeNum('');
+    setSeriesId('');
     setScheduleDateTime('');
     setIsPremiere(false);
     setFromStories(false);
@@ -1859,6 +1875,8 @@ export function EmbedUploadProvider({ children }) {
           // Chapters + link toasters (utils/videoTimeline.js). Read by the watch
           // page and the embed player; nothing when the creator added none.
           ...timeline,
+          // Season / episode (utils/episodeNumbers.js), for the podcast feeds.
+          ...(fromStories ? {} : episodeFields({ season: seasonNum, episode: episodeNum })),
           // Legacy 3Speak `info` block. Other Hive frontends (peakd, ecency, …)
           // render the player by reading video.info.author + video.info.permlink
           // to build the embed — WITHOUT it they request an EMPTY owner/permlink
@@ -2019,7 +2037,8 @@ export function EmbedUploadProvider({ children }) {
       // for an account_update2 signature on the first scheduled post ever),
       // then POST the fully-built post to the checker, which has a 5-minute
       // cron that broadcasts due posts as @threespeak on the user's behalf.
-      if (isScheduled && scheduleDateTime && !fromStories) {
+      const asDraft = saveAsDraft && !fromStories && !incubationHandle;
+      if (((isScheduled && scheduleDateTime) || asDraft) && !fromStories) {
         try {
           setStatusText(t('upload.publishing.checkingAuthority'));
           addMessage(t('upload.publishing.checkingAuthority'));
@@ -2032,7 +2051,8 @@ export function EmbedUploadProvider({ children }) {
           }
 
           // The HTML datetime-local string is local-tz; convert to a real ISO UTC.
-          const scheduledOnIso = new Date(scheduleDateTime).toISOString();
+          // A draft has no time at all.
+          const scheduledOnIso = asDraft ? null : new Date(scheduleDateTime).toISOString();
 
           // Auth: the app key, plus the owner's signature over this create
           // (utils/scheduledPostProof.js: @threespeak via our API for every login,
@@ -2053,18 +2073,18 @@ export function EmbedUploadProvider({ children }) {
             if (v) embedPermlink = v.split('/').pop() || null;
           } catch { /* leave null — link step in cron is best-effort */ }
 
-          setStatusText(t('upload.publishing.savingScheduled'));
-          addMessage(t('upload.publishing.savingScheduled'));
+          setStatusText(t(asDraft ? 'episodes.drafts.saving' : 'upload.publishing.savingScheduled'));
+          addMessage(t(asDraft ? 'episodes.drafts.saving' : 'upload.publishing.savingScheduled'));
           // Signed right before the write (the checker allows 5 minutes), over
-          // the very scheduledOn string the body carries.
-          const proof = await proveScheduledPost({
-            action: 'create', owner: assetOwner, permlink: hivePermlink, scheduledOn: scheduledOnIso,
-          });
+          // the very scheduledOn string the body carries (a draft: no time).
+          const proof = await proveScheduledPost(asDraft
+            ? { action: 'draft', owner: assetOwner, permlink: hivePermlink }
+            : { action: 'create', owner: assetOwner, permlink: hivePermlink, scheduledOn: scheduledOnIso });
           const resp = await axios.post(url, {
             ...proof,
             owner: assetOwner,
             permlink: hivePermlink,
-            scheduledOn: scheduledOnIso,
+            ...(asDraft ? { draft: true } : { scheduledOn: scheduledOnIso }),
             title,
             description: publishDescription,
             body: postBody,
@@ -2090,9 +2110,15 @@ export function EmbedUploadProvider({ children }) {
 
           // We deliberately SKIP the regular Hive broadcast and the embed-link
           // step here — the cron does both at publish time.
-          setStatusText(t('upload.publishing.scheduledFor', { when: new Date(scheduledOnIso).toLocaleString() }));
-          addMessage(t('upload.publishing.scheduledFor', { when: new Date(scheduledOnIso).toLocaleString() }), 'success');
-          toast.success(t('upload.publishing.scheduled'));
+          if (asDraft) {
+            setStatusText(t('episodes.drafts.saved'));
+            addMessage(t('episodes.drafts.savedLong'), 'success');
+            toast.success(t('episodes.drafts.saved'));
+          } else {
+            setStatusText(t('upload.publishing.scheduledFor', { when: new Date(scheduledOnIso).toLocaleString() }));
+            addMessage(t('upload.publishing.scheduledFor', { when: new Date(scheduledOnIso).toLocaleString() }), 'success');
+            toast.success(t('upload.publishing.scheduled'));
+          }
           setCompleted(true);
           setUploading(false);
           setUploadProgress(100);
@@ -2100,8 +2126,9 @@ export function EmbedUploadProvider({ children }) {
         } catch (schedErr) {
           console.error('Scheduled-post error:', schedErr);
           const msg = scheduledPostWriteError(schedErr, t('upload.errors.couldNotSchedule'));
-          addMessage(t('upload.errors.scheduleFailed', { msg }), 'error');
-          toast.error(t('upload.errors.scheduleFailed', { msg }));
+          const failKey = asDraft ? 'episodes.drafts.saveFailed' : 'upload.errors.scheduleFailed';
+          addMessage(t(failKey, { msg }), 'error');
+          toast.error(t(failKey, { msg }));
           throw schedErr;
         }
       }
@@ -2311,6 +2338,20 @@ export function EmbedUploadProvider({ children }) {
         }
       }
 
+      // ─── A Short's series: the next part ───
+      // After the post exists (the indexer checks the item). Non-fatal: the Short
+      // is out either way and can be added from the series page.
+      if (fromStories && seriesId && !result.incubation) {
+        try {
+          await addToPlaylist(seriesId, user, hivePermlink, SERIES_APPEND_POSITION);
+          addMessage(t('episodes.series.addedLog'), 'success');
+        } catch (seriesErr) {
+          console.warn('Failed to add the short to its series:', seriesErr);
+          addMessage(t('episodes.series.addFailed'), 'warning');
+          toast.error(t('episodes.series.addFailed'));
+        }
+      }
+
       // ─── Imported video: remember it is on 3Speak now ───
       // Non-fatal and silent: it only feeds the ✓ on the import page.
       if (importSource && !result.incubation) {
@@ -2372,6 +2413,10 @@ export function EmbedUploadProvider({ children }) {
     isScheduled, setIsScheduled,
     scheduleDateTime, setScheduleDateTime,
     isPremiere, setIsPremiere,
+    saveAsDraft, setSaveAsDraft,
+    seasonNum, setSeasonNum,
+    episodeNum, setEpisodeNum,
+    seriesId, setSeriesId,
     // Community data
     communitiesData, setCommunitiesData,
     // Modals

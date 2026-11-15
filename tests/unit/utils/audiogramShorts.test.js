@@ -22,6 +22,12 @@ describe('sanitizeAudiograms', () => {
     expect(sanitizeAudiograms([good({ url: 'http://localhost:3104/rendered/audiogram-abc.mp4' })])).toHaveLength(1)
   })
 
+  it('keeps where in the episode the piece starts, when the editor sends it', () => {
+    expect(sanitizeAudiograms([good({ start: 73.04 })])[0].start).toBe(73)
+    expect(sanitizeAudiograms([good({ start: -1 })])[0]).not.toHaveProperty('start')
+    expect(sanitizeAudiograms([good({ start: 'x' })])[0]).not.toHaveProperty('start')
+  })
+
   it('drops anything else', () => {
     for (const bad of [
       good({ url: 'http://evil.example/rendered/audiogram-abc.mp4' }),
@@ -69,6 +75,11 @@ describe('the Short', () => {
     expect(m.image).toEqual(['https://img/t.jpg'])
     expect(m['3speak']).toEqual({ audiogram: { author: 'alice', permlink: 'my-episode' } })
     expect(audiogramShortMetadata({ embedUrl: 'e', owner: 'a', assetPermlink: 'p', duration: 3, episode }).image).toBeUndefined()
+  })
+
+  it('metadata: the piece of the episode (start, duration) for the podcast feed\'s soundbite', () => {
+    const m = audiogramShortMetadata({ embedUrl: 'e', owner: 'badadib', assetPermlink: 'p', duration: 45.46, episode, start: 300 })
+    expect(m['3speak'].audiogram).toEqual({ author: 'alice', permlink: 'my-episode', start: 300, duration: 45.5 })
   })
 
   it('permlinks: from the title, different per audiogram', () => {

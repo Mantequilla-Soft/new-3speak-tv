@@ -18,6 +18,11 @@ describe('scheduledPostMessage', () => {
     expect(scheduledPostMessage({ action: 'update', owner: 'alice', permlink: 'p', scheduledOn: AT, timestamp: 9 })).toBe('scheduled-post|update|alice|p|9')
     expect(scheduledPostMessage({ action: 'cancel', owner: 'alice', permlink: 'p', timestamp: 9 })).toBe('scheduled-post|cancel|alice|p|9')
   })
+
+  it('a draft names no time, publishing one names the time it goes out', () => {
+    expect(scheduledPostMessage({ action: 'draft', owner: 'badadib', permlink: 'p', scheduledOn: AT, timestamp: 9 })).toBe('scheduled-post|draft|badadib|p|9')
+    expect(scheduledPostMessage({ action: 'publish', owner: 'badadib', permlink: 'p', scheduledOn: AT, timestamp: 9 })).toBe(`scheduled-post|publish|badadib|p|${AT}|9`)
+  })
 })
 
 describe('parseScheduledPostRequest', () => {
@@ -26,6 +31,15 @@ describe('parseScheduledPostRequest', () => {
       .toEqual({ action: 'create', owner: 'alice', permlink: 'p', scheduledOn: AT })
     expect(parseScheduledPostRequest({ action: 'cancel', owner: 'alice', permlink: 'p', scheduledOn: AT }))
       .toEqual({ action: 'cancel', owner: 'alice', permlink: 'p' })
+  })
+
+  it('draft and publish: publish needs a real time, a draft keeps none', () => {
+    expect(parseScheduledPostRequest({ action: 'draft', owner: 'badadib', permlink: 'p', scheduledOn: AT }))
+      .toEqual({ action: 'draft', owner: 'badadib', permlink: 'p' })
+    expect(parseScheduledPostRequest({ action: 'publish', owner: 'badadib', permlink: 'p', scheduledOn: AT }))
+      .toEqual({ action: 'publish', owner: 'badadib', permlink: 'p', scheduledOn: AT })
+    expect(parseScheduledPostRequest({ action: 'publish', owner: 'badadib', permlink: 'p', scheduledOn: 'soon' }))
+      .toEqual({ error: 'invalid scheduledOn' })
   })
 
   it('refuses a body that is not an object', () => {

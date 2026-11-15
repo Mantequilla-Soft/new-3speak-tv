@@ -42,6 +42,8 @@ vi.mock('../../../src/utils/audioUpload', () => ({
   audioFormatFor: () => 'webm',
 }))
 vi.mock('../../../src/utils/uploadThumbnail', () => ({ uploadThumbnail: vi.fn(async () => 'https://images.hive.blog/DQmMine/mine.jpg') }))
+// Scheduled posts and drafts go to the checker (utils/scheduledPosts.js).
+vi.mock('../../../src/utils/scheduledPosts', () => ({ saveScheduledPost: vi.fn(async () => ({ success: true })) }))
 vi.mock('../../../src/utils/postingAuthority', () => ({ hasThreespeakPostingAuth: async () => true, addThreespeakToPostingAuth: async () => {} }))
 vi.mock('../../../src/utils/rcCheck', async (importOriginal) => ({ ...(await importOriginal()), checkPostingRc: async () => ({ ok: true }) }))
 vi.mock('../../../src/lib/youtubeImport', () => ({ markImportPublished: vi.fn(async () => ({ ok: true })) }))
@@ -94,6 +96,7 @@ const { useAppStore } = await import('../../../src/lib/store')
 const { default: AudioUploadModal } = await import('../../../src/components/AudioUploadModal/AudioUploadModal.jsx')
 const { publishAudiogramShorts } = await import('../../../src/utils/audiogramShorts')
 const { markImportPublished } = await import('../../../src/lib/youtubeImport')
+const { saveScheduledPost } = await import('../../../src/utils/scheduledPosts')
 
 // jsdom reads no media: every <audio> reports m.duration as soon as it gets a src.
 let savedSrc
@@ -741,5 +744,61 @@ describe('AudioUploadModal: transcripts', () => {
     await user.click(screen.getByRole('button', { name: /Make a transcript/ }))
     await act(async () => runs[1].reject(Object.assign(new Error('x'), { code: 'connection' })))
     expect(await screen.findByText('The transcript could not be made. Please try again.')).toBeTruthy()
+  })
+})
+
+describe('AudioUploadModal: season, episode, scheduling and drafts (standalone post)', () => {
+  beforeEach(() => useAppStore.setState({ user: 'badadib' }))
+  const plainTrack = () => ({ blob: new File(['ID3'], 'Episode.mp3', { type: 'audio/mpeg' }), filename: 'Episode.mp3', type: null, source: 'editor' })
+  const postOps = () => aioha.broadcastWithAioha.mock.calls.map(([o]) => o).find((o) => o[0][0] === 'comment')
+
+  it('season and episode ride in the audio block of the post', async () => {
+    const { user } = openModal({ initialTrack: plainTrack() })
+    await waitFor(() => row('Episode.mp3'))
+    await toPostStep(user, null)
+    await user.type(screen.getByPlaceholderText('Title (required)'), 'Garden talk')
+    await user.type(screen.getByTestId('episode-season'), '2')
+    await user.type(screen.getByTestId('episode-episode'), '5')
+    await next(user)
+    await user.click(screen.getByRole('button', { name: 'Publish' }))
+    await waitFor(() => expect(postOps()).toBeDefined())
+    expect(JSON.parse(postOps()[0][1].json_metadata).audio).toMatchObject({ type: 'podcast', season: 2, episode: 5 })
+    expect(saveScheduledPost).not.toHaveBeenCalled()
+  })
+
+  it('saved as a draft: the upload and the built post go to the checker, nothing is broadcast', async () => {
+    const { user } = openModal({ initialTrack: plainTrack() })
+    await waitFor(() => row('Episode.mp3'))
+    await toPostStep(user, 'Show A')
+    await user.type(screen.getByPlaceholderText('Title (required)'), 'Garden talk')
+    await user.click(screen.getByRole('tab', { name: /Draft/ }))
+    await next(user)
+    await user.click(screen.getByRole('button', { name: /Save draft/ }))
+    await waitFor(() => expect(saveScheduledPost).toHaveBeenCalledTimes(1))
+    const { owner, permlink, scheduledOn, post } = saveScheduledPost.mock.calls[0][0]
+    expect(owner).toBe('badadib')
+    expect(scheduledOn).toBeNull()
+    expect(permlink).toMatch(/^garden-talk/)
+    expect(post).toMatchObject({ title: 'Garden talk', audioPermlink: 'aud-1', playlistAdd: { playlist_id: 'p1', position: 0 }, parentAuthor: '' })
+    expect(post.body).toContain('https://audio.3speak.tv/play?a=aud-1')
+    expect(post.jsonMetadata.audio).toMatchObject({ type: 'podcast' })
+    expect(postOps()).toBeUndefined()
+    await screen.findByRole('link', { name: /Open my studio/ })
+    expect(screen.getByRole('link', { name: /Open my studio/ })).toHaveAttribute('href', '/draft?show=unsent')
+  })
+
+  it('scheduled: the same, with the time picked', async () => {
+    const { user } = openModal({ initialTrack: plainTrack() })
+    await waitFor(() => row('Episode.mp3'))
+    await toPostStep(user, null)
+    await user.type(screen.getByPlaceholderText('Title (required)'), 'Garden talk')
+    await user.click(screen.getByRole('tab', { name: /Schedule/ }))
+    await next(user)
+    await user.click(screen.getByRole('button', { name: /^Schedule/ }))
+    await waitFor(() => expect(saveScheduledPost).toHaveBeenCalledTimes(1))
+    const { scheduledOn, post } = saveScheduledPost.mock.calls[0][0]
+    expect(Date.parse(scheduledOn)).toBeGreaterThan(Date.now() + 10 * 60 * 1000)
+    expect(post.playlistAdd).toBeNull()
+    expect(postOps()).toBeUndefined()
   })
 })

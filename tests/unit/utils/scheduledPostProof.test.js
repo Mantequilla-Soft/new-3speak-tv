@@ -53,6 +53,13 @@ describe('the signed message', () => {
     expect(scheduledPostMessage({ action: 'cancel', owner: 'alice', permlink: 'p-1', timestamp: 5 }))
       .toBe('scheduled-post|cancel|alice|p-1|5')
   })
+
+  it('a draft names no time; publishing a draft names the time like a create', () => {
+    expect(scheduledPostMessage({ action: 'draft', owner: 'badadib', permlink: 'p-1', scheduledOn: AT, timestamp: 5 }))
+      .toBe('scheduled-post|draft|badadib|p-1|5')
+    expect(scheduledPostMessage({ action: 'publish', owner: 'badadib', permlink: 'p-1', scheduledOn: AT, timestamp: 5 }))
+      .toBe(`scheduled-post|publish|badadib|p-1|${AT}|5`)
+  })
 })
 
 describe('signed by our API', () => {

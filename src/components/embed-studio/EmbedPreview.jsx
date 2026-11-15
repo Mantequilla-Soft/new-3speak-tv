@@ -41,6 +41,7 @@ function EmbedPreview() {
     statusText,
     statusMessages,
     publishToEmbed,
+    saveAsDraft,
     user,
     fromStories,
     isStory,
@@ -303,8 +304,10 @@ function EmbedPreview() {
       !gateSatisfied && { key: "watch", label: t("upload.review.watchAdToPublish"), onClick: startGateAd, icon: "play_circle" },
       {
         key: "post",
-        icon: "send",
-        label: fromStories ? t(isStory ? 'upload.review.postStory' : 'upload.review.postShort') : t('upload.review.postVideo'),
+        icon: saveAsDraft && !fromStories ? "edit_note" : "send",
+        label: fromStories
+          ? t(isStory ? 'upload.review.postStory' : 'upload.review.postShort')
+          : (saveAsDraft ? t('episodes.drafts.saveButton') : t('upload.review.postVideo')),
         onClick: handlePostVideo,
         disabled: !gateSatisfied || publishing,
         title: gateSatisfied ? undefined : t('upload.review.watchSponsorFirst'),
