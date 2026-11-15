@@ -41,7 +41,7 @@ import AudioCommentPanel from './AudioCommentPanel';
 import AudioHypeButton from './AudioHypeButton';
 import FollowChip from './FollowChip';
 import useAudioComments from './useAudioComments';
-import { recordWatch } from '../../utils/watchHistory';
+import { noteListen } from '../../lib/listenHistory';
 import {
   fmt, SPEEDS, SPEED_KEY, normalizeSpeed, formatSpeed, SKIP_BACK, SKIP_FORWARD, skipTarget,
   SWIPE_SKIP, barSwipe, fullSwipeCollapses,
@@ -307,9 +307,6 @@ function GlobalAudioPlayer() {
   // never earn) and send a heartbeat while the audio is actually advancing.
   // The backend credits the wall-clock time it observes between beats, so a
   // listen can't be forged with a single request.
-  // The 3Speak track last put in the listener's watch history (once per track
-  // per page visit; the history counts rewatches itself).
-  const historyRef = useRef(null);
   const listenRef = useRef({ permlink: null, sid: null, token: null, beatMs: 10000, lastBeatAt: 0, credited: false, encrypted: false });
   const beatOnce = useCallback(async () => {
     const L = listenRef.current;
@@ -530,17 +527,9 @@ function GlobalAudioPlayer() {
     };
     const onPageHide = () => savePosition();
     window.addEventListener('pagehide', onPageHide);
-    // A 3Speak track joins the watch history (/watched, Audio tab) once it was
-    // really listened to: 30 s, or half of a shorter track, the rule a play uses.
-    const saveHistory = (pos) => {
-      if (!audioCurrent?.permlink || audioCurrent.external || live || historyRef.current === audioCurrent._id) return;
-      const dur = Number(audioCurrent.duration) || el.duration || 0;
-      if (!(pos >= Math.min(30, dur > 0 ? dur / 2 : 30))) return;
-      historyRef.current = audioCurrent._id;
-      const { user: u, incubationHandle, watchHistoryEnabled } = useAppStore.getState();
-      const who = u || incubationHandle;
-      if (who && watchHistoryEnabled !== false) recordWatch(who, audioCurrent.owner, audioCurrent.permlink);
-    };
+    // The track joins the watch history (/watched, Audio tab) once it was really
+    // listened to, once a day: 3Speak audio and outside episodes (lib/listenHistory.js).
+    const saveHistory = (pos) => noteListen(audioCurrent, pos, Number(audioCurrent?.duration) || el.duration || 0);
     const h = {
       timeupdate: () => {
         audioSetCurrentTime(el.currentTime);
