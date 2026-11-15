@@ -1,0 +1,34 @@
+{
+  "readyTitle": "Je clip is klaar",
+  "readySub": "De laatste 30 seconden van de stream.",
+  "postShort": "Posten als Short",
+  "download": "Downloaden",
+  "delete": "Verwijderen",
+  "shareHost": "@{{host}} krijgt {{percent}}% van de beloningen van de Short: het is hun stream.",
+  "shareClipper": "@{{clipper}} maakte deze clip en krijgt {{percent}}% van de beloningen van de Short.",
+  "loginToPost": "Log in om clips als Shorts te posten.",
+  "allClips": "Al je clips van deze stream",
+  "postFailed": "De clip kon niet worden geopend om te posten. Probeer het opnieuw.",
+  "deleteConfirm": "Deze clip verwijderen?",
+  "deleteFailed": "De clip kon niet worden verwijderd.",
+  "title": "Beste momenten",
+  "subHost": "Clips uit je stream, klaar om als Shorts te posten. Ze blijven 2 dagen.",
+  "subViewer": "Je clips van deze stream. Ze blijven 2 dagen.",
+  "error": "Clips konden nu niet worden geladen.",
+  "empty": "Nog geen clips. Drukke momenten in de chat en boosts verschijnen hier.",
+  "at": "op {{time}}",
+  "source": {
+    "auto": "Hoogtepunt",
+    "mine": "Jouw clip",
+    "by": "Geclipt door @{{user}}",
+    "guest": "Geclipt door een gast"
+  },
+  "reasons": {
+    "chat": "De chat ging los",
+    "boosts": "Boosts",
+    "big_boost": "Grote boost"
+  },
+  "momentsTitle": "Meer momenten",
+  "momentsSub": "Maak een Short van de opname zodra die verwerkt is.",
+  "makeShort": "Maak een Short"
+}

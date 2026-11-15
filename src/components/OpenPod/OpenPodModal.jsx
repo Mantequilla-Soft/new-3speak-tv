@@ -11,12 +11,14 @@ import { getCreatorSettings, isUploadBlocked } from '../../utils/creatorSettings
 import { useSupportBlock } from '../../lib/supportBlockStore';
 import { firePendingAnnouncement, getAnnounceConfig } from '../../utils/openpodAnnounce';
 import { publishStreamVod } from '../../utils/streamVod';
+import { podcastChapters } from '../../utils/podcastChapters';
 import { usePremiumStatus } from '../../hooks/usePremiumStatus';
 import { defaultEndpoint, findRoomEndpoint } from '../../utils/hangoutsEndpoints';
 import { storiesEnabledFor } from '../../utils/config';
 import StreamStoryPrompt from '../openpods/StreamStoryPrompt';
 import AnnounceOptions from '../openpods/AnnounceOptions';
 import { useStudioCaptionsOptions, saveStreamCaptions } from '../openpods/studioCaptions';
+import StreamHighlightsPanel from '../openpods/StreamHighlightsPanel';
 import { Button, Icon } from '../v2/ui';
 import './OpenPodModal.scss';
 
@@ -174,6 +176,9 @@ export default function OpenPodModal({ isOpen, onClose, roomName, sessionToken, 
         blob: file.blob,
         filename: file.filename,
         type: 'podcast',
+        // Record as podcast (H23): chapters from stage changes and the host's marks.
+        ...(Array.isArray(file.chapters) ? { chapters: podcastChapters(file.chapters, file.title, t) } : {}),
+        ...(file.title ? { prefill: { title: file.title } } : {}),
       },
     }));
   };
@@ -239,6 +244,10 @@ export default function OpenPodModal({ isOpen, onClose, roomName, sessionToken, 
                   <p className="openpod-ended__text">
                     {streamEnded ? t('live.modal.recordingProcessing') : t('live.modal.noLongerLive')}
                   </p>
+                )}
+                {/* H13: the best moments of the stream, ready to post as Shorts. */}
+                {streamEnded && roomMode === 'standalone' && (
+                  <StreamHighlightsPanel api={endpoint.api} room={roomName} token={sessionToken || null} compact />
                 )}
                 <Button
                   variant="secondary"

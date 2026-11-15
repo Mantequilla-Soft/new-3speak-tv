@@ -1,0 +1,11 @@
+{
+  "label": "Geri sar",
+  "goLive": "Canlıya dön",
+  "title": "{{minutes}} dk'ya kadar geri sar",
+  "error": "Geri sarma şu anda kullanılamıyor.",
+  "back10": "10 saniye geri",
+  "forward10": "10 saniye ileri",
+  "play": "Oynat",
+  "pause": "Duraklat",
+  "seek": "Yayındaki konum"
+}

@@ -1,0 +1,34 @@
+{
+  "readyTitle": "Ton clip est prêt",
+  "readySub": "Les 30 dernières secondes du direct.",
+  "postShort": "Publier en Short",
+  "download": "Télécharger",
+  "delete": "Supprimer",
+  "shareHost": "@{{host}} reçoit {{percent}} % des récompenses du Short : c'est son direct.",
+  "shareClipper": "@{{clipper}} a fait ce clip et reçoit {{percent}} % des récompenses du Short.",
+  "loginToPost": "Connecte-toi pour publier des clips en Shorts.",
+  "allClips": "Tous tes clips de ce direct",
+  "postFailed": "Impossible d'ouvrir le clip pour le publier. Réessaie.",
+  "deleteConfirm": "Supprimer ce clip ?",
+  "deleteFailed": "Impossible de supprimer le clip.",
+  "title": "Meilleurs moments",
+  "subHost": "Les clips de ton direct, prêts à publier en Shorts. Ils restent 2 jours.",
+  "subViewer": "Tes clips de ce direct. Ils restent 2 jours.",
+  "error": "Impossible de charger les clips pour le moment.",
+  "empty": "Pas encore de clips. Les moments où le chat et les boosts s'emballent apparaissent ici.",
+  "at": "à {{time}}",
+  "source": {
+    "auto": "Temps fort",
+    "mine": "Ton clip",
+    "by": "Clip de @{{user}}",
+    "guest": "Clip d'un invité"
+  },
+  "reasons": {
+    "chat": "Le chat s'est enflammé",
+    "boosts": "Boosts",
+    "big_boost": "Gros boost"
+  },
+  "momentsTitle": "Autres moments",
+  "momentsSub": "Fais un Short à partir du replay une fois qu'il est traité.",
+  "makeShort": "Faire un Short"
+}

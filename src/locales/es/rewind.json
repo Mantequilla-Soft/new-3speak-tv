@@ -1,0 +1,11 @@
+{
+  "label": "Retroceder",
+  "goLive": "Ir al directo",
+  "title": "Retrocede hasta {{minutes}} min",
+  "error": "Retroceder no está disponible ahora.",
+  "back10": "Atrás 10 segundos",
+  "forward10": "Adelante 10 segundos",
+  "play": "Reproducir",
+  "pause": "Pausa",
+  "seek": "Posición en la transmisión"
+}

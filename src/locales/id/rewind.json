@@ -1,0 +1,11 @@
+{
+  "label": "Putar mundur",
+  "goLive": "Kembali ke live",
+  "title": "Putar mundur hingga {{minutes}} mnt",
+  "error": "Putar mundur tidak tersedia saat ini.",
+  "back10": "Mundur 10 detik",
+  "forward10": "Maju 10 detik",
+  "play": "Putar",
+  "pause": "Jeda",
+  "seek": "Posisi dalam siaran"
+}

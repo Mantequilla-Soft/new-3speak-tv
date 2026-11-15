@@ -1,0 +1,11 @@
+{
+  "label": "Revenir en arrière",
+  "goLive": "Revenir au direct",
+  "title": "Reviens jusqu'à {{minutes}} min en arrière",
+  "error": "Le retour en arrière n'est pas disponible pour le moment.",
+  "back10": "Reculer de 10 secondes",
+  "forward10": "Avancer de 10 secondes",
+  "play": "Lecture",
+  "pause": "Pause",
+  "seek": "Position dans le direct"
+}
