@@ -16,9 +16,12 @@ export const LIGHTNING_PRESETS = [500, 1000, 2500, 5000];
 // creator set their own Lightning address, else 'v4v'. `verifiable` false = no way
 // to see the payment arrive (the address offers no LUD-21 verify URL). Throws an Error whose `code` is the API's error name
 // (bad_amount, amount_out_of_range, no_account, invoice_failed, ...).
-export async function requestLightningInvoice({ to, sats, comment }) {
+// `watch: false`: no need to watch for the payment (a streamed minute paid by WebLN,
+// lib/boosts.js), so the server does not poll Hive for it.
+export async function requestLightningInvoice({ to, sats, comment, watch = true }) {
   const qs = new URLSearchParams({ to, sats: String(sats) });
   if (comment) qs.set('comment', comment);
+  if (!watch) qs.set('watch', '0');
   const res = await fetch(`/api/lightning/invoice?${qs}`);
   const data = await res.json().catch(() => ({}));
   if (!res.ok || !data.pr) {

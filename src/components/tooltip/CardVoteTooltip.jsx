@@ -7,6 +7,7 @@ import VoteWeightPanel from './VoteWeightPanel';
 import { estimate, getUersContent, getVotePower } from '../../utils/hiveUtils';
 import { toastIn } from '../../utils/toast';
 import { voteWithAioha, isLoggedIn } from '../../hive-api/aioha';
+import { estimateCuration, formatSmallUsd } from '../../lib/curation';
 
 // Every toast from this module is headed "Vote"; the message becomes the
 // line under it. See utils/toast.js.
@@ -132,7 +133,9 @@ const CardVoteTooltip = ({
       // Use aioha for client-side voting
       await voteWithAioha(author, permlink, voteWeight);
 
-      toast.success(t('engagement.vote.success', { value: voteValue }));
+      // What the vote added and roughly what it earns in curation (lib/curation.js).
+      const earn = estimateCuration({ value: voteValue, post: data, changed: !!existingVote });
+      toast.success(t(earn > 0 ? 'curation.vote.added' : 'curation.vote.addedNoCuration', { value: formatSmallUsd(voteValue), earn: formatSmallUsd(earn) }));
       const postKey = `${author}/${permlink}`;
       // Optimistically mark as voted
       setVoteStatus((prev) => ({

@@ -14,6 +14,8 @@ import UpvoteCount from '../UpvoteCount/UpvoteCount';
 import CommentVoteTooltip from '../tooltip/CommentVoteTooltip';
 import AddToPlaylistModal from '../AddToPlaylistModal/AddToPlaylistModal';
 import TipModal from '../tip-reward/TipModal';
+import StreamSatsModal from '../boosts/StreamSatsModal';
+import useSatStream from '../../hooks/useSatStream';
 import BlogContent from '../playVideo/BlogContent';
 import Waveform from './Waveform';
 import ReportModal from '../modal/ReportModal';
@@ -318,6 +320,17 @@ function GlobalAudioPlayer() {
   const [playlistTarget, setPlaylistTarget] = useState(null);
   const [shareTarget, setShareTarget] = useState(null);
   const [tipTarget, setTipTarget] = useState(null);
+  // Streaming sats to the creator while a native 3Speak track plays (lib/boosts.js):
+  // never for outside podcasts, live audio or your own track.
+  const streamTo = audioCurrent && !audioCurrent.external && !isLive && audioCurrent.post_permlink && user !== audioCurrent.owner
+    ? audioCurrent.owner : null;
+  const satStream = useSatStream({
+    to: streamTo,
+    permlink: streamTo ? audioCurrent.post_permlink : null,
+    playing: audioIsPlaying,
+    link: streamTo ? `https://3speak.tv/audio/${audioCurrent.owner}/${audioCurrent.post_permlink}` : '',
+  });
+  const [streamOpen, setStreamOpen] = useState(false);
   const [podcastTip, setPodcastTip] = useState(null);
   // The comment box at the top of the player: { author, permlink, title, at }.
   const [commentTarget, setCommentTarget] = useState(null);
@@ -2103,6 +2116,16 @@ function GlobalAudioPlayer() {
               {post && <DockTile className="gap-tile" icon="chat_bubble" label={String(commentCount || 0)} active={activeTab === 'comments'} tone="cyan" fill={false} onClick={openComments} aria-label={t('audio.item.comments')} />}
               {canSave && <DockTile className="gap-tile" icon="playlist_add" label={t('common.actions.save')} onClick={openPlaylist} title={t('audio.player.playlist')} />}
               {canTip && <DockTile className="gap-tile" icon="volunteer_activism" label={t('audio.post.tip')} onClick={openTip} title={nowPlaying.external && !post ? t('audio.podcasts.tip.button') : t('audio.post.tip')} />}
+              {satStream.available && (
+                <DockTile
+                  className="gap-tile"
+                  icon="bolt"
+                  label={satStream.settings.enabled ? t('boosts.stream.tileOn', { sats: satStream.sessionSats }) : t('boosts.stream.tile')}
+                  active={satStream.settings.enabled}
+                  onClick={() => setStreamOpen(true)}
+                  title={t('boosts.stream.title')}
+                />
+              )}
               {canShare && <DockTile className="gap-tile" icon="ios_share" label={t('common.actions.share')} active={shareOpen} tone="cyan" fill={false} onClick={toggleMenu('share')} aria-haspopup="dialog" />}
             </div>
           </div>
@@ -2503,8 +2526,13 @@ function GlobalAudioPlayer() {
 
       {podcastTip && <PodcastTipModal track={podcastTip} onClose={() => setPodcastTip(null)} />}
 
+      {streamOpen && satStream.available && (
+        <StreamSatsModal stream={satStream} to={streamTo} onClose={() => setStreamOpen(false)} />
+      )}
+
       {tipTarget && (
         <TipModal
+          boost
           recipient={tipTarget.author}
           permlink={tipTarget.permlink}
           memoLink={`https://3speak.tv/audio/${tipTarget.author}/${tipTarget.permlink}`}

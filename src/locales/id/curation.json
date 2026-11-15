@@ -1,0 +1,27 @@
+{
+  "vote": {
+    "added": "Vote-mu menambah sekitar ${{value}} ke postingan ini dan seharusnya memberimu sekitar ${{earn}} dari kurasi saat dibayarkan.",
+    "addedNoCuration": "Vote-mu menambah sekitar ${{value}} ke postingan ini.",
+    "addedTagged": "Diberi tag “{{tag}}”. Vote-mu menambah sekitar ${{value}} dan seharusnya memberimu sekitar ${{earn}} dari kurasi."
+  },
+  "page": {
+    "title": "Kurasi",
+    "sub": "Pilihanmu di 3Speak dalam {{days}} hari terakhir",
+    "subOther": "Pilihan di 3Speak dalam {{days}} hari terakhir",
+    "picks": "Pilihan",
+    "earned": "Reward kurasi",
+    "early": "Ditemukan lebih awal",
+    "earnedValue": "{{hp}} HP",
+    "rule": "“Ditemukan lebih awal” berarti vote sebelum vote-mu membawa paling banyak {{share}}% dari nilai vote postingan, dan postingan itu kemudian mendapat setidaknya {{votes}} vote.",
+    "votedAt": "Di-vote {{when}}",
+    "weight": "Vote {{weight}}%",
+    "rank": "Vote ke-{{rank}} dari {{votes}}",
+    "reward": "+{{hp}} HP",
+    "pending": "Dibayar nanti",
+    "badge": "Ditemukan lebih awal",
+    "empty": "Tidak ada vote di video, shorts, atau audio 3Speak dalam periode ini.",
+    "loadFailed": "Riwayat kurasi tidak bisa dimuat. Coba lagi sebentar lagi.",
+    "open": "Kurasi",
+    "note": "Reward kurasi dibayar dalam Hive Power saat postingan dibayarkan, 7 hari setelah dipublikasikan."
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "vote": {
+    "added": "Your vote added about ${{value}} to this post and should earn you about ${{earn}} in curation when it pays out.",
+    "addedNoCuration": "Your vote added about ${{value}} to this post.",
+    "addedTagged": "Tagged “{{tag}}”. Your vote added about ${{value}} and should earn you about ${{earn}} in curation."
+  },
+  "page": {
+    "title": "Curation",
+    "sub": "Your picks on 3Speak in the last {{days}} days",
+    "subOther": "Picks on 3Speak in the last {{days}} days",
+    "picks": "Picks",
+    "earned": "Curation earned",
+    "early": "Found it early",
+    "earnedValue": "{{hp}} HP",
+    "rule": "“Found it early” means the votes before yours carried at most {{share}}% of the post's vote value, and the post went on to get at least {{votes}} votes.",
+    "votedAt": "Voted {{when}}",
+    "weight": "{{weight}}% vote",
+    "rank": "Vote {{rank}} of {{votes}}",
+    "reward": "+{{hp}} HP",
+    "pending": "Pays out later",
+    "badge": "Found it early",
+    "empty": "No votes on 3Speak videos, shorts or audio in this time.",
+    "loadFailed": "Could not load the curation history. Try again in a minute.",
+    "open": "Curation",
+    "note": "Curation rewards are paid in Hive Power when a post pays out, 7 days after it was published."
+  }
+}

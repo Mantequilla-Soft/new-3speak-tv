@@ -1,0 +1,93 @@
+{
+  "actions": {
+    "powerUp": "Power up",
+    "powerDown": "Power down",
+    "savings": "เงินออม",
+    "convert": "แปลง",
+    "delegate": "เดลิเกต",
+    "aria": "จัดการเงินของคุณ"
+  },
+  "common": {
+    "amount": "จำนวน ({{coin}})",
+    "available": "ใช้ได้: {{balance}}",
+    "max": "สูงสุด",
+    "to": "ไปยังบัญชี",
+    "toHint": "ปล่อยไว้ตามเดิมหากเป็นบัญชีของคุณเอง",
+    "activeKey": "ต้องใช้ active key ของคุณ",
+    "butrauth": "ลงชื่อเข้าใช้ด้วย Butter Auth: คุณจะอนุมัติรายการนี้ด้วยกระเป๋า Hive หรือ active key ในขั้นตอนถัดไป",
+    "insufficient": "จำนวนนี้มากกว่าที่คุณมี",
+    "amountPositive": "ใส่จำนวนที่มากกว่าศูนย์",
+    "invalidAccount": "ไม่มีบัญชี Hive ชื่อนี้",
+    "done": "เสร็จแล้ว อาจใช้เวลาสักครู่กว่าจะแสดงที่นี่",
+    "failed": "ทำรายการไม่สำเร็จ: {{error}}",
+    "loading": "กำลังโหลดกระเป๋าเงินของคุณ..."
+  },
+  "powerUp": {
+    "title": "Power up",
+    "note": "Hive Power ทำให้โหวตของคุณมีน้ำหนักและได้รับรางวัลการคัดสรร การแปลงกลับเป็น HIVE ใช้การจ่ายรายสัปดาห์ 13 ครั้ง",
+    "submit": "Power up {{amount}} HIVE",
+    "submitTo": "Power up {{amount}} HIVE ให้ @{{to}}"
+  },
+  "powerDown": {
+    "title": "Power down",
+    "note": "Hive Power จะกลับมาเป็น HIVE ด้วยการจ่ายรายสัปดาห์ 13 ครั้ง ประมาณสัปดาห์ละ {{weekly}} HP",
+    "replace": "มี power down ที่กำลังทำงานอยู่ (เหลือ {{left}} HP) การเริ่มรายการใหม่จะแทนที่รายการเดิม",
+    "submit": "Power down {{amount}} HP",
+    "stop": "หยุด power down",
+    "stopped": "หยุด power down แล้ว"
+  },
+  "savings": {
+    "title": "เงินออม",
+    "deposit": "ฝาก",
+    "withdraw": "ถอน",
+    "depositNote": "HBD ในเงินออมได้ผลตอบแทน {{rate}}% ต่อปี การถอนใช้เวลา 3 วัน",
+    "depositNoteHive": "HIVE ในเงินออมไม่ได้ดอกเบี้ย การถอนใช้เวลา 3 วัน",
+    "withdrawNote": "ได้รับภายใน 3 วัน คุณยกเลิกได้จนถึงตอนนั้น",
+    "submitDeposit": "ฝาก {{amount}} {{coin}}",
+    "submitWithdraw": "ถอน {{amount}} {{coin}}"
+  },
+  "convert": {
+    "title": "แปลง",
+    "hbdToHive": "HBD เป็น HIVE",
+    "hiveToHbd": "HIVE เป็น HBD",
+    "hbdNote": "คุณจะได้ประมาณ {{amount}} HIVE ใน 3.5 วัน ตามราคามัธยฐานของช่วงนั้น จำนวนสุดท้ายอาจต่างออกไป",
+    "hiveNote": "คุณจะได้ประมาณ {{amount}} HBD ทันที HIVE ครึ่งหนึ่งของคุณถูกกันไว้เป็นหลักประกัน และส่วนที่เหลือจะคืนมาใน 3.5 วัน มีค่าธรรมเนียม 5%",
+    "warning": "การแปลงย้อนกลับไม่ได้ การซื้อขายในตลาดอาจถูกกว่า",
+    "submit": "แปลง {{amount}} {{coin}}"
+  },
+  "delegate": {
+    "title": "เดลิเกต",
+    "toLabel": "เดลิเกตให้",
+    "note": "Hive Power ที่เดลิเกตยังเป็นของคุณ แต่บัญชีอื่นจะได้ใช้น้ำหนักโหวตของมัน เมื่อคุณถอนคืน จะใช้เวลา 5 วันกว่าจะกลับมา",
+    "current": "ตอนนี้คุณเดลิเกต {{hp}} HP ให้ @{{to}} รายการนี้จะตั้งจำนวนใหม่",
+    "submit": "เดลิเกต {{amount}} HP ให้ @{{to}}",
+    "submitNoTo": "เดลิเกต {{amount}} HP",
+    "yours": "การเดลิเกตของคุณ",
+    "remove": "ถอนคืน",
+    "removed": "ถอนการเดลิเกตแล้ว HP จะกลับมาใน 5 วัน",
+    "self": "คุณเดลิเกตให้ตัวเองไม่ได้"
+  },
+  "pending": {
+    "title": "กำลังดำเนินการ",
+    "powerDown": "Power down: สัปดาห์ละ {{weekly}} HP เหลืออีก {{weeks}} สัปดาห์",
+    "nextPayment": "จ่ายครั้งถัดไป {{date}}",
+    "withdrawal": "จากเงินออม: {{amount}}",
+    "arrives": "ได้รับ {{date}}",
+    "convertHbd": "กำลังแปลง {{amount}} เป็น HIVE",
+    "convertHive": "{{amount}} ถูกกันไว้เป็นหลักประกัน",
+    "ready": "เสร็จ {{date}}",
+    "delegation": "เดลิเกตให้ @{{to}}: {{hp}} HP",
+    "cancel": "ยกเลิก",
+    "cancelled": "ยกเลิกการถอนแล้ว เงินยังอยู่ในเงินออม",
+    "stop": "หยุด",
+    "empty": "ไม่มีรายการที่กำลังดำเนินการ"
+  },
+  "activeAuth": {
+    "powerDown": "Power down {{amount}}",
+    "toSavings": "ย้าย {{amount}} ไปเงินออม",
+    "fromSavings": "ถอน {{amount}} จากเงินออม",
+    "cancelSavings": "ยกเลิกการถอนจากเงินออม",
+    "convert": "แปลง {{amount}}",
+    "delegate": "เดลิเกต {{amount}} ให้ @{{to}}"
+  }
+}

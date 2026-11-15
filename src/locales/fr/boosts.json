@@ -1,0 +1,35 @@
+{
+  "title": "Boost",
+  "button": "Boost",
+  "buttonTitle": "Envoyer un boost avec un message au créateur",
+  "messageLabel": "Votre boostagram",
+  "messagePlaceholder": "Dites quelque chose au créateur",
+  "messageHint": "Affiché avec le montant sur le mur des boosts de cette publication.",
+  "wall": {
+    "title": "Boosts",
+    "empty": "Aucun boost pour l'instant. Soyez le premier à booster cette publication.",
+    "lightning": "Soutien Lightning",
+    "streamed": "envoyé en streaming pendant l'écoute",
+    "boost": "Boost",
+    "total": "{{amount}} au total",
+    "failed": "Impossible de charger le mur des boosts.",
+    "note": "Seuls les paiements visibles sur Hive s'affichent ici : HIVE et HBD, et Lightning via v4v.app."
+  },
+  "stream": {
+    "tile": "Stream",
+    "tileOn": "{{sats}} sats",
+    "title": "Streaming de sats",
+    "intro": "Pendant l'écoute, envoyez quelques sats au créateur chaque minute, depuis votre portefeuille Lightning dans le navigateur.",
+    "toggle": "Envoyer des sats pendant que j'écoute",
+    "rate": "Sats par minute",
+    "cap": "Limite mensuelle (sats)",
+    "spent": "Ce mois-ci : {{spent}} sur {{cap}} sats",
+    "session": "Envoyé pour ce titre : {{sats}} sats",
+    "budget": "Votre portefeuille demande avant chaque paiement, sauf si vous y accordez un budget à 3Speak. Les paiements s'arrêtent quand vous refusez, ou à votre limite mensuelle.",
+    "capped": "Votre limite mensuelle est atteinte. Le streaming est en pause jusqu'au mois prochain.",
+    "stopped": "Streaming arrêté : le portefeuille n'a pas payé.",
+    "on": "Streaming de {{sats}} sats par minute vers @{{to}}.",
+    "off": "Le streaming est désactivé.",
+    "save": "Enregistrer"
+  }
+}

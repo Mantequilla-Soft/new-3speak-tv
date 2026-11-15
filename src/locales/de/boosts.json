@@ -1,0 +1,35 @@
+{
+  "title": "Boost",
+  "button": "Boost",
+  "buttonTitle": "Schick dem Creator einen Boost mit Nachricht",
+  "messageLabel": "Dein Boostagram",
+  "messagePlaceholder": "Sag dem Creator etwas",
+  "messageHint": "Wird mit dem Betrag auf der Boost-Wand dieses Posts angezeigt.",
+  "wall": {
+    "title": "Boosts",
+    "empty": "Noch keine Boosts. Sei der Erste, der diesen Post boostet.",
+    "lightning": "Lightning-Unterstützer",
+    "streamed": "beim Zuhören gestreamt",
+    "boost": "Boost",
+    "total": "{{amount}} insgesamt",
+    "failed": "Die Boost-Wand konnte nicht geladen werden.",
+    "note": "Hier erscheinen nur Zahlungen, die auf Hive sichtbar sind: HIVE und HBD sowie Lightning über v4v.app."
+  },
+  "stream": {
+    "tile": "Stream",
+    "tileOn": "{{sats}} Sats",
+    "title": "Sats streamen",
+    "intro": "Während du zuhörst, schickst du dem Creator jede Minute ein paar Sats, aus deiner Lightning-Wallet im Browser.",
+    "toggle": "Sats streamen, während ich zuhöre",
+    "rate": "Sats pro Minute",
+    "cap": "Monatslimit (Sats)",
+    "spent": "Diesen Monat: {{spent}} von {{cap}} Sats",
+    "session": "Für diesen Track gesendet: {{sats}} Sats",
+    "budget": "Deine Wallet fragt vor jeder Zahlung, außer du gibst 3Speak darin ein Budget. Die Zahlungen stoppen, wenn du ablehnst oder dein Monatslimit erreicht ist.",
+    "capped": "Dein Monatslimit ist erreicht. Das Streamen pausiert bis nächsten Monat.",
+    "stopped": "Streamen gestoppt: Die Wallet hat nicht bezahlt.",
+    "on": "Streamt {{sats}} Sats pro Minute an @{{to}}.",
+    "off": "Streamen ist aus.",
+    "save": "Speichern"
+  }
+}

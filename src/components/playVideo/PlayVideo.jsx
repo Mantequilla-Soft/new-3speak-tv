@@ -22,6 +22,8 @@ import BeneficiariesTooltip from "../tooltip/BeneficiariesTooltip";
 import { useNavigate } from "react-router-dom";
 import BarLoader from "../Loader/BarLoader";
 import TipModal from "../../components/tip-reward/TipModal";
+import BoostWall from "../boosts/BoostWall";
+import { useBoostWall } from "../../lib/boosts";
 import { toastIn } from '../../utils/toast';
 import { TailChase } from 'ldrs/react';
 import 'ldrs/react/TailChase.css';
@@ -522,6 +524,8 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
   const [pinnedBeneficiaries, setPinnedBeneficiaries] = useState(false);
   const payoutRef = useRef(null);
   const [isTipModalOpen, setIsTipModalOpen] = useState(false);
+  // The Boost button's window: the tip window with a message for the boost wall.
+  const [isBoostOpen, setIsBoostOpen] = useState(false);
   const [tipNudgeVisible, setTipNudgeVisible] = useState(false);
   const tipNudgeShownRef = useRef(false);
   const [isVoted, setIsVoted] = useState(false);
@@ -607,8 +611,8 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
   // stopped autoplay-next and channel surfing at the end of almost everything.
   useEffect(() => {
     const isVotePopupOpen = showTooltip && authenticated && isLoggedIn();
-    videoControls?.onPopupOpen?.(isTipModalOpen || isVotePopupOpen);
-  }, [isTipModalOpen, showTooltip, authenticated]); // eslint-disable-line react-hooks/exhaustive-deps
+    videoControls?.onPopupOpen?.(isTipModalOpen || isBoostOpen || isVotePopupOpen);
+  }, [isTipModalOpen, isBoostOpen, showTooltip, authenticated]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Watch Later detection
   const { data: myPlaylists = [], refetch: refetchPlaylists } = useMyPlaylists({ enabled: !!user });
@@ -1444,6 +1448,14 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
       {t('watch.actions.support', { name: videoDetails?.author?.id || author })}
     </UiButton>
   ) : null;
+  // The post's boost wall (lib/boosts.js): a Hive post that is out, not a stream.
+  const hasBoosts = !scheduled && !isLive && !postIsOffChain;
+  const boostWall = useBoostWall(author, permlink, hasBoosts);
+  const boostCount = boostWall.data?.count || undefined;
+  const openBoost = () => { videoControls?.onPause?.(); setIsBoostOpen(true); };
+  const boostsPane = hasBoosts ? (
+    <BoostWall author={author} permlink={permlink} onBoost={!isOwner ? openBoost : undefined} />
+  ) : null;
   const votersPane = (
     <VotersPane
       voters={tooltipVoters}
@@ -1516,6 +1528,12 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
           {supportButton}
         </>
       ),
+    },
+    !wide && hasBoosts && {
+      id: 'boosts',
+      label: t('boosts.wall.title'),
+      count: boostCount || null,
+      content: boostsPane,
     },
     !wide && !scheduled && {
       id: 'voters',
@@ -2230,13 +2248,14 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                 label={t('watch.voters.cardLabel')}
                 options={[
                   { value: 'supporters', label: t('profile.tabs.supporters') },
+                  ...(hasBoosts ? [{ value: 'boosts', label: t('boosts.wall.title'), count: boostCount }] : []),
                   { value: 'voters', label: t('watch.voters.title'), count: postIsOffChain ? (offChainVotes || undefined) : (tooltipVoters.length || undefined) },
                 ]}
               />
               <div className="wv2-credits__body">
-                {creditTab === 'supporters' ? <SupportersPane author={author} avatars /> : votersPane}
+                {creditTab === 'supporters' ? <SupportersPane author={author} avatars /> : creditTab === 'boosts' && boostsPane ? boostsPane : votersPane}
               </div>
-              {supportButton}
+              {creditTab !== 'boosts' && supportButton}
             </div>
           </aside>
         )}
@@ -2266,6 +2285,17 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
           memoLink={isLive ? undefined : `https://3speak.tv/watch?v=${author}/${permlink}`}
           isOpen={isTipModalOpen}
           onClose={() => setIsTipModalOpen(false)}
+        />
+      )}
+
+      {isBoostOpen && (
+        <TipModal
+          boost
+          recipient={author}
+          permlink={permlink}
+          memoLink={`https://3speak.tv/watch?v=${author}/${permlink}`}
+          isOpen
+          onClose={() => setIsBoostOpen(false)}
         />
       )}
 

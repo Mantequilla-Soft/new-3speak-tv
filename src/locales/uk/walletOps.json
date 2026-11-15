@@ -1,0 +1,93 @@
+{
+  "actions": {
+    "powerUp": "Power up",
+    "powerDown": "Power down",
+    "savings": "Заощадження",
+    "convert": "Конвертувати",
+    "delegate": "Делегувати",
+    "aria": "Керування коштами"
+  },
+  "common": {
+    "amount": "Сума ({{coin}})",
+    "available": "Доступно: {{balance}}",
+    "max": "Макс.",
+    "to": "На акаунт",
+    "toHint": "Залиште як є для власного акаунта.",
+    "activeKey": "Потрібен ваш active-ключ",
+    "butrauth": "Ви увійшли через Butter Auth: на наступному кроці підтвердьте це гаманцем Hive або active-ключем.",
+    "insufficient": "Це більше, ніж у вас є.",
+    "amountPositive": "Введіть суму, більшу за нуль.",
+    "invalidAccount": "Акаунта Hive з таким ім'ям немає.",
+    "done": "Готово. Тут це може з'явитися за кілька секунд.",
+    "failed": "Не вдалося: {{error}}",
+    "loading": "Завантажуємо гаманець..."
+  },
+  "powerUp": {
+    "title": "Power up",
+    "note": "Hive Power додає вагу вашим голосам і приносить кураторські винагороди. Назад у HIVE він повертається за 13 щотижневих виплат.",
+    "submit": "Power up {{amount}} HIVE",
+    "submitTo": "Power up {{amount}} HIVE для @{{to}}"
+  },
+  "powerDown": {
+    "title": "Power down",
+    "note": "Hive Power повертається як HIVE за 13 щотижневих виплат, приблизно {{weekly}} HP на тиждень.",
+    "replace": "Power down уже триває (залишилося {{left}} HP). Новий замінить його.",
+    "submit": "Power down {{amount}} HP",
+    "stop": "Зупинити power down",
+    "stopped": "Power down зупинено."
+  },
+  "savings": {
+    "title": "Заощадження",
+    "deposit": "Внести",
+    "withdraw": "Вивести",
+    "depositNote": "HBD у заощадженнях приносить {{rate}}% на рік. Виведення триває 3 дні.",
+    "depositNoteHive": "HIVE у заощадженнях не приносить відсотків. Виведення триває 3 дні.",
+    "withdrawNote": "Надійде через 3 дні. До того часу виведення можна скасувати.",
+    "submitDeposit": "Внести {{amount}} {{coin}}",
+    "submitWithdraw": "Вивести {{amount}} {{coin}}"
+  },
+  "convert": {
+    "title": "Конвертація",
+    "hbdToHive": "HBD у HIVE",
+    "hiveToHbd": "HIVE у HBD",
+    "hbdNote": "Ви отримаєте приблизно {{amount}} HIVE через 3,5 дня за медіанною ціною цих днів. Остаточна сума може відрізнятися.",
+    "hiveNote": "Ви одразу отримаєте приблизно {{amount}} HBD. Половина вашого HIVE утримується як застава, решта повернеться через 3,5 дня. Комісія 5%.",
+    "warning": "Конвертацію не можна скасувати. Обмін на біржі може бути дешевшим.",
+    "submit": "Конвертувати {{amount}} {{coin}}"
+  },
+  "delegate": {
+    "title": "Делегування",
+    "toLabel": "Кому делегувати",
+    "note": "Делегований Hive Power залишається вашим, але його сила голосу переходить іншому акаунту. Після відкликання він повертається через 5 днів.",
+    "current": "Зараз ви делегуєте {{hp}} HP акаунту @{{to}}. Це встановить нову суму.",
+    "submit": "Делегувати {{amount}} HP акаунту @{{to}}",
+    "submitNoTo": "Делегувати {{amount}} HP",
+    "yours": "Ваші делегування",
+    "remove": "Відкликати",
+    "removed": "Делегування відкликано. HP повернеться через 5 днів.",
+    "self": "Не можна делегувати самому собі."
+  },
+  "pending": {
+    "title": "Триває",
+    "powerDown": "Power down: {{weekly}} HP на тиждень, залишилося тижнів: {{weeks}}",
+    "nextPayment": "Наступна виплата: {{date}}",
+    "withdrawal": "Із заощаджень: {{amount}}",
+    "arrives": "Надійде: {{date}}",
+    "convertHbd": "Конвертація {{amount}} у HIVE",
+    "convertHive": "{{amount}} у заставі",
+    "ready": "Готово: {{date}}",
+    "delegation": "Делеговано @{{to}}: {{hp}} HP",
+    "cancel": "Скасувати",
+    "cancelled": "Виведення скасовано. Кошти залишаються в заощадженнях.",
+    "stop": "Зупинити",
+    "empty": "Зараз нічого не триває."
+  },
+  "activeAuth": {
+    "powerDown": "Power down {{amount}}",
+    "toSavings": "Перенести {{amount}} у заощадження",
+    "fromSavings": "Вивести {{amount}} із заощаджень",
+    "cancelSavings": "Скасувати виведення із заощаджень",
+    "convert": "Конвертувати {{amount}}",
+    "delegate": "Делегувати {{amount}} акаунту @{{to}}"
+  }
+}

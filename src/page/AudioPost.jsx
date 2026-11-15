@@ -15,6 +15,7 @@ import PayoutAmount from '../components/PayoutAmount/PayoutAmount';
 import UpvoteCount from '../components/UpvoteCount/UpvoteCount';
 import CommentVoteTooltip from '../components/tooltip/CommentVoteTooltip';
 import TipModal from '../components/tip-reward/TipModal';
+import BoostWall from '../components/boosts/BoostWall';
 import AddToPlaylistModal from '../components/AddToPlaylistModal/AddToPlaylistModal';
 import AccountImg from '../components/HiveAvatar/AccountImg';
 import Waveform from '../components/GlobalAudioPlayer/Waveform';
@@ -95,6 +96,7 @@ function AudioPost() {
   const [voted, setVoted] = useState(false);
   const [voteCount, setVoteCount] = useState(0);
   const [isTipOpen, setIsTipOpen] = useState(false);
+  const [isBoostOpen, setIsBoostOpen] = useState(false);
   const [playlistOpen, setPlaylistOpen] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
@@ -539,6 +541,13 @@ function AudioPost() {
         <BlogContent author={author} permlink={permlink} description={post.body} defaultExpanded />
       </div>
 
+      {/* The boost wall (lib/boosts.js): boosts with their messages, and sats
+          streamed while people listened. */}
+      <section className="audio-post-boosts" aria-label={t('boosts.wall.title')}>
+        <h2>{t('boosts.wall.title')}</h2>
+        <BoostWall author={author} permlink={permlink} onBoost={!isOwner ? () => setIsBoostOpen(true) : undefined} />
+      </section>
+
       <div className="audio-post-comments" ref={commentsRef}>
         <CommentSection
           videoDetails={videoDetails}
@@ -568,6 +577,9 @@ function AudioPost() {
 
       {isTipOpen && (
         <TipModal recipient={author} permlink={permlink} memoLink={`https://3speak.tv/audio/${author}/${permlink}`} isOpen={isTipOpen} onClose={() => setIsTipOpen(false)} />
+      )}
+      {isBoostOpen && (
+        <TipModal boost recipient={author} permlink={permlink} memoLink={`https://3speak.tv/audio/${author}/${permlink}`} isOpen onClose={() => setIsBoostOpen(false)} />
       )}
 
       {playlistOpen && (

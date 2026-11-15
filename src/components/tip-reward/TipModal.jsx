@@ -21,6 +21,7 @@ import { queueSupport, recordSupport } from '../../lib/supports';
 import { QRCodeSVG } from 'qrcode.react';
 import { recurrentTransferOp, stopRecurrentTransferOp, findMonthlySupport, formatMonth, formatInterval, isMonthly } from '../../lib/recurringTip';
 import { LIGHTNING_PRESETS, requestLightningInvoice, isLightningInvoicePaid, hasWebln, payWithWebln, fetchLightningReceiver } from '../../lib/lightningTip';
+import { boostMemo, boostWallKey } from '../../lib/boosts';
 
 // Every toast from this module is headed "Tip"; the message becomes the
 // line under it. See utils/toast.js.
@@ -33,9 +34,12 @@ const toast = toastIn('Tip');
 // memo so the recipient sees what the tip was for.
 // `variant="page"`: the window is the whole page (the /tip popup), not an
 // overlay on top of one.
+// `boost`: the Boost button's window (lib/boosts.js). The same tip, titled Boost,
+// with the message shown on the post's boost wall: the memo gets the post link
+// and `#boost`, and there is no monthly option.
 // Callers also pass `isOpen` and `onSendTip`; neither is read: the window is
 // mounted only while open, and sends by itself.
-const TipModal = ({ recipient, permlink, memoLink, onClose, variant }) => {
+const TipModal = ({ recipient, permlink, memoLink, onClose, variant, boost = false }) => {
     const { t, i18n } = useTranslation();
     const fieldId = useId();
     const queryClient = useQueryClient();
@@ -161,6 +165,7 @@ const TipModal = ({ recipient, permlink, memoLink, onClose, variant }) => {
 
   // Same memo as a Hive tip: the typed text plus the link to the post.
   const memoWithLink = () => {
+    if (boost) return boostMemo(memo, memoLink);
     const typed = memo.trim();
     return memoLink && !typed.includes(memoLink)
       ? (typed ? `${typed} ${memoLink}` : memoLink)
@@ -272,6 +277,7 @@ const TipModal = ({ recipient, permlink, memoLink, onClose, variant }) => {
         recordSupport(pending)
           .then((r) => {
             if (!r?.recorded) return;
+            queryClient.invalidateQueries({ queryKey: boostWallKey(recipient, permlink) });
             queryClient.invalidateQueries({ queryKey: ['supporters', recipient] });
             queryClient.invalidateQueries({ queryKey: ['supports', recipient] });
             queryClient.invalidateQueries({ queryKey: ['supported', activetUser] });
@@ -403,13 +409,13 @@ const TipModal = ({ recipient, permlink, memoLink, onClose, variant }) => {
 
             <Field
               id={`${fieldId}-ln-memo`}
-              label={t('engagement.tip.lightning.messageLabel')}
+              label={boost ? t('boosts.messageLabel') : t('engagement.tip.lightning.messageLabel')}
               type="text"
-              maxLength={500}
-              placeholder={t('engagement.tip.memoPlaceholder')}
+              maxLength={boost ? 250 : 500}
+              placeholder={boost ? t('boosts.messagePlaceholder') : t('engagement.tip.memoPlaceholder')}
               value={memo}
               onChange={(e) => setMemo(e.target.value)}
-              hint={memoLink ? t('engagement.tip.memoLinkNote', { link: memoLink }) : undefined}
+              hint={boost ? t('boosts.messageHint') : memoLink ? t('engagement.tip.memoLinkNote', { link: memoLink }) : undefined}
             />
 
             <Banner tone="info" icon="bolt">
@@ -508,18 +514,19 @@ const TipModal = ({ recipient, permlink, memoLink, onClose, variant }) => {
               </Field>
             </div>
 
-            <MonthlyField months={months} onChange={setMonths} existing={monthly} recipient={recipient} />
+            {!boost && <MonthlyField months={months} onChange={setMonths} existing={monthly} recipient={recipient} />}
 
             <Field
               id={`${fieldId}-memo`}
               as="textarea"
               rows={3}
               className="tip-v2__memo tip-v2__sr-label"
-              label={t('engagement.tip.memoLabel')}
-              placeholder={t('engagement.tip.memoPlaceholder')}
+              label={boost ? t('boosts.messageLabel') : t('engagement.tip.memoLabel')}
+              placeholder={boost ? t('boosts.messagePlaceholder') : t('engagement.tip.memoPlaceholder')}
+              maxLength={boost ? 250 : undefined}
               value={memo}
               onChange={(e) => setMemo(e.target.value)}
-              hint={memoLink ? t('engagement.tip.memoLinkNote', { link: memoLink }) : undefined}
+              hint={boost ? t('boosts.messageHint') : memoLink ? t('engagement.tip.memoLinkNote', { link: memoLink }) : undefined}
             />
           </div>
         )}
@@ -569,7 +576,7 @@ const TipModal = ({ recipient, permlink, memoLink, onClose, variant }) => {
       onClose={handleClose}
       side
       tone="accent"
-      title={t('watch.actions.tip')}
+      title={boost ? t('boosts.title') : t('watch.actions.tip')}
       width={420}
       zIndex={9999}
       overlayClassName={cx('tip-v2-overlay', step === 2 && 'is-success')}

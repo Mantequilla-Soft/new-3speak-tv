@@ -1,0 +1,27 @@
+{
+  "vote": {
+    "added": "Il tuo voto ha aggiunto circa ${{value}} a questo post e dovrebbe farti guadagnare circa ${{earn}} di curation al pagamento.",
+    "addedNoCuration": "Il tuo voto ha aggiunto circa ${{value}} a questo post.",
+    "addedTagged": "Taggato «{{tag}}». Il tuo voto ha aggiunto circa ${{value}} e dovrebbe farti guadagnare circa ${{earn}} di curation."
+  },
+  "page": {
+    "title": "Curation",
+    "sub": "Le tue scelte su 3Speak negli ultimi {{days}} giorni",
+    "subOther": "Scelte su 3Speak negli ultimi {{days}} giorni",
+    "picks": "Scelte",
+    "earned": "Curation guadagnata",
+    "early": "Scoperto presto",
+    "earnedValue": "{{hp}} HP",
+    "rule": "«Scoperto presto» significa che i voti prima del tuo valevano al massimo il {{share}}% del valore dei voti del post, e che il post ha poi ricevuto almeno {{votes}} voti.",
+    "votedAt": "Votato {{when}}",
+    "weight": "Voto al {{weight}}%",
+    "rank": "Voto {{rank}} di {{votes}}",
+    "reward": "+{{hp}} HP",
+    "pending": "Pagato più avanti",
+    "badge": "Scoperto presto",
+    "empty": "Nessun voto su video, short o audio di 3Speak in questo periodo.",
+    "loadFailed": "Impossibile caricare la cronologia di curation. Riprova tra un minuto.",
+    "open": "Curation",
+    "note": "Le ricompense di curation vengono pagate in Hive Power quando il post va in pagamento, 7 giorni dopo la pubblicazione."
+  }
+}

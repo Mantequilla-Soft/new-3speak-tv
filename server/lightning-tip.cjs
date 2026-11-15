@@ -352,7 +352,7 @@ function mountLightningTip(app, { client, limiter }) {
 
       if (receiver.address) {
         const inv = await addressInvoice(receiver.address, sats, comment)
-        const verifiable = watch(inv.hash, inv.verifyUrl, receiver.address.split('@')[1])
+        const verifiable = req.query.watch !== '0' && watch(inv.hash, inv.verifyUrl, receiver.address.split('@')[1])
         res.set('Cache-Control', 'no-store')
         return res.json({ pr: inv.pr, sats, hash: inv.hash, via: 'address', address: receiver.address, verifiable })
       }
@@ -384,7 +384,9 @@ function mountLightningTip(app, { client, limiter }) {
       }
       if (bolt11Msats(inv.pr) !== msats) throw new Error('invoice amount mismatch')
       const hash = bolt11PaymentHash(inv.pr)
-      if (hash) {
+      // watch=0: the caller learns of the payment from its own wallet (streamed
+      // sats, src/lib/boosts.js), so no @v4vapp polling for this one.
+      if (hash && req.query.watch !== '0') {
         pending.set(hash, Date.now())
         ensurePolling()
       }

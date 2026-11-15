@@ -1,0 +1,35 @@
+{
+  "title": "ブースト",
+  "button": "ブースト",
+  "buttonTitle": "メッセージ付きのブーストをクリエイターに送る",
+  "messageLabel": "あなたのブーストグラム",
+  "messagePlaceholder": "クリエイターにひとこと",
+  "messageHint": "この投稿のブーストウォールに金額と一緒に表示されます。",
+  "wall": {
+    "title": "ブースト",
+    "empty": "まだブーストはありません。この投稿に最初のブーストを送りましょう。",
+    "lightning": "Lightning サポーター",
+    "streamed": "聴きながらストリーミング",
+    "boost": "ブースト",
+    "total": "合計 {{amount}}",
+    "failed": "ブーストウォールを読み込めませんでした。",
+    "note": "Hive 上で確認できる支払いだけがここに表示されます: HIVE と HBD、そして v4v.app 経由の Lightning です。"
+  },
+  "stream": {
+    "tile": "ストリーム",
+    "tileOn": "{{sats}} sats",
+    "title": "sats をストリーミング",
+    "intro": "聴いている間、ブラウザの Lightning ウォレットから毎分少しずつ sats をクリエイターに送ります。",
+    "toggle": "聴いている間 sats をストリーミング",
+    "rate": "1 分あたりの sats",
+    "cap": "月間上限（sats）",
+    "spent": "今月: {{spent}} / {{cap}} sats",
+    "session": "このトラックで送った額: {{sats}} sats",
+    "budget": "ウォレットで 3Speak に予算を設定しない限り、支払いのたびにウォレットが確認します。拒否するか、月間上限に達すると支払いは止まります。",
+    "capped": "月間上限に達しました。来月までストリーミングを一時停止します。",
+    "stopped": "ストリーミングを停止しました: ウォレットが支払いませんでした。",
+    "on": "@{{to}} に毎分 {{sats}} sats をストリーミング中。",
+    "off": "ストリーミングはオフです。",
+    "save": "保存"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "vote": {
+    "added": "Tu voto sumó unos ${{value}} a esta publicación y debería darte unos ${{earn}} en curación cuando pague.",
+    "addedNoCuration": "Tu voto sumó unos ${{value}} a esta publicación.",
+    "addedTagged": "Etiquetada como «{{tag}}». Tu voto sumó unos ${{value}} y debería darte unos ${{earn}} en curación."
+  },
+  "page": {
+    "title": "Curación",
+    "sub": "Tus elecciones en 3Speak en los últimos {{days}} días",
+    "subOther": "Elecciones en 3Speak en los últimos {{days}} días",
+    "picks": "Elecciones",
+    "earned": "Curación ganada",
+    "early": "Descubierto pronto",
+    "earnedValue": "{{hp}} HP",
+    "rule": "«Descubierto pronto» significa que los votos anteriores al tuyo sumaban como máximo el {{share}}% del valor de votos de la publicación, y que la publicación llegó a tener al menos {{votes}} votos.",
+    "votedAt": "Votado {{when}}",
+    "weight": "Voto al {{weight}}%",
+    "rank": "Voto {{rank}} de {{votes}}",
+    "reward": "+{{hp}} HP",
+    "pending": "Se paga más adelante",
+    "badge": "Descubierto pronto",
+    "empty": "No hay votos en videos, shorts ni audios de 3Speak en este periodo.",
+    "loadFailed": "No se pudo cargar el historial de curación. Inténtalo de nuevo en un minuto.",
+    "open": "Curación",
+    "note": "Las recompensas de curación se pagan en Hive Power cuando la publicación paga, 7 días después de publicarse."
+  }
+}

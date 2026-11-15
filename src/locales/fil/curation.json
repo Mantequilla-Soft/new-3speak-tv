@@ -1,0 +1,27 @@
+{
+  "vote": {
+    "added": "Nagdagdag ang vote mo ng mga ${{value}} sa post na ito at dapat kang kumita ng mga ${{earn}} sa curation kapag nag-payout ito.",
+    "addedNoCuration": "Nagdagdag ang vote mo ng mga ${{value}} sa post na ito.",
+    "addedTagged": "Na-tag na “{{tag}}”. Nagdagdag ang vote mo ng mga ${{value}} at dapat kang kumita ng mga ${{earn}} sa curation."
+  },
+  "page": {
+    "title": "Curation",
+    "sub": "Mga pinili mo sa 3Speak sa nakaraang {{days}} araw",
+    "subOther": "Mga pinili sa 3Speak sa nakaraang {{days}} araw",
+    "picks": "Mga pinili",
+    "earned": "Kinita sa curation",
+    "early": "Maagang nahanap",
+    "earnedValue": "{{hp}} HP",
+    "rule": "Ang ibig sabihin ng “Maagang nahanap” ay hanggang {{share}}% lang ng vote value ng post ang dala ng mga vote bago ang sa iyo, at nakakuha pa ang post ng hindi bababa sa {{votes}} na vote.",
+    "votedAt": "Nag-vote {{when}}",
+    "weight": "{{weight}}% vote",
+    "rank": "Vote {{rank}} sa {{votes}}",
+    "reward": "+{{hp}} HP",
+    "pending": "Mababayaran mamaya",
+    "badge": "Maagang nahanap",
+    "empty": "Walang vote sa mga video, shorts o audio sa 3Speak sa panahong ito.",
+    "loadFailed": "Hindi ma-load ang curation history. Subukan ulit pagkalipas ng isang minuto.",
+    "open": "Curation",
+    "note": "Binabayaran ang curation rewards sa Hive Power kapag nag-payout ang post, 7 araw pagkatapos itong ma-publish."
+  }
+}

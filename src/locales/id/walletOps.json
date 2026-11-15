@@ -1,0 +1,93 @@
+{
+  "actions": {
+    "powerUp": "Power up",
+    "powerDown": "Power down",
+    "savings": "Tabungan",
+    "convert": "Konversi",
+    "delegate": "Delegasikan",
+    "aria": "Kelola danamu"
+  },
+  "common": {
+    "amount": "Jumlah ({{coin}})",
+    "available": "Tersedia: {{balance}}",
+    "max": "Maks",
+    "to": "Ke akun",
+    "toHint": "Biarkan apa adanya untuk akunmu sendiri.",
+    "activeKey": "Perlu active key-mu",
+    "butrauth": "Masuk dengan Butter Auth: kamu menyetujui ini dengan dompet Hive atau active key-mu di langkah berikutnya.",
+    "insufficient": "Itu lebih dari yang kamu punya.",
+    "amountPositive": "Masukkan jumlah lebih dari nol.",
+    "invalidAccount": "Tidak ada akun Hive dengan nama itu.",
+    "done": "Selesai. Mungkin perlu beberapa detik sampai muncul di sini.",
+    "failed": "Tidak berhasil: {{error}}",
+    "loading": "Memuat dompetmu..."
+  },
+  "powerUp": {
+    "title": "Power up",
+    "note": "Hive Power memberi bobot pada vote-mu dan menghasilkan reward kurasi. Mengubahnya kembali ke HIVE butuh 13 pembayaran mingguan.",
+    "submit": "Power up {{amount}} HIVE",
+    "submitTo": "Power up {{amount}} HIVE untuk @{{to}}"
+  },
+  "powerDown": {
+    "title": "Power down",
+    "note": "Hive Power kembali sebagai HIVE dalam 13 pembayaran mingguan, sekitar {{weekly}} HP per minggu.",
+    "replace": "Ada power down yang sedang berjalan (sisa {{left}} HP). Memulai yang baru akan menggantinya.",
+    "submit": "Power down {{amount}} HP",
+    "stop": "Hentikan power down",
+    "stopped": "Power down dihentikan."
+  },
+  "savings": {
+    "title": "Tabungan",
+    "deposit": "Setor",
+    "withdraw": "Tarik",
+    "depositNote": "HBD di tabungan menghasilkan {{rate}}% per tahun. Penarikan butuh 3 hari.",
+    "depositNoteHive": "HIVE di tabungan tidak menghasilkan bunga. Penarikan butuh 3 hari.",
+    "withdrawNote": "Tiba dalam 3 hari. Kamu bisa membatalkannya sampai saat itu.",
+    "submitDeposit": "Setor {{amount}} {{coin}}",
+    "submitWithdraw": "Tarik {{amount}} {{coin}}"
+  },
+  "convert": {
+    "title": "Konversi",
+    "hbdToHive": "HBD ke HIVE",
+    "hiveToHbd": "HIVE ke HBD",
+    "hbdNote": "Kamu mendapat sekitar {{amount}} HIVE dalam 3,5 hari, dengan harga median selama hari-hari itu. Jumlah akhirnya bisa berbeda.",
+    "hiveNote": "Kamu langsung mendapat sekitar {{amount}} HBD. Separuh HIVE-mu ditahan sebagai jaminan dan sisanya kembali dalam 3,5 hari. Ada biaya 5%.",
+    "warning": "Konversi tidak bisa dibatalkan. Trading di market bisa lebih murah.",
+    "submit": "Konversi {{amount}} {{coin}}"
+  },
+  "delegate": {
+    "title": "Delegasikan",
+    "toLabel": "Delegasikan ke",
+    "note": "Hive Power yang didelegasikan tetap milikmu, tetapi bobot vote-nya diberikan ke akun lain. Saat kamu menariknya, butuh 5 hari untuk kembali.",
+    "current": "Saat ini kamu mendelegasikan {{hp}} HP ke @{{to}}. Ini menetapkan jumlah baru.",
+    "submit": "Delegasikan {{amount}} HP ke @{{to}}",
+    "submitNoTo": "Delegasikan {{amount}} HP",
+    "yours": "Delegasimu",
+    "remove": "Hapus",
+    "removed": "Delegasi dihapus. HP kembali dalam 5 hari.",
+    "self": "Kamu tidak bisa mendelegasikan ke dirimu sendiri."
+  },
+  "pending": {
+    "title": "Sedang berjalan",
+    "powerDown": "Power down: {{weekly}} HP per minggu, sisa {{weeks}} minggu",
+    "nextPayment": "Pembayaran berikutnya {{date}}",
+    "withdrawal": "Dari tabungan: {{amount}}",
+    "arrives": "Tiba {{date}}",
+    "convertHbd": "Mengonversi {{amount}} ke HIVE",
+    "convertHive": "{{amount}} ditahan sebagai jaminan",
+    "ready": "Selesai {{date}}",
+    "delegation": "Didelegasikan ke @{{to}}: {{hp}} HP",
+    "cancel": "Batal",
+    "cancelled": "Penarikan dibatalkan. Dana tetap di tabungan.",
+    "stop": "Hentikan",
+    "empty": "Tidak ada yang sedang berjalan."
+  },
+  "activeAuth": {
+    "powerDown": "Power down {{amount}}",
+    "toSavings": "Pindahkan {{amount}} ke tabungan",
+    "fromSavings": "Tarik {{amount}} dari tabungan",
+    "cancelSavings": "Batalkan penarikan tabungan",
+    "convert": "Konversi {{amount}}",
+    "delegate": "Delegasikan {{amount}} ke @{{to}}"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "vote": {
+    "added": "Kura yako imeongeza karibu ${{value}} kwenye chapisho hili na inatarajiwa kukupatia karibu ${{earn}} za uteuzi chapisho litakapolipwa.",
+    "addedNoCuration": "Kura yako imeongeza karibu ${{value}} kwenye chapisho hili.",
+    "addedTagged": "Lebo “{{tag}}” imewekwa. Kura yako imeongeza karibu ${{value}} na inatarajiwa kukupatia karibu ${{earn}} za uteuzi."
+  },
+  "page": {
+    "title": "Uteuzi",
+    "sub": "Ulivyochagua kwenye 3Speak katika siku {{days}} zilizopita",
+    "subOther": "Vilivyochaguliwa kwenye 3Speak katika siku {{days}} zilizopita",
+    "picks": "Chaguo",
+    "earned": "Mapato ya uteuzi",
+    "early": "Uligundua mapema",
+    "earnedValue": "{{hp}} HP",
+    "rule": "“Uligundua mapema” inamaanisha kura zilizotangulia yako zilibeba si zaidi ya {{share}}% ya thamani ya kura za chapisho, na baadaye chapisho lilipata angalau kura {{votes}}.",
+    "votedAt": "Ulipiga kura {{when}}",
+    "weight": "Kura ya {{weight}}%",
+    "rank": "Kura {{rank}} kati ya {{votes}}",
+    "reward": "+{{hp}} HP",
+    "pending": "Italipwa baadaye",
+    "badge": "Uligundua mapema",
+    "empty": "Hakuna kura kwenye video, shorts au sauti za 3Speak katika kipindi hiki.",
+    "loadFailed": "Historia ya uteuzi haikuweza kupakiwa. Jaribu tena baada ya dakika moja.",
+    "open": "Uteuzi",
+    "note": "Zawadi za uteuzi hulipwa kwa Hive Power chapisho linapolipwa, siku 7 baada ya kuchapishwa."
+  }
+}

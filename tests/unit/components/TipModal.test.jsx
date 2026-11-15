@@ -337,3 +337,26 @@ describe('the tip window for a member: HIVE and HBD', () => {
     expect(onClose).toHaveBeenCalledTimes(1)
   })
 })
+
+describe('the Boost window (boost)', () => {
+  it('a Hive boost: titled Boost, no monthly option, memo with the link and #boost, reported as a support', async () => {
+    signIn()
+    const { user } = mount({ boost: true })
+    expect(screen.getByRole('heading', { name: 'Boost' })).toBeInTheDocument()
+    await screen.findByText('25')
+    expect(screen.queryByText(/monthly/i)).not.toBeInTheDocument()
+    await user.type(field('Amount:'), '2')
+    await user.type(field('Your boostagram'), 'Loved the lake')
+    await user.click(screen.getByRole('button', { name: 'Send 2 HIVE' }))
+    const memo = `Loved the lake ${LINK} #boost`
+    expect(m.transfer).toHaveBeenCalledWith('badadib', 2, 'HIVE', memo)
+    expect(m.queue).toHaveBeenCalledWith(expect.objectContaining({ memo, permlink: 'lake-day' }))
+  })
+
+  it('a Lightning boost carries the same tag in its comment', async () => {
+    const { user } = mount({ boost: true })
+    await user.type(screen.getByPlaceholderText('Say something to the creator'), 'Hi')
+    await user.click(screen.getByRole('button', { name: 'Show QR code' }))
+    expect(m.invoice).toHaveBeenCalledWith({ to: 'badadib', sats: 1000, comment: `Hi ${LINK} #boost` })
+  })
+})
