@@ -54,6 +54,7 @@ import { usePremiumStatus } from '../hooks/usePremiumStatus';
 import { fetchScheduledPost, getScheduledEmbedRef } from '../utils/scheduledPosts';
 import EditScheduledModal from '../components/modal/EditScheduledModal';
 import { getHiveRenderer } from '../lib/hiveRenderer';
+import { readTheater, saveTheater } from '../lib/playerKeys';
 
 // Stable identity so `related?.videos || EMPTY_LIST` doesn't hand a NEW [] to the
 // memo on every render.
@@ -379,6 +380,18 @@ function Watch({ v2 = false, routeV = null }) {
   const [controlsVisible, setControlsVisible] = useState(false);
   const hideTimerRef = useRef(null);
   const [videoEnded, setVideoEnded] = useState(false);
+  // Theater (wide) mode: the player across the page, the side panel under it.
+  // Remembered in this browser, as YouTube does.
+  const [theater, setTheater] = useState(readTheater);
+  const toggleTheater = useCallback(() => {
+    setTheater((on) => { saveTheater(!on); return !on; });
+  }, []);
+  // Loop this video: it starts again from the top when it ends, instead of the
+  // autoplay-next. For this video only, like the player's own loop.
+  const [loop, setLoop] = useState(false);
+  const loopRef = useRef(false);
+  loopRef.current = loop;
+  useEffect(() => { setLoop(false); }, [author, permlink]);
   const [autoplayBlocked, setAutoplayBlocked] = useState(false);
   const clipModeActiveRef = useRef(false);
   const popupOpenRef = useRef(false);
@@ -971,6 +984,11 @@ function Watch({ v2 = false, routeV = null }) {
       const el = videoElRef.current;
       if (el && Number.isFinite(el.duration) && el.duration > 0
         && el.currentTime < el.duration - 1.5) {
+        return;
+      }
+      if (loopRef.current) {
+        player.seek(adBreakRef.current.playerTimeFor?.(0) ?? 0);
+        player.play().catch(() => {});
         return;
       }
       // Don't autoplay when user is selecting clip start/end or a popup is open
@@ -1978,7 +1996,7 @@ function Watch({ v2 = false, routeV = null }) {
   }
 
   return (
-    <div className={`play-container watch-page${isReactionPlayerVisible && reactions.length > 0 ? ` reaction-${reactionSize}` : ''}${v2 ? ' watch-v2' : ''}`}>
+    <div className={`play-container watch-page${isReactionPlayerVisible && reactions.length > 0 ? ` reaction-${reactionSize}` : ''}${v2 ? ' watch-v2' : ''}${theater && !isLive ? ' is-theater' : ''}`}>
       {/* Put the video's title in the browser tab (Helmet → <title>). SEOHead
           appends " | 3Speak"; falls back to the default title when unknown. */}
       {videoDetails?.title && (
@@ -2193,6 +2211,10 @@ function Watch({ v2 = false, routeV = null }) {
           onPlaybackRateChange: choosePlaybackRate,
           onHoldControls: holdControls,
           onReleaseControls: releaseControls,
+          isTheater: theater,
+          onToggleTheater: isLive ? null : toggleTheater,
+          loop,
+          onToggleLoop: () => setLoop((v) => !v),
         }}
         // The reactions on the timeline: full width under the description at
         // the cinema size. No tab in the side panel (owner 2026-11-12).

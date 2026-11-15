@@ -72,6 +72,8 @@ vi.mock('../../../src/components/playVideo/PlayVideo', () => ({
       {p.mediaBlocked && <button type="button" onClick={p.onRetryPlayback}>Retry playback</button>}
       {p.belowPlayerSlot}
       {p.recommendations}
+      {p.videoControls?.onToggleTheater && <button type="button" onClick={p.videoControls.onToggleTheater}>{p.videoControls.isTheater ? 'Theater on' : 'Theater off'}</button>}
+      {p.videoControls?.onToggleLoop && <button type="button" onClick={p.videoControls.onToggleLoop}>{p.videoControls.loop ? 'Loop on' : 'Loop off'}</button>}
     </section>
   ),
 }))
@@ -292,6 +294,36 @@ describe('the watch page', () => {
       await waitFor(() => expect(m.player.handlers.ended).toBeTypeOf('function'))
       m.player.emit('ended')
       expect(screen.getByTestId('location')).toHaveTextContent('/@badadib/forest-day?playlist=pl-1&pos=1')
+    })
+
+    it('theater mode widens the page and is remembered for the next video', async () => {
+      const { user, container, unmount } = mount()
+      await screen.findByRole('heading', { name: 'A day at the lake' })
+      expect(container.querySelector('.watch-page')).not.toHaveClass('is-theater')
+      await user.click(screen.getByRole('button', { name: 'Theater off' }))
+      expect(container.querySelector('.watch-page')).toHaveClass('is-theater')
+      expect(localStorage.getItem('3speak-watch-theater')).toBe('1')
+      unmount()
+      const again = mount()
+      expect(again.container.querySelector('.watch-page')).toHaveClass('is-theater')
+      await again.user.click(screen.getByRole('button', { name: 'Theater on' }))
+      expect(localStorage.getItem('3speak-watch-theater')).toBeNull()
+    })
+
+    it('with loop on, the end starts the video again instead of moving on', async () => {
+      const playlist = { id: 'pl-1', name: 'Best of' }
+      const videos = [{ author: 'badadib', permlink: 'lake-day' }, { author: 'badadib', permlink: 'forest-day' }]
+      const { user } = renderWithProviders(<Watch />, {
+        route: { pathname: '/watch', search: '?v=badadib/lake-day&playlist=pl-1&pos=0', state: { playlist, videos, currentIndex: 0 } },
+        path: '/watch',
+      })
+      await screen.findByText('Playlist Best of, video 1 of 2')
+      await user.click(screen.getByRole('button', { name: 'Loop off' }))
+      expect(screen.getByRole('button', { name: 'Loop on' })).toBeInTheDocument()
+      m.player.emit('ended')
+      expect(m.player.seek).toHaveBeenCalledWith(0)
+      expect(m.player.play).toHaveBeenCalled()
+      expect(screen.getByTestId('location')).toHaveTextContent('/watch?v=badadib/lake-day')
     })
 
     it('an "ended" in the middle of a video (an emptied buffer) is not a real end', async () => {

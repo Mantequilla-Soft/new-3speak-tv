@@ -1,4 +1,6 @@
 import { useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
+import { seekKeyTarget, timelineSliderProps } from '../../lib/sliderKeys';
 
 // Renders an embed-audio doc's pre-computed `waveform` (1-channel, ~800
 // peak samples, values roughly in [-1, 1]) as canvas-drawn vertical bars.
@@ -19,7 +21,13 @@ import { useEffect, useRef } from 'react';
 // rounded bar ends, an optional 2px --text playhead, and `pins` (comments tied
 // to a moment: { f: fraction, label, title, key }) drawn as small cyan tags
 // above the bars; a pin is a button that calls onPin(pin).
-export default function Waveform({ samples, audioRef, duration, onSeek, markers, pins, onPin, playhead = false, className = '', barPx = 3 }) {
+//
+// It is a real slider for the keyboard and screen readers (role="slider",
+// focusable, "1:05 of 4:00"; arrows 5 s, Page Up/Down 10 %, Home, End).
+// `currentTime` feeds aria-valuenow (the drawing reads the element itself);
+// without it the element's time at render is used.
+export default function Waveform({ samples, audioRef, duration, onSeek, markers, pins, onPin, playhead = false, className = '', barPx = 3, currentTime, label }) {
+  const { t } = useTranslation();
   const canvasRef = useRef(null);
   const containerRef = useRef(null);
   const stateRef = useRef({ samples, audioRef, duration, markers, playhead, barPx });
@@ -248,10 +256,22 @@ export default function Waveform({ samples, audioRef, duration, onSeek, markers,
     dragRef.current = { active: false, fraction: 0 };
   };
 
+  const now = Number.isFinite(currentTime) ? currentTime : (audioRef?.current?.currentTime || 0);
+  const onKeyDown = (e) => {
+    if (e.ctrlKey || e.metaKey || e.altKey || !onSeek || !(duration > 0)) return;
+    const to = seekKeyTarget(e.key, Number.isFinite(currentTime) ? currentTime : (audioRef?.current?.currentTime || 0), duration);
+    if (to === null) return;
+    e.preventDefault();
+    e.stopPropagation();
+    onSeek(to / duration);
+  };
+
   return (
     <div
       ref={containerRef}
       className={`audio-np-waveform${className ? ` ${className}` : ''}`}
+      {...(onSeek ? timelineSliderProps({ value: now, max: duration, label: label || t('playerKeys.seekLabel'), t }) : {})}
+      onKeyDown={onKeyDown}
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}

@@ -1,0 +1,29 @@
+{
+  "valueText": "{{time}} van {{total}}",
+  "seekLabel": "Positie",
+  "loop": "Herhalen",
+  "loopOn": "Herhalen staat aan",
+  "loopOff": "Deze video herhalen",
+  "theater": "Theatermodus",
+  "theaterExit": "Standaardweergave",
+  "title": "Sneltoetsen",
+  "sub": "Ze werken overal op de pagina, behalve terwijl je typt.",
+  "keySpace": "Spatie",
+  "keyShift": "Shift",
+  "list": {
+    "playPause": "Afspelen of pauzeren",
+    "back10": "10 seconden terug",
+    "forward10": "10 seconden vooruit",
+    "arrows": "10 seconden terug of vooruit",
+    "frame": "Eén beeld terug of vooruit",
+    "percent": "Naar 0% tot 90% van de video",
+    "volume": "Volume hoger of lager",
+    "mute": "Dempen of geluid aan",
+    "captions": "Ondertitels aan of uit",
+    "fullscreen": "Volledig scherm",
+    "theater": "Theatermodus aan of uit",
+    "save": "Opslaan",
+    "share": "Delen",
+    "help": "Deze lijst tonen"
+  }
+}

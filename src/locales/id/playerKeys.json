@@ -1,0 +1,29 @@
+{
+  "valueText": "{{time}} dari {{total}}",
+  "seekLabel": "Geser posisi",
+  "loop": "Ulangi",
+  "loopOn": "Ulangi aktif",
+  "loopOff": "Ulangi video ini",
+  "theater": "Mode teater",
+  "theaterExit": "Tampilan default",
+  "title": "Pintasan keyboard",
+  "sub": "Berfungsi di seluruh halaman, kecuali saat mengetik.",
+  "keySpace": "Spasi",
+  "keyShift": "Shift",
+  "list": {
+    "playPause": "Putar atau jeda",
+    "back10": "Mundur 10 detik",
+    "forward10": "Maju 10 detik",
+    "arrows": "Mundur atau maju 10 detik",
+    "frame": "Satu bingkai mundur atau maju",
+    "percent": "Lompat ke 0% hingga 90% video",
+    "volume": "Volume naik atau turun",
+    "mute": "Bisukan atau bunyikan",
+    "captions": "Teks aktif atau mati",
+    "fullscreen": "Layar penuh",
+    "theater": "Mode teater aktif atau mati",
+    "save": "Simpan",
+    "share": "Bagikan",
+    "help": "Tampilkan daftar ini"
+  }
+}

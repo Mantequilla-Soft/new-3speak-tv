@@ -410,6 +410,7 @@ function AudioPost() {
                     samples={samples}
                     audioRef={clockRef}
                     duration={total}
+                    currentTime={elapsed}
                     playhead={isThisCurrent}
                     pins={pins}
                     onPin={(p) => { seekTo(p.at); setSideTab('notes'); }}

@@ -1,0 +1,29 @@
+{
+  "valueText": "{{time}} von {{total}}",
+  "seekLabel": "Position",
+  "loop": "Wiederholen",
+  "loopOn": "Wiederholung ist an",
+  "loopOff": "Dieses Video wiederholen",
+  "theater": "Kinomodus",
+  "theaterExit": "Standardansicht",
+  "title": "Tastenkürzel",
+  "sub": "Sie gelten überall auf der Seite, außer während du tippst.",
+  "keySpace": "Leertaste",
+  "keyShift": "Umschalt",
+  "list": {
+    "playPause": "Abspielen oder pausieren",
+    "back10": "10 Sekunden zurück",
+    "forward10": "10 Sekunden vor",
+    "arrows": "10 Sekunden zurück oder vor",
+    "frame": "Ein Bild zurück oder vor",
+    "percent": "Zu 0 % bis 90 % des Videos springen",
+    "volume": "Lauter oder leiser",
+    "mute": "Stumm oder Ton an",
+    "captions": "Untertitel an oder aus",
+    "fullscreen": "Vollbild",
+    "theater": "Kinomodus an oder aus",
+    "save": "Speichern",
+    "share": "Teilen",
+    "help": "Diese Liste zeigen"
+  }
+}

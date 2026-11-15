@@ -59,6 +59,7 @@ import useAudioAd from '../../hooks/useAudioAd';
 import TickerCrawl from '../ads/TickerCrawl';
 import { audioItemPath } from '../AudioItem/AudioItemView';
 import mantequillaLogo from '../../assets/mantequilla-logo.png';
+import { seekKeyTarget, timelineSliderProps } from '../../lib/sliderKeys';
 import '../../page/Audio.scss';
 import './GlobalAudioPlayer.scss';
 
@@ -1672,8 +1673,24 @@ function GlobalAudioPlayer() {
   ));
 
   // The seek bar where there is no waveform (outside episodes), with chapter ticks.
+  // A slider for the keyboard and screen readers too (lib/sliderKeys.js); a live
+  // stream has no timeline, so it is a plain bar there.
+  const seekKeys = (e) => {
+    const el = audioRef.current;
+    if (isLive || !el || !(audioDuration > 0) || e.ctrlKey || e.metaKey || e.altKey) return;
+    const to = seekKeyTarget(e.key, el.currentTime, audioDuration);
+    if (to === null) return;
+    e.preventDefault();
+    e.stopPropagation();
+    el.currentTime = to;
+  };
   const progressBar = (
-    <div className={cx('audio-np-progress', isLive && 'is-live')} onClick={isLive ? undefined : handleSeek}>
+    <div
+      className={cx('audio-np-progress', isLive && 'is-live')}
+      onClick={isLive ? undefined : handleSeek}
+      {...(isLive ? {} : timelineSliderProps({ value: audioCurrentTime, max: audioDuration, label: t('playerKeys.seekLabel'), t }))}
+      onKeyDown={seekKeys}
+    >
       {!isLive && <div className="audio-np-progress-fill" style={{ width: audioDuration ? `${(audioCurrentTime / audioDuration) * 100}%` : '0%' }} />}
       {markers.map((f, i) => <span key={i} className="audio-np-progress-marker" style={{ left: `${f * 100}%` }} aria-hidden="true" />)}
     </div>
@@ -1840,6 +1857,7 @@ function GlobalAudioPlayer() {
               audioRef={audioRef}
               duration={audioDuration}
               markers={markers}
+              currentTime={audioCurrentTime}
               onSeek={(f) => { const el = audioRef.current; if (el && audioDuration > 0) el.currentTime = f * audioDuration; }}
             />
           )}
@@ -2021,6 +2039,7 @@ function GlobalAudioPlayer() {
                 audioRef={audioRef}
                 duration={audioDuration}
                 markers={markers}
+                currentTime={audioCurrentTime}
                 playhead
                 pins={pins}
                 onPin={(p) => { seekTo(p.at); setCommentScope('moment'); pickTab('comments'); }}

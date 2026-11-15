@@ -1,0 +1,29 @@
+{
+  "valueText": "{{time}} / {{total}}",
+  "seekLabel": "Konum",
+  "loop": "Döngü",
+  "loopOn": "Döngü açık",
+  "loopOff": "Bu videoyu döngüye al",
+  "theater": "Sinema modu",
+  "theaterExit": "Varsayılan görünüm",
+  "title": "Klavye kısayolları",
+  "sub": "Yazı yazarken hariç sayfanın her yerinde çalışır.",
+  "keySpace": "Boşluk",
+  "keyShift": "Shift",
+  "list": {
+    "playPause": "Oynat veya duraklat",
+    "back10": "10 saniye geri",
+    "forward10": "10 saniye ileri",
+    "arrows": "10 saniye geri veya ileri",
+    "frame": "Bir kare geri veya ileri",
+    "percent": "Videonun %0 ile %90'ına atla",
+    "volume": "Sesi aç veya kıs",
+    "mute": "Sesi kapat veya aç",
+    "captions": "Altyazı açık veya kapalı",
+    "fullscreen": "Tam ekran",
+    "theater": "Sinema modunu aç veya kapat",
+    "save": "Kaydet",
+    "share": "Paylaş",
+    "help": "Bu listeyi göster"
+  }
+}
