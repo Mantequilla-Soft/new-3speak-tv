@@ -1,0 +1,49 @@
+{
+  "levels": {
+    "button": "Notify",
+    "buttonTitle": "Notifications from @{{user}}: {{level}}",
+    "title": "Notifications from @{{user}}",
+    "sub": "Your device switches in Settings still apply.",
+    "saveFailed": "Could not save. Please try again.",
+    "all": {
+      "title": "All",
+      "desc": "Videos, shorts, stories, audio and when they go live.",
+      "saved": "You will hear about everything from @{{user}}."
+    },
+    "highlights": {
+      "title": "Highlights",
+      "desc": "Videos, audio and when they go live. No shorts or stories.",
+      "saved": "Only highlights from @{{user}} from now on."
+    },
+    "off": {
+      "title": "Off",
+      "desc": "No notifications from this creator. You still follow them.",
+      "saved": "Notifications from @{{user}} are off."
+    }
+  },
+  "live": {
+    "badge": "LIVE",
+    "aria": "Live now from people you follow",
+    "summary_one": "{{count}} person you follow is live now",
+    "summary_other": "{{count}} people you follow are live now"
+  },
+  "notifs": {
+    "heading": "From 3Speak",
+    "liveNow": "@{{user}} is live",
+    "wasLive": "@{{user}} went live",
+    "collabInvite": "@{{user}} invited you to a collab"
+  },
+  "push": {
+    "live": {
+      "title": "Going live",
+      "desc": "When a creator you follow starts a live stream."
+    }
+  },
+  "collab": {
+    "accept": "Accept",
+    "decline": "Decline",
+    "acceptedToast": "The collab with @{{user}} is now on your channel.",
+    "declinedToast": "Invite declined.",
+    "answerFailed": "Could not send your answer. Please try again."
+  }
+}

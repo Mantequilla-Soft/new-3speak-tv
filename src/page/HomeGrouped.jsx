@@ -20,6 +20,7 @@ import ShortsStories from "../components/ShortsStories/ShortsStories";
 import WelcomeBanner from "../components/WelcomeTour/WelcomeBanner";
 import NewFromFollowing from "../components/NewFromFollowing/NewFromFollowing";
 import ContinueWatching from "../components/ContinueWatching/ContinueWatching";
+import LiveFromFollowing from "../components/LiveFromFollowing/LiveFromFollowing";
 import SuggestedCreators from "../components/SuggestedCreators/SuggestedCreators";
 import { useWarmupVideos, useFollowedWarmupVideos } from "../hooks/useWarmupVideos";
 import { useLiveStreams } from "../hooks/useLiveStreams";
@@ -1202,6 +1203,9 @@ const HomeGrouped = () => {
       {/* The Spotlight (20a): the featured videos, full width under the bar. */}
       <HomeHero videos={spotlight} pending={featuredLoading && !spotlight.length} />
       <ShortsStories tiles />
+      {/* Live now from people you follow: full width above the two strips,
+          only while someone followed is live. */}
+      <LiveFromFollowing />
       {/* Logged-in only; each renders nothing when it has nothing to show.
           Side by side from tablet width up, stacked on a phone. */}
       <div className="home-strips">
