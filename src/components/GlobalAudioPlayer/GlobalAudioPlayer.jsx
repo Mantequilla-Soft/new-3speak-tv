@@ -135,6 +135,12 @@ function pageOf(track) {
   return track.owner && track.permlink ? audioItemPath(track) : '';
 }
 
+// 1.2K, the way the watch page's Vote tile counts (playVideo/WatchPanels compactNumber).
+const compactNumber = (n) => {
+  const v = Number(n) || 0;
+  try { return new Intl.NumberFormat(undefined, { notation: 'compact', maximumFractionDigits: 1 }).format(v); } catch { return String(v); }
+};
+
 function audioThumb(item) {
   if (!item) return fallbackImg;
   // An outside podcast episode (components/Podcasts): the show's or episode's art.
@@ -1612,6 +1618,15 @@ function GlobalAudioPlayer() {
     audioSetExpanded(false);
   };
   const openVote = () => { if (!loggedIn) return; setVoteTarget({ author: nowPlaying.owner, permlink: post }); setShowVoteTooltip(!showVoteTooltip); };
+  // The Vote tile and menu row (a 3Speak track is a Hive post): the same vote
+  // popup as the count in the title area and the watch page (CommentVoteTooltip,
+  // weight slider, voted state). Signed out, or signed in without a Hive key,
+  // it says how to vote instead, like the watch page's Vote tile.
+  const pressVote = () => {
+    if (!loggedIn) { toastIn('Post').error(t('audio.post.signInToVote')); return; }
+    openVote();
+  };
+  const voteLabel = npVoteCount > 0 ? compactNumber(npVoteCount) : npIsVoted ? t('audio.post.voted') : t('audio.post.vote');
 
   const shareButton = canShare && (
     <button
@@ -2130,8 +2145,20 @@ function GlobalAudioPlayer() {
             <div className={cx('gap-transport', !isLive && 'has-skip')}>{transport(true)}</div>
             <div className="gap-docks">
               {post && <AudioHypeButton author={nowPlaying.owner} permlink={post} variant="tile" />}
+              {post && (
+                <DockTile
+                  className="gap-tile"
+                  icon="arrow_upward"
+                  label={voteLabel}
+                  active={npIsVoted}
+                  fill
+                  onClick={pressVote}
+                  title={npIsVoted ? t('audio.post.voted') : t('audio.post.vote')}
+                  aria-label={t('audio.post.vote')}
+                />
+              )}
               {post && <DockTile className="gap-tile" icon="chat_bubble" label={String(commentCount || 0)} active={activeTab === 'comments'} tone="cyan" fill={false} onClick={openComments} aria-label={t('audio.item.comments')} />}
-              {canSave && <DockTile className="gap-tile" icon="playlist_add" label={t('common.actions.save')} onClick={openPlaylist} title={t('audio.player.playlist')} />}
+              {canSave && <DockTile className="gap-tile gap-tile--save" icon="playlist_add" label={t('common.actions.save')} onClick={openPlaylist} title={t('audio.player.playlist')} />}
               {canTip && <DockTile className="gap-tile" icon="volunteer_activism" label={t('audio.post.tip')} onClick={openTip} title={nowPlaying.external && !post ? t('audio.podcasts.tip.button') : t('audio.post.tip')} />}
               {canShare && <DockTile className="gap-tile" icon="ios_share" label={t('common.actions.share')} active={shareOpen} tone="cyan" fill={false} onClick={toggleMenu('share')} aria-haspopup="dialog" />}
             </div>
@@ -2447,6 +2474,7 @@ function GlobalAudioPlayer() {
                 onClick={() => setMenu({ name: 'sleep', anchor: menu.anchor })}
               />
             )}
+            {post && <PmRow icon="arrow_upward" label={npIsVoted ? t('audio.post.voted') : t('audio.post.vote')} sub={npVoteCount > 0 ? compactNumber(npVoteCount) : null} onClick={() => { closeMenu(); pressVote(); }} />}
             {canSave && <PmRow icon="playlist_add" label={t('engagement.cardMenu.addToPlaylist')} onClick={() => { closeMenu(); openPlaylist(); }} />}
             <PmRow icon={nowPlaying.external ? 'podcasts' : 'person'} label={t('audio.player.goTo', { name: bylineOf(nowPlaying) })} onClick={() => { closeMenu(); goCreator(); }} />
             {!isLive && <PmRow icon={dlSaved ? 'download_done' : 'download'} label={dlSaved ? t('audio.player.downloaded') : t('audio.player.download')} onClick={startDownload} disabled={dlSaved || dlBusy} sub={dlBusy ? t('audio.player.downloading', { pct: dlPct }) : null} />}
