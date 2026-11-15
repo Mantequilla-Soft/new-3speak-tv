@@ -18,6 +18,72 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.82',
+    category: 'podcasts',
+    date: '2026-11-15',
+    summary: 'Record an OpenPods show as a podcast episode, with chapters.',
+  },
+  {
+    version: '2.0.81',
+    category: 'live',
+    date: '2026-11-15',
+    summary: 'Streamers can tap the connection pill for stream health; quality adjusts on a weak upload.',
+  },
+  {
+    version: '2.0.80',
+    category: 'live',
+    date: '2026-11-15',
+    summary: 'Phones held upright get a vertical version of landscape streams.',
+  },
+  {
+    version: '2.0.79',
+    category: 'live',
+    date: '2026-11-15',
+    summary: 'The stream studio adds lower thirds, a ticker, a countdown, fades and a be right back screen.',
+  },
+  {
+    version: '2.0.78',
+    category: 'live',
+    date: '2026-11-15',
+    summary: 'Live battles: two streamers side by side, and the boosts decide who wins.',
+  },
+  {
+    version: '2.0.77',
+    category: 'live',
+    date: '2026-11-15',
+    summary: 'Streamers can raid: send their viewers on to another live 3Speak stream.',
+  },
+  {
+    version: '2.0.76',
+    category: 'shorts',
+    date: '2026-11-15',
+    summary: "Post a viewer's clip as a Short and they get 30% of its rewards; post your own clip and the host gets 50%.",
+  },
+  {
+    version: '2.0.75',
+    category: 'live',
+    date: '2026-11-15',
+    summary: 'After your stream, see who clipped what and post the clips as Shorts from the new Your stream clips page.',
+  },
+  {
+    version: '2.0.74',
+    category: 'live',
+    date: '2026-11-15',
+    summary: 'Clip any live stream; without DVR your clip is ready when the stream ends.',
+  },
+  {
+    version: '2.0.73',
+    category: 'live',
+    date: '2026-11-15',
+    summary: 'Streamers can run polls and predictions; viewers vote or stake channel points, not money.',
+  },
+  {
+    version: '2.0.72',
+    category: 'live',
+    date: '2026-11-15',
+    summary: "Live chat keeps its recent messages after a reload, and a stream's replay shows its chat.",
+  },
+  {
     version: '2.0.71',
     category: 'live',
     date: '2026-11-15',
