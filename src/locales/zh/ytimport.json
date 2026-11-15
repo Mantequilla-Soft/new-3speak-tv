@@ -1,5 +1,5 @@
 {
-  "title": "导入你的视频",
+  "title": "导入你的内容",
   "subtitle": "把你在 YouTube 或 TikTok 上的视频带到 3Speak。标题、描述、标签和缩略图会自动为你填好。",
   "noChannel": "你还没有关联 YouTube 频道。请先在个人资料中关联并验证，然后再回到这里。",
   "linkChannel": "前往我的个人资料",
@@ -9,6 +9,7 @@
   "openOnYoutube": "在 YouTube 上打开",
   "import": "导入此视频",
   "useOwnFile": "我已有文件",
+  "openInUploader": "编辑并发布",
   "cancel": "取消",
   "retry": "重试",
   "progress": {
@@ -31,9 +32,11 @@
     "blocked": "YouTube 目前不允许我们的服务器下载此视频。",
     "notVideo": "该文件不是视频。",
     "tooLongForShort": "此视频时长超过 {{minutes}} 分钟，对 Short 来说太长了。请将其作为普通视频导入。",
-    "proxyPaused": "YouTube 导入暂时暂停，请稍后再试。"
+    "proxyPaused": "YouTube 导入暂时暂停，请稍后再试。",
+    "notAudio": "该文件不是音频文件。"
   },
   "entry": "导入视频",
+  "menuEntry": "导入内容",
   "types": {
     "videos": "视频",
     "shorts": "Shorts",
@@ -60,7 +63,8 @@
     "tiktok": "TikTok",
     "instagram": "Instagram",
     "bitchute": "BitChute",
-    "rumble": "Rumble"
+    "rumble": "Rumble",
+    "rss": "播客"
   },
   "tiktok": {
     "noLink": "你还没有关联 TikTok 账号。请先在个人资料中关联并验证，然后再回到这里。",
@@ -98,7 +102,7 @@
     "selectedCount": "已选 {{count}} 个",
     "maxHint": "最多 {{max}} 个",
     "clear": "清空",
-    "importSelected": "导入所选 ({{count}})",
+    "importSelected": "在后台发布（{{count}}）",
     "busy": "你上一批导入仍在进行中",
     "steps": {
       "content": "内容",
@@ -135,7 +139,16 @@
     "stopConfirm": "要停止这次导入吗？尚未发布的视频会被取消，包括已排定的。已发布的视频会保留。",
     "stopYes": "是的，停止",
     "stopKeep": "继续导入",
-    "countOf": "{{done}} / {{total}}"
+    "countOf": "{{done}} / {{total}}",
+    "audio": {
+      "formTitle": "导入 {{count}} 个单集",
+      "contentIntro": "选择音频类型，以及每个帖子的标题、描述和标签从哪里获取。",
+      "settingsIntro": "以下设置适用于你选择的全部单集。",
+      "spacing": "每个单集会先在我们的服务器上导入，然后逐个发布，间隔 {{minutes}} 分钟。第一个会在准备好几分钟后发布。你可以关闭此页面。",
+      "canLeave": "现在可以关闭此页面。你的单集会在我们的服务器上导入并发布，即使你不在也一样。",
+      "stopConfirm": "要停止这次导入吗？尚未发布的单集会被取消，包括已排定的。已发布的单集会保留。",
+      "maxReached": "一次最多可选 {{max}} 个单集"
+    }
   },
   "bitchute": {
     "noLink": "你还没有关联 BitChute 账号。请先在个人资料中关联并验证，然后再回到这里。",
@@ -166,5 +179,85 @@
     "empty": "你的 Rumble 频道中没有找到公开视频。",
     "olderHint": "没看到你想要的视频？",
     "olderHintAction": "粘贴它的链接"
+  },
+  "rss": {
+    "noLink": "你还没有关联播客 RSS 源。请先在个人资料中关联并验证，然后再回来。",
+    "latest": "你的播客单集",
+    "empty": "你的播客源中没有找到单集。",
+    "openOn": "打开单集页面",
+    "fallbackIntro": "你仍然可以导入：自己下载这一集，然后在这里选择文件。其他内容都会保留。",
+    "fallbackStep1": "在你的播客托管平台打开这一集。",
+    "fallbackStep2": "下载它的音频文件（MP3 或 M4A）。",
+    "limits": "可导入时长不超过 {{hours}} 小时的单集。它们会作为带节目说明和封面的音频帖子发布。",
+    "show": "播客",
+    "unreadable": "暂时无法读取",
+    "unreadableAll": "暂时无法读取你的播客源。请确认它在线，然后稍后再试。",
+    "import": "导入此音频",
+    "progressServer": "正在获取音频：{{pct}}%",
+    "progressTransfer": "正在将音频载入上传器：{{pct}}%"
+  },
+  "auto": {
+    "title": "自动导入",
+    "unavailable": "此服务器暂不支持自动导入。",
+    "off": "已关闭。开启后，这个节目的每个新单集都会成为 3Speak 上的音频帖子。",
+    "onSince": "自 {{date}} 起开启。每 {{minutes}} 分钟检查一次播客源。",
+    "pillOn": "开启",
+    "pillOff": "关闭",
+    "queued": "目前已导入的新单集：{{count}}",
+    "lastCheck": "上次检查：{{time}}",
+    "waiting": "等待明天：{{count}}（每天最多 {{max}} 个）",
+    "skipped": "已跳过，超过导入时长上限：{{titles}}",
+    "comesAuto": "新单集：自动导入会在下次检查时获取",
+    "errors": {
+      "noLink": "此播客源已不再在你的个人资料中验证。请重新关联以继续。",
+      "noGrant": "3Speak 可能已无法代你发布。请打开设置重新授权。",
+      "unreadable": "上次检查时无法读取你的播客源。我们会在下次检查时重试。",
+      "generic": "上次检查失败。我们会在下次检查时重试。"
+    },
+    "edit": "编辑设置",
+    "setUp": "设置自动导入",
+    "formTitle": "自动导入",
+    "formIntro": "<b>{{show}}</b> 的新单集会按这些设置成为音频帖子，每天最多 {{max}} 个，并像批量导入一样间隔发布。",
+    "enabled": "自动导入新单集",
+    "enabledInfo": "我们会定期检查你的播客源。开启后出现的每个单集都会由 @threespeak 按下面的设置下载并代你发布。播客源中已有的单集不受影响。",
+    "enabledOn": "新单集会代你发布",
+    "enabledOff": "设置会保留，不会发布任何内容",
+    "sections": {
+      "content": "标题、标签和描述",
+      "post": "帖子设置"
+    },
+    "kind": "音频类型",
+    "target": "发布为",
+    "targetPost": "独立帖子",
+    "targetSnap": "Snap 评论",
+    "targetPostHint": "带标题的帖子，发布到你在下方选择的社区。",
+    "targetSnapHint": "作为 snaps 动态中的回复发布，没有标题，类似短视频。社区和博客不适用。",
+    "fromSource": "从来源导入",
+    "fromSourceInfo": "开启：每篇帖子使用单集的标题、节目说明及其中的 #话题标签，与你的 RSS 源一致。关闭：由你自己设置标题格式、标签和描述。",
+    "fromSourceOn": "标题、描述和标签来自每一集",
+    "fromSourceOff": "你在下方设置标题、标签和描述",
+    "titleLabel": "标题",
+    "titleHint": "用 {title} 表示单集标题，{show} 表示节目名称，{episode} 和 {season} 表示集数和季数，{date} 表示发布日期。",
+    "sampleTitle": "单集标题",
+    "sampleShow": "我的节目",
+    "titlePreview": "示例：{{title}}",
+    "tagsLabel": "标签",
+    "tagsHint": "最多 8 个，用空格分隔。会添加到每个帖子。",
+    "hashtags": "同时使用节目说明中的话题标签",
+    "hashtagsInfo": "单集节目说明中写成 #tag 的词，会在你自己的标签之后成为该帖子的标签（最多 10 个标签）。",
+    "hashtagsHint": "说明中的 #tags 会成为帖子标签",
+    "useNotes": "使用节目说明作为描述",
+    "useNotesInfo": "帖子正文是你播客源中该单集的节目说明，包括其中的链接。关闭后，每个单集都使用你自己写的同一段文字。",
+    "useNotesOn": "每个帖子显示其单集的说明",
+    "useNotesOff": "每个帖子使用你在下面写的文字",
+    "addendumLabel": "节目说明下方的文字",
+    "addendumHint": "添加在每个帖子的说明之后，例如你其他频道的链接。",
+    "optional": "可选",
+    "textLabel": "描述",
+    "textHint": "用于每个单集。{title}、{show}、{episode}、{season} 和 {date} 在这里也可用。",
+    "textRequired": "请写下要使用的描述，或使用节目说明。",
+    "onlyNew": "只导入开启后出现在你播客源中的单集，绝不导入更早的单集。",
+    "grantNeeded": "自动导入由 @threespeak 代你发布，因此需要在你的账号上发布的权限。",
+    "save": "保存"
   }
 }

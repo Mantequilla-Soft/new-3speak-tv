@@ -95,6 +95,11 @@ const EmbedTimeline = lazyRoute(() => import("./components/embed-studio/EmbedTim
 const EmbedStudioPage = lazyRoute(() => import("./components/embed-studio/EmbedStudioPage"), "./components/embed-studio/EmbedStudioPage");
 const EmbedThumbnail = lazyRoute(() => import("./components/embed-studio/EmbedThumbnail"), "./components/embed-studio/EmbedThumbnail");
 const YoutubeImportPage = lazyRoute(() => import("./page/YoutubeImportPage"), "./page/YoutubeImportPage");
+// /youtube-import → /import, keeping ?platform= / ?mode=.
+function OldImportRedirect() {
+  const { search } = useLocation();
+  return <Navigate to={`/import${search}`} replace />;
+}
 const Feed = lazyRoute(() => import("./components/Feed/Feed"), "./components/Feed/Feed");
 const FirstUploads = lazyRoute(() => import("./page/FirstUploads"), "./page/FirstUploads");
 const FollowFeed = lazyRoute(() => import("./page/FollowFeed"), "./page/FollowFeed");
@@ -394,6 +399,8 @@ function App() {
           chapters: Array.isArray(detail.chapters) ? detail.chapters : null,
           // audiograms to post as Shorts with it (checked in EditorModal)
           audiograms: Array.isArray(detail.audiograms) ? detail.audiograms : null,
+          // An imported podcast episode: its title, notes, tags and cover (lib/youtubeImport.js)
+          prefill: detail.prefill && typeof detail.prefill === 'object' ? detail.prefill : null,
         });
       }
       setAudioUploadOpen(true);
@@ -840,7 +847,9 @@ function App() {
               {/* Publish the backlog someone made before they had a Hive account. */}
               <Route path="/publish-backlog" element={<PublishBacklog />} />
               <Route path="/firstupload" element={<FirstUploads />} />
-              {VIDEO_IMPORT_ENABLED && <Route path="/youtube-import" element={<YoutubeImportPage />} />}
+              {VIDEO_IMPORT_ENABLED && <Route path="/import" element={<YoutubeImportPage />} />}
+              {/* The importer's old address (until 2026-11-15): links keep working, query included. */}
+              {VIDEO_IMPORT_ENABLED && <Route path="/youtube-import" element={<OldImportRedirect />} />}
               <Route path="/trend" element={<Trend />} />
               <Route path="/discover" element={<Discover />} />
               <Route path="/audio" element={<Audio />} />

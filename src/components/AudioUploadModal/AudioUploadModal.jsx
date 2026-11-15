@@ -10,6 +10,7 @@ import { KeyTypes } from '@aioha/aioha';
 import { useMyPlaylists } from '../../hooks/useMyPlaylists';
 import { uploadAudioTo3Speak, getSnapsContainer, linkAudioToPost, audioFormatFor } from '../../utils/audioUpload';
 import { uploadThumbnail } from '../../utils/uploadThumbnail';
+import { markImportPublished } from '../../lib/youtubeImport';
 import { broadcastWithAioha, broadcastViaThreespeak, getCurrentProvider, Providers, commentWithAioha } from '../../hive-api/aioha';
 import { hasThreespeakPostingAuth, addThreespeakToPostingAuth } from '../../utils/postingAuthority';
 import { checkPostingRc } from '../../utils/rcCheck';
@@ -568,11 +569,13 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     const url = URL.createObjectURL(blob);
     objectUrlsRef.current.add(url);
     const dur = await probeDuration(blob);
+    const id = newId();
     setTracks(prev => [...prev, {
-      id: newId(),
+      id,
       blob,
       filename,
-      title: defaultTitleFromFile(filename),
+      // An imported episode brings its own title, text and cover (extra.title/desc/thumb).
+      title: extra.title || defaultTitleFromFile(filename),
       durationSec: dur,
       objectUrl: url,
       source,
@@ -587,14 +590,15 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
       bpm: '',
       // Per-track publish config (snaps + album-post comments). Chapters from
       // the audio editor start the description ("0:00 Intro" lines).
-      desc: chaptersText(sanitizeChapters(extra.chapters)),
+      desc: extra.desc || chaptersText(sanitizeChapters(extra.chapters)),
       chaptersText: chaptersText(sanitizeChapters(extra.chapters)),
       // Audiograms from the audio editor: posted as Shorts after this track's post
       audiograms: sanitizeAudiograms(extra.audiograms),
-      thumb: '',
+      thumb: extra.thumb || '',
       payout: 'default',      // default | powerup | decline
       beneStr: '[]',          // JSON beneficiary list
     }]);
+    return id;
   }, []);
 
   // When an initialTrack lands (e.g. an OpenPods recording handed off
@@ -602,22 +606,42 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
   // ref guard ensures one initial blob per open cycle even if the
   // parent re-renders mid-flight or the user dismisses then reopens.
   const consumedInitialRef = useRef(false);
+  // An imported podcast episode (the import page): its source id, reported back
+  // once the post is out so the import grid marks it as on 3Speak.
+  const importSourceRef = useRef(null);
   useEffect(() => {
     if (!isOpen) {
       consumedInitialRef.current = false;
+      importSourceRef.current = null;
       return;
     }
     if (consumedInitialRef.current) return;
     if (!initialTrack || !initialTrack.blob) return;
     consumedInitialRef.current = true;
-    addBlobAsTrack(
+    // An imported episode: its own title, show notes, tags and cover, all still
+    // editable, on the post AND on the track (a snap comment is the track's).
+    const pre = initialTrack.prefill;
+    const cover = pre?.coverUrl && /^https:\/\//.test(pre.coverUrl) ? pre.coverUrl : '';
+    const added = addBlobAsTrack(
       initialTrack.blob,
       initialTrack.filename || 'openpod-recording.ogg',
-      initialTrack.source === 'editor' ? 'editor' : 'record',
+      initialTrack.source === 'editor' ? 'editor' : initialTrack.source === 'import' ? 'file' : 'record',
       initialTrack.type ?? null,
-      { musicCredits: initialTrack.musicCredits, chapters: initialTrack.chapters, audiograms: initialTrack.audiograms },
+      {
+        musicCredits: initialTrack.musicCredits, chapters: initialTrack.chapters, audiograms: initialTrack.audiograms,
+        ...(pre ? { title: pre.title ? String(pre.title).slice(0, 255) : '', desc: pre.description ? String(pre.description) : '', thumb: cover } : {}),
+      },
     );
-  }, [isOpen, initialTrack, addBlobAsTrack]);
+    if (pre) {
+      if (pre.title) setMainTitle(String(pre.title).slice(0, 255));
+      if (pre.description) setPostDescription(String(pre.description));
+      if (Array.isArray(pre.tags) && pre.tags.length) setPostTagsInput(pre.tags.join(' '));
+      if (cover) setCoverFor('main', cover);
+      // Reported back for this track, however it is published (post or snap).
+      const sourceId = typeof pre.sourceId === 'string' ? pre.sourceId : null;
+      if (sourceId) added.then((trackId) => { importSourceRef.current = { sourceId, trackId }; });
+    }
+  }, [isOpen, initialTrack, addBlobAsTrack, setCoverFor]);
 
   const handleFiles = useCallback(async (fileList) => {
     const files = Array.from(fileList || []).filter(f => f.type.startsWith('audio/') || AUDIO_EXT_RE.test(f.name));
@@ -1255,8 +1279,18 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
 
   // Publish one track honoring the active mode (also used by retry).
   const publishOneTrack = useCallback(async (track, parent) => {
-    if (mode === 'single') return publishSinglePost(track);
-    return publishTrackComment(track, parent);
+    if (mode === 'single') await publishSinglePost(track);
+    else await publishTrackComment(track, parent);
+    // The imported episode is out (standalone post or snap): the import page
+    // marks it as on 3Speak (server record + an event for an open import page).
+    const imp = importSourceRef.current;
+    const out = trackPostsRef.current[track.id];
+    if (imp && imp.trackId === track.id && out?.permlink) {
+      importSourceRef.current = null;
+      markImportPublished(imp.sourceId, out.permlink)
+        .then(() => window.dispatchEvent(new CustomEvent('import-published', { detail: { source: imp.sourceId, permlink: out.permlink } })))
+        .catch(() => {});
+    }
   }, [mode, publishSinglePost, publishTrackComment]);
 
   // Where "Open post" / "Open playlist" go once every track is published.

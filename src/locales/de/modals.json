@@ -44,6 +44,7 @@
     "title": "Verknüpfte externe Profile",
     "intro": "Beweise, dass dir ein YouTube-Kanal (oder ein anderer) gehört, indem du deinen eindeutigen 3Speak-Hash in die öffentliche Profilbeschreibung einfügst und ihn hier verifizierst.",
     "openProfile": "Profil öffnen",
+    "importEpisodes": "Folgen importieren",
     "removeLink": "Verknüpfung entfernen",
     "empty": "Noch keine externen Profile verknüpft.",
     "addPlatform": "Neue Plattform hinzufügen",

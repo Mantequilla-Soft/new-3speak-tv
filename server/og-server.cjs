@@ -911,6 +911,12 @@ const PAGE_CARDS = {
     image: '/og/faq.jpg',
   },
   // Live only where the importer is switched on (VITE_VIDEO_IMPORT): nginx is the switch.
+  '/import': {
+    title: '3S | Import your content to 3Speak',
+    description: 'Bring your videos and podcasts to 3Speak. Title, description, tags and thumbnail are filled in for you.',
+    image: '/og/youtube-import.jpg',
+  },
+  // The importer's old address (redirects to /import).
   '/youtube-import': {
     title: '3S | Import your videos to 3Speak',
     description: 'Bring your videos from YouTube or TikTok to 3Speak. Title, description, tags and thumbnail are filled in for you.',

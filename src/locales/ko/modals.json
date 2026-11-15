@@ -44,6 +44,7 @@
     "title": "연결된 외부 프로필",
     "intro": "고유한 3Speak 해시를 공개 프로필 설명에 붙여넣은 다음 여기서 인증하면 YouTube(또는 다른) 채널의 소유자임을 증명할 수 있어요.",
     "openProfile": "프로필 열기",
+    "importEpisodes": "에피소드 가져오기",
     "removeLink": "연결 삭제",
     "empty": "아직 연결된 외부 프로필이 없어요.",
     "addPlatform": "새 플랫폼 추가",

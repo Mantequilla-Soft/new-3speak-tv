@@ -136,6 +136,13 @@
       "placeholder": "https://www.bitchute.com/channel/…",
       "help": "Paste your BitChute channel name or link. Put the hash anywhere in your channel description."
     },
+    "rss": {
+      "placeholder": "https://example.com/podcast.xml",
+      "help": "Paste the RSS feed address of your podcast. Your podcast host shows it in the show's settings or distribution page.",
+      "flowTitle": "Link your podcast RSS feed",
+      "step2": "<strong>Paste it into your show description, or into the description of your newest episode</strong>, at your podcast host. Save and publish the change. You can remove it again once the feed is verified.",
+      "step3": "Enter your podcast's RSS feed address:"
+    },
     "rumble": {
       "placeholder": "https://rumble.com/c/…",
       "help": "Paste your Rumble channel name or link. Put the hash anywhere in your channel description."

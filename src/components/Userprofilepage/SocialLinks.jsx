@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { FaYoutube, FaSoundcloud, FaTiktok, FaInstagram, FaPlayCircle } from 'react-icons/fa';
+import { FaYoutube, FaSoundcloud, FaTiktok, FaInstagram, FaPlayCircle, FaPodcast } from 'react-icons/fa';
 import { SiRumble } from 'react-icons/si';
 import { Icon as MsIcon } from '../v2/Icon';
 import { toastIn } from '../../utils/toast';
@@ -24,6 +24,7 @@ export const PLATFORM_ICONS = {
   bitchute: FaPlayCircle,
   rumble: SiRumble,
   soundcloud: FaSoundcloud,
+  rss: FaPodcast,
 };
 
 // What the profile header draws (37b): Material Symbols, like the rest of the
@@ -35,6 +36,7 @@ const PLATFORM_SYMBOLS = {
   bitchute: 'play_circle',
   rumble: 'videocam',
   soundcloud: 'cloud',
+  rss: 'podcasts',
 };
 
 export default function SocialLinks({ hiveUsername, refreshKey = 0, canDelete = false, onChange, column = false }) {

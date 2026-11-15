@@ -8,8 +8,11 @@ import { BatchForm, BatchStatus } from "./ImportBatch";
 import { SHORTS_MAX_DURATION_SEC, ENABLE_SUBS } from "../utils/config";
 import {
   IMPORT_MODE_PLATFORMS, getImportStatus, listChannelVideos, listTikTokVideos, listInstagramVideos, listPlatformVideos, resolveImportUrl, getImportBatches, startImportJob, getImportJob, cancelImportJob,
-  downloadImportFile, fetchThumbnailDataUrl, handOffToStudio, youtubeStudioUrl, youtubeWatchUrl, fmtDuration, refreshImportLists,
+  downloadImportFile, fetchThumbnailDataUrl, handOffToStudio, youtubeStudioUrl, fmtDuration, refreshImportLists,
+  listPodcastEpisodes, getPodcastNotes, handOffToAudioUpload, getAutoImports,
 } from "../lib/youtubeImport";
+import { PodcastAutoCard } from "./PodcastAutoImport";
+import { uploadThumbnail } from "../utils/uploadThumbnail";
 import "./YoutubeImportPage.scss";
 
 const toast = toastIn('Upload');
@@ -23,7 +26,10 @@ const PLATFORM_TABS = [
   { key: 'instagram', icon: 'photo_camera' },
   { key: 'bitchute', icon: 'play_circle' },
   { key: 'rumble', icon: 'live_tv' },
+  { key: 'rss', icon: 'podcasts' },
 ];
+// The podcast tab lists one verified show at a time (`podcastFeed`, below).
+let podcastFeed = '';
 // Everything but YouTube: a grid plus a paste-a-link box. TikTok / Instagram list
 // only their newest few; BitChute / Rumble page through the whole channel.
 // Each loader takes the page number and answers { videos, hasMore? }.
@@ -32,8 +38,12 @@ const LINK_PLATFORMS = {
   instagram: () => listInstagramVideos(),
   bitchute: (page) => listPlatformVideos('bitchute', page),
   rumble: (page) => listPlatformVideos('rumble', page),
+  // Podcast episodes have no link to paste: the whole show pages through.
+  rss: (page) => listPodcastEpisodes({ feed: podcastFeed, page }),
 };
-const emptyLinkList = { items: [], loading: false, loaded: false, error: '', page: 0, hasMore: false };
+// Lists without a paste-a-link box.
+const NO_PASTE = new Set(['rss']);
+const emptyLinkList = { items: [], loading: false, loaded: false, error: '', page: 0, hasMore: false, shows: null, feedId: null };
 const emptyGroups = () => Object.fromEntries(
   TYPES.map((type) => [type, { items: [], next: null, total: null, loaded: false, loading: false, error: '' }]),
 );
@@ -55,7 +65,7 @@ export default function YoutubeImportPage() {
   //   videos → YouTube videos + past livestreams, always a regular video
   //   (none, e.g. from the profile) → everything, the type decides.
   const [searchParams] = useSearchParams();
-  const mode = ['shorts', 'videos'].includes(searchParams.get('mode')) ? searchParams.get('mode') : null;
+  const mode = ['shorts', 'videos', 'audio'].includes(searchParams.get('mode')) ? searchParams.get('mode') : null;
   const types = useMemo(() => (mode === 'shorts' ? ['shorts'] : mode === 'videos' ? ['videos', 'live'] : TYPES), [mode]);
   const shortMinutes = Math.round(SHORTS_MAX_DURATION_SEC / 60);
   const { user, authenticated } = useAppStore();
@@ -78,6 +88,8 @@ export default function YoutubeImportPage() {
   const [picked, setPicked] = useState([]);
   const [batchInfo, setBatchInfo] = useState(null); // { max, spacingMin, granted, batches }
   const [batchFormOpen, setBatchFormOpen] = useState(false);
+  // 🔁 Automatic podcast imports: { available, intervalMin, maxPerDay, configs }
+  const [autoInfo, setAutoInfo] = useState(null);
 
   const [selected, setSelected] = useState(null);
   const [job, setJob] = useState(null);           // server job
@@ -103,11 +115,16 @@ export default function YoutubeImportPage() {
           else if (s.links?.instagram?.length && s.instagramReady) setPlatform('instagram');
           else if (s.links?.rumble?.length) setPlatform('rumble');
           else if (s.links?.bitchute?.length) setPlatform('bitchute');
+          else if (s.links?.rss?.length) setPlatform('rss');
         }
+        if (mode === 'audio') setPlatform('rss');
+        // ?platform=rss (e.g. from a linked feed in Settings): open on that tab.
+        const wanted = searchParams.get('platform');
+        if (wanted && wanted !== 'youtube' && s.links?.[wanted]?.length && (!s.sources || s.sources.includes(wanted))) setPlatform(wanted);
       })
       .catch((e) => alive && setStatusError(e.status === 401 ? t('ytimport.errors.signIn') : e.message));
     return () => { alive = false; };
-  }, [authenticated, user, t, mode]);
+  }, [authenticated, user, t, mode, searchParams]);
 
   // Batches: load once, then poll while the newest one is still working.
   const latestBatch = batchInfo?.batches?.[0] || null;
@@ -124,6 +141,40 @@ export default function YoutubeImportPage() {
     const iv = batchPending ? setInterval(load, batchRunning ? 5000 : 60000) : null;
     return () => { alive = false; if (iv) clearInterval(iv); };
   }, [authenticated, user, batchRunning, batchPending]);
+  useEffect(() => {
+    if (!authenticated || !user || platform !== 'rss') return;
+    let alive = true;
+    getAutoImports().then((d) => alive && setAutoInfo(d)).catch(() => alive && setAutoInfo(null));
+    return () => { alive = false; };
+  }, [authenticated, user, platform, batchRunning]);
+  // An episode published from the audio upload: on 3Speak now, without a reload.
+  useEffect(() => {
+    const onPublished = (e) => {
+      const { source, permlink } = e.detail || {};
+      if (!source || !permlink) return;
+      setStatus((cur) => (cur ? { ...cur, imported: { ...(cur.imported || {}), [source]: permlink } } : cur));
+    };
+    window.addEventListener('import-published', onPublished);
+    return () => window.removeEventListener('import-published', onPublished);
+  }, []);
+  // While an automatic import is on, look again every minute: a new episode gets
+  // queued, then published, without a reload.
+  const autoOn = platform === 'rss' && !!autoInfo?.configs?.some((c) => c.enabled);
+  useEffect(() => {
+    if (!autoOn) return;
+    const iv = setInterval(() => {
+      getAutoImports().then(setAutoInfo).catch(() => {});
+      getImportBatches().then(setBatchInfo).catch(() => {});
+      getImportStatus().then(setStatus).catch(() => {});
+    }, 60 * 1000);
+    return () => clearInterval(iv);
+  }, [autoOn]);
+
+  const autoSaved = (config) => setAutoInfo((info) => ({
+    ...(info || {}),
+    configs: [config, ...((info?.configs || []).filter((c) => c.feedUrl !== config.feedUrl))],
+  }));
+
   // Already on 3Speak (source id → permlink) and still waiting in a batch: the
   // server's view (Hive + batches), plus the batches on this page, which change
   // sooner than a status reload.
@@ -204,7 +255,7 @@ export default function YoutubeImportPage() {
     const set = (v) => setLinkLists((all) => ({ ...all, [p]: v }));
     set({ ...emptyLinkList, loading: true });
     LINK_PLATFORMS[p](0)
-      .then((d) => set({ items: d.videos || [], loading: false, loaded: true, error: '', page: 0, hasMore: !!d.hasMore }))
+      .then((d) => set({ items: d.videos || [], loading: false, loaded: true, error: '', page: 0, hasMore: !!d.hasMore, shows: d.shows || null, feedId: d.feedId || null }))
       .catch((e) => set({ ...emptyLinkList, loaded: true, error: e.message }));
   }, [platform, hasLinkAccount, ttList.loaded, ttList.loading]);
   // All linked channels on every platform are read again: new and newly public
@@ -231,6 +282,14 @@ export default function YoutubeImportPage() {
     } finally {
       setRefreshing(false);
     }
+  };
+
+  // Another of the creator's verified shows: its episodes from the first page.
+  const pickShow = (id) => {
+    podcastFeed = id;
+    setSelected(null);
+    setPhase('idle');
+    setLinkLists((all) => ({ ...all, rss: emptyLinkList }));
   };
 
   const loadMoreLink = () => {
@@ -289,6 +348,27 @@ export default function YoutubeImportPage() {
   // creator picked their own file).
   const finish = useCallback(async (file, video, media = null) => {
     setPhase('handoff');
+    // A podcast episode goes to the audio uploader, with its full show notes and
+    // its cover (uploaded like any audio cover); either may be missing.
+    if (video.platform === 'rss') {
+      const [notes, coverUrl] = await Promise.all([
+        getPodcastNotes(video.token).then((d) => d?.text || '').catch(() => ''),
+        (async () => {
+          if (!video.thumbnail) return '';
+          try {
+            const r = await fetch(video.thumbnail, { credentials: 'omit' });
+            if (!r.ok) return '';
+            const blob = await r.blob();
+            return await uploadThumbnail(new File([blob], 'cover.jpg', { type: blob.type || 'image/jpeg' }), user);
+          } catch { return ''; }
+        })(),
+      ]);
+      handOffToAudioUpload(file, video, { description: notes, coverUrl });
+      setPicked((list) => list.filter((x) => x.id !== video.id));
+      setSelected(null);
+      setPhase('idle');
+      return;
+    }
     // A Short becomes a 3Speak Short when it fits our length limit; a longer one
     // (YouTube Shorts go up to 3 minutes, TikToks far longer) goes in as a normal
     // video. TikTok gives no length up front, so an unmeasured portrait TikTok (or
@@ -308,9 +388,10 @@ export default function YoutubeImportPage() {
     // Short thumbnails come as 16:9 frames (YouTube) or ship with the file; a
     // portrait Short keeps the frames the studio grabs from the file instead.
     const thumb = asShort ? null : await fetchThumbnailDataUrl(video);
+    setPicked((list) => list.filter((x) => x.id !== video.id));
     handOffToStudio(file, video, thumb, asShort ? 'shorts' : 'longform');
     navigate(asShort ? '/embed-studio?from=shorts' : '/embed-studio');
-  }, [navigate, mode, shortMinutes, t]);
+  }, [navigate, mode, shortMinutes, t, user]);
 
   const fail = (message, code) => {
     clearInterval(pollRef.current);
@@ -365,8 +446,9 @@ export default function YoutubeImportPage() {
     const file = e.target.files?.[0];
     e.target.value = '';
     if (!file || !selected) return;
-    if (!file.type.startsWith('video/')) {
-      toast.error(t('ytimport.errors.notVideo'));
+    const audio = selected.platform === 'rss';
+    if (!file.type.startsWith(audio ? 'audio/' : 'video/')) {
+      toast.error(t(audio ? 'ytimport.errors.notAudio' : 'ytimport.errors.notVideo'));
       return;
     }
     finish(file, selected);
@@ -375,7 +457,10 @@ export default function YoutubeImportPage() {
   // Not pickable: over the import limit, or (Short mode) over the Short limit.
   // Returns the limit in minutes for the badge, or null.
   const blockedMinutes = (v) => {
-    if (v.tooLong) return status?.limits ? Math.round(status.limits.maxDurationS / 60) : null;
+    if (v.tooLong) {
+      const max = v.platform === 'rss' ? status?.limits?.podcastMaxDurationS : status?.limits?.maxDurationS;
+      return max ? Math.round(max / 60) : null;
+    }
     if (mode === 'shorts' && v.duration > SHORTS_MAX_DURATION_SEC) return shortMinutes;
     return null;
   };
@@ -387,7 +472,9 @@ export default function YoutubeImportPage() {
     setTtError('');
     try {
       const d = await resolveImportUrl(ttUrl.trim());
-      choose(d.video);
+      // Found: ticked like a tile, ready for the uploader or a batch.
+      if (d.video && !picked.some((x) => x.id === d.video.id)) togglePick(d.video);
+      setTtUrl('');
     } catch (err) {
       setTtError(err.message);
     } finally {
@@ -406,19 +493,24 @@ export default function YoutubeImportPage() {
     setJob(null);
   };
 
-  const choose = (v) => {
-    if (blockedMinutes(v)) return;
-    if (phase === 'server' || phase === 'transfer' || phase === 'handoff' || phase === 'starting') return;
-    // Instagram's reels tab has no caption/date: look the pick up first. (Rumble
-    // lists have everything but the description, which the server fills in later.)
-    const bare = v.platform === 'instagram' && !v.publishedAt && !enrichedRef.current.has(v.id);
-    setSelected(bare ? { ...v, enriching: true } : v);
-    setFailure(null);
-    setPhase('idle');
-    setJob(null);
-    if (bare) enrichOne(v).then((full) => { if (!full) setSelected((cur) => (cur?.id === v.id ? { ...cur, enriching: false } : cur)); });
-    // The picked tile opens across its row; keep it in view.
-    requestAnimationFrame(() => document.getElementById(`yt-import-card-${v.id}`)?.scrollIntoView({ behavior: 'smooth', block: 'nearest' }));
+  // A click on a tile ticks it (red frame) for the uploader or a batch; one on
+  // a tile already on 3Speak opens its post. Instagram's reels tab has no
+  // caption or date: those are looked up when the tile is ticked.
+  const pickTile = (v) => {
+    if (blockedMinutes(v) || ['starting', 'server', 'transfer', 'handoff'].includes(phase)) return;
+    if (importedMap[v.id]) { navigate(`/@${user}/${importedMap[v.id]}`); return; }
+    if (inBatch[v.id]) return;
+    if (!picked.some((x) => x.id === v.id) && v.platform === 'instagram' && !v.publishedAt && !enrichedRef.current.has(v.id)) {
+      enrichOne(v).then((full) => { if (full) setPicked((list) => list.map((x) => (x.id === v.id ? full : x))); });
+    }
+    togglePick(v);
+  };
+
+  // One ticked item into the normal uploader (studio / audio upload), editable.
+  const importOne = (v) => {
+    setSelected(v);
+    startImport(v);
+    requestAnimationFrame(() => document.getElementById('yt-import-single')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' }));
   };
 
   // ---- Render -------------------------------------------------------------------
@@ -445,7 +537,7 @@ export default function YoutubeImportPage() {
           : failure?.code === 'proxy_paused' ? t('ytimport.errors.proxyPaused')
             : failure?.message}
       </p>
-      <p className="yt-import__muted">{t('ytimport.fallback.intro')}</p>
+      <p className="yt-import__muted">{t(v.platform === 'rss' ? 'ytimport.rss.fallbackIntro' : 'ytimport.fallback.intro')}</p>
       {v.platform !== 'youtube' ? (
         <ol className="yt-import__steps">
           <li><span className="num">1</span><span>{t(`ytimport.${v.platform}.fallbackStep1`)}</span></li>
@@ -476,51 +568,26 @@ export default function YoutubeImportPage() {
     </div>
   );
 
-  // The import controls of the picked video; they live inside its tile.
-  const renderPanel = (v) => (
-    <div className="yt-import__card-panel">
-      <p className="yt-import__muted">
-        {v.duration > 0 && <><span className="num">{fmtDuration(v.duration)}</span> · </>}
-        {v.publishedAt && <>{new Date(v.publishedAt).toLocaleDateString()} · </>}
-        {v.platform !== 'youtube' ? (
-          <a href={v.sourceUrl} target="_blank" rel="noopener noreferrer">{t(`ytimport.${v.platform}.openOn`)}</a>
-        ) : (
-          <a href={youtubeWatchUrl(v.id)} target="_blank" rel="noopener noreferrer">{t('ytimport.openOnYoutube')}</a>
-        )}
-      </p>
-      {importedMap[v.id] && (
-        <p className="yt-import__on-site">
-          <Icon name="check_circle" size={16} /> {t('ytimport.onSite')} ·{' '}
-          <Link to={`/@${user}/${importedMap[v.id]}`}>{t('ytimport.viewPost')}</Link>
-        </p>
-      )}
-      {!importedMap[v.id] && inBatch[v.id] && (
-        <p className="yt-import__on-site yt-import__on-site--waiting"><Icon name="schedule" size={16} /> {t('ytimport.inBatch')}</p>
-      )}
-
-      {phase === 'idle' && (
-        <div className="yt-import__actions">
-          <Button variant="primary" size={44} trailing="download" className="is-next" onClick={() => startImport(v)} disabled={v.enriching}>
-            {t('ytimport.import')}
-          </Button>
-          <Button variant="secondary" size={44} icon="upload_file" onClick={() => fileInputRef.current?.click()}>
-            {t('ytimport.useOwnFile')}
-          </Button>
-        </div>
-      )}
-
+  // The one item on its way to the uploader: its progress, or what to do when it
+  // could not be fetched. A card above the list.
+  const renderSingle = (v) => (
+    <section id="yt-import-single" className="yt-import__single" aria-live="polite">
+      <div className="yt-import__single-head">
+        <span className="yt-import__single-thumb">{v.thumbnail && <img src={v.thumbnail} alt="" />}</span>
+        <b>{v.title}</b>
+      </div>
       {busy && (
         <div className="yt-import__progress">
           <Progress
             tone="cyan"
-            label={t('ytimport.import')}
+            label={v.platform === 'rss' ? t('ytimport.rss.import') : t('ytimport.import')}
             value={phase === 'transfer' ? Math.round(transfer * 100) : phase === 'handoff' ? 100 : serverPct}
           />
           <p className="yt-import__muted yt-import__progress-line">
             <Icon name="progress_activity" size={16} className="v2-spin" />
             {phase === 'starting' && t('ytimport.progress.starting')}
-            {phase === 'server' && t('ytimport.progress.server', { pct: serverPct })}
-            {phase === 'transfer' && t('ytimport.progress.transfer', { pct: Math.round(transfer * 100) })}
+            {phase === 'server' && t(v.platform === 'rss' ? 'ytimport.rss.progressServer' : 'ytimport.progress.server', { pct: serverPct })}
+            {phase === 'transfer' && t(v.platform === 'rss' ? 'ytimport.rss.progressTransfer' : 'ytimport.progress.transfer', { pct: Math.round(transfer * 100) })}
             {phase === 'handoff' && t('ytimport.progress.handoff')}
           </p>
           {(phase === 'server' || phase === 'starting') && (
@@ -532,63 +599,73 @@ export default function YoutubeImportPage() {
           )}
         </div>
       )}
-
       {phase === 'failed' && renderFallback(v)}
-    </div>
+    </section>
   );
 
   // One tile in a video grid (YouTube, TikTok and Instagram share it). The picked
   // tile opens across its row with the import controls next to the cover.
+  // A new episode of a show with automatic import on: the next check takes it
+  // (server/import-auto.cjs, same rules: not in the feed at switch-on, dated at
+  // most 6 hours before it, not on 3Speak or in a batch yet).
+  const autoConfig = platform === 'rss' ? autoInfo?.configs?.find((c) => c.enabled && c.feedId === ttList.feedId) : null;
+  const comesAuto = (v) => {
+    if (!autoConfig || v.platform !== 'rss' || v.tooLong || importedMap[v.id] || inBatch[v.id]) return false;
+    if ((autoConfig.baseline || []).includes(v.id)) return false;
+    const at = Date.parse(v.publishedAt);
+    return !Number.isFinite(at) || at >= Date.parse(autoConfig.enabledAt) - 6 * 3600 * 1000;
+  };
+
   const renderCard = (v) => {
     const blocked = blockedMinutes(v);
+    const auto = comesAuto(v);
     const onSite = !!importedMap[v.id];
-    // Never twice in a batch: these cannot be ticked (the server refuses them too).
+    // Waiting in a batch: not tickable (the server refuses it twice too).
     const waiting = !onSite && !!inBatch[v.id];
-    const tickBlocked = onSite || waiting;
-    const isSelected = selected?.id === v.id;
     const isPicked = picked.some((x) => x.id === v.id);
-    // The selected copy can be fresher (details looked up after the pick).
-    const shown = isSelected ? { ...v, ...selected } : v;
-    // 33c: a tile that cannot go in a batch says why in a chip under its title.
+    // The ticked copy can be fresher (details looked up after the tick).
+    const shown = isPicked ? { ...v, ...picked.find((x) => x.id === v.id) } : v;
+    // 33c: a tile that cannot be ticked says why in a chip under its title.
     const tag = onSite ? t('ytimport.onSite')
       : blocked ? t('ytimport.tooLong', { minutes: blocked })
         : waiting ? t('ytimport.inBatch')
           : null;
+    const full = !isPicked && picked.length >= batchMax;
     return (
       <div
         key={v.id}
         id={`yt-import-card-${v.id}`}
-        className={`yt-import__card${isSelected ? ' yt-import__card--selected' : ''}${blocked ? ' yt-import__card--too-long' : ''}${isPicked ? ' yt-import__card--picked' : ''}${tag && !isSelected ? ' yt-import__card--tagged' : ''}`}
+        className={`yt-import__card${blocked ? ' yt-import__card--too-long' : ''}${isPicked ? ' yt-import__card--picked' : ''}${tag ? ' yt-import__card--tagged' : ''}`}
       >
         <button
           type="button"
           className="yt-import__pick"
-          onClick={() => choose(v)}
-          disabled={!!blocked || (busy && !isSelected)}
-          title={blocked ? t('ytimport.tooLong', { minutes: blocked }) : undefined}
+          onClick={() => pickTile(v)}
+          disabled={!!blocked || waiting || auto || busy || (full && !onSite)}
+          aria-pressed={tag || auto ? undefined : isPicked}
+          title={blocked ? t('ytimport.tooLong', { minutes: blocked })
+            : auto ? t('ytimport.auto.comesAuto')
+              : waiting ? t('ytimport.inBatch')
+                : onSite ? t('ytimport.viewPost')
+                  : full ? t(platform === 'rss' ? 'ytimport.batch.audio.maxReached' : 'ytimport.batch.maxReached', { max: batchMax })
+                    : undefined}
         >
           <div className="yt-import__thumb">
             {/* A cover that cannot be loaded leaves the striped tile, not a broken image. */}
             <img src={shown.thumbnail} alt="" loading="lazy" onError={(e) => { e.currentTarget.style.visibility = 'hidden'; }} />
             {shown.duration > 0 && <span className="yt-import__dur num">{fmtDuration(shown.duration)}</span>}
+            {/* Coming automatically or waiting in a batch: a clock, not a tick box. */}
+            {(auto || waiting) ? (
+              <span className="yt-import__tick is-clock" aria-hidden="true"><Icon name="schedule" size={16} /></span>
+            ) : !tag && (
+              <span className={`yt-import__tick${isPicked ? ' is-on' : ''}`} aria-hidden="true">
+                {isPicked && <Icon name="check" size={16} />}
+              </span>
+            )}
           </div>
           <span className="yt-import__title">{shown.title}</span>
           {tag && <span className={`yt-import__tag${onSite ? ' is-done' : ''}`}>{tag}</span>}
         </button>
-        {!blocked && !tickBlocked && (
-          <button
-            type="button"
-            className={`yt-import__tick${isPicked ? ' is-on' : ''}`}
-            onClick={() => togglePick(shown)}
-            disabled={!isPicked && picked.length >= batchMax}
-            aria-pressed={isPicked}
-            aria-label={t('ytimport.batch.select')}
-            title={!isPicked && picked.length >= batchMax ? t('ytimport.batch.maxReached', { max: batchMax }) : t('ytimport.batch.select')}
-          >
-            {isPicked && <Icon name="check" size={16} />}
-          </button>
-        )}
-        {isSelected && renderPanel(shown)}
       </div>
     );
   };
@@ -599,13 +676,11 @@ export default function YoutubeImportPage() {
       <Icon name="progress_activity" size={28} className="v2-spin" />
     </div>
   );
-  // A failed import also shows its way out in the side column (33c).
-  const fallbackAside = phase === 'failed' && !!selected;
   // A platform is "linked" when the creator has an account on it to list from.
   const isLinked = (key) => (key === 'youtube' ? !!status?.channels?.length : !!status?.links?.[key]?.length);
 
   return (
-    <div className={`yt-import${latestBatch || fallbackAside ? ' has-batch' : ''}${fallbackAside ? ' has-fallback' : ''}`}>
+    <div className={`yt-import${latestBatch ? ' has-batch' : ''}`}>
       <div className="yt-import__main">
         <Header
           t={t}
@@ -645,6 +720,7 @@ export default function YoutubeImportPage() {
           </div>
         )}
         {refreshNote && <p className="yt-import__note yt-import__refresh-note">{refreshNote}</p>}
+        {selected && phase !== 'idle' && renderSingle(selected)}
 
         {status && isLinkPlatform && (
           !hasLinkAccount ? (
@@ -655,6 +731,38 @@ export default function YoutubeImportPage() {
             </div>
           ) : (
             <>
+            {platform === 'rss' && ttList.shows?.length > 1 && (
+              <label className="yt-import__channel v2-field">
+                <span className="v2-eyebrow">{t('ytimport.rss.show')}</span>
+                <select className="v2-input is-select" value={ttList.feedId || ''} onChange={(e) => pickShow(e.target.value)} disabled={busy || ttList.loading}>
+                  {ttList.shows.map((sh) => (
+                    <option key={sh.url} value={sh.id || ''} disabled={!sh.id}>
+                      {sh.title || sh.url}{sh.id ? '' : ` (${t('ytimport.rss.unreadable')})`}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            )}
+            {platform === 'rss' && ttList.loaded && !ttList.feedId && ttList.shows?.length > 0 && (
+              <p className="yt-import__error" role="alert">{t('ytimport.rss.unreadableAll')}</p>
+            )}
+            {platform === 'rss' && ttList.feedId && autoInfo && (() => {
+              const show = ttList.shows?.find((sh) => sh.id === ttList.feedId);
+              if (!show) return null;
+              const sample = { title: ttList.items[0]?.title || t('ytimport.auto.sampleTitle'), show: show.title, episode: 12, date: new Date().toISOString().slice(0, 10) };
+              return (
+                <PodcastAutoCard
+                  user={user}
+                  show={show}
+                  info={autoInfo}
+                  sample={sample}
+                  granted={batchInfo?.granted !== false}
+                  onGranted={(ok = true) => setBatchInfo((info) => ({ ...(info || {}), granted: ok }))}
+                  onSaved={autoSaved}
+                />
+              );
+            })()}
+            {!NO_PASTE.has(platform) && (
             <form className="yt-import__paste yt-import__paste--card" onSubmit={findTikTok}>
               <label className="v2-eyebrow" htmlFor="yt-import-tt">{t(`ytimport.${platform}.pasteLabel`)}</label>
               <div className="yt-import__paste-row">
@@ -678,12 +786,13 @@ export default function YoutubeImportPage() {
               <p className="v2-field__hint">{t(`ytimport.${platform}.pasteHint`)}</p>
               {ttError && <p className="yt-import__error" role="alert">{ttError}</p>}
             </form>
+            )}
             <h3 className="yt-import__section">{t(`ytimport.${platform}.latest`)}</h3>
             {ttList.error && <p className="yt-import__error" role="alert">{ttList.error}</p>}
             {ttList.loaded && !ttList.loading && ttList.items.length === 0 && !ttList.error && (
               <p className="yt-import__note">{t(`ytimport.${platform}.empty`)}</p>
             )}
-            <div className={`yt-import__grid${ttList.items.every((v) => v.type === 'shorts') ? ' yt-import__grid--shorts' : ''}`}>
+            <div className={`yt-import__grid${ttList.items.every((v) => v.type === 'shorts') ? ' yt-import__grid--shorts' : ''}${platform === 'rss' ? ' yt-import__grid--square' : ''}`}>
               {ttList.items.map(renderCard)}
             </div>
             {ttList.loading && spinner}
@@ -692,7 +801,7 @@ export default function YoutubeImportPage() {
                 <Button variant="secondary" icon="expand_more" onClick={loadMoreLink}>{t('ytimport.loadMore')}</Button>
               </div>
             )}
-            {ttList.items.length > 0 && (
+            {ttList.items.length > 0 && !NO_PASTE.has(platform) && (
               <p className="yt-import__note yt-import__more-hint">
                 {t(`ytimport.${platform}.olderHint`)}{' '}
                 <button type="button" className="yt-import__linkbtn" onClick={() => document.getElementById('yt-import-tt')?.focus()}>
@@ -726,7 +835,7 @@ export default function YoutubeImportPage() {
           </label>
         )}
 
-        <input ref={fileInputRef} type="file" accept="video/*" hidden onChange={pickOwnFile} />
+        <input ref={fileInputRef} type="file" accept={platform === 'rss' ? 'audio/*' : 'video/*'} hidden onChange={pickOwnFile} />
 
         {platform === 'youtube' && channel && (
           <>
@@ -761,7 +870,13 @@ export default function YoutubeImportPage() {
           </>
         )}
 
-        {status?.limits && (
+        {status?.limits && platform === 'rss' && (
+          <div className="yt-import__limits">
+            <Icon name="info" size={20} />
+            <span>{t('ytimport.rss.limits', { hours: Math.round((status.limits.podcastMaxDurationS || 14400) / 3600) })}</span>
+          </div>
+        )}
+        {status?.limits && platform !== 'rss' && (
           <div className="yt-import__limits">
             <Icon name="info" size={20} />
             <span>
@@ -784,8 +899,15 @@ export default function YoutubeImportPage() {
               <b className="num">{t('ytimport.batch.selectedCount', { count: picked.length })}</b> · {t('ytimport.batch.maxHint', { max: batchMax })}
             </span>
             <div className="yt-batch-bar__actions">
-              <Button variant="ghost" size={40} onClick={() => setPicked([])}>{t('ytimport.batch.clear')}</Button>
-              <Button variant="cyan" size={40} trailing="download" onClick={() => setBatchFormOpen(true)} disabled={batchRunning}
+              <Button variant="ghost" size={40} onClick={() => setPicked([])} disabled={busy}>{t('ytimport.batch.clear')}</Button>
+              {/* One ticked: it can also go to the normal uploader, to edit before posting. */}
+              {picked.length === 1 && (
+                <Button variant="secondary" size={40} icon="edit" onClick={() => importOne(picked[0])} disabled={busy}>
+                  {t('ytimport.openInUploader')}
+                </Button>
+              )}
+              <Button variant="cyan" size={40} trailing="download" onClick={() => setBatchFormOpen(true)}
+                disabled={batchRunning || busy || (picked.some((x) => x.platform === 'rss') && batchInfo?.audio === false)}
                 title={batchRunning ? t('ytimport.batch.busy') : undefined}>
                 {t('ytimport.batch.importSelected', { count: picked.length })}
               </Button>
@@ -794,10 +916,9 @@ export default function YoutubeImportPage() {
         )}
       </div>
 
-      {(latestBatch || fallbackAside) && (
-        <aside className={`yt-import__aside${latestBatch ? '' : ' is-fallback-only'}`}>
-          {latestBatch && <BatchStatus batch={latestBatch} user={user} onChange={showBatch} />}
-          {fallbackAside && renderFallback(selected, true)}
+      {latestBatch && (
+        <aside className="yt-import__aside">
+          <BatchStatus batch={latestBatch} user={user} onChange={showBatch} />
         </aside>
       )}
 

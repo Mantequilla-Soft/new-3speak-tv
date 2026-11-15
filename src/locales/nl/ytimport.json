@@ -1,5 +1,5 @@
 {
-  "title": "Je video's importeren",
+  "title": "Je content importeren",
   "subtitle": "Haal je video's van YouTube of TikTok naar 3Speak. Titel, beschrijving, tags en thumbnail worden voor je ingevuld.",
   "noChannel": "Je hebt nog geen YouTube-kanaal gekoppeld. Koppel en verifieer het eerst in je profiel en kom daarna hier terug.",
   "linkChannel": "Naar mijn profiel",
@@ -9,6 +9,7 @@
   "openOnYoutube": "Openen op YouTube",
   "import": "Deze video importeren",
   "useOwnFile": "Ik heb het bestand al",
+  "openInUploader": "Bewerken en publiceren",
   "cancel": "Annuleren",
   "retry": "Opnieuw proberen",
   "progress": {
@@ -31,9 +32,11 @@
     "blocked": "YouTube liet onze server deze video nu niet downloaden.",
     "notVideo": "Dat bestand is geen video.",
     "tooLongForShort": "Deze video is langer dan {{minutes}} minuten, te lang voor een Short. Importeer hem in plaats daarvan als gewone video.",
-    "proxyPaused": "YouTube-imports zijn even gepauzeerd. Probeer het later opnieuw."
+    "proxyPaused": "YouTube-imports zijn even gepauzeerd. Probeer het later opnieuw.",
+    "notAudio": "Dat bestand is geen audiobestand."
   },
   "entry": "Video's importeren",
+  "menuEntry": "Content importeren",
   "types": {
     "videos": "Video's",
     "shorts": "Shorts",
@@ -60,7 +63,8 @@
     "tiktok": "TikTok",
     "instagram": "Instagram",
     "bitchute": "BitChute",
-    "rumble": "Rumble"
+    "rumble": "Rumble",
+    "rss": "Podcast"
   },
   "tiktok": {
     "noLink": "Je hebt nog geen TikTok-account gekoppeld. Koppel en verifieer het eerst in je profiel en kom daarna hier terug.",
@@ -98,7 +102,7 @@
     "selectedCount": "{{count}} geselecteerd",
     "maxHint": "tot {{max}}",
     "clear": "Wissen",
-    "importSelected": "Selectie importeren ({{count}})",
+    "importSelected": "Op de achtergrond publiceren ({{count}})",
     "busy": "Je vorige bulkimport loopt nog",
     "steps": {
       "content": "Inhoud",
@@ -135,7 +139,16 @@
     "stopConfirm": "Deze import stoppen? Video's die nog niet gepubliceerd zijn worden geannuleerd, ook als ze al ingepland zijn. Gepubliceerde video's blijven staan.",
     "stopYes": "Ja, stoppen",
     "stopKeep": "Doorgaan met importeren",
-    "countOf": "{{done}} van {{total}}"
+    "countOf": "{{done}} van {{total}}",
+    "audio": {
+      "formTitle": "{{count}} afleveringen importeren",
+      "contentIntro": "Kies het soort audio en waar de titel, beschrijving en tags van elk bericht vandaan komen.",
+      "settingsIntro": "Deze instellingen gelden voor alle gekozen afleveringen.",
+      "spacing": "Elke aflevering wordt op onze server geïmporteerd en daarna apart gepubliceerd, {{minutes}} minuten na elkaar. De eerste gaat een paar minuten na het klaarzetten online. Je kunt deze pagina sluiten.",
+      "canLeave": "Je kunt deze pagina nu sluiten. Je afleveringen worden op onze server geïmporteerd en gepubliceerd, ook als je weg bent.",
+      "stopConfirm": "Deze import stoppen? Afleveringen die nog niet gepubliceerd zijn worden geannuleerd, ook als ze al ingepland zijn. Gepubliceerde afleveringen blijven staan.",
+      "maxReached": "Je kunt tot {{max}} afleveringen tegelijk kiezen"
+    }
   },
   "bitchute": {
     "noLink": "Je hebt nog geen BitChute-account gekoppeld. Koppel en verifieer het eerst in je profiel en kom daarna hier terug.",
@@ -166,5 +179,85 @@
     "empty": "Geen openbare video's gevonden op je Rumble-kanaal.",
     "olderHint": "Zie je de video die je zoekt niet?",
     "olderHintAction": "Plak de link"
+  },
+  "rss": {
+    "noLink": "Je hebt nog geen podcast-RSS-feed gekoppeld. Koppel en verifieer die eerst op je profiel en kom dan hier terug.",
+    "latest": "Je podcastafleveringen",
+    "empty": "Geen afleveringen gevonden in je podcastfeed.",
+    "openOn": "Pagina van de aflevering openen",
+    "fallbackIntro": "Je kunt hem toch importeren: download de aflevering zelf en kies het bestand hier. De rest blijft ingevuld.",
+    "fallbackStep1": "Open de aflevering bij je podcasthost.",
+    "fallbackStep2": "Download het audiobestand (MP3 of M4A).",
+    "limits": "Afleveringen tot {{hours}} uur kunnen worden geïmporteerd. Ze verschijnen als audioberichten met hun shownotes en cover.",
+    "show": "Podcast",
+    "unreadable": "nu niet leesbaar",
+    "unreadableAll": "Je podcastfeed kan nu niet worden gelezen. Controleer of hij online is en probeer het later opnieuw.",
+    "import": "Deze audio importeren",
+    "progressServer": "Audio ophalen: {{pct}}%",
+    "progressTransfer": "Audio in de uploader laden: {{pct}}%"
+  },
+  "auto": {
+    "title": "Automatische import",
+    "unavailable": "Automatische imports zijn op deze server nog niet beschikbaar.",
+    "off": "Uit. Zet hem aan en elke nieuwe aflevering van deze show wordt een audiobericht op 3Speak.",
+    "onSince": "Aan sinds {{date}}. De feed wordt elke {{minutes}} minuten gecontroleerd.",
+    "pillOn": "Aan",
+    "pillOff": "Uit",
+    "queued": "Tot nu toe geïmporteerde nieuwe afleveringen: {{count}}",
+    "lastCheck": "Laatste controle: {{time}}",
+    "waiting": "Wacht op morgen: {{count}} (maximaal {{max}} per dag)",
+    "skipped": "Overgeslagen, langer dan de importlimiet: {{titles}}",
+    "comesAuto": "Nieuwe aflevering: de automatische import neemt hem mee bij de volgende controle",
+    "errors": {
+      "noLink": "Deze feed is niet meer geverifieerd op je profiel. Koppel hem opnieuw om door te gaan.",
+      "noGrant": "3Speak mag niet meer voor je publiceren. Open de instellingen om het weer toe te staan.",
+      "unreadable": "Je feed kon bij de laatste controle niet worden gelezen. We proberen het bij de volgende opnieuw.",
+      "generic": "De laatste controle is mislukt. We proberen het bij de volgende opnieuw."
+    },
+    "edit": "Instellingen bewerken",
+    "setUp": "Automatische import instellen",
+    "formTitle": "Automatische import",
+    "formIntro": "Nieuwe afleveringen van <b>{{show}}</b> worden met deze instellingen audioberichten, maximaal {{max}} per dag, verspreid zoals bij een bulkimport.",
+    "enabled": "Nieuwe afleveringen automatisch importeren",
+    "enabledInfo": "We controleren je feed regelmatig. Elke aflevering die verschijnt nadat je dit aanzet, wordt gedownload en door @threespeak voor je gepubliceerd, met de instellingen hieronder. Afleveringen die al in de feed staan, blijven ongemoeid.",
+    "enabledOn": "Nieuwe afleveringen worden voor je gepubliceerd",
+    "enabledOff": "De instellingen blijven bewaard, er wordt niets gepubliceerd",
+    "sections": {
+      "content": "Titel, tags en beschrijving",
+      "post": "Berichtinstellingen"
+    },
+    "kind": "Soort audio",
+    "target": "Publiceren als",
+    "targetPost": "Losse post",
+    "targetSnap": "Snap-reactie",
+    "targetPostHint": "Een post met titel, in de community die je hieronder kiest.",
+    "targetSnapHint": "Een reactie in de snaps-feed, zonder titel, zoals een short. Community en blog gelden hier niet.",
+    "fromSource": "Uit de bron overnemen",
+    "fromSourceInfo": "Aan: elk bericht neemt de titel, shownotes en de #hashtags daarin over zoals je feed ze heeft. Uit: je stelt het titelformaat, de tags en de beschrijving zelf in.",
+    "fromSourceOn": "Titel, beschrijving en tags komen uit elke aflevering",
+    "fromSourceOff": "Je stelt titel, tags en beschrijving hieronder in",
+    "titleLabel": "Titel",
+    "titleHint": "Gebruik {title} voor de titel van de aflevering, {show} voor de naam van de show, {episode} en {season} voor hun nummers, {date} voor de releasedatum.",
+    "sampleTitle": "Titel van de aflevering",
+    "sampleShow": "Mijn show",
+    "titlePreview": "Voorbeeld: {{title}}",
+    "tagsLabel": "Tags",
+    "tagsHint": "Tot 8, gescheiden door spaties. Worden aan elk bericht toegevoegd.",
+    "hashtags": "Ook hashtags uit de shownotes gebruiken",
+    "hashtagsInfo": "Woorden die als #tag in de shownotes van een aflevering staan, worden tags van het bericht, na je eigen tags (maximaal 10 tags).",
+    "hashtagsHint": "#tags in de shownotes worden berichttags",
+    "useNotes": "De shownotes als beschrijving gebruiken",
+    "useNotesInfo": "De tekst van het bericht zijn de shownotes van de aflevering uit je feed, met hun links. Zet het uit om voor elke aflevering dezelfde eigen tekst te gebruiken.",
+    "useNotesOn": "Elk bericht toont de shownotes van zijn aflevering",
+    "useNotesOff": "Elk bericht gebruikt je tekst hieronder",
+    "addendumLabel": "Tekst onder de shownotes",
+    "addendumHint": "Wordt na de shownotes aan elk bericht toegevoegd, bijvoorbeeld links naar je andere kanalen.",
+    "optional": "optioneel",
+    "textLabel": "Beschrijving",
+    "textHint": "Wordt voor elke aflevering gebruikt. {title}, {show}, {episode}, {season} en {date} werken hier ook.",
+    "textRequired": "Schrijf de beschrijving die je wilt gebruiken, of gebruik de shownotes.",
+    "onlyNew": "Alleen afleveringen die na het aanzetten in je feed verschijnen, worden geïmporteerd, nooit oudere.",
+    "grantNeeded": "Automatische imports worden door @threespeak voor je gepubliceerd, dus het heeft toestemming nodig om op je account te publiceren.",
+    "save": "Opslaan"
   }
 }

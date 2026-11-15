@@ -44,6 +44,7 @@
     "title": "Profils externes associés",
     "intro": "Prouvez que vous possédez une chaîne YouTube (ou autre) en collant votre hash 3Speak unique dans la description publique de votre profil, puis en le vérifiant ici.",
     "openProfile": "Ouvrir le profil",
+    "importEpisodes": "Importer les épisodes",
     "removeLink": "Retirer le lien",
     "empty": "Aucun profil externe associé pour l'instant.",
     "addPlatform": "Ajouter une plateforme",

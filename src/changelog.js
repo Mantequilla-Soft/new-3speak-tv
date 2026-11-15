@@ -18,6 +18,30 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.25',
+    category: 'upload',
+    date: '2026-11-15',
+    summary: 'The importer is now "Import your content": click a tile to select it.',
+  },
+  {
+    version: '2.0.24',
+    category: 'podcasts',
+    date: '2026-11-15',
+    summary: 'Automatic podcast import: new episodes of your feed become audio posts on their own.',
+  },
+  {
+    version: '2.0.23',
+    category: 'podcasts',
+    date: '2026-11-15',
+    summary: 'Import your podcast episodes as audio posts or snaps, one by one or up to 5 at once.',
+  },
+  {
+    version: '2.0.22',
+    category: 'profile',
+    date: '2026-11-15',
+    summary: "Link your podcast's RSS feed on your profile.",
+  },
+  {
     version: '2.0.21',
     category: 'audio',
     date: '2026-11-15',

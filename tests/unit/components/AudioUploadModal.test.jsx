@@ -44,6 +44,7 @@ vi.mock('../../../src/utils/audioUpload', () => ({
 vi.mock('../../../src/utils/uploadThumbnail', () => ({ uploadThumbnail: vi.fn(async () => 'https://images.hive.blog/DQmMine/mine.jpg') }))
 vi.mock('../../../src/utils/postingAuthority', () => ({ hasThreespeakPostingAuth: async () => true, addThreespeakToPostingAuth: async () => {} }))
 vi.mock('../../../src/utils/rcCheck', async (importOriginal) => ({ ...(await importOriginal()), checkPostingRc: async () => ({ ok: true }) }))
+vi.mock('../../../src/lib/youtubeImport', () => ({ markImportPublished: vi.fn(async () => ({ ok: true })) }))
 vi.mock('../../../src/lib/advertiseData', () => ({ fetchCreatorAdPrefs: async () => ({}), syncAudioAdChoice: async () => {} }))
 vi.mock('../../../src/lib/uploadGate', () => ({ fetchUploadGateAd: async () => null, confirmUploadGatePost: () => {}, gateSessionId: () => null }))
 vi.mock('../../../src/components/HiveAvatar/AccountImg', () => ({ default: () => null }))
@@ -92,6 +93,7 @@ const { uploadThumbnail } = await import('../../../src/utils/uploadThumbnail')
 const { useAppStore } = await import('../../../src/lib/store')
 const { default: AudioUploadModal } = await import('../../../src/components/AudioUploadModal/AudioUploadModal.jsx')
 const { publishAudiogramShorts } = await import('../../../src/utils/audiogramShorts')
+const { markImportPublished } = await import('../../../src/lib/youtubeImport')
 
 // jsdom reads no media: every <audio> reports m.duration as soon as it gets a src.
 let savedSrc
@@ -478,6 +480,68 @@ describe('AudioUploadModal: chapters from the editor', () => {
     // Edited again (from the track's Edit audio): the new list replaces the old one, the notes stay
     await result({ trackId, file: new File(['ID3'], 'Episode 12.mp3', { type: 'audio/mpeg' }), durationSec: 100, chapters: [{ start: 0, title: 'Intro' }, { start: 60, title: 'Talk' }] })
     await waitFor(() => expect(text()).toHaveValue('Show notes\n\n0:00 Intro\n1:00 Talk'))
+  })
+})
+
+describe('AudioUploadModal: a podcast episode from the import page', () => {
+  const prefill = {
+    title: 'Episode 7: Hello', description: 'Full show notes [https://example.com/x]', tags: ['podcasting', 'hive'],
+    coverUrl: 'https://images.hive.blog/DQmCover/cover.jpg', sourceId: 'rss:AAAAAAAAAAAAAAAA',
+  }
+  const episode = () => ({ blob: new File(['ID3'], 'import-rss-AAAAAAAAAAAAAAAA.mp3', { type: 'audio/mpeg' }), filename: 'import-rss-AAAAAAAAAAAAAAAA.mp3', type: 'podcast', source: 'import', prefill })
+
+  it('fills in the title, notes, tags and cover, and reports the post back to the importer', async () => {
+    const { user } = openModal({ initialTrack: episode() })
+    await waitFor(() => row('import-rss-AAAAAAAAAAAAAAAA.mp3'))
+    await toPostStep(user, null)
+    expect(screen.getByPlaceholderText('Title (required)')).toHaveValue('Episode 7: Hello')
+    await next(user)
+    await user.click(screen.getByRole('button', { name: 'Publish' }))
+    await waitFor(() => expect(markImportPublished).toHaveBeenCalled())
+    const ops = aioha.broadcastWithAioha.mock.calls.map(([o]) => o).find((o) => o[0][0] === 'comment')
+    const post = ops[0][1]
+    expect(post.title).toBe('Episode 7: Hello')
+    expect(post.body).toContain('![Episode 7: Hello](https://images.hive.blog/DQmCover/cover.jpg)')
+    expect(post.body).toContain('Full show notes [https://example.com/x]')
+    expect(JSON.parse(post.json_metadata).tags).toEqual(['podcasting', 'hive'])
+    expect(markImportPublished).toHaveBeenCalledWith('rss:AAAAAAAAAAAAAAAA', post.permlink)
+  })
+
+  it('as a snap comment: the track carries the episode, and the snap is reported back', async () => {
+    const seen = []
+    const onPublished = (e) => seen.push(e.detail)
+    window.addEventListener('import-published', onPublished)
+    try {
+      const { user } = openModal({ initialTrack: episode() })
+      await waitFor(() => screen.getByText('import-rss-AAAAAAAAAAAAAAAA.mp3'))
+      await next(user)
+      await user.click(screen.getByRole('radio', { name: /Snap comments/ }))
+      await next(user)
+      await next(user) // tracks: the episode's own title and notes on the track
+      expect(screen.getByDisplayValue('Episode 7: Hello')).toBeInTheDocument()
+      await next(user)
+      await user.click(screen.getByRole('button', { name: /Publish/ }))
+      await waitFor(() => expect(markImportPublished).toHaveBeenCalled())
+      const calls = [...aioha.broadcastWithAioha.mock.calls.map(([o]) => o), ...(aioha.commentWithAioha?.mock?.calls || []).map((c) => [['comment', { permlink: c[2], title: c[3], body: c[4] }]])]
+      const snap = calls.find((o) => o[0][0] === 'comment')
+      expect(markImportPublished).toHaveBeenCalledWith('rss:AAAAAAAAAAAAAAAA', snap[0][1].permlink)
+      expect(snap[0][1].body).toContain('Full show notes')
+      await waitFor(() => expect(seen).toEqual([{ source: 'rss:AAAAAAAAAAAAAAAA', permlink: snap[0][1].permlink }]))
+    } finally {
+      window.removeEventListener('import-published', onPublished)
+    }
+  })
+
+  it('a plain upload reports nothing to the importer', async () => {
+    const blob = new File(['ID3'], 'Episode.mp3', { type: 'audio/mpeg' })
+    const { user } = openModal({ initialTrack: { blob, filename: 'Episode.mp3', type: null, source: 'editor' } })
+    await waitFor(() => row('Episode.mp3'))
+    await toPostStep(user, null)
+    await user.type(screen.getByPlaceholderText('Title (required)'), 'Mine')
+    await next(user)
+    await user.click(screen.getByRole('button', { name: 'Publish' }))
+    await waitFor(() => expect(aioha.broadcastWithAioha).toHaveBeenCalled())
+    expect(markImportPublished).not.toHaveBeenCalled()
   })
 })
 

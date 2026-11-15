@@ -1,5 +1,5 @@
 {
-  "title": "Impor video Anda",
+  "title": "Impor kontenmu",
   "subtitle": "Bawa video Anda dari YouTube atau TikTok ke 3Speak. Judul, deskripsi, tag, dan thumbnail diisi otomatis untuk Anda.",
   "noChannel": "Anda belum menautkan kanal YouTube. Tautkan dan verifikasi dulu di profil Anda, lalu kembali ke sini.",
   "linkChannel": "Buka profil saya",
@@ -9,6 +9,7 @@
   "openOnYoutube": "Buka di YouTube",
   "import": "Impor video ini",
   "useOwnFile": "Saya sudah punya filenya",
+  "openInUploader": "Edit dan terbitkan",
   "cancel": "Batal",
   "retry": "Coba lagi",
   "progress": {
@@ -31,9 +32,11 @@
     "blocked": "YouTube tidak mengizinkan server kami mengunduh video ini saat ini.",
     "notVideo": "File itu bukan video.",
     "tooLongForShort": "Video ini berdurasi lebih dari {{minutes}} menit, terlalu panjang untuk sebuah Short. Impor sebagai video biasa saja.",
-    "proxyPaused": "Impor dari YouTube sedang dijeda untuk sementara. Coba lagi nanti."
+    "proxyPaused": "Impor dari YouTube sedang dijeda untuk sementara. Coba lagi nanti.",
+    "notAudio": "File itu bukan file audio."
   },
   "entry": "Impor video",
+  "menuEntry": "Impor konten",
   "types": {
     "videos": "Video",
     "shorts": "Shorts",
@@ -60,7 +63,8 @@
     "tiktok": "TikTok",
     "instagram": "Instagram",
     "bitchute": "BitChute",
-    "rumble": "Rumble"
+    "rumble": "Rumble",
+    "rss": "Podcast"
   },
   "tiktok": {
     "noLink": "Anda belum menautkan akun TikTok. Tautkan dan verifikasi dulu di profil Anda, lalu kembali ke sini.",
@@ -98,7 +102,7 @@
     "selectedCount": "{{count}} dipilih",
     "maxHint": "hingga {{max}}",
     "clear": "Hapus pilihan",
-    "importSelected": "Impor yang dipilih ({{count}})",
+    "importSelected": "Terbitkan di latar belakang ({{count}})",
     "busy": "Impor massal sebelumnya masih berjalan",
     "steps": {
       "content": "Konten",
@@ -135,7 +139,16 @@
     "stopConfirm": "Hentikan impor ini? Video yang belum diterbitkan akan dibatalkan, termasuk yang sudah dijadwalkan. Video yang sudah terbit tetap ada.",
     "stopYes": "Ya, hentikan",
     "stopKeep": "Lanjutkan impor",
-    "countOf": "{{done}} dari {{total}}"
+    "countOf": "{{done}} dari {{total}}",
+    "audio": {
+      "formTitle": "Impor {{count}} episode",
+      "contentIntro": "Pilih jenis audio, dan dari mana judul, deskripsi, dan tag tiap postingan diambil.",
+      "settingsIntro": "Pengaturan ini berlaku untuk semua episode yang Anda pilih.",
+      "spacing": "Setiap episode diimpor di server kami lalu diterbitkan satu per satu, berjarak {{minutes}} menit. Yang pertama terbit beberapa menit setelah siap. Kamu bisa menutup halaman ini.",
+      "canLeave": "Kamu sudah bisa menutup halaman ini. Episodemu diimpor dan dipublikasikan di server kami, juga saat kamu pergi.",
+      "stopConfirm": "Hentikan impor ini? Episode yang belum diterbitkan akan dibatalkan, termasuk yang sudah dijadwalkan. Episode yang sudah terbit tetap ada.",
+      "maxReached": "Kamu bisa memilih hingga {{max}} episode sekaligus"
+    }
   },
   "bitchute": {
     "noLink": "Anda belum menautkan akun BitChute. Tautkan dan verifikasi dulu di profil Anda, lalu kembali ke sini.",
@@ -166,5 +179,85 @@
     "empty": "Tidak ada video publik di kanal Rumble-mu.",
     "olderHint": "Tidak melihat video yang kamu cari?",
     "olderHintAction": "Tempel tautannya"
+  },
+  "rss": {
+    "noLink": "Kamu belum menautkan feed RSS podcast. Tautkan dan verifikasi dulu di profilmu, lalu kembali ke sini.",
+    "latest": "Episode podcast-mu",
+    "empty": "Tidak ada episode di feed podcast-mu.",
+    "openOn": "Buka halaman episode",
+    "fallbackIntro": "Kamu tetap bisa mengimpornya: unduh episodenya sendiri lalu pilih file-nya di sini. Semua yang lain tetap terisi.",
+    "fallbackStep1": "Buka episode di layanan hosting podcast-mu.",
+    "fallbackStep2": "Unduh file audionya (MP3 atau M4A).",
+    "limits": "Episode hingga {{hours}} jam bisa diimpor. Episode diterbitkan sebagai postingan audio dengan catatan dan sampulnya.",
+    "show": "Podcast",
+    "unreadable": "tidak bisa dibaca saat ini",
+    "unreadableAll": "Feed podcast-mu tidak bisa dibaca saat ini. Pastikan feed-nya online, lalu coba lagi nanti.",
+    "import": "Impor audio ini",
+    "progressServer": "Mengambil audio: {{pct}}%",
+    "progressTransfer": "Memuat audio ke pengunggah: {{pct}}%"
+  },
+  "auto": {
+    "title": "Impor otomatis",
+    "unavailable": "Impor otomatis belum tersedia di server ini.",
+    "off": "Mati. Nyalakan, dan setiap episode baru dari acara ini akan menjadi postingan audio di 3Speak.",
+    "onSince": "Aktif sejak {{date}}. Feed diperiksa setiap {{minutes}} menit.",
+    "pillOn": "Aktif",
+    "pillOff": "Mati",
+    "queued": "Episode baru yang sudah diimpor: {{count}}",
+    "lastCheck": "Pemeriksaan terakhir: {{time}}",
+    "waiting": "Menunggu besok: {{count}} (maksimal {{max}} per hari)",
+    "skipped": "Dilewati, lebih panjang dari batas impor: {{titles}}",
+    "comesAuto": "Episode baru: impor otomatis mengambilnya di pengecekan berikutnya",
+    "errors": {
+      "noLink": "Feed ini tidak lagi terverifikasi di profilmu. Tautkan lagi untuk melanjutkan.",
+      "noGrant": "3Speak mungkin tidak lagi bisa menerbitkan untukmu. Buka pengaturan untuk mengizinkannya lagi.",
+      "unreadable": "Feed-mu tidak bisa dibaca pada pemeriksaan terakhir. Kami coba lagi pada pemeriksaan berikutnya.",
+      "generic": "Pemeriksaan terakhir gagal. Kami coba lagi pada pemeriksaan berikutnya."
+    },
+    "edit": "Ubah pengaturan",
+    "setUp": "Atur impor otomatis",
+    "formTitle": "Impor otomatis",
+    "formIntro": "Episode baru dari <b>{{show}}</b> menjadi postingan audio dengan pengaturan ini, maksimal {{max}} per hari, diberi jeda seperti impor massal.",
+    "enabled": "Impor episode baru secara otomatis",
+    "enabledInfo": "Kami memeriksa feed-mu secara rutin. Setiap episode yang muncul setelah kamu menyalakan ini diunduh dan diposting untukmu oleh @threespeak, dengan pengaturan di bawah. Episode yang sudah ada di feed tidak diubah.",
+    "enabledOn": "Episode baru diposting untukmu",
+    "enabledOff": "Pengaturan disimpan, tidak ada yang diposting",
+    "sections": {
+      "content": "Judul, tag, dan deskripsi",
+      "post": "Pengaturan postingan"
+    },
+    "kind": "Jenis audio",
+    "target": "Terbitkan sebagai",
+    "targetPost": "Postingan tersendiri",
+    "targetSnap": "Komentar snap",
+    "targetPostHint": "Postingan dengan judul, di komunitas yang kamu pilih di bawah.",
+    "targetSnapHint": "Balasan di feed snaps, tanpa judul, seperti short. Komunitas dan blog tidak berlaku.",
+    "fromSource": "Impor dari sumber",
+    "fromSourceInfo": "Aktif: setiap postingan memakai judul, catatan episode, dan #hashtag di dalamnya sesuai feed-mu. Nonaktif: kamu atur sendiri format judul, tag, dan deskripsi.",
+    "fromSourceOn": "Judul, deskripsi, dan tag diambil dari setiap episode",
+    "fromSourceOff": "Kamu atur judul, tag, dan deskripsi di bawah",
+    "titleLabel": "Judul",
+    "titleHint": "Gunakan {title} untuk judul episode, {show} untuk nama acara, {episode} dan {season} untuk nomornya, {date} untuk tanggal rilis.",
+    "sampleTitle": "Judul episode",
+    "sampleShow": "Acaraku",
+    "titlePreview": "Contoh: {{title}}",
+    "tagsLabel": "Tag",
+    "tagsHint": "Hingga 8, dipisahkan spasi. Ditambahkan ke setiap postingan.",
+    "hashtags": "Gunakan juga hashtag dari catatan acara",
+    "hashtagsInfo": "Kata yang ditulis sebagai #tag di catatan acara sebuah episode menjadi tag postingannya, setelah tag milikmu sendiri (maksimal 10 tag).",
+    "hashtagsHint": "#tags di catatan menjadi tag postingan",
+    "useNotes": "Gunakan catatan acara sebagai deskripsi",
+    "useNotesInfo": "Teks postingan adalah catatan acara episode dari feed-mu, beserta tautannya. Matikan untuk memakai teksmu sendiri yang sama untuk setiap episode.",
+    "useNotesOn": "Setiap postingan menampilkan catatan episodenya",
+    "useNotesOff": "Setiap postingan memakai teksmu di bawah",
+    "addendumLabel": "Teks di bawah catatan acara",
+    "addendumHint": "Ditambahkan ke setiap postingan setelah catatan, misalnya tautan ke kanal-kanalmu yang lain.",
+    "optional": "opsional",
+    "textLabel": "Deskripsi",
+    "textHint": "Dipakai untuk setiap episode. {title}, {show}, {episode}, {season}, dan {date} juga berlaku di sini.",
+    "textRequired": "Tulis deskripsi yang akan dipakai, atau gunakan catatan acara.",
+    "onlyNew": "Hanya episode yang muncul di feed-mu setelah kamu menyalakan ini yang diimpor, tidak pernah yang lebih lama.",
+    "grantNeeded": "Impor otomatis diposting untukmu oleh @threespeak, jadi perlu izin untuk menerbitkan di akunmu.",
+    "save": "Simpan"
   }
 }

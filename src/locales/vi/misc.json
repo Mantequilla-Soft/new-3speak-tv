@@ -139,6 +139,13 @@
     "rumble": {
       "placeholder": "https://rumble.com/c/…",
       "help": "Dán tên hoặc liên kết kênh Rumble của bạn. Đặt mã hash ở bất kỳ đâu trong phần mô tả kênh."
+    },
+    "rss": {
+      "placeholder": "https://example.com/podcast.xml",
+      "help": "Dán địa chỉ nguồn cấp RSS của podcast. Dịch vụ lưu trữ hiển thị nó trong phần cài đặt hoặc trang phân phối của chương trình.",
+      "flowTitle": "Liên kết nguồn cấp RSS podcast của bạn",
+      "step2": "<strong>Dán nó vào mô tả chương trình hoặc mô tả của tập mới nhất</strong> trên dịch vụ lưu trữ podcast. Lưu và xuất bản thay đổi. Bạn có thể xóa nó sau khi nguồn cấp được xác minh.",
+      "step3": "Nhập địa chỉ nguồn cấp RSS của podcast:"
     }
   },
   "snaps": {

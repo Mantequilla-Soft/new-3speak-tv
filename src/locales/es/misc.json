@@ -139,6 +139,13 @@
     "rumble": {
       "placeholder": "https://rumble.com/c/…",
       "help": "Pega el nombre o enlace de tu canal de Rumble. Pon el hash en cualquier parte de la descripción del canal."
+    },
+    "rss": {
+      "placeholder": "https://example.com/podcast.xml",
+      "help": "Pega la dirección del feed RSS de tu pódcast. Tu servicio de alojamiento la muestra en los ajustes o en la página de distribución del programa.",
+      "flowTitle": "Vincula el feed RSS de tu pódcast",
+      "step2": "<strong>Pégalo en la descripción de tu programa o en la de tu episodio más reciente</strong>, en tu servicio de alojamiento. Guarda y publica el cambio. Puedes quitarlo cuando el feed esté verificado.",
+      "step3": "Introduce la dirección del feed RSS de tu pódcast:"
     }
   },
   "snaps": {

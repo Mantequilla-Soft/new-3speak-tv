@@ -155,7 +155,7 @@ function EmbedStudioPage() {
       const sharedShort = autoShort && height > width && duration <= SHORTS_MAX_DURATION_SEC;
       if (sharedShort) setFromStories(true);
 
-      // ▶️ YouTube import (/youtube-import): carry over title, description, tags
+      // ▶️ Import (/import): carry over title, description, tags
       // and the original thumbnail, which goes first so it is preselected. It
       // takes the start frame's place, so the thumbnail step still offers four.
       const ytMeta = window.__ytImportMeta;

@@ -1349,7 +1349,7 @@ export default function SettingsModal({ isOpen, onClose, dropdown = null, leavin
     connections: (
       <>
         {/* Order (owner 2026-11-12): linked profiles, support links, Lightning. */}
-        {settingsUser && <AddSocialLink_modal isOpen inline hiveUsername={settingsUser} onClose={() => {}} />}
+        {settingsUser && <AddSocialLink_modal isOpen inline hiveUsername={settingsUser} onClose={() => {}} onNavigate={onClose} />}
         <SupportLinksSection />
         <LightningReceiveSection />
         {!rewardsVisible && <ReferralSection />}

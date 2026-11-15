@@ -139,6 +139,13 @@
     "rumble": {
       "placeholder": "https://rumble.com/c/…",
       "help": "Plak de naam of link van je Rumble-kanaal. Zet de hash ergens in de beschrijving van je kanaal."
+    },
+    "rss": {
+      "placeholder": "https://example.com/podcast.xml",
+      "help": "Plak het adres van de RSS-feed van je podcast. Je podcasthost toont het in de instellingen of op de distributiepagina van de show.",
+      "flowTitle": "Je podcast-RSS-feed koppelen",
+      "step2": "<strong>Plak hem in de beschrijving van je show of van je nieuwste aflevering</strong>, bij je podcasthost. Sla de wijziging op en publiceer hem. Je kunt hem weer weghalen zodra de feed geverifieerd is.",
+      "step3": "Vul het adres van de RSS-feed van je podcast in:"
     }
   },
   "snaps": {

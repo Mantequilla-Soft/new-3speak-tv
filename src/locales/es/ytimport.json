@@ -1,5 +1,5 @@
 {
-  "title": "Importa tus videos",
+  "title": "Importa tu contenido",
   "subtitle": "Trae tus videos de YouTube o TikTok a 3Speak. El título, la descripción, las etiquetas y la miniatura se rellenan por ti.",
   "noChannel": "Aún no has vinculado un canal de YouTube. Vincúlalo y verifícalo primero en tu perfil y luego vuelve aquí.",
   "linkChannel": "Ir a mi perfil",
@@ -9,6 +9,7 @@
   "openOnYoutube": "Abrir en YouTube",
   "import": "Importar este video",
   "useOwnFile": "Ya tengo el archivo",
+  "openInUploader": "Editar y publicar",
   "cancel": "Cancelar",
   "retry": "Intentar de nuevo",
   "progress": {
@@ -31,9 +32,11 @@
     "blocked": "YouTube no permitió que nuestro servidor descargara este video en este momento.",
     "notVideo": "Ese archivo no es un video.",
     "tooLongForShort": "Este video dura más de {{minutes}} minutos, demasiado largo para un Short. Impórtalo como un video normal.",
-    "proxyPaused": "Las importaciones de YouTube están en pausa por un tiempo. Vuelve a intentarlo más tarde."
+    "proxyPaused": "Las importaciones de YouTube están en pausa por un tiempo. Vuelve a intentarlo más tarde.",
+    "notAudio": "Ese archivo no es de audio."
   },
   "entry": "Importar videos",
+  "menuEntry": "Importar contenido",
   "types": {
     "videos": "Videos",
     "shorts": "Shorts",
@@ -60,7 +63,8 @@
     "tiktok": "TikTok",
     "instagram": "Instagram",
     "bitchute": "BitChute",
-    "rumble": "Rumble"
+    "rumble": "Rumble",
+    "rss": "Pódcast"
   },
   "tiktok": {
     "noLink": "Aún no has vinculado una cuenta de TikTok. Vincúlala y verifícala primero en tu perfil y luego vuelve aquí.",
@@ -98,7 +102,7 @@
     "selectedCount": "{{count}} seleccionados",
     "maxHint": "hasta {{max}}",
     "clear": "Borrar",
-    "importSelected": "Importar selección ({{count}})",
+    "importSelected": "Publicar en segundo plano ({{count}})",
     "busy": "Tu lote anterior todavía se está importando",
     "steps": {
       "content": "Contenido",
@@ -135,7 +139,16 @@
     "stopConfirm": "¿Detener esta importación? Los videos que aún no se han publicado se cancelan, incluidos los ya programados. Los publicados se quedan.",
     "stopYes": "Sí, detener",
     "stopKeep": "Seguir importando",
-    "countOf": "{{done}} de {{total}}"
+    "countOf": "{{done}} de {{total}}",
+    "audio": {
+      "formTitle": "Importar {{count}} episodios",
+      "contentIntro": "Elige el tipo de audio y de dónde salen el título, la descripción y las etiquetas de cada publicación.",
+      "settingsIntro": "Estos ajustes se aplican a todos los episodios que elegiste.",
+      "spacing": "Cada episodio se importa en nuestro servidor y luego se publica por separado, con {{minutes}} minutos de diferencia. El primero sale unos minutos después de estar listo. Puedes cerrar esta página.",
+      "canLeave": "Ya puedes cerrar esta página. Tus episodios se importan y publican en nuestro servidor, también mientras no estás.",
+      "stopConfirm": "¿Detener esta importación? Los episodios que aún no se han publicado se cancelan, incluidos los ya programados. Los publicados se quedan.",
+      "maxReached": "Puedes elegir hasta {{max}} episodios a la vez"
+    }
   },
   "bitchute": {
     "noLink": "Aún no has vinculado una cuenta de BitChute. Vincúlala y verifícala primero en tu perfil y luego vuelve aquí.",
@@ -166,5 +179,85 @@
     "empty": "No se encontraron videos públicos en tu canal de Rumble.",
     "olderHint": "¿No ves el video que buscas?",
     "olderHintAction": "Pega su enlace"
+  },
+  "rss": {
+    "noLink": "Aún no has vinculado el feed RSS de tu pódcast. Vincúlalo y verifícalo primero en tu perfil y luego vuelve aquí.",
+    "latest": "Tus episodios",
+    "empty": "No se encontraron episodios en el feed de tu pódcast.",
+    "openOn": "Abrir la página del episodio",
+    "fallbackIntro": "Aún puedes importarlo: descarga el episodio tú mismo y elige el archivo aquí. Todo lo demás sigue rellenado.",
+    "fallbackStep1": "Abre el episodio en tu servicio de alojamiento de pódcast.",
+    "fallbackStep2": "Descarga su archivo de audio (MP3 o M4A).",
+    "limits": "Se pueden importar episodios de hasta {{hours}} horas. Se publican como publicaciones de audio con sus notas y su portada.",
+    "show": "Pódcast",
+    "unreadable": "no se puede leer ahora",
+    "unreadableAll": "Ahora no se puede leer el feed de tu pódcast. Comprueba que esté en línea e inténtalo más tarde.",
+    "import": "Importar este audio",
+    "progressServer": "Obteniendo el audio: {{pct}}%",
+    "progressTransfer": "Cargando el audio en el cargador: {{pct}}%"
+  },
+  "auto": {
+    "title": "Importación automática",
+    "unavailable": "Las importaciones automáticas aún no están disponibles en este servidor.",
+    "off": "Desactivada. Actívala y cada nuevo episodio de este programa se convertirá en una publicación de audio en 3Speak.",
+    "onSince": "Activada desde el {{date}}. El feed se revisa cada {{minutes}} minutos.",
+    "pillOn": "Activada",
+    "pillOff": "Desactivada",
+    "queued": "Episodios nuevos importados hasta ahora: {{count}}",
+    "lastCheck": "Última revisión: {{time}}",
+    "waiting": "Esperando a mañana: {{count}} (como máximo {{max}} al día)",
+    "skipped": "Omitidos, más largos que el límite de importación: {{titles}}",
+    "comesAuto": "Episodio nuevo: la importación automática lo toma en la próxima revisión",
+    "errors": {
+      "noLink": "Este feed ya no está verificado en tu perfil. Vincúlalo de nuevo para continuar.",
+      "noGrant": "3Speak ya no tiene permiso para publicar por ti. Abre los ajustes para permitirlo de nuevo.",
+      "unreadable": "No se pudo leer tu feed en la última revisión. Lo intentaremos de nuevo en la siguiente.",
+      "generic": "La última revisión falló. Lo intentaremos de nuevo en la siguiente."
+    },
+    "edit": "Editar ajustes",
+    "setUp": "Configurar la importación automática",
+    "formTitle": "Importación automática",
+    "formIntro": "Los nuevos episodios de <b>{{show}}</b> se convierten en publicaciones de audio con estos ajustes, como máximo {{max}} al día, espaciados como en una importación por lotes.",
+    "enabled": "Importar nuevos episodios automáticamente",
+    "enabledInfo": "Revisamos tu feed con regularidad. Cada episodio que aparezca después de activar esto se descarga y @threespeak lo publica por ti con los ajustes de abajo. Los episodios que ya están en el feed no se tocan.",
+    "enabledOn": "Los nuevos episodios se publican por ti",
+    "enabledOff": "Los ajustes se guardan, no se publica nada",
+    "sections": {
+      "content": "Título, etiquetas y descripción",
+      "post": "Ajustes de publicación"
+    },
+    "kind": "Tipo de audio",
+    "target": "Publicar como",
+    "targetPost": "Publicación independiente",
+    "targetSnap": "Comentario snap",
+    "targetPostHint": "Una publicación con su título, en la comunidad que elijas abajo.",
+    "targetSnapHint": "Una respuesta en el feed de snaps, sin título, como un short. La comunidad y el blog no se aplican.",
+    "fromSource": "Importar desde la fuente",
+    "fromSourceInfo": "Activado: cada publicación toma el título, las notas del episodio y sus #hashtags tal como están en tu feed. Desactivado: tú defines el formato del título, las etiquetas y la descripción.",
+    "fromSourceOn": "El título, la descripción y las etiquetas vienen de cada episodio",
+    "fromSourceOff": "Tú defines el título, las etiquetas y la descripción abajo",
+    "titleLabel": "Título",
+    "titleHint": "Usa {title} para el título del episodio, {show} para el nombre del programa, {episode} y {season} para sus números y {date} para la fecha de publicación.",
+    "sampleTitle": "Título del episodio",
+    "sampleShow": "Mi programa",
+    "titlePreview": "Ejemplo: {{title}}",
+    "tagsLabel": "Etiquetas",
+    "tagsHint": "Hasta 8, separadas por espacios. Se añaden a cada publicación.",
+    "hashtags": "Usar también los hashtags de las notas del episodio",
+    "hashtagsInfo": "Las palabras escritas como #tag en las notas de un episodio se convierten en etiquetas de su publicación, después de tus propias etiquetas (10 etiquetas como máximo).",
+    "hashtagsHint": "Los #tags de las notas se convierten en etiquetas",
+    "useNotes": "Usar las notas del episodio como descripción",
+    "useNotesInfo": "El texto de la publicación son las notas del episodio de tu feed, con sus enlaces. Desactívalo para usar el mismo texto propio en todos los episodios.",
+    "useNotesOn": "Cada publicación muestra las notas de su episodio",
+    "useNotesOff": "Todas las publicaciones usan tu texto de abajo",
+    "addendumLabel": "Texto debajo de las notas",
+    "addendumHint": "Se añade a cada publicación después de las notas, por ejemplo enlaces a tus otros canales.",
+    "optional": "opcional",
+    "textLabel": "Descripción",
+    "textHint": "Se usa para todos los episodios. {title}, {show}, {episode}, {season} y {date} también funcionan aquí.",
+    "textRequired": "Escribe la descripción que quieres usar o usa las notas del episodio.",
+    "onlyNew": "Solo se importan los episodios que aparezcan en tu feed después de activar esto, nunca los anteriores.",
+    "grantNeeded": "@threespeak publica las importaciones automáticas por ti, así que necesita permiso para publicar en tu cuenta.",
+    "save": "Guardar"
   }
 }

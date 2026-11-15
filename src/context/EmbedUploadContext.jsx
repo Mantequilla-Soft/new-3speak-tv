@@ -303,7 +303,7 @@ export function EmbedUploadProvider({ children }) {
   // Hive permlink of the just-published post — used by the success screen to
   // offer promotion of the new video.
   const [publishedPermlink, setPublishedPermlink] = useState('');
-  // ▶️ Set when the video came from the importer (/youtube-import):
+  // ▶️ Set when the video came from the importer (/import):
   // { id: "<youtube id>" | "tiktok:<id>" | "instagram:<shortcode>", platform, url }. On publish it goes into
   // the post's json_metadata (imported_from) and is reported to our API, so the
   // import grid can mark it as already on 3Speak.
@@ -1889,7 +1889,7 @@ export function EmbedUploadProvider({ children }) {
             ...(isStory && fromStories ? { story: true } : {}),
           },
         } : {}),
-        // ▶️ Where an imported video came from (/youtube-import): provenance on the
+        // ▶️ Where an imported video came from (/import): provenance on the
         // creator's own signed record, for later features (dedupe, re-sync,
         // "originally on …") without depending on our server's bookkeeping.
         ...(importSource ? {

@@ -599,7 +599,7 @@ function EmbedVideoUploadStep1() {
                       size={44}
                       icon="download"
                       className="yt-import-entry"
-                      onClick={() => navigate(`/youtube-import?mode=${fromStories ? 'shorts' : 'videos'}`)}
+                      onClick={() => navigate(`/import?mode=${fromStories ? 'shorts' : 'videos'}`)}
                     >
                       {t('ytimport.entry')}
                     </Button>

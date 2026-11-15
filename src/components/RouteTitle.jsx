@@ -36,7 +36,7 @@ const CANONICAL_ORIGIN = 'https://3speak.tv';
 // One person's own pages, or a step in a flow: nothing a search result could
 // usefully send anyone else to. Matched as prefixes (subpaths included).
 const PRIVATE = [
-  '/notifications', '/upload', '/publish-backlog', '/youtube-import', '/login', '/newlogin',
+  '/notifications', '/upload', '/publish-backlog', '/import', '/youtube-import', '/login', '/newlogin',
   '/auth', '/callback', '/studio', '/embed-studio', '/draft', '/editvideo', '/edit-scheduled',
   '/profile', '/wallet', '/test', '/image', '/openpods/publish', '/chat', '/translate',
   '/invite-links', '/invite', '/home-feed', '/follow-feed', '/watched', '/egress-stream',

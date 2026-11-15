@@ -298,8 +298,8 @@ function ProfileNav({ isVisible, pinned = true, leaving = false, hoverProps, onc
                 header). Needs a Hive account to publish, so not for incubating users,
                 and a verified link to a platform we import from. */}
             {VIDEO_IMPORT_ENABLED && !isIncubating && canImport && (
-              <Link to="/youtube-import" className="pn-item" role="menuitem" onClick={onclose}>
-                {row('move_to_inbox', t('ytimport.entry'))}
+              <Link to="/import" className="pn-item" role="menuitem" onClick={onclose}>
+                {row('move_to_inbox', t('ytimport.menuEntry'))}
               </Link>
             )}
             {/* Closed testing. Same gate as the /advertise page itself, so the menu can
