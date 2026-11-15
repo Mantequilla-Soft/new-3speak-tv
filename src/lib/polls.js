@@ -15,7 +15,7 @@ export const POLL_OPTION_MAX_LEN = 80;
 // The end choices the composer offers, in days; 0 = no end.
 export const POLL_DURATIONS = [1, 3, 7, 0];
 
-/** The `poll` block for json_metadata, or null when the options don't make a poll. */
+/** The poll block for json_metadata, or null when the options don't make a poll. */
 export function buildPollMeta(options, days, now = Date.now()) {
   const clean = (options || []).map((o) => String(o || '').replace(/\s+/g, ' ').trim().slice(0, POLL_OPTION_MAX_LEN)).filter(Boolean);
   if (clean.length < POLL_MIN_OPTIONS || clean.length > POLL_MAX_OPTIONS) return null;

@@ -1,0 +1,106 @@
+{
+  "levels": {
+    "button": "Avvisi",
+    "buttonTitle": "Notifiche da @{{user}}: {{level}}",
+    "title": "Notifiche da @{{user}}",
+    "sub": "Le impostazioni del tuo dispositivo in Impostazioni restano valide.",
+    "saveFailed": "Impossibile salvare. Riprova.",
+    "all": {
+      "title": "Tutto",
+      "desc": "Video, shorts, storie, audio e quando vanno in diretta.",
+      "saved": "Riceverai tutto da @{{user}}."
+    },
+    "highlights": {
+      "title": "In evidenza",
+      "desc": "Video, audio e quando vanno in diretta. Niente shorts né storie.",
+      "saved": "D'ora in poi solo i contenuti in evidenza di @{{user}}."
+    },
+    "off": {
+      "title": "Disattivate",
+      "desc": "Nessuna notifica da questo creator. Continui a seguirlo.",
+      "saved": "Le notifiche da @{{user}} sono disattivate."
+    }
+  },
+  "live": {
+    "badge": "LIVE",
+    "aria": "In diretta ora: persone che segui",
+    "summary_one": "{{count}} persona che segui è in diretta ora",
+    "summary_many": "{{count}} persone che segui sono in diretta ora",
+    "summary_other": "{{count}} persone che segui sono in diretta ora"
+  },
+  "notifs": {
+    "heading": "Da 3Speak",
+    "liveNow": "@{{user}} è in diretta",
+    "wasLive": "@{{user}} è andato in diretta",
+    "collabInvite": "@{{user}} ti ha invitato a una collaborazione"
+  },
+  "push": {
+    "live": {
+      "title": "In diretta",
+      "desc": "Quando un creator che segui avvia una diretta."
+    }
+  },
+  "collab": {
+    "accept": "Accetta",
+    "decline": "Rifiuta",
+    "acceptedToast": "La collaborazione con @{{user}} ora è sul tuo canale.",
+    "declinedToast": "Invito rifiutato.",
+    "answerFailed": "Impossibile inviare la tua risposta. Riprova.",
+    "row": "Aggiungi un collaboratore",
+    "rowSub": "Pubblicalo con un co-creator e dividete le ricompense",
+    "rowSet": "@{{user}} riceve il {{split}}% della tua parte",
+    "modalTitle": "Aggiungi un collaboratore",
+    "modalSub": "Riceverà un invito. Quando accetta, il video sarà su entrambi i canali.",
+    "accountLabel": "Co-creator",
+    "accountPlaceholder": "Nome account Hive",
+    "suggestions": "Account corrispondenti",
+    "splitLabel": "La sua parte delle tue ricompense",
+    "splitPreview": "@{{user}} riceve il {{share}}% delle ricompense, tu tieni il {{mine}}%.",
+    "inviteNote": "La divisione è un beneficiario Hive, quindi vale anche se rifiuta.",
+    "someone": "il tuo co-creator",
+    "save": "Salva",
+    "remove": "Rimuovi",
+    "noRoom": "@{{user}} non è stato aggiunto come beneficiario: il post ha già il numero massimo di beneficiari consentito da Hive.",
+    "errors": {
+      "invalid": "Non è un nome account Hive valido.",
+      "self": "Non puoi collaborare con te stesso.",
+      "notFound": "@{{user}} non è un account Hive."
+    },
+    "cardWith": "con {{users}}",
+    "cardBoth": "{{author}} con {{users}}",
+    "withLabel": "con",
+    "invitesTitle": "Inviti a collaborare"
+  },
+  "polls": {
+    "aria": "Sondaggio",
+    "addPoll": "Sondaggio",
+    "removePoll": "Nessun sondaggio",
+    "editorAria": "Opzioni del sondaggio",
+    "questionPlaceholder": "Fai una domanda ai tuoi follower",
+    "optionPlaceholder": "Opzione {{n}}",
+    "removeOption": "Rimuovi opzione {{n}}",
+    "addOption": "Aggiungi opzione",
+    "duration": "Fine del sondaggio",
+    "days_one": "{{count}} giorno",
+    "days_many": "{{count}} giorni",
+    "days_other": "{{count}} giorni",
+    "noEnd": "Nessuna scadenza",
+    "invalid": "Un sondaggio richiede da {{min}} a {{max}} opzioni diverse.",
+    "votes_one": "{{count}} voto",
+    "votes_many": "{{count}} voti",
+    "votes_other": "{{count}} voti",
+    "endsInDays_one": "Termina tra {{count}} giorno",
+    "endsInDays_many": "Termina tra {{count}} giorni",
+    "endsInDays_other": "Termina tra {{count}} giorni",
+    "endsInHours_one": "Termina tra {{count}} ora",
+    "endsInHours_many": "Termina tra {{count}} ore",
+    "endsInHours_other": "Termina tra {{count}} ore",
+    "closed": "Sondaggio chiuso",
+    "open": "Aperto",
+    "changeHint": "Tocca un'altra opzione per cambiare il tuo voto.",
+    "signIn": "Accedi per votare.",
+    "closedToast": "Questo sondaggio è terminato.",
+    "voteFailed": "Il tuo voto non è andato a buon fine. Riprova.",
+    "statsTitle": "Sondaggi"
+  }
+}

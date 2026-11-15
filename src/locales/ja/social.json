@@ -1,0 +1,96 @@
+{
+  "levels": {
+    "button": "通知",
+    "buttonTitle": "@{{user}}さんからの通知：{{level}}",
+    "title": "@{{user}}さんからの通知",
+    "sub": "設定のデバイス別スイッチは引き続き適用されます。",
+    "saveFailed": "保存できませんでした。もう一度お試しください。",
+    "all": {
+      "title": "すべて",
+      "desc": "動画、ショート、ストーリー、音声、ライブ開始。",
+      "saved": "@{{user}}さんのすべての更新をお知らせします。"
+    },
+    "highlights": {
+      "title": "ハイライト",
+      "desc": "動画、音声、ライブ開始。ショートとストーリーは除きます。",
+      "saved": "今後は@{{user}}さんのハイライトのみお知らせします。"
+    },
+    "off": {
+      "title": "オフ",
+      "desc": "このクリエイターからの通知はありません。フォローは続きます。",
+      "saved": "@{{user}}さんからの通知をオフにしました。"
+    }
+  },
+  "live": {
+    "badge": "LIVE",
+    "aria": "フォロー中のユーザーがライブ配信中",
+    "summary_other": "フォロー中の{{count}}人がライブ配信中です"
+  },
+  "notifs": {
+    "heading": "3Speak から",
+    "liveNow": "@{{user}}さんがライブ配信中です",
+    "wasLive": "@{{user}}さんがライブ配信を開始しました",
+    "collabInvite": "@{{user}}さんからコラボに招待されました"
+  },
+  "push": {
+    "live": {
+      "title": "ライブ開始",
+      "desc": "フォロー中のクリエイターがライブ配信を始めたとき。"
+    }
+  },
+  "collab": {
+    "accept": "承諾",
+    "decline": "辞退",
+    "acceptedToast": "@{{user}}さんとのコラボがあなたのチャンネルに追加されました。",
+    "declinedToast": "招待を辞退しました。",
+    "answerFailed": "返答を送信できませんでした。もう一度お試しください。",
+    "row": "共同制作者を追加",
+    "rowSub": "共同制作者と一緒に投稿して報酬を分け合う",
+    "rowSet": "@{{user}}さんがあなたの取り分の{{split}}%を受け取ります",
+    "modalTitle": "共同制作者を追加",
+    "modalSub": "相手に招待が届きます。承諾されると、動画は両方のチャンネルに表示されます。",
+    "accountLabel": "共同制作者",
+    "accountPlaceholder": "Hive アカウント名",
+    "suggestions": "一致するアカウント",
+    "splitLabel": "あなたの報酬のうち相手の取り分",
+    "splitPreview": "@{{user}}さんが報酬の{{share}}%を受け取り、あなたは{{mine}}%を受け取ります。",
+    "inviteNote": "分配は Hive の受益者として設定されるため、相手が辞退しても適用されます。",
+    "someone": "共同制作者",
+    "save": "保存",
+    "remove": "削除",
+    "noRoom": "@{{user}}さんを受益者に追加できませんでした：この投稿はすでに Hive で許可される受益者の上限に達しています。",
+    "errors": {
+      "invalid": "有効な Hive アカウント名ではありません。",
+      "self": "自分自身とはコラボできません。",
+      "notFound": "@{{user}}は Hive アカウントではありません。"
+    },
+    "cardWith": "{{users}}と",
+    "cardBoth": "{{author}}、{{users}}と",
+    "withLabel": "コラボ",
+    "invitesTitle": "コラボの招待"
+  },
+  "polls": {
+    "aria": "投票",
+    "addPoll": "投票",
+    "removePoll": "投票なし",
+    "editorAria": "投票の選択肢",
+    "questionPlaceholder": "フォロワーに質問してみましょう",
+    "optionPlaceholder": "選択肢 {{n}}",
+    "removeOption": "選択肢 {{n}} を削除",
+    "addOption": "選択肢を追加",
+    "duration": "投票期間",
+    "days_other": "{{count}}日",
+    "noEnd": "終了日なし",
+    "invalid": "投票には{{min}}〜{{max}}個の異なる選択肢が必要です。",
+    "votes_other": "{{count}}票",
+    "endsInDays_other": "残り{{count}}日",
+    "endsInHours_other": "残り{{count}}時間",
+    "closed": "投票終了",
+    "open": "受付中",
+    "changeHint": "別の選択肢をタップすると投票を変更できます。",
+    "signIn": "ログインして投票しましょう。",
+    "closedToast": "この投票は終了しました。",
+    "voteFailed": "投票できませんでした。もう一度お試しください。",
+    "statsTitle": "投票"
+  }
+}

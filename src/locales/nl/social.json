@@ -1,0 +1,101 @@
+{
+  "levels": {
+    "button": "Meldingen",
+    "buttonTitle": "Meldingen van @{{user}}: {{level}}",
+    "title": "Meldingen van @{{user}}",
+    "sub": "De schakelaars voor je apparaat in Instellingen blijven gelden.",
+    "saveFailed": "Opslaan is niet gelukt. Probeer het opnieuw.",
+    "all": {
+      "title": "Alles",
+      "desc": "Video's, shorts, stories, audio en wanneer ze live gaan.",
+      "saved": "Je hoort voortaan alles van @{{user}}."
+    },
+    "highlights": {
+      "title": "Hoogtepunten",
+      "desc": "Video's, audio en wanneer ze live gaan. Geen shorts of stories.",
+      "saved": "Vanaf nu alleen hoogtepunten van @{{user}}."
+    },
+    "off": {
+      "title": "Uit",
+      "desc": "Geen meldingen van deze maker. Je blijft ze volgen.",
+      "saved": "Meldingen van @{{user}} staan uit."
+    }
+  },
+  "live": {
+    "badge": "LIVE",
+    "aria": "Nu live van mensen die je volgt",
+    "summary_one": "{{count}} persoon die je volgt is nu live",
+    "summary_other": "{{count}} mensen die je volgt zijn nu live"
+  },
+  "notifs": {
+    "heading": "Van 3Speak",
+    "liveNow": "@{{user}} is live",
+    "wasLive": "@{{user}} ging live",
+    "collabInvite": "@{{user}} heeft je uitgenodigd voor een collab"
+  },
+  "push": {
+    "live": {
+      "title": "Live gaan",
+      "desc": "Wanneer een maker die je volgt een livestream start."
+    }
+  },
+  "collab": {
+    "accept": "Accepteren",
+    "decline": "Weigeren",
+    "acceptedToast": "De collab met @{{user}} staat nu op je kanaal.",
+    "declinedToast": "Uitnodiging geweigerd.",
+    "answerFailed": "Je antwoord kon niet worden verstuurd. Probeer het opnieuw.",
+    "row": "Medemaker toevoegen",
+    "rowSub": "Plaats het met een medemaker en deel de opbrengst",
+    "rowSet": "@{{user}} krijgt {{split}}% van jouw deel",
+    "modalTitle": "Medemaker toevoegen",
+    "modalSub": "Ze krijgen een uitnodiging. Zodra ze accepteren, staat de video op beide kanalen.",
+    "accountLabel": "Medemaker",
+    "accountPlaceholder": "Hive-accountnaam",
+    "suggestions": "Overeenkomende accounts",
+    "splitLabel": "Hun deel van jouw opbrengst",
+    "splitPreview": "@{{user}} krijgt {{share}}% van de opbrengst, jij houdt {{mine}}%.",
+    "inviteNote": "De verdeling is een Hive-begunstigde, dus die geldt ook als ze weigeren.",
+    "someone": "je medemaker",
+    "save": "Opslaan",
+    "remove": "Verwijderen",
+    "noRoom": "@{{user}} is niet als begunstigde toegevoegd: de post heeft al het maximale aantal begunstigden dat Hive toestaat.",
+    "errors": {
+      "invalid": "Dat is geen geldige Hive-accountnaam.",
+      "self": "Je kunt niet met jezelf samenwerken.",
+      "notFound": "@{{user}} is geen Hive-account."
+    },
+    "cardWith": "met {{users}}",
+    "cardBoth": "{{author}} met {{users}}",
+    "withLabel": "met",
+    "invitesTitle": "Collab-uitnodigingen"
+  },
+  "polls": {
+    "aria": "Peiling",
+    "addPoll": "Peiling",
+    "removePoll": "Geen peiling",
+    "editorAria": "Opties van de peiling",
+    "questionPlaceholder": "Stel je volgers een vraag",
+    "optionPlaceholder": "Optie {{n}}",
+    "removeOption": "Optie {{n}} verwijderen",
+    "addOption": "Optie toevoegen",
+    "duration": "Peiling eindigt",
+    "days_one": "{{count}} dag",
+    "days_other": "{{count}} dagen",
+    "noEnd": "Geen einddatum",
+    "invalid": "Een peiling heeft {{min}} tot {{max}} verschillende opties nodig.",
+    "votes_one": "{{count}} stem",
+    "votes_other": "{{count}} stemmen",
+    "endsInDays_one": "Eindigt over {{count}} dag",
+    "endsInDays_other": "Eindigt over {{count}} dagen",
+    "endsInHours_one": "Eindigt over {{count}} uur",
+    "endsInHours_other": "Eindigt over {{count}} uur",
+    "closed": "Peiling gesloten",
+    "open": "Open",
+    "changeHint": "Tik op een andere optie om je stem te wijzigen.",
+    "signIn": "Log in om te stemmen.",
+    "closedToast": "Deze peiling is afgelopen.",
+    "voteFailed": "Je stem is niet doorgekomen. Probeer het opnieuw.",
+    "statsTitle": "Peilingen"
+  }
+}
