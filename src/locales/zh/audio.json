@@ -146,6 +146,16 @@
     "notes": "笔记",
     "stillIndexing": "这条帖子的音频仍在索引中——请几分钟后再试。"
   },
+  "edit": {
+    "title": "编辑音频",
+    "editTitle": "编辑标题、节目说明、标签和封面",
+    "cover": "封面",
+    "coverAlt": "封面预览",
+    "coverHint": "上传图片或粘贴直接链接。方形图片效果最好。",
+    "notesPlaceholder": "向听众介绍这段音频…",
+    "keptNote": "帖子中的播放器链接和音乐署名保持不变。",
+    "updated": "音频已更新！"
+  },
   "page": {
     "sections": {
       "popular": "热门",

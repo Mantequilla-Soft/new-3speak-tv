@@ -150,6 +150,16 @@
     "notes": "Notas",
     "stillIndexing": "El audio de esta publicación aún se está indexando; inténtalo de nuevo en unos minutos."
   },
+  "edit": {
+    "title": "Editar audio",
+    "editTitle": "Editar título, notas, etiquetas y portada",
+    "cover": "Portada",
+    "coverAlt": "Vista previa de la portada",
+    "coverHint": "Sube una imagen o pega una URL directa. Una imagen cuadrada se ve mejor.",
+    "notesPlaceholder": "Cuéntales a los oyentes sobre este audio…",
+    "keptNote": "El enlace del reproductor y los créditos de música de la publicación se mantienen como están.",
+    "updated": "¡Audio actualizado!"
+  },
   "page": {
     "sections": {
       "popular": "Populares",

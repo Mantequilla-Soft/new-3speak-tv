@@ -1,0 +1,31 @@
+@use "../../styles/v2" as v2;
+
+// Edit audio: the edit-video dialog (EditVideoModal.scss) with one panel and
+// no tabs, so a narrower, shorter panel, and a square cover in place of the
+// 16:9 thumbnail.
+.edit-video-modal-content.edit-audio-modal.v2-dialog__panel {
+  width: min(760px, 100%);
+  height: min(680px, calc(100vh - 48px));
+  height: min(680px, calc(100dvh - 48px));
+
+  @include v2.mobile {
+    height: 88vh;
+    height: 88dvh;
+  }
+}
+
+.edit-audio-modal .eam-cover {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  @include v2.mobile { max-width: 220px; }
+}
+
+.edit-audio-modal .eam-cover__img {
+  aspect-ratio: 1 / 1;
+  width: 100%;
+  overflow: hidden;
+
+  img { width: 100%; height: 100%; object-fit: cover; display: block; }
+}

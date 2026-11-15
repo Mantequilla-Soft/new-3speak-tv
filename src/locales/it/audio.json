@@ -150,6 +150,16 @@
     "notes": "Note",
     "stillIndexing": "L'audio di questo post è ancora in fase di indicizzazione — riprova tra qualche minuto."
   },
+  "edit": {
+    "title": "Modifica audio",
+    "editTitle": "Modifica titolo, note, tag e copertina",
+    "cover": "Copertina",
+    "coverAlt": "Anteprima copertina",
+    "coverHint": "Carica un'immagine o incolla un URL diretto. Un'immagine quadrata rende meglio.",
+    "notesPlaceholder": "Racconta agli ascoltatori di questo audio…",
+    "keptNote": "Il link del player e i crediti musicali nel post restano come sono.",
+    "updated": "Audio aggiornato!"
+  },
   "page": {
     "sections": {
       "popular": "Popolari",

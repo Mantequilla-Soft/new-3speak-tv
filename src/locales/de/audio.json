@@ -148,6 +148,16 @@
     "notes": "Notizen",
     "stillIndexing": "Das Audio zu diesem Post wird noch indexiert – versuch es in ein paar Minuten nochmal."
   },
+  "edit": {
+    "title": "Audio bearbeiten",
+    "editTitle": "Titel, Shownotes, Tags und Cover bearbeiten",
+    "cover": "Cover",
+    "coverAlt": "Cover-Vorschau",
+    "coverHint": "Lade ein Bild hoch oder füge eine direkte URL ein. Ein quadratisches Bild sieht am besten aus.",
+    "notesPlaceholder": "Erzähl deinen Hörern etwas über dieses Audio…",
+    "keptNote": "Der Player-Link und die Musik-Credits im Beitrag bleiben, wie sie sind.",
+    "updated": "Audio aktualisiert!"
+  },
   "page": {
     "sections": {
       "popular": "Beliebt",

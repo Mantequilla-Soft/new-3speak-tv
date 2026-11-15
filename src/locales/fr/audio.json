@@ -150,6 +150,16 @@
     "notes": "Notes",
     "stillIndexing": "L'audio de cette publication est encore en cours d'indexation — réessayez dans quelques minutes."
   },
+  "edit": {
+    "title": "Modifier l'audio",
+    "editTitle": "Modifier le titre, les notes, les tags et la pochette",
+    "cover": "Pochette",
+    "coverAlt": "Aperçu de la pochette",
+    "coverHint": "Importe une image ou colle une URL directe. Une image carrée rend le mieux.",
+    "notesPlaceholder": "Parle de cet audio à tes auditeurs…",
+    "keptNote": "Le lien du lecteur et les crédits musicaux du post restent tels quels.",
+    "updated": "Audio mis à jour !"
+  },
   "page": {
     "sections": {
       "popular": "Populaires",

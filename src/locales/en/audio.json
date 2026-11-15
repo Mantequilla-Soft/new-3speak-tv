@@ -148,6 +148,16 @@
     "notes": "Notes",
     "stillIndexing": "Audio for this post is still being indexed — try again in a few minutes."
   },
+  "edit": {
+    "title": "Edit audio",
+    "editTitle": "Edit title, show notes, tags and cover",
+    "cover": "Cover",
+    "coverAlt": "Cover preview",
+    "coverHint": "Upload an image or paste a direct URL. A square image looks best.",
+    "notesPlaceholder": "Tell listeners about this audio…",
+    "keptNote": "The player link and any music credits in the post stay as they are.",
+    "updated": "Audio updated!"
+  },
   "page": {
     "sections": {
       "popular": "Popular",

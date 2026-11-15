@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.21',
+    category: 'audio',
+    date: '2026-11-15',
+    summary: 'You can now edit your audio posts: open one and press Edit to change its title, show notes, tags or cover.',
+  },
+  {
     version: '2.0.20',
     category: 'upload',
     date: '2026-11-14',

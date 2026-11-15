@@ -148,6 +148,16 @@
     "notes": "Mga tala",
     "stillIndexing": "Ini-index pa ang audio ng post na ito — subukan ulit pagkalipas ng ilang minuto."
   },
+  "edit": {
+    "title": "I-edit ang audio",
+    "editTitle": "I-edit ang pamagat, show notes, tags at cover",
+    "cover": "Cover",
+    "coverAlt": "Preview ng cover",
+    "coverHint": "Mag-upload ng larawan o mag-paste ng direktang URL. Pinakamaganda ang parisukat na larawan.",
+    "notesPlaceholder": "Ikuwento sa mga tagapakinig ang audio na ito…",
+    "keptNote": "Mananatili ang player link at mga music credit sa post.",
+    "updated": "Na-update ang audio!"
+  },
   "page": {
     "sections": {
       "popular": "Sikat",

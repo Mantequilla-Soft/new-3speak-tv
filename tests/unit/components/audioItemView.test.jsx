@@ -17,6 +17,7 @@ vi.mock('../../../src/lib/store', () => {
   useAppStore.getState = () => state
   return { useAppStore }
 })
+vi.mock('../../../src/hive-api/aioha', async (orig) => ({ ...(await orig()), isLoggedIn: () => state.authenticated }))
 vi.mock('../../../src/components/playVideo/BlogContent', () => ({ default: ({ permlink }) => <div className="blog-stub">{permlink}</div> }))
 
 const doc = {
@@ -51,6 +52,21 @@ describe('a 3Speak audio page', () => {
     expect(html).toContain('<span class="pod-btn-count">3</span>')
     expect(html).toContain('Description')
     expect(html).toContain('my-show-ep-1')
+  })
+
+  it('the creator gets Edit where everyone else gets Tip', async () => {
+    Object.assign(state, { authenticated: true, user: 'epodcaster' })
+    try {
+      const own = await render('/audio?play=epodcaster/f48l7vyi', doc)
+      expect(own).toContain('Edit')
+      expect(own).not.toContain('Tip')
+      state.user = 'someoneelse'
+      const other = await render('/audio?play=epodcaster/f48l7vyi', doc)
+      expect(other).toContain('Tip')
+      expect(other).not.toMatch(/>Edit</)
+    } finally {
+      Object.assign(state, { authenticated: false, user: '' })
+    }
   })
 
   it('offers the shared clip on the Play button', async () => {

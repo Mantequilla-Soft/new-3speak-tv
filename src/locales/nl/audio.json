@@ -148,6 +148,16 @@
     "notes": "Notities",
     "stillIndexing": "De audio van deze post wordt nog geïndexeerd — probeer het over een paar minuten opnieuw."
   },
+  "edit": {
+    "title": "Audio bewerken",
+    "editTitle": "Titel, shownotes, tags en cover bewerken",
+    "cover": "Cover",
+    "coverAlt": "Covervoorbeeld",
+    "coverHint": "Upload een afbeelding of plak een directe URL. Een vierkante afbeelding ziet er het best uit.",
+    "notesPlaceholder": "Vertel luisteraars over deze audio…",
+    "keptNote": "De spelerlink en eventuele muziekcredits in de post blijven zoals ze zijn.",
+    "updated": "Audio bijgewerkt!"
+  },
   "page": {
     "sections": {
       "popular": "Populair",

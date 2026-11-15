@@ -146,6 +146,16 @@
     "notes": "Ghi chú",
     "stillIndexing": "Âm thanh của bài đăng này vẫn đang được lập chỉ mục — hãy thử lại sau vài phút."
   },
+  "edit": {
+    "title": "Sửa âm thanh",
+    "editTitle": "Sửa tiêu đề, ghi chú, thẻ và ảnh bìa",
+    "cover": "Ảnh bìa",
+    "coverAlt": "Xem trước ảnh bìa",
+    "coverHint": "Tải ảnh lên hoặc dán URL trực tiếp. Ảnh vuông trông đẹp nhất.",
+    "notesPlaceholder": "Kể cho người nghe về bản âm thanh này…",
+    "keptNote": "Liên kết trình phát và phần ghi công nhạc trong bài vẫn giữ nguyên.",
+    "updated": "Đã cập nhật âm thanh!"
+  },
   "page": {
     "sections": {
       "popular": "Phổ biến",

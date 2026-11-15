@@ -1,5 +1,5 @@
 import { Icon } from '../components/v2/Icon';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { lazy, useEffect, useMemo, useRef, useState } from 'react';
 import { getHiveUrl } from '../utils/hiveNode';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -28,7 +28,11 @@ import { cx } from '../components/v2/helpers';
 import { canSubscribe, setCommunitySubscription } from '../components/Communities/communitySubscribe';
 import { fixVideoThumbnail, fallbackImg } from '../utils/fixThumbnails';
 import { isLoggedIn } from '../hive-api/aioha';
+import MountWhenOpened from '../components/common/LazyMount';
 import './AudioPost.scss';
+
+// Only the creator ever opens it, so it loads on the first Edit.
+const EditAudioModal = lazy(() => import('../components/AudioEdit/EditAudioModal'));
 
 // Every toast from this module is headed "Post"; the message becomes the
 // line under it. See utils/toast.js.
@@ -93,6 +97,7 @@ function AudioPost() {
   const [isTipOpen, setIsTipOpen] = useState(false);
   const [playlistOpen, setPlaylistOpen] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
   // The panel beside the player (18b): the queue, or the notes (comments).
   const [sideTab, setSideTab] = useState('queue');
   // The community it was posted in, for the strip on top (18b).
@@ -441,7 +446,10 @@ function AudioPost() {
                   <AudioHypeButton author={author} permlink={permlink} variant="tile" />
                   <DockTile icon="chat_bubble" label={String(commentCount)} fill={false} onClick={showComments} aria-label={t('audio.item.comments')} title={t('audio.item.comments')} />
                   {loggedIn && <DockTile icon="playlist_add" label={t('common.actions.save')} fill={false} onClick={() => setPlaylistOpen(true)} title={t('engagement.cardMenu.addToPlaylist')} />}
-                  {!isOwner && <DockTile icon="volunteer_activism" label={t('audio.post.tip')} fill={false} onClick={() => setIsTipOpen(true)} />}
+                  {/* Nobody tips themselves: the creator gets Edit in its place, as on the watch page. */}
+                  {isOwner
+                    ? <DockTile icon="edit" label={t('common.actions.edit')} fill={false} onClick={() => setEditOpen(true)} title={t('audio.edit.editTitle')} />
+                    : <DockTile icon="volunteer_activism" label={t('audio.post.tip')} fill={false} onClick={() => setIsTipOpen(true)} />}
                   <DockTile icon="ios_share" label={t('common.actions.share')} fill={false} active={shareOpen} tone="cyan" onClick={() => setShareOpen(true)} aria-haspopup="dialog" />
                 </div>
               </div>
@@ -571,6 +579,27 @@ function AudioPost() {
           videoTitle={title}
           audioCategory={audioDoc?.category || ''}
         />
+      )}
+
+      {isOwner && (
+        <MountWhenOpened when={editOpen} name="edit audio">
+          <EditAudioModal
+            isOpen={editOpen}
+            onClose={() => setEditOpen(false)}
+            author={author}
+            permlink={permlink}
+            rowTitle={audioDoc?.title || ''}
+            onSaved={(changes) => {
+              // Show the edit at once; the chain and the audio row catch up behind it.
+              setPost((p) => (p ? { ...p, title: changes.title, body: changes.body, json_metadata: changes.json_metadata } : p));
+              setAudioDoc((d) => (d ? {
+                ...d,
+                ...(changes.title ? { title: changes.title } : {}),
+                ...(changes.cover ? { thumbnail_url: changes.cover } : {}),
+              } : d));
+            }}
+          />
+        </MountWhenOpened>
       )}
 
       {shareOpen && audioDoc && (

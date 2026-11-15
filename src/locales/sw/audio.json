@@ -148,6 +148,16 @@
     "notes": "Madokezo",
     "stillIndexing": "Sauti ya chapisho hili bado inaorodheshwa — jaribu tena baada ya dakika chache."
   },
+  "edit": {
+    "title": "Hariri sauti",
+    "editTitle": "Hariri kichwa, maelezo, lebo na jalada",
+    "cover": "Jalada",
+    "coverAlt": "Onyesho la jalada",
+    "coverHint": "Pakia picha au bandika URL ya moja kwa moja. Picha ya mraba inaonekana vizuri zaidi.",
+    "notesPlaceholder": "Waambie wasikilizaji kuhusu sauti hii…",
+    "keptNote": "Kiungo cha kicheza sauti na sifa za muziki katika chapisho vinabaki kama vilivyo.",
+    "updated": "Sauti imesasishwa!"
+  },
   "page": {
     "sections": {
       "popular": "Maarufu",

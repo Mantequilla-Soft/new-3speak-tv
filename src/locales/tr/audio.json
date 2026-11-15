@@ -148,6 +148,16 @@
     "notes": "Notlar",
     "stillIndexing": "Bu gönderinin sesi hâlâ dizinleniyor; birkaç dakika sonra tekrar dene."
   },
+  "edit": {
+    "title": "Sesi düzenle",
+    "editTitle": "Başlığı, notları, etiketleri ve kapağı düzenle",
+    "cover": "Kapak",
+    "coverAlt": "Kapak önizlemesi",
+    "coverHint": "Bir görsel yükle veya doğrudan bir URL yapıştır. Kare bir görsel en iyi görünür.",
+    "notesPlaceholder": "Dinleyicilere bu ses kaydından bahset…",
+    "keptNote": "Gönderideki oynatıcı bağlantısı ve müzik bilgileri olduğu gibi kalır.",
+    "updated": "Ses güncellendi!"
+  },
   "page": {
     "sections": {
       "popular": "Popüler",
