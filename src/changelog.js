@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.67',
+    category: 'general',
+    date: '2026-11-15',
+    summary: 'A Powered by Hive link to hive.io now sits at the bottom of the site.',
+  },
+  {
     version: '2.0.66',
     category: 'editor',
     date: '2026-11-15',
