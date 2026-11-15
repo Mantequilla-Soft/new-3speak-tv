@@ -995,6 +995,49 @@ describe('the audio player: an outside podcast episode', () => {
   })
 })
 
+describe('the audio player: a video heard as audio (lib/videoAsAudio.js)', () => {
+  const VIDEO = {
+    _id: 'video:badadib/test-stream', video: true, owner: 'badadib', post_permlink: 'test-stream', title: 'Test stream',
+    thumbnail_url: '', duration: 104, src: 'https://play.example/hls?u=480', mime: 'application/vnd.apple.mpegurl',
+  }
+  beforeEach(() => act(() => useAppStore.setState({ audioExpanded: true })))
+  afterEach(() => { HTMLMediaElement.prototype.canPlayType = () => '' })
+
+  it('plays the HLS rendition natively where the browser can and there is no MSE, with no audio download and no effects', async () => {
+    vi.stubGlobal('MediaSource', undefined)
+    vi.stubGlobal('ManagedMediaSource', undefined)
+    HTMLMediaElement.prototype.canPlayType = (type) => (/mpegurl/i.test(type) ? 'maybe' : '')
+    mount()
+    play(VIDEO)
+    expect(audio()).toHaveAttribute('src', 'https://play.example/hls?u=480')
+    expect(screen.getAllByText('Test stream')[0]).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Download' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Audio effects' })).not.toBeInTheDocument()
+  })
+
+  it('says so when neither hls.js nor the browser can play it', async () => {
+    vi.stubGlobal('MediaSource', undefined)
+    vi.stubGlobal('ManagedMediaSource', undefined)
+    mount()
+    play(VIDEO)
+    await waitFor(() => expect(toastMessages(toast.error)).toContain("This browser can't play this video as audio."))
+  })
+
+  it('with MSE, the effects stay (hls.js feeds the element, Web Audio can read it)', () => {
+    vi.stubGlobal('MediaSource', function MediaSource() {})
+    mount()
+    play(VIDEO)
+    expect(screen.getByRole('button', { name: 'Audio effects' })).toBeInTheDocument()
+  })
+
+  it('its Hive post carries the votes and comments', async () => {
+    hive.getContent = vi.fn(async () => null)
+    mount()
+    play(VIDEO)
+    await waitFor(() => expect(hive.getContent).toHaveBeenCalledWith('badadib', 'test-stream'))
+  })
+})
+
 describe('the audio player: saving for offline, effects and the pop-out window', () => {
   beforeEach(() => act(() => useAppStore.setState({ audioExpanded: true })))
 

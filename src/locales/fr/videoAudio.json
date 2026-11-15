@@ -1,0 +1,7 @@
+{
+  "playAsAudio": "Lire en audio",
+  "listen": "Écouter",
+  "label": "Vidéo",
+  "failed": "Cette vidéo ne peut pas être lue en audio pour le moment.",
+  "unsupported": "Ce navigateur ne peut pas lire cette vidéo en audio."
+}

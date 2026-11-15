@@ -1,0 +1,7 @@
+{
+  "playAsAudio": "Riproduci come audio",
+  "listen": "Ascolta",
+  "label": "Video",
+  "failed": "Al momento questo video non può essere riprodotto come audio.",
+  "unsupported": "Questo browser non può riprodurre questo video come audio."
+}

@@ -38,6 +38,20 @@ export function isHlsTrack(track) {
   return /\.m3u8(\?|#|$)/i.test(String(track.src || ''));
 }
 
+/**
+ * How an HLS item plays in the <audio> element: 'hlsjs', 'native', or null (not
+ * HLS, or not an item that streams HLS). A live stream uses the browser's own HLS
+ * where there is one. A video heard as audio (lib/videoAsAudio.js) goes through
+ * hls.js wherever Media Source Extensions exist, so Web Audio can read it.
+ */
+export function hlsPlayback(track, { canPlayNative = false, mse = false } = {}) {
+  if (!track || !isHlsTrack(track)) return null;
+  // (An outside episode's `video` is its feed's alternate video file, not this.)
+  if (track.video === true && !track.external) return mse || !canPlayNative ? 'hlsjs' : 'native';
+  if (track.live) return canPlayNative ? 'native' : 'hlsjs';
+  return null;
+}
+
 // ─── Playback speed ───────────────────────────────────────────────────────────
 
 // Up to 2x: faster than that, speech stops being worth listening to.

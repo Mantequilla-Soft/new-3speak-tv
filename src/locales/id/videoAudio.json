@@ -1,0 +1,7 @@
+{
+  "playAsAudio": "Putar sebagai audio",
+  "listen": "Dengarkan",
+  "label": "Video",
+  "failed": "Video ini tidak bisa diputar sebagai audio saat ini.",
+  "unsupported": "Browser ini tidak bisa memutar video ini sebagai audio."
+}

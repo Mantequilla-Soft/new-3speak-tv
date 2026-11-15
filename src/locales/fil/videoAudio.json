@@ -1,0 +1,7 @@
+{
+  "playAsAudio": "I-play bilang audio",
+  "listen": "Makinig",
+  "label": "Video",
+  "failed": "Hindi ma-play ang video na ito bilang audio ngayon.",
+  "unsupported": "Hindi kayang i-play ng browser na ito ang video bilang audio."
+}
