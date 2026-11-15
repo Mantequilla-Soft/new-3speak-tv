@@ -92,7 +92,7 @@ function stubMp3({ ok = true, type = 'audio/mpeg' } = {}) {
 describe('EditorModal in audio mode', () => {
   it('opens the editor with mode=audio and an audio title', async () => {
     const { iframe } = await open({ mode: 'audio' })
-    expect(iframe.getAttribute('src')).toBe(`${EDITOR}?compact=true&mode=audio`)
+    expect(iframe.getAttribute('src')).toBe(`${EDITOR}?compact=true&mode=audio&lang=en`)
     expect(iframe).toHaveAttribute('title', '3Speak Audio Editor')
   })
 
@@ -206,7 +206,7 @@ describe('EditorModal in audio mode', () => {
 describe('EditorModal in video mode (unchanged)', () => {
   it('opens the shorts editor without a mode', async () => {
     const { iframe } = await open({})
-    expect(iframe.getAttribute('src')).toBe(`${EDITOR}?compact=true`)
+    expect(iframe.getAttribute('src')).toBe(`${EDITOR}?compact=true&lang=en`)
     expect(iframe).toHaveAttribute('title', '3Speak Video Editor')
   })
 
@@ -474,12 +474,12 @@ describe('EditorModal: the shape the editor reports decides Short or normal vide
 
   it('opens a landscape project with ?aspect=, and nothing for a Short or a made-up shape', async () => {
     const { iframe } = await open({ aspect: '16:9' })
-    expect(iframe.getAttribute('src')).toBe(`${EDITOR}?compact=true&aspect=16%3A9`)
+    expect(iframe.getAttribute('src')).toBe(`${EDITOR}?compact=true&aspect=16%3A9&lang=en`)
   })
 
   it('a made-up shape opens the editor as before', async () => {
     const { iframe } = await open({ aspect: '21:9' })
-    expect(iframe.getAttribute('src')).toBe(`${EDITOR}?compact=true`)
+    expect(iframe.getAttribute('src')).toBe(`${EDITOR}?compact=true&lang=en`)
   })
 
   it('a 16:9 render goes to the normal video uploader, with no story question', async () => {
