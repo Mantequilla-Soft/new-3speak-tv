@@ -183,7 +183,7 @@
   border-radius: 3px;
   background: var(--surface-2);
   cursor: pointer;
-  &::before { content: ""; position: absolute; inset: -10px 0; }
+  // Its hit area and drag look: components/GlobalAudioPlayer/ScrubOverlay.scss.
 }
 .audio-post-progress-fill { height: 100%; border-radius: 3px; background: var(--accent); }
 .audio-post-times {

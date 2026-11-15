@@ -25,6 +25,7 @@ import LeaderboardBadges from "../components/LeaderboardBadges/LeaderboardBadges
 import SupportersList from "../components/Supporters/SupportersList";
 import HiveBadges from "../components/HiveBadges/HiveBadges";
 import ProfileStreams, { ProfileLiveNow } from "../components/Userprofilepage/ProfileStreams";
+import UpcomingPremieres from "../components/Premiere/UpcomingPremieres";
 import AddSocialLink_modal, { SOCIAL_LINKS_CHANGED } from "../components/modal/AddSocialLink_modal";
 import EditVideoHintModal from "../components/modal/EditVideoHintModal";
 import { fetchScheduledPosts, normalizeScheduledForCard } from "../utils/scheduledPosts";
@@ -733,6 +734,7 @@ function ProfilePage() {
           <>
             {/* A live stream comes first, ahead of the videos. */}
             <ProfileLiveNow user={user} />
+            <UpcomingPremieres owner={user} />
             {isLoading ? (
               <BarLoader />
             ) : videoListItems.length === 0 ? (

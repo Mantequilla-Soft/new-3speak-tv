@@ -80,6 +80,8 @@ import { Button as UiButton, Segmented, StatusPill } from '../v2/ui';
 import { Icon } from '../v2/Icon';
 import { cx } from '../v2/helpers';
 import { SUPPORTED_LANGUAGES } from '../../utils/translate';
+import KeyboardShortcuts from './KeyboardShortcuts';
+import { isTypingTarget, volumeAfter, percentSeekTarget, captionToggleTarget } from '../../lib/playerKeys';
 
 // Every toast from this module is headed "Video"; the message becomes the
 // line under it. See utils/toast.js.
@@ -90,7 +92,7 @@ dayjs.extend(relativeTime);
 // Stable identity for "no chapters", so memo deps don't change every render.
 const EMPTY_CHAPTERS = [];
 
-const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, mediaBlocked = false, onRetryPlayback = null, mediaLoading = false, playlistData, onClosePlaylist, videoControls, cinemaReactionPanel, videoRef, wrapperRef, onVideoEdited, overrideBody, scheduled = false, scheduledOn = null, mediaScheduledOn = null, onEditScheduled, isLive = false, streamRoom = null, liveChatSlot = null, onLiveChatSent = null, vodAssetPending = false, onStreamRoomMeta = null, belowPlayerSlot = null, sponsorLabel = null, adCountdown = null, bannerHit = null, tickerSlot = null, adSkip = null, adPlaying = false, adLocked = false, timelineLinks = null, timelineResetKey = null, tickerShown = false, surfActive = false, onReact = null, upNext = null, playerOverlay = null }) => {
+const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, mediaBlocked = false, onRetryPlayback = null, mediaLoading = false, playlistData, onClosePlaylist, videoControls, cinemaReactionPanel, videoRef, wrapperRef, onVideoEdited, overrideBody, scheduled = false, scheduledOn = null, mediaScheduledOn = null, onEditScheduled, isLive = false, streamRoom = null, liveChatSlot = null, onLiveChatSent = null, vodAssetPending = false, onStreamRoomMeta = null, belowPlayerSlot = null, sponsorLabel = null, adCountdown = null, bannerHit = null, tickerSlot = null, adSkip = null, adPlaying = false, adLocked = false, timelineLinks = null, timelineResetKey = null, tickerShown = false, surfActive = false, onReact = null, upNext = null, playerOverlay = null, premiereTab = null }) => {
   const { t } = useTranslation();
   const { user, authenticated } = useAppStore();
   const isPremium = !!usePremiumStatus(user)?.premium;
@@ -401,6 +403,11 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
   // S saves, Shift+S shares: the keys the action menu shows on its tiles (07d).
   // Filled in below, once the handlers exist.
   const menuKeysRef = useRef({});
+  // The "?" sheet listing every key (KeyboardShortcuts).
+  const [keysOpen, setKeysOpen] = useState(false);
+  const wrapperElRef = useRef(null);
+  wrapperElRef.current = wrapperRef && typeof wrapperRef === 'object' ? wrapperRef.current : null;
+  const wideRef = useRef(false);
   // Frame length, measured from the decoder while the video plays (the smallest
   // gap between two presented frames: a dropped frame only makes a gap larger).
   const frameSecRef = useRef(1 / 30);
@@ -430,7 +437,7 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
       if (!vc || e.defaultPrevented || e.ctrlKey || e.metaKey || e.altKey) return;
       const tgt = e.target;
       const tag = tgt?.tagName;
-      if (tgt?.isContentEditable || tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+      if (isTypingTarget(tgt)) return;
       // A dialog the key was pressed in, or a modal that's open, owns the
       // keyboard. Not any [role=dialog] on the page: the cookie banner is one,
       // and it would switch the shortcuts off for every new visitor.
@@ -448,6 +455,80 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
           // Refused while an ad break holds the playhead; don't claim a skip.
           if (!adLockedRef.current) flashActionRef.current('forward');
           vc.onSeekForward?.();
+          break;
+        case 'j':
+        case 'J':
+          e.preventDefault();
+          flashActionRef.current('back');
+          vc.onSeekBackward?.();
+          break;
+        case 'l':
+        case 'L':
+          e.preventDefault();
+          if (!adLockedRef.current) flashActionRef.current('forward');
+          vc.onSeekForward?.();
+          break;
+        case 'k':
+        case 'K':
+          e.preventDefault();
+          flashActionRef.current(vc.isPlaying ? 'pause' : 'play');
+          vc.onTogglePlay?.();
+          break;
+        case 'f':
+        case 'F':
+          e.preventDefault();
+          vc.onToggleFullscreen?.();
+          break;
+        case 'm':
+        case 'M':
+          e.preventDefault();
+          flashActionRef.current(vc.isMuted ? 'unmuted' : 'muted');
+          vc.onToggleMute?.();
+          break;
+        case 'c':
+        case 'C': {
+          if (!vc.onSubtitleChange) break;
+          let remembered = null;
+          try { remembered = localStorage.getItem('3speak-subtitle-lang'); } catch { /* storage off */ }
+          const next = captionToggleTarget(vc.subtitleLanguages, vc.selectedSubtitleLang, {
+            remembered, uiLang: document.documentElement.lang,
+          });
+          if (next === undefined) break;
+          e.preventDefault();
+          flashActionRef.current(next ? 'captions' : 'captionsOff');
+          vc.onSubtitleChange(next);
+          break;
+        }
+        case 't':
+        case 'T':
+          if (!vc.onToggleTheater || !wideRef.current || document.fullscreenElement) break;
+          e.preventDefault();
+          vc.onToggleTheater();
+          break;
+        case 'ArrowUp':
+        case 'ArrowDown': {
+          // Volume only while the player is what the viewer is at: focus in it, or
+          // on the page itself with the player at least half on screen. Reading the
+          // comments further down, the arrows scroll as always.
+          const wrap = wrapperElRef.current;
+          const inPlayer = !!wrap && !!tgt && wrap.contains(tgt);
+          const onPage = !tgt || tgt === document.body || tgt === document.documentElement;
+          let inView = !!document.fullscreenElement;
+          if (!inView && wrap) {
+            const r = wrap.getBoundingClientRect();
+            const seen = Math.min(r.bottom, window.innerHeight) - Math.max(r.top, 0);
+            inView = r.height > 0 && seen / r.height >= 0.5;
+          }
+          if (!vc.onVolumeChange || !(inPlayer || (onPage && inView))) break;
+          e.preventDefault();
+          const vol = volumeAfter(vc.volume, vc.isMuted, e.key === 'ArrowUp' ? 1 : -1);
+          flashActionRef.current(vol > 0 ? 'volume' : 'muted');
+          vc.onVolumeChange(vol);
+          break;
+        }
+        case '?':
+          e.preventDefault();
+          setKeysOpen(true);
           break;
         case ' ':
         case 'Spacebar': {
@@ -484,7 +565,13 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
           vc.onSeek?.(to);
           break;
         }
-        default:
+        default: {
+          // 0 to 9: that tenth of the video (0 is the start).
+          const to = percentSeekTarget(e.key, vc.duration);
+          if (to === null) break;
+          e.preventDefault();
+          vc.onSeek?.(to);
+        }
       }
     };
     document.addEventListener('keydown', onKey);
@@ -1146,6 +1233,7 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
   // description below, supporters and voters in a card beside them. Narrow: one
   // column, and every panel is a chip tab above one fixed scroll area.
   const wide = useWideWatch();
+  wideRef.current = wide;
   const isOwner = !!user && user.toLowerCase() === String(author || '').toLowerCase();
   const loggedInOnChain = authenticated && isLoggedIn();
   // The live chat's portal target, when Watch did not hand one in.
@@ -1170,9 +1258,13 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
   const chapters = videoControls?.chapters || EMPTY_CHAPTERS;
   const nowSec = videoControls?.currentTime || 0;
   const chapterAt = chapters.findIndex((c) => nowSec >= c.start && nowSec < c.end);
+  // A running premiere's chat is the 'chat' tab, so it opens first like a
+  // stream's; afterwards its replay is a tab of its own after the discussion.
+  const premiereLive = !!premiereTab?.live && !isLive;
   const sideIds = [
-    isLive && 'chat',
+    (isLive || premiereLive) && 'chat',
     'discussion',
+    premiereTab && !premiereLive && 'premiere',
     hasSubtitles && 'transcript',
     !wide && chapters.length > 0 && 'chapters',
     !wide && !scheduled && 'supporters',
@@ -1476,6 +1568,14 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
       // shares the player's single LiveKit connection. Empty until it connects.
       content: <div className="wv2-chat" ref={setChatSlotEl} />,
     },
+    premiereLive && {
+      id: 'chat',
+      label: t('premieres.chat.liveTab'),
+      icon: 'theaters',
+      keepMounted: true,
+      flush: true,
+      content: premiereTab.render(seekFromText),
+    },
     {
       id: 'discussion',
       label: t('communities.page.tabs.discussion'),
@@ -1498,6 +1598,12 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
           pinnable={!isLive && !scheduled}
         />
       ),
+    },
+    premiereTab && !premiereLive && {
+      id: 'premiere',
+      label: t('premieres.chat.replayTab'),
+      flush: true,
+      content: premiereTab.render(seekFromText),
     },
     hasSubtitles && {
       id: 'transcript',
@@ -1909,6 +2015,10 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                       {actionFlash.kind === 'pause' && <Icon name="pause" fill className="video-action-flash__icon" />}
                       {actionFlash.kind === 'back' && <Icon name="replay_10" className="video-action-flash__icon" />}
                       {actionFlash.kind === 'forward' && <Icon name="forward_10" className="video-action-flash__icon" />}
+                      {actionFlash.kind === 'muted' && <Icon name="volume_off" className="video-action-flash__icon" />}
+                      {(actionFlash.kind === 'unmuted' || actionFlash.kind === 'volume') && <Icon name="volume_up" className="video-action-flash__icon" />}
+                      {actionFlash.kind === 'captions' && <Icon name="closed_caption" className="video-action-flash__icon" />}
+                      {actionFlash.kind === 'captionsOff' && <Icon name="closed_caption_disabled" className="video-action-flash__icon" />}
                     </div>
                   )}
                   <VideoControls
@@ -1957,6 +2067,10 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                     onPlaybackRateChange={videoControls.onPlaybackRateChange}
                     onHoldControls={videoControls.onHoldControls}
                     onReleaseControls={videoControls.onReleaseControls}
+                    isTheater={!!videoControls.isTheater}
+                    onToggleTheater={wide ? videoControls.onToggleTheater : null}
+                    loop={!!videoControls.loop}
+                    onToggleLoop={videoControls.onToggleLoop}
                   />
                 </>
               )}
@@ -2260,6 +2374,8 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
           </aside>
         )}
       </div>
+
+      <KeyboardShortcuts open={keysOpen} onClose={() => setKeysOpen(false)} wide={wide} />
 
       <ShareChooserModal
         open={shareChooserOpen}

@@ -5,6 +5,7 @@ import { useAppStore } from '../../lib/store';
 import { CHECKER_API_KEY } from '../../utils/config';
 import { getMinMaxDates, formatDateTimeLocal } from '../../utils/schedulingHelpers';
 import ScheduleCalendar, { ScheduleManualDate } from './ScheduleCalendar';
+import PremiereSwitch from '../Premiere/PremiereSwitch';
 import { uploadThumbnail } from '../../utils/uploadThumbnail';
 import { proveScheduledPost, scheduledPostWriteError } from '../../utils/scheduledPostProof';
 import MarkdownComposer from './MarkdownComposer';
@@ -111,6 +112,8 @@ export default function ScheduledPostEditor({ permlink, onClose, onSaved, onCanc
   const [thumbnailUploading, setThumbnailUploading] = useState(false);
   const [payoutOptions, setPayoutOptions] = useState('default');
   const [scheduleDateTime, setScheduleDateTime] = useState('');
+  // "List as a premiere" (opt-in): routes/premieres.js on the checker.
+  const [premiere, setPremiere] = useState(false);
 
   // Beneficiary modal state — same contract as EmbedUploadContext.
   const [isBeneficiaryModalOpen, setIsBeneficiaryModalOpen] = useState(false);
@@ -142,6 +145,7 @@ export default function ScheduledPostEditor({ permlink, onClose, onSaved, onCanc
         setTagsInputValue(tagsToText(tags));
         setThumbnail(found.thumbnail || null);
         setPayoutOptions(found.payoutOptions || 'default');
+        setPremiere(found.premiere === true);
         setScheduleDateTime(
           found.scheduledOn ? formatDateTimeLocal(new Date(found.scheduledOn)) : '',
         );
@@ -206,6 +210,7 @@ export default function ScheduledPostEditor({ permlink, onClose, onSaved, onCanc
           tags: tagsPreview,
           payoutOptions,
           beneficiaries: cleanedBenes,
+          premiere,
         },
       }, {
         headers: CHECKER_API_KEY ? { Authorization: `Bearer ${CHECKER_API_KEY}` } : {},
@@ -363,6 +368,7 @@ export default function ScheduledPostEditor({ permlink, onClose, onSaved, onCanc
                 onChange={setScheduleDateTime}
               />
               <ScheduleManualDate value={scheduleDateTime} onChange={setScheduleDateTime} />
+              <PremiereSwitch checked={premiere} onChange={setPremiere} />
               {when && !inPast && (
                 <p className="esp-note is-cyan">
                   <Icon name="schedule_send" size={16} />

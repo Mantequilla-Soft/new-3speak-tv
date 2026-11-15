@@ -315,6 +315,29 @@ describe('the audio player: swipes on a phone', () => {
     expect(audio().currentTime).toBe(40)
   })
 
+  it('a press on the timeline scrubs it and is never taken for a swipe', () => {
+    if (!window.PointerEvent) {
+      window.PointerEvent = class extends MouseEvent {
+        constructor(type, init = {}) { super(type, init); this.pointerId = init.pointerId ?? 1; this.pointerType = init.pointerType ?? 'mouse' }
+      }
+    }
+    mount()
+    play(A)
+    loaded()
+    at(40)
+    const line = bar().querySelector('.audio-np-progress[role="slider"]')
+    swipe(line, -90, 4)
+    expect(audio().currentTime).toBe(40)
+    vi.spyOn(line, 'getBoundingClientRect').mockReturnValue({ left: 0, width: 400, top: 0, height: 4, right: 400, bottom: 4 })
+    fireEvent.pointerDown(line, { clientX: 100, button: 0, pointerId: 3, pointerType: 'touch' })
+    fireEvent.pointerMove(line, { clientX: 300, pointerId: 3 })
+    expect(line.querySelector('.tl-scrub-tip')).toHaveTextContent('1:30')
+    expect(audio().currentTime).toBe(40)
+    fireEvent.pointerUp(line, { clientX: 300, pointerId: 3 })
+    expect(audio().currentTime).toBe(90)
+    expect(store().audioExpanded).toBeFalsy()
+  })
+
   it('up opens the full player, and down on the full player collapses it', () => {
     mount()
     play(A)

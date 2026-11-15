@@ -30,6 +30,9 @@ import { canSubscribe, setCommunitySubscription } from '../components/Communitie
 import { fixVideoThumbnail, fallbackImg } from '../utils/fixThumbnails';
 import { isLoggedIn } from '../hive-api/aioha';
 import MountWhenOpened from '../components/common/LazyMount';
+import useTimelineScrub from '../hooks/useTimelineScrub';
+import ScrubOverlay from '../components/GlobalAudioPlayer/ScrubOverlay';
+import { seekKeyTarget, timelineSliderProps } from '../lib/sliderKeys';
 import './AudioPost.scss';
 
 // Only the creator ever opens it, so it loads on the first Edit.
@@ -186,12 +189,12 @@ function AudioPost() {
     else audioPlay(audioDoc, [audioDoc]);
   };
 
-  const onSeek = (e) => {
-    if (!isThisCurrent || !total) return;
-    const rect = e.currentTarget.getBoundingClientRect();
-    const time = ((e.clientX - rect.left) / rect.width) * total;
-    audioRequestSeek(time);
-  };
+  // Press and drag on the progress line (no waveform): the seek lands on release.
+  const scrub = useTimelineScrub({
+    duration: total,
+    disabled: !isThisCurrent,
+    onSeek: (sec) => { if (isThisCurrent && total) audioRequestSeek(sec); },
+  });
 
   // Build a videoDetails-shaped object so CommentSection can consume it
   const videoDetails = useMemo(() => {
@@ -412,14 +415,27 @@ function AudioPost() {
                     samples={samples}
                     audioRef={clockRef}
                     duration={total}
+                    currentTime={elapsed}
                     playhead={isThisCurrent}
                     pins={pins}
                     onPin={(p) => { seekTo(p.at); setSideTab('notes'); }}
                     onSeek={seekFraction}
                   />
                 ) : (
-                  <div className="audio-post-progress" onClick={onSeek}>
-                    <div className="audio-post-progress-fill" style={{ width: `${total > 0 ? (elapsed / total) * 100 : 0}%` }} />
+                  <div
+                    className={`audio-post-progress${scrub.dragging ? ' is-scrubbing' : ''}`}
+                    {...timelineSliderProps({ value: scrub.dragging ? scrub.time : elapsed, max: total, label: t('playerKeys.seekLabel'), t })}
+                    onKeyDown={(e) => {
+                      if (e.ctrlKey || e.metaKey || e.altKey) return;
+                      const to = seekKeyTarget(e.key, elapsed, total);
+                      if (to === null) return;
+                      e.preventDefault();
+                      seekFraction(to / total);
+                    }}
+                    {...scrub.handlers}
+                  >
+                    <div className="audio-post-progress-fill" style={{ width: `${total > 0 ? Math.min(100, (scrub.dragging ? scrub.fraction : elapsed / total) * 100) : 0}%` }} />
+                    <ScrubOverlay fraction={scrub.fraction} time={scrub.time} />
                   </div>
                 )}
               </div>

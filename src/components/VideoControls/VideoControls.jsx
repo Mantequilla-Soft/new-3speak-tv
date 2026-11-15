@@ -2,6 +2,7 @@ import { useState, useCallback, useRef, useEffect, useMemo } from 'react';
 import useSeekPreview from '../../hooks/useSeekPreview';
 import { chapterAt } from '../../utils/timestamps';
 import { createPortal } from 'react-dom';
+import { seekKeyTarget, timelineSliderProps } from '../../lib/sliderKeys';
 import { useTranslation } from 'react-i18next';
 import { Icon } from '../v2/Icon';
 import { SUPPORTED_LANGUAGES } from '../../utils/translate';
@@ -112,6 +113,12 @@ function VideoControls({
   onPlaybackRateChange,
   onHoldControls,
   onReleaseControls,
+  // Theater (wide) mode on the watch page; null where there is no room for it.
+  isTheater = false,
+  onToggleTheater = null,
+  // Play the video again from the start when it ends, instead of moving on.
+  loop = false,
+  onToggleLoop = null,
 }) {
   const { t } = useTranslation();
   const resolvedMarkers = markers || [];
@@ -406,6 +413,23 @@ function VideoControls({
         <div
           className="vc-progress-track"
           ref={trackRef}
+          // A real slider (WAI-ARIA): focusable, announced as "1:05 of 4:00",
+          // and moved by the arrows (5 s), Page Up/Down (10 %), Home and End.
+          // preventDefault keeps the page's own arrow keys (10 s) out of it.
+          {...timelineSliderProps({
+            value: dragProgress !== null ? (dragProgress / 100) * duration : currentTime,
+            max: duration,
+            label: t('playerKeys.seekLabel'),
+            t,
+            disabled: adPlaying,
+          })}
+          onKeyDown={(e) => {
+            if (e.ctrlKey || e.metaKey || e.altKey) return;
+            const to = seekKeyTarget(e.key, currentTime, duration);
+            if (to === null) return;
+            e.preventDefault();
+            onSeek?.(to);
+          }}
           onMouseDown={handleTrackPointerDown}
           onTouchStart={handleTrackPointerDown}
           onMouseMove={(e) => { if (!isTouchDevice && previewVideoId) showSeekPreview(e.clientX); }}
@@ -585,6 +609,18 @@ function VideoControls({
               aria-pressed={!!autoplayNext}
             >
               <Icon name="skip_next" size={22} fill={!!autoplayNext} />
+            </button>
+          )}
+          {onToggleLoop && (
+            <button
+              type="button"
+              className={`vc-btn vc-btn--loop${loop ? ' active' : ''}`}
+              onClick={onToggleLoop}
+              title={loop ? t('playerKeys.loopOn') : t('playerKeys.loopOff')}
+              aria-label={t('playerKeys.loop')}
+              aria-pressed={!!loop}
+            >
+              <Icon name="repeat" size={20} />
             </button>
           )}
           {onToggleGlow && (
@@ -842,6 +878,18 @@ function VideoControls({
                     <Icon name="skip_next" size={20} fill={!!autoplayNext} />
                   </button>
                 )}
+                {onToggleLoop && (
+                  <button
+                    type="button"
+                    className={`vc-mobile-settings-item${loop ? ' active' : ''}`}
+                    onClick={() => { onToggleLoop(); }}
+                    title={loop ? t('playerKeys.loopOn') : t('playerKeys.loopOff')}
+                    aria-label={t('playerKeys.loop')}
+                    aria-pressed={!!loop}
+                  >
+                    <Icon name="repeat" size={20} />
+                  </button>
+                )}
                 {subtitleLanguages && subtitleLanguages.length > 0 && (
                   <button
                     type="button"
@@ -878,6 +926,18 @@ function VideoControls({
               </div>
             )}
           </div>
+          {onToggleTheater && !isFullscreen && (
+            <button
+              type="button"
+              className={`vc-btn vc-btn--theater${isTheater ? ' active' : ''}`}
+              onClick={onToggleTheater}
+              title={`${isTheater ? t('playerKeys.theaterExit') : t('playerKeys.theater')} (t)`}
+              aria-label={isTheater ? t('playerKeys.theaterExit') : t('playerKeys.theater')}
+              aria-pressed={!!isTheater}
+            >
+              <Icon name="crop_landscape" size={22} />
+            </button>
+          )}
           <button type="button" className="vc-btn vc-btn--fullscreen" onClick={onToggleFullscreen} title={isFullscreen ? t('player.controls.exitFullscreen') : t('player.controls.fullscreen')} aria-label={isFullscreen ? t('player.controls.exitFullscreen') : t('player.controls.fullscreen')}>
             <Icon name={isFullscreen ? 'fullscreen_exit' : 'fullscreen'} size={22} />
           </button>

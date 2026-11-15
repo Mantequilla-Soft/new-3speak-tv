@@ -1,0 +1,29 @@
+{
+  "valueText": "{{time}} kati ya {{total}}",
+  "seekLabel": "Sogeza",
+  "loop": "Rudia",
+  "loopOn": "Kurudia kumewashwa",
+  "loopOff": "Rudia video hii",
+  "theater": "Hali ya sinema",
+  "theaterExit": "Mwonekano wa kawaida",
+  "title": "Njia za mkato za kibodi",
+  "sub": "Zinafanya kazi popote kwenye ukurasa, isipokuwa unapoandika.",
+  "keySpace": "Nafasi",
+  "keyShift": "Shift",
+  "list": {
+    "playPause": "Cheza au simamisha",
+    "back10": "Rudi nyuma sekunde 10",
+    "forward10": "Songa mbele sekunde 10",
+    "arrows": "Rudi nyuma au songa mbele sekunde 10",
+    "frame": "Fremu moja nyuma au mbele",
+    "percent": "Ruka hadi 0% hadi 90% ya video",
+    "volume": "Ongeza au punguza sauti",
+    "mute": "Zima au washa sauti",
+    "captions": "Manukuu washa au zima",
+    "fullscreen": "Skrini nzima",
+    "theater": "Hali ya sinema washa au zima",
+    "save": "Hifadhi",
+    "share": "Shiriki",
+    "help": "Onyesha orodha hii"
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "valueText": "{{time}} di {{total}}",
+  "seekLabel": "Posizione",
+  "loop": "Ripeti",
+  "loopOn": "Ripetizione attiva",
+  "loopOff": "Ripeti questo video",
+  "theater": "Modalità cinema",
+  "theaterExit": "Vista predefinita",
+  "title": "Scorciatoie da tastiera",
+  "sub": "Funzionano ovunque nella pagina, tranne mentre scrivi.",
+  "keySpace": "Spazio",
+  "keyShift": "Maiusc",
+  "list": {
+    "playPause": "Riproduci o metti in pausa",
+    "back10": "Indietro di 10 secondi",
+    "forward10": "Avanti di 10 secondi",
+    "arrows": "Indietro o avanti di 10 secondi",
+    "frame": "Un fotogramma indietro o avanti",
+    "percent": "Vai dallo 0% al 90% del video",
+    "volume": "Alza o abbassa il volume",
+    "mute": "Disattiva o riattiva l'audio",
+    "captions": "Sottotitoli sì o no",
+    "fullscreen": "Schermo intero",
+    "theater": "Modalità cinema sì o no",
+    "save": "Salva",
+    "share": "Condividi",
+    "help": "Mostra questo elenco"
+  }
+}

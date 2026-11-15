@@ -700,7 +700,10 @@ describe('a scheduled post', () => {
       parentPermlink: 'hive-181335',
       embedPermlink: 'asset-1',
       reblog: true,
+      // Listing as a premiere is opt-in: off unless switched on.
+      premiere: false,
     })
+    expect(body.jsonMetadata.video.premiere).toBeUndefined()
     expect(body.body).toContain(h.EMBED_URL)
     expect(body.jsonMetadata.app).toBe('3speak/embed')
     expect(body).toMatchObject({ signature: 'OWNER-SIG', timestamp: 4242 })
@@ -708,6 +711,14 @@ describe('a scheduled post', () => {
     expect(fetchTo('/hive')).toHaveLength(0)
     expect(result.current).toMatchObject({ completed: true, uploading: false, uploadProgress: 100 })
     expect(h.fns.toastSuccess).toHaveBeenCalledWith('upload.publishing.scheduled')
+  })
+
+  it('"List as a premiere" goes to the checker and into the post\'s metadata', async () => {
+    const { result } = await ready((c) => { asScheduled(c); c.setIsPremiere(true) })
+    await publish(result)
+    const [, body] = scheduleCall()
+    expect(body.premiere).toBe(true)
+    expect(body.jsonMetadata.video.premiere).toBe(true)
   })
 
   it('asks once for @threespeak posting authority when it is missing', async () => {

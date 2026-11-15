@@ -50,6 +50,9 @@ $menu-bg: color-mix(in srgb, var(--media-black) 90%, transparent);
     transition: height var(--t-fast) var(--ease);
 
     &:hover { height: 8px; }
+    // Keyboard focus (it is a slider): a ring outside the bar, never on a click.
+    &:focus { outline: none; }
+    &:focus-visible { height: 8px; outline: 2px solid var(--on-media); outline-offset: 4px; }
 
     // Invisible expanded tap/click target
     &::after {
@@ -775,6 +778,8 @@ $menu-bg: color-mix(in srgb, var(--media-black) 90%, transparent);
     .vc-btn--resize,
     .vc-btn--glow,
     .vc-btn--autoplay,
+    .vc-btn--loop,
+    .vc-btn--theater,
     .vc-btn--react { display: none; }
 
     // Hide the triggers inside the wraps, but keep the wraps so menus can render

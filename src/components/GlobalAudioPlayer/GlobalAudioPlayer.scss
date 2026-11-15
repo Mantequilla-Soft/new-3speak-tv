@@ -1511,3 +1511,10 @@ $wide: 1025px;   // the side-by-side full player; the bottom nav shows up to 102
   15%, 70% { opacity: 1; scale: 1; }
   100% { opacity: 0; }
 }
+
+// The timeline is a slider (keyboard + screen readers): a ring on keyboard focus only.
+.audio-np-progress,
+.audio-np-waveform {
+  &:focus { outline: none; }
+  &:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: var(--r-sm); }
+}

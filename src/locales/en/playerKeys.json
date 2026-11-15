@@ -1,0 +1,29 @@
+{
+  "valueText": "{{time}} of {{total}}",
+  "seekLabel": "Seek",
+  "loop": "Loop",
+  "loopOn": "Loop is on",
+  "loopOff": "Loop this video",
+  "theater": "Theater mode",
+  "theaterExit": "Default view",
+  "title": "Keyboard shortcuts",
+  "sub": "They work anywhere on the page, except while you type.",
+  "keySpace": "Space",
+  "keyShift": "Shift",
+  "list": {
+    "playPause": "Play or pause",
+    "back10": "Back 10 seconds",
+    "forward10": "Forward 10 seconds",
+    "arrows": "Back or forward 10 seconds",
+    "frame": "One frame back or forward",
+    "percent": "Jump to 0% to 90% of the video",
+    "volume": "Volume up or down",
+    "mute": "Mute or unmute",
+    "captions": "Captions on or off",
+    "fullscreen": "Fullscreen",
+    "theater": "Theater mode on or off",
+    "save": "Save",
+    "share": "Share",
+    "help": "Show this list"
+  }
+}

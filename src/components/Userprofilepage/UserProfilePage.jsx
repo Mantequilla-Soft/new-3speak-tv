@@ -37,6 +37,7 @@ import CommunitySnaps from './CommunitySnaps';
 import SpotlightEditor from '../Spotlight/SpotlightEditor';
 import ProfileStreams, { ProfileLiveNow } from './ProfileStreams';
 import NotifyLevelButton from '../NotifyLevel/NotifyLevelButton';
+import UpcomingPremieres from '../Premiere/UpcomingPremieres';
 import { fetchSnaps } from '../../lib/snaps';
 import SocialLinks from './SocialLinks';
 import LeaderboardBadges from '../LeaderboardBadges/LeaderboardBadges';
@@ -718,6 +719,7 @@ const {
     <>
       {/* A live stream comes first, ahead of the videos. */}
       <ProfileLiveNow user={user} />
+      <UpcomingPremieres owner={user} />
       {isLoading ? (
         <BarLoader />
       ) : videos?.length === 0 ? (

@@ -1,0 +1,29 @@
+{
+  "valueText": "{{time}} / {{total}}",
+  "seekLabel": "拖动进度",
+  "loop": "循环",
+  "loopOn": "循环已开启",
+  "loopOff": "循环播放此视频",
+  "theater": "影院模式",
+  "theaterExit": "默认视图",
+  "title": "键盘快捷键",
+  "sub": "在页面任何位置都可用，输入文字时除外。",
+  "keySpace": "空格",
+  "keyShift": "Shift",
+  "list": {
+    "playPause": "播放或暂停",
+    "back10": "后退 10 秒",
+    "forward10": "前进 10 秒",
+    "arrows": "后退或前进 10 秒",
+    "frame": "后退或前进一帧",
+    "percent": "跳到视频的 0% 至 90%",
+    "volume": "调高或调低音量",
+    "mute": "静音或取消静音",
+    "captions": "开启或关闭字幕",
+    "fullscreen": "全屏",
+    "theater": "开启或关闭影院模式",
+    "save": "保存",
+    "share": "分享",
+    "help": "显示此列表"
+  }
+}

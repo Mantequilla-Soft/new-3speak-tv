@@ -1,0 +1,57 @@
+@use "../../styles/v2" as v2;
+
+// The "?" keyboard sheet: two columns, key caps on the left.
+.kbs__list {
+  display: grid;
+  gap: 2px;
+  margin: 0;
+}
+
+.kbs__row {
+  display: grid;
+  grid-template-columns: 132px minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+  min-height: 40px;
+  padding: 4px 0;
+  border-bottom: 1px solid var(--border);
+
+  &:last-child { border-bottom: 0; }
+
+  @include v2.mobile { grid-template-columns: 112px minmax(0, 1fr); }
+}
+
+.kbs__keys {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  margin: 0;
+}
+
+.kbs__kbd {
+  display: inline-grid;
+  place-items: center;
+  min-width: 28px;
+  height: 28px;
+  padding: 0 8px;
+  border-radius: var(--r-sm);
+  background: var(--surface-2);
+  color: var(--text);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.kbs__sep {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.kbs__what {
+  margin: 0;
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.35;
+}

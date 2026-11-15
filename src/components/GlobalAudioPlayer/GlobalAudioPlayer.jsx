@@ -61,6 +61,10 @@ import useAudioAd from '../../hooks/useAudioAd';
 import TickerCrawl from '../ads/TickerCrawl';
 import { audioItemPath } from '../AudioItem/AudioItemView';
 import mantequillaLogo from '../../assets/mantequilla-logo.png';
+import { seekKeyTarget, timelineSliderProps } from '../../lib/sliderKeys';
+import useTimelineScrub from '../../hooks/useTimelineScrub';
+import { isLocalSource } from '../../lib/timelineScrub';
+import ScrubOverlay from './ScrubOverlay';
 import '../../page/Audio.scss';
 import './GlobalAudioPlayer.scss';
 
@@ -1114,12 +1118,6 @@ function GlobalAudioPlayer() {
     el.currentTime = skipTarget(el.currentTime, delta, d);
   }, []);
 
-  const handleSeek = useCallback((e) => {
-    const el = audioRef.current;
-    if (!el || !audioDuration || isLive) return;
-    el.currentTime = ((e.clientX - e.currentTarget.getBoundingClientRect().left) / e.currentTarget.getBoundingClientRect().width) * audioDuration;
-  }, [audioDuration, isLive]);
-
   const playNext = useCallback(() => {
     if (!audioCurrent) return;
     if (audioQueue.length > 0) {
@@ -1475,6 +1473,16 @@ function GlobalAudioPlayer() {
     </div>
   ) : null;
 
+  // Press and drag on the timelines (hooks/useTimelineScrub.js). Before the early
+  // returns below: a hook must run on every render.
+  const localSrc = isLocalSource(audioRef.current?.currentSrc);
+  const scrub = useTimelineScrub({
+    duration: audioDuration,
+    local: localSrc,
+    disabled: isLive,
+    onSeek: (sec) => { const el = audioRef.current; if (el) el.currentTime = sec; },
+  });
+
   // Every return has the same root (the provider) with {audioEl} first, so React
   // keeps ONE <audio> element from the idle bar to playing. With a Fragment here
   // it was remounted on the first play, and effects bound to the element by elKey
@@ -1493,7 +1501,7 @@ function GlobalAudioPlayer() {
           ref={npRef}
           className="audio-now-playing gap-bar audio-np-idle"
           // A swipe down does what its X does: clear the queue, the bar goes.
-          onTouchStart={(e) => { const p = e.touches[0]; swipeRef.current = p ? { x: p.clientX, y: p.clientY } : null; }}
+          onTouchStart={(e) => { const p = e.touches[0]; swipeRef.current = p && !e.target.closest?.('[role="slider"]') ? { x: p.clientX, y: p.clientY } : null; }}
           onTouchEnd={(e) => {
             const from = swipeRef.current;
             swipeRef.current = null;
@@ -1685,10 +1693,30 @@ function GlobalAudioPlayer() {
   ));
 
   // The seek bar where there is no waveform (outside episodes), with chapter ticks.
+  // A slider for the keyboard and screen readers too (lib/sliderKeys.js); a live
+  // stream has no timeline, so it is a plain bar there.
+  const seekKeys = (e) => {
+    const el = audioRef.current;
+    if (isLive || !el || !(audioDuration > 0) || e.ctrlKey || e.metaKey || e.altKey) return;
+    const to = seekKeyTarget(e.key, el.currentTime, audioDuration);
+    if (to === null) return;
+    e.preventDefault();
+    e.stopPropagation();
+    el.currentTime = to;
+  };
+  // Press and drag scrubs (hooks/useTimelineScrub.js): the time shows above a
+  // thumb while dragging, the seek lands on release (live for a downloaded file).
+  const scrubFill = scrub.dragging ? scrub.fraction : (audioDuration ? audioCurrentTime / audioDuration : 0);
   const progressBar = (
-    <div className={cx('audio-np-progress', isLive && 'is-live')} onClick={isLive ? undefined : handleSeek}>
-      {!isLive && <div className="audio-np-progress-fill" style={{ width: audioDuration ? `${(audioCurrentTime / audioDuration) * 100}%` : '0%' }} />}
+    <div
+      className={cx('audio-np-progress', isLive && 'is-live', scrub.dragging && 'is-scrubbing')}
+      {...(isLive ? {} : timelineSliderProps({ value: scrub.dragging ? scrub.time : audioCurrentTime, max: audioDuration, label: t('playerKeys.seekLabel'), t }))}
+      onKeyDown={seekKeys}
+      {...(isLive ? {} : scrub.handlers)}
+    >
+      {!isLive && <div className="audio-np-progress-fill" style={{ width: `${Math.min(100, scrubFill * 100)}%` }} />}
       {markers.map((f, i) => <span key={i} className="audio-np-progress-marker" style={{ left: `${f * 100}%` }} aria-hidden="true" />)}
+      {!isLive && <ScrubOverlay fraction={scrub.fraction} time={scrub.time} />}
     </div>
   );
 
@@ -1786,7 +1814,7 @@ function GlobalAudioPlayer() {
       className={cx('audio-now-playing gap-bar', isLive && 'is-live', !!transcriptPanel && 'has-panel')}
       // Phones (27c + owner 2026-11-12): up opens the player, down closes it,
       // left / right go back / forward 15 s (not on a live stream).
-      onTouchStart={(e) => { const p = e.touches[0]; swipeRef.current = p ? { x: p.clientX, y: p.clientY } : null; }}
+      onTouchStart={(e) => { const p = e.touches[0]; swipeRef.current = p && !e.target.closest?.('[role="slider"]') ? { x: p.clientX, y: p.clientY } : null; }}
       onTouchEnd={(e) => {
         const from = swipeRef.current;
         swipeRef.current = null;
@@ -1853,6 +1881,8 @@ function GlobalAudioPlayer() {
               audioRef={audioRef}
               duration={audioDuration}
               markers={markers}
+              currentTime={audioCurrentTime}
+              local={localSrc}
               onSeek={(f) => { const el = audioRef.current; if (el && audioDuration > 0) el.currentTime = f * audioDuration; }}
             />
           )}
@@ -2034,10 +2064,12 @@ function GlobalAudioPlayer() {
                 audioRef={audioRef}
                 duration={audioDuration}
                 markers={markers}
+                currentTime={audioCurrentTime}
                 playhead
                 pins={pins}
                 onPin={(p) => { seekTo(p.at); setCommentScope('moment'); pickTab('comments'); }}
-                onSeek={(f) => { const el = audioRef.current; if (el && audioDuration > 0) el.currentTime = f * audioDuration; }}
+                local={localSrc}
+              onSeek={(f) => { const el = audioRef.current; if (el && audioDuration > 0) el.currentTime = f * audioDuration; }}
               />
             ) : progressBar}
           </div>

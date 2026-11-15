@@ -52,6 +52,23 @@ $wide: 1024px;
     // Cinema: the player takes the whole width; the panels follow below it.
     .reaction-cinema > & { grid-template-columns: minmax(0, 1fr); grid-template-areas: "strip" "stage" "main" "side" "aside"; }
   }
+
+  // Theater (T, or the button by fullscreen): the player across the whole page,
+  // the side panel beside the details under it, with a height of its own.
+  @include wide {
+    .is-theater > & {
+      grid-template-columns: minmax(0, 1fr) var(--side-panel-w);
+      grid-template-areas: "strip strip" "stage stage" "main side" "main aside";
+    }
+    .is-theater > & .video-iframe-wrapper:not(:fullscreen) {
+      padding-top: 0;
+      aspect-ratio: 16 / 9;
+      // Never taller than the window under the top bar, so the controls stay on screen.
+      max-height: calc(100dvh - var(--nav-top-offset, 64px) - 96px);
+      min-height: 360px;
+    }
+    .is-theater > & .wv2-side.is-wide { height: 560px; align-self: start; }
+  }
 }
 
 /* ─── Stage: the player with its glow ─────────────────────────────────────── */
