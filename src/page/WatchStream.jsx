@@ -17,6 +17,7 @@ import StreamBoostGoalBar from '../components/openpods/StreamBoostGoalBar';
 import { LiveCaptionsOverlay, LiveCaptionsToggle, useCaptionsPref } from '../components/openpods/LiveCaptions';
 import { useBoostLabels } from '../components/openpods/boostLabels';
 import { useBattleLabels } from '../components/openpods/battleLabels';
+import { useLiveLabels, raidPath } from '../components/openpods/liveLabels';
 import { useStreamSession } from '../hooks/useStreamSession';
 import { useLiveStreamPager } from '../hooks/useLiveStreamPager';
 import { useStreamChatMirror } from '../hooks/useStreamChatMirror';
@@ -187,8 +188,12 @@ export default function WatchStream() {
   // The SDK's goal bar text in the site language (live.boost.dialog).
   const boostLabels = useBoostLabels();
   const battleLabels = useBattleLabels();
+  // Polls, predictions and raids in the site language (liveInteract.labels).
+  const liveLabels = useLiveLabels();
   const { streamId } = useParams();
   const navigate = useNavigate();
+  // The host raided another stream: go along to it.
+  const onRaid = useCallback((target) => navigate(raidPath(target)), [navigate]);
   const { aioha, sessionToken, hangoutsUser, connectReady, joinKey, needsSignIn, canInteract, signIn, signingIn } = useStreamSession();
 
   const [state, setState] = useState({ status: 'loading', room: null, hivePost: null });
@@ -397,7 +402,7 @@ export default function WatchStream() {
           aioha={aioha}
         >
           {!connectReady ? <BarLoader /> : (
-            <StandaloneWatch key={joinKey} roomName={streamId} connecting={<BarLoader />} audioMuted={prerollHold}>
+            <StandaloneWatch key={joinKey} roomName={streamId} connecting={<BarLoader />} audioMuted={prerollHold} onRaid={onRaid} liveLabels={liveLabels}>
               <main className={`short-main no-bottom-bar ws-shorts${isLandscape ? ' ws-shorts--landscape' : ''}${!infoVisible ? ' ws-info-hidden' : ''}${prerollHold ? ' ws-preroll-on' : ''}${chatOverlayOn ? '' : ' ws-chat-off'}${controlsHidden ? ' ws-controls-hidden' : ''}`}>
                 <div className="videoWrapper">
                   <div className="videoContainer" ref={pagerRef} onClick={revealInfo}>
@@ -510,7 +515,7 @@ export default function WatchStream() {
                     {chatOverlayOn && (
                       <div className="ws-shorts__chat">
                         {/* Messages only — the composer lives in the bottom bar. */}
-                        <ChatPanel readOnly readOnlyNotice="" />
+                        <ChatPanel readOnly readOnlyNotice="" liveLabels={liveLabels} />
                       </div>
                     )}
                   </div>
@@ -556,7 +561,7 @@ export default function WatchStream() {
       >
         {!connectReady ? <BarLoader /> : (
 
-        <StandaloneWatch key={joinKey} roomName={streamId} connecting={<BarLoader />} audioMuted={prerollHold}>
+        <StandaloneWatch key={joinKey} roomName={streamId} connecting={<BarLoader />} audioMuted={prerollHold} onRaid={onRaid} liveLabels={liveLabels}>
           {/* Live strip (18c): LIVE, time on air, who is watching, playback quality. */}
           <div className="ws-strip">
             <StatusPill tone="live" className="ws-live-tag">{t('feeds.live.badge')}</StatusPill>
@@ -634,6 +639,7 @@ export default function WatchStream() {
                     readOnly={!canInteract}
                     readOnlyNotice={chatNotice}
                     onMessageSent={mirrorChatToHive}
+                    liveLabels={liveLabels}
                   />
                 </div>
                 {chatTab === 'supporters' && (

@@ -1,0 +1,39 @@
+{
+  "labels": {
+    "raidLine": "{name} さんが視聴者 {count} 人とレイド中",
+    "raidTitle": "@{host} さんが別の配信にレイドします",
+    "raidBody": "{seconds} 秒後に視聴者全員が {title} へ移動します。",
+    "raidGoNow": "今すぐ移動",
+    "raidStay": "ここに残る",
+    "pollBadge": "投票",
+    "predictionBadge": "予想",
+    "endsIn": "残り {time}",
+    "finalResults": "最終結果",
+    "votes": "投票数: {count}",
+    "youVoted": "投票しました",
+    "signInToVote": "ログインして投票",
+    "voteFailed": "うまくいきませんでした。もう一度お試しください。",
+    "pot": "合計: {points} ポイント",
+    "balance": "所持ポイント: {points}",
+    "stakeButton": "賭ける",
+    "stakePlaceholder": "ポイント",
+    "yourStake": "{option} に {points} ポイントを賭けました",
+    "waitingForResult": "結果待ち",
+    "outcomeWon": "{option} の勝ち",
+    "youWon": "{points} ポイントが戻りました",
+    "cancelled": "中止になりました。ポイントはそのままです",
+    "close": "閉じる"
+  },
+  "replay": {
+    "tab": "ライブチャットのリプレイ",
+    "label": "動画に合わせて流れるライブチャット",
+    "loading": "ライブチャットを読み込み中",
+    "empty": "ライブチャットへの書き込みはありませんでした。",
+    "seekTo": "{{time}} へ移動",
+    "poll": "投票",
+    "prediction": "予想",
+    "votes": "投票数: {{count}}",
+    "won": "{{option}} の勝ち",
+    "follow": "現在の位置に戻る"
+  }
+}

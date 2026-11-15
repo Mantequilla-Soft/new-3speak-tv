@@ -1,0 +1,39 @@
+{
+  "labels": {
+    "raidLine": "{name} กำลังเรดพร้อมผู้ชม {count} คน",
+    "raidTitle": "@{host} กำลังเรดไปยังสตรีมอื่น",
+    "raidBody": "ทุกคนที่กำลังดูจะย้ายไปที่ {title} ใน {seconds} วินาที",
+    "raidGoNow": "ไปเลย",
+    "raidStay": "อยู่ที่นี่",
+    "pollBadge": "โพล",
+    "predictionBadge": "การทาย",
+    "endsIn": "สิ้นสุดใน {time}",
+    "finalResults": "ผลสุดท้าย",
+    "votes": "จำนวนโหวต: {count}",
+    "youVoted": "คุณโหวตแล้ว",
+    "signInToVote": "ลงชื่อเข้าใช้เพื่อโหวต",
+    "voteFailed": "ไม่สำเร็จ ลองอีกครั้ง",
+    "pot": "เงินกองกลาง: {points} แต้ม",
+    "balance": "คุณมี {points} แต้ม",
+    "stakeButton": "ลงแต้ม",
+    "stakePlaceholder": "แต้ม",
+    "yourStake": "คุณลง {points} แต้มที่ {option}",
+    "waitingForResult": "กำลังรอผล",
+    "outcomeWon": "{option} ชนะ",
+    "youWon": "คุณได้คืน {points} แต้ม",
+    "cancelled": "ยกเลิกแล้ว ทุกคนได้แต้มคืนครบ",
+    "close": "ปิด"
+  },
+  "replay": {
+    "tab": "แชทสดย้อนหลัง",
+    "label": "แชทสดที่เลื่อนไปพร้อมวิดีโอ",
+    "loading": "กำลังโหลดแชทสด",
+    "empty": "ไม่มีใครเขียนในแชทสด",
+    "seekTo": "ไปที่ {{time}}",
+    "poll": "โพล",
+    "prediction": "การทาย",
+    "votes": "จำนวนโหวต: {{count}}",
+    "won": "{{option}} ชนะ",
+    "follow": "กลับไปยังช่วงปัจจุบัน"
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "labels": {
+    "raidLine": "Nagre-raid si {name} kasama ang {count} manonood",
+    "raidTitle": "Nagre-raid si @{host} sa ibang stream",
+    "raidBody": "Lahat ng nanonood ay lilipat sa {title} sa loob ng {seconds} s.",
+    "raidGoNow": "Pumunta na",
+    "raidStay": "Dito na lang",
+    "pollBadge": "Poll",
+    "predictionBadge": "Hula",
+    "endsIn": "Matatapos sa {time}",
+    "finalResults": "Huling resulta",
+    "votes": "Mga boto: {count}",
+    "youVoted": "Bumoto ka na",
+    "signInToVote": "Mag-sign in para bumoto",
+    "voteFailed": "Hindi gumana. Subukan ulit.",
+    "pot": "Pot: {points} points",
+    "balance": "May {points} points ka",
+    "stakeButton": "Itaya",
+    "stakePlaceholder": "Points",
+    "yourStake": "Itinaya mo ang {points} points sa {option}",
+    "waitingForResult": "Hinihintay ang resulta",
+    "outcomeWon": "Nanalo ang {option}",
+    "youWon": "Nabawi mo ang {points} points",
+    "cancelled": "Kinansela, walang nawalan ng points",
+    "close": "Isara"
+  },
+  "replay": {
+    "tab": "Replay ng live chat",
+    "label": "Ang live chat, kasabay ng video",
+    "loading": "Nilo-load ang live chat",
+    "empty": "Walang sumulat sa live chat.",
+    "seekTo": "Pumunta sa {{time}}",
+    "poll": "Poll",
+    "prediction": "Hula",
+    "votes": "Mga boto: {{count}}",
+    "won": "Nanalo ang {{option}}",
+    "follow": "Bumalik sa kasalukuyan"
+  }
+}

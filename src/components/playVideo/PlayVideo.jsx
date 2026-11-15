@@ -1644,9 +1644,10 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
     },
     premiereTab && !premiereLive && {
       id: 'premiere',
-      label: t('premieres.chat.replayTab'),
+      // A stream VOD's chat replay brings its own label (Watch.jsx).
+      label: premiereTab.label || t('premieres.chat.replayTab'),
       flush: true,
-      content: premiereTab.render(seekFromText),
+      content: premiereTab.render(seekFromText, videoControls?.currentTime || 0),
     },
     hasSubtitles && {
       id: 'transcript',

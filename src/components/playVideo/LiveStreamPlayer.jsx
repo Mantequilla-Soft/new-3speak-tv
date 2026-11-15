@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { HangoutsProvider, StandaloneWatch, StreamVideo, StreamViewerCount, ChatPanel, CollabRequest, useStreamLive } from '@snapie/hangouts-react';
 import { defaultEndpoint, findRoomEndpoint } from '../../utils/hangoutsEndpoints';
@@ -12,6 +13,7 @@ import StreamWatermark from '../openpods/StreamWatermark';
 import { useBoostLabels } from '../openpods/boostLabels';
 import { useBattleLabels } from '../openpods/battleLabels';
 import { LiveCaptionsOverlay, LiveCaptionsToggle, useCaptionsPref } from '../openpods/LiveCaptions';
+import { useLiveLabels, raidPath } from '../openpods/liveLabels';
 import '@snapie/hangouts-react/src/styles/hangouts.css';
 import './LiveStreamPlayer.scss';
 import { Icon } from '../v2/Icon';
@@ -98,6 +100,10 @@ export default function LiveStreamPlayer({ roomName, chatSlot = null, onChatSent
   const battleLabels = useBattleLabels();
   // H11: the viewer's live captions switch (shown only while the host captions).
   const [captionsOn, toggleCaptions] = useCaptionsPref();
+  // Polls, predictions and raids in the site language; a raid moves the viewer on.
+  const liveLabels = useLiveLabels();
+  const navigate = useNavigate();
+  const onRaid = useCallback((target) => navigate(raidPath(target)), [navigate]);
 
   if (!roomName) return null;
   return (
@@ -110,7 +116,7 @@ export default function LiveStreamPlayer({ roomName, chatSlot = null, onChatSent
         aioha={aioha}
       >
         {connectReady && endpointReady && (
-          <StandaloneWatch key={`${joinKey}:${endpoint.api}`} roomName={roomName} audioMuted={prerollHold}>
+          <StandaloneWatch key={`${joinKey}:${endpoint.api}`} roomName={roomName} audioMuted={prerollHold} onRaid={onRaid} liveLabels={liveLabels}>
             <StreamVideo showLiveBadge boostLabels={boostLabels} battleLabels={battleLabels} />
             {/* A free host's stream from OBS: the page draws the 3Speak mark
                 the browser studio would have burned into the picture. */}
@@ -140,6 +146,7 @@ export default function LiveStreamPlayer({ roomName, chatSlot = null, onChatSent
                   ? <StreamSignInButton label={t('comments.live.signInChat')} onSignIn={signIn} busy={signingIn} />
                   : t('comments.live.signInJoinChat')}
                 onMessageSent={onChatSent || undefined}
+                liveLabels={liveLabels}
               />,
               chatSlot,
             )}
