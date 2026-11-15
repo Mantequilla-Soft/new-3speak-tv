@@ -66,7 +66,7 @@ export default function StreamClipButton({ roomName, variant = 'inline' }) {
     }
   }, [busy, roomName, apiUrl, apiClient, t]);
 
-  const modal = <ClipReadyModal open={!!ready} url={ready?.url} clip={ready?.clip} room={roomName} onClose={() => setReady(null)} />;
+  const modal = <ClipReadyModal open={!!ready} url={ready?.url} clip={ready?.clip} room={roomName} api={apiUrl} token={apiClient?.getSessionToken?.() || null} onClose={() => setReady(null)} />;
   if (!available) return ready ? modal : null;
 
   if (variant === 'sidebar') {

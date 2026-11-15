@@ -3,7 +3,7 @@
 import { describe, it, expect, vi, afterEach } from 'vitest'
 import {
   clipShareFor, applyClipShare, streamClipMetadata, momentRanges, clipClock,
-  makeClip, fetchStreamHighlights, deleteClip, fetchClipFile, clipFileUrl,
+  makeClip, fetchStreamHighlights, deleteClip, fetchClipFile, clipFileUrl, shortUrlFor,
   CLIPPER_SHARE_PERCENT, HOST_SHARE_PERCENT,
 } from '../../../src/lib/streamClips.js'
 
@@ -102,5 +102,21 @@ describe('hangouts calls', () => {
     await expect(deleteClip(API, 'abc', 'tok')).rejects.toThrow()
     await expect(fetchClipFile('u')).rejects.toThrow('clip file: 404')
     expect(clipFileUrl(API, '/dvr/clips/a.mp4')).toBe('https://live.3speak.tv/dvr/clips/a.mp4')
+  })
+
+  it('shortUrlFor: the vertical copy when the stream had a phone crop, else (or on failure) the clip', async () => {
+    const plain = { id: 'c1', path: '/dvr/clips/a.mp4', vertical: { available: false, path: null } }
+    expect(await shortUrlFor(API, plain, 'tok')).toBe('https://live.3speak.tv/dvr/clips/a.mp4')
+    expect(await shortUrlFor(API, { ...plain, vertical: { available: true, path: '/dvr/clips/a-v.mp4' } }, 'tok')).toBe('https://live.3speak.tv/dvr/clips/a-v.mp4')
+    const f = vi.fn().mockResolvedValue(json({ clip: { vertical: { available: true, path: '/dvr/clips/a-v2.mp4' } } }))
+    vi.stubGlobal('fetch', f)
+    const crop = { ...plain, vertical: { available: true, path: null } }
+    expect(await shortUrlFor(API, crop, 'tok')).toBe('https://live.3speak.tv/dvr/clips/a-v2.mp4')
+    expect(f).toHaveBeenCalledWith('https://live.3speak.tv/clips/c1/vertical', { method: 'POST', headers: { Authorization: 'Bearer tok' } })
+    f.mockResolvedValue(json({}, 500))
+    expect(await shortUrlFor(API, crop, 'tok')).toBe('https://live.3speak.tv/dvr/clips/a.mp4')
+    f.mockRejectedValue(new Error('down'))
+    expect(await shortUrlFor(API, crop, 'tok')).toBe('https://live.3speak.tv/dvr/clips/a.mp4')
+    expect(await shortUrlFor(API, crop, null)).toBe('https://live.3speak.tv/dvr/clips/a.mp4')
   })
 })

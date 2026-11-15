@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useAppStore } from '../../lib/store';
 import { toastIn } from '../../utils/toast';
 import { usePostClipAsShort } from '../../hooks/usePostClipAsShort';
-import { clipShareFor, downloadClip } from '../../lib/streamClips';
+import { clipShareFor, downloadClip, shortUrlFor } from '../../lib/streamClips';
 import { Button, Dialog } from '../v2/ui';
 import './StreamClips.scss';
 
@@ -14,7 +14,7 @@ const toast = toastIn('Live');
  * as Short (the Shorts upload, the other side gets a locked share) and Download.
  * `clip` is the kept record (host, clipper); without one only Download is offered.
  */
-export default function ClipReadyModal({ open, onClose, url, clip, room }) {
+export default function ClipReadyModal({ open, onClose, url, clip, room, api = null, token = null }) {
   const { t } = useTranslation();
   const user = useAppStore((s) => s.user);
   const { post, busy } = usePostClipAsShort();
@@ -23,7 +23,9 @@ export default function ClipReadyModal({ open, onClose, url, clip, room }) {
 
   const postShort = async () => {
     try {
-      await post({ url, room: clip.room || room, host: clip.host, clipper: clip.clipper, offsetSec: clip.offsetSec });
+      // A Shorts-ready 9:16 copy when the host had the phone crop on.
+      const shortUrl = api ? await shortUrlFor(api, clip, token) : url;
+      await post({ url: shortUrl, room: clip.room || room, host: clip.host, clipper: clip.clipper, offsetSec: clip.offsetSec });
       onClose();
     } catch {
       toast.error(t('streamClips.postFailed'));

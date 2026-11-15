@@ -6,7 +6,7 @@ import { toastIn } from '../../utils/toast';
 import { usePostClipAsShort } from '../../hooks/usePostClipAsShort';
 import { shortRangeParam } from '../../lib/clipIdeas';
 import {
-  fetchStreamHighlights, deleteClip, clipFileUrl, clipShareFor, momentRanges, clipClock, downloadClip,
+  fetchStreamHighlights, deleteClip, clipFileUrl, clipShareFor, momentRanges, clipClock, downloadClip, shortUrlFor,
 } from '../../lib/streamClips';
 import { Button, IconButton, Icon, StatusPill } from '../v2/ui';
 import './StreamClips.scss';
@@ -48,7 +48,7 @@ export default function StreamHighlightsPanel({ api, room, token, compact = fals
   const postClip = async (c) => {
     setPosting(c.id);
     try {
-      await post({ url: clipFileUrl(api, c.path), room, host: c.host || data?.host, clipper: c.clipper, offsetSec: c.offsetSec });
+      await post({ url: await shortUrlFor(api, c, token), room, host: c.host || data?.host, clipper: c.clipper, offsetSec: c.offsetSec });
     } catch {
       toast.error(t('streamClips.postFailed'));
     } finally { setPosting(null); }

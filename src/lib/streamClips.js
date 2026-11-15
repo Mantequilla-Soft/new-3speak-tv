@@ -83,6 +83,25 @@ export async function fetchStreamHighlights(api, room, token) {
   };
 }
 
+/**
+ * The URL to post as a Short: the 9:16 copy cut with the host's phone crop
+ * (POST /clips/:id/vertical) when the stream had one, else the clip itself. A
+ * failed vertical cut falls back to the landscape clip.
+ */
+export async function shortUrlFor(api, clip, token) {
+  const plain = clipFileUrl(api, clip.path);
+  if (!clip?.vertical?.available || !clip.id || !token) return plain;
+  if (clip.vertical.path) return clipFileUrl(api, clip.vertical.path);
+  try {
+    const res = await fetch(`${base(api)}/clips/${encodeURIComponent(clip.id)}/vertical`, { method: 'POST', headers: auth(token) });
+    if (!res.ok) return plain;
+    const d = await res.json();
+    return d?.clip?.vertical?.path ? clipFileUrl(api, d.clip.vertical.path) : plain;
+  } catch {
+    return plain;
+  }
+}
+
 export async function deleteClip(api, id, token) {
   const res = await fetch(`${base(api)}/clips/${encodeURIComponent(id)}`, { method: 'DELETE', headers: auth(token) });
   if (!res.ok) throw new Error(`delete clip: ${res.status}`);
