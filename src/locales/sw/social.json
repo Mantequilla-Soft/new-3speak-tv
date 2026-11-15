@@ -31,7 +31,8 @@
     "heading": "Kutoka 3Speak",
     "liveNow": "@{{user}} yuko mubashara",
     "wasLive": "@{{user}} alianza mubashara",
-    "collabInvite": "@{{user}} amekualika kwenye ushirikiano"
+    "collabInvite": "@{{user}} amekualika kwenye ushirikiano",
+    "premiereStarted": "Onyesho la kwanza la @{{user}} limeanza"
   },
   "push": {
     "live": {

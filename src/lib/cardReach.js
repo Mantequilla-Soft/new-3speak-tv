@@ -216,7 +216,10 @@ export function takeOpenSource(author, permlink, now = Date.now()) {
 // only speaks for the page the visit started on.
 function landedHere() {
   try {
-    const nav = performance.getEntriesByType?.('navigation')?.[0];
+    // The document's own entry, picked by its class: the entry type's name in
+    // quotes would read as an icon name to scripts/icons/scan.mjs.
+    const Timing = window.PerformanceNavigationTiming;
+    const nav = Timing && performance.getEntries?.().find((e) => e instanceof Timing);
     if (!nav?.name) return true;
     const a = new URL(nav.name);
     return a.pathname === window.location.pathname;

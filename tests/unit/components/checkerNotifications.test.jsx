@@ -43,6 +43,15 @@ describe('checker notifications', () => {
     expect(screen.getByTestId('location').textContent).toBe('/')
   })
 
+  it('a started premiere you asked about opens the video, marked live', async () => {
+    const premiere = { _checker: true, _viewer: 'fan', id: 'premiere:badadib/p2', type: 'premiere', actor: 'badadib', author: 'badadib', permlink: 'p2', title: 'Launch day', url: '/watch?v=badadib/p2', at, live: true, seen: false }
+    const { user } = renderWithProviders(<StoryNotifications stories={[premiere]} />)
+    expect(screen.getByText("@badadib's premiere has started")).toBeInTheDocument()
+    expect(screen.getByText('LIVE')).toBeInTheDocument()
+    await user.click(screen.getByText("@badadib's premiere has started"))
+    expect(screen.getByTestId('location').textContent).toBe('/watch?v=badadib/p2')
+  })
+
   it('no checker items: nothing extra', () => {
     const { container } = renderWithProviders(<StoryNotifications stories={[]} />)
     expect(container.querySelector('.checker-notifs-section')).toBeNull()

@@ -33,7 +33,8 @@
     "heading": "От 3Speak",
     "liveNow": "@{{user}} в эфире",
     "wasLive": "@{{user}} начал(а) эфир",
-    "collabInvite": "@{{user}} приглашает вас в совместный пост"
+    "collabInvite": "@{{user}} приглашает вас в совместный пост",
+    "premiereStarted": "Премьера @{{user}} началась"
   },
   "push": {
     "live": {

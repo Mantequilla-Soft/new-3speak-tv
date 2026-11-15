@@ -30,7 +30,8 @@
     "heading": "Dari 3Speak",
     "liveNow": "@{{user}} sedang live",
     "wasLive": "@{{user}} mulai live",
-    "collabInvite": "@{{user}} mengundangmu ke kolaborasi"
+    "collabInvite": "@{{user}} mengundangmu ke kolaborasi",
+    "premiereStarted": "Premiere @{{user}} sudah dimulai"
   },
   "push": {
     "live": {

@@ -30,7 +30,8 @@
     "heading": "จาก 3Speak",
     "liveNow": "@{{user}} กำลังไลฟ์",
     "wasLive": "@{{user}} ได้ไลฟ์",
-    "collabInvite": "@{{user}} เชิญคุณร่วมคอลแลบ"
+    "collabInvite": "@{{user}} เชิญคุณร่วมคอลแลบ",
+    "premiereStarted": "รอบปฐมทัศน์ของ @{{user}} เริ่มแล้ว"
   },
   "push": {
     "live": {

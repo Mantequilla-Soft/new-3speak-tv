@@ -18,11 +18,13 @@ const toast = toastIn('Notifications');
 const TYPES = {
   live: { icon: 'sensors', tone: 'accent' },
   collab_invite: { icon: 'group_add', tone: 'cyan' },
+  premiere: { icon: 'live_tv', tone: 'accent' },
 };
 
 function message(n, t) {
   if (n.type === 'live') return n.live ? t('social.notifs.liveNow', { user: n.actor }) : t('social.notifs.wasLive', { user: n.actor });
   if (n.type === 'collab_invite') return t('social.notifs.collabInvite', { user: n.actor });
+  if (n.type === 'premiere') return t('social.notifs.premiereStarted', { user: n.actor });
   return `@${n.actor}`;
 }
 
@@ -94,7 +96,7 @@ export default function CheckerNotifications({ items, user, onOpen, variant = 'd
                   <b>{message(n, t)}</b>{n.title ? `: ${n.title}` : ''}
                 </div>
                 <div className="podcast-notif-age">
-                  {n.type === 'live' && n.live && <span className="checker-notif-live">{t('social.live.badge')}</span>}
+                  {(n.type === 'live' || n.type === 'premiere') && n.live && <span className="checker-notif-live">{t('social.live.badge')}</span>}
                   {formatNotifTime(n.at)}
                 </div>
                 {n.type === 'collab_invite' && <CollabActions n={n} user={user} />}

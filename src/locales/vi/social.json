@@ -30,7 +30,8 @@
     "heading": "Từ 3Speak",
     "liveNow": "@{{user}} đang phát trực tiếp",
     "wasLive": "@{{user}} đã phát trực tiếp",
-    "collabInvite": "@{{user}} đã mời bạn cộng tác"
+    "collabInvite": "@{{user}} đã mời bạn cộng tác",
+    "premiereStarted": "Buổi công chiếu của @{{user}} đã bắt đầu"
   },
   "push": {
     "live": {

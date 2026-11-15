@@ -31,7 +31,8 @@
     "heading": "Von 3Speak",
     "liveNow": "@{{user}} ist live",
     "wasLive": "@{{user}} ist live gegangen",
-    "collabInvite": "@{{user}} hat dich zu einer Collab eingeladen"
+    "collabInvite": "@{{user}} hat dich zu einer Collab eingeladen",
+    "premiereStarted": "Die Premiere von @{{user}} hat begonnen"
   },
   "push": {
     "live": {

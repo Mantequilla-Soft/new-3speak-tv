@@ -31,7 +31,8 @@
     "heading": "Mula sa 3Speak",
     "liveNow": "Live si @{{user}}",
     "wasLive": "Nag-live si @{{user}}",
-    "collabInvite": "Inimbitahan ka ni @{{user}} sa isang collab"
+    "collabInvite": "Inimbitahan ka ni @{{user}} sa isang collab",
+    "premiereStarted": "Nagsimula na ang premiere ni @{{user}}"
   },
   "push": {
     "live": {

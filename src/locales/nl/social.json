@@ -31,7 +31,8 @@
     "heading": "Van 3Speak",
     "liveNow": "@{{user}} is live",
     "wasLive": "@{{user}} ging live",
-    "collabInvite": "@{{user}} heeft je uitgenodigd voor een collab"
+    "collabInvite": "@{{user}} heeft je uitgenodigd voor een collab",
+    "premiereStarted": "De première van @{{user}} is begonnen"
   },
   "push": {
     "live": {

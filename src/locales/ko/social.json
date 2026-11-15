@@ -30,7 +30,8 @@
     "heading": "3Speak 알림",
     "liveNow": "@{{user}}님이 라이브 중이에요",
     "wasLive": "@{{user}}님이 라이브를 시작했어요",
-    "collabInvite": "@{{user}}님이 콜라보에 초대했어요"
+    "collabInvite": "@{{user}}님이 콜라보에 초대했어요",
+    "premiereStarted": "@{{user}} 님의 최초 공개가 시작되었습니다"
   },
   "push": {
     "live": {

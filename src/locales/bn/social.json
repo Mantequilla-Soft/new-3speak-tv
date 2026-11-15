@@ -31,7 +31,8 @@
     "heading": "3Speak থেকে",
     "liveNow": "@{{user}} লাইভে আছেন",
     "wasLive": "@{{user}} লাইভে এসেছিলেন",
-    "collabInvite": "@{{user}} আপনাকে একটি কোলাবে আমন্ত্রণ জানিয়েছেন"
+    "collabInvite": "@{{user}} আপনাকে একটি কোলাবে আমন্ত্রণ জানিয়েছেন",
+    "premiereStarted": "@{{user}}-এর প্রিমিয়ার শুরু হয়েছে"
   },
   "push": {
     "live": {

@@ -30,7 +30,8 @@
     "heading": "3Speak から",
     "liveNow": "@{{user}}さんがライブ配信中です",
     "wasLive": "@{{user}}さんがライブ配信を開始しました",
-    "collabInvite": "@{{user}}さんからコラボに招待されました"
+    "collabInvite": "@{{user}}さんからコラボに招待されました",
+    "premiereStarted": "@{{user}} さんのプレミア公開が始まりました"
   },
   "push": {
     "live": {

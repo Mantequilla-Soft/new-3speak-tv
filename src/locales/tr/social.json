@@ -31,7 +31,8 @@
     "heading": "3Speak'ten",
     "liveNow": "@{{user}} canlı yayında",
     "wasLive": "@{{user}} canlı yayın açtı",
-    "collabInvite": "@{{user}} seni bir ortak yapıma davet etti"
+    "collabInvite": "@{{user}} seni bir ortak yapıma davet etti",
+    "premiereStarted": "@{{user}} kullanıcısının prömiyeri başladı"
   },
   "push": {
     "live": {

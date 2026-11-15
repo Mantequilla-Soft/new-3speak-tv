@@ -32,7 +32,8 @@
     "heading": "De 3Speak",
     "liveNow": "@{{user}} est en direct",
     "wasLive": "@{{user}} est passé en direct",
-    "collabInvite": "@{{user}} vous a invité à une collaboration"
+    "collabInvite": "@{{user}} vous a invité à une collaboration",
+    "premiereStarted": "La première de @{{user}} a commencé"
   },
   "push": {
     "live": {

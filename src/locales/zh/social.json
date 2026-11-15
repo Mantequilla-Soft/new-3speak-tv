@@ -30,7 +30,8 @@
     "heading": "来自 3Speak",
     "liveNow": "@{{user}} 正在直播",
     "wasLive": "@{{user}} 开始了直播",
-    "collabInvite": "@{{user}} 邀请你合作"
+    "collabInvite": "@{{user}} 邀请你合作",
+    "premiereStarted": "@{{user}} 的首映已开始"
   },
   "push": {
     "live": {

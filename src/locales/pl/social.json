@@ -33,7 +33,8 @@
     "heading": "Od 3Speak",
     "liveNow": "@{{user}} nadaje na żywo",
     "wasLive": "@{{user}} rozpoczął(-ęła) transmisję na żywo",
-    "collabInvite": "@{{user}} zaprasza cię do wspólnego posta"
+    "collabInvite": "@{{user}} zaprasza cię do wspólnego posta",
+    "premiereStarted": "Premiera @{{user}} właśnie się zaczęła"
   },
   "push": {
     "live": {
