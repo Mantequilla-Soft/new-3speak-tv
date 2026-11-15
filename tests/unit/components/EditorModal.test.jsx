@@ -156,6 +156,20 @@ describe('EditorModal in audio mode', () => {
     expect(screen.getByTestId('location')).toHaveTextContent('/')
   })
 
+  it('keeps where in the episode each audiogram starts (the podcast feed\'s soundbites)', async () => {
+    stubMp3()
+    await open({ mode: 'audio', audioFile: new File(['a'], 'a.wav'), audioTrackId: 'track-7' })
+    await ready({ canEditAudio: true })
+    const url = `${EDITOR}/rendered/audiogram-1f2e3d4c-aaaa-bbbb-cccc-123456789abc.mp4`
+    // exactly what the editor's audiogramsToPost sends
+    await fromEditor({
+      type: 'post-to-3speak', mediaType: 'audio', outputUrl: `${EDITOR}/rendered/out.mp3`, fileName: 'Ep.mp3', durationSec: 600,
+      audiograms: [{ url, description: 'Best bit', title: 'Teaser', duration: 42.5, start: 73, width: 1080, height: 1920 }],
+    })
+    await waitFor(() => expect(events).toHaveLength(1))
+    expect(events[0].detail.audiograms).toEqual([{ url, description: 'Best bit', title: 'Teaser', duration: 42.5, start: 73 }])
+  })
+
   it('opens a new audio upload with it when opened from the share menu', async () => {
     stubMp3()
     await open({ mode: 'audio' })
@@ -318,19 +332,30 @@ describe('EditorModal: a Short made with "Use this sound"', () => {
     if (savedSrc) Object.defineProperty(proto, 'src', savedSrc); else delete proto.src
   })
 
-  it('loads the sound on the music track with its credit, once', async () => {
+  it('loads the sound on the music track with its credit, once, into an editor that says canLoadSound', async () => {
     await open({ sound: SOUND })
-    await ready()
-    await ready()
+    await ready({ canLoadSound: true })
+    await ready({ canLoadSound: true })
     const loads = posted.filter((p) => p.type === 'load-media')
     expect(loads).toEqual([{ type: 'load-media', url: SOUND.url, name: 'My beat', mediaType: 'audio', music: true, credit: SOUND.credit }])
   })
 
-  it('an editor that drops credits: the sound is credited here, and its creator gets the 5% split', async () => {
+  it('an editor that does not say canLoadSound gets no sound, says so, and nothing is credited', async () => {
     stubMp3({ type: 'video/mp4' })
     await open({ sound: SOUND })
     await ready()
+    expect(posted.filter((p) => p.type === 'load-media')).toHaveLength(0)
+    expect(toastMessages(toast.warning)).toContain("The sound could not be added to the editor yet. Add music from the editor's music library instead.")
     await fromEditor({ type: 'post-to-3speak', outputUrl: `${EDITOR}/rendered/v.mp4`, musicCredits: [{ id: 'calm', title: 'Calm', artist: 'Kevin MacLeod', source: 'incompetech' }] })
+    await waitFor(() => expect(calls('setMusicCredits')).toHaveLength(1))
+    expect(calls('setMusicCredits')[0][0].map((c) => c.id)).toEqual(['calm'])
+  })
+
+  it('the sound still on the timeline is credited first, and its creator gets the 5% split', async () => {
+    stubMp3({ type: 'video/mp4' })
+    await open({ sound: SOUND })
+    await ready({ canLoadSound: true })
+    await fromEditor({ type: 'post-to-3speak', outputUrl: `${EDITOR}/rendered/v.mp4`, musicCredits: [{ id: 'calm', title: 'Calm', artist: 'Kevin MacLeod', source: 'incompetech' }, SOUND.credit] })
     await waitFor(() => expect(calls('setMusicCredits')).toHaveLength(1))
     expect(calls('setMusicCredits')[0][0].map((c) => c.id)).toEqual(['short_badadib_beat-1', 'calm'])
     expect(calls('setList')[0][0]).toEqual(expect.arrayContaining([expect.objectContaining({ account: 'badadib', percent: 5 })]))
@@ -343,6 +368,59 @@ describe('EditorModal: a Short made with "Use this sound"', () => {
     await fromEditor({ type: 'post-to-3speak', outputUrl: `${EDITOR}/rendered/v.mp4`, musicCredits: [] })
     await waitFor(() => expect(calls('setMusicCredits')).toHaveLength(1))
     expect(calls('setMusicCredits')[0][0]).toEqual([])
+  })
+})
+
+describe('EditorModal: the editor\'s auto captions become the Short\'s subtitles', () => {
+  const calls = (name) => m.embed.filter((c) => c[0] === name).map((c) => c.slice(1))
+  const SUBS = {
+    language: 'de', vttUrl: `${EDITOR}/rendered/j.vtt`, srtUrl: `${EDITOR}/rendered/j.srt`, burnedIn: true,
+    cues: [{ start: 0, end: 1.2, text: 'Hallo badadib Fans' }, { start: 1.2, end: 2, text: 'Los geht es' }],
+  }
+  // jsdom loads no media: the duration probe of the rendered video answers at once
+  let savedSrc
+  beforeEach(() => {
+    const proto = HTMLMediaElement.prototype
+    savedSrc = Object.getOwnPropertyDescriptor(proto, 'src')
+    Object.defineProperty(proto, 'src', {
+      configurable: true,
+      get() { return this.getAttribute('src') || '' },
+      set(v) { this.setAttribute('src', v); queueMicrotask(() => this.onloadedmetadata?.()) },
+    })
+  })
+  afterEach(() => {
+    const proto = HTMLMediaElement.prototype
+    if (savedSrc) Object.defineProperty(proto, 'src', savedSrc); else delete proto.src
+  })
+
+  it('hands the checked captions to the publish step', async () => {
+    stubMp3({ type: 'video/mp4' })
+    await open({})
+    await ready()
+    await fromEditor({ type: 'post-to-3speak', outputUrl: `${EDITOR}/rendered/v.mp4`, subtitles: SUBS })
+    await waitFor(() => expect(calls('setEditorSubtitles')).toHaveLength(1))
+    expect(calls('setEditorSubtitles')[0][0]).toEqual({ language: 'de', cues: SUBS.cues, burnedIn: true })
+  })
+
+  it('through the short-or-story choice too; none sent = none kept', async () => {
+    m.stories = true
+    stubMp3({ type: 'video/mp4' })
+    await open({})
+    await ready()
+    await fromEditor({ type: 'post-to-3speak', outputUrl: `${EDITOR}/rendered/v.mp4`, subtitles: { ...SUBS, burnedIn: false } })
+    const asShort = (await screen.findByText('Stays on your channel')).closest('button')
+    await act(async () => { asShort.click() })
+    await waitFor(() => expect(calls('setEditorSubtitles')).toHaveLength(1))
+    expect(calls('setEditorSubtitles')[0][0]).toMatchObject({ language: 'de', burnedIn: false })
+  })
+
+  it('an editor without captions: nothing to save', async () => {
+    stubMp3({ type: 'video/mp4' })
+    await open({})
+    await ready()
+    await fromEditor({ type: 'post-to-3speak', outputUrl: `${EDITOR}/rendered/v.mp4` })
+    await waitFor(() => expect(calls('setEditorSubtitles')).toHaveLength(1))
+    expect(calls('setEditorSubtitles')[0][0]).toBeNull()
   })
 })
 

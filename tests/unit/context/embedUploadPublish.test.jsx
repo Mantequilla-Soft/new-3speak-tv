@@ -34,6 +34,9 @@ vi.mock('../../../src/hive-api/hiveApi', () => h.mocks.hiveApi)
 // A Short's series (lib/series.js): the playlist add after the post is out.
 const addToPlaylist = vi.hoisted(() => vi.fn(async () => ({ success: true })))
 vi.mock('../../../src/utils/playlistOperations', () => ({ addToPlaylist }))
+// The shorts editor's captions (lib/captionEdit.js): saved after the post is out.
+const saveCaptionEdit = vi.hoisted(() => vi.fn(async () => ({ cid: 'QmCaps', cues: [] })))
+vi.mock('../../../src/lib/captionEdit', () => ({ saveCaptionEdit }))
 // The owner's signature is a fake; the error wording is the real module's (its
 // t() is the same key-echo as the provider's).
 vi.mock('../../../src/i18n', () => h.mocks.appI18n)
@@ -886,5 +889,37 @@ describe('season, episode, drafts and a Short\'s series', () => {
     await publish(result)
     expect(h.fns.toastError).toHaveBeenCalledWith('episodes.series.addFailed')
     expect(result.current.completed).toBe(true)
+  })
+})
+
+describe('a Short with the shorts editor\'s auto captions', () => {
+  const CUES = [{ start: 0, end: 1.5, text: 'Hello badadib fans' }]
+  const asEditorShort = (subs) => (c) => {
+    c.setFromStories(true); c.setTitle(''); c.setDescription('Sunset at the beach'); c.setTagsPreview([])
+    c.setEditorSubtitles(subs)
+  }
+  beforeEach(() => saveCaptionEdit.mockClear())
+
+  it('they become its subtitles once it is out, under its Hive permlink, burnt-in ones marked', async () => {
+    const { result } = await ready(asEditorShort({ language: 'de', cues: CUES, burnedIn: true }))
+    await publish(result)
+    expect(saveCaptionEdit).toHaveBeenCalledWith({ author: 'badadib', permlink: 'sunset-at-the-beach-42', lang: 'de', cues: CUES, burnedIn: true })
+    expect(saveCaptionEdit.mock.invocationCallOrder[0]).toBeGreaterThan(h.fns.broadcastViaThreespeak.mock.invocationCallOrder[0])
+    expect(result.current.statusMessages).toContainEqual(expect.objectContaining({ message: 'editorLink.captionsSaved', type: 'success' }))
+    expect(result.current.completed).toBe(true)
+  })
+
+  it('a failed save is a warning: the Short is published', async () => {
+    saveCaptionEdit.mockRejectedValueOnce(new Error('checker down'))
+    const { result } = await ready(asEditorShort({ language: 'en', cues: CUES, burnedIn: false }))
+    await publish(result)
+    expect(result.current.statusMessages).toContainEqual(expect.objectContaining({ message: 'editorLink.captionsFailed', type: 'warning' }))
+    expect(result.current.completed).toBe(true)
+  })
+
+  it('no captions from the editor: nothing is saved', async () => {
+    const { result } = await ready(asEditorShort(null))
+    await publish(result)
+    expect(saveCaptionEdit).not.toHaveBeenCalled()
   })
 })

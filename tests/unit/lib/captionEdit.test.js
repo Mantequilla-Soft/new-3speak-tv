@@ -93,6 +93,14 @@ describe('saveCaptionEdit', () => {
     })
   })
 
+  it('the shorts editor\'s captions say when they are burnt into the picture (and only then)', async () => {
+    await saveCaptionEdit({ author: 'alice', permlink: 'p', lang: 'de', cues, burnedIn: true })
+    expect(JSON.parse(fetchMock.mock.calls[1][1].body)).toMatchObject({ lang: 'de', burnedIn: true })
+    signAnswers = [res(200, { signature: 'sig', timestamp: 111, username: 'alice' })]
+    await saveCaptionEdit({ author: 'alice', permlink: 'p', lang: 'de', cues, burnedIn: false })
+    expect(JSON.parse(fetchMock.mock.calls[3][1].body)).not.toHaveProperty('burnedIn')
+  })
+
   it('refuses to save captions that are all empty', async () => {
     await expect(saveCaptionEdit({ author: 'a', permlink: 'p', lang: 'en', cues: [{ start: 0, end: 1, text: '<b></b>' }] }))
       .rejects.toThrow('comments.transcript.edit.empty')

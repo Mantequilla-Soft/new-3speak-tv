@@ -137,19 +137,24 @@ describe('primarySoundMetadata and soundLabel', () => {
 describe('withSoundCredit (a Short made with "Use this sound")', () => {
   const SOUND = { id: 'short_badadib_beat-1', title: 'Beat', artist: '@badadib', source: '3speak', account: 'badadib', sourceUrl: 'https://3speak.tv/sound/short_badadib_beat-1' }
 
-  it('puts the sound first, once, so it is the Short\'s sound and its creator gets the split', () => {
-    const credits = withSoundCredit([CC], SOUND)
+  it('the sound still on the timeline goes first, once, so it is the Short\'s sound and its creator gets the split', () => {
+    const credits = withSoundCredit([CC, SOUND], SOUND)
     expect(credits.map((c) => c.id)).toEqual(['short_badadib_beat-1', 'song-1'])
     expect(soundAuthorsOf(credits, 'fan')).toEqual(['badadib'])
     expect(withSoundCredit([SOUND, CC], SOUND).map((c) => c.id)).toEqual(['short_badadib_beat-1', 'song-1'])
   })
 
+  it('a sound taken off the timeline is not credited', () => {
+    expect(withSoundCredit([CC], SOUND).map((c) => c.id)).toEqual(['song-1'])
+    expect(soundAuthorsOf(withSoundCredit([], SOUND), 'fan')).toEqual([])
+  })
+
   it('no sound, or one that does not pass the checks: just the editor credits', () => {
     expect(withSoundCredit([CC], null).map((c) => c.id)).toEqual(['song-1'])
-    expect(withSoundCredit([CC], { ...SOUND, account: 'NOT VALID!' }).map((c) => c.id)).toEqual(['song-1'])
+    expect(withSoundCredit([CC, SOUND], { ...SOUND, account: 'NOT VALID!' }).map((c) => c.id)).toEqual(['song-1', 'short_badadib_beat-1'])
   })
 
   it('the poster using their own sound gets no split from it', () => {
-    expect(soundAuthorsOf(withSoundCredit([], SOUND), 'badadib')).toEqual([])
+    expect(soundAuthorsOf(withSoundCredit([SOUND], SOUND), 'badadib')).toEqual([])
   })
 })
