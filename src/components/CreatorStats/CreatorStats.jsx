@@ -10,6 +10,7 @@ import { Link } from 'react-router-dom';
 // The "Your year on 3Speak" link. OFF until the recap launches (planned with a
 // popup around 2026-12-20); /recap itself still works by its address.
 const RECAP_LINK_VISIBLE = false;
+import CreatorPollsCard from '../Polls/CreatorPollsCard';
 import VideoStats from './VideoStats';
 import { WORLD_LAND_PATH } from '../../lib/worldMapPath';
 import './CreatorStats.scss';
@@ -661,6 +662,9 @@ export default function CreatorStats({ user }) {
               <p className="cs-footnote">{t('stats.footnote')}</p>
             </section>
           )}
+
+          {/* Polls on the channel's Community tab and their results. */}
+          <CreatorPollsCard username={user} />
 
           {/* Compare videos (45a) */}
           {videos.length >= 2 && (

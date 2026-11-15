@@ -45,5 +45,33 @@
     "acceptedToast": "The collab with @{{user}} is now on your channel.",
     "declinedToast": "Invite declined.",
     "answerFailed": "Could not send your answer. Please try again."
+  },
+  "polls": {
+    "aria": "Poll",
+    "addPoll": "Poll",
+    "removePoll": "No poll",
+    "editorAria": "Poll options",
+    "questionPlaceholder": "Ask your followers a question",
+    "optionPlaceholder": "Option {{n}}",
+    "removeOption": "Remove option {{n}}",
+    "addOption": "Add option",
+    "duration": "Poll ends",
+    "days_one": "{{count}} day",
+    "days_other": "{{count}} days",
+    "noEnd": "No end date",
+    "invalid": "A poll needs {{min}} to {{max}} different options.",
+    "votes_one": "{{count}} vote",
+    "votes_other": "{{count}} votes",
+    "endsInDays_one": "Ends in {{count}} day",
+    "endsInDays_other": "Ends in {{count}} days",
+    "endsInHours_one": "Ends in {{count}} hour",
+    "endsInHours_other": "Ends in {{count}} hours",
+    "closed": "Poll closed",
+    "open": "Open",
+    "changeHint": "Tap another option to change your vote.",
+    "signIn": "Sign in to vote.",
+    "closedToast": "This poll has ended.",
+    "voteFailed": "Your vote did not go through. Please try again.",
+    "statsTitle": "Polls"
   }
 }
