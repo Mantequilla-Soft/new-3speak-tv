@@ -1,0 +1,14 @@
+{
+  "bar": {
+    "title": "Đối đầu",
+    "startsIn": "Bắt đầu sau {seconds}",
+    "timeLeft": "Còn {time}",
+    "counting": "Đang đếm những boost cuối…",
+    "amount": "{amount} HBD",
+    "wins": "@{name} thắng!",
+    "tie": "Hòa!",
+    "endedEarly": "Trận đối đầu kết thúc sớm",
+    "dropped": "Trận đối đầu kết thúc: @{name} đã rời đi",
+    "boostHint": "Boost ở đây được tính cho @{name}"
+  }
+}

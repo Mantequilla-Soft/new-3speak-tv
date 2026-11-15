@@ -1,0 +1,14 @@
+{
+  "bar": {
+    "title": "배틀",
+    "startsIn": "{seconds}초 후 시작",
+    "timeLeft": "{time} 남음",
+    "counting": "마지막 부스트를 집계하는 중…",
+    "amount": "{amount} HBD",
+    "wins": "@{name} 승리!",
+    "tie": "무승부!",
+    "endedEarly": "배틀이 일찍 끝났습니다",
+    "dropped": "배틀 종료: @{name} 님이 나갔습니다",
+    "boostHint": "여기서 보낸 부스트는 @{name} 님에게 집계됩니다"
+  }
+}

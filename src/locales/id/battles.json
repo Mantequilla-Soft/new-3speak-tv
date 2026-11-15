@@ -1,0 +1,14 @@
+{
+  "bar": {
+    "title": "Battle",
+    "startsIn": "Mulai dalam {seconds}",
+    "timeLeft": "Sisa {time}",
+    "counting": "Menghitung boost terakhir…",
+    "amount": "{amount} HBD",
+    "wins": "@{name} menang!",
+    "tie": "Seri!",
+    "endedEarly": "Battle berakhir lebih awal",
+    "dropped": "Battle berakhir: @{name} keluar",
+    "boostHint": "Boost di sini dihitung untuk @{name}"
+  }
+}
