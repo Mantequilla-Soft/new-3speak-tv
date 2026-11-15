@@ -1,0 +1,30 @@
+{
+  "studio": {
+    "title": "Live-Untertitel",
+    "toggle": "Zuschauern Live-Untertitel zeigen",
+    "hint": "Während du live bist, wird dein Mikrofon in Text umgewandelt. Zuschauer können Untertitel einschalten, und viele Browser übersetzen sie in die Sprache des Zuschauers.",
+    "language": "Deine Sprache",
+    "onlyLanguage": "Untertitel verstehen nur diese Sprache: {lang}.",
+    "statusOff": "Aus",
+    "statusWaiting": "Startet, sobald du live gehst.",
+    "statusMicOff": "Schalte dein Mikrofon für Untertitel ein.",
+    "statusStarting": "Untertitel starten…",
+    "statusOn": "Untertitel sind an.",
+    "statusFull": "Alle Untertitel-Plätze sind gerade belegt. Neuer Versuch in einer Minute.",
+    "statusUnavailable": "Live-Untertitel sind gerade nicht verfügbar.",
+    "statusError": "Die Untertitel wurden gestoppt, weil der Sprachdienst nicht erreichbar war. Schalte sie aus und wieder ein, um es erneut zu versuchen."
+  },
+  "viewer": {
+    "translatedFrom": "Auf deinem Gerät übersetzt (Original: {lang})",
+    "showOriginal": "Original zeigen",
+    "translateTo": "Übersetzen: {lang}",
+    "noTranslator": "Auf {lang}: Dieser Browser kann Untertitel nicht übersetzen",
+    "label": "Untertitel",
+    "show": "Live-Untertitel zeigen",
+    "hide": "Live-Untertitel ausblenden"
+  },
+  "vod": {
+    "saved": "Deine Live-Untertitel wurden der Aufzeichnung als Untertitel hinzugefügt.",
+    "failed": "Die Live-Untertitel konnten der Aufzeichnung nicht hinzugefügt werden."
+  }
+}

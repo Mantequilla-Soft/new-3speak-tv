@@ -1,0 +1,30 @@
+{
+  "studio": {
+    "title": "实时字幕",
+    "toggle": "向观众显示实时字幕",
+    "hint": "直播时，你的麦克风语音会转成文字。观众可以打开字幕，许多浏览器会把字幕翻译成观众的语言。",
+    "language": "你说的语言",
+    "onlyLanguage": "字幕只能识别{lang}。",
+    "statusOff": "关闭",
+    "statusWaiting": "开始直播后启动。",
+    "statusMicOff": "请打开麦克风以使用字幕。",
+    "statusStarting": "正在启动字幕…",
+    "statusOn": "字幕已开启。",
+    "statusFull": "目前所有字幕名额都已占用。一分钟后重试。",
+    "statusUnavailable": "实时字幕目前不可用。",
+    "statusError": "无法连接语音服务，字幕已停止。关闭后再打开即可重试。"
+  },
+  "viewer": {
+    "translatedFrom": "已在你的设备上从{lang}翻译",
+    "showOriginal": "显示原文",
+    "translateTo": "翻译成{lang}",
+    "noTranslator": "{lang}：此浏览器无法翻译字幕",
+    "label": "字幕",
+    "show": "显示实时字幕",
+    "hide": "隐藏实时字幕"
+  },
+  "vod": {
+    "saved": "你的实时字幕已作为字幕添加到回放。",
+    "failed": "无法将实时字幕添加到回放。"
+  }
+}

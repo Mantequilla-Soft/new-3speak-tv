@@ -14,6 +14,7 @@ import StreamFullscreenButton from '../components/openpods/StreamFullscreenButto
 import StreamWatermark from '../components/openpods/StreamWatermark';
 import StreamSignInButton from '../components/openpods/StreamSignInButton';
 import StreamBoostGoalBar from '../components/openpods/StreamBoostGoalBar';
+import { LiveCaptionsOverlay, LiveCaptionsToggle, useCaptionsPref } from '../components/openpods/LiveCaptions';
 import { useBoostLabels } from '../components/openpods/boostLabels';
 import { useBattleLabels } from '../components/openpods/battleLabels';
 import { useStreamSession } from '../hooks/useStreamSession';
@@ -234,6 +235,8 @@ export default function WatchStream() {
   }, [revealInfo]);
 
   const [chatOverlayOn, setChatOverlayOn] = useState(readChatOverlayPref);
+  // H11: the viewer's live captions switch (shown only while the host captions).
+  const [captionsOn, toggleCaptions] = useCaptionsPref();
   // Phones: the viewer's "clean view". Everything over the picture goes (rail,
   // caption, chat, composer, quality, back); one small button in the top-right
   // corner brings it all back.
@@ -404,6 +407,7 @@ export default function WatchStream() {
                     {/* Free host streaming from OBS: draw the 3Speak mark the
                         browser studio would have burned in. Follows the crop. */}
                     <StreamWatermark show={showWatermark} />
+                    <LiveCaptionsOverlay show={captionsOn && !controlsHidden} />
                     {/* Ticker + drawn banner. Below the back button / quality row. */}
                     <LiveAdLayer
                       host={host}
@@ -470,6 +474,7 @@ export default function WatchStream() {
                       </div>
                       <CollabRequest variant="rail" canRequest={canInteract} />
                       <StreamBoostButton variant="rail" />
+                      <LiveCaptionsToggle variant="rail" on={captionsOn} onToggle={toggleCaptions} />
                       {canCrop && (
                         <div className="actionItem" onClick={toggleVertical}>
                           <div className="actionButton">
@@ -569,6 +574,7 @@ export default function WatchStream() {
               <div className="ws-player">
                 <StreamVideo showLiveBadge={false} boostLabels={boostLabels} battleLabels={battleLabels} />
                 <StreamWatermark show={showWatermark} />
+                <LiveCaptionsOverlay show={captionsOn} />
                 <LiveAdLayer host={host} room={streamId} onPreroll={setPrerollHold} />
                 {/* The creator on the player, with Follow (18c). */}
                 <div className="ws-creator">
@@ -599,6 +605,7 @@ export default function WatchStream() {
                     : <CollabRequest canRequest={canInteract} />}
                   <StreamClipButton roomName={streamId} />
                   <StreamBoostButton />
+                  <LiveCaptionsToggle on={captionsOn} onToggle={toggleCaptions} />
                   <DockTile icon={copied ? 'check' : 'ios_share'} label={copied ? t('common.actions.copied') : t('common.actions.share')} onClick={copyLink} title={t('misc.watchStream.copyLink')} />
                   <StreamReportButton roomName={streamId} host={host} />
                   <StreamFullscreenButton variant="dock" label={t('misc.watchStream.full')} />

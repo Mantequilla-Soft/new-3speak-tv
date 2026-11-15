@@ -1,0 +1,30 @@
+{
+  "studio": {
+    "title": "Napisy na żywo",
+    "toggle": "Pokazuj widzom napisy na żywo",
+    "hint": "Gdy nadajesz na żywo, Twój mikrofon jest zamieniany na tekst. Widzowie mogą włączyć napisy, a wiele przeglądarek tłumaczy je na ich język.",
+    "language": "Język, w którym mówisz",
+    "onlyLanguage": "Napisy rozumieją tylko ten język: {lang}.",
+    "statusOff": "Wyłączone",
+    "statusWaiting": "Startują, gdy zaczniesz transmisję.",
+    "statusMicOff": "Włącz mikrofon, aby mieć napisy.",
+    "statusStarting": "Uruchamianie napisów…",
+    "statusOn": "Napisy są włączone.",
+    "statusFull": "Wszystkie miejsca na napisy są teraz zajęte. Spróbujemy ponownie za minutę.",
+    "statusUnavailable": "Napisy na żywo są teraz niedostępne.",
+    "statusError": "Napisy zatrzymały się, bo usługa mowy jest nieosiągalna. Wyłącz je i włącz ponownie, aby spróbować jeszcze raz."
+  },
+  "viewer": {
+    "translatedFrom": "Przetłumaczono z języka: {lang} na Twoim urządzeniu",
+    "showOriginal": "Pokaż oryginał",
+    "translateTo": "Przetłumacz na: {lang}",
+    "noTranslator": "Język: {lang}. Ta przeglądarka nie tłumaczy napisów",
+    "label": "Napisy",
+    "show": "Pokaż napisy na żywo",
+    "hide": "Ukryj napisy na żywo"
+  },
+  "vod": {
+    "saved": "Twoje napisy na żywo dodano do nagrania.",
+    "failed": "Nie udało się dodać napisów na żywo do nagrania."
+  }
+}

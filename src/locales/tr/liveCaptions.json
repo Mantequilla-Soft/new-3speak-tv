@@ -1,0 +1,30 @@
+{
+  "studio": {
+    "title": "Canlı altyazı",
+    "toggle": "İzleyicilere canlı altyazı göster",
+    "hint": "Canlı yayındayken mikrofonun metne dönüştürülür. İzleyiciler altyazıyı açabilir ve birçok tarayıcı onu izleyicinin diline çevirir.",
+    "language": "Konuştuğun dil",
+    "onlyLanguage": "Altyazı yalnızca şu dili anlar: {lang}.",
+    "statusOff": "Kapalı",
+    "statusWaiting": "Canlı yayına geçince başlar.",
+    "statusMicOff": "Altyazı için mikrofonunu aç.",
+    "statusStarting": "Altyazı başlatılıyor…",
+    "statusOn": "Altyazı açık.",
+    "statusFull": "Şu an tüm altyazı yerleri dolu. Bir dakika sonra yeniden denenecek.",
+    "statusUnavailable": "Canlı altyazı şu an kullanılamıyor.",
+    "statusError": "Konuşma hizmetine ulaşılamadığı için altyazı durdu. Yeniden denemek için kapatıp aç."
+  },
+  "viewer": {
+    "translatedFrom": "Cihazında {lang} dilinden çevrildi",
+    "showOriginal": "Orijinali göster",
+    "translateTo": "Şu dile çevir: {lang}",
+    "noTranslator": "{lang}: bu tarayıcı altyazıyı çeviremiyor",
+    "label": "Altyazı",
+    "show": "Canlı altyazıyı göster",
+    "hide": "Canlı altyazıyı gizle"
+  },
+  "vod": {
+    "saved": "Canlı altyazıların tekrar videosuna altyazı olarak eklendi.",
+    "failed": "Canlı altyazılar tekrar videosuna eklenemedi."
+  }
+}
