@@ -61,6 +61,7 @@ const downloads = await import('../../../src/lib/podcastDownloads')
 const pip = await import('../../../src/components/GlobalAudioPlayer/AudioPip')
 const { CHECKER_URL } = await import('../../../src/utils/config')
 const { useAppStore } = await import('../../../src/lib/store')
+const { _resetListenHistory } = await import('../../../src/lib/listenHistory')
 const { notifyMediaPlay } = await import('../../../src/utils/mediaCoordinator')
 const { default: GlobalAudioPlayer } = await import('../../../src/components/GlobalAudioPlayer/GlobalAudioPlayer.jsx')
 const { default: EmbedCodeHost } = await import('../../../src/components/Embed/EmbedCodeModal.jsx')
@@ -140,8 +141,9 @@ beforeEach(() => {
     audioCurrent: null, audioQueue: [], audioAutoplayList: [], audioLast: null, audioIsPlaying: false,
     audioRestoredAt: null, audioStartAt: null, audioClipEnd: null, audioCurrentTime: 0, audioDuration: 0,
     audioExpanded: false, audioShowQueue: false, audioDock: null, audioDockOpener: null,
-    authenticated: false, user: null,
+    authenticated: false, user: null, watchHistoryEnabled: true,
   })
+  _resetListenHistory()
   axios.get.mockReset().mockResolvedValue({ data: {} })
   axios.post.mockReset().mockResolvedValue({ data: {} })
   aioha.isLoggedIn.mockReturnValue(false)
@@ -458,7 +460,18 @@ describe('the audio player: previous, next and the end of a track', () => {
     at(31)
     at(40)
     expect(recordWatch).toHaveBeenCalledTimes(1)
-    expect(recordWatch).toHaveBeenCalledWith('listener', 'badadib', 'audio-1')
+    expect(recordWatch).toHaveBeenCalledWith('listener', 'badadib', 'audio-1', { short: false })
+  })
+
+  it('with "Save history" off, a listened track is not recorded', async () => {
+    const { recordWatch } = await import('../../../src/utils/watchHistory')
+    act(() => useAppStore.setState({ user: 'listener', watchHistoryEnabled: false }))
+    mount()
+    play(A)
+    loaded()
+    at(31)
+    at(60)
+    expect(recordWatch).not.toHaveBeenCalled()
   })
 })
 
