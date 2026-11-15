@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.68',
+    category: 'general',
+    date: '2026-11-15',
+    summary: 'Warm-up like counts, replies and authors now load even when the nearest checker server has a hiccup.',
+  },
+  {
     version: '2.0.67',
     category: 'general',
     date: '2026-11-15',
