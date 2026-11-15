@@ -15,6 +15,7 @@ import { sanitizeChapters } from '../../utils/audioChapters';
 import { sanitizeAudiograms, playlistCoversOf } from '../../utils/audiogramShorts';
 import { sanitizeEditorSubtitles } from '../../utils/editorSubtitles';
 import { editorPostKind, editorAspect, editorTitle, editorChapters } from '../../utils/editorFormat';
+import { editorUrlWithLang, useEditorLanguage } from '../../utils/editorLanguage';
 import ShortTextModal from './ShortTextModal';
 
 // The original post a remix goes under, as the editor sends it ({ parentAuthor,
@@ -75,6 +76,9 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
   const [resolvedUrl, setResolvedUrl] = useState(null);
   const [resolving, setResolving] = useState(false);
   const [resolveError, setResolveError] = useState(false);
+  // The language the iframe was opened in (its URL's lang=, see useEditorLanguage below)
+  const [openLang, setOpenLang] = useState(null);
+  const langRef = useRef(null);
 
   // Resolve a working editor URL when the modal opens
   useEffect(() => {
@@ -89,6 +93,7 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
     getEditorUrl().then(url => {
       if (cancelled) return;
       if (url) {
+        setOpenLang(langRef.current);
         setResolvedUrl(url);
       } else {
         setResolveError(true);
@@ -117,6 +122,11 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
       iframeRef.current.contentWindow.postMessage(message, new URL(resolvedUrl).origin);
     }
   }, [resolvedUrl]);
+
+  // The viewer's language: on the iframe URL at open (openLang, so a later switch
+  // does not reload the editor), then as 'set-language' messages while it is open
+  const lang = useEditorLanguage(sendToEditor, editorReady);
+  useEffect(() => { langRef.current = lang; }, [lang]);
 
   // Send theme and desktop flag to editor when ready or when theme changes
   useEffect(() => {
@@ -721,7 +731,7 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
           {resolvedUrl && (
             <iframe
               ref={iframeRef}
-              src={`${resolvedUrl}?compact=true${audioMode ? '&mode=audio' : editorAspect(aspect) ? `&aspect=${encodeURIComponent(editorAspect(aspect))}` : ''}`}
+              src={editorUrlWithLang(`${resolvedUrl}?compact=true${audioMode ? '&mode=audio' : editorAspect(aspect) ? `&aspect=${encodeURIComponent(editorAspect(aspect))}` : ''}`, openLang)}
               className="editor-iframe"
               allow="cross-origin-isolated; camera; microphone; fullscreen"
               allowFullScreen
