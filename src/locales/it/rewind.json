@@ -1,0 +1,11 @@
+{
+  "label": "Riavvolgi",
+  "goLive": "Torna in diretta",
+  "title": "Riavvolgi fino a {{minutes}} min",
+  "error": "Il riavvolgimento non è disponibile ora.",
+  "back10": "Indietro di 10 secondi",
+  "forward10": "Avanti di 10 secondi",
+  "play": "Riproduci",
+  "pause": "Pausa",
+  "seek": "Posizione nella diretta"
+}

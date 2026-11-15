@@ -1,0 +1,11 @@
+{
+  "label": "Terugspoelen",
+  "goLive": "Naar live",
+  "title": "Spoel tot {{minutes}} min terug",
+  "error": "Terugspoelen is nu niet beschikbaar.",
+  "back10": "10 seconden terug",
+  "forward10": "10 seconden vooruit",
+  "play": "Afspelen",
+  "pause": "Pauze",
+  "seek": "Positie in de stream"
+}

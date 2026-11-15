@@ -1,0 +1,11 @@
+{
+  "label": "I-rewind",
+  "goLive": "Bumalik sa live",
+  "title": "Mag-rewind hanggang {{minutes}} min",
+  "error": "Hindi available ang rewind ngayon.",
+  "back10": "Paatras nang 10 segundo",
+  "forward10": "Pasulong nang 10 segundo",
+  "play": "I-play",
+  "pause": "I-pause",
+  "seek": "Posisyon sa stream"
+}

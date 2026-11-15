@@ -1,0 +1,11 @@
+{
+  "label": "Zurückspulen",
+  "goLive": "Zurück zu live",
+  "title": "Bis zu {{minutes}} Min. zurückspulen",
+  "error": "Zurückspulen ist gerade nicht verfügbar.",
+  "back10": "10 Sekunden zurück",
+  "forward10": "10 Sekunden vor",
+  "play": "Abspielen",
+  "pause": "Pause",
+  "seek": "Position im Stream"
+}

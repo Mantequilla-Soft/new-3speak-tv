@@ -13,6 +13,8 @@ import { useBoostLabels } from '../openpods/boostLabels';
 import '@snapie/hangouts-react/src/styles/hangouts.css';
 import './LiveStreamPlayer.scss';
 import { Icon } from '../v2/Icon';
+import { StreamRewindButton, StreamRewindPlayer } from '../openpods/StreamRewind';
+import { useStreamRewind } from '../../hooks/useStreamRewind';
 
 // Strip a trailing slash — the SDK builds `${apiBaseUrl}/rooms/...` with a raw
 // fetch, so a trailing slash yields `//rooms` and a 404.
@@ -91,6 +93,8 @@ export default function LiveStreamPlayer({ roomName, chatSlot = null, onChatSent
   const { aioha, sessionToken, hangoutsUser, connectReady, joinKey, needsSignIn, canInteract, signIn, signingIn } = useStreamSession();
   // The stream's sound stays off while LiveAdLayer plays a pre-roll over it.
   const [prerollHold, setPrerollHold] = useState(false);
+  // Rewind (H14) in the Pro DVR's last minutes; the live sound waits meanwhile.
+  const rewind = useStreamRewind(endpoint?.api, roomName, sessionToken);
   // The goal bar <StreamVideo> draws over the picture, in the site language.
   const boostLabels = useBoostLabels();
 
@@ -105,7 +109,7 @@ export default function LiveStreamPlayer({ roomName, chatSlot = null, onChatSent
         aioha={aioha}
       >
         {connectReady && endpointReady && (
-          <StandaloneWatch key={`${joinKey}:${endpoint.api}`} roomName={roomName} audioMuted={prerollHold}>
+          <StandaloneWatch key={`${joinKey}:${endpoint.api}`} roomName={roomName} audioMuted={prerollHold || rewind.active}>
             <StreamVideo showLiveBadge boostLabels={boostLabels} />
             {/* A free host's stream from OBS: the page draws the 3Speak mark
                 the browser studio would have burned into the picture. */}
@@ -119,6 +123,8 @@ export default function LiveStreamPlayer({ roomName, chatSlot = null, onChatSent
             <StreamViewerCount render={(c) => (
               <span className="live-stream-player__viewers">{t('comments.live.watching', { count: c })}</span>
             )} />
+            <StreamRewindPlayer rewind={rewind} />
+            <StreamRewindButton rewind={rewind} variant="overlay" />
             <StreamBoostButton variant="overlay" />
             <StreamFullscreenButton />
             <div className="live-stream-player__collab">

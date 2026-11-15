@@ -1,0 +1,11 @@
+{
+  "label": "Rudisha nyuma",
+  "goLive": "Rudi mubashara",
+  "title": "Rudisha nyuma hadi dak {{minutes}}",
+  "error": "Kurudisha nyuma hakupatikani sasa.",
+  "back10": "Nyuma sekunde 10",
+  "forward10": "Mbele sekunde 10",
+  "play": "Cheza",
+  "pause": "Sitisha",
+  "seek": "Mahali katika mtiririko"
+}

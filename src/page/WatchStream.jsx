@@ -8,6 +8,8 @@ import '@snapie/hangouts-react/src/styles/hangouts.css';
 import StreamBoostButton from '../components/openpods/StreamBoostButton';
 import StreamReportButton from '../components/openpods/StreamReportButton';
 import StreamClipButton from '../components/openpods/StreamClipButton';
+import { StreamRewindButton, StreamRewindPlayer } from '../components/openpods/StreamRewind';
+import { useStreamRewind } from '../hooks/useStreamRewind';
 import CroppableStreamVideo from '../components/openpods/CroppableStreamVideo';
 import LiveAdLayer from '../components/openpods/LiveAdLayer';
 import StreamFullscreenButton from '../components/openpods/StreamFullscreenButton';
@@ -255,6 +257,9 @@ export default function WatchStream() {
   // While LiveAdLayer holds the stream for a pre-roll: the stream's sound is off
   // and, on phones, its chrome (chat, rail, caption) steps out of the ad's way.
   const [prerollHold, setPrerollHold] = useState(false);
+  // Rewind (H14): the Pro DVR's last minutes over the live picture; the live
+  // sound is held while it plays.
+  const rewind = useStreamRewind(endpoint?.api, streamId, sessionToken);
   // Swipe/scroll to the next live stream, shorts-style. No-op when nothing else
   // is live.
   const { containerRef: pagerRef, hasNext: hasNextLive } = useLiveStreamPager({
@@ -392,7 +397,7 @@ export default function WatchStream() {
           aioha={aioha}
         >
           {!connectReady ? <BarLoader /> : (
-            <StandaloneWatch key={joinKey} roomName={streamId} connecting={<BarLoader />} audioMuted={prerollHold}>
+            <StandaloneWatch key={joinKey} roomName={streamId} connecting={<BarLoader />} audioMuted={prerollHold || rewind.active}>
               <main className={`short-main no-bottom-bar ws-shorts${isLandscape ? ' ws-shorts--landscape' : ''}${!infoVisible ? ' ws-info-hidden' : ''}${prerollHold ? ' ws-preroll-on' : ''}${chatOverlayOn ? '' : ' ws-chat-off'}${controlsHidden ? ' ws-controls-hidden' : ''}`}>
                 <div className="videoWrapper">
                   <div className="videoContainer" ref={pagerRef} onClick={revealInfo}>
@@ -402,6 +407,7 @@ export default function WatchStream() {
                     {/* Free host streaming from OBS: draw the 3Speak mark the
                         browser studio would have burned in. Follows the crop. */}
                     <StreamWatermark show={showWatermark} />
+                    <StreamRewindPlayer rewind={rewind} />
                     {/* Ticker + drawn banner. Below the back button / quality row. */}
                     <LiveAdLayer
                       host={host}
@@ -480,6 +486,7 @@ export default function WatchStream() {
                         <div className="actionButton"><Icon name={copied ? 'check' : 'share'} size={24} /></div>
                         <span className="actionLabel">{copied ? t('common.actions.copied') : t('common.actions.share')}</span>
                       </div>
+                      <StreamRewindButton rewind={rewind} variant="sidebar" />
                       <StreamClipButton roomName={streamId} variant="sidebar" />
                       <StreamReportButton roomName={streamId} host={host} variant="sidebar" />
                       <div className="actionItem" onClick={() => setControlsHidden(true)}>
@@ -549,7 +556,7 @@ export default function WatchStream() {
       >
         {!connectReady ? <BarLoader /> : (
 
-        <StandaloneWatch key={joinKey} roomName={streamId} connecting={<BarLoader />} audioMuted={prerollHold}>
+        <StandaloneWatch key={joinKey} roomName={streamId} connecting={<BarLoader />} audioMuted={prerollHold || rewind.active}>
           {/* Live strip (18c): LIVE, time on air, who is watching, playback quality. */}
           <div className="ws-strip">
             <StatusPill tone="live" className="ws-live-tag">{t('feeds.live.badge')}</StatusPill>
@@ -567,6 +574,7 @@ export default function WatchStream() {
               <div className="ws-player">
                 <StreamVideo showLiveBadge={false} boostLabels={boostLabels} />
                 <StreamWatermark show={showWatermark} />
+                <StreamRewindPlayer rewind={rewind} />
                 <LiveAdLayer host={host} room={streamId} onPreroll={setPrerollHold} />
                 {/* The creator on the player, with Follow (18c). */}
                 <div className="ws-creator">
@@ -595,6 +603,7 @@ export default function WatchStream() {
                   {needsSignIn
                     ? <StreamSignInButton variant="dock" label={t('misc.watchStream.signInRaiseHand')} onSignIn={signIn} busy={signingIn} />
                     : <CollabRequest canRequest={canInteract} />}
+                  <StreamRewindButton rewind={rewind} />
                   <StreamClipButton roomName={streamId} />
                   <StreamBoostButton />
                   <DockTile icon={copied ? 'check' : 'ios_share'} label={copied ? t('common.actions.copied') : t('common.actions.share')} onClick={copyLink} title={t('misc.watchStream.copyLink')} />
