@@ -1,0 +1,5 @@
+{
+  "videoEditor": "视频编辑器",
+  "videoEditorSub": "剪辑最长 10 分钟的横屏视频",
+  "editorTooLong": "视频编辑器支持最长 {{minutes}} 分钟的视频"
+}

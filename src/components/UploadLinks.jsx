@@ -87,6 +87,13 @@ export default function UploadLinks({ linkClass, iconClass = "icon", onClick }) 
             <ItemIcon name="movie_edit" tone="accent" className={iconClass} /> {text('shortsEditor')}
           </a>
         )}
+        {/* The same editor as a landscape project (up to 10 minutes), posted as a
+            normal video (hooks/useEditorLauncher.js, open-video-editor). */}
+        {FEATURE_EDITOR && (
+          <a href="#" className={linkClass} title={t('editorFormat.videoEditor')} onClick={(e) => gatedGo(e, () => window.dispatchEvent(new CustomEvent('open-video-editor')))}>
+            <ItemIcon name="content_cut" tone="accent" className={iconClass} /> <ItemText label={t('editorFormat.videoEditor')} sub={t('editorFormat.videoEditorSub')} />
+          </a>
+        )}
         {/* 24h story: a vertical short that leaves the stories row after a day.
             Any Hive account (storiesEnabledFor); the checker enforces it too. */}
         {storiesEnabledFor(user) && (

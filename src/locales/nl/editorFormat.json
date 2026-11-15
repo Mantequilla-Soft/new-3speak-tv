@@ -1,0 +1,5 @@
+{
+  "videoEditor": "Video-editor",
+  "videoEditorSub": "Bewerk een liggende video tot 10 minuten",
+  "editorTooLong": "De video-editor neemt video's tot {{minutes}} minuten"
+}

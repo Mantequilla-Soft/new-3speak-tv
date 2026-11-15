@@ -1,0 +1,5 @@
+{
+  "videoEditor": "Editor Video",
+  "videoEditorSub": "Edit video lanskap hingga 10 menit",
+  "editorTooLong": "Editor video menerima video hingga {{minutes}} menit"
+}
