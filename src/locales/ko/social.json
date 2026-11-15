@@ -1,0 +1,96 @@
+{
+  "levels": {
+    "button": "알림",
+    "buttonTitle": "@{{user}}님의 알림: {{level}}",
+    "title": "@{{user}}님의 알림",
+    "sub": "설정의 기기별 스위치는 그대로 적용돼요.",
+    "saveFailed": "저장하지 못했어요. 다시 시도해 주세요.",
+    "all": {
+      "title": "전체",
+      "desc": "동영상, 쇼츠, 스토리, 오디오, 라이브 시작 알림.",
+      "saved": "@{{user}}님의 모든 소식을 알려 드려요."
+    },
+    "highlights": {
+      "title": "하이라이트",
+      "desc": "동영상, 오디오, 라이브 시작 알림. 쇼츠와 스토리는 제외.",
+      "saved": "이제 @{{user}}님의 하이라이트만 알려 드려요."
+    },
+    "off": {
+      "title": "끔",
+      "desc": "이 크리에이터의 알림을 받지 않아요. 팔로우는 유지돼요.",
+      "saved": "@{{user}}님의 알림을 껐어요."
+    }
+  },
+  "live": {
+    "badge": "LIVE",
+    "aria": "팔로우하는 사람들의 라이브",
+    "summary_other": "팔로우하는 {{count}}명이 지금 라이브 중이에요"
+  },
+  "notifs": {
+    "heading": "3Speak 알림",
+    "liveNow": "@{{user}}님이 라이브 중이에요",
+    "wasLive": "@{{user}}님이 라이브를 시작했어요",
+    "collabInvite": "@{{user}}님이 콜라보에 초대했어요"
+  },
+  "push": {
+    "live": {
+      "title": "라이브 시작",
+      "desc": "팔로우하는 크리에이터가 라이브 방송을 시작할 때."
+    }
+  },
+  "collab": {
+    "accept": "수락",
+    "decline": "거절",
+    "acceptedToast": "@{{user}}님과의 콜라보가 내 채널에 올라갔어요.",
+    "declinedToast": "초대를 거절했어요.",
+    "answerFailed": "답변을 보내지 못했어요. 다시 시도해 주세요.",
+    "row": "공동 제작자 추가",
+    "rowSub": "공동 제작자와 함께 올리고 보상을 나눠요",
+    "rowSet": "@{{user}}님이 내 몫의 {{split}}%를 받아요",
+    "modalTitle": "공동 제작자 추가",
+    "modalSub": "상대방에게 초대가 가요. 수락하면 두 채널 모두에 동영상이 올라가요.",
+    "accountLabel": "공동 제작자",
+    "accountPlaceholder": "Hive 계정 이름",
+    "suggestions": "일치하는 계정",
+    "splitLabel": "내 보상 중 상대방 몫",
+    "splitPreview": "@{{user}}님이 보상의 {{share}}%를 받고, 나는 {{mine}}%를 가져요.",
+    "inviteNote": "이 분배는 Hive 수혜자로 설정되어, 상대방이 거절해도 적용돼요.",
+    "someone": "공동 제작자",
+    "save": "저장",
+    "remove": "제거",
+    "noRoom": "@{{user}}님을 수혜자로 추가하지 못했어요: 이 게시물은 이미 Hive가 허용하는 최대 수혜자 수에 도달했어요.",
+    "errors": {
+      "invalid": "올바른 Hive 계정 이름이 아니에요.",
+      "self": "자기 자신과는 콜라보할 수 없어요.",
+      "notFound": "@{{user}}은(는) Hive 계정이 아니에요."
+    },
+    "cardWith": "{{users}}와 함께",
+    "cardBoth": "{{author}}, {{users}}와 함께",
+    "withLabel": "함께",
+    "invitesTitle": "콜라보 초대"
+  },
+  "polls": {
+    "aria": "투표",
+    "addPoll": "투표",
+    "removePoll": "투표 없음",
+    "editorAria": "투표 항목",
+    "questionPlaceholder": "팔로워에게 질문해 보세요",
+    "optionPlaceholder": "항목 {{n}}",
+    "removeOption": "항목 {{n}} 삭제",
+    "addOption": "항목 추가",
+    "duration": "투표 종료",
+    "days_other": "{{count}}일",
+    "noEnd": "종료일 없음",
+    "invalid": "투표에는 서로 다른 항목이 {{min}}~{{max}}개 필요해요.",
+    "votes_other": "{{count}}표",
+    "endsInDays_other": "{{count}}일 후 종료",
+    "endsInHours_other": "{{count}}시간 후 종료",
+    "closed": "투표 종료됨",
+    "open": "진행 중",
+    "changeHint": "다른 항목을 탭하면 투표를 바꿀 수 있어요.",
+    "signIn": "로그인하고 투표하세요.",
+    "closedToast": "이 투표는 종료됐어요.",
+    "voteFailed": "투표가 반영되지 않았어요. 다시 시도해 주세요.",
+    "statsTitle": "투표"
+  }
+}

@@ -1,0 +1,101 @@
+{
+  "levels": {
+    "button": "Arifu",
+    "buttonTitle": "Arifa kutoka kwa @{{user}}: {{level}}",
+    "title": "Arifa kutoka kwa @{{user}}",
+    "sub": "Swichi za kifaa chako kwenye Mipangilio bado zinatumika.",
+    "saveFailed": "Imeshindwa kuhifadhi. Tafadhali jaribu tena.",
+    "all": {
+      "title": "Zote",
+      "desc": "Video, shorts, hadithi, sauti na wanapoanza mubashara.",
+      "saved": "Utaarifiwa kuhusu kila kitu kutoka kwa @{{user}}."
+    },
+    "highlights": {
+      "title": "Muhimu",
+      "desc": "Video, sauti na wanapoanza mubashara. Hakuna shorts wala hadithi.",
+      "saved": "Kuanzia sasa ni mambo muhimu tu kutoka kwa @{{user}}."
+    },
+    "off": {
+      "title": "Zima",
+      "desc": "Hakuna arifa kutoka kwa mtayarishaji huyu. Bado unamfuata.",
+      "saved": "Arifa kutoka kwa @{{user}} zimezimwa."
+    }
+  },
+  "live": {
+    "badge": "MUBASHARA",
+    "aria": "Mubashara sasa kutoka kwa watu unaowafuata",
+    "summary_one": "Mtu {{count}} unayemfuata yuko mubashara sasa",
+    "summary_other": "Watu {{count}} unaowafuata wako mubashara sasa"
+  },
+  "notifs": {
+    "heading": "Kutoka 3Speak",
+    "liveNow": "@{{user}} yuko mubashara",
+    "wasLive": "@{{user}} alianza mubashara",
+    "collabInvite": "@{{user}} amekualika kwenye ushirikiano"
+  },
+  "push": {
+    "live": {
+      "title": "Kuanza mubashara",
+      "desc": "Mtayarishaji unayemfuata anapoanza mtiririko mubashara."
+    }
+  },
+  "collab": {
+    "accept": "Kubali",
+    "decline": "Kataa",
+    "acceptedToast": "Ushirikiano na @{{user}} sasa uko kwenye chaneli yako.",
+    "declinedToast": "Mwaliko umekataliwa.",
+    "answerFailed": "Imeshindwa kutuma jibu lako. Tafadhali jaribu tena.",
+    "row": "Ongeza mshirika",
+    "rowSub": "Ichapishe pamoja na mtayarishaji mwenza na mgawane malipo",
+    "rowSet": "@{{user}} anapata {{split}}% ya sehemu yako",
+    "modalTitle": "Ongeza mshirika",
+    "modalSub": "Watapata mwaliko. Wakikubali, video itakuwa kwenye chaneli zote mbili.",
+    "accountLabel": "Mtayarishaji mwenza",
+    "accountPlaceholder": "Jina la akaunti ya Hive",
+    "suggestions": "Akaunti zinazolingana",
+    "splitLabel": "Sehemu yao ya malipo yako",
+    "splitPreview": "@{{user}} anapata {{share}}% ya malipo, wewe unabaki na {{mine}}%.",
+    "inviteNote": "Mgawanyo huu ni mnufaika wa Hive, kwa hivyo unatumika hata wakikataa.",
+    "someone": "mtayarishaji mwenza wako",
+    "save": "Hifadhi",
+    "remove": "Ondoa",
+    "noRoom": "@{{user}} hakuongezwa kama mnufaika: chapisho tayari lina idadi ya juu ya wanufaika ambayo Hive inaruhusu.",
+    "errors": {
+      "invalid": "Hilo si jina sahihi la akaunti ya Hive.",
+      "self": "Huwezi kushirikiana na wewe mwenyewe.",
+      "notFound": "@{{user}} si akaunti ya Hive."
+    },
+    "cardWith": "pamoja na {{users}}",
+    "cardBoth": "{{author}} pamoja na {{users}}",
+    "withLabel": "pamoja na",
+    "invitesTitle": "Mialiko ya ushirikiano"
+  },
+  "polls": {
+    "aria": "Kura ya maoni",
+    "addPoll": "Kura ya maoni",
+    "removePoll": "Bila kura ya maoni",
+    "editorAria": "Chaguo za kura ya maoni",
+    "questionPlaceholder": "Waulize wafuasi wako swali",
+    "optionPlaceholder": "Chaguo {{n}}",
+    "removeOption": "Ondoa chaguo {{n}}",
+    "addOption": "Ongeza chaguo",
+    "duration": "Kura inaisha",
+    "days_one": "Siku {{count}}",
+    "days_other": "Siku {{count}}",
+    "noEnd": "Hakuna tarehe ya mwisho",
+    "invalid": "Kura ya maoni inahitaji chaguo {{min}} hadi {{max}} tofauti.",
+    "votes_one": "Kura {{count}}",
+    "votes_other": "Kura {{count}}",
+    "endsInDays_one": "Inaisha baada ya siku {{count}}",
+    "endsInDays_other": "Inaisha baada ya siku {{count}}",
+    "endsInHours_one": "Inaisha baada ya saa {{count}}",
+    "endsInHours_other": "Inaisha baada ya saa {{count}}",
+    "closed": "Kura imefungwa",
+    "open": "Wazi",
+    "changeHint": "Gusa chaguo jingine kubadilisha kura yako.",
+    "signIn": "Ingia ili upige kura.",
+    "closedToast": "Kura hii ya maoni imeisha.",
+    "voteFailed": "Kura yako haikupita. Tafadhali jaribu tena.",
+    "statsTitle": "Kura za maoni"
+  }
+}

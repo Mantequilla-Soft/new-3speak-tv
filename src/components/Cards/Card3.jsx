@@ -1,4 +1,6 @@
 import PayoutAmount from "../PayoutAmount/PayoutAmount";
+import { collaboratorsOf } from '../../lib/collabs';
+import './CardCollab.scss';
 import { bodyToPlaintext } from '../../hive-api/hiveApi';
 import { useDeadVideos } from '../../lib/deadVideos';
 import UpvoteCount from "../UpvoteCount/UpvoteCount";
@@ -626,7 +628,18 @@ function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0
                         <Icon name="eco" size={14} />
                       </span>
                     )}
+                    {/* Collab post (lib/collabs.js): "with fan" after the name. */}
+                    {collaboratorsOf(video).length > 0 && (
+                      <span className="card-collab">{t('social.collab.cardWith', { users: collaboratorsOf(video).join(', ') })}</span>
+                    )}
                   </span>}
+                  {/* On a channel's own grid the name is hidden, but a collab post may
+                      be someone else's: both names then. */}
+                  {hideAuthor && collaboratorsOf(video).length > 0 && (
+                    <span className="card-author-group card-collab">
+                      {t('social.collab.cardBoth', { author: cardAuthor, users: collaboratorsOf(video).join(', ') })}
+                    </span>
+                  )}
                   {video._liveStream ? (
                     /* On a live tile the slot counts people watching RIGHT NOW,
                        not lifetime views, and says so. */

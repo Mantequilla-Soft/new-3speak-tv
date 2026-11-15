@@ -1,0 +1,15 @@
+// The level dialog's choices (NotifyLevelButton.jsx): the v2 ChoiceCards in a
+// column, like the other one-of-three pickers.
+.notify-level-choices {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+// The compact bell beside an AuthorBadge's Follow pill: same height and surface.
+.author-badge .follow-btn.notify-level-btn {
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  padding: 0;
+}

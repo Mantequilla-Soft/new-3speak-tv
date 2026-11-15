@@ -36,6 +36,7 @@ import UserAudioList from './UserAudioList';
 import CommunitySnaps from './CommunitySnaps';
 import SpotlightEditor from '../Spotlight/SpotlightEditor';
 import ProfileStreams, { ProfileLiveNow } from './ProfileStreams';
+import NotifyLevelButton from '../NotifyLevel/NotifyLevelButton';
 import { fetchSnaps } from '../../lib/snaps';
 import SocialLinks from './SocialLinks';
 import LeaderboardBadges from '../LeaderboardBadges/LeaderboardBadges';
@@ -616,6 +617,8 @@ const {
             >
               {followLoading ? t('common.status.loading') : isFollowing ? t('common.actions.following') : t('common.actions.follow')}
             </Button>
+            {/* All / Highlights / Off for this creator, once followed. */}
+            {authenticated && isFollowing && <NotifyLevelButton creator={user} />}
             <ProfileTile
               icon="chat_bubble"
               label={t('profile.page.message')}

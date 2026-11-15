@@ -1,0 +1,31 @@
+@use "../../styles/v2" as v2;
+
+// Creator stats' Polls card (CreatorPollsCard.jsx): each poll's question, its
+// vote count, then the stats page's bars. The list scrolls inside like Top content.
+.cs-polls .cs-polls-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-height: 420px;
+  @include v2.scroll-y;
+}
+
+.cs-poll {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cs-poll-q {
+  color: var(--text);
+  font-weight: 700;
+  font-size: 14px;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+  &:hover { text-decoration: underline; }
+}
+
+.cs-poll-sub {
+  font-size: 12px;
+  color: var(--muted);
+}

@@ -118,7 +118,7 @@ function buildOptions(author, permlink, rewards, beneficiaries) {
  *           beneficiaries?:{account:string,weight:number}[], nsfw?:boolean, community?:string }} opts
  * @returns {{ author:string, permlink:string, indexed:object|null }}
  */
-export async function publishSnap({ user, body, tags = [], rewards = 'default', beneficiaries = [], nsfw = false, community = '' }) {
+export async function publishSnap({ user, body, tags = [], rewards = 'default', beneficiaries = [], nsfw = false, community = '', poll = null }) {
   if (!user) throw new Error('Please log in first');
   const text = String(body || '').trim();
   if (!text) throw new Error('Write something first');
@@ -144,6 +144,8 @@ export async function publishSnap({ user, body, tags = [], rewards = 'default', 
     tags: finalTags,
     type: 'snap',
     ...(COMMUNITY_ID.test(community) ? { community } : {}),
+    // A poll snap (lib/polls.js buildPollMeta): the body is the question.
+    ...(poll && Array.isArray(poll.options) ? { poll } : {}),
   };
 
   const options = buildOptions(user, permlink, rewards, beneficiaries);
@@ -200,9 +202,12 @@ export async function updateSnap({ user, permlink, body, tags = [], nsfw = false
   // Keep the community the snap was filed under: an edit rewrites the whole
   // json_metadata, and dropping it would pull the snap out of that Discussion tab.
   let community = '';
+  let poll = null;
   try {
     const prev = typeof post.json_metadata === 'string' ? JSON.parse(post.json_metadata || '{}') : (post.json_metadata || {});
     if (COMMUNITY_ID.test(prev.community || '')) community = prev.community;
+    // A poll stays as it was published: the checker keeps the first one anyway.
+    if (prev.poll && Array.isArray(prev.poll.options)) poll = prev.poll;
   } catch { /* unreadable metadata: nothing to keep */ }
 
   const jsonMetadata = {
@@ -211,6 +216,7 @@ export async function updateSnap({ user, permlink, body, tags = [], nsfw = false
     tags: cleanTags.slice(0, 10),
     type: 'snap',
     ...(community ? { community } : {}),
+    ...(poll ? { poll } : {}),
   };
 
   const result = await commentWithAioha(post.parent_author, post.parent_permlink, permlink, '', text, jsonMetadata, null);

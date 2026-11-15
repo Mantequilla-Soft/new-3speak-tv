@@ -17,6 +17,7 @@ import { setChannelTrailer } from '../utils/channelTrailer';
 import { syncVideoAdOptOut } from '../lib/advertiseData';
 import { markImportPublished } from '../lib/youtubeImport';
 import { sanitizeMusicCredits, soundAuthorsOf, soundCreditsMarkdown, primarySoundMetadata } from '../utils/soundCredits';
+import { registerCollab, collabWeight } from '../lib/collabs';
 import { enforceLockedBeneficiaries, getLockedBeneficiaries, chargesEncoder, LOCKED_FUND_ACCOUNT, LOCKED_ENCODER_ACCOUNT } from '../utils/beneficiaries';
 import { remixChainAuthors, remixChainMarkdown } from '../utils/remixChain';
 import { oaEnvelope, threespeakVideo, probeVideoOrientation, OA_ARTICLE, OA_MICROPOST, OA_COMMENT } from '../utils/openAttribute';
@@ -198,6 +199,9 @@ export function EmbedUploadProvider({ children }) {
   const [videoRollsEnabled, setVideoRollsEnabled] = useState(true);
   // "Mark as channel trailer" — pinned to the creator's profile after publish.
   const [isChannelTrailer, setIsChannelTrailer] = useState(false);
+  // Collab post (lib/collabs.js): { account, split } or null. Regular videos by
+  // a Hive account only; the co-creator gets an invite on the checker.
+  const [collaborator, setCollaborator] = useState(null);
   const [isScheduled, setIsScheduled] = useState(false);
   const [scheduleDateTime, setScheduleDateTime] = useState('');
 
@@ -440,6 +444,7 @@ export function EmbedUploadProvider({ children }) {
     setVideoAdsEnabled(true);
     setVideoRollsEnabled(true);
     setIsChannelTrailer(false);
+    setCollaborator(null);
     SetDeclineRewards(false);
     setRewardPowerup(false);
     setIsScheduled(false);
@@ -1812,10 +1817,17 @@ export function EmbedUploadProvider({ children }) {
       // file — a remix that reuses an existing embed never had one.
       const oaOrientation = await probeVideoOrientation(videoFile);
 
+      // Collab post: a regular video by a Hive account naming someone else.
+      const collab = (!fromStories && !incubationHandle && collaborator?.account && collaborator.account !== user)
+        ? collaborator : null;
+
       const jsonMetadata = {
         app: '3speak/embed',
         format: 'markdown',
         tags: [...baseTags, ...userTags],
+        // Who made it with the author (routes/collabs.js on the checker reads it
+        // back from the post and invites them). The split is a beneficiary below.
+        ...(collab ? { collaborators: [collab.account] } : {}),
         // Top-level `image: [url]` is the Hive-wide convention frontends read to
         // pick a post's cover (peakd, ecency, hive.blog, …). Only add it when we
         // actually have a thumbnail — otherwise we'd post `image: [null]` which
@@ -1930,6 +1942,16 @@ export function EmbedUploadProvider({ children }) {
         remixAuthors: originalAuthor && originalPermlink ? remixChainAuthors(remixChain, user) : [],
         soundAuthors: soundAuthorsOf(musicCredits, user),
       });
+
+        // The collaborator's split: their share of what the author keeps after
+        // every other beneficiary (lib/collabs.js collabWeight). Skipped, with a
+        // note in the log, when Hive's beneficiary limit leaves no room.
+        if (collab) {
+          const others = [...beneMap.entries()].filter(([a]) => a !== collab.account).map(([account, weight]) => ({ account, weight }));
+          const w = collabWeight(others, collab.split);
+          if (w) beneMap.set(collab.account, w);
+          else addMessage(t('social.collab.noRoom', { user: collab.account }), 'error');
+        }
 
         // Convert map to sorted array (sorted by account name — required by Hive protocol)
         allBeneficiaries = [...beneMap.entries()]
@@ -2175,6 +2197,12 @@ export function EmbedUploadProvider({ children }) {
       }
 
       addMessage(t('upload.publishing.log.postedToHive'));
+
+      // Collab: the checker reads the post back and invites the co-creator.
+      // In the background: the upload is done either way.
+      if (collab && !result.incubation) {
+        registerCollab(user, hivePermlink).catch(() => {});
+      }
       setStatusText(t('upload.publishing.linkingEmbed'));
 
       // ─── Step 3: Link embed video to Hive post ───
@@ -2331,6 +2359,7 @@ export function EmbedUploadProvider({ children }) {
     videoAdsEnabled, setVideoAdsEnabled,
     videoRollsEnabled, setVideoRollsEnabled,
     isChannelTrailer, setIsChannelTrailer,
+    collaborator, setCollaborator,
     isScheduled, setIsScheduled,
     scheduleDateTime, setScheduleDateTime,
     // Community data

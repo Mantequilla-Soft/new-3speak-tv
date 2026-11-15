@@ -120,6 +120,14 @@ describe('a grid of video cards', () => {
     expect(c.querySelector('.card-body.is-own-channel')).not.toBeNull()
   })
 
+  it('a collab post says who it was made with, on a channel grid with both names', () => {
+    const { unmount } = mount({ videos: [video('badadib', 'lake-day', { collaborators: ['fan'] })] })
+    expect(screen.getByText('with fan')).toBeInTheDocument()
+    unmount()
+    mount({ videos: [video('badadib', 'lake-day', { collaborators: ['fan'] })], hideAuthor: true })
+    expect(screen.getByText('badadib with fan')).toBeInTheDocument()
+  })
+
   it('uses another link form for other prefixes, with the page\'s query', () => {
     mount({ videos: [video('badadib', 'clip')], linkPrefix: '/shorts', linkQuery: '&from=feed' })
     expect(card('Title clip')).toHaveAttribute('href', '/shorts?v=badadib/clip&from=feed')

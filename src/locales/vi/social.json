@@ -1,0 +1,96 @@
+{
+  "levels": {
+    "button": "Thông báo",
+    "buttonTitle": "Thông báo từ @{{user}}: {{level}}",
+    "title": "Thông báo từ @{{user}}",
+    "sub": "Các công tắc thiết bị trong Cài đặt vẫn được áp dụng.",
+    "saveFailed": "Không thể lưu. Vui lòng thử lại.",
+    "all": {
+      "title": "Tất cả",
+      "desc": "Video, Shorts, tin, âm thanh và khi họ phát trực tiếp.",
+      "saved": "Bạn sẽ được thông báo mọi thứ từ @{{user}}."
+    },
+    "highlights": {
+      "title": "Nổi bật",
+      "desc": "Video, âm thanh và khi họ phát trực tiếp. Không có Shorts hay tin.",
+      "saved": "Từ giờ chỉ nhận nội dung nổi bật từ @{{user}}."
+    },
+    "off": {
+      "title": "Tắt",
+      "desc": "Không nhận thông báo từ nhà sáng tạo này. Bạn vẫn theo dõi họ.",
+      "saved": "Đã tắt thông báo từ @{{user}}."
+    }
+  },
+  "live": {
+    "badge": "TRỰC TIẾP",
+    "aria": "Đang trực tiếp từ những người bạn theo dõi",
+    "summary_other": "{{count}} người bạn theo dõi đang phát trực tiếp"
+  },
+  "notifs": {
+    "heading": "Từ 3Speak",
+    "liveNow": "@{{user}} đang phát trực tiếp",
+    "wasLive": "@{{user}} đã phát trực tiếp",
+    "collabInvite": "@{{user}} đã mời bạn cộng tác"
+  },
+  "push": {
+    "live": {
+      "title": "Phát trực tiếp",
+      "desc": "Khi một nhà sáng tạo bạn theo dõi bắt đầu phát trực tiếp."
+    }
+  },
+  "collab": {
+    "accept": "Chấp nhận",
+    "decline": "Từ chối",
+    "acceptedToast": "Bài cộng tác với @{{user}} giờ đã có trên kênh của bạn.",
+    "declinedToast": "Đã từ chối lời mời.",
+    "answerFailed": "Không thể gửi câu trả lời. Vui lòng thử lại.",
+    "row": "Thêm cộng tác viên",
+    "rowSub": "Đăng cùng một đồng sáng tạo và chia sẻ phần thưởng",
+    "rowSet": "@{{user}} nhận {{split}}% phần của bạn",
+    "modalTitle": "Thêm cộng tác viên",
+    "modalSub": "Họ sẽ nhận được lời mời. Khi họ chấp nhận, video sẽ có trên cả hai kênh.",
+    "accountLabel": "Đồng sáng tạo",
+    "accountPlaceholder": "Tên tài khoản Hive",
+    "suggestions": "Tài khoản phù hợp",
+    "splitLabel": "Phần của họ trong phần thưởng của bạn",
+    "splitPreview": "@{{user}} nhận {{share}}% phần thưởng, bạn giữ {{mine}}%.",
+    "inviteNote": "Phần chia là người thụ hưởng trên Hive, nên vẫn áp dụng kể cả khi họ từ chối.",
+    "someone": "đồng sáng tạo của bạn",
+    "save": "Lưu",
+    "remove": "Xóa",
+    "noRoom": "@{{user}} chưa được thêm làm người thụ hưởng: bài đăng đã có số người thụ hưởng tối đa mà Hive cho phép.",
+    "errors": {
+      "invalid": "Đó không phải là tên tài khoản Hive hợp lệ.",
+      "self": "Bạn không thể cộng tác với chính mình.",
+      "notFound": "@{{user}} không phải là tài khoản Hive."
+    },
+    "cardWith": "cùng {{users}}",
+    "cardBoth": "{{author}} cùng {{users}}",
+    "withLabel": "cùng",
+    "invitesTitle": "Lời mời cộng tác"
+  },
+  "polls": {
+    "aria": "Bình chọn",
+    "addPoll": "Bình chọn",
+    "removePoll": "Không bình chọn",
+    "editorAria": "Các lựa chọn bình chọn",
+    "questionPlaceholder": "Đặt câu hỏi cho người theo dõi của bạn",
+    "optionPlaceholder": "Lựa chọn {{n}}",
+    "removeOption": "Xóa lựa chọn {{n}}",
+    "addOption": "Thêm lựa chọn",
+    "duration": "Bình chọn kết thúc",
+    "days_other": "{{count}} ngày",
+    "noEnd": "Không có ngày kết thúc",
+    "invalid": "Một bình chọn cần từ {{min}} đến {{max}} lựa chọn khác nhau.",
+    "votes_other": "{{count}} phiếu",
+    "endsInDays_other": "Kết thúc sau {{count}} ngày",
+    "endsInHours_other": "Kết thúc sau {{count}} giờ",
+    "closed": "Bình chọn đã đóng",
+    "open": "Đang mở",
+    "changeHint": "Chạm vào lựa chọn khác để đổi phiếu.",
+    "signIn": "Đăng nhập để bình chọn.",
+    "closedToast": "Bình chọn này đã kết thúc.",
+    "voteFailed": "Phiếu của bạn chưa được ghi nhận. Vui lòng thử lại.",
+    "statsTitle": "Bình chọn"
+  }
+}

@@ -1,0 +1,8 @@
+// "badadib with fan" on a collab post's card (Card3.jsx, lib/collabs.js): muted,
+// one line, cut with an ellipsis before it can push the views off the card.
+.card-meta .card-collab {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

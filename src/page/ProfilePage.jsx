@@ -44,6 +44,7 @@ import { createPlaylist } from "../utils/playlistOperations";
 import PlaylistTypePicker from "../components/PlaylistTypePicker/PlaylistTypePicker";
 import { useQueryClient } from "@tanstack/react-query";
 import ProfileHeader from "../components/ProfileHeader/ProfileHeader";
+import CollabInvites from "../components/Collabs/CollabInvites";
 import ProfileStats from "../components/ProfileHeader/ProfileStats";
 import ProfileOverview from "../components/Userprofilepage/ProfileOverview";
 import ProfileEmptyState from "../components/Userprofilepage/ProfileEmptyState";
@@ -650,6 +651,9 @@ function ProfilePage() {
           </>
         }
       />
+
+      {/* Pending collab invites to this channel (lib/collabs.js). */}
+      {user && <CollabInvites user={user} />}
 
       {/* ================= TABS ================= */}
       <ProfileTabs
