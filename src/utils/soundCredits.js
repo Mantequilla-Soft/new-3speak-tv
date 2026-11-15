@@ -122,17 +122,18 @@ export function primarySoundMetadata(credits) {
 
 /**
  * The credits of a Short made with "Use this sound" (lib/sounds.js soundCredit):
- * that sound first (it is the Short's sound, `video.sound`), then the editor's own
- * songs. An editor that keeps credits on its clips (`canLoadSound`) already sends
- * the sound when it is still on the timeline; an older one drops it, so it is
- * added here. Sanitized like any credit.
+ * the editor's own (it keeps the sound's credit on its music clip and sends the
+ * songs still on the timeline, `canLoadSound`), with the sound first when it is
+ * among them, so it is the Short's sound (`video.sound`). A sound taken off the
+ * timeline is not credited. Sanitized like any credit.
  */
 export function withSoundCredit(rawCredits, soundCredit) {
   const credits = sanitizeMusicCredits(rawCredits);
   if (!soundCredit) return credits;
   const [sound] = sanitizeMusicCredits([soundCredit]);
-  if (!sound) return credits;
-  return sanitizeMusicCredits([sound, ...credits.filter((c) => c.id !== sound.id)]);
+  const used = sound && credits.find((c) => c.id === sound.id);
+  if (!used) return credits;
+  return [used, ...credits.filter((c) => c !== used)];
 }
 
 /** Ticker label for a short: the song if it has one, else the creator's original audio. */

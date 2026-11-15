@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { TRANSLATE_API_URL, CHECKER_URL } from '../utils/config';
 import { parseSrt } from '../utils/srtParser';
+import { autoCaptionLanguages } from '../utils/editorSubtitles';
 
 const SUBTITLE_LANG_KEY = '3speak-subtitle-lang';
 const SUBTITLE_STYLE_KEY = '3speak-subtitle-style';
@@ -150,7 +151,7 @@ export function pickSubtitleLang(available, { anyAsLastResort = false } = {}) {
  */
 export function prefetchSubtitles(author, permlink) {
   listSubtitleLanguages(author, permlink).then((list) => {
-    const lang = pickSubtitleLang(list);
+    const lang = pickSubtitleLang(autoCaptionLanguages(list));
     if (lang) loadSubtitleCues(author, permlink, list.find((l) => l.lang === lang)).catch(() => {});
   });
 }
@@ -196,10 +197,11 @@ export default function useSubtitles(author, permlink, { autoSelect = false } = 
       // Captions come on by themselves only for a viewer who turned CC on before
       // (a saved choice exists), or when `autoSelect` is set. The language is
       // their saved one, else their device language, else English.
-      // setSelectedLang here does NOT persist a choice.
+      // setSelectedLang here does NOT persist a choice. Captions burnt into the
+      // picture (`burnedIn`, the shorts editor's) never come on by themselves.
       let stored = null;
       try { stored = localStorage.getItem(SUBTITLE_LANG_KEY); } catch { /* private mode */ }
-      if (autoSelect || stored) setSelectedLang(pickSubtitleLang(data));
+      if (autoSelect || stored) setSelectedLang(pickSubtitleLang(autoCaptionLanguages(data)));
     });
 
     return () => { cancelled = true; };

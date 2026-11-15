@@ -119,6 +119,18 @@ describe('publishAudiogramShorts', () => {
     expect(steps[2]).toMatchObject({ ok: true, permlink: res[0].permlink })
   })
 
+  it('end to end: the editor\'s start and length land in the Short\'s 3speak.audiogram (the feed\'s soundbite)', async () => {
+    const d = deps()
+    const broadcast = vi.fn(async () => ({ success: true }))
+    // the editor's audiogramsToPost output, as it arrives
+    const fromEditor = [good({ start: 73, duration: 42.5 }), good({ start: 0 }), good()]
+    await publishAudiogramShorts({ audiograms: sanitizeAudiograms(fromEditor), user: 'alice', isPremium: false, episode, broadcast, deps: d })
+    const metaOf = (n) => JSON.parse(broadcast.mock.calls[n][0][0][1].json_metadata)['3speak'].audiogram
+    expect(metaOf(0)).toEqual({ author: 'alice', permlink: 'my-episode', start: 73, duration: 42.5 })
+    expect(metaOf(1)).toEqual({ author: 'alice', permlink: 'my-episode', start: 0, duration: 30 })
+    expect(metaOf(2)).toEqual({ author: 'alice', permlink: 'my-episode' })
+  })
+
   it('uses the Short\'s own title and the thumbnail made in the upload', async () => {
     const d = deps()
     const broadcast = vi.fn(async () => ({ success: true }))

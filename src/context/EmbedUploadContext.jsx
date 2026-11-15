@@ -17,6 +17,7 @@ import { setChannelTrailer } from '../utils/channelTrailer';
 import { syncVideoAdOptOut } from '../lib/advertiseData';
 import { markImportPublished } from '../lib/youtubeImport';
 import { sanitizeMusicCredits, soundAuthorsOf, soundCreditsMarkdown, primarySoundMetadata } from '../utils/soundCredits';
+import { saveCaptionEdit } from '../lib/captionEdit';
 import { registerCollab, collabWeight } from '../lib/collabs';
 import { enforceLockedBeneficiaries, getLockedBeneficiaries, chargesEncoder, LOCKED_FUND_ACCOUNT, LOCKED_ENCODER_ACCOUNT } from '../utils/beneficiaries';
 import { remixChainAuthors, remixChainMarkdown } from '../utils/remixChain';
@@ -283,6 +284,9 @@ export function EmbedUploadProvider({ children }) {
   // in the soundtrack ticker, 3Speak sound creators get a locked split)
   const [musicCredits, setMusicCreditsRaw] = useState([]);
   const setMusicCredits = useCallback((raw) => setMusicCreditsRaw(sanitizeMusicCredits(raw)), []);
+  // The shorts editor's auto captions ({ language, cues, burnedIn }, already
+  // checked: utils/editorSubtitles.js), saved as the Short's subtitles once it is published
+  const [editorSubtitles, setEditorSubtitles] = useState(null);
 
   // Reusable flag (allow others to remix/clip this video)
   const [reusable, setReusable] = useState(true);
@@ -476,6 +480,7 @@ export function EmbedUploadProvider({ children }) {
     setOriginalShortPermlink(null);
     setRemixChain([]);
     setMusicCreditsRaw([]);
+    setEditorSubtitles(null);
     setReusable(true);
     setChapters([]);
     setTimelineLinks([]);
@@ -2352,6 +2357,21 @@ export function EmbedUploadProvider({ children }) {
         }
       }
 
+      // ─── The shorts editor's captions: the Short's subtitles ───
+      // After the post exists, under its Hive permlink (what the watch page and
+      // the transcript ask for). The author adds the language (checker POST
+      // /subtitles/edit); burnt-in ones are marked so CC stays off for them by
+      // default. Non-fatal: the Short is out either way.
+      if (editorSubtitles?.cues?.length && !result.incubation && user) {
+        try {
+          await saveCaptionEdit({ author: user, permlink: hivePermlink, lang: editorSubtitles.language || 'en', cues: editorSubtitles.cues, burnedIn: editorSubtitles.burnedIn === true });
+          addMessage(t('editorLink.captionsSaved'), 'success');
+        } catch (capErr) {
+          console.warn('Failed to save the editor captions as subtitles:', capErr);
+          addMessage(t('editorLink.captionsFailed'), 'warning');
+        }
+      }
+
       // ─── Imported video: remember it is on 3Speak now ───
       // Non-fatal and silent: it only feeds the ✓ on the import page.
       if (importSource && !result.incubation) {
@@ -2457,6 +2477,7 @@ export function EmbedUploadProvider({ children }) {
     originalShortPermlink, setOriginalShortPermlink,
     remixChain, setRemixChain,
     musicCredits, setMusicCredits,
+    editorSubtitles, setEditorSubtitles,
     // Reusable flag
     reusable, setReusable,
     // Timeline step
