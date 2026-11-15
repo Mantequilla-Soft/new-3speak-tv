@@ -1,6 +1,7 @@
 @use '../../styles/shorts-action-rail' as rail;
 @use '../../styles/v2' as v2;
 @use '../openpods/hangouts-skin' as hh;
+@use '../openpods/studio-tools-skin' as tools;
 
 /* The OpenPods room / stream studio (SDK HangoutsRoom) in a full-size v2 sheet,
    plus our own states around it: connecting (39c) and stream ended (39c). */
@@ -25,6 +26,8 @@
   @include hh.room;
   // The goal bar over the studio preview (SDK hh-studio__boost-goal).
   @include hh.boost-goal;
+  // Overlays button, stream health panel, Phone version (studio tools).
+  @include tools.studio-tools;
   position: relative;
   background: var(--bg);
   color: var(--text);
@@ -276,4 +279,10 @@ div.hh-boost-settings {
     border: 0;
     background: transparent;
   }
+}
+
+/* The studio's Overlays panel (SDK StudioOverlaysPanel, portalled to <body>):
+   the Boost settings sheet look. */
+div.hh-overlays {
+  @include tools.overlays-panel;
 }
