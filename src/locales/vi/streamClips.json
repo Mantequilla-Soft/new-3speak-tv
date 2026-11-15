@@ -1,0 +1,34 @@
+{
+  "readyTitle": "Clip của bạn đã sẵn sàng",
+  "readySub": "30 giây cuối của buổi phát trực tiếp.",
+  "postShort": "Đăng thành Short",
+  "download": "Tải xuống",
+  "delete": "Xóa",
+  "shareHost": "@{{host}} nhận {{percent}}% phần thưởng của Short: đây là buổi phát của họ.",
+  "shareClipper": "@{{clipper}} đã làm clip này và nhận {{percent}}% phần thưởng của Short.",
+  "loginToPost": "Đăng nhập để đăng clip thành Short.",
+  "allClips": "Tất cả clip của bạn trong buổi phát này",
+  "postFailed": "Không thể mở clip để đăng. Hãy thử lại.",
+  "deleteConfirm": "Xóa clip này?",
+  "deleteFailed": "Không thể xóa clip.",
+  "title": "Khoảnh khắc hay nhất",
+  "subHost": "Clip từ buổi phát của bạn, sẵn sàng đăng thành Short. Được giữ 2 ngày.",
+  "subViewer": "Clip của bạn trong buổi phát này. Được giữ 2 ngày.",
+  "error": "Hiện không thể tải clip.",
+  "empty": "Chưa có clip. Những lúc chat và boost sôi nổi sẽ hiện ở đây.",
+  "at": "lúc {{time}}",
+  "source": {
+    "auto": "Điểm nổi bật",
+    "mine": "Clip của bạn",
+    "by": "Clip của @{{user}}",
+    "guest": "Clip của một khách"
+  },
+  "reasons": {
+    "chat": "Chat bùng nổ",
+    "boosts": "Boost",
+    "big_boost": "Boost lớn"
+  },
+  "momentsTitle": "Thêm khoảnh khắc",
+  "momentsSub": "Tạo Short từ bản ghi khi đã xử lý xong.",
+  "makeShort": "Tạo Short"
+}

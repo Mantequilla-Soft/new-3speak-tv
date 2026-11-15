@@ -1,0 +1,147 @@
+@use "../../styles/v2" as v2;
+
+// Highlight clips that become Shorts (H13): the fresh-clip sheet and the
+// post-stream list of clips and moments. Flat cards on bg wells, like
+// "Shorts from this video".
+
+.clip-ready {
+  &__video {
+    display: block;
+    width: 100%;
+    max-height: 50vh;
+    border-radius: var(--r-md);
+    background: var(--media-black);
+  }
+  &__note {
+    margin: 10px 0 0;
+    @include v2.text(body-sm);
+    color: var(--muted);
+    a { color: var(--accent); }
+  }
+  &__actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+  }
+}
+
+.stream-highlights {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+  width: 100%;
+  text-align: left;
+  color: var(--text);
+
+  &__head { display: flex; flex-direction: column; gap: 2px; }
+
+  &__title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0;
+    @include v2.text(title-sm);
+  }
+
+  &__sub { margin: 0; font-size: 12px; line-height: 1.4; color: var(--muted); }
+
+  &__skeleton { height: 120px; border-radius: var(--r-md); }
+
+  &__empty {
+    margin: 0;
+    padding: 16px 12px;
+    border-radius: var(--r-md);
+    background: var(--bg);
+    @include v2.text(body-sm);
+    color: var(--muted);
+  }
+
+  &__clips {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &.is-compact &__clips { grid-template-columns: minmax(0, 1fr); max-height: 50vh; overflow-y: auto; }
+
+  &__clip {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0;
+    padding: 10px;
+    border-radius: var(--r-md);
+    background: var(--bg);
+  }
+
+  &__video {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border-radius: var(--r-md);
+    background: var(--media-black);
+    object-fit: contain;
+  }
+
+  &__meta, &__reasons {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+  }
+
+  &__at { font-size: 12px; color: var(--muted); }
+
+  &__reason {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  &__share { margin: 0; font-size: 12px; color: var(--muted); }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    > .v2-btn { flex: 1 1 auto; }
+  }
+
+  &__moments { display: flex; flex-direction: column; gap: 6px; }
+
+  &__moments-title { margin: 6px 0 0; @include v2.text(body-sm); font-weight: 700; }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__moment {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    border-radius: var(--r-md);
+    background: var(--bg);
+  }
+}
+
+.stream-clips-page {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 24px 16px 48px;
+  @include v2.mobile { padding: 16px 16px 96px; }
+}

@@ -1,0 +1,34 @@
+{
+  "readyTitle": "Your clip is ready",
+  "readySub": "The last 30 seconds of the stream.",
+  "postShort": "Post as Short",
+  "download": "Download",
+  "delete": "Delete",
+  "shareHost": "@{{host}} gets {{percent}}% of the Short's rewards: it is their stream.",
+  "shareClipper": "@{{clipper}} made this clip and gets {{percent}}% of the Short's rewards.",
+  "loginToPost": "Log in to post clips as Shorts.",
+  "allClips": "All your clips of this stream",
+  "postFailed": "The clip could not be opened for posting. Try again.",
+  "deleteConfirm": "Delete this clip?",
+  "deleteFailed": "The clip could not be deleted.",
+  "title": "Best moments",
+  "subHost": "Clips from your stream, ready to post as Shorts. They stay for 2 days.",
+  "subViewer": "Your clips of this stream. They stay for 2 days.",
+  "error": "Clips could not be loaded right now.",
+  "empty": "No clips yet. Busy moments in chat and boosts show up here.",
+  "at": "at {{time}}",
+  "source": {
+    "auto": "Highlight",
+    "mine": "Your clip",
+    "by": "Clipped by @{{user}}",
+    "guest": "Clipped by a guest"
+  },
+  "reasons": {
+    "chat": "Chat lit up",
+    "boosts": "Boosts",
+    "big_boost": "Big boost"
+  },
+  "momentsTitle": "More moments",
+  "momentsSub": "Make a Short from the replay once it has processed.",
+  "makeShort": "Make a Short"
+}

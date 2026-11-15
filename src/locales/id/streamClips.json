@@ -1,0 +1,34 @@
+{
+  "readyTitle": "Klipmu sudah siap",
+  "readySub": "30 detik terakhir dari siaran.",
+  "postShort": "Posting sebagai Short",
+  "download": "Unduh",
+  "delete": "Hapus",
+  "shareHost": "@{{host}} mendapat {{percent}}% hadiah Short ini: ini siarannya.",
+  "shareClipper": "@{{clipper}} membuat klip ini dan mendapat {{percent}}% hadiah Short ini.",
+  "loginToPost": "Masuk untuk memposting klip sebagai Short.",
+  "allClips": "Semua klipmu dari siaran ini",
+  "postFailed": "Klip tidak bisa dibuka untuk diposting. Coba lagi.",
+  "deleteConfirm": "Hapus klip ini?",
+  "deleteFailed": "Klip tidak bisa dihapus.",
+  "title": "Momen terbaik",
+  "subHost": "Klip dari siaranmu, siap diposting sebagai Short. Disimpan selama 2 hari.",
+  "subViewer": "Klipmu dari siaran ini. Disimpan selama 2 hari.",
+  "error": "Klip tidak bisa dimuat sekarang.",
+  "empty": "Belum ada klip. Momen ramai di chat dan boost muncul di sini.",
+  "at": "pada {{time}}",
+  "source": {
+    "auto": "Sorotan",
+    "mine": "Klipmu",
+    "by": "Diklip oleh @{{user}}",
+    "guest": "Diklip oleh tamu"
+  },
+  "reasons": {
+    "chat": "Chat ramai",
+    "boosts": "Boost",
+    "big_boost": "Boost besar"
+  },
+  "momentsTitle": "Momen lainnya",
+  "momentsSub": "Buat Short dari rekaman setelah selesai diproses.",
+  "makeShort": "Buat Short"
+}

@@ -1,0 +1,34 @@
+{
+  "readyTitle": "Seu clipe está pronto",
+  "readySub": "Os últimos 30 segundos da transmissão.",
+  "postShort": "Publicar como Short",
+  "download": "Baixar",
+  "delete": "Excluir",
+  "shareHost": "@{{host}} recebe {{percent}}% das recompensas do Short: a transmissão é dele.",
+  "shareClipper": "@{{clipper}} fez este clipe e recebe {{percent}}% das recompensas do Short.",
+  "loginToPost": "Entre para publicar clipes como Shorts.",
+  "allClips": "Todos os seus clipes desta transmissão",
+  "postFailed": "Não foi possível abrir o clipe para publicar. Tente de novo.",
+  "deleteConfirm": "Excluir este clipe?",
+  "deleteFailed": "Não foi possível excluir o clipe.",
+  "title": "Melhores momentos",
+  "subHost": "Clipes da sua transmissão, prontos para publicar como Shorts. Ficam por 2 dias.",
+  "subViewer": "Seus clipes desta transmissão. Ficam por 2 dias.",
+  "error": "Não foi possível carregar os clipes agora.",
+  "empty": "Ainda não há clipes. Momentos com muito chat e boosts aparecem aqui.",
+  "at": "em {{time}}",
+  "source": {
+    "auto": "Destaque",
+    "mine": "Seu clipe",
+    "by": "Clipe de @{{user}}",
+    "guest": "Clipe de um convidado"
+  },
+  "reasons": {
+    "chat": "O chat bombou",
+    "boosts": "Boosts",
+    "big_boost": "Grande boost"
+  },
+  "momentsTitle": "Mais momentos",
+  "momentsSub": "Faça um Short da gravação quando ela estiver processada.",
+  "makeShort": "Fazer um Short"
+}

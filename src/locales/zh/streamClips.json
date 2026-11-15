@@ -1,0 +1,34 @@
+{
+  "readyTitle": "你的剪辑已准备好",
+  "readySub": "直播的最后 30 秒。",
+  "postShort": "发布为短视频",
+  "download": "下载",
+  "delete": "删除",
+  "shareHost": "@{{host}} 获得这条短视频 {{percent}}% 的奖励：这是 TA 的直播。",
+  "shareClipper": "@{{clipper}} 制作了这段剪辑，获得这条短视频 {{percent}}% 的奖励。",
+  "loginToPost": "登录后即可把剪辑发布为短视频。",
+  "allClips": "查看你在这场直播中的所有剪辑",
+  "postFailed": "无法打开剪辑进行发布，请重试。",
+  "deleteConfirm": "删除这段剪辑？",
+  "deleteFailed": "无法删除这段剪辑。",
+  "title": "精彩时刻",
+  "subHost": "你直播中的剪辑，可直接发布为短视频，保留 2 天。",
+  "subViewer": "你在这场直播中的剪辑，保留 2 天。",
+  "error": "暂时无法加载剪辑。",
+  "empty": "还没有剪辑。聊天和打赏热烈的时刻会显示在这里。",
+  "at": "在 {{time}}",
+  "source": {
+    "auto": "精彩片段",
+    "mine": "你的剪辑",
+    "by": "@{{user}} 的剪辑",
+    "guest": "访客的剪辑"
+  },
+  "reasons": {
+    "chat": "聊天火热",
+    "boosts": "打赏",
+    "big_boost": "大额打赏"
+  },
+  "momentsTitle": "更多时刻",
+  "momentsSub": "回放处理完成后，可以用它制作短视频。",
+  "makeShort": "制作短视频"
+}

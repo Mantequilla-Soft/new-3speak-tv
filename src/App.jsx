@@ -147,6 +147,7 @@ const ProfileRouter = lazyRoute(() => import("./components/Incubation/ProfileRou
 const Wallet = lazyRoute(() => import("./page/Wallet"), "./page/Wallet");
 const Watch = lazyRoute(() => import("./page/Watch"), "./page/Watch");
 const WatchStream = lazyRoute(() => import("./page/WatchStream"), "./page/WatchStream");
+const StreamClipsPage = lazyRoute(() => import("./page/StreamClipsPage"), "./page/StreamClipsPage");
 const WatchedView = lazyRoute(() => import("./page/WatchedView"), "./page/WatchedView");
 const Curation = lazyRoute(() => import("./page/Curation"), "./page/Curation");
 const Translate = lazyRoute(() => import("./page/Translate/Translate"), "./page/Translate/Translate");
@@ -842,6 +843,8 @@ function App() {
               {/* Live OpenPods stream at /watch/<roomName> (path param, distinct
                   from the ?v= VOD route above). */}
               <Route path="/watch/:streamId" element={<WatchStream />} />
+              {/* A stream's clips after it ended (H13). */}
+              <Route path="/live/clips/:room" element={<StreamClipsPage />} />
               {/* Short alias for stream share links — see buildOpenPodShareUrl. */}
               <Route path="/l/:streamId" element={<WatchStream />} />
               {/* Opened by the LiveKit egress worker, never by a person: a

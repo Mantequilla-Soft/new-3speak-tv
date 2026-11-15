@@ -20,6 +20,7 @@ import { sanitizeMusicCredits, soundAuthorsOf, soundCreditsMarkdown, primarySoun
 import { saveCaptionEdit } from '../lib/captionEdit';
 import { registerCollab, collabWeight } from '../lib/collabs';
 import { enforceLockedBeneficiaries, getLockedBeneficiaries, chargesEncoder, LOCKED_FUND_ACCOUNT, LOCKED_ENCODER_ACCOUNT } from '../utils/beneficiaries';
+import { applyClipShare, streamClipMetadata } from '../lib/streamClips';
 import { remixChainAuthors, remixChainMarkdown } from '../utils/remixChain';
 import { oaEnvelope, threespeakVideo, probeVideoOrientation, OA_ARTICLE, OA_MICROPOST, OA_COMMENT } from '../utils/openAttribute';
 import axios from 'axios';
@@ -206,6 +207,9 @@ export function EmbedUploadProvider({ children }) {
   // Collab post (lib/collabs.js): { account, split } or null. Regular videos by
   // a Hive account only; the co-creator gets an invite on the checker.
   const [collaborator, setCollaborator] = useState(null);
+  // A live-stream clip posted as a Short (lib/streamClips.js): { room, host,
+  // clipper, offsetSec, share } or null. `share` is the other side's locked split.
+  const [streamClip, setStreamClip] = useState(null);
   const [isScheduled, setIsScheduled] = useState(false);
   const [scheduleDateTime, setScheduleDateTime] = useState('');
   // "List as a premiere" (opt-in, scheduled posts only): a public countdown page
@@ -464,6 +468,7 @@ export function EmbedUploadProvider({ children }) {
     setVideoRollsEnabled(true);
     setIsChannelTrailer(false);
     setCollaborator(null);
+    setStreamClip(null);
     SetDeclineRewards(false);
     setRewardPowerup(false);
     setIsScheduled(false);
@@ -1873,6 +1878,8 @@ export function EmbedUploadProvider({ children }) {
           ...(thumbnailUrl ? { thumbnail: thumbnailUrl } : {}),
           ...(originalAuthor ? { originalAuthor, originalPermlink } : {}),
           ...(originalAuthor && remixChain.length ? { remixChain } : {}),
+          // Clipped from a live stream: whose show, who clipped it, where.
+          ...(streamClipMetadata(streamClip) ? { streamClip: streamClipMetadata(streamClip) } : {}),
           ...(musicCredits.length ? { sound: primarySoundMetadata(musicCredits) } : {}),
           // Listed as a premiere: the watch page asks the checker for its
           // countdown, shared start and chat (lib/premieres.js).
@@ -1972,6 +1979,8 @@ export function EmbedUploadProvider({ children }) {
         remixAuthors: originalAuthor && originalPermlink ? remixChainAuthors(remixChain, user) : [],
         soundAuthors: soundAuthorsOf(musicCredits, user),
       });
+      // A stream clip's share: the clipper (host posts) or the host (clipper posts).
+      applyClipShare(beneMap, streamClip, user);
 
         // The collaborator's split: their share of what the author keeps after
         // every other beneficiary (lib/collabs.js collabWeight). Skipped, with a
@@ -2430,6 +2439,7 @@ export function EmbedUploadProvider({ children }) {
     videoRollsEnabled, setVideoRollsEnabled,
     isChannelTrailer, setIsChannelTrailer,
     collaborator, setCollaborator,
+    streamClip, setStreamClip,
     isScheduled, setIsScheduled,
     scheduleDateTime, setScheduleDateTime,
     isPremiere, setIsPremiere,

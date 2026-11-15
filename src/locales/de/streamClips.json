@@ -1,0 +1,34 @@
+{
+  "readyTitle": "Dein Clip ist fertig",
+  "readySub": "Die letzten 30 Sekunden des Streams.",
+  "postShort": "Als Short posten",
+  "download": "Herunterladen",
+  "delete": "Löschen",
+  "shareHost": "@{{host}} bekommt {{percent}} % der Belohnungen des Shorts: Es ist sein Stream.",
+  "shareClipper": "@{{clipper}} hat diesen Clip gemacht und bekommt {{percent}} % der Belohnungen des Shorts.",
+  "loginToPost": "Melde dich an, um Clips als Shorts zu posten.",
+  "allClips": "Alle deine Clips dieses Streams",
+  "postFailed": "Der Clip konnte nicht zum Posten geöffnet werden. Versuch es noch einmal.",
+  "deleteConfirm": "Diesen Clip löschen?",
+  "deleteFailed": "Der Clip konnte nicht gelöscht werden.",
+  "title": "Beste Momente",
+  "subHost": "Clips aus deinem Stream, bereit zum Posten als Shorts. Sie bleiben 2 Tage.",
+  "subViewer": "Deine Clips dieses Streams. Sie bleiben 2 Tage.",
+  "error": "Clips konnten gerade nicht geladen werden.",
+  "empty": "Noch keine Clips. Momente mit viel Chat und Boosts erscheinen hier.",
+  "at": "bei {{time}}",
+  "source": {
+    "auto": "Highlight",
+    "mine": "Dein Clip",
+    "by": "Geclippt von @{{user}}",
+    "guest": "Geclippt von einem Gast"
+  },
+  "reasons": {
+    "chat": "Chat ging ab",
+    "boosts": "Boosts",
+    "big_boost": "Großer Boost"
+  },
+  "momentsTitle": "Weitere Momente",
+  "momentsSub": "Erstelle einen Short aus der Aufzeichnung, sobald sie verarbeitet ist.",
+  "makeShort": "Short erstellen"
+}

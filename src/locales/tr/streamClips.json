@@ -1,0 +1,34 @@
+{
+  "readyTitle": "Klibin hazır",
+  "readySub": "Yayının son 30 saniyesi.",
+  "postShort": "Short olarak paylaş",
+  "download": "İndir",
+  "delete": "Sil",
+  "shareHost": "Short'un ödüllerinin %{{percent}} kadarı @{{host}} hesabına gider: yayın onun.",
+  "shareClipper": "Bu klibi @{{clipper}} yaptı ve Short'un ödüllerinin %{{percent}} kadarını alır.",
+  "loginToPost": "Klipleri Short olarak paylaşmak için giriş yap.",
+  "allClips": "Bu yayındaki tüm kliplerin",
+  "postFailed": "Klip paylaşım için açılamadı. Tekrar dene.",
+  "deleteConfirm": "Bu klip silinsin mi?",
+  "deleteFailed": "Klip silinemedi.",
+  "title": "En iyi anlar",
+  "subHost": "Yayınından klipler, Short olarak paylaşılmaya hazır. 2 gün kalır.",
+  "subViewer": "Bu yayındaki kliplerin. 2 gün kalır.",
+  "error": "Klipler şu anda yüklenemedi.",
+  "empty": "Henüz klip yok. Sohbetin ve boostların hareketlendiği anlar burada görünür.",
+  "at": "{{time}} anında",
+  "source": {
+    "auto": "Öne çıkan",
+    "mine": "Senin klibin",
+    "by": "@{{user}} tarafından kliplendi",
+    "guest": "Bir misafir tarafından kliplendi"
+  },
+  "reasons": {
+    "chat": "Sohbet coştu",
+    "boosts": "Boostlar",
+    "big_boost": "Büyük boost"
+  },
+  "momentsTitle": "Diğer anlar",
+  "momentsSub": "Kayıt işlendiğinde ondan bir Short yap.",
+  "makeShort": "Short yap"
+}
