@@ -60,6 +60,7 @@ import usePremiere from '../hooks/usePremiere';
 import PremiereCountdown from '../components/Premiere/PremiereCountdown';
 import PremiereBar from '../components/Premiere/PremiereBar';
 import PremiereChat from '../components/Premiere/PremiereChat';
+import StreamChatReplay from '../components/StreamChatReplay/StreamChatReplay';
 
 // Stable identity so `related?.videos || EMPTY_LIST` doesn't hand a NEW [] to the
 // memo on every render.
@@ -2316,7 +2317,15 @@ function Watch({ v2 = false, routeV = null }) {
           render: (onSeek) => (
             <PremiereChat owner={author} permlink={permlink} live={premiereState === 'live'} onSeek={premiereState === 'ended' ? onSeek : null} />
           ),
-        } : null}
+        } : (videoDetails?.live && liveVodReady ? {
+          // A finished stream's VOD: its live chat (the timecoded Hive comments
+          // the chat mirror wrote) and its polls, following the video.
+          live: false,
+          label: t('liveInteract.replay.tab'),
+          render: (onSeek, currentTime) => (
+            <StreamChatReplay author={author} permlink={permlink} currentTime={currentTime} onSeek={onSeek} />
+          ),
+        } : null)}
       />
 
       {/* Next in the playlist (02): the next five from the same playlist, then

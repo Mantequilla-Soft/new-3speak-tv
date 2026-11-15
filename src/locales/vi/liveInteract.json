@@ -1,0 +1,39 @@
+{
+  "labels": {
+    "raidLine": "{name} đang raid cùng {count} người xem",
+    "raidTitle": "@{host} đang raid sang một buổi phát khác",
+    "raidBody": "Mọi người đang xem sẽ cùng chuyển sang {title} sau {seconds} giây.",
+    "raidGoNow": "Đi ngay",
+    "raidStay": "Ở lại đây",
+    "pollBadge": "Bình chọn",
+    "predictionBadge": "Dự đoán",
+    "endsIn": "Kết thúc sau {time}",
+    "finalResults": "Kết quả cuối cùng",
+    "votes": "Lượt bình chọn: {count}",
+    "youVoted": "Bạn đã bình chọn",
+    "signInToVote": "Đăng nhập để bình chọn",
+    "voteFailed": "Chưa được. Hãy thử lại.",
+    "pot": "Tổng điểm cược: {points}",
+    "balance": "Bạn có {points} điểm",
+    "stakeButton": "Đặt cược",
+    "stakePlaceholder": "Điểm",
+    "yourStake": "Bạn đã đặt {points} điểm vào {option}",
+    "waitingForResult": "Đang chờ kết quả",
+    "outcomeWon": "{option} thắng",
+    "youWon": "Bạn nhận lại {points} điểm",
+    "cancelled": "Đã hủy, mọi người giữ nguyên điểm",
+    "close": "Đóng"
+  },
+  "replay": {
+    "tab": "Phát lại trò chuyện trực tiếp",
+    "label": "Trò chuyện trực tiếp chạy theo video",
+    "loading": "Đang tải trò chuyện trực tiếp",
+    "empty": "Không ai viết trong trò chuyện trực tiếp.",
+    "seekTo": "Đến {{time}}",
+    "poll": "Bình chọn",
+    "prediction": "Dự đoán",
+    "votes": "Lượt bình chọn: {{count}}",
+    "won": "{{option}} thắng",
+    "follow": "Quay lại thời điểm hiện tại"
+  }
+}

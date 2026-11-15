@@ -16,7 +16,7 @@ vi.mock('../../../src/utils/hiveNode', () => ({ getHiveClient: () => ({ call: as
 vi.mock('@hiveio/dhive', () => ({ Client: class { constructor() { this.database = { call: async () => [] } } } }))
 vi.mock('../../../src/lib/videoData', () => ({
   fetchVideoDetails: (...a) => m.details(...a),
-  fetchPlaySource: async () => null,
+  fetchPlaySource: async (...a) => (m.playSource ? m.playSource(...a) : null),
   fetchTrendingFeed: async () => ({ videos: [] }),
   fetchAuthorVideos: async () => ({ videos: [] }),
   fetchRelatedFeed: async () => ({ videos: [] }),
@@ -79,7 +79,7 @@ vi.mock('../../../src/components/playVideo/PlayVideo', () => ({
       {p.mediaBlocked && <button type="button" onClick={p.onRetryPlayback}>Retry playback</button>}
       {p.belowPlayerSlot}
       {p.recommendations}
-      {p.premiereTab && <p>{p.premiereTab.live ? 'Premiere chat live' : 'Premiere chat replay'}</p>}
+      {p.premiereTab && <p>{p.premiereTab.label || (p.premiereTab.live ? 'Premiere chat live' : 'Premiere chat replay')}</p>}
       {p.videoControls?.onToggleTheater && <button type="button" onClick={p.videoControls.onToggleTheater}>{p.videoControls.isTheater ? 'Theater on' : 'Theater off'}</button>}
       {p.videoControls?.onToggleLoop && <button type="button" onClick={p.videoControls.onToggleLoop}>{p.videoControls.loop ? 'Loop on' : 'Loop off'}</button>}
     </section>
@@ -129,6 +129,7 @@ beforeEach(() => {
   m.report = vi.fn()
   m.load = vi.fn(async () => {})
   m.hiveCall = null
+  m.playSource = null
   m.muted = []
   m.sdkState.duration = 0
   vi.stubGlobal('fetch', vi.fn(async () => ({ ok: true, json: async () => ({}) })))
@@ -204,6 +205,25 @@ describe('the watch page', () => {
     m.scheduled = vi.fn(async () => ({ owner: 'badadib', title: 'Coming soon', body: '', createdAt: '2026-11-01T00:00:00Z' }))
     mount('/watch?v=badadib/later&scheduled=1')
     expect(await screen.findByRole('heading', { name: 'Coming soon' })).toBeInTheDocument()
+  })
+
+  describe('a finished stream', () => {
+    it('its VOD gets the live chat replay beside it', async () => {
+      m.details = vi.fn(async () => ({ ...POST, live: true, roomName: 'lake-day' }))
+      m.playSource = vi.fn(async () => ({ published: true, status: 'published' }))
+      mount()
+      expect(await screen.findByText('Live chat replay')).toBeInTheDocument()
+      expect(m.playProps.premiereTab.live).toBe(false)
+      expect(m.playProps.isLive).toBe(false)
+    })
+
+    it('while it is still live there is no replay tab', async () => {
+      m.details = vi.fn(async () => ({ ...POST, live: true, roomName: 'lake-day' }))
+      m.playSource = vi.fn(async () => null)
+      mount()
+      await screen.findByRole('heading', { name: 'A day at the lake' })
+      expect(screen.queryByText('Live chat replay')).not.toBeInTheDocument()
+    })
   })
 
   describe('a premiere', () => {

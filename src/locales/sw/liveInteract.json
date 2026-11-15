@@ -1,0 +1,39 @@
+{
+  "labels": {
+    "raidLine": "{name} anavamia pamoja na watazamaji {count}",
+    "raidTitle": "@{host} anavamia mtiririko mwingine",
+    "raidBody": "Kila anayetazama anahamia {title} baada ya sekunde {seconds}.",
+    "raidGoNow": "Nenda sasa",
+    "raidStay": "Baki hapa",
+    "pollBadge": "Kura",
+    "predictionBadge": "Utabiri",
+    "endsIn": "Inaisha baada ya {time}",
+    "finalResults": "Matokeo ya mwisho",
+    "votes": "Kura: {count}",
+    "youVoted": "Umepiga kura",
+    "signInToVote": "Ingia ili upige kura",
+    "voteFailed": "Haikufanikiwa. Jaribu tena.",
+    "pot": "Jumla ya dau: pointi {points}",
+    "balance": "Una pointi {points}",
+    "stakeButton": "Weka dau",
+    "stakePlaceholder": "Pointi",
+    "yourStake": "Umeweka pointi {points} kwa {option}",
+    "waitingForResult": "Tunasubiri matokeo",
+    "outcomeWon": "{option} imeshinda",
+    "youWon": "Umerudishiwa pointi {points}",
+    "cancelled": "Imeghairiwa, kila mtu anabaki na pointi zake",
+    "close": "Funga"
+  },
+  "replay": {
+    "tab": "Marudio ya gumzo la moja kwa moja",
+    "label": "Gumzo la moja kwa moja, sambamba na video",
+    "loading": "Inapakia gumzo la moja kwa moja",
+    "empty": "Hakuna aliyeandika kwenye gumzo la moja kwa moja.",
+    "seekTo": "Nenda {{time}}",
+    "poll": "Kura",
+    "prediction": "Utabiri",
+    "votes": "Kura: {{count}}",
+    "won": "{{option}} imeshinda",
+    "follow": "Rudi sasa hivi"
+  }
+}

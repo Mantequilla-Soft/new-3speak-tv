@@ -1,0 +1,39 @@
+{
+  "labels": {
+    "raidLine": "{name} is raiding with {count} viewers",
+    "raidTitle": "@{host} is raiding another stream",
+    "raidBody": "Everyone watching goes along to {title} in {seconds} s.",
+    "raidGoNow": "Go now",
+    "raidStay": "Stay here",
+    "pollBadge": "Poll",
+    "predictionBadge": "Prediction",
+    "endsIn": "Ends in {time}",
+    "finalResults": "Final results",
+    "votes": "Votes: {count}",
+    "youVoted": "You voted",
+    "signInToVote": "Sign in to vote",
+    "voteFailed": "That did not work. Try again.",
+    "pot": "Pot: {points} points",
+    "balance": "You have {points} points",
+    "stakeButton": "Stake",
+    "stakePlaceholder": "Points",
+    "yourStake": "You put {points} points on {option}",
+    "waitingForResult": "Waiting for the result",
+    "outcomeWon": "{option} won",
+    "youWon": "You got {points} points back",
+    "cancelled": "Cancelled, everyone keeps their points",
+    "close": "Close"
+  },
+  "replay": {
+    "tab": "Live chat replay",
+    "label": "The live chat, in step with the video",
+    "loading": "Loading the live chat",
+    "empty": "Nobody wrote in the live chat.",
+    "seekTo": "Go to {{time}}",
+    "poll": "Poll",
+    "prediction": "Prediction",
+    "votes": "Votes: {{count}}",
+    "won": "{{option}} won",
+    "follow": "Back to now"
+  }
+}

@@ -1,0 +1,29 @@
+@use "./hangouts-skin" as hh;
+
+/* The SDK's live-interaction pieces in the v2 look: the raid banner (fixed,
+   so it can sit outside a skinned ancestor) and the poll card in the chat.
+   Flat cards, design-system tokens only. */
+.hh-raid {
+  @include hh.tokens;
+  border-radius: var(--r-lg);
+  border-color: var(--border);
+  background: var(--surface);
+  box-shadow: none;
+  font-family: var(--font-sans);
+}
+.hh-raid__count { background: var(--accent); color: var(--on-accent); }
+
+.hh-poll {
+  border-radius: var(--r-lg);
+  border-color: var(--border);
+  background: var(--surface);
+}
+.hh-poll__choice,
+.hh-poll__result,
+.hh-poll__amount { border-radius: var(--r-md); background: var(--surface-2); border-color: transparent; }
+.hh-poll__bar { background: var(--accent-tint); }
+.hh-poll__opt.is-mine .hh-poll__result,
+.hh-poll__choice:hover:not(:disabled) { border-color: var(--accent); }
+.hh-poll__opt.is-winner .hh-poll__result { border-color: var(--cyan); }
+.hh-chat__poll { padding: 8px 16px 0; }
+.hh-chat__msg--system { background: var(--surface-2); border-radius: var(--r-md); padding: 6px 10px; }

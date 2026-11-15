@@ -1,0 +1,39 @@
+{
+  "labels": {
+    "raidLine": "{name} 带着 {count} 位观众来突袭了",
+    "raidTitle": "@{host} 正在突袭另一个直播",
+    "raidBody": "{seconds} 秒后，所有观众将一起前往 {title}。",
+    "raidGoNow": "立即前往",
+    "raidStay": "留在这里",
+    "pollBadge": "投票",
+    "predictionBadge": "预测",
+    "endsIn": "{time} 后结束",
+    "finalResults": "最终结果",
+    "votes": "票数：{count}",
+    "youVoted": "你已投票",
+    "signInToVote": "登录后投票",
+    "voteFailed": "没有成功，请再试一次。",
+    "pot": "奖池：{points} 积分",
+    "balance": "你有 {points} 积分",
+    "stakeButton": "下注",
+    "stakePlaceholder": "积分",
+    "yourStake": "你在 {option} 上下注了 {points} 积分",
+    "waitingForResult": "等待结果",
+    "outcomeWon": "{option} 获胜",
+    "youWon": "你拿回了 {points} 积分",
+    "cancelled": "已取消，大家的积分不变",
+    "close": "关闭"
+  },
+  "replay": {
+    "tab": "直播聊天回放",
+    "label": "与视频同步的直播聊天",
+    "loading": "正在加载直播聊天",
+    "empty": "直播聊天里没有人发言。",
+    "seekTo": "跳转到 {{time}}",
+    "poll": "投票",
+    "prediction": "预测",
+    "votes": "票数：{{count}}",
+    "won": "{{option}} 获胜",
+    "follow": "回到当前位置"
+  }
+}
