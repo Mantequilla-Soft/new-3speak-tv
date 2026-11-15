@@ -1,0 +1,14 @@
+{
+  "bar": {
+    "title": "Battle",
+    "startsIn": "Début dans {seconds}",
+    "timeLeft": "Encore {time}",
+    "counting": "Décompte des derniers boosts…",
+    "amount": "{amount} HBD",
+    "wins": "@{name} gagne !",
+    "tie": "Égalité !",
+    "endedEarly": "La battle s'est terminée plus tôt",
+    "dropped": "La battle est terminée : @{name} est parti",
+    "boostHint": "Les boosts ici comptent pour @{name}"
+  }
+}

@@ -292,6 +292,24 @@
       "cta": "Nhận 3Speak Pro"
     }
   },
+  "phoneSource": {
+    "menuItem": "Màn hình điện thoại hoặc máy tính bảng",
+    "menuHint": "Hiển thị màn hình iPhone, iPad hoặc thiết bị Android, gửi từ một ứng dụng miễn phí",
+    "sourceName": "Màn hình điện thoại",
+    "title": "Màn hình điện thoại hoặc máy tính bảng",
+    "lead": "Hiển thị màn hình iPhone, iPad hoặc thiết bị Android trong buổi phát của bạn qua internet. Chỉ cần một ứng dụng phát màn hình miễn phí trên thiết bị đó.",
+    "step1": "Trên điện thoại hoặc máy tính bảng, cài Larix Screencaster (miễn phí, App Store hoặc Google Play).",
+    "step2": "Trong Larix, thêm một kết nối, chọn WebRTC (WHIP) và dán địa chỉ bên dưới làm URL. Để trống token.",
+    "step3": "Bắt đầu phát trong Larix. Trên iPhone hoặc iPad, xác nhận ghi màn hình khi được hỏi.",
+    "step4": "Màn hình sẽ xuất hiện ở đây như một nguồn sau vài giây. Dùng nó trong bất kỳ cảnh nào.",
+    "qrHint": "Quét mã này bằng điện thoại hoặc máy tính bảng để có địa chỉ trên đó.",
+    "keepPrivate": "Giữ kín địa chỉ này: ai có nó đều có thể gửi hình ảnh vào buổi phát của bạn.",
+    "sharedSlot": "Mỗi lúc chỉ một nguồn bên ngoài: dùng chung vị trí với OBS.",
+    "soundNote": "Âm thanh: iPhone và iPad gửi micro, hoặc âm thanh của các ứng dụng cho phép.",
+    "delayNote": "Hình ảnh đến chậm hơn một chút so với camera và micro của phòng phát.",
+    "waiting": "Đang chờ thiết bị kết nối…",
+    "connected": "Thiết bị đã kết nối."
+  },
   "createForm": {
     "beta": "beta",
     "introPhoneTitle": "Phát trực tiếp",

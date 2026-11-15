@@ -28,7 +28,9 @@
     },
     "errors": {
       "pickStars": "Please pick a star rating",
-      "sendFailed": "Could not send your review. Please try again."
+      "sendFailed": "Could not send your review. Please try again.",
+      "screenshotUnreadable": "That file is not an image we can read.",
+      "screenshotTooBig": "That image is too large. Please try a smaller one."
     },
     "thanks": "Thanks for your feedback! 🙏",
     "sendFeedback": "Send feedback",
@@ -40,6 +42,12 @@
     "recommendLabel": "Would you recommend 3Speak? <opt>(optional)</opt>",
     "moreLabel": "Tell us more <opt>(optional)</opt>",
     "placeholder": "What did you like? What could be better?",
+    "screenshotLabel": "Screenshot <opt>(optional)</opt>",
+    "attachScreenshot": "Attach a screenshot",
+    "screenshotPreparing": "Preparing screenshot…",
+    "screenshotAlt": "Your screenshot",
+    "removeScreenshot": "Remove screenshot",
+    "screenshotHint": "Only the 3Speak team sees it. You can also paste an image here.",
     "notNow": "Not now",
     "sending": "Sending…"
   },

@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { StreamVideo } from '@snapie/hangouts-react';
+import { StreamVideo, useStreamFormats, objectPositionFor } from '@snapie/hangouts-react';
 import { Icon } from '../v2/ui';
+import { useBattleLabels } from './battleLabels';
 import './CroppableStreamVideo.scss';
 
 // A stream counts as landscape above this width/height ratio. A little over 1 so
@@ -11,13 +12,17 @@ const LANDSCAPE_RATIO = 1.15;
 const DRAG_SLOP_PX = 6;
 
 /**
- * The SDK's <StreamVideo>, plus a viewer-side vertical crop for phones.
+ * The SDK's <StreamVideo>, plus vertical viewing for phones.
  *
- * The streamer sends ONE landscape program track. With `vertical` on, a
- * landscape stream fills the portrait screen (object-fit: cover) and the viewer
- * drags sideways to choose which slice of the frame they see. Nothing changes
- * on the wire or in the program track: the studio canvas also feeds the VOD and
- * the DVR clips, so the crop must only ever happen here.
+ * With `vertical` on there are two ways a landscape stream fills the portrait
+ * screen:
+ * - the studio sends its own 9:16 phone video next to the landscape one (the
+ *   host's "Phone version"): <StreamVideo format="vertical"> plays that, with
+ *   the overlays laid out for it, and the other track stays paused;
+ * - otherwise the landscape stream is cropped here (object-fit: cover) and the
+ *   viewer drags sideways to choose which slice they see. The crop starts where
+ *   the host placed their phone box (room metadata), centred when there is none.
+ *   Nothing changes on the wire: the program also feeds the VOD and DVR clips.
  *
  * Whether the stream really IS landscape is read from the <video> element's
  * decoded size, not the room's `portrait` flag: a phone streamer's frame is
@@ -29,6 +34,7 @@ const DRAG_SLOP_PX = 6;
  */
 export default function CroppableStreamVideo({ vertical = false, onOrientation, showLiveBadge = false, showBoostGoal = true, boostLabels }) {
   const { t } = useTranslation();
+  const battleLabels = useBattleLabels();
   const wrapRef = useRef(null);
   const [videoEl, setVideoEl] = useState(null);
   const [aspect, setAspect] = useState(null); // decoded width / height, null until known
@@ -39,8 +45,16 @@ export default function CroppableStreamVideo({ vertical = false, onOrientation, 
   const draggedRef = useRef(false);
   const guideTimerRef = useRef(null);
 
-  const landscape = aspect == null ? null : aspect > LANDSCAPE_RATIO;
-  const active = vertical && landscape === true;
+  // The studio's own phone video, and where the host put their crop.
+  const { hasVertical, crop: hostCrop } = useStreamFormats();
+  const playVertical = vertical && hasVertical;
+  // Decoded shape of what is on screen. With the phone video playing that is
+  // 9:16, but the stream itself is still a landscape one (the switch to the
+  // full view must stay), so the stream counts as landscape.
+  const decodedLandscape = aspect == null ? null : aspect > LANDSCAPE_RATIO;
+  const landscape = hasVertical ? true : decodedLandscape;
+  const active = vertical && !playVertical && decodedLandscape === true;
+  const userMovedRef = useRef(false);
 
   // The SDK mounts its <video> only once the program track arrives, and can
   // swap it (host reconnects, quality layer changes), so watch for it.
@@ -136,6 +150,7 @@ export default function CroppableStreamVideo({ vertical = false, onOrientation, 
       }
       if (d.overflow <= 0) return;
       // The picture follows the finger: dragging right reveals the LEFT side.
+      userMovedRef.current = true;
       setCropX(Math.min(1, Math.max(0, d.start - dx / d.overflow)));
       flashGuide();
     };
@@ -167,6 +182,13 @@ export default function CroppableStreamVideo({ vertical = false, onOrientation, 
 
   // Position bar: the full frame as a track, the visible slice as the thumb.
   const visibleFrac = active && aspect && box.h ? Math.min(1, box.w / (box.h * aspect)) : 1;
+
+  // Start (and keep following) the host's phone box until the viewer drags.
+  const hostX = hostCrop?.x;
+  useEffect(() => {
+    if (!active || userMovedRef.current || typeof hostX !== 'number') return;
+    setCropX(objectPositionFor(hostX, visibleFrac));
+  }, [active, hostX, visibleFrac]);
   const thumbLeft = (1 - visibleFrac) * cropX;
 
   return (
@@ -175,7 +197,7 @@ export default function CroppableStreamVideo({ vertical = false, onOrientation, 
       className={`ws-crop${active ? ' ws-crop--active' : ''}`}
       style={{ '--ws-crop-x': `${(cropX * 100).toFixed(2)}%` }}
     >
-      <StreamVideo showLiveBadge={showLiveBadge} showBoostGoal={showBoostGoal} boostLabels={boostLabels} />
+      <StreamVideo format={playVertical ? 'vertical' : 'landscape'} showLiveBadge={showLiveBadge} showBoostGoal={showBoostGoal} boostLabels={boostLabels} battleLabels={battleLabels} />
       {active && (
         <div className={`ws-crop__guide${showGuide ? ' is-visible' : ''}`} aria-hidden="true">
           <span className="ws-crop__hint"><Icon name="pan_tool" size={16} />{t('misc.watchStream.dragToPan')}</span>

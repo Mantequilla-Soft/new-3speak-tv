@@ -15,8 +15,9 @@
 // the URL they were given and so stay on the primary, which serves everything.
 //
 // Failover: a network error from the chosen instance benches it for BENCH_MS and
-// moves to the next one in the ranking (the primary last). A GET / HEAD is retried
-// once there; anything else is not (it may have reached the server).
+// moves to the next one in the ranking (the primary last). A GET / HEAD, or one of
+// the batch reads sent as POST (READ_POSTS), is retried once there; anything else
+// is not (it may have reached the server).
 //
 // The pick is kept in localStorage for TTL_MS, so a returning viewer is routed
 // right away and the race runs about four times a day, not on every page load.
@@ -160,6 +161,15 @@ const isNetworkError = (err) => err && err.name !== 'AbortError';
 const GATEWAY_FAILURES = new Set([502, 503, 504, 520, 521, 522, 523, 524, 525, 526, 527, 530]);
 export const isGatewayFailure = (status) => GATEWAY_FAILURES.has(Number(status));
 const methodOf = (input, init) => String((init && init.method) || (input && input.method) || 'GET').toUpperCase();
+// Batch READS sent as POST because the list is too long for a query string. They
+// change nothing, so they may be sent again on the next instance like a GET.
+const READ_POSTS = ['/incubation/likes/for', '/incubation/replies/for', '/incubation/authors'];
+export const isReadPost = (url) => {
+  try {
+    const path = new URL(String(url)).pathname.replace(/\/+$/, '');
+    return READ_POSTS.includes(path);
+  } catch { return false; }
+};
 
 let installed = false;
 
@@ -178,7 +188,10 @@ export function installCheckerRouting() {
       const used = originOf(target);
       const method = methodOf(input, init);
       const send = (u) => orig(isReq ? new Request(u, input) : u, init);
-      const idempotent = method === 'GET' || method === 'HEAD';
+      // A read POST is retried only with its body in `init` (a string): a Request's
+      // body stream can be read once.
+      const idempotent = method === 'GET' || method === 'HEAD'
+        || (method === 'POST' && !isReq && isReadPost(url));
       return send(target).then((res) => {
         if (!isGatewayFailure(res.status)) return res;
         benchChecker(used);

@@ -1,0 +1,30 @@
+{
+  "studio": {
+    "title": "Phụ đề trực tiếp",
+    "toggle": "Hiện phụ đề trực tiếp cho người xem",
+    "hint": "Khi bạn phát trực tiếp, giọng nói qua micro được chuyển thành chữ. Người xem có thể bật phụ đề, và nhiều trình duyệt dịch phụ đề sang ngôn ngữ của người xem.",
+    "language": "Ngôn ngữ bạn nói",
+    "onlyLanguage": "Phụ đề chỉ nhận diện được {lang}.",
+    "statusOff": "Tắt",
+    "statusWaiting": "Bắt đầu khi bạn phát trực tiếp.",
+    "statusMicOff": "Hãy bật micro để có phụ đề.",
+    "statusStarting": "Đang bật phụ đề…",
+    "statusOn": "Phụ đề đang bật.",
+    "statusFull": "Hiện tất cả chỗ phụ đề đều đang dùng. Sẽ thử lại sau một phút.",
+    "statusUnavailable": "Phụ đề trực tiếp hiện không khả dụng.",
+    "statusError": "Phụ đề đã dừng vì không kết nối được dịch vụ giọng nói. Tắt rồi bật lại để thử lại."
+  },
+  "viewer": {
+    "translatedFrom": "Đã dịch từ {lang} trên thiết bị của bạn",
+    "showOriginal": "Xem bản gốc",
+    "translateTo": "Dịch sang {lang}",
+    "noTranslator": "Bằng {lang}: trình duyệt này không dịch được phụ đề",
+    "label": "Phụ đề",
+    "show": "Hiện phụ đề trực tiếp",
+    "hide": "Ẩn phụ đề trực tiếp"
+  },
+  "vod": {
+    "saved": "Phụ đề trực tiếp của bạn đã được thêm vào bản phát lại.",
+    "failed": "Không thể thêm phụ đề trực tiếp vào bản phát lại."
+  }
+}

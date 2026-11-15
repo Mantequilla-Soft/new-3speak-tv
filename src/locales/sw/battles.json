@@ -1,0 +1,14 @@
+{
+  "bar": {
+    "title": "Pambano",
+    "startsIn": "Linaanza baada ya {seconds}",
+    "timeLeft": "Zimebaki {time}",
+    "counting": "Tunahesabu boost za mwisho…",
+    "amount": "{amount} HBD",
+    "wins": "@{name} ameshinda!",
+    "tie": "Sare!",
+    "endedEarly": "Pambano liliisha mapema",
+    "dropped": "Pambano limeisha: @{name} ameondoka",
+    "boostHint": "Boost hapa zinahesabiwa kwa @{name}"
+  }
+}

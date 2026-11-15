@@ -292,6 +292,24 @@
       "cta": "3Speak Proを入手"
     }
   },
+  "phoneSource": {
+    "menuItem": "スマホ・タブレットの画面",
+    "menuHint": "無料アプリから送信される iPhone、iPad、Android 端末の画面を表示します",
+    "sourceName": "スマホの画面",
+    "title": "スマホ・タブレットの画面",
+    "lead": "iPhone、iPad、Android 端末の画面をインターネット経由で配信に表示できます。その端末に無料の画面配信アプリが必要です。",
+    "step1": "スマホまたはタブレットに Larix Screencaster をインストールします（無料、App Store または Google Play）。",
+    "step2": "Larix で接続を追加し、WebRTC (WHIP) を選んで、下のアドレスを URL に貼り付けます。トークンは空のままにします。",
+    "step3": "Larix で配信を開始します。iPhone や iPad では、確認が表示されたら画面収録を許可してください。",
+    "step4": "数秒で画面がここにソースとして表示されます。どのシーンでも使えます。",
+    "qrHint": "スマホまたはタブレットでスキャンすると、アドレスをその端末に送れます。",
+    "keepPrivate": "このアドレスは他人に教えないでください。知っている人は誰でも配信に映像を送れます。",
+    "sharedSlot": "外部ソースは同時に1つまでです。OBS と同じ枠を使います。",
+    "soundNote": "音声：iPhone と iPad はマイク、または許可しているアプリの音を送ります。",
+    "delayNote": "映像はスタジオのカメラやマイクより少し遅れて届きます。",
+    "waiting": "端末の接続を待っています…",
+    "connected": "端末が接続されました。"
+  },
   "createForm": {
     "beta": "ベータ",
     "introPhoneTitle": "ライブ配信",

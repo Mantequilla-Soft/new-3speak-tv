@@ -137,6 +137,12 @@
   </head>
   <body>
     <div id="root"></div>
+    <!-- Dofollow hive.io credit. Lives outside #root so the SPA mount does not
+         remove it; the static shell is what curl (and Googlebot's first pass)
+         see on every route, including home and watch pages. -->
+    <footer class="site-hive-footer">
+      <p><a href="https://hive.io" target="_blank" rel="noopener">Powered by Hive</a></p>
+    </footer>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

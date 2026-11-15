@@ -293,6 +293,24 @@
       "cta": "Kumuha ng 3Speak Pro"
     }
   },
+  "phoneSource": {
+    "menuItem": "Screen ng phone o tablet",
+    "menuHint": "Ipakita ang screen ng iPhone, iPad o Android device, na ipinapadala ng libreng app",
+    "sourceName": "Screen ng phone",
+    "title": "Screen ng phone o tablet",
+    "lead": "Ipakita sa iyong stream ang screen ng iPhone, iPad o Android device, sa internet. Kailangan lang ng libreng screen-broadcast app sa device na iyon.",
+    "step1": "Sa phone o tablet, i-install ang Larix Screencaster (libre, App Store o Google Play).",
+    "step2": "Sa Larix, magdagdag ng connection, piliin ang WebRTC (WHIP) at i-paste ang address sa ibaba bilang URL. Iwanang walang laman ang token.",
+    "step3": "Simulan ang broadcast sa Larix. Sa iPhone o iPad, kumpirmahin ang screen recording kapag tinanong.",
+    "step4": "Lalabas dito ang screen bilang source sa loob ng ilang segundo. Gamitin ito sa kahit anong scene.",
+    "qrHint": "I-scan ito gamit ang phone o tablet para makuha roon ang address.",
+    "keepPrivate": "Itago ang address na ito: kahit sino na may hawak nito ay puwedeng magpadala ng larawan sa stream mo.",
+    "sharedSlot": "Isang panlabas na source lang sa isang pagkakataon: pareho ang puwesto nito sa OBS.",
+    "soundNote": "Tunog: ipinapadala ng iPhone at iPad ang mikropono, o ang tunog ng mga app na pumapayag dito.",
+    "delayNote": "Medyo nahuhuli ang dating ng larawan kumpara sa camera at mic ng studio.",
+    "waiting": "Hinihintay na kumonekta ang device…",
+    "connected": "Nakakonekta na ang device."
+  },
   "createForm": {
     "beta": "beta",
     "introPhoneTitle": "Mag-live",

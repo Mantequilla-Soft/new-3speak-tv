@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { HangoutsProvider, HangoutsRoom } from '@snapie/hangouts-react';
@@ -17,6 +17,7 @@ import { defaultEndpoint, findRoomEndpoint } from '../../utils/hangoutsEndpoints
 import { storiesEnabledFor } from '../../utils/config';
 import StreamStoryPrompt from '../openpods/StreamStoryPrompt';
 import AnnounceOptions from '../openpods/AnnounceOptions';
+import { useStudioCaptionsOptions, saveStreamCaptions } from '../openpods/studioCaptions';
 import StreamHighlightsPanel from '../openpods/StreamHighlightsPanel';
 import { Button, Icon } from '../v2/ui';
 import './OpenPodModal.scss';
@@ -61,15 +62,30 @@ function buildOpenPodShareUrl(roomName, origin, mode) {
   return `https://hangout.3speak.tv/room/${roomName}`;
 }
 
+// Text of the studio's "Phone or tablet screen" source (SDK
+// PhoneScreenSourceLabels). Built with a dynamic t() like the create form.
+const PHONE_SOURCE_KEYS = [
+  'menuItem', 'menuHint', 'sourceName', 'title', 'lead', 'step1', 'step2', 'step3', 'step4',
+  'qrHint', 'keepPrivate', 'sharedSlot', 'soundNote', 'delayNote', 'waiting', 'connected',
+];
+
 export default function OpenPodModal({ isOpen, onClose, roomName, sessionToken, username, isAuthenticated }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const phoneSourceLabels = useMemo(() => ({
+    ...Object.fromEntries(PHONE_SOURCE_KEYS.map((k) => [k, t(`live.phoneSource.${k}`)])),
+    copy: t('common.actions.copy'),
+    copied: t('common.actions.copied'),
+    close: t('common.actions.close'),
+  }), [t]);
   useWakeLock(isOpen);
   // Follow the 3speak-selected theme (light/dark/system) instead of
   // forcing the SDK widgets dark.
   const hhTheme = useAppStore((s) => s.getEffectiveTheme());
   const premiumStatus = usePremiumStatus(username);
   const isPremium = !!premiumStatus?.premium;
+  // H11: what the studio needs to offer live captions (undefined = not offered).
+  const studioCaptions = useStudioCaptionsOptions(username, isOpen);
   // Owned here so the studio can react: with no announcement there's no post
   // for a VOD to replace, so that option is hidden and inert.
   const [announceEnabled, setAnnounceEnabled] = useState(() => getAnnounceConfig().announceEnabled !== false);
@@ -264,6 +280,8 @@ export default function OpenPodModal({ isOpen, onClose, roomName, sessionToken, 
               // video. Fire-and-forget into a module-level publisher so the
               // upload survives this modal unmounting when the room ends.
               onStreamVod={(file) => {
+                // H11: the live captions become the replay's subtitles.
+                void saveStreamCaptions({ author: username, permlink: file.roomName || roomName, captions: file.captions });
                 // Normal path: the server publishes the VOD itself, even after
                 // the host closes the tab, so there's nothing to show here.
                 if (file.publishStatusUrl) return;
@@ -282,7 +300,10 @@ export default function OpenPodModal({ isOpen, onClose, roomName, sessionToken, 
                 });
               }}
               canPublishVod={announceEnabled && !isUnlisted}
+              phoneSourceLabels={phoneSourceLabels}
               isUnlisted={isUnlisted}
+              // H11 live captions: host opt-in, off by default (studio Settings tab).
+              captions={studioCaptions}
               renderPostExtras={(
                 <>
                 {/* Announce upfront (owner 2026-11-13): a story before going

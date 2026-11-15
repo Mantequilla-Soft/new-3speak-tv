@@ -1,0 +1,30 @@
+{
+  "studio": {
+    "title": "실시간 자막",
+    "toggle": "시청자에게 실시간 자막 표시",
+    "hint": "방송 중에는 마이크 음성이 텍스트로 바뀝니다. 시청자는 자막을 켤 수 있고, 많은 브라우저가 자막을 시청자의 언어로 번역합니다.",
+    "language": "말하는 언어",
+    "onlyLanguage": "자막은 {lang}만 인식합니다.",
+    "statusOff": "꺼짐",
+    "statusWaiting": "방송을 시작하면 켜집니다.",
+    "statusMicOff": "자막을 쓰려면 마이크를 켜세요.",
+    "statusStarting": "자막 시작 중…",
+    "statusOn": "자막이 켜져 있습니다.",
+    "statusFull": "지금은 자막 자리가 모두 사용 중입니다. 1분 후 다시 시도합니다.",
+    "statusUnavailable": "지금은 실시간 자막을 사용할 수 없습니다.",
+    "statusError": "음성 서비스에 연결할 수 없어 자막이 멈췄습니다. 껐다가 다시 켜서 시도하세요."
+  },
+  "viewer": {
+    "translatedFrom": "기기에서 {lang}에서 번역됨",
+    "showOriginal": "원문 보기",
+    "translateTo": "{lang}(으)로 번역",
+    "noTranslator": "{lang}: 이 브라우저는 자막을 번역할 수 없습니다",
+    "label": "자막",
+    "show": "실시간 자막 보기",
+    "hide": "실시간 자막 숨기기"
+  },
+  "vod": {
+    "saved": "실시간 자막이 다시보기에 자막으로 추가되었습니다.",
+    "failed": "실시간 자막을 다시보기에 추가하지 못했습니다."
+  }
+}

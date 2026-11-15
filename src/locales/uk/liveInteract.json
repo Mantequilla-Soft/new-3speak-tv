@@ -1,0 +1,39 @@
+{
+  "labels": {
+    "raidLine": "{name} влаштовує рейд, з ним {count} глядачів",
+    "raidTitle": "@{host} влаштовує рейд на інший стрим",
+    "raidBody": "Усі глядачі перейдуть на {title} за {seconds} с.",
+    "raidGoNow": "Перейти зараз",
+    "raidStay": "Залишитися тут",
+    "pollBadge": "Опитування",
+    "predictionBadge": "Прогноз",
+    "endsIn": "Завершиться через {time}",
+    "finalResults": "Підсумки",
+    "votes": "Голосів: {count}",
+    "youVoted": "Ви проголосували",
+    "signInToVote": "Увійдіть, щоб голосувати",
+    "voteFailed": "Не вдалося. Спробуйте ще раз.",
+    "pot": "Банк: {points} балів",
+    "balance": "У вас {points} балів",
+    "stakeButton": "Поставити",
+    "stakePlaceholder": "Бали",
+    "yourStake": "Ви поставили {points} балів на «{option}»",
+    "waitingForResult": "Чекаємо на результат",
+    "outcomeWon": "Переміг варіант «{option}»",
+    "youWon": "Вам повернулося {points} балів",
+    "cancelled": "Скасовано, усі зберігають свої бали",
+    "close": "Закрити"
+  },
+  "replay": {
+    "tab": "Повтор чату трансляції",
+    "label": "Чат трансляції синхронно з відео",
+    "loading": "Завантажуємо чат трансляції",
+    "empty": "У чаті трансляції ніхто не писав.",
+    "seekTo": "Перейти до {{time}}",
+    "poll": "Опитування",
+    "prediction": "Прогноз",
+    "votes": "Голосів: {{count}}",
+    "won": "Переміг варіант «{{option}}»",
+    "follow": "Повернутися до поточного моменту"
+  }
+}

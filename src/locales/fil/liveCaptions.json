@@ -1,0 +1,30 @@
+{
+  "studio": {
+    "title": "Live na caption",
+    "toggle": "Ipakita ang live na caption sa mga manonood",
+    "hint": "Habang live ka, ginagawang teksto ang iyong mikropono. Puwedeng i-on ng mga manonood ang caption, at maraming browser ang nagsasalin nito sa wika ng manonood.",
+    "language": "Wikang ginagamit mo",
+    "onlyLanguage": "{lang} lang ang naiintindihan ng caption.",
+    "statusOff": "Naka-off",
+    "statusWaiting": "Magsisimula pag nag-live ka.",
+    "statusMicOff": "I-on ang mikropono para sa caption.",
+    "statusStarting": "Sinisimulan ang caption…",
+    "statusOn": "Naka-on ang caption.",
+    "statusFull": "Puno ang lahat ng puwesto para sa caption ngayon. Susubukan ulit sa loob ng isang minuto.",
+    "statusUnavailable": "Hindi available ang live na caption ngayon.",
+    "statusError": "Huminto ang caption dahil hindi maabot ang speech service. I-off at i-on ulit para subukan muli."
+  },
+  "viewer": {
+    "translatedFrom": "Isinalin mula sa {lang} sa iyong device",
+    "showOriginal": "Ipakita ang orihinal",
+    "translateTo": "Isalin sa {lang}",
+    "noTranslator": "Sa {lang}: hindi kayang isalin ng browser na ito ang caption",
+    "label": "Caption",
+    "show": "Ipakita ang live na caption",
+    "hide": "Itago ang live na caption"
+  },
+  "vod": {
+    "saved": "Naidagdag ang iyong live na caption sa replay bilang subtitle.",
+    "failed": "Hindi naidagdag ang live na caption sa replay."
+  }
+}

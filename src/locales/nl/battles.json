@@ -1,0 +1,14 @@
+{
+  "bar": {
+    "title": "Battle",
+    "startsIn": "Begint over {seconds}",
+    "timeLeft": "Nog {time}",
+    "counting": "De laatste boosts worden geteld…",
+    "amount": "{amount} HBD",
+    "wins": "@{name} wint!",
+    "tie": "Gelijkspel!",
+    "endedEarly": "De battle is eerder gestopt",
+    "dropped": "De battle is voorbij: @{name} is weg",
+    "boostHint": "Boosts hier tellen voor @{name}"
+  }
+}

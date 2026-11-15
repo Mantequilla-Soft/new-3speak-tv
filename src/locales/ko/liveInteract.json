@@ -1,0 +1,39 @@
+{
+  "labels": {
+    "raidLine": "{name} 님이 시청자 {count}명과 함께 레이드 중",
+    "raidTitle": "@{host} 님이 다른 방송으로 레이드합니다",
+    "raidBody": "{seconds}초 후 시청자 모두 {title}(으)로 이동합니다.",
+    "raidGoNow": "지금 이동",
+    "raidStay": "여기 있기",
+    "pollBadge": "투표",
+    "predictionBadge": "예측",
+    "endsIn": "{time} 후 종료",
+    "finalResults": "최종 결과",
+    "votes": "투표 수: {count}",
+    "youVoted": "투표했습니다",
+    "signInToVote": "로그인하고 투표하기",
+    "voteFailed": "실패했습니다. 다시 시도하세요.",
+    "pot": "총 포인트: {points}",
+    "balance": "보유 포인트: {points}",
+    "stakeButton": "걸기",
+    "stakePlaceholder": "포인트",
+    "yourStake": "{option}에 {points} 포인트를 걸었습니다",
+    "waitingForResult": "결과를 기다리는 중",
+    "outcomeWon": "{option} 승리",
+    "youWon": "{points} 포인트를 돌려받았습니다",
+    "cancelled": "취소됨, 모두 포인트를 그대로 유지합니다",
+    "close": "닫기"
+  },
+  "replay": {
+    "tab": "라이브 채팅 다시 보기",
+    "label": "영상에 맞춰 흐르는 라이브 채팅",
+    "loading": "라이브 채팅 불러오는 중",
+    "empty": "라이브 채팅에 아무도 글을 쓰지 않았습니다.",
+    "seekTo": "{{time}}(으)로 이동",
+    "poll": "투표",
+    "prediction": "예측",
+    "votes": "투표 수: {{count}}",
+    "won": "{{option}} 승리",
+    "follow": "현재 위치로 돌아가기"
+  }
+}

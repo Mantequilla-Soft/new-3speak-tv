@@ -1,0 +1,39 @@
+{
+  "labels": {
+    "raidLine": "{name} устраивает рейд, с ним {count} зрителей",
+    "raidTitle": "@{host} устраивает рейд на другой стрим",
+    "raidBody": "Все зрители перейдут на {title} через {seconds} с.",
+    "raidGoNow": "Перейти сейчас",
+    "raidStay": "Остаться здесь",
+    "pollBadge": "Опрос",
+    "predictionBadge": "Прогноз",
+    "endsIn": "Закончится через {time}",
+    "finalResults": "Итоги",
+    "votes": "Голосов: {count}",
+    "youVoted": "Вы проголосовали",
+    "signInToVote": "Войдите, чтобы голосовать",
+    "voteFailed": "Не получилось. Попробуйте ещё раз.",
+    "pot": "Банк: {points} очков",
+    "balance": "У вас {points} очков",
+    "stakeButton": "Поставить",
+    "stakePlaceholder": "Очки",
+    "yourStake": "Вы поставили {points} очков на «{option}»",
+    "waitingForResult": "Ждём результат",
+    "outcomeWon": "Победил вариант «{option}»",
+    "youWon": "Вам вернулось {points} очков",
+    "cancelled": "Отменено, все сохраняют свои очки",
+    "close": "Закрыть"
+  },
+  "replay": {
+    "tab": "Повтор чата трансляции",
+    "label": "Чат трансляции синхронно с видео",
+    "loading": "Загружаем чат трансляции",
+    "empty": "В чате трансляции никто не писал.",
+    "seekTo": "Перейти к {{time}}",
+    "poll": "Опрос",
+    "prediction": "Прогноз",
+    "votes": "Голосов: {{count}}",
+    "won": "Победил вариант «{{option}}»",
+    "follow": "Вернуться к текущему моменту"
+  }
+}

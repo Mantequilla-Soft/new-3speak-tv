@@ -1,0 +1,14 @@
+{
+  "bar": {
+    "title": "Kapışma",
+    "startsIn": "{seconds} sonra başlıyor",
+    "timeLeft": "{time} kaldı",
+    "counting": "Son boostlar sayılıyor…",
+    "amount": "{amount} HBD",
+    "wins": "@{name} kazandı!",
+    "tie": "Berabere!",
+    "endedEarly": "Kapışma erken bitti",
+    "dropped": "Kapışma bitti: @{name} ayrıldı",
+    "boostHint": "Buradaki boostlar @{name} için sayılır"
+  }
+}

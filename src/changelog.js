@@ -18,6 +18,36 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.71',
+    category: 'live',
+    date: '2026-11-15',
+    summary: 'Show your phone or tablet screen live: in the stream studio, open Add source, then Phone or tablet screen, and use a free app.',
+  },
+  {
+    version: '2.0.70',
+    category: 'live',
+    date: '2026-11-15',
+    summary: 'Live streams now stay smooth for big audiences and weak connections; those viewers see the stream a few seconds later.',
+  },
+  {
+    version: '2.0.69',
+    category: 'general',
+    date: '2026-11-15',
+    summary: 'Feedback: you can now attach a screenshot (pick an image or paste one), and only the 3Speak team sees it.',
+  },
+  {
+    version: '2.0.68',
+    category: 'general',
+    date: '2026-11-15',
+    summary: 'Warm-up like counts, replies and authors now load even when the nearest checker server has a hiccup.',
+  },
+  {
+    version: '2.0.67',
+    category: 'general',
+    date: '2026-11-15',
+    summary: 'A Powered by Hive link to hive.io now sits at the bottom of the site.',
+  },
+  {
     version: '2.0.66',
     category: 'editor',
     date: '2026-11-15',

@@ -1,0 +1,26 @@
+/* A stream's live chat beside its VOD: the premiere replay (Premiere.scss),
+   plus what is still ahead in the video dimmed and the polls the host ran. */
+.stream-replay {
+  position: relative;
+
+  .is-later { opacity: 0.45; }
+
+  .stream-replay__poll .hh-chat__msg-body {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 8px 10px;
+    border-radius: var(--r-md);
+    background: var(--surface-2);
+  }
+  .stream-replay__poll-kind { color: var(--accent); font-size: 12px; font-weight: 700; text-transform: uppercase; }
+  .stream-replay__poll-q { font-weight: 600; }
+  .stream-replay__poll-result { color: var(--muted); font-size: 13px; }
+
+  .stream-replay__follow {
+    position: absolute;
+    left: 50%;
+    bottom: 12px;
+    transform: translateX(-50%);
+  }
+}

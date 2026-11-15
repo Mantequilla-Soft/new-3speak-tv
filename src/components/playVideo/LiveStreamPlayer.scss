@@ -17,6 +17,10 @@
   @include hh.boost-goal;
   .hh-boost-goal--overlay { bottom: 58px; }
 
+  // The live battle meter: below the viewer count, top right.
+  @include hh.battle;
+  .hh-battle-bar--overlay { top: 44px; }
+
   &__viewers {
     position: absolute;
     top: 12px;

@@ -28,7 +28,9 @@
     },
     "errors": {
       "pickStars": "Silakan pilih rating bintang",
-      "sendFailed": "Ulasanmu tidak dapat dikirim. Silakan coba lagi."
+      "sendFailed": "Ulasanmu tidak dapat dikirim. Silakan coba lagi.",
+      "screenshotUnreadable": "File itu bukan gambar yang bisa kami baca.",
+      "screenshotTooBig": "Gambar itu terlalu besar. Coba yang lebih kecil."
     },
     "thanks": "Terima kasih atas masukanmu! 🙏",
     "sendFeedback": "Kirim masukan",
@@ -39,6 +41,12 @@
     "recommendLabel": "Apakah kamu akan merekomendasikan 3Speak? <opt>(opsional)</opt>",
     "moreLabel": "Ceritakan lebih lanjut <opt>(opsional)</opt>",
     "placeholder": "Apa yang kamu suka? Apa yang bisa lebih baik?",
+    "screenshotLabel": "Tangkapan layar <opt>(opsional)</opt>",
+    "attachScreenshot": "Lampirkan tangkapan layar",
+    "screenshotPreparing": "Menyiapkan tangkapan layar…",
+    "screenshotAlt": "Tangkapan layarmu",
+    "removeScreenshot": "Hapus tangkapan layar",
+    "screenshotHint": "Hanya tim 3Speak yang melihatnya. Kamu juga bisa menempelkan gambar di sini.",
     "notNow": "Nanti saja",
     "sending": "Mengirim…"
   },

@@ -292,6 +292,24 @@
       "cta": "Dapatkan 3Speak Pro"
     }
   },
+  "phoneSource": {
+    "menuItem": "Layar ponsel atau tablet",
+    "menuHint": "Tampilkan layar iPhone, iPad, atau perangkat Android yang dikirim dari aplikasi gratis",
+    "sourceName": "Layar ponsel",
+    "title": "Layar ponsel atau tablet",
+    "lead": "Tampilkan layar iPhone, iPad, atau perangkat Android di siaranmu lewat internet. Cukup pasang aplikasi siaran layar gratis di perangkat itu.",
+    "step1": "Di ponsel atau tablet, pasang Larix Screencaster (gratis, App Store atau Google Play).",
+    "step2": "Di Larix, tambahkan koneksi, pilih WebRTC (WHIP), lalu tempel alamat di bawah sebagai URL. Biarkan token kosong.",
+    "step3": "Mulai siaran di Larix. Di iPhone atau iPad, konfirmasi perekaman layar saat diminta.",
+    "step4": "Layar muncul di sini sebagai sumber dalam beberapa detik. Gunakan di adegan mana pun.",
+    "qrHint": "Pindai ini dengan ponsel atau tablet agar alamatnya ada di sana.",
+    "keepPrivate": "Rahasiakan alamat ini: siapa pun yang memilikinya bisa mengirim gambar ke siaranmu.",
+    "sharedSlot": "Satu sumber luar dalam satu waktu: memakai slot yang sama dengan OBS.",
+    "soundNote": "Suara: iPhone dan iPad mengirim mikrofon, atau suara aplikasi yang mengizinkannya.",
+    "delayNote": "Gambar tiba sedikit lebih lambat daripada kamera dan mikrofon studio.",
+    "waiting": "Menunggu perangkat terhubung…",
+    "connected": "Perangkat sudah terhubung."
+  },
   "createForm": {
     "beta": "beta",
     "introPhoneTitle": "Siaran Langsung",

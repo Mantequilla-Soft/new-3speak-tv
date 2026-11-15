@@ -1,0 +1,39 @@
+{
+  "labels": {
+    "raidLine": "{name} robi rajd z {count} widzami",
+    "raidTitle": "@{host} robi rajd na inny stream",
+    "raidBody": "Wszyscy widzowie przechodzą do {title} za {seconds} s.",
+    "raidGoNow": "Idź teraz",
+    "raidStay": "Zostań tutaj",
+    "pollBadge": "Ankieta",
+    "predictionBadge": "Przewidywanie",
+    "endsIn": "Koniec za {time}",
+    "finalResults": "Wyniki końcowe",
+    "votes": "Głosy: {count}",
+    "youVoted": "Oddano głos",
+    "signInToVote": "Zaloguj się, aby głosować",
+    "voteFailed": "Nie udało się. Spróbuj ponownie.",
+    "pot": "Pula: {points} pkt",
+    "balance": "Masz {points} pkt",
+    "stakeButton": "Postaw",
+    "stakePlaceholder": "Punkty",
+    "yourStake": "Postawiono {points} pkt na {option}",
+    "waitingForResult": "Czekamy na wynik",
+    "outcomeWon": "Wygrywa {option}",
+    "youWon": "Odzyskano {points} pkt",
+    "cancelled": "Anulowano, wszyscy zachowują punkty",
+    "close": "Zamknij"
+  },
+  "replay": {
+    "tab": "Powtórka czatu na żywo",
+    "label": "Czat na żywo w rytmie filmu",
+    "loading": "Wczytywanie czatu na żywo",
+    "empty": "Nikt nie pisał na czacie na żywo.",
+    "seekTo": "Przejdź do {{time}}",
+    "poll": "Ankieta",
+    "prediction": "Przewidywanie",
+    "votes": "Głosy: {{count}}",
+    "won": "Wygrywa {{option}}",
+    "follow": "Wróć do bieżącego miejsca"
+  }
+}
