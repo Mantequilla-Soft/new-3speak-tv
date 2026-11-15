@@ -1,0 +1,65 @@
+@use "../../styles/v2" as v2;
+
+/* Press-and-drag scrubbing on the audio timelines (hooks/useTimelineScrub.js):
+   a round thumb at the spot and the time above it while dragging; a hit area
+   taller than the bar itself (32px on touch screens); touch-action none on the
+   bar only, so the page never scrolls and no swipe takes the drag over. */
+
+.tl-scrub-thumb {
+  position: absolute;
+  top: 50%;
+  z-index: 2;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--accent);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.tl-scrub-tip {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  z-index: 3;
+  padding: 3px 8px;
+  border-radius: var(--r-sm);
+  background: var(--text);
+  color: var(--bg);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.3;
+  white-space: nowrap;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.audio-np-progress:not(.is-live),
+.audio-post-progress {
+  touch-action: none;
+  user-select: none;
+
+  // The invisible hit area: 24px around a 4 to 6px line, 32px under a finger.
+  &::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 24px;
+    transform: translateY(-50%);
+  }
+  @media (pointer: coarse) { &::before { height: 32px; } }
+
+  &.is-scrubbing { cursor: grabbing; }
+}
+
+// Phones: the mini bar's 3px line along its foot takes a drag too (its row keeps
+// its swipes; a press on the line never starts one). The hit area grows up into
+// the bar, not out below it.
+@include v2.mobile {
+  .gap-bar .gap-bar__seek .audio-np-progress:not(.is-live) {
+    pointer-events: auto;
+    &::before { top: auto; bottom: 0; height: 24px; transform: none; }
+    .tl-scrub-thumb { width: 12px; height: 12px; }
+  }
+}
