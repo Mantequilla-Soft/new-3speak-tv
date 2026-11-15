@@ -54,6 +54,7 @@ import { usePremiumStatus } from '../hooks/usePremiumStatus';
 import { fetchScheduledPost, getScheduledEmbedRef } from '../utils/scheduledPosts';
 import EditScheduledModal from '../components/modal/EditScheduledModal';
 import { getHiveRenderer } from '../lib/hiveRenderer';
+import { reportOpen } from '../lib/cardReach';
 
 // Stable identity so `related?.videos || EMPTY_LIST` doesn't hand a NEW [] to the
 // memo on every render.
@@ -198,6 +199,12 @@ function Watch({ v2 = false, routeV = null }) {
   // The player's onError is registered once, so it reads scheduled mode from a ref.
   const scheduledRef = useRef(scheduled);
   scheduledRef.current = scheduled;
+
+  // Where this video was found: the card that was clicked, or the page that
+  // linked here (creator stats' "where viewers found it", lib/cardReach.js).
+  useEffect(() => {
+    if (!scheduled && v && author !== 'unknown') reportOpen(author, permlink);
+  }, [author, permlink, scheduled, v]);
 
   useEffect(() => {
     if (!scheduled || !author || !permlink || author === 'unknown') {

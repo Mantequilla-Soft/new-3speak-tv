@@ -13,7 +13,7 @@ import HiveAvatar from "../HiveAvatar/HiveAvatar";
 import { NO_ACCOUNT_AVATAR } from "../../utils/avatarCache";
 import CardOptionsMenu from "../CardOptionsMenu/CardOptionsMenu";
 import TimeAgo from "../TimeAgo/TimeAgo";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
 import "./Cards.scss";
 import { useState, useMemo, memo, useCallback, useRef, useEffect } from "react";
@@ -32,6 +32,7 @@ import { useTranslation } from "react-i18next";
 import { formatDate } from "../../i18n";
 import { watchPath } from '../../utils/urls';
 import { shortHeading } from '../../utils/shortTitle';
+import { surfaceForPath, useCardSeen, rememberOpenSource } from '../../lib/cardReach';
 
 
 /**
@@ -116,9 +117,18 @@ const isAiCard = (v) => !v._liveStream
 // way the cell does (Cards.scss .card-link), so the card looks as it always did.
 // Far from the viewport (windowed grids only) it renders as an empty slot of
 // its last height; `render` draws the card's content otherwise.
-function CardLink({ windowing, cardKey, index, cardProps, render, renderControls, to, title, ...cellProps }) {
+// `reachAuthor` / `reachPermlink` / `surface`: the card counts as seen there once
+// half of it was on screen for a second, and a click tells the watch page where
+// the video was found (lib/cardReach.js). Live tiles pass no author.
+function CardLink({ windowing, cardKey, index, cardProps, render, renderControls, to, title, reachAuthor, reachPermlink, surface, ...cellProps }) {
   const { ref: ownRef, ...restCardProps } = cardProps;
-  const { ref, hiddenHeight } = useWindowedCard(windowing, cardKey, index, ownRef);
+  const seenRef = useCardSeen(reachAuthor, reachPermlink, surface);
+  const withSeen = useCallback((node) => {
+    const done = ownRef?.(node);
+    if (reachAuthor) seenRef(node);
+    return done;
+  }, [ownRef, seenRef, reachAuthor]);
+  const { ref, hiddenHeight } = useWindowedCard(windowing, cardKey, index, withSeen);
   if (hiddenHeight != null) {
     return <div {...cellProps} {...restCardProps} ref={ref} style={{ height: hiddenHeight }} aria-hidden="true" />;
   }
@@ -128,7 +138,12 @@ function CardLink({ windowing, cardKey, index, cardProps, render, renderControls
       {/* Zero-height layer at the card's top-left: the controls sit where they
           sat inside the thumbnail, above it (z-index), outside the link. */}
       {controls && <div className="card-controls">{controls}</div>}
-      <Link to={to} title={title} className="card-link">{render()}</Link>
+      <Link
+        to={to}
+        title={title}
+        className="card-link"
+        onClick={reachAuthor ? () => rememberOpenSource(reachAuthor, reachPermlink, surface) : undefined}
+      >{render()}</Link>
     </div>
   );
 }
@@ -214,9 +229,13 @@ const cardHref = (linkPrefix, author, permlink, query) => (linkPrefix === '/watc
   ? watchPath(author, permlink, query)
   : `${linkPrefix}?v=${author}/${permlink}${query}`);
 
-function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0, renderInterleave = null, communityEvery = 0, renderCommunity = null, creatorsEvery = 0, renderCreators = null, getContentForVideo = null, isWatched = null, getViewCount = null, isNew = null, badgeLabel = null, linkPrefix = '/watch', linkQuery = '', shortTimeAgo = true, shortsGrid = false, priority = false, hideWatched = false, watchedVersion = 0, renderFooter = null, windowed = false, featuredKey = null, featuredLayout = null, featuredNav = null, featuredPending = false, variant = null, hideAuthor = false }) {
+function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0, renderInterleave = null, communityEvery = 0, renderCommunity = null, creatorsEvery = 0, renderCreators = null, getContentForVideo = null, isWatched = null, getViewCount = null, isNew = null, badgeLabel = null, linkPrefix = '/watch', linkQuery = '', shortTimeAgo = true, shortsGrid = false, priority = false, hideWatched = false, watchedVersion = 0, renderFooter = null, windowed = false, featuredKey = null, featuredLayout = null, featuredNav = null, featuredPending = false, variant = null, hideAuthor = false, surface = null }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  // Where these cards are shown, for creator stats' impressions (lib/cardReach.js).
+  // Home tabs say which tab; everywhere else the path tells.
+  const location = useLocation();
+  const reachSurface = surface || surfaceForPath(location.pathname, location.search);
   const [modalUser, setModalUser] = useState(null);
 
   // Dismissed content ("not interested" / hidden creator): the viewer's ONE list
@@ -375,6 +394,9 @@ function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0
             windowing={windowing}
             cardKey={postKey}
             index={index}
+            reachAuthor={video._liveStream || video._scheduled || video.status === 'scheduled' ? null : cardAuthor}
+            reachPermlink={video.permlink}
+            surface={reachSurface}
             to={video._liveStream
               ? (video._openpodRoom ? `/openpods/${video.roomName}` : `/watch/${video.roomName}`)
               : cardHref(linkPrefix, cardAuthor, video.permlink,
@@ -714,6 +736,7 @@ Card3.propTypes = {
   renderFooter: PropTypes.func,      // (video) => node drawn under the card's bottom row
   windowed: PropTypes.bool,
   variant: PropTypes.oneOf(['bare']), // 'bare': no card frame, avatar or stat pills (19c tag feed, 49c First Uploads)
+  surface: PropTypes.string,         // where the grid is shown (lib/cardReach.js CARD_SURFACES); default from the path
   hideAuthor: PropTypes.bool,        // a channel's own grid: no name in the meta line, "2.0K views · 1w" (20b)
   featuredKey: PropTypes.string,     // "author/permlink" of a first card to draw large
   featuredPending: PropTypes.bool,   // hold that block with a skeleton until the card is there

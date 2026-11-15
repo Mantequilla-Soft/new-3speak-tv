@@ -105,6 +105,7 @@ import useReblog from '../hooks/useReblog';
 import useLayoutMediaQuery from '../hooks/useLayoutMediaQuery';
 
 import { soundLabel } from '../utils/soundCredits';
+import { reportOpen } from '../lib/cardReach';
 // Every toast from this module is headed "Shorts"; the message becomes the
 // line under it. See utils/toast.js.
 const toast = toastIn('Shorts');
@@ -570,6 +571,13 @@ const VideoShort = () => {
     }
     return null;
   }, []);
+
+  // The short this page opened on: where it was found (lib/cardReach.js). The
+  // ones swiped to after it are the shorts feed's own, not an open.
+  useEffect(() => {
+    const shared = getSharedVideoFromUrl();
+    if (shared) reportOpen(shared.author, shared.permlink);
+  }, [getSharedVideoFromUrl]);
 
   // Update URL when current video changes (without page reload)
   const updateUrlWithCurrentVideo = useCallback((video) => {

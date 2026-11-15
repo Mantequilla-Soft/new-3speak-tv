@@ -309,3 +309,26 @@ describe('a grid of video cards', () => {
     expect(within(card('Title a')).queryAllByRole('button')).toHaveLength(0)
   })
 })
+
+describe('where a card was found (creator stats reach)', () => {
+  beforeEach(() => sessionStorage.clear())
+  const stored = () => JSON.parse(sessionStorage.getItem('3speak_open_src'))
+
+  it('a click tells the watch page the surface, from the path', async () => {
+    const { user } = renderWithProviders(<Card3 videos={[video('badadib', 'a')]} />, { route: '/t/music' })
+    await user.click(card('Title a'))
+    expect(stored()).toMatchObject({ k: 'badadib/a', s: 'tag' })
+  })
+
+  it('a Home tab passes its own surface', async () => {
+    const { user } = renderWithProviders(<Card3 videos={[video('badadib', 'a')]} surface="discover" />)
+    await user.click(card('Title a'))
+    expect(stored()).toMatchObject({ s: 'discover' })
+  })
+
+  it('live tiles are not counted', async () => {
+    const { user } = renderWithProviders(<Card3 videos={[video('badadib', 'room', { _liveStream: true, roomName: 'room' })]} />)
+    await user.click(card('Title room'))
+    expect(sessionStorage.getItem('3speak_open_src')).toBeNull()
+  })
+})

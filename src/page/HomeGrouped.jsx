@@ -1155,6 +1155,7 @@ const HomeGrouped = () => {
       <>
         <Card3 windowed
           videos={s.videos}
+          surface={s.key === 'home' ? (authenticated ? 'following' : 'trending') : s.key}
           loading={false}
           getContentForVideo={getContentForVideo}
           isWatched={isWatched}

@@ -29,6 +29,7 @@ import useJoinedCommunities from "../components/Groups/useJoinedCommunities";
 import { fetchLeaderboard, formatMetric } from "../lib/leaderboardData";
 import { aiKey, isAiFlagged, useAiFlags } from "../utils/aiFlags";
 import { toastIn } from "../utils/toast";
+import { useCardSeen, rememberOpenSource } from '../lib/cardReach';
 
 // Discover (design 21b) and the search page (21a), one route: /discover shows
 // the browse view, /discover?q=… the results. The top bar's search field and
@@ -194,9 +195,12 @@ function ResultRow({ item }) {
   const { t } = useTranslation();
   const to = item.type === 'short' ? `/shorts?v=${item.author}/${item.permlink}` : `/@${item.author}/${item.permlink}`;
   const hasThumb = item.images?.thumbnail || item.images?.poster;
+  // A search result is a card too: seen and clicked on 'search' (lib/cardReach.js).
+  const isVideo = item.type === 'video' || item.type === 'short';
+  const seenRef = useCardSeen(isVideo ? item.author : null, item.permlink, 'search');
   return (
-    <div className="discover-row discover-result">
-      <Link to={to} className="discover-row__link" aria-label={item.title} />
+    <div className="discover-row discover-result" ref={isVideo ? seenRef : undefined}>
+      <Link to={to} className="discover-row__link" aria-label={item.title} onClick={isVideo ? () => rememberOpenSource(item.author, item.permlink, 'search') : undefined} />
       <span className="discover-row__thumb">
         {hasThumb && <img src={fixVideoThumbnail(item)} onError={(e) => { e.currentTarget.src = fallbackImg; }} alt="" loading="lazy" />}
         {KIND_KEYS[item.type] && <span className="discover-row__kind">{t(KIND_KEYS[item.type])}</span>}
@@ -480,8 +484,9 @@ function TrendRow({ v, index, views, watched }) {
   const author = authorOf(v);
   const to = live ? (v._openpodRoom ? `/openpods/${v.roomName}` : `/watch/${v.roomName}`) : watchPath(author, v.permlink);
   const thumb = live ? v.thumbnail : fixVideoThumbnail(v);
+  const seenRef = useCardSeen(live ? null : author, v.permlink, 'discover');
   return (
-    <Link to={to} className="discover-row discover-trend">
+    <Link to={to} className="discover-row discover-trend" ref={live ? undefined : seenRef} onClick={live ? undefined : () => rememberOpenSource(author, v.permlink, 'discover')}>
       <span className={cx('discover-trend__rank', live ? 'is-live' : rankTone(index))}>
         {live ? <Icon name="sensors" size={28} /> : index + 1}
       </span>
