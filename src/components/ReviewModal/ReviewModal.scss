@@ -100,6 +100,64 @@
   }
 }
 
+// Optional screenshot: a dashed drop-style tile until one is attached, then the
+// picture itself with a round remove button in its corner. The file input stays
+// in the DOM (the tile clicks it) but is never shown.
+.review-shot__input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.review-shot__add {
+  @include v2.control(44);
+  @include v2.text(label);
+  width: 100%;
+  justify-content: center;
+  border: 2px dashed var(--border);
+  background: transparent;
+  color: var(--text);
+
+  &:hover:not(:disabled) { background: var(--bg-hover); }
+  &:disabled { cursor: default; opacity: .7; }
+}
+
+.review-shot__preview {
+  position: relative;
+  align-self: flex-start;
+  max-width: 100%;
+
+  img {
+    display: block;
+    max-width: 100%;
+    max-height: 160px;
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    object-fit: contain;
+  }
+}
+
+.review-shot__remove {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--text);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+
+  &:hover { background: var(--surface-2); }
+  @include v2.mobile { width: 40px; height: 40px; }
+}
+
 // The floating "Feedback" button on the home page: a surface pill that floats
 // (shadow), the icon in the accent. Not a red fill: the page has its own one.
 .review-fab {

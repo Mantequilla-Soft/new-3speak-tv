@@ -28,7 +28,9 @@
     },
     "errors": {
       "pickStars": "Kies een aantal sterren",
-      "sendFailed": "Je review kon niet worden verstuurd. Probeer het opnieuw."
+      "sendFailed": "Je review kon niet worden verstuurd. Probeer het opnieuw.",
+      "screenshotUnreadable": "Dit bestand is geen afbeelding die we kunnen lezen.",
+      "screenshotTooBig": "Die afbeelding is te groot. Probeer een kleinere."
     },
     "thanks": "Bedankt voor je feedback! 🙏",
     "sendFeedback": "Feedback versturen",
@@ -40,6 +42,12 @@
     "recommendLabel": "Zou je 3Speak aanraden? <opt>(optioneel)</opt>",
     "moreLabel": "Vertel ons meer <opt>(optioneel)</opt>",
     "placeholder": "Wat vond je goed? Wat kan beter?",
+    "screenshotLabel": "Screenshot <opt>(optioneel)</opt>",
+    "attachScreenshot": "Screenshot toevoegen",
+    "screenshotPreparing": "Screenshot voorbereiden…",
+    "screenshotAlt": "Je screenshot",
+    "removeScreenshot": "Screenshot verwijderen",
+    "screenshotHint": "Alleen het 3Speak-team ziet hem. Je kunt hier ook een afbeelding plakken.",
     "notNow": "Niet nu",
     "sending": "Versturen…"
   },

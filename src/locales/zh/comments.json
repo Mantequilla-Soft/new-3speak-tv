@@ -28,7 +28,9 @@
     },
     "errors": {
       "pickStars": "请选择星级评分",
-      "sendFailed": "评价发送失败，请重试。"
+      "sendFailed": "评价发送失败，请重试。",
+      "screenshotUnreadable": "这个文件不是我们能读取的图片。",
+      "screenshotTooBig": "图片太大了，请换一张小一点的。"
     },
     "thanks": "感谢你的反馈！🙏",
     "sendFeedback": "发送反馈",
@@ -39,6 +41,12 @@
     "recommendLabel": "你会推荐 3Speak 吗？<opt>（可选）</opt>",
     "moreLabel": "详细说说 <opt>（可选）</opt>",
     "placeholder": "你喜欢什么？哪里可以做得更好？",
+    "screenshotLabel": "截图 <opt>(可选)</opt>",
+    "attachScreenshot": "附上截图",
+    "screenshotPreparing": "正在准备截图…",
+    "screenshotAlt": "你的截图",
+    "removeScreenshot": "移除截图",
+    "screenshotHint": "只有 3Speak 团队能看到。你也可以在这里粘贴图片。",
     "notNow": "以后再说",
     "sending": "发送中…"
   },

@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.69',
+    category: 'general',
+    date: '2026-11-15',
+    summary: 'Feedback: you can now attach a screenshot (pick an image or paste one), and only the 3Speak team sees it.',
+  },
+  {
     version: '2.0.68',
     category: 'general',
     date: '2026-11-15',
