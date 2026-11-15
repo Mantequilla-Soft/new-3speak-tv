@@ -39,6 +39,7 @@ import useEmojiShortcodes from '../hooks/useEmojiShortcodes';
 import { prefetchVideoTagsV2 } from '../utils/tagsV2';
 import AiBadge from '../components/AiBadge/AiBadge';
 import AudiogramEpisodeLink from '../components/AudiogramEpisodeLink/AudiogramEpisodeLink';
+import ShortSeriesBar from '../components/Episodes/ShortSeriesBar';
 import { stripEpisodeLine } from '../utils/audiogramLink';
 
 // Custom Hive Icon Component
@@ -4206,6 +4207,10 @@ const VideoShort = () => {
                   (from its metadata, so it holds whatever the text says) */}
               {currentVideo.audiogramOf && (
                 <AudiogramEpisodeLink author={currentVideo.audiogramOf.author} permlink={currentVideo.audiogramOf.permlink} />
+              )}
+              {/* A part of its creator's series: "Part 3 of 7 · title" and Next part (lib/series.js) */}
+              {currentVideo.author && (currentVideo.hivePermlink || currentVideo.permlink) && (
+                <ShortSeriesBar author={currentVideo.author} permlink={currentVideo.hivePermlink || currentVideo.permlink} />
               )}
               {/* The creator's `## Title` (utils/shortTitle.js), above the caption. */}
               {currentVideo.heading && <p className="captionTitle">{currentVideo.heading}</p>}

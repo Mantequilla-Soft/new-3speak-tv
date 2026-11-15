@@ -42,6 +42,11 @@ import UploadGate from '../ads/UploadGate';
 import { fetchUploadGateAd, confirmUploadGatePost, gateSessionId } from '../../lib/uploadGate';
 import { usePortalDoc } from '../../utils/portalDocument';
 import { readAddToBlog, writeAddToBlog, reblogOp } from '../../utils/addToBlog';
+import { episodeFields } from '../../utils/episodeNumbers';
+import { saveScheduledPost } from '../../utils/scheduledPosts';
+import { scheduledPostWriteError } from '../../utils/scheduledPostProof';
+import EpisodeNumberFields from '../Episodes/EpisodeNumberFields';
+import AudioPublishWhen from './AudioPublishWhen';
 import PlaylistTypePicker from '../PlaylistTypePicker/PlaylistTypePicker';
 import MarkdownComposer from '../studio/MarkdownComposer';
 import { sanitizeAudiograms, publishAudiogramShorts } from '../../utils/audiogramShorts';
@@ -332,6 +337,13 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
   const [communityOpen, setCommunityOpen] = useState(false);
   const [mainTitle, setMainTitle] = useState('');
   const [postDescription, setPostDescription] = useState('');
+  // A standalone post's season / episode (utils/episodeNumbers.js), as typed,
+  // and when it goes out: 'now', 'schedule' (at scheduleAt, datetime-local) or
+  // 'draft' (AudioPublishWhen; the checker's scheduled posts keep the other two).
+  const [seasonNum, setSeasonNum] = useState('');
+  const [episodeNum, setEpisodeNum] = useState('');
+  const [publishWhen, setPublishWhen] = useState('now');
+  const [scheduleAt, setScheduleAt] = useState('');
   const [postTagsInput, setPostTagsInput] = useState('');
   // The post cover the creator picked, designed or cleared themselves; until
   // they do (postThumbFrom null), the post cover is the playlist's (postThumb,
@@ -1070,12 +1082,61 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     const metaObj = {
       app: HIVE_APP_NAME,
       tags,
-      audio: withSound(audioMeta, credits),
+      // Season / episode ride in the bare audio block, which the checker reads
+      // (podcast feeds, the audio rows' "S2 E5").
+      audio: withSound({ ...audioMeta, ...episodeFields({ season: seasonNum, episode: episodeNum }) }, credits),
       ...oaEnvelope(OA_ARTICLE),
       ...threespeakAudio({ ...audioMeta, duration: track.durationSec }),
       ...audioAdsMeta,
     };
     if (postThumb) metaObj.image = [postThumb];
+
+    // Later, or not yet: the built post goes to the checker's scheduled posts
+    // (a draft has no time) and its cron publishes it as the creator under the
+    // @threespeak posting authority, playlist add included, and links the upload
+    // to it. Until then the checker keeps the upload out of the audio lists.
+    if (!warmup && publishWhen !== 'now') {
+      const scheduledOn = publishWhen === 'schedule' ? new Date(scheduleAt).toISOString() : null;
+      if (!(await hasThreespeakPostingAuth(user))) await addThreespeakToPostingAuth(user);
+      const co = buildCommentOptions(user, hivePermlink, {
+        payout: postPayout, beneStr: postBeneStr, isPremium, ppl: rewardMode === 'ppl',
+        soundAuthors: soundAuthorsOf(credits, user),
+      });
+      const beneficiaries = co?.[1]?.extensions?.[0]?.[1]?.beneficiaries || [];
+      try {
+        await saveScheduledPost({
+          owner: user,
+          permlink: hivePermlink,
+          scheduledOn,
+          post: {
+            title: postTitle,
+            description: desc,
+            body,
+            tags,
+            jsonMetadata: metaObj,
+            beneficiaries,
+            payoutOptions: postPayout === 'decline' || postPayout === 'powerup' ? postPayout : 'default',
+            thumbnail: postThumb || null,
+            parentAuthor: '',
+            parentPermlink: (community && community.name) || tags[0],
+            audioPermlink,
+            playlistAdd: playlistChoice ? { playlist_id: playlistChoice, position: 0 } : null,
+            reblog: !!addToBlog,
+          },
+        });
+      } catch (err) {
+        throw new Error(scheduledPostWriteError(err, t('upload.errors.couldNotSchedule')), { cause: err });
+      }
+      await pushAudioThumb(audioPermlink, postThumb);
+      setTrackStatus(track.id, {
+        state: 'success',
+        stage: undefined,
+        message: scheduledOn
+          ? t('upload.publishing.scheduledFor', { when: new Date(scheduledOn).toLocaleString() })
+          : t('episodes.drafts.saved'),
+      });
+      return;
+    }
 
     if (warmup) {
       // No Article envelope (`oa`): the warm-up service files an Article as a VIDEO,
@@ -1130,7 +1191,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     await pushAudioThumb(audioPermlink, postThumb);
     trackPostsRef.current[track.id] = { author: user, permlink: hivePermlink, title: postTitle };
     setTrackStatus(track.id, { state: 'success', stage: undefined });
-  }, [user, owner, warmup, mainTitle, community, postDescription, postTagsInput, postThumb, postPayout, postBeneStr, isPremium, rewardMode, playlistChoice, pushAudioThumb, shareToBlog, audioAds, mirrorAudioAds]);
+  }, [user, owner, warmup, mainTitle, community, postDescription, postTagsInput, postThumb, postPayout, postBeneStr, isPremium, rewardMode, playlistChoice, pushAudioThumb, shareToBlog, audioAds, mirrorAudioAds, seasonNum, episodeNum, publishWhen, scheduleAt, addToBlog, t]);
 
   // ── album main post (no audio — pure composer landing page) ──
   // Cached so a per-track retry doesn't re-broadcast the parent.
@@ -1305,12 +1366,15 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
       const p = trackPostsRef.current[tracks[0]?.id];
       if (p) post = `/audio/${p.author}/${p.permlink}`;
     }
+    // Scheduled or kept as a draft: nothing is on Hive yet, so the studio list it waits in.
+    const deferred = mode === 'single' && !warmup && publishWhen !== 'now';
     return {
-      post,
-      playlist: playlistChoice ? `/playlist/${playlistChoice}` : null,
+      post: deferred ? null : post,
+      playlist: playlistChoice && !deferred ? `/playlist/${playlistChoice}` : null,
       profileAudio: mode === 'snaps' && user ? `/@${user}?tab=audio` : null,
+      waiting: deferred ? `/draft?show=${publishWhen === 'draft' ? 'unsent' : 'scheduled'}` : null,
     };
-  }, [mode, tracks, playlistChoice, user, warmup]);
+  }, [mode, tracks, playlistChoice, user, warmup, publishWhen]);
 
   // The modal stays mounted (App.jsx), so a closed session would otherwise
   // reopen with the last upload still in it. Every close starts fresh.
@@ -1329,6 +1393,10 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     replaceStatuses({});
     setMainTitle('');
     setPostDescription('');
+    setSeasonNum('');
+    setEpisodeNum('');
+    setPublishWhen('now');
+    setScheduleAt('');
     cancelAllTranscripts();
     postTranscriptRef.current = '';
     transcriptTargetRef.current = {};
@@ -1515,7 +1583,10 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
   const isLastStep = step >= flow.length - 1;
   const canNext = (() => {
     if (stepKey === 'source') return tracks.length > 0 && !isRecording && (!warmup || tracks.length === 1);
-    if (stepKey === 'post') return (tracks[0]?.title || mainTitle || '').trim().length > 0 && !!tracks[0]?.type;
+    if (stepKey === 'post') {
+      return (tracks[0]?.title || mainTitle || '').trim().length > 0 && !!tracks[0]?.type
+        && (warmup || publishWhen !== 'schedule' || !!scheduleAt);
+    }
     // Every track needs its category picked before review.
     if (stepKey === 'tracks') return tracks.every((tr) => !!tr.type);
     if (stepKey === 'mainpost') return (mainTitle || '').trim().length > 0;
@@ -1591,7 +1662,10 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     setIsPublishing(false);
 
     if (allOk) {
-      toast.success(t('audio.upload.toasts.published', { count: tracks.length }));
+      const deferred = mode === 'single' && !warmup && publishWhen !== 'now';
+      toast.success(deferred
+        ? (publishWhen === 'draft' ? t('episodes.drafts.saved') : t('upload.publishing.scheduled'))
+        : t('audio.upload.toasts.published', { count: tracks.length }));
       queryClient.invalidateQueries({ queryKey: ['myPlaylists', user] });
       // No auto-close: the review step now shows where everything landed.
       markDoneIfComplete();
@@ -1614,7 +1688,10 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
       : { key: 'community', icon: 'groups', label: community ? (community.title || community.name) : t('audio.upload.side.community'), on: !!community },
     { key: 'rss', icon: 'podcasts', label: t('audio.upload.side.rss'), on: !!chosenPlaylist },
   ];
-  const publishLabel = mode === 'album' && !warmup
+  const deferredSingle = mode === 'single' && !warmup && publishWhen !== 'now';
+  const publishLabel = deferredSingle
+    ? (publishWhen === 'draft' ? t('episodes.drafts.saveButton') : t('episodes.when.scheduleButton'))
+    : mode === 'album' && !warmup
     ? t('audio.upload.publishAlbum', { count: tracks.length })
     : shortsList.length > 0
       ? t('audio.upload.publishWithShorts', { count: shortsList.length })
@@ -1762,6 +1839,8 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
               onDesignShortThumb={(trackId, url) => setShortThumbFor({ trackId, url })}
               shortsLocked={isPublishing}
               transcript={stepKey === 'post' ? transcriptPropsFor(tracks[0], 'post') : null}
+              numbers={stepKey === 'post' ? { season: seasonNum, episode: episodeNum, onSeason: setSeasonNum, onEpisode: setEpisodeNum } : null}
+              when={stepKey === 'post' && !warmup ? { value: publishWhen, onChange: setPublishWhen, scheduleAt, onScheduleAt: setScheduleAt } : null}
             />
           )}
           {stepKey === 'tracks' && (
@@ -2778,6 +2857,7 @@ function MainPostStep({
   addToBlog, setAddToBlog, warmup = false,
   onShortsChange = null, onDesignShortThumb = null, shortsLocked = false,
   transcript = null,
+  numbers = null, when = null,
 }) {
   const { t } = useTranslation();
   const isAlbum = variant === 'album';
@@ -2850,6 +2930,20 @@ function MainPostStep({
         </div>
         {!isAlbum && transcript && <TranscriptControl {...transcript} disabled={shortsLocked} />}
       </section>
+
+      {/* Season and episode, for listeners and podcast apps */}
+      {!isAlbum && numbers && (
+        <section className="audio-upload-card">
+          <EpisodeNumberFields {...numbers} />
+        </section>
+      )}
+
+      {/* Now, at a time, or kept as a draft */}
+      {!isAlbum && when && (
+        <section className="audio-upload-card">
+          <AudioPublishWhen {...when} />
+        </section>
+      )}
 
       {/* The audiograms going out as Shorts with it (not for warm-up: Shorts need the Hive account) */}
       {!isAlbum && singleTrack && !warmup && onShortsChange && singleTrack.audiograms?.length > 0 && (
@@ -3188,6 +3282,11 @@ function ReviewStep({
             {published.playlist && (
               <Button as={Link} variant="secondary" size={40} icon="queue_music" to={published.playlist} onClick={onNavigate}>
                 {t('audio.upload.done.openPlaylist')}
+              </Button>
+            )}
+            {published.waiting && (
+              <Button as={Link} variant="primary" size={40} next to={published.waiting} onClick={onNavigate}>
+                {t('episodes.drafts.openStudio')}
               </Button>
             )}
             {published.profileAudio && (

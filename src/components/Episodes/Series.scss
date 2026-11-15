@@ -1,0 +1,189 @@
+@use "../../styles/v2" as v2;
+
+// The series line on a Short (over the video): the part and the series name,
+// and the Next part button. Flat, like the episode pill above the caption.
+.short-series {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 100%;
+  margin: 0 0 8px;
+  pointer-events: auto;
+}
+
+.short-series__info {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  min-height: 36px;
+  padding: 6px 10px;
+  border-radius: var(--r-md);
+  background: color-mix(in srgb, var(--surface) 85%, transparent);
+  color: var(--text);
+  text-decoration: none;
+
+  &:hover { background: var(--surface); color: var(--text); }
+}
+
+.short-series__text {
+  min-width: 0;
+  font-size: 12px;
+  line-height: 1.25;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  b { font-weight: 900; }
+}
+
+.short-series__next {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+  gap: 4px;
+  min-height: 36px;
+  padding: 6px 10px;
+  border-radius: var(--r-md);
+  background: var(--accent);
+  color: var(--on-accent);
+  font-size: 12px;
+  font-weight: 900;
+  text-decoration: none;
+  white-space: nowrap;
+
+  &:hover { color: var(--on-accent); }
+}
+
+.series-select__none {
+  margin: 0;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+// The series page header line and the channel's Series row.
+.series-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--muted);
+}
+
+.series-create {
+  display: grid;
+  gap: 12px;
+}
+
+.series-create__list {
+  display: grid;
+  gap: 8px;
+  max-height: min(50vh, 420px);
+  overflow-y: auto;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.series-create__item {
+  width: 100%;
+  border: 0;
+  font: inherit;
+  text-align: left;
+  color: var(--text);
+  display: grid;
+  grid-template-columns: 28px 48px minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+  padding: 6px;
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+  cursor: pointer;
+
+  img {
+    width: 48px;
+    aspect-ratio: 9 / 16;
+    object-fit: cover;
+    border-radius: var(--r-sm);
+    display: block;
+  }
+
+  &.is-on { outline: 2px solid var(--accent); }
+}
+
+.series-create__num {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--surface);
+  font-size: 12px;
+  font-weight: 900;
+
+  .is-on & { background: var(--accent); color: var(--on-accent); }
+}
+
+.series-create__title {
+  min-width: 0;
+  font-size: 13px;
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.channel-series {
+  display: grid;
+  gap: 12px;
+  margin: 0 0 24px;
+}
+
+.channel-series__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  h2 { margin: 0; @include v2.text(title-sm); }
+}
+
+.channel-series__row {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 12px;
+
+  @include v2.mobile { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+.channel-series__card {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+  padding: 8px;
+  border-radius: var(--r-lg);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  text-decoration: none;
+
+  b {
+    font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+.channel-series__cover {
+  aspect-ratio: 16 / 9;
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  color: var(--muted);
+
+  img { width: 100%; height: 100%; object-fit: cover; display: block; }
+}

@@ -19,6 +19,7 @@ import useGalaxyFits from '../../hooks/useGalaxyFits';
 import { getHidden, hideCreator, unhideCreator, refreshRailsAfterHide } from '../../utils/userFilters';
 import Follower from './Follower';
 import PlaylistCard from '../Cards/PlaylistCard';
+import ChannelSeries from '../Episodes/ChannelSeries';
 import { useUserPlaylists } from '../../hooks/useUserPlaylists';
 import { useAppStore } from '../../lib/store';
 import CreatorStats from '../CreatorStats/CreatorStats';
@@ -723,7 +724,11 @@ const {
     ) : shortsVideos.length === 0 ? (
       <ProfileEmptyState kind="shorts" isOwnProfile={isOwnProfile} username={user} />
     ) : (
-      <Card3 windowed videos={shortsVideos} loading={isFetchingNextShortsPage} linkPrefix="/shorts" linkQuery={`&user=${user}`} getViewCount={getViewCount} shortsGrid />
+      <>
+        {/* The channel's series of Shorts (lib/series.js) */}
+        <ChannelSeries owner={user} playlists={playlists} isOwnProfile={isOwnProfile} />
+        <Card3 windowed videos={shortsVideos} loading={isFetchingNextShortsPage} linkPrefix="/shorts" linkQuery={`&user=${user}`} getViewCount={getViewCount} shortsGrid />
+      </>
     )
   ) : show === "audio" ? (
     <UserAudioList user={user} isOwnProfile={isOwnProfile} />

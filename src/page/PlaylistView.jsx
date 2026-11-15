@@ -4,6 +4,8 @@ import axios from 'axios';
 import { useState, useMemo, useRef, useId } from 'react';
 import PlaylistTypePicker from '../components/PlaylistTypePicker/PlaylistTypePicker';
 import { resolvePlaylistType, playlistTypeFields } from '../lib/playlistType';
+import { isSeries } from '../lib/series';
+import SeriesModal from '../components/Episodes/SeriesModal';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import BarLoader from '../components/Loader/BarLoader';
@@ -171,6 +173,9 @@ function PlaylistView() {
     } catch { return {}; }
   }, [playlist]);
   const playlistTags = useMemo(() => playlistJsonMeta.tags || [], [playlistJsonMeta]);
+  // A series (lib/series.js): its parts in order, "Part 1" first; the owner adds parts.
+  const series = isSeries(playlist);
+  const [addingParts, setAddingParts] = useState(false);
 
   // Outside podcast shows the owner added (lib/playlistFeeds.js): their episodes
   // are merged by date with the playlist's own items.
@@ -564,6 +569,11 @@ function PlaylistView() {
   };
   const ownerButtons = isOwner && (
     <>
+      {series && (
+        <Button variant="secondary" size={40} icon="add" className="pod-btn" onClick={() => setAddingParts(true)} disabled={isSaving}>
+          {t('episodes.series.addParts')}
+        </Button>
+      )}
       <Button variant="secondary" size={40} icon="edit" className="pod-btn" onClick={handleOpenEdit} disabled={isSaving}>
         {t('common.actions.edit')}
       </Button>
@@ -917,9 +927,12 @@ function PlaylistView() {
             </span>
           </div>
           <StatusPill tone="cyan" className="pv-kind">
-            {t('profile.layout.types.playlist')} · {isPrivate ? t('playlists.private') : t('playlists.public')}
+            {series ? t('episodes.series.kind') : t('profile.layout.types.playlist')} · {isPrivate ? t('playlists.private') : t('playlists.public')}
           </StatusPill>
           <h1 className="pv-title">{playlist.name}</h1>
+          {isOwner && series && (
+            <SeriesModal open={addingParts} onClose={() => setAddingParts(false)} owner={playlist.owner} series={playlist} />
+          )}
           <div className="pv-owner">
             <AccountImg account={playlist.owner} alt="" className="pv-owner-avatar" />
             <Link to={`/@${playlist.owner}`} className="owner">@{playlist.owner}</Link>

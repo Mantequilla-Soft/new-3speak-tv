@@ -970,6 +970,34 @@ describe('the audio player: transcripts and chapters', () => {
   })
 })
 
+describe('the audio player: chapters of a 3Speak track', () => {
+  it('reads them from the track\'s own post (the audio editor\'s list) and shows the same chapter tab', async () => {
+    hive.getContent = vi.fn(async () => ({
+      body: 'https://audio.3speak.tv/play?a=audio-7\n\nNotes\n\n0:00 Intro\n1:00 The garden\n2:30 Questions',
+      json_metadata: JSON.stringify({ audio: { type: 'podcast' } }),
+      active_votes: [], children: 0,
+    }))
+    act(() => useAppStore.setState({ audioExpanded: true }))
+    const { user } = mount()
+    play(track(7, { post_permlink: 'garden-talk', duration: 300 }))
+    const list = await screen.findByRole('region', { name: 'Chapters' })
+    expect(hive.getContent).toHaveBeenCalledWith('badadib', 'garden-talk')
+    expect(podcastMedia.fetchChapters).not.toHaveBeenCalled()
+    expect(within(list).getByRole('button', { name: /Intro/ })).toHaveAttribute('aria-current', 'true')
+    await user.click(within(list).getByRole('button', { name: 'Next chapter' }))
+    expect(audio().currentTime).toBe(60)
+  })
+
+  it('a post without a list has no chapter tab', async () => {
+    hive.getContent = vi.fn(async () => ({ body: 'Just notes', json_metadata: '{}', active_votes: [], children: 0 }))
+    act(() => useAppStore.setState({ audioExpanded: true }))
+    mount()
+    play(track(8, { post_permlink: 'plain' }))
+    await waitFor(() => expect(hive.getContent).toHaveBeenCalled())
+    expect(screen.queryByRole('region', { name: 'Chapters' })).not.toBeInTheDocument()
+  })
+})
+
 describe('the audio player: an outside podcast episode', () => {
   const ep = { _id: 'ep-3', external: true, src: 'https://pod.example/ep3.mp3', title: 'Episode three', show: 'A show', show_id: 'feed-9', summary: 'What this one is about', duration: 900 }
 

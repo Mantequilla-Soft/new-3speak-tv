@@ -25,6 +25,8 @@ import './EmbedDetails.scss';
 import { useTranslation, Trans } from 'react-i18next';
 import { SHORT_TITLE_MAX } from '../../utils/shortTitle';
 import { Button, Icon, IconButton, Toggle } from '../v2/ui';
+import EpisodeNumberFields from '../Episodes/EpisodeNumberFields';
+import ShortSeriesSelect from '../Episodes/ShortSeriesSelect';
 
 // Every toast from this module is headed "Upload"; the message becomes the
 // line under it. See utils/toast.js.
@@ -106,6 +108,10 @@ function EmbedDetails() {
     editedThumbnail,
     isScheduled, setIsScheduled,
     scheduleDateTime, setScheduleDateTime,
+    saveAsDraft, setSaveAsDraft,
+    seasonNum, setSeasonNum,
+    episodeNum, setEpisodeNum,
+    seriesId, setSeriesId,
     fromStories,
     isStory,
     reusable, setReusable,
@@ -529,7 +535,22 @@ function EmbedDetails() {
   const nextLabel = t('upload.details.nextStep', { step: fromStories ? t('upload.steps.previewUpload') : t('upload.steps.timeline') });
   actions.primary = [{ key: 'proceed', label: nextLabel, onClick: process }];
 
+  // A draft and a schedule exclude each other: the last one chosen wins.
+  const toggleDraft = () => {
+    const next = !saveAsDraft;
+    setSaveAsDraft(next);
+    if (next) setIsScheduled(false);
+  };
+
   const settingRows = [
+    !fromStories && !incubationHandle && {
+      key: 'draft',
+      icon: 'edit_note',
+      title: t('episodes.drafts.row'),
+      sub: saveAsDraft ? t('episodes.drafts.rowOn') : t('episodes.drafts.rowOff'),
+      on: !!saveAsDraft,
+      onClick: toggleDraft,
+    },
     !fromStories && {
       key: 'schedule',
       icon: 'event',
@@ -604,6 +625,18 @@ function EmbedDetails() {
                   </div>
                 )}
               </section>
+
+              {/* Season and episode (long-form), or the series a Short continues. */}
+              {!fromStories && (
+                <section className="v2-card details-card input-group">
+                  <EpisodeNumberFields season={seasonNum} episode={episodeNum} onSeason={setSeasonNum} onEpisode={setEpisodeNum} />
+                </section>
+              )}
+              {fromStories && !isStory && !incubationHandle && (
+                <section className="v2-card details-card input-group">
+                  <ShortSeriesSelect value={seriesId} onChange={setSeriesId} />
+                </section>
+              )}
 
               {/* Choices as tiles (21c): what the post is filed under. Each opens
                   its picker; Community is a Hive category, so it is left out for
@@ -793,7 +826,7 @@ function EmbedDetails() {
                   trailing="event"
                   className="dlg-main"
                   disabled={!scheduleDraft}
-                  onClick={() => { setScheduleDateTime(scheduleDraft); setIsScheduled(true); setScheduleOpen(false); }}
+                  onClick={() => { setScheduleDateTime(scheduleDraft); setIsScheduled(true); setSaveAsDraft(false); setScheduleOpen(false); }}
                 >
                   {t('upload.details.schedule.scheduleFor', { when: formatScheduleWhen(scheduleDraft) })}
                 </Button>

@@ -30,6 +30,8 @@ import { fixVideoThumbnail, fallbackImg } from '../utils/fixThumbnails';
 import { isLoggedIn } from '../hive-api/aioha';
 import MountWhenOpened from '../components/common/LazyMount';
 import './AudioPost.scss';
+import EpisodeBadge from '../components/Episodes/EpisodeBadge';
+import { episodeNumbersOfMeta } from '../utils/episodeNumbers';
 
 // Only the creator ever opens it, so it loads on the first Edit.
 const EditAudioModal = lazy(() => import('../components/AudioEdit/EditAudioModal'));
@@ -383,7 +385,11 @@ function AudioPost() {
             <img className="audio-post-cover" src={cover} alt="" onError={(e) => { e.currentTarget.src = fallbackImg; }} />
             <div className="audio-post-hero-body">
               <div className="v2-eyebrow is-cyan audio-post-eyebrow">{eyebrow}</div>
-              <h1 className="audio-post-title">{title}</h1>
+              <h1 className="audio-post-title">
+                {/* "S2 E5" from the post itself (utils/episodeNumbers.js) */}
+                <EpisodeBadge {...episodeNumbersOfMeta(post?.json_metadata)} className="audio-post-episode" />
+                {title}
+              </h1>
               <div className="audio-post-by">
                 <Link to={`/@${author}?tab=audio`} className="audio-post-by__who">
                   <img className="audio-post-by__avatar" src={`/img/u/${author}/avatar/small`} alt="" onError={(e) => { e.currentTarget.style.visibility = 'hidden'; }} />

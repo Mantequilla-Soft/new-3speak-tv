@@ -31,6 +31,9 @@ vi.mock('../../../src/lib/advertiseData', () => h.mocks.advertise)
 vi.mock('../../../src/lib/youtubeImport', () => h.mocks.youtubeImport)
 vi.mock('../../../src/lib/stories', () => h.mocks.stories)
 vi.mock('../../../src/hive-api/hiveApi', () => h.mocks.hiveApi)
+// A Short's series (lib/series.js): the playlist add after the post is out.
+const addToPlaylist = vi.hoisted(() => vi.fn(async () => ({ success: true })))
+vi.mock('../../../src/utils/playlistOperations', () => ({ addToPlaylist }))
 // The owner's signature is a fake; the error wording is the real module's (its
 // t() is the same key-echo as the provider's).
 vi.mock('../../../src/i18n', () => h.mocks.appI18n)
@@ -799,6 +802,56 @@ describe('a prefilled upload (pushed to the embed service by another uploader)',
     // No local file: the orientation is unknown, so the attribute is left out.
     expect(meta()).not.toHaveProperty('threespeak.video')
     expect(fetchTo('/video/hangout-rec-1/hive')[0][0]).toBe(`${h.RELIABLE_BASE}/video/hangout-rec-1/hive`)
+    expect(result.current.completed).toBe(true)
+  })
+})
+
+describe('season, episode, drafts and a Short\'s series', () => {
+  beforeEach(() => addToPlaylist.mockClear())
+  const draftCall = () => h.fns.axiosPost.mock.calls.find(([url]) => url.endsWith('/scheduled-posts/create'))
+
+  it('season and episode go into the video block as whole numbers, only when set', async () => {
+    const { result } = await ready((c) => { c.setSeasonNum('2'); c.setEpisodeNum('5') })
+    await publish(result)
+    expect(meta().video).toMatchObject({ season: 2, episode: 5 })
+  })
+
+  it('no numbers: no fields', async () => {
+    const { result } = await ready((c) => { c.setEpisodeNum('0') })
+    await publish(result)
+    expect(meta().video).not.toHaveProperty('season')
+    expect(meta().video).not.toHaveProperty('episode')
+  })
+
+  it('a draft is kept on the checker without a time, signed as a draft, and nothing is broadcast', async () => {
+    const { result } = await ready((c) => { c.setSaveAsDraft(true); c.setSeasonNum('1') })
+    await publish(result)
+    const [, body] = draftCall()
+    expect(body).toMatchObject({ owner: 'badadib', permlink: PERMLINK, draft: true, embedPermlink: 'asset-1', title: 'My First Video!' })
+    expect(body).not.toHaveProperty('scheduledOn')
+    expect(body.jsonMetadata.video).toMatchObject({ season: 1 })
+    expect(h.fns.proveScheduledPost).toHaveBeenCalledWith({ action: 'draft', owner: 'badadib', permlink: PERMLINK })
+    nothingPosted()
+    expect(result.current.completed).toBe(true)
+    expect(h.fns.toastSuccess).toHaveBeenCalledWith('episodes.drafts.saved')
+  })
+
+  it('a Short picked for a series is added at its end once it is out', async () => {
+    const { result } = await ready((c) => {
+      c.setFromStories(true); c.setTitle(''); c.setDescription('Sunset at the beach'); c.setTagsPreview([]); c.setSeriesId('pl-garden-1')
+    })
+    await publish(result)
+    expect(addToPlaylist).toHaveBeenCalledWith('pl-garden-1', 'badadib', 'sunset-at-the-beach-42', 100000)
+    expect(addToPlaylist.mock.invocationCallOrder[0]).toBeGreaterThan(h.fns.broadcastViaThreespeak.mock.invocationCallOrder[0])
+  })
+
+  it('a failed series add is a warning: the Short is published', async () => {
+    addToPlaylist.mockRejectedValueOnce(new Error('indexer down'))
+    const { result } = await ready((c) => {
+      c.setFromStories(true); c.setTitle(''); c.setDescription('Sunset'); c.setTagsPreview([]); c.setSeriesId('pl-garden-1')
+    })
+    await publish(result)
+    expect(h.fns.toastError).toHaveBeenCalledWith('episodes.series.addFailed')
     expect(result.current.completed).toBe(true)
   })
 })

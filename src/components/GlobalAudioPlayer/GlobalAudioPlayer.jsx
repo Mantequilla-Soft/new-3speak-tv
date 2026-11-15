@@ -29,6 +29,7 @@ import { podcastPath, episodePath, artUrl, PODCAST_PLACEHOLDER } from '../../lib
 // build without it must still load (the player then plays track.src).
 import * as podcastsLib from '../../lib/podcasts';
 import { fetchChapters, fetchTranscript, chapterAt } from '../../lib/podcastMedia';
+import { chaptersOfPost } from '../../utils/postChapters';
 import { isDownloaded, localAudioUrl, downloadTrack, useDownloads } from '../../lib/podcastDownloads';
 import { setAudioSrc } from '../../lib/audioCorsMode';
 import { toastIn } from '../../utils/toast';
@@ -331,6 +332,8 @@ function GlobalAudioPlayer() {
   const [npPayout, setNpPayout] = useState(0);
   const [npComments, setNpComments] = useState(0);
   const [npBody, setNpBody] = useState('');
+  // A 3Speak track's own post (body + json_metadata), for its chapters.
+  const [npPost, setNpPost] = useState(null);
   const [npTags, setNpTags] = useState([]);
   const [npMantecurated, setNpMantecurated] = useState(false);
 
@@ -919,6 +922,17 @@ function GlobalAudioPlayer() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [audioCurrent?._id, audioCurrent?.chapters, audioCurrent?.external, audioCurrent?.live]);
 
+  // Chapters of a 3Speak track, from its own post: the timeline's chapters in
+  // its metadata, else the "0:00 Intro" list the audio editor writes into the
+  // text (utils/postChapters.js). The same chapter tab, ticks and skip buttons as
+  // an outside episode's.
+  useEffect(() => {
+    if (audioCurrent?.external || !npPost) return;
+    if (npPost.key !== `${audioCurrent?.owner}/${audioCurrent?.post_permlink}`) return;
+    const duration = audioDuration || Number(audioCurrent?.duration) || 0;
+    setChapters(chaptersOfPost({ body: npPost.body, json_metadata: npPost.json_metadata, duration }));
+  }, [npPost, audioDuration, audioCurrent?.external, audioCurrent?.owner, audioCurrent?.post_permlink, audioCurrent?.duration]);
+
   // Casting: a button only while the browser sees a device. Safari has its own
   // AirPlay picker; the others the Remote Playback API.
   useEffect(() => {
@@ -980,12 +994,14 @@ function GlobalAudioPlayer() {
   useEffect(() => {
     if (!audioCurrent?.post_permlink) {
       setNpIsVoted(false); setNpVoteCount(0); setNpPayout(0); setNpComments(0);
-      setNpBody(''); setNpTags([]); setNpMantecurated(false);
+      setNpBody(''); setNpTags([]); setNpMantecurated(false); setNpPost(null);
       return;
     }
     let cancelled = false;
+    setNpPost(null);
     getUersContent(audioCurrent.owner, audioCurrent.post_permlink).then(data => {
       if (cancelled || !data) return;
+      setNpPost({ key: `${audioCurrent.owner}/${audioCurrent.post_permlink}`, body: data.body || '', json_metadata: data.json_metadata });
       setNpVoteCount(data.active_votes?.length || 0);
       setNpComments(Number(data.children) || 0);
       setNpIsVoted(data.active_votes?.some(v => v.voter === user) || false);

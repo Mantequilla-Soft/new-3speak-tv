@@ -48,7 +48,9 @@ describe('the signed message', () => {
 
   it('refuses fields that are not exactly an owner, a permlink and a date', async () => {
     const cases = [
-      [{ action: 'publish', owner: 'alice', permlink: 'p' }, 'invalid action'],
+      [{ action: 'delete', owner: 'alice', permlink: 'p' }, 'invalid action'],
+      // publish (a draft going out) names its time, like create
+      [{ action: 'publish', owner: 'alice', permlink: 'p' }, 'invalid scheduledOn'],
       [{ owner: 'alice', permlink: 'p' }, 'invalid action'],
       [{ action: 'cancel', owner: 'Alice', permlink: 'p' }, 'invalid owner'],
       [{ action: 'cancel', owner: ' alice', permlink: 'p' }, 'invalid owner'],

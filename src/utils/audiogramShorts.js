@@ -41,11 +41,15 @@ export function sanitizeAudiograms(list) {
     const duration = Number(a.duration);
     if (!(duration > 0 && duration <= MAX_SHORT_SECONDS)) continue;
     if (Number(a.width) > Number(a.height)) continue;
+    // Where in the episode the piece starts (seconds), when the editor says:
+    // with it the podcast feed lists the Short as a soundbite of the episode.
+    const start = Number(a.start);
     out.push({
       url: u.href,
       description: typeof a.description === 'string' ? a.description.trim().slice(0, MAX_DESCRIPTION) : '',
       title: typeof a.title === 'string' ? a.title.trim().slice(0, 120) : '',
       duration: Math.round(duration * 10) / 10,
+      ...(a.start != null && Number.isFinite(start) && start >= 0 && start <= 24 * 3600 ? { start: Math.round(start * 10) / 10 } : {}),
     });
     if (out.length >= MAX_AUDIOGRAM_SHORTS) break;
   }
@@ -91,7 +95,7 @@ export function audiogramShortBody({ embedUrl, description, episode, author, per
 }
 
 /** The Short's json_metadata: a regular short's, plus the episode it is from. */
-export function audiogramShortMetadata({ embedUrl, owner, assetPermlink, thumbnailUrl, duration, episode, tags = [], title = '' }) {
+export function audiogramShortMetadata({ embedUrl, owner, assetPermlink, thumbnailUrl, duration, episode, tags = [], title = '', start = null }) {
   const userTags = (tags || []).filter(t => typeof t === 'string' && t && t !== SHORTS_TAG).slice(0, 9);
   return {
     app: '3speak/embed',
@@ -115,8 +119,16 @@ export function audiogramShortMetadata({ embedUrl, owner, assetPermlink, thumbna
     },
     ...oaEnvelope(OA_MICROPOST),
     ...threespeakVideo({ surface: 'shorts', orientation: 'portrait', duration }),
-    // Where it is from: the audio post (the audiogram is a teaser of it)
-    '3speak': { audiogram: { author: episode.author, permlink: episode.permlink } },
+    // Where it is from: the audio post (the audiogram is a teaser of it), and
+    // which piece of it when known (the checker's feeds make it a soundbite:
+    // 3speakchecks routes/rss.js, utils/postMeta.js audiogramOf)
+    '3speak': {
+      audiogram: {
+        author: episode.author,
+        permlink: episode.permlink,
+        ...(Number.isFinite(start) && start >= 0 ? { start, duration: Math.round((Number(duration) || 0) * 10) / 10 } : {}),
+      },
+    },
   };
 }
 
@@ -171,7 +183,7 @@ export async function publishAudiogramShorts({ audiograms, user, isPremium, epis
       const title = shortTitleOf(a, episode);
       const permlink = audiogramPermlink(title, i);
       const body = audiogramShortBody({ embedUrl: asset.embedUrl, description: a.description, episode, author: user, permlink, title });
-      const meta = audiogramShortMetadata({ embedUrl: asset.embedUrl, owner: asset.owner, assetPermlink: asset.permlink, thumbnailUrl, duration: a.duration, episode, tags, title });
+      const meta = audiogramShortMetadata({ embedUrl: asset.embedUrl, owner: asset.owner, assetPermlink: asset.permlink, thumbnailUrl, duration: a.duration, episode, tags, title, start: a.start ?? null });
       const beneMap = new Map();
       enforceLockedBeneficiaries(beneMap, { isPremium, username: user, includeEncoder: true });
       const beneficiaries = [...beneMap.entries()].map(([account, weight]) => ({ account, weight })).sort((x, y) => x.account.localeCompare(y.account));

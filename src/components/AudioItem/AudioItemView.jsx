@@ -21,6 +21,8 @@ import CommentVoteTooltip from '../tooltip/CommentVoteTooltip';
 import BlogContent from '../playVideo/BlogContent';
 import { LazyBoundary } from '../common/LazyMount';
 import '../Podcasts/PodcastsTab.scss';
+import EpisodeBadge from '../Episodes/EpisodeBadge';
+import { episodeNumbersOf, episodeNumbersOfMeta } from '../../utils/episodeNumbers';
 
 // Opened from a card's Tip / Save buttons only: not part of the first download.
 const TipModal = lazy(() => import('../tip-reward/TipModal'));
@@ -150,6 +152,9 @@ export default function AudioItemView({ owner, id, onBack }) {
   const listKind = storedPlaylistType(playlist).kind;
   const isTrack = listKind ? listKind === 'music' : item.category === 'song';
   const genre = item.category === 'song' && item.genre ? item.genre : '';
+  // Season / episode: the post's own (newest), else what the checker copied onto the row
+  const fromPost = episodeNumbersOfMeta(post?.json_metadata);
+  const numbers = fromPost.season != null || fromPost.episode != null ? fromPost : episodeNumbersOf(item);
   const votes = post?.active_votes || [];
   const voted = votedNow || (!!user && votes.some((v) => v.voter === user));
   const voteCount = votes.length + (votedNow && !votes.some((v) => v.voter === user) ? 1 : 0);
@@ -172,6 +177,7 @@ export default function AudioItemView({ owner, id, onBack }) {
           <h2 className="pod-show-title">{title || t('audio.untitled')}</h2>
           <div className="pod-show-meta">
             {item.createdAt && <span>{fmtDate(item.createdAt)}</span>}
+            <EpisodeBadge {...numbers} />
             {item.duration > 0 && <span className="pod-chip">{fmtDuration(item.duration)}</span>}
             {genre && <span className="pod-chip">{genre}</span>}
             {item.plays > 0 && <span>{t('audio.tile.plays', { count: item.plays })}</span>}
