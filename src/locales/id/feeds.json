@@ -35,6 +35,14 @@
     "hide": "Sembunyikan",
     "markSeen": "Tandai semua sudah dilihat"
   },
+  "continueWatching": {
+    "aria": "Lanjutkan menonton",
+    "rest": "untuk lanjut ditonton",
+    "remove": "Hapus dari Lanjutkan menonton",
+    "removed": "Dihapus dari Lanjutkan menonton",
+    "removeFailed": "Tidak bisa menghapusnya. Coba lagi.",
+    "progress": "{{pct}}% ditonton"
+  },
   "tagMeta": {
     "videos_other": "{{num}} video",
     "thisWeek": "{{num}} minggu ini"

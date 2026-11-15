@@ -35,6 +35,14 @@
     "hide": "隐藏",
     "markSeen": "全部标为已看"
   },
+  "continueWatching": {
+    "aria": "继续观看",
+    "rest": "可继续观看",
+    "remove": "从“继续观看”中移除",
+    "removed": "已从“继续观看”中移除",
+    "removeFailed": "无法移除，请重试。",
+    "progress": "已观看 {{pct}}%"
+  },
   "tagMeta": {
     "videos_other": "{{num}} 个视频",
     "thisWeek": "本周 {{num}} 个"

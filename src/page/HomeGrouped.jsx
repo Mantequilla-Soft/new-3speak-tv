@@ -19,6 +19,7 @@ import { getFeedSeed, refreshHomeFeeds } from "../utils/feedSeed";
 import ShortsStories from "../components/ShortsStories/ShortsStories";
 import WelcomeBanner from "../components/WelcomeTour/WelcomeBanner";
 import NewFromFollowing from "../components/NewFromFollowing/NewFromFollowing";
+import ContinueWatching from "../components/ContinueWatching/ContinueWatching";
 import SuggestedCreators from "../components/SuggestedCreators/SuggestedCreators";
 import { useWarmupVideos, useFollowedWarmupVideos } from "../hooks/useWarmupVideos";
 import { useLiveStreams } from "../hooks/useLiveStreams";
@@ -1201,8 +1202,12 @@ const HomeGrouped = () => {
       {/* The Spotlight (20a): the featured videos, full width under the bar. */}
       <HomeHero videos={spotlight} pending={featuredLoading && !spotlight.length} />
       <ShortsStories tiles />
-      {/* Logged-in only, and renders nothing when there's nothing unwatched. */}
-      <NewFromFollowing />
+      {/* Logged-in only; each renders nothing when it has nothing to show.
+          Side by side from tablet width up, stacked on a phone. */}
+      <div className="home-strips">
+        <NewFromFollowing />
+        <ContinueWatching />
+      </div>
       {/* A creator blocked from uploading: the banner sits here on Home, under
           the Spotlight and over the feed tabs (the app-level copy hides it). */}
       <UploadBlockNotice inline />

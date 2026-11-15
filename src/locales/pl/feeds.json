@@ -41,6 +41,14 @@
     "hide": "Ukryj",
     "markSeen": "Oznacz wszystko jako obejrzane"
   },
+  "continueWatching": {
+    "aria": "Oglądaj dalej",
+    "rest": "do dokończenia",
+    "remove": "Usuń z Oglądaj dalej",
+    "removed": "Usunięto z Oglądaj dalej",
+    "removeFailed": "Nie udało się usunąć. Spróbuj ponownie.",
+    "progress": "Obejrzano {{pct}}%"
+  },
   "tagMeta": {
     "videos_one": "{{num}} film",
     "videos_few": "{{num}} filmy",

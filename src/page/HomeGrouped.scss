@@ -38,7 +38,29 @@
 .home-grouped-container > .shorts-stories:first-child,
 .home-grouped-container > .welcome-banner + .shorts-stories { margin-top: 0; }
 
-.home-grouped-container > .new-from-following { margin-top: 20px; }
+// "New from people you follow" and "Continue watching": side by side from
+// tablet width up, one above the other on a phone. Either can be missing (each
+// renders nothing when it has nothing), and the other then takes the row.
+// Tops aligned, so opening one never stretches the other.
+.home-grouped-container > .home-strips {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin: 20px 0 16px;
+  min-width: 0;
+
+  &:empty { display: none; }
+
+  > .new-from-following { flex: 1 1 0; margin: 0; }
+
+  @include v2.mobile {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    margin-bottom: 12px;
+    > .new-from-following { flex: none; }
+  }
+}
 
 // The feed and, from 1280px up, the activity panel beside it.
 .home-layout {

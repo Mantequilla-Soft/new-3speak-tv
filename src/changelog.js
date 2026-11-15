@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.26',
+    category: 'home',
+    date: '2026-11-15',
+    summary: 'Continue watching on Home: the videos you left part way, with how far you got. It shows when you take part in viewer rewards, and the x removes a video from it.',
+  },
+  {
     version: '2.0.25',
     category: 'upload',
     date: '2026-11-15',

@@ -37,6 +37,14 @@
     "hide": "Ficha",
     "markSeen": "Weka zote kuwa zimeonekana"
   },
+  "continueWatching": {
+    "aria": "Endelea kutazama",
+    "rest": "za kuendelea kutazama",
+    "remove": "Ondoa kwenye Endelea kutazama",
+    "removed": "Imeondolewa kwenye Endelea kutazama",
+    "removeFailed": "Imeshindwa kuondoa. Tafadhali jaribu tena.",
+    "progress": "Imetazamwa {{pct}}%"
+  },
   "tagMeta": {
     "videos_one": "video {{num}}",
     "videos_other": "video {{num}}",
