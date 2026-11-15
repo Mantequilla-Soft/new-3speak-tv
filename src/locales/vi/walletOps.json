@@ -1,0 +1,93 @@
+{
+  "actions": {
+    "powerUp": "Power up",
+    "powerDown": "Power down",
+    "savings": "Tiết kiệm",
+    "convert": "Chuyển đổi",
+    "delegate": "Ủy quyền",
+    "aria": "Quản lý tiền của bạn"
+  },
+  "common": {
+    "amount": "Số lượng ({{coin}})",
+    "available": "Khả dụng: {{balance}}",
+    "max": "Tối đa",
+    "to": "Đến tài khoản",
+    "toHint": "Giữ nguyên nếu là tài khoản của bạn.",
+    "activeKey": "Cần active key của bạn",
+    "butrauth": "Đã đăng nhập bằng Butter Auth: ở bước tiếp theo bạn duyệt thao tác này bằng ví Hive hoặc active key của mình.",
+    "insufficient": "Số này nhiều hơn số bạn đang có.",
+    "amountPositive": "Nhập số lượng lớn hơn 0.",
+    "invalidAccount": "Không có tài khoản Hive nào có tên này.",
+    "done": "Xong. Có thể mất vài giây để hiện ở đây.",
+    "failed": "Không thực hiện được: {{error}}",
+    "loading": "Đang tải ví của bạn..."
+  },
+  "powerUp": {
+    "title": "Power up",
+    "note": "Hive Power giúp lượt vote của bạn có sức nặng và kiếm phần thưởng curation. Đổi lại thành HIVE mất 13 lần trả hằng tuần.",
+    "submit": "Power up {{amount}} HIVE",
+    "submitTo": "Power up {{amount}} HIVE cho @{{to}}"
+  },
+  "powerDown": {
+    "title": "Power down",
+    "note": "Hive Power trở lại thành HIVE qua 13 lần trả hằng tuần, khoảng {{weekly}} HP mỗi tuần.",
+    "replace": "Đang có một lệnh power down (còn {{left}} HP). Bắt đầu lệnh mới sẽ thay thế lệnh này.",
+    "submit": "Power down {{amount}} HP",
+    "stop": "Dừng power down",
+    "stopped": "Đã dừng power down."
+  },
+  "savings": {
+    "title": "Tiết kiệm",
+    "deposit": "Gửi vào",
+    "withdraw": "Rút ra",
+    "depositNote": "HBD trong tiết kiệm được hưởng {{rate}}% mỗi năm. Rút ra mất 3 ngày.",
+    "depositNoteHive": "HIVE trong tiết kiệm không có lãi. Rút ra mất 3 ngày.",
+    "withdrawNote": "Đến sau 3 ngày. Bạn có thể hủy trước lúc đó.",
+    "submitDeposit": "Gửi {{amount}} {{coin}}",
+    "submitWithdraw": "Rút {{amount}} {{coin}}"
+  },
+  "convert": {
+    "title": "Chuyển đổi",
+    "hbdToHive": "HBD sang HIVE",
+    "hiveToHbd": "HIVE sang HBD",
+    "hbdNote": "Bạn nhận khoảng {{amount}} HIVE sau 3,5 ngày, theo giá trung vị của những ngày đó. Số cuối cùng có thể khác.",
+    "hiveNote": "Bạn nhận ngay khoảng {{amount}} HBD. Một nửa số HIVE của bạn được giữ làm tài sản thế chấp và phần còn lại trả về sau 3,5 ngày. Có phí 5%.",
+    "warning": "Không thể hoàn tác một lần chuyển đổi. Giao dịch trên sàn có thể rẻ hơn.",
+    "submit": "Chuyển đổi {{amount}} {{coin}}"
+  },
+  "delegate": {
+    "title": "Ủy quyền",
+    "toLabel": "Ủy quyền cho",
+    "note": "Hive Power đã ủy quyền vẫn là của bạn, nhưng sức vote của nó thuộc về tài khoản kia. Khi bạn gỡ, phải mất 5 ngày để quay lại.",
+    "current": "Hiện bạn đang ủy quyền {{hp}} HP cho @{{to}}. Thao tác này đặt một số lượng mới.",
+    "submit": "Ủy quyền {{amount}} HP cho @{{to}}",
+    "submitNoTo": "Ủy quyền {{amount}} HP",
+    "yours": "Các ủy quyền của bạn",
+    "remove": "Gỡ",
+    "removed": "Đã gỡ ủy quyền. HP sẽ quay lại sau 5 ngày.",
+    "self": "Bạn không thể ủy quyền cho chính mình."
+  },
+  "pending": {
+    "title": "Đang xử lý",
+    "powerDown": "Power down: {{weekly}} HP mỗi tuần, còn {{weeks}} tuần",
+    "nextPayment": "Lần trả tiếp theo {{date}}",
+    "withdrawal": "Từ tiết kiệm: {{amount}}",
+    "arrives": "Đến {{date}}",
+    "convertHbd": "Đang chuyển {{amount}} sang HIVE",
+    "convertHive": "{{amount}} đang được giữ làm thế chấp",
+    "ready": "Xong {{date}}",
+    "delegation": "Ủy quyền cho @{{to}}: {{hp}} HP",
+    "cancel": "Hủy",
+    "cancelled": "Đã hủy lệnh rút. Tiền vẫn nằm trong tiết kiệm.",
+    "stop": "Dừng",
+    "empty": "Không có gì đang xử lý."
+  },
+  "activeAuth": {
+    "powerDown": "Power down {{amount}}",
+    "toSavings": "Chuyển {{amount}} vào tiết kiệm",
+    "fromSavings": "Rút {{amount}} từ tiết kiệm",
+    "cancelSavings": "Hủy một lệnh rút tiết kiệm",
+    "convert": "Chuyển đổi {{amount}}",
+    "delegate": "Ủy quyền {{amount}} cho @{{to}}"
+  }
+}

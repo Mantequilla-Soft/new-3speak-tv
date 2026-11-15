@@ -1,0 +1,93 @@
+{
+  "actions": {
+    "powerUp": "Power up",
+    "powerDown": "Power down",
+    "savings": "Poupança",
+    "convert": "Converter",
+    "delegate": "Delegar",
+    "aria": "Gerencie seus fundos"
+  },
+  "common": {
+    "amount": "Valor ({{coin}})",
+    "available": "Disponível: {{balance}}",
+    "max": "Máx.",
+    "to": "Para a conta",
+    "toHint": "Deixe assim para a sua própria conta.",
+    "activeKey": "Requer sua chave active",
+    "butrauth": "Conectado via Butter Auth: na próxima etapa, você aprova isso com sua carteira Hive ou sua chave active.",
+    "insufficient": "Isso é mais do que você tem.",
+    "amountPositive": "Digite um valor acima de zero.",
+    "invalidAccount": "Não existe conta Hive com esse nome.",
+    "done": "Pronto. Pode levar alguns segundos para aparecer aqui.",
+    "failed": "Não deu certo: {{error}}",
+    "loading": "Carregando sua carteira..."
+  },
+  "powerUp": {
+    "title": "Power up",
+    "note": "O Hive Power dá peso aos seus votos e rende recompensas de curadoria. Transformá-lo de volta em HIVE leva 13 pagamentos semanais.",
+    "submit": "Power up de {{amount}} HIVE",
+    "submitTo": "Power up de {{amount}} HIVE para @{{to}}"
+  },
+  "powerDown": {
+    "title": "Power down",
+    "note": "O Hive Power volta como HIVE em 13 pagamentos semanais, cerca de {{weekly}} HP por semana.",
+    "replace": "Há um power down em andamento (faltam {{left}} HP). Iniciar um novo substitui o atual.",
+    "submit": "Power down de {{amount}} HP",
+    "stop": "Parar o power down",
+    "stopped": "Power down interrompido."
+  },
+  "savings": {
+    "title": "Poupança",
+    "deposit": "Depositar",
+    "withdraw": "Sacar",
+    "depositNote": "HBD na poupança rende {{rate}}% ao ano. Sacar leva 3 dias.",
+    "depositNoteHive": "HIVE na poupança não rende juros. Sacar leva 3 dias.",
+    "withdrawNote": "Chega em 3 dias. Você pode cancelar até lá.",
+    "submitDeposit": "Depositar {{amount}} {{coin}}",
+    "submitWithdraw": "Sacar {{amount}} {{coin}}"
+  },
+  "convert": {
+    "title": "Converter",
+    "hbdToHive": "HBD para HIVE",
+    "hiveToHbd": "HIVE para HBD",
+    "hbdNote": "Você recebe cerca de {{amount}} HIVE em 3,5 dias, pelo preço mediano desses dias. O valor final pode variar.",
+    "hiveNote": "Você recebe cerca de {{amount}} HBD agora. Metade do seu HIVE fica retida como garantia e o restante volta em 3,5 dias. Há uma taxa de 5%.",
+    "warning": "Uma conversão não pode ser desfeita. Negociar em um mercado pode sair mais barato.",
+    "submit": "Converter {{amount}} {{coin}}"
+  },
+  "delegate": {
+    "title": "Delegar",
+    "toLabel": "Delegar para",
+    "note": "O Hive Power delegado continua sendo seu, mas os votos dele passam para a outra conta. Quando você o remove, ele leva 5 dias para voltar.",
+    "current": "Você delega {{hp}} HP para @{{to}} agora. Isto define um novo valor.",
+    "submit": "Delegar {{amount}} HP para @{{to}}",
+    "submitNoTo": "Delegar {{amount}} HP",
+    "yours": "Suas delegações",
+    "remove": "Remover",
+    "removed": "Delegação removida. O HP volta em 5 dias.",
+    "self": "Você não pode delegar para si mesmo."
+  },
+  "pending": {
+    "title": "Em andamento",
+    "powerDown": "Power down: {{weekly}} HP por semana, faltam {{weeks}} semanas",
+    "nextPayment": "Próximo pagamento: {{date}}",
+    "withdrawal": "Da poupança: {{amount}}",
+    "arrives": "Chega em {{date}}",
+    "convertHbd": "Convertendo {{amount}} em HIVE",
+    "convertHive": "{{amount}} retido como garantia",
+    "ready": "Concluído em {{date}}",
+    "delegation": "Delegado para @{{to}}: {{hp}} HP",
+    "cancel": "Cancelar",
+    "cancelled": "Saque cancelado. Os fundos continuam na poupança.",
+    "stop": "Parar",
+    "empty": "Nada em andamento."
+  },
+  "activeAuth": {
+    "powerDown": "Power down de {{amount}}",
+    "toSavings": "Mover {{amount}} para a poupança",
+    "fromSavings": "Sacar {{amount}} da poupança",
+    "cancelSavings": "Cancelar um saque da poupança",
+    "convert": "Converter {{amount}}",
+    "delegate": "Delegar {{amount}} para @{{to}}"
+  }
+}
