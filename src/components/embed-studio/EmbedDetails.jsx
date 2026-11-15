@@ -25,6 +25,7 @@ import './EmbedDetails.scss';
 import { useTranslation, Trans } from 'react-i18next';
 import { SHORT_TITLE_MAX } from '../../utils/shortTitle';
 import { Button, Icon, IconButton, Toggle } from '../v2/ui';
+import PremiereSwitch from '../Premiere/PremiereSwitch';
 
 // Every toast from this module is headed "Upload"; the message becomes the
 // line under it. See utils/toast.js.
@@ -106,6 +107,7 @@ function EmbedDetails() {
     editedThumbnail,
     isScheduled, setIsScheduled,
     scheduleDateTime, setScheduleDateTime,
+    isPremiere, setIsPremiere,
     fromStories,
     isStory,
     reusable, setReusable,
@@ -172,6 +174,7 @@ function EmbedDetails() {
   // The sheet edits a draft; only OK writes it back, so closing or pressing
   // Escape leaves the previously chosen time alone.
   const [scheduleDraft, setScheduleDraft] = useState('');
+  const [premiereDraft, setPremiereDraft] = useState(false);
   const [rewardsOpen, setRewardsOpen] = useState(false);
   const [guestsOpen, setGuestsOpen] = useState(false);
   const [tagsOpen, setTagsOpen] = useState(false);
@@ -362,6 +365,7 @@ function EmbedDetails() {
   const openScheduleSheet = () => {
     const { minFormatted, minDate } = getMinMaxDates();
     setScheduleDraft((isScheduled && scheduleDateTime) || minFormatted || minDate?.toISOString().slice(0, 16) || '');
+    setPremiereDraft(!!isScheduled && !!isPremiere);
     setScheduleOpen(true);
   };
 
@@ -535,7 +539,7 @@ function EmbedDetails() {
       icon: 'event',
       title: t('upload.details.schedule.short'),
       sub: isScheduled && scheduleDateTime
-        ? new Date(scheduleDateTime).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' })
+        ? `${new Date(scheduleDateTime).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' })}${isPremiere ? ` · ${t('premieres.badge')}` : ''}`
         : t('upload.details.schedule.publishLater'),
       on: !!isScheduled,
       onClick: openScheduleSheet,
@@ -782,7 +786,7 @@ function EmbedDetails() {
             footer={(
               <>
                 {isScheduled && (
-                  <Button variant="ghost" size={40} block icon="bolt" onClick={() => { setIsScheduled(false); setScheduleOpen(false); }}>
+                  <Button variant="ghost" size={40} block icon="bolt" onClick={() => { setIsScheduled(false); setIsPremiere(false); setScheduleOpen(false); }}>
                     {t('upload.details.schedule.publishNow')}
                   </Button>
                 )}
@@ -793,7 +797,7 @@ function EmbedDetails() {
                   trailing="event"
                   className="dlg-main"
                   disabled={!scheduleDraft}
-                  onClick={() => { setScheduleDateTime(scheduleDraft); setIsScheduled(true); setScheduleOpen(false); }}
+                  onClick={() => { setScheduleDateTime(scheduleDraft); setIsScheduled(true); setIsPremiere(premiereDraft); setScheduleOpen(false); }}
                 >
                   {t('upload.details.schedule.scheduleFor', { when: formatScheduleWhen(scheduleDraft) })}
                 </Button>
@@ -813,6 +817,8 @@ function EmbedDetails() {
                   <p className="schedule-sheet__note">
                     {t('upload.details.schedule.note')}
                   </p>
+                  {/* Opt-in (owner: "make listing as premiere optional"). */}
+                  <PremiereSwitch checked={premiereDraft} onChange={setPremiereDraft} />
                 </>
               );
             })()}

@@ -20,6 +20,7 @@ import ShortsStories from "../components/ShortsStories/ShortsStories";
 import WelcomeBanner from "../components/WelcomeTour/WelcomeBanner";
 import NewFromFollowing from "../components/NewFromFollowing/NewFromFollowing";
 import ContinueWatching from "../components/ContinueWatching/ContinueWatching";
+import UpcomingPremieres from "../components/Premiere/UpcomingPremieres";
 import SuggestedCreators from "../components/SuggestedCreators/SuggestedCreators";
 import { useWarmupVideos, useFollowedWarmupVideos } from "../hooks/useWarmupVideos";
 import { useLiveStreams } from "../hooks/useLiveStreams";
@@ -1208,6 +1209,8 @@ const HomeGrouped = () => {
         <NewFromFollowing />
         <ContinueWatching />
       </div>
+      {/* Premieres coming up (and running), from every creator; nothing when none. */}
+      <UpcomingPremieres />
       {/* A creator blocked from uploading: the banner sits here on Home, under
           the Spotlight and over the feed tabs (the app-level copy hides it). */}
       <UploadBlockNotice inline />

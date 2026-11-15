@@ -55,6 +55,10 @@ import { fetchScheduledPost, getScheduledEmbedRef } from '../utils/scheduledPost
 import EditScheduledModal from '../components/modal/EditScheduledModal';
 import { getHiveRenderer } from '../lib/hiveRenderer';
 import { readTheater, saveTheater } from '../lib/playerKeys';
+import usePremiere from '../hooks/usePremiere';
+import PremiereCountdown from '../components/Premiere/PremiereCountdown';
+import PremiereBar from '../components/Premiere/PremiereBar';
+import PremiereChat from '../components/Premiere/PremiereChat';
 
 // Stable identity so `related?.videos || EMPTY_LIST` doesn't hand a NEW [] to the
 // memo on every render.
@@ -83,6 +87,15 @@ function isPlayerInFocus(el) {
   if (!r.height) return false;
   const visible = Math.min(r.bottom, window.innerHeight) - Math.max(r.top, 0);
   return visible / r.height >= 0.5;
+}
+
+// Published within the last day (Hive dates are UTC without a zone): a premiere
+// published a little early, whose metadata may not say it is one.
+function isFreshPost(created) {
+  if (!created) return false;
+  const iso = /[zZ]|[+-]\d\d:?\d\d$/.test(created) ? created : `${created}Z`;
+  const at = Date.parse(iso);
+  return Number.isFinite(at) && Date.now() - at < 24 * 3600 * 1000;
 }
 
 // Seconds the "Next video in 3, 2, 1" card shows before autoplay-next moves on.
@@ -1449,6 +1462,41 @@ function Watch({ v2 = false, routeV = null }) {
     return merged;
   }, [baseVideoDetails, editOverride]);
 
+  // 🎬 Premieres (lib/premieres.js): a scheduled video its creator listed as one.
+  // Asked of the checker only where one can be: a post not on Hive yet, one whose
+  // metadata says so (video.premiere, set at upload), or one a day old at most.
+  // Before the start the page is the countdown; at the start everyone plays it
+  // from the same second, with the premiere chat beside it; afterwards the chat
+  // stays as timecoded messages.
+  const premiereCandidate = !scheduled && !!author && author !== 'unknown' && !!permlink && (
+    (!videoLoading && !videoDetails)
+    || gatedMeta?.video?.premiere === true
+    || isFreshPost(videoDetails?.created_at)
+  );
+  const premiereInfo = usePremiere(author, permlink, { enabled: premiereCandidate });
+  const premiereState = premiereInfo.premiere ? premiereInfo.state : null;
+  // Started, but the Hive post has not reached us yet: ask again until it has.
+  useEffect(() => {
+    if (premiereState !== 'live' || videoDetails) return undefined;
+    refetchVideo();
+    const id = setInterval(() => refetchVideo(), 10 * 1000);
+    return () => clearInterval(id);
+  }, [premiereState, !!videoDetails, refetchVideo]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // A premiere that is running: start where everyone else is (now minus the
+  // start, by the checker's clock), once per video, when its first frame is in.
+  const premiereSyncedRef = useRef(null);
+  useEffect(() => {
+    if (premiereState !== 'live' || !videoReady || !player) return;
+    const key = `${author}/${permlink}`;
+    if (premiereSyncedRef.current === key) return;
+    premiereSyncedRef.current = key;
+    const at = premiereInfo.offset();
+    if (at == null) return;
+    seek(adBreakRef.current.playerTimeFor?.(at) ?? at);
+    player.play?.()?.catch?.(() => {});
+  }, [premiereState, videoReady, player, author, permlink]); // eslint-disable-line react-hooks/exhaustive-deps
+
   // A finished OpenPods stream publishes its recording as a VOD under the SAME
   // owner/permlink, but the Hive post keeps `video.live: true` forever (we
   // never rewrite the post). So "is this still live?" = the post says live AND
@@ -1979,6 +2027,25 @@ function Watch({ v2 = false, routeV = null }) {
   //
   // The "not found" branch must therefore wait for loading to FINISH — otherwise
   // every video flashes an error before its metadata arrives.
+  // A premiere before its start (or started, while its post is on the way): the
+  // countdown with Notify me, in place of the page.
+  if (premiereInfo.premiere && (premiereState === 'soon' || (premiereState === 'live' && !videoDetails))) {
+    return (
+      <div className="play-container watch-page watch-premiere">
+        <SEOHead title={premiereInfo.premiere.title || permlink} author={author} url={`https://3speak.tv/@${author}/${permlink}`} />
+        <PremiereCountdown premiere={premiereInfo.premiere} serverNow={premiereInfo.serverNow} starting={premiereState === 'live'} />
+      </div>
+    );
+  }
+  // Not on Hive (yet): is it a premiere? Wait for that answer before "not found".
+  if (!isLoading && !videoDetails && premiereInfo.loading) {
+    return (
+      <div className="watch-error" role="status">
+        <Icon name="progress_activity" size={32} className="v2-spin" />
+      </div>
+    );
+  }
+
   if (!isLoading && !videoDetails) {
     return (
       <div className="watch-error">
@@ -2010,6 +2077,14 @@ function Watch({ v2 = false, routeV = null }) {
       <PlayVideo
         belowPlayerSlot={(
           <>
+        {premiereState === 'live' && (
+          <PremiereBar
+            premiere={premiereInfo.premiere}
+            serverNow={premiereInfo.serverNow}
+            currentTime={adBreakRef.current.contentTime(playerState.currentTime)}
+            onJump={(sec) => { seek(adBreakRef.current.playerTimeFor?.(sec) ?? sec); player?.play?.()?.catch?.(() => {}); }}
+          />
+        )}
         {surfChannel && (
           <SurfBar
             channel={surfChannel}
@@ -2221,6 +2296,14 @@ function Watch({ v2 = false, routeV = null }) {
         onReact={handleReactToMoment}
         upNext={suggestedVideos.slice(0, 10)}
         cinemaReactionPanel={reactionSize === 'cinema' && reactions.length > 0 ? reactionPanel : null}
+        // The premiere's chat: live beside the player while it runs, then the
+        // timecoded replay ("Premiere chat") whose times seek.
+        premiereTab={premiereState === 'live' || premiereState === 'ended' ? {
+          live: premiereState === 'live',
+          render: (onSeek) => (
+            <PremiereChat owner={author} permlink={permlink} live={premiereState === 'live'} onSeek={premiereState === 'ended' ? onSeek : null} />
+          ),
+        } : null}
       />
 
       {/* Next in the playlist (02): the next five from the same playlist, then

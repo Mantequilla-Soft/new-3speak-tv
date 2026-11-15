@@ -89,7 +89,7 @@ dayjs.extend(relativeTime);
 // Stable identity for "no chapters", so memo deps don't change every render.
 const EMPTY_CHAPTERS = [];
 
-const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, mediaBlocked = false, onRetryPlayback = null, mediaLoading = false, playlistData, onClosePlaylist, videoControls, cinemaReactionPanel, videoRef, wrapperRef, onVideoEdited, overrideBody, scheduled = false, scheduledOn = null, mediaScheduledOn = null, onEditScheduled, isLive = false, streamRoom = null, liveChatSlot = null, onLiveChatSent = null, vodAssetPending = false, onStreamRoomMeta = null, belowPlayerSlot = null, sponsorLabel = null, adCountdown = null, bannerHit = null, tickerSlot = null, adSkip = null, adPlaying = false, adLocked = false, timelineLinks = null, timelineResetKey = null, tickerShown = false, surfActive = false, onReact = null, upNext = null, playerOverlay = null }) => {
+const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, mediaBlocked = false, onRetryPlayback = null, mediaLoading = false, playlistData, onClosePlaylist, videoControls, cinemaReactionPanel, videoRef, wrapperRef, onVideoEdited, overrideBody, scheduled = false, scheduledOn = null, mediaScheduledOn = null, onEditScheduled, isLive = false, streamRoom = null, liveChatSlot = null, onLiveChatSent = null, vodAssetPending = false, onStreamRoomMeta = null, belowPlayerSlot = null, sponsorLabel = null, adCountdown = null, bannerHit = null, tickerSlot = null, adSkip = null, adPlaying = false, adLocked = false, timelineLinks = null, timelineResetKey = null, tickerShown = false, surfActive = false, onReact = null, upNext = null, playerOverlay = null, premiereTab = null }) => {
   const { t } = useTranslation();
   const { user, authenticated } = useAppStore();
   const isPremium = !!usePremiumStatus(user)?.premium;
@@ -1253,9 +1253,13 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
   const chapters = videoControls?.chapters || EMPTY_CHAPTERS;
   const nowSec = videoControls?.currentTime || 0;
   const chapterAt = chapters.findIndex((c) => nowSec >= c.start && nowSec < c.end);
+  // A running premiere's chat is the 'chat' tab, so it opens first like a
+  // stream's; afterwards its replay is a tab of its own after the discussion.
+  const premiereLive = !!premiereTab?.live && !isLive;
   const sideIds = [
-    isLive && 'chat',
+    (isLive || premiereLive) && 'chat',
     'discussion',
+    premiereTab && !premiereLive && 'premiere',
     hasSubtitles && 'transcript',
     !wide && chapters.length > 0 && 'chapters',
     !wide && !scheduled && 'supporters',
@@ -1551,6 +1555,14 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
       // shares the player's single LiveKit connection. Empty until it connects.
       content: <div className="wv2-chat" ref={setChatSlotEl} />,
     },
+    premiereLive && {
+      id: 'chat',
+      label: t('premieres.chat.liveTab'),
+      icon: 'theaters',
+      keepMounted: true,
+      flush: true,
+      content: premiereTab.render(seekFromText),
+    },
     {
       id: 'discussion',
       label: t('communities.page.tabs.discussion'),
@@ -1573,6 +1585,12 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
           pinnable={!isLive && !scheduled}
         />
       ),
+    },
+    premiereTab && !premiereLive && {
+      id: 'premiere',
+      label: t('premieres.chat.replayTab'),
+      flush: true,
+      content: premiereTab.render(seekFromText),
     },
     hasSubtitles && {
       id: 'transcript',

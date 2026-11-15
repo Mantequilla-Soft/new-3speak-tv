@@ -26,11 +26,12 @@ vi.mock('@mantequilla-soft/3speak-player/react', () => {
   const noop = () => {}
   const state = { duration: 0, currentTime: 0, paused: true }
   const load = (...a) => m.load(...a)
+  const seek = (...a) => m.seek?.(...a)
   return {
     usePlayer: (opts) => {
       m.playerOpts = opts
       return {
-        ref: noop, state, player: m.player, load, pause: noop, togglePlay: noop, seek: noop,
+        ref: noop, state, player: m.player, load, pause: noop, togglePlay: noop, seek,
         setMuted: noop, setVolume: noop, togglePip: noop, setQuality: noop, setPlaybackRate: noop,
       }
     },
@@ -61,6 +62,7 @@ vi.mock('../../../src/lib/recordView', () => ({ recordView: vi.fn() }))
 vi.mock('../../../src/lib/reportUnavailable', () => ({ reportVideoUnavailable: (...a) => m.report(...a) }))
 vi.mock('../../../src/lib/deadVideos', () => ({ useDeadVideos: () => new Set(), videoKey: (a, p) => `${a}/${p}` }))
 vi.mock('../../../src/lib/hiveRenderer', () => ({ getHiveRenderer: async () => (md) => md }))
+vi.mock('../../../src/lib/premieres', async (orig) => ({ ...(await orig()), fetchPremiere: (...a) => m.premiere(...a) }))
 // The page's children, each tested on its own.
 vi.mock('../../../src/components/playVideo/PlayVideo', () => ({
   default: (p) => (
@@ -72,6 +74,7 @@ vi.mock('../../../src/components/playVideo/PlayVideo', () => ({
       {p.mediaBlocked && <button type="button" onClick={p.onRetryPlayback}>Retry playback</button>}
       {p.belowPlayerSlot}
       {p.recommendations}
+      {p.premiereTab && <p>{p.premiereTab.live ? 'Premiere chat live' : 'Premiere chat replay'}</p>}
       {p.videoControls?.onToggleTheater && <button type="button" onClick={p.videoControls.onToggleTheater}>{p.videoControls.isTheater ? 'Theater on' : 'Theater off'}</button>}
       {p.videoControls?.onToggleLoop && <button type="button" onClick={p.videoControls.onToggleLoop}>{p.videoControls.loop ? 'Loop on' : 'Loop off'}</button>}
     </section>
@@ -117,6 +120,7 @@ beforeEach(() => {
   m.details = vi.fn(async () => POST)
   m.hidden = vi.fn(async () => false)
   m.scheduled = vi.fn(async () => null)
+  m.premiere = vi.fn(async () => ({ premiere: null, skew: 0 }))
   m.report = vi.fn()
   m.load = vi.fn(async () => {})
   vi.stubGlobal('fetch', vi.fn(async () => ({ ok: true, json: async () => ({}) })))
@@ -192,6 +196,57 @@ describe('the watch page', () => {
     m.scheduled = vi.fn(async () => ({ owner: 'badadib', title: 'Coming soon', body: '', createdAt: '2026-11-01T00:00:00Z' }))
     mount('/watch?v=badadib/later&scheduled=1')
     expect(await screen.findByRole('heading', { name: 'Coming soon' })).toBeInTheDocument()
+  })
+
+  describe('a premiere', () => {
+    const at = (ms) => new Date(Date.now() + ms).toISOString()
+    const premiere = (startMs, extra = {}) => ({
+      owner: 'badadib', permlink: 'lake-day', title: 'Lake premiere', thumbnail: null,
+      startAt: at(startMs), chatUntil: at(startMs + 20 * 60 * 1000), duration: 600, reminders: 0, ...extra,
+    })
+
+    it('before its start the watch address is the countdown, even with no post on Hive yet', async () => {
+      m.details = vi.fn(async () => null)
+      m.premiere = vi.fn(async () => ({ premiere: premiere(3600 * 1000), skew: 0 }))
+      mount()
+      expect(await screen.findByRole('heading', { name: 'Lake premiere' })).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: 'Sign in to get a reminder' })).toBeInTheDocument()
+      expect(screen.queryByText('Video not found or failed to load.')).not.toBeInTheDocument()
+      expect(screen.queryByRole('region', { name: 'Player' })).not.toBeInTheDocument()
+      expect(m.premiere).toHaveBeenCalledWith('badadib', 'lake-day')
+    })
+
+    it('an old post that is no premiere never asks the checker', async () => {
+      m.details = vi.fn(async () => ({ ...POST, created_at: '2020-01-01T00:00:00' }))
+      mount()
+      await screen.findByRole('heading', { name: 'A day at the lake' })
+      expect(m.premiere).not.toHaveBeenCalled()
+    })
+
+    it('running: the page plays it with the live premiere chat, from the shared second', async () => {
+      m.player = fakePlayer()
+      m.details = vi.fn(async () => ({ ...POST, json_metadata: JSON.stringify({ video: { premiere: true } }) }))
+      m.premiere = vi.fn(async () => ({ premiere: premiere(-90 * 1000), skew: 0 }))
+      mount()
+      expect(await screen.findByText('Premiere chat live')).toBeInTheDocument()
+      expect(screen.getByText(/Started 1 minute ago/)).toBeInTheDocument()
+      m.seek = vi.fn()
+      act(() => m.playerOpts.onReady())
+      await waitFor(() => expect(m.seek).toHaveBeenCalledTimes(1))
+      expect(m.seek.mock.calls[0][0]).toBeGreaterThanOrEqual(89)
+      expect(m.seek.mock.calls[0][0]).toBeLessThan(95)
+      expect(m.player.play).toHaveBeenCalled()
+      // Once per video: a second ready does not pull the viewer back.
+      act(() => m.playerOpts.onReady())
+      expect(m.seek).toHaveBeenCalledTimes(1)
+    })
+
+    it('over: the chat stays as the replay tab', async () => {
+      m.details = vi.fn(async () => ({ ...POST, json_metadata: JSON.stringify({ video: { premiere: true } }) }))
+      m.premiere = vi.fn(async () => ({ premiere: premiere(-3 * 3600 * 1000), skew: 0 }))
+      mount()
+      expect(await screen.findByText('Premiere chat replay')).toBeInTheDocument()
+    })
   })
 
   describe('when the player gives up', () => {

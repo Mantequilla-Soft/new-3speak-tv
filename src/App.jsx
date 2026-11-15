@@ -202,6 +202,8 @@ import MountWhenOpened, { LazyBoundary } from "./components/common/LazyMount";
 // paint (LazyBoundary). See components/common/LazyMount.jsx.
 const MiniPlayer = lazy(() => import("./components/MiniPlayer/MiniPlayer"));
 const GlobalAudioPlayer = lazy(() => import("./components/GlobalAudioPlayer/GlobalAudioPlayer"));
+// "Notify me" for premieres: a toast when one the viewer asked about starts.
+const PremiereReminders = lazy(() => import("./components/Premiere/PremiereReminders"));
 const AudioUploadModal = lazy(() => import("./components/AudioUploadModal/AudioUploadModal"));
 const AddAccount_modal = lazy(() => import("./components/modal/AddAccount_modal"));
 const EditorModal = lazy(() => import("./components/modal/EditorModal"));
@@ -796,6 +798,7 @@ function App() {
       <EmbedCodeHost />
       <SupportModal />
       <CookieConsent />
+      {authenticated && <LazyBoundary name="premiere-reminders"><PremiereReminders /></LazyBoundary>}
       <WelcomeTour />
       <GlobalReviewModal />
       <ReviewFab />

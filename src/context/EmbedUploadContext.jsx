@@ -200,6 +200,9 @@ export function EmbedUploadProvider({ children }) {
   const [isChannelTrailer, setIsChannelTrailer] = useState(false);
   const [isScheduled, setIsScheduled] = useState(false);
   const [scheduleDateTime, setScheduleDateTime] = useState('');
+  // "List as a premiere" (opt-in, scheduled posts only): a public countdown page
+  // with Notify me, and a shared start with a live chat (checker routes/premieres.js).
+  const [isPremiere, setIsPremiere] = useState(false);
 
   // Community data
   const [communitiesData, setCommunitiesData] = useState([]);
@@ -444,6 +447,7 @@ export function EmbedUploadProvider({ children }) {
     setRewardPowerup(false);
     setIsScheduled(false);
     setScheduleDateTime('');
+    setIsPremiere(false);
     setFromStories(false);
     setIsStory(false);
     setOriginalAuthor(null);
@@ -1837,6 +1841,9 @@ export function EmbedUploadProvider({ children }) {
           ...(originalAuthor ? { originalAuthor, originalPermlink } : {}),
           ...(originalAuthor && remixChain.length ? { remixChain } : {}),
           ...(musicCredits.length ? { sound: primarySoundMetadata(musicCredits) } : {}),
+          // Listed as a premiere: the watch page asks the checker for its
+          // countdown, shared start and chat (lib/premieres.js).
+          ...(isScheduled && scheduleDateTime && isPremiere && !fromStories ? { premiere: true } : {}),
           // Chapters + link toasters (utils/videoTimeline.js). Read by the watch
           // page and the embed player; nothing when the creator added none.
           ...timeline,
@@ -2049,6 +2056,8 @@ export function EmbedUploadProvider({ children }) {
             embedPermlink,
             // "Add to my blog": the checker reblogs it once the cron publishes it.
             reblog: !!addToBlog && !fromStories,
+            // Opt-in: off unless the creator switched it on in the schedule sheet.
+            premiere: !!isPremiere,
           }, {
             headers: CHECKER_API_KEY ? { Authorization: `Bearer ${CHECKER_API_KEY}` } : {},
           });
@@ -2333,6 +2342,7 @@ export function EmbedUploadProvider({ children }) {
     isChannelTrailer, setIsChannelTrailer,
     isScheduled, setIsScheduled,
     scheduleDateTime, setScheduleDateTime,
+    isPremiere, setIsPremiere,
     // Community data
     communitiesData, setCommunitiesData,
     // Modals
