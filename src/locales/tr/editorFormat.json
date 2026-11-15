@@ -1,0 +1,5 @@
+{
+  "videoEditor": "Video Düzenleyici",
+  "videoEditorSub": "10 dakikaya kadar yatay video düzenleyin",
+  "editorTooLong": "Video düzenleyici en fazla {{minutes}} dakikalık videoları alır"
+}

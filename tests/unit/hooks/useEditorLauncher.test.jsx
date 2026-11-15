@@ -76,4 +76,17 @@ describe('useEditorLauncher', () => {
     fire('open-audio-editor')
     expect(result.current.open).toBe(false)
   })
+
+  it('opens the video editor as a landscape project, with the upload\'s video when there is one', () => {
+    const { result } = renderHook(() => useEditorLauncher())
+    fire('open-video-editor')
+    expect(result.current).toMatchObject({ open: true, mode: 'video', file: null, aspect: '16:9' })
+    const video = new File(['v'], 'talk.mp4', { type: 'video/mp4' })
+    fire('open-video-editor', { file: video, aspect: '1:1' })
+    expect(result.current).toMatchObject({ file: video, aspect: '1:1' })
+    fire('open-video-editor', { aspect: 'nonsense' })
+    expect(result.current.aspect).toBe('16:9')
+    fire('open-shorts-editor')
+    expect(result.current.aspect).toBe(null)
+  })
 })

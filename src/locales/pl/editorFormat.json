@@ -1,0 +1,5 @@
+{
+  "videoEditor": "Edytor wideo",
+  "videoEditorSub": "Edytuj poziome wideo do 10 minut",
+  "editorTooLong": "Edytor wideo przyjmuje filmy do {{minutes}} minut"
+}

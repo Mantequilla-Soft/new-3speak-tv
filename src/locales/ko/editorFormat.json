@@ -1,0 +1,5 @@
+{
+  "videoEditor": "동영상 편집기",
+  "videoEditorSub": "최대 10분 길이의 가로 동영상 편집",
+  "editorTooLong": "동영상 편집기는 최대 {{minutes}}분 길이의 동영상을 받습니다"
+}

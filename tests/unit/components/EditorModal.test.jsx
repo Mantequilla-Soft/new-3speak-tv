@@ -453,3 +453,69 @@ describe('EditorModal: speech-to-text for the editor teleprompter', () => {
     expect(fetchMock).not.toHaveBeenCalled()
   })
 })
+
+describe('EditorModal: the shape the editor reports decides Short or normal video', () => {
+  const calls = (name) => m.embed.filter((c) => c[0] === name).map((c) => c.slice(1))
+  // jsdom loads no media: the duration probe of the rendered video answers at once
+  let savedSrc
+  beforeEach(() => {
+    const proto = HTMLMediaElement.prototype
+    savedSrc = Object.getOwnPropertyDescriptor(proto, 'src')
+    Object.defineProperty(proto, 'src', {
+      configurable: true,
+      get() { return this.getAttribute('src') || '' },
+      set(v) { this.setAttribute('src', v); queueMicrotask(() => this.onloadedmetadata?.()) },
+    })
+  })
+  afterEach(() => {
+    const proto = HTMLMediaElement.prototype
+    if (savedSrc) Object.defineProperty(proto, 'src', savedSrc); else delete proto.src
+  })
+
+  it('opens a landscape project with ?aspect=, and nothing for a Short or a made-up shape', async () => {
+    const { iframe } = await open({ aspect: '16:9' })
+    expect(iframe.getAttribute('src')).toBe(`${EDITOR}?compact=true&aspect=16%3A9`)
+  })
+
+  it('a made-up shape opens the editor as before', async () => {
+    const { iframe } = await open({ aspect: '21:9' })
+    expect(iframe.getAttribute('src')).toBe(`${EDITOR}?compact=true`)
+  })
+
+  it('a 16:9 render goes to the normal video uploader, with no story question', async () => {
+    m.stories = true
+    stubMp3({ type: 'video/mp4' })
+    await open({ aspect: '16:9' })
+    await ready({ canFormat: true })
+    await fromEditor({ type: 'post-to-3speak', outputUrl: `${EDITOR}/rendered/v.mp4`, format: { aspect: '16:9', short: false, durationSec: 300 } })
+    await waitFor(() => expect(calls('setFromStories')).toEqual([[false]]))
+    expect(screen.queryByText('Post it as')).toBeNull()
+    expect(calls('setVideoMode')).toEqual([['longform']])
+    expect(calls('setIsStory')).toEqual([[false]])
+    expect(calls('setVideoFile')[0][0].name).toBe('edited-video.mp4')
+  })
+
+  it('a 9:16 render from a format-aware editor is still a Short', async () => {
+    stubMp3({ type: 'video/mp4' })
+    await open({})
+    await ready({ canFormat: true })
+    await fromEditor({ type: 'post-to-3speak', outputUrl: `${EDITOR}/rendered/v.mp4`, format: { aspect: '9:16', short: true } })
+    await waitFor(() => expect(calls('setFromStories')).toEqual([[true]]))
+    expect(calls('setVideoMode')).toEqual([])
+  })
+
+  it('the audio editor\'s video podcast is posted as a normal video with its title and chapters', async () => {
+    stubMp3({ type: 'video/mp4' })
+    await open({ mode: 'audio' })
+    await ready({ mode: 'audio', canEditAudio: true, canVideoPodcast: true })
+    await fromEditor({
+      type: 'post-to-3speak', mediaType: 'video', outputUrl: `${EDITOR}/rendered/video-podcast-1.mp4`, durationSec: 3600,
+      format: { aspect: '16:9', short: false }, title: 'Episode 12',
+      chapters: [{ start: 0, end: 600, title: 'Intro' }, { start: 600, end: 3600, title: 'The talk' }],
+    })
+    await waitFor(() => expect(calls('setFromStories')).toEqual([[false]]))
+    expect(events).toHaveLength(0) // not handed to the audio upload
+    expect(calls('setTitle')).toEqual([['Episode 12']])
+    expect(calls('setChapters')[0][0].map(({ start, title }) => ({ start, title }))).toEqual([{ start: 0, title: 'Intro' }, { start: 600, title: 'The talk' }])
+  })
+})
