@@ -6,7 +6,7 @@ import { toastIn } from '../../utils/toast';
 import { usePostClipAsShort } from '../../hooks/usePostClipAsShort';
 import { shortRangeParam } from '../../lib/clipIdeas';
 import {
-  fetchStreamHighlights, deleteClip, clipFileUrl, clipShareFor, momentRanges, clipClock, downloadClip, shortUrlFor,
+  fetchStreamHighlights, deleteClip, clipFileUrl, clipShareFor, momentRanges, clipClock, downloadClip, shortUrlFor, clipSummary, isReadyClip,
 } from '../../lib/streamClips';
 import { Button, IconButton, Icon, StatusPill } from '../v2/ui';
 import './StreamClips.scss';
@@ -39,6 +39,21 @@ export default function StreamHighlightsPanel({ api, room, token, compact = fals
     return () => { alive = false; };
   }, [api, room, token]);
   useEffect(() => load(), [load]);
+
+  // Clips of a stream without DVR are cut from its recording after it ends:
+  // look again every 15 s while some are still pending (for up to 20 minutes).
+  const pendingCount = (state.data?.clips || []).filter((c) => c.status === 'pending').length;
+  const [polls, setPolls] = useState(0);
+  useEffect(() => {
+    if (!pendingCount || polls >= 80) return undefined;
+    const timer = setTimeout(() => {
+      fetchStreamHighlights(api, room, token)
+        .then((data) => { if (data) setState({ loading: false, data, error: false }); })
+        .catch(() => { /* next round */ })
+        .finally(() => setPolls((n) => n + 1));
+    }, 15000);
+    return () => clearTimeout(timer);
+  }, [pendingCount, polls, api, room, token]);
 
   const data = state.data;
   const clips = data?.clips || [];
@@ -86,13 +101,22 @@ export default function StreamHighlightsPanel({ api, room, token, compact = fals
         <p className="stream-highlights__empty">{t('streamClips.empty')}</p>
       )}
 
+      {data?.isHost && clips.length > 0 && <ClipSummary clips={clips} t={t} />}
+
       {clips.length > 0 && (
         <ul className="stream-highlights__clips">
           {clips.map((c) => {
             const share = clipShareFor({ poster: user, host: c.host || data?.host, clipper: c.clipper });
             return (
-              <li key={c.id} className="stream-highlights__clip">
-                <video className="stream-highlights__video" src={clipFileUrl(api, c.path)} controls playsInline preload="metadata" />
+              <li key={c.id} className={`stream-highlights__clip${isReadyClip(c) ? '' : ' is-waiting'}`}>
+                {isReadyClip(c)
+                  ? <video className="stream-highlights__video" src={clipFileUrl(api, c.path)} controls playsInline preload="metadata" />
+                  : (
+                    <div className="stream-highlights__placeholder">
+                      <Icon name={c.status === 'pending' ? 'schedule' : 'content_cut'} size={24} />
+                      <span>{c.status === 'pending' ? t('streamClips.status.pending') : t(`streamClips.reasonUnavailable.${c.reason || 'failed'}`)}</span>
+                    </div>
+                  )}
                 <div className="stream-highlights__meta">
                   <StatusPill tone={c.source === 'auto' ? 'accent' : 'muted'} caps={false}>{label(c)}</StatusPill>
                   {Number.isFinite(c.offsetSec) && <span className="stream-highlights__at num">{t('streamClips.at', { time: clipClock(c.offsetSec) })}</span>}
@@ -104,10 +128,14 @@ export default function StreamHighlightsPanel({ api, room, token, compact = fals
                   ? t('streamClips.shareClipper', { clipper: share.account, percent: share.percent })
                   : t('streamClips.shareHost', { host: share.account, percent: share.percent })}</p>}
                 <div className="stream-highlights__actions">
-                  <Button variant="primary" size={40} icon="movie" onClick={() => postClip(c)} loading={posting === c.id} disabled={busy}>
-                    {t('streamClips.postShort')}
-                  </Button>
-                  <IconButton icon="download" label={t('streamClips.download')} onClick={() => save(c)} />
+                  {isReadyClip(c) && (
+                    <>
+                      <Button variant="primary" size={40} icon="movie" onClick={() => postClip(c)} loading={posting === c.id} disabled={busy}>
+                        {t('streamClips.postShort')}
+                      </Button>
+                      <IconButton icon="download" label={t('streamClips.download')} onClick={() => save(c)} />
+                    </>
+                  )}
                   <IconButton icon="delete" label={t('streamClips.delete')} onClick={() => remove(c)} />
                 </div>
               </li>
@@ -142,5 +170,23 @@ export default function StreamHighlightsPanel({ api, room, token, compact = fals
         </div>
       )}
     </section>
+  );
+}
+
+/** The host's end screen: how many clips, from whom, and whether they are still being cut. */
+function ClipSummary({ clips, t }) {
+  const sum = clipSummary(clips);
+  if (!sum.total) return null;
+  const parts = [
+    ...sum.byUser.map((u) => t('streamClips.summary.byUser', { user: u.user, count: u.count })),
+    ...(sum.auto ? [t('streamClips.summary.auto', { count: sum.auto })] : []),
+    ...(sum.guests ? [t('streamClips.summary.guests', { count: sum.guests })] : []),
+  ];
+  return (
+    <div className="stream-highlights__summary" role="status">
+      <b>{t('streamClips.summary.title', { count: sum.total })}</b>
+      <span className="stream-highlights__summary-who">{parts.join(' · ')}</span>
+      <span className="stream-highlights__sub">{sum.pending ? t('streamClips.summary.pending') : t('streamClips.summary.ready')}</span>
+    </div>
   );
 }

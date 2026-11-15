@@ -1,9 +1,11 @@
+// @vitest-environment jsdom
 // Highlight clips that become Shorts (H13), the data layer (src/lib/streamClips.js):
 // who gets the locked share, how it lands in the beneficiaries, the hangouts calls.
 import { describe, it, expect, vi, afterEach } from 'vitest'
 import {
   clipShareFor, applyClipShare, streamClipMetadata, momentRanges, clipClock,
   makeClip, fetchStreamHighlights, deleteClip, fetchClipFile, clipFileUrl, shortUrlFor,
+  fetchMyClips, clipSummary, isReadyClip, readClipQueue, writeClipQueue,
   CLIPPER_SHARE_PERCENT, HOST_SHARE_PERCENT,
 } from '../../../src/lib/streamClips.js'
 
@@ -11,9 +13,9 @@ const API = 'https://live.3speak.tv/'
 afterEach(() => vi.unstubAllGlobals())
 
 describe('clipShareFor', () => {
-  it('the host posting a viewer\'s clip gives the clipper 10 %', () => {
+  it('the host posting a viewer\'s clip gives the clipper 30 %', () => {
     expect(clipShareFor({ poster: 'badadib', host: 'BadAdib', clipper: 'fan' })).toEqual({ account: 'fan', percent: CLIPPER_SHARE_PERCENT, role: 'clipper' })
-    expect(CLIPPER_SHARE_PERCENT).toBe(10)
+    expect(CLIPPER_SHARE_PERCENT).toBe(30)
   })
 
   it('a viewer posting their clip gives the host 50 %; nobody pays themselves', () => {
@@ -118,5 +120,38 @@ describe('hangouts calls', () => {
     f.mockRejectedValue(new Error('down'))
     expect(await shortUrlFor(API, crop, 'tok')).toBe('https://live.3speak.tv/dvr/clips/a.mp4')
     expect(await shortUrlFor(API, crop, null)).toBe('https://live.3speak.tv/dvr/clips/a.mp4')
+  })
+
+  it('fetchMyClips tags each clip with its server and knows the keep time', async () => {
+    expect(await fetchMyClips(API, null)).toBeNull()
+    const f = vi.fn().mockResolvedValue(json({ clips: [{ id: 'a' }], keepHours: 24 }))
+    vi.stubGlobal('fetch', f)
+    expect(await fetchMyClips(API, 'tok')).toEqual({ clips: [{ id: 'a', api: 'https://live.3speak.tv' }], keepHours: 24 })
+    expect(f).toHaveBeenCalledWith('https://live.3speak.tv/clips/mine', { headers: { Authorization: 'Bearer tok' } })
+    f.mockResolvedValue(json({}, 401))
+    expect(await fetchMyClips(API, 'tok')).toBeNull()
+    f.mockResolvedValue(json({}, 500))
+    await expect(fetchMyClips(API, 'tok')).rejects.toThrow()
+  })
+})
+
+describe('clipSummary, isReadyClip and the post queue', () => {
+  it('counts clips per viewer, automatic and guest ones, and how many are still being cut', () => {
+    const clips = [
+      { clipper: 'fan', source: 'viewer', status: 'pending' }, { clipper: 'fan', source: 'viewer', status: 'ready', path: '/x' },
+      { clipper: 'badadib', source: 'host', status: 'ready', path: '/y' }, { clipper: null, source: 'auto', status: 'pending' },
+      { clipper: null, source: 'viewer', path: '/z' }, { clipper: 'late', source: 'viewer', status: 'unavailable' },
+    ]
+    expect(clipSummary(clips)).toEqual({ total: 5, byUser: [{ user: 'fan', count: 2 }, { user: 'badadib', count: 1 }], auto: 1, guests: 1, pending: 2, ready: 3 })
+    expect(clipSummary(null).total).toBe(0)
+    expect(isReadyClip({ path: '/a' })).toBe(true)
+    expect(isReadyClip({ status: 'pending', path: null })).toBe(false)
+  })
+
+  it('keeps the queue of clips still to post in this browser', () => {
+    writeClipQueue([{ id: 'a', api: API, path: '/p' }, { id: 'bad' }])
+    expect(readClipQueue()).toEqual([{ id: 'a', api: API, path: '/p' }])
+    writeClipQueue([])
+    expect(readClipQueue()).toEqual([])
   })
 })

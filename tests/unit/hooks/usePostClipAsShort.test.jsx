@@ -34,7 +34,7 @@ beforeEach(() => {
 afterEach(() => vi.restoreAllMocks())
 
 describe('usePostClipAsShort', () => {
-  it('the host posting a viewer\'s clip: Shorts flow with the clipper\'s locked 10 % row', async () => {
+  it('the host posting a viewer\'s clip: Shorts flow with the clipper\'s locked 30 % row', async () => {
     useAppStore.setState({ user: 'badadib' })
     const { result } = renderHook(() => usePostClipAsShort())
     await act(() => result.current.post({ url: 'https://live.3speak.tv/dvr/clips/a.mp4', room: 'badadib-r1', host: 'badadib', clipper: 'fan', offsetSec: 60 }))
@@ -43,13 +43,13 @@ describe('usePostClipAsShort', () => {
     expect(h.ctx.setFromStories).toHaveBeenCalledWith(true)
     expect(h.ctx.setOriginalAuthor).toHaveBeenCalledWith(null)
     expect(h.ctx.setGeneratedThumbnail).toHaveBeenCalledWith(['data:image/jpeg;base64,AA'])
-    expect(h.ctx.setStreamClip).toHaveBeenCalledWith({ room: 'badadib-r1', host: 'badadib', clipper: 'fan', offsetSec: 60, share: { account: 'fan', percent: 10, role: 'clipper' } })
+    expect(h.ctx.setStreamClip).toHaveBeenCalledWith({ room: 'badadib-r1', host: 'badadib', clipper: 'fan', offsetSec: 60, share: { account: 'fan', percent: 30, role: 'clipper' } })
     expect(h.ctx.setList).toHaveBeenCalledWith([
       { account: 'threespeakfund', percent: 10, locked: true, minPercent: 10 },
       { account: 'encoder.pay', percent: 1, locked: true, minPercent: 1 },
-      { account: 'fan', percent: 10, locked: true, minPercent: 10 },
+      { account: 'fan', percent: 30, locked: true, minPercent: 30 },
     ])
-    expect(h.ctx.setRemaingPercent).toHaveBeenCalledWith(79)
+    expect(h.ctx.setRemaingPercent).toHaveBeenCalledWith(59)
     expect(h.navigate).toHaveBeenCalledWith('/embed-studio/thumbnail?from=stories')
   })
 

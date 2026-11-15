@@ -30,5 +30,41 @@
   },
   "momentsTitle": "Mais momentos",
   "momentsSub": "Faça um Short da gravação quando ela estiver processada.",
-  "makeShort": "Fazer um Short"
+  "makeShort": "Fazer um Short",
+  "notif": {
+    "host": "Os clipes da sua transmissão estão prontos para publicar como Shorts ({{count}})",
+    "clipper": "Seus clipes da transmissão de @{{user}} estão prontos ({{count}})"
+  },
+  "pendingTitle": "Seu clipe ficará pronto quando a transmissão terminar",
+  "pendingSub": "Ele é cortado da gravação depois da transmissão. Você o encontra em Seus clipes de transmissões.",
+  "status": {
+    "pending": "Pronto após a transmissão",
+    "unavailable": "Não foi possível criar"
+  },
+  "reasonUnavailable": {
+    "past_cap": "Depois dos 30 minutos grátis",
+    "past_end": "Depois do fim da gravação",
+    "no_recording": "A transmissão não foi gravada",
+    "failed": "Não foi possível cortar"
+  },
+  "summary": {
+    "title": "{{count}} clipes da sua transmissão",
+    "pending": "Estão sendo cortados da gravação e ficam prontos em alguns minutos. Vamos avisar você.",
+    "ready": "Todos os clipes estão prontos.",
+    "byUser": "@{{user}}: {{count}}",
+    "auto": "Automáticos: {{count}}",
+    "guests": "Convidados: {{count}}"
+  },
+  "page": {
+    "title": "Seus clipes de transmissões",
+    "sub": "Clipes que você fez e clipes das suas transmissões. Ficam guardados por {{hours}} horas.",
+    "empty": "Ainda não há clipes. Faça um clipe de uma transmissão ou entre ao vivo: os clipes dos seus espectadores aparecem aqui.",
+    "select": "Selecionar",
+    "postSelected": "Publicar selecionados como Shorts ({{count}})",
+    "queueNext": "Publicar o próximo (faltam {{count}})",
+    "queueClear": "Limpar",
+    "ofStream": "Transmissão de @{{host}}",
+    "yours": "Sua transmissão",
+    "open": "Seus clipes de transmissões"
+  }
 }

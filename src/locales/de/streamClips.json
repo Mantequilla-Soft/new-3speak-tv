@@ -30,5 +30,41 @@
   },
   "momentsTitle": "Weitere Momente",
   "momentsSub": "Erstelle einen Short aus der Aufzeichnung, sobald sie verarbeitet ist.",
-  "makeShort": "Short erstellen"
+  "makeShort": "Short erstellen",
+  "notif": {
+    "host": "Die Clips deines Streams sind bereit zum Posten als Shorts ({{count}})",
+    "clipper": "Deine Clips aus dem Stream von @{{user}} sind fertig ({{count}})"
+  },
+  "pendingTitle": "Dein Clip ist fertig, wenn der Stream endet",
+  "pendingSub": "Er wird nach dem Stream aus der Aufzeichnung geschnitten. Du findest ihn unter Deine Stream-Clips.",
+  "status": {
+    "pending": "Fertig nach dem Stream",
+    "unavailable": "Konnte nicht erstellt werden"
+  },
+  "reasonUnavailable": {
+    "past_cap": "Nach den kostenlosen 30 Minuten",
+    "past_end": "Nach dem Ende der Aufzeichnung",
+    "no_recording": "Der Stream wurde nicht aufgezeichnet",
+    "failed": "Konnte nicht geschnitten werden"
+  },
+  "summary": {
+    "title": "{{count}} Clips aus deinem Stream",
+    "pending": "Sie werden gerade aus der Aufzeichnung geschnitten und sind in ein paar Minuten fertig. Wir sagen dir Bescheid.",
+    "ready": "Alle Clips sind fertig.",
+    "byUser": "@{{user}}: {{count}}",
+    "auto": "Automatisch: {{count}}",
+    "guests": "Gäste: {{count}}"
+  },
+  "page": {
+    "title": "Deine Stream-Clips",
+    "sub": "Clips, die du gemacht hast, und Clips deiner Streams. Clips bleiben {{hours}} Stunden.",
+    "empty": "Noch keine Clips. Clippe einen Livestream oder geh live: Die Clips deiner Zuschauer erscheinen hier.",
+    "select": "Auswählen",
+    "postSelected": "Ausgewählte als Shorts posten ({{count}})",
+    "queueNext": "Den nächsten posten (noch {{count}})",
+    "queueClear": "Leeren",
+    "ofStream": "Stream von @{{host}}",
+    "yours": "Dein Stream",
+    "open": "Deine Stream-Clips"
+  }
 }

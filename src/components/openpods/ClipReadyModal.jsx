@@ -18,7 +18,28 @@ export default function ClipReadyModal({ open, onClose, url, clip, room, api = n
   const { t } = useTranslation();
   const user = useAppStore((s) => s.user);
   const { post, busy } = usePostClipAsShort();
-  if (!open || !url) return null;
+  if (!open || (!url && !clip)) return null;
+  // No Pro DVR: the clip is cut from the stream's recording when it ends.
+  if (clip && clip.status && clip.status !== 'ready') {
+    const unavailable = clip.status === 'unavailable';
+    return (
+      <Dialog
+        open
+        onClose={onClose}
+        title={unavailable ? t('streamClips.status.unavailable') : t('streamClips.pendingTitle')}
+        sub={unavailable ? t(`streamClips.reasonUnavailable.${clip.reason || 'failed'}`) : t('streamClips.pendingSub')}
+        className="clip-ready"
+        footer={(
+          <div className="clip-ready__actions">
+            {!unavailable && user && (
+              <Button as={Link} to="/clips" variant="secondary" size={48} block icon="content_cut" onClick={onClose}>{t('streamClips.page.open')}</Button>
+            )}
+            <Button variant="primary" size={48} block onClick={onClose}>{t('common.actions.close')}</Button>
+          </div>
+        )}
+      />
+    );
+  }
   const share = clip ? clipShareFor({ poster: user, host: clip.host, clipper: clip.clipper }) : null;
 
   const postShort = async () => {

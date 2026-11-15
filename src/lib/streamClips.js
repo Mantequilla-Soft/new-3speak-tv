@@ -9,12 +9,12 @@
  *
  * A clip is posted as a 3Speak Short through the normal Shorts upload, with a
  * locked beneficiary for the other side (clipShareFor): the host posting a
- * viewer's clip gives the clipper 10%; a viewer posting their clip of someone's
+ * viewer's clip gives the clipper 30%; a viewer posting their clip of someone's
  * stream gives the host 50%, since it is the host's show.
  */
 import { HIVE_MAX_BENEFICIARIES } from '../utils/beneficiaries';
 
-export const CLIPPER_SHARE_PERCENT = 10;
+export const CLIPPER_SHARE_PERCENT = 30;
 export const HOST_SHARE_PERCENT = 50;
 
 const lc = (s) => String(s || '').trim().toLowerCase();
@@ -150,4 +150,60 @@ export function clipClock(sec) {
   const m = Math.floor((s % 3600) / 60);
   const ss = String(s % 60).padStart(2, '0');
   return h ? `${h}:${String(m).padStart(2, '0')}:${ss}` : `${m}:${ss}`;
+}
+
+/** A clip has its MP4 (older servers send no status: ready). */
+export const isReadyClip = (c) => !!c && (c.status == null || c.status === 'ready') && !!c.path;
+
+/**
+ * The clips a user made and every clip of their own streams, from one hangouts
+ * server: { clips, keepHours } (each clip tagged with the server's base URL as api), or null
+ * when not signed in there.
+ */
+export async function fetchMyClips(api, token) {
+  if (!api || !token) return null;
+  const res = await fetch(`${base(api)}/clips/mine`, { headers: auth(token) });
+  if (res.status === 401) return null;
+  if (!res.ok) throw new Error(`my clips: ${res.status}`);
+  const d = await res.json();
+  return {
+    clips: (Array.isArray(d.clips) ? d.clips : []).map((c) => ({ ...c, api: base(api) })),
+    keepHours: Number(d.keepHours) || 48,
+  };
+}
+
+/**
+ * The end screen's summary of a stream's clips: who clipped how many, the
+ * automatic ones, and how many are still being cut.
+ * -> { total, byUser: [{ user, count }], auto, guests, pending, ready }
+ */
+export function clipSummary(clips) {
+  const list = Array.isArray(clips) ? clips : [];
+  const counts = new Map();
+  let auto = 0; let guests = 0; let pending = 0; let ready = 0;
+  for (const c of list) {
+    if (c.status === 'unavailable') continue;
+    if (c.status === 'pending') pending += 1; else ready += 1;
+    if (c.source === 'auto') auto += 1;
+    else if (c.clipper) counts.set(c.clipper, (counts.get(c.clipper) || 0) + 1);
+    else guests += 1;
+  }
+  const byUser = [...counts.entries()].map(([user, count]) => ({ user, count })).sort((a, b) => b.count - a.count || a.user.localeCompare(b.user));
+  return { total: pending + ready, byUser, auto, guests, pending, ready };
+}
+
+// "Post selected as Shorts": the clips still to post, one Shorts upload after
+// the other. Kept in this browser only.
+const QUEUE_KEY = '3s-clip-post-queue';
+export function readClipQueue() {
+  try {
+    const q = JSON.parse(localStorage.getItem(QUEUE_KEY) || '[]');
+    return Array.isArray(q) ? q.filter((c) => c && c.id && c.api && c.path) : [];
+  } catch { return []; }
+}
+export function writeClipQueue(list) {
+  try {
+    if (list && list.length) localStorage.setItem(QUEUE_KEY, JSON.stringify(list.slice(0, 40)));
+    else localStorage.removeItem(QUEUE_KEY);
+  } catch { /* storage off */ }
 }

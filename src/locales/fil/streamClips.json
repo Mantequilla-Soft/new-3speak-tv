@@ -30,5 +30,41 @@
   },
   "momentsTitle": "Iba pang sandali",
   "momentsSub": "Gumawa ng Short mula sa replay kapag naproseso na ito.",
-  "makeShort": "Gumawa ng Short"
+  "makeShort": "Gumawa ng Short",
+  "notif": {
+    "host": "Handa nang i-post bilang Short ang mga clip ng stream mo ({{count}})",
+    "clipper": "Handa na ang mga clip mo sa stream ni @{{user}} ({{count}})"
+  },
+  "pendingTitle": "Magiging handa ang clip mo kapag natapos ang stream",
+  "pendingSub": "Gugupitin ito mula sa recording pagkatapos ng stream. Makikita mo ito sa Mga stream clip mo.",
+  "status": {
+    "pending": "Handa pagkatapos ng stream",
+    "unavailable": "Hindi nagawa"
+  },
+  "reasonUnavailable": {
+    "past_cap": "Lampas sa libreng 30 minuto",
+    "past_end": "Pagkatapos matapos ang recording",
+    "no_recording": "Hindi na-record ang stream",
+    "failed": "Hindi nagupit"
+  },
+  "summary": {
+    "title": "{{count}} clip mula sa stream mo",
+    "pending": "Ginugupit na ang mga ito mula sa recording at magiging handa sa loob ng ilang minuto. Sasabihan ka namin.",
+    "ready": "Handa na ang lahat ng clip.",
+    "byUser": "@{{user}}: {{count}}",
+    "auto": "Awtomatiko: {{count}}",
+    "guests": "Mga bisita: {{count}}"
+  },
+  "page": {
+    "title": "Mga stream clip mo",
+    "sub": "Mga clip na ginawa mo at mga clip ng mga stream mo. Itinatabi ang mga clip nang {{hours}} oras.",
+    "empty": "Wala pang clip. Mag-clip ng live stream, o mag-live: lalabas dito ang mga clip ng mga manonood mo.",
+    "select": "Piliin",
+    "postSelected": "I-post ang mga napili bilang Short ({{count}})",
+    "queueNext": "I-post ang susunod ({{count}} pa)",
+    "queueClear": "I-clear",
+    "ofStream": "Stream ni @{{host}}",
+    "yours": "Stream mo",
+    "open": "Mga stream clip mo"
+  }
 }

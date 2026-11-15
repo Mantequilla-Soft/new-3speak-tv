@@ -432,13 +432,13 @@ describe('a short', () => {
     expect(h.tus.uploads[0].options.metadata.short).toBe('true')
   })
 
-  it('a live-stream clip posted by its host gives the clipper a locked 10 % and records where it came from (H13)', async () => {
-    const { result } = await ready((c) => { asShort(c); c.setStreamClip({ room: 'badadib-r1', host: 'badadib', clipper: 'fan', offsetSec: 754, share: { account: 'fan', percent: 10, role: 'clipper' } }) })
+  it('a live-stream clip posted by its host gives the clipper a locked 30 % and records where it came from (H13)', async () => {
+    const { result } = await ready((c) => { asShort(c); c.setStreamClip({ room: 'badadib-r1', host: 'badadib', clipper: 'fan', offsetSec: 754, share: { account: 'fan', percent: 30, role: 'clipper' } }) })
     await publish(result)
     expect(meta().video.streamClip).toEqual({ room: 'badadib-r1', host: 'badadib', clipper: 'fan', offset: 754 })
     expect(optionsOp().extensions).toEqual([[0, { beneficiaries: [
       { account: 'encoder.pay', weight: 100 },
-      { account: 'fan', weight: 1000 },
+      { account: 'fan', weight: 3000 },
       { account: 'threespeakfund', weight: 1000 },
     ] }]])
   })

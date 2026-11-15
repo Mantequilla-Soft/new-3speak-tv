@@ -30,5 +30,41 @@
   },
   "momentsTitle": "Thêm khoảnh khắc",
   "momentsSub": "Tạo Short từ bản ghi khi đã xử lý xong.",
-  "makeShort": "Tạo Short"
+  "makeShort": "Tạo Short",
+  "notif": {
+    "host": "Các clip từ buổi phát của bạn đã sẵn sàng để đăng thành Short ({{count}})",
+    "clipper": "Các clip của bạn từ buổi phát của @{{user}} đã sẵn sàng ({{count}})"
+  },
+  "pendingTitle": "Clip của bạn sẽ sẵn sàng khi buổi phát kết thúc",
+  "pendingSub": "Clip được cắt từ bản ghi sau buổi phát. Bạn sẽ thấy nó trong Clip phát trực tiếp của bạn.",
+  "status": {
+    "pending": "Sẵn sàng sau buổi phát",
+    "unavailable": "Không thể tạo"
+  },
+  "reasonUnavailable": {
+    "past_cap": "Sau 30 phút miễn phí",
+    "past_end": "Sau khi bản ghi kết thúc",
+    "no_recording": "Buổi phát không được ghi lại",
+    "failed": "Không thể cắt"
+  },
+  "summary": {
+    "title": "{{count}} clip từ buổi phát của bạn",
+    "pending": "Chúng đang được cắt từ bản ghi và sẽ sẵn sàng sau vài phút. Chúng tôi sẽ báo cho bạn.",
+    "ready": "Tất cả clip đã sẵn sàng.",
+    "byUser": "@{{user}}: {{count}}",
+    "auto": "Tự động: {{count}}",
+    "guests": "Khách: {{count}}"
+  },
+  "page": {
+    "title": "Clip phát trực tiếp của bạn",
+    "sub": "Clip bạn đã làm và clip từ các buổi phát của bạn. Clip được giữ {{hours}} giờ.",
+    "empty": "Chưa có clip. Hãy cắt clip một buổi phát hoặc phát trực tiếp: clip của người xem sẽ hiện ở đây.",
+    "select": "Chọn",
+    "postSelected": "Đăng các clip đã chọn thành Short ({{count}})",
+    "queueNext": "Đăng clip tiếp theo (còn {{count}})",
+    "queueClear": "Xóa hết",
+    "ofStream": "Buổi phát của @{{host}}",
+    "yours": "Buổi phát của bạn",
+    "open": "Clip phát trực tiếp của bạn"
+  }
 }

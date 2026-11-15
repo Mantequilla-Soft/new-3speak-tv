@@ -30,5 +30,41 @@
   },
   "momentsTitle": "Momen lainnya",
   "momentsSub": "Buat Short dari rekaman setelah selesai diproses.",
-  "makeShort": "Buat Short"
+  "makeShort": "Buat Short",
+  "notif": {
+    "host": "Klip dari siaranmu siap diposting sebagai Short ({{count}})",
+    "clipper": "Klipmu dari siaran @{{user}} sudah siap ({{count}})"
+  },
+  "pendingTitle": "Klipmu akan siap saat siaran berakhir",
+  "pendingSub": "Klip dipotong dari rekaman setelah siaran. Kamu bisa menemukannya di Klip siaranmu.",
+  "status": {
+    "pending": "Siap setelah siaran",
+    "unavailable": "Tidak bisa dibuat"
+  },
+  "reasonUnavailable": {
+    "past_cap": "Setelah 30 menit gratis",
+    "past_end": "Setelah rekaman berakhir",
+    "no_recording": "Siaran tidak direkam",
+    "failed": "Tidak bisa dipotong"
+  },
+  "summary": {
+    "title": "{{count}} klip dari siaranmu",
+    "pending": "Klip sedang dipotong dari rekaman dan akan siap dalam beberapa menit. Kami akan memberi tahu.",
+    "ready": "Semua klip sudah siap.",
+    "byUser": "@{{user}}: {{count}}",
+    "auto": "Otomatis: {{count}}",
+    "guests": "Tamu: {{count}}"
+  },
+  "page": {
+    "title": "Klip siaranmu",
+    "sub": "Klip yang kamu buat dan klip dari siaranmu. Klip disimpan selama {{hours}} jam.",
+    "empty": "Belum ada klip. Buat klip dari siaran langsung, atau mulai siaran: klip penontonmu muncul di sini.",
+    "select": "Pilih",
+    "postSelected": "Posting yang dipilih sebagai Short ({{count}})",
+    "queueNext": "Posting berikutnya ({{count}} lagi)",
+    "queueClear": "Kosongkan",
+    "ofStream": "Siaran @{{host}}",
+    "yours": "Siaranmu",
+    "open": "Klip siaranmu"
+  }
 }

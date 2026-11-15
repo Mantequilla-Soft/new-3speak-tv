@@ -30,5 +30,41 @@
   },
   "momentsTitle": "Autres moments",
   "momentsSub": "Fais un Short à partir du replay une fois qu'il est traité.",
-  "makeShort": "Faire un Short"
+  "makeShort": "Faire un Short",
+  "notif": {
+    "host": "Les clips de ton direct sont prêts à publier en Shorts ({{count}})",
+    "clipper": "Tes clips du direct de @{{user}} sont prêts ({{count}})"
+  },
+  "pendingTitle": "Ton clip sera prêt à la fin du direct",
+  "pendingSub": "Il est découpé dans l'enregistrement après le direct. Tu le trouveras dans Tes clips de directs.",
+  "status": {
+    "pending": "Prêt après le direct",
+    "unavailable": "Impossible à créer"
+  },
+  "reasonUnavailable": {
+    "past_cap": "Après les 30 minutes gratuites",
+    "past_end": "Après la fin de l'enregistrement",
+    "no_recording": "Le direct n'a pas été enregistré",
+    "failed": "Impossible à découper"
+  },
+  "summary": {
+    "title": "{{count}} clips de ton direct",
+    "pending": "Ils sont découpés dans l'enregistrement et seront prêts dans quelques minutes. On te préviendra.",
+    "ready": "Tous les clips sont prêts.",
+    "byUser": "@{{user}} : {{count}}",
+    "auto": "Automatiques : {{count}}",
+    "guests": "Invités : {{count}}"
+  },
+  "page": {
+    "title": "Tes clips de directs",
+    "sub": "Les clips que tu as faits et ceux de tes directs. Ils sont gardés {{hours}} heures.",
+    "empty": "Pas encore de clips. Fais un clip d'un direct ou lance-toi en direct : les clips de tes spectateurs apparaissent ici.",
+    "select": "Sélectionner",
+    "postSelected": "Publier la sélection en Shorts ({{count}})",
+    "queueNext": "Publier le suivant (encore {{count}})",
+    "queueClear": "Vider",
+    "ofStream": "Direct de @{{host}}",
+    "yours": "Ton direct",
+    "open": "Tes clips de directs"
+  }
 }

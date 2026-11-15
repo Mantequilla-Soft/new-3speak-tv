@@ -43,6 +43,15 @@ describe('checker notifications', () => {
     expect(screen.getByTestId('location').textContent).toBe('/')
   })
 
+  it('ready stream clips: the host and a clipper each get their line, and it opens /clips', async () => {
+    const host = { _checker: true, _viewer: 'badadib', id: 'clips:r1', type: 'stream_clips', actor: 'badadib', role: 'host', count: 4, title: 'Friday', url: '/clips', at, seen: false }
+    const fan = { _checker: true, _viewer: 'fan', id: 'clips:r2', type: 'stream_clips', actor: 'badadib', role: 'clipper', count: 2, title: 'Friday', url: '/clips', at, seen: false }
+    const { user } = renderWithProviders(<StoryNotifications stories={[host, fan]} />)
+    expect(screen.getByText("Your stream's clips are ready to post as Shorts (4)")).toBeInTheDocument()
+    await user.click(screen.getByText("Your clips of @badadib's stream are ready (2)"))
+    expect(screen.getByTestId('location').textContent).toBe('/clips')
+  })
+
   it('a started premiere you asked about opens the video, marked live', async () => {
     const premiere = { _checker: true, _viewer: 'fan', id: 'premiere:badadib/p2', type: 'premiere', actor: 'badadib', author: 'badadib', permlink: 'p2', title: 'Launch day', url: '/watch?v=badadib/p2', at, live: true, seen: false }
     const { user } = renderWithProviders(<StoryNotifications stories={[premiere]} />)

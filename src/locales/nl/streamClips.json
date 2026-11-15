@@ -30,5 +30,41 @@
   },
   "momentsTitle": "Meer momenten",
   "momentsSub": "Maak een Short van de opname zodra die verwerkt is.",
-  "makeShort": "Maak een Short"
+  "makeShort": "Maak een Short",
+  "notif": {
+    "host": "De clips van je stream staan klaar om als Shorts te posten ({{count}})",
+    "clipper": "Je clips van de stream van @{{user}} zijn klaar ({{count}})"
+  },
+  "pendingTitle": "Je clip is klaar als de stream eindigt",
+  "pendingSub": "Hij wordt na de stream uit de opname geknipt. Je vindt hem bij Je streamclips.",
+  "status": {
+    "pending": "Klaar na de stream",
+    "unavailable": "Kon niet worden gemaakt"
+  },
+  "reasonUnavailable": {
+    "past_cap": "Na de gratis 30 minuten",
+    "past_end": "Na het einde van de opname",
+    "no_recording": "De stream is niet opgenomen",
+    "failed": "Kon niet worden geknipt"
+  },
+  "summary": {
+    "title": "{{count}} clips uit je stream",
+    "pending": "Ze worden nu uit de opname geknipt en zijn over een paar minuten klaar. We laten het je weten.",
+    "ready": "Alle clips zijn klaar.",
+    "byUser": "@{{user}}: {{count}}",
+    "auto": "Automatisch: {{count}}",
+    "guests": "Gasten: {{count}}"
+  },
+  "page": {
+    "title": "Je streamclips",
+    "sub": "Clips die jij maakte en clips van je streams. Clips blijven {{hours}} uur.",
+    "empty": "Nog geen clips. Clip een livestream of ga live: de clips van je kijkers verschijnen hier.",
+    "select": "Selecteren",
+    "postSelected": "Geselecteerde als Shorts posten ({{count}})",
+    "queueNext": "Post de volgende (nog {{count}})",
+    "queueClear": "Wissen",
+    "ofStream": "Stream van @{{host}}",
+    "yours": "Jouw stream",
+    "open": "Je streamclips"
+  }
 }

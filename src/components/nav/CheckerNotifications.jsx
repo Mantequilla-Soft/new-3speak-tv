@@ -19,12 +19,19 @@ const TYPES = {
   live: { icon: 'sensors', tone: 'accent' },
   collab_invite: { icon: 'group_add', tone: 'cyan' },
   premiere: { icon: 'live_tv', tone: 'accent' },
+  // A stream's clips are cut and ready to post as Shorts (H13); opens /clips.
+  stream_clips: { icon: 'content_cut', tone: 'accent' },
 };
 
 function message(n, t) {
   if (n.type === 'live') return n.live ? t('social.notifs.liveNow', { user: n.actor }) : t('social.notifs.wasLive', { user: n.actor });
   if (n.type === 'collab_invite') return t('social.notifs.collabInvite', { user: n.actor });
   if (n.type === 'premiere') return t('social.notifs.premiereStarted', { user: n.actor });
+  if (n.type === 'stream_clips') {
+    return n.role === 'host'
+      ? t('streamClips.notif.host', { count: n.count || 1 })
+      : t('streamClips.notif.clipper', { user: n.actor, count: n.count || 1 });
+  }
   return `@${n.actor}`;
 }
 

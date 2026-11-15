@@ -30,5 +30,41 @@
   },
   "momentsTitle": "Altri momenti",
   "momentsSub": "Crea uno Short dalla registrazione quando è stata elaborata.",
-  "makeShort": "Crea uno Short"
+  "makeShort": "Crea uno Short",
+  "notif": {
+    "host": "I clip della tua diretta sono pronti da pubblicare come Short ({{count}})",
+    "clipper": "I tuoi clip della diretta di @{{user}} sono pronti ({{count}})"
+  },
+  "pendingTitle": "Il tuo clip sarà pronto alla fine della diretta",
+  "pendingSub": "Viene tagliato dalla registrazione dopo la diretta. Lo trovi in I tuoi clip delle dirette.",
+  "status": {
+    "pending": "Pronto dopo la diretta",
+    "unavailable": "Impossibile da creare"
+  },
+  "reasonUnavailable": {
+    "past_cap": "Dopo i 30 minuti gratuiti",
+    "past_end": "Dopo la fine della registrazione",
+    "no_recording": "La diretta non è stata registrata",
+    "failed": "Impossibile da tagliare"
+  },
+  "summary": {
+    "title": "{{count}} clip della tua diretta",
+    "pending": "Vengono tagliati dalla registrazione e saranno pronti tra pochi minuti. Ti avviseremo.",
+    "ready": "Tutti i clip sono pronti.",
+    "byUser": "@{{user}}: {{count}}",
+    "auto": "Automatici: {{count}}",
+    "guests": "Ospiti: {{count}}"
+  },
+  "page": {
+    "title": "I tuoi clip delle dirette",
+    "sub": "I clip che hai fatto e quelli delle tue dirette. Restano {{hours}} ore.",
+    "empty": "Ancora nessun clip. Fai un clip di una diretta o vai in diretta: qui compaiono i clip dei tuoi spettatori.",
+    "select": "Seleziona",
+    "postSelected": "Pubblica i selezionati come Short ({{count}})",
+    "queueNext": "Pubblica il prossimo (ne restano {{count}})",
+    "queueClear": "Svuota",
+    "ofStream": "Diretta di @{{host}}",
+    "yours": "La tua diretta",
+    "open": "I tuoi clip delle dirette"
+  }
 }

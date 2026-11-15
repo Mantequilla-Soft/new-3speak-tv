@@ -12,7 +12,8 @@ const toast = toastIn('Live');
 
 // Viewer-facing "clip the last 30s" button for a live OpenPods stream. Only a
 // Pro host has DVR running, so the button appears only while /dvr/status reports
-// recording=true (which also hides it for non-Pro hosts). Both endpoints are
+// recording=true, or, without the Pro DVR, while the stream records its VOD
+// (clips: 'after': the clip is cut from the recording when the stream ends). Both endpoints are
 // public; /clip is rate-limited server-side. A signed-in clipper is credited
 // (H13): the clip is kept two days and opens in ClipReadyModal, ready to post as
 // a Short with the host as a beneficiary, or to download.
@@ -39,7 +40,7 @@ export default function StreamClipButton({ roomName, variant = 'inline' }) {
     const check = () => {
       fetch(`${apiUrl}/rooms/${encodeURIComponent(roomName)}/dvr/status`)
         .then((r) => (r.ok ? r.json() : null))
-        .then((d) => { if (alive) setAvailable(!!d?.recording); })
+        .then((d) => { if (alive) setAvailable(!!d?.recording || d?.clips === 'after'); })
         .catch(() => { if (alive) setAvailable(false); });
     };
     check();

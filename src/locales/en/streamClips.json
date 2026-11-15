@@ -30,5 +30,41 @@
   },
   "momentsTitle": "More moments",
   "momentsSub": "Make a Short from the replay once it has processed.",
-  "makeShort": "Make a Short"
+  "makeShort": "Make a Short",
+  "notif": {
+    "host": "Your stream's clips are ready to post as Shorts ({{count}})",
+    "clipper": "Your clips of @{{user}}'s stream are ready ({{count}})"
+  },
+  "pendingTitle": "Your clip will be ready when the stream ends",
+  "pendingSub": "It is cut from the stream's recording after the stream. You find it under Your stream clips.",
+  "status": {
+    "pending": "Ready after the stream",
+    "unavailable": "Could not be made"
+  },
+  "reasonUnavailable": {
+    "past_cap": "After the free 30 minutes",
+    "past_end": "After the recording ended",
+    "no_recording": "The stream was not recorded",
+    "failed": "Could not be cut"
+  },
+  "summary": {
+    "title": "{{count}} clips from your stream",
+    "pending": "They are cut from the recording now and will be ready in a few minutes. We will let you know.",
+    "ready": "All clips are ready.",
+    "byUser": "@{{user}}: {{count}}",
+    "auto": "Automatic: {{count}}",
+    "guests": "Guests: {{count}}"
+  },
+  "page": {
+    "title": "Your stream clips",
+    "sub": "Clips you made and clips of your streams. Clips are kept for {{hours}} hours.",
+    "empty": "No clips yet. Clip a live stream, or go live: your viewers' clips show up here.",
+    "select": "Select",
+    "postSelected": "Post selected as Shorts ({{count}})",
+    "queueNext": "Post the next one ({{count}} left)",
+    "queueClear": "Clear",
+    "ofStream": "@{{host}}'s stream",
+    "yours": "Your stream",
+    "open": "Your stream clips"
+  }
 }

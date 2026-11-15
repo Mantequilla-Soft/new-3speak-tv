@@ -148,6 +148,7 @@ const Wallet = lazyRoute(() => import("./page/Wallet"), "./page/Wallet");
 const Watch = lazyRoute(() => import("./page/Watch"), "./page/Watch");
 const WatchStream = lazyRoute(() => import("./page/WatchStream"), "./page/WatchStream");
 const StreamClipsPage = lazyRoute(() => import("./page/StreamClipsPage"), "./page/StreamClipsPage");
+const StreamClipsHome = lazyRoute(() => import("./page/StreamClipsHome"), "./page/StreamClipsHome");
 const WatchedView = lazyRoute(() => import("./page/WatchedView"), "./page/WatchedView");
 const Curation = lazyRoute(() => import("./page/Curation"), "./page/Curation");
 const Translate = lazyRoute(() => import("./page/Translate/Translate"), "./page/Translate/Translate");
@@ -845,6 +846,8 @@ function App() {
               <Route path="/watch/:streamId" element={<WatchStream />} />
               {/* A stream's clips after it ended (H13). */}
               <Route path="/live/clips/:room" element={<StreamClipsPage />} />
+              {/* Your stream clips: made by you, and of your streams; the bell leads here. */}
+              <Route path="/clips" element={<StreamClipsHome />} />
               {/* Short alias for stream share links — see buildOpenPodShareUrl. */}
               <Route path="/l/:streamId" element={<WatchStream />} />
               {/* Opened by the LiveKit egress worker, never by a person: a

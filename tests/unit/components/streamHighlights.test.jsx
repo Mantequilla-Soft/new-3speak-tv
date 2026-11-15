@@ -38,7 +38,7 @@ describe('StreamHighlightsPanel', () => {
     expect(screen.getByText('Highlight')).toBeInTheDocument()
     expect(screen.getByText('Big boost')).toBeInTheDocument()
     expect(screen.getByText('at 12:34')).toBeInTheDocument()
-    expect(screen.getByText('@fan made this clip and gets 10% of the Short\'s rewards.')).toBeInTheDocument()
+    expect(screen.getByText('@fan made this clip and gets 30% of the Short\'s rewards.')).toBeInTheDocument()
     const make = screen.getByRole('link', { name: /Make a Short/ })
     expect(make).toHaveAttribute('href', '/@badadib/badadib-r1?t=555&short=555-605')
     expect(fetch).toHaveBeenCalledWith(`${API}/rooms/badadib-r1/highlights`, { headers: { Authorization: 'Bearer tok' } })
@@ -77,6 +77,26 @@ describe('StreamHighlightsPanel', () => {
   })
 })
 
+describe('clips cut after the stream (no DVR)', () => {
+  it('the host\'s end screen counts clips per viewer, says they are being cut, and shows pending ones as waiting', async () => {
+    answer = { host: 'badadib', isHost: true, moments: [], clips: [
+      clip({ id: 'p1', status: 'pending', path: null, vertical: { available: false } }),
+      clip({ id: 'p2', status: 'pending', path: null }),
+      clip({ id: 'a1', clipper: null, source: 'auto', status: 'pending', path: null }),
+      clip({ id: 'u1', clipper: 'late', status: 'unavailable', reason: 'past_cap', path: null }),
+      clip({ id: 'r1', clipper: 'badadib', source: 'host' }),
+    ] }
+    renderWithProviders(<StreamHighlightsPanel api={API} room="badadib-r1" token="tok" compact />)
+    expect(await screen.findByText('4 clips from your stream')).toBeInTheDocument()
+    expect(screen.getByText('@fan: 2 · @badadib: 1 · Automatic: 1')).toBeInTheDocument()
+    expect(screen.getByText(/They are cut from the recording now/)).toBeInTheDocument()
+    expect(screen.getAllByText('Ready after the stream')).toHaveLength(3)
+    expect(screen.getByText('After the free 30 minutes')).toBeInTheDocument()
+    // Only the ready clip can be posted.
+    expect(screen.getAllByRole('button', { name: /Post as Short/ })).toHaveLength(1)
+  })
+})
+
 describe('ClipReadyModal', () => {
   it('offers Post as Short with the host\'s share to a signed-in viewer', async () => {
     useAppStore.setState({ user: 'fan' })
@@ -88,6 +108,19 @@ describe('ClipReadyModal', () => {
     await user.click(screen.getByRole('button', { name: /Post as Short/ }))
     await waitFor(() => expect(onClose).toHaveBeenCalled())
     expect(h.post).toHaveBeenCalledWith(expect.objectContaining({ host: 'badadib', clipper: 'fan', room: 'badadib-r1' }))
+  })
+
+  it('a pending clip says it will be ready when the stream ends, and leads to Your stream clips', () => {
+    useAppStore.setState({ user: 'fan' })
+    renderWithProviders(<ClipReadyModal open url={null} clip={clip({ status: 'pending', path: null })} room="badadib-r1" onClose={() => {}} />)
+    expect(screen.getByText('Your clip will be ready when the stream ends')).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /Your stream clips/ })).toHaveAttribute('href', '/clips')
+    expect(screen.queryByRole('button', { name: /Post as Short/ })).not.toBeInTheDocument()
+  })
+
+  it('an unavailable clip says why', () => {
+    renderWithProviders(<ClipReadyModal open url={null} clip={clip({ status: 'unavailable', reason: 'no_recording', path: null })} room="r" onClose={() => {}} />)
+    expect(screen.getByText('The stream was not recorded')).toBeInTheDocument()
   })
 
   it('logged out: only Download, and a note to log in', () => {
