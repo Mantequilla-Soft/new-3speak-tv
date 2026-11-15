@@ -1,4 +1,5 @@
 @use "../../styles/v2" as v2;
+@use "../openpods/hangouts-skin" as hh;
 
 // The live OpenPods player in the watch page's player slot. Text over video is
 // white on scrims, in both themes.
@@ -10,6 +11,11 @@
 
   // StreamVideo fills its parent (absolute inset:0 from the SDK).
   .hh-stream-video { position: absolute; inset: 0; }
+
+  // The host's boost goal (StreamVideo draws it): above the bottom row of
+  // buttons (Boost, raise hand, fullscreen) instead of under them.
+  @include hh.boost-goal;
+  .hh-boost-goal--overlay { bottom: 58px; }
 
   &__viewers {
     position: absolute;
