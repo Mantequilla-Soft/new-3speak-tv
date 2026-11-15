@@ -70,6 +70,7 @@ import useUnstickPlayerWhileTyping from '../../hooks/useUnstickPlayerWhileTyping
 import Transcript from './Transcript';
 import WatchTabs, { useWideWatch, useSideTab } from './WatchTabs';
 import WatchDock from './WatchDock';
+import useListenAndSaveTiles from './useListenAndSaveTiles';
 import { SupportersPane, VotersPane, ChapterCards, ChapterList, UpNextList, MediaState, compactNumber } from './WatchPanels';
 import { listSubtitleLanguages } from '../../hooks/useSubtitles';
 import { canSubscribe, setCommunitySubscription } from '../Communities/communitySubscribe';
@@ -1240,6 +1241,13 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
     }
   }, [community_id, joinBusy, authenticated, incubationHandle, communitySubscribed, comunity_name, t]);
 
+  // Listen and Download in the More menu (before the loading return: it is a hook).
+  const listenSaveTiles = useListenAndSaveTiles({
+    author, permlink, videoDetails,
+    currentTime: videoControls?.currentTime,
+    available: !!videoDetails && !isLive && !scheduled && !mediaUnavailable && !mediaBlocked,
+  });
+
   // Loading state - show loader if essential data is missing
   if (!videoDetails) {
     return <BarLoader />;
@@ -1363,6 +1371,8 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
       },
     });
   };
+  // Listen (the global audio player) and Download (offline), for every viewer.
+  const [listenTile, downloadTile] = listenSaveTiles;
   const moreTiles = [
     {
       id: 'save',
@@ -1376,6 +1386,8 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
     },
     { ...shareTile, kbd: isLive ? null : '⇧S', keys: isLive ? null : 'Shift+S' },
     { ...tipTile, narrowOnly: true },
+    listenTile,
+    downloadTile,
     !isLive && { id: 'react', icon: 'videocam', label: t('comments.section.reactTab'), title: t('player.controls.reactToMoment'), onClick: () => { openSide('discussion'); onReact?.(); } },
     titleMeta.hasSummary && { id: 'summary', icon: 'auto_awesome', label: t('watch.summary.title'), title: t('watch.summary.buttonTitle'), onClick: () => setSummaryOpen(true) },
     {
