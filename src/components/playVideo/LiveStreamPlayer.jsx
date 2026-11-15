@@ -10,6 +10,7 @@ import LiveAdLayer from '../openpods/LiveAdLayer';
 import StreamFullscreenButton from '../openpods/StreamFullscreenButton';
 import StreamWatermark from '../openpods/StreamWatermark';
 import { useBoostLabels } from '../openpods/boostLabels';
+import { useBattleLabels } from '../openpods/battleLabels';
 import '@snapie/hangouts-react/src/styles/hangouts.css';
 import './LiveStreamPlayer.scss';
 import { Icon } from '../v2/Icon';
@@ -93,6 +94,7 @@ export default function LiveStreamPlayer({ roomName, chatSlot = null, onChatSent
   const [prerollHold, setPrerollHold] = useState(false);
   // The goal bar <StreamVideo> draws over the picture, in the site language.
   const boostLabels = useBoostLabels();
+  const battleLabels = useBattleLabels();
 
   if (!roomName) return null;
   return (
@@ -106,7 +108,7 @@ export default function LiveStreamPlayer({ roomName, chatSlot = null, onChatSent
       >
         {connectReady && endpointReady && (
           <StandaloneWatch key={`${joinKey}:${endpoint.api}`} roomName={roomName} audioMuted={prerollHold}>
-            <StreamVideo showLiveBadge boostLabels={boostLabels} />
+            <StreamVideo showLiveBadge boostLabels={boostLabels} battleLabels={battleLabels} />
             {/* A free host's stream from OBS: the page draws the 3Speak mark
                 the browser studio would have burned into the picture. */}
             <StreamWatermark show={!!(roomMeta?.headless && roomMeta?.watermark)} />

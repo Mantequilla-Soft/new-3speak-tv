@@ -15,6 +15,7 @@ import StreamWatermark from '../components/openpods/StreamWatermark';
 import StreamSignInButton from '../components/openpods/StreamSignInButton';
 import StreamBoostGoalBar from '../components/openpods/StreamBoostGoalBar';
 import { useBoostLabels } from '../components/openpods/boostLabels';
+import { useBattleLabels } from '../components/openpods/battleLabels';
 import { useStreamSession } from '../hooks/useStreamSession';
 import { useLiveStreamPager } from '../hooks/useLiveStreamPager';
 import { useStreamChatMirror } from '../hooks/useStreamChatMirror';
@@ -184,6 +185,7 @@ export default function WatchStream() {
   const { t } = useTranslation();
   // The SDK's goal bar text in the site language (live.boost.dialog).
   const boostLabels = useBoostLabels();
+  const battleLabels = useBattleLabels();
   const { streamId } = useParams();
   const navigate = useNavigate();
   const { aioha, sessionToken, hangoutsUser, connectReady, joinKey, needsSignIn, canInteract, signIn, signingIn } = useStreamSession();
@@ -565,7 +567,7 @@ export default function WatchStream() {
             {/* Main column: the player, then the title with the tile dock beside it. */}
             <div className="ws-col-main">
               <div className="ws-player">
-                <StreamVideo showLiveBadge={false} boostLabels={boostLabels} />
+                <StreamVideo showLiveBadge={false} boostLabels={boostLabels} battleLabels={battleLabels} />
                 <StreamWatermark show={showWatermark} />
                 <LiveAdLayer host={host} room={streamId} onPreroll={setPrerollHold} />
                 {/* The creator on the player, with Follow (18c). */}

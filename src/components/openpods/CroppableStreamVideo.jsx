@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { StreamVideo } from '@snapie/hangouts-react';
 import { Icon } from '../v2/ui';
+import { useBattleLabels } from './battleLabels';
 import './CroppableStreamVideo.scss';
 
 // A stream counts as landscape above this width/height ratio. A little over 1 so
@@ -29,6 +30,7 @@ const DRAG_SLOP_PX = 6;
  */
 export default function CroppableStreamVideo({ vertical = false, onOrientation, showLiveBadge = false, showBoostGoal = true, boostLabels }) {
   const { t } = useTranslation();
+  const battleLabels = useBattleLabels();
   const wrapRef = useRef(null);
   const [videoEl, setVideoEl] = useState(null);
   const [aspect, setAspect] = useState(null); // decoded width / height, null until known
@@ -175,7 +177,7 @@ export default function CroppableStreamVideo({ vertical = false, onOrientation, 
       className={`ws-crop${active ? ' ws-crop--active' : ''}`}
       style={{ '--ws-crop-x': `${(cropX * 100).toFixed(2)}%` }}
     >
-      <StreamVideo showLiveBadge={showLiveBadge} showBoostGoal={showBoostGoal} boostLabels={boostLabels} />
+      <StreamVideo showLiveBadge={showLiveBadge} showBoostGoal={showBoostGoal} boostLabels={boostLabels} battleLabels={battleLabels} />
       {active && (
         <div className={`ws-crop__guide${showGuide ? ' is-visible' : ''}`} aria-hidden="true">
           <span className="ws-crop__hint"><Icon name="pan_tool" size={16} />{t('misc.watchStream.dragToPan')}</span>

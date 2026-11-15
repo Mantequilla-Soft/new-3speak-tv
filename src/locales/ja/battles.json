@@ -1,0 +1,14 @@
+{
+  "bar": {
+    "title": "バトル",
+    "startsIn": "{seconds}秒後に開始",
+    "timeLeft": "残り {time}",
+    "counting": "最後のブーストを集計中…",
+    "amount": "{amount} HBD",
+    "wins": "@{name} の勝ち！",
+    "tie": "引き分け！",
+    "endedEarly": "バトルは途中で終了しました",
+    "dropped": "バトル終了：@{name} が退出しました",
+    "boostHint": "ここでのブーストは @{name} に加算されます"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "bar": {
+    "title": "对战",
+    "startsIn": "{seconds} 秒后开始",
+    "timeLeft": "剩余 {time}",
+    "counting": "正在统计最后的打赏…",
+    "amount": "{amount} HBD",
+    "wins": "@{name} 获胜！",
+    "tie": "平局！",
+    "endedEarly": "对战提前结束",
+    "dropped": "对战结束：@{name} 已离开",
+    "boostHint": "在这里的打赏计入 @{name}"
+  }
+}

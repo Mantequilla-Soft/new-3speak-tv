@@ -1,0 +1,14 @@
+{
+  "bar": {
+    "title": "Pojedynek",
+    "startsIn": "Start za {seconds}",
+    "timeLeft": "Zostało {time}",
+    "counting": "Liczymy ostatnie boosty…",
+    "amount": "{amount} HBD",
+    "wins": "Wygrywa @{name}!",
+    "tie": "Remis!",
+    "endedEarly": "Pojedynek zakończył się przed czasem",
+    "dropped": "Pojedynek zakończony: @{name} wyszedł",
+    "boostHint": "Boosty tutaj liczą się dla @{name}"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "bar": {
+    "title": "Laban",
+    "startsIn": "Magsisimula sa {seconds}",
+    "timeLeft": "{time} na lang",
+    "counting": "Binibilang ang huling mga boost…",
+    "amount": "{amount} HBD",
+    "wins": "Panalo si @{name}!",
+    "tie": "Tabla!",
+    "endedEarly": "Maagang natapos ang laban",
+    "dropped": "Tapos na ang laban: umalis si @{name}",
+    "boostHint": "Ang mga boost dito ay para kay @{name}"
+  }
+}

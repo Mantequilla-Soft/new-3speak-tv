@@ -1299,3 +1299,59 @@
   .hh-boost-top__name { font-weight: 700; }
   .hh-boost-top__amount { @include v2.mono(12, 700); }
 }
+
+// Live battles (SDK StreamBattleBar, BattleInviteCard, 0.27): the meter over
+// the video on the media scrim like the goal bar, our side filling in the
+// accent against the other side's track; inline (the studio's battle panel) a
+// bg well. The result banner is an accent pill, cyan when this side won.
+@mixin battle {
+  .hh-battle-bar { gap: 6px; font-family: var(--font-sans); }
+  .hh-battle-bar--overlay {
+    box-sizing: border-box;
+    padding: 8px 12px 10px;
+    border-radius: var(--r-md);
+    background: var(--media-scrim);
+    color: var(--on-media);
+  }
+  .hh-battle-bar--inline {
+    padding: 12px 14px;
+    border: 0;
+    border-radius: var(--r-md);
+    background: var(--bg);
+    color: var(--text);
+  }
+  .hh-battle-bar__row { font-size: 13px; }
+  .hh-battle-bar__name { font-weight: 700; }
+  .hh-battle-bar__tag { border-radius: var(--r-sm); background: var(--accent); color: var(--on-accent); @include v2.text(eyebrow); font-size: 10px; }
+  .hh-battle-bar__clock { @include v2.mono(12, 700); }
+  .hh-battle-bar__meter { height: 6px; border-radius: var(--r-bar); background: color-mix(in srgb, currentColor 25%, transparent); }
+  .hh-battle-bar__fill { background: var(--accent); }
+  .hh-battle-bar__row--amounts { @include v2.mono(12, 700); opacity: .8; }
+  .hh-battle-bar__hint { font-family: var(--font-sans); font-weight: 400; }
+  .hh-battle-bar__banner {
+    padding: 2px 10px;
+    border-radius: var(--r-sm);
+    background: var(--accent);
+    color: var(--on-accent);
+    font-size: 12px;
+    font-weight: 900;
+  }
+  .hh-battle-bar--won .hh-battle-bar__banner { background: var(--cyan); color: var(--bg); }
+
+  .hh-battle-invite {
+    gap: 10px;
+    padding: 14px 16px;
+    border: 1px solid var(--border);
+    border-radius: var(--r-lg);
+    background: var(--surface);
+    color: var(--text);
+    font-family: var(--font-sans);
+    font-size: 14px;
+    line-height: 1.4;
+  }
+  .hh-battle-invite__sub { color: var(--muted); opacity: 1; font-size: 13px; }
+
+  // The studio header's battle button: an icon button like Boost history.
+  .hh-studio__battle-btn { width: 40px; padding: 0; }
+  .hh-studio__battle-btn .hh-studio__icon { @include glyph-box("trophy", 20px); }
+}

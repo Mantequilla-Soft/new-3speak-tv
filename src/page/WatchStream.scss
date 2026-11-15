@@ -764,3 +764,18 @@
   &:hover,
   &:focus-visible { opacity: 1; }
 }
+
+/* The live battle meter (SDK StreamBattleBar via StreamVideo). Desktop: under
+   the creator badge, left. Phones: under the back button and quality picker,
+   with the boost toasts stepping down below it while a battle runs. */
+.ws-page, .ws-shorts { @include hh.battle; }
+.ws-player .hh-battle-bar--overlay {
+  top: 78px;
+  left: 18px;
+  right: auto;
+  width: min(380px, calc(100% - 36px));
+  margin: 0;
+  z-index: 8;
+}
+.ws-shorts .hh-battle-bar--overlay { top: calc(60px + var(--safe-top, 0px)); }
+.ws-shorts:has(.hh-battle-bar--overlay) .hh-boost-overlay { top: calc(136px + var(--safe-top, 0px)); }

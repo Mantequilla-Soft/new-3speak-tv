@@ -1,0 +1,14 @@
+{
+  "bar": {
+    "title": "Sfida",
+    "startsIn": "Inizia tra {seconds}",
+    "timeLeft": "Mancano {time}",
+    "counting": "Conteggio degli ultimi boost…",
+    "amount": "{amount} HBD",
+    "wins": "Vince @{name}!",
+    "tie": "Pareggio!",
+    "endedEarly": "La sfida è finita in anticipo",
+    "dropped": "La sfida è finita: @{name} se n'è andato",
+    "boostHint": "I boost qui contano per @{name}"
+  }
+}
