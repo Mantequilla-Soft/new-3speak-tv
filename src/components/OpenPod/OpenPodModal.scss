@@ -23,6 +23,8 @@
   @include hh.buttons(false);
   @include hh.studio;
   @include hh.room;
+  // The goal bar over the studio preview (SDK hh-studio__boost-goal).
+  @include hh.boost-goal;
   position: relative;
   background: var(--bg);
   color: var(--text);
@@ -218,12 +220,25 @@ div.hh-boost-settings {
     &:hover { background: var(--bg-hover); }
   }
 
+  // Scrolls inside the sheet: Goal, On screen, Alerts and Preset amounts made
+  // it taller than a phone (the SDK caps its height).
   .hh-boost-settings__body {
     display: flex;
     flex-direction: column;
     gap: 14px;
     padding: 6px 20px 12px;
+    @include v2.scroll-y;
   }
+
+  // One group per setting area, each under a divider with an eyebrow title,
+  // like the create form's sections.
+  .hh-boost-settings__section {
+    gap: 10px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+  }
+  .hh-boost-settings__section-title { @include v2.text(eyebrow); color: var(--muted); }
+  .hh-boost-settings__try { align-self: flex-start; }
 
   .hh-boost-settings__row {
     display: flex;

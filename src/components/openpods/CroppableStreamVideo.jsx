@@ -23,8 +23,11 @@ const DRAG_SLOP_PX = 6;
  * decoded size, not the room's `portrait` flag: a phone streamer's frame is
  * already 9:16 and gets no crop. `onOrientation(true|false|null)` reports it so
  * the page only offers the vertical/full switch when it means something.
+ *
+ * `showBoostGoal` / `boostLabels` go to <StreamVideo>: the phone stream page
+ * turns its bottom-of-video goal bar off and places <StreamBoostGoalBar> itself.
  */
-export default function CroppableStreamVideo({ vertical = false, onOrientation, showLiveBadge = false }) {
+export default function CroppableStreamVideo({ vertical = false, onOrientation, showLiveBadge = false, showBoostGoal = true, boostLabels }) {
   const { t } = useTranslation();
   const wrapRef = useRef(null);
   const [videoEl, setVideoEl] = useState(null);
@@ -172,7 +175,7 @@ export default function CroppableStreamVideo({ vertical = false, onOrientation, 
       className={`ws-crop${active ? ' ws-crop--active' : ''}`}
       style={{ '--ws-crop-x': `${(cropX * 100).toFixed(2)}%` }}
     >
-      <StreamVideo showLiveBadge={showLiveBadge} />
+      <StreamVideo showLiveBadge={showLiveBadge} showBoostGoal={showBoostGoal} boostLabels={boostLabels} />
       {active && (
         <div className={`ws-crop__guide${showGuide ? ' is-visible' : ''}`} aria-hidden="true">
           <span className="ws-crop__hint"><Icon name="pan_tool" size={16} />{t('misc.watchStream.dragToPan')}</span>

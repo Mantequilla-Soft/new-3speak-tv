@@ -2,7 +2,7 @@ import { useEffect, useState, useRef, useCallback, useMemo } from 'react';
 import { useParams, useNavigate, Navigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import {
-  HangoutsProvider, StandaloneWatch, StreamVideo, StreamViewerCount, StreamQualityControl, ChatPanel, CollabRequest, useIsMobile, useChat, useBoostStore,
+  HangoutsProvider, StandaloneWatch, StreamVideo, StreamViewerCount, StreamQualityControl, ChatPanel, CollabRequest, useIsMobile, useChat, useBoostStore, useRoomBoost,
 } from '@snapie/hangouts-react';
 import '@snapie/hangouts-react/src/styles/hangouts.css';
 import StreamBoostButton from '../components/openpods/StreamBoostButton';
@@ -13,6 +13,8 @@ import LiveAdLayer from '../components/openpods/LiveAdLayer';
 import StreamFullscreenButton from '../components/openpods/StreamFullscreenButton';
 import StreamWatermark from '../components/openpods/StreamWatermark';
 import StreamSignInButton from '../components/openpods/StreamSignInButton';
+import StreamBoostGoalBar from '../components/openpods/StreamBoostGoalBar';
+import { useBoostLabels } from '../components/openpods/boostLabels';
 import { useStreamSession } from '../hooks/useStreamSession';
 import { useLiveStreamPager } from '../hooks/useLiveStreamPager';
 import { useStreamChatMirror } from '../hooks/useStreamChatMirror';
@@ -108,25 +110,31 @@ function LiveClock({ since }) {
   return <span className="ws-clock" role="timer">{h > 0 ? `${h}:${pad(m)}:${pad(s % 60)}` : `${m}:${pad(s % 60)}`}</span>;
 }
 
-function SupporterRow({ rank, name, usd }) {
+function SupporterRow({ rank, name, amount }) {
   const avatar = useAvatarUrl(name, 'small');
   return (
     <li className="ws-supporters__row">
       <span className="ws-supporters__rank">{rank}</span>
       <img className="ws-supporters__avatar" src={avatar} alt="" loading="lazy" />
       <Link className="ws-supporters__name" to={`/@${name}`}>@{name}</Link>
-      <span className="ws-supporters__usd money">${usd.toFixed(2)}</span>
+      <span className="ws-supporters__usd money">{amount}</span>
     </li>
   );
 }
 
-/** "Top supporters" beside the chat (18c): the boosts sent during this stream,
- *  summed per sender. The SDK already keeps the room's boost list
- *  (BoostStoreProvider inside StandaloneWatch); nothing is fetched here. */
+/** "Top supporters" beside the chat (18c). The server's tally for the whole
+ *  stream (room metadata, hangouts server 0.26.23+), so a viewer who joined
+ *  late sees everyone; on an older server, the boosts seen since this page
+ *  opened, summed per sender (the SDK's BoostStoreProvider inside
+ *  StandaloneWatch keeps that list). Nothing is fetched here. */
 function TopSupporters() {
   const { t } = useTranslation();
   const boosts = useBoostStore();
+  const { top } = useRoomBoost();
   const rows = useMemo(() => {
+    if (top.length > 0) {
+      return top.map((s) => ({ name: s.account, amount: t('live.boost.dialog.supporterAmount').replace('{amount}', s.hbd.toFixed(2)) }));
+    }
     const bySender = new Map();
     for (const b of boosts || []) {
       if (!b?.sender) continue;
@@ -134,14 +142,14 @@ function TopSupporters() {
       row.usd += Number(b.usdAmount) || 0;
       bySender.set(b.sender, row);
     }
-    return [...bySender.values()].sort((a, b) => b.usd - a.usd);
-  }, [boosts]);
+    return [...bySender.values()].sort((a, b) => b.usd - a.usd).map((r) => ({ name: r.name, amount: `$${r.usd.toFixed(2)}` }));
+  }, [boosts, top, t]);
   if (!rows.length) {
     return <EmptyState icon="rocket_launch" title={t('misc.watchStream.noSupporters')} className="ws-supporters__empty" />;
   }
   return (
     <ol className="ws-supporters">
-      {rows.map((r, i) => <SupporterRow key={r.name} rank={i + 1} name={r.name} usd={r.usd} />)}
+      {rows.map((r, i) => <SupporterRow key={r.name} rank={i + 1} name={r.name} amount={r.amount} />)}
     </ol>
   );
 }
@@ -174,6 +182,8 @@ function keepChatScrollInside(el) {
 
 export default function WatchStream() {
   const { t } = useTranslation();
+  // The SDK's goal bar text in the site language (live.boost.dialog).
+  const boostLabels = useBoostLabels();
   const { streamId } = useParams();
   const navigate = useNavigate();
   const { aioha, sessionToken, hangoutsUser, connectReady, joinKey, needsSignIn, canInteract, signIn, signingIn } = useStreamSession();
@@ -386,7 +396,9 @@ export default function WatchStream() {
               <main className={`short-main no-bottom-bar ws-shorts${isLandscape ? ' ws-shorts--landscape' : ''}${!infoVisible ? ' ws-info-hidden' : ''}${prerollHold ? ' ws-preroll-on' : ''}${chatOverlayOn ? '' : ' ws-chat-off'}${controlsHidden ? ' ws-controls-hidden' : ''}`}>
                 <div className="videoWrapper">
                   <div className="videoContainer" ref={pagerRef} onClick={revealInfo}>
-                    <CroppableStreamVideo vertical={verticalOn} onOrientation={setStreamLandscape} />
+                    {/* The goal bar goes in the info block below, not over the bottom
+                        of the picture, where the caption and chat composer are. */}
+                    <CroppableStreamVideo vertical={verticalOn} onOrientation={setStreamLandscape} showBoostGoal={false} />
                     {/* Free host streaming from OBS: draw the 3Speak mark the
                         browser studio would have burned in. Follows the crop. */}
                     <StreamWatermark show={showWatermark} />
@@ -425,6 +437,8 @@ export default function WatchStream() {
                     )}
 
                     <div className="bottomOverlay">
+                      {/* The host's boost goal, slim, above LIVE and the author. */}
+                      <StreamBoostGoalBar className="ws-shorts__goal" />
                       <div className="ws-shorts__live">
                         <StatusPill tone="live" className="ws-live-tag">{t('feeds.live.badge')}</StatusPill>
                         <StreamViewerCount render={(c) => (
@@ -551,7 +565,7 @@ export default function WatchStream() {
             {/* Main column: the player, then the title with the tile dock beside it. */}
             <div className="ws-col-main">
               <div className="ws-player">
-                <StreamVideo showLiveBadge={false} />
+                <StreamVideo showLiveBadge={false} boostLabels={boostLabels} />
                 <StreamWatermark show={showWatermark} />
                 <LiveAdLayer host={host} room={streamId} onPreroll={setPrerollHold} />
                 {/* The creator on the player, with Follow (18c). */}
