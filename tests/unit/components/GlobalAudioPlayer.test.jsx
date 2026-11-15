@@ -43,7 +43,16 @@ vi.mock('../../../src/components/AudioItem/AudioItemView', () => ({ audioItemPat
 // Children with their own data fetching, each tested on its own.
 vi.mock('../../../src/components/PayoutAmount/PayoutAmount', () => ({ default: ({ amount }) => <span>${amount}</span> }))
 vi.mock('../../../src/components/UpvoteCount/UpvoteCount', () => ({ default: ({ count }) => <span>{count} votes</span> }))
-vi.mock('../../../src/components/tooltip/CommentVoteTooltip', () => ({ default: () => null }))
+// The shared vote popup (weight slider, Aioha vote) has its own tests; here it
+// shows what it was opened for and can report a vote that went through.
+vi.mock('../../../src/components/tooltip/CommentVoteTooltip', () => ({
+  default: (p) => (p.showTooltip ? (
+    <div data-testid="vote-popup">
+      {p.author}/{p.permlink}
+      <button type="button" onClick={() => p.onVoteSuccess?.()}>Confirm vote</button>
+    </div>
+  ) : null),
+}))
 vi.mock('../../../src/components/AddToPlaylistModal/AddToPlaylistModal', () => ({ default: () => null }))
 vi.mock('../../../src/components/tip-reward/TipModal', () => ({ default: () => null }))
 vi.mock('../../../src/components/playVideo/BlogContent', () => ({ default: () => <div>Post body</div> }))
@@ -890,6 +899,73 @@ describe('the audio player: the opened player and its menus', () => {
     expect(screen.getAllByText('$1.25').length).toBeGreaterThan(0)
     expect(screen.getByText('#music')).toBeInTheDocument()
     expect(screen.getByText('Curated')).toBeInTheDocument()
+  })
+})
+
+// The owner, 2026-11-15: "I can not upvote an audio from the player. There is
+// no upvote button here." A 3Speak track is a Hive post: the full player's row
+// and the bar's menu have Vote, opening the same vote popup as the watch page.
+describe('the audio player: voting on the track post', () => {
+  const posted = track(5, { post_permlink: 'post-5' })
+  const signIn = () => {
+    aioha.isLoggedIn.mockReturnValue(true)
+    act(() => useAppStore.setState({ authenticated: true, user: 'fan' }))
+  }
+
+  it('the full player has a Vote tile next to Hype that opens the vote popup for the post', async () => {
+    signIn()
+    hive.getContent = vi.fn(async () => ({ active_votes: [{ voter: 'x' }], pending_payout_value: '0.10 HBD' }))
+    act(() => useAppStore.setState({ audioExpanded: true }))
+    const { user } = mount()
+    play(posted)
+    const tile = await screen.findByRole('button', { name: 'Vote' })
+    await waitFor(() => expect(tile).toHaveTextContent('1'))
+    expect(tile).toHaveAttribute('aria-pressed', 'false')
+    await user.click(tile)
+    expect(screen.getByTestId('vote-popup')).toHaveTextContent('badadib/post-5')
+    // The vote went through: marked voted, one more vote.
+    await user.click(screen.getByRole('button', { name: 'Confirm vote' }))
+    expect(screen.queryByTestId('vote-popup')).toBeNull()
+    expect(tile).toHaveAttribute('aria-pressed', 'true')
+    expect(tile).toHaveTextContent('2')
+  })
+
+  it('shows as voted when the listener already voted', async () => {
+    signIn()
+    hive.getContent = vi.fn(async () => ({ active_votes: [{ voter: 'fan' }] }))
+    act(() => useAppStore.setState({ audioExpanded: true }))
+    mount()
+    play(posted)
+    await waitFor(() => expect(screen.getByRole('button', { name: 'Vote' })).toHaveAttribute('aria-pressed', 'true'))
+  })
+
+  it('signed out, Vote says how to vote instead', async () => {
+    act(() => useAppStore.setState({ audioExpanded: true }))
+    const { user } = mount()
+    play(posted)
+    await user.click(screen.getByRole('button', { name: 'Vote' }))
+    expect(toastMessages(toast.error)).toContain('Sign in to vote')
+    expect(screen.queryByTestId('vote-popup')).toBeNull()
+  })
+
+  it('the bar\'s menu has Vote too', async () => {
+    signIn()
+    const { user } = mount()
+    play(posted)
+    await user.click(screen.getByRole('button', { name: 'More options' }))
+    const menu = screen.getAllByRole('dialog').find((d) => within(d).queryByRole('button', { name: /Close player/ }))
+    await user.click(within(menu).getByRole('button', { name: /^Vote/ }))
+    expect(screen.getByTestId('vote-popup')).toHaveTextContent('badadib/post-5')
+  })
+
+  it('no Vote for an outside podcast episode (not a Hive post) or a track without its post', async () => {
+    signIn()
+    act(() => useAppStore.setState({ audioExpanded: true }))
+    mount()
+    play({ _id: 'ep-7', external: true, src: 'https://pod.example/ep7.mp3', title: 'Episode seven', show: 'A show', show_id: 'feed-9', duration: 900 })
+    expect(screen.queryByRole('button', { name: 'Vote' })).toBeNull()
+    play(A)
+    expect(screen.queryByRole('button', { name: 'Vote' })).toBeNull()
   })
 })
 

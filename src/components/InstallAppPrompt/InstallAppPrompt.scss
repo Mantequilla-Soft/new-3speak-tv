@@ -1,0 +1,40 @@
+// The install sheet (InstallAppSheet.jsx): a DialogShell, so it is a bottom
+// sheet on phones like every dialog. Only its body is laid out here.
+.install-sheet__body {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.install-sheet__icon {
+  flex: none;
+  width: 56px;
+  height: 56px;
+  border-radius: var(--r-md, 12px);
+  background: var(--surface-2);
+}
+
+.install-sheet__why {
+  margin: 0;
+  color: var(--text);
+  font-size: 15px;
+  line-height: 1.45;
+}
+
+.install-sheet__ios {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 14px 0 0;
+  padding: 12px 14px;
+  border-radius: var(--r-md, 12px);
+  background: var(--surface-2);
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.install-sheet__share {
+  flex: none;
+  color: var(--accent);
+}

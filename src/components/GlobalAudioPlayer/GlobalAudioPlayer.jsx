@@ -33,6 +33,7 @@ import * as podcastsLib from '../../lib/podcasts';
 import { fetchChapters, fetchTranscript, chapterAt } from '../../lib/podcastMedia';
 import { isDownloaded, localAudioUrl, downloadTrack, useDownloads } from '../../lib/podcastDownloads';
 import { setAudioSrc } from '../../lib/audioCorsMode';
+import { pageAway, onPageAwayChange } from '../../utils/pageAway';
 import { toastIn } from '../../utils/toast';
 import useReblog from '../../hooks/useReblog';
 import AudioCommentPanel from './AudioCommentPanel';
@@ -139,6 +140,12 @@ function pageOf(track) {
   if (track.external) return episodePath(track._id);
   return track.owner && track.permlink ? audioItemPath(track) : '';
 }
+
+// 1.2K, the way the watch page's Vote tile counts (playVideo/WatchPanels compactNumber).
+const compactNumber = (n) => {
+  const v = Number(n) || 0;
+  try { return new Intl.NumberFormat(undefined, { notation: 'compact', maximumFractionDigits: 1 }).format(v); } catch { return String(v); }
+};
 
 function audioThumb(item) {
   if (!item) return fallbackImg;
@@ -666,7 +673,11 @@ function GlobalAudioPlayer() {
       if (fresh) {
         const f = fxRef.current;
         const wantFx = (f.boost || f.skip) && !track.live && !fxBlockedRef.current && webAudioSupported();
-        const want = wantFx && corsKnown(src, { storage: lsStorage(), origin: window.location.origin }) === true;
+        let want = wantFx && corsKnown(src, { storage: lsStorage(), origin: window.location.origin }) === true;
+        // Away (the next track with the screen locked): no swap to the Web Audio
+        // element, which would have to start on its own in the background. The
+        // plain one plays the track; the effects come back with the listener.
+        if (want && !routedRef.current && pageAway()) want = false;
         if (want !== routedRef.current) {
           handoverRef.current = null;
           retiredEls.add(el);
@@ -809,8 +820,15 @@ function GlobalAudioPlayer() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [audioCurrent?._id, audioCurrent?.audio_cid, elKey]);
 
+  // Whether the listener is away (utils/pageAway.js): the swap below waits
+  // for them to come back.
+  const [away, setAway] = useState(pageAway);
+  useEffect(() => onPageAwayChange(() => setAway(pageAway())), []);
+
   // Effects switched on (or a new track) while the plain element plays: find
   // out whether the source allows CORS, and swap to a routed element if so.
+  // Never while the listener is away: the new element would have to start on
+  // its own in the background, and a phone lets only the playing one go on.
   useEffect(() => {
     const track = audioCurrent;
     if (!fxOn || !track) { setRouteOk(null); return undefined; }
@@ -820,17 +838,17 @@ function GlobalAudioPlayer() {
     if (!src) return undefined; // the load effect hasn't picked the source yet
     const known = corsKnown(src, { storage: lsStorage(), origin: window.location.origin });
     setRouteOk(known);
-    if (known === true) { switchElement(true); return undefined; }
+    if (known === true) { if (!away) switchElement(true); return undefined; }
     if (known === false) return undefined;
     let gone = false;
     canRoute(src).then((ok) => {
       if (gone || srcRef.current.src !== src) return;
       setRouteOk(ok);
-      if (ok && (fxRef.current.boost || fxRef.current.skip)) switchElement(true);
+      if (ok && (fxRef.current.boost || fxRef.current.skip) && !pageAway()) switchElement(true);
     });
     return () => { gone = true; };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fxOn, fxBlocked, routed, audioCurrent?._id, loadedSrc]);
+  }, [fxOn, fxBlocked, routed, audioCurrent?._id, loadedSrc, away]);
 
   // The routed element joins the Web Audio graph. The browser only lets audio
   // start after a click: if the context still isn't running shortly after play,
@@ -1119,6 +1137,9 @@ function GlobalAudioPlayer() {
   }, []);
 
   const playNext = useCallback(() => {
+    // From the store, not this render: the end of a track, the lock screen's
+    // Next and the queue all act on what the queue is at that moment.
+    const { audioCurrent, audioQueue, audioAutoplayList } = useAppStore.getState();
     if (!audioCurrent) return;
     if (audioQueue.length > 0) {
       const i = audioQueue.findIndex(x => x._id === audioCurrent._id);
@@ -1129,7 +1150,7 @@ function GlobalAudioPlayer() {
     // a list of one, and the album or page would stop after it.
     const i = audioAutoplayList.findIndex(x => x._id === audioCurrent._id);
     if (i >= 0 && i < audioAutoplayList.length - 1) audioPlay(audioAutoplayList[i + 1], audioAutoplayList);
-  }, [audioCurrent, audioQueue, audioAutoplayList, audioPlay]);
+  }, [audioPlay]);
 
   const playPrev = useCallback(() => {
     const el = audioRef.current;
@@ -1185,26 +1206,41 @@ function GlobalAudioPlayer() {
     if (ms) ms.playbackState = audioIsPlaying ? 'playing' : 'paused';
   }, [audioIsPlaying]);
 
+  // The buttons are told once and call the latest Next / Previous through a
+  // ref. They used to be taken away and set again on every track change, which
+  // left the lock screen without them for a moment each time a track began.
+  const sessionActionsRef = useRef({ playNext, playPrev });
+  sessionActionsRef.current = { playNext, playPrev };
   useEffect(() => {
     const ms = typeof navigator !== 'undefined' ? navigator.mediaSession : undefined;
     if (!ms?.setActionHandler) return undefined;
     const el = () => audioRef.current;
     // An action a browser does not know throws; it just goes without that button.
     const set = (action, fn) => { try { ms.setActionHandler(action, fn); } catch { /* unsupported */ } };
-    // The same 15 s back / 15 s forward as the player's own buttons. A live
-    // stream can't be skipped through.
     const handlers = {
       play: () => { el()?.play().catch(() => {}); },
       pause: () => { el()?.pause(); },
-      previoustrack: playPrev,
-      nexttrack: playNext,
+      previoustrack: () => sessionActionsRef.current.playPrev(),
+      nexttrack: () => sessionActionsRef.current.playNext(),
+    };
+    for (const [action, fn] of Object.entries(handlers)) set(action, fn);
+    return () => { for (const action of Object.keys(handlers)) set(action, null); };
+  }, []);
+  // The same 15 s back / 15 s forward as the player's own buttons. A live
+  // stream can't be skipped through.
+  useEffect(() => {
+    const ms = typeof navigator !== 'undefined' ? navigator.mediaSession : undefined;
+    if (!ms?.setActionHandler) return undefined;
+    const el = () => audioRef.current;
+    const set = (action, fn) => { try { ms.setActionHandler(action, fn); } catch { /* unsupported */ } };
+    const handlers = {
       seekto: isLive ? null : (d) => { const a = el(); if (a && Number.isFinite(d.seekTime)) a.currentTime = d.seekTime; },
       seekbackward: isLive ? null : () => skipBy(-SKIP_BACK),
       seekforward: isLive ? null : () => skipBy(SKIP_FORWARD),
     };
     for (const [action, fn] of Object.entries(handlers)) set(action, fn);
     return () => { for (const action of Object.keys(handlers)) set(action, null); };
-  }, [playNext, playPrev, skipBy, isLive]);
+  }, [skipBy, isLive]);
 
   // The lock screen's timeline: duration, position and the real rate, told
   // again whenever one of them jumps (the system runs the clock in between).
@@ -1603,6 +1639,15 @@ function GlobalAudioPlayer() {
     audioSetExpanded(false);
   };
   const openVote = () => { if (!loggedIn) return; setVoteTarget({ author: nowPlaying.owner, permlink: post }); setShowVoteTooltip(!showVoteTooltip); };
+  // The Vote tile and menu row (a 3Speak track is a Hive post): the same vote
+  // popup as the count in the title area and the watch page (CommentVoteTooltip,
+  // weight slider, voted state). Signed out, or signed in without a Hive key,
+  // it says how to vote instead, like the watch page's Vote tile.
+  const pressVote = () => {
+    if (!loggedIn) { toastIn('Post').error(t('audio.post.signInToVote')); return; }
+    openVote();
+  };
+  const voteLabel = npVoteCount > 0 ? compactNumber(npVoteCount) : npIsVoted ? t('audio.post.voted') : t('audio.post.vote');
 
   const shareButton = canShare && (
     <button
@@ -2145,8 +2190,20 @@ function GlobalAudioPlayer() {
             <div className={cx('gap-transport', !isLive && 'has-skip')}>{transport(true)}</div>
             <div className="gap-docks">
               {post && <AudioHypeButton author={nowPlaying.owner} permlink={post} variant="tile" />}
+              {post && (
+                <DockTile
+                  className="gap-tile"
+                  icon="arrow_upward"
+                  label={voteLabel}
+                  active={npIsVoted}
+                  fill
+                  onClick={pressVote}
+                  title={npIsVoted ? t('audio.post.voted') : t('audio.post.vote')}
+                  aria-label={t('audio.post.vote')}
+                />
+              )}
               {post && <DockTile className="gap-tile" icon="chat_bubble" label={String(commentCount || 0)} active={activeTab === 'comments'} tone="cyan" fill={false} onClick={openComments} aria-label={t('audio.item.comments')} />}
-              {canSave && <DockTile className="gap-tile" icon="playlist_add" label={t('common.actions.save')} onClick={openPlaylist} title={t('audio.player.playlist')} />}
+              {canSave && <DockTile className="gap-tile gap-tile--save" icon="playlist_add" label={t('common.actions.save')} onClick={openPlaylist} title={t('audio.player.playlist')} />}
               {canTip && <DockTile className="gap-tile" icon="volunteer_activism" label={t('audio.post.tip')} onClick={openTip} title={nowPlaying.external && !post ? t('audio.podcasts.tip.button') : t('audio.post.tip')} />}
               {satStream.available && (
                 <DockTile
@@ -2472,6 +2529,7 @@ function GlobalAudioPlayer() {
                 onClick={() => setMenu({ name: 'sleep', anchor: menu.anchor })}
               />
             )}
+            {post && <PmRow icon="arrow_upward" label={npIsVoted ? t('audio.post.voted') : t('audio.post.vote')} sub={npVoteCount > 0 ? compactNumber(npVoteCount) : null} onClick={() => { closeMenu(); pressVote(); }} />}
             {canSave && <PmRow icon="playlist_add" label={t('engagement.cardMenu.addToPlaylist')} onClick={() => { closeMenu(); openPlaylist(); }} />}
             <PmRow icon={nowPlaying.external ? 'podcasts' : 'person'} label={t('audio.player.goTo', { name: bylineOf(nowPlaying) })} onClick={() => { closeMenu(); goCreator(); }} />
             {!isLive && <PmRow icon={dlSaved ? 'download_done' : 'download'} label={dlSaved ? t('audio.player.downloaded') : t('audio.player.download')} onClick={startDownload} disabled={dlSaved || dlBusy} sub={dlBusy ? t('audio.player.downloading', { pct: dlPct }) : null} />}
