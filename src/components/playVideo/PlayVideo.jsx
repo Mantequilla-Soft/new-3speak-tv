@@ -13,6 +13,8 @@ import CommentSection from "./CommentSection";
 import LiveStreamPlayer from "./LiveStreamPlayer";
 import VideoStats from "../CreatorStats/VideoStats";
 import { fetchVideoHasStats } from "../../lib/creatorStats";
+import ShortsFromVideo from "../ShortsFromVideo/ShortsFromVideo";
+import { useClipPreview, useShortRangeParam } from "../../hooks/useClipPreview";
 import ShareChooserModal from "../Chat/ShareChooserModal";
 import { useAppStore } from '../../lib/store';
 import { fetchIncubationLikes, voteIncubation } from '../../lib/incubation';
@@ -1301,6 +1303,33 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
     if (videoControls.isPlaying === false) videoControls.onTogglePlay?.();
   }, [videoControls]);
 
+  // Shorts from this video (the owner's clip suggestions, under the stats).
+  // Preview plays the range and pauses at its end; Make a Short opens the editor
+  // on it, as the clip tool does. Their own video, so no `reusable` check, only
+  // the remix chain (a remix still pays its earlier creators).
+  const canSuggestShorts = isOwner && !isLive && !scheduled;
+  const clipPreview = useClipPreview({
+    currentTime: videoControls?.currentTime,
+    seek: seekFromText,
+    pause: () => controlsRef.current?.onPause?.(),
+  });
+  const makeShortFrom = async ({ start, end }) => {
+    if (!videoUrlSelected) {
+      toast.error(t('watch.clip.noVideoUrl'));
+      return;
+    }
+    if (!(await remixAllowed())) return;
+    videoControls?.onPause?.();
+    clipPreview.stop();
+    setEditorVideoUrl(videoUrlSelected);
+    setEditorVideoName(`${author} - ${videoDetails?.title || permlink} (clip)`);
+    setEditorVideoType('video');
+    setEditorClipStart(start);
+    setEditorClipEnd(end);
+    setShowEditorModal(true);
+  };
+  useShortRangeParam({ ready: canSuggestShorts && FEATURE_EDITOR && !!videoUrlSelected, open: makeShortFrom });
+
   // The creator chip on the player shows with the controls (and while paused),
   // never over a spot, the preload cover or a media state.
   const creatorShown = !adPlaying && !mediaLoading && !mediaUnavailable && !mediaBlocked
@@ -2337,6 +2366,16 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
           {canSeeVideoStats && videoStatsOpen && (
             <div className="watch-stats-panel">
               <VideoStats username={author} permlink={permlink} compact onSeek={videoControls?.onSeek} />
+              {canSuggestShorts && (
+                <ShortsFromVideo
+                  owner={author}
+                  permlink={permlink}
+                  onPreview={videoControls?.onSeek ? clipPreview.toggle : null}
+                  onMakeShort={makeShortFrom}
+                  canMake={FEATURE_EDITOR && !!videoUrlSelected}
+                  previewing={clipPreview.previewing?.start ?? null}
+                />
+              )}
             </div>
           )}
 

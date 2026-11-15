@@ -1,0 +1,19 @@
+{
+  "title": "Mga Short mula sa video na ito",
+  "sub": "Pinili ng mga manonood mo: ang mga bahaging inuulit nila, kinokomentuhan at pinag-uusapan sa chat, at mga linyang sulit i-quote.",
+  "empty": "Wala pang mungkahi. Lalabas ang mga ito kapag pinanood, inulit at kinomentuhan ng mga tao ang video na ito.",
+  "error": "Hindi ma-load ang mga mungkahi ngayon.",
+  "range": "{{start}} hanggang {{end}}",
+  "seconds": "{{seconds}} s",
+  "reasons": {
+    "replay": "Pinakamaraming inulit",
+    "comments_one": "{{count}} komento ang tumuturo dito",
+    "comments_other": "{{count}} komento ang tumuturo dito",
+    "chat": "Umingay ang chat",
+    "quote": "Linyang sulit i-quote"
+  },
+  "preview": "Silipin",
+  "stop": "Ihinto",
+  "makeShort": "Gumawa ng Short",
+  "foot": "Ikaw lang ang nakakakita nito. Binibilang ang mga pag-ulit nang hindi alam kung sino ang nanood."
+}

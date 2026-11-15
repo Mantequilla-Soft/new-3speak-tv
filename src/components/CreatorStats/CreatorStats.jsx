@@ -15,6 +15,8 @@ import { Link } from 'react-router-dom';
 const RECAP_LINK_VISIBLE = false;
 import CreatorPollsCard from '../Polls/CreatorPollsCard';
 import VideoStats from './VideoStats';
+import ShortsFromVideo from '../ShortsFromVideo/ShortsFromVideo';
+import { FEATURE_EDITOR } from '../../utils/config';
 import { WORLD_LAND_PATH } from '../../lib/worldMapPath';
 import './CreatorStats.scss';
 import { useTranslation, Trans } from 'react-i18next';
@@ -750,6 +752,8 @@ export default function CreatorStats({ user }) {
                 {!isAudio && reach && ` · ${t('creator.reach.detail', { impressions: fmtCount(detail.impressions || 0), ctr: detail.ctr == null ? '-' : `${detail.ctr}%` })}`}
               </span>
               <VideoStats username={user} permlink={detail.permlink} variant="detail" kind={detail.audio ? 'audio' : null} />
+              {/* Clip ranges for a Short, the owner only (links to the watch page). */}
+              {!detail.audio && !detail.short && <ShortsFromVideo owner={user} permlink={detail.permlink} canMake={FEATURE_EDITOR} />}
               <p className="cs-footnote">{t('stats.footnote')}</p>
             </section>
           )}

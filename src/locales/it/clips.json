@@ -1,0 +1,20 @@
+{
+  "title": "Short da questo video",
+  "sub": "Scelti dai tuoi spettatori: le parti che rivedono, commentano e di cui parlano in chat, e frasi da citare.",
+  "empty": "Ancora nessun suggerimento. Compariranno quando le persone guarderanno, rivedranno e commenteranno questo video.",
+  "error": "Impossibile caricare i suggerimenti al momento.",
+  "range": "da {{start}} a {{end}}",
+  "seconds": "{{seconds}} s",
+  "reasons": {
+    "replay": "Il più rivisto",
+    "comments_one": "{{count}} commento punta qui",
+    "comments_many": "{{count}} commenti puntano qui",
+    "comments_other": "{{count}} commenti puntano qui",
+    "chat": "La chat si è accesa",
+    "quote": "Frase da citare"
+  },
+  "preview": "Anteprima",
+  "stop": "Ferma",
+  "makeShort": "Crea uno Short",
+  "foot": "Solo tu vedi questi suggerimenti. Le visioni ripetute sono contate senza sapere chi ha guardato."
+}

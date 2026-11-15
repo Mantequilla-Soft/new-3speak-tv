@@ -1,0 +1,19 @@
+{
+  "title": "Bu videodan Shorts",
+  "sub": "İzleyicilerin seçtiği: tekrar izledikleri, yorum yaptıkları ve sohbette konuştukları bölümler ile alıntılanacak cümleler.",
+  "empty": "Henüz öneri yok. İnsanlar bu videoyu izleyip tekrar izledikçe ve yorum yaptıkça görünür.",
+  "error": "Öneriler şu anda yüklenemedi.",
+  "range": "{{start}} - {{end}}",
+  "seconds": "{{seconds}} sn",
+  "reasons": {
+    "replay": "En çok tekrar izlenen",
+    "comments_one": "{{count}} yorum burayı gösteriyor",
+    "comments_other": "{{count}} yorum burayı gösteriyor",
+    "chat": "Sohbet coştu",
+    "quote": "Alıntılık cümle"
+  },
+  "preview": "Önizle",
+  "stop": "Durdur",
+  "makeShort": "Short yap",
+  "foot": "Bunları yalnızca sen görürsün. Tekrar izlemeler kimin izlediği bilinmeden sayılır."
+}

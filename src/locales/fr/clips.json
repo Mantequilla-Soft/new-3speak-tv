@@ -1,0 +1,20 @@
+{
+  "title": "Shorts tirés de cette vidéo",
+  "sub": "Choisis par vos spectateurs : les passages qu'ils revoient, commentent et dont ils parlent dans le chat, et les phrases à citer.",
+  "empty": "Pas encore de suggestions. Elles apparaissent quand les gens regardent, revoient et commentent cette vidéo.",
+  "error": "Impossible de charger les suggestions pour le moment.",
+  "range": "{{start}} à {{end}}",
+  "seconds": "{{seconds}} s",
+  "reasons": {
+    "replay": "Le plus revu",
+    "comments_one": "{{count}} commentaire pointe ici",
+    "comments_many": "{{count}} commentaires pointent ici",
+    "comments_other": "{{count}} commentaires pointent ici",
+    "chat": "Le chat s'est enflammé",
+    "quote": "Phrase à citer"
+  },
+  "preview": "Aperçu",
+  "stop": "Arrêter",
+  "makeShort": "Faire un Short",
+  "foot": "Vous seul voyez ceci. Les revisionnages sont comptés sans savoir qui a regardé."
+}
