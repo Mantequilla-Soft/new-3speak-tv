@@ -4533,6 +4533,7 @@ const VideoShort = () => {
 
         {isTipOpen && (
           <TipModal
+            boost
             recipient={currentVideo.author}
             permlink={currentVideo.permlink}
             memoLink={`https://3speak.tv/shorts?v=${currentVideo.author}/${currentVideo.permlink}`}

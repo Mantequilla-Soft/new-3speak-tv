@@ -1,0 +1,35 @@
+{
+  "title": "Impulso",
+  "button": "Impulso",
+  "buttonTitle": "Envía un impulso con un mensaje al creador",
+  "messageLabel": "Tu boostagram",
+  "messagePlaceholder": "Dile algo al creador",
+  "messageHint": "Se muestra con el monto en el muro de impulsos de esta publicación.",
+  "wall": {
+    "title": "Impulsos",
+    "empty": "Aún no hay impulsos. Sé el primero en impulsar esta publicación.",
+    "lightning": "Seguidor vía Lightning",
+    "streamed": "enviado mientras escuchaba",
+    "boost": "Impulso",
+    "total": "{{amount}} en total",
+    "failed": "No se pudo cargar el muro de impulsos.",
+    "note": "Aquí solo aparecen los pagos visibles en Hive: HIVE y HBD, y Lightning a través de v4v.app."
+  },
+  "stream": {
+    "tile": "Streaming",
+    "tileOn": "{{sats}} sats",
+    "title": "Streaming de sats",
+    "intro": "Mientras escuchas, envía unos sats al creador cada minuto desde tu billetera Lightning del navegador.",
+    "toggle": "Enviar sats mientras escucho",
+    "rate": "Sats por minuto",
+    "cap": "Límite mensual (sats)",
+    "spent": "Este mes: {{spent}} de {{cap}} sats",
+    "session": "Enviado por esta pista: {{sats}} sats",
+    "budget": "Tu billetera pregunta antes de cada pago, salvo que le des a 3Speak un presupuesto en ella. Los pagos se detienen cuando dices que no o al llegar a tu límite mensual.",
+    "capped": "Llegaste a tu límite mensual. El streaming queda en pausa hasta el mes que viene.",
+    "stopped": "Streaming detenido: la billetera no pagó.",
+    "on": "Enviando {{sats}} sats por minuto a @{{to}}.",
+    "off": "El streaming está desactivado.",
+    "save": "Guardar"
+  }
+}

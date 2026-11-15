@@ -323,6 +323,15 @@
   @include v2.card(24);
   @include v2.mobile { padding: 16px; }
 }
+// The boost wall (components/boosts/BoostWall)
+.audio-post-boosts {
+  margin: 0 0 20px;
+  padding: 20px;
+  @include v2.card(24);
+  h2 { margin: 0 0 12px; @include v2.text(title-sm); }
+  .boost-wall__btn { align-self: flex-start; width: auto; }
+  @include v2.mobile { padding: 16px; .boost-wall__btn { align-self: stretch; width: 100%; } }
+}
 .audio-post-comments {
   padding: 20px;
   scroll-margin-top: 88px;

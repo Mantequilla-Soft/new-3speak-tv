@@ -1,0 +1,35 @@
+{
+  "title": "Boost",
+  "button": "Boost",
+  "buttonTitle": "Tuma boost yenye ujumbe kwa mtayarishaji",
+  "messageLabel": "Boostagram yako",
+  "messagePlaceholder": "Mwambie mtayarishaji kitu",
+  "messageHint": "Inaonyeshwa pamoja na kiasi kwenye ukuta wa boost wa chapisho hili.",
+  "wall": {
+    "title": "Boosts",
+    "empty": "Bado hakuna boosts. Kuwa wa kwanza kutuma boost kwa chapisho hili.",
+    "lightning": "Mchangiaji wa Lightning",
+    "streamed": "alituma akisikiliza",
+    "boost": "Boost",
+    "total": "Jumla {{amount}}",
+    "failed": "Ukuta wa boost haukuweza kupakiwa.",
+    "note": "Malipo yanayoonekana kwenye Hive pekee ndiyo yanaonyeshwa hapa: HIVE na HBD, na Lightning kupitia v4v.app."
+  },
+  "stream": {
+    "tile": "Tiririsha",
+    "tileOn": "sats {{sats}}",
+    "title": "Tiririsha sats",
+    "intro": "Unaposikiliza, tuma sats chache kwa mtayarishaji kila dakika, kutoka pochi yako ya Lightning kwenye kivinjari.",
+    "toggle": "Tiririsha sats ninaposikiliza",
+    "rate": "Sats kwa dakika",
+    "cap": "Kikomo cha mwezi (sats)",
+    "spent": "Mwezi huu: {{spent}} kati ya sats {{cap}}",
+    "session": "Zilizotumwa kwa kipande hiki: sats {{sats}}",
+    "budget": "Pochi yako inauliza kabla ya kila malipo isipokuwa uipe 3Speak bajeti ndani yake. Malipo yanasimama ukikataa, au ukifikia kikomo chako cha mwezi.",
+    "capped": "Kikomo chako cha mwezi kimefikiwa. Utiririshaji umesimamishwa hadi mwezi ujao.",
+    "stopped": "Utiririshaji umesimama: pochi haikulipa.",
+    "on": "Inatiririsha sats {{sats}} kwa dakika kwa @{{to}}.",
+    "off": "Utiririshaji umezimwa.",
+    "save": "Hifadhi"
+  }
+}

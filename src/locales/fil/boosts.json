@@ -1,0 +1,35 @@
+{
+  "title": "Boost",
+  "button": "Boost",
+  "buttonTitle": "Magpadala ng boost na may mensahe sa creator",
+  "messageLabel": "Ang boostagram mo",
+  "messagePlaceholder": "Magsabi ng kahit ano sa creator",
+  "messageHint": "Ipinapakita kasama ng halaga sa boost wall ng post na ito.",
+  "wall": {
+    "title": "Mga Boost",
+    "empty": "Wala pang boost. Ikaw na ang unang mag-boost sa post na ito.",
+    "lightning": "Lightning supporter",
+    "streamed": "nag-stream habang nakikinig",
+    "boost": "Boost",
+    "total": "{{amount}} lahat",
+    "failed": "Hindi ma-load ang boost wall.",
+    "note": "Ang mga bayad lang na nakikita sa Hive ang lumalabas dito: HIVE at HBD, at Lightning sa pamamagitan ng v4v.app."
+  },
+  "stream": {
+    "tile": "Stream",
+    "tileOn": "{{sats}} sats",
+    "title": "Mag-stream ng sats",
+    "intro": "Habang nakikinig ka, magpadala ng ilang sats sa creator bawat minuto mula sa Lightning wallet mo sa browser.",
+    "toggle": "Mag-stream ng sats habang nakikinig ako",
+    "rate": "Sats kada minuto",
+    "cap": "Buwanang limit (sats)",
+    "spent": "Ngayong buwan: {{spent}} sa {{cap}} sats",
+    "session": "Naipadala para sa track na ito: {{sats}} sats",
+    "budget": "Nagtatanong ang wallet mo bago ang bawat bayad maliban kung bibigyan mo ang 3Speak ng budget dito. Humihinto ang mga bayad kapag tumanggi ka, o kapag naabot ang buwanang limit mo.",
+    "capped": "Naabot na ang buwanang limit mo. Naka-pause ang streaming hanggang sa susunod na buwan.",
+    "stopped": "Huminto ang streaming: hindi nagbayad ang wallet.",
+    "on": "Nag-i-stream ng {{sats}} sats kada minuto kay @{{to}}.",
+    "off": "Naka-off ang streaming.",
+    "save": "I-save"
+  }
+}
