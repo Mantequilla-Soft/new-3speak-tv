@@ -294,6 +294,11 @@ function ProfileNav({ isVisible, pinned = true, leaving = false, hoverProps, onc
                 {row('monitoring', t('nav.profile.analytics'))}
               </Link>
             )}
+            {!isIncubating && (
+              <Link to="/profile?tab=comments" className="pn-item" role="menuitem" onClick={onclose}>
+                {row('forum', t('creator.inbox.menu'))}
+              </Link>
+            )}
             {/* ▶️ Import your own videos from YouTube & co. (moved here from the profile
                 header). Needs a Hive account to publish, so not for incubating users,
                 and a verified link to a platform we import from. */}

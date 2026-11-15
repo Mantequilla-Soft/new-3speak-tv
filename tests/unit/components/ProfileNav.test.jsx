@@ -90,8 +90,13 @@ describe('the account menu', () => {
     expect(items).toEqual([
       'Switch', 'Channel', 'Studio', 'Wallet', 'Playlists', 'History', 'Badges',
       // Settings as a row, About and FAQ along the bottom (owner 2026-11-12).
-      'Analytics', 'Groups', 'Live', 'Chat', 'Rankings', 'Settings', 'About 3Speak', 'FAQ',
+      'Analytics', 'Comment inbox', 'Groups', 'Live', 'Chat', 'Rankings', 'Settings', 'About 3Speak', 'FAQ',
     ])
+  })
+
+  it('the comment inbox is the Comments tab of your own profile', () => {
+    const { menu } = mount()
+    expect(within(menu()).getByRole('menuitem', { name: 'Comment inbox' })).toHaveAttribute('href', '/profile?tab=comments')
   })
 
   it('adds Advertise, invite links, the translation editor and the publish backlog for those who have them', async () => {
@@ -112,6 +117,7 @@ describe('the account menu', () => {
     expect(within(menu()).getByText('@newbie')).toBeInTheDocument()
     expect(within(menu()).queryByRole('menuitem', { name: 'Wallet' })).not.toBeInTheDocument()
     expect(within(menu()).queryByRole('menuitem', { name: 'Analytics' })).not.toBeInTheDocument()
+    expect(within(menu()).queryByRole('menuitem', { name: 'Comment inbox' })).not.toBeInTheDocument()
     expect(within(menu()).queryByText('VP')).not.toBeInTheDocument()
   })
 
