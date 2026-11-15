@@ -9,7 +9,8 @@ import { Client } from '@hiveio/dhive';
 import { HIVE_API_NODES } from '../../utils/config';
 import './ReactionPlayer.scss';
 import { markByReputation } from '../../utils/reputation';
-import { markByHidden } from '../../utils/hiddenCreators';
+import { markByHidden, dropMuted } from '../../utils/hiddenCreators';
+import { useAppStore } from '../../lib/store';
 import { translateText, getTargetLanguage } from '../../utils/translate';
 import TranslateButton from '../TranslateButton/TranslateButton';
 import { getHiveRenderer } from '../../lib/hiveRenderer';
@@ -57,7 +58,7 @@ function CommentNode({ comment, depth, collapsible = true }) {
     finally { setIsTranslating(false); }
   };
 
-  if (comment.isLowReputation || comment.isHidden) return null;
+  if (comment.isLowReputation || comment.isHidden || comment.isMuted) return null;
 
   if (collapsible && collapsed) {
     return (
@@ -281,7 +282,8 @@ function ReactionPlayer({
         };
 
         const tree = await buildTree(current.author, current.permlink, 0);
-        const markedTree = await markByHidden(await markByReputation(tree));
+        // Bots on the comment mutelist go entirely, with the replies under them.
+        const markedTree = dropMuted(await markByHidden(await markByReputation(tree), { viewer: useAppStore.getState().user }));
         if (!cancelled) {
           setNestedComments(markedTree);
           setLoadingComments(false);
@@ -483,7 +485,7 @@ function ReactionPlayer({
   // The thread under a reaction: the reaction itself, then its replies.
   const thread = (
     <div className="rct-comment-thread">
-      <CommentNode comment={{ author: current.author, avatar: current.avatar, body: current.body, isLowReputation: current.isLowReputation, isHidden: current.isHidden, children: [] }} depth={0} collapsible={false} />
+      <CommentNode comment={{ author: current.author, avatar: current.avatar, body: current.body, isLowReputation: current.isLowReputation, isHidden: current.isHidden, isMuted: current.isMuted, children: [] }} depth={0} collapsible={false} />
       {loadingComments && <div className="rct-thread-loading">{t('player.reactions.loadingReplies')}</div>}
       {nestedComments.map((reply, i) => (
         <CommentNode key={i} comment={reply} depth={1} />
@@ -614,7 +616,7 @@ function ReactionPlayer({
       {/* Horizontal scrollable list */}
       <div className="reaction-list" ref={scrollRef}>
         {reactions.map((reaction, i) => {
-          if (reaction.isLowReputation || reaction.isHidden) return null;
+          if (reaction.isLowReputation || reaction.isHidden || reaction.isMuted) return null;
           // Insert divider before the first non-timestamped reaction
           const showDivider = reaction.pct === null && (i === 0 || reactions[i - 1].pct !== null);
           return (

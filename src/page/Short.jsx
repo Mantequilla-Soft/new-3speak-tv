@@ -81,7 +81,7 @@ import { fixVideoThumbnail, fallbackImg } from '../utils/fixThumbnails';
 import AuthorBadge from '../components/AuthorBadge/AuthorBadge';
 import ShortsLoadingScreen from '../components/ShortsLoadingScreen/ShortsLoadingScreen';
 import { markByReputation } from '../utils/reputation';
-import { markByHidden } from '../utils/hiddenCreators';
+import { markAndDropMuted } from '../utils/hiddenCreators';
 import { getVotePower, getDynamicProps } from '../utils/hiveUtils';
 import { mergeOffChainReplies, applyOffChainLikes } from '../utils/offChainReplies';
 import { fetchIncubationShorts, handleAvatar, postIncubationContent } from '../lib/incubation';
@@ -2043,8 +2043,9 @@ const VideoShort = () => {
       }
       // Marked BEFORE the merge, like the watch page does it: reputation and
       // hidden-creator marking are Hive lookups, and an off-chain handle is not
-      // a Hive account to look up.
-      const marked = await markByHidden(await markByReputation(rawComments));
+      // a Hive account to look up. Bots on the comment mutelist go entirely,
+      // with the replies under them (never the viewer's own comments).
+      const marked = await markAndDropMuted(await markByReputation(rawComments), { viewer: user || incubationHandle });
       const merged = await mergeOffChainReplies(rootPermlink, marked);
       // Off-chain likes on those comments, in one request for the whole thread.
       const comments = await applyOffChainLikes(merged, user || incubationHandle);
@@ -4875,7 +4876,7 @@ const VideoShort = () => {
 };
 
 /* ================= COMMENT ITEM COMPONENT ================= */
-const CommentItem = ({
+export const CommentItem = ({
   comment,
   depth,
   formatNumber,
@@ -4949,7 +4950,7 @@ const CommentItem = ({
       .replace(/\n?<sup>replied to \[.*?\]\([^)]*\)<\/sup>/g, '');
   };
 
-  if (comment.isLowReputation || comment.isHidden) return null;
+  if (comment.isLowReputation || comment.isHidden || comment.isMuted) return null;
 
   if (collapsed) {
     return (

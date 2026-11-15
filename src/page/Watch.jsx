@@ -33,7 +33,7 @@ import { readTimeline, chaptersWithEnds } from '../utils/videoTimeline';
 import { Button, EmptyState } from '../components/v2/ui';
 import { Icon } from '../components/v2/Icon';
 import { batchGetReputations, LOW_REP_THRESHOLD } from '../utils/reputation';
-import { batchCheckHidden, isCreatorHidden } from '../utils/hiddenCreators';
+import { batchCheckFlags, isCreatorHidden } from '../utils/hiddenCreators';
 import { usePlayer } from '@mantequilla-soft/3speak-player/react';
 import { useAdPlayback } from '../hooks/useAdPlayback';
 
@@ -1170,14 +1170,20 @@ function Watch({ v2 = false, routeV = null }) {
 
         // Batch-fetch reputations and hidden status; mark low-rep + hidden authors.
         const authors = markers.map(m => m.label);
-        const [reputations, hiddenSet] = await Promise.all([
+        const [reputations, { hidden: hiddenSet, muted: mutedSet }] = await Promise.all([
           batchGetReputations(authors),
-          batchCheckHidden(authors),
+          batchCheckFlags(authors),
         ]);
-        for (const m of markers) {
+        // Bots on the comment mutelist leave no marker, moment or reaction at all
+        // (never the viewer's own comments).
+        const me = String(useAppStore.getState().user || '').toLowerCase();
+        for (let i = markers.length - 1; i >= 0; i -= 1) {
+          const m = markers[i];
+          const name = String(m.label || '').toLowerCase();
+          if (mutedSet.has(name) && name !== me) { markers.splice(i, 1); continue; }
           const rep = reputations.get(m.label) ?? 25;
           m.isLowReputation = rep < LOW_REP_THRESHOLD;
-          m.isHidden = hiddenSet.has(String(m.label || '').toLowerCase());
+          m.isHidden = hiddenSet.has(name);
         }
 
         // Sort by timestamp: timestamped first (ascending), then no-timestamp at end
@@ -1908,7 +1914,7 @@ function Watch({ v2 = false, routeV = null }) {
   const reactions = useMemo(() => {
     if (!commentMarkers) return [];
     return commentMarkers
-      .filter(m => !m.isLowReputation && !m.isHidden)
+      .filter(m => !m.isLowReputation && !m.isHidden && !m.isMuted)
       .map((m, i) => {
         const base = {
           id: `reaction-${i}`,

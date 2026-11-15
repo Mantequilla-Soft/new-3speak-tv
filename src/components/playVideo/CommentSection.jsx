@@ -18,7 +18,7 @@ import CommentVoteTooltip from '../tooltip/CommentVoteTooltip';
 import { toastIn } from '../../utils/toast';
 import { estimate, getVotePower } from '../../utils/hiveUtils';
 import { markByReputation, getUserReputation } from '../../utils/reputation';
-import { markByHidden } from '../../utils/hiddenCreators';
+import { markByHidden, dropMuted } from '../../utils/hiddenCreators';
 import AuthorBadge from '../AuthorBadge/AuthorBadge';
 import AccountImg from '../HiveAvatar/AccountImg';
 import PayoutAmount from '../PayoutAmount/PayoutAmount';
@@ -259,8 +259,9 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
         try {
           const replies = await client.call('condenser_api', 'get_content_replies', [author, permlink]);
           const commentsWithChildren = await loadNestedComments(replies);
-          // Mark low-reputation accounts (rep < 15) — also caches reputations
-          markedComments = await markByHidden(await markByReputation(commentsWithChildren));
+          // Mark low-reputation accounts (rep < 15), which also caches reputations.
+          // Bots on the comment mutelist go entirely, with the replies under them.
+          markedComments = dropMuted(await markByHidden(await markByReputation(commentsWithChildren), { viewer: displayName }));
         } catch (err) {
           // Normal for an off-chain post; anything else is worth a line.
           console.warn('[comments] no Hive thread:', err?.message);
@@ -694,6 +695,7 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
   const countComments = (comments) => {
     if (!comments || comments.length === 0) return 0;
     return comments.reduce((sum, c) => {
+      if (c.isMuted) return sum; // removed with its replies, never counted
       if (c.isLowReputation || c.isHidden) return sum + countComments(c.children || []);
       return sum + 1 + countComments(c.children || []);
     }, 0);
@@ -1057,6 +1059,9 @@ function Comment({
     if (isReplying) setReplyTab('comment');
   }, [isReplying]);
 
+  // Muted (a bot on the global comment mutelist): not shown at all, no Show bar.
+  if (comment.isMuted) return null;
+
   // Hidden (a low score, or a creator you hid): a one-line bar with Show (28a, 43a).
   if ((comment.isLowReputation || comment.isHidden) && !revealHidden) {
     return (
@@ -1104,7 +1109,7 @@ function Comment({
   }
 
   // Panel (02): replies fold under an "N replies" link; on a page they show.
-  const visibleReplies = (comment.children || []).filter((c) => !c.isLowReputation && !c.isHidden).length;
+  const visibleReplies = (comment.children || []).filter((c) => !c.isLowReputation && !c.isHidden && !c.isMuted).length;
 
   return (
     <div className={cx('comment-container', depth > 0 && 'is-reply')}>

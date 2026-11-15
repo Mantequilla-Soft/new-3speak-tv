@@ -100,3 +100,60 @@ describe('isCreatorHidden', () => {
     expect(await m.isCreatorHidden('')).toBe(false)
   })
 })
+
+// The global comment mutelist (checker utils/commentMutes.js), in the same answer.
+const replyingFlags = (hidden, muted) => vi.fn(async () => ({ json: async () => ({ hidden, muted }) }))
+
+describe('muted authors (the comment mutelist)', () => {
+  it('batchCheckFlags reads hidden and muted from one request, cached together', async () => {
+    const fetch = replyingFlags(['spammer'], ['AI-Agent-Hunter'])
+    vi.stubGlobal('fetch', fetch)
+    const m = await load()
+    const out = await m.batchCheckFlags(['fan', 'spammer', 'ai-agent-hunter'])
+    expect([...out.hidden]).toEqual(['spammer'])
+    expect([...out.muted]).toEqual(['ai-agent-hunter'])
+    expect([...(await m.batchCheckHidden(['ai-agent-hunter', 'spammer']))]).toEqual(['spammer'])
+    expect(fetch).toHaveBeenCalledTimes(1)
+  })
+
+  it('an older checker without `muted` mutes nobody; an error mutes nobody', async () => {
+    vi.stubGlobal('fetch', replying(['spammer']))
+    let m = await load()
+    expect((await m.batchCheckFlags(['ai-agent-hunter'])).muted.size).toBe(0)
+    vi.stubGlobal('fetch', vi.fn(async () => { throw new TypeError('offline') }))
+    m = await load()
+    const tree = [{ author: 'ai-agent-hunter', children: [{ author: 'fan' }] }]
+    expect(m.dropMuted(await m.markByHidden(tree))).toEqual(tree)
+  })
+
+  it('markByHidden sets isMuted at every depth, never on the viewer\'s own comments', async () => {
+    vi.stubGlobal('fetch', replyingFlags([], ['ai-agent-hunter', 'badadib']))
+    const m = await load()
+    const tree = [
+      { author: 'fan', children: [{ author: { username: 'AI-Agent-Hunter' } }] },
+      { author: 'badadib', replies: [{ author: 'ai-agent-hunter' }] },
+    ]
+    const out = await m.markByHidden(tree, { viewer: 'BadAdib' })
+    expect(out[0].isMuted).toBeUndefined()
+    expect(out[0].children[0].isMuted).toBe(true)
+    expect(out[1].isMuted).toBeUndefined()
+    expect(out[1].replies[0].isMuted).toBe(true)
+    expect(out[0].isHidden).toBe(false)
+  })
+
+  it('dropMuted removes a muted comment with every reply under it, in both nestings', async () => {
+    vi.stubGlobal('fetch', replyingFlags([], ['ai-agent-hunter']))
+    const m = await load()
+    const tree = [
+      { author: 'fan', children: [{ author: 'ai-agent-hunter', children: [{ author: 'fan2' }] }, { author: 'fan3' }] },
+      { author: 'ai-agent-hunter', children: [{ author: 'fan4' }] },
+      { author: 'fan5', replies: [{ author: 'ai-agent-hunter' }] },
+    ]
+    const out = await m.markAndDropMuted(tree)
+    expect(out.map((c) => c.author)).toEqual(['fan', 'fan5'])
+    expect(out[0].children.map((c) => c.author)).toEqual(['fan3'])
+    expect(out[1].replies).toEqual([])
+    expect(tree).toHaveLength(3) // input untouched
+    expect(m.dropMuted(null)).toEqual([])
+  })
+})
