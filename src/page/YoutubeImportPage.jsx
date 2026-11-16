@@ -510,7 +510,7 @@ export default function YoutubeImportPage() {
   const importOne = (v) => {
     setSelected(v);
     startImport(v);
-    requestAnimationFrame(() => document.getElementById('yt-import-single')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' }));
+    requestAnimationFrame(() => document.getElementById('yt-import-single')?.scrollIntoView?.({ behavior: 'smooth', block: 'nearest' }));
   };
 
   // ---- Render -------------------------------------------------------------------
