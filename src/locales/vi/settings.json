@@ -173,8 +173,9 @@
   },
   "startPrompt": {
     "title": "Tiếp tục từ chỗ bạn đã dừng?",
-    "intro": "Không bắt buộc. Mọi thứ chỉ lưu trên thiết bị này và bạn có thể đổi sau.",
-    "notNow": "Để sau"
+    "intro": "3Speak có thể mở lại trang bạn xem lần cuối thay vì Trang chủ. Chỉ lưu trên thiết bị này và bạn có thể đổi bất cứ lúc nào trong Cài đặt, Chung.",
+    "notNow": "Để sau",
+    "turnOn": "Bật"
   },
   "shorts": {
     "commentBar": {

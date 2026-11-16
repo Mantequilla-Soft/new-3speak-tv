@@ -173,8 +173,9 @@
   },
   "startPrompt": {
     "title": "Kaldığın yerden devam etmek ister misin?",
-    "intro": "İsteğe bağlı. Her şey bu cihazda kalır ve daha sonra değiştirebilirsin.",
-    "notNow": "Şimdi değil"
+    "intro": "3Speak, Ana sayfa yerine en son bulunduğun sayfada açılabilir. Bu yalnızca bu cihazda saklanır ve istediğin zaman Ayarlar, Genel bölümünden değiştirebilirsin.",
+    "notNow": "Şimdi değil",
+    "turnOn": "Aç"
   },
   "shorts": {
     "commentBar": {

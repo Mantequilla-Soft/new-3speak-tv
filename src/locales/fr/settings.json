@@ -173,8 +173,9 @@
   },
   "startPrompt": {
     "title": "Reprendre là où tu en étais ?",
-    "intro": "Facultatif. Tout reste sur cet appareil, et tu peux le changer plus tard.",
-    "notNow": "Pas maintenant"
+    "intro": "3Speak peut s'ouvrir sur la dernière page que tu as consultée au lieu de l'accueil. C'est enregistré sur cet appareil uniquement, et tu peux le changer à tout moment dans Paramètres, Général.",
+    "notNow": "Pas maintenant",
+    "turnOn": "Activer"
   },
   "shorts": {
     "commentBar": {

@@ -173,8 +173,9 @@
   },
   "startPrompt": {
     "title": "Pick up where you left off?",
-    "intro": "Optional. Everything stays on this device, and you can change it later.",
-    "notNow": "Not now"
+    "intro": "3Speak can open on the page you were last on instead of Home. It is saved on this device only, and you can change it any time in Settings, General.",
+    "notNow": "Not now",
+    "turnOn": "Turn on"
   },
   "shorts": {
     "commentBar": {

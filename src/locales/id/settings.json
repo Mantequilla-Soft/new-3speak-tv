@@ -173,8 +173,9 @@
   },
   "startPrompt": {
     "title": "Lanjutkan dari terakhir kali?",
-    "intro": "Opsional. Semuanya tetap di perangkat ini, dan bisa kamu ubah nanti.",
-    "notNow": "Nanti saja"
+    "intro": "3Speak bisa terbuka di halaman terakhir yang kamu buka, bukan di Beranda. Ini hanya disimpan di perangkat ini, dan bisa kamu ubah kapan saja di Pengaturan, Umum.",
+    "notNow": "Nanti saja",
+    "turnOn": "Aktifkan"
   },
   "shorts": {
     "commentBar": {

@@ -1,39 +1,32 @@
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAppStore } from '../../lib/store';
-import { consentDecidedAt, hasConsent, hasDecided, setConsent } from '../../lib/consent';
-import { notifyAdConsentChanged } from '../../lib/thirdPartyAds';
+import { hasDecided } from '../../lib/consent';
+import { markStartPromptAnswered } from '../../lib/lastPage';
 import { blockedNow } from '../InstallAppPrompt/installGate';
-import { Button, Dialog, SettingRow, Toggle } from '../v2/ui';
+import { Button, Dialog } from '../v2/ui';
+import { Icon } from '../v2/Icon';
 import {
-  ANSWERED_KEY, ALWAYS_ON_HOSTS, FIRST_DELAY_MS, RETRY_MS, startPromptItems,
+  ANSWERED_KEY, ALWAYS_ON_HOSTS, FIRST_DELAY_MS, RETRY_MS, shouldAsk,
 } from './startPromptGate';
 import './StartPrompt.scss';
 
 const readAnswered = () => {
   try { return localStorage.getItem(ANSWERED_KEY) === '1'; } catch { return false; }
 };
-const markAnswered = () => {
-  try { localStorage.setItem(ANSWERED_KEY, '1'); } catch { /* asked again next visit */ }
-};
 
 /**
- * "Pick up where you left off?" (owner 2026-11-16): asks once whether to turn on
- * Continue where I left off (Settings, General), and, for someone who answered
- * the cookie banner without it, whether to remember where they left off in each
- * video. Comes after the changelog popup (it waits while `appUpdatedFrom` is set),
- * never over another dialog, the cookie banner or the tour. Both switches start
- * at what is set now, so nothing optional is ticked for anyone. Save, Not now,
- * the X and Escape all count as answered.
+ * "Pick up where you left off?" (owner 2026-11-16): asks someone who used 3Speak
+ * before, once, whether to turn on Continue where I left off (Settings, General;
+ * a first visit has it on already). Comes after the changelog popup (it waits
+ * while `appUpdatedFrom` is set), never over another dialog, the cookie banner or
+ * the tour. Turn on, Not now, the X and Escape all count as answered.
  */
 export default function StartPrompt() {
   const { t } = useTranslation();
   const appUpdatedFrom = useAppStore((s) => s.appUpdatedFrom);
-  const resumeLastPage = useAppStore((s) => s.resumeLastPage);
   const setResumeLastPage = useAppStore((s) => s.setResumeLastPage);
-  const [items, setItems] = useState(null);
-  const [resumeOn, setResumeOn] = useState(false);
-  const [playbackOn, setPlaybackOn] = useState(false);
+  const [open, setOpen] = useState(false);
   const [armed, setArmed] = useState(false);
   const shownRef = useRef(false);
 
@@ -44,42 +37,30 @@ export default function StartPrompt() {
 
   useEffect(() => {
     if (!armed || shownRef.current || appUpdatedFrom) return undefined;
-    const ask = () => startPromptItems({
+    const ask = () => shouldAsk({
       always: typeof window !== 'undefined' && ALWAYS_ON_HOSTS.includes(window.location.hostname),
       answered: readAnswered(),
       resumeLastPage: useAppStore.getState().resumeLastPage,
-      consentDecidedAt: consentDecidedAt(),
-      functionalConsent: hasConsent('functional'),
     });
-    if (!ask().length) return undefined;
+    if (!ask()) return undefined;
     let id = null;
     const tryShow = () => {
       if (blockedNow({ consentDecided: hasDecided() })) {
         id = setTimeout(tryShow, RETRY_MS);
         return;
       }
-      const list = ask();
-      if (!list.length) return;
+      if (!ask()) return;
       shownRef.current = true;
-      setResumeOn(!!useAppStore.getState().resumeLastPage);
-      setPlaybackOn(hasConsent('functional'));
-      setItems(list);
+      setOpen(true);
     };
     tryShow();
     return () => clearTimeout(id);
   }, [armed, appUpdatedFrom]);
 
-  if (!items) return null;
+  if (!open) return null;
 
-  const close = () => { markAnswered(); setItems(null); };
-  const save = () => {
-    if (items.includes('lastPage') && resumeOn !== !!resumeLastPage) setResumeLastPage(resumeOn);
-    if (items.includes('playback') && playbackOn !== hasConsent('functional')) {
-      setConsent({ functional: playbackOn, advertising: hasConsent('advertising') });
-      notifyAdConsentChanged();
-    }
-    close();
-  };
+  const close = () => { markStartPromptAnswered(); setOpen(false); };
+  const turnOn = () => { setResumeLastPage(true); setOpen(false); };
 
   return (
     <Dialog
@@ -88,34 +69,19 @@ export default function StartPrompt() {
       title={t('settings.startPrompt.title')}
       closeLabel={t('common.actions.close')}
       tone="cyan"
-      width={440}
+      width={420}
       backdropClose={false}
       className="start-prompt"
       footer={(
         <div className="start-prompt__foot">
           <Button variant="secondary" center onClick={close}>{t('settings.startPrompt.notNow')}</Button>
-          <Button variant="primary" center onClick={save}>{t('common.actions.save')}</Button>
+          <Button variant="primary" center onClick={turnOn}>{t('settings.startPrompt.turnOn')}</Button>
         </div>
       )}
     >
-      <p className="start-prompt__intro">{t('settings.startPrompt.intro')}</p>
-      <div className="start-prompt__rows">
-        {items.includes('lastPage') && (
-          <SettingRow
-            icon="history"
-            title={t('settings.startup.resume.title')}
-            sub={t('settings.startup.resume.desc')}
-            control={<Toggle tone="cyan" checked={resumeOn} onChange={setResumeOn} label={t('settings.startup.resume.title')} />}
-          />
-        )}
-        {items.includes('playback') && (
-          <SettingRow
-            icon="replay"
-            title={t('consent.toggles.resumeTitle')}
-            sub={t('consent.toggles.resumeDesc')}
-            control={<Toggle tone="cyan" checked={playbackOn} onChange={setPlaybackOn} label={t('consent.toggles.resumeTitle')} />}
-          />
-        )}
+      <div className="start-prompt__body">
+        <span className="start-prompt__icon" aria-hidden="true"><Icon name="history" size={24} /></span>
+        <p>{t('settings.startPrompt.intro')}</p>
       </div>
     </Dialog>
   );

@@ -173,8 +173,9 @@
   },
   "startPrompt": {
     "title": "Verdergaan waar je was?",
-    "intro": "Optioneel. Alles blijft op dit apparaat en je kunt het later wijzigen.",
-    "notNow": "Niet nu"
+    "intro": "3Speak kan openen op de pagina waar je het laatst was in plaats van Home. Dit wordt alleen op dit apparaat bewaard en je kunt het altijd wijzigen in Instellingen, Algemeen.",
+    "notNow": "Niet nu",
+    "turnOn": "Aanzetten"
   },
   "shorts": {
     "commentBar": {

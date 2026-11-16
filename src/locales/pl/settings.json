@@ -173,8 +173,9 @@
   },
   "startPrompt": {
     "title": "Kontynuować tam, gdzie skończyłeś?",
-    "intro": "Opcjonalne. Wszystko zostaje na tym urządzeniu i możesz to później zmienić.",
-    "notNow": "Nie teraz"
+    "intro": "3Speak może otwierać się na stronie, na której byłeś ostatnio, zamiast na stronie głównej. Zapisuje się to tylko na tym urządzeniu i możesz to zmienić w Ustawieniach, Ogólne.",
+    "notNow": "Nie teraz",
+    "turnOn": "Włącz"
   },
   "shorts": {
     "commentBar": {

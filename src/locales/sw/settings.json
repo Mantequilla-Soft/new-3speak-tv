@@ -173,8 +173,9 @@
   },
   "startPrompt": {
     "title": "Uendelee ulipoishia?",
-    "intro": "Si lazima. Kila kitu hubaki kwenye kifaa hiki, na unaweza kubadilisha baadaye.",
-    "notNow": "Si sasa"
+    "intro": "3Speak inaweza kufunguka kwenye ukurasa uliokuwa mwisho badala ya Mwanzo. Huhifadhiwa kwenye kifaa hiki pekee, na unaweza kubadilisha wakati wowote katika Mipangilio, Jumla.",
+    "notNow": "Si sasa",
+    "turnOn": "Washa"
   },
   "shorts": {
     "commentBar": {

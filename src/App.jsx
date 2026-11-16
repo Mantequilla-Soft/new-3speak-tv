@@ -35,6 +35,7 @@ import { fetchPlaySource } from "./lib/videoData";
 import { useQueryClient } from "@tanstack/react-query";
 import RouteTitle from "./components/RouteTitle";
 import ResumeLastPage from "./components/ResumeLastPage";
+import RouteFallback from "./components/RouteFallback";
 // import TestingLogin from "./page/Login/TestingLogin";
 import { Toaster } from 'sonner';
 import { toastIn } from './utils/toast';
@@ -826,7 +827,7 @@ function App() {
           <UploadBlockNotice hidden={hideNavOnMobile} />
           {/* Browser-tab title for every route (watch/shorts set their own). */}
           <RouteTitle />
-          {/* Optional: open on the page the app was last on (off by default). */}
+          {/* Continue where I left off: records each page (the jump back is in main.jsx). */}
           <ResumeLastPage />
           {/* <Toaster richColors position="top-right" /> */}
           {/* Every route below the index one is lazy, so the router needs a
@@ -835,7 +836,7 @@ function App() {
               chunk arriving swaps in just the page body. A spinner here would
               flash on every navigation, which reads worse than the shell holding
               still for a moment. */}
-          <Suspense fallback={<div className="route-suspense-fallback" />}>
+          <Suspense fallback={<RouteFallback />}>
           <RouteErrorBoundary routeKey={location.pathname}>
             <Routes>
               <Route path="/" element={<HomeGrouped />} />

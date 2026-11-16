@@ -69,6 +69,27 @@
   min-height: 60vh;
 }
 
+/* Opening on the page you were last on (components/RouteFallback): a spinner
+   over a see-through veil while that page's code arrives. Below the dialogs. */
+.route-resume-veil {
+  position: fixed;
+  inset: 0;
+  z-index: 900;
+  display: grid;
+  place-items: center;
+  background: color-mix(in srgb, var(--bg) 60%, transparent);
+}
+.route-resume-spinner {
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--surface, var(--bg));
+  color: var(--cyan);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.25);
+}
+
 /* Unobtrusive hive.io credit in the static shell (index.html). It sits
    outside #root so the SPA mount leaves it in the document. */
 .site-hive-footer {

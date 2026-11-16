@@ -173,8 +173,9 @@
   },
   "startPrompt": {
     "title": "¿Seguir donde lo dejaste?",
-    "intro": "Opcional. Todo se queda en este dispositivo y puedes cambiarlo más tarde.",
-    "notNow": "Ahora no"
+    "intro": "3Speak puede abrirse en la última página que visitaste en lugar de Inicio. Solo se guarda en este dispositivo y puedes cambiarlo cuando quieras en Ajustes, General.",
+    "notNow": "Ahora no",
+    "turnOn": "Activar"
   },
   "shorts": {
     "commentBar": {

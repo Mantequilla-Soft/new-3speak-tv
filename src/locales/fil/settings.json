@@ -173,8 +173,9 @@
   },
   "startPrompt": {
     "title": "Ituloy kung saan ka huminto?",
-    "intro": "Opsyonal. Mananatili ang lahat sa device na ito, at puwede mo itong baguhin mamaya.",
-    "notNow": "Hindi muna"
+    "intro": "Puwedeng bumukas ang 3Speak sa huling page na binuksan mo sa halip na sa Home. Sa device na ito lang ito naka-save, at puwede mo itong baguhin anumang oras sa Settings, General.",
+    "notNow": "Hindi muna",
+    "turnOn": "I-on"
   },
   "shorts": {
     "commentBar": {

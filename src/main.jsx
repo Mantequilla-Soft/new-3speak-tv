@@ -58,6 +58,12 @@ try { localStorage.removeItem('3speak_viewer_id'); } catch { /* storage disabled
 import { enforceConsentOnStart } from './lib/consent';
 enforceConsentOnStart();
 
+// "Continue where I left off": opened on Home, go straight to the page this
+// browser was last on, BEFORE the router reads the address, so Home never
+// flashes first (lib/lastPage.js).
+import { resumeOnStart } from './lib/lastPage';
+resumeOnStart();
+
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';

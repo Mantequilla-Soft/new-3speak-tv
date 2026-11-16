@@ -1,15 +1,28 @@
-// "Pick up where you left off?" (StartPrompt.jsx): the intro, the switch rows
-// divided by 1px lines like the settings cards, Not now + Save at the foot.
+// "Pick up where you left off?" (StartPrompt.jsx): an icon well beside the
+// question, Not now + Turn on at the foot.
 .start-prompt {
-  .start-prompt__intro {
-    margin: 0 0 12px;
-    color: var(--muted);
-    font-size: 14px;
-    line-height: 1.45;
+  .start-prompt__body {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+
+    p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+    }
   }
 
-  .start-prompt__rows .v2-setting + .v2-setting {
-    border-top: 1px solid var(--border);
+  .start-prompt__icon {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: color-mix(in srgb, var(--cyan) 14%, transparent);
+    color: var(--cyan);
   }
 
   .start-prompt__foot {

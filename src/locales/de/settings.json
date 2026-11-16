@@ -173,8 +173,9 @@
   },
   "startPrompt": {
     "title": "Dort weitermachen, wo du warst?",
-    "intro": "Freiwillig. Alles bleibt auf diesem Gerät, und du kannst es später ändern.",
-    "notNow": "Nicht jetzt"
+    "intro": "3Speak kann statt der Startseite die Seite öffnen, auf der du zuletzt warst. Das wird nur auf diesem Gerät gespeichert, und du kannst es jederzeit unter Einstellungen, Allgemein ändern.",
+    "notNow": "Nicht jetzt",
+    "turnOn": "Einschalten"
   },
   "shorts": {
     "commentBar": {

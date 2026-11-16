@@ -8,6 +8,21 @@ import {createPostProcessingSlice} from "./slices/createPostProcessingSlice"
 import { createThemeSlice } from './slices/createThemeSlice';
 import { createMiniPlayerSlice } from './slices/createMiniPlayerSlice';
 import { createAudioPlayerSlice } from './slices/createAudioPlayerSlice';
+import { markStartPromptAnswered } from './lastPage';
+
+// Someone opening 3Speak for the very first time in this browser: nothing any
+// earlier visit leaves behind (the saved settings, the app-version marker, the
+// cookie answer). Read once, when the store is created, before any of them is
+// written. "Continue where I left off" starts ON for them (owner 2026-11-16);
+// everyone who used 3Speak before keeps it off until they say yes
+// (components/StartPrompt asks once).
+const FIRST_VISIT = (() => {
+  try {
+    return ['user-store', '3speak_app_version', '3speak_cookie_consent'].every((k) => localStorage.getItem(k) == null);
+  } catch {
+    return false;
+  }
+})();
 
 export const useAppStore = create(
   persist(
@@ -60,9 +75,13 @@ export const useAppStore = create(
       // entirely, it doesn't just hide the rows.
       inlineShorts: true,
       setInlineShorts: (val) => a[0]({ inlineShorts: !!(typeof val === 'function' ? val(a[1]().inlineShorts) : val) }),
-      // Open 3Speak on the page it was last on (components/ResumeLastPage). Off by default.
-      resumeLastPage: false,
-      setResumeLastPage: (val) => a[0]({ resumeLastPage: !!(typeof val === 'function' ? val(a[1]().resumeLastPage) : val) }),
+      // Open 3Speak on the page it was last on (components/ResumeLastPage). On for a
+      // first visit, off for anyone who used 3Speak before (FIRST_VISIT above).
+      resumeLastPage: FIRST_VISIT,
+      setResumeLastPage: (val) => {
+        markStartPromptAnswered(); // a choice made in Settings: the popup does not ask
+        a[0]({ resumeLastPage: !!(typeof val === 'function' ? val(a[1]().resumeLastPage) : val) });
+      },
       // Hide videos the user has already watched from discovery feeds (default ON).
       hideWatched: true,
       setHideWatched: (val) => a[0]({ hideWatched: typeof val === 'function' ? val(a[1]().hideWatched) : val }),
@@ -134,3 +153,8 @@ export const useAppStore = create(
     }
   )
 );
+
+// Save the first visit's default at once: the next visit reads it before React
+// starts (lib/lastPage resumeOnStart), and by then this no longer counts as a
+// first visit (the app-version marker is written on the first load).
+if (FIRST_VISIT) useAppStore.setState({ resumeLastPage: true });

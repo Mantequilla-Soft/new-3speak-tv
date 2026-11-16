@@ -1,35 +1,27 @@
 // @vitest-environment jsdom
-// "Continue where I left off" (components/ResumeLastPage.jsx + lib/lastPage.js):
-// remembers the page while the setting is on and opens the app there again.
-import { describe, it, expect, beforeEach } from 'vitest'
+// "Continue where I left off": lib/lastPage.js remembers the page and, before the
+// router mounts, sends an app opened on Home there (resumeOnStart);
+// components/ResumeLastPage records each page while the setting is on;
+// components/RouteFallback shows a spinner while the resumed page loads.
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { render, screen, act } from '@testing-library/react'
-import { MemoryRouter, Routes, Route, Link, useLocation } from 'react-router-dom'
+import { MemoryRouter, Routes, Route, Link } from 'react-router-dom'
 import ResumeLastPage from '../../../src/components/ResumeLastPage'
+import RouteFallback, { fallbackShowing } from '../../../src/components/RouteFallback'
 import { useAppStore } from '../../../src/lib/store'
-import { readLastPage, rememberablePath, saveLastPage } from '../../../src/lib/lastPage'
+import {
+  readLastPage, rememberablePath, saveLastPage, resumeOnStart, isResuming, endResume,
+} from '../../../src/lib/lastPage'
 
-function Where() {
-  const loc = useLocation()
-  return <p data-testid="where">{`${loc.pathname}${loc.search}${loc.hash}`}</p>
-}
-
-function openApp(at = '/') {
-  return render(
-    <MemoryRouter initialEntries={[at]}>
-      <ResumeLastPage />
-      <Where />
-      <Routes>
-        <Route path="*" element={<Link to="/t/music">music</Link>} />
-      </Routes>
-    </MemoryRouter>,
-  )
-}
-const where = () => screen.getByTestId('where').textContent
+const setting = (on) => localStorage.setItem('user-store', JSON.stringify({ version: 5, state: { resumeLastPage: on } }))
 
 beforeEach(() => {
   localStorage.clear()
+  endResume()
+  window.history.replaceState(null, '', '/')
   useAppStore.setState({ resumeLastPage: false })
 })
+afterEach(() => { vi.useRealTimers() })
 
 describe('lib/lastPage', () => {
   it('remembers path, query and hash, but not sign-in, embeds or upload steps', () => {
@@ -50,37 +42,83 @@ describe('lib/lastPage', () => {
   })
 })
 
+describe('resumeOnStart (before the router mounts)', () => {
+  it('opened on Home with the setting on: stands on the saved page, Home behind it', () => {
+    setting(true)
+    localStorage.setItem('last-page', '/t/music')
+    const before = window.history.length
+    expect(resumeOnStart()).toBe('/t/music')
+    expect(window.location.pathname).toBe('/t/music')
+    expect(window.history.length).toBe(before + 1)
+    expect(isResuming()).toBe(true)
+  })
+
+  it('does nothing with the setting off, nothing saved, or a link the app was opened with', () => {
+    setting(false)
+    localStorage.setItem('last-page', '/t/music')
+    expect(resumeOnStart()).toBeNull()
+
+    setting(true)
+    window.history.replaceState(null, '', '/?ref=x')
+    expect(resumeOnStart()).toBeNull()
+    window.history.replaceState(null, '', '/watch?v=badadib/abc')
+    expect(resumeOnStart()).toBeNull()
+
+    window.history.replaceState(null, '', '/')
+    localStorage.removeItem('last-page')
+    expect(resumeOnStart()).toBeNull()
+    expect(window.location.pathname).toBe('/')
+    expect(isResuming()).toBe(false)
+  })
+})
+
 describe('ResumeLastPage', () => {
+  function app(at) {
+    return render(
+      <MemoryRouter initialEntries={[at]}>
+        <ResumeLastPage />
+        <Routes><Route path="*" element={<Link to="/t/music">music</Link>} /></Routes>
+      </MemoryRouter>,
+    )
+  }
+
   it('does nothing while off and forgets a page saved before', () => {
     localStorage.setItem('last-page', '/p/badadib')
-    openApp('/')
-    expect(where()).toBe('/')
+    app('/')
     expect(localStorage.getItem('last-page')).toBeNull()
   })
 
-  it('while on, saves every page and opens the app on the last one', async () => {
+  it('while on, saves every page', async () => {
     useAppStore.setState({ resumeLastPage: true })
-    const first = openApp('/p/badadib')
+    app('/p/badadib')
     expect(localStorage.getItem('last-page')).toBe('/p/badadib')
     await act(async () => { screen.getByText('music').click() })
     expect(localStorage.getItem('last-page')).toBe('/t/music')
-    first.unmount()
-
-    openApp('/')
-    expect(where()).toBe('/t/music')
   })
 
-  it('a link the app is opened with wins over the saved page', () => {
-    useAppStore.setState({ resumeLastPage: true })
+  it('ends the resume when the page rendered without a route fallback', () => {
+    setting(true)
     localStorage.setItem('last-page', '/t/music')
-    openApp('/watch?v=badadib/abc')
-    expect(where()).toBe('/watch?v=badadib/abc')
-    expect(localStorage.getItem('last-page')).toBe('/watch?v=badadib/abc')
+    resumeOnStart()
+    app('/t/music')
+    expect(isResuming()).toBe(false)
   })
+})
 
-  it('with nothing saved yet, the app stays on Home', () => {
-    useAppStore.setState({ resumeLastPage: true })
-    openApp('/')
-    expect(where()).toBe('/')
+describe('RouteFallback', () => {
+  it('a spinner over the shell while the resumed page loads, then never again', () => {
+    vi.useFakeTimers()
+    setting(true)
+    localStorage.setItem('last-page', '/t/music')
+    resumeOnStart()
+    const { unmount } = render(<RouteFallback />)
+    expect(fallbackShowing()).toBe(true)
+    expect(screen.getByRole('status', { name: /Loading/ })).toBeInTheDocument()
+    unmount()
+    act(() => { vi.advanceTimersByTime(100) })
+    expect(isResuming()).toBe(false)
+
+    render(<RouteFallback />)
+    expect(screen.queryByRole('status')).toBeNull()
   })
 })
