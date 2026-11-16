@@ -262,3 +262,12 @@ export function unlinkTimestampsInMarkdown(text, { author, permlink }) {
   );
   return text.replace(re, '$1');
 }
+
+/**
+ * A comment's "[0:42](https://3speak.tv/watch?...)" link to its moment, as the
+ * plain time: the Hive renderer would turn the 3Speak link into a whole video
+ * embed. Used before rendering a comment (the watch page, the comment inbox).
+ */
+export function stripTimestampEmbeds(body) {
+  return String(body || '').replace(/\[(\d{1,2}:\d{2}(?::\d{2})?)\]\((https?:\/\/(?:3speak\.tv|play\.3speak\.tv)[^)]*)\)/g, '$1');
+}

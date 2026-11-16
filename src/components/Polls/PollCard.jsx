@@ -23,7 +23,8 @@ function endsLabel(endsAt, t) {
  * bars, the viewer's own choice marked; tapping another option moves the vote
  * until the poll ends. Signed out: the results, and a hint to sign in.
  */
-export default function PollCard({ snap, question = '' }) {
+// `labels`: the options as shown (a translation); votes still go by position.
+export default function PollCard({ snap, question = '', labels = null }) {
   const { t } = useTranslation();
   const user = useAppStore((s) => s.user);
   const authenticated = useAppStore((s) => s.authenticated);
@@ -61,24 +62,27 @@ export default function PollCard({ snap, question = '' }) {
       {/* A video's poll asks its own question; a snap's or comment's text is it */}
       {question && <p className="poll-question"><Icon name="poll" size={18} /> {question}</p>}
       <ul className="poll-options">
-        {poll.options.map((label, i) => (
-          <li key={i}>
-            <button
-              type="button"
-              className={`poll-option${i === mine ? ' is-mine' : ''}`}
-              onClick={() => choose(i)}
-              disabled={busy || closed}
-              aria-pressed={i === mine}
-            >
-              {showResults && <span className="poll-option-bar" style={{ width: `${pct[i]}%` }} aria-hidden="true" />}
-              <span className="poll-option-label">
-                {i === mine && <Icon name="check_circle" size={16} fill />}
-                {label}
-              </span>
-              {showResults && <span className="poll-option-pct num">{pct[i]}%</span>}
-            </button>
-          </li>
-        ))}
+        {poll.options.map((option, i) => {
+          const label = labels?.[i] || option;
+          return (
+            <li key={i}>
+              <button
+                type="button"
+                className={`poll-option${i === mine ? ' is-mine' : ''}`}
+                onClick={() => choose(i)}
+                disabled={busy || closed}
+                aria-pressed={i === mine}
+              >
+                {showResults && <span className="poll-option-bar" style={{ width: `${pct[i]}%` }} aria-hidden="true" />}
+                <span className="poll-option-label">
+                  {i === mine && <Icon name="check_circle" size={16} fill />}
+                  {label}
+                </span>
+                {showResults && <span className="poll-option-pct num">{pct[i]}%</span>}
+              </button>
+            </li>
+          );
+        })}
       </ul>
       <div className="poll-meta">
         <Icon name="how_to_vote" size={14} />

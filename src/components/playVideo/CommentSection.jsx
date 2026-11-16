@@ -24,7 +24,7 @@ import AccountImg from '../HiveAvatar/AccountImg';
 import PayoutAmount from '../PayoutAmount/PayoutAmount';
 import { commentWithAioha } from '../../hive-api/aioha';
 import PollCard from '../Polls/PollCard';
-import { pollFromMeta } from '../../lib/polls';
+import { pollFromMeta, translatePollOptions } from '../../lib/polls';
 import { HIVE_API_NODES } from '../../utils/config';
 import TimeAgo from '../TimeAgo/TimeAgo';
 import { Link } from 'react-router-dom';
@@ -37,7 +37,7 @@ import {
   readCommentSort, saveCommentSort, sortComments, pinnedFirst,
 } from './commentTools';
 import {
-  linkifyTimestamps, handleTimestampClick, linkTimestampsInMarkdown, unlinkTimestampsInMarkdown,
+  linkifyTimestamps, handleTimestampClick, linkTimestampsInMarkdown, unlinkTimestampsInMarkdown, stripTimestampEmbeds,
 } from '../../utils/timestamps';
 
 // Every toast from this module is headed "Comment"; the message becomes the
@@ -66,11 +66,6 @@ function parseTimeInput(str) {
   if (parts.length === 1) return parts[0];
   return null;
 }
-
-// Replace timestamp-linked 3speak URLs so the renderer doesn't embed them
-// Matches [0:00] or [1:23:45] style text linking to 3speak/play.3speak URLs
-const stripTimestampEmbeds = (body) =>
-  body.replace(/\[(\d{1,2}:\d{2}(?::\d{2})?)\]\((https?:\/\/(?:3speak\.tv|play\.3speak\.tv)[^)]*)\)/g, '$1');
 
 // A timestamped comment's body ENDS with the "replied to [0:42](…) on [host](…)"
 // line that handlePostComment appends. It is ours, not the author's words, so an
@@ -1018,6 +1013,7 @@ function Comment({
   // Replying here opens the thread, so the new reply lands in view.
   useEffect(() => { if (isReplying) setShowReplies(true); }, [isReplying]);
   const [translatedText, setTranslatedText] = useState(null);
+  const [translatedOptions, setTranslatedOptions] = useState(null);
   const [translateError, setTranslateError] = useState(false);
   const [isReportOpen, setIsReportOpen] = useState(false);
 
@@ -1027,6 +1023,9 @@ function Comment({
     try {
       const result = await onTranslate?.(comment.permlink, comment.body, langCode);
       if (result) setTranslatedText(result);
+      // A poll's answers go with the text.
+      const poll = pollFromMeta(comment.jsonMetadata);
+      if (poll) setTranslatedOptions(await translatePollOptions(onTranslate, comment.permlink, poll.options, langCode).catch(() => null));
     } catch {
       setTranslateError(true);
     }
@@ -1034,7 +1033,9 @@ function Comment({
 
   const handleDismissTranslation = () => {
     setTranslatedText(null);
+    setTranslatedOptions(null);
     clearTranslation?.(comment.permlink);
+    clearTranslation?.(`${comment.permlink}#poll`);
   };
 
   // Inherit timestamp from the parent comment (not editable)
@@ -1158,7 +1159,7 @@ function Comment({
           {/* A poll in the comment (ours, or PeakD's or Ecency's): the text is
               the question. Not on an off-chain comment, which Hive cannot see. */}
           {!editing && comment?.onChain !== false && pollFromMeta(comment?.jsonMetadata) && (
-            <PollCard snap={{ owner: comment.author?.username, permlink: comment.permlink, poll: pollFromMeta(comment.jsonMetadata) }} />
+            <PollCard snap={{ owner: comment.author?.username, permlink: comment.permlink, poll: pollFromMeta(comment.jsonMetadata) }} labels={translatedOptions} />
           )}
           {translatedText && (
             <div className="comment-translation">

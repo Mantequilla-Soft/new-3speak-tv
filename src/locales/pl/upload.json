@@ -288,8 +288,8 @@
     },
     "remix": {
       "label": "Zezwól na remiks i klip",
-      "info": "Pozwól innym tworzyć remiksy i klipy z tego filmu. Jako autor oryginału widniejesz ty i otrzymujesz co najmniej 5% jako beneficjent.",
-      "hint": "Dostajesz co najmniej 5% z każdego remiksu"
+      "info": "Pozwól innym tworzyć remiksy i klipy z tego filmu. Jesteś podany jako autor oryginału i dostajesz 15% nagród z remiksu (mniej przy remiksach remiksów, co najmniej 5%).",
+      "hint": "Dostajesz 15% z każdego remiksu tego filmu"
     },
     "nsfw": {
       "label": "Oznacz jako NSFW",

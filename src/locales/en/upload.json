@@ -286,8 +286,8 @@
     },
     "remix": {
       "label": "Allow remix and clip",
-      "info": "Allow others to create remixes and clips from this video. You will be credited as original author and receive a minimum of 5% in beneficiaries.",
-      "hint": "You get at least 5% of every remix"
+      "info": "Allow others to create remixes and clips from this video. You are credited as the original author and get 15% of a remix's rewards (less for remixes of remixes, at least 5%).",
+      "hint": "You get 15% of every remix of this video"
     },
     "nsfw": {
       "label": "Mark as NSFW",

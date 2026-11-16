@@ -19,6 +19,8 @@ import './Composer.scss';
 
 const toast = toastIn('Comment');
 const plainPreview = (render, text) => render(text);
+// Split View needs the editor to span at least this share of the window.
+const SPLIT_MIN_SHARE = 0.3;
 
 // The preview renders the way the destination does: a video description never
 // embeds a 3Speak player (its page already plays one), a snap or a comment does.
@@ -306,6 +308,22 @@ function FullView({
   getRenderer, toHtml, onPreviewClick, tools, pollEditor, footer,
 }) {
   const [viewMode, setViewMode] = useState('editor');
+  // Split View only where the editor has room for two columns: at least
+  // SPLIT_MIN_SHARE of the window's width. Narrower, the choice is Editor Only
+  // or Preview Only, and an open split falls back to the editor.
+  const rootRef = useRef(null);
+  const [roomy, setRoomy] = useState(false);
+  useEffect(() => {
+    const el = rootRef.current;
+    if (!el) return undefined;
+    const check = () => setRoomy(el.getBoundingClientRect().width >= window.innerWidth * SPLIT_MIN_SHARE);
+    check();
+    const ro = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(check) : null;
+    ro?.observe(el);
+    window.addEventListener('resize', check);
+    return () => { ro?.disconnect(); window.removeEventListener('resize', check); };
+  }, []);
+  const mode = viewMode === 'split' && !roomy ? 'editor' : viewMode;
   const [headers, setHeaders] = useState(false);
   const [dragOver, setDragOver] = useState(false);
   const [html, setHtml] = useState('');
@@ -322,16 +340,16 @@ function FullView({
     const cap = Number.isFinite(maxH) ? Math.max(110, maxH - chrome) : Infinity;
     el.style.height = `${Math.min(el.scrollHeight, cap)}px`;
   }, [inputRef]);
-  useLayoutEffect(() => { autoResize(); }, [value, viewMode, autoResize]);
+  useLayoutEffect(() => { autoResize(); }, [value, mode, autoResize]);
 
   useEffect(() => {
-    if (viewMode === 'editor' || !value) { setHtml(''); return undefined; }
+    if (mode === 'editor' || !value) { setHtml(''); return undefined; }
     let alive = true;
     getRenderer()
       .then((render) => { if (alive) setHtml(toHtml(render, value)); })
       .catch(() => { if (alive) setHtml(`<p>${t('studio.composer.renderError')}</p>`); });
     return () => { alive = false; };
-  }, [value, viewMode, getRenderer, toHtml, t]);
+  }, [value, mode, getRenderer, toHtml, t]);
 
   // A toolbar edit: the new text, then the caret where the edit says.
   const apply = (edit) => {
@@ -359,14 +377,14 @@ function FullView({
 
   const MODES = [
     { id: 'editor', label: t('studio.composer.editorOnly') },
-    { id: 'split', label: t('studio.composer.splitView') },
+    roomy && { id: 'split', label: t('studio.composer.splitView') },
     { id: 'preview', label: t('studio.composer.previewOnly') },
-  ];
+  ].filter(Boolean);
 
   const carriesFiles = (e) => [...(e.dataTransfer?.types || [])].includes('Files');
 
   return (
-    <div className={cx('composer is-full markdown-composer', className)}>
+    <div ref={rootRef} className={cx('composer is-full markdown-composer', className)}>
       {!disabled && (
         <div className="composer-toolbar" role="toolbar" aria-label={t('comments.editor.toolbar')}>
           <Tool icon="format_bold" title={t('studio.composer.bold')} onClick={() => wrapWith('**')} />
@@ -406,8 +424,8 @@ function FullView({
           <button
             key={m.id}
             type="button"
-            className={`v2-seg__opt h28${viewMode === m.id ? ' is-on' : ''}`}
-            aria-pressed={viewMode === m.id}
+            className={`v2-seg__opt h28${mode === m.id ? ' is-on' : ''}`}
+            aria-pressed={mode === m.id}
             onClick={() => setViewMode(m.id)}
           >
             {m.label}
@@ -415,12 +433,12 @@ function FullView({
         ))}
       </div>
 
-      <div className={`composer-content ${viewMode}`}>
+      <div className={`composer-content ${mode}`}>
         {/* Kept mounted in Preview (hidden): the caret and the ref every tool
             inserts through survive. */}
         <div
           className={`editor-panel ${dragOver ? 'drag-over' : ''}`}
-          hidden={viewMode === 'preview'}
+          hidden={mode === 'preview'}
           onDragOver={(e) => { if (carriesFiles(e)) { e.preventDefault(); setDragOver(true); } }}
           onDragLeave={() => setDragOver(false)}
           onDrop={(e) => { setDragOver(false); images.onDrop(e); }}
@@ -441,7 +459,7 @@ function FullView({
           )}
         </div>
 
-        {viewMode !== 'editor' && (
+        {mode !== 'editor' && (
           <div className="preview-panel">
             {html ? (
               <div className="preview-content markdown-view" onClick={onPreviewClick} dangerouslySetInnerHTML={{ __html: html }} />

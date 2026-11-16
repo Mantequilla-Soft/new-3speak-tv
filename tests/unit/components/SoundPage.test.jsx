@@ -68,7 +68,7 @@ describe('a sound page', () => {
     expect(await screen.findByRole('heading', { name: 'My beat' })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: '@badadib' })).toHaveAttribute('href', '/@badadib')
     expect(screen.getByText('2 Shorts use it')).toBeInTheDocument()
-    expect(screen.getByText('Shorts made with this sound give @badadib 5% of their rewards.')).toBeInTheDocument()
+    expect(screen.getByText('Shorts made with this sound give @badadib 15% of their rewards.')).toBeInTheDocument()
     const grids = screen.getAllByTestId('grid')
     expect(grids[0]).toHaveTextContent('My beat (badadib/o1)')
     expect(grids[1]).toHaveTextContent('Use two (fan/u2)')

@@ -268,16 +268,6 @@ $wide: 1024px;
 
   &__icon { color: var(--accent); }
   &__label { flex: 1; min-width: 160px; @include v2.text(body-sm); }
-
-  &.is-over {
-    position: absolute;
-    left: 14px;
-    right: 14px;
-    bottom: 64px;
-    z-index: 9;
-    background: var(--media-scrim-strong);
-    color: var(--on-media);
-  }
 }
 
 /* ─── Main column: community, title, meta, dock, chapters, description ───── */

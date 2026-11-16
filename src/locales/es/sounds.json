@@ -9,7 +9,7 @@
   "listen": "Escuchar",
   "pause": "Pausa",
   "useThisSound": "Usar este sonido",
-  "splitNote": "Los Shorts hechos con este sonido dan a {{name}} el 5 % de sus recompensas.",
+  "splitNote": "Los Shorts hechos con este sonido dan a {{name}} el 15 % de sus recompensas.",
   "license": "Licencia: {{license}}",
   "original": "Original",
   "shortsUsing": "Shorts que usan este sonido",

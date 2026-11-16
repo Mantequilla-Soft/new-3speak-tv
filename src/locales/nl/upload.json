@@ -286,8 +286,8 @@
     },
     "remix": {
       "label": "Remix en clip toestaan",
-      "info": "Sta anderen toe om remixes en clips van deze video te maken. Jij wordt vermeld als oorspronkelijke maker en ontvangt minimaal 5% als begunstigde.",
-      "hint": "Je krijgt minstens 5% van elke remix"
+      "info": "Laat anderen remixes en clips van deze video maken. Je wordt genoemd als maker van het origineel en krijgt 15% van de beloningen van een remix (minder bij remixes van remixes, minstens 5%).",
+      "hint": "Je krijgt 15% van elke remix van deze video"
     },
     "nsfw": {
       "label": "Markeren als NSFW",

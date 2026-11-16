@@ -80,6 +80,20 @@ export function pollFromMeta(meta) {
   return null;
 }
 
+/**
+ * A poll's options in another language, with the comment's translation: one
+ * request, an option per line (`translate(id, text, lang)` is the comment
+ * translator, so its cache applies). Null when the lines do not come back one
+ * per option, so the options stay as written rather than shift.
+ */
+export async function translatePollOptions(translate, permlink, options, lang) {
+  if (!translate || !options?.length) return null;
+  const text = options.map((o) => String(o).replace(/\s+/g, ' ').trim()).join('\n');
+  const out = await translate(`${permlink}#poll`, text, lang);
+  const lines = String(out || '').split('\n').map((l) => l.trim()).filter(Boolean);
+  return lines.length === options.length ? lines : null;
+}
+
 /** The question a post's poll asks (the protocol's field), or ''. */
 export function pollQuestionFromMeta(meta) {
   let m = meta;

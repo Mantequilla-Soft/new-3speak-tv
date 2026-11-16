@@ -8,7 +8,7 @@
   "listen": "Listen",
   "pause": "Pause",
   "useThisSound": "Use this sound",
-  "splitNote": "Shorts made with this sound give {{name}} 5% of their rewards.",
+  "splitNote": "Shorts made with this sound give {{name}} 15% of their rewards.",
   "license": "License: {{license}}",
   "original": "Original",
   "shortsUsing": "Shorts using this sound",

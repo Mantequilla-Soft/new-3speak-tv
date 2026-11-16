@@ -1,10 +1,21 @@
-import { useEffect, useState } from 'react';
+import { lazy, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Icon } from '../v2/Icon';
 import { useAppStore } from '../../lib/store';
-import { fetchClipIdeas, shortRangeParam } from '../../lib/clipIdeas';
+import { fetchClipIdeas } from '../../lib/clipIdeas';
+import { fetchPlaySource } from '../../lib/videoData';
+import { checkRemix, remixBlockedMessage } from '../../utils/remixChain';
+import { toastIn } from '../../utils/toast';
+import MountWhenOpened from '../common/LazyMount';
 import './ShortsFromVideo.scss';
+
+const EditorModal = lazy(() => import('../modal/EditorModal'));
+const toast = toastIn('Video');
+
+// The editor takes an http(s) source; an ipfs:// one goes through our gateway,
+// as on the watch page.
+const playableUrl = (url) => (url && url.startsWith('ipfs://') ? `https://hotipfs-3speak-1.b-cdn.net/ipfs/${url.slice(7)}` : url);
 
 const REASON_ICON = { replay: 'replay', comments: 'forum', chat: 'chat', quote: 'format_quote' };
 
@@ -25,15 +36,38 @@ function mmss(sec) {
  *
  * On the watch page the player is right there: `onPreview(s)` plays the range and
  * `onMakeShort(s)` opens the editor on it (`previewing` is the range playing now).
- * Elsewhere (the profile's Stats tab) both are links to the watch page: `?t=` to
- * preview, `&short=S-E` to open the editor there. The watch page is the Hive
- * post: pass its permlink as `watchPermlink` when `permlink` is 3Speak's own id.
+ * Elsewhere (the profile's Stats tab) Preview links to the watch page at that
+ * moment, and Make a Short opens the Shorts editor right here on the range (the
+ * video's source looked up from the player), so the creator stays on the page.
+ * The watch page is the Hive post: pass its permlink as `watchPermlink` when
+ * `permlink` is 3Speak's own id; `title` names the clip in the editor.
  */
-export default function ShortsFromVideo({ owner, permlink, watchPermlink = null, onPreview = null, onMakeShort = null, previewing = null, canMake = true }) {
+export default function ShortsFromVideo({ owner, permlink, watchPermlink = null, title = '', onPreview = null, onMakeShort = null, previewing = null, canMake = true }) {
   const { t, i18n } = useTranslation();
   const user = useAppStore((s) => s.user);
   const isOwner = !!user && !!owner && user.toLowerCase() === String(owner).toLowerCase();
+  const isPremium = useAppStore((s) => s.isPremium);
   const [state, setState] = useState({ loading: true, data: null, error: false });
+  const [editor, setEditor] = useState(null); // { url, start, end, chain } while the editor is open
+  const [opening, setOpening] = useState(null); // the range being looked up
+
+  const hivePermlink = watchPermlink || permlink;
+  const openEditorHere = async (s) => {
+    if (opening != null) return;
+    setOpening(s.start);
+    try {
+      const { chain, blocked } = await checkRemix({ author: owner, permlink: hivePermlink }, { user, isPremium });
+      if (blocked) { toast.info(remixBlockedMessage(blocked, t)); return; }
+      const src = await fetchPlaySource(owner, hivePermlink);
+      const url = playableUrl(src?.play_url);
+      if (!url) { toast.error(t('watch.clip.noVideoUrl')); return; }
+      setEditor({ url, start: s.start, end: s.end, chain });
+    } catch {
+      toast.error(t('watch.clip.noVideoUrl'));
+    } finally {
+      setOpening(null);
+    }
+  };
 
   useEffect(() => {
     if (!isOwner || !permlink) return undefined;
@@ -102,10 +136,16 @@ export default function ShortsFromVideo({ owner, permlink, watchPermlink = null,
                       <span className="v2-btn__label">{t('clips.makeShort')}</span>
                     </button>
                   ) : (
-                    <Link className="v2-btn v2-btn--primary h32" to={`${watchPath}?t=${s.start}&short=${shortRangeParam(s.start, s.end)}`} aria-label={`${t('clips.makeShort')} ${range}`}>
-                      <Icon name="content_cut" size={16} />
+                    <button
+                      type="button"
+                      className="v2-btn v2-btn--primary h32"
+                      onClick={() => openEditorHere(s)}
+                      disabled={opening != null}
+                      aria-label={`${t('clips.makeShort')} ${range}`}
+                    >
+                      <Icon name={opening === s.start ? 'progress_activity' : 'content_cut'} size={16} className={opening === s.start ? 'v2-spin' : undefined} />
                       <span className="v2-btn__label">{t('clips.makeShort')}</span>
-                    </Link>
+                    </button>
                   ))}
                 </div>
               </li>
@@ -114,6 +154,22 @@ export default function ShortsFromVideo({ owner, permlink, watchPermlink = null,
         </ol>
       )}
       {list.length > 0 && <p className="sfv-foot">{t('clips.foot')}</p>}
+      <MountWhenOpened when={!!editor} name="shorts editor">
+        {editor && (
+          <EditorModal
+            isOpen
+            onClose={() => setEditor(null)}
+            videoUrl={editor.url}
+            videoName={`${owner} - ${title || hivePermlink} (clip)`}
+            videoType="video"
+            clipStart={editor.start}
+            clipEnd={editor.end}
+            originalAuthor={owner}
+            originalPermlink={hivePermlink}
+            remixChain={editor.chain}
+          />
+        )}
+      </MountWhenOpened>
     </section>
   );
 }

@@ -130,3 +130,16 @@ describe('polls on posts, Shorts and comments', () => {
     expect(await lib.fetchPollsAmong([])).toEqual(new Map())
   })
 })
+
+describe('translatePollOptions', () => {
+  it('translates the options as one text, an option per line', async () => {
+    const translate = vi.fn(async (id, text) => text.split('\n').map((l) => `de:${l}`).join('\n'))
+    expect(await lib.translatePollOptions(translate, 'c1', ['Yes', 'No  way'], 'de')).toEqual(['de:Yes', 'de:No way'])
+    expect(translate).toHaveBeenCalledWith('c1#poll', 'Yes\nNo way', 'de')
+  })
+  it('null when the lines do not match the options, so nothing shifts', async () => {
+    expect(await lib.translatePollOptions(async () => 'Ja Nein', 'c1', ['Yes', 'No'], 'de')).toBeNull()
+    expect(await lib.translatePollOptions(null, 'c1', ['Yes'], 'de')).toBeNull()
+  })
+})
+

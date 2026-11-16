@@ -8,6 +8,13 @@ import { renderWithProviders } from './_render.jsx'
 
 const fetchClipIdeas = vi.hoisted(() => vi.fn())
 vi.mock('../../../src/lib/clipIdeas', async (orig) => ({ ...(await orig()), fetchClipIdeas }))
+const fetchPlaySource = vi.hoisted(() => vi.fn())
+vi.mock('../../../src/lib/videoData', () => ({ fetchPlaySource }))
+vi.mock('../../../src/utils/remixChain', () => ({ checkRemix: async () => ({ chain: [], blocked: null }), remixBlockedMessage: () => '' }))
+// The editor as a stand-in: what it was opened with.
+vi.mock('../../../src/components/modal/EditorModal', () => ({
+  default: ({ videoUrl, clipStart, clipEnd, originalPermlink }) => <div data-testid="editor">{`${videoUrl} ${clipStart}-${clipEnd} ${originalPermlink}`}</div>,
+}))
 
 const { useAppStore } = await import('../../../src/lib/store')
 const { default: ShortsFromVideo } = await import('../../../src/components/ShortsFromVideo/ShortsFromVideo.jsx')
@@ -68,20 +75,16 @@ describe('Shorts from this video', () => {
     expect(within(first).getByRole('button', { name: 'Stop' })).toHaveAttribute('aria-pressed', 'true')
   })
 
-  it('without a player (Stats tab) both are links to the watch page', async () => {
+  it('without a player (Stats tab): Preview links to the watch page, Make a Short opens the editor right here', async () => {
     fetchClipIdeas.mockResolvedValue(IDEAS)
-    renderWithProviders(<ShortsFromVideo owner="badadib" permlink="my-video" />)
-    const [first] = await screen.findAllByRole('listitem')
-    expect(within(first).getByRole('link', { name: 'Preview 4:00 to 4:30' })).toHaveAttribute('href', '/@badadib/my-video?t=240')
-    expect(within(first).getByRole('link', { name: 'Make a Short 4:00 to 4:30' })).toHaveAttribute('href', '/@badadib/my-video?t=240&short=240-270')
-  })
-
-  it('links go to the Hive post when the id is 3Speak\'s own (the Stats tab)', async () => {
-    fetchClipIdeas.mockResolvedValue(IDEAS)
-    renderWithProviders(<ShortsFromVideo owner="badadib" permlink="ydtx92iw" watchPermlink="my-video" />)
+    fetchPlaySource.mockResolvedValue({ play_url: 'https://cdn.example/v.m3u8' })
+    const { user } = renderWithProviders(<ShortsFromVideo owner="badadib" permlink="ydtx92iw" watchPermlink="my-video" />)
     const [first] = await screen.findAllByRole('listitem')
     expect(fetchClipIdeas).toHaveBeenCalledWith('badadib', 'ydtx92iw', expect.anything())
-    expect(within(first).getByRole('link', { name: 'Make a Short 4:00 to 4:30' })).toHaveAttribute('href', '/@badadib/my-video?t=240&short=240-270')
+    expect(within(first).getByRole('link', { name: 'Preview 4:00 to 4:30' })).toHaveAttribute('href', '/@badadib/my-video?t=240')
+    await user.click(within(first).getByRole('button', { name: 'Make a Short 4:00 to 4:30' }))
+    expect(await screen.findByTestId('editor')).toHaveTextContent('https://cdn.example/v.m3u8 240-270 my-video')
+    expect(fetchPlaySource).toHaveBeenCalledWith('badadib', 'my-video')
   })
 
   it('no Make a Short where the editor is off', async () => {

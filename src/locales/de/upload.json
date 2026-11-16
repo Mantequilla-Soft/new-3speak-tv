@@ -286,8 +286,8 @@
     },
     "remix": {
       "label": "Remix und Clip erlauben",
-      "info": "Erlaube anderen, Remixe und Clips aus diesem Video zu erstellen. Du wirst als Originalautor genannt und erhältst als Begünstigter mindestens 5 %.",
-      "hint": "Du bekommst mindestens 5 % jedes Remixes"
+      "info": "Erlaube anderen, Remixe und Clips aus diesem Video zu machen. Du wirst als Original genannt und bekommst 15 % der Belohnungen eines Remixes (bei Remixen von Remixen weniger, mindestens 5 %).",
+      "hint": "Du bekommst 15 % jedes Remixes dieses Videos"
     },
     "nsfw": {
       "label": "Als NSFW markieren",

@@ -228,8 +228,10 @@ export default function AudioItemView({ owner, id, onBack }) {
                 <Icon name="volunteer_activism" size={16} /> {t('audio.post.tip')}
               </button>
             )}
-            {/* The creator gets Edit in the Tip spot, as on the watch page. */}
-            {postPermlink && loggedIn && user === item.owner && (
+            {/* The creator gets Edit in the Tip spot, as on the watch page and
+                the audio post page: for the signed-in owner, whether or not a
+                wallet session is up yet (saving asks for it). */}
+            {postPermlink && authenticated && user === item.owner && (
               <button type="button" className="pod-btn" onClick={() => setEditing(true)} title={t('audio.edit.editTitle')}>
                 <Icon name="edit" size={16} /> {t('common.actions.edit')}
               </button>

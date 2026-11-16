@@ -285,8 +285,8 @@
     },
     "remix": {
       "label": "Cho phép remix và clip",
-      "info": "Cho phép người khác tạo remix và clip từ video này. Bạn sẽ được ghi nhận là tác giả gốc và nhận tối thiểu 5% dưới dạng người thụ hưởng.",
-      "hint": "Bạn nhận ít nhất 5% từ mỗi bản remix"
+      "info": "Cho phép người khác tạo bản remix và clip từ video này. Bạn được ghi là tác giả gốc và nhận 15% phần thưởng của một bản remix (ít hơn với remix của remix, tối thiểu 5%).",
+      "hint": "Bạn nhận 15% từ mỗi bản remix của video này"
     },
     "nsfw": {
       "label": "Đánh dấu là NSFW",

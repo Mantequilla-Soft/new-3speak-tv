@@ -760,7 +760,7 @@ export default function CreatorStats({ user }) {
               </span>
               <VideoStats username={user} permlink={detail.permlink} variant="detail" kind={detail.audio ? 'audio' : null} />
               {/* Clip ranges for a Short, the owner only (links to the watch page). */}
-              {!detail.audio && !detail.short && <ShortsFromVideo owner={user} permlink={detail.permlink} watchPermlink={detail.hivePermlink} canMake={FEATURE_EDITOR} />}
+              {!detail.audio && !detail.short && <ShortsFromVideo owner={user} permlink={detail.permlink} watchPermlink={detail.hivePermlink} title={detail.title} canMake={FEATURE_EDITOR} />}
               <p className="cs-footnote">{t('stats.footnote')}</p>
             </section>
           )}

@@ -351,14 +351,14 @@ describe('EditorModal: a Short made with "Use this sound"', () => {
     expect(calls('setMusicCredits')[0][0].map((c) => c.id)).toEqual(['calm'])
   })
 
-  it('the sound still on the timeline is credited first, and its creator gets the 5% split', async () => {
+  it('the sound still on the timeline is credited first, and its creator gets the 15% split', async () => {
     stubMp3({ type: 'video/mp4' })
     await open({ sound: SOUND })
     await ready({ canLoadSound: true })
     await fromEditor({ type: 'post-to-3speak', outputUrl: `${EDITOR}/rendered/v.mp4`, musicCredits: [{ id: 'calm', title: 'Calm', artist: 'Kevin MacLeod', source: 'incompetech' }, SOUND.credit] })
     await waitFor(() => expect(calls('setMusicCredits')).toHaveLength(1))
     expect(calls('setMusicCredits')[0][0].map((c) => c.id)).toEqual(['short_badadib_beat-1', 'calm'])
-    expect(calls('setList')[0][0]).toEqual(expect.arrayContaining([expect.objectContaining({ account: 'badadib', percent: 5 })]))
+    expect(calls('setList')[0][0]).toEqual(expect.arrayContaining([expect.objectContaining({ account: 'badadib', percent: 15 })]))
   })
 
   it('an editor that keeps credits (canLoadSound) is trusted: a sound taken off the timeline is not credited', async () => {

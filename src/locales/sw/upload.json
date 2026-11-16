@@ -286,8 +286,8 @@
     },
     "remix": {
       "label": "Ruhusu remix na klipu",
-      "info": "Ruhusu wengine kutengeneza remix na klipu kutoka kwa video hii. Utatajwa kama mwandishi asili na utapokea angalau 5% kama mnufaika.",
-      "hint": "Unapata angalau 5% ya kila remix"
+      "info": "Ruhusu wengine kutengeneza remix na klipu kutoka video hii. Unatajwa kama mwandishi wa asili na unapata 15% ya zawadi za remix (kidogo kwa remix za remix, angalau 5%).",
+      "hint": "Unapata 15% ya kila remix ya video hii"
     },
     "nsfw": {
       "label": "Weka alama ya NSFW",

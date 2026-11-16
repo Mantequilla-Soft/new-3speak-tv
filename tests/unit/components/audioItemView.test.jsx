@@ -18,7 +18,7 @@ vi.mock('../../../src/lib/store', () => {
   useAppStore.getState = () => state
   return { useAppStore }
 })
-vi.mock('../../../src/hive-api/aioha', async (orig) => ({ ...(await orig()), isLoggedIn: () => state.authenticated }))
+vi.mock('../../../src/hive-api/aioha', async (orig) => ({ ...(await orig()), isLoggedIn: () => state.walletSession ?? state.authenticated }))
 vi.mock('../../../src/components/playVideo/BlogContent', () => ({ default: ({ permlink, description }) => <div className="blog-stub">{permlink}{description ? ` ${description}` : ''}</div> }))
 // The edit dialog, tested on its own: here a button that "saves" new notes.
 vi.mock('../../../src/components/AudioEdit/EditAudioModal', () => ({
@@ -57,6 +57,15 @@ describe('a 3Speak audio page', () => {
     expect(html).toContain('<span class="pod-btn-count">3</span>')
     expect(html).toContain('Description')
     expect(html).toContain('my-show-ep-1')
+  })
+
+  it('the creator gets Edit even before a wallet session is up (two logins in one browser)', async () => {
+    Object.assign(state, { authenticated: true, user: 'epodcaster', walletSession: false })
+    try {
+      expect(await render('/audio?play=epodcaster/f48l7vyi', doc)).toContain('Edit')
+    } finally {
+      Object.assign(state, { authenticated: false, user: '', walletSession: undefined })
+    }
   })
 
   it('the creator gets Edit where everyone else gets Tip', async () => {

@@ -286,8 +286,8 @@
     },
     "remix": {
       "label": "Payagan ang remix at clip",
-      "info": "Payagan ang iba na gumawa ng remix at clip mula sa video na ito. Ikaw ang kikilalaning original author at makakatanggap ka ng hindi bababa sa 5% bilang beneficiary.",
-      "hint": "Makakakuha ka ng hindi bababa sa 5% ng bawat remix"
+      "info": "Payagan ang iba na gumawa ng remix at clip mula sa video na ito. Ikaw ang kikilalaning orihinal na gumawa at makakakuha ng 15% ng rewards ng isang remix (mas mababa sa remix ng remix, hindi bababa sa 5%).",
+      "hint": "Makakakuha ka ng 15% sa bawat remix ng video na ito"
     },
     "nsfw": {
       "label": "I-mark bilang NSFW",

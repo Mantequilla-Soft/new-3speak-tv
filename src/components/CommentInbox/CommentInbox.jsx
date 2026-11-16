@@ -11,6 +11,7 @@ import TimeAgo from '../TimeAgo/TimeAgo';
 import MarkdownView from '../common/MarkdownView';
 import ReactVideoTab from '../ReactVideoModal/ReactVideoModal';
 import { getHiveRenderer } from '../../lib/hiveRenderer';
+import { stripTimestampEmbeds } from '../../utils/timestamps';
 import { commentWithAioha } from '../../hive-api/aioha';
 import { toastIn } from '../../utils/toast';
 import { fetchCommentInbox, setCommentDone, filterInbox, flagCounts, INBOX_FLAGS } from '../../lib/commentInbox';
@@ -27,7 +28,8 @@ function useRendered(body) {
   useEffect(() => {
     let cancelled = false;
     getHiveRenderer()
-      .then((render) => { if (!cancelled) setHtml(render(body || '')); })
+      // The "replied to 0:42" link stays text: rendered, it is a whole video embed.
+      .then((render) => { if (!cancelled) setHtml(render(stripTimestampEmbeds(body))); })
       .catch(() => { if (!cancelled) setHtml(''); });
     return () => { cancelled = true; };
   }, [body]);

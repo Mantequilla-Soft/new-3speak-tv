@@ -24,6 +24,9 @@ const incubation = vi.hoisted(() => ({
   playlistIncubation: null, postIncubationContent: null,
 }))
 vi.mock('../../../src/lib/incubation', () => incubation)
+// A vote cast here is reported for the voter's curator page (lib/curation.js).
+const curation = vi.hoisted(() => ({ noteSiteVote: null }))
+vi.mock('../../../src/lib/curation', () => curation)
 
 const aioha = await import('../../../src/hive-api/aioha.js')
 const {
@@ -52,6 +55,7 @@ beforeEach(() => {
   localStorage.clear()
   resetWallet()
   for (const k of Object.keys(incubation)) incubation[k] = vi.fn(async () => ({ permlink: 'stored-permlink' }))
+  curation.noteSiteVote = vi.fn(async () => {})
   setHiveAuthCallbacks(null, null)
   setActiveAuthHandler(null)
   vi.spyOn(console, 'error').mockImplementation(() => {})
@@ -65,6 +69,23 @@ describe('voting', () => {
     await expect(voteWithAioha('bob', 'my-video', 5000)).resolves.toEqual({ success: true, result: { id: 'wallet-tx' } })
     expect(wallet.vote).toHaveBeenCalledWith('bob', 'my-video', 5000)
     expect(wallet.signAndBroadcastTx).not.toHaveBeenCalled()
+  })
+
+  it('a vote that went through is reported as cast on 3Speak, for the voter', async () => {
+    asButrAuth('alice')
+    fakeApi({ [BROADCAST]: ok() })
+    await voteWithAioha('bob', 'my-video', 5000)
+    await vi.waitFor(() => expect(curation.noteSiteVote).toHaveBeenCalledWith('alice', 'bob', 'my-video', 5000))
+  })
+
+  it('a failed vote and an off-chain one are not reported', async () => {
+    wallet.vote.mockResolvedValue({ success: false, error: 'nope' })
+    await expect(voteWithAioha('bob', 'my-video')).rejects.toThrow()
+    asIncubating()
+    fakeApi({})
+    await voteWithAioha('bob', 'my-video')
+    await new Promise((r) => setTimeout(r, 0))
+    expect(curation.noteSiteVote).not.toHaveBeenCalled()
   })
 
   it('a full upvote is the default weight', async () => {

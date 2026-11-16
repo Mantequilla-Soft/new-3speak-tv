@@ -286,8 +286,8 @@
     },
     "remix": {
       "label": "Remix ve klibe izin ver",
-      "info": "Başkalarının bu videodan remix ve klip oluşturmasına izin ver. Orijinal yazar olarak gösterilirsin ve lehtar olarak en az %5 alırsın.",
-      "hint": "Her remixten en az %5 alırsın"
+      "info": "Başkalarının bu videodan remiks ve klip yapmasına izin ver. Orijinal yaratıcı olarak anılırsın ve bir remiksin ödüllerinin %15'ini alırsın (remikslerin remikslerinde daha az, en az %5).",
+      "hint": "Bu videonun her remiksinden %15 alırsın"
     },
     "nsfw": {
       "label": "NSFW olarak işaretle",

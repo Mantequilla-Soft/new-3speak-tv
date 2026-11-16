@@ -473,7 +473,7 @@ describe('a short', () => {
     expect(h.fns.resolveSnapsContainer).not.toHaveBeenCalled()
     expect(postOp()).toMatchObject({ parent_author: 'alice', parent_permlink: 'orig-short' })
     expect(postOp().body).toContain(`*Based on a video by [@alice](${window.location.origin}/shorts?v=alice/orig-short)*`)
-    expect(optionsOp().extensions[0][1].beneficiaries).toContainEqual({ account: 'alice', weight: 500 })
+    expect(optionsOp().extensions[0][1].beneficiaries).toContainEqual({ account: 'alice', weight: 1500 })
   })
 })
 
@@ -534,8 +534,8 @@ describe('a remix of a regular video', () => {
       remixChain: [{ author: 'alice', permlink: 'orig-video' }, { author: 'bob', permlink: 'first' }],
     })
     expect(optionsOp().extensions[0][1].beneficiaries).toEqual([
-      { account: 'alice', weight: 500 },
-      { account: 'bob', weight: 500 },
+      { account: 'alice', weight: 1500 },
+      { account: 'bob', weight: 1000 },
       ...LOCKED_SPLITS,
     ])
   })

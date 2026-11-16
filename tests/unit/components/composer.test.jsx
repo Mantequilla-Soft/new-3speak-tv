@@ -116,3 +116,24 @@ describe('full editor (post fields)', () => {
     expect(screen.getByRole('button', { name: 'Focus mode' })).toBeInTheDocument()
   })
 })
+
+describe('Split View', () => {
+  const widthOf = (w) => vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockReturnValue({ width: w, height: 300, top: 0, left: 0, right: w, bottom: 300, x: 0, y: 0 })
+  beforeEach(() => { window.innerWidth = 1000 })
+
+  it('is offered when the editor spans at least 30% of the window', () => {
+    const spy = widthOf(400)
+    renderWithProviders(<Harness mode="full" expandable={false} />)
+    expect(screen.getByRole('button', { name: 'Split View' })).toBeInTheDocument()
+    spy.mockRestore()
+  })
+
+  it('is not offered in a narrow box: Editor Only and Preview Only', () => {
+    const spy = widthOf(250)
+    renderWithProviders(<Harness mode="full" expandable={false} />)
+    expect(screen.queryByRole('button', { name: 'Split View' })).not.toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Editor Only' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Preview Only' })).toBeInTheDocument()
+    spy.mockRestore()
+  })
+})

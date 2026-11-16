@@ -10,7 +10,7 @@
 //    left to fall back to the playlist art
 //  - every cover picker opens the cover designer
 //  - songs from the editor's library are credited in the published post, with
-//    the 5% split for a 3Speak sound creator
+//    the 15% split for a 3Speak sound creator
 import { describe, it, expect, vi, beforeAll, afterAll, beforeEach, afterEach } from 'vitest'
 import { act, screen, waitFor, within, fireEvent } from '@testing-library/react'
 import { renderWithProviders, toastMessages } from './_render.jsx'
@@ -550,7 +550,7 @@ describe('AudioUploadModal: a podcast episode from the import page', () => {
 })
 
 describe('AudioUploadModal: songs from the editor', () => {
-  it('credits a library song in the post and gives its 3Speak creator 5%', async () => {
+  it('credits a library song in the post and gives its 3Speak creator 15%', async () => {
     const blob = new File(['ID3'], 'Episode.mp3', { type: 'audio/mpeg' })
     const { user } = openModal({
       initialTrack: {
@@ -571,7 +571,7 @@ describe('AudioUploadModal: songs from the editor', () => {
     expect(meta.audio.sound).toMatchObject({ title: 'Night Beat', account: 'bob' })
     expect(meta.image).toEqual(['https://images.hive.blog/DQmA/a.jpg'])
     const options = ops.find((o) => o[0] === 'comment_options')[1]
-    expect(options.extensions[0][1].beneficiaries).toEqual(expect.arrayContaining([{ account: 'bob', weight: 500 }]))
+    expect(options.extensions[0][1].beneficiaries).toEqual(expect.arrayContaining([{ account: 'bob', weight: 1500 }]))
   })
 
   it('posts no credit line for an audio without library songs', async () => {

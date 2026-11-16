@@ -18,6 +18,18 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.98',
+    category: 'profile',
+    date: '2026-11-16',
+    summary: 'Curation pages now show only votes cast on 3Speak, counted from today.',
+  },
+  {
+    version: '2.0.97',
+    category: 'upload',
+    date: '2026-11-16',
+    summary: 'Remixes, clips and Shorts with a 3Speak sound now give the original creator 15% of their rewards (less further back in a remix chain, at least 5%).',
+  },
+  {
     version: '2.0.96',
     category: 'watch',
     date: '2026-11-16',

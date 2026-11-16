@@ -8,7 +8,7 @@
   "listen": "Dinle",
   "pause": "Duraklat",
   "useThisSound": "Bu sesi kullan",
-  "splitNote": "Bu sesle yapılan Short'lar ödüllerinin %5'ini {{name}} hesabına verir.",
+  "splitNote": "Bu sesle yapılan Short'lar ödüllerinin %15'ini {{name}} hesabına verir.",
   "license": "Lisans: {{license}}",
   "original": "Orijinal",
   "shortsUsing": "Bu sesi kullanan Short'lar",

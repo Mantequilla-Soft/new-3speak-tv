@@ -65,6 +65,25 @@ export function useCuration(user) {
   });
 }
 
+/**
+ * Tell the checker a vote was cast on 3Speak (POST /curation/vote): the
+ * curator page lists only those, as a Hive vote carries no app. Sent after the
+ * vote went through, with the voter's session vouch; an unvote or downvote
+ * (weight <= 0) takes the post off. Never throws: the vote itself already
+ * happened, a lost report only leaves it off the curator page.
+ */
+export async function noteSiteVote(voter, author, permlink, weight) {
+  if (!voter || !author || !permlink) return;
+  try {
+    const { sessionVouch } = await import('./podcastProgress');
+    const v = await sessionVouch(voter);
+    if (!v) return;
+    await axios.post(`${CHECKER_URL}/curation/vote`, {
+      user: v.user, signature: v.signature, timestamp: v.timestamp, author, permlink, weight: Math.round(Number(weight) || 0),
+    });
+  } catch { /* the curator page simply misses this one */ }
+}
+
 /** Where a pick lives on 3Speak (same rules as Supporters' supportItemLink). */
 export function pickLink(p) {
   if (p.kind === 'audio') return `/audio/${p.author}/${p.permlink}`;

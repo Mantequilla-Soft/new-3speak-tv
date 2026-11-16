@@ -1706,7 +1706,7 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
   // the clip bar. Between the player and the title on purpose: they comment on
   // the thing just above them.
   const clipBar = FEATURE_EDITOR && clipMode ? (
-    <div className={cx('wv2-clipbar', wide && 'is-over')} role="status">
+    <div className="wv2-clipbar" role="status">
       <Icon name="content_cut" size={24} className="wv2-clipbar__icon" />
       <span className="wv2-clipbar__label">
         {clipMode === 'start' && t('watch.clip.barStart')}
@@ -1716,7 +1716,7 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
       {clipMode === 'start' && <UiButton variant="primary" size={36} onClick={handleSetClipStart}>{t('watch.clip.setStart')}</UiButton>}
       {clipMode === 'end' && <UiButton variant="primary" size={36} onClick={handleSetClipEnd}>{t('watch.clip.setEnd')}</UiButton>}
       {clipMode === 'done' && <UiButton variant="primary" size={36} onClick={handleCreateClip}>{t('watch.clip.createClip')}</UiButton>}
-      <UiButton variant={wide ? 'media' : 'secondary'} size={36} onClick={handleCancelClip}>{t('common.actions.cancel')}</UiButton>
+      <UiButton variant="secondary" size={36} onClick={handleCancelClip}>{t('common.actions.cancel')}</UiButton>
     </div>
   ) : null;
 
@@ -2009,7 +2009,6 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                   </button>
                 </div>
               )}
-              {wide && clipBar}
               {videoControls && (
                 <>
                   <div
@@ -2145,7 +2144,9 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
           {/* Notices that belong to the video rather than the page — the
               supporters-only paywall, the creator's guest list, channel surfing. */}
           {belowPlayerSlot}
-          {!wide && clipBar}
+          {/* Under the player in every layout: over the picture the timeline
+              and the controls covered it. */}
+          {clipBar}
 
           {/* Title, meta and tags on the left, the dock on the right (02);
               stacked when the column is narrow. */}

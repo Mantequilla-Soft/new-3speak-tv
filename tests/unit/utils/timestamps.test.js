@@ -5,7 +5,7 @@
 import { describe, it, expect, vi } from 'vitest'
 import {
   parseStamp, formatStamp, linkifyTimestamps, handleTimestampClick, chapterFromLine,
-  parseChapters, chapterAt, watchTimeUrl, linkTimestampsInMarkdown, unlinkTimestampsInMarkdown,
+  parseChapters, chapterAt, watchTimeUrl, linkTimestampsInMarkdown, unlinkTimestampsInMarkdown, stripTimestampEmbeds,
 } from '../../../src/utils/timestamps.js'
 
 describe('parseStamp', () => {
@@ -362,3 +362,15 @@ describe('timestamps in comment markdown', () => {
     expect(unlinkTimestampsInMarkdown('[1:00](https://3speak.tv/watch?v=a.b/x-y&t=60)', p)).toBe('1:00')
   })
 })
+
+describe('stripTimestampEmbeds', () => {
+  it('turns a comment\'s link to its moment into the plain time, so it is never a video embed', () => {
+    const body = 'Nice!\n<br><sup>replied to [1:23](https://3speak.tv/watch?v=badadib/test&t=83) on [3speak.tv](https://3speak.tv)</sup>'
+    expect(stripTimestampEmbeds(body)).toBe('Nice!\n<br><sup>replied to 1:23 on [3speak.tv](https://3speak.tv)</sup>')
+  })
+  it('leaves other links and an empty body alone', () => {
+    expect(stripTimestampEmbeds('[docs](https://example.com) at [1:00](https://example.com)')).toBe('[docs](https://example.com) at [1:00](https://example.com)')
+    expect(stripTimestampEmbeds(null)).toBe('')
+  })
+})
+

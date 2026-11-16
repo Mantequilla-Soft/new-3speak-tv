@@ -285,8 +285,8 @@
     },
     "remix": {
       "label": "Izinkan remix dan klip",
-      "info": "Izinkan orang lain membuat remix dan klip dari video ini. Kamu akan dicantumkan sebagai pembuat asli dan menerima minimal 5% sebagai penerima manfaat.",
-      "hint": "Kamu mendapat minimal 5% dari setiap remix"
+      "info": "Izinkan orang lain membuat remix dan klip dari video ini. Kamu dicantumkan sebagai pembuat asli dan mendapat 15% hadiah sebuah remix (lebih sedikit untuk remix dari remix, minimal 5%).",
+      "hint": "Kamu mendapat 15% dari setiap remix video ini"
     },
     "nsfw": {
       "label": "Tandai sebagai NSFW",

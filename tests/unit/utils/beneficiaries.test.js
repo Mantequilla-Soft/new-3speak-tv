@@ -16,8 +16,8 @@ describe('split constants', () => {
   it('weights are percent x 100, as Hive expects', () => {
     expect(LOCKED_FUND_WEIGHT).toBe(1000)
     expect(LOCKED_ENCODER_WEIGHT).toBe(100)
-    expect(REMIX_AUTHOR_WEIGHT).toBe(500)
-    expect(SOUND_AUTHOR_WEIGHT).toBe(500)
+    expect(REMIX_AUTHOR_WEIGHT).toBe(1500)
+    expect(SOUND_AUTHOR_WEIGHT).toBe(1500)
   })
 })
 
@@ -57,19 +57,19 @@ describe('getLockedBeneficiaries', () => {
 
   it('remix attribution survives Pro', () => {
     const list = getLockedBeneficiaries({ isPremium: true, originalAuthor: 'bob' })
-    expect(list).toEqual([{ account: 'bob', percent: 5, locked: true, minPercent: 5 }])
+    expect(list).toEqual([{ account: 'bob', percent: 15, locked: true, minPercent: 15 }])
   })
 
-  it('adds every sound author at 5%', () => {
+  it('adds every sound author at 15%', () => {
     const list = getLockedBeneficiaries({ isPremium: true, soundAuthors: ['dj1', 'dj2'] })
     expect(list.map((b) => b.account)).toEqual(['dj1', 'dj2'])
-    expect(list.every((b) => b.percent === 5 && b.locked)).toBe(true)
+    expect(list.every((b) => b.percent === 15 && b.locked)).toBe(true)
   })
 
   it('a sound author who is also the remix source is listed once, not twice', () => {
     const list = getLockedBeneficiaries({ isPremium: true, originalAuthor: 'bob', soundAuthors: ['bob'] })
     expect(list).toHaveLength(1)
-    expect(list[0]).toMatchObject({ account: 'bob', percent: 5, minPercent: 5 })
+    expect(list[0]).toMatchObject({ account: 'bob', percent: 15, minPercent: 15 })
   })
 
   it('defaults soundAuthors to none', () => {
@@ -111,12 +111,12 @@ describe('enforceLockedBeneficiaries', () => {
     expect(grandfathered.get('encoder.pay')).toBe(100)
   })
 
-  it('enforces at least 5% for the remix source and each sound author', () => {
-    const m = new Map([['bob', 100], ['dj', 900]])
+  it('enforces at least 15% for the remix source and each sound author', () => {
+    const m = new Map([['bob', 100], ['dj', 2000]])
     enforceLockedBeneficiaries(m, { isPremium: true, originalAuthor: 'bob', soundAuthors: ['dj', 'dj2'] })
-    expect(m.get('bob')).toBe(500)
-    expect(m.get('dj')).toBe(900)
-    expect(m.get('dj2')).toBe(500)
+    expect(m.get('bob')).toBe(1500)
+    expect(m.get('dj')).toBe(2000)
+    expect(m.get('dj2')).toBe(1500)
   })
 
   it('returns the same map for chaining', () => {
@@ -126,13 +126,13 @@ describe('enforceLockedBeneficiaries', () => {
 })
 
 describe('remix chain authors', () => {
-  it('locks 5% for every earlier author of the chain, each once', () => {
-    const list = getLockedBeneficiaries({ isPremium: true, originalAuthor: 'bob', remixAuthors: ['bob', 'carol', 'dave'] })
+  it('15% for the source, 5% less per step back, never below 5%, each author once', () => {
+    const list = getLockedBeneficiaries({ isPremium: true, originalAuthor: 'bob', remixAuthors: ['bob', 'carol', 'dave', 'erin'] })
     expect(list.map(b => [b.account, b.percent, b.locked])).toEqual([
-      ['bob', 5, true], ['carol', 5, true], ['dave', 5, true],
+      ['bob', 15, true], ['carol', 10, true], ['dave', 5, true], ['erin', 5, true],
     ])
     const map = enforceLockedBeneficiaries(new Map(), { isPremium: true, originalAuthor: 'bob', remixAuthors: ['carol', 'bob'] })
-    expect(Object.fromEntries(map)).toEqual({ bob: REMIX_AUTHOR_WEIGHT, carol: REMIX_AUTHOR_WEIGHT })
+    expect(Object.fromEntries(map)).toEqual({ bob: 1500, carol: 1000 })
   })
 
   it('leaves out a sound split that no longer fits in Hive\'s 8 slots', () => {
@@ -147,6 +147,7 @@ describe('remix chain authors', () => {
 
   it('still raises a sound creator who is already in the chain', () => {
     const list = getLockedBeneficiaries({ isPremium: false, includeEncoder: true, username: 'me', remixAuthors: ['a1', 'a2', 'a3', 'a4', 'a5', 'singer'], soundAuthors: ['singer'] })
-    expect(list.find(b => b.account === 'singer').percent).toBe(5)
+    // 5% as the chain's sixth author, raised to the sound's 15%
+    expect(list.find(b => b.account === 'singer').percent).toBe(15)
   })
 })

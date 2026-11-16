@@ -40,7 +40,7 @@ import AiBadge from '../components/AiBadge/AiBadge';
 import AudiogramEpisodeLink from '../components/AudiogramEpisodeLink/AudiogramEpisodeLink';
 import ShortSeriesBar from '../components/Episodes/ShortSeriesBar';
 import ShortPollPill from '../components/Polls/ShortPollPill';
-import { useShortPolls, pollFromMeta } from '../lib/polls';
+import { useShortPolls, pollFromMeta, translatePollOptions } from '../lib/polls';
 import PollCard from '../components/Polls/PollCard';
 import { stripEpisodeLine } from '../utils/audiogramLink';
 
@@ -4860,6 +4860,7 @@ export const CommentItem = ({
   const [showReplies, setShowReplies] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
   const [translatedText, setTranslatedText] = useState(null);
+  const [translatedOptions, setTranslatedOptions] = useState(null);
   const [translateError, setTranslateError] = useState(false);
   const [isReportOpen, setIsReportOpen] = useState(false);
   const replyInputRef = useRef(null);
@@ -4871,6 +4872,9 @@ export const CommentItem = ({
     try {
       const result = await onTranslate?.(comment.permlink, comment.body, langCode);
       if (result) setTranslatedText(result);
+      // A poll's answers go with the text.
+      const poll = pollFromMeta(comment.jsonMetadata);
+      if (poll) setTranslatedOptions(await translatePollOptions(onTranslate, comment.permlink, poll.options, langCode).catch(() => null));
     } catch { setTranslateError(true); }
   };
 
@@ -4938,14 +4942,14 @@ export const CommentItem = ({
           </div>
           <div className="commentText markdown-view" dangerouslySetInnerHTML={{ __html: getCommentHtml() }} />
           {comment.onChain !== false && pollFromMeta(comment.jsonMetadata) && (
-            <PollCard snap={{ owner: comment.author, permlink: comment.permlink, poll: pollFromMeta(comment.jsonMetadata) }} />
+            <PollCard snap={{ owner: comment.author, permlink: comment.permlink, poll: pollFromMeta(comment.jsonMetadata) }} labels={translatedOptions} />
           )}
           {translatedText && (
             <div className="comment-translation">
               <div className="comment-translation-header">
                 <Icon name="translate" size={14} />
                 <span>{t('shorts.comments.translation')}</span>
-                <button type="button" className="comment-translation-dismiss" aria-label={t('common.actions.close')} onClick={() => { setTranslatedText(null); clearTranslation?.(comment.permlink); }}><Icon name="close" size={14} /></button>
+                <button type="button" className="comment-translation-dismiss" aria-label={t('common.actions.close')} onClick={() => { setTranslatedText(null); setTranslatedOptions(null); clearTranslation?.(comment.permlink); clearTranslation?.(`${comment.permlink}#poll`); }}><Icon name="close" size={14} /></button>
               </div>
               <p>{translatedText}</p>
             </div>

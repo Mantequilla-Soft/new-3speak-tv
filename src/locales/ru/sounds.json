@@ -10,7 +10,7 @@
   "listen": "Слушать",
   "pause": "Пауза",
   "useThisSound": "Использовать этот звук",
-  "splitNote": "Shorts с этим звуком отдают {{name}} 5% наград.",
+  "splitNote": "Shorts с этим звуком отдают {{name}} 15% наград.",
   "license": "Лицензия: {{license}}",
   "original": "Оригинал",
   "shortsUsing": "Shorts с этим звуком",
