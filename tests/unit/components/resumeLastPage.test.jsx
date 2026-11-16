@@ -128,6 +128,14 @@ describe('ResumeLastPage', () => {
 })
 
 describe('RouteFallback', () => {
+  it('a page still loading shows a spinner, and the Powered by Hive footer hides meanwhile', async () => {
+    render(<RouteFallback />)
+    expect(screen.getByRole('status', { name: /Loading/ })).toHaveClass('route-loading')
+    const { readFileSync } = await import('node:fs')
+    const css = readFileSync(`${process.cwd()}/src/App.css`, 'utf8')
+    expect(css).toMatch(/body:has\(\.route-suspense-fallback\) \.site-hive-footer \{\s*display: none;/)
+  })
+
   it('a spinner over the shell while the resumed page loads, then never again', () => {
     vi.useFakeTimers()
     setting(true)
@@ -140,7 +148,9 @@ describe('RouteFallback', () => {
     act(() => { vi.advanceTimersByTime(100) })
     expect(isResuming()).toBe(false)
 
+    // Afterwards only the plain loading spinner, not the veil.
     render(<RouteFallback />)
-    expect(screen.queryByRole('status')).toBeNull()
+    expect(screen.getByRole('status', { name: /Loading/ })).toHaveClass('route-loading')
+    expect(document.querySelector('.route-resume-veil')).toBeNull()
   })
 })

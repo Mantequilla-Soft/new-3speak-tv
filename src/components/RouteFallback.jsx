@@ -8,10 +8,12 @@ let showing = 0;
 export const fallbackShowing = () => showing > 0;
 
 /**
- * What the router shows while a lazy route arrives: an empty block that holds the
- * page height (App.css), so the shell holds still. When the app was just sent on
- * to the page it was last on (lib/lastPage resumeOnStart), a spinner over a
- * see-through veil says it is on its way (owner 2026-11-16).
+ * What the router shows while a lazy route arrives: a block that holds the page
+ * height (App.css), so the shell holds still, with a spinner in it that fades in
+ * after a moment (a page that arrives quickly shows none); the Powered by Hive
+ * footer hides meanwhile (owner 2026-11-16). When the app was just sent on to
+ * the page it was last on (lib/lastPage resumeOnStart), a spinner over a
+ * see-through veil says it is on its way instead.
  */
 export default function RouteFallback() {
   const { t } = useTranslation();
@@ -26,9 +28,13 @@ export default function RouteFallback() {
   }, []);
   return (
     <div className="route-suspense-fallback">
-      {resuming && (
+      {resuming ? (
         <div className="route-resume-veil" role="status" aria-label={t('common.status.loading')}>
           <span className="route-resume-spinner"><Icon name="progress_activity" size={32} className="v2-spin" /></span>
+        </div>
+      ) : (
+        <div className="route-loading" role="status" aria-label={t('common.status.loading')}>
+          <Icon name="progress_activity" size={32} className="v2-spin" />
         </div>
       )}
     </div>

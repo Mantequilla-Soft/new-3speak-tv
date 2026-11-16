@@ -68,6 +68,19 @@
 .route-suspense-fallback {
   min-height: 60vh;
 }
+/* A page still loading: a spinner that fades in after a moment, so a page that
+   arrives quickly flashes nothing (components/RouteFallback). */
+.route-loading {
+  display: grid;
+  place-items: center;
+  min-height: 60vh;
+  color: var(--muted);
+  animation: route-loading-in 0.2s ease 0.3s both;
+}
+@keyframes route-loading-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
 
 /* Opening on the page you were last on (components/RouteFallback): a spinner
    over a see-through veil while that page's code arrives. Below the dialogs. */
@@ -125,5 +138,10 @@
    the shell footer would add a strip of page scroll under them. The link stays
    in the HTML for crawlers; it is only hidden on screen there. */
 body:has(.galaxy-page, .short-main, .shorts-story-feed, .spotlight-page) .site-hive-footer {
+  display: none;
+}
+/* Nor while a page is still loading: under an empty page it is all there is to
+   see (owner 2026-11-16). */
+body:has(.route-suspense-fallback) .site-hive-footer {
   display: none;
 }
