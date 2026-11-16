@@ -27,7 +27,6 @@ import { useTranslation, Trans } from 'react-i18next';
 import { SHORT_TITLE_MAX } from '../../utils/shortTitle';
 import { Button, Icon, IconButton, Toggle } from '../v2/ui';
 import PremiereSwitch from '../Premiere/PremiereSwitch';
-import EpisodeNumberFields from '../Episodes/EpisodeNumberFields';
 import ShortSeriesSelect from '../Episodes/ShortSeriesSelect';
 
 // Every toast from this module is headed "Upload"; the message becomes the
@@ -112,8 +111,6 @@ function EmbedDetails() {
     scheduleDateTime, setScheduleDateTime,
     isPremiere, setIsPremiere,
     saveAsDraft, setSaveAsDraft,
-    seasonNum, setSeasonNum,
-    episodeNum, setEpisodeNum,
     seriesId, setSeriesId,
     fromStories,
     isStory,
@@ -648,12 +645,9 @@ function EmbedDetails() {
                 )}
               </section>
 
-              {/* Season and episode (long-form), or the series a Short continues. */}
-              {!fromStories && (
-                <section className="v2-card details-card input-group">
-                  <EpisodeNumberFields season={seasonNum} episode={episodeNum} onSeason={setSeasonNum} onEpisode={setEpisodeNum} />
-                </section>
-              )}
+              {/* The series a Short continues. A regular video has no season
+                  or episode numbers to set (owner 2026-11-16): only audio
+                  episodes have them. */}
               {fromStories && !isStory && !incubationHandle && (
                 <section className="v2-card details-card input-group">
                   <ShortSeriesSelect value={seriesId} onChange={setSeriesId} />

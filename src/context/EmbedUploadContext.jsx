@@ -30,7 +30,6 @@ import { readAddToBlog, writeAddToBlog, reblogOp } from '../utils/addToBlog';
 import { timelineMeta, applyTimelineToDescription } from '../utils/videoTimeline';
 import { registerStory } from '../lib/stories';
 import { dataUrlToBlob } from '../utils/videoThumbnails';
-import { episodeFields } from '../utils/episodeNumbers';
 import { addToPlaylist } from '../utils/playlistOperations';
 import { SERIES_APPEND_POSITION } from '../lib/series';
 
@@ -219,9 +218,6 @@ export function EmbedUploadProvider({ children }) {
   // (utils/scheduledPosts.js drafts) instead of going out; published later from
   // the studio's Drafts. Exclusive with a schedule.
   const [saveAsDraft, setSaveAsDraft] = useState(false);
-  // Season and episode numbers (utils/episodeNumbers.js), as typed; long-form only.
-  const [seasonNum, setSeasonNum] = useState('');
-  const [episodeNum, setEpisodeNum] = useState('');
   // A Short's series (lib/series.js): the playlist it is added to as the next part.
   const [seriesId, setSeriesId] = useState('');
 
@@ -486,8 +482,6 @@ export function EmbedUploadProvider({ children }) {
     setRewardPowerup(false);
     setIsScheduled(false);
     setSaveAsDraft(false);
-    setSeasonNum('');
-    setEpisodeNum('');
     setSeriesId('');
     setScheduleDateTime('');
     setIsPremiere(false);
@@ -1900,8 +1894,6 @@ export function EmbedUploadProvider({ children }) {
           // Chapters + link toasters (utils/videoTimeline.js). Read by the watch
           // page and the embed player; nothing when the creator added none.
           ...timeline,
-          // Season / episode (utils/episodeNumbers.js), for the podcast feeds.
-          ...(fromStories ? {} : episodeFields({ season: seasonNum, episode: episodeNum })),
           // Legacy 3Speak `info` block. Other Hive frontends (peakd, ecency, …)
           // render the player by reading video.info.author + video.info.permlink
           // to build the embed — WITHOUT it they request an EMPTY owner/permlink
@@ -2457,8 +2449,6 @@ export function EmbedUploadProvider({ children }) {
     scheduleDateTime, setScheduleDateTime,
     isPremiere, setIsPremiere,
     saveAsDraft, setSaveAsDraft,
-    seasonNum, setSeasonNum,
-    episodeNum, setEpisodeNum,
     seriesId, setSeriesId,
     // Community data
     communitiesData, setCommunitiesData,

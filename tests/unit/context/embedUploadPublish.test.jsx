@@ -859,30 +859,24 @@ describe('a prefilled upload (pushed to the embed service by another uploader)',
   })
 })
 
-describe('season, episode, drafts and a Short\'s series', () => {
+describe('drafts and a Short\'s series', () => {
   beforeEach(() => addToPlaylist.mockClear())
   const draftCall = () => h.fns.axiosPost.mock.calls.find(([url]) => url.endsWith('/scheduled-posts/create'))
 
-  it('season and episode go into the video block as whole numbers, only when set', async () => {
-    const { result } = await ready((c) => { c.setSeasonNum('2'); c.setEpisodeNum('5') })
-    await publish(result)
-    expect(meta().video).toMatchObject({ season: 2, episode: 5 })
-  })
-
-  it('no numbers: no fields', async () => {
-    const { result } = await ready((c) => { c.setEpisodeNum('0') })
+  it('a video has no season or episode numbers (only audio episodes do)', async () => {
+    const { result } = await ready()
+    expect(result.current).not.toHaveProperty('setSeasonNum')
     await publish(result)
     expect(meta().video).not.toHaveProperty('season')
     expect(meta().video).not.toHaveProperty('episode')
   })
 
   it('a draft is kept on the checker without a time, signed as a draft, and nothing is broadcast', async () => {
-    const { result } = await ready((c) => { c.setSaveAsDraft(true); c.setSeasonNum('1') })
+    const { result } = await ready((c) => { c.setSaveAsDraft(true) })
     await publish(result)
     const [, body] = draftCall()
     expect(body).toMatchObject({ owner: 'badadib', permlink: PERMLINK, draft: true, embedPermlink: 'asset-1', title: 'My First Video!' })
     expect(body).not.toHaveProperty('scheduledOn')
-    expect(body.jsonMetadata.video).toMatchObject({ season: 1 })
     expect(h.fns.proveScheduledPost).toHaveBeenCalledWith({ action: 'draft', owner: 'badadib', permlink: PERMLINK })
     nothingPosted()
     expect(result.current.completed).toBe(true)
