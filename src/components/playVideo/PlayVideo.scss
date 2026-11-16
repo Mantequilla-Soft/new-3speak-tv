@@ -144,6 +144,11 @@ $wide: 1024px;
 
   &.is-shown { opacity: 1; pointer-events: auto; }
 
+  // The author, then a collab post's co-creators, side by side.
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+
   .author-badge {
     display: inline-flex;
     align-items: center;
@@ -605,7 +610,8 @@ $wide: 1024px;
 }
 
 .wv2-chapter {
-  flex: 1;
+  // A card's size, not a share of the row: two chapters stay two small cards.
+  flex: 0 1 200px;
   min-width: 0;
   display: flex;
   flex-direction: column;
@@ -634,6 +640,27 @@ $wide: 1024px;
   &__title { @include v2.text(body-sm); font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 }
 
+// A chapter's still (hooks/useChapterStills), over the placeholder once drawn;
+// the hidden low-res video it comes from.
+.wv2-chapter__still {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity var(--t-base) var(--ease);
+  &.is-drawn { opacity: 1; }
+}
+.chapter-stills-source {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  opacity: 0;
+  pointer-events: none;
+}
+
 // Chapters as a list (narrow Chapters tab, summary sheet).
 .wv2-chapter-list { display: flex; flex-direction: column; gap: 4px; padding-top: 6px; }
 .wv2-chapter-row {
@@ -652,7 +679,7 @@ $wide: 1024px;
   &:hover { background: var(--bg-hover); }
   &.is-on { border-color: var(--cyan); background: color-mix(in srgb, var(--cyan) 8%, transparent); }
 
-  &__thumb { width: 96px; aspect-ratio: 16 / 9; border-radius: var(--r-md); flex: none; @include v2.thumb-placeholder(6px); }
+  &__thumb { position: relative; overflow: hidden; width: 96px; aspect-ratio: 16 / 9; border-radius: var(--r-md); flex: none; @include v2.thumb-placeholder(6px); }
   &__text { display: flex; flex-direction: column; gap: 2px; min-width: 0; b { @include v2.text(body-sm); font-weight: 700; } }
 }
 

@@ -155,5 +155,23 @@
     "creator": "Creator",
     "empty": "Noch keine Kommentare",
     "emptyHint": "Kommentare zu einer bestimmten Stelle erscheinen auf der Zeitleiste des Videos."
+  },
+  "focus": {
+    "open": "Fokusmodus",
+    "aria": "Fokusmodus: Kommentar schreiben",
+    "done": "Fertig",
+    "sound": "Schreibmaschinenklang",
+    "words_one": "{{count}} Wort",
+    "words_other": "{{count}} Wörter",
+    "music": "Hintergrundmusik",
+    "musicOff": "Aus",
+    "track1": "Regen",
+    "track2": "Nachtklavier",
+    "track3": "Kaminfeuer"
+  },
+  "editor": {
+    "full": "Voller Editor",
+    "compact": "Kompakter Editor",
+    "toolbar": "Formatierung"
   }
 }

@@ -155,5 +155,23 @@
     "creator": "Maker",
     "empty": "Nog geen reacties",
     "emptyHint": "Reacties bij een bepaald moment verschijnen op de tijdlijn van de video."
+  },
+  "focus": {
+    "open": "Focusmodus",
+    "aria": "Focusmodus: schrijf je reactie",
+    "done": "Klaar",
+    "sound": "Typemachinegeluid",
+    "words_one": "{{count}} woord",
+    "words_other": "{{count}} woorden",
+    "music": "Achtergrondmuziek",
+    "musicOff": "Uit",
+    "track1": "Regen",
+    "track2": "Nachtpiano",
+    "track3": "Haardvuur"
+  },
+  "editor": {
+    "full": "Volledige editor",
+    "compact": "Compacte editor",
+    "toolbar": "Opmaak"
   }
 }

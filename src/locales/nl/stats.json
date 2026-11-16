@@ -91,6 +91,7 @@
   },
   "loadError": "Je statistieken konden nu niet worden geladen.",
   "emptyRange": "Nog geen kijkgegevens in deze periode — probeer “Alles”, of wacht tot mensen je video's bekijken.",
+  "emptyRangeAudio": "Nog geen luistergegevens in deze periode. Probeer ‘Alles’ of wacht tot mensen luisteren.",
   "tiles": {
     "avgViewDuration": "Gem. kijkduur",
     "avgWatched": "Gem. bekeken",

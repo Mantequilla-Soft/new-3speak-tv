@@ -437,6 +437,36 @@ export default function HomeHero({ videos = [], pending = false }) {
     slotSrc.current = [null, null];
   }, []);
 
+  // Parallax (desktop, a mouse): the picture and the clips drift a little
+  // against the pointer, the text a touch with it, wherever the mouse is on
+  // the page (measured from the hero's middle, so the drift is strongest at
+  // its edges and stays there beyond them). CSS variables set straight on the
+  // section once a frame, so moving the mouse never re-renders.
+  const heroRef = useRef(null);
+  useEffect(() => {
+    if (!window.matchMedia?.('(hover: hover) and (pointer: fine)').matches) return undefined;
+    let frame = 0;
+    let x = 0;
+    let y = 0;
+    const onMove = (e) => {
+      if (e.pointerType && e.pointerType !== 'mouse') return;
+      const el = heroRef.current;
+      if (!el) return;
+      const r = el.getBoundingClientRect();
+      if (r.bottom < 0 || r.top > window.innerHeight) return;
+      x = Math.max(-1, Math.min(1, ((e.clientX - r.left) / r.width) * 2 - 1));
+      y = Math.max(-1, Math.min(1, ((e.clientY - r.top) / r.height) * 2 - 1));
+      if (frame) return;
+      frame = requestAnimationFrame(() => {
+        frame = 0;
+        el.style.setProperty("--px", x.toFixed(3));
+        el.style.setProperty("--py", y.toFixed(3));
+      });
+    };
+    window.addEventListener('pointermove', onMove, { passive: true });
+    return () => { window.removeEventListener('pointermove', onMove); cancelAnimationFrame(frame); };
+  }, []);
+
   const touch = useRef(null);
   const onTouchStart = (e) => { const p = e.touches[0]; touch.current = { x: p.clientX, y: p.clientY }; };
   const onTouchEnd = (e) => {
@@ -489,6 +519,7 @@ export default function HomeHero({ videos = [], pending = false }) {
 
   return (
     <section
+      ref={heroRef}
       className={`home-hero${paused ? " is-paused" : ""}${fading ? " is-fading" : ""}`}
       aria-label={t("cards.badges.spotlight")}
       onPointerEnter={(e) => { if (e.pointerType === "mouse") setHover(true); }}

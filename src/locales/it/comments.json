@@ -161,5 +161,24 @@
     "creator": "Creator",
     "empty": "Ancora nessun commento",
     "emptyHint": "I commenti legati a un momento compaiono sulla timeline del video."
+  },
+  "focus": {
+    "open": "Modalità concentrazione",
+    "aria": "Modalità concentrazione: scrivi il tuo commento",
+    "done": "Fatto",
+    "sound": "Suono della macchina da scrivere",
+    "words_one": "{{count}} parola",
+    "words_many": "{{count}} parole",
+    "words_other": "{{count}} parole",
+    "music": "Musica di sottofondo",
+    "musicOff": "No",
+    "track1": "Pioggia",
+    "track2": "Piano notturno",
+    "track3": "Caminetto"
+  },
+  "editor": {
+    "full": "Editor completo",
+    "compact": "Editor compatto",
+    "toolbar": "Formattazione"
   }
 }

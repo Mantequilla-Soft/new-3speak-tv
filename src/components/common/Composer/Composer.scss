@@ -1,0 +1,103 @@
+@use "../../../styles/v2" as v2;
+
+/* The one editor (Composer.jsx). The full view wears studio/MarkdownComposer.scss
+   (`.markdown-composer`, which post forms size). These are the compact view's
+   base looks, under :where() so they weigh nothing: a host (the watch page's
+   CommentSection, Shorts, snaps, the audio player) restyles the same hooks
+   without fighting them. */
+
+:where(.composer.is-stacked) {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+:where(.composer) .textarea-box {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 56px;
+  max-height: 240px;
+  padding: 10px 12px;
+  border: 2px solid transparent;
+  border-radius: var(--r-md);
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
+  @include v2.text(body);
+  line-height: 1.45;
+  resize: none;
+  overflow-y: auto;
+  outline: none;
+  transition: border-color var(--t-fast) var(--ease);
+
+  &::placeholder { color: var(--muted); }
+  &:focus { border-color: var(--accent); }
+  &:disabled { opacity: .45; }
+
+  // 16px stops iOS from zooming the page when the box is focused.
+  @include v2.mobile { font-size: 16px; }
+}
+
+:where(.composer) .comment-form-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+:where(.composer) .comment-compose-tools {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+  min-width: 0;
+}
+
+:where(.composer) .btn-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+}
+
+:where(.composer) .snap-poll-editor { margin-top: 8px; }
+
+// Inline (Shorts): no box of its own, so the host's row (`rowClassName`) sits
+// where it always did; a poll's editor lands just above it.
+:where(.composer.is-inline) { display: contents; }
+
+:where(.composer__row) {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  min-width: 0;
+
+  > .comment-drop-zone { flex: 1; min-width: 0; }
+}
+
+:where(.composer__tools) {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+// The poll toggle at the size of the other tools in a row of 32px buttons.
+:where(.composer .comment-compose-tools, .composer__tools) .poll-toggle {
+  width: 32px;
+  height: 32px;
+}
+
+// Full view: the tools after the formatting, past a thin rule; the footer
+// (the comment's Cancel / submit) under the editor.
+.composer.is-full {
+  .composer-toolbar__sep {
+    width: 1px;
+    height: 18px;
+    margin: 0 4px;
+    background: var(--border);
+  }
+  .comment-form-row { margin-top: 0; }
+}

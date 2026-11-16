@@ -637,6 +637,8 @@ async function loadNestedComments(comments, loggedInUser = null) {
         author: comment.author,
         permlink: comment.permlink,
         body: comment.body,
+        // A poll on the comment lives here (lib/polls.js pollFromMeta).
+        jsonMetadata: comment.json_metadata,
         createdAt: comment.created,
         timeAgo: timeAgo(comment.created),
         netVotes: comment.net_votes || 0,

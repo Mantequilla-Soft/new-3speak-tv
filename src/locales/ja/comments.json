@@ -149,5 +149,22 @@
     "creator": "クリエイター",
     "empty": "まだコメントはありません",
     "emptyHint": "特定の場面に付けたコメントは、動画のタイムラインに表示されます。"
+  },
+  "focus": {
+    "open": "集中モード",
+    "aria": "集中モード：コメントを書く",
+    "done": "完了",
+    "sound": "タイプライターの音",
+    "words_other": "{{count}} 語",
+    "music": "BGM",
+    "musicOff": "オフ",
+    "track1": "雨",
+    "track2": "夜のピアノ",
+    "track3": "暖炉"
+  },
+  "editor": {
+    "full": "フルエディター",
+    "compact": "コンパクトエディター",
+    "toolbar": "書式"
   }
 }

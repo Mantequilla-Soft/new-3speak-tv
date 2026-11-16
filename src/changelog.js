@@ -18,6 +18,42 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.96',
+    category: 'watch',
+    date: '2026-11-16',
+    summary: 'A collab video shows every co-creator on the player, each with a Follow button.',
+  },
+  {
+    version: '2.0.95',
+    category: 'profile',
+    date: '2026-11-16',
+    summary: 'Profiles have a Curation tab showing what the channel voted for.',
+  },
+  {
+    version: '2.0.94',
+    category: 'watch',
+    date: '2026-11-16',
+    summary: "The player's quality menu has a button for the keyboard shortcut list.",
+  },
+  {
+    version: '2.0.93',
+    category: 'groups',
+    date: '2026-11-16',
+    summary: 'Polls work in snap comments and replies too.',
+  },
+  {
+    version: '2.0.92',
+    category: 'comments',
+    date: '2026-11-16',
+    summary: "Focus mode turns a comment box into a typewriter page, with a warm light, the video's picture behind it and optional background music.",
+  },
+  {
+    version: '2.0.91',
+    category: 'comments',
+    date: '2026-11-16',
+    summary: 'Every comment and post box is now one editor: comments open compact, with a button for the full editor with formatting.',
+  },
+  {
     version: '2.0.90',
     category: 'watch',
     date: '2026-11-16',

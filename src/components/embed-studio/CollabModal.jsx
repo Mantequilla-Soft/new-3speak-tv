@@ -26,19 +26,24 @@ export default function CollabModal({ open, onClose, value, onSave, user, creato
   const [suggestions, setSuggestions] = useState([]);
   const [error, setError] = useState('');
   const [checking, setChecking] = useState(false);
+  // The account picked from the suggestions (or the one being edited): shown
+  // as its avatar and name in place of the field, with no more suggestions.
+  const [picked, setPicked] = useState(value?.account || '');
 
   useEffect(() => {
     if (!open) return;
     setAccount(value?.account || '');
+    setPicked(value?.account || '');
     setSplit(value?.split || COLLAB_SPLIT_DEFAULT);
     setError('');
   }, [open, value]);
 
   const name = account.trim().toLowerCase().replace(/^@/, '');
+  const chosen = !!picked && picked === name;
 
   // Suggestions from Hive's account list as the name is typed.
   useEffect(() => {
-    if (!open || name.length < 2) { setSuggestions([]); return undefined; }
+    if (!open || name.length < 2 || chosen) { setSuggestions([]); return undefined; }
     let alive = true;
     const timer = setTimeout(async () => {
       try {
@@ -49,7 +54,7 @@ export default function CollabModal({ open, onClose, value, onSave, user, creato
       }
     }, 250);
     return () => { alive = false; clearTimeout(timer); };
-  }, [name, open, user]);
+  }, [name, open, user, chosen]);
 
   const share = Math.round(creatorPercent * split) / 100;
 
@@ -86,6 +91,17 @@ export default function CollabModal({ open, onClose, value, onSave, user, creato
       )}
     >
       <div className="collab-modal">
+        {chosen ? (
+          <div className="collab-modal__chosen">
+            <span className="v2-eyebrow">{t('social.collab.accountLabel')}</span>
+            <div className="collab-modal__chosen-row">
+              <HiveAvatar username={name} size="small" alt="" badgeSize={0} />
+              <b>@{name}</b>
+              <Button variant="ghost" size={32} icon="edit" onClick={() => setPicked('')}>{t('common.actions.edit')}</Button>
+            </div>
+            {error && <p className="collab-modal__error" role="alert">{error}</p>}
+          </div>
+        ) : (
         <Field
           label={t('social.collab.accountLabel')}
           placeholder={t('social.collab.accountPlaceholder')}
@@ -97,11 +113,12 @@ export default function CollabModal({ open, onClose, value, onSave, user, creato
           onChange={(e) => { setAccount(e.target.value); setError(''); }}
           onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); save(); } }}
         />
-        {suggestions.length > 0 && (
+        )}
+        {!chosen && suggestions.length > 0 && (
           <ul className="collab-modal__suggest" aria-label={t('social.collab.suggestions')}>
             {suggestions.map((s) => (
               <li key={s}>
-                <button type="button" onClick={() => { setAccount(s); setSuggestions([]); setError(''); }}>
+                <button type="button" onClick={() => { setAccount(s); setPicked(s); setSuggestions([]); setError(''); }}>
                   <HiveAvatar username={s} size="small" alt="" badgeSize={0} />
                   <span>@{s}</span>
                 </button>

@@ -500,6 +500,40 @@ $menu-bg: color-mix(in srgb, var(--media-black) 90%, transparent);
 .vc-speed-menu { width: 296px; }
 // As wide as its choices need ("Automatisch" in German), within reason
 .vc-quality-menu { width: max-content; min-width: 240px; max-width: min(340px, calc(100vw - 24px)); }
+
+// Under Quality: the keyboard shortcut list, for a mouse (a phone has no keys).
+.vc-menu-shortcuts {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  height: 36px;
+  margin-top: 8px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: var(--r-md);
+  background: transparent;
+  color: var(--on-media);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+
+  &:hover { background: rgba(255, 255, 255, 0.1); }
+  &:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  kbd {
+    display: inline-grid;
+    place-items: center;
+    min-width: 22px;
+    height: 22px;
+    border: 1px solid $line;
+    border-radius: var(--r-sm);
+    font: 700 12px var(--font-mono);
+  }
+
+  @media (hover: none) { display: none; }
+}
 .vc-subtitle-menu {
   width: 296px;
   max-height: min(420px, 70vh);

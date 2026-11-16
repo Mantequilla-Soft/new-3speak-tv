@@ -31,6 +31,18 @@ describe('collab modal', () => {
     expect(onClose).toHaveBeenCalled()
   })
 
+  it('a picked account closes the list and shows its avatar; Edit brings the field back', async () => {
+    const { user } = renderWithProviders(<CollabModal open onClose={vi.fn()} onSave={vi.fn()} user="badadib" />)
+    await user.type(screen.getByLabelText('Co-creator'), 'fa')
+    await user.click(await screen.findByRole('button', { name: '@fanatic' }))
+    expect(screen.queryByRole('list', { name: /suggest/i })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: '@fan' })).not.toBeInTheDocument()
+    expect(screen.queryByLabelText('Co-creator')).not.toBeInTheDocument()
+    expect(screen.getByText('@fanatic')).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Edit' }))
+    expect(screen.getByLabelText('Co-creator')).toHaveValue('fanatic')
+  })
+
   it('refuses the creator and an unknown account', async () => {
     const onSave = vi.fn()
     const { user } = renderWithProviders(<CollabModal open onClose={vi.fn()} onSave={onSave} user="badadib" />)

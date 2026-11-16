@@ -25,6 +25,7 @@ import { useAppStore } from '../../lib/store';
 import CreatorStats from '../CreatorStats/CreatorStats';
 // Lazy: it carries the video-reply recorder (tus upload), which no other tab needs.
 const CommentInbox = React.lazy(() => import('../CommentInbox/CommentInbox'));
+const CurationView = React.lazy(() => import('../../page/Curation').then((m) => ({ default: m.CurationView })));
 import { createPlaylist } from '../../utils/playlistOperations';
 import { AUDIO_KINDS } from '../../lib/playlistType';
 import { toastIn } from '../../utils/toast';
@@ -86,6 +87,7 @@ function UserProfilePage({ user: userProp }) {
       if (tab === 'links') return 'links';
       if (tab === 'stats') return 'stats';
       if (tab === 'comments') return 'comments';
+      if (tab === 'curation') return 'curation';
       if (tab === 'video') return 'video';
       if (tab === 'members') return 'members';
       // `supporters` was the members-only shelf's old id; it now means tippers.
@@ -106,6 +108,7 @@ function UserProfilePage({ user: userProp }) {
       else if (tab === 'links') setShow('links');
       else if (tab === 'stats') setShow('stats');
       else if (tab === 'comments') setShow('comments');
+      else if (tab === 'curation') setShow('curation');
       else if (tab === 'video') setShow('video');
       else if (tab === 'members') setShow('members');
       else if (tab === 'supports' || tab === 'supporters') setShow('supports');
@@ -583,6 +586,9 @@ const {
     hasGated && { value: 'members', label: t('profile.tabs.members') },
     isOwnProfile && { value: 'links', label: t('profile.tabs.links') },
     canSeeStats && { value: 'stats', label: t('profile.tabs.analytics') },
+    // What this account voted for on 3Speak (the /curation/:user page): Hive votes,
+    // so not for your own warm-up account.
+    !(isOwnProfile && incubationHandle) && { value: 'curation', label: t('curation.page.title') },
     // The comment inbox: the creator's own, and only for a Hive account (a reply is a Hive post).
     isOwnProfile && !incubationHandle && { value: 'comments', label: t('creator.inbox.tab') },
   ].filter(Boolean);
@@ -757,6 +763,10 @@ const {
     canSeeStats ? <CreatorStats user={user} /> : null
   ) : show === "comments" ? (
     isOwnProfile && !incubationHandle ? <React.Suspense fallback={<BarLoader />}><CommentInbox user={user} /></React.Suspense> : null
+  ) : show === "curation" ? (
+    <div className="watched-view-container curation-page is-tab">
+      <React.Suspense fallback={<BarLoader />}><CurationView user={user} withSub /></React.Suspense>
+    </div>
   ) : show === "playlists" ? (
     <>
       {isOwnProfile && (

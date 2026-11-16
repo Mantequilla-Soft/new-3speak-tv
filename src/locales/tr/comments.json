@@ -155,5 +155,23 @@
     "creator": "İçerik üreticisi",
     "empty": "Henüz yorum yok",
     "emptyHint": "Belirli bir ana bağlı yorumlar videonun zaman çizelgesinde görünür."
+  },
+  "focus": {
+    "open": "Odak modu",
+    "aria": "Odak modu: yorumunu yaz",
+    "done": "Bitti",
+    "sound": "Daktilo sesi",
+    "words_one": "{{count}} kelime",
+    "words_other": "{{count}} kelime",
+    "music": "Arka plan müziği",
+    "musicOff": "Kapalı",
+    "track1": "Yağmur",
+    "track2": "Gece piyanosu",
+    "track3": "Şömine"
+  },
+  "editor": {
+    "full": "Tam düzenleyici",
+    "compact": "Kompakt düzenleyici",
+    "toolbar": "Biçimlendirme"
   }
 }

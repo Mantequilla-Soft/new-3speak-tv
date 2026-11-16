@@ -33,6 +33,32 @@
   }
 }
 
+.collab-modal__chosen {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+// The picked collaborator: avatar and name, Edit to type another.
+.collab-modal__chosen-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 6px 6px 6px 8px;
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+
+  .hive-avatar, img { width: 36px; height: 36px; border-radius: 50%; flex: none; }
+  b { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+}
+
+.collab-modal__error {
+  margin: 0;
+  font-size: 13px;
+  color: var(--danger, var(--accent));
+}
+
 .collab-modal__split {
   display: flex;
   flex-direction: column;

@@ -91,6 +91,7 @@
   },
   "loadError": "Imeshindwa kupakia takwimu zako kwa sasa.",
   "emptyRange": "Bado hakuna data ya kutazama katika kipindi hiki — jaribu “Zote”, au subiri watu watazame video zako.",
+  "emptyRangeAudio": "Bado hakuna data ya kusikiliza katika kipindi hiki. Jaribu “Zote”, au subiri watu wasikilize.",
   "tiles": {
     "avgViewDuration": "Wastani wa muda wa kutazama",
     "avgWatched": "Wastani uliotazamwa",

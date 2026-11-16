@@ -94,6 +94,7 @@
   },
   "loadError": "No se pudieron cargar tus estadísticas en este momento.",
   "emptyRange": "Aún no hay datos de visualización en este periodo. Prueba con “Todo” o espera a que la gente vea tus videos.",
+  "emptyRangeAudio": "Aún no hay datos de escucha en este periodo. Prueba «Todo» o espera a que alguien escuche.",
   "tiles": {
     "avgViewDuration": "Duración media de visualización",
     "avgWatched": "Promedio visto",

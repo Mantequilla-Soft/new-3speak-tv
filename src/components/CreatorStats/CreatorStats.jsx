@@ -636,7 +636,7 @@ export default function CreatorStats({ user }) {
 
       {!totals.videos ? (
         <>
-          <div className="cs-empty">{t('stats.emptyRange')}</div>
+          <div className="cs-empty">{t(isAudio ? 'stats.emptyRangeAudio' : 'stats.emptyRange')}</div>
           {/* Earnings do not depend on watch sessions: they still show. */}
           <div className="cs-grid">
             <EarningsCard

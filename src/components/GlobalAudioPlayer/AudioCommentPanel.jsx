@@ -1,11 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Icon } from '../v2/Icon';
-import { Button } from '../v2/ui';
 import { commentWithAioha } from '../../hive-api/aioha';
-import useEmojiShortcodes from '../../hooks/useEmojiShortcodes';
-import EmojiGifPicker from '../common/EmojiGifPicker/EmojiGifPicker';
-import { insertAtCursor, gifMarkdown } from '../../utils/composerInsert';
+import Composer from '../common/Composer/Composer';
 import { toastIn } from '../../utils/toast';
 import './AudioCommentPanel.scss';
 
@@ -24,9 +21,8 @@ const fmt = (s) => {
  * is the top section of the player card (above the controls), with no overlay,
  * so play/pause, seek and skip stay usable while writing. Lives inside the
  * player's DOM, so it follows the player into the docked Player tab and the
- * pop-out window too. Emojis and GIFs from the shared picker (over the page, so
- * the player card can't clip it) and `:shortcode:` emojis while typing, as in the
- * watch page's comment box. Optionally tied to the moment it was opened at
+ * pop-out window too. The one editor (common/Composer), its emoji / GIF picker
+ * over the page so the player card can't clip it. Optionally tied to the moment it was opened at
  * (`parentTimestamp`, the way the watch page's comment box does it).
  *
  * @param {string}   author     the track's owner (the Hive post author)
@@ -41,27 +37,28 @@ export default function AudioCommentPanel({ author, permlink, title, at, onClose
   const [withTime, setWithTime] = useState(false);
   const [busy, setBusy] = useState(false);
   const inputRef = useRef(null);
-  const emoji = useEmojiShortcodes(inputRef, text, setText);
   const atSec = Math.floor(at || 0);
 
   useEffect(() => { inputRef.current?.focus({ preventScroll: true }); }, []);
 
   const close = () => { if (!busy) onClose(); };
 
-  const post = async () => {
+  const post = async ({ meta = {} } = {}) => {
     const body = text.trim();
-    if (!body || busy) return;
+    if (!body || busy) return false;
     setBusy(true);
     try {
-      const metadata = { app: '3speak/new-version' };
+      const metadata = { app: '3speak/new-version', ...meta };
       if (withTime && atSec > 0) metadata.parentTimestamp = atSec;
       const res = await commentWithAioha(author, permlink, `re-${permlink}-${Date.now()}`, '', body, metadata);
       if (!res?.success) throw new Error(res?.error || 'comment failed');
       toast.success(t('comments.section.posted'));
       onClose();
+      return true;
     } catch (err) {
       console.error('Audio comment failed:', err);
       toast.error(t('comments.section.postFailed'));
+      return false;
     } finally {
       setBusy(false);
     }
@@ -72,9 +69,10 @@ export default function AudioCommentPanel({ author, permlink, title, at, onClose
       className="audio-np-comment"
       aria-label={t('comments.section.commentTab')}
       // Escape only while focus is in here, so it never fights the player's menus.
-      // Keys from the picker's popover bubble up here through its portal: not ours.
+      // Keys from the picker's popover bubble up here through its portal: not ours;
+      // the :shortcode: list stops its own Escape.
       onKeyDown={(e) => {
-        if (e.key !== 'Escape' || emoji.open || !e.currentTarget.contains(e.target)) return;
+        if (e.key !== 'Escape' || !e.currentTarget.contains(e.target)) return;
         e.stopPropagation();
         close();
       }}
@@ -91,39 +89,29 @@ export default function AudioCommentPanel({ author, permlink, title, at, onClose
           title={t('common.actions.close')}
         ><Icon name="close" size={18} /></button>
       </div>
-      <textarea
-        ref={inputRef}
-        className="audio-np-comment-input"
+      <Composer
         value={text}
-        onChange={(e) => setText(emoji.change(e))}
-        onKeyDown={(e) => { if (emoji.keyDown(e)) return; if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) post(); }}
-        onBlur={emoji.blur}
+        onChange={setText}
+        inputRef={inputRef}
+        className="audio-np-comment-editor"
+        textareaClassName="audio-np-comment-input"
+        textareaProps={{ maxLength: 10000 }}
         placeholder={t('comments.section.commentPlaceholder')}
         rows={5}
-        maxLength={10000}
         disabled={busy}
+        pickerProps={{ portal: true }}
+        polls
+        extraTools={atSec > 0 && (
+          <label className={`audio-np-comment-at${withTime ? ' is-on' : ''}`}>
+            <input type="checkbox" checked={withTime} onChange={(e) => setWithTime(e.target.checked)} disabled={busy} />
+            <Icon name="schedule" size={16} />
+            <span>{t('comments.section.atTime', { time: fmt(atSec) })}</span>
+          </label>
+        )}
+        onSubmit={post}
+        submitting={busy}
+        submitLabel={busy ? t('comments.section.saving') : t('comments.section.commentButton')}
       />
-      {emoji.popup}
-      <div className="audio-np-comment-foot">
-        <div className="audio-np-comment-tools">
-          <EmojiGifPicker
-            portal
-            disabled={busy}
-            onPickEmoji={(em) => insertAtCursor(inputRef.current, text, em, setText)}
-            onPickGif={(url) => insertAtCursor(inputRef.current, text, gifMarkdown(url), setText)}
-          />
-          {atSec > 0 && (
-            <label className={`audio-np-comment-at${withTime ? ' is-on' : ''}`}>
-              <input type="checkbox" checked={withTime} onChange={(e) => setWithTime(e.target.checked)} disabled={busy} />
-              <Icon name="schedule" size={16} />
-              <span>{t('comments.section.atTime', { time: fmt(atSec) })}</span>
-            </label>
-          )}
-        </div>
-        <Button variant="primary" size={40} className="audio-np-comment-post" onClick={post} disabled={busy || !text.trim()} loading={busy} trailing="send">
-          {busy ? t('comments.section.saving') : t('comments.section.commentButton')}
-        </Button>
-      </div>
     </section>
   );
 }

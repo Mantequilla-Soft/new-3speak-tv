@@ -38,6 +38,7 @@ import { pageAway, onPageAwayChange } from '../../utils/pageAway';
 import { toastIn } from '../../utils/toast';
 import useReblog from '../../hooks/useReblog';
 import AudioCommentPanel from './AudioCommentPanel';
+import { FocusBackdropProvider } from '../common/FocusWriter/focusBackdrop';
 import AudioHypeButton from './AudioHypeButton';
 import FollowChip from './FollowChip';
 import useAudioComments from './useAudioComments';
@@ -2295,7 +2296,9 @@ function GlobalAudioPlayer() {
                   <p className="gap-panel__note">{t('comments.section.empty')}</p>
                 )}
                 {loggedIn && (commentTarget ? (
-                  <AudioCommentPanel {...commentTarget} onClose={() => { setCommentTarget(null); setCommentsRefresh(k => k + 1); }} />
+                  <FocusBackdropProvider value={heroArt(nowPlaying) || null}>
+                    <AudioCommentPanel {...commentTarget} onClose={() => { setCommentTarget(null); setCommentsRefresh(k => k + 1); }} />
+                  </FocusBackdropProvider>
                 ) : (
                   <button
                     type="button"

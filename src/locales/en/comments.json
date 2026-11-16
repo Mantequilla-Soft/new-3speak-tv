@@ -155,5 +155,23 @@
     "creator": "Creator",
     "empty": "No comments yet",
     "emptyHint": "Comments tied to a moment show up on the video's timeline."
+  },
+  "focus": {
+    "open": "Focus mode",
+    "aria": "Focus mode: write your comment",
+    "done": "Done",
+    "sound": "Typewriter sound",
+    "words_one": "{{count}} word",
+    "words_other": "{{count}} words",
+    "music": "Background music",
+    "musicOff": "Off",
+    "track1": "Rain",
+    "track2": "Night piano",
+    "track3": "Fireplace"
+  },
+  "editor": {
+    "full": "Full editor",
+    "compact": "Compact editor",
+    "toolbar": "Formatting"
   }
 }

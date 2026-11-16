@@ -576,6 +576,7 @@ function AudioPost() {
           author={author}
           permlink={permlink}
           setIsVoted={() => {}}
+          backdrop={audioDoc ? cover : null}
         />
       </div>
 

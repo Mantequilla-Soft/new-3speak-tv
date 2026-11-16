@@ -23,9 +23,8 @@ export default function Curation() {
   const user = String(param || '').replace(/^@/, '').toLowerCase();
   const navigate = useNavigate();
   const me = useAppStore((s) => s.user);
-  const { data, isLoading, isError } = useCuration(user);
+  const { data } = useCuration(user);
   const days = data?.days || 30;
-  const picks = data?.picks || [];
 
   return (
     <div className="watched-view-container curation-page">
@@ -45,7 +44,27 @@ export default function Curation() {
           <Button className="back-btn" icon="arrow_back" size={36} onClick={() => navigate(-1)}>{t('common.actions.back')}</Button>
         </div>
       </div>
+      <CurationView user={user} />
+    </div>
+  );
+}
 
+/**
+ * The curator's picks, totals and rules without the page around them: the
+ * body of /curation/:user and of the profiles' Curation tab.
+ */
+export function CurationView({ user, withSub = false }) {
+  const { t } = useTranslation();
+  const me = useAppStore((s) => s.user);
+  const { data, isLoading, isError } = useCuration(user);
+  const days = data?.days || 30;
+  const picks = data?.picks || [];
+
+  return (
+    <>
+      {withSub && (
+        <p className="curation-page__sub">{me === user ? t('curation.page.sub', { days }) : t('curation.page.subOther', { days })}</p>
+      )}
       {isLoading ? (
         <div className="loading-more"><BarLoader /></div>
       ) : isError ? (
@@ -100,6 +119,6 @@ export default function Curation() {
           </p>
         </>
       )}
-    </div>
+    </>
   );
 }

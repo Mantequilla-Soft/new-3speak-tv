@@ -8,9 +8,20 @@ import { renderWithProviders } from './_render.jsx'
 
 const publishSnap = vi.hoisted(() => vi.fn())
 vi.mock('../../../src/lib/snaps', () => ({ publishSnap, SNAP_TAG: 'community', MAX_USER_TAGS: 9 }))
-vi.mock('../../../src/components/studio/MarkdownComposer', () => ({
-  default: ({ value, onChange, placeholder }) => <textarea aria-label="body" placeholder={placeholder} value={value} onChange={(e) => onChange(e.target.value)} />,
-}))
+// The editor as a stand-in: its text box, and the real poll button and editor
+// on the composer's poll state (common/Composer `pollState`).
+vi.mock('../../../src/components/common/Composer/Composer', async () => {
+  const { default: PollEditor, PollToggle } = await import('../../../src/components/Polls/PollEditor')
+  return {
+    default: ({ value, onChange, placeholder, polls, pollState: p }) => (
+      <>
+        <textarea aria-label="body" placeholder={placeholder} value={value} onChange={(e) => onChange(e.target.value)} />
+        {polls && <PollToggle on={p.on} onToggle={() => p.setOn(!p.on)} />}
+        {polls && p.on && <PollEditor options={p.options} onOptions={p.setOptions} days={p.days} onDays={p.setDays} />}
+      </>
+    ),
+  }
+})
 const error = vi.hoisted(() => vi.fn())
 vi.mock('../../../src/utils/toast', () => ({ toastIn: () => ({ success: vi.fn(), error }) }))
 

@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 import WatchCollaborators from './WatchCollaborators';
+import { usePostCollaborators } from '../../lib/collabs';
 import { getHiveUrl } from '../../utils/hiveNode';
 import "./PlayVideo.scss";
 import VideoControls from "../VideoControls/VideoControls";
@@ -639,6 +640,8 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
   useUnstickPlayerWhileTyping();
   const [shareChooserOpen, setShareChooserOpen] = useState(false);
   const [isFollowingCreator, setIsFollowingCreator] = useState(null);
+  // A collab post's co-creators who accepted (lib/collabs.js): on the video beside the author.
+  const collaborators = usePostCollaborators(postIsOffChain || scheduled ? null : author, permlink);
   const [followLoading, setFollowLoading] = useState(false);
 
   // Reshare state
@@ -1668,7 +1671,7 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
       id: 'chapters',
       label: t('audio.player.chapters'),
       count: chapters.length,
-      content: <ChapterList chapters={chapters} current={chapterAt} onSeek={seekChapter} />,
+      content: <ChapterList chapters={chapters} current={chapterAt} onSeek={seekChapter} videoId={videoControls?.previewVideoId} />,
     },
     !wide && !scheduled && {
       id: 'supporters',
@@ -1834,6 +1837,10 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                     isFollowing={postIsOffChain ? undefined : isFollowingCreator}
                     onFollow={(_, willFollow) => setIsFollowingCreator(willFollow)}
                   />
+                  {/* A collab post: every co-creator who accepted, each with Follow. */}
+                  {collaborators.map((c) => (
+                    <AuthorBadge key={c.account} author={c.account} fetchFollowers showFollow />
+                  ))}
                 </div>
               )}
               {/* Branded preload cover — the SAME splash as the site's initial load
@@ -2113,6 +2120,7 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                     onToggleTheater={wide ? videoControls.onToggleTheater : null}
                     loop={!!videoControls.loop}
                     onToggleLoop={videoControls.onToggleLoop}
+                    onShowShortcuts={() => setKeysOpen(true)}
                   />
                 </>
               )}
@@ -2378,7 +2386,7 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
             </div>
           )}
 
-          {wide && <ChapterCards chapters={chapters} current={chapterAt} onSeek={seekChapter} />}
+          {wide && <ChapterCards chapters={chapters} current={chapterAt} onSeek={seekChapter} videoId={videoControls?.previewVideoId} />}
 
           <div className="wv2-desc">
             {/* BlogContent falls back to fetching the post from Hive, which has

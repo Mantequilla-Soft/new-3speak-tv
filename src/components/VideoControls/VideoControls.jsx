@@ -116,6 +116,8 @@ function VideoControls({
   // Play the video again from the start when it ends, instead of moving on.
   loop = false,
   onToggleLoop = null,
+  // Opens the keyboard shortcut list (the "?" key); a button under Quality.
+  onShowShortcuts = null,
 }) {
   const { t } = useTranslation();
   const resolvedMarkers = markers || [];
@@ -838,6 +840,16 @@ function VideoControls({
                       </button>
                     ))}
                   </div>
+                  {onShowShortcuts && (
+                    <button
+                      type="button"
+                      className="vc-menu-shortcuts"
+                      onClick={() => { setQualityMenuOpen(false); onShowShortcuts(); }}
+                    >
+                      <kbd>?</kbd>
+                      {t('playerKeys.title')}
+                    </button>
+                  )}
                 </div>
                 </PortalIf>
               )}

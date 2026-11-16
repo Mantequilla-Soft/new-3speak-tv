@@ -202,6 +202,8 @@ export function CommentDropZone({
   // Optional controls shown at the start of the Write / Preview row (the watch
   // page puts its Comment / React switch there, so both share one row).
   tabsLead = null,
+  // The preview's renderer (lib/hiveRenderer.js): comments render like Hive.
+  getRenderer = getHiveRenderer,
 }) {
   const { t } = useI18n();
   const [over, setOver] = useState(false);
@@ -212,11 +214,11 @@ export function CommentDropZone({
   useEffect(() => {
     if (!previewing) return undefined;
     let alive = true;
-    getHiveRenderer()
+    getRenderer()
       .then((render) => { if (alive) setHtml(toHtml(render, value || '')); })
       .catch(() => { if (alive) setHtml(''); });
     return () => { alive = false; };
-  }, [previewing, value, toHtml]);
+  }, [previewing, value, toHtml, getRenderer]);
 
   // Back to Write once the box is emptied by posting or Cancel, so the next
   // comment does not start in a preview of nothing.

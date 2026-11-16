@@ -2,12 +2,11 @@ import { useState } from 'react';
 import { toastIn } from '../../utils/toast';
 import { Icon } from '../v2/Icon';
 import { Button, Checkbox } from '../v2/ui';
-import MarkdownComposer from '../studio/MarkdownComposer';
+import Composer from '../common/Composer/Composer';
 import { useAppStore } from '../../lib/store';
 import { publishSnap, SNAP_TAG, MAX_USER_TAGS } from '../../lib/snaps';
 import '../Polls/PollCard.scss';
 import { buildPollMeta, POLL_MIN_OPTIONS, POLL_MAX_OPTIONS } from '../../lib/polls';
-import PollEditor, { PollToggle } from '../Polls/PollEditor';
 import { useTranslation } from 'react-i18next';
 
 // Every toast from this module is headed "Post"; the message becomes the
@@ -115,16 +114,16 @@ export default function SnapComposer({ onPosted, community = '', placeholder }) 
 
   return (
     <div className="snap-composer">
-      <MarkdownComposer
+      {/* Not in a community's Discussion tab: polls live on the channel. */}
+      <Composer
+        mode="full"
         value={body}
         onChange={setBody}
         placeholder={pollOn ? t('social.polls.questionPlaceholder') : (placeholder ?? t('profile.snaps.composerPlaceholder'))}
         previewContext="snap"
+        polls={!community}
+        pollState={{ on: pollOn, setOn: setPollOn, options: pollOptions, setOptions: setPollOptions, days: pollDays, setDays: setPollDays }}
       />
-
-      {pollOn && (
-        <PollEditor options={pollOptions} onOptions={setPollOptions} days={pollDays} onDays={setPollDays} />
-      )}
 
       <div className="snap-composer-row">
         <input
@@ -135,8 +134,6 @@ export default function SnapComposer({ onPosted, community = '', placeholder }) 
           onKeyDown={onTagKeyDown}
           disabled={tags.length >= MAX_USER_TAGS}
         />
-        {/* Not in a community's Discussion tab: polls live on the channel. */}
-        {!community && <PollToggle on={pollOn} onToggle={() => setPollOn((v) => !v)} className="snap-poll-toggle" />}
         <Button
           variant="ghost"
           size={40}

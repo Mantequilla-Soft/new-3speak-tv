@@ -34,3 +34,16 @@
     color: var(--muted);
   }
 }
+
+// As a profile tab (ProfilePage / UserProfilePage): the tab's own width and
+// spacing, the period as a line over the tiles instead of the page header.
+.curation-page.is-tab {
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+.curation-page__sub {
+  margin: 0 0 12px;
+  @include v2.text(body-sm);
+  color: var(--muted);
+}

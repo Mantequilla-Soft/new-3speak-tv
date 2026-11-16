@@ -14,7 +14,7 @@ vi.mock('../../../src/hive-api/aioha', async () => (await import('./_render.jsx'
   commentWithAioha: (...a) => m.comment(...a),
 }))
 vi.mock('../../../src/utils/hiveNode', () => ({ getHiveClient: () => ({ call: (...a) => m.call(...a) }), getHiveUrl: () => 'https://api.hive.example' }))
-vi.mock('../../../src/lib/hiveRenderer', () => ({ getHiveRenderer: async () => (md) => `<p>${md}</p>` }))
+vi.mock('../../../src/lib/hiveRenderer', () => ({ getHiveRenderer: async () => (md) => `<p>${md}</p>`, getPostBodyRenderer: async () => (md) => `<p>${md}</p>` }))
 vi.mock('../../../src/utils/reputation', () => ({
   markByReputation: async (list) => list.map((c) => ({ ...c, isLowReputation: c.author.username === 'spammer' })),
   getUserReputation: async () => 60,

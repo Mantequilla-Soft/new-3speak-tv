@@ -149,5 +149,22 @@
     "creator": "创作者",
     "empty": "还没有评论",
     "emptyHint": "关联到某个时间点的评论会显示在视频的时间轴上。"
+  },
+  "focus": {
+    "open": "专注模式",
+    "aria": "专注模式：撰写评论",
+    "done": "完成",
+    "sound": "打字机音效",
+    "words_other": "{{count}} 个词",
+    "music": "背景音乐",
+    "musicOff": "关",
+    "track1": "雨声",
+    "track2": "夜曲钢琴",
+    "track3": "壁炉"
+  },
+  "editor": {
+    "full": "完整编辑器",
+    "compact": "精简编辑器",
+    "toolbar": "格式"
   }
 }

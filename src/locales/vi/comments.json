@@ -149,5 +149,22 @@
     "creator": "Nhà sáng tạo",
     "empty": "Chưa có bình luận nào",
     "emptyHint": "Bình luận gắn với một khoảnh khắc sẽ hiện trên dòng thời gian của video."
+  },
+  "focus": {
+    "open": "Chế độ tập trung",
+    "aria": "Chế độ tập trung: viết bình luận",
+    "done": "Xong",
+    "sound": "Âm thanh máy đánh chữ",
+    "words_other": "{{count}} từ",
+    "music": "Nhạc nền",
+    "musicOff": "Tắt",
+    "track1": "Mưa",
+    "track2": "Piano đêm",
+    "track3": "Lò sưởi"
+  },
+  "editor": {
+    "full": "Trình soạn thảo đầy đủ",
+    "compact": "Trình soạn thảo gọn",
+    "toolbar": "Định dạng"
   }
 }

@@ -88,6 +88,7 @@
   },
   "loadError": "暂时无法加载你的数据。",
   "emptyRange": "该时间段内还没有观看数据——试试“全部”，或者等观众来看你的视频。",
+  "emptyRangeAudio": "此时间段内还没有收听数据。试试“全部”，或等待有人收听。",
   "tiles": {
     "avgViewDuration": "平均观看时长",
     "avgWatched": "平均观看比例",

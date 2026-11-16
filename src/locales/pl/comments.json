@@ -167,5 +167,25 @@
     "creator": "Twórca",
     "empty": "Brak komentarzy",
     "emptyHint": "Komentarze przypisane do konkretnego momentu pojawiają się na osi czasu filmu."
+  },
+  "focus": {
+    "open": "Tryb skupienia",
+    "aria": "Tryb skupienia: napisz komentarz",
+    "done": "Gotowe",
+    "sound": "Dźwięk maszyny do pisania",
+    "words_one": "{{count}} słowo",
+    "words_other": "{{count}} słów",
+    "words_few": "{{count}} słowa",
+    "words_many": "{{count}} słów",
+    "music": "Muzyka w tle",
+    "musicOff": "Wył.",
+    "track1": "Deszcz",
+    "track2": "Nocne pianino",
+    "track3": "Kominek"
+  },
+  "editor": {
+    "full": "Pełny edytor",
+    "compact": "Kompaktowy edytor",
+    "toolbar": "Formatowanie"
   }
 }

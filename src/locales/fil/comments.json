@@ -155,5 +155,23 @@
     "creator": "Creator",
     "empty": "Wala pang komento",
     "emptyHint": "Lumalabas sa timeline ng video ang mga komentong nakakabit sa isang sandali."
+  },
+  "focus": {
+    "open": "Focus mode",
+    "aria": "Focus mode: isulat ang komento mo",
+    "done": "Tapos na",
+    "sound": "Tunog ng makinilya",
+    "words_one": "{{count}} salita",
+    "words_other": "{{count}} salita",
+    "music": "Background music",
+    "musicOff": "Off",
+    "track1": "Ulan",
+    "track2": "Piano sa gabi",
+    "track3": "Fireplace"
+  },
+  "editor": {
+    "full": "Buong editor",
+    "compact": "Compact na editor",
+    "toolbar": "Pag-format"
   }
 }

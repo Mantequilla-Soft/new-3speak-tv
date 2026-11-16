@@ -33,15 +33,15 @@ import TranslateButton from '../components/TranslateButton/TranslateButton';
 import useSubtitles from '../hooks/useSubtitles';
 import SubtitleOverlay from '../components/SubtitleOverlay/SubtitleOverlay';
 import { SUPPORTED_LANGUAGES } from '../utils/translate';
-import EmojiGifPicker from '../components/common/EmojiGifPicker/EmojiGifPicker';
-import { insertAtCursor, gifMarkdown } from '../utils/composerInsert';
-import useEmojiShortcodes from '../hooks/useEmojiShortcodes';
+import Composer from '../components/common/Composer/Composer';
+import { FocusBackdropProvider } from '../components/common/FocusWriter/focusBackdrop';
 import { prefetchVideoTagsV2 } from '../utils/tagsV2';
 import AiBadge from '../components/AiBadge/AiBadge';
 import AudiogramEpisodeLink from '../components/AudiogramEpisodeLink/AudiogramEpisodeLink';
 import ShortSeriesBar from '../components/Episodes/ShortSeriesBar';
 import ShortPollPill from '../components/Polls/ShortPollPill';
-import { useShortPolls } from '../lib/polls';
+import { useShortPolls, pollFromMeta } from '../lib/polls';
+import PollCard from '../components/Polls/PollCard';
 import { stripEpisodeLine } from '../utils/audiogramLink';
 
 // Custom Hive Icon Component
@@ -73,7 +73,7 @@ import { FEATURE_EDITOR } from '../utils/config';
 import { getHiveRenderer } from '../lib/hiveRenderer';
 import { setCommentPinned } from '../lib/commentPins';
 import {
-  readCommentSort, saveCommentSort, sortComments, pinnedFirst, useCommentImageUpload, CommentImageButton, CommentDropZone,
+  readCommentSort, saveCommentSort, sortComments, pinnedFirst,
 } from '../components/playVideo/commentTools';
 import { getPlayerUrl } from '../utils/playerUrl';
 import { withGatewayFallback } from '../lib/hlsGatewayFallback.js';
@@ -361,8 +361,6 @@ const VideoShort = () => {
   const mainCommentRef = useRef(null);
   const bottomCommentRef = useRef(null);
   // ":fire:" → 🔥 and the ":" emoji list in both comment boxes, as in the chat.
-  const mainCommentEmoji = useEmojiShortcodes(mainCommentRef, newComment, setNewComment);
-  const bottomCommentEmoji = useEmojiShortcodes(bottomCommentRef, newComment, setNewComment);
   const [shareChooserOpen, setShareChooserOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -2174,8 +2172,6 @@ const VideoShort = () => {
       setPinBusy(null);
     }
   }, [videos, currentIndex, pinBusy, t]);
-  const mainCommentImages = useCommentImageUpload(mainCommentRef, newComment, setNewComment, user);
-  const bottomCommentImages = useCommentImageUpload(bottomCommentRef, newComment, setNewComment, user);
 
   /* ---------- SUBTITLES ---------- */
   const {
@@ -2280,15 +2276,17 @@ const VideoShort = () => {
   // `offChainParent`: the parent is a warm-up short or an off-chain reply. Hive
   // rejects a comment whose parent does not exist, so such a reply is stored
   // off-chain whoever writes it, as the watch page's CommentSection does.
-  const handlePostComment = async (parentAuthor, parentPermlink, commentText, isReply = false, offChainParent = false) => {
+  // `extraMeta`: what the editor adds to json_metadata (a poll's fields).
+  // Resolves false when nothing was posted, so the editor keeps its poll.
+  const handlePostComment = async (parentAuthor, parentPermlink, commentText, isReply = false, offChainParent = false, extraMeta = {}) => {
     if (!commentText.trim()) {
       toast.error(t('shorts.comments.enterComment'));
-      return;
+      return false;
     }
 
     if (!parentAuthor || !parentPermlink) {
       toast.error(t('shorts.comments.unavailable'));
-      return;
+      return false;
     }
 
     // A warm-up user has a handle rather than a `user`; commentWithAioha
@@ -2297,7 +2295,7 @@ const VideoShort = () => {
     const commenter = user || incubationHandle;
     if (!commenter || (user && !isLoggedIn())) {
       toast.error(t('shorts.comments.loginToComment'));
-      return;
+      return false;
     }
 
     setPostingComment(true);
@@ -2308,6 +2306,7 @@ const VideoShort = () => {
       author: commenter,
       permlink: newPermlink,
       body: commentText,
+      jsonMetadata: extraMeta,
       createdAt: new Date().toISOString(),
       timeAgo: t('shorts.comments.justNow'),
       netVotes: 0,
@@ -2375,10 +2374,11 @@ const VideoShort = () => {
           newPermlink,
           '', // title (empty for comments)
           commentText,
-          { app: '3speak/new-version' }
+          { app: '3speak/new-version', ...extraMeta }
         );
       }
       toast.success(t('shorts.comments.posted'));
+      return true;
     } catch (err) {
       console.error('Comment failed:', err);
       toast.error(t('shorts.comments.failed', { message: err.message || t('shorts.pleaseTryAgain') }));
@@ -2393,6 +2393,7 @@ const VideoShort = () => {
           };
         })
       );
+      return false;
     } finally {
       setPostingComment(false);
     }
@@ -3447,6 +3448,7 @@ const VideoShort = () => {
 
   return (
     <>
+    <FocusBackdropProvider value={currentVideo?.thumbnailUrl || null}>
     <main className={`short-main${shortsCommentBar ? '' : ' no-bottom-bar'}${adPlaying ? ' ad-playing' : ''}${commentsVisible ? ' with-comments' : ''}${showPeek ? ' has-peek' : ''}${isStoryView ? ' is-story-view' : ''}`}>
       <div className="landscape-block"
         onClick={(e) => { e.stopPropagation(); e.preventDefault(); }}
@@ -4509,35 +4511,26 @@ const VideoShort = () => {
               </div>
             )
           ) : (
-            <div className="storyFoot storyReply" onClick={(e) => e.stopPropagation()} onTouchStart={(e) => e.stopPropagation()} onTouchEnd={(e) => e.stopPropagation()}>
-              <CommentDropZone
-                className="storyReply__box"
-                images={bottomCommentImages}
-                value={newComment}
-                setValue={setNewComment}
-                disabled={!(user || incubationHandle) || currentVideo.hivePostMissing}
-              >
-                <textarea
-                  ref={bottomCommentRef}
-                  rows={1}
-                  placeholder={
-                    currentVideo.hivePostMissing
-                      ? t('shorts.comments.unavailable')
-                      : (user || incubationHandle) ? t('shorts.stories.replyTo', { user: currentVideo.author }) : t('shorts.comments.loginPlaceholder')
-                  }
-                  value={newComment}
-                  onChange={(e) => {
-                    setNewComment(bottomCommentEmoji.change(e));
-                    e.target.style.height = 'auto';
-                    e.target.style.height = e.target.scrollHeight + 'px';
-                  }}
-                  onKeyDown={bottomCommentEmoji.keyDown}
-                  onBlur={bottomCommentEmoji.blur}
-                  disabled={!(user || incubationHandle) || currentVideo.hivePostMissing}
-                  onPaste={bottomCommentImages.onPaste}
-                />
-                {bottomCommentEmoji.popup}
-              </CommentDropZone>
+            <Composer
+              layout="inline"
+              rowClassName="storyFoot storyReply"
+              rowProps={{ onClick: (e) => e.stopPropagation(), onTouchStart: (e) => e.stopPropagation(), onTouchEnd: (e) => e.stopPropagation() }}
+              dropClassName="storyReply__box"
+              inputRef={bottomCommentRef}
+              rows={1}
+              value={newComment}
+              onChange={setNewComment}
+              placeholder={
+                currentVideo.hivePostMissing
+                  ? t('shorts.comments.unavailable')
+                  : (user || incubationHandle) ? t('shorts.stories.replyTo', { user: currentVideo.author }) : t('shorts.comments.loginPlaceholder')
+              }
+              disabled={!(user || incubationHandle) || currentVideo.hivePostMissing}
+              // A reply to a story: the box, the heart and send, nothing more.
+              tools={false}
+              expandable={false}
+              toHtml={null}
+              beforeSubmit={
               <button
                 type="button"
                 className={`storyReply__btn is-heart${currentVideo.isLiked ? ' is-on' : ''}`}
@@ -4548,16 +4541,13 @@ const VideoShort = () => {
               >
                 <Icon name="favorite" size={24} fill />
               </button>
-              <button
-                type="button"
-                className="storyReply__btn"
-                onClick={() => handlePostComment(currentVideo.author, currentVideo.hivePermlink || currentVideo.permlink, newComment, false, !!currentVideo._incubation)}
-                disabled={!(user || incubationHandle) || !newComment.trim() || postingComment || currentVideo.hivePostMissing}
-                aria-label={t('shorts.comments.send')}
-              >
-                {postingComment ? <Icon name="progress_activity" size={24} className="v2-spin" /> : <Icon name="send" size={24} fill />}
-              </button>
-            </div>
+              }
+              onSubmit={({ meta }) => handlePostComment(currentVideo.author, currentVideo.hivePermlink || currentVideo.permlink, newComment, false, !!currentVideo._incubation, meta)}
+              submitting={postingComment}
+              submitClassName="storyReply__btn"
+              submitLabel={t('shorts.comments.send')}
+              submitIconSize={24}
+            />
           )
         )}
 
@@ -4741,63 +4731,34 @@ const VideoShort = () => {
         {/* Comment Input */}
         {/* One row (18a): the box, then send. Write / Preview only once there is
             something to preview. */}
-        <div className="commentInput">
-          <CommentDropZone
-            className="commentInputBox"
-            images={mainCommentImages}
-            value={newComment}
-            setValue={setNewComment}
-            disabled={!(user || incubationHandle) || postingComment || currentVideo.hivePostMissing}
-            toHtml={newComment ? shortsCommentPreviewHtml : null}
-            previewMarkdownClass="commentText"
-          >
-          <textarea
-            ref={mainCommentRef}
-            rows={1}
-            placeholder={
-              // A short whose Hive post was deleted has no parent to comment on,
-              // so the box is disabled. Without this it still read "Add a
-              // comment..." and simply refused to focus, which reads as broken.
-              currentVideo.hivePostMissing
-                ? t('shorts.comments.unavailable')
-                : (user || incubationHandle) ? t('shorts.comments.addPlaceholder') : t('shorts.comments.loginPlaceholder')
-            }
-            value={newComment}
-            onChange={(e) => {
-              setNewComment(mainCommentEmoji.change(e));
-              e.target.style.height = 'auto';
-              e.target.style.height = e.target.scrollHeight + 'px';
-            }}
-            onKeyDown={mainCommentEmoji.keyDown}
-            onBlur={mainCommentEmoji.blur}
-            disabled={!(user || incubationHandle) || postingComment || currentVideo.hivePostMissing}
-            onPaste={mainCommentImages.onPaste}
-            // Enter always inserts a newline (multi-line comments); posting is
-            // handled only by the Send button.
-          />
-          {mainCommentEmoji.popup}
-          </CommentDropZone>
-          {(user || incubationHandle) && !currentVideo.hivePostMissing && (
-            <span className={`commentInputTools${newComment ? ' is-shown' : ''}`}>
-              <EmojiGifPicker
-                align="right"
-                openDirection="up"
-                onPickEmoji={(em) => insertAtCursor(mainCommentRef.current, newComment, em, setNewComment)}
-                onPickGif={(url) => insertAtCursor(mainCommentRef.current, newComment, gifMarkdown(url), setNewComment)}
-              />
-              <CommentImageButton uploading={mainCommentImages.uploading} onFiles={mainCommentImages.upload} />
-            </span>
-          )}
-          <button
-            type="button"
-            className="sendCommentBtn"
-            onClick={() => handlePostComment(currentVideo.author, currentVideo.hivePermlink || currentVideo.permlink, newComment, false, !!currentVideo._incubation)}
-            disabled={!(user || incubationHandle) || !newComment.trim() || postingComment || currentVideo.hivePostMissing}
-            aria-label={t('shorts.comments.send')}
-          >
-            {postingComment ? <Icon name="progress_activity" size={20} className="v2-spin" /> : <Icon name="send" size={20} />}
-          </button>
-        </div>
+        <Composer
+          layout="inline"
+          rowClassName="commentInput"
+          dropClassName="commentInputBox"
+          inputRef={mainCommentRef}
+          rows={1}
+          value={newComment}
+          onChange={setNewComment}
+          placeholder={
+            // A short whose Hive post was deleted has no parent to comment on,
+            // so the box is disabled. Without this it still read "Add a
+            // comment..." and simply refused to focus, which reads as broken.
+            currentVideo.hivePostMissing
+              ? t('shorts.comments.unavailable')
+              : (user || incubationHandle) ? t('shorts.comments.addPlaceholder') : t('shorts.comments.loginPlaceholder')
+          }
+          disabled={!(user || incubationHandle) || postingComment || currentVideo.hivePostMissing}
+          toHtml={shortsCommentPreviewHtml}
+          previewMarkdownClass="commentText"
+          toolsClassName={`commentInputTools${newComment ? ' is-shown' : ''}`}
+          pickerProps={{ align: 'right', openDirection: 'up' }}
+          // A poll goes on Hive: not on a warm-up Short.
+          polls={!currentVideo._incubation}
+          onSubmit={({ meta }) => handlePostComment(currentVideo.author, currentVideo.hivePermlink || currentVideo.permlink, newComment, false, !!currentVideo._incubation, meta)}
+          submitting={postingComment}
+          submitClassName="sendCommentBtn"
+          submitLabel={t('shorts.comments.send')}
+        />
         </>
         )}
       </div>
@@ -4821,58 +4782,32 @@ const VideoShort = () => {
           on the shorts view). Hidden while the full comments panel is open, and
           OFF by default: enable it in Settings ("Comment bar on shorts"). */}
       {!showComments && shortsCommentBar && !isStoryView && (
-        <div className="shortsBottomComment">
-          <CommentDropZone
-            className="commentInputBox"
-            images={bottomCommentImages}
-            value={newComment}
-            setValue={setNewComment}
-            disabled={!(user || incubationHandle) || currentVideo.hivePostMissing}
-          >
-          <textarea
-            ref={bottomCommentRef}
-            rows={1}
-            placeholder={
-              currentVideo.hivePostMissing
-                ? t('shorts.comments.unavailable')
-                : (user || incubationHandle) ? t('shorts.comments.addPlaceholderBar') : t('shorts.comments.loginPlaceholder')
-            }
-            value={newComment}
-            onChange={(e) => {
-              setNewComment(bottomCommentEmoji.change(e));
-              e.target.style.height = 'auto';
-              e.target.style.height = e.target.scrollHeight + 'px';
-            }}
-            onKeyDown={bottomCommentEmoji.keyDown}
-            onBlur={bottomCommentEmoji.blur}
-            disabled={!(user || incubationHandle) || currentVideo.hivePostMissing}
-            onPaste={bottomCommentImages.onPaste}
-          />
-          {bottomCommentEmoji.popup}
-          </CommentDropZone>
-          {(user || incubationHandle) && !currentVideo.hivePostMissing && (
-            <>
-              <EmojiGifPicker
-                align="right"
-                openDirection="up"
-                onPickEmoji={(em) => insertAtCursor(bottomCommentRef.current, newComment, em, setNewComment)}
-                onPickGif={(url) => insertAtCursor(bottomCommentRef.current, newComment, gifMarkdown(url), setNewComment)}
-              />
-              <CommentImageButton uploading={bottomCommentImages.uploading} onFiles={bottomCommentImages.upload} />
-            </>
-          )}
-          <button
-            type="button"
-            className="sendCommentBtn"
-            onClick={() => handlePostComment(currentVideo.author, currentVideo.hivePermlink || currentVideo.permlink, newComment, false, !!currentVideo._incubation)}
-            disabled={!(user || incubationHandle) || !newComment.trim() || postingComment || currentVideo.hivePostMissing}
-            aria-label={t('shorts.comments.send')}
-          >
-            {postingComment ? <Icon name="progress_activity" size={20} className="v2-spin" /> : <Icon name="send" size={20} />}
-          </button>
-        </div>
+        <Composer
+          layout="inline"
+          rowClassName="shortsBottomComment"
+          dropClassName="commentInputBox"
+          inputRef={bottomCommentRef}
+          rows={1}
+          value={newComment}
+          onChange={setNewComment}
+          placeholder={
+            currentVideo.hivePostMissing
+              ? t('shorts.comments.unavailable')
+              : (user || incubationHandle) ? t('shorts.comments.addPlaceholderBar') : t('shorts.comments.loginPlaceholder')
+          }
+          disabled={!(user || incubationHandle) || currentVideo.hivePostMissing}
+          // A one-line bar: no poll or full editor here (the comments panel has them).
+          expandable={false}
+          toHtml={null}
+          pickerProps={{ align: 'right', openDirection: 'up' }}
+          onSubmit={({ meta }) => handlePostComment(currentVideo.author, currentVideo.hivePermlink || currentVideo.permlink, newComment, false, !!currentVideo._incubation, meta)}
+          submitting={postingComment}
+          submitClassName="sendCommentBtn"
+          submitLabel={t('shorts.comments.send')}
+        />
       )}
     </main>
+    </FocusBackdropProvider>
   {isReportOpen && (
     <ReportModal
       isOpen={isReportOpen}
@@ -4928,7 +4863,6 @@ export const CommentItem = ({
   const [translateError, setTranslateError] = useState(false);
   const [isReportOpen, setIsReportOpen] = useState(false);
   const replyInputRef = useRef(null);
-  const replyImages = useCommentImageUpload(replyInputRef, replyText, setReplyText, user);
   const maxDepth = 3;
 
   const handleTranslate = async (langCode) => {
@@ -5003,6 +4937,9 @@ export const CommentItem = ({
             <button type="button" className="comment-collapse-chevron" onClick={() => setCollapsed(true)} aria-label={t('common.actions.showLess')}><Icon name="expand_less" size={18} /></button>
           </div>
           <div className="commentText markdown-view" dangerouslySetInnerHTML={{ __html: getCommentHtml() }} />
+          {comment.onChain !== false && pollFromMeta(comment.jsonMetadata) && (
+            <PollCard snap={{ owner: comment.author, permlink: comment.permlink, poll: pollFromMeta(comment.jsonMetadata) }} />
+          )}
           {translatedText && (
             <div className="comment-translation">
               <div className="comment-translation-header">
@@ -5064,51 +5001,25 @@ export const CommentItem = ({
           {/* Reply Input */}
           {isReplying && (
             <div className="replyInputWrapper">
-              <CommentDropZone
-                images={replyImages}
+              <Composer
+                inputRef={replyInputRef}
+                rows={1}
                 value={replyText}
-                setValue={setReplyText}
+                onChange={setReplyText}
+                placeholder={t('shorts.comments.replyPlaceholder')}
                 disabled={postingComment}
+                autoFocus
                 toHtml={shortsCommentPreviewHtml}
                 previewMarkdownClass="commentText"
-              >
-              <input
-                ref={replyInputRef}
-                type="text"
-                placeholder={t('shorts.comments.replyPlaceholder')}
-                value={replyText}
-                onChange={(e) => setReplyText(e.target.value)}
-                disabled={postingComment}
-                onPaste={replyImages.onPaste}
-                onKeyPress={(e) => {
-                  if (e.key === 'Enter' && !postingComment) {
-                    handlePostComment(authorName, comment.permlink, replyText, true, comment.onChain === false);
-                  }
-                }}
+                pickerProps={{ align: 'left', openDirection: 'up' }}
+                // A poll goes on Hive: not under an off-chain comment.
+                polls={comment.onChain !== false}
+                onCancel={() => setActiveReply(null)}
+                onSubmit={({ meta }) => handlePostComment(authorName, comment.permlink, replyText, true, comment.onChain === false, meta)}
+                submitting={postingComment}
+                submitIcon={null}
+                submitLabel={t('common.actions.reply')}
               />
-              </CommentDropZone>
-              <div className="replyBottomRow">
-                <div className="replyTools">
-                  <EmojiGifPicker
-                    align="left"
-                    openDirection="up"
-                    onPickEmoji={(em) => insertAtCursor(replyInputRef.current, replyText, em, setReplyText)}
-                    onPickGif={(url) => insertAtCursor(replyInputRef.current, replyText, gifMarkdown(url), setReplyText)}
-                  />
-                  <CommentImageButton uploading={replyImages.uploading} onFiles={replyImages.upload} />
-                </div>
-                <div className="replyActions">
-                  <button type="button" onClick={() => setActiveReply(null)}>{t('common.actions.cancel')}</button>
-                  <button
-                    type="button"
-                    className="submitReply"
-                    onClick={() => handlePostComment(authorName, comment.permlink, replyText, true, comment.onChain === false)}
-                    disabled={!replyText.trim() || postingComment}
-                  >
-                    {postingComment ? <Icon name="progress_activity" size={16} className="v2-spin" /> : t('common.actions.reply')}
-                  </button>
-                </div>
-              </div>
             </div>
           )}
 

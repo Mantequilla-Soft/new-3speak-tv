@@ -161,5 +161,24 @@
     "creator": "Créateur",
     "empty": "Aucun commentaire pour l'instant",
     "emptyHint": "Les commentaires liés à un moment apparaissent sur la timeline de la vidéo."
+  },
+  "focus": {
+    "open": "Mode concentration",
+    "aria": "Mode concentration : écrivez votre commentaire",
+    "done": "Terminé",
+    "sound": "Son de machine à écrire",
+    "words_one": "{{count}} mot",
+    "words_many": "{{count}} mots",
+    "words_other": "{{count}} mots",
+    "music": "Musique de fond",
+    "musicOff": "Non",
+    "track1": "Pluie",
+    "track2": "Piano de nuit",
+    "track3": "Feu de cheminée"
+  },
+  "editor": {
+    "full": "Éditeur complet",
+    "compact": "Éditeur compact",
+    "toolbar": "Mise en forme"
   }
 }

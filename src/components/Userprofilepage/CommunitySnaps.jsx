@@ -20,9 +20,9 @@ import { fetchIncubationRepliesFor, fetchIncubationLikes } from '../../lib/incub
 import { useAppStore } from '../../lib/store';
 import SnapComposer from './SnapComposer';
 import PollCard from '../Polls/PollCard';
-import EmojiGifPicker from '../common/EmojiGifPicker/EmojiGifPicker';
-import { insertAtCursor, gifMarkdown } from '../../utils/composerInsert';
-import useEmojiShortcodes from '../../hooks/useEmojiShortcodes';
+import Composer from '../common/Composer/Composer';
+import { pollFromMeta } from '../../lib/polls';
+import { FocusBackdropProvider } from '../common/FocusWriter/focusBackdrop';
 import UpvoteCount from '../UpvoteCount/UpvoteCount';
 import AuthorBadge from '../AuthorBadge/AuthorBadge';
 import CommentVoteTooltip from '../tooltip/CommentVoteTooltip';
@@ -181,26 +181,28 @@ function SnapBody({ body, maxVh = 0.33, onReadMore }) {
 // onSigned fires the moment the broadcast succeeds (for instant counters);
 // onPosted fires right after it with the new reply, so the thread can show it
 // before any node returns it (see usePendingReplies).
-function ReplyBox({ parentAuthor, parentPermlink, onPosted, onSigned, autoFocus = false }) {
+// `offChainParent`: replying under an off-chain comment, where a poll has no Hive post.
+function ReplyBox({ parentAuthor, parentPermlink, onPosted, onSigned, autoFocus = false, offChainParent = false }) {
   const { t } = useTranslation();
   const user = useAppStore((s) => s.user);
   const incubationHandle = useAppStore((s) => s.incubationHandle);
   const [reply, setReply] = useState('');
   const [posting, setPosting] = useState(false);
   const replyRef = useRef(null);
-  const replyEmoji = useEmojiShortcodes(replyRef, reply, setReply);
   // A warm-up user has a handle rather than a `user`, and commentWithAioha
   // already stores their reply off-chain. Gating on `user` alone hid the
   // composer from exactly the people the warm-up asks to write ten comments.
   if (!user && !incubationHandle) return null;
 
-  const submit = async () => {
+  // `meta`: what the editor adds to json_metadata (a poll's fields).
+  const submit = async ({ meta = {} } = {}) => {
     const text = reply.trim();
-    if (!text) return;
+    if (!text) return false;
     setPosting(true);
     try {
       const rp = `re-${parentPermlink}-${Date.now() % 1000000}`.toLowerCase().replace(/[^a-z0-9-]/g, '').slice(0, 250);
-      await commentWithAioha(parentAuthor, parentPermlink, rp, '', text, { app: '3speak/snap', format: 'markdown' }, null);
+      const metadata = { app: '3speak/snap', format: 'markdown', ...meta };
+      await commentWithAioha(parentAuthor, parentPermlink, rp, '', text, metadata, null);
       toast.success(t('profile.snaps.commentPosted'));
       // What was just written, in the shape the thread renders, so it can be
       // shown before any node returns it (see usePendingReplies).
@@ -212,12 +214,15 @@ function ReplyBox({ parentAuthor, parentPermlink, onPosted, onSigned, autoFocus 
         children: 0,
         offChildren: 0,
         onChain: !!user,
+        json_metadata: metadata,
       };
       onSigned?.(local); // instant — counters bump right after signing
       setReply('');
       onPosted?.(local);
+      return true;
     } catch (e) {
       toast.error(e?.message || t('profile.snaps.commentFailed'));
+      return false;
     } finally {
       setPosting(false);
     }
@@ -225,26 +230,19 @@ function ReplyBox({ parentAuthor, parentPermlink, onPosted, onSigned, autoFocus 
 
   return (
     <div className="snap-reply-box">
-      <textarea
-        ref={replyRef}
-        placeholder={t('profile.snaps.commentPlaceholder')}
+      <Composer
         value={reply}
-        onChange={(e) => setReply(replyEmoji.change(e))}
-        onKeyDown={replyEmoji.keyDown}
-        onBlur={replyEmoji.blur}
-        rows={2}
+        onChange={setReply}
+        inputRef={replyRef}
+        placeholder={t('profile.snaps.commentPlaceholder')}
         autoFocus={autoFocus}
+        previewContext="snap"
+        polls={!offChainParent}
+        onSubmit={submit}
+        submitting={posting}
+        submitIcon={null}
+        submitLabel={posting ? t('profile.snaps.posting') : t('common.actions.reply')}
       />
-      {replyEmoji.popup}
-      <div className="snap-reply-actions">
-        <EmojiGifPicker
-          onPickEmoji={(em) => insertAtCursor(replyRef.current, reply, em, setReply)}
-          onPickGif={(url) => insertAtCursor(replyRef.current, reply, gifMarkdown(url), setReply)}
-        />
-        <Button variant="primary" size={32} onClick={submit} disabled={posting || !reply.trim()} loading={posting}>
-          {posting ? t('profile.snaps.posting') : t('common.actions.reply')}
-        </Button>
-      </div>
     </div>
   );
 }
@@ -282,6 +280,9 @@ function SnapComment({ comment }) {
         <span className="snap-comment-time">{hiveTime(comment.created)}</span>
       </div>
       <div className="snap-comment-body markdown-body" dangerouslySetInnerHTML={{ __html: html }} />
+      {comment.onChain !== false && pollFromMeta(comment.json_metadata) && (
+        <PollCard snap={{ owner: comment.author, permlink: comment.permlink, poll: pollFromMeta(comment.json_metadata) }} />
+      )}
       <div className="snap-comment-actions">
         {(user || incubationHandle) && (
           <button type="button" onClick={() => setReplying((v) => !v)}>{replying ? t('common.actions.cancel') : t('common.actions.reply')}</button>
@@ -296,6 +297,7 @@ function SnapComment({ comment }) {
         <ReplyBox
           parentAuthor={comment.author}
           parentPermlink={comment.permlink}
+          offChainParent={comment.onChain === false}
           autoFocus
           onPosted={(local) => { setReplying(false); setShowReplies(true); addPending(local); }}
         />
@@ -779,7 +781,13 @@ export default function CommunitySnaps({ user, community = '', canPost = false, 
     }, 12000);
   };
 
+  // Behind focus mode in these snaps' comments: the banner of the channel (or
+  // the community) whose tab this is. One with no banner gets an error from
+  // the image host, and focus mode then shows no picture.
+  const banner = user || community ? `https://images.hive.blog/u/${user || community}/cover` : null;
+
   return (
+    <FocusBackdropProvider value={banner}>
     <div className="community-snaps">
       {canPost && (
         <SnapComposer
@@ -815,5 +823,6 @@ export default function CommunitySnaps({ user, community = '', canPost = false, 
         </div>
       )}
     </div>
+    </FocusBackdropProvider>
   );
 }

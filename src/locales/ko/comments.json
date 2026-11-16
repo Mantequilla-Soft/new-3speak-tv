@@ -149,5 +149,22 @@
     "creator": "크리에이터",
     "empty": "아직 댓글이 없어요",
     "emptyHint": "특정 장면에 단 댓글은 동영상 타임라인에 표시돼요."
+  },
+  "focus": {
+    "open": "집중 모드",
+    "aria": "집중 모드: 댓글 쓰기",
+    "done": "완료",
+    "sound": "타자기 소리",
+    "words_other": "{{count}}단어",
+    "music": "배경 음악",
+    "musicOff": "끔",
+    "track1": "빗소리",
+    "track2": "밤의 피아노",
+    "track3": "벽난로"
+  },
+  "editor": {
+    "full": "전체 편집기",
+    "compact": "간단한 편집기",
+    "toolbar": "서식"
   }
 }

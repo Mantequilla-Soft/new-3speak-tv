@@ -88,6 +88,7 @@
   },
   "loadError": "Statistikmu tidak dapat dimuat saat ini.",
   "emptyRange": "Belum ada data tonton di rentang ini — coba “Semua”, atau tunggu orang menonton videomu.",
+  "emptyRangeAudio": "Belum ada data mendengarkan di rentang ini. Coba “Semua”, atau tunggu orang mendengarkan.",
   "tiles": {
     "avgViewDuration": "Rata-rata durasi tonton",
     "avgWatched": "Rata-rata ditonton",
