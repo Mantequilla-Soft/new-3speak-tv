@@ -55,6 +55,7 @@ import { Icon } from "../components/v2/Icon";
 import { ProfileTile, ProfileMoreMenu, ProfileTabs, ProfileSearch, ProfileSearchResults } from "../components/Userprofilepage/ProfileActions";
 import { requestLayoutEdit } from "../lib/profileLayout";
 import { useTranslation } from "react-i18next";
+const CommentInbox = React.lazy(() => import("../components/CommentInbox/CommentInbox"));
 
 // Every toast from this module is headed "Profile"; the message becomes the
 // line under it. See utils/toast.js.
@@ -88,6 +89,7 @@ function ProfilePage() {
     if (tab === 'streams') return 'streams';
     if (tab === 'links') return 'links';
     if (tab === 'stats') return 'stats';
+    if (tab === 'comments') return 'comments';
     if (tab === 'video') return 'video';
     // Same landing tab as the public profile — one profile screen, one behaviour.
     return 'overview';
@@ -104,6 +106,7 @@ function ProfilePage() {
     else if (tab === 'streams') setShow('streams');
     else if (tab === 'links') setShow('links');
     else if (tab === 'stats') setShow('stats');
+    else if (tab === 'comments') setShow('comments');
     else if (tab === 'video') setShow('video');
     else if (!tab) setShow('overview');
   }, [searchParams]);
@@ -554,6 +557,8 @@ function ProfilePage() {
     hasGated && { value: 'members', label: t('profile.tabs.members') },
     { value: 'links', label: t('profile.tabs.links') },
     { value: 'stats', label: t('profile.tabs.analytics') },
+    // The comment inbox (the account menu's "Comment inbox" opens it here)
+    { value: 'comments', label: t('creator.inbox.tab') },
   ].filter(Boolean);
 
   const uploads = inProgress?.count > 0 ? inProgress.videos : [];
@@ -769,6 +774,8 @@ function ProfilePage() {
           <SpotlightEditor username={user} />
         ) : show === "stats" ? (
           <CreatorStats user={user} />
+        ) : show === "comments" ? (
+          <React.Suspense fallback={<BarLoader />}><CommentInbox user={user} /></React.Suspense>
         ) : show === "playlists" ? (
           <>
             <div className="profile-tab-actions">
