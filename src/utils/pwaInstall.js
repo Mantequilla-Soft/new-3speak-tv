@@ -39,6 +39,14 @@ if (typeof window !== 'undefined') {
   window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     deferredPrompt = e;
+    // The browser only offers this while the app is not installed, so an
+    // "installed" remembered from before means it was uninstalled since: the
+    // sheet may come again (a "Not now" snooze still holds).
+    const state = readInstallPromptState();
+    if (state.installed) {
+      const { installed, ...rest } = state;
+      writeInstallPromptState(rest);
+    }
     notify();
   });
   window.addEventListener('appinstalled', () => {

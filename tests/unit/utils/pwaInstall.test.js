@@ -101,6 +101,13 @@ describe('usePwaInstall', () => {
     expect(result.current.showInstall).toBe(false)
   })
 
+  it('forgets an earlier install once the browser offers it again (the app was uninstalled)', async () => {
+    const { readInstallPromptState } = await load()
+    localStorage.setItem('3speak_install_prompt', JSON.stringify({ installed: true, until: 123 }))
+    window.dispatchEvent(installPrompt())
+    expect(readInstallPromptState()).toEqual({ until: 123 })
+  })
+
   it('stops updating a menu after it unmounts', async () => {
     const { usePwaInstall } = await load()
     const { result, unmount } = renderHook(() => usePwaInstall())
