@@ -560,7 +560,9 @@ export default function CreatorStats({ user }) {
   const money = moneyTile({ content, days, earnings: earningsOk, payout: totals.payout });
   const urlOf = (v) => (v.audio
     ? (v.hivePermlink ? `/audio/${user}/${v.hivePermlink}` : null)
-    : v.short ? `/shorts?v=${user}/${v.permlink}` : `/@${user}/${v.permlink}`);
+    // A video's watch page is its Hive post (`permlink` is 3Speak's own id,
+    // which the watch page does not know); a Short opens by 3Speak's id.
+    : v.short ? `/shorts?v=${user}/${v.permlink}` : `/@${v.hiveAuthor || user}/${v.hivePermlink || v.permlink}`);
 
   // CSV exports: the daily earnings, and every row of the content table.
   const exportDaily = () => {
@@ -758,7 +760,7 @@ export default function CreatorStats({ user }) {
               </span>
               <VideoStats username={user} permlink={detail.permlink} variant="detail" kind={detail.audio ? 'audio' : null} />
               {/* Clip ranges for a Short, the owner only (links to the watch page). */}
-              {!detail.audio && !detail.short && <ShortsFromVideo owner={user} permlink={detail.permlink} canMake={FEATURE_EDITOR} />}
+              {!detail.audio && !detail.short && <ShortsFromVideo owner={user} permlink={detail.permlink} watchPermlink={detail.hivePermlink} canMake={FEATURE_EDITOR} />}
               <p className="cs-footnote">{t('stats.footnote')}</p>
             </section>
           )}

@@ -93,6 +93,6 @@ describe('creator stats', () => {
     const rows = downloadCsv.mock.calls[1][1].split('\r\n')
     expect(rows[0]).toMatch(/^Title,Link,Published,Views,Watch time \(seconds\),/)
     expect(rows[0]).toMatch(/Earned from votes \(HBD\),Impressions,Click-through rate \(%\)$/)
-    expect(rows[1]).toMatch(/^Video a,http.*\/@badadib\/a,2026-11-01,10,600,50,2,1,0.5,4,300,5$/)
+    expect(rows[1]).toMatch(/^Video a,http.*\/@badadib\/hive-a,2026-11-01,10,600,50,2,1,0.5,4,300,5$/)
   })
 })

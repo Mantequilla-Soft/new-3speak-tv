@@ -76,6 +76,14 @@ describe('Shorts from this video', () => {
     expect(within(first).getByRole('link', { name: 'Make a Short 4:00 to 4:30' })).toHaveAttribute('href', '/@badadib/my-video?t=240&short=240-270')
   })
 
+  it('links go to the Hive post when the id is 3Speak\'s own (the Stats tab)', async () => {
+    fetchClipIdeas.mockResolvedValue(IDEAS)
+    renderWithProviders(<ShortsFromVideo owner="badadib" permlink="ydtx92iw" watchPermlink="my-video" />)
+    const [first] = await screen.findAllByRole('listitem')
+    expect(fetchClipIdeas).toHaveBeenCalledWith('badadib', 'ydtx92iw', expect.anything())
+    expect(within(first).getByRole('link', { name: 'Make a Short 4:00 to 4:30' })).toHaveAttribute('href', '/@badadib/my-video?t=240&short=240-270')
+  })
+
   it('no Make a Short where the editor is off', async () => {
     fetchClipIdeas.mockResolvedValue(IDEAS)
     renderWithProviders(<ShortsFromVideo owner="badadib" permlink="my-video" canMake={false} />)

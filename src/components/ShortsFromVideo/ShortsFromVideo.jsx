@@ -26,9 +26,10 @@ function mmss(sec) {
  * On the watch page the player is right there: `onPreview(s)` plays the range and
  * `onMakeShort(s)` opens the editor on it (`previewing` is the range playing now).
  * Elsewhere (the profile's Stats tab) both are links to the watch page: `?t=` to
- * preview, `&short=S-E` to open the editor there.
+ * preview, `&short=S-E` to open the editor there. The watch page is the Hive
+ * post: pass its permlink as `watchPermlink` when `permlink` is 3Speak's own id.
  */
-export default function ShortsFromVideo({ owner, permlink, onPreview = null, onMakeShort = null, previewing = null, canMake = true }) {
+export default function ShortsFromVideo({ owner, permlink, watchPermlink = null, onPreview = null, onMakeShort = null, previewing = null, canMake = true }) {
   const { t, i18n } = useTranslation();
   const user = useAppStore((s) => s.user);
   const isOwner = !!user && !!owner && user.toLowerCase() === String(owner).toLowerCase();
@@ -48,7 +49,7 @@ export default function ShortsFromVideo({ owner, permlink, onPreview = null, onM
   // Not theirs after all, or a Short: nothing to suggest, no card.
   if (!state.loading && !state.error && (!state.data || state.data.short)) return null;
 
-  const watchPath = `/@${owner}/${permlink}`;
+  const watchPath = `/@${owner}/${watchPermlink || permlink}`;
   const list = state.data?.suggestions || [];
 
   return (
