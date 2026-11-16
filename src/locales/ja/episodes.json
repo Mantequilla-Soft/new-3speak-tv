@@ -70,6 +70,10 @@
     "new": "新しいシリーズ",
     "channelEmpty": "Shorts からシリーズを作ると、視聴者に「パート 1 / 5」と「次のパート」ボタンが表示されます。",
     "addParts": "パートを追加",
-    "parts_other": "{{count}} パート"
+    "parts_other": "{{count}} パート",
+    "allParts": "すべてのパート",
+    "fromStart": "パート1から再生",
+    "openPage": "シリーズのページを開く",
+    "partN": "パート{{part}}"
   }
 }

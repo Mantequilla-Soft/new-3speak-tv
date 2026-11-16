@@ -71,6 +71,10 @@
     "channelEmpty": "আপনার Shorts থেকে সিরিজ বানান: দর্শকেরা দেখবেন ৫টির মধ্যে অংশ ১ আর পরের অংশ বোতাম।",
     "addParts": "অংশ যোগ করুন",
     "parts_one": "{{count}}টি অংশ",
-    "parts_other": "{{count}}টি অংশ"
+    "parts_other": "{{count}}টি অংশ",
+    "allParts": "সব পর্ব",
+    "fromStart": "পর্ব ১ থেকে চালান",
+    "openPage": "সিরিজের পেজ খুলুন",
+    "partN": "পর্ব {{part}}"
   }
 }

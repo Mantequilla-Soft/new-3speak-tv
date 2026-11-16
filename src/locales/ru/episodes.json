@@ -73,6 +73,10 @@
     "parts_one": "{{count}} часть",
     "parts_few": "{{count}} части",
     "parts_many": "{{count}} частей",
-    "parts_other": "{{count}} части"
+    "parts_other": "{{count}} части",
+    "allParts": "Все части",
+    "fromStart": "Смотреть с части 1",
+    "openPage": "Открыть страницу серии",
+    "partN": "Часть {{part}}"
   }
 }

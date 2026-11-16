@@ -70,6 +70,10 @@
     "new": "새 시리즈",
     "channelEmpty": "Shorts로 시리즈를 만들면 시청자에게 5편 중 1편과 다음 편 버튼이 보입니다.",
     "addParts": "편 추가",
-    "parts_other": "{{count}}편"
+    "parts_other": "{{count}}편",
+    "allParts": "모든 파트",
+    "fromStart": "파트 1부터 재생",
+    "openPage": "시리즈 페이지 열기",
+    "partN": "파트 {{part}}"
   }
 }

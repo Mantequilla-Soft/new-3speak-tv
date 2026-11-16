@@ -72,6 +72,10 @@
     "addParts": "Adicionar partes",
     "parts_one": "{{count}} parte",
     "parts_many": "{{count}} partes",
-    "parts_other": "{{count}} partes"
+    "parts_other": "{{count}} partes",
+    "allParts": "Todas as partes",
+    "fromStart": "Reproduzir a partir da parte 1",
+    "openPage": "Abrir a página da série",
+    "partN": "Parte {{part}}"
   }
 }

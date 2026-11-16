@@ -71,6 +71,10 @@
     "channelEmpty": "अपने Shorts से सीरीज़ बनाएँ: दर्शक 5 में से भाग 1 और अगला भाग बटन देखते हैं।",
     "addParts": "भाग जोड़ें",
     "parts_one": "{{count}} भाग",
-    "parts_other": "{{count}} भाग"
+    "parts_other": "{{count}} भाग",
+    "allParts": "सभी भाग",
+    "fromStart": "भाग 1 से चलाएँ",
+    "openPage": "सीरीज़ का पेज खोलें",
+    "partN": "भाग {{part}}"
   }
 }

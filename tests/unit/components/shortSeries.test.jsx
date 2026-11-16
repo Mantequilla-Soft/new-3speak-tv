@@ -3,15 +3,16 @@
 // (ShortSeriesBar), the series select while publishing one, making a series from
 // your Shorts (SeriesModal, one transaction) and the channel's Series row.
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { screen, waitFor, within } from '@testing-library/react'
+import { screen, waitFor, within, fireEvent } from '@testing-library/react'
 import { renderWithProviders } from './_render.jsx'
 
-const h = vi.hoisted(() => ({ videoPlaylists: vi.fn(), myPlaylists: vi.fn(), shorts: vi.fn() }))
+const h = vi.hoisted(() => ({ videoPlaylists: vi.fn(), myPlaylists: vi.fn(), shorts: vi.fn(), partDetails: vi.fn() }))
 vi.mock('../../../src/hive-api/aioha', async () => (await import('./_render.jsx')).aiohaModule({ KeyTypes: { Posting: 'posting', Active: 'active' } }))
 vi.mock('sonner', async () => (await import('./_render.jsx')).sonnerModule())
 vi.mock('../../../src/hooks/useVideoPlaylists', () => ({ useVideoPlaylists: (...a) => h.videoPlaylists(...a) }))
 vi.mock('../../../src/hooks/useMyPlaylists', () => ({ useMyPlaylists: (...a) => h.myPlaylists(...a) }))
 vi.mock('../../../src/hive-api/hiveApi', () => ({ fetchUserShortsWithDetails: (...a) => h.shorts(...a) }))
+vi.mock('../../../src/utils/playlistVideos', () => ({ fetchVideosForPlaylist: (...a) => h.partDetails(...a) }))
 
 const aioha = await import('../../../src/hive-api/aioha')
 const { default: ShortSeriesBar } = await import('../../../src/components/Episodes/ShortSeriesBar.jsx')
@@ -33,6 +34,7 @@ beforeEach(() => {
   h.videoPlaylists.mockReset()
   h.myPlaylists.mockReset()
   h.shorts.mockReset()
+  h.partDetails.mockReset()
   aioha.broadcastWithAioha.mockClear()
 })
 
@@ -43,8 +45,38 @@ describe('ShortSeriesBar', () => {
     const bar = screen.getByTestId('short-series-bar')
     expect(bar).toHaveTextContent('Part 2 of 3')
     expect(bar).toHaveTextContent('Garden diary')
-    expect(within(bar).getByRole('link', { name: /Garden diary/ })).toHaveAttribute('href', '/playlist/pl-garden-1')
     expect(screen.getByTestId('short-series-next')).toHaveAttribute('href', '/shorts?v=badadib/part-three')
+  })
+
+  it('the series line opens every part to jump to, the one playing marked, and the series page', async () => {
+    h.videoPlaylists.mockReturnValue({ data: [garden] })
+    h.partDetails.mockResolvedValue([
+      { author: 'badadib', permlink: 'part-one', title: 'Digging the beds', images: { thumbnail: 'https://img.example/1.jpg' } },
+      { author: 'badadib', permlink: 'part-two', title: 'Planting', images: { thumbnail: null } },
+    ])
+    renderWithProviders(<ShortSeriesBar author="badadib" permlink="part-two" />)
+    fireEvent.click(within(screen.getByTestId('short-series-bar')).getByRole('button', { name: /Garden diary/ }))
+    const list = await screen.findByRole('list', { name: 'All parts' })
+    const parts = within(list).getAllByRole('link')
+    expect(parts.map((a) => a.getAttribute('href'))).toEqual(['/shorts?v=badadib/part-one', '/shorts?v=badadib/part-two', '/shorts?v=badadib/part-three'])
+    expect(await within(list).findByText('Digging the beds')).toBeInTheDocument()
+    // A part Hive did not answer for still lists, by its number
+    expect(within(list).getByText('Part 3')).toBeInTheDocument()
+    expect(parts[1]).toHaveAttribute('aria-current', 'true')
+    expect(screen.getByTestId('series-parts-start')).toHaveAttribute('href', '/shorts?v=badadib/part-one')
+    expect(screen.getByRole('link', { name: /Open the series page/ })).toHaveAttribute('href', '/playlist/pl-garden-1')
+    // Jumping to a part closes the list
+    fireEvent.click(parts[2])
+    await waitFor(() => expect(screen.queryByRole('list', { name: 'All parts' })).toBeNull())
+  })
+
+  it('no Play from part 1 on the first part', async () => {
+    h.videoPlaylists.mockReturnValue({ data: [garden] })
+    h.partDetails.mockResolvedValue([])
+    renderWithProviders(<ShortSeriesBar author="badadib" permlink="part-one" />)
+    fireEvent.click(within(screen.getByTestId('short-series-bar')).getByRole('button', { name: /Garden diary/ }))
+    await screen.findByRole('list', { name: 'All parts' })
+    expect(screen.queryByTestId('series-parts-start')).toBeNull()
   })
 
   it('no Next part on the last part; nothing outside a series or in someone else\'s', () => {

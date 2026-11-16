@@ -71,6 +71,10 @@
     "channelEmpty": "Shorts'larından bir seri yap: izleyiciler Bölüm 1 / 5 ve Sonraki bölüm düğmesini görür.",
     "addParts": "Bölüm ekle",
     "parts_one": "{{count}} bölüm",
-    "parts_other": "{{count}} bölüm"
+    "parts_other": "{{count}} bölüm",
+    "allParts": "Tüm bölümler",
+    "fromStart": "1. bölümden oynat",
+    "openPage": "Serinin sayfasını aç",
+    "partN": "{{part}}. bölüm"
   }
 }

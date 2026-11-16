@@ -70,6 +70,10 @@
     "new": "Loạt mới",
     "channelEmpty": "Tạo loạt từ Shorts của bạn: người xem thấy Phần 1 / 5 và nút Phần tiếp theo.",
     "addParts": "Thêm phần",
-    "parts_other": "{{count}} phần"
+    "parts_other": "{{count}} phần",
+    "allParts": "Tất cả các phần",
+    "fromStart": "Phát từ phần 1",
+    "openPage": "Mở trang của loạt video",
+    "partN": "Phần {{part}}"
   }
 }

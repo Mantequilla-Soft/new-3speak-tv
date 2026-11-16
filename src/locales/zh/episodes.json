@@ -70,6 +70,10 @@
     "new": "新系列",
     "channelEmpty": "用你的 Shorts 做一个系列：观众会看到第 1 部分，共 5 部分，以及下一部分按钮。",
     "addParts": "添加部分",
-    "parts_other": "{{count}} 个部分"
+    "parts_other": "{{count}} 个部分",
+    "allParts": "全部分集",
+    "fromStart": "从第 1 集开始播放",
+    "openPage": "打开系列页面",
+    "partN": "第 {{part}} 集"
   }
 }

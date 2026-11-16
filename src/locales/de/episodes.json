@@ -71,6 +71,10 @@
     "channelEmpty": "Mach aus deinen Shorts eine Serie: Zuschauer sehen Teil 1 von 5 und einen Button Nächster Teil.",
     "addParts": "Teile hinzufügen",
     "parts_one": "{{count}} Teil",
-    "parts_other": "{{count}} Teile"
+    "parts_other": "{{count}} Teile",
+    "allParts": "Alle Teile",
+    "fromStart": "Ab Teil 1 abspielen",
+    "openPage": "Seite der Serie öffnen",
+    "partN": "Teil {{part}}"
   }
 }

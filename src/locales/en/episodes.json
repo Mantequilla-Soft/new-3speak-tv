@@ -71,6 +71,10 @@
     "channelEmpty": "Make a series from your Shorts: viewers see Part 1 of 5 and a Next part button.",
     "addParts": "Add parts",
     "parts_one": "{{count}} part",
-    "parts_other": "{{count}} parts"
+    "parts_other": "{{count}} parts",
+    "allParts": "All parts",
+    "fromStart": "Play from part 1",
+    "openPage": "Open the series page",
+    "partN": "Part {{part}}"
   }
 }

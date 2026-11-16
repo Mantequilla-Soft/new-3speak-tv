@@ -71,6 +71,10 @@
     "channelEmpty": "Gumawa ng serye mula sa iyong Shorts: makikita ng manonood ang Bahagi 1 ng 5 at button na Susunod na bahagi.",
     "addParts": "Magdagdag ng bahagi",
     "parts_one": "{{count}} bahagi",
-    "parts_other": "{{count}} bahagi"
+    "parts_other": "{{count}} bahagi",
+    "allParts": "Lahat ng bahagi",
+    "fromStart": "I-play mula sa bahagi 1",
+    "openPage": "Buksan ang pahina ng serye",
+    "partN": "Bahagi {{part}}"
   }
 }

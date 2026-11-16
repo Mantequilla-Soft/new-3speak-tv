@@ -70,6 +70,10 @@
     "new": "Seri baru",
     "channelEmpty": "Buat seri dari Shorts-mu: penonton melihat Bagian 1 dari 5 dan tombol Bagian berikutnya.",
     "addParts": "Tambah bagian",
-    "parts_other": "{{count}} bagian"
+    "parts_other": "{{count}} bagian",
+    "allParts": "Semua bagian",
+    "fromStart": "Putar dari bagian 1",
+    "openPage": "Buka halaman seri",
+    "partN": "Bagian {{part}}"
   }
 }

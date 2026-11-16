@@ -70,6 +70,10 @@
     "new": "ซีรีส์ใหม่",
     "channelEmpty": "สร้างซีรีส์จาก Shorts ของคุณ ผู้ชมจะเห็นตอนที่ 1 จาก 5 และปุ่มตอนถัดไป",
     "addParts": "เพิ่มตอน",
-    "parts_other": "{{count}} ตอน"
+    "parts_other": "{{count}} ตอน",
+    "allParts": "ทุกตอน",
+    "fromStart": "เล่นตั้งแต่ตอนที่ 1",
+    "openPage": "เปิดหน้าซีรีส์",
+    "partN": "ตอนที่ {{part}}"
   }
 }

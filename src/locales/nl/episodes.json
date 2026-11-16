@@ -71,6 +71,10 @@
     "channelEmpty": "Maak een serie van je Shorts: kijkers zien Deel 1 van 5 en een knop Volgend deel.",
     "addParts": "Delen toevoegen",
     "parts_one": "{{count}} deel",
-    "parts_other": "{{count}} delen"
+    "parts_other": "{{count}} delen",
+    "allParts": "Alle delen",
+    "fromStart": "Afspelen vanaf deel 1",
+    "openPage": "Open de pagina van de serie",
+    "partN": "Deel {{part}}"
   }
 }

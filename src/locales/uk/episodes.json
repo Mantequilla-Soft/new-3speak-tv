@@ -73,6 +73,10 @@
     "parts_one": "{{count}} частина",
     "parts_few": "{{count}} частини",
     "parts_many": "{{count}} частин",
-    "parts_other": "{{count}} частини"
+    "parts_other": "{{count}} частини",
+    "allParts": "Усі частини",
+    "fromStart": "Дивитися з частини 1",
+    "openPage": "Відкрити сторінку серії",
+    "partN": "Частина {{part}}"
   }
 }

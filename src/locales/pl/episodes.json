@@ -73,6 +73,10 @@
     "parts_one": "{{count}} część",
     "parts_few": "{{count}} części",
     "parts_many": "{{count}} części",
-    "parts_other": "{{count}} części"
+    "parts_other": "{{count}} części",
+    "allParts": "Wszystkie części",
+    "fromStart": "Odtwórz od części 1",
+    "openPage": "Otwórz stronę serii",
+    "partN": "Część {{part}}"
   }
 }

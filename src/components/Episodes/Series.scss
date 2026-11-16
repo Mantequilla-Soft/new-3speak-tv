@@ -55,6 +55,85 @@
   &:hover { color: var(--on-accent); }
 }
 
+// The list of every part, opened from the series line (SeriesPartsSheet).
+.series-parts__start,
+.series-parts__page {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--text);
+  text-decoration: none;
+
+  &:hover { color: var(--accent); }
+}
+.series-parts__start { margin-bottom: 12px; }
+.series-parts__page { margin-top: 14px; color: var(--muted); }
+
+.series-parts__list {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.series-parts__item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 56px;
+  padding: 6px 10px;
+  border-radius: var(--r-md);
+  color: var(--text);
+  text-decoration: none;
+
+  &:hover { background: var(--surface-2); color: var(--text); }
+  &.is-playing { background: color-mix(in srgb, var(--accent) 14%, transparent); }
+}
+
+.series-parts__num {
+  flex: none;
+  width: 22px;
+  font-size: 13px;
+  font-weight: 900;
+  text-align: right;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+
+  .is-playing & { color: var(--accent); }
+}
+
+// Shorts are upright: a small 9:16 frame
+.series-parts__thumb {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 27px;
+  height: 48px;
+  overflow: hidden;
+  border-radius: 6px;
+  background: var(--surface-2);
+  color: var(--muted);
+
+  img { width: 100%; height: 100%; object-fit: cover; }
+}
+
+.series-parts__title {
+  flex: 1;
+  min-width: 0;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.series-parts__now { flex: none; color: var(--accent); }
+
 .series-select__none {
   margin: 0;
   font-size: 13px;

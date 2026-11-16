@@ -71,6 +71,10 @@
     "channelEmpty": "Tengeneza mfululizo kutoka Shorts zako: watazamaji wanaona Sehemu 1 kati ya 5 na kitufe cha Sehemu inayofuata.",
     "addParts": "Ongeza sehemu",
     "parts_one": "Sehemu {{count}}",
-    "parts_other": "Sehemu {{count}}"
+    "parts_other": "Sehemu {{count}}",
+    "allParts": "Sehemu zote",
+    "fromStart": "Cheza kuanzia sehemu ya 1",
+    "openPage": "Fungua ukurasa wa mfululizo",
+    "partN": "Sehemu ya {{part}}"
   }
 }
