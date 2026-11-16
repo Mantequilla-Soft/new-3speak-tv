@@ -11,6 +11,7 @@ import { CHECKER_URL } from '../utils/config';
 import { getHiveUrl } from '../utils/hiveNode';
 import { resolveSnapsContainer } from '../utils/snapsContainer';
 import { commentWithAioha } from '../hive-api/aioha';
+import { openPollFields } from './polls';
 
 // Must match SNAP_APP in the checker's routes/snaps.js — it's how a snap is told
 // apart from any other comment the account has under @peak.snaps.
@@ -144,8 +145,9 @@ export async function publishSnap({ user, body, tags = [], rewards = 'default', 
     tags: finalTags,
     type: 'snap',
     ...(COMMUNITY_ID.test(community) ? { community } : {}),
-    // A poll snap (lib/polls.js buildPollMeta): the body is the question.
-    ...(poll && Array.isArray(poll.options) ? { poll } : {}),
+    // A poll snap (lib/polls.js): the body is the question. Our block for the
+    // checker, and the Hive Open Polls fields so PeakD and Ecency show it too.
+    ...(poll && Array.isArray(poll.options) ? { poll, ...openPollFields(text, poll) } : {}),
   };
 
   const options = buildOptions(user, permlink, rewards, beneficiaries);

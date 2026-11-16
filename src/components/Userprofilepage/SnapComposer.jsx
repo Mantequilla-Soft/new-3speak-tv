@@ -152,7 +152,7 @@ export default function SnapComposer({ onPosted, community = '', placeholder }) 
               label={t('social.polls.duration')}
               value={pollDays}
               onChange={setPollDays}
-              options={POLL_DURATIONS.map((d) => ({ value: d, label: d ? t('social.polls.days', { count: d }) : t('social.polls.noEnd') }))}
+              options={POLL_DURATIONS.map((d) => ({ value: d, label: t('social.polls.days', { count: d }) }))}
             />
           </div>
         </div>

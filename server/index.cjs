@@ -498,7 +498,24 @@ const ALLOWED_CUSTOM_JSON_IDS = new Set([
   // proxied under @threespeak's delegated posting key — so the validation below
   // restricts this id to a plain subscribe/unsubscribe (the user's own action).
   'community',
+  // A vote on a poll (Hive Open Polls protocol, as PeakD and Ecency use it):
+  // { poll: '<author>/<permlink>', action: 'vote', choices: [n] }. Limited to
+  // exactly that shape by isPollVote below.
+  'polls',
 ])
+
+// The one `polls` payload we proxy: the user's own vote. Choice numbers count
+// from 1; an empty list or [0] takes the vote back.
+function isPollVote(json) {
+  let v
+  try { v = JSON.parse(json) } catch { return false }
+  if (!v || typeof v !== 'object' || Array.isArray(v)) return false
+  const keys = Object.keys(v)
+  if (keys.some((k) => !['poll', 'action', 'choices'].includes(k))) return false
+  if (v.action !== 'vote') return false
+  if (typeof v.poll !== 'string' || !/^[a-z0-9.-]{3,16}\/[a-z0-9-]{1,255}$/.test(v.poll)) return false
+  return Array.isArray(v.choices) && v.choices.length <= 20 && v.choices.every((c) => Number.isInteger(c) && c >= 0 && c <= 100)
+}
 
 // custom_json ids whose payload we further restrict to specific actions. The
 // json is a stringified ["<action>", {...}] tuple; only these first-element
@@ -1158,6 +1175,9 @@ async function broadcastAsThreespeak(hiveUsername, operations, res) {
       }
       if (!ALLOWED_CUSTOM_JSON_IDS.has(opData.id)) {
         return res.status(403).json({ error: 'custom_json id not allowed for this app' })
+      }
+      if (opData.id === 'polls' && !isPollVote(opData.json)) {
+        return res.status(403).json({ error: 'custom_json action not allowed for this app' })
       }
       // For ids with a restricted action set (e.g. `community`), the payload's
       // first element must be an allowed action — so we never proxy the id's
