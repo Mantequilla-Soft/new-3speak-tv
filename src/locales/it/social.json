@@ -102,6 +102,11 @@
     "signIn": "Accedi per votare.",
     "closedToast": "Questo sondaggio è terminato.",
     "voteFailed": "Il tuo voto non è andato a buon fine. Riprova.",
-    "statsTitle": "Sondaggi"
+    "statsTitle": "Sondaggi",
+    "question": "Domanda",
+    "questionPlaceholderVideo": "Fai una domanda a chi ti guarda",
+    "addPollTitle": "Aggiungi un sondaggio",
+    "removePollTitle": "Rimuovi il sondaggio",
+    "invalidVideo": "Un sondaggio ha bisogno di una domanda e di {{min}}-{{max}} opzioni diverse."
   }
 }

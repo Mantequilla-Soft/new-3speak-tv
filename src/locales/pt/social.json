@@ -102,6 +102,11 @@
     "signIn": "Entre para votar.",
     "closedToast": "Esta enquete terminou.",
     "voteFailed": "Seu voto não foi registrado. Tente de novo.",
-    "statsTitle": "Enquetes"
+    "statsTitle": "Enquetes",
+    "question": "Pergunta",
+    "questionPlaceholderVideo": "Faça uma pergunta aos seus espectadores",
+    "addPollTitle": "Adicionar uma enquete",
+    "removePollTitle": "Remover a enquete",
+    "invalidVideo": "Uma enquete precisa de uma pergunta e de {{min}} a {{max}} opções diferentes."
   }
 }

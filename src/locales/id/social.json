@@ -92,6 +92,11 @@
     "signIn": "Masuk untuk memberi suara.",
     "closedToast": "Polling ini sudah berakhir.",
     "voteFailed": "Suaramu tidak terkirim. Coba lagi.",
-    "statsTitle": "Polling"
+    "statsTitle": "Polling",
+    "question": "Pertanyaan",
+    "questionPlaceholderVideo": "Ajukan pertanyaan kepada penontonmu",
+    "addPollTitle": "Tambahkan polling",
+    "removePollTitle": "Hapus polling",
+    "invalidVideo": "Polling butuh satu pertanyaan dan {{min}} sampai {{max}} pilihan yang berbeda."
   }
 }

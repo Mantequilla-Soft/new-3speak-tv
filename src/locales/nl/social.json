@@ -97,6 +97,11 @@
     "signIn": "Log in om te stemmen.",
     "closedToast": "Deze peiling is afgelopen.",
     "voteFailed": "Je stem is niet doorgekomen. Probeer het opnieuw.",
-    "statsTitle": "Peilingen"
+    "statsTitle": "Peilingen",
+    "question": "Vraag",
+    "questionPlaceholderVideo": "Stel je kijkers een vraag",
+    "addPollTitle": "Poll toevoegen",
+    "removePollTitle": "Poll verwijderen",
+    "invalidVideo": "Een poll heeft een vraag en {{min}} tot {{max}} verschillende opties nodig."
   }
 }

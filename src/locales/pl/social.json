@@ -107,6 +107,11 @@
     "signIn": "Zaloguj się, aby zagłosować.",
     "closedToast": "Ta ankieta się zakończyła.",
     "voteFailed": "Twój głos nie został zapisany. Spróbuj ponownie.",
-    "statsTitle": "Ankiety"
+    "statsTitle": "Ankiety",
+    "question": "Pytanie",
+    "questionPlaceholderVideo": "Zadaj widzom pytanie",
+    "addPollTitle": "Dodaj ankietę",
+    "removePollTitle": "Usuń ankietę",
+    "invalidVideo": "Ankieta potrzebuje pytania i od {{min}} do {{max}} różnych odpowiedzi."
   }
 }

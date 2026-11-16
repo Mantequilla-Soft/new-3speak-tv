@@ -97,6 +97,11 @@
     "signIn": "Mag-sign in para bumoto.",
     "closedToast": "Tapos na ang poll na ito.",
     "voteFailed": "Hindi pumasok ang boto mo. Pakisubukang muli.",
-    "statsTitle": "Mga poll"
+    "statsTitle": "Mga poll",
+    "question": "Tanong",
+    "questionPlaceholderVideo": "Magtanong sa iyong mga manonood",
+    "addPollTitle": "Magdagdag ng poll",
+    "removePollTitle": "Alisin ang poll",
+    "invalidVideo": "Kailangan ng poll ng isang tanong at {{min}} hanggang {{max}} na magkakaibang pagpipilian."
   }
 }

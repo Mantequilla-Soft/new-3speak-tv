@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { toastIn } from '../../utils/toast';
 import { Icon } from '../v2/Icon';
-import { Button, Checkbox, Segmented } from '../v2/ui';
+import { Button, Checkbox } from '../v2/ui';
 import MarkdownComposer from '../studio/MarkdownComposer';
 import { useAppStore } from '../../lib/store';
 import { publishSnap, SNAP_TAG, MAX_USER_TAGS } from '../../lib/snaps';
 import '../Polls/PollCard.scss';
-import { buildPollMeta, POLL_MIN_OPTIONS, POLL_MAX_OPTIONS, POLL_OPTION_MAX_LEN, POLL_DURATIONS } from '../../lib/polls';
+import { buildPollMeta, POLL_MIN_OPTIONS, POLL_MAX_OPTIONS } from '../../lib/polls';
+import PollEditor, { PollToggle } from '../Polls/PollEditor';
 import { useTranslation } from 'react-i18next';
 
 // Every toast from this module is headed "Post"; the message becomes the
@@ -39,7 +40,6 @@ export default function SnapComposer({ onPosted, community = '', placeholder }) 
   const [pollOn, setPollOn] = useState(false);
   const [pollOptions, setPollOptions] = useState(['', '']);
   const [pollDays, setPollDays] = useState(1);
-  const setOption = (i, v) => setPollOptions((list) => list.map((o, j) => (j === i ? v : o)));
 
   const totalBenWeight = beneficiaries.reduce((s, b) => s + Number(b.weight || 0), 0);
 
@@ -123,39 +123,7 @@ export default function SnapComposer({ onPosted, community = '', placeholder }) 
       />
 
       {pollOn && (
-        <div className="snap-poll-editor" role="group" aria-label={t('social.polls.editorAria')}>
-          {pollOptions.map((o, i) => (
-            <div key={i} className="snap-poll-option">
-              <input
-                className="v2-input"
-                value={o}
-                maxLength={POLL_OPTION_MAX_LEN}
-                placeholder={t('social.polls.optionPlaceholder', { n: i + 1 })}
-                aria-label={t('social.polls.optionPlaceholder', { n: i + 1 })}
-                onChange={(e) => setOption(i, e.target.value)}
-              />
-              {pollOptions.length > POLL_MIN_OPTIONS && (
-                <button type="button" className="snap-poll-remove" onClick={() => setPollOptions((list) => list.filter((_, j) => j !== i))} aria-label={t('social.polls.removeOption', { n: i + 1 })}>
-                  <Icon name="close" size={16} />
-                </button>
-              )}
-            </div>
-          ))}
-          {pollOptions.length < POLL_MAX_OPTIONS && (
-            <Button variant="ghost" size={32} icon="add" onClick={() => setPollOptions((list) => [...list, ''])}>
-              {t('social.polls.addOption')}
-            </Button>
-          )}
-          <div className="snap-field">
-            <span className="snap-field-label">{t('social.polls.duration')}</span>
-            <Segmented
-              label={t('social.polls.duration')}
-              value={pollDays}
-              onChange={setPollDays}
-              options={POLL_DURATIONS.map((d) => ({ value: d, label: t('social.polls.days', { count: d }) }))}
-            />
-          </div>
-        </div>
+        <PollEditor options={pollOptions} onOptions={setPollOptions} days={pollDays} onDays={setPollDays} />
       )}
 
       <div className="snap-composer-row">
@@ -168,18 +136,7 @@ export default function SnapComposer({ onPosted, community = '', placeholder }) 
           disabled={tags.length >= MAX_USER_TAGS}
         />
         {/* Not in a community's Discussion tab: polls live on the channel. */}
-        {!community && (
-          <Button
-            variant="ghost"
-            size={40}
-            className={`snap-poll-toggle${pollOn ? ' is-on' : ''}`}
-            icon="how_to_vote"
-            aria-pressed={pollOn}
-            onClick={() => setPollOn((v) => !v)}
-          >
-            {pollOn ? t('social.polls.removePoll') : t('social.polls.addPoll')}
-          </Button>
-        )}
+        {!community && <PollToggle on={pollOn} onToggle={() => setPollOn((v) => !v)} className="snap-poll-toggle" />}
         <Button
           variant="ghost"
           size={40}

@@ -97,6 +97,11 @@
     "signIn": "Ingia ili upige kura.",
     "closedToast": "Kura hii ya maoni imeisha.",
     "voteFailed": "Kura yako haikupita. Tafadhali jaribu tena.",
-    "statsTitle": "Kura za maoni"
+    "statsTitle": "Kura za maoni",
+    "question": "Swali",
+    "questionPlaceholderVideo": "Waulize watazamaji wako swali",
+    "addPollTitle": "Ongeza kura ya maoni",
+    "removePollTitle": "Ondoa kura ya maoni",
+    "invalidVideo": "Kura ya maoni inahitaji swali moja na chaguo {{min}} hadi {{max}} tofauti."
   }
 }

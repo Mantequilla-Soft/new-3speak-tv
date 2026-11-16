@@ -97,6 +97,11 @@
     "signIn": "Sign in to vote.",
     "closedToast": "This poll has ended.",
     "voteFailed": "Your vote did not go through. Please try again.",
-    "statsTitle": "Polls"
+    "statsTitle": "Polls",
+    "question": "Question",
+    "questionPlaceholderVideo": "Ask your viewers a question",
+    "addPollTitle": "Add a poll",
+    "removePollTitle": "Remove the poll",
+    "invalidVideo": "A poll needs a question and {{min}} to {{max}} different options."
   }
 }

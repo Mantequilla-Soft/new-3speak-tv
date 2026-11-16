@@ -97,6 +97,11 @@
     "signIn": "वोट करने के लिए साइन इन करें।",
     "closedToast": "यह पोल खत्म हो गया है।",
     "voteFailed": "आपका वोट दर्ज नहीं हुआ। कृपया फिर से कोशिश करें।",
-    "statsTitle": "पोल"
+    "statsTitle": "पोल",
+    "question": "सवाल",
+    "questionPlaceholderVideo": "अपने दर्शकों से एक सवाल पूछें",
+    "addPollTitle": "पोल जोड़ें",
+    "removePollTitle": "पोल हटाएँ",
+    "invalidVideo": "पोल के लिए एक सवाल और {{min}} से {{max}} अलग-अलग विकल्प चाहिए।"
   }
 }

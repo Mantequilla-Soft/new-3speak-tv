@@ -23,7 +23,7 @@ function endsLabel(endsAt, t) {
  * bars, the viewer's own choice marked; tapping another option moves the vote
  * until the poll ends. Signed out: the results, and a hint to sign in.
  */
-export default function PollCard({ snap }) {
+export default function PollCard({ snap, question = '' }) {
   const { t } = useTranslation();
   const user = useAppStore((s) => s.user);
   const authenticated = useAppStore((s) => s.authenticated);
@@ -57,7 +57,9 @@ export default function PollCard({ snap }) {
   const status = closed ? t('social.polls.closed') : endsLabel(poll.ends_at, t);
 
   return (
-    <div className={`poll-card${showResults ? ' poll-card--results' : ''}`} role="group" aria-label={t('social.polls.aria')}>
+    <div className={`poll-card${showResults ? ' poll-card--results' : ''}`} role="group" aria-label={question || t('social.polls.aria')}>
+      {/* A video's poll asks its own question; a snap's or comment's text is it */}
+      {question && <p className="poll-question"><Icon name="poll" size={18} /> {question}</p>}
       <ul className="poll-options">
         {poll.options.map((label, i) => (
           <li key={i}>

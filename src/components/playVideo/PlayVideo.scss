@@ -656,6 +656,17 @@ $wide: 1024px;
   &__text { display: flex; flex-direction: column; gap: 2px; min-width: 0; b { @include v2.text(body-sm); font-weight: 700; } }
 }
 
+// The video's poll (PollCard), a card like the description above it.
+.wv2-poll {
+  padding: 14px 18px;
+  border-radius: var(--r-xl);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  min-width: 0;
+
+  .poll-card { margin: 0; }
+}
+
 // Description card (02): 14px muted text, two lines, then a bold "Show more".
 // Phones: no card, 13px, two lines and the toggle under them.
 .wv2-desc {

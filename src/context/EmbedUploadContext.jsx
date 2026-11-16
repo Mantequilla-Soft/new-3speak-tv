@@ -32,6 +32,7 @@ import { registerStory } from '../lib/stories';
 import { dataUrlToBlob } from '../utils/videoThumbnails';
 import { addToPlaylist } from '../utils/playlistOperations';
 import { SERIES_APPEND_POSITION } from '../lib/series';
+import { buildPollMeta, openPollFields, POLL_MIN_OPTIONS, POLL_MAX_OPTIONS } from '../lib/polls';
 
 // The body of a story posted without a caption (see publishToEmbed).
 const STORY_FALLBACK_CAPTION = 'My 24-hour story on 3Speak.';
@@ -220,6 +221,12 @@ export function EmbedUploadProvider({ children }) {
   const [saveAsDraft, setSaveAsDraft] = useState(false);
   // A Short's series (lib/series.js): the playlist it is added to as the next part.
   const [seriesId, setSeriesId] = useState('');
+  // A poll on the video or Short (lib/polls.js): its own question, 2 to 4
+  // options and how many days it runs. Off until the creator adds one.
+  const [pollOn, setPollOn] = useState(false);
+  const [pollQuestion, setPollQuestion] = useState('');
+  const [pollOptions, setPollOptions] = useState(['', '']);
+  const [pollDays, setPollDays] = useState(1);
 
   // Community data
   const [communitiesData, setCommunitiesData] = useState([]);
@@ -483,6 +490,10 @@ export function EmbedUploadProvider({ children }) {
     setIsScheduled(false);
     setSaveAsDraft(false);
     setSeriesId('');
+    setPollOn(false);
+    setPollQuestion('');
+    setPollOptions(['', '']);
+    setPollDays(1);
     setScheduleDateTime('');
     setIsPremiere(false);
     setFromStories(false);
@@ -1574,6 +1585,12 @@ export function EmbedUploadProvider({ children }) {
       toast.error(t('upload.details.errors.tagRequired'));
       return;
     }
+    // A poll needs its question and 2 to 4 different options.
+    const pollMeta = pollOn && !incubationHandle && !isStory ? buildPollMeta(pollOptions, pollDays) : null;
+    if (pollOn && !incubationHandle && !isStory && (!pollMeta || !pollQuestion.trim())) {
+      toast.error(t('social.polls.invalidVideo', { min: POLL_MIN_OPTIONS, max: POLL_MAX_OPTIONS }));
+      return;
+    }
 
     // Backstop upload gate: blocks "Post Video/Short" for creators with
     // canUpload === false, even if they reached /embed-studio directly (bypassing
@@ -1865,6 +1882,9 @@ export function EmbedUploadProvider({ children }) {
         // Who made it with the author (routes/collabs.js on the checker reads it
         // back from the post and invites them). The split is a beneficiary below.
         ...(collab ? { collaborators: [collab.account] } : {}),
+        // A poll: our block and the Hive Open Polls fields (PeakD and Ecency
+        // show it too); the question is the creator's own, not the title.
+        ...(pollMeta ? { poll: pollMeta, ...openPollFields(pollQuestion, pollMeta) } : {}),
         // Top-level `image: [url]` is the Hive-wide convention frontends read to
         // pick a post's cover (peakd, ecency, hive.blog, …). Only add it when we
         // actually have a thumbnail — otherwise we'd post `image: [null]` which
@@ -2450,6 +2470,10 @@ export function EmbedUploadProvider({ children }) {
     isPremiere, setIsPremiere,
     saveAsDraft, setSaveAsDraft,
     seriesId, setSeriesId,
+    pollOn, setPollOn,
+    pollQuestion, setPollQuestion,
+    pollOptions, setPollOptions,
+    pollDays, setPollDays,
     // Community data
     communitiesData, setCommunitiesData,
     // Modals

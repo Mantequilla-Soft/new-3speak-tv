@@ -103,3 +103,30 @@ describe('on Hive and the polls API', () => {
     expect(p).toEqual({ key: 'badadib/poll-1', author: 'badadib', permlink: 'poll-1', question: 'Which?', options: ['Music', 'Code'], counts: [1, 3], total: 4, closed: false })
   })
 })
+
+describe('polls on posts, Shorts and comments', () => {
+  it('reads the poll a post carries: ours, else the protocol fields (PeakD, Ecency)', () => {
+    expect(lib.pollFromMeta({ poll: { options: ['A', 'B'], ends_at: '2026-11-18T10:00:00.000Z' } })).toEqual({ options: ['A', 'B'], ends_at: '2026-11-18T10:00:00.000Z' })
+    expect(lib.pollFromMeta(JSON.stringify({ content_type: 'poll', choices: ['si', 'no'], end_time: 1795389312 })))
+      .toEqual({ options: ['si', 'no'], ends_at: new Date(1795389312 * 1000).toISOString() })
+    expect(lib.pollFromMeta({ app: '3speak/new-version' })).toBeNull()
+    expect(lib.pollFromMeta({ content_type: 'poll', choices: ['only one'] })).toBeNull()
+    expect(lib.pollFromMeta('not json')).toBeNull()
+    expect(lib.pollQuestionFromMeta({ question: 'Which?' })).toBe('Which?')
+    expect(lib.pollQuestionFromMeta(null)).toBe('')
+  })
+
+  it('finds the polls among loaded Shorts in one request', async () => {
+    fetchMock.mockResolvedValueOnce(reply([
+      { author: 'badadib', permlink: 's1', question: 'Cats?', end_time: '2026-11-18T10:00:00', poll_choices: [{ choice_num: 2, choice_text: 'No' }, { choice_num: 1, choice_text: 'Yes' }] },
+      { author: 'someone-else', permlink: 's2', question: 'x', poll_choices: [] },
+    ]))
+    const found = await lib.fetchPollsAmong([{ author: 'badadib', permlink: 's1' }, { author: 'badadib', permlink: 's2' }])
+    expect(fetchMock).toHaveBeenCalledTimes(1)
+    expect(decodeURIComponent(fetchMock.mock.calls[0][0])).toBe('https://polls.hivehub.dev/rpc/poll?permlink=in.("s1","s2")')
+    // only the ones asked for, by author too
+    expect([...found.keys()]).toEqual(['badadib/s1'])
+    expect(found.get('badadib/s1')).toEqual({ poll: { options: ['Yes', 'No'], ends_at: '2026-11-18T10:00:00Z' }, question: 'Cats?' })
+    expect(await lib.fetchPollsAmong([])).toEqual(new Map())
+  })
+})

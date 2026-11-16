@@ -27,7 +27,7 @@ describe('poll in the composer', () => {
   it('publishes the question with 3 options ending in 3 days', async () => {
     const onPosted = vi.fn()
     const { user } = renderWithProviders(<SnapComposer onPosted={onPosted} />)
-    await user.click(screen.getByRole('button', { name: 'Poll' }))
+    await user.click(screen.getByRole('button', { name: 'Add a poll' }))
     expect(screen.getByPlaceholderText('Ask your followers a question')).toBeInTheDocument()
     await user.type(screen.getByLabelText('body'), 'Which topic next?')
     await user.type(screen.getByLabelText('Option 1'), 'Music')
@@ -46,7 +46,7 @@ describe('poll in the composer', () => {
 
   it('one filled option is not a poll and nothing is published', async () => {
     const { user } = renderWithProviders(<SnapComposer />)
-    await user.click(screen.getByRole('button', { name: 'Poll' }))
+    await user.click(screen.getByRole('button', { name: 'Add a poll' }))
     await user.type(screen.getByLabelText('body'), 'Hmm?')
     await user.type(screen.getByLabelText('Option 1'), 'Only one')
     await user.click(screen.getByRole('button', { name: /Post/ }))

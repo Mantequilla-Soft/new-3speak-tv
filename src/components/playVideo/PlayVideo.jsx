@@ -9,6 +9,8 @@ import { fetchHiveProfile, fetchPlaySource } from "../../lib/videoData";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import BlogContent from "./BlogContent";
+import PollCard from "../Polls/PollCard";
+import { pollFromMeta, pollQuestionFromMeta } from "../../lib/polls";
 import CommentSection from "./CommentSection";
 import LiveStreamPlayer from "./LiveStreamPlayer";
 import VideoStats from "../CreatorStats/VideoStats";
@@ -108,6 +110,9 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
   // a Hive user — because there is nothing on chain to act on. A different
   // situation from the viewer lacking an account, so it gets its own wording.
   const postIsOffChain = !!videoDetails?._incubation;
+  const videoMeta = videoDetails?.json_metadata ?? videoDetails?.jsonMetadata;
+  const videoPoll = useMemo(() => pollFromMeta(videoMeta), [videoMeta]);
+  const videoPollQuestion = useMemo(() => pollQuestionFromMeta(videoMeta), [videoMeta]);
   const lockedForIncubation = viewerHasNoAccount || postIsOffChain;
 
   // VOTING is the exception to that lock. A vote on an off-chain post is stored
@@ -2390,6 +2395,14 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
               onSeek={isLive ? null : seekFromText}
             />
           </div>
+
+          {/* The video's poll (ours, or one made on PeakD or Ecency), on Hive
+              only: not on a scheduled or off-chain post. */}
+          {videoPoll && !postIsOffChain && !scheduled && (
+            <div className="wv2-poll">
+              <PollCard snap={{ owner: author, permlink, poll: videoPoll }} question={videoPollQuestion} />
+            </div>
+          )}
 
           {/* Cinema reaction size: the reactions run full width under the description. */}
           {cinemaReactionPanel && (

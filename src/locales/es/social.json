@@ -102,6 +102,11 @@
     "signIn": "Inicia sesión para votar.",
     "closedToast": "Esta encuesta ha terminado.",
     "voteFailed": "Tu voto no se registró. Inténtalo de nuevo.",
-    "statsTitle": "Encuestas"
+    "statsTitle": "Encuestas",
+    "question": "Pregunta",
+    "questionPlaceholderVideo": "Haz una pregunta a tu audiencia",
+    "addPollTitle": "Añadir una encuesta",
+    "removePollTitle": "Quitar la encuesta",
+    "invalidVideo": "Una encuesta necesita una pregunta y de {{min}} a {{max}} opciones distintas."
   }
 }

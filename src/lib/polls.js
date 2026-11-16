@@ -61,6 +61,57 @@ export function openPollFields(question, poll) {
   };
 }
 
+/**
+ * The poll a post or comment carries, as our block { options, ends_at }, from
+ * its json_metadata (object or string): ours, else the protocol's fields, so a
+ * poll made on PeakD or Ecency shows here too. Null when it carries none.
+ */
+export function pollFromMeta(meta) {
+  let m = meta;
+  if (typeof m === 'string') { try { m = JSON.parse(m); } catch { return null; } }
+  if (!m || typeof m !== 'object') return null;
+  if (m.poll && Array.isArray(m.poll.options) && m.poll.options.length >= POLL_MIN_OPTIONS) {
+    return { options: m.poll.options.map(String), ends_at: m.poll.ends_at || null };
+  }
+  if (m.content_type === 'poll' && Array.isArray(m.choices) && m.choices.length >= POLL_MIN_OPTIONS) {
+    const end = Number(m.end_time);
+    return { options: m.choices.map(String), ends_at: end > 0 ? new Date(end * 1000).toISOString() : null };
+  }
+  return null;
+}
+
+/** The question a post's poll asks (the protocol's field), or ''. */
+export function pollQuestionFromMeta(meta) {
+  let m = meta;
+  if (typeof m === 'string') { try { m = JSON.parse(m); } catch { return ''; } }
+  return m && typeof m.question === 'string' ? m.question : '';
+}
+
+/**
+ * Which of these posts carry a poll, in one request to the polls API (Shorts
+ * have no metadata at hand): Map 'author/permlink' -> { poll, question }.
+ */
+export async function fetchPollsAmong(items) {
+  const list = (items || []).filter((i) => i && i.author && i.permlink).slice(0, 50);
+  if (!list.length) return new Map();
+  const permlinks = [...new Set(list.map((i) => i.permlink))].map((p) => `"${p}"`).join(',');
+  const res = await fetch(`${POLLS_API_URL}/rpc/poll?permlink=in.(${encodeURIComponent(permlinks)})`);
+  if (!res.ok) throw new Error(`polls: ${res.status}`);
+  const rows = await res.json();
+  const wanted = new Set(list.map((i) => `${i.author}/${i.permlink}`));
+  const out = new Map();
+  for (const row of Array.isArray(rows) ? rows : []) {
+    const key = `${row.author}/${row.permlink}`;
+    if (!wanted.has(key)) continue;
+    const choices = [...(row.poll_choices || [])].sort((a, b) => a.choice_num - b.choice_num);
+    out.set(key, {
+      poll: { options: choices.map((c) => c.choice_text), ends_at: row.end_time ? `${row.end_time}Z` : null },
+      question: row.question || '',
+    });
+  }
+  return out;
+}
+
 export const pollKey = (snap) => `${snap.owner}/${snap.permlink}`;
 export const isPollClosed = (poll, now = Date.now()) => !!(poll?.ends_at && new Date(poll.ends_at).getTime() <= now);
 
@@ -155,6 +206,26 @@ export function usePoll(snap, user) {
   };
   return { result: data || null, isLoading, vote };
 }
+
+/**
+ * Which of the loaded Shorts carry a poll: one request for the whole batch
+ * (the newest 50), again only when the feed grows. Map 'author/permlink' ->
+ * { poll, question }; empty while it loads or if the API is down.
+ */
+export function useShortPolls(items) {
+  const list = (items || []).filter((i) => i && i.author && i.permlink).slice(-50);
+  const key = list.map((i) => `${i.author}/${i.permlink}`).join(',');
+  const { data } = useQuery({
+    queryKey: ['short-polls', key],
+    enabled: list.length > 0,
+    staleTime: 5 * 60 * 1000,
+    retry: 1,
+    placeholderData: (prev) => prev,
+    queryFn: () => fetchPollsAmong(list),
+  });
+  return data || EMPTY_POLLS;
+}
+const EMPTY_POLLS = new Map();
 
 export function useCreatorPolls(owner) {
   return useQuery({

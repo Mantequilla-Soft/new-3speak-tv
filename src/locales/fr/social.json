@@ -102,6 +102,11 @@
     "signIn": "Connectez-vous pour voter.",
     "closedToast": "Ce sondage est terminé.",
     "voteFailed": "Votre vote n'a pas été pris en compte. Veuillez réessayer.",
-    "statsTitle": "Sondages"
+    "statsTitle": "Sondages",
+    "question": "Question",
+    "questionPlaceholderVideo": "Pose une question à tes spectateurs",
+    "addPollTitle": "Ajouter un sondage",
+    "removePollTitle": "Retirer le sondage",
+    "invalidVideo": "Un sondage a besoin d'une question et de {{min}} à {{max}} options différentes."
   }
 }

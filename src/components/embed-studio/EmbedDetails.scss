@@ -478,3 +478,19 @@
     .guest-tile & { padding-right: 10px; }
   }
 }
+
+// The poll card (EmbedDetails): the small poll button and its name, the
+// editor (components/Polls/PollEditor) under it once the poll is on.
+.details-poll {
+  .details-poll__head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .details-poll__label {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .snap-poll-editor { margin-top: 12px; }
+}

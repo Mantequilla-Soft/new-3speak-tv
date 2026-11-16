@@ -369,7 +369,7 @@ export const CHANGELOG = [
     version: '2.0.32',
     category: 'groups',
     date: '2026-11-15',
-    summary: "Add a poll to a post in your channel's Community tab; votes are on Hive, so PeakD and Ecency show the same poll.",
+    summary: 'Add a poll to a video, Short, comment or Community post; votes are on Hive, so PeakD and Ecency show the same poll.',
   },
   {
     version: '2.0.31',

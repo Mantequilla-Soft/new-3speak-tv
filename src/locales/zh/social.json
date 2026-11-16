@@ -92,6 +92,11 @@
     "signIn": "登录后投票。",
     "closedToast": "这个投票已经结束。",
     "voteFailed": "投票未成功。请重试。",
-    "statsTitle": "投票"
+    "statsTitle": "投票",
+    "question": "问题",
+    "questionPlaceholderVideo": "向观众提一个问题",
+    "addPollTitle": "添加投票",
+    "removePollTitle": "移除投票",
+    "invalidVideo": "投票需要一个问题和 {{min}} 到 {{max}} 个不同的选项。"
   }
 }

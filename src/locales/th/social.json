@@ -92,6 +92,11 @@
     "signIn": "เข้าสู่ระบบเพื่อโหวต",
     "closedToast": "โพลนี้สิ้นสุดแล้ว",
     "voteFailed": "โหวตของคุณไม่สำเร็จ โปรดลองอีกครั้ง",
-    "statsTitle": "โพล"
+    "statsTitle": "โพล",
+    "question": "คำถาม",
+    "questionPlaceholderVideo": "ถามคำถามผู้ชมของคุณ",
+    "addPollTitle": "เพิ่มโพล",
+    "removePollTitle": "ลบโพล",
+    "invalidVideo": "โพลต้องมีคำถามและตัวเลือกที่ต่างกัน {{min}} ถึง {{max}} ข้อ"
   }
 }

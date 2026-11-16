@@ -23,6 +23,9 @@ import AuthorBadge from '../AuthorBadge/AuthorBadge';
 import AccountImg from '../HiveAvatar/AccountImg';
 import PayoutAmount from '../PayoutAmount/PayoutAmount';
 import { commentWithAioha } from '../../hive-api/aioha';
+import PollEditor, { PollToggle } from '../Polls/PollEditor';
+import PollCard from '../Polls/PollCard';
+import { buildPollMeta, openPollFields, pollFromMeta, POLL_MIN_OPTIONS, POLL_MAX_OPTIONS } from '../../lib/polls';
 import { HIVE_API_NODES } from '../../utils/config';
 import TimeAgo from '../TimeAgo/TimeAgo';
 import { Link } from 'react-router-dom';
@@ -115,6 +118,10 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
   const displayName = user || incubationHandle;
   const { translate, getTranslation, clearTranslation, translating } = useTranslation();
   const [commentInfo, setCommentInfo] = useState('');
+  // A poll on a new comment (not a reply): the comment's text is the question.
+  const [pollOn, setPollOn] = useState(false);
+  const [pollOptions, setPollOptions] = useState(['', '']);
+  const [pollDays, setPollDays] = useState(1);
   const [activeTab, setActiveTab] = useState('comment'); // 'comment' | 'react'
   // The side panel's composer rests as one line (02: the moment, "Join the
   // discussion…", send) and opens into the full one (43a) when used.
@@ -457,6 +464,13 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
     try {
       // Build json_metadata with optional timestamp
       const metadata = { app: '3speak/new-version' };
+      // A poll (lib/polls.js): our block and the Hive Open Polls fields, so
+      // PeakD and Ecency show it too. Only on a new comment, never a reply.
+      if (isReplyingToMainPost && pollOn) {
+        const poll = buildPollMeta(pollOptions, pollDays);
+        if (!poll) { toast.error(t('social.polls.invalid', { min: POLL_MIN_OPTIONS, max: POLL_MAX_OPTIONS })); return; }
+        Object.assign(metadata, { poll, ...openPollFields(textToPost, poll) });
+      }
       if (isReplyingToMainPost) {
         const timestampSec = parseTimeInput(timelineInput);
         if (timestampSec !== null && timestampSec > 0) {
@@ -587,6 +601,7 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
         }
 
         setCommentInfo('');
+        if (isReplyingToMainPost) { setPollOn(false); setPollOptions(['', '']); setPollDays(1); }
         setReplyText('');
         setActiveReply(null);
         setReplyToComment(null);
@@ -782,6 +797,7 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
             />
             {commentEmoji.popup}
           </CommentDropZone>
+          {pollOn && <PollEditor options={pollOptions} onOptions={setPollOptions} days={pollDays} onDays={setPollDays} />}
           <div className="comment-form-row">
             <div className="comment-compose-tools">
               <EmojiGifPicker
@@ -790,6 +806,10 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
                 onPickGif={(url) => insertAtCursor(commentInputRef.current, commentInfo, gifMarkdown(url), setCommentInfo)}
               />
               <CommentImageButton uploading={commentImages.uploading} onFiles={commentImages.upload} />
+              {/* A poll goes on Hive: not for a warm-up account or an off-chain post */}
+              {!incubationHandle && !videoDetails?._incubation && (
+                <PollToggle on={pollOn} onToggle={() => setPollOn((v) => !v)} />
+              )}
               {/* The moment of the video this comment is about: follows the
                   playhead until typed in by hand. */}
               <div className="comment-timestamp">
@@ -1194,6 +1214,11 @@ function Comment({
               html={processedBody(comment?.body || '', comment?.permlink)}
               onClick={onBodyClick}
             />
+          )}
+          {/* A poll in the comment (ours, or PeakD's or Ecency's): the text is
+              the question. Not on an off-chain comment, which Hive cannot see. */}
+          {!editing && comment?.onChain !== false && pollFromMeta(comment?.jsonMetadata) && (
+            <PollCard snap={{ owner: comment.author?.username, permlink: comment.permlink, poll: pollFromMeta(comment.jsonMetadata) }} />
           )}
           {translatedText && (
             <div className="comment-translation">

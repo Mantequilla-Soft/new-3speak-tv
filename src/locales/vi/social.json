@@ -92,6 +92,11 @@
     "signIn": "Đăng nhập để bình chọn.",
     "closedToast": "Bình chọn này đã kết thúc.",
     "voteFailed": "Phiếu của bạn chưa được ghi nhận. Vui lòng thử lại.",
-    "statsTitle": "Bình chọn"
+    "statsTitle": "Bình chọn",
+    "question": "Câu hỏi",
+    "questionPlaceholderVideo": "Đặt câu hỏi cho người xem",
+    "addPollTitle": "Thêm cuộc thăm dò",
+    "removePollTitle": "Bỏ cuộc thăm dò",
+    "invalidVideo": "Cuộc thăm dò cần một câu hỏi và từ {{min}} đến {{max}} lựa chọn khác nhau."
   }
 }

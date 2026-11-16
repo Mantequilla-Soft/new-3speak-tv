@@ -107,6 +107,11 @@
     "signIn": "Войдите, чтобы проголосовать.",
     "closedToast": "Этот опрос завершён.",
     "voteFailed": "Голос не засчитан. Попробуйте ещё раз.",
-    "statsTitle": "Опросы"
+    "statsTitle": "Опросы",
+    "question": "Вопрос",
+    "questionPlaceholderVideo": "Задайте зрителям вопрос",
+    "addPollTitle": "Добавить опрос",
+    "removePollTitle": "Убрать опрос",
+    "invalidVideo": "Для опроса нужны вопрос и от {{min}} до {{max}} разных вариантов."
   }
 }

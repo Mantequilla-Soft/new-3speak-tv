@@ -92,6 +92,11 @@
     "signIn": "로그인하고 투표하세요.",
     "closedToast": "이 투표는 종료됐어요.",
     "voteFailed": "투표가 반영되지 않았어요. 다시 시도해 주세요.",
-    "statsTitle": "투표"
+    "statsTitle": "투표",
+    "question": "질문",
+    "questionPlaceholderVideo": "시청자에게 질문해 보세요",
+    "addPollTitle": "투표 추가",
+    "removePollTitle": "투표 삭제",
+    "invalidVideo": "투표에는 질문과 서로 다른 선택지 {{min}}~{{max}}개가 필요해요."
   }
 }

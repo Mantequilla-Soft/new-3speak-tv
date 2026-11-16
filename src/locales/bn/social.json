@@ -97,6 +97,11 @@
     "signIn": "ভোট দিতে সাইন ইন করুন।",
     "closedToast": "এই পোল শেষ হয়ে গেছে।",
     "voteFailed": "আপনার ভোট জমা হয়নি। আবার চেষ্টা করুন।",
-    "statsTitle": "পোল"
+    "statsTitle": "পোল",
+    "question": "প্রশ্ন",
+    "questionPlaceholderVideo": "আপনার দর্শকদের একটি প্রশ্ন করুন",
+    "addPollTitle": "পোল যোগ করুন",
+    "removePollTitle": "পোল সরান",
+    "invalidVideo": "পোলের জন্য একটি প্রশ্ন এবং {{min}} থেকে {{max}}টি ভিন্ন বিকল্প লাগবে।"
   }
 }

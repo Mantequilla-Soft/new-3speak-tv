@@ -40,6 +40,8 @@ import { prefetchVideoTagsV2 } from '../utils/tagsV2';
 import AiBadge from '../components/AiBadge/AiBadge';
 import AudiogramEpisodeLink from '../components/AudiogramEpisodeLink/AudiogramEpisodeLink';
 import ShortSeriesBar from '../components/Episodes/ShortSeriesBar';
+import ShortPollPill from '../components/Polls/ShortPollPill';
+import { useShortPolls } from '../lib/polls';
 import { stripEpisodeLine } from '../utils/audiogramLink';
 
 // Custom Hive Icon Component
@@ -2086,6 +2088,10 @@ const VideoShort = () => {
   }, [showComments, currentIndex, videos, fetchComments]);
 
   const currentVideo = videos[currentIndex];
+  // Which loaded Shorts carry a poll: one polls API request per feed batch.
+  const pollItems = useMemo(() => videos.map((v) => ({ author: v.author, permlink: v.hivePermlink || v.permlink })), [videos]);
+  const shortPolls = useShortPolls(pollItems);
+  const currentPoll = currentVideo ? shortPolls.get(`${currentVideo.author}/${currentVideo.hivePermlink || currentVideo.permlink}`) : null;
   // 24h story: hours left for the badge, or expired (the screen instead of the video).
   const storyMsLeft = currentVideo?.storyExpiresAt ? new Date(currentVideo.storyExpiresAt).getTime() - storyNow : null;
   const storyExpired = storyMsLeft != null && storyMsLeft <= 0;
@@ -4224,6 +4230,10 @@ const VideoShort = () => {
                   (from its metadata, so it holds whatever the text says) */}
               {currentVideo.audiogramOf && (
                 <AudiogramEpisodeLink author={currentVideo.audiogramOf.author} permlink={currentVideo.audiogramOf.permlink} />
+              )}
+              {/* A poll on the Short (ours, or one made on PeakD or Ecency): a pill that opens it */}
+              {currentPoll && (
+                <ShortPollPill author={currentVideo.author} permlink={currentVideo.hivePermlink || currentVideo.permlink} poll={currentPoll.poll} question={currentPoll.question} />
               )}
               {/* A part of its creator's series: "Part 3 of 7 · title" and Next part (lib/series.js) */}
               {currentVideo.author && (currentVideo.hivePermlink || currentVideo.permlink) && (

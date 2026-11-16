@@ -97,6 +97,11 @@
     "signIn": "Melde dich an, um abzustimmen.",
     "closedToast": "Diese Umfrage ist beendet.",
     "voteFailed": "Deine Stimme wurde nicht gezählt. Bitte versuche es noch einmal.",
-    "statsTitle": "Umfragen"
+    "statsTitle": "Umfragen",
+    "question": "Frage",
+    "questionPlaceholderVideo": "Stell deinen Zuschauern eine Frage",
+    "addPollTitle": "Umfrage hinzufügen",
+    "removePollTitle": "Umfrage entfernen",
+    "invalidVideo": "Eine Umfrage braucht eine Frage und {{min}} bis {{max}} verschiedene Antworten."
   }
 }

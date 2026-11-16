@@ -110,6 +110,8 @@ describe('before anything is sent', () => {
     ['a video has no title', null, (c) => c.setTitle('  '), 'upload.details.errors.titleRequired'],
     ['there is no description', null, (c) => c.setDescription(' '), 'upload.details.errors.descriptionRequired'],
     ['a video has no tags', null, (c) => c.setTagsPreview([]), 'upload.details.errors.tagRequired'],
+    ['a poll has no question', null, (c) => { c.setPollOn(true); c.setPollOptions(['Yes', 'No']) }, 'social.polls.invalidVideo {"min":2,"max":4}'],
+    ['a poll has one option', null, (c) => { c.setPollOn(true); c.setPollQuestion('Cats?'); c.setPollOptions(['Yes', '']) }, 'social.polls.invalidVideo {"min":2,"max":4}'],
   ])('refuses when %s', async (_label, arrange, setup, message) => {
     arrange?.()
     const { result } = await ready(setup)
@@ -856,6 +858,24 @@ describe('a prefilled upload (pushed to the embed service by another uploader)',
     expect(meta()).not.toHaveProperty('threespeak.video')
     expect(fetchTo('/video/hangout-rec-1/hive')[0][0]).toBe(`${h.RELIABLE_BASE}/video/hangout-rec-1/hive`)
     expect(result.current.completed).toBe(true)
+  })
+})
+
+describe('a poll on the video', () => {
+  it('goes into json_metadata as our block and the Hive Open Polls fields, with its own question', async () => {
+    const { result } = await ready((c) => { c.setPollOn(true); c.setPollQuestion('Cats or dogs?'); c.setPollOptions(['Cats', 'Dogs']); c.setPollDays(3) })
+    await publish(result)
+    const m = meta()
+    expect(m.poll).toEqual({ options: ['Cats', 'Dogs'], ends_at: expect.any(String) })
+    expect(m).toMatchObject({ content_type: 'poll', version: 0.8, question: 'Cats or dogs?', choices: ['Cats', 'Dogs'], preferred_interpretation: 'number_of_votes', max_choices_voted: 1 })
+    expect(m.end_time).toBe(Math.floor(Date.parse(m.poll.ends_at) / 1000))
+  })
+
+  it('no poll unless one was added', async () => {
+    const { result } = await ready((c) => { c.setPollQuestion('Left over'); c.setPollOptions(['A', 'B']) })
+    await publish(result)
+    expect(meta()).not.toHaveProperty('poll')
+    expect(meta()).not.toHaveProperty('content_type')
   })
 })
 

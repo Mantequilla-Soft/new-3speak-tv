@@ -97,6 +97,11 @@
     "signIn": "Oy vermek için giriş yap.",
     "closedToast": "Bu anket sona erdi.",
     "voteFailed": "Oyun kaydedilemedi. Lütfen tekrar dene.",
-    "statsTitle": "Anketler"
+    "statsTitle": "Anketler",
+    "question": "Soru",
+    "questionPlaceholderVideo": "İzleyicilerine bir soru sor",
+    "addPollTitle": "Anket ekle",
+    "removePollTitle": "Anketi kaldır",
+    "invalidVideo": "Bir anket için bir soru ve {{min}} ile {{max}} arasında farklı seçenek gerekir."
   }
 }

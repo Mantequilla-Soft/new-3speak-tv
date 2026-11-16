@@ -28,6 +28,7 @@ import { SHORT_TITLE_MAX } from '../../utils/shortTitle';
 import { Button, Icon, IconButton, Toggle } from '../v2/ui';
 import PremiereSwitch from '../Premiere/PremiereSwitch';
 import ShortSeriesSelect from '../Episodes/ShortSeriesSelect';
+import PollEditor, { PollToggle } from '../Polls/PollEditor';
 
 // Every toast from this module is headed "Upload"; the message becomes the
 // line under it. See utils/toast.js.
@@ -112,6 +113,10 @@ function EmbedDetails() {
     isPremiere, setIsPremiere,
     saveAsDraft, setSaveAsDraft,
     seriesId, setSeriesId,
+    pollOn, setPollOn,
+    pollQuestion, setPollQuestion,
+    pollOptions, setPollOptions,
+    pollDays, setPollDays,
     fromStories,
     isStory,
     reusable, setReusable,
@@ -651,6 +656,27 @@ function EmbedDetails() {
               {fromStories && !isStory && !incubationHandle && (
                 <section className="v2-card details-card input-group">
                   <ShortSeriesSelect value={seriesId} onChange={setSeriesId} />
+                </section>
+              )}
+
+              {/* A poll on the video or Short (on Hive, so not for a warm-up
+                  account, nor on a 24h story): the small poll button opens it. */}
+              {!isStory && !incubationHandle && (
+                <section className="v2-card details-card input-group details-poll">
+                  <div className="details-poll__head">
+                    <PollToggle on={pollOn} onToggle={() => setPollOn((v) => !v)} />
+                    <span className="details-poll__label">{t('social.polls.addPollTitle')}</span>
+                  </div>
+                  {pollOn && (
+                    <PollEditor
+                      options={pollOptions}
+                      onOptions={setPollOptions}
+                      days={pollDays}
+                      onDays={setPollDays}
+                      question={pollQuestion}
+                      onQuestion={setPollQuestion}
+                    />
+                  )}
                 </section>
               )}
 

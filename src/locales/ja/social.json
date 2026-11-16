@@ -92,6 +92,11 @@
     "signIn": "ログインして投票しましょう。",
     "closedToast": "この投票は終了しました。",
     "voteFailed": "投票できませんでした。もう一度お試しください。",
-    "statsTitle": "投票"
+    "statsTitle": "投票",
+    "question": "質問",
+    "questionPlaceholderVideo": "視聴者に質問しましょう",
+    "addPollTitle": "投票を追加",
+    "removePollTitle": "投票を削除",
+    "invalidVideo": "投票には質問と、{{min}}〜{{max}}個の異なる選択肢が必要です。"
   }
 }

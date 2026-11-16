@@ -10,6 +10,18 @@
   margin: 10px 0 4px;
 }
 
+.poll-question {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--text);
+
+  .material-symbols-rounded { color: var(--cyan); }
+}
+
 .poll-options {
   list-style: none;
   margin: 0;
@@ -121,6 +133,64 @@
 }
 
 .snap-composer .snap-composer-row {
-  .snap-poll-toggle { flex: none; color: var(--muted); &:hover, &.is-on { color: var(--cyan); } }
   @include v2.mobile { flex-wrap: wrap; .snap-tags-input { flex-basis: 100%; } }
+}
+
+// The question (a video's poll) and the end, each with its small label.
+.poll-editor-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.poll-editor-label { @include v2.text(eyebrow); color: var(--muted); }
+
+// The small poll button of every composer (PollEditor.jsx PollToggle): a
+// square icon tile, cyan while the poll is on.
+.poll-toggle {
+  display: inline-grid;
+  flex: none;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--r-md);
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+
+  &:hover { color: var(--text); background: var(--bg-hover); }
+  &.is-on { color: var(--cyan); background: color-mix(in srgb, var(--cyan) 14%, transparent); }
+  &:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; }
+}
+
+// A Short's poll as a pill over the video (ShortPollPill), like the series line
+// beside it; the poll itself opens in a sheet.
+.short-poll {
+  display: flex;
+  max-width: 100%;
+  margin: 0 0 8px;
+  pointer-events: auto;
+}
+.short-poll__pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  min-height: 36px;
+  padding: 6px 12px;
+  border-radius: var(--r-md);
+  background: color-mix(in srgb, var(--surface) 85%, transparent);
+  color: var(--text);
+  font-size: 12px;
+  font-weight: 800;
+
+  .material-symbols-rounded { flex: none; color: var(--cyan); }
+  &:hover { background: var(--surface); }
+}
+.short-poll__text {
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
