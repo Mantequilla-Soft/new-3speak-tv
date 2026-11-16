@@ -2,19 +2,20 @@
 // Editing an audio post (components/AudioEdit/EditAudioModal.jsx): title, show
 // notes, tags and cover, broadcast as a `comment` on the same permlink, with
 // the player line of the body and the payout terms left alone.
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { screen, fireEvent, waitFor } from '@testing-library/react'
 import { renderWithProviders } from './_render.jsx'
 
 const hive = vi.hoisted(() => ({ post: null }))
 const comment = vi.hoisted(() => vi.fn(async () => ({ success: true })))
 const put = vi.hoisted(() => vi.fn(async () => ({ data: {} })))
+const post = vi.hoisted(() => vi.fn(async () => ({ data: {} })))
 
 vi.mock('../../../src/utils/hiveNode', () => ({ getHiveClient: () => ({ call: async () => hive.post }) }))
 vi.mock('../../../src/hive-api/aioha', () => ({ commentWithAioha: comment }))
 vi.mock('../../../src/utils/uploadThumbnail', () => ({ uploadThumbnail: vi.fn(async () => 'https://images.example/up.png') }))
 vi.mock('../../../src/utils/config', () => ({ CHECKER_URL: 'https://checker.example', CHECKER_API_KEY: 'k' }))
-vi.mock('axios', () => ({ default: { put } }))
+vi.mock('axios', () => ({ default: { put, post } }))
 
 const { default: EditAudioModal } = await import('../../../src/components/AudioEdit/EditAudioModal.jsx')
 
@@ -47,7 +48,37 @@ function open(post, props = {}) {
 const save = () => screen.getByRole('button', { name: /Save changes/ })
 
 describe('EditAudioModal', () => {
-  beforeEach(() => { comment.mockClear(); put.mockClear() })
+  beforeEach(() => { comment.mockClear(); put.mockClear(); post.mockClear() })
+  afterEach(() => { vi.useRealTimers() })
+
+  it('a new title asks the checker to re-read the post from Hive, once the edit is in a block and again later', async () => {
+    vi.useFakeTimers({ toFake: ['setTimeout'], shouldAdvanceTime: true })
+    open(root)
+    fireEvent.change(await screen.findByLabelText('Title'), { target: { value: 'My Episode (new)' } })
+    fireEvent.click(save())
+    await waitFor(() => expect(comment).toHaveBeenCalledTimes(1))
+    expect(post).not.toHaveBeenCalled()
+    vi.advanceTimersByTime(6000)
+    expect(post).toHaveBeenCalledTimes(1)
+    expect(post).toHaveBeenCalledWith(
+      'https://checker.example/audio/resync',
+      { author: 'badadib', permlink: 'my-episode' },
+      { headers: { Authorization: 'Bearer k' } },
+    )
+    vi.advanceTimersByTime(24000)
+    expect(post).toHaveBeenCalledTimes(2)
+  })
+
+  it('an edit that keeps the title does not ask for a re-read', async () => {
+    vi.useFakeTimers({ toFake: ['setTimeout'], shouldAdvanceTime: true })
+    open(root)
+    await screen.findByLabelText('Title')
+    fireEvent.change(screen.getByLabelText('Description'), { target: { value: 'Only notes' } })
+    fireEvent.click(save())
+    await waitFor(() => expect(comment).toHaveBeenCalledTimes(1))
+    vi.advanceTimersByTime(60000)
+    expect(post).not.toHaveBeenCalled()
+  })
 
   it("a snap starts from the audio row's title and writes it to the post when changed", async () => {
     const { onSaved, onClose } = open(snap, { rowTitle: 'test import' })

@@ -27,6 +27,9 @@ const parseTags = (input) => [...new Set(
   String(input || '').toLowerCase().split(/[\s,]+/).map((x) => x.replace(/^#/, '').trim()).filter(Boolean),
 )];
 
+// When the checker is asked to re-read an edited title (see save()).
+const RESYNC_AFTER_MS = [6000, 30000];
+
 /**
  * Edit an audio post on Hive: its title, show notes, tags and cover. It
  * broadcasts a `comment` with the same author and permlink. The audio file, the
@@ -191,6 +194,22 @@ export default function EditAudioModal({ isOpen, onClose, author, permlink, rowT
           { owner: author, permlink, thumbnail: newCover },
           { headers: { Authorization: `Bearer ${CHECKER_API_KEY}` } },
         ).catch((err) => console.warn('Audio cover update on the checker failed:', err?.message));
+      }
+
+      // Cards, search and RSS read the title the checker keeps, which it only
+      // re-reads on its own for a week after upload: ask it to read this post
+      // again. It reads the title from Hive, so wait for the edit to land in a
+      // block; the second ask covers a slow node.
+      if (titleDirty && CHECKER_API_KEY) {
+        for (const ms of RESYNC_AFTER_MS) {
+          setTimeout(() => {
+            axios.post(
+              `${CHECKER_URL}/audio/resync`,
+              { author, permlink },
+              { headers: { Authorization: `Bearer ${CHECKER_API_KEY}` } },
+            ).catch((err) => console.warn('Audio title refresh on the checker failed:', err?.message));
+          }, ms);
+        }
       }
 
       toast.success(t('audio.edit.updated'));
