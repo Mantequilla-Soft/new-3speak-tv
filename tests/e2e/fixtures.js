@@ -1,5 +1,5 @@
 // Shared setup for the browser tests: a first-time visitor who already answered the
-// cookie banner and the welcome prompts, in English, on the current app version, so
+// cookie banner, the welcome prompts and the start prompt, in English, on the current app version, so
 // pages open without popups. A test can opt out with test.use({ fresh: true }).
 // Every test fails on an uncaught JavaScript error in the page. Console errors from
 // the network (CORS on localhost, a missing thumbnail) are expected and ignored.
@@ -26,6 +26,8 @@ export const test = base.extend({
           localStorage.setItem('3speak_welcome_closed', '1')
           localStorage.setItem('3speak_welcomed', '1')
           localStorage.setItem('3speak_interests_prompted', '1')
+          // Not a first visit, so "Pick up where you left off?" would ask (StartPrompt).
+          localStorage.setItem('3speak_start_prompt', '1')
         } catch { /* storage blocked */ }
       },
       { fresh, lang, version: APP_VERSION },
