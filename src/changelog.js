@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.83',
+    category: 'settings',
+    date: '2026-11-16',
+    summary: 'Settings, General: Continue where I left off opens 3Speak on the page you were last on, saved on this device only.',
+  },
+  {
     version: '2.0.82',
     category: 'podcasts',
     date: '2026-11-15',
