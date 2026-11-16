@@ -137,7 +137,7 @@ export async function downloadImportFile(id, videoId, onProgress) {
   return new File([blob], `import-${videoId}.${FILE_EXT[type] || 'mp4'}`, { type });
 }
 // Podcast episodes come as audio, in whatever format the show publishes.
-const FILE_EXT = { 'video/mp4': 'mp4', 'audio/mpeg': 'mp3', 'audio/mp4': 'm4a', 'audio/x-m4a': 'm4a', 'audio/aac': 'aac', 'audio/ogg': 'ogg', 'audio/opus': 'opus', 'audio/wav': 'wav', 'audio/x-wav': 'wav', 'audio/flac': 'flac' };
+const FILE_EXT = { 'video/mp4': 'mp4', 'audio/mpeg': 'mp3', 'audio/mp4': 'm4a', 'audio/x-m4a': 'm4a', 'audio/aac': 'aac', 'audio/ogg': 'ogg', 'audio/opus': 'opus', 'audio/webm': 'webm', 'audio/wav': 'wav', 'audio/x-wav': 'wav', 'audio/flac': 'flac' };
 
 /** The video's thumbnail as a data URL (proxied by our API, so no CORS trouble). null on failure. */
 export async function fetchThumbnailDataUrl(video) {

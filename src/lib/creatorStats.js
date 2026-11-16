@@ -69,6 +69,20 @@ export const EARNING_SOURCES = ['votes', 'curation', 'tips', 'ads', 'boosts'];
 export const fmtHbd = (v) => `$${Number(v || 0).toFixed(2)}`;
 export const earnedTotal = (row) => EARNING_SOURCES.reduce((n, k) => n + (Number(row?.[k]) || 0), 0);
 
+/**
+ * The stats page's money tile. The earnings by source are channel-wide and reach
+ * back 12 months at most, so they only answer for every kind of content over a
+ * range of days: { kind: 'earned', value } then. Filtered to some content, or
+ * over all time, the tile is the posts' payout (`payout`, which follows both):
+ * { kind: 'payout', value }. Also the payout while the earnings load or failed.
+ */
+export function moneyTile({ content = 'all', days = 0, earnings = null, payout = 0 } = {}) {
+  if (content === 'all' && days > 0 && earnings && !earnings.error && earnings.totals) {
+    return { kind: 'earned', value: earnedTotal(earnings.totals) };
+  }
+  return { kind: 'payout', value: Number(payout) || 0 };
+}
+
 // Lightweight check: does this video have any watch records? (gates the Stats button)
 export function fetchVideoHasStats(username, permlink) {
   return get(`/creator-stats/has-data?username=${encodeURIComponent(username)}&permlink=${encodeURIComponent(permlink)}`);

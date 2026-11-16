@@ -285,7 +285,7 @@
       "viewers": "Viewers watching",
       "liveFor": "Time live",
       "timeLeft": "Time left before the stream ends",
-      "boosts": "Boosts received this stream (USD)"
+      "boosts": "Boosts received this stream"
     },
     "pro": {
       "title": "Streaming from OBS is part of 3Speak Pro",

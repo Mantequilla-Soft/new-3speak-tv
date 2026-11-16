@@ -4,6 +4,7 @@ import { PrivateKey } from '@hiveio/dhive';
 import { KeyTypes, Providers } from '@aioha/aioha';
 import { useTranslation, Trans } from 'react-i18next';
 import aioha, { setActiveAuthHandler } from '../../hive-api/aioha';
+import { hivePerVests, vestsWithHp } from '../../lib/walletOps';
 import { Dialog, Button, ChoiceCard, Field, Banner, Icon } from '../v2/ui';
 import './ActiveAuthModal.scss';
 
@@ -19,8 +20,9 @@ const WALLET_ICONS = {
 const client = getHiveClient();
 
 // Human-readable summary of what the user is about to sign: one line per
-// operation, and a transfer's memo on a muted line under it (42a).
-function describeOps(operations, t) {
+// operation, and a transfer's memo on a muted line under it (42a). `vestsRate`
+// (HIVE per VESTS) adds the HP to a power down or delegation's VESTS.
+function describeOps(operations, t, vestsRate = 0) {
   try {
     return operations.map(([name, payload]) => {
       if (name === 'transfer') {
@@ -33,12 +35,12 @@ function describeOps(operations, t) {
         return { line: t('auth.activeAuth.ops.powerUp', { amount: payload.amount }) };
       }
       // Wallet > Power down / Savings / Convert / Delegate (lib/walletOps.js).
-      if (name === 'withdraw_vesting') return { line: t('walletOps.activeAuth.powerDown', { amount: payload.vesting_shares }) };
+      if (name === 'withdraw_vesting') return { line: t('walletOps.activeAuth.powerDown', { amount: vestsWithHp(payload.vesting_shares, vestsRate) }) };
       if (name === 'transfer_to_savings') return { line: t('walletOps.activeAuth.toSavings', { amount: payload.amount }) };
       if (name === 'transfer_from_savings') return { line: t('walletOps.activeAuth.fromSavings', { amount: payload.amount }) };
       if (name === 'cancel_transfer_from_savings') return { line: t('walletOps.activeAuth.cancelSavings') };
       if (name === 'convert' || name === 'collateralized_convert') return { line: t('walletOps.activeAuth.convert', { amount: payload.amount }) };
-      if (name === 'delegate_vesting_shares') return { line: t('walletOps.activeAuth.delegate', { amount: payload.vesting_shares, to: payload.delegatee }) };
+      if (name === 'delegate_vesting_shares') return { line: t('walletOps.activeAuth.delegate', { amount: vestsWithHp(payload.vesting_shares, vestsRate), to: payload.delegatee }) };
       if (name === 'custom_json') {
         return { line: t('auth.activeAuth.ops.customJson', { id: payload.id }) };
       }
@@ -74,6 +76,8 @@ export default function ActiveAuthModal() {
   const [activeKey, setActiveKey] = useState('');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
+  // HIVE per VESTS, read when a power down or delegation is to be signed (describeOps).
+  const [vestsRate, setVestsRate] = useState(0);
 
   const username = (() => {
     try { return localStorage.getItem('user_id') || ''; } catch { return ''; }
@@ -106,6 +110,16 @@ export default function ActiveAuthModal() {
     });
     return () => setActiveAuthHandler(null);
   }, []);
+
+  const needsRate = !!ops?.some(([name]) => name === 'withdraw_vesting' || name === 'delegate_vesting_shares');
+  useEffect(() => {
+    if (!needsRate || vestsRate > 0) return undefined;
+    let alive = true;
+    client.call('condenser_api', 'get_dynamic_global_properties', [])
+      .then((dgp) => { if (alive) setVestsRate(hivePerVests(dgp)); })
+      .catch(() => { /* VESTS alone, as the chain names them */ });
+    return () => { alive = false; };
+  }, [needsRate, vestsRate]);
 
   function settleResolve(result) {
     const p = pending.current;
@@ -254,7 +268,7 @@ export default function ActiveAuthModal() {
       </p>
 
       <div className="v2-well aauth-ops">
-        {describeOps(ops, t).map((op, i) => (
+        {describeOps(ops, t, vestsRate).map((op, i) => (
           <div key={i} className="aauth-op">
             {op.line}
             {op.memo && <span className="aauth-op__memo">{op.memo}</span>}

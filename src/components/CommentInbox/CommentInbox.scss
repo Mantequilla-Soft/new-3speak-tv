@@ -46,6 +46,7 @@
   }
 
   .ci-list { display: flex; flex-direction: column; gap: 10px; }
+  .ci-more { align-self: center; }
 
   .ci-skeleton { height: 140px; border-radius: var(--r-lg); }
 

@@ -25,7 +25,7 @@ const success = vi.hoisted(() => vi.fn())
 const error = vi.hoisted(() => vi.fn())
 vi.mock('../../../src/utils/toast', () => ({ toastIn: () => ({ success, error }) }))
 
-const { default: CommentInbox } = await import('../../../src/components/CommentInbox/CommentInbox.jsx')
+const { default: CommentInbox, INBOX_PAGE } = await import('../../../src/components/CommentInbox/CommentInbox.jsx')
 
 const item = (permlink, body, over = {}) => ({
   author: 'fan', permlink, parentPermlink: 'post-a', rootPermlink: 'post-a', rootTitle: 'My first video', onPost: true,
@@ -125,5 +125,22 @@ describe('comment inbox', () => {
     const { user } = renderWithProviders(<CommentInbox user="badadib" />)
     await user.click(await screen.findByRole('button', { name: 'Try again' }))
     expect(await screen.findByText('Great video')).toBeInTheDocument()
+  })
+
+  it('draws a page at a time: Show more adds the next, a new filter starts over', async () => {
+    const many = Array.from({ length: INBOX_PAGE + 5 }, (_, i) => item(`re-m${i}`, `Comment ${i}`, { question: i % 2 === 0 }))
+    fetchCommentInbox.mockResolvedValue({ days: 90, items: many })
+    const { user } = renderWithProviders(<CommentInbox user="badadib" />)
+    await screen.findByText('Comment 0')
+    expect(articles()).toHaveLength(INBOX_PAGE)
+    await user.click(screen.getByRole('button', { name: 'Show more' }))
+    expect(articles()).toHaveLength(INBOX_PAGE + 5)
+    expect(screen.queryByRole('button', { name: 'Show more' })).toBeNull()
+    // Questions only: 18 of them, one page, no Show more.
+    await user.click(screen.getByRole('button', { name: /Questions/ }))
+    expect(articles()).toHaveLength(18)
+    expect(screen.queryByRole('button', { name: 'Show more' })).toBeNull()
+    await user.click(screen.getByRole('button', { name: /Questions/ }))
+    expect(articles()).toHaveLength(INBOX_PAGE)
   })
 })

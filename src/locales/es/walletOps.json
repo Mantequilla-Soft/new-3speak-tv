@@ -18,6 +18,7 @@
     "insufficient": "Es más de lo que tienes.",
     "amountPositive": "Ingresa un monto mayor que cero.",
     "invalidAccount": "No existe ninguna cuenta de Hive con ese nombre.",
+    "accountCheckFailed": "Ahora mismo no se puede comprobar esa cuenta. Inténtalo de nuevo en un momento.",
     "done": "Listo. Puede tardar unos segundos en aparecer aquí.",
     "failed": "No se completó: {{error}}",
     "loading": "Cargando tu billetera..."

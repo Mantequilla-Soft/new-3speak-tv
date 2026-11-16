@@ -4,7 +4,7 @@ import "./DraftStudio.scss";
 import FilterBar from '../Draft/FilterBar';
 import VideoCard from '../Draft/VideoCard';
 import DraftCard from '../Draft/DraftCard';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAppStore } from '../../lib/store';
 import { useInfiniteQuery, useQuery, useQueryClient } from '@tanstack/react-query';
 import { fetchDrafts } from '../../utils/scheduledPosts';
@@ -13,6 +13,13 @@ import { useTranslation } from 'react-i18next';
 import { fetchCreatorOverview, fetchCreatorFollows, fetchCreatorTimeseries, fmtDuration, fmtCount } from '../../lib/creatorStats';
 import { Button, EmptyState } from '../v2/ui';
 import mark from '../../assets/image/3S_mark.svg';
+
+// The tabs a link can open with ?show= (the upload windows link here).
+const SHOW_TABS = ['unsent', 'scheduled', 'published', 'publish_manual'];
+const showTabOf = (search) => {
+  const show = new URLSearchParams(search).get('show');
+  return SHOW_TABS.includes(show) ? show : null;
+};
 
 // Hive makes a block every 3 seconds: 28 days of blocks.
 const BLOCKS_28D = 28 * 24 * 1200;
@@ -62,9 +69,16 @@ const DraftStudio = () => {
   const { user } = useAppStore();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-  // ?show=unsent (the drafts) or ?show=scheduled opens that tab (the upload windows link here).
-  const [searchParams] = useSearchParams();
-  const [filter, setFilter] = useState(() => (['unsent', 'scheduled', 'published', 'publish_manual'].includes(searchParams.get('show')) ? searchParams.get('show') : 'all'));
+  // ?show=unsent (the drafts) or ?show=scheduled opens that tab, also when the
+  // studio is already open (a new navigation, even to the same address, has a new key).
+  const location = useLocation();
+  const [filter, setFilter] = useState(() => showTabOf(location.search) || 'all');
+  const [linkKey, setLinkKey] = useState(location.key);
+  if (linkKey !== location.key) {
+    setLinkKey(location.key);
+    const show = showTabOf(location.search);
+    if (show) setFilter(show);
+  }
   const queryClient = useQueryClient();
 
   const pageSize = 20;

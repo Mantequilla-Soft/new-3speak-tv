@@ -429,6 +429,19 @@ export function EmbedUploadProvider({ children }) {
     setChapters([]);
     setTimelineLinks([]);
     setTimelineSeeded(false);
+    // A stream clip's share (usePostClipAsShort) belongs to that clip: another
+    // video drops it and its locked row. The fund and encoder rows stay.
+    const clipShare = streamClip?.share;
+    if (clipShare?.account) {
+      const isClipRow = (b) => b.locked && b.account === clipShare.account
+        && b.account !== LOCKED_FUND_ACCOUNT && b.account !== LOCKED_ENCODER_ACCOUNT;
+      const dropped = list.filter(isClipRow).reduce((sum, b) => sum + (Number(b.percent) || 0), 0);
+      if (dropped) {
+        setList(list.filter((b) => !isClipRow(b)));
+        setRemaingPercent((prev) => prev + dropped);
+      }
+    }
+    setStreamClip(null);
     resetEarlyUpload();
   };
 

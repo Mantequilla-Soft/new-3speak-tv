@@ -5,7 +5,7 @@ import {
   asset, powerUpOp, powerDownOp, cancelPowerDownOp, toSavingsOp, fromSavingsOp, cancelSavingsWithdrawOp,
   convertOp, collateralizedConvertOp, delegateOp, removeDelegationOp, newRequestId, hpToVests, vestsToHp,
   hivePerVests, powerDownOf, freeVests, conversionsOf, savingsWithdrawalsOf, delegationsOf, collateralizedEstimate,
-  convertEstimate, loadWalletState,
+  convertEstimate, loadWalletState, delegatableVests, vestsWithHp,
 } from '../../../src/lib/walletOps.js'
 
 // 1 VESTS = 0.0005 HIVE, so 1000 HP = 2,000,000 VESTS.
@@ -71,6 +71,18 @@ describe('HP and VESTS', () => {
   it('free VESTS leave out what is delegated', () => {
     expect(freeVests({ vesting_shares: '5000.000000 VESTS', delegated_vesting_shares: '1200.000000 VESTS' })).toBe(3800)
   })
+  it('delegatable VESTS also leave out what a running power down still pays out (raw VESTS, 6 decimals)', () => {
+    const acct = { vesting_shares: '5000.000000 VESTS', delegated_vesting_shares: '1200.000000 VESTS', to_withdraw: 2_600_000_000, withdrawn: 400_000_000 }
+    expect(delegatableVests(acct)).toBe(1600)
+    expect(delegatableVests({ ...acct, to_withdraw: 0, withdrawn: 0 })).toBe(3800)
+    expect(delegatableVests({ ...acct, to_withdraw: 9_000_000_000 })).toBe(0)
+    expect(delegatableVests(null)).toBe(0)
+  })
+  it('shows VESTS with their HP for the signing summary', () => {
+    expect(vestsWithHp('26000.000000 VESTS', hivePerVests(dgp))).toBe('13.000 HP (26000.000000 VESTS)')
+    expect(vestsWithHp('26000.000000 VESTS', 0)).toBe('26000.000000 VESTS')
+    expect(vestsWithHp('1.000 HIVE', 0.0005)).toBe('1.000 HIVE')
+  })
 })
 
 describe('reading the account', () => {
@@ -125,6 +137,8 @@ describe('loadWalletState', () => {
     expect(s.hbdPerHive).toBe(0.25)
     expect(s.hp).toBe(10)
     expect(s.freeHp).toBe(9)
+    expect(s.delegatableVests).toBe(18000)
+    expect(s.delegatableHp).toBe(9)
     expect(s.savingsHbd).toBe(4)
     expect(s.delegations).toEqual([])
     expect(s.powerDown).toBeNull()

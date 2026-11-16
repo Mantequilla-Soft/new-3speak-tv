@@ -42,7 +42,8 @@
     "nowHint": "Se publica en cuanto pulses Publicar.",
     "scheduleHint": "3Speak lo publica por ti a esa hora.",
     "draftHint": "Se queda en Borradores en tu estudio hasta que lo publiques.",
-    "scheduleButton": "Programar"
+    "scheduleButton": "Programar",
+    "tooSoon": "Esa hora está demasiado cerca. Elige una al menos {{minutes}} minutos a partir de ahora."
   },
   "series": {
     "kind": "Serie",

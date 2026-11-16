@@ -42,7 +42,8 @@
     "nowHint": "Wird veröffentlicht, sobald du auf Veröffentlichen tippst.",
     "scheduleHint": "3Speak veröffentlicht es zu diesem Zeitpunkt für dich.",
     "draftHint": "Bleibt unter Entwürfe in deinem Studio, bis du es veröffentlichst.",
-    "scheduleButton": "Planen"
+    "scheduleButton": "Planen",
+    "tooSoon": "Dieser Zeitpunkt ist zu früh. Wähle einen, der mindestens {{minutes}} Minuten in der Zukunft liegt."
   },
   "series": {
     "kind": "Serie",

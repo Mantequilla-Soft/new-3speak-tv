@@ -90,6 +90,14 @@ describe('a video as an audio-player track', () => {
     expect(videoTrackId('a', 'b')).toBe('video:a/b')
   })
 
+  it('plays the upload but keeps the Hive post when the two differ (a sound\'s original Short)', async () => {
+    const fetchImpl = vi.fn(async () => text(MASTER))
+    const src = vi.fn(fetchSource)
+    const track = await videoAudioTrack({ author: 'badadib', permlink: 'asset-1', postAuthor: 'badadib', postPermlink: 'my-beat' }, { fetchSource: src, fetchImpl })
+    expect(src).toHaveBeenCalledWith('badadib', 'asset-1')
+    expect(track).toMatchObject({ _id: 'video:badadib/my-beat', owner: 'badadib', post_permlink: 'my-beat' })
+  })
+
   it('a playlist it cannot read plays as it is', async () => {
     expect(await lowestRenditionUrl(PLAY, { fetchImpl: async () => text('', 500) })).toBe(PLAY)
     expect(await lowestRenditionUrl(PLAY, { fetchImpl: async () => text(MEDIA) })).toBe(PLAY)

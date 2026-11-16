@@ -206,6 +206,32 @@ describe('picking another video (clearVideoSelection)', () => {
       title: 'Keep me',
     })
   })
+
+  it('drops a stream clip\'s share and its locked row, keeping the fund and encoder rows', () => {
+    const { result } = mount()
+    act(() => {
+      result.current.setVideoFile(h.videoFile())
+      result.current.setStreamClip({ room: 'r1', host: 'host1', clipper: 'badadib', offsetSec: 60, share: { account: 'host1', percent: 50, role: 'host' } })
+      result.current.setList([...LOCKED, { account: 'host1', percent: 50, locked: true, minPercent: 50 }, { account: 'friend', percent: 5 }])
+      result.current.setRemaingPercent(34)
+    })
+    act(() => result.current.clearVideoSelection())
+    expect(result.current.streamClip).toBeNull()
+    expect(result.current.list).toEqual([...LOCKED, { account: 'friend', percent: 5 }])
+    expect(result.current.remaingPercent).toBe(84)
+  })
+
+  it('leaves the beneficiaries alone when no clip was picked', () => {
+    const { result } = mount()
+    act(() => {
+      result.current.setVideoFile(h.videoFile())
+      result.current.setList([...LOCKED, { account: 'friend', percent: 5 }])
+      result.current.setRemaingPercent(84)
+    })
+    act(() => result.current.clearVideoSelection())
+    expect(result.current.list).toEqual([...LOCKED, { account: 'friend', percent: 5 }])
+    expect(result.current.remaingPercent).toBe(84)
+  })
 })
 
 describe('starting over (resetUploadState)', () => {

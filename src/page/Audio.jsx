@@ -697,7 +697,7 @@ function Audio() {
       {params.has('podcast') || params.has('episode') ? (
         <PodcastsTab view={podcastsView} hideNav />
       ) : item ? (
-        <AudioItemView owner={item.owner} id={item.id} onBack={closeItem} />
+        <AudioItemView key={`${item.owner}/${item.id}`} owner={item.owner} id={item.id} onBack={closeItem} />
       ) : onMine || external ? (
         <PodcastsTab view={podcastsView} hideNav />
       ) : selectedCreator ? (

@@ -42,7 +42,8 @@
     "nowHint": "Pubblicato appena premi Pubblica.",
     "scheduleHint": "3Speak lo pubblica per te a quell’ora.",
     "draftHint": "Resta in Bozze nel tuo studio finché non lo pubblichi.",
-    "scheduleButton": "Programma"
+    "scheduleButton": "Programma",
+    "tooSoon": "Quell'orario è troppo vicino. Scegline uno ad almeno {{minutes}} minuti da adesso."
   },
   "series": {
     "kind": "Serie",

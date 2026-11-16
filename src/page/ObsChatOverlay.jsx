@@ -133,7 +133,8 @@ function DockCounters({ room }) {
   const participants = useParticipants();
   const [info, setInfo] = useState(null);       // { host, liveAt }
   const [premium, setPremium] = useState(null); // unknown until the checker answers
-  const [boosts, setBoosts] = useState({ total: 0, count: 0, goal: null });
+  // `source`: 'summary' (total in HBD) or 'ledger' (an older server: USD).
+  const [boosts, setBoosts] = useState({ total: 0, count: 0, goal: null, source: null });
   // The server answered 404 for the summary (older than 0.26.23): read the
   // ledger from then on instead of asking again every poll.
   const legacyRef = useRef(false);
@@ -163,7 +164,7 @@ function DockCounters({ room }) {
         }
         if (b) {
           if (b.source === "ledger") legacyRef.current = true;
-          setBoosts({ total: b.total, count: b.count, goal: b.goal });
+          setBoosts({ total: b.total, count: b.count, goal: b.goal, source: b.source });
         }
       } catch { /* keep the last numbers through a blip */ }
     };
@@ -191,6 +192,8 @@ function DockCounters({ room }) {
   const left = capMs != null && elapsed != null ? capMs - elapsed : null;
   const showLeft = left != null && (!premium || left < PRO_LEFT_SHOWN_MS);
   const { goal } = boosts;
+  // The tally in what it was counted in: HBD from the summary, USD from the ledger.
+  const totalText = boosts.source === "ledger" ? `$${boosts.total.toFixed(2)}` : `${hbd(boosts.total)} HBD`;
   const goalTitle = goal ? goal.title || t("live.boost.dialog.goalDefaultTitle") : "";
   const goalText = goal
     ? t("live.boost.dialog.goalProgress").replace("{progress}", hbd(goal.progress)).replace("{target}", hbd(goal.target))
@@ -211,8 +214,8 @@ function DockCounters({ room }) {
           <Icon name="hourglass_bottom" size={16} /><span className="num">{clock(left)}</span>
         </span>
       )}
-      <span className="obs-chat__counter" title={t("live.obs.chatOverlay.boosts")} aria-label={`${t("live.obs.chatOverlay.boosts")}: $${boosts.total.toFixed(2)}`}>
-        <Icon name="rocket_launch" size={16} /><span className="num">${boosts.total.toFixed(2)}</span>
+      <span className="obs-chat__counter" title={t("live.obs.chatOverlay.boosts")} aria-label={`${t("live.obs.chatOverlay.boosts")}: ${totalText}`}>
+        <Icon name="rocket_launch" size={16} /><span className="num">{totalText}</span>
       </span>
       {goal && (
         <span className={`obs-chat__counter obs-chat__goal${goal.reached ? " is-reached" : ""}`} title={goalTitle} aria-label={`${goalTitle}: ${goalText}`}>

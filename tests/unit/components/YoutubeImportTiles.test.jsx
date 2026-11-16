@@ -27,7 +27,7 @@ vi.mock('../../../src/lib/youtubeImport', async (importOriginal) => ({
 }))
 
 const { useAppStore } = await import('../../../src/lib/store')
-const { startImportJob } = await import('../../../src/lib/youtubeImport')
+const { startImportJob, getAutoImports } = await import('../../../src/lib/youtubeImport')
 const { default: YoutubeImportPage } = await import('../../../src/page/YoutubeImportPage.jsx')
 
 beforeEach(() => { vi.clearAllMocks(); useAppStore.setState({ user: 'alice', authenticated: true }) })
@@ -76,5 +76,28 @@ describe('import tiles', () => {
     await screen.findByText('Episode 3')
     await user.click(tile('Episode 3'))
     expect(screen.getByTestId('location')).toHaveTextContent('/@alice/old-post')
+  })
+
+  it('with automatic import on: a new episode waits for it, one it failed can be imported by hand', async () => {
+    const before = getAutoImports.getMockImplementation()
+    getAutoImports.mockImplementation(async () => ({
+      available: true, intervalMin: 15, maxPerDay: 5,
+      configs: [{
+        feedUrl: 'https://testfeed.okinoko.io/feed.xml', feedId: '0123456789abcdef01234567', enabled: true,
+        enabledAt: new Date(Date.now() - 3600 * 1000).toISOString(), baseline: [], failed: ['rss:BBBBBBBBBBBBBBBB'],
+        settings: {}, options: {}, status: {},
+      }],
+    }))
+    try {
+      const { user } = open()
+      await screen.findByText('Episode 1')
+      // Episode 1 is new: the next check takes it, so it cannot be ticked.
+      await vi.waitFor(() => expect(tile('Episode 1')).toBeDisabled())
+      expect(tile('Episode 2')).toBeEnabled()
+      await user.click(tile('Episode 2'))
+      expect(tile('Episode 2')).toHaveAttribute('aria-pressed', 'true')
+    } finally {
+      getAutoImports.mockImplementation(before)
+    }
   })
 })

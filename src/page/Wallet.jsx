@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import './Wallet.scss';
 import TrxHistory from '../components/Wallet/TrxHistory';
 import { useAppStore } from '../lib/store';
@@ -75,11 +75,19 @@ function Wallet() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
+  // Only the newest read for the wallet on screen lands: a slow one for the wallet
+  // left behind (or refreshAll's late re-read of it), or an older one of the same
+  // wallet, must not overwrite it.
+  const opsSeq = useRef(0);
+  const opsUser = useRef(user);
+  useEffect(() => { opsUser.current = user; }, [user]);
   const loadOps = useCallback(async () => {
-    if (!user) return;
+    if (!user || opsUser.current !== user) return;
+    const seq = ++opsSeq.current;
     try {
+      const next = await loadWalletState((api, method, params) => client.call(api, method, params), user);
       // Tagged with the account, so another wallet's state never shows here.
-      setOpState({ ...(await loadWalletState((api, method, params) => client.call(api, method, params), user)), user });
+      if (seq === opsSeq.current && opsUser.current === user) setOpState({ ...next, user });
     } catch (err) {
       console.error('Wallet state failed:', err);
     }

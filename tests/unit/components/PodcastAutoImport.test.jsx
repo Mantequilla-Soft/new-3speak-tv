@@ -3,17 +3,30 @@
 // (src/page/PodcastAutoImport.jsx). The save call and the ad prefs are stand-ins.
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { screen, waitFor } from '@testing-library/react'
+import { StrictMode } from 'react'
 import { renderWithProviders } from './_render.jsx'
 
 vi.mock('sonner', async () => (await import('./_render.jsx')).sonnerModule())
 vi.mock('../../../src/hive-api/aioha', async () => (await import('./_render.jsx')).aiohaModule())
 vi.mock('../../../src/lib/youtubeImport', () => ({ saveAutoImport: vi.fn() }))
 vi.mock('../../../src/lib/advertiseData', () => ({ fetchCreatorAdPrefs: async () => ({}) }))
-vi.mock('../../../src/hooks/usePremiumStatus', () => ({ usePremiumStatus: () => ({ premium: false }) }))
+// `premium` and what the beneficiary modal was handed, per test.
+const h = vi.hoisted(() => ({ premium: false, beneProps: null }))
+// Pro arrives after the first render, as the real status does (a fetch).
+vi.mock('../../../src/hooks/usePremiumStatus', async () => {
+  const { useEffect, useState } = await import('react')
+  return {
+    usePremiumStatus: () => {
+      const [premium, setPremium] = useState(false)
+      useEffect(() => { if (h.premium) setPremium(true) }, [])
+      return { premium }
+    },
+  }
+})
 vi.mock('../../../src/utils/postingAuthority', () => ({ addThreespeakToPostingAuth: vi.fn(), waitForThreespeakPostingAuth: vi.fn(async () => true) }))
 vi.mock('../../../src/components/HiveAvatar/AccountImg', () => ({ default: () => null }))
 vi.mock('../../../src/components/modal/Community_modal', () => ({ default: () => null }))
-vi.mock('../../../src/components/modal/Beneficiary_modal', () => ({ default: () => null }))
+vi.mock('../../../src/components/modal/Beneficiary_modal', () => ({ default: (props) => { h.beneProps = props; return null } }))
 
 const { saveAutoImport } = await import('../../../src/lib/youtubeImport')
 const { PodcastAutoCard, previewTitle } = await import('../../../src/page/PodcastAutoImport.jsx')
@@ -25,7 +38,7 @@ const card = (props = {}) => renderWithProviders(
   <PodcastAutoCard user="alice" show={show} info={info()} sample={sample} granted onGranted={vi.fn()} onSaved={vi.fn()} {...props} />,
 )
 
-beforeEach(() => vi.clearAllMocks())
+beforeEach(() => { vi.clearAllMocks(); h.premium = false; h.beneProps = null })
 
 describe('previewTitle', () => {
   it('fills the template like the server and drops what has no value', () => {
@@ -128,5 +141,25 @@ describe('the settings form', () => {
     await user.click(screen.getByRole('button', { name: /Set up automatic import/ }))
     expect(screen.getByText(/needs permission to publish on your account/)).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Save' })).toBeDisabled()
+  })
+})
+
+describe('AutoImportForm beneficiaries', () => {
+  it('Pro: no fund row, and its share goes back once (even when React runs an update twice)', async () => {
+    h.premium = true
+    const config = {
+      feedUrl: show.url, enabled: true, enabledAt: '2026-11-14T10:00:00Z', settings: {}, status: {},
+      options: { community: 'hive-181335', payout: 'default', beneficiaries: [{ account: 'friend', percent: 20 }] },
+    }
+    const { user } = renderWithProviders(
+      <StrictMode>
+        <PodcastAutoCard user="alice" show={show} info={info([config])} sample={sample} granted onGranted={vi.fn()} onSaved={vi.fn()} />
+      </StrictMode>,
+    )
+    await user.click(screen.getByRole('button', { name: /Edit settings/ }))
+    await user.click((await screen.findByText('Share rewards with others.')).closest('.yt-batch-pick'))
+    await waitFor(() => expect(h.beneProps).not.toBeNull())
+    expect(h.beneProps.list.map((b) => b.account)).toEqual(['friend'])
+    expect(h.beneProps.remaingPercent).toBe(80)
   })
 })

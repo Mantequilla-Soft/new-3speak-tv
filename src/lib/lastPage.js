@@ -21,7 +21,9 @@ const MAX_LEN = 500;
 const SKIP = [
   /^\/(login|newlogin|email|callback|auth)(\/|$)/,
   /^\/(embed|embed-studio|egress-stream|tip|invite|test|image)(\/|$)/,
-  /^\/(studio|draft|editvideo|edit-scheduled|firstupload|publish-backlog)(\/|$)/,
+  /^\/(studio|draft|editvideo|edit-scheduled|firstupload|publish-backlog|upload)(\/|$)/,
+  // Publishing a stream's recording: its state comes from the stream just ended.
+  /^\/openpods\/publish(\/|$)/,
 ];
 
 /** The path + query + hash to remember for a router location, or null when it is skipped. */
@@ -70,7 +72,9 @@ export function resumeOnStart(win = typeof window !== 'undefined' ? window : nul
   if (!on || pathname !== '/' || search || hash) return null;
   const target = readLastPage();
   if (!target) return null;
-  win.history.pushState(null, '', target);
+  // A refused pushState (an odd embed, a browser quirk) just stays on Home: this
+  // runs in main.jsx before React, where a throw would leave a blank page.
+  try { win.history.pushState(null, '', target); } catch { return null; }
   resuming = true;
   return target;
 }

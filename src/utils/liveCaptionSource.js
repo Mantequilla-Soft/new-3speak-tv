@@ -8,12 +8,17 @@
  * token is short-lived. So this keeps one session open at a time and reconnects
  * with a fresh token when it closes, backing off when it keeps failing, and
  * gives up (status 'error', the studio shows it and frees its slot) after
- * MAX_FAILS closes in a row without any text in between.
+ * MAX_FAILS closes in a row without any text in between. A session that was
+ * connected for STABLE_MS or longer ended cleanly (the time limit, during a
+ * quiet stretch too) and starts the count afresh; one dropped right after
+ * connecting still counts, so a server that keeps refusing is not retried
+ * every second forever.
  */
 import { createSttStream } from './sttClient';
 
 export const BACKOFF_MS = [1000, 2000, 5000, 10000, 20000];
 export const MAX_FAILS = 6;
+export const STABLE_MS = 30 * 1000;
 
 /**
  * @param {{ url: string, connect?: typeof createSttStream }} cfg
@@ -31,6 +36,7 @@ export function createLiveCaptionSource({ url, connect = createSttStream }) {
     const open = () => {
       if (stopped) return;
       const g = ++gen;
+      let connectedAt = 0;
       status('connecting');
       session = connect({
         track,
@@ -44,13 +50,14 @@ export function createLiveCaptionSource({ url, connect = createSttStream }) {
         },
         onStatus: (s, m) => {
           if (stopped || g !== gen) return;
-          if (s === 'connected') { status('connected'); return; }
+          if (s === 'connected') { connectedAt = Date.now(); status('connected'); return; }
           if (s !== 'error') return;
           // One close reports twice (the server's error message, then the
           // socket close): only the first one counts, for this session.
           gen += 1;
           try { session?.stop(); } catch { /* already closed */ }
           session = null;
+          if (connectedAt && Date.now() - connectedAt >= STABLE_MS) fails = 0;
           fails += 1;
           if (fails >= MAX_FAILS) { status('error', m); return; }
           const wait = BACKOFF_MS[Math.min(fails - 1, BACKOFF_MS.length - 1)];

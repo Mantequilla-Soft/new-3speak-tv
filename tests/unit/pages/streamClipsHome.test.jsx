@@ -46,11 +46,32 @@ describe('Your stream clips', () => {
     await user.click(screen.getByRole('button', { name: /Post selected as Shorts \(2\)/ }))
     await waitFor(() => expect(h.post).toHaveBeenCalledTimes(1))
     expect(h.post.mock.calls[0][0]).toMatchObject({ url: `${API}/dvr/clips/c1.mp4`, host: 'badadib', clipper: 'fan', room: 'badadib-r1' })
-    expect(JSON.parse(localStorage.getItem('3s-clip-post-queue')).map((c) => c.id)).toEqual(['c2'])
+    await waitFor(() => expect(JSON.parse(localStorage.getItem('3s-clip-post-queue') || '[]').map((c) => c.id)).toEqual(['c2']))
     await user.click(screen.getByRole('button', { name: /Post the next one \(1 left\)/ }))
     await waitFor(() => expect(h.post).toHaveBeenCalledTimes(2))
     expect(h.post.mock.calls[1][0]).toMatchObject({ url: `${API}/dvr/clips/c2.mp4`, clipper: null })
-    expect(localStorage.getItem('3s-clip-post-queue')).toBeNull()
+    await waitFor(() => expect(localStorage.getItem('3s-clip-post-queue')).toBeNull())
+  })
+
+  it('a clip that fails to post stays in the queue, first in line', async () => {
+    const queued = () => JSON.parse(localStorage.getItem('3s-clip-post-queue') || '[]').map((c) => c.id)
+    h.post.mockRejectedValueOnce(new Error('clip file: 502'))
+    const { user } = renderWithProviders(<StreamClipsHome />)
+    await screen.findByText('Your stream')
+    const boxes = screen.getAllByRole('checkbox')
+    await user.click(boxes[0])
+    await user.click(boxes[1])
+    await user.click(screen.getByRole('button', { name: /Post selected as Shorts \(2\)/ }))
+    await waitFor(() => expect(queued()).toEqual(['c1', 'c2']))
+
+    // "Post the next one" fails again: still both; then it goes through.
+    h.post.mockRejectedValueOnce(new Error('clip file: 502'))
+    await user.click(screen.getByRole('button', { name: /Post the next one \(2 left\)/ }))
+    await waitFor(() => expect(h.post).toHaveBeenCalledTimes(2))
+    expect(queued()).toEqual(['c1', 'c2'])
+    await user.click(screen.getByRole('button', { name: /Post the next one \(2 left\)/ }))
+    await waitFor(() => expect(queued()).toEqual(['c2']))
+    expect(h.post.mock.calls[2][0]).toMatchObject({ url: `${API}/dvr/clips/c1.mp4` })
   })
 
   it('empty, and logged out', async () => {

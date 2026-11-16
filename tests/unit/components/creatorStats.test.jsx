@@ -50,6 +50,22 @@ describe('creator stats', () => {
     expect(api.fetchCreatorReach).toHaveBeenCalledWith('badadib', { days: 28, content: 'all' })
   })
 
+  it('filtered to some content, or over all time, the tile is that payout and says so', async () => {
+    const { user } = renderWithProviders(<CreatorStats user="badadib" />)
+    await screen.findByText('$5.00', { selector: '.cs-tile-v' })
+    expect(screen.getByText('Earned', { selector: '.cs-tile-l' })).toBeInTheDocument()
+    // Shorts only: the earnings by source are channel-wide, so the posts' payout.
+    await user.click(screen.getByRole('tab', { name: 'Shorts' }))
+    expect(await screen.findByText('$1.00', { selector: '.cs-tile-v' })).toBeInTheDocument()
+    expect(screen.getByText('Payout', { selector: '.cs-tile-l' })).toBeInTheDocument()
+    // All time, every kind: the earnings reach back 12 months only.
+    await user.click(screen.getAllByRole('tab', { name: 'All' })[1])
+    await user.click(screen.getAllByRole('tab', { name: 'All' })[0])
+    await waitFor(() => expect(api.fetchCreatorEarnings).toHaveBeenLastCalledWith('badadib', { days: 365 }))
+    expect(await screen.findByText('$1.00', { selector: '.cs-tile-v' })).toBeInTheDocument()
+    expect(screen.getByText('Payout', { selector: '.cs-tile-l' })).toBeInTheDocument()
+  })
+
   it('audio reads listening, opens the audio detail and asks for no reach', async () => {
     api.fetchCreatorOverview.mockResolvedValue({ totals: { videos: 1, sessions: 3, watchSeconds: 90 }, videos: [vid('pod1', { audio: true })] })
     const { user } = renderWithProviders(<CreatorStats user="badadib" />)

@@ -53,16 +53,24 @@ describe('Earnings card', () => {
     expect(screen.getByText('300 sats')).toBeInTheDocument()
   })
 
-  it('the export buttons call back; daily waits for the data', async () => {
+  it('the export buttons call back; both wait for the earnings (the content table carries them)', async () => {
     const daily = vi.fn()
     const content = vi.fn()
     const { user, rerender } = wrap(<EarningsCard earnings={null} onExportDaily={daily} onExportContent={content} />)
     expect(screen.getByRole('button', { name: 'Export daily earnings (CSV)' })).toBeDisabled()
-    await user.click(screen.getByRole('button', { name: 'Export content table (CSV)' }))
-    expect(content).toHaveBeenCalled()
+    expect(screen.getByRole('button', { name: 'Export content table (CSV)' })).toBeDisabled()
     rerender(<div className="creator-stats"><EarningsCard earnings={earnings} onExportDaily={daily} onExportContent={content} /></div>)
     await user.click(screen.getByRole('button', { name: 'Export daily earnings (CSV)' }))
     expect(daily).toHaveBeenCalled()
+    await user.click(screen.getByRole('button', { name: 'Export content table (CSV)' }))
+    expect(content).toHaveBeenCalled()
+  })
+
+  it('earnings that failed keep the content export off and say why', () => {
+    wrap(<EarningsCard earnings={null} error onExportDaily={() => {}} onExportContent={() => {}} />)
+    const btn = screen.getByRole('button', { name: 'Export content table (CSV)' })
+    expect(btn).toBeDisabled()
+    expect(btn).toHaveAttribute('title', expect.stringMatching(/could not be loaded/))
   })
 
   it('no earnings in the range, and the checker down, each say so', () => {

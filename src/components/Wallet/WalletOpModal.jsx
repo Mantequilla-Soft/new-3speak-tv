@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import DialogShell from '../modal/DialogShell';
 import { Button, Field, Icon, Segmented, Banner } from '../v2/ui';
 import { cx } from '../v2/helpers';
-import { isAccountValid } from '../../hive-api/api';
+import { handleStateOnHive } from '../../hive-api/api';
 import { broadcastWithAioha, KeyTypes, isLoggedIn, isManteAuthLogin } from '../../hive-api/aioha';
 import { formatNumber } from '../../i18n';
 import { toastIn } from '../../utils/toast';
@@ -34,6 +34,9 @@ export default function WalletOpModal({ mode, user, state, onClose, onDone }) {
   const [coin, setCoin] = useState('HBD');
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(null);
+  // One broadcast at a time: set before the first await, so a second tap while
+  // the account is being checked does nothing (a re-render would come too late).
+  const lock = useRef(false);
 
   const s = state || {};
   const target = norm(to);
@@ -43,7 +46,8 @@ export default function WalletOpModal({ mode, user, state, onClose, onDone }) {
   let unit = 'HIVE';
   let available = s.hive || 0;
   if (mode === 'powerDown') { unit = 'HP'; available = s.freeHp || 0; }
-  if (mode === 'delegate') { unit = 'HP'; available = (s.freeHp || 0) + (existing?.hp || 0); }
+  // A running power down's remaining VESTS can't be delegated (lib/walletOps.js delegatableVests).
+  if (mode === 'delegate') { unit = 'HP'; available = (s.delegatableHp ?? s.freeHp ?? 0) + (existing?.hp || 0); }
   if (mode === 'savings') {
     unit = coin;
     available = sub === 'deposit' ? (coin === 'HBD' ? s.hbd : s.hive) : (coin === 'HBD' ? s.savingsHbd : s.savingsHive);
@@ -51,12 +55,26 @@ export default function WalletOpModal({ mode, user, state, onClose, onDone }) {
   if (mode === 'convert') { unit = sub === 'hbd' ? 'HBD' : 'HIVE'; available = sub === 'hbd' ? s.hbd : s.hive; }
   available = Number(available) || 0;
 
-  const n = parseFloat(amount);
+  // Cut to 3 decimals here, so the button says exactly what is signed (the
+  // builders round down to the asset's precision the same way).
+  const n = Math.floor((parseFloat(amount) || 0) * 1000 + 1e-7) / 1000;
   const shown = n > 0 ? formatNumber(n, { maximumFractionDigits: 3 }) : null;
 
-  const run = async (key, ops, doneText) => {
-    if (!isLoggedIn()) { toast.error(t('wallet.transferModal.loginRequired')); return; }
+  // `key` names the button that shows the spinner; every button is off meanwhile.
+  const once = async (key, fn) => {
+    if (lock.current) return;
+    lock.current = true;
     setBusy(key);
+    try {
+      await fn();
+    } finally {
+      lock.current = false;
+      setBusy(null);
+    }
+  };
+
+  const run = async (ops, doneText) => {
+    if (!isLoggedIn()) { toast.error(t('wallet.transferModal.loginRequired')); return; }
     try {
       await broadcastWithAioha(ops, KeyTypes.Active);
       toast.success(doneText || t('walletOps.common.done'));
@@ -64,19 +82,20 @@ export default function WalletOpModal({ mode, user, state, onClose, onDone }) {
       onClose();
     } catch (err) {
       toast.error(t('walletOps.common.failed', { error: err?.message || '' }));
-    } finally {
-      setBusy(null);
     }
   };
 
   const build = () => {
     // Never more VESTS than the account can give (Max, rounding of HP to VESTS).
-    const cap = mode === 'powerDown' ? s.freeVests : (s.freeVests || 0) + (existing?.vests || 0);
+    const cap = mode === 'powerDown' ? s.freeVests : (s.delegatableVests ?? s.freeVests ?? 0) + (existing?.vests || 0);
     const vests = (hp) => Math.min(hpToVests(hp, s.dgp), cap);
+    // 0 VESTS would STOP the power down or REMOVE the delegation (no chain rate,
+    // nothing free): never sent from here, only from the Stop and Remove buttons.
+    const someVests = (hp) => { const v = vests(hp); return v >= 1e-6 ? v : null; };
     switch (mode) {
       case 'powerUp': return powerUpOp({ from: user, to: target || user, amount: n });
-      case 'powerDown': return powerDownOp({ account: user, vests: vests(n) });
-      case 'delegate': return delegateOp({ delegator: user, delegatee: target, vests: vests(n) });
+      case 'powerDown': { const v = someVests(n); return v ? powerDownOp({ account: user, vests: v }) : null; }
+      case 'delegate': { const v = someVests(n); return v ? delegateOp({ delegator: user, delegatee: target, vests: v }) : null; }
       case 'savings': return sub === 'deposit'
         ? toSavingsOp({ from: user, to: target || user, amount: n, currency: coin })
         : fromSavingsOp({ from: user, to: user, amount: n, currency: coin, requestId: newRequestId((s.withdrawals || []).map((w) => w.requestId)) });
@@ -88,18 +107,26 @@ export default function WalletOpModal({ mode, user, state, onClose, onDone }) {
     }
   };
 
-  const submit = async () => {
+  const submit = () => once('submit', async () => {
     setError('');
     if (!(n > 0)) { setError(t('walletOps.common.amountPositive')); return; }
     if (n > available + 1e-9) { setError(t('walletOps.common.insufficient')); return; }
     const needsTo = mode === 'delegate' || (mode === 'powerUp' && target !== user) || (mode === 'savings' && sub === 'deposit' && target !== user);
     if (mode === 'delegate' && target === user) { setError(t('walletOps.delegate.self')); return; }
-    if (needsTo && (!isAccountName(target) || !(await isAccountValid(target)))) { setError(t('walletOps.common.invalidAccount')); return; }
-    await run('submit', [build()]);
-  };
+    if (needsTo) {
+      if (!isAccountName(target)) { setError(t('walletOps.common.invalidAccount')); return; }
+      // 'unknown' = no node answered: say so, not "no such account".
+      const found = await handleStateOnHive(target);
+      if (found === 'unknown') { setError(t('walletOps.common.accountCheckFailed')); return; }
+      if (found !== 'taken') { setError(t('walletOps.common.invalidAccount')); return; }
+    }
+    const op = build();
+    if (!op) { setError(t('walletOps.common.amountPositive')); return; }
+    await run([op]);
+  });
 
-  const stopPowerDown = () => run('stop', [cancelPowerDownOp({ account: user })], t('walletOps.powerDown.stopped'));
-  const removeDelegation = (delegatee) => run(`rm:${delegatee}`, [removeDelegationOp({ delegator: user, delegatee })], t('walletOps.delegate.removed'));
+  const stopPowerDown = () => once('stop', () => run([cancelPowerDownOp({ account: user })], t('walletOps.powerDown.stopped')));
+  const removeDelegation = (delegatee) => once(`rm:${delegatee}`, () => run([removeDelegationOp({ delegator: user, delegatee })], t('walletOps.delegate.removed')));
 
   // The button says exactly what will happen.
   let label = t(`walletOps.${mode}.title`);

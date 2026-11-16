@@ -286,7 +286,7 @@
       "viewers": "Spectateurs en train de regarder",
       "liveFor": "Durée du live",
       "timeLeft": "Temps restant avant la fin du live",
-      "boosts": "Boosts reçus pendant ce live (USD)"
+      "boosts": "Boosts reçus pendant ce live"
     },
     "pro": {
       "title": "Diffuser depuis OBS fait partie de 3Speak Pro",

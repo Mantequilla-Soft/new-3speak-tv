@@ -18,6 +18,7 @@
     "insufficient": "Mas marami iyan kaysa sa mayroon ka.",
     "amountPositive": "Maglagay ng halagang higit sa zero.",
     "invalidAccount": "Walang Hive account na may ganyang pangalan.",
+    "accountCheckFailed": "Hindi ma-check ang account na iyan ngayon. Subukan ulit mamaya.",
     "done": "Tapos na. Puwedeng umabot ng ilang segundo bago ito lumabas dito.",
     "failed": "Hindi ito natuloy: {{error}}",
     "loading": "Nilo-load ang wallet mo..."

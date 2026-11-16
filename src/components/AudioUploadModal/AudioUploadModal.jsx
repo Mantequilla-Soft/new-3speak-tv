@@ -46,7 +46,7 @@ import { episodeFields } from '../../utils/episodeNumbers';
 import { saveScheduledPost } from '../../utils/scheduledPosts';
 import { scheduledPostWriteError } from '../../utils/scheduledPostProof';
 import EpisodeNumberFields from '../Episodes/EpisodeNumberFields';
-import AudioPublishWhen from './AudioPublishWhen';
+import AudioPublishWhen, { scheduleTooSoon, SCHEDULE_MIN_LEAD_MIN } from './AudioPublishWhen';
 import PlaylistTypePicker from '../PlaylistTypePicker/PlaylistTypePicker';
 import MarkdownComposer from '../studio/MarkdownComposer';
 import { sanitizeAudiograms, publishAudiogramShorts } from '../../utils/audiogramShorts';
@@ -1052,6 +1052,12 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
 
   // ── single (standalone post, audio embedded — uses the main composer) ──
   const publishSinglePost = useCallback(async (track) => {
+    // A scheduled time that has come too close while the creator was in the
+    // review step: say so before the upload, not after it (the checker would
+    // refuse the post and leave the audio without one).
+    if (!warmup && publishWhen === 'schedule' && scheduleTooSoon(scheduleAt)) {
+      throw new Error(t('episodes.when.tooSoon', { minutes: SCHEDULE_MIN_LEAD_MIN }));
+    }
     setTrackStatus(track.id, { state: 'uploading', stage: 'upload', message: undefined });
     // The post's title is the audio's title too: the track title is only the
     // filename-derived default here ("recording 4702"), and audio cards and the
@@ -1585,7 +1591,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     if (stepKey === 'source') return tracks.length > 0 && !isRecording && (!warmup || tracks.length === 1);
     if (stepKey === 'post') {
       return (tracks[0]?.title || mainTitle || '').trim().length > 0 && !!tracks[0]?.type
-        && (warmup || publishWhen !== 'schedule' || !!scheduleAt);
+        && (warmup || publishWhen !== 'schedule' || !scheduleTooSoon(scheduleAt));
     }
     // Every track needs its category picked before review.
     if (stepKey === 'tracks') return tracks.every((tr) => !!tr.type);

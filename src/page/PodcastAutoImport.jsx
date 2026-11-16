@@ -233,14 +233,14 @@ export function AutoImportForm({ user, show, config, sample, granted, onGranted,
     ...extras.filter((b) => b.account !== LOCKED_FUND_ACCOUNT),
   ]);
   const [remaining, setRemaining] = useState(() => 100 - list.reduce((sum, b) => sum + Number(b.percent || 0), 0));
-  useEffect(() => {
-    if (!isPremium) return;
-    setList((prev) => {
-      const fund = prev.find((b) => b.account === LOCKED_FUND_ACCOUNT && b.locked);
-      if (fund) setRemaining((r) => Math.min(100, r + Number(fund.percent)));
-      return prev.filter((b) => !(b.account === LOCKED_FUND_ACCOUNT && b.locked));
-    });
-  }, [isPremium]);
+  // Pro (known after the first render): no fund row, its share back to the creator.
+  // Two plain updates while rendering, never one inside the other's updater
+  // (React may run an updater twice, which gave the share back twice).
+  const proFund = isPremium ? list.find((b) => b.account === LOCKED_FUND_ACCOUNT && b.locked) : null;
+  if (proFund) {
+    setList(list.filter((b) => b !== proFund));
+    setRemaining(Math.min(100, remaining + Number(proFund.percent)));
+  }
 
   const [accountAdsOn, setAccountAdsOn] = useState(false);
   useEffect(() => {

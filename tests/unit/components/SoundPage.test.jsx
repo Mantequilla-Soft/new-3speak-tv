@@ -18,6 +18,7 @@ vi.mock('../../../src/lib/sounds', async (importOriginal) => ({
 vi.mock('../../../src/lib/videoAsAudio', () => ({
   videoAudioTrack: vi.fn(async () => m.track),
   playVideoAsAudio: vi.fn(async () => m.track),
+  videoTrackId: (a, p) => `video:${a}/${p}`,
 }))
 vi.mock('../../../src/utils/creatorSettings', () => ({
   creatorKey: (u) => u, getCreatorSettings: async () => m.settings, isUploadBlocked: (s) => s?.canUpload === false,
@@ -100,7 +101,25 @@ describe('a sound page', () => {
   it('Listen plays a Short\'s sound in the audio player', async () => {
     const { user } = mount()
     await user.click(await screen.findByRole('button', { name: 'Listen' }))
-    expect(videoAsAudio.playVideoAsAudio).toHaveBeenCalledWith(expect.objectContaining({ author: 'badadib', permlink: 'o1' }), expect.any(Object))
+    // The upload plays; votes, comments and tips go to the Hive post.
+    expect(videoAsAudio.playVideoAsAudio).toHaveBeenCalledWith(
+      expect.objectContaining({ author: 'badadib', permlink: 'o1', postAuthor: 'badadib', postPermlink: 'orig-1' }),
+      expect.any(Object),
+    )
+  })
+
+  it('the original playing (by its Hive post) shows Pause and pauses the player', async () => {
+    const toggle = vi.fn()
+    const before = useAppStore.getState()
+    act(() => { useAppStore.setState({ audioCurrent: { _id: 'video:badadib/orig-1', video: true }, audioIsPlaying: true, audioRequestToggle: toggle }) })
+    try {
+      const { user } = mount()
+      await user.click(await screen.findByRole('button', { name: 'Pause' }))
+      expect(toggle).toHaveBeenCalled()
+      expect(videoAsAudio.playVideoAsAudio).not.toHaveBeenCalled()
+    } finally {
+      act(() => { useAppStore.setState({ audioCurrent: before.audioCurrent, audioIsPlaying: before.audioIsPlaying, audioRequestToggle: before.audioRequestToggle }) })
+    }
   })
 
   it('signed out, or blocked from uploading: no editor', async () => {

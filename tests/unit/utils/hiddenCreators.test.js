@@ -54,6 +54,26 @@ describe('batchCheckHidden', () => {
     expect((await m.batchCheckHidden(['alice'])).size).toBe(0)
   })
 
+  it('fails open when the checker does not answer in time', async () => {
+    vi.useFakeTimers()
+    try {
+      // A request that only ends when it is aborted.
+      const fetch = vi.fn((url, init) => new Promise((resolve, reject) => {
+        init.signal.addEventListener('abort', () => reject(new DOMException('aborted', 'AbortError')))
+      }))
+      vi.stubGlobal('fetch', fetch)
+      const m = await load()
+      const pending = m.batchCheckFlags(['alice'])
+      await vi.advanceTimersByTimeAsync(m.CHECK_TIMEOUT_MS)
+      const out = await pending
+      expect(out.hidden.size).toBe(0)
+      expect(out.muted.size).toBe(0)
+      expect(fetch.mock.calls[0][1].signal.aborted).toBe(true)
+    } finally {
+      vi.useRealTimers()
+    }
+  })
+
   it('does not call the network for an empty list', async () => {
     const fetch = vi.fn()
     vi.stubGlobal('fetch', fetch)

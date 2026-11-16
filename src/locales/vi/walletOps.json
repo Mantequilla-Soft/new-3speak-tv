@@ -18,6 +18,7 @@
     "insufficient": "Số này nhiều hơn số bạn đang có.",
     "amountPositive": "Nhập số lượng lớn hơn 0.",
     "invalidAccount": "Không có tài khoản Hive nào có tên này.",
+    "accountCheckFailed": "Hiện không thể kiểm tra tài khoản này. Hãy thử lại sau giây lát.",
     "done": "Xong. Có thể mất vài giây để hiện ở đây.",
     "failed": "Không thực hiện được: {{error}}",
     "loading": "Đang tải ví của bạn..."

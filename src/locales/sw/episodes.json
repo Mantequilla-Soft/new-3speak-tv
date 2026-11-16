@@ -42,7 +42,8 @@
     "nowHint": "Inachapishwa mara tu unapobonyeza Chapisha.",
     "scheduleHint": "3Speak itakuchapishia wakati huo.",
     "draftHint": "Inabaki kwenye Rasimu kwenye studio yako hadi uichapishe.",
-    "scheduleButton": "Panga"
+    "scheduleButton": "Panga",
+    "tooSoon": "Muda huo uko karibu mno. Chagua muda wa angalau dakika {{minutes}} kuanzia sasa."
   },
   "series": {
     "kind": "Mfululizo",

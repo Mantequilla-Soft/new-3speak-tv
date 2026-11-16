@@ -67,7 +67,6 @@ import { watchPath } from '../../utils/urls';
 import mantequillaLogo from '../../assets/mantequilla-logo.png';
 import { seekKeyTarget, timelineSliderProps } from '../../lib/sliderKeys';
 import useTimelineScrub from '../../hooks/useTimelineScrub';
-import { isLocalSource } from '../../lib/timelineScrub';
 import ScrubOverlay from './ScrubOverlay';
 import '../../page/Audio.scss';
 import './GlobalAudioPlayer.scss';
@@ -341,7 +340,9 @@ function GlobalAudioPlayer() {
     to: streamTo,
     permlink: streamTo ? audioCurrent.post_permlink : null,
     playing: audioIsPlaying,
-    link: streamTo ? `https://3speak.tv/audio/${audioCurrent.owner}/${audioCurrent.post_permlink}` : '',
+    // The page the checker files the sats under (its memo parser reads /audio/,
+    // /@ and /watch?v= links): a video's watch page, an audio's post page.
+    link: streamTo ? `https://3speak.tv${isVideoTrack(audioCurrent) ? pageOf(audioCurrent) : `/audio/${audioCurrent.owner}/${audioCurrent.post_permlink}`}` : '',
   });
   const [streamOpen, setStreamOpen] = useState(false);
   const [podcastTip, setPodcastTip] = useState(null);
@@ -840,7 +841,7 @@ function GlobalAudioPlayer() {
     if (track.live || fxBlocked || !webAudioSupported() || (isVideoTrack(track) && !mseAvailable())) { setRouteOk(false); return undefined; }
     if (routed) { setRouteOk(true); return undefined; }
     // A video heard as audio plays through hls.js (MSE): always readable.
-    if (isVideoTrack(track)) { setRouteOk(true); switchElement(true); return undefined; }
+    if (isVideoTrack(track)) { setRouteOk(true); if (!away) switchElement(true); return undefined; }
     const src = srcRef.current.id === track._id ? srcRef.current.src : null;
     if (!src) return undefined; // the load effect hasn't picked the source yet
     const known = corsKnown(src, { storage: lsStorage(), origin: window.location.origin });
@@ -1173,6 +1174,8 @@ function GlobalAudioPlayer() {
   }, [audioPlay]);
 
   const playPrev = useCallback(() => {
+    // From the store, like playNext.
+    const { audioCurrent, audioQueue, audioAutoplayList } = useAppStore.getState();
     const el = audioRef.current;
     if (el && el.currentTime > 3 && !audioCurrent?.live) { el.currentTime = 0; return; }
     if (!audioCurrent) return;
@@ -1182,7 +1185,7 @@ function GlobalAudioPlayer() {
     if (qi > 0) { audioPlay(audioQueue[qi - 1]); return; }
     const i = audioAutoplayList.findIndex(x => x._id === audioCurrent._id);
     if (i > 0) audioPlay(audioAutoplayList[i - 1], audioAutoplayList);
-  }, [audioCurrent, audioQueue, audioAutoplayList, audioPlay]);
+  }, [audioPlay]);
 
   // What the phone's media notification, lock screen, headphones and car show
   // and control (Media Session). Without it Android shows the tab's title and
@@ -1531,7 +1534,9 @@ function GlobalAudioPlayer() {
 
   // Press and drag on the timelines (hooks/useTimelineScrub.js). Before the early
   // returns below: a hook must run on every render.
-  const localSrc = isLocalSource(audioRef.current?.currentSrc);
+  // Live seeking while dragging only for a saved copy. Not read from the
+  // element's src: hls.js gives it a blob: URL too, while it streams.
+  const localSrc = playingLocal;
   const scrub = useTimelineScrub({
     duration: audioDuration,
     local: localSrc,

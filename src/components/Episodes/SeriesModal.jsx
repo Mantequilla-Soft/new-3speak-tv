@@ -4,7 +4,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import DialogShell from '../modal/DialogShell';
 import { Button, Field } from '../v2/ui';
 import { fetchUserShortsWithDetails } from '../../hive-api/hiveApi';
-import { broadcastViaThreespeak, broadcastWithAioha, getCurrentProvider, KeyTypes } from '../../hive-api/aioha';
+import { broadcastWithAioha, KeyTypes } from '../../hive-api/aioha';
 import { playlistTypeFields } from '../../lib/playlistType';
 import { SERIES_APPEND_POSITION, SERIES_META, seriesParts } from '../../lib/series';
 import { toastIn } from '../../utils/toast';
@@ -58,7 +58,9 @@ export function seriesOps({ owner, newId = null, name = '', seriesId = null, par
   return ops;
 }
 
-const broadcast = (ops) => (getCurrentProvider() ? broadcastViaThreespeak(ops) : broadcastWithAioha(ops, KeyTypes.Posting));
+// broadcastWithAioha picks the way: a ButrAuth login through its session, a
+// wallet through @threespeak first, signing itself when that grant is missing.
+const broadcast = (ops) => broadcastWithAioha(ops, KeyTypes.Posting);
 const newPlaylistId = () => ((typeof crypto !== 'undefined' && crypto.randomUUID)
   ? crypto.randomUUID()
   : `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`);

@@ -18,6 +18,7 @@
     "insufficient": "Hicho ni zaidi ya ulicho nacho.",
     "amountPositive": "Weka kiasi kilicho juu ya sifuri.",
     "invalidAccount": "Hakuna akaunti ya Hive yenye jina hilo.",
+    "accountCheckFailed": "Imeshindwa kukagua akaunti hiyo kwa sasa. Jaribu tena baada ya muda mfupi.",
     "done": "Imekamilika. Inaweza kuchukua sekunde chache kuonekana hapa.",
     "failed": "Haikufanikiwa: {{error}}",
     "loading": "Inapakia pochi yako..."

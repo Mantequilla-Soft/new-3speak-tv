@@ -25,6 +25,10 @@ function fileDuration(file) {
  * the other side of the clip (clipper or host) is a locked beneficiary, shown
  * in the list and enforced at publish (EmbedUploadContext `streamClip`).
  *
+ * The clip starts a clean upload (resetUploadState): nothing of an earlier,
+ * unfinished one (title, schedule, another clip's share) carries over. While a
+ * publish is still running it refuses instead, so that upload is not cut off.
+ *
  * `post({ url, room, host, clipper, offsetSec })`; `busy` while fetching.
  */
 export function usePostClipAsShort() {
@@ -34,14 +38,16 @@ export function usePostClipAsShort() {
     isPremium, setVideoFile, setPrevVideoFile, setVideoDuration, setGeneratedThumbnail,
     setFromStories, setIsStory, setVideoMode, setOriginalAuthor, setOriginalPermlink,
     setOriginalShortPermlink, setRemixChain, setList, setRemaingPercent, setStreamClip,
+    uploading, resetUploadState,
   } = useEmbedUpload();
   const [busy, setBusy] = useState(false);
 
   const post = useCallback(async ({ url, room, host, clipper, offsetSec = null }) => {
+    if (uploading) throw new Error('an upload is still publishing');
     setBusy(true);
     try {
       const file = await fetchClipFile(url);
-      setVideoDuration(await fileDuration(file));
+      const duration = await fileDuration(file);
       let thumbs = [];
       try {
         thumbs = await Promise.race([
@@ -49,6 +55,9 @@ export function usePostClipAsShort() {
           new Promise((_, reject) => setTimeout(() => reject(new Error('thumbnail timeout')), 15000)),
         ]);
       } catch { /* the thumbnail step can still capture one */ }
+      // Only now that the clip is here: a failed fetch leaves the form alone.
+      resetUploadState();
+      setVideoDuration(duration);
       setGeneratedThumbnail(thumbs);
       setVideoFile(file);
       setPrevVideoFile(file);
@@ -71,7 +80,7 @@ export function usePostClipAsShort() {
     } finally {
       setBusy(false);
     }
-  }, [user, isPremium, navigate, setVideoFile, setPrevVideoFile, setVideoDuration, setGeneratedThumbnail, setFromStories, setIsStory, setVideoMode, setOriginalAuthor, setOriginalPermlink, setOriginalShortPermlink, setRemixChain, setList, setRemaingPercent, setStreamClip]);
+  }, [user, isPremium, uploading, resetUploadState, navigate, setVideoFile, setPrevVideoFile, setVideoDuration, setGeneratedThumbnail, setFromStories, setIsStory, setVideoMode, setOriginalAuthor, setOriginalPermlink, setOriginalShortPermlink, setRemixChain, setList, setRemaingPercent, setStreamClip]);
 
   return { post, busy };
 }

@@ -7,7 +7,7 @@ import { Button, Segmented, EmptyState } from '../components/v2/ui';
 import Card3 from '../components/Cards/Card3';
 import { useAppStore } from '../lib/store';
 import { fetchSound, fetchTrendingSounds, soundCredit, isSoundId } from '../lib/sounds';
-import { videoAudioTrack, playVideoAsAudio } from '../lib/videoAsAudio';
+import { videoAudioTrack, playVideoAsAudio, videoTrackId } from '../lib/videoAsAudio';
 import { FEATURE_EDITOR } from '../utils/config';
 import { creatorKey, getCreatorSettings, isUploadBlocked } from '../utils/creatorSettings';
 import { useSupportBlock } from '../lib/supportBlockStore';
@@ -92,7 +92,10 @@ export default function SoundPage() {
   const sound = data?.sound || null;
   const cards = useMemo(() => (data?.shorts || []).map(asCard), [data]);
   const originalCard = original ? [asCard(original)] : [];
-  const playingOriginal = original && audioIsPlaying && audioCurrent?._id === `video:${original.owner}/${original.embed_permlink}`;
+  // The upload (owner/embed_permlink) is what plays; the Hive post
+  // (author/permlink) is what the player votes, comments and tips on.
+  const originalPost = original ? { postAuthor: original.author || original.owner, postPermlink: original.permlink || original.embed_permlink } : null;
+  const playingOriginal = original && audioIsPlaying && audioCurrent?._id === videoTrackId(originalPost.postAuthor, originalPost.postPermlink);
 
   const togglePreview = async () => {
     if (sound?.audio_url) {
@@ -104,7 +107,7 @@ export default function SoundPage() {
     if (!original) return;
     if (playingOriginal) { useAppStore.getState().audioRequestToggle(); return; }
     try {
-      await playVideoAsAudio({ author: original.owner, permlink: original.embed_permlink, title: sound?.title || original.title }, useAppStore.getState());
+      await playVideoAsAudio({ author: original.owner, permlink: original.embed_permlink, ...originalPost, title: sound?.title || original.title }, useAppStore.getState());
     } catch {
       toastIn('Audio').error(t('videoAudio.failed'));
     }

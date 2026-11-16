@@ -31,6 +31,16 @@ describe('lib/lastPage', () => {
     }
   })
 
+  it('does not come back to an upload or to publishing a stream recording (their state is in memory)', () => {
+    for (const p of ['/upload', '/upload/details', '/openpods/publish']) {
+      expect(rememberablePath({ pathname: p, search: '?room=x' })).toBeNull()
+    }
+    // Only the publish step: the stream pages themselves are remembered.
+    expect(rememberablePath({ pathname: '/openpods' })).toBe('/openpods')
+    expect(rememberablePath({ pathname: '/openpods/some-room' })).toBe('/openpods/some-room')
+    expect(rememberablePath({ pathname: '/uploads-guide' })).toBe('/uploads-guide')
+  })
+
   it('treats Home, a skipped page or blocked storage as nothing to resume', () => {
     expect(readLastPage()).toBeNull()
     saveLastPage({ pathname: '/' })
@@ -51,6 +61,18 @@ describe('resumeOnStart (before the router mounts)', () => {
     expect(window.location.pathname).toBe('/t/music')
     expect(window.history.length).toBe(before + 1)
     expect(isResuming()).toBe(true)
+  })
+
+  it('stays on Home when the browser refuses the jump, instead of throwing before React starts', () => {
+    setting(true)
+    localStorage.setItem('last-page', '/t/music')
+    const win = {
+      location: { pathname: '/', search: '', hash: '' },
+      history: { pushState: vi.fn(() => { throw new Error('SecurityError') }) },
+    }
+    expect(() => resumeOnStart(win)).not.toThrow()
+    expect(resumeOnStart(win)).toBeNull()
+    expect(isResuming()).toBe(false)
   })
 
   it('does nothing with the setting off, nothing saved, or a link the app was opened with', () => {

@@ -30,6 +30,25 @@ export function volumeAfter(volume, muted, dir) {
   return Math.min(1, Math.max(0, to));
 }
 
+/**
+ * Do ArrowUp / ArrowDown set the volume? Only while the player is what the viewer
+ * is at: focus in it (`wrap`, the player's box), or on the page itself with the
+ * player at least half on screen (always in fullscreen). Reading the comments
+ * further down, the arrows scroll as always. While channel surfing they belong to
+ * the surf bar (channel up / down), so never then.
+ */
+export function arrowsSetVolume(target, wrap, { surfing = false, fullscreen = false, viewportHeight = 0 } = {}) {
+  if (surfing) return false;
+  if (wrap && target && wrap.contains(target)) return true;
+  const onPage = !target || target === document.body || target === document.documentElement;
+  if (!onPage) return false;
+  if (fullscreen) return true;
+  if (!wrap) return false;
+  const r = wrap.getBoundingClientRect();
+  const seen = Math.min(r.bottom, viewportHeight) - Math.max(r.top, 0);
+  return r.height > 0 && seen / r.height >= 0.5;
+}
+
 /** "0" to "9": that tenth of the video, in seconds. Null for any other key. */
 export function percentSeekTarget(key, duration) {
   if (!/^[0-9]$/.test(key) || !(duration > 0)) return null;

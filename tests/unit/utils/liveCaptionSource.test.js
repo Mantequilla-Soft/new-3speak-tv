@@ -2,7 +2,7 @@
 // the teleprompter's speech server open, reconnects when the server closes it
 // (its session time limit), backs off, and gives up after a run of failures.
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-import { createLiveCaptionSource, captionLanguages, BACKOFF_MS, MAX_FAILS } from '../../../src/utils/liveCaptionSource'
+import { createLiveCaptionSource, captionLanguages, BACKOFF_MS, MAX_FAILS, STABLE_MS } from '../../../src/utils/liveCaptionSource'
 
 function fakeConnect() {
   const sessions = []
@@ -73,6 +73,35 @@ describe('createLiveCaptionSource', () => {
       vi.advanceTimersByTime(BACKOFF_MS[0])
     }
     expect(onStatus).not.toHaveBeenCalledWith('error', expect.anything())
+  })
+
+  it('sessions that connected and ran a while never switch captions off, even with no words', () => {
+    const { connect, sessions } = fakeConnect()
+    const onStatus = vi.fn()
+    createLiveCaptionSource({ url: 'wss://x', connect })({}, { lang: 'en-us', onText: vi.fn(), onStatus })
+    // A quiet hour and more: every session reaches the time limit in silence.
+    for (let i = 0; i < MAX_FAILS * 2; i += 1) {
+      sessions[i].opts.onStatus('connected')
+      vi.advanceTimersByTime(10 * 60 * 1000)
+      sessions[i].opts.onStatus('error', 'session time limit reached')
+      vi.advanceTimersByTime(BACKOFF_MS[0])
+    }
+    expect(connect).toHaveBeenCalledTimes(MAX_FAILS * 2 + 1)
+    expect(onStatus).not.toHaveBeenCalledWith('error', expect.anything())
+  })
+
+  it('a session dropped right after connecting still counts as a failure', () => {
+    const { connect, sessions } = fakeConnect()
+    const onStatus = vi.fn()
+    createLiveCaptionSource({ url: 'wss://x', connect })({}, { lang: 'en-us', onText: vi.fn(), onStatus })
+    for (let i = 0; i < MAX_FAILS; i += 1) {
+      sessions[i].opts.onStatus('connected')
+      vi.advanceTimersByTime(STABLE_MS - 1000)
+      sessions[i].opts.onStatus('error', 'unauthorized')
+      vi.advanceTimersByTime(BACKOFF_MS[Math.min(i, BACKOFF_MS.length - 1)])
+    }
+    expect(onStatus).toHaveBeenLastCalledWith('error', 'unauthorized')
+    expect(connect).toHaveBeenCalledTimes(MAX_FAILS)
   })
 
   it('stop closes the session and cancels a pending reconnect', () => {

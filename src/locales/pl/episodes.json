@@ -42,7 +42,8 @@
     "nowHint": "Publikowane od razu po naciśnięciu Opublikuj.",
     "scheduleHint": "3Speak opublikuje to za Ciebie o tej porze.",
     "draftHint": "Zostaje w Szkicach w Twoim studiu, dopóki go nie opublikujesz.",
-    "scheduleButton": "Zaplanuj"
+    "scheduleButton": "Zaplanuj",
+    "tooSoon": "Ta godzina jest zbyt bliska. Wybierz co najmniej {{minutes}} minut od teraz."
   },
   "series": {
     "kind": "Seria",

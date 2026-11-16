@@ -84,7 +84,7 @@ import { Icon } from '../v2/Icon';
 import { cx } from '../v2/helpers';
 import { SUPPORTED_LANGUAGES } from '../../utils/translate';
 import KeyboardShortcuts from './KeyboardShortcuts';
-import { isTypingTarget, volumeAfter, percentSeekTarget, captionToggleTarget } from '../../lib/playerKeys';
+import { isTypingTarget, volumeAfter, percentSeekTarget, captionToggleTarget, arrowsSetVolume } from '../../lib/playerKeys';
 
 // Every toast from this module is headed "Video"; the message becomes the
 // line under it. See utils/toast.js.
@@ -408,8 +408,9 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
   const menuKeysRef = useRef({});
   // The "?" sheet listing every key (KeyboardShortcuts).
   const [keysOpen, setKeysOpen] = useState(false);
-  const wrapperElRef = useRef(null);
-  wrapperElRef.current = wrapperRef && typeof wrapperRef === 'object' ? wrapperRef.current : null;
+  // Channel surfing (SurfBar): the up / down arrows change the channel then.
+  const surfActiveRef = useRef(surfActive);
+  surfActiveRef.current = surfActive;
   const wideRef = useRef(false);
   // Frame length, measured from the decoder while the video plays (the smallest
   // gap between two presented frames: a dropped frame only makes a gap larger).
@@ -510,19 +511,14 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
           break;
         case 'ArrowUp':
         case 'ArrowDown': {
-          // Volume only while the player is what the viewer is at: focus in it, or
-          // on the page itself with the player at least half on screen. Reading the
-          // comments further down, the arrows scroll as always.
-          const wrap = wrapperElRef.current;
-          const inPlayer = !!wrap && !!tgt && wrap.contains(tgt);
-          const onPage = !tgt || tgt === document.body || tgt === document.documentElement;
-          let inView = !!document.fullscreenElement;
-          if (!inView && wrap) {
-            const r = wrap.getBoundingClientRect();
-            const seen = Math.min(r.bottom, window.innerHeight) - Math.max(r.top, 0);
-            inView = r.height > 0 && seen / r.height >= 0.5;
-          }
-          if (!vc.onVolumeChange || !(inPlayer || (onPage && inView))) break;
+          // Volume only while the player is what the viewer is at, and never while
+          // surfing: the surf bar's channel up / down (lib/playerKeys.js).
+          const wrap = wrapperRef && typeof wrapperRef === 'object' ? wrapperRef.current : null;
+          if (!vc.onVolumeChange || !arrowsSetVolume(tgt, wrap, {
+            surfing: surfActiveRef.current,
+            fullscreen: !!document.fullscreenElement,
+            viewportHeight: window.innerHeight,
+          })) break;
           e.preventDefault();
           const vol = volumeAfter(vc.volume, vc.isMuted, e.key === 'ArrowUp' ? 1 : -1);
           flashActionRef.current(vol > 0 ? 'volume' : 'muted');
@@ -579,7 +575,7 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
     };
     document.addEventListener('keydown', onKey);
     return () => document.removeEventListener('keydown', onKey);
-  }, [isLive]);
+  }, [isLive, wrapperRef]);
 
   // A timestamp clicked in the description or a comment. The reader is usually
   // scrolled down past the player by then, so bring it back into view, and

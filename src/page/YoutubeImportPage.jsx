@@ -607,11 +607,12 @@ export default function YoutubeImportPage() {
   // tile opens across its row with the import controls next to the cover.
   // A new episode of a show with automatic import on: the next check takes it
   // (server/import-auto.cjs, same rules: not in the feed at switch-on, dated at
-  // most 6 hours before it, not on 3Speak or in a batch yet).
+  // most 6 hours before it, not on 3Speak or in a batch yet). One it took up and
+  // will not post (skipped, or failed for good: `failed`) can be imported by hand.
   const autoConfig = platform === 'rss' ? autoInfo?.configs?.find((c) => c.enabled && c.feedId === ttList.feedId) : null;
   const comesAuto = (v) => {
     if (!autoConfig || v.platform !== 'rss' || v.tooLong || importedMap[v.id] || inBatch[v.id]) return false;
-    if ((autoConfig.baseline || []).includes(v.id)) return false;
+    if ((autoConfig.baseline || []).includes(v.id) || (autoConfig.failed || []).includes(v.id)) return false;
     const at = Date.parse(v.publishedAt);
     return !Number.isFinite(at) || at >= Date.parse(autoConfig.enabledAt) - 6 * 3600 * 1000;
   };

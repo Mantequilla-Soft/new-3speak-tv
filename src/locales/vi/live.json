@@ -284,7 +284,7 @@
       "viewers": "Người đang xem",
       "liveFor": "Thời gian phát",
       "timeLeft": "Thời gian còn lại trước khi buổi phát kết thúc",
-      "boosts": "Boost nhận được trong buổi phát này (USD)"
+      "boosts": "Boost nhận được trong buổi phát này"
     },
     "pro": {
       "title": "Phát trực tiếp từ OBS là một phần của 3Speak Pro",

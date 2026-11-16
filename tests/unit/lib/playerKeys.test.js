@@ -3,7 +3,7 @@
 // @vitest-environment jsdom
 import { describe, it, expect, beforeEach } from 'vitest'
 import {
-  isTypingTarget, volumeAfter, percentSeekTarget, captionToggleTarget, PLAYER_SHORTCUTS,
+  isTypingTarget, volumeAfter, percentSeekTarget, captionToggleTarget, PLAYER_SHORTCUTS, arrowsSetVolume,
   readTheater, saveTheater, THEATER_STORAGE_KEY,
 } from '../../../src/lib/playerKeys'
 import { seekKeyTarget, clockText, timelineSliderProps } from '../../../src/lib/sliderKeys'
@@ -37,6 +37,30 @@ describe('player keys', () => {
     expect(volumeAfter(0.02, false, -1)).toBe(0)
     expect(volumeAfter(0.8, true, 1)).toBe(0.05)
     expect(volumeAfter(undefined, false, -1)).toBe(0.95)
+  })
+
+  it('arrow up and down are the volume only while the player is what the viewer is at, never while surfing', () => {
+    const wrap = document.createElement('div')
+    const button = document.createElement('button')
+    wrap.appendChild(button)
+    document.body.appendChild(wrap)
+    const at = (top, height) => { wrap.getBoundingClientRect = () => ({ top, bottom: top + height, height }) }
+    const outside = document.createElement('button')
+    document.body.appendChild(outside)
+
+    at(0, 400)
+    expect(arrowsSetVolume(button, wrap, { viewportHeight: 800 })).toBe(true) // focus in the player
+    expect(arrowsSetVolume(document.body, wrap, { viewportHeight: 800 })).toBe(true) // page, player on screen
+    expect(arrowsSetVolume(outside, wrap, { viewportHeight: 800 })).toBe(false) // some other control
+    at(-300, 400)
+    expect(arrowsSetVolume(document.body, wrap, { viewportHeight: 800 })).toBe(false) // scrolled past it
+    expect(arrowsSetVolume(document.body, wrap, { viewportHeight: 800, fullscreen: true })).toBe(true)
+    // Channel surfing: up / down are the surf bar's channel keys.
+    at(0, 400)
+    expect(arrowsSetVolume(button, wrap, { viewportHeight: 800, surfing: true })).toBe(false)
+    expect(arrowsSetVolume(document.body, wrap, { viewportHeight: 800, surfing: true })).toBe(false)
+    expect(arrowsSetVolume(document.body, null, { viewportHeight: 800 })).toBe(false)
+    wrap.remove(); outside.remove()
   })
 
   it('0 to 9 jump to that tenth of the video; anything else is not a seek', () => {

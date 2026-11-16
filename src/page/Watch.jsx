@@ -1915,7 +1915,7 @@ function Watch({ v2 = false, routeV = null }) {
   const reactions = useMemo(() => {
     if (!commentMarkers) return [];
     return commentMarkers
-      .filter(m => !m.isLowReputation && !m.isHidden && !m.isMuted)
+      .filter(m => !m.isLowReputation && !m.isHidden)
       .map((m, i) => {
         const base = {
           id: `reaction-${i}`,

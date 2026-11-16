@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo, useRef, useCallback, memo } from 'react';
 import {
   fetchCreatorOverview, fetchCreatorTimeseries, fetchCreatorDemographics, fetchVideoAnalytics, fetchCreatorFollows,
-  fetchCreatorReach, fetchCreatorEarnings, earnedTotal, fmtHbd, EARNING_SOURCES,
+  fetchCreatorReach, fetchCreatorEarnings, earnedTotal, fmtHbd, EARNING_SOURCES, moneyTile,
   fmtDuration, fmtCount, timeAgo, countryFlag, countryName, countryLatLng,
 } from '../../lib/creatorStats';
 import { toCsv, downloadCsv } from '../../lib/csvExport';
@@ -557,6 +557,7 @@ export default function CreatorStats({ user }) {
   });
   const sortList = isAudio ? SORTS.filter((m) => m.key !== 'impressions' && m.key !== 'ctr') : SORTS;
   const earningsOk = earnings && !earnings.error ? earnings : null;
+  const money = moneyTile({ content, days, earnings: earningsOk, payout: totals.payout });
   const urlOf = (v) => (v.audio
     ? (v.hivePermlink ? `/audio/${user}/${v.hivePermlink}` : null)
     : v.short ? `/shorts?v=${user}/${v.permlink}` : `/@${user}/${v.permlink}`);
@@ -571,8 +572,11 @@ export default function CreatorStats({ user }) {
       { key: 'lightningSats', label: `${t('creator.earnings.sources.lightning')} (sats)` },
     ]));
   };
+  // Waits for the earnings (EarningsCard keeps the button off until then), so
+  // the "Earned" column is never left empty without a word.
   const exportContent = () => {
-    const byPost = earningsOk?.byPost || {};
+    if (!earningsOk) return;
+    const byPost = earningsOk.byPost || {};
     downloadCsv(`3speak-content-${user}-${days || 'all'}-${content}.csv`, toCsv(videos, [
       { key: 'title', label: t('creator.export.cols.title') },
       { label: t('creator.export.cols.url'), value: (v) => { const u = urlOf(v); return u ? `${window.location.origin}${u}` : ''; } },
@@ -611,9 +615,10 @@ export default function CreatorStats({ user }) {
       d: follows ? delta(follows.count, follows.prev) : null,
       chart: !!follows?.perDay,
     },
-    // Earned in the range from every source (the Earnings card has the split);
-    // the posts' payouts until that has loaded.
-    { key: 'earned', label: t('stats.metrics.earned'), value: earningsOk ? fmtHbd(earnedTotal(earningsOk.totals)) : `$${Number(totals.payout || 0).toFixed(2)}`, d: null, chart: false },
+    // Earned in the range from every source (the Earnings card has the split).
+    // Filtered to some content, or all time, it is the posts' payout and says so
+    // (lib/creatorStats.js moneyTile): the earnings are channel-wide, 12 months.
+    { key: 'earned', label: money.kind === 'earned' ? t('stats.metrics.earned') : t('stats.metrics.payout'), value: fmtHbd(money.value), d: null, chart: false },
   ];
   const active = tiles.find((x) => x.key === metric && x.chart) ? metric : 'views';
   const pickSeries = (s) => {

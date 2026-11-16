@@ -7,6 +7,7 @@ import os from 'node:os'
 import path from 'node:path'
 import http from 'node:http'
 import { createRequire } from 'node:module'
+import { spawnSync } from 'node:child_process'
 
 const require = createRequire(import.meta.url)
 let stub
@@ -27,6 +28,8 @@ beforeAll(async () => {
       }
       received = { url: req.url, headers: req.headers, body: Buffer.concat(chunks).toString('latin1') }
       if (req.headers['x-api-key'] !== 'audio-test-key') { res.statusCode = 401; return res.end('{"error":"bad key"}') }
+      if (req.headers['x-user'] === 'busy') { res.statusCode = 503; return res.end('{"error":"try later"}') }
+      if (req.headers['x-user'] === 'refused') { res.statusCode = 400; return res.end('{"error":"bad file"}') }
       res.end(JSON.stringify({ success: true, permlink: 'aud123', playUrl: 'http://audio.example/play?a=aud123' }))
     })
   })
@@ -102,6 +105,66 @@ describe('uploadAudio', () => {
     expect(received.body).toContain('name="category"\r\n\r\npodcast\r\n')
     expect(received.body).toContain('filename="recording.mp3"\r\nContent-Type: audio/mpeg\r\n\r\nID3 fake mp3 bytes\r\n')
     expect(seen.at(-1)).toBe(1)
+  })
+})
+
+describe('uploadAudio failures', () => {
+  it('a busy or broken service may pass (audio_service); a refusal will not (audio_rejected)', async () => {
+    const file = path.join(work, 'ep2.mp3')
+    fs.writeFileSync(file, Buffer.from('ID3 fake mp3 bytes'))
+    const up = (user) => batch.uploadAudio({ file, user, title: 'Ep', duration: 1, format: 'mp3', mime: 'audio/mpeg' })
+    await expect(up('busy')).rejects.toMatchObject({ code: 'audio_service' })
+    await expect(up('refused')).rejects.toMatchObject({ code: 'audio_rejected' })
+  })
+})
+
+// ── audio-format.cjs: what the downloaded file holds, converted when needed ──
+const audioFormat = require('../../server/audio-format.cjs')
+const hasFfmpeg = spawnSync('ffmpeg', ['-version']).status === 0 && spawnSync('ffprobe', ['-version']).status === 0
+// One second of a tone in the given codec (the container from the name).
+const tone = (name, codec) => {
+  const out = path.join(work, name)
+  spawnSync('ffmpeg', ['-y', '-loglevel', 'error', '-f', 'lavfi', '-i', 'sine=frequency=440:duration=1', '-c:a', codec, out])
+  return out
+}
+
+describe('serviceFormatOf', () => {
+  const f = audioFormat.serviceFormatOf
+  it('names the formats the service takes, from the container and the codec', () => {
+    expect(f({ formats: ['mp3'], audio: 'mp3' })).toBe('mp3')
+    expect(f({ formats: ['mov', 'mp4', 'm4a', '3gp'], audio: 'aac' })).toBe('m4a')
+    expect(f({ formats: ['ogg'], audio: 'opus' })).toBe('ogg')
+    expect(f({ formats: ['matroska', 'webm'], audio: 'vorbis' })).toBe('webm')
+    expect(f({ formats: ['wav'], audio: 'pcm_s16le' })).toBe('wav')
+  })
+  it('anything else is converted: FLAC, raw AAC, ALAC, a video, no audio, unreadable', () => {
+    expect(f({ formats: ['flac'], audio: 'flac' })).toBeNull()
+    expect(f({ formats: ['aac'], audio: 'aac' })).toBeNull()
+    expect(f({ formats: ['mov', 'mp4', 'm4a'], audio: 'alac' })).toBeNull()
+    expect(f({ formats: ['mov', 'mp4', 'm4a'], audio: 'aac', video: true })).toBeNull()
+    expect(f({ formats: ['mp3'], audio: '' })).toBeNull()
+    expect(f(null)).toBeNull()
+  })
+})
+
+describe.skipIf(!hasFfmpeg)('prepareAudio', () => {
+  it('keeps a format the service takes as it is, with its own type', async () => {
+    const file = tone('keep.m4a', 'aac')
+    expect(await audioFormat.prepareAudio(file)).toEqual({ file, format: 'm4a', mime: 'audio/mp4', converted: false })
+  })
+  it('converts FLAC to an MP3 and drops the original', async () => {
+    const file = tone('show.flac', 'flac')
+    const out = await audioFormat.prepareAudio(file)
+    expect(out).toMatchObject({ format: 'mp3', mime: 'audio/mpeg', converted: true })
+    expect(fs.existsSync(file)).toBe(false)
+    const probe = await audioFormat.probeAudio(out.file)
+    expect(probe).toMatchObject({ audio: 'mp3', video: false })
+    expect(probe.formats).toContain('mp3')
+  })
+  it('a file with no audio in it fails for good (format)', async () => {
+    const file = path.join(work, 'junk.mp3')
+    fs.writeFileSync(file, 'not audio at all')
+    await expect(audioFormat.prepareAudio(file)).rejects.toMatchObject({ code: 'format' })
   })
 })
 

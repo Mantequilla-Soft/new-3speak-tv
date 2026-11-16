@@ -55,7 +55,10 @@ describe('OBS chat dock boosts', () => {
 
   it('shows the total and the goal from the boost summary, and plays alerts', async () => {
     await renderDock('?key=k1&dock=1')
-    expect(await screen.findByText('$17.50')).toBeInTheDocument()
+    // The summary counts in HBD, so the total says HBD, never a dollar sign.
+    expect(await screen.findByText('17.5 HBD')).toBeInTheDocument()
+    expect(screen.queryByText(/^\$/)).not.toBeInTheDocument()
+    expect(screen.getByLabelText('Boosts received this stream: 17.5 HBD')).toBeInTheDocument()
     expect(screen.getByText('12.5 / 50 HBD')).toBeInTheDocument()
     expect(screen.getByTitle('New mic')).toBeInTheDocument()
     expect(screen.getByTestId('boost-alerts')).toBeInTheDocument()
@@ -66,13 +69,15 @@ describe('OBS chat dock boosts', () => {
   it('falls back to the ledger on a server without the summary route', async () => {
     summaryStatus = 404
     await renderDock('?key=k1&dock=1')
+    // The ledger sums USD: the old dollar total.
     expect(await screen.findByText('$4.25')).toBeInTheDocument()
     expect(screen.queryByText(/ HBD$/)).not.toBeInTheDocument()
+    expect(screen.getByLabelText('Boosts received this stream: $4.25')).toBeInTheDocument()
   })
 
   it('plays no alerts with alerts=0, nor over the video unless alerts=1', async () => {
     const { unmount } = await renderDock('?key=k1&dock=1&alerts=0')
-    await screen.findByText('$17.50')
+    await screen.findByText('17.5 HBD')
     expect(screen.queryByTestId('boost-alerts')).not.toBeInTheDocument()
     unmount()
 

@@ -1747,3 +1747,6 @@
   font-size: 13px;
   color: var(--muted);
 }
+
+// A scheduled time that has come too close (AudioPublishWhen)
+.audio-upload-step-help.is-error { color: var(--accent); }

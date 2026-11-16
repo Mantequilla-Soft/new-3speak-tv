@@ -42,7 +42,8 @@
     "nowHint": "Yayınla'ya bastığın anda yayınlanır.",
     "scheduleHint": "3Speak o saatte senin için yayınlar.",
     "draftHint": "Yayınlayana kadar stüdyondaki Taslaklar'da kalır.",
-    "scheduleButton": "Planla"
+    "scheduleButton": "Planla",
+    "tooSoon": "Bu saat çok yakın. Şu andan en az {{minutes}} dakika sonrasını seç."
   },
   "series": {
     "kind": "Seri",

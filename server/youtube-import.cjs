@@ -114,6 +114,7 @@ const scrubSecrets = (text) => String(text || '').replace(/\/\/[^\s/@]+@/g, '//*
 // BitChute + Rumble readers (import-platforms.cjs). Rumble pages need the
 // residential proxy (Cloudflare); its files and everything BitChute go direct.
 const platforms = require('./import-platforms.cjs')
+const { prepareAudio } = require('./audio-format.cjs')
 const rumble = platforms.createRumble({ proxyForAttempt, scrub: scrubSecrets })
 
 // ── Discord alerts ───────────────────────────────────────────────────────────
@@ -385,7 +386,10 @@ function rssEntry(user, feed, ep) {
 }
 
 const AUDIO_EXT = { 'audio/mpeg': 'mp3', 'audio/mp3': 'mp3', 'audio/mp4': 'm4a', 'audio/x-m4a': 'm4a', 'audio/aac': 'aac', 'audio/ogg': 'ogg', 'audio/opus': 'opus', 'audio/wav': 'wav', 'audio/x-wav': 'wav', 'audio/flac': 'flac' }
-const audioExt = (mime) => AUDIO_EXT[String(mime || '').split(';')[0].trim().toLowerCase()] || 'mp3'
+// Only the name of the downloaded file: what it really holds is read from the
+// file itself before anything uses it (audio-format.cjs). An unknown type is
+// never called an MP3.
+const audioExt = (mime) => AUDIO_EXT[String(mime || '').split(';')[0].trim().toLowerCase()] || 'bin'
 
 // ── TikTok ───────────────────────────────────────────────────────────────────
 // TikTok has no way to list someone's videos without an approved app, so the
@@ -805,13 +809,15 @@ function startDownload(job) {
 }
 
 // Streams a direct MP4 link into the job dir with progress, then measures it.
-async function streamToJob(job, dir, url, headers, via, { ext = 'mp4' } = {}) {
+// `prepare(file)` → { file, mime, format } runs before the job is done (a
+// podcast episode is converted when the audio service cannot take it).
+async function streamToJob(job, dir, url, headers, via, { ext = 'mp4', prepare = null } = {}) {
   job.abort = new AbortController()
   const r = await fetch(url, { headers, signal: job.abort.signal })
   if (!r.ok || !r.body) throw new Error(`HTTP ${r.status}`)
   const total = Number(r.headers.get('content-length')) || 0
   if (total > 6 * 1024 ** 3) throw new Error('file too large')
-  const file = path.join(dir, `${job.videoId}.${ext}`)
+  let file = path.join(dir, `${job.videoId}.${ext}`)
   let got = 0
   const meter = new Transform({
     transform(chunk, _enc, cb) {
@@ -822,6 +828,13 @@ async function streamToJob(job, dir, url, headers, via, { ext = 'mp4' } = {}) {
   })
   await pipeline(Readable.fromWeb(r.body), meter, fs.createWriteStream(file))
   if (job.status === 'cancelled') return
+  if (prepare) {
+    const ready = await prepare(file)
+    if (job.status === 'cancelled') return
+    file = ready.file
+    job.mime = ready.mime
+    job.audioFormat = ready.format
+  }
   job.file = file
   job.size = fs.statSync(file).size
   job.attempt = 1
@@ -899,9 +912,9 @@ async function directPodcastDownload(job) {
   const id = String(job.direct?.episodeId || '')
   if (!RSS_EPISODE_RE.test(id)) throw Object.assign(new Error('Look the episode up again'), { code: 'expired' })
   const url = `${VERIFIER_URL}/podcasts/verified/${encodeURIComponent(job.user)}/episode/${encodeURIComponent(id)}/download`
-  const ext = audioExt(job.direct.mime)
-  job.mime = ext === 'mp3' ? 'audio/mpeg' : String(job.direct.mime || 'audio/mpeg').split(';')[0]
-  await streamToJob(job, dir, url, {}, 'podcast host (checker)', { ext })
+  // The type and format come from the file (converted to MP3 when the audio
+  // service cannot take it), not from what the feed says it is.
+  await streamToJob(job, dir, url, {}, 'podcast host (checker)', { ext: audioExt(job.direct.mime), prepare: prepareAudio })
   if (job.media?.duration > RSS_MAX_DURATION_S) {
     job.status = 'failed'; job.errorCode = 'too_long'; job.error = RSS_LIMIT_MESSAGE
   }

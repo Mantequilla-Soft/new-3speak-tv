@@ -42,7 +42,8 @@
     "nowHint": "Được đăng ngay khi bạn bấm Đăng.",
     "scheduleHint": "3Speak sẽ đăng giúp bạn vào lúc đó.",
     "draftHint": "Giữ trong Bản nháp ở studio cho đến khi bạn đăng.",
-    "scheduleButton": "Lên lịch"
+    "scheduleButton": "Lên lịch",
+    "tooSoon": "Thời điểm đó quá sớm. Hãy chọn thời điểm cách bây giờ ít nhất {{minutes}} phút."
   },
   "series": {
     "kind": "Loạt",

@@ -3,14 +3,18 @@
 // (components/Wallet/WalletOpModal.jsx): the sheet builds the right operation
 // and hands it to the (stand-in) wallet with the active key. Nothing is broadcast.
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { screen } from '@testing-library/react'
+import { screen, fireEvent, act } from '@testing-library/react'
 import { renderWithProviders } from './_render.jsx'
 
 vi.mock('../../../src/hive-api/aioha', async () => (await import('./_render.jsx')).aiohaModule({
   isLoggedIn: vi.fn(() => true),
   KeyTypes: { Active: 'active', Posting: 'posting' },
 }))
-vi.mock('../../../src/hive-api/api', () => ({ isAccountValid: vi.fn(async (n) => n !== 'nobody') }))
+// 'nobody' has no account; 'offline' can't be checked (no node answered).
+vi.mock('../../../src/hive-api/api', () => ({
+  handleStateOnHive: vi.fn(async (n) => (n === 'nobody' ? 'free' : n === 'offline' ? 'unknown' : 'taken')),
+}))
+const api = await import('../../../src/hive-api/api')
 
 const aioha = await import('../../../src/hive-api/aioha')
 const { default: WalletOpModal } = await import('../../../src/components/Wallet/WalletOpModal.jsx')
@@ -29,7 +33,7 @@ const mount = (mode, extra = {}) => {
 const amountBox = () => screen.getByRole('spinbutton')
 const sent = () => aioha.broadcastWithAioha.mock.calls.at(-1)
 
-beforeEach(() => { aioha.broadcastWithAioha.mockClear() })
+beforeEach(() => { aioha.broadcastWithAioha.mockClear(); api.handleStateOnHive.mockClear() })
 
 describe('WalletOpModal', () => {
   it('powers up for yourself', async () => {
@@ -104,5 +108,55 @@ describe('WalletOpModal', () => {
     await user.type(amountBox(), '100')
     await user.click(screen.getByRole('button', { name: 'Delegate 100 HP to @fan' }))
     expect(sent()[0]).toEqual([['delegate_vesting_shares', { delegator: 'badadib', delegatee: 'fan', vesting_shares: '200000.000000 VESTS' }]])
+  })
+
+  it('sends once when tapped twice while the account is being checked', async () => {
+    let answer
+    api.handleStateOnHive.mockImplementationOnce(() => new Promise((r) => { answer = r }))
+    const { user } = mount('powerUp')
+    await user.clear(screen.getByLabelText('To account'))
+    await user.type(screen.getByLabelText('To account'), 'friend')
+    await user.type(amountBox(), '2')
+    const button = screen.getByRole('button', { name: 'Power up 2 HIVE for @friend' })
+    // Two taps in one go, before React could re-render the button as busy.
+    act(() => { fireEvent.click(button); fireEvent.click(button) })
+    expect(button).toBeDisabled()
+    await act(async () => { answer('taken') })
+    expect(aioha.broadcastWithAioha).toHaveBeenCalledTimes(1)
+    expect(api.handleStateOnHive).toHaveBeenCalledTimes(1)
+  })
+
+  it('says the account could not be checked when no node answers', async () => {
+    const { user } = mount('delegate')
+    await user.type(screen.getByLabelText('Delegate to'), 'offline')
+    await user.type(amountBox(), '5')
+    await user.click(screen.getByRole('button', { name: 'Delegate 5 HP to @offline' }))
+    expect(screen.getByText('Could not check that account right now. Try again in a moment.')).toBeInTheDocument()
+    expect(aioha.broadcastWithAioha).not.toHaveBeenCalled()
+  })
+
+  it('cannot delegate what a running power down still pays out', async () => {
+    const { user } = mount('delegate', { delegatableHp: 40, delegatableVests: 80000 })
+    expect(screen.getByText('Available: 40.000 HP')).toBeInTheDocument()
+    await user.type(screen.getByLabelText('Delegate to'), 'friend')
+    await user.type(amountBox(), '50')
+    await user.click(screen.getByRole('button', { name: 'Delegate 50 HP to @friend' }))
+    expect(screen.getByText('That is more than you have.')).toBeInTheDocument()
+    expect(aioha.broadcastWithAioha).not.toHaveBeenCalled()
+  })
+
+  it('never sends 0 VESTS from the amount (that would stop the power down)', async () => {
+    const { user } = mount('powerDown', { dgp: {} })
+    await user.type(amountBox(), '13')
+    await user.click(screen.getByRole('button', { name: 'Power down 13 HP' }))
+    expect(screen.getByText('Enter an amount above zero.')).toBeInTheDocument()
+    expect(aioha.broadcastWithAioha).not.toHaveBeenCalled()
+  })
+
+  it('the button names the amount that is signed: cut to 3 decimals', async () => {
+    const { user } = mount('powerUp')
+    await user.type(amountBox(), '1.0006')
+    await user.click(screen.getByRole('button', { name: 'Power up 1 HIVE' }))
+    expect(sent()[0]).toEqual([['transfer_to_vesting', { from: 'badadib', to: 'badadib', amount: '1.000 HIVE' }]])
   })
 })

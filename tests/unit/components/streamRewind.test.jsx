@@ -3,7 +3,7 @@
 // The hangouts server and hls.js are stand-ins.
 // @vitest-environment jsdom
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-import { screen, waitFor } from '@testing-library/react'
+import { screen, waitFor, renderHook, act } from '@testing-library/react'
 import { renderWithProviders } from './_render.jsx'
 
 const h = vi.hoisted(() => ({ instances: [], supported: true }))
@@ -18,7 +18,7 @@ vi.mock('hls.js', () => {
 })
 
 const { StreamRewindButton, StreamRewindPlayer } = await import('../../../src/components/openpods/StreamRewind.jsx')
-const { useStreamRewind } = await import('../../../src/hooks/useStreamRewind.js')
+const { useStreamRewind, POLL_MS, OFF_MS } = await import('../../../src/hooks/useStreamRewind.js')
 
 const API = 'https://live.3speak.tv/'
 function Harness({ token = null }) {
@@ -92,5 +92,55 @@ describe('rewind', () => {
     const { user } = renderWithProviders(<Harness />)
     await user.click((await screen.findAllByText('Rewind'))[0])
     expect(await screen.findByText('Rewind is not available right now.')).toBeInTheDocument()
+  })
+})
+
+describe('rewind polling', () => {
+  const setHidden = (hidden) => {
+    Object.defineProperty(document, 'hidden', { configurable: true, get: () => hidden })
+    document.dispatchEvent(new Event('visibilitychange'))
+  }
+  beforeEach(() => vi.useFakeTimers())
+  afterEach(() => { vi.useRealTimers(); setHidden(false) })
+
+  it('asks again every POLL_MS while the tab shows', async () => {
+    renderHook(() => useStreamRewind(API, 'badadib-r1', null))
+    await act(() => vi.advanceTimersByTimeAsync(0))
+    expect(fetch).toHaveBeenCalledTimes(1)
+    await act(() => vi.advanceTimersByTimeAsync(POLL_MS))
+    expect(fetch).toHaveBeenCalledTimes(2)
+  })
+
+  it('a 404 (rewind off) waits OFF_MS before asking again', async () => {
+    fetch.mockResolvedValue({ ok: false, status: 404, json: async () => ({}) })
+    const { result } = renderHook(() => useStreamRewind(API, 'badadib-r1', null))
+    await act(() => vi.advanceTimersByTimeAsync(0))
+    expect(fetch).toHaveBeenCalledTimes(1)
+    expect(result.current.available).toBe(false)
+    await act(() => vi.advanceTimersByTimeAsync(POLL_MS * 2))
+    expect(fetch).toHaveBeenCalledTimes(1)
+    await act(() => vi.advanceTimersByTimeAsync(OFF_MS))
+    expect(fetch).toHaveBeenCalledTimes(2)
+  })
+
+  it('a hidden tab stops asking, and asks at once when it shows again', async () => {
+    renderHook(() => useStreamRewind(API, 'badadib-r1', null))
+    await act(() => vi.advanceTimersByTimeAsync(0))
+    expect(fetch).toHaveBeenCalledTimes(1)
+    setHidden(true)
+    await act(() => vi.advanceTimersByTimeAsync(POLL_MS * 5))
+    expect(fetch).toHaveBeenCalledTimes(1)
+    await act(async () => { setHidden(false) })
+    expect(fetch).toHaveBeenCalledTimes(2)
+  })
+
+  it('stops for good on unmount', async () => {
+    const { unmount } = renderHook(() => useStreamRewind(API, 'badadib-r1', null))
+    await act(() => vi.advanceTimersByTimeAsync(0))
+    unmount()
+    setHidden(true)
+    setHidden(false)
+    await act(() => vi.advanceTimersByTimeAsync(OFF_MS))
+    expect(fetch).toHaveBeenCalledTimes(1)
   })
 })

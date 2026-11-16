@@ -42,7 +42,8 @@
     "nowHint": "Terbit begitu kamu menekan Terbitkan.",
     "scheduleHint": "3Speak menerbitkannya untukmu pada waktu itu.",
     "draftHint": "Tetap di Draf studiomu sampai kamu menerbitkannya.",
-    "scheduleButton": "Jadwalkan"
+    "scheduleButton": "Jadwalkan",
+    "tooSoon": "Waktu itu terlalu dekat. Pilih waktu paling cepat {{minutes}} menit dari sekarang."
   },
   "series": {
     "kind": "Seri",

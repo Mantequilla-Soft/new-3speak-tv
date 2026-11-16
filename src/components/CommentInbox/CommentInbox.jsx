@@ -17,6 +17,8 @@ import { fetchCommentInbox, setCommentDone, filterInbox, flagCounts, INBOX_FLAGS
 import './CommentInbox.scss';
 
 const toast = toastIn('Comment');
+// Comments drawn at once (each one is rendered Markdown); Show more adds as many.
+export const INBOX_PAGE = 30;
 const FLAG_ICONS = { question: 'help', firstTime: 'person_add', supporter: 'favorite' };
 
 // A comment's body as HTML, rendered once it is on screen.
@@ -144,6 +146,9 @@ export default function CommentInbox({ user }) {
   const [error, setError] = useState(false);
   const [view, setView] = useState('unanswered');
   const [flags, setFlags] = useState([]);
+  const [limit, setLimit] = useState(INBOX_PAGE);
+  // Another view or filter starts from the first page again.
+  useEffect(() => { setLimit(INBOX_PAGE); }, [view, flags]);
 
   const load = useCallback(() => {
     setError(false);
@@ -207,9 +212,14 @@ export default function CommentInbox({ user }) {
         <EmptyState icon="forum" title={view === 'unanswered' && !flags.length ? t('creator.inbox.allAnswered') : t('creator.inbox.empty')} />
       ) : (
         <div className="ci-list">
-          {shown.map((it) => (
+          {shown.slice(0, limit).map((it) => (
             <InboxItem key={`${it.author}/${it.permlink}`} user={user} item={it} onAnswered={onAnswered} onDone={onDone} />
           ))}
+          {shown.length > limit && (
+            <Button size={36} variant="secondary" icon="expand_more" className="ci-more" onClick={() => setLimit((n) => n + INBOX_PAGE)}>
+              {t('common.actions.showMore')}
+            </Button>
+          )}
         </div>
       )}
       <p className="ci-foot">{t('creator.inbox.supportersNote')}</p>

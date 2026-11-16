@@ -6,6 +6,7 @@ import fs from 'node:fs'
 import os from 'node:os'
 import path from 'node:path'
 import { createRequire } from 'node:module'
+import { spawnSync } from 'node:child_process'
 import express from 'express'
 
 const require = createRequire(import.meta.url)
@@ -13,6 +14,10 @@ const FEED = '0123456789abcdef01234567'
 const EP1 = `${FEED}:AAAAAAAAAAAAAAAA`
 const EP2 = `${FEED}:BBBBBBBBBBBBBBBB`
 const LONG = `${FEED}:CCCCCCCCCCCCCCCC`
+const JUNK = `${FEED}:DDDDDDDDDDDDDDDD`
+const hasFfmpeg = spawnSync('ffmpeg', ['-version']).status === 0 && spawnSync('ffprobe', ['-version']).status === 0
+// What the stub host serves per episode: { type, body }.
+const files = {}
 
 let checker
 let importer
@@ -44,17 +49,27 @@ beforeAll(async () => {
       { id: EP1, title: 'Episode 1', summary: 'short notes', duration: 1800, mime: 'audio/mpeg', published_at: '2026-11-01T00:00:00Z' },
       { id: EP2, title: 'Episode 2', duration: 600, mime: 'audio/x-m4a', art: 'epArt' },
       { id: LONG, title: 'Marathon', duration: 6 * 3600, mime: 'audio/mpeg' },
+      { id: JUNK, title: 'Broken', duration: 60, mime: 'audio/mpeg' },
       { id: 'not-an-id', title: 'junk' },
     ],
   }))
   stub.get('/podcasts/episode/:id/notes', (req, res) => res.json({ success: true, html: '<p>Full <b>notes</b> with <a href="https://example.com/x">a link</a></p><img src="x.jpg">' }))
   stub.get('/podcasts/verified/:user/episode/:id/download', (req, res) => {
     if (req.params.user !== 'alice') return res.status(404).end()
-    res.set('Content-Type', 'audio/mpeg').send(Buffer.from('ID3 fake audio'))
+    const f = files[req.params.id] || { type: 'audio/mpeg', body: Buffer.from('ID3 fake audio') }
+    res.set('Content-Type', f.type).send(f.body)
   })
   await new Promise((r) => { checker = stub.listen(0, '127.0.0.1', r) })
 
   work = fs.mkdtempSync(path.join(os.tmpdir(), 'yt-import-rss-'))
+  // A real M4A for episode 2, and a FLAC the feed calls an MP3 for episode 1.
+  if (hasFfmpeg) {
+    for (const [id, name, codec] of [[EP2, 'ep2.m4a', 'aac'], [EP1, 'ep1.flac', 'flac']]) {
+      const out = path.join(work, name)
+      spawnSync('ffmpeg', ['-y', '-loglevel', 'error', '-f', 'lavfi', '-i', 'sine=frequency=440:duration=1', '-c:a', codec, out])
+      files[id] = { type: 'audio/mpeg', body: fs.readFileSync(out) }
+    }
+  }
   process.env.SOCIAL_VERIFIER_URL = `http://127.0.0.1:${checker.address().port}`
   process.env.YT_IMPORT_DIR = path.join(work, 'jobs')
   process.env.YT_IMPORT_STORE = path.join(work, 'imports.json')
@@ -109,7 +124,7 @@ describe('podcast episodes of verified feeds', () => {
       { url: 'https://example.com/feed.xml', id: FEED, title: 'My Show', code: null },
       { url: 'https://example.com/broken', id: null, title: '', code: 'not_a_podcast' },
     ])
-    expect(res.body.videos.map((v) => v.id)).toEqual(['rss:AAAAAAAAAAAAAAAA', 'rss:BBBBBBBBBBBBBBBB', 'rss:CCCCCCCCCCCCCCCC'])
+    expect(res.body.videos.map((v) => v.id)).toEqual(['rss:AAAAAAAAAAAAAAAA', 'rss:BBBBBBBBBBBBBBBB', 'rss:CCCCCCCCCCCCCCCC', 'rss:DDDDDDDDDDDDDDDD'])
     const [one, two, long] = res.body.videos
     expect(one).toMatchObject({ platform: 'rss', kind: 'audio', type: 'podcast', title: 'Episode 1', description: 'short notes', duration: 1800, tooLong: false, channelTitle: 'My Show', sourceUrl: 'https://example.com' })
     expect(one.thumbnail).toBe(`${process.env.SOCIAL_VERIFIER_URL}/podcasts/art/artTok/512.jpg`)
@@ -141,23 +156,45 @@ describe('podcast episodes of verified feeds', () => {
     expect((await get(`/api/yt-import/rss/notes/${body.videos[0].token}`, 'bob')).status).toBe(404)
   })
 
-  it('downloads an episode through the checker\'s owner-checked route, as audio', async () => {
+  // Starts the download of the listed episode at `index` and waits for its end.
+  const download = async (index) => {
     const { body } = await list()
-    const ep = body.videos[1]
-    const job = (await post('/api/yt-import/jobs', 'alice', { token: ep.token })).body
+    const job = (await post('/api/yt-import/jobs', 'alice', { token: body.videos[index].token })).body
     expect(job.id).toBeTruthy()
     const done = await waitFor(async () => {
       const j = (await get(`/api/yt-import/jobs/${job.id}`, 'alice')).body
       return j.status === 'done' || j.status === 'failed' ? j : null
     })
-    expect(done.status).toBe('done')
+    return { job: done, token: body.videos[index].token }
+  }
+
+  it.skipIf(!hasFfmpeg)('downloads an episode through the checker\'s owner-checked route, typed by what the file holds', async () => {
+    const { job, token } = await download(1)
+    expect(job.status).toBe('done')
     expect(seen).toContain(`/podcasts/verified/alice/episode/${encodeURIComponent(EP2)}/download`)
     const file = await get(`/api/yt-import/jobs/${job.id}/file`, 'alice')
     expect(file.status).toBe(200)
-    expect(file.text).toBe('ID3 fake audio')
-    expect(file.headers['content-type']).toMatch(/^audio\/x-m4a/)
+    // An M4A, though the host said MP3 and the feed said audio/x-m4a.
+    expect(file.headers['content-type']).toMatch(/^audio\/mp4/)
     // Someone else's token is refused before anything is fetched.
-    expect((await post('/api/yt-import/jobs', 'bob', { token: ep.token })).status).toBe(404)
+    expect((await post('/api/yt-import/jobs', 'bob', { token })).status).toBe(404)
+  })
+
+  it.skipIf(!hasFfmpeg)('an episode the audio service cannot take (FLAC called MP3) comes back as a real MP3', async () => {
+    const { job } = await download(0)
+    expect(job.status).toBe('done')
+    const file = await get(`/api/yt-import/jobs/${job.id}/file`, 'alice')
+    expect(file.headers['content-type']).toMatch(/^audio\/mpeg/)
+    const bytes = Buffer.from(await (await fetch(`${base}/api/yt-import/jobs/${job.id}/file`, { headers: { 'x-test-user': 'alice' } })).arrayBuffer())
+    // An MP3 frame or an ID3 tag, not the FLAC's "fLaC".
+    expect(bytes.subarray(0, 4).toString('latin1')).not.toBe('fLaC')
+    expect(bytes[0] === 0xff || bytes.subarray(0, 3).toString('latin1') === 'ID3').toBe(true)
+  })
+
+  it('a file with no audio in it fails for good, never handed on as an MP3', async () => {
+    const { job } = await download(3)
+    expect(job.status).toBe('failed')
+    expect(job.errorCode).toBe('format')
   })
 
   it('an episode over the podcast limit is refused up front', async () => {
@@ -179,7 +216,9 @@ describe('helpers', () => {
     const { audioExt } = importer._test
     expect(audioExt('audio/mpeg')).toBe('mp3')
     expect(audioExt('audio/x-m4a; charset=binary')).toBe('m4a')
-    expect(audioExt('')).toBe('mp3')
+    // Unknown: only the download's file name, never called an MP3.
+    expect(audioExt('')).toBe('bin')
+    expect(audioExt('video/mp4')).toBe('bin')
   })
   it('long notes are cut below the post body limit', () => {
     const { notesText } = importer._test

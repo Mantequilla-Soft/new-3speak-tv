@@ -112,6 +112,21 @@ describe('making a series', () => {
     expect(keyType).toBe('posting')
     expect(ops.slice(1).map((o) => JSON.parse(o[1].json).permlink)).toEqual(['s2', 's1'])
   })
+
+  it('a wallet login goes through broadcastWithAioha too (it falls back when @threespeak is not granted)', async () => {
+    aioha.getCurrentProvider.mockReturnValue('keychain')
+    aioha.broadcastViaThreespeak.mockClear()
+    h.shorts.mockResolvedValue({ page: 1, totalPages: 1, shorts: [{ author: 'badadib', permlink: 's1', hivePermlink: 's1', heading: 'First' }] })
+    const { user } = renderWithProviders(<SeriesModal open owner="badadib" onClose={() => {}} />)
+    const picks = await screen.findAllByTestId('series-pick')
+    await user.type(screen.getByTestId('series-name'), 'Cooking')
+    await user.click(picks[0])
+    await user.click(screen.getByTestId('series-save'))
+    await waitFor(() => expect(aioha.broadcastWithAioha).toHaveBeenCalledTimes(1))
+    expect(aioha.broadcastWithAioha.mock.calls[0][1]).toBe('posting')
+    expect(aioha.broadcastViaThreespeak).not.toHaveBeenCalled()
+    aioha.getCurrentProvider.mockReturnValue(null)
+  })
 })
 
 describe('ChannelSeries', () => {

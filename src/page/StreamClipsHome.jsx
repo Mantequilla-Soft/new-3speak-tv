@@ -51,27 +51,28 @@ export default function StreamClipsHome() {
     return [...m.values()];
   }, [state.clips]);
 
+  // true once the clip is in the Shorts upload.
   const postOne = async (c) => {
     try {
       await post({ url: await shortUrlFor(c.api, c, sessionToken), room: c.room, host: c.host, clipper: c.clipper, offsetSec: c.offsetSec });
+      return true;
     } catch {
       toast.error(t('streamClips.postFailed'));
+      return false;
     }
   };
+  // The queue shortens only after a post went through: a failed clip stays
+  // first in line for "Post the next one".
+  const keepQueue = (list) => { writeClipQueue(list); setQueue(list); };
   const postSelected = async () => {
     const chosen = state.clips.filter((c) => picked.has(c.id) && isReadyClip(c));
     if (!chosen.length) return;
-    const rest = chosen.slice(1);
-    writeClipQueue(rest);
-    setQueue(rest);
-    await postOne(chosen[0]);
+    keepQueue((await postOne(chosen[0])) ? chosen.slice(1) : chosen);
   };
   const postNext = async () => {
     const [next, ...rest] = queue;
     if (!next) return;
-    writeClipQueue(rest);
-    setQueue(rest);
-    await postOne(next);
+    if (await postOne(next)) keepQueue(rest);
   };
   const toggle = (id) => setPicked((p) => {
     const n = new Set(p);

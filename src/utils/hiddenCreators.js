@@ -23,6 +23,9 @@ import { CHECKER_URL } from './config';
 
 const cache = new Map(); // username(lc) -> { hidden: bool, muted: bool, at: ms }
 const CACHE_MS = 5 * 60 * 1000;
+// A checker that does not answer: give up and fail open, so the comments that
+// wait on this lookup still show.
+export const CHECK_TIMEOUT_MS = 8000;
 
 const nameOf = (item) => (typeof item?.author === 'string' ? item.author : item?.author?.username) || '';
 
@@ -44,11 +47,14 @@ export async function batchCheckFlags(usernames) {
   });
 
   if (need.length > 0) {
+    const ctrl = typeof AbortController === 'function' ? new AbortController() : null;
+    const timer = ctrl ? setTimeout(() => ctrl.abort(), CHECK_TIMEOUT_MS) : null;
     try {
       const res = await fetch(`${CHECKER_URL}/check-hidden`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ usernames: need }),
+        signal: ctrl?.signal,
       });
       const data = await res.json().catch(() => ({}));
       const listed = (key) => new Set((Array.isArray(data?.[key]) ? data[key] : []).map((u) => String(u).toLowerCase()));
@@ -58,6 +64,8 @@ export async function batchCheckFlags(usernames) {
       need.forEach((u) => cache.set(u, { hidden: hiddenSet.has(u), muted: mutedSet.has(u), at: now }));
     } catch {
       need.forEach((u) => cache.set(u, { hidden: false, muted: false, at: now })); // fail-open
+    } finally {
+      clearTimeout(timer);
     }
   }
 

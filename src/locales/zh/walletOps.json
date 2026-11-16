@@ -18,6 +18,7 @@
     "insufficient": "超出了你的余额。",
     "amountPositive": "请输入大于零的金额。",
     "invalidAccount": "没有这个名字的 Hive 账户。",
+    "accountCheckFailed": "暂时无法检查这个账户，请稍后再试。",
     "done": "完成。可能需要几秒钟才会显示在这里。",
     "failed": "操作未成功：{{error}}",
     "loading": "正在加载你的钱包..."

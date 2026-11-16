@@ -18,6 +18,7 @@
     "insufficient": "Dat is meer dan je hebt.",
     "amountPositive": "Vul een bedrag boven nul in.",
     "invalidAccount": "Er is geen Hive-account met die naam.",
+    "accountCheckFailed": "Dat account kan nu niet worden gecontroleerd. Probeer het zo opnieuw.",
     "done": "Klaar. Het kan een paar seconden duren voordat het hier te zien is.",
     "failed": "Het is niet gelukt: {{error}}",
     "loading": "Je wallet laden..."

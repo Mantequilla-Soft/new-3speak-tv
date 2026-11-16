@@ -242,24 +242,39 @@ function buildPost({ user, source, media, embedUrl, thumbnailUrl, options, isSho
   }
 }
 
-/** "{show} #{episode}: {title}" → the episode's values; a missing one leaves no stray separators. */
-function renderTemplate(tpl, source) {
+const PLACEHOLDER_RE = /\{(title|show|episode|season|date)\}/g
+function templateValues(source) {
   const ep = source.episode || {}
-  const values = {
+  return {
     title: String(source.title || '').trim(),
     show: String(ep.show || '').trim(),
     episode: ep.number != null ? String(ep.number) : '',
     season: ep.season != null ? String(ep.season) : '',
     date: ep.publishedAt ? String(ep.publishedAt).slice(0, 10) : '',
   }
+}
+
+/** "{show} #{episode}: {title}" → the episode's values; a missing one leaves no stray separators. */
+function renderTemplate(tpl, source) {
+  const values = templateValues(source)
   return String(tpl || '')
-    .replace(/\{(title|show|episode|season|date)\}/g, (_, k) => values[k])
+    .replace(PLACEHOLDER_RE, (_, k) => values[k])
     .replace(/\(\s*\)|\[\s*\]/g, '')
     .replace(/[ \t]+/g, ' ')
     .replace(/\s*([:|·–-])\s*([:|·–-]\s*)+/g, ' $1 ')
     .replace(/^[\s:|·–#-]+|[\s:|·–#-]+$/g, '')
     .replace(/\s+#\s*(?=[:|·–-]|$)/g, '')
     .trim()
+}
+
+/**
+ * The creator's own description: only the placeholders are filled in. It is
+ * markdown (headings, lists, rules, paragraphs), so none of the title's one-line
+ * clean-up applies to it.
+ */
+function renderText(text, source) {
+  const values = templateValues(source)
+  return String(text || '').replace(PLACEHOLDER_RE, (_, k) => values[k]).trim()
 }
 
 /**
@@ -288,7 +303,7 @@ function buildAudioPost({ user, source, playUrl, thumbnailUrl, options, premium,
   const addendum = String(a.addendum || '').trim()
   let description
   if (a.useNotes === false) {
-    description = renderTemplate(a.text || '', source) || title
+    description = renderText(a.text, source) || title
   } else {
     const room = AUDIO_DESCRIPTION_MAX - (addendum ? addendum.length + 2 : 0)
     const cut = notes.length > room ? `${notes.slice(0, Math.max(0, room - 1)).trimEnd()}…` : notes
@@ -445,7 +460,11 @@ async function uploadAudio({ file, user, title, duration, format, mime, category
     signal: AbortSignal.timeout(30 * 60 * 1000),
   })
   const d = await r.json().catch(() => ({}))
-  if (!r.ok || !d.permlink || !d.playUrl) throw new Error(`audio upload: HTTP ${r.status} ${d.error || d.message || ''}`.trim())
+  if (!r.ok || !d.permlink || !d.playUrl) {
+    // Busy or down (429, 5xx): worth another go later; anything else it refused.
+    const code = r.status === 429 || r.status >= 500 ? 'audio_service' : 'audio_rejected'
+    throw Object.assign(new Error(`audio upload: HTTP ${r.status} ${d.error || d.message || ''}`.trim()), { code })
+  }
   return { permlink: d.permlink, playUrl: String(d.playUrl).replace(/^http:/, 'https:') }
 }
 
@@ -737,9 +756,11 @@ function mountImportBatch(app, deps) {
     it.isShort = false
     try {
       it.status = 'uploading'; it.progress = 50; save(b)
-      const format = path.extname(job.file).slice(1).toLowerCase()
+      // Read from the file and converted to MP3 when needed by the download
+      // itself (audio-format.cjs), so this only guards against a job without it.
+      const format = job.audioFormat
       if (!AUDIO_FORMATS.has(format)) {
-        throw Object.assign(new Error(`3Speak cannot take ${format.toUpperCase()} audio yet (MP3, M4A, OGG, WebM or WAV)`), { code: 'format' })
+        throw Object.assign(new Error('The episode file was not checked as audio the audio service takes'), { code: 'format' })
       }
       // The show's cover (non-fatal, like the video thumbnail).
       let thumbnailUrl = null
@@ -756,7 +777,7 @@ function mountImportBatch(app, deps) {
       // The post's title and kind, known before the upload: the audio row carries them too.
       const draft = buildAudioPost({ user, source: it.source, playUrl: '', thumbnailUrl, options: b.options, premium: false, duration })
       const up = await uploadAudio({
-        file: job.file, user, title: draft.title, duration, format, mime: job.mime || 'audio/mpeg', category: draft.type,
+        file: job.file, user, title: draft.title, duration, format, mime: job.mime, category: draft.type,
         onProgress: (f) => { it.progress = 50 + f * 45 },
       })
       deps.removeJob(job)
@@ -956,8 +977,22 @@ function mountImportBatch(app, deps) {
     res.json(publicBatch(b, await checkerStatuses(user)))
   })
 
+  /**
+   * How the newest batch item for this source ended up: { status, errorCode } or
+   * null (none). The automatic import reads it to retry a failure that may pass.
+   */
+  function outcomeOf(user, sourceId) {
+    for (let i = store.batches.length - 1; i >= 0; i -= 1) {
+      const b = store.batches[i]
+      if (b.user !== user) continue
+      const it = b.items.find((x) => x.source.sourceId === sourceId)
+      if (it) return { status: it.status, errorCode: it.errorCode || null }
+    }
+    return null
+  }
+
   ready.then((ok) => { if (ok) kick() })
-  return { ready, enqueue, parseOptions }
+  return { ready, enqueue, parseOptions, outcomeOf }
 }
 
 /**
@@ -979,4 +1014,4 @@ function batchSourcesFor(user) {
   return out
 }
 
-module.exports = { mountImportBatch, batchSourcesFor, buildPost, buildAudioPost, renderTemplate, uploadAudio, setAudioThumbnail, audioBatchReady, AUDIO_TYPES, beneficiariesFor, tagsFor, permlinkFor, scheduleOnChecker, cancelOnChecker }
+module.exports = { mountImportBatch, batchSourcesFor, buildPost, buildAudioPost, renderTemplate, renderText, uploadAudio, setAudioThumbnail, audioBatchReady, AUDIO_TYPES, beneficiariesFor, tagsFor, permlinkFor, scheduleOnChecker, cancelOnChecker }

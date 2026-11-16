@@ -42,13 +42,18 @@ export async function lowestRenditionUrl(playUrl, { fetchImpl } = {}) {
 
 /**
  * The audio-player track for a video. `video` = { author, permlink, title?,
- * thumbnail?, duration? }; what is missing comes from the player API. Throws
- * an Error with code 'no_source' when the video has nothing to play (processing,
- * deleted, a live stream).
+ * thumbnail?, duration?, postAuthor?, postPermlink? }; what is missing comes
+ * from the player API. `author`/`permlink` find what plays (the upload); the
+ * Hive post the player votes, comments and tips on is `postAuthor`/`postPermlink`
+ * when the caller knows the upload's own (a sound's original Short), else the
+ * same. Throws an Error with code 'no_source' when the video has nothing to play
+ * (processing, deleted, a live stream).
  */
 export async function videoAudioTrack(video, { fetchSource = fetchPlaySource, fetchImpl } = {}) {
   const author = String(video?.author || '').trim();
   const permlink = String(video?.permlink || '').trim();
+  const postAuthor = String(video?.postAuthor || '').trim() || author;
+  const postPermlink = String(video?.postPermlink || '').trim() || permlink;
   const source = author && permlink ? await fetchSource(author, permlink) : null;
   if (!source?.play_url || source.placeholder) {
     const err = new Error('no_source');
@@ -57,10 +62,10 @@ export async function videoAudioTrack(video, { fetchSource = fetchPlaySource, fe
   }
   const src = await lowestRenditionUrl(source.play_url, { fetchImpl });
   return {
-    _id: videoTrackId(author, permlink),
+    _id: videoTrackId(postAuthor, postPermlink),
     video: true,
-    owner: author,
-    post_permlink: permlink,
+    owner: postAuthor,
+    post_permlink: postPermlink,
     title: video.title || '',
     thumbnail_url: video.thumbnail || source.thumbnail_url || null,
     duration: Number(video.duration) || Number(source.duration) || 0,

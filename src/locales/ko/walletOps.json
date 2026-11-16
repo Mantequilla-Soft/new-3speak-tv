@@ -18,6 +18,7 @@
     "insufficient": "가진 것보다 많아요.",
     "amountPositive": "0보다 큰 금액을 입력하세요.",
     "invalidAccount": "그런 이름의 Hive 계정이 없어요.",
+    "accountCheckFailed": "지금은 그 계정을 확인할 수 없어요. 잠시 후 다시 시도해 주세요.",
     "done": "완료했어요. 여기에 표시되기까지 몇 초 걸릴 수 있어요.",
     "failed": "처리되지 않았어요: {{error}}",
     "loading": "지갑을 불러오는 중..."

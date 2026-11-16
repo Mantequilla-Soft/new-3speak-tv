@@ -42,7 +42,8 @@
     "nowHint": "按下发布后立即发布。",
     "scheduleHint": "3Speak 会在那个时间替你发布。",
     "draftHint": "在你发布之前保存在工作室的草稿中。",
-    "scheduleButton": "定时发布"
+    "scheduleButton": "定时发布",
+    "tooSoon": "这个时间太近了。请选择至少 {{minutes}} 分钟之后的时间。"
   },
   "series": {
     "kind": "系列",

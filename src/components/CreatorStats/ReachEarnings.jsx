@@ -177,7 +177,17 @@ export function EarningsCard({ earnings, allTime, error, onExportDaily, onExport
       )}
       <div className="re-exports">
         <Button size={36} icon="download" disabled={!earnings} onClick={onExportDaily}>{t('creator.export.daily')}</Button>
-        <Button size={36} icon="download" onClick={onExportContent}>{t('creator.export.content')}</Button>
+        {/* The content table carries each post's earnings: it waits for them, and
+            stays off (saying why) while they cannot be loaded. */}
+        <Button
+          size={36}
+          icon="download"
+          disabled={!earnings}
+          title={error ? t('creator.earnings.unavailable') : undefined}
+          onClick={onExportContent}
+        >
+          {t('creator.export.content')}
+        </Button>
       </div>
     </section>
   );

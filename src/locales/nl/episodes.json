@@ -42,7 +42,8 @@
     "nowHint": "Gepubliceerd zodra je op Publiceren tikt.",
     "scheduleHint": "3Speak publiceert het op dat moment voor je.",
     "draftHint": "Blijft in Concepten in je studio tot je het publiceert.",
-    "scheduleButton": "Inplannen"
+    "scheduleButton": "Inplannen",
+    "tooSoon": "Dat tijdstip is te snel. Kies er een van minstens {{minutes}} minuten vanaf nu."
   },
   "series": {
     "kind": "Serie",

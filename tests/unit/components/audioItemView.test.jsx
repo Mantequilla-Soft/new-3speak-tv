@@ -5,6 +5,7 @@
 import { describe, it, expect, vi } from 'vitest'
 import React from 'react'
 import { renderToString } from 'react-dom/server'
+import { render as rtlRender, screen, fireEvent } from '@testing-library/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { MemoryRouter } from 'react-router-dom'
 
@@ -18,7 +19,11 @@ vi.mock('../../../src/lib/store', () => {
   return { useAppStore }
 })
 vi.mock('../../../src/hive-api/aioha', async (orig) => ({ ...(await orig()), isLoggedIn: () => state.authenticated }))
-vi.mock('../../../src/components/playVideo/BlogContent', () => ({ default: ({ permlink }) => <div className="blog-stub">{permlink}</div> }))
+vi.mock('../../../src/components/playVideo/BlogContent', () => ({ default: ({ permlink, description }) => <div className="blog-stub">{permlink}{description ? ` ${description}` : ''}</div> }))
+// The edit dialog, tested on its own: here a button that "saves" new notes.
+vi.mock('../../../src/components/AudioEdit/EditAudioModal', () => ({
+  default: ({ onSaved, onClose }) => <button type="button" onClick={() => { onSaved({ title: 'T', body: 'Edited notes', json_metadata: '{}', cover: null }); onClose() }}>stub save</button>,
+}))
 
 const doc = {
   _id: 'a1', owner: 'epodcaster', permlink: 'f48l7vyi', post_permlink: 'my-show-ep-1', title: 'My Show, Episode 1',
@@ -84,6 +89,31 @@ describe('a 3Speak audio page', () => {
     expect(await render('/audio?play=epodcaster/f48l7vyi', { ...doc, category: 'song' }, { type: 'video' })).toContain('Play track')
     const podcast = { type: 'audio', audio_kind: 'podcast' }
     expect(await render('/audio?play=epodcaster/f48l7vyi', { ...doc, category: 'song' }, podcast)).toContain('Play episode')
+  })
+
+  it('notes just saved show on that audio only, not on the next one the page opens', async () => {
+    const { default: AudioItemView } = await import('../../../src/components/AudioItem/AudioItemView.jsx')
+    const qc = new QueryClient()
+    qc.setQueryData(['audio-item', 'epodcaster', 'f48l7vyi'], doc)
+    qc.setQueryData(['audio-item', 'epodcaster', 'g2'], { ...doc, _id: 'a2', permlink: 'g2', post_permlink: 'my-show-ep-2' })
+    qc.setQueryData(['audio-item-post', 'epodcaster', 'my-show-ep-1'], { active_votes: [], children: 0 })
+    qc.setQueryData(['audio-item-post', 'epodcaster', 'my-show-ep-2'], { active_votes: [], children: 0 })
+    const view = (id) => (
+      <QueryClientProvider client={qc}><MemoryRouter><AudioItemView owner="epodcaster" id={id} onBack={() => {}} /></MemoryRouter></QueryClientProvider>
+    )
+    Object.assign(state, { authenticated: true, user: 'epodcaster' })
+    try {
+      const { container, rerender, unmount } = rtlRender(view('f48l7vyi'))
+      fireEvent.click(screen.getByRole('button', { name: /Edit/ }))
+      fireEvent.click(await screen.findByRole('button', { name: 'stub save' }))
+      expect(container.querySelector('.blog-stub').textContent).toBe('my-show-ep-1 Edited notes')
+      // The same mounted view, now on another audio (a link from the player).
+      rerender(view('g2'))
+      expect(container.querySelector('.blog-stub').textContent).toBe('my-show-ep-2')
+      unmount()
+    } finally {
+      Object.assign(state, { authenticated: false, user: '' })
+    }
   })
 
   it('says so when the audio is gone', async () => {

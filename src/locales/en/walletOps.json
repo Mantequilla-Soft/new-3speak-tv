@@ -18,6 +18,7 @@
     "insufficient": "That is more than you have.",
     "amountPositive": "Enter an amount above zero.",
     "invalidAccount": "There is no Hive account with that name.",
+    "accountCheckFailed": "Could not check that account right now. Try again in a moment.",
     "done": "Done. It can take a few seconds to show here.",
     "failed": "It did not go through: {{error}}",
     "loading": "Loading your wallet..."

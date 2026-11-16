@@ -29,6 +29,8 @@ function reset() {
     granted: true,
     imported: {},
     queued: [],
+    // sourceId → how its batch item ended up (the batch runner's outcomeOf)
+    outcomes: {},
   })
 }
 
@@ -53,6 +55,7 @@ beforeAll(async () => {
       ready: Promise.resolve(true),
       parseOptions: async (_u, o) => ({ options: { community: o?.community || 'hive-181335', payout: o?.payout || 'default', beneficiaries: [], nsfw: false, ads: true, reblog: false } }),
       enqueue: (user, sources, options, meta) => { state.queued.push({ user, sources, options, meta }); return { id: `b${state.queued.length}` } },
+      outcomeOf: (_user, id) => state.outcomes[id] || null,
     },
     verifiedPodcasts: async (user) => state.shows[user] || [],
     feedEpisodes: async () => [...state.episodes].sort((a, b) => Date.parse(b.published_at) - Date.parse(a.published_at)),
@@ -197,6 +200,97 @@ describe('the check', () => {
   })
 })
 
+describe('failed imports', () => {
+  const failOnce = (n, errorCode) => { state.outcomes[`rss:${key(n)}`] = { status: 'failed', errorCode } }
+
+  it('a failure that may pass is queued again, at most three times in all, then named as failed', async () => {
+    await save()
+    state.episodes.unshift(ep(20, Date.now() - HOUR))
+    await auto.checkAll()
+    expect(queuedIds()).toEqual([`rss:${key(20)}`])
+    for (const code of ['download_failed', 'audio_service']) {
+      failOnce(20, code)
+      await auto.checkAll()
+      // The next check takes the failure up; it goes again.
+      delete state.outcomes[`rss:${key(20)}`]
+    }
+    expect(queuedIds()).toEqual([`rss:${key(20)}`, `rss:${key(20)}`, `rss:${key(20)}`])
+    failOnce(20, 'upload_failed')
+    await auto.checkAll()
+    await auto.checkAll()
+    expect(queuedIds()).toHaveLength(mod.MAX_ATTEMPTS)
+    const { body } = await call('GET', '/api/yt-import/auto')
+    expect(body.configs[0].failed).toEqual([`rss:${key(20)}`])
+  })
+
+  it('a failure that will not pass, or a cancelled one, is not queued again and can be imported by hand', async () => {
+    await save()
+    state.episodes.unshift(ep(21, Date.now() - 2 * HOUR), ep(22, Date.now() - HOUR))
+    await auto.checkAll()
+    expect(queuedIds()).toHaveLength(2)
+    failOnce(21, 'format')
+    state.outcomes[`rss:${key(22)}`] = { status: 'cancelled', errorCode: null }
+    await auto.checkAll()
+    expect(queuedIds()).toHaveLength(2)
+    const { body } = await call('GET', '/api/yt-import/auto')
+    expect([...body.configs[0].failed].sort()).toEqual([`rss:${key(21)}`, `rss:${key(22)}`])
+  })
+
+  it('one still on its way is not named as failed', async () => {
+    await save()
+    state.episodes.unshift(ep(23, Date.now() - HOUR))
+    await auto.checkAll()
+    state.outcomes[`rss:${key(23)}`] = { status: 'uploading', errorCode: null }
+    await auto.checkAll()
+    expect((await call('GET', '/api/yt-import/auto')).body.configs[0].failed).toEqual([])
+  })
+})
+
+describe('a store that cannot be opened', () => {
+  it('never rejects unhandled: ready says false, reads and writes say unavailable', async () => {
+    const unhandled = []
+    const onUnhandled = (e) => unhandled.push(e)
+    process.on('unhandledRejection', onUnhandled)
+    try {
+      const store = mod.createStore({ connect: () => Promise.reject(new Error('Mongo is down')) })
+      await new Promise((r) => setTimeout(r, 20))
+      expect(await store.ready).toBe(false)
+      await expect(store.list()).rejects.toMatchObject({ code: 'unavailable', status: 503 })
+      await expect(store.get('x')).rejects.toMatchObject({ code: 'unavailable' })
+      await expect(store.put({ _id: 'x' })).rejects.toMatchObject({ code: 'unavailable' })
+      expect(unhandled).toEqual([])
+    } finally {
+      process.off('unhandledRejection', onUnhandled)
+    }
+  })
+
+  it('the routes answer 503 and the check skips quietly', async () => {
+    const app = express()
+    app.use(express.json())
+    const down = mod.mountImportAuto(app, {
+      auth: async () => 'alice', mw: [],
+      batch: { ready: Promise.resolve(true), parseOptions: async () => ({ options: {} }), enqueue: () => { throw new Error('never') } },
+      verifiedPodcasts: async () => [{ url: FEED_URL, feed: FEED }],
+      feedEpisodes: async () => [], rssSourceOf: () => ({}), hasPostingGrant: async () => true,
+      knownImports: async () => ({ imported: {}, inBatch: {} }), audioReady: () => true,
+      audioTypes: require('../../server/import-batch.cjs').AUDIO_TYPES,
+      connectStore: () => Promise.reject(new Error('Mongo is down')),
+    })
+    const srv = await new Promise((r) => { const s = app.listen(0, '127.0.0.1', () => r(s)) })
+    try {
+      const url = `http://127.0.0.1:${srv.address().port}/api/yt-import/auto`
+      const got = await fetch(url)
+      expect(got.status).toBe(503)
+      expect((await got.json()).errorCode).toBe('unavailable')
+      const put = await fetch(url, { method: 'PUT', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ feedUrl: FEED_URL, enabled: false }) })
+      expect(put.status).toBe(503)
+      await expect(down.checkAll()).resolves.toBeUndefined()
+    } finally {
+      srv.close()
+    }
+  })
+})
+
 describe('buildAudioPost with show settings', () => {
   const { buildAudioPost } = require('../../server/import-batch.cjs')
   const source = {
@@ -248,6 +342,17 @@ describe('buildAudioPost with show settings', () => {
     const { AUDIO_TYPES } = require('../../server/import-batch.cjs')
     expect(parseSettings({ fromSource: true, useNotes: false }, AUDIO_TYPES).settings).toMatchObject({ fromSource: true })
     expect(parseSettings({ fromSource: false, useNotes: false }, AUDIO_TYPES).error).toBeTruthy()
+  })
+
+  it('a fixed text keeps its markdown: only the placeholders are filled in', () => {
+    const text = '# About {show}\n\nLinks:\n- https://example.com\n- second\n\n---\nThanks -- see you in episode {episode}'
+    const post = buildAudioPost({ user: 'alice', source, playUrl: 'https://p', options: opts({ titleTemplate: '{show} - {title}', useNotes: false, text, tags: [] }), premium: true, duration: 0 })
+    expect(post.description).toBe('# About My Show\n\nLinks:\n- https://example.com\n- second\n\n---\nThanks -- see you in episode 7')
+    // The title still gets the one-line clean-up.
+    expect(post.title).toBe('My Show - Hello')
+    const { renderText, renderTemplate } = require('../../server/import-batch.cjs')
+    expect(renderText('{season} | {title}\n- {date}', source)).toBe('| Hello\n- 2026-11-14')
+    expect(renderTemplate('{season} | {title}', source)).toBe('Hello')
   })
 
   it('long notes are cut so notes and addendum stay under the body limit', () => {

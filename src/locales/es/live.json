@@ -286,7 +286,7 @@
       "viewers": "Espectadores viendo",
       "liveFor": "Tiempo en vivo",
       "timeLeft": "Tiempo restante antes de que termine la transmisión",
-      "boosts": "Boosts recibidos en esta transmisión (USD)"
+      "boosts": "Boosts recibidos en esta transmisión"
     },
     "pro": {
       "title": "Transmitir desde OBS es parte de 3Speak Pro",

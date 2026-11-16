@@ -284,7 +284,7 @@
       "viewers": "正在观看的人数",
       "liveFor": "直播时长",
       "timeLeft": "距离直播结束的剩余时间",
-      "boosts": "本场直播收到的助推 (USD)"
+      "boosts": "本场直播收到的助推"
     },
     "pro": {
       "title": "通过 OBS 直播是 3Speak Pro 的功能",

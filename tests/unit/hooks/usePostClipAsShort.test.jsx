@@ -12,10 +12,10 @@ vi.mock('../../../src/utils/videoThumbnails', () => ({ generateVideoThumbnailsAt
 const { useAppStore } = await import('../../../src/lib/store')
 const { usePostClipAsShort } = await import('../../../src/hooks/usePostClipAsShort.js')
 
-const setters = ['setVideoFile', 'setPrevVideoFile', 'setVideoDuration', 'setGeneratedThumbnail', 'setFromStories', 'setIsStory', 'setVideoMode', 'setOriginalAuthor', 'setOriginalPermlink', 'setOriginalShortPermlink', 'setRemixChain', 'setList', 'setRemaingPercent', 'setStreamClip']
+const setters = ['setVideoFile', 'setPrevVideoFile', 'setVideoDuration', 'setGeneratedThumbnail', 'setFromStories', 'setIsStory', 'setVideoMode', 'setOriginalAuthor', 'setOriginalPermlink', 'setOriginalShortPermlink', 'setRemixChain', 'setList', 'setRemaingPercent', 'setStreamClip', 'resetUploadState']
 
 beforeEach(() => {
-  h.ctx = { isPremium: false }
+  h.ctx = { isPremium: false, uploading: false }
   for (const s of setters) h.ctx[s] = vi.fn()
   h.navigate.mockReset()
   h.thumbs.mockReset().mockResolvedValue(['data:image/jpeg;base64,AA'])
@@ -51,6 +51,10 @@ describe('usePostClipAsShort', () => {
     ])
     expect(h.ctx.setRemaingPercent).toHaveBeenCalledWith(59)
     expect(h.navigate).toHaveBeenCalledWith('/embed-studio/thumbnail?from=stories')
+    // A clean upload first, then the clip's own values on top of it.
+    expect(h.ctx.resetUploadState).toHaveBeenCalledTimes(1)
+    expect(h.ctx.resetUploadState.mock.invocationCallOrder[0]).toBeLessThan(h.ctx.setStreamClip.mock.invocationCallOrder[0])
+    expect(h.ctx.resetUploadState.mock.invocationCallOrder[0]).toBeLessThan(h.ctx.setList.mock.invocationCallOrder[0])
   })
 
   it('a Pro host posting their own clip: no extra share; a failed thumbnail still posts', async () => {
@@ -70,5 +74,16 @@ describe('usePostClipAsShort', () => {
     await expect(act(() => result.current.post({ url: 'u', room: 'r', host: 'badadib', clipper: 'fan' }))).rejects.toThrow()
     expect(h.navigate).not.toHaveBeenCalled()
     expect(result.current.busy).toBe(false)
+    // The form the creator had is left alone.
+    expect(h.ctx.resetUploadState).not.toHaveBeenCalled()
+  })
+
+  it('refuses while another upload is still publishing, so it is not cut off', async () => {
+    h.ctx.uploading = true
+    const { result } = renderHook(() => usePostClipAsShort())
+    await expect(act(() => result.current.post({ url: 'u', room: 'r', host: 'badadib', clipper: 'fan' }))).rejects.toThrow()
+    expect(globalThis.fetch).not.toHaveBeenCalled()
+    expect(h.ctx.resetUploadState).not.toHaveBeenCalled()
+    expect(h.navigate).not.toHaveBeenCalled()
   })
 })

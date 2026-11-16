@@ -42,7 +42,8 @@
     "nowHint": "「公開」を押すとすぐに公開されます。",
     "scheduleHint": "その時刻に 3Speak が代わりに公開します。",
     "draftHint": "公開するまでスタジオの下書きに保存されます。",
-    "scheduleButton": "予約する"
+    "scheduleButton": "予約する",
+    "tooSoon": "その時刻は早すぎます。今から{{minutes}}分以上先の時刻を選んでください。"
   },
   "series": {
     "kind": "シリーズ",

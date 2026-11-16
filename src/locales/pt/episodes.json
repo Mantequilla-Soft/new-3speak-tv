@@ -42,7 +42,8 @@
     "nowHint": "Publicado assim que você tocar em Publicar.",
     "scheduleHint": "O 3Speak publica por você nesse horário.",
     "draftHint": "Fica em Rascunhos no seu estúdio até você publicar.",
-    "scheduleButton": "Agendar"
+    "scheduleButton": "Agendar",
+    "tooSoon": "Esse horário é muito cedo. Escolha um com pelo menos {{minutes}} minutos a partir de agora."
   },
   "series": {
     "kind": "Série",

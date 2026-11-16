@@ -58,6 +58,17 @@ export function hpToVests(hp, dgp) {
   return rate > 0 ? Number(hp || 0) / rate : 0;
 }
 
+/**
+ * A VESTS amount as a person reads it, for the signing summary (ActiveAuthModal):
+ * "13.000 HP (26000.000000 VESTS)" at `rate` (hivePerVests), or the asset as it
+ * is without a rate.
+ */
+export function vestsWithHp(vestsAsset, rate) {
+  const { amount, symbol } = parseAsset(vestsAsset);
+  if (symbol !== 'VESTS' || !(rate > 0)) return String(vestsAsset || '');
+  return `${(amount * rate).toFixed(3)} HP (${vestsAsset})`;
+}
+
 /* ---------- Builders ---------- */
 
 /** Power up: HIVE into Hive Power, for yourself or for another account. */
@@ -157,6 +168,17 @@ export function freeVests(account) {
   return Math.max(0, own - delegated);
 }
 
+/**
+ * Vesting the account can delegate: the free VESTS minus what a running power
+ * down still has to pay out, which Hive keeps back from a delegation.
+ * to_withdraw and withdrawn are raw VESTS (6 implied decimals).
+ */
+export function delegatableVests(account) {
+  if (!account) return 0;
+  const poweringDown = Math.max(0, (Number(account.to_withdraw) || 0) - (Number(account.withdrawn) || 0)) / 1e6;
+  return Math.max(0, freeVests(account) - poweringDown);
+}
+
 /** Pending savings withdrawals (get_savings_withdraw_from) in a plain shape. */
 export const savingsWithdrawalsOf = (rows) => (rows || []).map((r) => ({
   requestId: r.request_id,
@@ -212,6 +234,8 @@ export async function loadWalletState(call, account) {
     hp: vestsToHp(parseAsset(acct?.vesting_shares).amount, dgp),
     freeHp: vestsToHp(freeVests(acct), dgp),
     freeVests: freeVests(acct),
+    delegatableHp: vestsToHp(delegatableVests(acct), dgp),
+    delegatableVests: delegatableVests(acct),
     delegatedHp: vestsToHp(parseAsset(acct?.delegated_vesting_shares).amount, dgp),
     receivedHp: vestsToHp(parseAsset(acct?.received_vesting_shares).amount, dgp),
     powerDown: powerDownOf(acct, dgp),

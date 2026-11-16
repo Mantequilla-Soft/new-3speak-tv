@@ -10,6 +10,8 @@ import { act, fireEvent, screen, within, waitFor } from '@testing-library/react'
 import { renderWithProviders, stubClipboard, toastMessages } from './_render.jsx'
 
 const hive = vi.hoisted(() => ({ getContent: null }))
+// Whether Web Audio is offered (the effects' routed element); off unless a test says so.
+const fxEnv = vi.hoisted(() => ({ webAudio: false }))
 vi.mock('sonner', async () => (await import('./_render.jsx')).sonnerModule())
 vi.mock('../../../src/hive-api/aioha', async () => (await import('./_render.jsx')).aiohaModule())
 vi.mock('axios', () => {
@@ -37,8 +39,13 @@ vi.mock('../../../src/components/GlobalAudioPlayer/AudioPip', () => ({
   openAudioPip: vi.fn(async () => null), watchAudioPip: () => () => {}, useAudioPipWindow: () => {},
 }))
 vi.mock('../../../src/components/GlobalAudioPlayer/audioEffects', () => ({
-  attach: () => null, detach: () => {}, canRoute: async () => false, markNoCors: () => {}, webAudioSupported: () => false, warmUp: () => {},
+  attach: () => null, detach: () => {}, canRoute: async () => false, markNoCors: () => {}, webAudioSupported: () => fxEnv.webAudio, warmUp: () => {},
 }))
+// The real sat stream, watched for what the player hands it.
+vi.mock('../../../src/hooks/useSatStream', async (importOriginal) => {
+  const real = await importOriginal()
+  return { default: vi.fn((args) => real.default(args)) }
+})
 vi.mock('../../../src/components/AudioItem/AudioItemView', () => ({ audioItemPath: (i) => `/audio?play=${i.owner}/${i.permlink}` }))
 // Children with their own data fetching, each tested on its own.
 vi.mock('../../../src/components/PayoutAmount/PayoutAmount', () => ({ default: ({ amount }) => <span>${amount}</span> }))
@@ -72,6 +79,7 @@ const { CHECKER_URL } = await import('../../../src/utils/config')
 const { useAppStore } = await import('../../../src/lib/store')
 const { _resetListenHistory } = await import('../../../src/lib/listenHistory')
 const { notifyMediaPlay } = await import('../../../src/utils/mediaCoordinator')
+const { default: useSatStream } = await import('../../../src/hooks/useSatStream')
 const { default: GlobalAudioPlayer } = await import('../../../src/components/GlobalAudioPlayer/GlobalAudioPlayer.jsx')
 const { default: EmbedCodeHost } = await import('../../../src/components/Embed/EmbedCodeModal.jsx')
 
@@ -598,6 +606,14 @@ describe('the audio player: the lock screen and media keys (Media Session)', () 
     play(B, [A, B, C])
     act(() => session.handlers.previoustrack())
     expect(store().audioCurrent).toBe(A)
+  })
+
+  it('previous acts on the track playing now, even before the player has re-rendered', () => {
+    mount()
+    play(B, [A, B, C])
+    // Next and then Previous before React renders again (a phone in the background).
+    act(() => { store().audioPlay(C, [A, B, C]); session.handlers.previoustrack() })
+    expect(store().audioCurrent).toBe(B)
   })
 
   it('shows the timeline on the lock screen with the duration, the position and the speed', () => {
@@ -1168,6 +1184,59 @@ describe('the audio player: a video heard as audio (lib/videoAsAudio.js)', () =>
     mount()
     play(VIDEO)
     expect(screen.getByRole('button', { name: 'Audio effects' })).toBeInTheDocument()
+  })
+
+  it('with the effects on, waits for the listener before moving it to the Web Audio element', async () => {
+    vi.stubGlobal('MediaSource', function MediaSource() {})
+    localStorage.setItem('3speak-audio-effects', JSON.stringify({ boost: true }))
+    fxEnv.webAudio = true
+    const vis = Object.getOwnPropertyDescriptor(Document.prototype, 'visibilityState')
+    Object.defineProperty(document, 'visibilityState', { value: 'hidden', configurable: true })
+    try {
+      mount()
+      // The next track with the screen locked: the plain element plays it.
+      play(VIDEO)
+      await act(async () => { await new Promise((r) => setTimeout(r, 20)) })
+      expect(audio()).not.toHaveAttribute('crossorigin')
+      // Back: now the effects' element takes over.
+      Object.defineProperty(document, 'visibilityState', { value: 'visible', configurable: true })
+      act(() => { document.dispatchEvent(new Event('visibilitychange')) })
+      expect(audio()).toHaveAttribute('crossorigin', 'anonymous')
+    } finally {
+      fxEnv.webAudio = false
+      delete document.visibilityState
+      if (vis) Object.defineProperty(Document.prototype, 'visibilityState', vis)
+    }
+  })
+
+  it('a drag on its timeline seeks on release only (hls.js streams it through a blob: URL)', () => {
+    if (!window.PointerEvent) {
+      window.PointerEvent = class extends MouseEvent {
+        constructor(type, init = {}) { super(type, init); this.pointerId = init.pointerId ?? 1; this.pointerType = init.pointerType ?? 'mouse' }
+      }
+    }
+    vi.stubGlobal('MediaSource', function MediaSource() {})
+    mount()
+    play(VIDEO)
+    // What hls.js leaves on the element: a MediaSource object URL, not a saved copy.
+    act(() => { audio().setAttribute('src', 'blob:https://3speak.tv/ms-1') })
+    loaded(104)
+    at(10)
+    const line = document.querySelector('.audio-np-progress[role="slider"]')
+    vi.spyOn(line, 'getBoundingClientRect').mockReturnValue({ left: 0, width: 400, top: 0, height: 4, right: 400, bottom: 4 })
+    fireEvent.pointerDown(line, { clientX: 100, button: 0, pointerId: 4, pointerType: 'touch' })
+    fireEvent.pointerMove(line, { clientX: 200, pointerId: 4 })
+    expect(audio().currentTime).toBe(10)
+    fireEvent.pointerUp(line, { clientX: 200, pointerId: 4 })
+    expect(audio().currentTime).toBe(52)
+  })
+
+  it('streamed sats name its watch page; an audio\'s name its post page', () => {
+    mount()
+    play(VIDEO)
+    expect(useSatStream).toHaveBeenLastCalledWith(expect.objectContaining({ to: 'badadib', permlink: 'test-stream', link: 'https://3speak.tv/@badadib/test-stream' }))
+    play(track(4, { post_permlink: 'my-post' }))
+    expect(useSatStream).toHaveBeenLastCalledWith(expect.objectContaining({ to: 'badadib', permlink: 'my-post', link: 'https://3speak.tv/audio/badadib/my-post' }))
   })
 
   it('its Hive post carries the votes and comments', async () => {

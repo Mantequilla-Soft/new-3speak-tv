@@ -14,7 +14,8 @@ vi.mock('../../../src/utils/scheduledPosts', () => ({ publishDraft: h.publishDra
 
 const { default: EpisodeNumberFields } = await import('../../../src/components/Episodes/EpisodeNumberFields.jsx')
 const { default: EpisodeBadge } = await import('../../../src/components/Episodes/EpisodeBadge.jsx')
-const { default: AudioPublishWhen } = await import('../../../src/components/AudioUploadModal/AudioPublishWhen.jsx')
+const { default: AudioPublishWhen, scheduleTooSoon, SCHEDULE_MIN_LEAD_MIN } = await import('../../../src/components/AudioUploadModal/AudioPublishWhen.jsx')
+const { formatDateTimeLocal } = await import('../../../src/utils/schedulingHelpers')
 const { default: DraftCard } = await import('../../../src/components/Draft/DraftCard.jsx')
 
 function Numbers() {
@@ -57,6 +58,24 @@ describe('AudioPublishWhen', () => {
     expect(onScheduleAt).toHaveBeenCalledWith(expect.stringMatching(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/))
     rerender(<AudioPublishWhen value="draft" onChange={onChange} scheduleAt="" onScheduleAt={onScheduleAt} />)
     expect(screen.getByText(/Kept in Drafts in your studio/)).toBeInTheDocument()
+  })
+
+  it('a time too close (or none) is too soon: the checker wants 5 minutes, the upload its share', () => {
+    const now = Date.parse('2026-11-16T12:00:00')
+    const at = (min) => formatDateTimeLocal(new Date(now + min * 60 * 1000))
+    expect(SCHEDULE_MIN_LEAD_MIN).toBeGreaterThan(5)
+    expect(scheduleTooSoon(at(15), now)).toBe(false)
+    expect(scheduleTooSoon(at(SCHEDULE_MIN_LEAD_MIN), now)).toBe(false)
+    expect(scheduleTooSoon(at(SCHEDULE_MIN_LEAD_MIN - 1), now)).toBe(true)
+    expect(scheduleTooSoon(at(-30), now)).toBe(true)
+    expect(scheduleTooSoon('', now)).toBe(true)
+    expect(scheduleTooSoon('not a date', now)).toBe(true)
+  })
+
+  it('says so under the day strip when the picked time has come too close', () => {
+    const soon = formatDateTimeLocal(new Date(Date.now() + 2 * 60 * 1000))
+    renderWithProviders(<AudioPublishWhen value="schedule" onChange={() => {}} scheduleAt={soon} onScheduleAt={() => {}} />)
+    expect(screen.getByRole('alert')).toHaveTextContent('Pick one at least 10 minutes from now')
   })
 })
 

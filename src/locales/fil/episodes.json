@@ -42,7 +42,8 @@
     "nowHint": "Mai-publish agad pagpindot mo ng I-publish.",
     "scheduleHint": "Ipa-publish ito ng 3Speak para sa iyo sa oras na iyon.",
     "draftHint": "Nasa Drafts sa studio mo hanggang i-publish mo.",
-    "scheduleButton": "I-schedule"
+    "scheduleButton": "I-schedule",
+    "tooSoon": "Masyadong maaga ang oras na iyan. Pumili ng oras na hindi bababa sa {{minutes}} minuto mula ngayon."
   },
   "series": {
     "kind": "Serye",

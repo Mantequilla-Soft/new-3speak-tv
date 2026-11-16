@@ -3,6 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { offlineLoaderClass, OFFLINE_PLAYLIST_URL } from '../../lib/videoDownloads';
 import { notifyMediaPlay, onMediaPlay } from '../../utils/mediaCoordinator';
 
+// recoverMediaError() attempts before the player gives up on a saved video.
+export const MAX_RECOVERIES = 2;
+
 /**
  * A saved video, played from this browser's storage with no connection
  * (lib/videoDownloads.js). hls.js reads the rebuilt playlist and the segments
@@ -24,10 +27,17 @@ export default function OfflineVideoPlayer({ entry, autoPlay = true }) {
       if (gone) return;
       if (!Hls?.isSupported?.()) { setFailed(true); return; }
       hls = new Hls({ loader: offlineLoaderClass(entry, LoadStats), maxBufferLength: 30, enableWorker: true });
+      // A media error is worth a retry or two; a saved segment that is broken
+      // fails every time, so after that the note shows instead of a stalled player.
+      let recoveries = 0;
       hls.on(Hls.Events.ERROR, (_e, data) => {
         if (!data?.fatal) return;
-        if (data.type === Hls.ErrorTypes.MEDIA_ERROR) hls.recoverMediaError();
-        else setFailed(true);
+        if (data.type === Hls.ErrorTypes.MEDIA_ERROR && recoveries < MAX_RECOVERIES) {
+          recoveries += 1;
+          hls.recoverMediaError();
+        } else {
+          setFailed(true);
+        }
       });
       hls.loadSource(OFFLINE_PLAYLIST_URL);
       hls.attachMedia(el);

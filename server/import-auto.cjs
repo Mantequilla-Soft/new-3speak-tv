@@ -31,6 +31,11 @@ const ENABLED = process.env.IMPORT_AUTO_ENABLED !== 'false'
 const GRACE_MS = 6 * 3600 * 1000
 const BASELINE_MAX = 500
 const HANDLED_MAX = 500
+// A queued episode whose import failed for a reason that may pass (the checker or
+// the audio service busy, a broken download) is queued again, this many times in
+// all. Anything else (too long, no audio in the file, cancelled) stays handled.
+const MAX_ATTEMPTS = 3
+const RETRYABLE = new Set(['download_failed', 'upload_failed', 'audio_service'])
 const MONGO_URI = process.env.IMPORT_BATCH_MONGODB_URI || process.env.MONGODB_URI || ''
 const MONGO_DB = process.env.IMPORT_BATCH_DATABASE_NAME || process.env.DATABASE_NAME || ''
 const ENV = process.env.IMPORT_BATCH_ENV || 'preview'
@@ -45,10 +50,21 @@ const DEFAULT_SETTINGS = { type: 'podcast', target: 'post', fromSource: true, ti
 const feedKey = (url) => crypto.createHash('sha1').update(String(url)).digest('hex').slice(0, 16)
 
 // ── Store ────────────────────────────────────────────────────────────────────
-function createStore() {
+// The store could not be opened (Mongo down at start): every read and write says
+// so with this, which the routes answer as 503 and the check logs and skips.
+const unavailableError = () => Object.assign(new Error('Automatic imports are not available right now'), { status: 503, code: 'unavailable' })
+
+/**
+ * `connect` (tests) stands in for the Mongo connection: () → collection.
+ * A failed start never rejects `ready` (an unhandled rejection would take the
+ * whole server down): it resolves false, and the store stays unavailable until
+ * a restart, like the batch store (import-batch.cjs load).
+ */
+function createStore({ connect } = {}) {
   let col = null
   let file = { configs: [] }
   const ready = (async () => {
+    if (connect) { col = await connect(); return true }
     let MongoClient = null
     try { ({ MongoClient } = require('mongodb')) } catch { /* file store */ }
     if (MONGO_URI && MongoClient) {
@@ -56,10 +72,15 @@ function createStore() {
       await client.connect()
       col = client.db(MONGO_DB || undefined).collection('import-auto')
       await col.createIndex({ env: 1, user: 1 }, { name: 'env_user' }).catch(() => {})
-      return
+      return true
     }
     try { file = JSON.parse(fs.readFileSync(STORE_FILE, 'utf8')) || { configs: [] } } catch { file = { configs: [] } }
-  })()
+    return true
+  })().catch((e) => {
+    console.error(`[import-auto] could not open the store, automatic imports are OFF until a restart: ${e.message}`)
+    return false
+  })
+  const open = async () => { if (!(await ready)) throw unavailableError() }
   const writeFile = () => {
     fs.mkdirSync(path.dirname(STORE_FILE), { recursive: true })
     const tmp = `${STORE_FILE}.${process.pid}.tmp`
@@ -69,17 +90,17 @@ function createStore() {
   return {
     ready,
     async list(filter = {}) {
-      await ready
+      await open()
       if (col) return col.find({ env: ENV, ...filter }).toArray()
       return file.configs.filter((c) => c.env === ENV && Object.entries(filter).every(([k, v]) => c[k] === v))
     },
     async get(id) {
-      await ready
+      await open()
       if (col) return col.findOne({ _id: id })
       return file.configs.find((c) => c._id === id) || null
     },
     async put(doc) {
-      await ready
+      await open()
       const next = { ...doc, env: ENV, updatedAt: new Date().toISOString() }
       if (col) { await col.replaceOne({ _id: next._id }, next, { upsert: true }); return next }
       file.configs = [...file.configs.filter((c) => c._id !== next._id), next]
@@ -126,6 +147,9 @@ function publicConfig(c) {
     // The episodes that were in the feed when it was switched on (never imported):
     // the page marks the others as coming automatically.
     baseline: c.enabled ? (c.baseline || []) : [],
+    // Episodes it took up and will not post (skipped, or failed for good): the
+    // page lets the creator import those by hand.
+    failed: c.enabled ? (c.handled || []).filter((h) => h.skipped || h.failed).map((h) => h.id) : [],
     settings: c.settings,
     options: {
       community: c.options.community, payout: c.options.payout, nsfw: c.options.nsfw, ads: c.options.ads,
@@ -139,12 +163,12 @@ function publicConfig(c) {
 /**
  * deps: auth, mw, verifiedPodcasts(user) → [{ url, feed?, code? }],
  *   feedEpisodes(feedId, limit) → [episode] (newest first), rssSourceOf(feed, ep) → batch source,
- *   hasPostingGrant(user), knownImports(user), batch: { ready, enqueue, parseOptions },
- *   audioReady() → bool, maxDurationS, alert(...)
+ *   hasPostingGrant(user), knownImports(user), batch: { ready, enqueue, parseOptions, outcomeOf },
+ *   audioReady() → bool, maxDurationS, alert(...), connectStore? (tests: the Mongo stand-in)
  */
 function mountImportAuto(app, deps) {
   const { auth, mw } = deps
-  const store = createStore()
+  const store = createStore({ connect: deps.connectStore })
   const available = () => ENABLED && deps.audioReady()
 
   const ownShow = async (user, feedUrl) => {
@@ -159,7 +183,7 @@ function mountImportAuto(app, deps) {
       res.json({ available: available(), intervalMin: INTERVAL_MIN, maxPerDay: MAX_PER_DAY, configs: configs.map(publicConfig) })
     } catch (e) {
       console.warn('[import-auto] list:', e.message)
-      res.status(500).json({ error: 'Something went wrong' })
+      res.status(e.status || 500).json(e.status ? { error: e.message, errorCode: e.code } : { error: 'Something went wrong' })
     }
   })
 
@@ -186,7 +210,7 @@ function mountImportAuto(app, deps) {
       const doc = {
         _id: id, user, feedUrl, feedId: show.feed.id, feedTitle: show.feed.title || '',
         settings: parsedSettings.settings, options: parsedOptions.options,
-        enabled, enabledAt: prev?.enabledAt || null, baseline: prev?.baseline || [], handled: prev?.handled || [],
+        enabled, enabledAt: prev?.enabledAt || null, baseline: prev?.baseline || [], handled: prev?.handled || [], retries: prev?.retries || {},
         status: prev?.status || {}, createdAt: prev?.createdAt || new Date().toISOString(),
       }
       if (enabled && !prev?.enabled) {
@@ -195,6 +219,7 @@ function mountImportAuto(app, deps) {
         doc.enabledAt = new Date().toISOString()
         doc.baseline = eps.map((e) => deps.rssSourceOf(show.feed, e).sourceId).slice(0, BASELINE_MAX)
         doc.handled = []
+        doc.retries = {}
         doc.status = { ...doc.status, lastError: null, lastErrorCode: null }
         console.log(`[import-auto] @${user} switched ON for ${feedUrl} (${doc.baseline.length} episodes already there)`)
       } else if (!enabled && prev?.enabled) {
@@ -205,7 +230,7 @@ function mountImportAuto(app, deps) {
       res.json({ config: publicConfig(saved) })
     } catch (e) {
       console.warn('[import-auto] save:', e.message)
-      res.status(e.status || 500).json({ error: e.status ? e.message : 'Something went wrong' })
+      res.status(e.status || 500).json(e.status ? { error: e.message, errorCode: e.code } : { error: 'Something went wrong' })
     }
   })
 
@@ -224,6 +249,23 @@ function mountImportAuto(app, deps) {
         c.feedTitle = show.feed.title || c.feedTitle
         const eps = await deps.feedEpisodes(show.feed.id, 30)
         const known = await deps.knownImports(c.user).catch(() => ({ imported: {}, inBatch: {} }))
+        // How the episodes queued before ended up: a failure that may pass goes
+        // again (below, like a new one), anything else that failed stays handled.
+        // `c.retries`: id → { attempts, h } of those waiting for another go.
+        const retries = { ...(c.retries || {}) }
+        c.handled = (c.handled || []).flatMap((h) => {
+          if (h.skipped || h.failed) return [h]
+          const out = deps.batch.outcomeOf ? deps.batch.outcomeOf(c.user, h.id) : null
+          if (out?.status === 'cancelled') return [{ ...h, failed: 'cancelled' }]
+          if (out?.status !== 'failed') return [h]
+          const attempts = h.attempts || 1
+          if (RETRYABLE.has(out.errorCode) && attempts < MAX_ATTEMPTS) {
+            retries[h.id] = { attempts, h: { ...h, failed: out.errorCode } }
+            return []
+          }
+          return [{ ...h, failed: out.errorCode || 'failed' }]
+        })
+        c.retries = retries
         const baseline = new Set(c.baseline || [])
         const handled = new Set((c.handled || []).map((h) => h.id))
         const since = Date.parse(c.enabledAt) - GRACE_MS
@@ -246,9 +288,16 @@ function mountImportAuto(app, deps) {
           }
           if (today + take.length >= MAX_PER_DAY) continue // next day
           take.push(src)
-          handledNow.push({ id: src.sourceId, at: new Date(now).toISOString(), title: src.title })
+          const again = retries[src.sourceId]
+          delete retries[src.sourceId]
+          handledNow.push({ id: src.sourceId, at: new Date(now).toISOString(), title: src.title, ...(again ? { attempts: again.attempts + 1 } : {}) })
         }
         status.waiting = fresh.length - handledNow.length
+        // A failure to retry that is no longer among the newest episodes: given up.
+        const seen = new Set(fresh.map(({ src }) => src.sourceId))
+        for (const [id, r] of Object.entries(retries)) {
+          if (!seen.has(id)) { handledNow.push(r.h); delete retries[id] }
+        }
         if (take.length) {
           const batch = deps.batch.enqueue(c.user, take, { ...c.options, audio: c.settings }, { auto: true, autoFeed: c.feedUrl })
           status.lastQueuedAt = new Date(now).toISOString()
@@ -269,13 +318,13 @@ function mountImportAuto(app, deps) {
     // the page in the meantime (new settings, switched off) wins.
     const current = await store.get(c._id)
     if (!current || !current.enabled || current.enabledAt !== c.enabledAt) return
-    await store.put({ ...current, feedId: c.feedId, feedTitle: c.feedTitle, handled: c.handled, status })
+    await store.put({ ...current, feedId: c.feedId, feedTitle: c.feedTitle, handled: c.handled, retries: c.retries || {}, status })
   }
 
   let checking = false
   async function checkAll() {
     if (checking || !available()) return
-    if (!(await deps.batch.ready)) return
+    if (!(await deps.batch.ready) || !(await store.ready)) return
     checking = true
     try {
       const configs = (await store.list({ enabled: true }))
@@ -297,11 +346,13 @@ function mountImportAuto(app, deps) {
   }
 
   if (ENABLED) {
-    setTimeout(() => checkAll(), 2 * 60 * 1000).unref()
-    setInterval(() => checkAll(), INTERVAL_MIN * 60 * 1000).unref()
+    // Never an unhandled rejection from a tick: it would take the server down.
+    const tick = () => checkAll().catch((e) => console.warn('[import-auto] tick:', e.message))
+    setTimeout(tick, 2 * 60 * 1000).unref()
+    setInterval(tick, INTERVAL_MIN * 60 * 1000).unref()
     console.log(`[import-auto] automatic podcast imports: every ${INTERVAL_MIN} min, at most ${MAX_PER_DAY} per show a day${deps.audioReady() ? '' : ' (waiting for AUDIO_API_KEY)'}`)
   }
   return { checkAll, store }
 }
 
-module.exports = { mountImportAuto, parseSettings, publicConfig, DEFAULT_SETTINGS }
+module.exports = { mountImportAuto, createStore, parseSettings, publicConfig, DEFAULT_SETTINGS, MAX_ATTEMPTS }

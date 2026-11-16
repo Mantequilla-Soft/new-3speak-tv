@@ -18,6 +18,7 @@
     "insufficient": "Itu lebih dari yang kamu punya.",
     "amountPositive": "Masukkan jumlah lebih dari nol.",
     "invalidAccount": "Tidak ada akun Hive dengan nama itu.",
+    "accountCheckFailed": "Akun itu tidak bisa diperiksa sekarang. Coba lagi sebentar lagi.",
     "done": "Selesai. Mungkin perlu beberapa detik sampai muncul di sini.",
     "failed": "Tidak berhasil: {{error}}",
     "loading": "Memuat dompetmu..."

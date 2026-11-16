@@ -82,8 +82,10 @@ export default function AudioItemView({ owner, id, onBack }) {
   const [tipping, setTipping] = useState(false);
   const [listing, setListing] = useState(false);
   const [editing, setEditing] = useState(false);
-  // The body as just saved, shown until the chain read catches up.
-  const [savedBody, setSavedBody] = useState('');
+  // The body as just saved, shown until the chain read catches up: only on the
+  // audio it was saved for, not on the next one this page shows.
+  const [saved, setSaved] = useState({ key: '', body: '' });
+  const savedBody = saved.key === `${owner}/${id}` ? saved.body : '';
   const queryClient = useQueryClient();
   const [voting, setVoting] = useState(false);
   const [votedNow, setVotedNow] = useState(false);
@@ -285,7 +287,7 @@ export default function AudioItemView({ owner, id, onBack }) {
           rowTitle={item.title || ''}
           onSaved={(changes) => {
             // Show the edit at once; the chain and the audio row catch up behind it.
-            setSavedBody(changes.body);
+            setSaved({ key: `${owner}/${id}`, body: changes.body });
             queryClient.setQueryData(['audio-item-post', owner, postPermlink], (p) => (p
               ? { ...p, title: changes.title, body: changes.body, json_metadata: changes.json_metadata } : p));
             queryClient.setQueryData(['audio-item', owner, id], (a) => (a ? {

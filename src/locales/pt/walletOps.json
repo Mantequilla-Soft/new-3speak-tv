@@ -18,6 +18,7 @@
     "insufficient": "Isso é mais do que você tem.",
     "amountPositive": "Digite um valor acima de zero.",
     "invalidAccount": "Não existe conta Hive com esse nome.",
+    "accountCheckFailed": "Não foi possível verificar essa conta agora. Tente de novo daqui a pouco.",
     "done": "Pronto. Pode levar alguns segundos para aparecer aqui.",
     "failed": "Não deu certo: {{error}}",
     "loading": "Carregando sua carteira..."

@@ -284,7 +284,7 @@
       "viewers": "시청 중인 사람",
       "liveFor": "방송 시간",
       "timeLeft": "방송 종료까지 남은 시간",
-      "boosts": "이번 방송에서 받은 부스트 (USD)"
+      "boosts": "이번 방송에서 받은 부스트"
     },
     "pro": {
       "title": "OBS 스트리밍은 3Speak Pro 기능입니다",

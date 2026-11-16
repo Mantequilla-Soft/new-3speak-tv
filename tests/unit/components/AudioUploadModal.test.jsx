@@ -97,6 +97,7 @@ const { default: AudioUploadModal } = await import('../../../src/components/Audi
 const { publishAudiogramShorts } = await import('../../../src/utils/audiogramShorts')
 const { markImportPublished } = await import('../../../src/lib/youtubeImport')
 const { saveScheduledPost } = await import('../../../src/utils/scheduledPosts')
+const { uploadAudioTo3Speak } = await import('../../../src/utils/audioUpload')
 
 // jsdom reads no media: every <audio> reports m.duration as soon as it gets a src.
 let savedSrc
@@ -800,5 +801,38 @@ describe('AudioUploadModal: season, episode, scheduling and drafts (standalone p
     expect(Date.parse(scheduledOn)).toBeGreaterThan(Date.now() + 10 * 60 * 1000)
     expect(post.playlistAdd).toBeNull()
     expect(postOps()).toBeUndefined()
+  })
+
+  // The earliest time is preset 15 minutes ahead; 12 minutes later it is too close
+  // (the checker wants 5, the upload needs its share too).
+  const later = (min) => { const real = Date.now(); return vi.spyOn(Date, 'now').mockReturnValue(real + min * 60 * 1000) }
+
+  it('a scheduled time that has come too close: Next waits and says why', async () => {
+    const { user } = openModal({ initialTrack: plainTrack() })
+    await waitFor(() => row('Episode.mp3'))
+    await toPostStep(user, null)
+    await user.click(screen.getByRole('tab', { name: /Schedule/ }))
+    await user.type(screen.getByPlaceholderText('Title (required)'), 'G')
+    expect(screen.getByRole('button', { name: /Next/ })).toBeEnabled()
+    const clock = later(12)
+    await user.type(screen.getByPlaceholderText('Title (required)'), 'o')
+    expect(screen.getByRole('button', { name: /Next/ })).toBeDisabled()
+    expect(screen.getByText(/at least 10 minutes from now/)).toHaveAttribute('role', 'alert')
+    clock.mockRestore()
+  })
+
+  it('too close by the time Schedule is pressed: nothing is uploaded, the error says why', async () => {
+    const { user } = openModal({ initialTrack: plainTrack() })
+    await waitFor(() => row('Episode.mp3'))
+    await toPostStep(user, null)
+    await user.type(screen.getByPlaceholderText('Title (required)'), 'Garden talk')
+    await user.click(screen.getByRole('tab', { name: /Schedule/ }))
+    await next(user)
+    const clock = later(12)
+    await user.click(screen.getByRole('button', { name: /^Schedule/ }))
+    await screen.findByText(/at least 10 minutes from now/)
+    expect(uploadAudioTo3Speak).not.toHaveBeenCalled()
+    expect(saveScheduledPost).not.toHaveBeenCalled()
+    clock.mockRestore()
   })
 })

@@ -18,6 +18,7 @@
     "insufficient": "Bu, sahip olduğundan fazla.",
     "amountPositive": "Sıfırdan büyük bir miktar gir.",
     "invalidAccount": "Bu adda bir Hive hesabı yok.",
+    "accountCheckFailed": "Bu hesap şu anda kontrol edilemiyor. Birazdan tekrar dene.",
     "done": "Tamam. Burada görünmesi birkaç saniye sürebilir.",
     "failed": "İşlem gerçekleşmedi: {{error}}",
     "loading": "Cüzdanın yükleniyor..."

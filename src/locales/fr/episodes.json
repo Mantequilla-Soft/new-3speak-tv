@@ -42,7 +42,8 @@
     "nowHint": "Publié dès que tu appuies sur Publier.",
     "scheduleHint": "3Speak le publie pour toi à ce moment-là.",
     "draftHint": "Gardé dans Brouillons de ton studio jusqu’à ce que tu le publies.",
-    "scheduleButton": "Programmer"
+    "scheduleButton": "Programmer",
+    "tooSoon": "Cette heure est trop proche. Choisis-en une au moins {{minutes}} minutes plus tard."
   },
   "series": {
     "kind": "Série",

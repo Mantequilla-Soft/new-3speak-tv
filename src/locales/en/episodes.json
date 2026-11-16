@@ -42,7 +42,8 @@
     "nowHint": "Published as soon as you press Publish.",
     "scheduleHint": "3Speak publishes it for you at that time.",
     "draftHint": "Kept in Drafts in your studio until you publish it.",
-    "scheduleButton": "Schedule"
+    "scheduleButton": "Schedule",
+    "tooSoon": "That time is too soon. Pick one at least {{minutes}} minutes from now."
   },
   "series": {
     "kind": "Series",
