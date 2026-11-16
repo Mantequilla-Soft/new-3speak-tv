@@ -112,6 +112,38 @@ describe('notifications bell on hover', () => {
     expect(list()).toBeNull()
   })
 
+  it('a hover shows a popup under the bell, not the side sheet', async () => {
+    enter()
+    await advance(250)
+    expect(list().className).toContain('notif-dropdown--popup')
+    expect(list().style.top).not.toBe('')
+  })
+
+  it('a click opens the side sheet, also over a running peek', async () => {
+    click()
+    expect(list().className).not.toContain('--popup')
+    click()
+    await advance(250)
+    enter()
+    leave()
+    await advance(100)
+    enter()
+    await advance(250)
+    expect(list().className).toContain('--popup')
+    click()
+    expect(list().className).not.toContain('--popup')
+    expect(list().style.top).toBe('')
+  })
+
+  it('a clicked sheet stays a sheet while it fades out', async () => {
+    enter()
+    await advance(250)
+    click()
+    click()
+    expect(list().className).toContain('--leaving')
+    expect(list().className).not.toContain('--popup')
+  })
+
   it('touch never peeks', async () => {
     enter('touch')
     await advance(1000)
