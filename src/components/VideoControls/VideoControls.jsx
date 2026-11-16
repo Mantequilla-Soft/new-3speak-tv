@@ -93,9 +93,6 @@ function VideoControls({
   getPlaybackHeight,
   onMarkerSelect,
   onReactToMoment,
-  onCycleReactionSize,
-  reactionSizeLabel,
-  reactionSizeShort,
   qualityLevels,
   currentQuality,
   onQualityChange,
@@ -593,12 +590,6 @@ function VideoControls({
               </div>
             )}
           </div>
-          {onCycleReactionSize && (
-            <button type="button" className="vc-btn vc-btn--resize" onClick={onCycleReactionSize} title={t('player.controls.playerSize', { size: reactionSizeLabel || t('player.controls.sizeStandard') })} aria-label={t('player.controls.playerSize', { size: reactionSizeLabel || t('player.controls.sizeStandard') })}>
-              <Icon name="open_in_full" size={18} />
-              <span className="vc-size-label">{reactionSizeShort || reactionSizeLabel || t('player.controls.sizeStandard')}</span>
-            </button>
-          )}
           {onToggleAutoplay && (
             <button
               type="button"
@@ -826,7 +817,7 @@ function VideoControls({
                   style={qualityPortalStyle || undefined}
                 >
                   <div className="vc-menu-head">{t('player.controls.quality')}</div>
-                  <div className="vc-tile-grid is-3">
+                  <div className="vc-quality-grid">
                     <button
                       type="button"
                       aria-pressed={currentQuality === -1}

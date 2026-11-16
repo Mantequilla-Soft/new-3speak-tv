@@ -5,8 +5,6 @@
     "reactToMoment": "回应这一刻",
     "mute": "静音",
     "unmute": "取消静音",
-    "playerSize": "播放器大小：{{size}}",
-    "sizeStandard": "标准",
     "pip": "画中画",
     "autoplayOn": "自动播放：开",
     "autoplayOff": "自动播放：关",

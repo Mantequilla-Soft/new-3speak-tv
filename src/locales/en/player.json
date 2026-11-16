@@ -5,8 +5,6 @@
     "reactToMoment": "React to this moment",
     "mute": "Mute",
     "unmute": "Unmute",
-    "playerSize": "Player size: {{size}}",
-    "sizeStandard": "Standard",
     "pip": "Picture-in-Picture",
     "autoplayOn": "Autoplay: on",
     "autoplayOff": "Autoplay: off",

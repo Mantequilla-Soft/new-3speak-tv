@@ -394,8 +394,7 @@ $menu-bg: color-mix(in srgb, var(--media-black) 90%, transparent);
     }
     &--react { font-family: var(--font-sans); font-size: 12px; }
 
-    .vc-btn-label,
-    .vc-size-label { white-space: nowrap; }
+    .vc-btn-label { white-space: nowrap; }
   }
 
   .vc-time {
@@ -499,7 +498,8 @@ $menu-bg: color-mix(in srgb, var(--media-black) 90%, transparent);
 }
 
 .vc-speed-menu { width: 296px; }
-.vc-quality-menu { width: 240px; }
+// As wide as its choices need ("Automatisch" in German), within reason
+.vc-quality-menu { width: max-content; min-width: 240px; max-width: min(340px, calc(100vw - 24px)); }
 .vc-subtitle-menu {
   width: 296px;
   max-height: min(420px, 70vh);
@@ -521,6 +521,16 @@ $menu-bg: color-mix(in srgb, var(--media-black) 90%, transparent);
   &.is-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 
   > button { padding: 0 4px; min-width: 0; }
+}
+
+// The quality choices: each as wide as its label, growing to fill the row and
+// wrapping when the row is full, so a long "Auto" in another language fits.
+.vc-quality-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+
+  > button { flex: 1 0 auto; min-width: 64px; padding: 0 12px; white-space: nowrap; }
 }
 
 // Choice tiles: 40 tall, radius 12, 2px border; the chosen one accent (speed,
@@ -775,7 +785,6 @@ $menu-bg: color-mix(in srgb, var(--media-black) 90%, transparent);
     }
 
     // Single-purpose toggles live in the settings gear on phones
-    .vc-btn--resize,
     .vc-btn--glow,
     .vc-btn--autoplay,
     .vc-btn--loop,

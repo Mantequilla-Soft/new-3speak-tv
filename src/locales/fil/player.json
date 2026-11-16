@@ -5,8 +5,6 @@
     "reactToMoment": "Mag-react sa sandaling ito",
     "mute": "I-mute",
     "unmute": "I-unmute",
-    "playerSize": "Laki ng player: {{size}}",
-    "sizeStandard": "Standard",
     "pip": "Picture-in-Picture",
     "autoplayOn": "Autoplay: on",
     "autoplayOff": "Autoplay: off",

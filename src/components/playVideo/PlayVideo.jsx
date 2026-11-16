@@ -2086,9 +2086,6 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                     getPlaybackHeight={videoControls.getPlaybackHeight}
                     onMarkerSelect={videoControls.onMarkerSelect}
                     onReactToMoment={() => { openSide('discussion'); videoControls.onReactToMoment?.(); }}
-                    onCycleReactionSize={videoControls.onCycleReactionSize}
-                    reactionSizeLabel={videoControls.reactionSizeLabel}
-                    reactionSizeShort={videoControls.reactionSizeShort}
                     onTogglePip={videoControls.onTogglePip}
                     qualityLevels={videoControls.qualityLevels}
                     currentQuality={videoControls.currentQuality}

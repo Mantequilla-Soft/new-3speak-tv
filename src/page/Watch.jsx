@@ -1266,21 +1266,12 @@ function Watch({ v2 = false, routeV = null }) {
     }, 100);
   }, []);
 
-  // The player sizes beside the reactions (48b: S / M / Std / Big / Cin).
-  const REACTION_SIZES = ['small', 'medium', 'standard', 'big', 'cinema'];
-  const REACTION_SIZE_LABEL_KEYS = { small: 'player.reactions.sizeNames.small', medium: 'player.reactions.sizeNames.medium', standard: 'player.reactions.sizeNames.standard', big: 'player.reactions.sizeNames.big', cinema: 'player.reactions.sizeNames.cinema' };
-  // A size picked straight from the reactions panel's size track.
+  // The player's size beside the reactions (48b: S / M / Std / Big / Cin), picked
+  // on the reactions panel's size track. The player controls have no size button
+  // any more: theater mode covers it (owner 2026-11-16).
   const chooseReactionSize = useCallback((next) => {
     setReactionSize(next);
     localStorage.setItem('3speak-reaction-size', next);
-  }, []);
-  const cycleReactionSize = useCallback(() => {
-    setReactionSize(prev => {
-      const idx = REACTION_SIZES.indexOf(prev);
-      const next = REACTION_SIZES[(idx + 1) % REACTION_SIZES.length];
-      localStorage.setItem('3speak-reaction-size', next);
-      return next;
-    });
   }, []);
 
   // Desktop: show controls on mouse movement, auto-hide after 3s
@@ -2254,10 +2245,6 @@ function Watch({ v2 = false, routeV = null }) {
           previewVideoId: playerLoadId,
           getPlaybackHeight,
           onMarkerSelect: handleSelectReaction,
-          onCycleReactionSize: isReactionPlayerVisible && reactions.length > 0 ? cycleReactionSize : null,
-          reactionSizeLabel: REACTION_SIZE_LABEL_KEYS[reactionSize] ? t(REACTION_SIZE_LABEL_KEYS[reactionSize]) : reactionSize,
-          // The button's own short label (19a: "Std"); the full name is its tooltip.
-          reactionSizeShort: t(`player.reactions.sizes.${reactionSize}`, { defaultValue: '' }),
           onTogglePip: handleTogglePip,
           videoEnded,
           onReplay: handleReplay,

@@ -5,8 +5,6 @@
     "reactToMoment": "Reagisci a questo momento",
     "mute": "Disattiva audio",
     "unmute": "Riattiva audio",
-    "playerSize": "Dimensione del player: {{size}}",
-    "sizeStandard": "Standard",
     "pip": "Picture-in-Picture",
     "autoplayOn": "Riproduzione automatica: attiva",
     "autoplayOff": "Riproduzione automatica: disattiva",

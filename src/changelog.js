@@ -18,6 +18,18 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.90',
+    category: 'watch',
+    date: '2026-11-16',
+    summary: 'The player size button is gone; theater mode gives you the bigger player.',
+  },
+  {
+    version: '2.0.89',
+    category: 'shorts',
+    date: '2026-11-16',
+    summary: 'Tap the series line on a Short to see every part and jump to any of them.',
+  },
+  {
     version: '2.0.88',
     category: 'general',
     date: '2026-11-16',

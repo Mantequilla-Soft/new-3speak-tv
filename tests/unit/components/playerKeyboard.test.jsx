@@ -77,6 +77,25 @@ describe('loop and theater toggles', () => {
   })
 })
 
+describe('player size and quality', () => {
+  it('has no player size button any more: theater mode covers it', () => {
+    controls({ onToggleTheater: vi.fn(), onCycleReactionSize: vi.fn() })
+    expect(screen.queryByRole('button', { name: /Player size/ })).toBeNull()
+    expect(document.querySelector('.vc-btn--resize')).toBeNull()
+  })
+
+  it('the quality choices wrap at their own width, so a long Auto label fits', () => {
+    const onQualityChange = vi.fn()
+    controls({ qualityLevels: [{ index: 0, height: 480 }, { index: 1, height: 1080 }], currentQuality: -1, onQualityChange })
+    fireEvent.click(screen.getAllByRole('button', { name: 'Quality' })[0])
+    const auto = screen.getByRole('button', { name: 'Auto' })
+    expect(auto.parentElement).toHaveClass('vc-quality-grid')
+    expect(auto).toHaveAttribute('aria-pressed', 'true')
+    fireEvent.click(screen.getByRole('button', { name: '1080p' }))
+    expect(onQualityChange).toHaveBeenCalledWith(1)
+  })
+})
+
 describe('the ? sheet', () => {
   it('lists the keys in a dialog with a header, theater only where there is room', () => {
     const onClose = vi.fn()
