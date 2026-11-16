@@ -104,13 +104,58 @@
 }
 
 /* Unobtrusive hive.io credit in the static shell (index.html). It sits
-   outside #root so the SPA mount leaves it in the document. */
+   outside #root so the SPA mount leaves it in the document, which is what the
+   followed link is for (PR #569): every page's HTML carries it. On screen it is
+   a thin bar docked at the bottom on desktop and hidden on phones and tablets,
+   where the bottom navigation sits (owner 2026-11-16); the link stays in the
+   HTML either way. Fixed elements clear it through --bottom-bar-clearance
+   (styles/design-system.scss). */
 .site-hive-footer {
-  text-align: center;
-  padding: 10px 16px calc(12px + var(--bottom-bar-clearance, 0px));
+  display: none;
   font-size: 12px;
   line-height: 1.4;
   color: var(--muted, #666);
+}
+.site-hive-footer p {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+/* The centred dot between Powered by Hive and Maintained by Mantequilla-Soft. */
+.site-hive-footer__sep {
+  padding: 0 10px;
+  opacity: 0.6;
+}
+@media (min-width: 1025px) {
+  /* `body` outranks the inline style in index.html that hides the bar until
+     this stylesheet has loaded.
+     A slim version of the top bar (components/nav/nav.scss .nav-bar): the
+     border and radius, more see-through, only as wide as its text,
+     floating centred just above the bottom edge. */
+  body .site-hive-footer {
+    position: fixed;
+    left: 50%;
+    bottom: var(--hive-bar-gap);
+    translate: -50% 0;
+    z-index: 40;
+    width: max-content;
+    max-width: calc(100vw - 2 * var(--page-pad));
+    height: var(--hive-bar-h);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 18px;
+    background: color-mix(in srgb, var(--surface) 30%, transparent);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    border: 1px solid color-mix(in srgb, var(--text) 7%, transparent);
+    border-radius: var(--r-xl);
+  }
+  /* The end of every page stays above the bar. */
+  body {
+    padding-bottom: calc(var(--hive-bar-h) + 2 * var(--hive-bar-gap));
+  }
 }
 .site-hive-footer a {
   display: inline-flex;
@@ -119,14 +164,19 @@
   color: inherit;
   text-decoration: none;
 }
-/* The Hive mark, as in the profile menu and the FAQ. Drawn from CSS so the
-   link text crawlers read stays exactly "Powered by Hive". */
+/* The Hive mark, as in the profile menu and the FAQ, and the Mantequilla
+   butter. Drawn from CSS so the link text crawlers read stays exactly
+   "Powered by Hive". */
 .site-hive-footer a::before {
   content: "";
   flex: none;
   width: 16px;
   height: 14px;
   background: url('./assets/image/hive-mark.png') center / contain no-repeat;
+}
+.site-hive-footer a.site-hive-footer__maintainer::before {
+  height: 16px;
+  background-image: url('./assets/image/mantequilla-mark.png');
 }
 .site-hive-footer a:hover,
 .site-hive-footer a:focus-visible {
@@ -135,8 +185,8 @@
 }
 
 /* Full-height views (map, Shorts, story feed, spotlight) fill the viewport, so
-   the shell footer would add a strip of page scroll under them. The link stays
-   in the HTML for crawlers; it is only hidden on screen there. */
+   the bar would cover their bottom edge. The link stays in the HTML for
+   crawlers; it is only hidden on screen there. */
 body:has(.galaxy-page, .short-main, .shorts-story-feed, .spotlight-page) .site-hive-footer {
   display: none;
 }

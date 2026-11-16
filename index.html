@@ -134,6 +134,9 @@
       Keep it that way: anything loaded from another origin leaks visitor IPs and can
       drag the site back into cookie-consent territory.
     -->
+    <!-- The hive.io credit below stays hidden until App.css arrives and docks it,
+         so a reload does not flash it as plain links first. -->
+    <style>.site-hive-footer{display:none}</style>
   </head>
   <body>
     <div id="root"></div>
@@ -141,7 +144,7 @@
          remove it; the static shell is what curl (and Googlebot's first pass)
          see on every route, including home and watch pages. -->
     <footer class="site-hive-footer">
-      <p><a href="https://hive.io" target="_blank" rel="noopener">Powered by Hive</a></p>
+      <p><a href="https://hive.io" target="_blank" rel="noopener">Powered by Hive</a><span class="site-hive-footer__sep" aria-hidden="true">·</span><a class="site-hive-footer__maintainer" href="https://mantequilla-soft.com" target="_blank" rel="noopener">Maintained by Mantequilla-Soft</a></p>
     </footer>
     <script type="module" src="/src/main.jsx"></script>
   </body>
