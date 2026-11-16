@@ -14,8 +14,12 @@ const post = vi.hoisted(() => vi.fn(async () => ({ data: {} })))
 vi.mock('../../../src/utils/hiveNode', () => ({ getHiveClient: () => ({ call: async () => hive.post }) }))
 vi.mock('../../../src/hive-api/aioha', () => ({ commentWithAioha: comment }))
 vi.mock('../../../src/utils/uploadThumbnail', () => ({ uploadThumbnail: vi.fn(async () => 'https://images.example/up.png') }))
-vi.mock('../../../src/utils/config', () => ({ CHECKER_URL: 'https://checker.example', CHECKER_API_KEY: 'k' }))
-vi.mock('axios', () => ({ default: { put, post } }))
+vi.mock('../../../src/utils/config', async (orig) => ({ ...(await orig()), CHECKER_URL: 'https://checker.example', CHECKER_API_KEY: 'k' }))
+// The editor's own imports make an axios client; this one stays a stand-in.
+vi.mock('axios', () => {
+  const client = { get: vi.fn(async () => ({ data: {} })), put, post, interceptors: { request: { use() {} }, response: { use() {} } } }
+  return { default: { put, post, create: () => client } }
+})
 
 const { default: EditAudioModal } = await import('../../../src/components/AudioEdit/EditAudioModal.jsx')
 

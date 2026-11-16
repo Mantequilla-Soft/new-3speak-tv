@@ -23,6 +23,7 @@ import { fetchCreatorAdPrefs, syncVideoAdChoice } from '../../lib/advertiseData'
 import { adsEnabledFor } from '../../utils/config';
 import { splitShortHeading, withShortHeading, SHORT_TITLE_MAX } from '../../utils/shortTitle';
 import './EditVideoModal.scss';
+import Composer from '../common/Composer/Composer';
 
 // Every toast from this module is headed "Video"; the message becomes the
 // line under it. See utils/toast.js.
@@ -1011,13 +1012,14 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
 
               <div className={cx('v2-field', 'evm-field', 'evm-field--grow', !bodyValid && 'is-error')}>
                 <label className="v2-eyebrow" htmlFor="evm-body-input">{t('watch.edit.description')}</label>
-                <textarea
-                  id="evm-body-input"
-                  className="v2-input is-area edit-video-textarea"
+                {/* The one editor (common/Composer), as on every post field. */}
+                <Composer
+                  mode="full"
+                  expandable={false}
                   value={body}
-                  onChange={(e) => setBody(e.target.value)}
-                  rows={10}
+                  onChange={setBody}
                   placeholder={t('watch.edit.descriptionPlaceholder')}
+                  textareaProps={{ id: 'evm-body-input' }}
                 />
                 <span className={cx('v2-field__hint', 'edit-video-hint', !bodyValid && 'error')}>{t('watch.edit.markdownHint')}</span>
                 {!isShort && (

@@ -9,6 +9,7 @@ import { hasThreespeakPostingAuth, addThreespeakToPostingAuth } from '../../util
 import { useAppStore } from '../../lib/store';
 import { oaEnvelope, threespeakVideo, probeVideoOrientation, OA_COMMENT } from '../../utils/openAttribute';
 import './ReactVideoModal.scss';
+import Composer from '../common/Composer/Composer';
 
 // Every toast from this module is headed "Video"; the message becomes the
 // line under it. See utils/toast.js.
@@ -569,11 +570,11 @@ function ReactVideoTab({ author, permlink, currentTime, onPosted, onRecordStart 
       {!recording && (
       <>
       {/* Description */}
-      <textarea
-        className="v2-input is-area rvt-description"
-        placeholder={t('player.reactionUpload.descriptionPlaceholder')}
+      {/* The one editor (common/Composer): the reaction's post text. */}
+      <Composer
         value={description}
-        onChange={(e) => setDescription(e.target.value)}
+        onChange={setDescription}
+        placeholder={t('player.reactionUpload.descriptionPlaceholder')}
         disabled={uploading}
       />
 

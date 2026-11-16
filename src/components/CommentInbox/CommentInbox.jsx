@@ -16,6 +16,7 @@ import { commentWithAioha } from '../../hive-api/aioha';
 import { toastIn } from '../../utils/toast';
 import { fetchCommentInbox, setCommentDone, filterInbox, flagCounts, INBOX_FLAGS } from '../../lib/commentInbox';
 import { Icon } from '../v2/Icon';
+import Composer from '../common/Composer/Composer';
 import { markByReputation } from '../../utils/reputation';
 import { markByHidden, dropMuted } from '../../utils/hiddenCreators';
 import './CommentInbox.scss';
@@ -49,9 +50,10 @@ function InboxItem({ user, item, onAnswered, onDone }) {
   const postUrl = `/@${user}/${item.rootPermlink}`;
   const title = item.rootTitle || item.rootPermlink;
 
-  const send = async () => {
+  // `meta`: what the editor adds to json_metadata (a poll's fields).
+  const send = async ({ meta = {} } = {}) => {
     const body = text.trim();
-    if (!body || posting) return;
+    if (!body || posting) return false;
     setPosting(true);
     try {
       const result = await commentWithAioha(
@@ -60,15 +62,17 @@ function InboxItem({ user, item, onAnswered, onDone }) {
         `re-${item.permlink}-${Date.now()}`.toLowerCase().replace(/[^a-z0-9-]/g, '').slice(0, 255),
         '',
         body,
-        { app: '3speak/new-version' },
+        { app: '3speak/new-version', ...meta },
       );
       if (!result?.success) throw new Error(result?.error || 'failed');
       toast.success(t('creator.inbox.replied'));
       setText('');
       setMode(null);
       onAnswered(item);
+      return true;
     } catch {
       toast.error(t('creator.inbox.replyFailed'));
+      return false;
     } finally {
       setPosting(false);
     }
@@ -130,21 +134,21 @@ function InboxItem({ user, item, onAnswered, onDone }) {
 
       {mode === 'reply' && (
         <div className="ci-composer">
-          <textarea
-            className="v2-input ci-textarea"
+          {/* The one editor (common/Composer), as in every comment box. */}
+          <Composer
             value={text}
+            onChange={setText}
             rows={3}
             autoFocus
             disabled={posting}
-            aria-label={t('creator.inbox.replyTo', { author: item.author })}
             placeholder={t('creator.inbox.replyTo', { author: item.author })}
-            onChange={(e) => setText(e.target.value)}
-            onKeyDown={(e) => { if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) send(); }}
+            textareaProps={{ 'aria-label': t('creator.inbox.replyTo', { author: item.author }) }}
+            polls
+            onCancel={() => setMode(null)}
+            onSubmit={send}
+            submitting={posting}
+            submitLabel={t('creator.inbox.send')}
           />
-          <div className="ci-composer-actions">
-            <Button size={36} variant="ghost" onClick={() => setMode(null)}>{t('common.actions.cancel')}</Button>
-            <Button size={36} variant="primary" icon="send" loading={posting} disabled={!text.trim()} onClick={send}>{t('creator.inbox.send')}</Button>
-          </div>
         </div>
       )}
       {mode === 'video' && (

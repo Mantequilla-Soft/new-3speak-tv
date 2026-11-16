@@ -107,11 +107,6 @@
 
   .rvt-pick { align-self: flex-start; }
 
-  .rvt-description {
-    min-height: 56px;
-    resize: vertical;
-    @include v2.mobile { font-size: 16px; }
-  }
 
   .rvt-toggle { color: var(--text); min-height: 32px; }
 

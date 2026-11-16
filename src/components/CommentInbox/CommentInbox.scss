@@ -143,19 +143,7 @@
     gap: 8px;
   }
 
-  .ci-textarea {
-    height: auto;
-    min-height: 84px;
-    padding: 10px 12px;
-    resize: vertical;
-    font: inherit;
-  }
 
-  .ci-composer-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 6px;
-  }
 
   .ci-react {
     border-radius: var(--r-lg);

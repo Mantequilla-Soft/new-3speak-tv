@@ -53,6 +53,7 @@ import { sanitizeAudiograms, publishAudiogramShorts } from '../../utils/audiogra
 import { playlistTypeFields, trackCategoryToKind, storedPlaylistType } from '../../lib/playlistType';
 import AudioClip from '../AudioClip/AudioClip';
 import { audioCategorySymbol } from '../AudioTile/audioSymbols';
+import Composer from '../common/Composer/Composer';
 
 // Every toast from this module is headed "Upload"; the message becomes the
 // line under it. See utils/toast.js.
@@ -3074,13 +3075,14 @@ function TracksStep({
         <p className="audio-upload-apply-note">
           <Trans i18nKey="audio.upload.tracks.applyNote" count={tracks.length} components={{ b: <b /> }} />
         </p>
-        <textarea
-          className="audio-upload-post-desc"
+        {/* The one editor (common/Composer), as on every post field. */}
+        <Composer
+          mode="full"
+          expandable={false}
           placeholder={t('audio.upload.tracks.sharedDescription')}
-          rows={3}
-          maxLength={5000}
+          textareaProps={{ maxLength: 5000 }}
           value={sharedDesc}
-          onChange={(e) => setSharedDesc(e.target.value)}
+          onChange={setSharedDesc}
         />
         <ThumbPicker
           value={sharedThumb}
@@ -3158,13 +3160,13 @@ function TracksStep({
 
             {/* The text this track's comment (or snap) carries. Always in view:
                 hidden behind Edit, people only ever found the shared field. */}
-            <textarea
-              className="audio-upload-post-desc audio-upload-track-text"
-              placeholder={mode === 'album' ? t('audio.upload.tracks.commentText') : t('audio.upload.tracks.snapText')}
+            <Composer
+              textareaClassName="textarea-box audio-upload-track-text"
               rows={tr.transcriptText ? 6 : 2}
-              maxLength={tr.transcriptText ? TRANSCRIPT_TEXT_MAX : 5000}
+              placeholder={mode === 'album' ? t('audio.upload.tracks.commentText') : t('audio.upload.tracks.snapText')}
+              textareaProps={{ maxLength: tr.transcriptText ? TRANSCRIPT_TEXT_MAX : 5000 }}
               value={tr.desc || ''}
-              onChange={(e) => patchTrack(tr.id, { desc: e.target.value })}
+              onChange={(desc) => patchTrack(tr.id, { desc })}
             />
             {transcriptPropsFor && (
               <TranscriptControl {...transcriptPropsFor(tr)} disabled={shortsLocked || editLocked(tr.id)} />

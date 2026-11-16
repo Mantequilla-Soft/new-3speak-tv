@@ -24,7 +24,7 @@ const SPLIT_MIN_SHARE = 0.3;
 
 // The preview renders the way the destination does: a video description never
 // embeds a 3Speak player (its page already plays one), a snap or a comment does.
-const RENDERERS = { 'post-body': getPostBodyRenderer, snap: getHiveRenderer, comment: getHiveRenderer };
+const RENDERERS = { 'post-body': () => getPostBodyRenderer(), snap: () => getHiveRenderer(), comment: () => getHiveRenderer() };
 
 // One 28px toolbar button: an icon, its name as the tooltip and label.
 function Tool({ icon, title, onClick, ...rest }) {
@@ -108,7 +108,7 @@ export default function Composer({
   const emoji = useEmojiShortcodes(inputRef, value, onChange);
   const images = useCommentImageUpload(inputRef, value, onChange, user || incubationHandle);
   const [full, setFull] = useState(mode === 'full');
-  const getRenderer = RENDERERS[previewContext] || getHiveRenderer;
+  const getRenderer = RENDERERS[previewContext] || RENDERERS.comment;
 
   // The poll: the parent's (`pollState`, a post form) or the editor's own.
   const [ownPollOn, setOwnPollOn] = useState(false);

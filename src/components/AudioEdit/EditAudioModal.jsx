@@ -14,6 +14,7 @@ import { Icon } from '../v2/Icon';
 import { cx } from '../v2/helpers';
 import '../playVideo/EditVideoModal.scss';
 import './EditAudioModal.scss';
+import Composer from '../common/Composer/Composer';
 
 // Every toast from this module is headed "Audio"; see utils/toast.js.
 const toast = toastIn('Audio');
@@ -336,13 +337,14 @@ export default function EditAudioModal({ isOpen, onClose, author, permlink, rowT
 
               <div className="v2-field evm-field evm-field--grow">
                 <label className="v2-eyebrow" htmlFor="eam-notes-input">{t('watch.edit.description')}</label>
-                <textarea
-                  id="eam-notes-input"
-                  className="v2-input is-area edit-video-textarea"
+                {/* The one editor (common/Composer), as on every post field. */}
+                <Composer
+                  mode="full"
+                  expandable={false}
                   value={notes}
-                  onChange={(e) => setNotes(e.target.value)}
-                  rows={8}
+                  onChange={setNotes}
                   placeholder={t('audio.edit.notesPlaceholder')}
+                  textareaProps={{ id: 'eam-notes-input' }}
                 />
                 <span className="v2-field__hint edit-video-hint">{t('watch.edit.markdownHint')}</span>
                 {original.parts.hasHead && (
