@@ -359,7 +359,8 @@
     "postShort": "ショートを投稿",
     "postStory": "ストーリーを投稿",
     "postVideo": "動画を投稿",
-    "backToTimeline": "タイムラインに戻る"
+    "backToTimeline": "タイムラインに戻る",
+    "benesDeclined": "報酬を辞退しました：この人たちにも何も入りませんが、クレジットは投稿に残ります。"
   },
   "publishing": {
     "titleShort": "ショートを公開中",

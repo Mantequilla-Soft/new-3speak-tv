@@ -362,7 +362,8 @@
     "postShort": "Shorts Paylaş",
     "postStory": "Hikâyeyi paylaş",
     "postVideo": "Video Paylaş",
-    "backToTimeline": "Zaman çizelgesine dön"
+    "backToTimeline": "Zaman çizelgesine dön",
+    "benesDeclined": "Ödeme reddedildi: onlar da bir şey almaz, anılma gönderide kalır."
   },
   "publishing": {
     "titleShort": "Short yayınlanıyor",

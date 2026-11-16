@@ -362,7 +362,8 @@
     "postShort": "Post Short",
     "postStory": "Post Story",
     "postVideo": "Post Video",
-    "backToTimeline": "Back to timeline"
+    "backToTimeline": "Back to timeline",
+    "benesDeclined": "Payout declined: they get nothing either, the credit stays on the post."
   },
   "publishing": {
     "titleShort": "Publishing short",

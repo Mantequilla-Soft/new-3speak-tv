@@ -359,7 +359,8 @@
     "postShort": "Posting Shorts",
     "postStory": "Posting Story",
     "postVideo": "Posting Video",
-    "backToTimeline": "Kembali ke linimasa"
+    "backToTimeline": "Kembali ke linimasa",
+    "benesDeclined": "Pembayaran ditolak: mereka juga tidak mendapat apa-apa, kreditnya tetap di postingan."
   },
   "publishing": {
     "titleShort": "Menerbitkan Short",

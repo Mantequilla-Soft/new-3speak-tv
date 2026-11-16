@@ -362,7 +362,8 @@
     "postShort": "Short plaatsen",
     "postStory": "Story plaatsen",
     "postVideo": "Video plaatsen",
-    "backToTimeline": "Terug naar tijdlijn"
+    "backToTimeline": "Terug naar tijdlijn",
+    "benesDeclined": "Uitbetaling geweigerd: zij krijgen ook niets, de vermelding blijft bij de post."
   },
   "publishing": {
     "titleShort": "Short publiceren",

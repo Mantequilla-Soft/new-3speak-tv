@@ -362,7 +362,8 @@
     "postShort": "Chapisha short",
     "postStory": "Chapisha Hadithi",
     "postVideo": "Chapisha video",
-    "backToTimeline": "Rudi kwenye ratiba ya muda"
+    "backToTimeline": "Rudi kwenye ratiba ya muda",
+    "benesDeclined": "Malipo yamekataliwa: wao pia hawapati chochote, utambuzi unabaki kwenye chapisho."
   },
   "publishing": {
     "titleShort": "Inachapisha Short",

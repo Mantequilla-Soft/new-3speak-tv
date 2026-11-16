@@ -320,6 +320,7 @@
   align-items: flex-end;
   gap: 4px;
 }
+.ep-benes__note { max-width: 240px; font-size: 12px; text-align: right; }
 .ep-bene { @include v2.text(meta); font-weight: 700; .num { color: var(--accent); } }
 
 .ep-tags {

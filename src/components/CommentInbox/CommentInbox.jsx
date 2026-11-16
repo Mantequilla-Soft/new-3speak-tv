@@ -15,6 +15,9 @@ import { stripTimestampEmbeds } from '../../utils/timestamps';
 import { commentWithAioha } from '../../hive-api/aioha';
 import { toastIn } from '../../utils/toast';
 import { fetchCommentInbox, setCommentDone, filterInbox, flagCounts, INBOX_FLAGS } from '../../lib/commentInbox';
+import { Icon } from '../v2/Icon';
+import { markByReputation } from '../../utils/reputation';
+import { markByHidden, dropMuted } from '../../utils/hiddenCreators';
 import './CommentInbox.scss';
 
 const toast = toastIn('Comment');
@@ -42,6 +45,7 @@ function InboxItem({ user, item, onAnswered, onDone }) {
   const [mode, setMode] = useState(null); // null | 'reply' | 'video'
   const [text, setText] = useState('');
   const [posting, setPosting] = useState(false);
+  const [reveal, setReveal] = useState(false);
   const postUrl = `/@${user}/${item.rootPermlink}`;
   const title = item.rootTitle || item.rootPermlink;
 
@@ -69,6 +73,22 @@ function InboxItem({ user, item, onAnswered, onDone }) {
       setPosting(false);
     }
   };
+
+  // A low score or a creator you hid: a one-line bar with Show, as under a video.
+  if ((item.isLowReputation || item.isHidden) && !reveal) {
+    return (
+      <div className="ci-hidden-bar">
+        <Icon name="visibility_off" size={18} />
+        <span>{item.isLowReputation ? t('comments.section.hiddenLowScore') : t('comments.section.hiddenComment')}</span>
+        <button
+          type="button"
+          className="ci-hidden-show"
+          aria-label={t('comments.section.showComment', { user: item.author })}
+          onClick={() => setReveal(true)}
+        >{t('comments.section.show')}</button>
+      </div>
+    );
+  }
 
   return (
     <article className={`ci-item${item.done ? ' is-done' : ''}`}>
@@ -155,8 +175,14 @@ export default function CommentInbox({ user }) {
   const load = useCallback(() => {
     setError(false);
     setItems(null);
+    // The same filters as the comments under a video: accounts on the comment
+    // mutelist are left out, low scores and hidden creators fold away.
     fetchCommentInbox(user)
-      .then((r) => { setItems(r.items); setDays(r.days); })
+      .then(async (r) => {
+        const marked = dropMuted(await markByHidden(await markByReputation(r.items || []), { viewer: user }));
+        setItems(marked);
+        setDays(r.days);
+      })
       .catch(() => setError(true));
   }, [user]);
   useEffect(() => { load(); }, [load]);

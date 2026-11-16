@@ -362,7 +362,8 @@
     "postShort": "I-post ang Short",
     "postStory": "I-post ang Story",
     "postVideo": "I-post ang Video",
-    "backToTimeline": "Bumalik sa timeline"
+    "backToTimeline": "Bumalik sa timeline",
+    "benesDeclined": "Tinanggihan ang payout: wala rin silang makukuha, nananatili ang credit sa post."
   },
   "publishing": {
     "titleShort": "Pine-publish ang Short",

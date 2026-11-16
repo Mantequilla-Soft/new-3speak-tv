@@ -24,6 +24,15 @@ vi.mock('../../../src/components/ReactVideoModal/ReactVideoModal', () => ({
 const success = vi.hoisted(() => vi.fn())
 const error = vi.hoisted(() => vi.fn())
 vi.mock('../../../src/utils/toast', () => ({ toastIn: () => ({ success, error }) }))
+// The comments section's filters, with stand-in Hive lookups: @spammy has a low
+// score, @mutedbot is on the comment mutelist.
+vi.mock('../../../src/utils/reputation', () => ({
+  markByReputation: async (list) => list.map((i) => ({ ...i, isLowReputation: i.author === 'spammy' })),
+}))
+vi.mock('../../../src/utils/hiddenCreators', async () => ({
+  ...(await vi.importActual('../../../src/utils/hiddenCreators')),
+  markByHidden: async (list) => list.map((i) => (i.author === 'mutedbot' ? { ...i, isMuted: true } : i)),
+}))
 
 const { default: CommentInbox, INBOX_PAGE } = await import('../../../src/components/CommentInbox/CommentInbox.jsx')
 
@@ -51,6 +60,20 @@ beforeEach(() => {
 const articles = () => screen.queryAllByRole('article')
 
 describe('comment inbox', () => {
+  it('leaves out the comment mutelist and folds low scores away, as under a video', async () => {
+    fetchCommentInbox.mockResolvedValue({ days: 90, items: [
+      item('re-1', 'What camera do you use?'),
+      item('re-5', 'Buy followers here', { author: 'mutedbot' }),
+      item('re-6', 'Low score words', { author: 'spammy' }),
+    ] })
+    const { user } = renderWithProviders(<CommentInbox user="badadib" />)
+    expect(await screen.findByText('What camera do you use?')).toBeInTheDocument()
+    expect(screen.queryByText('Buy followers here')).not.toBeInTheDocument()
+    expect(screen.queryByText('Low score words')).not.toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: /Show/ }))
+    expect(await screen.findByText('Low score words')).toBeInTheDocument()
+  })
+
   it('opens on the unanswered ones, with what each one is', async () => {
     renderWithProviders(<CommentInbox user="badadib" />)
     expect(await screen.findByText('What camera do you use?')).toBeInTheDocument()

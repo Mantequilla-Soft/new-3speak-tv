@@ -365,7 +365,8 @@
     "postShort": "Pubblica short",
     "postStory": "Pubblica storia",
     "postVideo": "Pubblica video",
-    "backToTimeline": "Torna alla timeline"
+    "backToTimeline": "Torna alla timeline",
+    "benesDeclined": "Pagamento rifiutato: nemmeno loro ricevono nulla, il credito resta sul post."
   },
   "publishing": {
     "titleShort": "Pubblicazione dello Short",

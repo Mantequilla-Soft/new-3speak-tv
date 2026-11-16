@@ -368,7 +368,8 @@
     "postShort": "Опублікувати Shorts",
     "postStory": "Опублікувати історію",
     "postVideo": "Опублікувати відео",
-    "backToTimeline": "Назад до таймлайну"
+    "backToTimeline": "Назад до таймлайну",
+    "benesDeclined": "Виплату відхилено: вони теж нічого не отримають, згадка лишається в дописі."
   },
   "publishing": {
     "titleShort": "Публікація Short",

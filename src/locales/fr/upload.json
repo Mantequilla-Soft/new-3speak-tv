@@ -365,7 +365,8 @@
     "postShort": "Publier le Short",
     "postStory": "Publier la story",
     "postVideo": "Publier la vidéo",
-    "backToTimeline": "Retour à la chronologie"
+    "backToTimeline": "Retour à la chronologie",
+    "benesDeclined": "Paiement refusé : ils ne reçoivent rien non plus, le crédit reste sur la publication."
   },
   "publishing": {
     "titleShort": "Publication du Short",

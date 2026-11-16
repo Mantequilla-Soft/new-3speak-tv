@@ -288,9 +288,9 @@ function EmbedPreview() {
   }
   // Show what publishing will actually set: the chosen list plus the locked
   // splits (3Speak fund, encoder, remix author), via the same rule publish uses.
-  // Declining rewards publishes with no beneficiaries at all.
+  // Shown (and published) with a declined payout too: they earn nothing then,
+  // which the card says.
   const userBeneficiaries = (() => {
-    if (declineRewards) return [];
     const beneMap = new Map();
     for (const b of beneList) {
       if (b && b.account) beneMap.set(b.account, Math.max(beneMap.get(b.account) || 0, Number(b.weight) || 0));
@@ -543,6 +543,7 @@ function EmbedPreview() {
                         {userBeneficiaries.map((b, i) => (
                           <span className="ep-bene" key={i}>@{b.account} · <span className="num">{(Number(b.weight) / 100).toFixed(0)}%</span></span>
                         ))}
+                        {declineRewards && <span className="ep-muted ep-benes__note">{t("upload.review.benesDeclined")}</span>}
                       </span>
                     )}
                   </span>

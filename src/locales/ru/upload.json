@@ -368,7 +368,8 @@
     "postShort": "Опубликовать Shorts",
     "postStory": "Опубликовать историю",
     "postVideo": "Опубликовать видео",
-    "backToTimeline": "Назад к таймлайну"
+    "backToTimeline": "Назад к таймлайну",
+    "benesDeclined": "Выплата отклонена: они тоже ничего не получат, упоминание остаётся в посте."
   },
   "publishing": {
     "titleShort": "Публикация Short",

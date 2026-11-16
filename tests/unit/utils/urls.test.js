@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { profilePath, watchPath, parseHivePath, isWatchPath, isProfilePath } from '../../../src/utils/urls'
+import { profilePath, watchPath, parseHivePath, isWatchPath, isProfilePath, lowercaseAccountPath } from '../../../src/utils/urls'
 
 describe('building addresses', () => {
   it('a profile is /@user, with an optional query', () => {
@@ -43,3 +43,15 @@ describe('reading addresses', () => {
     expect(isProfilePath('/@alice/my-vid')).toBe(false)
   })
 })
+
+describe('lowercaseAccountPath', () => {
+  it('lowercases the account of a /@ address, and only that', () => {
+    expect(lowercaseAccountPath('/@Vynith')).toBe('/@vynith')
+    expect(lowercaseAccountPath('/@BadAdib/My-Video')).toBe('/@badadib/My-Video')
+  })
+  it('leaves a lowercase or a non-/@ address alone', () => {
+    expect(lowercaseAccountPath('/@badadib/shorts')).toBe('/@badadib/shorts')
+    expect(lowercaseAccountPath('/Shorts')).toBe('/Shorts')
+  })
+})
+

@@ -51,6 +51,14 @@ export function parseHivePath(pathname) {
   return { kind: 'post', author: user, permlink: rest };
 }
 
+/**
+ * The same /@… address with the account name in lowercase, as Hive account
+ * names always are (/@Vynith → /@vynith), or the pathname unchanged.
+ */
+export function lowercaseAccountPath(pathname) {
+  return String(pathname || '').replace(/^\/@([^/]+)/, (_, name) => `/@${name.toLowerCase()}`);
+}
+
 /** True on a video's watch page, old or new address. */
 export function isWatchPath(pathname) {
   return pathname === '/watch' || parseHivePath(pathname)?.kind === 'post';

@@ -164,3 +164,33 @@
     min-width: 0;
   }
 }
+
+// A comment from a low score or a hidden creator, folded (as in CommentSection).
+.ci-hidden-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 40px;
+  padding: 6px 6px 6px 12px;
+  border-radius: var(--r-lg);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  font-size: 13px;
+  color: var(--muted);
+
+  > span { flex: 1; min-width: 0; }
+}
+
+.ci-hidden-show {
+  height: 28px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+  color: var(--text);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  &:hover { background: var(--bg-hover); }
+}
+

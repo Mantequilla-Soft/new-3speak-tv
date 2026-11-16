@@ -362,7 +362,8 @@
     "postShort": "Short posten",
     "postStory": "Story posten",
     "postVideo": "Video posten",
-    "backToTimeline": "Zurück zur Zeitleiste"
+    "backToTimeline": "Zurück zur Zeitleiste",
+    "benesDeclined": "Auszahlung abgelehnt: Sie bekommen auch nichts, die Nennung bleibt am Beitrag."
   },
   "publishing": {
     "titleShort": "Short wird veröffentlicht",

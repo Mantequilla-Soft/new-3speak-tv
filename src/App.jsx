@@ -29,7 +29,7 @@ import ProfileNav from "./components/nav/ProfileNav";
 import ScrollToTop from "./components/ScrollToTop";
 import RouteErrorBoundary from "./components/RouteErrorBoundary";
 import lazyRoute from "./utils/lazyRoute";
-import { parseHivePath, profilePath, watchPath } from "./utils/urls";
+import { parseHivePath, profilePath, watchPath, lowercaseAccountPath } from "./utils/urls";
 import { ensure3SpeakStatus, getCachedPost } from "./utils/threeSpeakDetection";
 import { fetchPlaySource } from "./lib/videoData";
 import { useQueryClient } from "@tanstack/react-query";
@@ -233,6 +233,12 @@ const toast = toastIn('Sign in');
 // parses the path and hands the names to the pages as props.
 const HiveLinkRedirect = () => {
   const location = useLocation();
+  // Hive account names are lowercase: /@Vynith is @vynith. Moved in place, so
+  // the address bar shows the real one and every lookup below finds the account.
+  const lowered = lowercaseAccountPath(location.pathname);
+  if (lowered !== location.pathname) {
+    return <Navigate to={`${lowered}${location.search}${location.hash}`} state={location.state} replace />;
+  }
   const hit = parseHivePath(location.pathname);
   if (!hit) return <NotFound />;
   if (hit.kind === 'shorts') {
@@ -303,7 +309,7 @@ const LegacyWatchRedirect = () => {
 const LegacyProfileRedirect = () => {
   const { user } = useParams();
   const location = useLocation();
-  return <Navigate to={profilePath(user, location.search)} state={location.state} replace />;
+  return <Navigate to={profilePath(String(user || '').toLowerCase(), location.search)} state={location.state} replace />;
 };
 
 // /login and /auth/login open the aioha modal and redirect to home

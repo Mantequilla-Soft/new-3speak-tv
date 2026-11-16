@@ -1975,53 +1975,52 @@ export function EmbedUploadProvider({ children }) {
         } : {}),
       };
 
-      // Build comment_options. When the author is declining payout, skip
-      // beneficiaries entirely — declaring beneficiaries against a 0 HBD
-      // payout reads weird on-chain and an empty beneficiaries extension
-      // would be rejected by Hive.
+      // Build comment_options. The beneficiaries go on the post even when the
+      // author declines the payout: they earn nothing then, but the credit to
+      // a remix's or a sound's creator stays on Hive with the post, as the
+      // review step shows it.
       let allBeneficiaries = [];
-      if (!declineRewards) {
-        let parsedBeneficiaries = beneficiaries;
-        if (typeof parsedBeneficiaries === 'string') {
-          try { parsedBeneficiaries = JSON.parse(parsedBeneficiaries); } catch { parsedBeneficiaries = []; }
-        }
+      let parsedBeneficiaries = beneficiaries;
+      if (typeof parsedBeneficiaries === 'string') {
+        try { parsedBeneficiaries = JSON.parse(parsedBeneficiaries); } catch { parsedBeneficiaries = []; }
+      }
 
-        // Start with user-set beneficiaries (from the UI list, includes locked items)
-        const beneMap = new Map();
-        for (const b of (Array.isArray(parsedBeneficiaries) ? parsedBeneficiaries : [])) {
-          beneMap.set(b.account, Math.max(beneMap.get(b.account) || 0, b.weight));
-        }
+      // Start with user-set beneficiaries (from the UI list, includes locked items)
+      const beneMap = new Map();
+      for (const b of (Array.isArray(parsedBeneficiaries) ? parsedBeneficiaries : [])) {
+        beneMap.set(b.account, Math.max(beneMap.get(b.account) || 0, b.weight));
+      }
 
       // Apply locked beneficiaries: 10% threespeakfund + 1% encoder.pay for
-      // non-Pro users (both skipped for Pro subscribers) + 5% to the original
-      // creator on remix/clip (kept for both tiers). encoder.pay rides on
+      // non-Pro users (both skipped for Pro subscribers) + the original
+      // creator's share on a remix/clip, 15% stepping down a chain (kept for
+      // both tiers). encoder.pay rides on
       // embed uploads specifically because they go through 3Speak's encoder.
       enforceLockedBeneficiaries(beneMap, {
-        isPremium,
-        username: user,
-        includeEncoder: true,
-        originalAuthor: originalAuthor && originalPermlink ? originalAuthor : null,
-        remixAuthors: originalAuthor && originalPermlink ? remixChainAuthors(remixChain, user) : [],
-        soundAuthors: soundAuthorsOf(musicCredits, user),
+      isPremium,
+      username: user,
+      includeEncoder: true,
+      originalAuthor: originalAuthor && originalPermlink ? originalAuthor : null,
+      remixAuthors: originalAuthor && originalPermlink ? remixChainAuthors(remixChain, user) : [],
+      soundAuthors: soundAuthorsOf(musicCredits, user),
       });
       // A stream clip's share: the clipper (host posts) or the host (clipper posts).
       applyClipShare(beneMap, streamClip, user);
 
-        // The collaborator's split: their share of what the author keeps after
-        // every other beneficiary (lib/collabs.js collabWeight). Skipped, with a
-        // note in the log, when Hive's beneficiary limit leaves no room.
-        if (collab) {
-          const others = [...beneMap.entries()].filter(([a]) => a !== collab.account).map(([account, weight]) => ({ account, weight }));
-          const w = collabWeight(others, collab.split);
-          if (w) beneMap.set(collab.account, w);
-          else addMessage(t('social.collab.noRoom', { user: collab.account }), 'error');
-        }
-
-        // Convert map to sorted array (sorted by account name — required by Hive protocol)
-        allBeneficiaries = [...beneMap.entries()]
-          .map(([account, weight]) => ({ account, weight }))
-          .sort((a, b) => a.account.localeCompare(b.account));
+      // The collaborator's split: their share of what the author keeps after
+      // every other beneficiary (lib/collabs.js collabWeight). Skipped, with a
+      // note in the log, when Hive's beneficiary limit leaves no room.
+      if (collab) {
+        const others = [...beneMap.entries()].filter(([a]) => a !== collab.account).map(([account, weight]) => ({ account, weight }));
+        const w = collabWeight(others, collab.split);
+        if (w) beneMap.set(collab.account, w);
+        else addMessage(t('social.collab.noRoom', { user: collab.account }), 'error');
       }
+
+      // Convert map to sorted array (sorted by account name — required by Hive protocol)
+      allBeneficiaries = [...beneMap.entries()]
+        .map(([account, weight]) => ({ account, weight }))
+        .sort((a, b) => a.account.localeCompare(b.account));
 
       const commentOptions = {
         author: user,

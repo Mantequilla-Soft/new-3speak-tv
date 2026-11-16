@@ -359,7 +359,8 @@
     "postShort": "发布短视频",
     "postStory": "发布快拍",
     "postVideo": "发布视频",
-    "backToTimeline": "返回时间线"
+    "backToTimeline": "返回时间线",
+    "benesDeclined": "已拒绝收益：他们也拿不到任何收益，但署名会保留在帖子上。"
   },
   "publishing": {
     "titleShort": "正在发布短视频",

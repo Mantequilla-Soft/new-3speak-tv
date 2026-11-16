@@ -368,7 +368,8 @@
     "postShort": "Opublikuj shorta",
     "postStory": "Opublikuj relację",
     "postVideo": "Opublikuj film",
-    "backToTimeline": "Wróć do osi czasu"
+    "backToTimeline": "Wróć do osi czasu",
+    "benesDeclined": "Wypłata odrzucona: oni też nic nie dostają, wzmianka zostaje przy wpisie."
   },
   "publishing": {
     "titleShort": "Publikowanie Shorta",

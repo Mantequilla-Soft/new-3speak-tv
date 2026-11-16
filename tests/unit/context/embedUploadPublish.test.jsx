@@ -315,10 +315,11 @@ describe('the post\'s community, tags and payout', () => {
     expect(meta().tags).toEqual(['hive-100', 'travel', 'hive-181335', 'nsfw'])
   })
 
-  it('declined rewards carry no payout and no beneficiaries', async () => {
-    const { result } = await ready((c) => c.SetDeclineRewards(true))
+  it('declined rewards carry no payout, but the beneficiaries stay on the post (the credit, at no reward)', async () => {
+    const { result } = await ready((c) => { c.SetDeclineRewards(true); c.setOriginalAuthor('alice'); c.setOriginalPermlink('orig-video') })
     await publish(result)
-    expect(optionsOp()).toMatchObject({ max_accepted_payout: '0.000 HBD', extensions: [] })
+    expect(optionsOp()).toMatchObject({ max_accepted_payout: '0.000 HBD' })
+    expect(optionsOp().extensions[0][1].beneficiaries).toEqual(expect.arrayContaining([{ account: 'alice', weight: 1500 }, ...LOCKED_SPLITS]))
   })
 
   it('"power up" takes the rewards fully in HP', async () => {

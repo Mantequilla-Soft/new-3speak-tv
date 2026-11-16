@@ -359,7 +359,8 @@
     "postShort": "쇼츠 게시",
     "postStory": "스토리 올리기",
     "postVideo": "동영상 게시",
-    "backToTimeline": "타임라인으로 돌아가기"
+    "backToTimeline": "타임라인으로 돌아가기",
+    "benesDeclined": "보상 거절됨: 이들도 아무것도 받지 않지만 크레딧은 게시물에 남습니다."
   },
   "publishing": {
     "titleShort": "쇼츠 게시 중",

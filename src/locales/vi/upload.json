@@ -359,7 +359,8 @@
     "postShort": "Đăng Shorts",
     "postStory": "Đăng tin",
     "postVideo": "Đăng video",
-    "backToTimeline": "Quay lại dòng thời gian"
+    "backToTimeline": "Quay lại dòng thời gian",
+    "benesDeclined": "Đã từ chối thanh toán: họ cũng không nhận được gì, phần ghi công vẫn ở bài đăng."
   },
   "publishing": {
     "titleShort": "Đang xuất bản Short",

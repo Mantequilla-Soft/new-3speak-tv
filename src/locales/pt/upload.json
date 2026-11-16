@@ -365,7 +365,8 @@
     "postShort": "Publicar Short",
     "postStory": "Publicar story",
     "postVideo": "Publicar vídeo",
-    "backToTimeline": "Voltar à linha do tempo"
+    "backToTimeline": "Voltar à linha do tempo",
+    "benesDeclined": "Pagamento recusado: eles também não recebem nada; o crédito fica no post."
   },
   "publishing": {
     "titleShort": "Publicando Short",
