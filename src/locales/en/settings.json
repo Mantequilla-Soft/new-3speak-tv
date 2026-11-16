@@ -165,6 +165,13 @@
       "desc": "Muted clips in the Spotlight on Home. Off shows still pictures."
     }
   },
+  "startup": {
+    "title": "When you open 3Speak",
+    "resume": {
+      "title": "Continue where I left off",
+      "desc": "Open 3Speak on the page you were last on. Saved on this device only."
+    }
+  },
   "shorts": {
     "commentBar": {
       "title": "Comment bar on shorts",

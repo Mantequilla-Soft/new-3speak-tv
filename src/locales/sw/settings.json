@@ -165,6 +165,13 @@
       "desc": "Klipu zisizo na sauti kwenye Spotlight ya Mwanzo. Ikizimwa, picha tuli huonyeshwa."
     }
   },
+  "startup": {
+    "title": "Unapofungua 3Speak",
+    "resume": {
+      "title": "Endelea nilipoishia",
+      "desc": "3Speak hufunguka kwenye ukurasa uliokuwa mwisho. Huhifadhiwa kwenye kifaa hiki pekee."
+    }
+  },
   "shorts": {
     "commentBar": {
       "title": "Upau wa maoni kwenye Shorts",

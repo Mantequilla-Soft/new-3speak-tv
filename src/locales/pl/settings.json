@@ -165,6 +165,13 @@
       "desc": "Wyciszone klipy w Spotlight na stronie głównej. Wyłączone pokazuje obrazy."
     }
   },
+  "startup": {
+    "title": "Po otwarciu 3Speak",
+    "resume": {
+      "title": "Kontynuuj tam, gdzie skończyłem",
+      "desc": "3Speak otwiera się na stronie, na której byłeś ostatnio. Zapisywane tylko na tym urządzeniu."
+    }
+  },
   "shorts": {
     "commentBar": {
       "title": "Pasek komentarza w Shorts",

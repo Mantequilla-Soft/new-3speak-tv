@@ -37,7 +37,7 @@ describe('first visit defaults', () => {
     expect(s).toMatchObject({
       theme: 'dark', homeCardSize: 'large', spotlightSize: 'small', previewEnabled: true,
       hideWatched: true, hideAi: true, inlineShorts: true, privateMode: false,
-      shortsFeedMode: 'discover', shortsCommentBar: false, openShortsOnStart: false,
+      shortsFeedMode: 'discover', shortsCommentBar: false, openShortsOnStart: false, resumeLastPage: false,
       watchHistoryEnabled: true, showNsfw: false, interests: [], appUpdatedFrom: null,
     })
   })
@@ -48,13 +48,14 @@ describe('what survives a reload', () => {
     const store = await loadStore()
     store.getState().setUser('badadib')
     store.getState().setPrivateMode(true)
+    store.getState().setResumeLastPage(true)
     store.getState().setInterests(['music'])
     store.getState().setAppUpdatedFrom('1.80.0')
     store.getState().setMiniPlayer({ author: 'badadib', permlink: 'p' })
 
     const saved = persisted()
     expect(saved.version).toBe(4)
-    expect(saved.state).toMatchObject({ user: 'badadib', privateMode: true, interests: ['music'], theme: 'dark' })
+    expect(saved.state).toMatchObject({ user: 'badadib', privateMode: true, resumeLastPage: true, interests: ['music'], theme: 'dark' })
     expect(saved.state).not.toHaveProperty('appUpdatedFrom')
     expect(saved.state).not.toHaveProperty('miniPlayer')
     expect(saved.state).not.toHaveProperty('authenticated')
@@ -119,6 +120,7 @@ describe('the setters', () => {
     ['setShortsCommentBar', 'shortsCommentBar'],
     ['setInlineShorts', 'inlineShorts'],
     ['setOpenShortsOnStart', 'openShortsOnStart'],
+    ['setResumeLastPage', 'resumeLastPage'],
     ['setHideAi', 'hideAi'],
   ])('%s always stores a boolean, from a value or an updater', (setter, key) => {
     store.getState()[setter]('yes')

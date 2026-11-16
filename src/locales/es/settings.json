@@ -165,6 +165,13 @@
       "desc": "Clips silenciados en el Destacado de Inicio. Desactivado muestra imágenes fijas."
     }
   },
+  "startup": {
+    "title": "Al abrir 3Speak",
+    "resume": {
+      "title": "Seguir donde lo dejé",
+      "desc": "3Speak se abre en la última página que visitaste. Solo se guarda en este dispositivo."
+    }
+  },
   "shorts": {
     "commentBar": {
       "title": "Barra de comentarios en Shorts",

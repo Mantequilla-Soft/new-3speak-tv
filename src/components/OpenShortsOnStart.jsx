@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAppStore } from '../lib/store';
+import { readLastPage } from '../lib/lastPage';
 
 /**
  * "Open shorts on start" — when enabled, launching 3Speak drops the user straight
@@ -38,6 +39,8 @@ export default function OpenShortsOnStart() {
     if (location.pathname !== '/') return;
     // Don't clobber a deep link that happens to carry params.
     if (location.search) return;
+    // "Continue where I left off" has a page to go back to: ResumeLastPage goes there.
+    if (useAppStore.getState().resumeLastPage && readLastPage()) return;
 
     // Push (not replace): keeps "/" behind us so Back returns to the home feed.
     navigate('/shorts');

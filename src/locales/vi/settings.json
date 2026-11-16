@@ -165,6 +165,13 @@
       "desc": "Clip tắt tiếng trong Spotlight ở Trang chủ. Tắt sẽ chỉ hiện ảnh tĩnh."
     }
   },
+  "startup": {
+    "title": "Khi mở 3Speak",
+    "resume": {
+      "title": "Tiếp tục từ chỗ đã dừng",
+      "desc": "3Speak mở lại trang bạn xem lần cuối. Chỉ lưu trên thiết bị này."
+    }
+  },
   "shorts": {
     "commentBar": {
       "title": "Thanh bình luận trên Shorts",

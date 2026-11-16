@@ -165,6 +165,13 @@
       "desc": "Clips muets dans la une de l’accueil. Désactivé affiche des images fixes."
     }
   },
+  "startup": {
+    "title": "À l'ouverture de 3Speak",
+    "resume": {
+      "title": "Reprendre là où j'en étais",
+      "desc": "3Speak s'ouvre sur la dernière page que tu as consultée. Enregistré sur cet appareil uniquement."
+    }
+  },
   "shorts": {
     "commentBar": {
       "title": "Barre de commentaire sur les Shorts",

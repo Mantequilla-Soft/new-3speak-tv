@@ -165,6 +165,13 @@
       "desc": "Ana sayfadaki Spotlight’ta sessiz klipler. Kapalıyken sabit görseller gösterilir."
     }
   },
+  "startup": {
+    "title": "3Speak açıldığında",
+    "resume": {
+      "title": "Kaldığım yerden devam et",
+      "desc": "3Speak en son bulunduğun sayfada açılır. Yalnızca bu cihazda saklanır."
+    }
+  },
   "shorts": {
     "commentBar": {
       "title": "Shorts'ta yorum çubuğu",

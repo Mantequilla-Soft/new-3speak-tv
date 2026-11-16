@@ -165,6 +165,13 @@
       "desc": "在首页焦点中播放静音片段。关闭后只显示静态图片。"
     }
   },
+  "startup": {
+    "title": "打开 3Speak 时",
+    "resume": {
+      "title": "从上次离开的地方继续",
+      "desc": "打开 3Speak 时回到你上次所在的页面。仅保存在此设备上。"
+    }
+  },
   "shorts": {
     "commentBar": {
       "title": "短视频评论栏",

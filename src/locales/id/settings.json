@@ -165,6 +165,13 @@
       "desc": "Klip tanpa suara di Spotlight Beranda. Mati menampilkan gambar diam."
     }
   },
+  "startup": {
+    "title": "Saat membuka 3Speak",
+    "resume": {
+      "title": "Lanjutkan dari terakhir kali",
+      "desc": "3Speak terbuka di halaman terakhir yang kamu buka. Hanya disimpan di perangkat ini."
+    }
+  },
   "shorts": {
     "commentBar": {
       "title": "Bilah komentar di Shorts",

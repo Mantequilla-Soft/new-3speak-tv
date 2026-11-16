@@ -165,6 +165,13 @@
       "desc": "Clip senza audio nel primo piano della Home. Spento mostra immagini statiche."
     }
   },
+  "startup": {
+    "title": "All'apertura di 3Speak",
+    "resume": {
+      "title": "Riprendi da dove eri rimasto",
+      "desc": "3Speak si apre sull'ultima pagina che hai visitato. Salvato solo su questo dispositivo."
+    }
+  },
   "shorts": {
     "commentBar": {
       "title": "Barra dei commenti negli Shorts",

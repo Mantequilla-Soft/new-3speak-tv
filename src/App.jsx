@@ -35,6 +35,7 @@ import { fetchPlaySource } from "./lib/videoData";
 import { useQueryClient } from "@tanstack/react-query";
 import RouteTitle from "./components/RouteTitle";
 import OpenShortsOnStart from "./components/OpenShortsOnStart";
+import ResumeLastPage from "./components/ResumeLastPage";
 // import TestingLogin from "./page/Login/TestingLogin";
 import { Toaster } from 'sonner';
 import { toastIn } from './utils/toast';
@@ -827,6 +828,8 @@ function App() {
           <RouteTitle />
           {/* Optional: land on /shorts when the app is opened (off by default). */}
           <OpenShortsOnStart />
+          {/* Optional: open on the page the app was last on (off by default). */}
+          <ResumeLastPage />
           {/* <Toaster richColors position="top-right" /> */}
           {/* Every route below the index one is lazy, so the router needs a
               boundary. The fallback is deliberately EMPTY: the nav and

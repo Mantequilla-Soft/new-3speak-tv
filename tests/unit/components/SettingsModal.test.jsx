@@ -110,7 +110,7 @@ beforeEach(() => {
   })
   useAppStore.setState({
     user: null, authenticated: false, theme: 'light', showNsfw: false, hideWatched: true, hideAi: true,
-    privateMode: false, previewEnabled: true, openShortsOnStart: false, inlineShorts: true,
+    privateMode: false, previewEnabled: true, openShortsOnStart: false, resumeLastPage: false, inlineShorts: true,
     shortsCommentBar: false, interests: [], homeCardSize: 'small',
   })
 })
@@ -227,6 +227,13 @@ describe('settings: General and Content', () => {
     expect(screen.queryByRole('switch', { name: /Simple feeds/ })).toBeNull()
     await user.click(sw('Video previews'))
     expect(useAppStore.getState().previewEnabled).toBe(false)
+  })
+
+  it('continue where I left off is a General switch, off until turned on', async () => {
+    const { user } = mount()
+    expect(sw('Continue where I left off')).toHaveAttribute('aria-checked', 'false')
+    await user.click(sw('Continue where I left off'))
+    expect(useAppStore.getState().resumeLastPage).toBe(true)
   })
 
   it('offers large cards only on a phone-sized screen', () => {

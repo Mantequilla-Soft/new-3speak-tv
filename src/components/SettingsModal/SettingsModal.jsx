@@ -1083,7 +1083,7 @@ const DROPDOWN_WIDTH = 600;
 
 export default function SettingsModal({ isOpen, onClose, dropdown = null, leaving = false, hoverProps, typingProps }) {
   const { t } = useTranslation();
-  const { theme, showNsfw, setShowNsfw, toggleTheme, homeCardSize, setHomeCardSize, previewEnabled, setPreviewEnabled, shortsCommentBar, setShortsCommentBar, openShortsOnStart, setOpenShortsOnStart, inlineShorts, setInlineShorts, hideWatched, setHideWatched, hideAi, setHideAi, privateMode, setPrivateMode, heroPreviewEnabled, setHeroPreviewEnabled } = useAppStore();
+  const { theme, showNsfw, setShowNsfw, toggleTheme, homeCardSize, setHomeCardSize, previewEnabled, setPreviewEnabled, shortsCommentBar, setShortsCommentBar, openShortsOnStart, setOpenShortsOnStart, resumeLastPage, setResumeLastPage, inlineShorts, setInlineShorts, hideWatched, setHideWatched, hideAi, setHideAi, privateMode, setPrivateMode, heroPreviewEnabled, setHeroPreviewEnabled } = useAppStore();
   const cardSize = useCardSize();
   const cardSizeMobile = useIsCardSizeMobile();
   /* Whether the Ads & rewards page exists at all.
@@ -1246,7 +1246,7 @@ export default function SettingsModal({ isOpen, onClose, dropdown = null, leavin
   const panels = {
     general: (
       <>
-        {/* Order (owner 2026-11-12): language, appearance, notifications. */}
+        {/* Order (owner 2026-11-12): language, appearance, notifications; "When you open 3Speak" (2026-11-16) sits before notifications. */}
         <Section tone="cyan" title={t('common.language.label')} className="settings-language">
           <LanguagePicker onNavigate={onClose} />
         </Section>
@@ -1283,6 +1283,15 @@ export default function SettingsModal({ isOpen, onClose, dropdown = null, leavin
               onChange={(v) => setHeroPreviewEnabled(v)}
             />
           )}
+        </Section>
+        <Section tone="cyan" title={t('settings.startup.title')}>
+          <Row
+            tone="cyan"
+            title={t('settings.startup.resume.title')}
+            desc={t('settings.startup.resume.desc')}
+            checked={!!resumeLastPage}
+            onChange={(v) => setResumeLastPage(v)}
+          />
         </Section>
         {settingsUser && <NotificationsSection />}
         {!rewardsVisible && <PostingAuthoritySection />}

@@ -165,6 +165,13 @@
       "desc": "Mga clip na walang tunog sa Spotlight ng Home. Kapag naka-off, mga larawan lang."
     }
   },
+  "startup": {
+    "title": "Pagbukas ng 3Speak",
+    "resume": {
+      "title": "Ituloy kung saan ako huminto",
+      "desc": "Bubukas ang 3Speak sa huling page na binuksan mo. Sa device na ito lang naka-save."
+    }
+  },
   "shorts": {
     "commentBar": {
       "title": "Comment bar sa Shorts",

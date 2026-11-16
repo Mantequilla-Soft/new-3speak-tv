@@ -63,6 +63,9 @@ export const useAppStore = create(
       // Land on /shorts instead of the home feed when 3Speak is opened. Off by default.
       openShortsOnStart: false,
       setOpenShortsOnStart: (val) => a[0]({ openShortsOnStart: !!(typeof val === 'function' ? val(a[1]().openShortsOnStart) : val) }),
+      // Open 3Speak on the page it was last on (components/ResumeLastPage). Off by default.
+      resumeLastPage: false,
+      setResumeLastPage: (val) => a[0]({ resumeLastPage: !!(typeof val === 'function' ? val(a[1]().resumeLastPage) : val) }),
       // Hide videos the user has already watched from discovery feeds (default ON).
       hideWatched: true,
       setHideWatched: (val) => a[0]({ hideWatched: typeof val === 'function' ? val(a[1]().hideWatched) : val }),
@@ -124,6 +127,7 @@ export const useAppStore = create(
         shortsFeedMode: state.shortsFeedMode,
         shortsCommentBar: state.shortsCommentBar,
         openShortsOnStart: state.openShortsOnStart,
+        resumeLastPage: state.resumeLastPage,
         inlineShorts: state.inlineShorts,
         hideWatched: state.hideWatched,
         hideAi: state.hideAi,

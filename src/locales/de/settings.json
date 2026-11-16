@@ -165,6 +165,13 @@
       "desc": "Stumme Clips im Spotlight auf der Startseite. Aus zeigt Standbilder."
     }
   },
+  "startup": {
+    "title": "Beim Öffnen von 3Speak",
+    "resume": {
+      "title": "Dort weitermachen, wo ich war",
+      "desc": "3Speak öffnet die Seite, auf der du zuletzt warst. Nur auf diesem Gerät gespeichert."
+    }
+  },
   "shorts": {
     "commentBar": {
       "title": "Kommentarleiste bei Shorts",

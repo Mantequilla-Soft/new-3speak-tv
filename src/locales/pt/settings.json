@@ -165,6 +165,13 @@
       "desc": "Clipes sem som no Destaque da página inicial. Desligado mostra imagens estáticas."
     }
   },
+  "startup": {
+    "title": "Ao abrir o 3Speak",
+    "resume": {
+      "title": "Continuar de onde parei",
+      "desc": "O 3Speak abre na última página em que você estava. Salvo apenas neste dispositivo."
+    }
+  },
   "shorts": {
     "commentBar": {
       "title": "Barra de comentários nos Shorts",
