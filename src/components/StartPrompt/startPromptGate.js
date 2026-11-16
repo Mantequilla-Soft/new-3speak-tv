@@ -8,17 +8,11 @@ export const ANSWERED_KEY = START_PROMPT_KEY;
 export const FIRST_DELAY_MS = 3000;
 export const RETRY_MS = 4000;
 
-// TEMPORARY (owner 2026-11-16): on preview the popup comes up on every load,
-// whatever was set or answered, so the dialog can be looked over. Remove before
-// the release that ships it.
-export const ALWAYS_ON_HOSTS = ['preview.3speak.tv'];
-
 /**
  * Ask while Continue where I left off is off and nobody answered yet. A first
  * visit starts with it on (lib/store.js), so only people who used 3Speak before
  * are asked; switching it in Settings counts as an answer.
  */
-export function shouldAsk({ always = false, answered = false, resumeLastPage }) {
-  if (always) return true;
+export function shouldAsk({ answered = false, resumeLastPage }) {
   return !answered && !resumeLastPage;
 }

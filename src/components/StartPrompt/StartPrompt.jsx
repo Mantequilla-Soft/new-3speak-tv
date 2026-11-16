@@ -7,7 +7,7 @@ import { blockedNow } from '../InstallAppPrompt/installGate';
 import { Button, Dialog } from '../v2/ui';
 import { Icon } from '../v2/Icon';
 import {
-  ANSWERED_KEY, ALWAYS_ON_HOSTS, FIRST_DELAY_MS, RETRY_MS, shouldAsk,
+  ANSWERED_KEY, FIRST_DELAY_MS, RETRY_MS, shouldAsk,
 } from './startPromptGate';
 import './StartPrompt.scss';
 
@@ -38,7 +38,6 @@ export default function StartPrompt() {
   useEffect(() => {
     if (!armed || shownRef.current || appUpdatedFrom) return undefined;
     const ask = () => shouldAsk({
-      always: typeof window !== 'undefined' && ALWAYS_ON_HOSTS.includes(window.location.hostname),
       answered: readAnswered(),
       resumeLastPage: useAppStore.getState().resumeLastPage,
     });

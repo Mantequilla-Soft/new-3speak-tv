@@ -1,8 +1,7 @@
 // @vitest-environment jsdom
 // "Pick up where you left off?" (components/StartPrompt): asks someone who used
 // 3Speak before, once, after the changelog popup and never over another dialog,
-// whether to turn on Continue where I left off. On preview (temporary) it always
-// asks.
+// whether to turn on Continue where I left off.
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { act, screen, fireEvent } from '@testing-library/react'
 import { renderWithProviders, useFakeClock } from './_render.jsx'
@@ -26,11 +25,10 @@ beforeEach(() => {
 afterEach(() => { vi.useRealTimers() })
 
 describe('when it asks', () => {
-  it('while the setting is off and nobody answered; always on preview', () => {
+  it('while the setting is off and nobody answered', () => {
     expect(shouldAsk({ resumeLastPage: false })).toBe(true)
     expect(shouldAsk({ resumeLastPage: true })).toBe(false)
     expect(shouldAsk({ resumeLastPage: false, answered: true })).toBe(false)
-    expect(shouldAsk({ resumeLastPage: true, answered: true, always: true })).toBe(true)
   })
 })
 

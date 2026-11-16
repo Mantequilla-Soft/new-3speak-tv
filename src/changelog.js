@@ -18,6 +18,30 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.87',
+    category: 'settings',
+    date: '2026-11-16',
+    summary: '3Speak now opens on the page you were last on, with a short loading spinner; returning visitors are asked once.',
+  },
+  {
+    version: '2.0.86',
+    category: 'audio',
+    date: '2026-11-16',
+    summary: 'A new title on an audio post now reaches the cards, search and RSS feeds within seconds, however old the post is.',
+  },
+  {
+    version: '2.0.85',
+    category: 'settings',
+    date: '2026-11-16',
+    summary: 'Settings: "Open Shorts on start" is gone; 3Speak opens on Home, or where you left off if you turn that on.',
+  },
+  {
+    version: '2.0.84',
+    category: 'settings',
+    date: '2026-11-16',
+    summary: 'Settings: "Continue where I left off" now sits with the language on the General card, and "Shorts inside the feeds" moved to Feed.',
+  },
+  {
     version: '2.0.83',
     category: 'settings',
     date: '2026-11-16',
