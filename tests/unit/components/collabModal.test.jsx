@@ -43,6 +43,16 @@ describe('collab modal', () => {
     expect(screen.getByLabelText('Co-creator')).toHaveValue('fanatic')
   })
 
+  it('asks Hive for 20 matches, keeps only names starting with the text, and offers the exact one too', async () => {
+    h.lookup.mockResolvedValue(['fan', 'fanatic', 'fbx'])
+    const { user } = renderWithProviders(<CollabModal open onClose={vi.fn()} onSave={vi.fn()} user="badadib" />)
+    await user.type(screen.getByLabelText('Co-creator'), 'fan')
+    expect(await screen.findByRole('button', { name: '@fan' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: '@fanatic' })).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: '@fbx' })).not.toBeInTheDocument()
+    expect(h.lookup).toHaveBeenLastCalledWith('condenser_api', 'lookup_accounts', ['fan', 20])
+  })
+
   it('refuses the creator and an unknown account', async () => {
     const onSave = vi.fn()
     const { user } = renderWithProviders(<CollabModal open onClose={vi.fn()} onSave={onSave} user="badadib" />)

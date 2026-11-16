@@ -596,7 +596,19 @@ $wide: 1024px;
   gap: 10px;
   min-width: 0;
 
-  &.is-scroll { @include v2.scroll-x; .wv2-chapter { flex: 0 0 200px; } }
+  // More chapters than fit: they scroll sideways, with a thin scrollbar to
+  // show there are more (and to drag with a mouse).
+  &.is-scroll {
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    padding-bottom: 8px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-strong, var(--muted)) transparent;
+    &::-webkit-scrollbar { height: 6px; }
+    &::-webkit-scrollbar-thumb { background: var(--border-strong, var(--muted)); border-radius: 3px; }
+    &::-webkit-scrollbar-track { background: transparent; }
+    .wv2-chapter { flex: 0 0 200px; }
+  }
 }
 
 .wv2-chapter {

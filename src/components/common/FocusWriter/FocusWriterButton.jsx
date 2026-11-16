@@ -35,7 +35,7 @@ export default function FocusWriterButton({ value, setValue, inputRef, placehold
         title={t('comments.focus.open')}
         onClick={() => setOpen(true)}
       >
-        <Icon name="edit_note" size={18} />
+        <Icon name="center_focus_strong" size={18} />
       </button>
       <MountWhenOpened when={open} name="focus-writer">
         {open && <FocusWriter value={value} onChange={setValue} placeholder={placeholder} backdrop={backdrop} onClose={close} />}

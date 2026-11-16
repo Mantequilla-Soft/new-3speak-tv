@@ -12,6 +12,14 @@
   padding: 4px;
   border-radius: var(--r-md);
   background: var(--surface-2);
+  // About five rows, then it scrolls, with a visible scrollbar.
+  max-height: 232px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--muted) transparent;
+  &::-webkit-scrollbar { width: 6px; }
+  &::-webkit-scrollbar-thumb { background: var(--muted); border-radius: 3px; }
 
   button {
     display: flex;

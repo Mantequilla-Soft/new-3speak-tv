@@ -72,9 +72,17 @@ export default function FocusWriter({ value, onChange, placeholder, backdrop = n
   // behind it held still, the caret on the paper at the end of the text.
   useEffect(() => {
     const root = rootRef.current;
-    let entered = false;
-    root?.requestFullscreen?.().then(() => { entered = true; }).catch(() => {});
-    const onFs = () => { if (entered && !document.fullscreenElement) closeRef.current(); };
+    // Leaving fullscreen ends focus mode: Firefox and Chrome take Esc for
+    // themselves in fullscreen, so that is the only Esc the page sees. Known
+    // from the change events, not the request's promise: a second request
+    // (React's dev double effect, a quick reopen) can be refused while the
+    // first one put the page in fullscreen.
+    let entered = !!root && document.fullscreenElement === root;
+    if (!entered) root?.requestFullscreen?.().catch(() => {});
+    const onFs = () => {
+      if (document.fullscreenElement === root) entered = true;
+      else if (entered && !document.fullscreenElement) closeRef.current();
+    };
     document.addEventListener('fullscreenchange', onFs);
     const overflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';

@@ -8,6 +8,8 @@ import { COLLAB_SPLITS, COLLAB_SPLIT_DEFAULT } from '../../lib/collabs';
 import './CollabModal.scss';
 
 const NAME_RE = /^[a-z][a-z0-9.-]{2,15}$/;
+// Accounts suggested while typing (the list scrolls past a handful).
+const SUGGESTIONS = 20;
 
 /**
  * "Add a collaborator" on the upload's details step (lib/collabs.js): a Hive
@@ -47,8 +49,10 @@ export default function CollabModal({ open, onClose, value, onSave, user, creato
     let alive = true;
     const timer = setTimeout(async () => {
       try {
-        const list = await getHiveClient().call('condenser_api', 'lookup_accounts', [name, 6]);
-        if (alive) setSuggestions((Array.isArray(list) ? list : []).filter((a) => a !== user && a !== name));
+        // Hive lists accounts from the typed name on, so an exact match comes
+        // first and can be picked (its avatar then shows) like any other.
+        const list = await getHiveClient().call('condenser_api', 'lookup_accounts', [name, SUGGESTIONS]);
+        if (alive) setSuggestions((Array.isArray(list) ? list : []).filter((a) => a !== user && a.startsWith(name)));
       } catch {
         if (alive) setSuggestions([]);
       }
