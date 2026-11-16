@@ -37,7 +37,7 @@ describe('first visit defaults', () => {
     expect(s).toMatchObject({
       theme: 'dark', homeCardSize: 'large', spotlightSize: 'small', previewEnabled: true,
       hideWatched: true, hideAi: true, inlineShorts: true, privateMode: false,
-      shortsFeedMode: 'discover', shortsCommentBar: false, openShortsOnStart: false, resumeLastPage: false,
+      shortsFeedMode: 'discover', shortsCommentBar: false, resumeLastPage: false,
       watchHistoryEnabled: true, showNsfw: false, interests: [], appUpdatedFrom: null,
     })
   })
@@ -54,7 +54,7 @@ describe('what survives a reload', () => {
     store.getState().setMiniPlayer({ author: 'badadib', permlink: 'p' })
 
     const saved = persisted()
-    expect(saved.version).toBe(4)
+    expect(saved.version).toBe(5)
     expect(saved.state).toMatchObject({ user: 'badadib', privateMode: true, resumeLastPage: true, interests: ['music'], theme: 'dark' })
     expect(saved.state).not.toHaveProperty('appUpdatedFrom')
     expect(saved.state).not.toHaveProperty('miniPlayer')
@@ -69,6 +69,13 @@ describe('what survives a reload', () => {
 })
 
 describe('migrating an older saved store', () => {
+  it('drops an old "Open Shorts on start" choice (the setting is gone)', async () => {
+    localStorage.setItem('user-store', JSON.stringify({ version: 4, state: { openShortsOnStart: true, theme: 'light' } }))
+    const s = (await loadStore()).getState()
+    expect(s.openShortsOnStart).toBeUndefined()
+    expect(s.theme).toBe('light')
+  })
+
   it('drops an old "Simple feeds" choice (the setting is gone)', async () => {
     localStorage.setItem('user-store', JSON.stringify({ version: 3, state: { simpleFeed: true, theme: 'light' } }))
     const s = (await loadStore()).getState()
@@ -119,7 +126,6 @@ describe('the setters', () => {
   it.each([
     ['setShortsCommentBar', 'shortsCommentBar'],
     ['setInlineShorts', 'inlineShorts'],
-    ['setOpenShortsOnStart', 'openShortsOnStart'],
     ['setResumeLastPage', 'resumeLastPage'],
     ['setHideAi', 'hideAi'],
   ])('%s always stores a boolean, from a value or an updater', (setter, key) => {

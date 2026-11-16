@@ -1083,7 +1083,7 @@ const DROPDOWN_WIDTH = 600;
 
 export default function SettingsModal({ isOpen, onClose, dropdown = null, leaving = false, hoverProps, typingProps }) {
   const { t } = useTranslation();
-  const { theme, showNsfw, setShowNsfw, toggleTheme, homeCardSize, setHomeCardSize, previewEnabled, setPreviewEnabled, shortsCommentBar, setShortsCommentBar, openShortsOnStart, setOpenShortsOnStart, resumeLastPage, setResumeLastPage, inlineShorts, setInlineShorts, hideWatched, setHideWatched, hideAi, setHideAi, privateMode, setPrivateMode, heroPreviewEnabled, setHeroPreviewEnabled } = useAppStore();
+  const { theme, showNsfw, setShowNsfw, toggleTheme, homeCardSize, setHomeCardSize, previewEnabled, setPreviewEnabled, shortsCommentBar, setShortsCommentBar, resumeLastPage, setResumeLastPage, inlineShorts, setInlineShorts, hideWatched, setHideWatched, hideAi, setHideAi, privateMode, setPrivateMode, heroPreviewEnabled, setHeroPreviewEnabled } = useAppStore();
   const cardSize = useCardSize();
   const cardSizeMobile = useIsCardSizeMobile();
   /* Whether the Ads & rewards page exists at all.
@@ -1246,9 +1246,17 @@ export default function SettingsModal({ isOpen, onClose, dropdown = null, leavin
   const panels = {
     general: (
       <>
-        {/* Order (owner 2026-11-12): language, appearance, notifications; "When you open 3Speak" (2026-11-16) sits before notifications. */}
-        <Section tone="cyan" title={t('common.language.label')} className="settings-language">
+        {/* Order (owner 2026-11-12): general, appearance, notifications. The first card
+            (owner 2026-11-16) is the language and "Continue where I left off". */}
+        <Section tone="cyan" title={t('settings.tabs.general')} className="settings-language">
           <LanguagePicker onNavigate={onClose} />
+          <Row
+            tone="cyan"
+            title={t('settings.startup.resume.title')}
+            desc={t('settings.startup.resume.desc')}
+            checked={!!resumeLastPage}
+            onChange={(v) => setResumeLastPage(v)}
+          />
         </Section>
         <Section title={t('settings.appearance.title')}>
           <Row
@@ -1284,22 +1292,13 @@ export default function SettingsModal({ isOpen, onClose, dropdown = null, leavin
             />
           )}
         </Section>
-        <Section tone="cyan" title={t('settings.startup.title')}>
-          <Row
-            tone="cyan"
-            title={t('settings.startup.resume.title')}
-            desc={t('settings.startup.resume.desc')}
-            checked={!!resumeLastPage}
-            onChange={(v) => setResumeLastPage(v)}
-          />
-        </Section>
         {settingsUser && <NotificationsSection />}
         {!rewardsVisible && <PostingAuthoritySection />}
       </>
     ),
     content: (
       <>
-        {/* Order (owner 2026-11-12): feed, shorts, interests. */}
+        {/* Order (owner 2026-11-12): feed, shorts (phone only), interests. */}
         <Section tone="cyan" title={t('settings.contentTabs.feed')}>
           <Row
             tone="cyan"
@@ -1329,30 +1328,27 @@ export default function SettingsModal({ isOpen, onClose, dropdown = null, leavin
             checked={!!privateMode}
             onChange={(v) => setPrivateMode(v)}
           />
-        </Section>
-        <Section title={t('common.nav.shorts')}>
-          {/* Comment bar is only rendered under 768px, so it's hidden on desktop. */}
-          {showShortsCommentBarSetting && (
-            <Row
-              title={t('settings.shorts.commentBar.title')}
-              desc={t('settings.shorts.commentBar.desc')}
-              checked={!!shortsCommentBar}
-              onChange={(v) => setShortsCommentBar(v)}
-            />
-          )}
           <Row
-            title={t('settings.shorts.openOnStart.title')}
-            desc={t('settings.shorts.openOnStart.desc')}
-            checked={!!openShortsOnStart}
-            onChange={(v) => setOpenShortsOnStart(v)}
-          />
-          <Row
+            tone="cyan"
             title={t('settings.shorts.inFeeds.title')}
             desc={t('settings.shorts.inFeeds.desc')}
             checked={inlineShorts !== false}
             onChange={(v) => setInlineShorts(v)}
           />
         </Section>
+        {/* The Shorts card is only the comment bar now (owner 2026-11-16: "Open Shorts
+            on start" is gone, Shorts in the feeds moved to Feed), and that bar is
+            only rendered under 768px, so the card shows on a phone only. */}
+        {showShortsCommentBarSetting && (
+          <Section title={t('common.nav.shorts')}>
+            <Row
+              title={t('settings.shorts.commentBar.title')}
+              desc={t('settings.shorts.commentBar.desc')}
+              checked={!!shortsCommentBar}
+              onChange={(v) => setShortsCommentBar(v)}
+            />
+          </Section>
+        )}
         <InterestsSection />
       </>
     ),

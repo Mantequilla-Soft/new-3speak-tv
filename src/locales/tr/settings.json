@@ -166,7 +166,6 @@
     }
   },
   "startup": {
-    "title": "3Speak açıldığında",
     "resume": {
       "title": "Kaldığım yerden devam et",
       "desc": "3Speak en son bulunduğun sayfada açılır. Yalnızca bu cihazda saklanır."
@@ -176,10 +175,6 @@
     "commentBar": {
       "title": "Shorts'ta yorum çubuğu",
       "desc": "Her Short'un altında bir yorum alanı"
-    },
-    "openOnStart": {
-      "title": "Açılışta Shorts'u aç",
-      "desc": "3Speak'i açtığında doğrudan Shorts'a git"
     },
     "inFeeds": {
       "title": "Akışlarda Shorts",

@@ -110,7 +110,7 @@ beforeEach(() => {
   })
   useAppStore.setState({
     user: null, authenticated: false, theme: 'light', showNsfw: false, hideWatched: true, hideAi: true,
-    privateMode: false, previewEnabled: true, openShortsOnStart: false, resumeLastPage: false, inlineShorts: true,
+    privateMode: false, previewEnabled: true, resumeLastPage: false, inlineShorts: true,
     shortsCommentBar: false, interests: [], homeCardSize: 'small',
   })
 })
@@ -229,8 +229,10 @@ describe('settings: General and Content', () => {
     expect(useAppStore.getState().previewEnabled).toBe(false)
   })
 
-  it('continue where I left off is a General switch, off until turned on', async () => {
+  it('continue where I left off sits with the language on the General card, off until turned on', async () => {
     const { user } = mount()
+    const card = screen.getByRole('heading', { name: 'General' }).closest('section')
+    expect(within(card).getByRole('switch', { name: 'Continue where I left off' })).toBeInTheDocument()
     expect(sw('Continue where I left off')).toHaveAttribute('aria-checked', 'false')
     await user.click(sw('Continue where I left off'))
     expect(useAppStore.getState().resumeLastPage).toBe(true)
@@ -266,13 +268,15 @@ describe('settings: General and Content', () => {
     expect(useAppStore.getState()).toMatchObject({ showNsfw: true, hideWatched: false, hideAi: false, privateMode: true })
   })
 
-  it('the Shorts card sets how shorts open and whether they show in feeds', async () => {
+  it('Shorts inside the feeds is on the Feed card; there is no Open Shorts on start, and no Shorts card on a desktop', async () => {
     const { user } = mount()
     await user.click(screen.getByRole('tab', { name: 'Content' }))
     expect(screen.queryByRole('switch', { name: 'Comment bar on shorts' })).not.toBeInTheDocument()
-    await user.click(sw('Open Shorts on start'))
-    await user.click(sw('Shorts inside the feeds'))
-    expect(useAppStore.getState()).toMatchObject({ openShortsOnStart: true, inlineShorts: false })
+    expect(screen.queryByRole('switch', { name: /Open Shorts on start/ })).toBeNull()
+    expect(screen.queryByRole('heading', { name: 'Shorts' })).toBeNull()
+    const feedCard = screen.getByRole('heading', { name: 'Feed' }).closest('section')
+    await user.click(within(feedCard).getByRole('switch', { name: 'Shorts inside the feeds' }))
+    expect(useAppStore.getState().inlineShorts).toBe(false)
   })
 
   it('offers the shorts comment bar on a phone, where it is drawn', async () => {

@@ -166,7 +166,6 @@
     }
   },
   "startup": {
-    "title": "3Speak을 열 때",
     "resume": {
       "title": "마지막 위치에서 계속하기",
       "desc": "마지막으로 보던 페이지에서 3Speak이 열립니다. 이 기기에만 저장됩니다."
@@ -176,10 +175,6 @@
     "commentBar": {
       "title": "쇼츠 댓글 입력창",
       "desc": "각 쇼츠 아래에 댓글 입력창"
-    },
-    "openOnStart": {
-      "title": "시작할 때 쇼츠 열기",
-      "desc": "3Speak를 열면 바로 쇼츠로 이동해요"
     },
     "inFeeds": {
       "title": "피드 안의 쇼츠",

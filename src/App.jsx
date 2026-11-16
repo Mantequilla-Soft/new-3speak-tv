@@ -34,7 +34,6 @@ import { ensure3SpeakStatus, getCachedPost } from "./utils/threeSpeakDetection";
 import { fetchPlaySource } from "./lib/videoData";
 import { useQueryClient } from "@tanstack/react-query";
 import RouteTitle from "./components/RouteTitle";
-import OpenShortsOnStart from "./components/OpenShortsOnStart";
 import ResumeLastPage from "./components/ResumeLastPage";
 // import TestingLogin from "./page/Login/TestingLogin";
 import { Toaster } from 'sonner';
@@ -826,8 +825,6 @@ function App() {
           <UploadBlockNotice hidden={hideNavOnMobile} />
           {/* Browser-tab title for every route (watch/shorts set their own). */}
           <RouteTitle />
-          {/* Optional: land on /shorts when the app is opened (off by default). */}
-          <OpenShortsOnStart />
           {/* Optional: open on the page the app was last on (off by default). */}
           <ResumeLastPage />
           {/* <Toaster richColors position="top-right" /> */}

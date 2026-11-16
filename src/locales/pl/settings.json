@@ -166,7 +166,6 @@
     }
   },
   "startup": {
-    "title": "Po otwarciu 3Speak",
     "resume": {
       "title": "Kontynuuj tam, gdzie skończyłem",
       "desc": "3Speak otwiera się na stronie, na której byłeś ostatnio. Zapisywane tylko na tym urządzeniu."
@@ -176,10 +175,6 @@
     "commentBar": {
       "title": "Pasek komentarza w Shorts",
       "desc": "Pole komentarza pod każdym Shortem"
-    },
-    "openOnStart": {
-      "title": "Otwieraj Shorts na starcie",
-      "desc": "Po otwarciu 3Speak przechodź od razu do Shorts"
     },
     "inFeeds": {
       "title": "Shorts w kanałach",

@@ -166,7 +166,6 @@
     }
   },
   "startup": {
-    "title": "Khi mở 3Speak",
     "resume": {
       "title": "Tiếp tục từ chỗ đã dừng",
       "desc": "3Speak mở lại trang bạn xem lần cuối. Chỉ lưu trên thiết bị này."
@@ -176,10 +175,6 @@
     "commentBar": {
       "title": "Thanh bình luận trên Shorts",
       "desc": "Ô nhập bình luận dưới mỗi Short"
-    },
-    "openOnStart": {
-      "title": "Mở Shorts khi khởi động",
-      "desc": "Vào thẳng Shorts khi bạn mở 3Speak"
     },
     "inFeeds": {
       "title": "Shorts trong bảng tin",

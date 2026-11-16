@@ -166,7 +166,6 @@
     }
   },
   "startup": {
-    "title": "Unapofungua 3Speak",
     "resume": {
       "title": "Endelea nilipoishia",
       "desc": "3Speak hufunguka kwenye ukurasa uliokuwa mwisho. Huhifadhiwa kwenye kifaa hiki pekee."
@@ -176,10 +175,6 @@
     "commentBar": {
       "title": "Upau wa maoni kwenye Shorts",
       "desc": "Sehemu ya kuandika maoni chini ya kila Short"
-    },
-    "openOnStart": {
-      "title": "Fungua Shorts mwanzoni",
-      "desc": "Nenda moja kwa moja kwenye Shorts unapofungua 3Speak"
     },
     "inFeeds": {
       "title": "Shorts ndani ya milisho",

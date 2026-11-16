@@ -166,7 +166,6 @@
     }
   },
   "startup": {
-    "title": "打开 3Speak 时",
     "resume": {
       "title": "从上次离开的地方继续",
       "desc": "打开 3Speak 时回到你上次所在的页面。仅保存在此设备上。"
@@ -176,10 +175,6 @@
     "commentBar": {
       "title": "短视频评论栏",
       "desc": "在每个短视频下方显示评论输入框"
-    },
-    "openOnStart": {
-      "title": "启动时打开短视频",
-      "desc": "打开 3Speak 时直接进入短视频"
     },
     "inFeeds": {
       "title": "在信息流中显示短视频",

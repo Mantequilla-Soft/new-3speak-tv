@@ -166,7 +166,6 @@
     }
   },
   "startup": {
-    "title": "Bij het openen van 3Speak",
     "resume": {
       "title": "Verdergaan waar ik was",
       "desc": "3Speak opent op de pagina waar je het laatst was. Alleen op dit apparaat bewaard."
@@ -176,10 +175,6 @@
     "commentBar": {
       "title": "Reactiebalk bij Shorts",
       "desc": "Een reactieveld onder elke Short"
-    },
-    "openOnStart": {
-      "title": "Shorts openen bij het starten",
-      "desc": "Ga direct naar Shorts als je 3Speak opent"
     },
     "inFeeds": {
       "title": "Shorts in de feeds",

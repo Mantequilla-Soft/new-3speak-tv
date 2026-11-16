@@ -166,7 +166,6 @@
     }
   },
   "startup": {
-    "title": "Beim Öffnen von 3Speak",
     "resume": {
       "title": "Dort weitermachen, wo ich war",
       "desc": "3Speak öffnet die Seite, auf der du zuletzt warst. Nur auf diesem Gerät gespeichert."
@@ -176,10 +175,6 @@
     "commentBar": {
       "title": "Kommentarleiste bei Shorts",
       "desc": "Ein Kommentarfeld unter jedem Short"
-    },
-    "openOnStart": {
-      "title": "Shorts beim Start öffnen",
-      "desc": "Beim Öffnen von 3Speak direkt zu den Shorts"
     },
     "inFeeds": {
       "title": "Shorts in den Feeds",

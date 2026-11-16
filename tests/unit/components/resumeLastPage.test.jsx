@@ -1,12 +1,10 @@
 // @vitest-environment jsdom
 // "Continue where I left off" (components/ResumeLastPage.jsx + lib/lastPage.js):
-// remembers the page while the setting is on and opens the app there again, and
-// how it shares the app open with "Open Shorts on start".
+// remembers the page while the setting is on and opens the app there again.
 import { describe, it, expect, beforeEach } from 'vitest'
 import { render, screen, act } from '@testing-library/react'
 import { MemoryRouter, Routes, Route, Link, useLocation } from 'react-router-dom'
 import ResumeLastPage from '../../../src/components/ResumeLastPage'
-import OpenShortsOnStart from '../../../src/components/OpenShortsOnStart'
 import { useAppStore } from '../../../src/lib/store'
 import { readLastPage, rememberablePath, saveLastPage } from '../../../src/lib/lastPage'
 
@@ -19,7 +17,6 @@ function openApp(at = '/') {
   return render(
     <MemoryRouter initialEntries={[at]}>
       <ResumeLastPage />
-      <OpenShortsOnStart />
       <Where />
       <Routes>
         <Route path="*" element={<Link to="/t/music">music</Link>} />
@@ -31,7 +28,7 @@ const where = () => screen.getByTestId('where').textContent
 
 beforeEach(() => {
   localStorage.clear()
-  useAppStore.setState({ resumeLastPage: false, openShortsOnStart: false })
+  useAppStore.setState({ resumeLastPage: false })
 })
 
 describe('lib/lastPage', () => {
@@ -81,16 +78,9 @@ describe('ResumeLastPage', () => {
     expect(localStorage.getItem('last-page')).toBe('/watch?v=badadib/abc')
   })
 
-  it('goes to the saved page instead of Shorts when both are on', () => {
-    useAppStore.setState({ resumeLastPage: true, openShortsOnStart: true })
-    localStorage.setItem('last-page', '/p/badadib')
+  it('with nothing saved yet, the app stays on Home', () => {
+    useAppStore.setState({ resumeLastPage: true })
     openApp('/')
-    expect(where()).toBe('/p/badadib')
-  })
-
-  it('with nothing saved yet, Open Shorts on start still applies', () => {
-    useAppStore.setState({ resumeLastPage: true, openShortsOnStart: true })
-    openApp('/')
-    expect(where()).toBe('/shorts')
+    expect(where()).toBe('/')
   })
 })

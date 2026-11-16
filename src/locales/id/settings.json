@@ -166,7 +166,6 @@
     }
   },
   "startup": {
-    "title": "Saat membuka 3Speak",
     "resume": {
       "title": "Lanjutkan dari terakhir kali",
       "desc": "3Speak terbuka di halaman terakhir yang kamu buka. Hanya disimpan di perangkat ini."
@@ -176,10 +175,6 @@
     "commentBar": {
       "title": "Bilah komentar di Shorts",
       "desc": "Kolom komentar di bawah setiap Short"
-    },
-    "openOnStart": {
-      "title": "Buka Shorts saat mulai",
-      "desc": "Langsung ke Shorts saat kamu membuka 3Speak"
     },
     "inFeeds": {
       "title": "Shorts di dalam feed",

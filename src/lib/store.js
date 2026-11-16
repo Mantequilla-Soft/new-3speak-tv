@@ -60,9 +60,6 @@ export const useAppStore = create(
       // entirely, it doesn't just hide the rows.
       inlineShorts: true,
       setInlineShorts: (val) => a[0]({ inlineShorts: !!(typeof val === 'function' ? val(a[1]().inlineShorts) : val) }),
-      // Land on /shorts instead of the home feed when 3Speak is opened. Off by default.
-      openShortsOnStart: false,
-      setOpenShortsOnStart: (val) => a[0]({ openShortsOnStart: !!(typeof val === 'function' ? val(a[1]().openShortsOnStart) : val) }),
       // Open 3Speak on the page it was last on (components/ResumeLastPage). Off by default.
       resumeLastPage: false,
       setResumeLastPage: (val) => a[0]({ resumeLastPage: !!(typeof val === 'function' ? val(a[1]().resumeLastPage) : val) }),
@@ -105,12 +102,14 @@ export const useAppStore = create(
       // so it becomes 'large'; a saved 'large' was picked and stays.
       // v4 (owner 2026-11-12): "Simple feeds" is gone; a saved value is dropped,
       // so everyone is back on the recommended feeds.
-      version: 4,
+      // v5 (owner 2026-11-16): "Open Shorts on start" is gone; a saved value is dropped.
+      version: 5,
       migrate: (persistedState, version) => {
         if (version < 1 && persistedState) persistedState.hideWatched = true;
         if (version < 2 && persistedState) persistedState.hideAi = true;
         if (version < 3 && persistedState && persistedState.homeCardSize !== 'large') persistedState.homeCardSize = 'large';
         if (version < 4 && persistedState) delete persistedState.simpleFeed;
+        if (version < 5 && persistedState) delete persistedState.openShortsOnStart;
         return persistedState;
       },
       partialize: (state) => ({
@@ -126,7 +125,6 @@ export const useAppStore = create(
         interests: state.interests,
         shortsFeedMode: state.shortsFeedMode,
         shortsCommentBar: state.shortsCommentBar,
-        openShortsOnStart: state.openShortsOnStart,
         resumeLastPage: state.resumeLastPage,
         inlineShorts: state.inlineShorts,
         hideWatched: state.hideWatched,

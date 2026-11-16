@@ -8,9 +8,9 @@ import { clearLastPage, readLastPage, saveLastPage } from '../lib/lastPage';
  * user opens is remembered (lib/lastPage.js), and opening 3Speak on Home goes
  * back to that page.
  *
- * The same rules as OpenShortsOnStart: once per page load, only when the app was
- * opened on "/" with no query (a shared link always wins), and a PUSH so Back
- * returns to the home feed. When a page is resumed, OpenShortsOnStart stands back.
+ * Once per page load, only when the app was opened on "/" with no query (a shared
+ * link always wins), and a PUSH so Back returns to the home feed. (It replaced
+ * "Open Shorts on start", owner 2026-11-16.)
  *
  * Turning the setting off forgets the saved page. Off by default.
  */

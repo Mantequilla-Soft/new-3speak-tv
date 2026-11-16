@@ -166,7 +166,6 @@
     }
   },
   "startup": {
-    "title": "Pagbukas ng 3Speak",
     "resume": {
       "title": "Ituloy kung saan ako huminto",
       "desc": "Bubukas ang 3Speak sa huling page na binuksan mo. Sa device na ito lang naka-save."
@@ -176,10 +175,6 @@
     "commentBar": {
       "title": "Comment bar sa Shorts",
       "desc": "Comment input sa ilalim ng bawat Short"
-    },
-    "openOnStart": {
-      "title": "Buksan ang Shorts sa simula",
-      "desc": "Diretso sa Shorts pagbukas mo ng 3Speak"
     },
     "inFeeds": {
       "title": "Shorts sa loob ng feeds",
