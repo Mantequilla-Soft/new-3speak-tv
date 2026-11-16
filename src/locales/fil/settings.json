@@ -171,6 +171,11 @@
       "desc": "Bubukas ang 3Speak sa huling page na binuksan mo. Sa device na ito lang naka-save."
     }
   },
+  "startPrompt": {
+    "title": "Ituloy kung saan ka huminto?",
+    "intro": "Opsyonal. Mananatili ang lahat sa device na ito, at puwede mo itong baguhin mamaya.",
+    "notNow": "Hindi muna"
+  },
   "shorts": {
     "commentBar": {
       "title": "Comment bar sa Shorts",

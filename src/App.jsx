@@ -112,6 +112,7 @@ const Galaxy = lazyRoute(() => import("./page/Galaxy"), "./page/Galaxy");
 const InvitePage = lazyRoute(() => import("./page/Invite/InvitePage"), "./page/Invite/InvitePage");
 import InvitePopup from "./components/InvitePopup/InvitePopup";
 import InstallAppPrompt from "./components/InstallAppPrompt/InstallAppPrompt";
+import StartPrompt from "./components/StartPrompt/StartPrompt";
 const InviteLinks = lazyRoute(() => import("./page/Invite/InviteLinks"), "./page/Invite/InviteLinks");
 const Advertise = lazyRoute(() => import("./page/Advertise"), "./page/Advertise");
 const Legal = lazyRoute(() => import("./page/Legal"), "./page/Legal");
@@ -976,6 +977,8 @@ function App() {
         <InvitePopup openLoginModal={openLoginModal} />
         {/* Phones: "Install as app", once, when the browser can (or Safari on an iPhone). */}
         <InstallAppPrompt />
+        {/* "Pick up where you left off?": once, after the changelog popup. */}
+        <StartPrompt />
         <LoginModal
           displayed={loginModalOpen}
           intent={loginIntent}

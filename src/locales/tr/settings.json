@@ -171,6 +171,11 @@
       "desc": "3Speak en son bulunduğun sayfada açılır. Yalnızca bu cihazda saklanır."
     }
   },
+  "startPrompt": {
+    "title": "Kaldığın yerden devam etmek ister misin?",
+    "intro": "İsteğe bağlı. Her şey bu cihazda kalır ve daha sonra değiştirebilirsin.",
+    "notNow": "Şimdi değil"
+  },
   "shorts": {
     "commentBar": {
       "title": "Shorts'ta yorum çubuğu",

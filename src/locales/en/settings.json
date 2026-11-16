@@ -171,6 +171,11 @@
       "desc": "Open 3Speak on the page you were last on. Saved on this device only."
     }
   },
+  "startPrompt": {
+    "title": "Pick up where you left off?",
+    "intro": "Optional. Everything stays on this device, and you can change it later.",
+    "notNow": "Not now"
+  },
   "shorts": {
     "commentBar": {
       "title": "Comment bar on shorts",

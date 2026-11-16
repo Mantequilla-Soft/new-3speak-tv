@@ -171,6 +171,11 @@
       "desc": "3Speak mở lại trang bạn xem lần cuối. Chỉ lưu trên thiết bị này."
     }
   },
+  "startPrompt": {
+    "title": "Tiếp tục từ chỗ bạn đã dừng?",
+    "intro": "Không bắt buộc. Mọi thứ chỉ lưu trên thiết bị này và bạn có thể đổi sau.",
+    "notNow": "Để sau"
+  },
   "shorts": {
     "commentBar": {
       "title": "Thanh bình luận trên Shorts",

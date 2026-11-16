@@ -171,6 +171,11 @@
       "desc": "3Speak öffnet die Seite, auf der du zuletzt warst. Nur auf diesem Gerät gespeichert."
     }
   },
+  "startPrompt": {
+    "title": "Dort weitermachen, wo du warst?",
+    "intro": "Freiwillig. Alles bleibt auf diesem Gerät, und du kannst es später ändern.",
+    "notNow": "Nicht jetzt"
+  },
   "shorts": {
     "commentBar": {
       "title": "Kommentarleiste bei Shorts",

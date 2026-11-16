@@ -171,6 +171,11 @@
       "desc": "3Speak hufunguka kwenye ukurasa uliokuwa mwisho. Huhifadhiwa kwenye kifaa hiki pekee."
     }
   },
+  "startPrompt": {
+    "title": "Uendelee ulipoishia?",
+    "intro": "Si lazima. Kila kitu hubaki kwenye kifaa hiki, na unaweza kubadilisha baadaye.",
+    "notNow": "Si sasa"
+  },
   "shorts": {
     "commentBar": {
       "title": "Upau wa maoni kwenye Shorts",

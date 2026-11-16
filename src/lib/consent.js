@@ -32,6 +32,10 @@
  *     • App-version marker (3speak_app_version) for the "what's new" changelog
  *     • "Welcome box closed" (3speak_welcome_closed): set when you close the welcome
  *       box with its X, so it does not come back
+ *     • "Continue where I left off" (last-page): the page you were last on, kept
+ *       only while you turned that setting on (components/ResumeLastPage.jsx)
+ *     • "Pick up where you left off?" answered (3speak_start_prompt), so that
+ *       popup does not come back
  *     • This consent choice itself — we cannot remember "no" without storing "no"
  *
  *   FUNCTIONAL (optional — this is what the banner is actually for):
@@ -81,6 +85,11 @@ function read() {
   } catch {
     return null;
   }
+}
+
+/** When the banner was answered (ISO string), or null. */
+export function consentDecidedAt() {
+  return read()?.decidedAt || null;
 }
 
 /** Has the user answered the banner yet? */

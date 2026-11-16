@@ -171,6 +171,11 @@
       "desc": "3Speak opent op de pagina waar je het laatst was. Alleen op dit apparaat bewaard."
     }
   },
+  "startPrompt": {
+    "title": "Verdergaan waar je was?",
+    "intro": "Optioneel. Alles blijft op dit apparaat en je kunt het later wijzigen.",
+    "notNow": "Niet nu"
+  },
   "shorts": {
     "commentBar": {
       "title": "Reactiebalk bij Shorts",

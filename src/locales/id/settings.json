@@ -171,6 +171,11 @@
       "desc": "3Speak terbuka di halaman terakhir yang kamu buka. Hanya disimpan di perangkat ini."
     }
   },
+  "startPrompt": {
+    "title": "Lanjutkan dari terakhir kali?",
+    "intro": "Opsional. Semuanya tetap di perangkat ini, dan bisa kamu ubah nanti.",
+    "notNow": "Nanti saja"
+  },
   "shorts": {
     "commentBar": {
       "title": "Bilah komentar di Shorts",

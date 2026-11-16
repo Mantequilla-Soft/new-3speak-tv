@@ -1,0 +1,21 @@
+// "Pick up where you left off?" (StartPrompt.jsx): the intro, the switch rows
+// divided by 1px lines like the settings cards, Not now + Save at the foot.
+.start-prompt {
+  .start-prompt__intro {
+    margin: 0 0 12px;
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.45;
+  }
+
+  .start-prompt__rows .v2-setting + .v2-setting {
+    border-top: 1px solid var(--border);
+  }
+
+  .start-prompt__foot {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    width: 100%;
+  }
+}
