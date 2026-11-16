@@ -397,10 +397,11 @@ function ProfileNav({ isVisible, pinned = true, leaving = false, hoverProps, onc
             </div>
           </div>
           {/* A plain, followed link to hive.io, as the Hive ecosystem asked
-              (issue #563): no nofollow / ugc / sponsored. */}
+              (issue #563): no nofollow / ugc / sponsored. The credit stays in
+              English in every language, like the site footer (owner 2026-11-16). */}
           <a href="https://hive.io" className="pn-powered" target="_blank" rel="noopener">
             <img src={hiveMark} alt="" width={16} height={14} />
-            {t('pages.about.hive.title')}
+            Powered by Hive
           </a>
         </div>
       </div>

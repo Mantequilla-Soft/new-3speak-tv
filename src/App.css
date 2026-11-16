@@ -100,8 +100,20 @@
   color: var(--muted, #666);
 }
 .site-hive-footer a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   color: inherit;
   text-decoration: none;
+}
+/* The Hive mark, as in the profile menu and the FAQ. Drawn from CSS so the
+   link text crawlers read stays exactly "Powered by Hive". */
+.site-hive-footer a::before {
+  content: "";
+  flex: none;
+  width: 16px;
+  height: 14px;
+  background: url('./assets/image/hive-mark.png') center / contain no-repeat;
 }
 .site-hive-footer a:hover,
 .site-hive-footer a:focus-visible {

@@ -8,6 +8,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { act, screen, waitFor, within } from '@testing-library/react'
 import { useNavigate } from 'react-router-dom'
 import { renderWithProviders } from './_render.jsx'
+import i18n from '../../../src/i18n'
 
 const m = vi.hoisted(() => ({}))
 vi.mock('sonner', async () => (await import('./_render.jsx')).sonnerModule())
@@ -80,6 +81,16 @@ describe('the account menu', () => {
     const link = screen.getByRole('link', { name: 'Powered by Hive' })
     expect(link).toHaveAttribute('href', 'https://hive.io')
     expect(link.getAttribute('rel')).not.toMatch(/nofollow|ugc|sponsored/)
+  })
+
+  it('keeps "Powered by Hive" in English in every language, like the site footer', async () => {
+    await i18n.changeLanguage('de')
+    try {
+      mount()
+      expect(screen.getByRole('link', { name: 'Powered by Hive' })).toHaveAttribute('href', 'https://hive.io')
+    } finally {
+      await i18n.changeLanguage('en')
+    }
   })
 
   it('lists the pages every member gets, as menu items', () => {
