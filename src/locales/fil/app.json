@@ -94,6 +94,12 @@
     "notNow": "Hindi muna",
     "save": "I-save ang mga interes"
   },
+  "socialLinks": {
+    "title": "May YouTube o iba ka pang channel?",
+    "body": "I-link ang iyong mga social media profile sa iyong 3Speak account at i-import ang iyong content mula roon.",
+    "note": "Puwede mong i-unlink ang isang profile anumang oras sa Settings.",
+    "link": "I-link ang mga profile"
+  },
   "emojiGif": {
     "emoji": "Emoji",
     "searchEmoji": "Maghanap ng emoji",

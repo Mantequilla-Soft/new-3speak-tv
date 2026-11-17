@@ -187,6 +187,7 @@ import InterestsPrompt from "./components/InterestsPrompt/InterestsPrompt";
 import WelcomePrompt from "./components/WelcomePrompt/WelcomePrompt";
 import AdsPrompt from "./components/AdsPrompt/AdsPrompt";
 import ViewerRewardsPrompt from "./components/AdsPrompt/ViewerRewardsPrompt";
+import SocialLinksPrompt from "./components/SocialLinksPrompt/SocialLinksPrompt";
 import GraduatedFollowsPrompt from "./components/Incubation/GraduatedFollowsPrompt";
 import IncubationSessionSync from "./components/Incubation/IncubationSessionSync";
 import AvatarSync from "./components/HiveAvatar/AvatarSync";
@@ -1005,6 +1006,8 @@ function App() {
         <InterestsPrompt />
         <AdsPrompt />
         <ViewerRewardsPrompt />
+        {/* No linked social profiles yet: link YouTube and the others, once. */}
+        <SocialLinksPrompt />
         {/* Offers an incubating user their own Hive account once BOTH
             butrauth (may they) and our own signal (have they earned it)
             agree. Shares the one-prompt-at-a-time gate with the others. */}

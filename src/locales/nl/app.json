@@ -94,6 +94,12 @@
     "notNow": "Niet nu",
     "save": "Interesses opslaan"
   },
+  "socialLinks": {
+    "title": "Heb je YouTube of andere kanalen?",
+    "body": "Koppel je socialemediaprofielen aan je 3Speak-account en importeer je content van daaruit.",
+    "note": "Je kunt een profiel altijd weer ontkoppelen in Instellingen.",
+    "link": "Profielen koppelen"
+  },
   "emojiGif": {
     "emoji": "Emoji",
     "searchEmoji": "Emoji zoeken",

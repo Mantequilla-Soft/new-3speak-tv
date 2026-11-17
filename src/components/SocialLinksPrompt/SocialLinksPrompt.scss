@@ -1,0 +1,30 @@
+@use "../../styles/v2" as v2;
+
+/* "Are you on YouTube too?": the platform icons in a row, one muted paragraph,
+   then Close | Link profiles side by side (as the ads prompts, 47d). */
+.social-links-prompt__icons {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+  color: var(--cyan);
+
+  > span {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: var(--cyan-tint);
+  }
+}
+
+.social-links-prompt__lede {
+  margin: 0 0 8px;
+  @include v2.text(body);
+  line-height: 1.5;
+  color: var(--text);
+}
+
+@include v2.tablet-up {
+  .social-links-prompt .v2-dialog__foot .social-links-prompt__main.v2-btn { flex: 1; }
+}

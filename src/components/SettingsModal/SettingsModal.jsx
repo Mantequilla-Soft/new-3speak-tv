@@ -1081,7 +1081,9 @@ const DROPDOWN_GAP = 8;
 const DROPDOWN_EDGE = 8;
 const DROPDOWN_WIDTH = 600;
 
-export default function SettingsModal({ isOpen, onClose, dropdown = null, leaving = false, hoverProps, typingProps }) {
+// `initialTab`: open on that tab (on a phone straight into that section), as the
+// linked-profiles prompt does with 'connections' (components/SocialLinksPrompt).
+export default function SettingsModal({ isOpen, onClose, dropdown = null, leaving = false, hoverProps, typingProps, initialTab = null }) {
   const { t } = useTranslation();
   const { theme, showNsfw, setShowNsfw, toggleTheme, homeCardSize, setHomeCardSize, previewEnabled, setPreviewEnabled, shortsCommentBar, setShortsCommentBar, resumeLastPage, setResumeLastPage, inlineShorts, setInlineShorts, hideWatched, setHideWatched, hideAi, setHideAi, privateMode, setPrivateMode, heroPreviewEnabled, setHeroPreviewEnabled } = useAppStore();
   const cardSize = useCardSize();
@@ -1124,7 +1126,7 @@ export default function SettingsModal({ isOpen, onClose, dropdown = null, leavin
     }),
     [rewardsVisible, notificationsVisible],
   );
-  const [tab, setTab] = useState('general');
+  const [tab, setTab] = useState(initialTab || 'general');
   // Losing the group (or logging out) while standing on that page would leave the modal
   // with no tab selected and nothing rendered.
   useEffect(() => {
@@ -1141,7 +1143,7 @@ export default function SettingsModal({ isOpen, onClose, dropdown = null, leavin
   // starts on the tiles again.
   const phone = useSyncExternalStore(subscribePhone, readPhone, () => false);
   const tiles = phone && !dropdown;
-  const [sectionOpen, setSectionOpen] = useState(false);
+  const [sectionOpen, setSectionOpen] = useState(!!initialTab);
   const [wasOpen, setWasOpen] = useState(isOpen);
   if (wasOpen !== isOpen) {
     setWasOpen(isOpen);

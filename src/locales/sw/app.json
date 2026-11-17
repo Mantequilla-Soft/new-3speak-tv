@@ -94,6 +94,12 @@
     "notNow": "Si sasa",
     "save": "Hifadhi mambo unayopenda"
   },
+  "socialLinks": {
+    "title": "Je, una YouTube au chaneli nyingine?",
+    "body": "Unganisha wasifu wako wa mitandao ya kijamii na akaunti yako ya 3Speak na uingize maudhui yako kutoka huko.",
+    "note": "Unaweza kutenganisha wasifu wakati wowote kwenye Mipangilio.",
+    "link": "Unganisha wasifu"
+  },
   "emojiGif": {
     "emoji": "Emoji",
     "searchEmoji": "Tafuta emoji",

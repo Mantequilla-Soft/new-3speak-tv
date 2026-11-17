@@ -94,6 +94,12 @@
     "notNow": "Nanti saja",
     "save": "Simpan minat"
   },
+  "socialLinks": {
+    "title": "Punya YouTube atau kanal lain?",
+    "body": "Tautkan profil media sosialmu ke akun 3Speak dan impor kontenmu dari sana.",
+    "note": "Kamu bisa melepas tautan profil kapan saja di Pengaturan.",
+    "link": "Tautkan profil"
+  },
   "emojiGif": {
     "emoji": "Emoji",
     "searchEmoji": "Cari emoji",

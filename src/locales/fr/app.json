@@ -94,6 +94,12 @@
     "notNow": "Pas maintenant",
     "save": "Enregistrer"
   },
+  "socialLinks": {
+    "title": "Tu as YouTube ou d'autres chaînes ?",
+    "body": "Relie tes profils de réseaux sociaux à ton compte 3Speak et importe ton contenu depuis ceux-ci.",
+    "note": "Tu peux délier un profil à tout moment dans les Paramètres.",
+    "link": "Relier mes profils"
+  },
   "emojiGif": {
     "emoji": "Emoji",
     "searchEmoji": "Rechercher un emoji",

@@ -139,6 +139,13 @@ describe('the settings window', () => {
     expect(tabs()).toEqual(['General', 'Content', 'Connections', 'About'])
   })
 
+  it('opens on the tab it is given (the linked-profiles prompt opens Connections)', () => {
+    signIn()
+    mount({ initialTab: 'connections' })
+    expect(screen.getByRole('tab', { name: 'Connections' })).toHaveAttribute('aria-selected', 'true')
+    expect(screen.getByText('Linked profiles of listener')).toBeInTheDocument()
+  })
+
   it('shows "Ads & rewards" only when the checker lets the account in', async () => {
     m.adsFor = () => true
     signIn()

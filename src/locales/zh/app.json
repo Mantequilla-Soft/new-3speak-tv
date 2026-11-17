@@ -94,6 +94,12 @@
     "notNow": "以后再说",
     "save": "保存兴趣"
   },
+  "socialLinks": {
+    "title": "你有 YouTube 或其他频道吗？",
+    "body": "将你的社交媒体资料关联到 3Speak 账户，并从那里导入你的内容。",
+    "note": "你可以随时在设置中取消关联。",
+    "link": "关联资料"
+  },
   "emojiGif": {
     "emoji": "表情",
     "searchEmoji": "搜索表情",
