@@ -133,7 +133,7 @@ export default function ThumbnailEditorModal({
         <div className="thumb-modal__footer">
           {/* 23c: one full-width primary. The video thumbnail is used as is;
               a host with its own Done (the audio cover) keeps "Done". */}
-          <Button variant="primary" size={56} block trailing="check" className="thumb-btn thumb-btn--primary is-next" onClick={onDone || onClose} disabled={doneBusy} loading={doneBusy}>
+          <Button variant="primary" size={44} block trailing="check" className="thumb-btn thumb-btn--primary is-next" onClick={onDone || onClose} disabled={doneBusy} loading={doneBusy}>
             {doneBusy ? t('audio.upload.thumb.uploading') : onDone ? t('upload.thumbnail.editor.done') : t('upload.thumbnail.editor.useThumbnail')}
           </Button>
         </div>
