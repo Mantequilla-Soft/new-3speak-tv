@@ -29,11 +29,13 @@
 // Parallax (HomeHero onPointerMove, a mouse only): --px / --py run from -1 to
 // 1 across the hero; the picture drifts against the pointer, the text a touch
 // with it, both easing after it. Still on touch screens and reduced motion.
+// The picture and the video are scaled up (1.1) so the drift never shows an edge:
+// 5% a side is 96px of a 1920 width and 28px of the 560 desktop height.
 .home-hero {
-  --hero-drift: translate3d(calc(var(--px, 0) * -16px), calc(var(--py, 0) * -10px), 0);
+  --hero-drift: translate3d(calc(var(--px, 0) * -48px), calc(var(--py, 0) * -24px), 0);
 }
 
-.home-hero__body { translate: calc(var(--px, 0) * 5px) calc(var(--py, 0) * 3px); }
+.home-hero__body { translate: calc(var(--px, 0) * 10px) calc(var(--py, 0) * 6px); }
 
 .home-hero__bg {
   position: absolute;
@@ -61,7 +63,7 @@
   // (scaled up a touch so the blurred edges stay off-screen).
   img {
     filter: blur(6px);
-    transform: var(--hero-drift) scale(1.06);
+    transform: var(--hero-drift) scale(1.1);
     transition: transform 700ms cubic-bezier(.2, .7, .3, 1);
   }
 
@@ -123,7 +125,7 @@
   .home-hero__video {
     z-index: 0;
     filter: blur(3px);
-    transform: var(--hero-drift) scale(1.05);
+    transform: var(--hero-drift) scale(1.1);
     transition: opacity var(--t-xfade) ease-in-out, transform 700ms cubic-bezier(.2, .7, .3, 1);
     &.is-top { z-index: 1; }
     &.is-off { opacity: 0; }
