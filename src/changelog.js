@@ -18,6 +18,30 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.103',
+    category: 'live',
+    date: '2026-11-17',
+    summary: 'Live captions are now a Pro feature, and each caption line finishes as a proper sentence with punctuation.',
+  },
+  {
+    version: '2.0.102',
+    category: 'account',
+    date: '2026-11-17',
+    summary: 'Accounts without linked profiles get a one-time tip to link YouTube and others and import their content.',
+  },
+  {
+    version: '2.0.101',
+    category: 'upload',
+    date: '2026-11-17',
+    summary: 'Share rewards: raise the 3Speak and encoder shares with − and + if you want to give more.',
+  },
+  {
+    version: '2.0.100',
+    category: 'settings',
+    date: '2026-11-17',
+    summary: 'Settings → About now lets you pick the Hive node: automatic, one of the known nodes, or your own.',
+  },
+  {
     version: '2.0.99',
     category: 'audio',
     date: '2026-11-17',
