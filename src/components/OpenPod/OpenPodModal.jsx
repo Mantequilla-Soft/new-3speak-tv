@@ -65,8 +65,10 @@ function buildOpenPodShareUrl(roomName, origin, mode) {
 // Text of the studio's "Phone or tablet screen" source (SDK
 // PhoneScreenSourceLabels). Built with a dynamic t() like the create form.
 const PHONE_SOURCE_KEYS = [
-  'menuItem', 'menuHint', 'sourceName', 'title', 'lead', 'step1', 'step2', 'step3', 'step4',
-  'qrHint', 'keepPrivate', 'sharedSlot', 'soundNote', 'delayNote', 'waiting', 'connected',
+  'menuItem', 'menuHint', 'sourceName', 'title', 'lead', 'tabVdoNinja', 'tabLarix',
+  'vdoStep1', 'vdoStep2', 'vdoStep3', 'vdoQrHint', 'sameEveryStream', 'step1', 'step2', 'step3', 'step4',
+  'urlLabel', 'tokenLabel', 'openInLarix', 'qrHint', 'keepPrivate', 'sharedSlot', 'soundNote',
+  'androidNote', 'firefoxNote', 'delayNote', 'waiting', 'connected',
 ];
 
 export default function OpenPodModal({ isOpen, onClose, roomName, sessionToken, username, isAuthenticated }) {

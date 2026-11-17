@@ -18,6 +18,36 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.111',
+    category: 'live',
+    date: '2026-11-17',
+    summary: 'Show your phone or tablet screen in the stream studio with VDO.Ninja or Larix, set up once for every stream.',
+  },
+  {
+    version: '2.0.110',
+    category: 'live',
+    date: '2026-11-17',
+    summary: 'Removed the record-and-download option: when the stream is replaced by a video, you can download that video afterwards.',
+  },
+  {
+    version: '2.0.109',
+    category: 'live',
+    date: '2026-11-17',
+    summary: 'Boost goals show as a small card in the top right by default, or anywhere else you pick in the create form or the Boosts tab.',
+  },
+  {
+    version: '2.0.108',
+    category: 'live',
+    date: '2026-11-17',
+    summary: 'Stream studio: the ticker can run along the top or the bottom.',
+  },
+  {
+    version: '2.0.107',
+    category: 'live',
+    date: '2026-11-17',
+    summary: 'Stream studio: the side panel has vertical tabs, Overlays and Boosts among them, and slides away when you go live (pin it to keep it open).',
+  },
+  {
     version: '2.0.106',
     category: 'audio',
     date: '2026-11-17',

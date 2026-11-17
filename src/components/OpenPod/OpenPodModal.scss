@@ -198,6 +198,25 @@ div.hh-boost-settings {
     padding-bottom: env(safe-area-inset-bottom);
   }
 
+  // In the studio's Boosts tab (SDK `embedded`): part of the right panel, not
+  // a floating sheet.
+  &.hh-boost-settings--embedded {
+    position: static;
+    transform: none;
+    z-index: auto;
+    width: auto;
+    height: 100%;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    padding-bottom: 0;
+    .hh-boost-settings__body { flex: 1; min-height: 0; max-height: none; padding-top: 12px; }
+  }
+
   .hh-boost-settings__header {
     display: flex;
     align-items: center;
@@ -373,4 +392,12 @@ div.hh-battle-panel {
    the Boost settings sheet look. */
 div.hh-overlays {
   @include tools.overlays-panel;
+  // In the studio's right rail (the Overlays tab): part of the panel.
+  &.hh-overlays--embedded {
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    .hh-overlays__body { padding: 8px 4px 12px; }
+  }
 }
