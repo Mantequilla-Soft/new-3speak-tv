@@ -6,7 +6,8 @@ import { useTranslation } from 'react-i18next';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { useAppStore } from '../../lib/store';
-import { CHECKER_URL, PLAYLISTS_READ_URL } from '../../utils/config';
+import { CHECKER_URL, FEATURE_EDITOR, PLAYLISTS_READ_URL } from '../../utils/config';
+import { sourcesFor } from '../../lib/podcastDownloads';
 import { storedPlaylistType } from '../../lib/playlistType';
 import { toastIn } from '../../utils/toast';
 import { isLoggedIn } from '../../hive-api/aioha';
@@ -37,6 +38,17 @@ export const audioItemPath = (item) => `/audio?play=${item.owner}/${item.permlin
 function coverOf(item) {
   const fixed = item.thumbnail_url ? wholeCover(item.thumbnail_url) : fixVideoThumbnail({});
   return !fixed || fixed === fallbackImg || fixed === '/images/speak.jpg' ? `/img/u/${item.owner}/avatar/large` : fixed;
+}
+
+// "Video podcast": the audio editor opens straight into its video podcast on
+// this episode (hooks/useEditorLauncher.js, open-audio-editor with an episode).
+function openVideoPodcast(item, title) {
+  const url = sourcesFor(item)[0]?.url;
+  if (!url) return;
+  const cover = new URL(coverOf(item), window.location.origin).href;
+  window.dispatchEvent(new CustomEvent('open-audio-editor', {
+    detail: { episode: { url, title: title || item.title || '', cover, durationSec: Number(item.duration) || null } },
+  }));
 }
 
 async function copyLink(url, t) {
@@ -234,6 +246,12 @@ export default function AudioItemView({ owner, id, onBack }) {
             {postPermlink && authenticated && user === item.owner && (
               <button type="button" className="pod-btn" onClick={() => setEditing(true)} title={t('audio.edit.editTitle')}>
                 <Icon name="edit" size={16} /> {t('common.actions.edit')}
+              </button>
+            )}
+            {/* The creator turns the episode into a video (cover, waveform, captions) */}
+            {FEATURE_EDITOR && authenticated && user === item.owner && !item.external && item.audio_cid && (
+              <button type="button" className="pod-btn" onClick={() => openVideoPodcast(item, title)} title={t('audio.item.videoPodcastTitle')}>
+                <Icon name="smart_display" size={16} /> {t('audio.item.videoPodcast')}
               </button>
             )}
             {loggedIn && (

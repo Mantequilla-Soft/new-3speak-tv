@@ -141,7 +141,8 @@
       "title": "Texto del Short",
       "hint": "Acompaña al audiograma en el Short. Se añade un enlace a tu audio automáticamente.",
       "placeholder": "¿De qué trata este fragmento? (opcional)"
-    }
+    },
+    "videoPodcastNotSupported": "El videopódcast aún no está disponible en el editor. Inténtalo de nuevo más tarde."
   },
   "profile": {
     "mustLogin": "Primero debes iniciar sesión",

@@ -141,7 +141,8 @@
       "title": "Text for the Short",
       "hint": "It goes with the audiogram in the Short. A link to your audio is added for you.",
       "placeholder": "What is this piece about? (optional)"
-    }
+    },
+    "videoPodcastNotSupported": "The video podcast is not available in the editor yet. Please try again later."
   },
   "profile": {
     "mustLogin": "You must login first",

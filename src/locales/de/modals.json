@@ -141,7 +141,8 @@
       "title": "Text für den Short",
       "hint": "Er erscheint mit dem Audiogramm im Short. Ein Link zu deinem Audio wird automatisch ergänzt.",
       "placeholder": "Worum geht es in diesem Ausschnitt? (optional)"
-    }
+    },
+    "videoPodcastNotSupported": "Der Video-Podcast ist im Editor noch nicht verfügbar. Bitte versuch es später noch einmal."
   },
   "profile": {
     "mustLogin": "Du musst dich zuerst anmelden",

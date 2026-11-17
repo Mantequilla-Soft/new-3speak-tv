@@ -828,7 +828,9 @@
     "description": "Description",
     "noDescription": "Pas de description.",
     "comments": "Commentaires",
-    "album": "De {{name}}"
+    "album": "De {{name}}",
+    "videoPodcast": "Podcast vidéo",
+    "videoPodcastTitle": "Fais une vidéo de cet épisode : sa pochette, une forme d'onde et des sous-titres"
   },
   "offline": {
     "notice": "Vous êtes hors ligne. Vos téléchargements restent lisibles.",

@@ -798,7 +798,9 @@
     "description": "Beschrijving",
     "noDescription": "Geen beschrijving.",
     "comments": "Reacties",
-    "album": "Uit {{name}}"
+    "album": "Uit {{name}}",
+    "videoPodcast": "Videopodcast",
+    "videoPodcastTitle": "Maak een video van deze aflevering: de cover, een golfvorm en ondertitels"
   },
   "offline": {
     "notice": "Je bent offline. Je downloads spelen nog steeds af.",

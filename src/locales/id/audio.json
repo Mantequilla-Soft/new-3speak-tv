@@ -768,7 +768,9 @@
     "description": "Deskripsi",
     "noDescription": "Tidak ada deskripsi.",
     "comments": "Komentar",
-    "album": "Dari {{name}}"
+    "album": "Dari {{name}}",
+    "videoPodcast": "Podcast video",
+    "videoPodcastTitle": "Buat video dari episode ini: sampul, gelombang suara, dan teks"
   },
   "offline": {
     "notice": "Kamu sedang offline. Unduhanmu tetap bisa diputar.",

@@ -141,7 +141,8 @@
       "title": "Tekst Shorta",
       "hint": "Pojawi się z audiogramem w Shorcie. Link do Twojego audio zostanie dodany automatycznie.",
       "placeholder": "O czym jest ten fragment? (opcjonalnie)"
-    }
+    },
+    "videoPodcastNotSupported": "Wideopodcast nie jest jeszcze dostępny w edytorze. Spróbuj ponownie później."
   },
   "profile": {
     "mustLogin": "Najpierw musisz się zalogować",

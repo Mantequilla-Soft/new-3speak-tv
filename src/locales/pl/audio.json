@@ -858,7 +858,9 @@
     "description": "Opis",
     "noDescription": "Brak opisu.",
     "comments": "Komentarze",
-    "album": "Z {{name}}"
+    "album": "Z {{name}}",
+    "videoPodcast": "Wideopodcast",
+    "videoPodcastTitle": "Zrób wideo z tego odcinka: okładka, fala dźwięku i napisy"
   },
   "offline": {
     "notice": "Jesteś offline. Pobrane odcinki nadal działają.",

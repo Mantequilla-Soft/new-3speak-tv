@@ -141,7 +141,8 @@
       "title": "Teks untuk Short",
       "hint": "Teks ini menyertai audiogram di Short. Tautan ke audiomu ditambahkan otomatis.",
       "placeholder": "Bagian ini tentang apa? (opsional)"
-    }
+    },
+    "videoPodcastNotSupported": "Podcast video belum tersedia di editor. Coba lagi nanti."
   },
   "profile": {
     "mustLogin": "Kamu harus masuk dulu",

@@ -1042,6 +1042,7 @@ function App() {
               audioTrackId={editor.audioTrackId}
               sound={editor.mode === 'video' ? editor.sound : null}
               aspect={editor.mode === 'video' ? editor.aspect : null}
+              episode={editor.mode === 'audio' ? editor.episode : null}
             />
           </MountWhenOpened>
         )}

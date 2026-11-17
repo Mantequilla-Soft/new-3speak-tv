@@ -141,7 +141,8 @@
       "title": "Maandishi ya Short",
       "hint": "Yanaambatana na audiogramu kwenye Short. Kiungo cha sauti yako kinaongezwa kiotomatiki.",
       "placeholder": "Kipande hiki kinahusu nini? (si lazima)"
-    }
+    },
+    "videoPodcastNotSupported": "Podikasti ya video bado haipatikani kwenye kihariri. Tafadhali jaribu tena baadaye."
   },
   "profile": {
     "mustLogin": "Lazima uingie kwanza",

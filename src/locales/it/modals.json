@@ -141,7 +141,8 @@
       "title": "Testo dello Short",
       "hint": "Accompagna l'audiogramma nello Short. Un link al tuo audio viene aggiunto automaticamente.",
       "placeholder": "Di cosa parla questo pezzo? (facoltativo)"
-    }
+    },
+    "videoPodcastNotSupported": "Il video podcast non è ancora disponibile nell'editor. Riprova più tardi."
   },
   "profile": {
     "mustLogin": "Prima devi accedere",

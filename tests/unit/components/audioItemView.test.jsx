@@ -18,6 +18,8 @@ vi.mock('../../../src/lib/store', () => {
   useAppStore.getState = () => state
   return { useAppStore }
 })
+// The editor is on (preview); the creator's "Video podcast" needs it.
+vi.mock('../../../src/utils/config', async (orig) => ({ ...(await orig()), FEATURE_EDITOR: true }))
 vi.mock('../../../src/hive-api/aioha', async (orig) => ({ ...(await orig()), isLoggedIn: () => state.walletSession ?? state.authenticated }))
 vi.mock('../../../src/components/playVideo/BlogContent', () => ({ default: ({ permlink, description }) => <div className="blog-stub">{permlink}{description ? ` ${description}` : ''}</div> }))
 // The edit dialog, tested on its own: here a button that "saves" new notes.
@@ -79,6 +81,39 @@ describe('a 3Speak audio page', () => {
       expect(other).toContain('Tip')
       expect(other).not.toMatch(/>Edit</)
     } finally {
+      Object.assign(state, { authenticated: false, user: '' })
+    }
+  })
+
+  it('the creator can make a video podcast of the episode; nobody else sees it', async () => {
+    Object.assign(state, { authenticated: true, user: 'epodcaster' })
+    try {
+      expect(await render('/audio?play=epodcaster/f48l7vyi', doc)).toContain('Video podcast')
+      state.user = 'someoneelse'
+      expect(await render('/audio?play=epodcaster/f48l7vyi', doc)).not.toContain('Video podcast')
+    } finally {
+      Object.assign(state, { authenticated: false, user: '' })
+    }
+  })
+
+  it('"Video podcast" opens the audio editor with the episode\'s audio, title, cover and length', async () => {
+    Object.assign(state, { authenticated: true, user: 'epodcaster' })
+    const { default: AudioItemView } = await import('../../../src/components/AudioItem/AudioItemView.jsx')
+    const qc = new QueryClient()
+    qc.setQueryData(['audio-item', 'epodcaster', 'f48l7vyi'], { ...doc, thumbnail_url: 'https://img.test/c.jpg' })
+    qc.setQueryData(['audio-item-post', 'epodcaster', 'my-show-ep-1'], { title: 'My Show, Episode 1', active_votes: [], children: 0 })
+    const seen = vi.fn()
+    window.addEventListener('open-audio-editor', seen)
+    try {
+      rtlRender(<QueryClientProvider client={qc}><MemoryRouter><AudioItemView owner="epodcaster" id="f48l7vyi" onBack={() => {}} /></MemoryRouter></QueryClientProvider>)
+      fireEvent.click(screen.getByRole('button', { name: /Video podcast/ }))
+      expect(seen).toHaveBeenCalledTimes(1)
+      const { episode } = seen.mock.calls[0][0].detail
+      expect(episode).toMatchObject({ title: 'My Show, Episode 1', durationSec: 1800 })
+      expect(episode.url).toMatch(/^https:\/\/.+\/Qm1$/)
+      expect(episode.cover).toMatch(/^https?:\/\//)
+    } finally {
+      window.removeEventListener('open-audio-editor', seen)
       Object.assign(state, { authenticated: false, user: '' })
     }
   })

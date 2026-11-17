@@ -768,7 +768,9 @@
     "description": "简介",
     "noDescription": "暂无简介。",
     "comments": "评论",
-    "album": "来自 {{name}}"
+    "album": "来自 {{name}}",
+    "videoPodcast": "视频播客",
+    "videoPodcastTitle": "把这一集做成视频：封面、波形和字幕"
   },
   "offline": {
     "notice": "你已离线。已下载的内容仍可播放。",

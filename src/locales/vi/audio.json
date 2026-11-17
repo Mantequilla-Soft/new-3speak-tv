@@ -768,7 +768,9 @@
     "description": "Mô tả",
     "noDescription": "Không có mô tả.",
     "comments": "Bình luận",
-    "album": "Từ {{name}}"
+    "album": "Từ {{name}}",
+    "videoPodcast": "Podcast video",
+    "videoPodcastTitle": "Tạo video từ tập này: ảnh bìa, dạng sóng âm và phụ đề"
   },
   "offline": {
     "notice": "Bạn đang ngoại tuyến. Nội dung đã tải vẫn phát được.",

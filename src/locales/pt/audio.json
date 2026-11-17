@@ -828,7 +828,9 @@
     "description": "Descrição",
     "noDescription": "Sem descrição.",
     "comments": "Comentários",
-    "album": "De {{name}}"
+    "album": "De {{name}}",
+    "videoPodcast": "Videocast",
+    "videoPodcastTitle": "Crie um vídeo deste episódio: capa, forma de onda e legendas"
   },
   "offline": {
     "notice": "Você está offline. Seus downloads continuam tocando.",

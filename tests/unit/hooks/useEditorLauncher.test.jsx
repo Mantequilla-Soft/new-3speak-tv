@@ -89,4 +89,18 @@ describe('useEditorLauncher', () => {
     fire('open-shorts-editor')
     expect(result.current.aspect).toBe(null)
   })
+
+  it('the audio page\'s "Video podcast" opens the audio editor with the episode, checked', () => {
+    const { result } = renderHook(() => useEditorLauncher())
+    fire('open-audio-editor', { episode: { url: 'https://audio.3speak.tv/Qm1', title: 'Ep 1', cover: 'https://img.test/c.jpg', durationSec: 1800 } })
+    expect(result.current).toMatchObject({ open: true, mode: 'audio', episode: { url: 'https://audio.3speak.tv/Qm1', title: 'Ep 1', cover: 'https://img.test/c.jpg', durationSec: 1800 } })
+    fire('open-audio-editor', { episode: { url: 'http://audio.3speak.tv/Qm1', cover: 'https://img.test/c.jpg' } })
+    expect(result.current.episode).toBeNull()
+    fire('open-audio-editor', { episode: { url: 'https://audio.3speak.tv/Qm1', cover: 'javascript:x', durationSec: 'long' } })
+    expect(result.current.episode).toEqual({ url: 'https://audio.3speak.tv/Qm1', title: '', cover: null, durationSec: null })
+    act(() => result.current.close())
+    expect(result.current.episode).toBeNull()
+    fire('open-shorts-editor')
+    expect(result.current.episode).toBeNull()
+  })
 })

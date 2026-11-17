@@ -141,7 +141,8 @@
       "title": "短视频文字",
       "hint": "它会和音频波形视频一起出现在短视频中。会自动添加指向你音频的链接。",
       "placeholder": "这一段讲的是什么？（可选）"
-    }
+    },
+    "videoPodcastNotSupported": "编辑器暂时还不能制作视频播客，请稍后再试。"
   },
   "profile": {
     "mustLogin": "你需要先登录",

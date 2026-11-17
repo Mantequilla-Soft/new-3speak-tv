@@ -42,7 +42,9 @@ const audioToast = toastIn('Audio');
 // `aspect` ('16:9', '4:3', '1:1'; utils/editorFormat.js): the video editor opens
 // as a project of that shape (?aspect=), not a Short; what it renders in a shape
 // other than 9:16 is posted as a normal video, a 9:16 one as a Short.
-function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStart, clipEnd, originalAuthor, originalPermlink, originalShortPermlink, remixChain, videoFile, mode = 'video', audioFile = null, audioTrackId = null, sound = null, aspect = null }) {
+// `episode` ({ url, title, cover, durationSec }, the audio page's "Video podcast",
+// mode 'audio'): opens the editor's video podcast on that published episode.
+function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStart, clipEnd, originalAuthor, originalPermlink, originalShortPermlink, remixChain, videoFile, mode = 'video', audioFile = null, audioTrackId = null, sound = null, aspect = null, episode = null }) {
   const audioMode = mode === 'audio';
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -211,6 +213,18 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
           editorDraftsRef.current = !!data.canSaveDrafts;
           if (data.canSaveDrafts) sendDraftSession(false);
           if (audioMode) {
+            // The audio page's "Video podcast": the published episode, straight
+            // into the editor's video podcast (no export first)
+            if (episode && !mediaLoadedRef.current) {
+              mediaLoadedRef.current = true;
+              if (data.canPodcastFromEpisode) {
+                sendToEditor({ type: 'open-video-podcast', ...episode });
+              } else {
+                audioToast.warning(t('modals.editor.videoPodcastNotSupported'));
+                handleClose({ confirmed: true });
+              }
+              break;
+            }
             // The track from the audio upload, posted as the File itself (a blob:
             // URL made here cannot be read from the editor's origin)
             if (audioFile && !mediaLoadedRef.current) {
@@ -402,7 +416,7 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
 
     window.addEventListener('message', handleMessage);
     return () => window.removeEventListener('message', handleMessage);
-  }, [isOpen, resolvedUrl, videoUrl, videoName, videoType, clipStart, clipEnd, sendToEditor, videoFile, audioMode, audioFile, audioTrackId, sound, t]);
+  }, [isOpen, resolvedUrl, videoUrl, videoName, videoType, clipStart, clipEnd, sendToEditor, videoFile, audioMode, audioFile, audioTrackId, sound, episode, t]);
 
   // While the editor is open, keys must not reach the page behind it (the
   // shorts page plays/pauses on Space and switches videos on the arrow keys).

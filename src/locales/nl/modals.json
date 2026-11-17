@@ -141,7 +141,8 @@
       "title": "Tekst bij de Short",
       "hint": "Die staat bij het audiogram in de Short. Een link naar je audio wordt automatisch toegevoegd.",
       "placeholder": "Waar gaat dit fragment over? (optioneel)"
-    }
+    },
+    "videoPodcastNotSupported": "De videopodcast is nog niet beschikbaar in de editor. Probeer het later opnieuw."
   },
   "profile": {
     "mustLogin": "Je moet eerst inloggen",

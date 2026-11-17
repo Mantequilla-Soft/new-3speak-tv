@@ -203,6 +203,26 @@ describe('EditorModal in audio mode', () => {
   })
 })
 
+describe('EditorModal: a video podcast of a published episode', () => {
+  const episode = { url: 'https://audio.3speak.tv/Qm1', title: 'Ep 1', cover: 'https://img.test/c.jpg', durationSec: 1800 }
+
+  it('opens the editor\'s video podcast on the episode, once', async () => {
+    await open({ mode: 'audio', episode })
+    await ready({ mode: 'audio', canEditAudio: true, canPodcastFromEpisode: true })
+    await ready({ mode: 'audio', canEditAudio: true, canPodcastFromEpisode: true })
+    const sent = posted.filter((p) => p.type === 'open-video-podcast')
+    expect(sent).toEqual([{ type: 'open-video-podcast', ...episode }])
+    expect(posted.filter((p) => p.type === 'load-media')).toHaveLength(0)
+  })
+
+  it('says so and closes when the deployed editor cannot do it yet', async () => {
+    const { onClose } = await open({ mode: 'audio', episode })
+    await ready({ mode: 'audio', canEditAudio: true })
+    expect(onClose).toHaveBeenCalled()
+    expect(posted.some((p) => p.type === 'open-video-podcast')).toBe(false)
+  })
+})
+
 describe('EditorModal in video mode (unchanged)', () => {
   it('opens the shorts editor without a mode', async () => {
     const { iframe } = await open({})

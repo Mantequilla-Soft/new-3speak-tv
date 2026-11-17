@@ -798,7 +798,9 @@
     "description": "Paglalarawan",
     "noDescription": "Walang paglalarawan.",
     "comments": "Mga komento",
-    "album": "Mula sa {{name}}"
+    "album": "Mula sa {{name}}",
+    "videoPodcast": "Video podcast",
+    "videoPodcastTitle": "Gumawa ng video ng episode na ito: cover, waveform at captions"
   },
   "offline": {
     "notice": "Offline ka. Tumutugtog pa rin ang mga download mo.",

@@ -768,7 +768,9 @@
     "description": "説明",
     "noDescription": "説明はありません。",
     "comments": "コメント",
-    "album": "{{name}} より"
+    "album": "{{name}} より",
+    "videoPodcast": "ビデオポッドキャスト",
+    "videoPodcastTitle": "このエピソードを動画に：カバー、波形、字幕付き"
   },
   "offline": {
     "notice": "オフラインです。ダウンロード済みのものは再生できます。",

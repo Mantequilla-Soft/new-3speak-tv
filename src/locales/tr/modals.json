@@ -141,7 +141,8 @@
       "title": "Short metni",
       "hint": "Short'ta audiogramla birlikte görünür. Sesine bir bağlantı otomatik eklenir.",
       "placeholder": "Bu bölüm ne hakkında? (isteğe bağlı)"
-    }
+    },
+    "videoPodcastNotSupported": "Video podcast henüz editörde kullanılamıyor. Lütfen daha sonra tekrar dene."
   },
   "profile": {
     "mustLogin": "Önce giriş yapmalısın",

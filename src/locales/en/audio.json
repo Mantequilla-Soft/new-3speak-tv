@@ -798,7 +798,9 @@
     "description": "Description",
     "noDescription": "No description.",
     "comments": "Comments",
-    "album": "From {{name}}"
+    "album": "From {{name}}",
+    "videoPodcast": "Video podcast",
+    "videoPodcastTitle": "Make a video of this episode: its cover, a waveform and captions"
   },
   "offline": {
     "notice": "You're offline. Your downloads still play.",

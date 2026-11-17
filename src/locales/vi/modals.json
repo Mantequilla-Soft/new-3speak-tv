@@ -141,7 +141,8 @@
       "title": "Nội dung Short",
       "hint": "Nội dung này đi kèm audiogram trong Short. Liên kết đến audio của bạn được tự động thêm vào.",
       "placeholder": "Đoạn này nói về gì? (không bắt buộc)"
-    }
+    },
+    "videoPodcastNotSupported": "Podcast video chưa có trong trình chỉnh sửa. Vui lòng thử lại sau."
   },
   "profile": {
     "mustLogin": "Bạn cần đăng nhập trước",
