@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.99',
+    category: 'audio',
+    date: '2026-11-17',
+    summary: 'Transcripts of audio recordings are much better now: proper sentences with punctuation and capitals.',
+  },
+  {
     version: '2.0.98',
     category: 'profile',
     date: '2026-11-16',
