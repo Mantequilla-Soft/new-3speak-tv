@@ -46,6 +46,7 @@ vi.mock('../../../src/utils/uploadThumbnail', () => ({ uploadThumbnail: vi.fn(as
 vi.mock('../../../src/utils/scheduledPosts', () => ({ saveScheduledPost: vi.fn(async () => ({ success: true })) }))
 vi.mock('../../../src/utils/postingAuthority', () => ({ hasThreespeakPostingAuth: async () => true, addThreespeakToPostingAuth: async () => {} }))
 vi.mock('../../../src/utils/rcCheck', async (importOriginal) => ({ ...(await importOriginal()), checkPostingRc: async () => ({ ok: true }) }))
+vi.mock('../../../src/utils/reportClientError', () => ({ reportClientError: vi.fn() }))
 vi.mock('../../../src/lib/youtubeImport', () => ({ markImportPublished: vi.fn(async () => ({ ok: true })) }))
 vi.mock('../../../src/lib/advertiseData', () => ({ fetchCreatorAdPrefs: async () => ({}), syncAudioAdChoice: async () => {} }))
 vi.mock('../../../src/lib/uploadGate', () => ({ fetchUploadGateAd: async () => null, confirmUploadGatePost: () => {}, gateSessionId: () => null }))
@@ -98,6 +99,7 @@ const { publishAudiogramShorts } = await import('../../../src/utils/audiogramSho
 const { markImportPublished } = await import('../../../src/lib/youtubeImport')
 const { saveScheduledPost } = await import('../../../src/utils/scheduledPosts')
 const { uploadAudioTo3Speak } = await import('../../../src/utils/audioUpload')
+const { reportClientError } = await import('../../../src/utils/reportClientError')
 
 // jsdom reads no media: every <audio> reports m.duration as soon as it gets a src.
 let savedSrc
@@ -841,27 +843,48 @@ describe('AudioUploadModal: recording', () => {
   let recorders
   let graphs
   let saved
+  let micGate
+  let streams
+  // How many of the first mic streams deliver only zeros
+  let deadStreams
   beforeEach(() => {
     recorders = []
     graphs = []
     saved = { md: navigator.mediaDevices, MR: window.MediaRecorder, AC: window.AudioContext }
-    const track = { muted: false, stop: vi.fn() }
+    // The permission prompt: getUserMedia answers when the test says so (only
+    // the first ask; the browser does not ask again)
+    micGate = null
+    streams = []
+    deadStreams = 0
     Object.defineProperty(navigator, 'mediaDevices', {
       configurable: true,
-      value: { getUserMedia: vi.fn(async () => ({ getTracks: () => [track], getAudioTracks: () => [track] })) },
+      value: { getUserMedia: vi.fn(async () => {
+        if (micGate && !streams.length) await (micGate.promise || new Promise((r) => setTimeout(r, micGate.ms)))
+        const track = { muted: false, readyState: 'live', stop: vi.fn(), getSettings: () => ({ sampleRate: 48000, noiseSuppression: true }) }
+        const st = { track, dead: streams.length < deadStreams, getTracks: () => [track], getAudioTracks: () => [track] }
+        streams.push(st)
+        return st
+      }) },
     })
     window.MediaRecorder = class {
       static isTypeSupported(ty) { return ty === 'audio/ogg;codecs=opus' }
-      constructor(stream, opts) { this.opts = opts; this.mimeType = opts?.mimeType || ''; this.state = 'inactive'; recorders.push(this) }
+      constructor(stream, opts) { this.stream = stream; this.opts = opts; this.mimeType = opts?.mimeType || ''; this.state = 'inactive'; recorders.push(this) }
       start(slice) { this.slice = slice; this.state = 'recording' }
       stop() { this.state = 'inactive'; this.ondataavailable?.({ data: new Blob(['abc'], { type: this.mimeType }) }); this.onstop?.() }
     }
     window.AudioContext = vi.fn(function Ctx() {
-      const g = { started: graphs.length, close: vi.fn(async () => {}) }
+      const g = { started: graphs.length, close: vi.fn(async () => {}), micAsked: navigator.mediaDevices.getUserMedia.mock.calls.length, sources: [] }
       graphs.push(g)
+      let heard = null
       return {
-        createAnalyser: () => ({ fftSize: 0, getByteTimeDomainData: (a) => a.fill(128) }),
-        createMediaStreamSource: () => ({ connect: () => {} }),
+        state: 'running',
+        // a mic's noise floor: never exactly zero; a dead stream is
+        createAnalyser: () => ({
+          fftSize: 0,
+          getByteTimeDomainData: (a) => a.fill(heard?.dead ? 128 : 129),
+          getFloatTimeDomainData: (a) => a.fill(heard?.dead ? 0 : 0.001),
+        }),
+        createMediaStreamSource: (st) => { g.sources.push(st); return { connect: () => { heard = st }, disconnect: vi.fn() } },
         resume: async () => {},
         close: g.close,
       }
@@ -887,5 +910,66 @@ describe('AudioUploadModal: recording', () => {
     await waitFor(() => expect(screen.queryByRole('img', { name: 'Microphone level' })).toBeNull())
     // the recording lands as a track (its extension comes from the mocked audioUpload)
     expect(await screen.findByText(/^recording-/)).toBeInTheDocument()
+  })
+
+  it('makes the audio graph in the click, before the mic prompt, and starts recording once the mic is ready', async () => {
+    let open
+    micGate = { promise: new Promise((r) => { open = r }) }
+    const { user } = openModal()
+    await user.click(await screen.findByRole('button', { name: /Or record live/ }))
+    // the prompt is up: the graph is already made, nothing records yet
+    expect(graphs).toHaveLength(1)
+    expect(graphs[0].micAsked).toBe(0)
+    expect(recorders).toHaveLength(0)
+    const busy = screen.getByRole('button', { name: /Getting the microphone ready/ })
+    expect(busy).toBeDisabled()
+    await act(async () => { open() })
+    await waitFor(() => expect(recorders).toHaveLength(1))
+    expect(recorders[0].state).toBe('recording')
+    expect(graphs).toHaveLength(1)
+    expect(screen.getByRole('button', { name: 'Stop' })).toBeInTheDocument()
+  })
+
+  it('lets a dead first stream go and records from the mic opened again, on the same graph', async () => {
+    deadStreams = 1
+    const { user } = openModal()
+    await user.click(await screen.findByRole('button', { name: /Or record live/ }))
+    await waitFor(() => expect(recorders).toHaveLength(1), { timeout: 4000 })
+    expect(streams).toHaveLength(2)
+    expect(streams[0].track.stop).toHaveBeenCalled()
+    expect(recorders[0].stream).toBe(streams[1])
+    expect(graphs).toHaveLength(1)
+    expect(graphs[0].sources).toEqual([streams[0], streams[1]])
+  })
+
+  it('a working mic is opened once', async () => {
+    const { user } = openModal()
+    await user.click(await screen.findByRole('button', { name: /Or record live/ }))
+    await waitFor(() => expect(recorders).toHaveLength(1))
+    expect(streams).toHaveLength(1)
+    expect(recorders[0].stream).toBe(streams[0])
+  })
+
+  it('records anyway after three dead opens, and reports it', async () => {
+    deadStreams = 5
+    const { user } = openModal()
+    await user.click(await screen.findByRole('button', { name: /Or record live/ }))
+    await waitFor(() => expect(recorders).toHaveLength(1), { timeout: 8000 })
+    expect(streams).toHaveLength(3)
+    await user.click(screen.getByRole('button', { name: 'Stop' }))
+    const d = JSON.parse(reportClientError.mock.calls.at(-1)[0].error.slice('record-silent '.length))
+    expect(d).toMatchObject({ opens: 3, ready: false })
+  }, 12000)
+
+  it('reports a recording the level graph heard nothing in, with what the mic said', async () => {
+    const { user } = openModal()
+    await user.click(await screen.findByRole('button', { name: /Or record live/ }))
+    await waitFor(() => expect(recorders).toHaveLength(1))
+    await user.click(screen.getByRole('button', { name: 'Stop' }))
+    expect(reportClientError).toHaveBeenCalledTimes(1)
+    const msg = reportClientError.mock.calls[0][0].error
+    expect(msg).toMatch(/^record-silent /)
+    const d = JSON.parse(msg.slice('record-silent '.length))
+    expect(d).toMatchObject({ opens: 1, ready: true, start: { track: { muted: false, state: 'live' }, ctx: 'running', settings: { sampleRate: 48000, noiseSuppression: true } } })
   })
 })

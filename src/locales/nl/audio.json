@@ -284,6 +284,7 @@
       "formats": "MP3, WAV, OGG, WEBM, M4A, FLAC, AAC · meerdere tegelijk",
       "stop": "Stoppen",
       "orRecord": "Of neem live op",
+      "micPreparing": "Microfoon wordt klaargemaakt...",
       "recordLimit": "Maximaal {{minutes}} min per opname",
       "level": "Microfoonniveau",
       "noSound": "Er komt geen geluid binnen. Controleer of je microfoon niet gedempt is of door een andere app wordt gebruikt.",

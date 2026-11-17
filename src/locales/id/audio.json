@@ -274,6 +274,7 @@
       "formats": "MP3, WAV, OGG, WEBM, M4A, FLAC, AAC · beberapa sekaligus",
       "stop": "Berhenti",
       "orRecord": "Atau rekam langsung",
+      "micPreparing": "Menyiapkan mikrofon...",
       "recordLimit": "Maksimal {{minutes}} menit per rekaman",
       "level": "Level mikrofon",
       "noSound": "Tidak ada suara yang masuk. Periksa apakah mikrofonmu tidak dibisukan atau dipakai aplikasi lain.",

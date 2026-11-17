@@ -284,6 +284,7 @@
       "formats": "MP3, WAV, OGG, WEBM, M4A, FLAC, AAC · birden fazla olabilir",
       "stop": "Durdur",
       "orRecord": "Ya da canlı kaydet",
+      "micPreparing": "Mikrofon hazırlanıyor...",
       "recordLimit": "Kayıt başına en fazla {{minutes}} dk",
       "level": "Mikrofon seviyesi",
       "noSound": "Ses gelmiyor. Mikrofonunun sessizde olmadığını veya başka bir uygulama tarafından kullanılmadığını kontrol et.",

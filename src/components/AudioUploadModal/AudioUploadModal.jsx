@@ -29,7 +29,8 @@ import CoverDesigner from './CoverDesigner';
 import ShortThumbDesigner from './ShortThumbDesigner';
 import AudiogramShortsSection from './AudiogramShortsSection';
 import AudioTeleprompter from './AudioTeleprompter';
-import RecordWave, { openRecordGraph } from './RecordWave';
+import RecordWave, { newRecordContext, openRecordGraph, waitForMic, QUIET_PEAK } from './RecordWave';
+import { reportClientError } from '../../utils/reportClientError';
 import TranscriptControl from './TranscriptControl';
 import { useTranscriptJobs } from '../../hooks/useTranscriptJobs';
 import { withTranscript, TRANSCRIPT_MAX_CHARS } from '../../utils/transcribe';
@@ -109,6 +110,27 @@ const FLOWS = {
 const MAX_RECORD_SEC = 300;
 // What the recorder is asked for, first one the browser has (as the editor's)
 const RECORD_TYPES = ['audio/webm;codecs=opus', 'audio/webm', 'audio/mp4', 'audio/ogg;codecs=opus'];
+// On a phone the first mic stream after a page load can deliver nothing but
+// zeros while the next one works (the second try always did, owner
+// 2026-11-17): a stream with no samples in MIC_WAIT_MS is let go and the mic
+// opened again, up to MIC_OPENS times
+const MIC_OPENS = 3;
+const MIC_WAIT_MS = 1500;
+const openMic = () => navigator.mediaDevices.getUserMedia({ audio: true });
+
+// What the mic said, for the report on a recording the level graph heard nothing in
+function micInfo(stream, graph) {
+  const tr = stream?.getAudioTracks?.()[0];
+  let set = {};
+  try { set = tr?.getSettings?.() || {}; } catch { /* ignore */ }
+  const pick = ['sampleRate', 'channelCount', 'echoCancellation', 'noiseSuppression', 'autoGainControl'];
+  return {
+    track: tr ? { muted: tr.muted, state: tr.readyState, enabled: tr.enabled } : null,
+    ctx: graph?.ctx?.state || null,
+    ctxRate: graph?.ctx?.sampleRate || null,
+    settings: Object.fromEntries(pick.filter((k) => k in set).map((k) => [k, set[k]])),
+  };
+}
 // A track's text with a transcript in it: room for the transcript (cut to
 // TRANSCRIPT_MAX_CHARS) and what the creator wrote around it
 const TRANSCRIPT_TEXT_MAX = TRANSCRIPT_MAX_CHARS + 5000;
@@ -544,7 +566,13 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
   const recordChunksRef = useRef([]);
   const recordStreamRef = useRef(null);
   const recordGraphRef = useRef(null);
+  // The loudest the level graph heard while recording, and how the mic was opened
+  const recordPeakRef = useRef(0);
+  const recordDiagRef = useRef(null);
   const [recordGraph, setRecordGraph] = useState(null);
+  // Between the record click and the recorder starting: the mic is opened and
+  // checked first (waitForMic)
+  const [micPreparing, setMicPreparing] = useState(false);
   const objectUrlsRef = useRef(new Set());
 
   const { data: playlists = [], isLoading: playlistsLoading, refetch: refetchPlaylists } = useMyPlaylists({ limit: 50 });
@@ -713,16 +741,42 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
   };
 
   const startRecording = async () => {
+    if (micPreparing || isRecording) return;
+    // Made in the click, before the permission prompt can use it up (RecordWave.jsx)
+    let ctx = newRecordContext();
+    setMicPreparing(true);
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const askedAt = performance.now();
+      let stream = await openMic();
+      const openMs = Math.round(performance.now() - askedAt);
       recordStreamRef.current = stream;
       recordChunksRef.current = [];
       // The level graph listens before the recorder starts, as in the editor's
       // recorder, whose recordings have sound on phones where this one's were
       // silent (owner 2026-11-17)
       recordGraphRef.current?.close();
-      recordGraphRef.current = openRecordGraph(stream);
-      setRecordGraph(recordGraphRef.current);
+      recordGraphRef.current = openRecordGraph(stream, ctx);
+      ctx = null;
+      const graph = recordGraphRef.current;
+      setRecordGraph(graph);
+      // Start only once the mic delivers; a dead stream goes first, then the
+      // mic is opened again, on the same graph (MIC_OPENS)
+      let opens = 1;
+      let ready = await waitForMic(stream, graph, { timeoutMs: MIC_WAIT_MS });
+      while (!ready && opens < MIC_OPENS && recordStreamRef.current === stream) {
+        stream.getTracks().forEach((tr) => tr.stop());
+        stream = await openMic();
+        opens += 1;
+        // Closed while it opened: let the new one go too
+        if (!recordStreamRef.current) { stream.getTracks().forEach((tr) => tr.stop()); return; }
+        recordStreamRef.current = stream;
+        graph?.attach(stream);
+        ready = await waitForMic(stream, graph, { timeoutMs: MIC_WAIT_MS });
+      }
+      recordPeakRef.current = 0;
+      recordDiagRef.current = { openMs, opens, ready, start: micInfo(stream, graph) };
+      // Closed while waiting: the cleanup let the mic go
+      if (recordStreamRef.current !== stream) return;
       const want = RECORD_TYPES.find((ty) => { try { return MediaRecorder.isTypeSupported?.(ty); } catch { return false; } });
       const mr = new MediaRecorder(stream, want ? { mimeType: want } : undefined);
       mr.ondataavailable = (e) => { if (e.data?.size > 0) recordChunksRef.current.push(e.data); };
@@ -730,6 +784,13 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
         // Safari's recorder makes audio/mp4, not webm: keep the type it reports.
         const type = mr.mimeType || recordChunksRef.current[0]?.type || 'audio/webm';
         const blob = new Blob(recordChunksRef.current, { type });
+        // The graph heard nothing the whole time: say what the mic looked like
+        if (recordGraphRef.current && recordPeakRef.current < QUIET_PEAK) {
+          reportClientError({
+            kind: 'render',
+            error: `record-silent ${JSON.stringify({ ...recordDiagRef.current, peak: Math.round(recordPeakRef.current * 1000) / 1000, end: micInfo(recordStreamRef.current, recordGraphRef.current).track, ctxEnd: recordGraphRef.current?.ctx?.state, type, size: blob.size })}`,
+          });
+        }
         recordStreamRef.current?.getTracks().forEach(tr => tr.stop());
         recordStreamRef.current = null;
         recordGraphRef.current?.close();
@@ -743,6 +804,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
       };
       mr.start(100);
       mediaRecorderRef.current = mr;
+      setMicPreparing(false);
       setIsRecording(true);
       setRecordSec(0);
       recordTimerRef.current = setInterval(() => {
@@ -755,12 +817,15 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
         });
       }, 1000);
     } catch {
+      try { ctx?.close(); } catch { /* ignore */ }
       recordGraphRef.current?.close();
       recordGraphRef.current = null;
       setRecordGraph(null);
       recordStreamRef.current?.getTracks().forEach(tr => tr.stop());
       recordStreamRef.current = null;
       toast.error(t('audio.upload.toasts.micDenied'));
+    } finally {
+      setMicPreparing(false);
     }
   };
 
@@ -780,6 +845,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
         try { mr.stop(); } catch {}
       }
       recordStreamRef.current?.getTracks().forEach(tr => tr.stop());
+      recordStreamRef.current = null;
       recordGraphRef.current?.close();
       objectUrlsRef.current.forEach(u => URL.revokeObjectURL(u));
       objectUrlsRef.current.clear();
@@ -1795,7 +1861,8 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
               tracks={tracks}
               isRecording={isRecording}
               recordSec={recordSec}
-              recordWave={isRecording && <RecordWave analyser={recordGraph?.analyser} track={recordStreamRef.current?.getAudioTracks?.()[0]} />}
+              micPreparing={micPreparing}
+              recordWave={isRecording && <RecordWave analyser={recordGraph?.analyser} track={recordStreamRef.current?.getAudioTracks?.()[0]} onPeak={(p) => { if (p > recordPeakRef.current) recordPeakRef.current = p; }} />}
               isDragging={isDragging}
               fileInputRef={fileInputRef}
               onDrop={onDrop}
@@ -2108,7 +2175,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
 }
 
 function SourceStep({
-  tracks, isRecording, recordSec, isDragging, fileInputRef,
+  tracks, isRecording, recordSec, micPreparing = false, isDragging, fileInputRef,
   onDrop, onDragOver, onDragLeave, onPickFiles, onFilesSelected,
   onStart, onStop, onRemove, onEditTrack = null, editLocked = () => false,
   teleprompter = null, recordWave = null,
@@ -2157,10 +2224,12 @@ function SourceStep({
           {recordWave}
         </div>
       ) : (
-        <button type="button" className="audio-upload-recorder" onClick={onStart} title={t('audio.upload.source.record')}>
-          <span className="audio-upload-rec-icon" aria-hidden="true"><Icon name="mic" size={24} /></span>
+        <button type="button" className="audio-upload-recorder" onClick={onStart} title={t('audio.upload.source.record')} disabled={micPreparing} aria-busy={micPreparing || undefined}>
+          <span className="audio-upload-rec-icon" aria-hidden="true">
+            {micPreparing ? <Icon name="progress_activity" size={24} className="v2-spin" /> : <Icon name="mic" size={24} />}
+          </span>
           <span className="audio-upload-rec-text">
-            <b>{t('audio.upload.source.orRecord')}</b>
+            <b>{micPreparing ? t('audio.upload.source.micPreparing') : t('audio.upload.source.orRecord')}</b>
             <small>{limit}</small>
           </span>
         </button>

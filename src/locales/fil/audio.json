@@ -284,6 +284,7 @@
       "formats": "MP3, WAV, OGG, WEBM, M4A, FLAC, AAC · puwede ang marami nang sabay",
       "stop": "Itigil",
       "orRecord": "O mag-record nang live",
+      "micPreparing": "Inihahanda ang mikropono...",
       "recordLimit": "Hanggang {{minutes}} min bawat recording",
       "level": "Lakas ng mikropono",
       "noSound": "Walang tunog na pumapasok. Tingnan kung hindi naka-mute ang mikropono mo o ginagamit ng ibang app.",

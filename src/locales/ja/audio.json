@@ -274,6 +274,7 @@
       "formats": "MP3、WAV、OGG、WEBM、M4A、FLAC、AAC · 複数可",
       "stop": "停止",
       "orRecord": "またはその場で録音",
+      "micPreparing": "マイクを準備しています...",
       "recordLimit": "1 回の録音は最大 {{minutes}} 分",
       "level": "マイクの音量",
       "noSound": "音が入っていません。マイクがミュートになっていないか、ほかのアプリが使っていないか確認してください。",

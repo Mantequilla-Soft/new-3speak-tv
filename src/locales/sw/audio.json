@@ -284,6 +284,7 @@
       "formats": "MP3, WAV, OGG, WEBM, M4A, FLAC, AAC · kadhaa kwa wakati mmoja",
       "stop": "Simamisha",
       "orRecord": "Au rekodi moja kwa moja",
+      "micPreparing": "Inaandaa maikrofoni...",
       "recordLimit": "Hadi dakika {{minutes}} kwa kila rekodi",
       "level": "Kiwango cha maikrofoni",
       "noSound": "Hakuna sauti inayoingia. Hakikisha maikrofoni yako haijanyamazishwa au haitumiwi na programu nyingine.",

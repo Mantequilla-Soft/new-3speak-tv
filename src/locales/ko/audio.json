@@ -274,6 +274,7 @@
       "formats": "MP3, WAV, OGG, WEBM, M4A, FLAC, AAC · 여러 개 한 번에",
       "stop": "중지",
       "orRecord": "또는 라이브로 녹음",
+      "micPreparing": "마이크를 준비하는 중...",
       "recordLimit": "녹음당 최대 {{minutes}}분",
       "level": "마이크 레벨",
       "noSound": "소리가 들어오지 않아요. 마이크가 음소거되어 있거나 다른 앱에서 사용 중인지 확인하세요.",

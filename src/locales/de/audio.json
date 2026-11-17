@@ -284,6 +284,7 @@
       "formats": "MP3, WAV, OGG, WEBM, M4A, FLAC, AAC · mehrere auf einmal",
       "stop": "Stopp",
       "orRecord": "Oder live aufnehmen",
+      "micPreparing": "Mikrofon wird vorbereitet...",
       "recordLimit": "Bis zu {{minutes}} Min. pro Aufnahme",
       "level": "Mikrofonpegel",
       "noSound": "Es kommt kein Ton an. Prüfe, ob dein Mikrofon stummgeschaltet ist oder von einer anderen App benutzt wird.",

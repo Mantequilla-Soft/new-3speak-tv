@@ -10,27 +10,81 @@ const BARS = 72;
 // 2026-11-17) shows up while it is made, not after
 const QUIET = 0.02;
 const SILENT_MS = 3000;
+export const QUIET_PEAK = QUIET;
+
+/**
+ * The audio context for the level graph, made in the record click itself: made
+ * after the mic permission prompt, the click no longer counts and the context
+ * stays suspended, the graph hears nothing and on a phone the recording came out
+ * silent (first try failed, the second worked; owner 2026-11-17).
+ */
+export function newRecordContext() {
+  const Ctx = window.AudioContext || window.webkitAudioContext;
+  if (!Ctx) return null;
+  try {
+    const ctx = new Ctx();
+    ctx.resume?.().catch(() => {});
+    return ctx;
+  } catch { return null; }
+}
 
 /**
  * An analyser on the mic stream, started before the recorder as the editor's
  * recorder does: on some phones a mic nothing else listens to records silence.
- * Returns { analyser, close } or null where Web Audio is missing.
+ * Takes the context from newRecordContext (else makes one). Returns
+ * { analyser, ctx, attach, close } or null where Web Audio is missing; attach
+ * moves the graph to a reopened mic on the same context.
  */
-export function openRecordGraph(stream) {
-  const Ctx = window.AudioContext || window.webkitAudioContext;
-  if (!Ctx || !stream) return null;
-  let ctx;
+export function openRecordGraph(stream, ctx = newRecordContext()) {
+  if (!ctx || !stream) { try { ctx?.close(); } catch { /* ignore */ } return null; }
   try {
-    ctx = new Ctx();
     const analyser = ctx.createAnalyser();
     analyser.fftSize = 1024;
-    ctx.createMediaStreamSource(stream).connect(analyser);
+    let source = ctx.createMediaStreamSource(stream);
+    source.connect(analyser);
     ctx.resume?.().catch(() => {});
-    return { analyser, close: () => { try { ctx.close().catch?.(() => {}); } catch { /* closed */ } } };
+    const attach = (next) => {
+      try { source.disconnect?.(); } catch { /* gone */ }
+      source = ctx.createMediaStreamSource(next);
+      source.connect(analyser);
+    };
+    return { analyser, ctx, attach, close: () => { try { ctx.close().catch?.(() => {}); } catch { /* closed */ } } };
   } catch {
-    try { ctx?.close(); } catch { /* ignore */ }
+    try { ctx.close(); } catch { /* ignore */ }
     return null;
   }
+}
+
+/**
+ * Wait until the mic really delivers: the track live and not muted, the graph's
+ * context running and its first samples in. A working mic is never exactly
+ * zero, not even in a quiet room (its noise floor); a dead stream is, so the
+ * check reads float samples: 8-bit ones round a quiet room to the silent
+ * midpoint too. Gives up after `timeoutMs`. Resolves true when ready.
+ */
+export async function waitForMic(stream, graph, { timeoutMs = 2500, stepMs = 50, sleep = (ms) => new Promise((r) => setTimeout(r, ms)) } = {}) {
+  const track = stream?.getAudioTracks?.()[0];
+  const float = !!graph?.analyser.getFloatTimeDomainData;
+  const data = graph ? new (float ? Float32Array : Uint8Array)(graph.analyser.fftSize) : null;
+  for (let waited = 0; waited <= timeoutMs; waited += stepMs) {
+    const live = !!track && track.readyState !== 'ended' && !track.muted;
+    let heard = !graph;
+    if (graph) {
+      if (graph.ctx?.state === 'suspended') graph.ctx.resume?.().catch(() => {});
+      if (!graph.ctx || graph.ctx.state === 'running') {
+        if (float) {
+          graph.analyser.getFloatTimeDomainData(data);
+          heard = data.some((v) => v !== 0);
+        } else {
+          graph.analyser.getByteTimeDomainData(data);
+          heard = data.some((v) => v !== 128);
+        }
+      }
+    }
+    if (live && heard) return true;
+    await sleep(stepMs);
+  }
+  return false;
 }
 
 /**
@@ -39,10 +93,12 @@ export function openRecordGraph(stream) {
  * for a few seconds, or the browser muted the track). `analyser` is the one
  * the modal hangs on the mic before the recorder starts (openRecordGraph).
  */
-export default function RecordWave({ analyser, track }) {
+export default function RecordWave({ analyser, track, onPeak }) {
   const { t } = useTranslation();
   const canvasRef = useRef(null);
   const [silent, setSilent] = useState(false);
+  const onPeakRef = useRef(onPeak);
+  onPeakRef.current = onPeak;
 
   useEffect(() => {
     if (!analyser) return undefined;
@@ -84,6 +140,7 @@ export default function RecordWave({ analyser, track }) {
       }
       peaks.shift();
       peaks.push(peak);
+      onPeakRef.current?.(peak);
       const now = Date.now();
       const muted = !!track?.muted;
       if (peak >= QUIET && !muted) lastLoud = now;

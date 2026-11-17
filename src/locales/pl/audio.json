@@ -304,6 +304,7 @@
       "formats": "MP3, WAV, OGG, WEBM, M4A, FLAC, AAC · kilka naraz",
       "stop": "Stop",
       "orRecord": "Lub nagraj na żywo",
+      "micPreparing": "Przygotowywanie mikrofonu...",
       "recordLimit": "Do {{minutes}} min na nagranie",
       "level": "Poziom mikrofonu",
       "noSound": "Nie dociera żaden dźwięk. Sprawdź, czy mikrofon nie jest wyciszony ani używany przez inną aplikację.",

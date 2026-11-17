@@ -274,6 +274,7 @@
       "formats": "MP3, WAV, OGG, WEBM, M4A, FLAC, AAC · nhiều tệp cùng lúc",
       "stop": "Dừng",
       "orRecord": "Hoặc ghi âm trực tiếp",
+      "micPreparing": "Đang chuẩn bị micrô...",
       "recordLimit": "Tối đa {{minutes}} phút mỗi lần ghi",
       "level": "Mức micrô",
       "noSound": "Không có âm thanh nào. Hãy kiểm tra micrô không bị tắt tiếng hoặc đang được ứng dụng khác dùng.",

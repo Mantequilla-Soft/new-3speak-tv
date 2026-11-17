@@ -274,6 +274,7 @@
       "formats": "MP3、WAV、OGG、WEBM、M4A、FLAC、AAC · 可同时选多个",
       "stop": "停止",
       "orRecord": "或者现场录制",
+      "micPreparing": "正在准备麦克风...",
       "recordLimit": "每段录音最长 {{minutes}} 分钟",
       "level": "麦克风音量",
       "noSound": "没有收到声音。请检查麦克风是否被静音或正被其他应用使用。",

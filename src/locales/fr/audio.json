@@ -294,6 +294,7 @@
       "formats": "MP3, WAV, OGG, WEBM, M4A, FLAC, AAC · plusieurs à la fois",
       "stop": "Arrêter",
       "orRecord": "Ou enregistrez en direct",
+      "micPreparing": "Préparation du micro...",
       "recordLimit": "Jusqu'à {{minutes}} min par enregistrement",
       "level": "Niveau du micro",
       "noSound": "Aucun son ne passe. Vérifie que ton micro n'est pas coupé ni utilisé par une autre app.",
