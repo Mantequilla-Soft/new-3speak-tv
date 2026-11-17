@@ -420,6 +420,10 @@
       "watermark": {
         "title": "Hakuna alama maji",
         "body": "Mitiririko ya bure ina alama ndogo ya jukwaa."
+      },
+      "captions": {
+        "title": "Manukuu ya moja kwa moja",
+        "body": "Maneno yako kama manukuu ukiwa mubashara, yanaandikwa na Whisper, na yanabaki kama manukuu ya marudio."
       }
     }
   },

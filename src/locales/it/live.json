@@ -421,6 +421,10 @@
       "watermark": {
         "title": "Nessun watermark",
         "body": "Gli stream gratuiti mostrano un piccolo marchio della piattaforma."
+      },
+      "captions": {
+        "title": "Sottotitoli dal vivo",
+        "body": "Le tue parole come sottotitoli mentre sei in diretta, scritte da Whisper e salvate come sottotitoli della replica."
       }
     }
   },

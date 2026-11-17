@@ -421,6 +421,10 @@
       "watermark": {
         "title": "Sin marca de agua",
         "body": "Los streams gratuitos llevan una pequeña marca de la plataforma."
+      },
+      "captions": {
+        "title": "Subtítulos en directo",
+        "body": "Tus palabras como subtítulos mientras estás en directo, escritas por Whisper y guardadas como subtítulos de la repetición."
       }
     }
   },

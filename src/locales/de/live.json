@@ -420,6 +420,10 @@
       "watermark": {
         "title": "Kein Wasserzeichen",
         "body": "Kostenlose Streams tragen ein kleines Plattform-Logo."
+      },
+      "captions": {
+        "title": "Live-Untertitel",
+        "body": "Deine Worte als Untertitel, während du live bist, von Whisper geschrieben und als Untertitel der Aufzeichnung gespeichert."
       }
     }
   },

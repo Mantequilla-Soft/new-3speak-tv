@@ -419,6 +419,10 @@
       "watermark": {
         "title": "Tanpa watermark",
         "body": "Siaran gratis memiliki tanda platform kecil."
+      },
+      "captions": {
+        "title": "Teks langsung",
+        "body": "Ucapanmu jadi teks saat siaran langsung, ditulis oleh Whisper, dan disimpan sebagai subtitle tayangan ulang."
       }
     }
   },

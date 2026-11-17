@@ -421,6 +421,10 @@
       "watermark": {
         "title": "Sem marca d'água",
         "body": "Streams grátis têm uma pequena marca da plataforma."
+      },
+      "captions": {
+        "title": "Legendas em direto",
+        "body": "As tuas palavras como legendas enquanto estás em direto, escritas pelo Whisper e guardadas como legendas da repetição."
       }
     }
   },

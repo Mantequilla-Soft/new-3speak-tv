@@ -419,6 +419,10 @@
       "watermark": {
         "title": "Không có hình mờ",
         "body": "Buổi phát miễn phí có một dấu nhỏ của nền tảng."
+      },
+      "captions": {
+        "title": "Phụ đề trực tiếp",
+        "body": "Lời bạn nói thành phụ đề khi phát trực tiếp, do Whisper viết, và được giữ làm phụ đề cho bản phát lại."
       }
     }
   },

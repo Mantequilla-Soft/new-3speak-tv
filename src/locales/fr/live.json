@@ -421,6 +421,10 @@
       "watermark": {
         "title": "Sans filigrane",
         "body": "Les streams gratuits portent un petit logo de la plateforme."
+      },
+      "captions": {
+        "title": "Sous-titres en direct",
+        "body": "Tes paroles en sous-titres pendant le direct, écrites par Whisper et gardées comme sous-titres du replay."
       }
     }
   },

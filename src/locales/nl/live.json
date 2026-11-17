@@ -420,6 +420,10 @@
       "watermark": {
         "title": "Geen watermerk",
         "body": "Gratis streams hebben een klein platformlogo."
+      },
+      "captions": {
+        "title": "Live ondertitels",
+        "body": "Je woorden als ondertitels terwijl je live bent, geschreven door Whisper en bewaard als ondertitels bij de herhaling."
       }
     }
   },

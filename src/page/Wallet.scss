@@ -402,3 +402,11 @@
     .v2-btn { flex: none; }
   }
 }
+
+// Every perk of the open tab in view (owner 2026-11-17): the SDK gives the list
+// a fixed 13rem (9.75rem on a phone) and scrolls the rest inside it, which hid
+// half of Live streaming.
+.wallet-v2__pro .hh-pro__perklist {
+  height: auto;
+  overflow: visible;
+}

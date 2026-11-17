@@ -420,6 +420,10 @@
       "watermark": {
         "title": "Filigran yok",
         "body": "Ücretsiz yayınlarda küçük bir platform işareti bulunur."
+      },
+      "captions": {
+        "title": "Canlı altyazı",
+        "body": "Canlıdayken sözlerin altyazı olarak, Whisper tarafından yazılır ve tekrar yayında altyazı olarak kalır."
       }
     }
   },

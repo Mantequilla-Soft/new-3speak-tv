@@ -420,6 +420,10 @@
       "watermark": {
         "title": "No watermark",
         "body": "Free streams carry a small platform mark."
+      },
+      "captions": {
+        "title": "Live captions",
+        "body": "Your words as captions while you are live, written by Whisper, and kept as subtitles on the replay."
       }
     }
   },

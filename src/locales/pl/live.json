@@ -422,6 +422,10 @@
       "watermark": {
         "title": "Bez znaku wodnego",
         "body": "Darmowe streamy mają mały znak platformy."
+      },
+      "captions": {
+        "title": "Napisy na żywo",
+        "body": "Twoje słowa jako napisy podczas transmisji, pisane przez Whisper i zachowane jako napisy w powtórce."
       }
     }
   },

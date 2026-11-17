@@ -56,7 +56,7 @@ const CREATE_FORM_KEYS = [
 // The Pro upsell's stream perks, in the SDK's order, with its icons.
 const STREAM_PERKS = [
   ['longer', '⏳'], ['replays', '🎬'], ['clips', '✂️'], ['rtmp', '📡'],
-  ['obs', '🎥'], ['quality', '📶'], ['watermark', '🚫'],
+  ['obs', '🎥'], ['quality', '📶'], ['watermark', '🚫'], ['captions', '💬'],
 ];
 
 export default function OpenPods() {

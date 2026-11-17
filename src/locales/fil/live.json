@@ -420,6 +420,10 @@
       "watermark": {
         "title": "Walang watermark",
         "body": "May maliit na marka ng platform ang mga libreng stream."
+      },
+      "captions": {
+        "title": "Live na caption",
+        "body": "Ang mga sinasabi mo bilang caption habang live ka, isinusulat ng Whisper, at itinatabi bilang subtitle ng replay."
       }
     }
   },
