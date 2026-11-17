@@ -13,6 +13,12 @@
  * quiet stretch too) and starts the count afresh; one dropped right after
  * connecting still counts, so a server that keeps refusing is not retried
  * every second forever.
+ *
+ * With `liveUrl` (the server's /live, where stream captions run on Whisper:
+ * Vosk partials, Whisper's sentence as each final) it starts there, with a
+ * token scoped to it for the signed-in `user`. A /live that never connects
+ * (nginx not passing it yet, no token) is left for `url` (/stt) for the rest
+ * of the stream, at once and without counting as a failure.
  */
 import { createSttStream } from './sttClient';
 
@@ -24,8 +30,10 @@ export const STABLE_MS = 30 * 1000;
  * @param {{ url: string, connect?: typeof createSttStream }} cfg
  * @returns {(track: MediaStreamTrack, opts: { lang: string, onText: (text: string, final: boolean) => void, onStatus?: (s: string, m?: string) => void }) => { stop: () => void }}
  */
-export function createLiveCaptionSource({ url, connect = createSttStream }) {
+export function createLiveCaptionSource({ url, liveUrl = null, user = null, connect = createSttStream }) {
   return (track, { lang, onText, onStatus }) => {
+    let onLive = !!liveUrl;
+    let liveWorked = false;
     let stopped = false;
     let session = null;
     let gen = 0;
@@ -38,10 +46,12 @@ export function createLiveCaptionSource({ url, connect = createSttStream }) {
       const g = ++gen;
       let connectedAt = 0;
       status('connecting');
+      const live = onLive;
       session = connect({
         track,
-        url,
+        url: live ? liveUrl : url,
         lang,
+        ...(live ? { tokenScope: 'live', user } : {}),
         onTranscript: (text, isFinal) => {
           if (stopped || g !== gen) return;
           // Words came through: the connection works, start counting afresh.
@@ -50,13 +60,23 @@ export function createLiveCaptionSource({ url, connect = createSttStream }) {
         },
         onStatus: (s, m) => {
           if (stopped || g !== gen) return;
-          if (s === 'connected') { connectedAt = Date.now(); status('connected'); return; }
+          if (s === 'connected') {
+            connectedAt = Date.now();
+            if (live) liveWorked = true;
+            status('connected');
+            return;
+          }
           if (s !== 'error') return;
           // One close reports twice (the server's error message, then the
           // socket close): only the first one counts, for this session.
           gen += 1;
           try { session?.stop(); } catch { /* already closed */ }
           session = null;
+          if (live && !liveWorked && !connectedAt) {
+            onLive = false;
+            open();
+            return;
+          }
           if (connectedAt && Date.now() - connectedAt >= STABLE_MS) fails = 0;
           fails += 1;
           if (fails >= MAX_FAILS) { status('error', m); return; }

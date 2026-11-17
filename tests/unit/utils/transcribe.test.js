@@ -317,6 +317,18 @@ describe('Whisper', () => {
 })
 
 describe('speech server offers', () => {
+  it('passes the stream captions offer (/live) beside the transcripts one', async () => {
+    vi.resetModules()
+    globalThis.fetch = vi.fn(async () => ({
+      ok: true,
+      json: async () => ({ models: ['en-us'], transcribe: null, live: { engine: 'whisper', langs: ['en', 'de'] } }),
+    }))
+    const W = await import('../../../src/utils/transcribe.js')
+    const info = await W.speechInfo()
+    expect(info.live).toEqual({ engine: 'whisper', langs: ['en', 'de'] })
+    expect(info.transcribe).toBeNull()
+  })
+
   it('uses Whisper on /transcribe when the server has it, for the site languages; the teleprompter keeps the live models', async () => {
     vi.resetModules()
     globalThis.fetch = vi.fn(async (url) => ({

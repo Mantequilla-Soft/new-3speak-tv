@@ -65,6 +65,7 @@ const BENEFITS = [
   'Priority encoding queue',
   'Priority automatic translation into 15 languages (10 more than standard)',
   'OpenPods audio & video session recordings (free tier is live-only)',
+  'Live captions on your streams, written by Whisper with punctuation and capitals, and kept as subtitles on the replay',
   'Higher upload limits (free tier remains capped)',
   'No beneficiary fee on uploads — keep 100% of your post rewards. The standard 11% (3Speak platform + encoder fee) is waived for subscribers.',
   'Additional benefits will follow automatically',

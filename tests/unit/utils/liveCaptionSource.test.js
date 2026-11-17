@@ -131,3 +131,44 @@ describe('captionLanguages', () => {
     expect(captionLanguages(null, 'en')).toEqual([])
   })
 })
+
+describe('stream captions on Whisper (/live)', () => {
+  const src = (connect) => createLiveCaptionSource({ url: 'wss://stt.example/stt', liveUrl: 'wss://stt.example/live', user: 'badadib', connect })
+
+  it('starts on /live with a token scoped to it for the host', () => {
+    const { connect, sessions } = fakeConnect()
+    src(connect)({ id: 'mic' }, { lang: 'en', onText: vi.fn() })
+    expect(sessions[0].opts).toMatchObject({ url: 'wss://stt.example/live', lang: 'en', tokenScope: 'live', user: 'badadib' })
+  })
+
+  it('a /live that never connects is left for /stt at once, for good, without counting as a failure', () => {
+    const { connect, sessions } = fakeConnect()
+    const onStatus = vi.fn()
+    src(connect)({}, { lang: 'en', onText: vi.fn(), onStatus })
+    sessions[0].opts.onStatus('error', 'closed')
+    expect(sessions).toHaveLength(2)
+    expect(sessions[1].opts.url).toBe('wss://stt.example/stt')
+    expect(sessions[1].opts.tokenScope).toBeUndefined()
+    // /stt failing now backs off as before, and never goes back to /live
+    sessions[1].opts.onStatus('error', 'closed')
+    vi.advanceTimersByTime(BACKOFF_MS[0])
+    expect(sessions[2].opts.url).toBe('wss://stt.example/stt')
+    expect(onStatus).not.toHaveBeenCalledWith('error', expect.anything())
+  })
+
+  it('a /live that worked stays on /live when it closes later', () => {
+    const { connect, sessions } = fakeConnect()
+    src(connect)({}, { lang: 'en', onText: vi.fn() })
+    sessions[0].opts.onStatus('connected')
+    sessions[0].opts.onStatus('error', 'session time limit reached')
+    vi.advanceTimersByTime(BACKOFF_MS[0])
+    expect(sessions[1].opts.url).toBe('wss://stt.example/live')
+  })
+
+  it('without a live URL it is /stt as before', () => {
+    const { connect, sessions } = fakeConnect()
+    createLiveCaptionSource({ url: 'wss://stt.example/stt', connect })({}, { lang: 'en-us', onText: vi.fn() })
+    expect(sessions[0].opts.url).toBe('wss://stt.example/stt')
+    expect(sessions[0].opts.tokenScope).toBeUndefined()
+  })
+})

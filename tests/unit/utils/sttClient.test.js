@@ -120,6 +120,11 @@ describe('createSttStream: setting up', () => {
     expect(onStatus).toHaveBeenCalledWith('connecting', undefined)
   })
 
+  it('asks for a stream captions token for the signed-in account when told to', async () => {
+    await connected({ tokenScope: 'live', user: 'badadib' })
+    expect(fetchMock).toHaveBeenCalledWith('/api/stt-token?scope=live&user=badadib', { credentials: 'include', headers: { 'X-API-Key': 'embed-key' } })
+  })
+
   it.each([
     ['refuses', async () => ({ ok: false, json: async () => ({}) })],
     ['is unreachable', async () => { throw new TypeError('Failed to fetch') }],

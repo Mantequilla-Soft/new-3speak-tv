@@ -2675,12 +2675,30 @@ if (process.env.VIDEO_IMPORT_ENABLED === 'true') {
 const STT_SIGNING_SECRET = process.env.STT_SIGNING_SECRET || ''
 const STT_TOKEN_TTL = parseInt(process.env.STT_TOKEN_TTL || '300', 10) // seconds
 
-app.get('/api/stt-token', baseLimiter, (req, res) => {
+// ?scope=live&user=<account>: a token for the stream captions socket (/live,
+// Whisper), only for a VERIFIED session of that account and only when it is
+// Pro (live captions are a Pro feature, owner 2026-11-17). Signed over
+// "<exp>.live" so it opens /live and nothing else, and /stt tokens do not open
+// /live. 401 'sign-in-needed' / 403 'pro-only' otherwise.
+app.get('/api/stt-token', baseLimiter, async (req, res) => {
   if (!STT_SIGNING_SECRET) return res.status(503).json({ error: 'STT tokens not configured' })
   if (EMBED_API_KEY && req.get('X-API-Key') !== EMBED_API_KEY) {
     return res.status(401).json({ error: 'unauthorized' })
   }
   const exp = Math.floor(Date.now() / 1000) + STT_TOKEN_TTL
+  if (req.query.scope === 'live') {
+    const want = String(req.query.user || '').toLowerCase()
+    const butr = await resolveButrUser(req, res)
+    const ws = req.cookies?.[WSESSION_COOKIE_NAME]
+    const wallet = ws && verifyWalletSession(ws)
+    const verified = [butr, wallet].filter(Boolean).map(u => String(u).toLowerCase())
+    const user = want ? verified.find(u => u === want) : verified[0]
+    if (!user || !HIVE_USER_RE.test(user)) return res.status(401).json({ error: 'sign-in-needed' })
+    if (!(await isPro(user))) return res.status(403).json({ error: 'pro-only' })
+    const signed = `${exp}.live`
+    const sig = crypto.createHmac('sha256', STT_SIGNING_SECRET).update(signed).digest('hex')
+    return res.json({ token: `${signed}.${sig}`, exp })
+  }
   const sig = crypto.createHmac('sha256', STT_SIGNING_SECRET).update(String(exp)).digest('hex')
   res.json({ token: `${exp}.${sig}`, exp })
 })
@@ -2747,13 +2765,18 @@ app.post('/api/editor-token', baseLimiter, async (req, res) => {
 //                server only lists the ones loaded so far)
 //   transcribe:  { engine: 'whisper', langs } when whole-file transcripts run on
 //                Whisper (/transcribe), else null
+//   live:        { engine: 'whisper', langs } when stream captions run on
+//                Whisper (/live), else null
 const STT_HTTP_URL = (process.env.STT_HTTP_URL || '').replace(/\/+$/, '')
-let sttLangCache = { at: 0, models: [], transcribe: null }
+let sttLangCache = { at: 0, models: [], transcribe: null, live: null }
 
-const sttLangBody = () => ({ models: sttLangCache.models, transcribe: sttLangCache.transcribe })
+const sttLangBody = () => ({ models: sttLangCache.models, transcribe: sttLangCache.transcribe, live: sttLangCache.live })
+const whisperOffer = (o) => (o && o.engine === 'whisper' && Array.isArray(o.langs)
+  ? { engine: 'whisper', langs: o.langs.filter((l) => typeof l === 'string') }
+  : null)
 
 app.get('/api/stt-langs', baseLimiter, async (req, res) => {
-  if (!STT_HTTP_URL) return res.json({ models: [], transcribe: null })
+  if (!STT_HTTP_URL) return res.json({ models: [], transcribe: null, live: null })
   const now = Date.now()
   if (now - sttLangCache.at < 60000 && sttLangCache.models.length) return res.json(sttLangBody())
   try {
@@ -2762,11 +2785,7 @@ app.get('/api/stt-langs', baseLimiter, async (req, res) => {
     const j = await r.json()
     const list = Array.isArray(j.models_available) ? j.models_available : j.models_loaded
     const models = Array.isArray(list) ? list.filter((m) => typeof m === 'string') : []
-    const tr = j.transcribe
-    const transcribe = tr && tr.engine === 'whisper' && Array.isArray(tr.langs)
-      ? { engine: 'whisper', langs: tr.langs.filter((l) => typeof l === 'string') }
-      : null
-    sttLangCache = { at: now, models, transcribe }
+    sttLangCache = { at: now, models, transcribe: whisperOffer(j.transcribe), live: whisperOffer(j.live) }
     return res.json(sttLangBody())
   } catch {
     return res.json(sttLangBody())

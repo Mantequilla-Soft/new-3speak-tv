@@ -19,9 +19,12 @@ import { EMBED_API_KEY } from './config';
 // Mint a short-lived signed token from the preview server (which holds the signing
 // secret — never the browser). Returns '' on failure so a no-auth STT box (local
 // testing) still connects; an auth-required box will then close 4401.
-export async function getSttToken() {
+// `scope: 'live'` (with the signed-in `user`) asks for a stream captions token,
+// which the server hands out to Pro accounts only.
+export async function getSttToken({ scope, user } = {}) {
   try {
-    const r = await fetch('/api/stt-token', {
+    const q = scope ? `?${new URLSearchParams({ scope, user: user || '' })}` : '';
+    const r = await fetch(`/api/stt-token${q}`, {
       credentials: 'include',
       headers: EMBED_API_KEY ? { 'X-API-Key': EMBED_API_KEY } : {},
     });
@@ -31,7 +34,7 @@ export async function getSttToken() {
   } catch { return ''; }
 }
 
-export function createSttStream({ track, url, lang, onTranscript, onStatus }) {
+export function createSttStream({ track, url, lang, onTranscript, onStatus, tokenScope, user }) {
   let ctx = null;
   let source = null;
   let worklet = null;
@@ -51,7 +54,7 @@ export function createSttStream({ track, url, lang, onTranscript, onStatus }) {
       source = ctx.createMediaStreamSource(new MediaStream([track]));
       worklet = new AudioWorkletNode(ctx, 'stt-downsampler', { processorOptions: { targetRate: 16000 } });
 
-      const token = await getSttToken();
+      const token = await getSttToken(tokenScope ? { scope: tokenScope, user } : undefined);
       if (closed) { try { ctx.close(); } catch { /* ignore */ } return; }
       const wsUrl = new URL(url);
       wsUrl.searchParams.set('lang', lang || 'en-US');

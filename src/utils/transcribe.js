@@ -57,18 +57,21 @@ let infoCache = null;
  * { engine: 'whisper', langs } or null }. Nothing without a server.
  */
 export async function speechInfo() {
-  const none = { models: [], transcribe: null };
+  const none = { models: [], transcribe: null, live: null };
   if (!STT_WS_URL) return none;
   if (infoCache) return infoCache;
   try {
     const r = await fetch('/api/stt-langs');
     if (!r.ok) return none;
     const j = await r.json();
-    const tr = j?.transcribe;
+    // Only where the socket URL is the usual …/stt, so …/transcribe and …/live
+    // are beside it
+    const whisper = (o) => (o?.engine === 'whisper' && Array.isArray(o.langs) && /\/stt\/?$/.test(STT_WS_URL) ? o : null);
     infoCache = {
       models: Array.isArray(j?.models) ? j.models : [],
-      // Only where the socket URL is the usual …/stt, so …/transcribe is beside it
-      transcribe: tr?.engine === 'whisper' && Array.isArray(tr.langs) && /\/stt\/?$/.test(STT_WS_URL) ? tr : null,
+      transcribe: whisper(j?.transcribe),
+      // Stream captions on Whisper (/live)
+      live: whisper(j?.live),
     };
     return infoCache;
   } catch {
