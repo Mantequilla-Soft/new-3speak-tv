@@ -22,9 +22,9 @@ describe('Powered by Hive footer in server-rendered HTML', () => {
     }
   })
 
-  it('sits beside "Maintained by Mantequilla-Soft" in the shell, the Hive link unchanged', () => {
+  it('sits beside "Delivered by Mantequilla-Soft" in the shell, the Hive link unchanged', () => {
     const html = source('index.html')
-    expect(html).toMatch(/>Powered by Hive<\/a><span class="site-hive-footer__sep" aria-hidden="true">·<\/span><a class="site-hive-footer__maintainer" href="https:\/\/mantequilla-soft\.com"[^>]*>Maintained by Mantequilla-Soft<\/a>/)
+    expect(html).toMatch(/>Powered by Hive<\/a><span class="site-hive-footer__sep" aria-hidden="true">·<\/span><a class="site-hive-footer__maintainer" href="https:\/\/mantequilla-soft\.com"[^>]*>Delivered by Mantequilla-Soft<\/a>/)
   })
 
   it('is in every crawler HTML template', () => {
