@@ -394,16 +394,22 @@ const tickerEnabledFor = (user) => ENABLE_TICKER || adsBetaUserFor(user);
 // a flag is a UI decision, and this one must fail closed at the loader.
 const ENABLE_THIRDPARTY_ADS = import.meta.env.VITE_ENABLE_THIRDPARTY_ADS === 'true';
 
-// Hosts whose live streams / rooms are kept OUT of the discovery feeds
-// (discover, follow, new). Same spirit as the checker's LEADERBOARD_EXCLUDED_USERS
-// — the account still works normally and its streams stay reachable by direct
-// link; they just don't get surfaced in the feeds. Comma-separated override.
+// Hosts whose live streams / rooms are shown nowhere: not in the feeds, the
+// /live page, the swipe between streams, or (to anyone but the host) their
+// profile. Same spirit as the checker's LEADERBOARD_EXCLUDED_USERS — the account
+// still works normally and its streams stay reachable by direct link.
+// Comma-separated override.
 const FEED_EXCLUDED_HOSTS = new Set(
-  (import.meta.env.VITE_FEED_EXCLUDED_HOSTS ?? 'badadib')
+  (import.meta.env.VITE_FEED_EXCLUDED_HOSTS ?? 'badadib,ashenadib')
     .split(',')
     .map((s) => s.trim().toLowerCase())
     .filter(Boolean),
 );
+// True when `viewer` should not see `host`'s rooms; the host always sees their own.
+const hidesHostStreams = (host, viewer) => {
+  const h = String(host || '').toLowerCase();
+  return FEED_EXCLUDED_HOSTS.has(h) && h !== String(viewer || '').toLowerCase();
+};
 
 // Mobile-only in-browser camera recorder with a voice-driven teleprompter
 // (prototype). When on, the video upload step shows a "Record" button on phones
@@ -514,6 +520,7 @@ export {
   warmupRailEnabledFor,
   ENABLE_THIRDPARTY_ADS,
   FEED_EXCLUDED_HOSTS,
+  hidesHostStreams,
   ENABLE_CAMERA_RECORD,
   cameraRecordEnabledFor,
   adWizardEnabledFor,

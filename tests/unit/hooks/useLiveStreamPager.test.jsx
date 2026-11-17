@@ -41,9 +41,9 @@ beforeEach(() => {
 afterEach(() => vi.useRealTimers())
 
 describe('useLiveStreamPager', () => {
-  it('reads every host, not the discovery-filtered list', () => {
+  it('pages through the same list as the feeds, hidden hosts left out', () => {
     render(<Page room="a" />)
-    expect(live.opts).toEqual({ includeAllHosts: true })
+    expect(live.opts).toBeUndefined()
   })
 
   it('scrolling down goes to the next stream and blocks the page scroll', () => {
