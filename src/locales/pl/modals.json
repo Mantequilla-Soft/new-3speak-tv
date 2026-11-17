@@ -82,7 +82,6 @@
     "addCollaborator": "Dodaj współtwórcę",
     "saveSplit": "Zapisz podział",
     "intro": "Dodaj użytkownika, który ma automatycznie otrzymywać część nagród za ten post.",
-    "minPercent": "% (min. {{percent}}%)",
     "usernamePlaceholder": "Wpisz nazwę użytkownika",
     "minimumReward": "Minimalna nagroda to <strong>1%</strong>",
     "checking": "Sprawdzanie <strong>@{{account}}</strong> na Hive…",
@@ -90,7 +89,11 @@
     "notAdded": "<strong>@{{account}}</strong> nie zostało jeszcze dodane. Kliknij <strong>+</strong>, aby je dodać, albo wyczyść pole.",
     "infrastructure": "Infrastruktura: 10%",
     "videoEncoding": "Kodowanie wideo: 1%",
-    "defaults": "Domyślni beneficjenci ({{count}})"
+    "defaults": "Domyślni beneficjenci ({{count}})",
+    "raise": "Zwiększ udział {{account}}",
+    "lower": "Zmniejsz udział {{account}}",
+    "minShare": "min. {{percent}}%",
+    "raiseHint": "Udziały z kłódką można zwiększyć, by dać więcej, ale nie zmniejszyć poniżej minimum."
   },
   "qr": {
     "scan": "Zeskanuj ten kod QR w Hive Keychain:",

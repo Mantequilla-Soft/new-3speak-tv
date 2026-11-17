@@ -82,7 +82,6 @@
     "addCollaborator": "เพิ่มผู้ร่วมงาน",
     "saveSplit": "บันทึกการแบ่ง",
     "intro": "เพิ่มผู้ใช้ที่คุณต้องการให้ได้รับส่วนแบ่งรางวัลของโพสต์นี้โดยอัตโนมัติ",
-    "minPercent": "% (ขั้นต่ำ {{percent}}%)",
     "usernamePlaceholder": "กรอกชื่อผู้ใช้",
     "minimumReward": "รางวัลขั้นต่ำคือ <strong>1%</strong>",
     "checking": "กำลังตรวจสอบ <strong>@{{account}}</strong> บน Hive…",
@@ -90,7 +89,11 @@
     "notAdded": "ยังไม่ได้เพิ่ม <strong>@{{account}}</strong> คลิก <strong>+</strong> เพื่อเพิ่ม หรือล้างช่องนี้",
     "infrastructure": "โครงสร้างพื้นฐาน: 10%",
     "videoEncoding": "การเข้ารหัสวิดีโอ: 1%",
-    "defaults": "ผู้รับผลประโยชน์เริ่มต้น ({{count}})"
+    "defaults": "ผู้รับผลประโยชน์เริ่มต้น ({{count}})",
+    "raise": "เพิ่มส่วนแบ่งของ {{account}}",
+    "lower": "ลดส่วนแบ่งของ {{account}}",
+    "minShare": "ขั้นต่ำ {{percent}}%",
+    "raiseHint": "ส่วนแบ่งที่มีแม่กุญแจเพิ่มได้เพื่อให้มากขึ้น แต่ลดต่ำกว่าขั้นต่ำไม่ได้"
   },
   "qr": {
     "scan": "สแกน QR นี้ใน Hive Keychain:",

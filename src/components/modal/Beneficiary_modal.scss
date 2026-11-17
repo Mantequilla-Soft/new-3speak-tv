@@ -63,14 +63,18 @@
     .bene-tile__pct { font-family: var(--font-sans); font-size: 16px; font-weight: 900; line-height: 1.2; }
     .bene-tile__edit {
       display: flex;
-      align-items: baseline;
+      align-items: center;
+      gap: 2px;
+      margin-left: -6px;
       font-size: 16px;
       font-weight: 900;
+      .v2-iconbtn { flex: none; color: var(--muted); }
       input {
         min-width: 1.5ch;
         padding: 0;
         border: 0;
-        border-bottom: 2px solid transparent;
+        border-bottom: 2px solid var(--border);
+        text-align: center;
         background: transparent;
         color: var(--text);
         font-family: var(--font-sans);
@@ -83,6 +87,7 @@
       }
     }
     .bene-tile__lock { color: var(--muted); margin-right: 4px; }
+    .bene-tile__min { @include v2.text(meta-sm); color: var(--muted); }
   }
 
   .bene-addbtn {

@@ -82,7 +82,6 @@
     "addCollaborator": "添加合作者",
     "saveSplit": "保存分配",
     "intro": "添加一位用户，让其自动获得这篇帖子的一部分奖励。",
-    "minPercent": "%（最少 {{percent}}%）",
     "usernamePlaceholder": "输入用户名",
     "minimumReward": "最低奖励为 <strong>1%</strong>",
     "checking": "正在 Hive 上检查 <strong>@{{account}}</strong>…",
@@ -90,7 +89,11 @@
     "notAdded": "<strong>@{{account}}</strong> 还没有添加。点击 <strong>+</strong> 添加，或清空该字段。",
     "infrastructure": "基础设施：10%",
     "videoEncoding": "视频编码：1%",
-    "defaults": "默认受益人（{{count}}）"
+    "defaults": "默认受益人（{{count}}）",
+    "raise": "提高 {{account}} 的份额",
+    "lower": "降低 {{account}} 的份额",
+    "minShare": "最低 {{percent}}%",
+    "raiseHint": "带锁的份额可以提高以多分一些，但不能低于其最低值。"
   },
   "qr": {
     "scan": "在 Hive Keychain 中扫描此二维码：",

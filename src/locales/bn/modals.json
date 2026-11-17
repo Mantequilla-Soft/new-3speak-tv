@@ -82,7 +82,6 @@
     "addCollaborator": "একজন সহযোগী যোগ করুন",
     "saveSplit": "ভাগ সেভ করুন",
     "intro": "এমন একজন ইউজার যোগ করুন যিনি এই পোস্টের রিওয়ার্ডের একটি অংশ স্বয়ংক্রিয়ভাবে পাবেন।",
-    "minPercent": "% (সর্বনিম্ন {{percent}}%)",
     "usernamePlaceholder": "ইউজারনেম লিখুন",
     "minimumReward": "সর্বনিম্ন রিওয়ার্ড <strong>1%</strong>",
     "checking": "Hive-এ <strong>@{{account}}</strong> যাচাই করা হচ্ছে…",
@@ -90,7 +89,11 @@
     "notAdded": "<strong>@{{account}}</strong> এখনো যোগ করা হয়নি। যোগ করতে <strong>+</strong> চাপুন, অথবা ঘরটি খালি করুন।",
     "infrastructure": "অবকাঠামো: 10%",
     "videoEncoding": "ভিডিও এনকোডিং: 1%",
-    "defaults": "ডিফল্ট বেনিফিশিয়ারি ({{count}})"
+    "defaults": "ডিফল্ট বেনিফিশিয়ারি ({{count}})",
+    "raise": "{{account}}-এর অংশ বাড়ান",
+    "lower": "{{account}}-এর অংশ কমান",
+    "minShare": "ন্যূনতম {{percent}}%",
+    "raiseHint": "তালাযুক্ত অংশগুলো বেশি দিতে বাড়ানো যায়, কিন্তু ন্যূনতমের নিচে নামানো যায় না।"
   },
   "qr": {
     "scan": "Hive Keychain-এ এই QR স্ক্যান করুন:",

@@ -82,7 +82,6 @@
     "addCollaborator": "Add a collaborator",
     "saveSplit": "Save split",
     "intro": "Add a user you want to automatically receive a portion of the rewards for this post.",
-    "minPercent": "% (min {{percent}}%)",
     "usernamePlaceholder": "Enter username",
     "minimumReward": "Minimum reward is <strong>1%</strong>",
     "checking": "Checking <strong>@{{account}}</strong> on Hive…",
@@ -90,7 +89,11 @@
     "notAdded": "<strong>@{{account}}</strong> is not added yet. Click <strong>+</strong> to add it, or clear the field.",
     "infrastructure": "Infrastructure: 10%",
     "videoEncoding": "Video Encoding: 1%",
-    "defaults": "Default Beneficiaries ({{count}})"
+    "defaults": "Default Beneficiaries ({{count}})",
+    "raise": "Raise the share of {{account}}",
+    "lower": "Lower the share of {{account}}",
+    "minShare": "min {{percent}}%",
+    "raiseHint": "Shares with a lock can be raised to give more, but not lowered below their minimum."
   },
   "qr": {
     "scan": "Scan this QR in Hive Keychain:",

@@ -82,7 +82,6 @@
     "addCollaborator": "Medewerker toevoegen",
     "saveSplit": "Verdeling opslaan",
     "intro": "Voeg een gebruiker toe die automatisch een deel van de beloningen van deze post moet krijgen.",
-    "minPercent": "% (min. {{percent}}%)",
     "usernamePlaceholder": "Gebruikersnaam invullen",
     "minimumReward": "Minimale beloning is <strong>1%</strong>",
     "checking": "<strong>@{{account}}</strong> controleren op Hive…",
@@ -90,7 +89,11 @@
     "notAdded": "<strong>@{{account}}</strong> is nog niet toegevoegd. Klik op <strong>+</strong> om het toe te voegen, of maak het veld leeg.",
     "infrastructure": "Infrastructuur: 10%",
     "videoEncoding": "Video-encoding: 1%",
-    "defaults": "Standaardbegunstigden ({{count}})"
+    "defaults": "Standaardbegunstigden ({{count}})",
+    "raise": "Aandeel van {{account}} verhogen",
+    "lower": "Aandeel van {{account}} verlagen",
+    "minShare": "min. {{percent}}%",
+    "raiseHint": "Aandelen met een slot kun je verhogen om meer te geven, maar niet onder hun minimum verlagen."
   },
   "qr": {
     "scan": "Scan deze QR in Hive Keychain:",

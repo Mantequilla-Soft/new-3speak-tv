@@ -82,7 +82,6 @@
     "addCollaborator": "Ortak çalışan ekle",
     "saveSplit": "Dağılımı kaydet",
     "intro": "Bu gönderinin ödüllerinden otomatik olarak pay almasını istediğin bir kullanıcı ekle.",
-    "minPercent": "% (en az %{{percent}})",
     "usernamePlaceholder": "Kullanıcı adını gir",
     "minimumReward": "En düşük ödül <strong>%1</strong>",
     "checking": "<strong>@{{account}}</strong> Hive'da kontrol ediliyor…",
@@ -90,7 +89,11 @@
     "notAdded": "<strong>@{{account}}</strong> henüz eklenmedi. Eklemek için <strong>+</strong> düğmesine tıkla ya da alanı temizle.",
     "infrastructure": "Altyapı: %10",
     "videoEncoding": "Video Kodlama: %1",
-    "defaults": "Varsayılan Lehtarlar ({{count}})"
+    "defaults": "Varsayılan Lehtarlar ({{count}})",
+    "raise": "{{account}} payını artır",
+    "lower": "{{account}} payını azalt",
+    "minShare": "en az %{{percent}}",
+    "raiseHint": "Kilitli paylar daha fazla vermek için artırılabilir ama alt sınırlarının altına indirilemez."
   },
   "qr": {
     "scan": "Bu QR kodunu Hive Keychain'de tara:",

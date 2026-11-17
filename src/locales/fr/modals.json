@@ -82,7 +82,6 @@
     "addCollaborator": "Ajouter un collaborateur",
     "saveSplit": "Enregistrer la répartition",
     "intro": "Ajoutez un utilisateur qui recevra automatiquement une partie des récompenses de cette publication.",
-    "minPercent": "% (min {{percent}} %)",
     "usernamePlaceholder": "Nom d'utilisateur",
     "minimumReward": "La récompense minimale est de <strong>1 %</strong>",
     "checking": "Vérification de <strong>@{{account}}</strong> sur Hive…",
@@ -90,7 +89,11 @@
     "notAdded": "<strong>@{{account}}</strong> n'est pas encore ajouté. Cliquez sur <strong>+</strong> pour l'ajouter, ou videz le champ.",
     "infrastructure": "Infrastructure : 10 %",
     "videoEncoding": "Encodage vidéo : 1 %",
-    "defaults": "Bénéficiaires par défaut ({{count}})"
+    "defaults": "Bénéficiaires par défaut ({{count}})",
+    "raise": "Augmenter la part de {{account}}",
+    "lower": "Baisser la part de {{account}}",
+    "minShare": "min. {{percent}} %",
+    "raiseHint": "Les parts avec un cadenas peuvent être augmentées pour donner plus, mais pas baissées sous leur minimum."
   },
   "qr": {
     "scan": "Scannez ce QR code dans Hive Keychain :",

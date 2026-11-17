@@ -82,7 +82,6 @@
     "addCollaborator": "Додати співавтора",
     "saveSplit": "Зберегти розподіл",
     "intro": "Додайте користувача, який автоматично отримуватиме частину винагород за цей допис.",
-    "minPercent": "% (мін. {{percent}}%)",
     "usernamePlaceholder": "Введіть ім'я користувача",
     "minimumReward": "Мінімальна винагорода: <strong>1%</strong>",
     "checking": "Перевіряємо <strong>@{{account}}</strong> у Hive…",
@@ -90,7 +89,11 @@
     "notAdded": "<strong>@{{account}}</strong> ще не додано. Натисніть <strong>+</strong>, щоб додати, або очистьте поле.",
     "infrastructure": "Інфраструктура: 10%",
     "videoEncoding": "Кодування відео: 1%",
-    "defaults": "Бенефіціари за замовчуванням ({{count}})"
+    "defaults": "Бенефіціари за замовчуванням ({{count}})",
+    "raise": "Збільшити частку {{account}}",
+    "lower": "Зменшити частку {{account}}",
+    "minShare": "мін. {{percent}}%",
+    "raiseHint": "Частки із замком можна збільшити, щоб дати більше, але не можна опустити нижче мінімуму."
   },
   "qr": {
     "scan": "Відскануйте цей QR у Hive Keychain:",
