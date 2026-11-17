@@ -33,7 +33,7 @@ export const CHANGELOG = [
     version: '2.0.111',
     category: 'live',
     date: '2026-11-17',
-    summary: 'Show your phone or tablet screen in the stream studio with VDO.Ninja or Larix, set up once for every stream.',
+    summary: 'Show your phone or tablet screen in the stream studio: a short guide for your computer and phone shows how to mirror it, then you share the window.',
   },
   {
     version: '2.0.110',

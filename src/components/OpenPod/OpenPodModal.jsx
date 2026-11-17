@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { HangoutsProvider, HangoutsRoom } from '@snapie/hangouts-react';
+import { HangoutsProvider, HangoutsRoom, PHONE_SCREEN_LABEL_KEYS } from '@snapie/hangouts-react';
 import '@snapie/hangouts-react/src/styles/hangouts.css';
 import logoDark from '../../assets/image/3S_logodark.png';
 import { useAppStore } from '../../lib/store';
@@ -64,12 +64,8 @@ function buildOpenPodShareUrl(roomName, origin, mode) {
 
 // Text of the studio's "Phone or tablet screen" source (SDK
 // PhoneScreenSourceLabels). Built with a dynamic t() like the create form.
-const PHONE_SOURCE_KEYS = [
-  'menuItem', 'menuHint', 'sourceName', 'title', 'lead', 'tabVdoNinja', 'tabLarix',
-  'vdoStep1', 'vdoStep2', 'vdoStep3', 'vdoQrHint', 'sameEveryStream', 'step1', 'step2', 'step3', 'step4',
-  'urlLabel', 'tokenLabel', 'openInLarix', 'qrHint', 'keepPrivate', 'sharedSlot', 'soundNote',
-  'androidNote', 'firefoxNote', 'delayNote', 'waiting', 'connected',
-];
+// The SDK's own list; copy, copied and close come from common.actions.
+const PHONE_SOURCE_KEYS = PHONE_SCREEN_LABEL_KEYS.filter((k) => !['copy', 'copied', 'close'].includes(k));
 
 export default function OpenPodModal({ isOpen, onClose, roomName, sessionToken, username, isAuthenticated }) {
   const { t } = useTranslation();
