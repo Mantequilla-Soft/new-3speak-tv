@@ -15,7 +15,7 @@ vi.mock('../../../src/utils/config', async (importOriginal) => ({
   STT_WS_URL: 'wss://stt.test/stt',
   sttEnabledFor: () => m.stt,
 }))
-vi.mock('../../../src/utils/transcribe', () => ({ transcriptLanguages: async () => m.langs }))
+vi.mock('../../../src/utils/transcribe', () => ({ liveLanguages: async () => m.langs }))
 vi.mock('../../../src/utils/sttClient', () => ({
   createSttStream: vi.fn((opts) => {
     const s = { opts, stop: vi.fn() }

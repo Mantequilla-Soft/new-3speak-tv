@@ -6,6 +6,7 @@
 // falls back to English whenever it isn't reasonably sure.
 
 const SCRIPT_RANGES = [
+  { re: /[ґєіїҐЄІЇ]/, lang: 'uk-UA' }, // letters only Ukrainian has (before Cyrillic)
   { re: /[Ѐ-ӿ]/, lang: 'ru-RU' }, // Cyrillic
   { re: /[؀-ۿ]/, lang: 'ar-SA' }, // Arabic
   { re: /[ऀ-ॿ]/, lang: 'hi-IN' }, // Devanagari
@@ -22,6 +23,10 @@ const STOPWORDS = {
   'fr-FR': ['le', 'la', 'les', 'et', 'de', 'que', 'est', 'un', 'une', 'pour', 'dans', 'avec', 'je', 'nous', 'pas', 'ce'],
   'it-IT': ['il', 'la', 'le', 'di', 'che', 'è', 'un', 'una', 'per', 'con', 'non', 'sono', 'del', 'nel', 'anche'],
   'nl-NL': ['de', 'het', 'een', 'en', 'van', 'is', 'dat', 'niet', 'op', 'met', 'voor', 'ik', 'wij', 'zijn', 'maar'],
+  // Only words no other listed language uses (Polish "i", "w", "do" are English too)
+  'pl-PL': ['się', 'nie', 'że', 'jest', 'jak', 'ale', 'tak', 'dla', 'jestem', 'już', 'żeby', 'może', 'bardzo', 'tylko'],
+  'tr-TR': ['ve', 'bir', 'bu', 'için', 'ile', 'çok', 'ama', 'biz', 'değil', 'gibi', 'daha', 'olarak', 'şey', 'bunu'],
+  'vi-VN': ['và', 'là', 'của', 'không', 'có', 'được', 'những', 'một', 'cho', 'này', 'với', 'các', 'người', 'trong', 'tôi'],
 };
 
 const DEFAULT_LANG = 'en-US';
@@ -78,6 +83,8 @@ export function modelIdToTag(id) {
     en: 'en-US', de: 'de-DE', es: 'es-ES', fr: 'fr-FR', pt: 'pt-BR', it: 'it-IT',
     nl: 'nl-NL', ru: 'ru-RU', hi: 'hi-IN', ar: 'ar-SA', ja: 'ja-JP', ko: 'ko-KR',
     zh: 'zh-CN', cn: 'zh-CN', pl: 'pl-PL', tr: 'tr-TR', sv: 'sv-SE',
+    uk: 'uk-UA', ua: 'uk-UA', vi: 'vi-VN', vn: 'vi-VN', id: 'id-ID', bn: 'bn-BD',
+    sw: 'sw-KE', th: 'th-TH', tl: 'fil-PH', fil: 'fil-PH',
   };
   return bare[base] || `${base}-${base.toUpperCase()}`;
 }

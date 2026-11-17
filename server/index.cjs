@@ -2743,24 +2743,33 @@ app.post('/api/editor-token', baseLimiter, async (req, res) => {
 
 // Which languages the STT server actually has models for. Proxied server-side so
 // the browser doesn't need CORS on the STT box; cached for a minute.
+//   models:      the live (Vosk) models on disk, for the teleprompters (an older
+//                server only lists the ones loaded so far)
+//   transcribe:  { engine: 'whisper', langs } when whole-file transcripts run on
+//                Whisper (/transcribe), else null
 const STT_HTTP_URL = (process.env.STT_HTTP_URL || '').replace(/\/+$/, '')
-let sttLangCache = { at: 0, models: [] }
+let sttLangCache = { at: 0, models: [], transcribe: null }
+
+const sttLangBody = () => ({ models: sttLangCache.models, transcribe: sttLangCache.transcribe })
 
 app.get('/api/stt-langs', baseLimiter, async (req, res) => {
-  if (!STT_HTTP_URL) return res.json({ models: [] })
+  if (!STT_HTTP_URL) return res.json({ models: [], transcribe: null })
   const now = Date.now()
-  if (now - sttLangCache.at < 60000 && sttLangCache.models.length) {
-    return res.json({ models: sttLangCache.models })
-  }
+  if (now - sttLangCache.at < 60000 && sttLangCache.models.length) return res.json(sttLangBody())
   try {
     const r = await fetch(`${STT_HTTP_URL}/healthz`, { signal: AbortSignal.timeout(4000) })
-    if (!r.ok) return res.json({ models: sttLangCache.models })
+    if (!r.ok) return res.json(sttLangBody())
     const j = await r.json()
-    const models = Array.isArray(j.models_loaded) ? j.models_loaded : []
-    sttLangCache = { at: now, models }
-    return res.json({ models })
+    const list = Array.isArray(j.models_available) ? j.models_available : j.models_loaded
+    const models = Array.isArray(list) ? list.filter((m) => typeof m === 'string') : []
+    const tr = j.transcribe
+    const transcribe = tr && tr.engine === 'whisper' && Array.isArray(tr.langs)
+      ? { engine: 'whisper', langs: tr.langs.filter((l) => typeof l === 'string') }
+      : null
+    sttLangCache = { at: now, models, transcribe }
+    return res.json(sttLangBody())
   } catch {
-    return res.json({ models: sttLangCache.models })
+    return res.json(sttLangBody())
   }
 })
 

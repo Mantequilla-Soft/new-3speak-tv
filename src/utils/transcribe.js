@@ -1,6 +1,12 @@
 /*
  * Transcript of an audio file, made with the teleprompter's speech-to-text
  * server (VITE_STT_WS_URL, the same WebSocket protocol as utils/sttClient.js).
+ * Where the server offers Whisper (the transcribe field of /api/stt-langs), the file goes
+ * to its /transcribe socket instead of the live one (Vosk): sentences with
+ * punctuation and capitals, in the site's languages. Whisper gathers the audio
+ * and works through it in pieces, a few times real time, saying how far it
+ * got ({"type":"progress","sec"}): the progress follows that, and a dropped
+ * connection goes on from there.
  *
  * The file never leaves the browser as a file: it is decoded here, turned into
  * 16 kHz mono 16-bit PCM and streamed to the server faster than real time
@@ -45,20 +51,42 @@ const abortError = () => Object.assign(new Error('aborted'), { name: 'AbortError
 
 // ── Languages ───────────────────────────────────────────────────────────────
 
-let langCache = null;
-/** The server's models as language tags ('en-us' -> 'en-US'); [] when there is no server. */
-export async function transcriptLanguages() {
-  if (!STT_WS_URL) return [];
-  if (langCache) return langCache;
+let infoCache = null;
+/**
+ * What the speech server offers: { models: its live (Vosk) models, transcribe:
+ * { engine: 'whisper', langs } or null }. Nothing without a server.
+ */
+export async function speechInfo() {
+  const none = { models: [], transcribe: null };
+  if (!STT_WS_URL) return none;
+  if (infoCache) return infoCache;
   try {
     const r = await fetch('/api/stt-langs');
-    const j = r.ok ? await r.json() : null;
-    const models = Array.isArray(j?.models) ? j.models : [];
-    langCache = [...new Set(models.map(modelIdToTag).filter(Boolean))];
-    return langCache;
+    if (!r.ok) return none;
+    const j = await r.json();
+    const tr = j?.transcribe;
+    infoCache = {
+      models: Array.isArray(j?.models) ? j.models : [],
+      // Only where the socket URL is the usual …/stt, so …/transcribe is beside it
+      transcribe: tr?.engine === 'whisper' && Array.isArray(tr.langs) && /\/stt\/?$/.test(STT_WS_URL) ? tr : null,
+    };
+    return infoCache;
   } catch {
-    return [];
+    return none;
   }
+}
+
+const toTags = (ids) => [...new Set(ids.map(modelIdToTag).filter(Boolean))];
+
+/** The languages a teleprompter can follow by voice, as tags ('en-us' -> 'en-US'). */
+export async function liveLanguages() {
+  return toTags((await speechInfo()).models);
+}
+
+/** The languages a transcript can be made in: Whisper's, else the live models'. */
+export async function transcriptLanguages() {
+  const info = await speechInfo();
+  return toTags(info.transcribe ? info.transcribe.langs : info.models);
 }
 
 // ── Decoding ────────────────────────────────────────────────────────────────
@@ -127,7 +155,7 @@ export async function* decodePieces(blob, name = '') {
 const NOISE = new Set(['the', 'a', 'uh', 'um', 'huh', 'hmm', 'mm', 'oh', 'ah', 'er']);
 const PARAGRAPH_WORDS = 70;
 
-/** A raw "final" (lower case, no punctuation) -> a sentence, or '' for noise. */
+/** A raw "final" from the live recognizer (lower case, no punctuation) -> a sentence, or '' for noise. */
 export function sentence(raw) {
   const words = String(raw || '').toLowerCase().replace(/\s+/g, ' ').trim().split(' ').filter(Boolean);
   if (!words.length || (words.length === 1 && NOISE.has(words[0]))) return '';
@@ -137,6 +165,18 @@ export function sentence(raw) {
     .replace(/\bthree speak\b/g, '3Speak');
   s = s.charAt(0).toUpperCase() + s.slice(1);
   return `${s}.`;
+}
+
+/**
+ * Whisper's finals already have punctuation and capitals, but a final is a
+ * stretch of speech, not a sentence: joined up and split again at the
+ * sentence ends, so paragraphs break between sentences.
+ */
+export function whisperSentences(finals) {
+  return finals.join(' ').replace(/\s+/g, ' ').trim()
+    .split(/(?<=[.!?…])\s+|(?<=[。！？])/)
+    .map((x) => x.trim())
+    .filter(Boolean);
 }
 
 /** Sentences -> paragraphs of about PARAGRAPH_WORDS words. */
@@ -187,12 +227,16 @@ export function withTranscript(desc, previous, next) {
  * One server session: send `pcm` (Int16Array, may be several pieces joined
  * by the caller) paced at TRANSCRIBE_RATE, then the silent tail, and resolve
  * with the finals once the server goes quiet. `onSent(samples)` reports
- * progress. Rejects with code 'unauthorized' / 'connection' / AbortError.
+ * progress, `onHeard(samples)` how far the server says it recognized.
+ * Rejects with code 'unauthorized' / 'connection' / AbortError (carrying the
+ * finals so far, `heard`, and whether the socket ever `opened`).
  */
-export function runSession({ pcm, url, lang, token, signal, onSent, WebSocketImpl = globalThis.WebSocket, now = () => Date.now(), idleMs = IDLE_DONE_MS }) {
+export function runSession({ pcm, url, lang, token, signal, onSent, onHeard, WebSocketImpl = globalThis.WebSocket, now = () => Date.now(), idleMs = IDLE_DONE_MS }) {
   return new Promise((resolve, reject) => {
     const finals = [];
     let partial = '';
+    let heard = 0;
+    let opened = false;
     let lastMsg = 0;
     let sentAll = false;
     let finished = false;
@@ -220,15 +264,19 @@ export function runSession({ pcm, url, lang, token, signal, onSent, WebSocketImp
       try { msg = JSON.parse(e.data); } catch { return; }
       if (msg.type === 'final') { finals.push(msg.text || ''); partial = ''; }
       else if (msg.type === 'partial') partial = msg.text || '';
-      else if (msg.type === 'done' && sentAll) finish();
+      else if (msg.type === 'progress' && Number.isFinite(msg.sec)) {
+        heard = Math.min(pcm.length, Math.round(msg.sec * SAMPLE_RATE));
+        onHeard?.(heard);
+      } else if (msg.type === 'done' && sentAll) finish();
     };
     ws.onclose = (ev) => {
       if (finished) return;
       if (sentAll) { finish(); return; } // closed after everything went: keep what came back
-      finish(Object.assign(new Error(ev?.code === 4401 ? 'unauthorized' : 'connection'), { code: ev?.code === 4401 ? 'unauthorized' : 'connection', finals, partial }));
+      finish(Object.assign(new Error(ev?.code === 4401 ? 'unauthorized' : 'connection'), { code: ev?.code === 4401 ? 'unauthorized' : 'connection', finals, partial, heard, opened }));
     };
     ws.onerror = () => {};
     ws.onopen = async () => {
+      opened = true;
       try { ws.send(JSON.stringify({ type: 'start', lang })); } catch { /* close follows */ }
       const frame = Math.round(SAMPLE_RATE * FRAME_SEC);
       const tail = new Int16Array(Math.round(SAMPLE_RATE * TAIL_SEC));
@@ -263,10 +311,17 @@ function joinPieces(pieces, length) {
 /**
  * Transcribe `blob`. `durationSec` (known length) drives the progress until
  * decoding has measured it. onProgress({ phase: 'decoding'|'listening', done: 0..1 }).
- * Resolves with the sentences (formatted, noise dropped).
+ * Resolves with the sentences (formatted, noise dropped). Without `url` the
+ * server's best engine is used (speechInfo); with one, `engine` says which it is.
  */
-export async function transcribe(blob, { name = '', lang = 'en-US', durationSec = 0, signal, onProgress, url = STT_WS_URL, WebSocketImpl, idleMs } = {}) {
-  if (!url) throw Object.assign(new Error('unavailable'), { code: 'unavailable' });
+export async function transcribe(blob, { name = '', lang = 'en-US', durationSec = 0, signal, onProgress, url, engine, WebSocketImpl, idleMs } = {}) {
+  if (!url) {
+    if (!STT_WS_URL) throw Object.assign(new Error('unavailable'), { code: 'unavailable' });
+    const info = await speechInfo();
+    engine = info.transcribe ? 'whisper' : 'vosk';
+    url = info.transcribe ? STT_WS_URL.replace(/\/stt\/?$/, '/transcribe') : STT_WS_URL;
+  }
+  let whisper = engine === 'whisper';
   const total = Math.max(1, Math.round((durationSec || 0) * SAMPLE_RATE));
   const report = (phase, done) => { try { onProgress?.({ phase, done: Math.max(0, Math.min(0.99, done)) }); } catch { /* ignore */ } };
   report('decoding', 0);
@@ -288,23 +343,34 @@ export async function transcribe(blob, { name = '', lang = 'en-US', durationSec 
       const token = await getSttToken();
       const base = doneSamples;
       let sent = 0;
+      // Whisper takes the audio in faster than it recognizes it: the progress
+      // is what it has recognized
+      const progress = (n) => report('listening', (base + n) / Math.max(total, base + n + 1));
       try {
         const got = await runSession({
           pcm: pcm.subarray(from), url, lang, token, signal, idleMs,
           ...(WebSocketImpl ? { WebSocketImpl } : {}),
-          onSent: (n) => { sent = n; report('listening', (base + n) / Math.max(total, base + n + 1)); },
+          onSent: (n) => { sent = n; if (!whisper) progress(n); },
+          onHeard: (n) => { if (whisper) progress(n); },
         });
         finals.push(...got);
         doneSamples = base + (pcm.length - from);
         from = pcm.length;
       } catch (err) {
+        // A Whisper socket that never opened (the server has it, its proxy
+        // does not pass /transcribe yet): the whole file on the live one
+        if (whisper && err?.code === 'connection' && !err.opened && !finals.length && STT_WS_URL) {
+          whisper = false;
+          url = STT_WS_URL;
+          continue;
+        }
         if (err?.name === 'AbortError' || err?.code === 'unauthorized' || reconnects >= MAX_RECONNECTS) throw err;
         // Dropped: keep what came back and go on from what we had sent, less
         // a few seconds the server may not have reached (a word or two may
-        // show up twice, none go missing)
+        // show up twice, none go missing). Whisper says how far it got.
         reconnects++;
         finals.push(...(err.finals || []));
-        const resume = Math.max(0, sent - RESUME_BACK_SEC * SAMPLE_RATE);
+        const resume = whisper ? (err.heard || 0) : Math.max(0, sent - RESUME_BACK_SEC * SAMPLE_RATE);
         doneSamples = base + resume;
         from += resume;
         await sleep(1000);
@@ -320,5 +386,5 @@ export async function transcribe(blob, { name = '', lang = 'en-US', durationSec 
   }
   await flush();
   report('listening', 0.99);
-  return finals.map(sentence).filter(Boolean);
+  return whisper ? whisperSentences(finals) : finals.map(sentence).filter(Boolean);
 }

@@ -5,7 +5,7 @@ import { useVoiceTeleprompter } from '../../hooks/useVoiceTeleprompter';
 import { createSttStream } from '../../utils/sttClient';
 import { detectScriptLang } from '../../utils/detectLang';
 import { STT_WS_URL, sttEnabledFor } from '../../utils/config';
-import { transcriptLanguages } from '../../utils/transcribe';
+import { liveLanguages } from '../../utils/transcribe';
 
 // Teleprompter for the audio upload's own recorder: write the script before
 // recording, read it while recording. It follows your voice through the
@@ -35,7 +35,7 @@ export default function AudioTeleprompter({ recording, streamRef, user }) {
   const [langs, setLangs] = useState([]);
   useEffect(() => {
     let alive = true;
-    if (sttEnabledFor(user)) transcriptLanguages().then((l) => { if (alive) setLangs(l); });
+    if (sttEnabledFor(user)) liveLanguages().then((l) => { if (alive) setLangs(l); });
     return () => { alive = false; };
   }, [user]);
   useEffect(() => { save(SCRIPT_KEY, script); }, [script]);
