@@ -223,7 +223,7 @@
       "ms": "{{ms}} ms",
       "badUrl": "Voer een adres in dat begint met https://",
       "failed": "Deze node reageerde niet of mist de sociale API (hivemind) die 3Speak nodig heeft.",
-      "switching": "Node wisselen…",
+      "switched": "Nu via {{node}}",
       "fallback": "Als de gekozen node niet meer reageert, gebruikt 3Speak de bekende nodes tot de pagina opnieuw wordt geladen."
     }
   },

@@ -223,7 +223,7 @@
       "ms": "{{ms}} ms",
       "badUrl": "https:// ile başlayan bir adres gir",
       "failed": "Bu düğüm yanıt vermedi ya da 3Speak'in ihtiyaç duyduğu sosyal API (hivemind) yok.",
-      "switching": "Düğüm değiştiriliyor…",
+      "switched": "Şimdi {{node}} kullanılıyor",
       "fallback": "Seçtiğin düğüm yanıt vermeyi bırakırsa 3Speak sayfa yenilenene kadar bilinen düğümleri kullanır."
     }
   },

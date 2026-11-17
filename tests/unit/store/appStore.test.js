@@ -17,6 +17,7 @@ vi.mock('../../../src/utils/api', () => ({ api: { auth: {} } }))
 const axiosPost = vi.hoisted(() => vi.fn())
 vi.mock('axios', () => ({ default: { post: axiosPost } }))
 vi.mock('../../../src/utils/config', () => ({ HIVE_API_URL: 'https://hive.test', API_URL_FROM_WEST: 'https://west.test' }))
+vi.mock('../../../src/utils/hiveNode', () => ({ getHiveUrl: () => 'https://hive.test' }))
 
 const persisted = () => JSON.parse(localStorage.getItem('user-store'))
 

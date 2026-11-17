@@ -6,9 +6,9 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 
 const h = vi.hoisted(() => ({ post: vi.fn() }))
 vi.mock('axios', () => ({ default: { post: h.post } }))
-vi.mock('../../../src/utils/hiveNode', () => ({ getHiveUrl: () => 'https://pinned.example' }))
-vi.mock('../../../src/utils/config', () => ({
-  HIVE_API_NODES: ['https://a.example', 'https://pinned.example', '', 'https://b.example'],
+// The node in use first, then the rest (utils/hiveNode getHiveNodes)
+vi.mock('../../../src/utils/hiveNode', () => ({
+  getHiveNodes: () => ['https://pinned.example', 'https://a.example', '', 'https://b.example'],
 }))
 vi.mock('../../../src/i18n', () => ({ t: (key, vars) => (vars ? `${key} ${JSON.stringify(vars)}` : key) }))
 

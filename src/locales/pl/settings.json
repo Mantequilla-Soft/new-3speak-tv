@@ -223,7 +223,7 @@
       "ms": "{{ms}} ms",
       "badUrl": "Wpisz adres zaczynający się od https://",
       "failed": "Ten węzeł nie odpowiedział lub nie ma społecznościowego API (hivemind), którego potrzebuje 3Speak.",
-      "switching": "Zmiana węzła…",
+      "switched": "Teraz przez {{node}}",
       "fallback": "Jeśli wybrany węzeł przestanie odpowiadać, 3Speak użyje znanych węzłów do czasu przeładowania strony."
     }
   },

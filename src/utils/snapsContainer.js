@@ -1,6 +1,5 @@
 import axios from 'axios';
-import { getHiveUrl } from './hiveNode';
-import { HIVE_API_NODES } from './config';
+import { getHiveNodes } from './hiveNode';
 import { t } from '../i18n';
 
 // Resolving the latest @peak.snaps container — the parent every snap-style
@@ -55,9 +54,7 @@ const CACHE_TTL_MS = 5 * 60 * 1000;
 let cached = null; // { author, permlink, at }
 
 function nodeOrder() {
-  const pinned = getHiveUrl();
-  const rest = (HIVE_API_NODES || []).filter((n) => n && n !== pinned);
-  return [...new Set([pinned, ...rest].filter(Boolean))];
+  return getHiveNodes().filter(Boolean);
 }
 
 function normalize(post) {

@@ -223,7 +223,7 @@
       "ms": "{{ms}} ms",
       "badUrl": "Weka anwani inayoanza na https://",
       "failed": "Nodi hii haikujibu, au haina API ya kijamii (hivemind) ambayo 3Speak inahitaji.",
-      "switching": "Inabadilisha nodi…",
+      "switched": "Sasa inatumia {{node}}",
       "fallback": "Nodi uliyochagua ikiacha kujibu, 3Speak hutumia nodi zinazojulikana hadi ukurasa upakiwe upya."
     }
   },

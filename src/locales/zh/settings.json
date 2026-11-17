@@ -223,7 +223,7 @@
       "ms": "{{ms}} 毫秒",
       "badUrl": "请输入以 https:// 开头的地址",
       "failed": "该节点没有响应，或缺少 3Speak 所需的社交 API（hivemind）。",
-      "switching": "正在切换节点…",
+      "switched": "正在使用 {{node}}",
       "fallback": "如果你选择的节点停止响应，3Speak 会在页面重新加载前使用已知节点。"
     }
   },

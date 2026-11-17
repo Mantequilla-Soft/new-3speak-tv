@@ -184,3 +184,28 @@ describe('a node chosen in Settings', () => {
     expect(typeof r.ms).toBe('number')
   })
 })
+
+describe('switching in Settings, without a reload', () => {
+  const OWN = 'https://node.example.com'
+
+  it('a picked node is in use at once, for dhive and raw callers, with the known nodes behind it', async () => {
+    NODES.forEach((n) => { health[n] = { hived: true, hivemind: true } })
+    const mod = await load()
+    await mod.ensureHealthyNode()
+    expect(await mod.setNodeChoice(OWN)).toBe(OWN)
+    expect(mod.getHiveUrl()).toBe(OWN)
+    expect(mod.getNodeChoice()).toBe(OWN)
+    expect(mod.getHiveNodes()).toEqual([OWN, ...NODES])
+  })
+
+  it('back to automatic runs a fresh race among the known nodes only', async () => {
+    localStorage.setItem('hive-rpc-node-manual', OWN)
+    health[NODES[1]] = { hived: true, hivemind: true }
+    const mod = await load()
+    expect(mod.getHiveUrl()).toBe(OWN)
+    expect(await mod.setNodeChoice(null)).toBe(NODES[1])
+    expect(mod.getHiveUrl()).toBe(NODES[1])
+    expect(mod.getNodeChoice()).toBeNull()
+    expect(calls.some((c) => c.url === OWN)).toBe(false)
+  })
+})

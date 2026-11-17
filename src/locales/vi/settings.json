@@ -223,7 +223,7 @@
       "ms": "{{ms}} ms",
       "badUrl": "Nhập địa chỉ bắt đầu bằng https://",
       "failed": "Node này không phản hồi hoặc thiếu API xã hội (hivemind) mà 3Speak cần.",
-      "switching": "Đang đổi node…",
+      "switched": "Đang dùng {{node}}",
       "fallback": "Nếu node bạn chọn ngừng phản hồi, 3Speak dùng các node đã biết cho đến khi tải lại trang."
     }
   },

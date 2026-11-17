@@ -223,7 +223,7 @@
       "ms": "{{ms}} ms",
       "badUrl": "Maglagay ng address na nagsisimula sa https://",
       "failed": "Hindi sumagot ang node na ito, o wala itong social API (hivemind) na kailangan ng 3Speak.",
-      "switching": "Lumilipat ng node…",
+      "switched": "Gumagamit na ng {{node}}",
       "fallback": "Kapag huminto sa pagsagot ang node na pinili mo, gagamitin ng 3Speak ang mga kilalang node hanggang i-reload ang page."
     }
   },

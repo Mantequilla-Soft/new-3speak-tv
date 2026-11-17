@@ -223,7 +223,7 @@
       "ms": "{{ms}} md",
       "badUrl": "Masukkan alamat yang diawali https://",
       "failed": "Node ini tidak merespons atau tidak punya API sosial (hivemind) yang dibutuhkan 3Speak.",
-      "switching": "Mengganti node…",
+      "switched": "Sekarang memakai {{node}}",
       "fallback": "Jika node pilihanmu berhenti merespons, 3Speak memakai node yang dikenal sampai halaman dimuat ulang."
     }
   },

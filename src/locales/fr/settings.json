@@ -223,7 +223,7 @@
       "ms": "{{ms}} ms",
       "badUrl": "Saisis une adresse qui commence par https://",
       "failed": "Ce nœud n'a pas répondu ou n'a pas l'API sociale (hivemind) dont 3Speak a besoin.",
-      "switching": "Changement de nœud…",
+      "switched": "Maintenant sur {{node}}",
       "fallback": "Si le nœud choisi ne répond plus, 3Speak utilise les nœuds connus jusqu'au rechargement de la page."
     }
   },

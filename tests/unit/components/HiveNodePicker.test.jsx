@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 // Settings → About → Hive RPC node (components/SettingsModal/HiveNodePicker):
 // automatic, one of the known nodes, or the viewer's own; a node is checked
-// before it is saved, then the page reloads.
+// before it is saved, and the switch happens in place (no reload).
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { screen, waitFor } from '@testing-library/react'
 import { renderWithProviders } from './_render.jsx'
@@ -26,7 +26,7 @@ const reload = vi.fn()
 beforeEach(() => {
   m.choice = null
   m.checkNode = vi.fn(async (url) => ({ ok: url !== 'https://api.deathwing.me', ms: 120 }))
-  m.setNodeChoice = vi.fn()
+  m.setNodeChoice = vi.fn(async (url) => { m.choice = url; return url || 'https://api.hive.blog' })
   reload.mockClear()
   Object.defineProperty(window, 'location', { configurable: true, value: { ...window.location, reload } })
 })
@@ -55,14 +55,17 @@ describe('the node row', () => {
 })
 
 describe('choosing', () => {
-  it('a known node that answers is saved and the page reloads', async () => {
-    vi.useFakeTimers({ shouldAdvanceTime: true })
+  it('a known node that answers is used at once, without reloading the page', async () => {
+    m.checkNode = vi.fn(async () => ({ ok: true, ms: 90 }))
     const { user } = await openPicker()
-    await user.click(radio('api.hive.blog'))
-    await waitFor(() => expect(m.setNodeChoice).toHaveBeenCalledWith('https://api.hive.blog'))
-    vi.advanceTimersByTime(700)
-    expect(reload).toHaveBeenCalled()
-    vi.useRealTimers()
+    await user.click(radio('api.deathwing.me'))
+    await waitFor(() => expect(m.setNodeChoice).toHaveBeenCalledWith('https://api.deathwing.me'))
+    await waitFor(() => expect(radio('api.deathwing.me')).toHaveAttribute('aria-checked', 'true'))
+    const row = screen.getByRole('button', { name: /Hive RPC node/ })
+    expect(row).toHaveTextContent('https://api.deathwing.me')
+    expect(row).not.toHaveTextContent('Auto')
+    await new Promise((r) => setTimeout(r, 700))
+    expect(reload).not.toHaveBeenCalled()
   })
 
   it('a node that does not answer is refused', async () => {

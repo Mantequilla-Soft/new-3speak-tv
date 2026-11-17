@@ -13,12 +13,13 @@ const norm = (url) => String(url || '').trim().replace(/\/+$/, '');
  * The Hive RPC node row in About, opening the choice: automatic (the race and
  * failover in utils/hiveNode.js), one of the known nodes, or the viewer's own.
  * A node is checked (hived and hivemind, from this page) before it is saved,
- * and the page reloads so every Hive call moves over. `onRowTap` is the About
+ * and every Hive call moves over at once, no reload. `onRowTap` is the About
  * row's own tap handler (the hidden Butter Auth unlock).
  */
 export default function HiveNodePicker({ onRowTap }) {
   const { t } = useTranslation();
-  const choice = getNodeChoice();
+  const [choice, setChoice] = useState(getNodeChoice);
+  const [inUse, setInUse] = useState(getHiveUrl);
   const ownChoice = choice && !KNOWN_NODES.includes(choice) ? choice : null;
   const [open, setOpen] = useState(false);
   // url -> { ok, ms }; missing = still checking
@@ -38,21 +39,23 @@ export default function HiveNodePicker({ onRowTap }) {
     return () => { alive = false; };
   }, [open, ownChoice]);
 
-  const switchTo = (url) => {
-    setNodeChoice(url);
-    toast.success(t('settings.about.node.switching'));
-    setTimeout(() => window.location.reload(), 600);
+  const switchTo = async (url) => {
+    setChoice(url);
+    setInUse(url || getHiveUrl());
+    const node = await setNodeChoice(url);
+    setInUse(node || getHiveUrl());
+    toast.success(t('settings.about.node.switched', { node: node || getHiveUrl() }));
   };
 
   const pick = async (url) => {
     setError('');
     if (url === choice) return;
-    if (!url) { switchTo(null); return; }
+    if (!url) { await switchTo(null); return; }
     setBusy(url);
     const r = await checkNode(url);
     setBusy(null);
     if (!r.ok) { setError(t('settings.about.node.failed')); return; }
-    switchTo(url);
+    await switchTo(url);
   };
 
   const submitOwn = () => {
@@ -93,7 +96,7 @@ export default function HiveNodePicker({ onRowTap }) {
         onClick={() => { onRowTap?.(); setOpen((o) => !o); }}
       >
         <span>{t('settings.about.rpcNode')}{!choice && ` · ${t('settings.about.node.modeAuto')}`}</span>
-        <b className="mono">{getHiveUrl()}</b>
+        <b className="mono">{inUse}</b>
         <Icon name={open ? 'expand_less' : 'expand_more'} size={16} />
       </button>
       {open && (
