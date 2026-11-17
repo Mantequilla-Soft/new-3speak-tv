@@ -211,7 +211,21 @@
     "rpcNode": "Hive RPC node",
     "yourData": "Ang data mo",
     "privacyLink": "Paano hinahawakan ng 3Speak ang data mo",
-    "getOrDelete": "Kunin o burahin"
+    "getOrDelete": "Kunin o burahin",
+    "node": {
+      "modeAuto": "Auto",
+      "auto": "Awtomatiko",
+      "autoHint": "Ang pinakamabilis na gumaganang node, lumilipat kapag pumalya",
+      "own": "Sarili mong node",
+      "use": "Gamitin",
+      "checking": "Sinusuri…",
+      "down": "Hindi sumasagot",
+      "ms": "{{ms}} ms",
+      "badUrl": "Maglagay ng address na nagsisimula sa https://",
+      "failed": "Hindi sumagot ang node na ito, o wala itong social API (hivemind) na kailangan ng 3Speak.",
+      "switching": "Lumilipat ng node…",
+      "fallback": "Kapag huminto sa pagsagot ang node na pinili mo, gagamitin ng 3Speak ang mga kilalang node hanggang i-reload ang page."
+    }
   },
   "dataRequest": {
     "emailRequired": "Maglagay ng email address para makasagot kami",

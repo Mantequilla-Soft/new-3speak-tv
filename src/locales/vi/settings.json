@@ -211,7 +211,21 @@
     "rpcNode": "Node RPC Hive",
     "yourData": "Dữ liệu của bạn",
     "privacyLink": "Cách 3Speak xử lý dữ liệu của bạn",
-    "getOrDelete": "Lấy hoặc xóa"
+    "getOrDelete": "Lấy hoặc xóa",
+    "node": {
+      "modeAuto": "Tự động",
+      "auto": "Tự động",
+      "autoHint": "Node nhanh nhất đang hoạt động, đổi khi lỗi",
+      "own": "Node của bạn",
+      "use": "Dùng",
+      "checking": "Đang kiểm tra…",
+      "down": "Không phản hồi",
+      "ms": "{{ms}} ms",
+      "badUrl": "Nhập địa chỉ bắt đầu bằng https://",
+      "failed": "Node này không phản hồi hoặc thiếu API xã hội (hivemind) mà 3Speak cần.",
+      "switching": "Đang đổi node…",
+      "fallback": "Nếu node bạn chọn ngừng phản hồi, 3Speak dùng các node đã biết cho đến khi tải lại trang."
+    }
   },
   "dataRequest": {
     "emailRequired": "Nhập địa chỉ email để chúng tôi có thể phản hồi",

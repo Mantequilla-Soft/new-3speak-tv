@@ -211,7 +211,21 @@
     "rpcNode": "Węzeł RPC Hive",
     "yourData": "Twoje dane",
     "privacyLink": "Jak 3Speak przetwarza twoje dane",
-    "getOrDelete": "Pobierz lub usuń"
+    "getOrDelete": "Pobierz lub usuń",
+    "node": {
+      "modeAuto": "Auto",
+      "auto": "Automatycznie",
+      "autoHint": "Najszybszy działający węzeł, zmieniany przy awarii",
+      "own": "Własny węzeł",
+      "use": "Użyj",
+      "checking": "Sprawdzanie…",
+      "down": "Nie odpowiada",
+      "ms": "{{ms}} ms",
+      "badUrl": "Wpisz adres zaczynający się od https://",
+      "failed": "Ten węzeł nie odpowiedział lub nie ma społecznościowego API (hivemind), którego potrzebuje 3Speak.",
+      "switching": "Zmiana węzła…",
+      "fallback": "Jeśli wybrany węzeł przestanie odpowiadać, 3Speak użyje znanych węzłów do czasu przeładowania strony."
+    }
   },
   "dataRequest": {
     "emailRequired": "Podaj adres e-mail, abyśmy mogli odpowiedzieć",

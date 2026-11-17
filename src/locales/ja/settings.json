@@ -211,7 +211,21 @@
     "rpcNode": "Hive RPC ノード",
     "yourData": "あなたのデータ",
     "privacyLink": "3Speak のデータの取り扱い",
-    "getOrDelete": "取得または削除"
+    "getOrDelete": "取得または削除",
+    "node": {
+      "modeAuto": "自動",
+      "auto": "自動",
+      "autoHint": "動作する最速のノード。障害時は切り替え",
+      "own": "自分のノード",
+      "use": "使用",
+      "checking": "確認中…",
+      "down": "応答なし",
+      "ms": "{{ms}} ms",
+      "badUrl": "https:// で始まるアドレスを入力してください",
+      "failed": "このノードは応答しないか、3Speak に必要なソーシャル API（hivemind）がありません。",
+      "switching": "ノードを切り替えています…",
+      "fallback": "選んだノードが応答しなくなった場合、ページを再読み込みするまで 3Speak は既知のノードを使います。"
+    }
   },
   "dataRequest": {
     "emailRequired": "返信先のメールアドレスを入力してください",

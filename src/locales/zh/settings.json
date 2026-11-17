@@ -211,7 +211,21 @@
     "rpcNode": "Hive RPC 节点",
     "yourData": "你的数据",
     "privacyLink": "3Speak 如何处理你的数据",
-    "getOrDelete": "获取或删除"
+    "getOrDelete": "获取或删除",
+    "node": {
+      "modeAuto": "自动",
+      "auto": "自动",
+      "autoHint": "使用最快的可用节点，出错时自动切换",
+      "own": "你自己的节点",
+      "use": "使用",
+      "checking": "检查中…",
+      "down": "无响应",
+      "ms": "{{ms}} 毫秒",
+      "badUrl": "请输入以 https:// 开头的地址",
+      "failed": "该节点没有响应，或缺少 3Speak 所需的社交 API（hivemind）。",
+      "switching": "正在切换节点…",
+      "fallback": "如果你选择的节点停止响应，3Speak 会在页面重新加载前使用已知节点。"
+    }
   },
   "dataRequest": {
     "emailRequired": "请输入邮箱地址，以便我们回复你",

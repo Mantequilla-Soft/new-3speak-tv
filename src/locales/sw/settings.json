@@ -211,7 +211,21 @@
     "rpcNode": "Nodi ya RPC ya Hive",
     "yourData": "Data yako",
     "privacyLink": "Jinsi 3Speak inavyoshughulikia data yako",
-    "getOrDelete": "Pata au futa"
+    "getOrDelete": "Pata au futa",
+    "node": {
+      "modeAuto": "Otomatiki",
+      "auto": "Otomatiki",
+      "autoHint": "Nodi yenye kasi zaidi inayofanya kazi, hubadilika ikishindwa",
+      "own": "Nodi yako mwenyewe",
+      "use": "Tumia",
+      "checking": "Inakagua…",
+      "down": "Haijibu",
+      "ms": "{{ms}} ms",
+      "badUrl": "Weka anwani inayoanza na https://",
+      "failed": "Nodi hii haikujibu, au haina API ya kijamii (hivemind) ambayo 3Speak inahitaji.",
+      "switching": "Inabadilisha nodi…",
+      "fallback": "Nodi uliyochagua ikiacha kujibu, 3Speak hutumia nodi zinazojulikana hadi ukurasa upakiwe upya."
+    }
   },
   "dataRequest": {
     "emailRequired": "Weka anwani ya barua pepe ili tuweze kukujibu",

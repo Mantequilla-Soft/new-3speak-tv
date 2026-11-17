@@ -32,7 +32,6 @@ const AUDIO_EMBED_BASE = (import.meta.env.VITE_AUDIO_EMBED_BASE || 'https://audi
   .trim()
   .replace(/\/+$/, '');
 
-const HIVE_API_URL = import.meta.env.VITE_HIVE_API_URL || 'https://api.hive.blog';
 const FEED_URL = import.meta.env.VITE_FEED_URL || 'https://legacy.3speak.tv';
 const CHECKER_URL = import.meta.env.VITE_CHECKER_URL || 'https://checker.3speak.tv';
 // Every checker instance this app may use (checker.3speak.tv, checker-us.3speak.tv,
@@ -222,13 +221,32 @@ const parseList = (s) => (s || '')
   .map((x) => x.trim())
   .filter(Boolean);
 
-const HIVE_API_NODES = (() => {
+// The known nodes Settings offers to pick from.
+const HIVE_KNOWN_NODES = (() => {
   const primary = import.meta.env.VITE_HIVE_API_URL || DEFAULT_HIVE_PRIMARY;
   const fallbacks = import.meta.env.VITE_HIVE_API_FALLBACKS
     ? parseList(import.meta.env.VITE_HIVE_API_FALLBACKS)
     : DEFAULT_HIVE_FALLBACKS;
   return [...new Set([primary, ...fallbacks])];
 })();
+
+// A node picked in Settings (a known one or the viewer's own) instead of the
+// automatic choice: it goes first everywhere, the known nodes stay behind it
+// as failover (utils/hiveNode.js). Read once at load; Settings reloads the
+// page after a change.
+export const HIVE_NODE_CHOICE_KEY = 'hive-rpc-node-manual';
+const HIVE_NODE_CHOICE = (() => {
+  try {
+    const v = (typeof localStorage !== 'undefined' && localStorage.getItem(HIVE_NODE_CHOICE_KEY)) || '';
+    return /^https:\/\/[^\s]+$/.test(v) ? v.replace(/\/+$/, '') : null;
+  } catch { return null; }
+})();
+
+const HIVE_API_NODES = HIVE_NODE_CHOICE
+  ? [...new Set([HIVE_NODE_CHOICE, ...HIVE_KNOWN_NODES])]
+  : HIVE_KNOWN_NODES;
+// Raw JSON-RPC callers that do not go through utils/hiveNode use this one.
+const HIVE_API_URL = HIVE_NODE_CHOICE || import.meta.env.VITE_HIVE_API_URL || 'https://api.hive.blog';
 
 /**
  * Append nsfw=true to a URL when NSFW content is enabled.
@@ -426,6 +444,8 @@ export {
   VIDEO_CDN_DOMAIN,
   HIVE_API_URL,
   HIVE_API_NODES,
+  HIVE_KNOWN_NODES,
+  HIVE_NODE_CHOICE,
   UPLOAD_TOKEN,
   UPLOAD_URL,
   TAG_FEED_URL,

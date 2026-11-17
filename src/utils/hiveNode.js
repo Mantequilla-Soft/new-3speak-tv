@@ -6,10 +6,14 @@
 // session (sessionStorage). All Hive access goes through the shared
 // `hiveClient` proxy / `getHiveUrl()` so everything uses that one node, with
 // the remaining nodes kept as fast dhive failover if it dies mid-session.
+//
+// Settings can replace the automatic pick with a node of the viewer's choice
+// (one of the known ones or their own, HIVE_NODE_CHOICE): that node is used
+// without a race, and the known nodes only take over if it fails.
 
 import axios from 'axios';
 import { Client } from '@hiveio/dhive';
-import { HIVE_API_NODES } from './config';
+import { HIVE_API_NODES, HIVE_KNOWN_NODES, HIVE_NODE_CHOICE, HIVE_NODE_CHOICE_KEY } from './config';
 
 // v2: the probe now also requires hivemind, so old (possibly hivemind-less)
 // pins from a previous build must not be trusted.
@@ -27,7 +31,7 @@ function sessionNode() {
 }
 
 // The currently-chosen primary node (sticky for the session).
-let chosen = sessionNode() || CANDIDATES[0];
+let chosen = HIVE_NODE_CHOICE || sessionNode() || CANDIDATES[0];
 
 function buildClient(primary) {
   const order = [primary, ...CANDIDATES.filter((n) => n !== primary)];
@@ -134,6 +138,17 @@ export function ensureHealthyNode() {
 
   const { first, healthy } = probeAll();
 
+  // The viewer's own pick: used as it is, the probes only build the failover
+  // list behind it.
+  if (HIVE_NODE_CHOICE) {
+    healthy.then((ok) => {
+      _healthy = ok.filter((n) => n !== HIVE_NODE_CHOICE);
+      if (chosen === HIVE_NODE_CHOICE) adoptHealthy(chosen, _healthy);
+    }).catch(() => { /* keep the known nodes */ });
+    _ensure = Promise.resolve(chosen);
+    return _ensure;
+  }
+
   // Runs in the background — never blocks the first Hive call. Narrows the
   // failover list to hivemind-capable nodes, and re-pins if the node we
   // adopted (including one restored from sessionStorage) turns out unusable.
@@ -225,3 +240,37 @@ axios.interceptors.response.use(undefined, (error) => {
   if (norm(next) === norm(cfg.url)) throw error;
   return axios.request({ ...cfg, url: next, hiveNodeTries: tries });
 });
+
+// ---------------------------------------------------------------------------
+// The node choice in Settings (About).
+
+/** The known nodes Settings lists. */
+export const KNOWN_NODES = HIVE_KNOWN_NODES;
+
+/** The node picked in Settings, or null for automatic. */
+export function getNodeChoice() {
+  return HIVE_NODE_CHOICE;
+}
+
+/**
+ * Save the choice (a https:// URL, or null for automatic). Takes effect on the
+ * next page load: the caller reloads.
+ */
+export function setNodeChoice(url) {
+  try {
+    if (url) localStorage.setItem(HIVE_NODE_CHOICE_KEY, norm(url));
+    else localStorage.removeItem(HIVE_NODE_CHOICE_KEY);
+    // Automatic starts with a fresh race instead of the old session pin.
+    sessionStorage.removeItem(SESSION_KEY);
+  } catch { /* storage blocked: nothing to keep */ }
+}
+
+/**
+ * Whether `url` can serve 3Speak (hived and hivemind, reachable from this
+ * page, so CORS too), and how long it took. Resolves { ok, ms }.
+ */
+export async function checkNode(url) {
+  const started = Date.now();
+  const ok = await probe(norm(url)).catch(() => false);
+  return { ok, ms: Date.now() - started };
+}

@@ -211,7 +211,21 @@
     "rpcNode": "Hive RPC düğümü",
     "yourData": "Verilerin",
     "privacyLink": "3Speak verilerini nasıl işler",
-    "getOrDelete": "Al veya sil"
+    "getOrDelete": "Al veya sil",
+    "node": {
+      "modeAuto": "Otomatik",
+      "auto": "Otomatik",
+      "autoHint": "Çalışan en hızlı düğüm, arızada değiştirilir",
+      "own": "Kendi düğümün",
+      "use": "Kullan",
+      "checking": "Kontrol ediliyor…",
+      "down": "Yanıt vermiyor",
+      "ms": "{{ms}} ms",
+      "badUrl": "https:// ile başlayan bir adres gir",
+      "failed": "Bu düğüm yanıt vermedi ya da 3Speak'in ihtiyaç duyduğu sosyal API (hivemind) yok.",
+      "switching": "Düğüm değiştiriliyor…",
+      "fallback": "Seçtiğin düğüm yanıt vermeyi bırakırsa 3Speak sayfa yenilenene kadar bilinen düğümleri kullanır."
+    }
   },
   "dataRequest": {
     "emailRequired": "Sana yanıt verebilmemiz için bir e-posta adresi gir",

@@ -56,7 +56,7 @@ vi.mock('../../../src/lib/supportLinks', async (importOriginal) => ({
   saveSupportLinks: (...a) => m.saveLinks(...a),
 }))
 vi.mock('../../../src/hooks/useCardSize', () => ({ default: () => 'small', useIsCardSizeMobile: () => m.cardMobile }))
-vi.mock('../../../src/utils/hiveNode', () => ({ getHiveUrl: () => 'https://api.hive.example' }))
+vi.mock('../../../src/utils/hiveNode', () => ({ getHiveUrl: () => 'https://api.hive.example', KNOWN_NODES: ['https://api.hive.example'], getNodeChoice: () => null, checkNode: async () => ({ ok: true, ms: 1 }), setNodeChoice: () => {} }))
 vi.mock('../../../src/hooks/getUserDetails', () => ({ useGetMyQuery: () => undefined }))
 vi.mock('../../../src/version', () => ({ APP_VERSION: '9.8.7' }))
 vi.mock('../../../src/components/tip-reward/OtherWays', () => ({ SUPPORT_SITE_ICONS: {} }))
@@ -346,7 +346,7 @@ describe('settings: General and Content', () => {
   it('About: five quick taps on the node row unlock Butter Auth', async () => {
     const { user } = mount()
     await user.click(screen.getByRole('tab', { name: 'About' }))
-    const row = screen.getByText('Hive RPC node')
+    const row = screen.getByRole('button', { name: /Hive RPC node/ })
     // The unlock reloads the page 600 ms later; that timer is dropped unrun.
     vi.useFakeTimers({ shouldAdvanceTime: true })
     try {

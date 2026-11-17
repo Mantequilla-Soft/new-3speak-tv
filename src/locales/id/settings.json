@@ -211,7 +211,21 @@
     "rpcNode": "Node RPC Hive",
     "yourData": "Datamu",
     "privacyLink": "Cara 3Speak menangani datamu",
-    "getOrDelete": "Dapatkan atau hapus"
+    "getOrDelete": "Dapatkan atau hapus",
+    "node": {
+      "modeAuto": "Otomatis",
+      "auto": "Otomatis",
+      "autoHint": "Node tercepat yang berfungsi, berganti jika gagal",
+      "own": "Node milikmu",
+      "use": "Gunakan",
+      "checking": "Memeriksa…",
+      "down": "Tidak merespons",
+      "ms": "{{ms}} md",
+      "badUrl": "Masukkan alamat yang diawali https://",
+      "failed": "Node ini tidak merespons atau tidak punya API sosial (hivemind) yang dibutuhkan 3Speak.",
+      "switching": "Mengganti node…",
+      "fallback": "Jika node pilihanmu berhenti merespons, 3Speak memakai node yang dikenal sampai halaman dimuat ulang."
+    }
   },
   "dataRequest": {
     "emailRequired": "Masukkan alamat email agar kami bisa membalas",

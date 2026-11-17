@@ -211,7 +211,21 @@
     "rpcNode": "Hive-RPC-Node",
     "yourData": "Deine Daten",
     "privacyLink": "Wie 3Speak mit deinen Daten umgeht",
-    "getOrDelete": "Abrufen oder löschen"
+    "getOrDelete": "Abrufen oder löschen",
+    "node": {
+      "modeAuto": "Auto",
+      "auto": "Automatisch",
+      "autoHint": "Der schnellste funktionierende Node, wechselt bei Ausfall",
+      "own": "Eigener Node",
+      "use": "Verwenden",
+      "checking": "Prüfe…",
+      "down": "Antwortet nicht",
+      "ms": "{{ms}} ms",
+      "badUrl": "Gib eine Adresse ein, die mit https:// beginnt",
+      "failed": "Dieser Node hat nicht geantwortet oder ihm fehlt die Social-API (hivemind), die 3Speak braucht.",
+      "switching": "Node wird gewechselt…",
+      "fallback": "Antwortet der gewählte Node nicht mehr, nutzt 3Speak die bekannten Nodes, bis die Seite neu geladen wird."
+    }
   },
   "dataRequest": {
     "emailRequired": "Gib eine E-Mail-Adresse ein, damit wir antworten können",

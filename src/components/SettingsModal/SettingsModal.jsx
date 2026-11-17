@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { toastIn } from '../../utils/toast';
 import { useAppStore } from '../../lib/store';
 import { APP_VERSION } from '../../version';
-import { getHiveUrl } from '../../utils/hiveNode';
+import HiveNodePicker from './HiveNodePicker';
 import { fetchUserInterests, saveInterestsToHive } from '../../utils/interests';
 import { fetchAdAccess, fetchCreatorAdPrefs, fetchViewerAdPrefs, setViewerAdPrefs, setListenerAdPrefs } from '../../lib/advertiseData';
 import { resetViewerRewards } from '../../utils/viewerRewards';
@@ -1380,10 +1380,7 @@ export default function SettingsModal({ isOpen, onClose, dropdown = null, leavin
             <b className="mono">v{APP_VERSION}</b>
             <IconButton icon="content_copy" size={28} variant="ghost" label={t('common.actions.copy')} onClick={copyVersion} />
           </div>
-          <div className="settings-kv v2-well" onClick={handleButrUnlockTap}>
-            <span>{t('settings.about.rpcNode')}</span>
-            <b className="mono">{getHiveUrl()}</b>
-          </div>
+          <HiveNodePicker onRowTap={handleButrUnlockTap} />
           <button type="button" className="settings-kv v2-well is-link" onClick={showDataCard}>
             <span>{t('settings.about.yourData')}</span>
             <b>{t('settings.about.getOrDelete')}</b>
