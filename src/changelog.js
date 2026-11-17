@@ -18,6 +18,24 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.106',
+    category: 'audio',
+    date: '2026-11-17',
+    summary: 'Turn your published audio episodes into a video podcast right from the episode page, no editor export needed.',
+  },
+  {
+    version: '2.0.105',
+    category: 'live',
+    date: '2026-11-17',
+    summary: 'Set your boost goal while setting up your stream, so the goal bar is there from the first minute.',
+  },
+  {
+    version: '2.0.104',
+    category: 'live',
+    date: '2026-11-17',
+    summary: 'Pro streamers can restream to Restream.io, Kick and any platform with a server URL and stream key, not only YouTube and Twitch.',
+  },
+  {
     version: '2.0.103',
     category: 'live',
     date: '2026-11-17',
