@@ -295,6 +295,8 @@
       "stop": "Stop",
       "orRecord": "Oppure registra dal vivo",
       "recordLimit": "Fino a {{minutes}} min per registrazione",
+      "level": "Livello del microfono",
+      "noSound": "Non arriva nessun suono. Controlla che il microfono non sia disattivato o in uso da un'altra app.",
       "record": "Registra",
       "added": "Aggiunti ({{count}})",
       "filesTitle": "File audio"

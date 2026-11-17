@@ -295,6 +295,8 @@
       "stop": "Detener",
       "orRecord": "O graba en vivo",
       "recordLimit": "Hasta {{minutes}} min por grabación",
+      "level": "Nivel del micrófono",
+      "noSound": "No llega ningún sonido. Comprueba que tu micrófono no esté silenciado ni en uso por otra app.",
       "record": "Grabar",
       "added": "Agregados ({{count}})",
       "filesTitle": "Archivos de audio"

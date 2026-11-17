@@ -275,6 +275,8 @@
       "stop": "Dừng",
       "orRecord": "Hoặc ghi âm trực tiếp",
       "recordLimit": "Tối đa {{minutes}} phút mỗi lần ghi",
+      "level": "Mức micrô",
+      "noSound": "Không có âm thanh nào. Hãy kiểm tra micrô không bị tắt tiếng hoặc đang được ứng dụng khác dùng.",
       "record": "Ghi âm",
       "added": "Đã thêm ({{count}})",
       "filesTitle": "Tệp âm thanh"

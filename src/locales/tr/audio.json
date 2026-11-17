@@ -285,6 +285,8 @@
       "stop": "Durdur",
       "orRecord": "Ya da canlı kaydet",
       "recordLimit": "Kayıt başına en fazla {{minutes}} dk",
+      "level": "Mikrofon seviyesi",
+      "noSound": "Ses gelmiyor. Mikrofonunun sessizde olmadığını veya başka bir uygulama tarafından kullanılmadığını kontrol et.",
       "record": "Kaydet",
       "added": "Eklenenler ({{count}})",
       "filesTitle": "Ses dosyaları"

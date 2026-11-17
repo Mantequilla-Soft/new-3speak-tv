@@ -275,6 +275,8 @@
       "stop": "중지",
       "orRecord": "또는 라이브로 녹음",
       "recordLimit": "녹음당 최대 {{minutes}}분",
+      "level": "마이크 레벨",
+      "noSound": "소리가 들어오지 않아요. 마이크가 음소거되어 있거나 다른 앱에서 사용 중인지 확인하세요.",
       "record": "녹음",
       "added": "추가됨({{count}})",
       "filesTitle": "오디오 파일"

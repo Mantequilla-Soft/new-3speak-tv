@@ -29,6 +29,7 @@ import CoverDesigner from './CoverDesigner';
 import ShortThumbDesigner from './ShortThumbDesigner';
 import AudiogramShortsSection from './AudiogramShortsSection';
 import AudioTeleprompter from './AudioTeleprompter';
+import RecordWave, { openRecordGraph } from './RecordWave';
 import TranscriptControl from './TranscriptControl';
 import { useTranscriptJobs } from '../../hooks/useTranscriptJobs';
 import { withTranscript, TRANSCRIPT_MAX_CHARS } from '../../utils/transcribe';
@@ -106,6 +107,8 @@ const FLOWS = {
 };
 
 const MAX_RECORD_SEC = 300;
+// What the recorder is asked for, first one the browser has (as the editor's)
+const RECORD_TYPES = ['audio/webm;codecs=opus', 'audio/webm', 'audio/mp4', 'audio/ogg;codecs=opus'];
 // A track's text with a transcript in it: room for the transcript (cut to
 // TRANSCRIPT_MAX_CHARS) and what the creator wrote around it
 const TRANSCRIPT_TEXT_MAX = TRANSCRIPT_MAX_CHARS + 5000;
@@ -540,6 +543,8 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
   const recordTimerRef = useRef(null);
   const recordChunksRef = useRef([]);
   const recordStreamRef = useRef(null);
+  const recordGraphRef = useRef(null);
+  const [recordGraph, setRecordGraph] = useState(null);
   const objectUrlsRef = useRef(new Set());
 
   const { data: playlists = [], isLoading: playlistsLoading, refetch: refetchPlaylists } = useMyPlaylists({ limit: 50 });
@@ -712,7 +717,14 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       recordStreamRef.current = stream;
       recordChunksRef.current = [];
-      const mr = new MediaRecorder(stream);
+      // The level graph listens before the recorder starts, as in the editor's
+      // recorder, whose recordings have sound on phones where this one's were
+      // silent (owner 2026-11-17)
+      recordGraphRef.current?.close();
+      recordGraphRef.current = openRecordGraph(stream);
+      setRecordGraph(recordGraphRef.current);
+      const want = RECORD_TYPES.find((ty) => { try { return MediaRecorder.isTypeSupported?.(ty); } catch { return false; } });
+      const mr = new MediaRecorder(stream, want ? { mimeType: want } : undefined);
       mr.ondataavailable = (e) => { if (e.data?.size > 0) recordChunksRef.current.push(e.data); };
       mr.onstop = async () => {
         // Safari's recorder makes audio/mp4, not webm: keep the type it reports.
@@ -720,13 +732,16 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
         const blob = new Blob(recordChunksRef.current, { type });
         recordStreamRef.current?.getTracks().forEach(tr => tr.stop());
         recordStreamRef.current = null;
+        recordGraphRef.current?.close();
+        recordGraphRef.current = null;
+        setRecordGraph(null);
         const idx = newId().slice(0, 4);
         await addBlobAsTrack(blob, `recording-${idx}.${audioFormatFor(blob)}`, 'record');
         setIsRecording(false);
         setRecordSec(0);
         stopRecordTimer();
       };
-      mr.start();
+      mr.start(100);
       mediaRecorderRef.current = mr;
       setIsRecording(true);
       setRecordSec(0);
@@ -740,6 +755,11 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
         });
       }, 1000);
     } catch {
+      recordGraphRef.current?.close();
+      recordGraphRef.current = null;
+      setRecordGraph(null);
+      recordStreamRef.current?.getTracks().forEach(tr => tr.stop());
+      recordStreamRef.current = null;
       toast.error(t('audio.upload.toasts.micDenied'));
     }
   };
@@ -760,6 +780,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
         try { mr.stop(); } catch {}
       }
       recordStreamRef.current?.getTracks().forEach(tr => tr.stop());
+      recordGraphRef.current?.close();
       objectUrlsRef.current.forEach(u => URL.revokeObjectURL(u));
       objectUrlsRef.current.clear();
     };
@@ -1774,6 +1795,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
               tracks={tracks}
               isRecording={isRecording}
               recordSec={recordSec}
+              recordWave={isRecording && <RecordWave analyser={recordGraph?.analyser} track={recordStreamRef.current?.getAudioTracks?.()[0]} />}
               isDragging={isDragging}
               fileInputRef={fileInputRef}
               onDrop={onDrop}
@@ -2089,7 +2111,7 @@ function SourceStep({
   tracks, isRecording, recordSec, isDragging, fileInputRef,
   onDrop, onDragOver, onDragLeave, onPickFiles, onFilesSelected,
   onStart, onStop, onRemove, onEditTrack = null, editLocked = () => false,
-  teleprompter = null,
+  teleprompter = null, recordWave = null,
 }) {
   const { t } = useTranslation();
   const limit = t('audio.upload.source.recordLimit', { minutes: Math.round(MAX_RECORD_SEC / 60) });
@@ -2132,6 +2154,7 @@ function SourceStep({
             <small>{limit}</small>
           </div>
           <span className="audio-upload-rec-dot" aria-hidden="true" />
+          {recordWave}
         </div>
       ) : (
         <button type="button" className="audio-upload-recorder" onClick={onStart} title={t('audio.upload.source.record')}>

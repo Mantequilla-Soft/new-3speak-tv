@@ -285,6 +285,8 @@
       "stop": "Itigil",
       "orRecord": "O mag-record nang live",
       "recordLimit": "Hanggang {{minutes}} min bawat recording",
+      "level": "Lakas ng mikropono",
+      "noSound": "Walang tunog na pumapasok. Tingnan kung hindi naka-mute ang mikropono mo o ginagamit ng ibang app.",
       "record": "Mag-record",
       "added": "Naidagdag ({{count}})",
       "filesTitle": "Mga audio file"

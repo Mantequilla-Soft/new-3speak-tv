@@ -275,6 +275,8 @@
       "stop": "停止",
       "orRecord": "或者现场录制",
       "recordLimit": "每段录音最长 {{minutes}} 分钟",
+      "level": "麦克风音量",
+      "noSound": "没有收到声音。请检查麦克风是否被静音或正被其他应用使用。",
       "record": "录制",
       "added": "已添加（{{count}}）",
       "filesTitle": "音频文件"

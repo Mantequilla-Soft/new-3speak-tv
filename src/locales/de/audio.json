@@ -285,6 +285,8 @@
       "stop": "Stopp",
       "orRecord": "Oder live aufnehmen",
       "recordLimit": "Bis zu {{minutes}} Min. pro Aufnahme",
+      "level": "Mikrofonpegel",
+      "noSound": "Es kommt kein Ton an. Prüfe, ob dein Mikrofon stummgeschaltet ist oder von einer anderen App benutzt wird.",
       "record": "Aufnehmen",
       "added": "Hinzugefügt ({{count}})",
       "filesTitle": "Audiodateien"

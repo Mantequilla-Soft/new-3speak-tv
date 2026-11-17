@@ -305,6 +305,8 @@
       "stop": "Stop",
       "orRecord": "Lub nagraj na żywo",
       "recordLimit": "Do {{minutes}} min na nagranie",
+      "level": "Poziom mikrofonu",
+      "noSound": "Nie dociera żaden dźwięk. Sprawdź, czy mikrofon nie jest wyciszony ani używany przez inną aplikację.",
       "record": "Nagraj",
       "added": "Dodane ({{count}})",
       "filesTitle": "Pliki audio"

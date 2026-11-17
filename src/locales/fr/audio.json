@@ -295,6 +295,8 @@
       "stop": "Arrêter",
       "orRecord": "Ou enregistrez en direct",
       "recordLimit": "Jusqu'à {{minutes}} min par enregistrement",
+      "level": "Niveau du micro",
+      "noSound": "Aucun son ne passe. Vérifie que ton micro n'est pas coupé ni utilisé par une autre app.",
       "record": "Enregistrer",
       "added": "Ajoutés ({{count}})",
       "filesTitle": "Fichiers audio"

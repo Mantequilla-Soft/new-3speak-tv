@@ -285,6 +285,8 @@
       "stop": "Stoppen",
       "orRecord": "Of neem live op",
       "recordLimit": "Maximaal {{minutes}} min per opname",
+      "level": "Microfoonniveau",
+      "noSound": "Er komt geen geluid binnen. Controleer of je microfoon niet gedempt is of door een andere app wordt gebruikt.",
       "record": "Opnemen",
       "added": "Toegevoegd ({{count}})",
       "filesTitle": "Audiobestanden"

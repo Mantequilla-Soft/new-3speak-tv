@@ -488,7 +488,27 @@
     &:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   }
 
-  &.recording { background: var(--accent-wash); }
+  &.recording { background: var(--accent-wash); flex-wrap: wrap; }
+}
+
+// The live mic level under the timer, and the "no sound" line
+.audio-upload-rec-wave {
+  flex: 1 0 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  canvas { display: block; width: 100%; height: 40px; color: var(--accent); }
+}
+
+.audio-upload-rec-silent {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  @include v2.text(meta-sm);
+  color: var(--accent);
+  font-weight: 700;
 }
 
 .audio-upload-rec-icon {
@@ -1734,7 +1754,8 @@
   @include v2.text(body-sm);
 
   > span { flex: 1; min-width: 0; font-variant-numeric: tabular-nums; }
-  .audio-transcript-spin { color: var(--cyan); }
+  // The icon is a span too: it keeps its own size, so it spins round its centre
+  .audio-transcript-spin { flex: none; color: var(--cyan); }
 }
 
 @media (prefers-reduced-motion: reduce) {

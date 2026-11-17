@@ -285,6 +285,8 @@
       "stop": "Simamisha",
       "orRecord": "Au rekodi moja kwa moja",
       "recordLimit": "Hadi dakika {{minutes}} kwa kila rekodi",
+      "level": "Kiwango cha maikrofoni",
+      "noSound": "Hakuna sauti inayoingia. Hakikisha maikrofoni yako haijanyamazishwa au haitumiwi na programu nyingine.",
       "record": "Rekodi",
       "added": "Zimeongezwa ({{count}})",
       "filesTitle": "Faili za sauti"

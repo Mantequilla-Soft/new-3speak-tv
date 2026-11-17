@@ -285,6 +285,8 @@
       "stop": "Stop",
       "orRecord": "Or record live",
       "recordLimit": "Up to {{minutes}} min per recording",
+      "level": "Microphone level",
+      "noSound": "No sound is coming in. Check that your microphone isn't muted or in use by another app.",
       "record": "Record",
       "added": "Added ({{count}})",
       "filesTitle": "Audio files"

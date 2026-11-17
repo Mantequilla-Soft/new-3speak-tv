@@ -836,3 +836,56 @@ describe('AudioUploadModal: season, episode, scheduling and drafts (standalone p
     clock.mockRestore()
   })
 })
+
+describe('AudioUploadModal: recording', () => {
+  let recorders
+  let graphs
+  let saved
+  beforeEach(() => {
+    recorders = []
+    graphs = []
+    saved = { md: navigator.mediaDevices, MR: window.MediaRecorder, AC: window.AudioContext }
+    const track = { muted: false, stop: vi.fn() }
+    Object.defineProperty(navigator, 'mediaDevices', {
+      configurable: true,
+      value: { getUserMedia: vi.fn(async () => ({ getTracks: () => [track], getAudioTracks: () => [track] })) },
+    })
+    window.MediaRecorder = class {
+      static isTypeSupported(ty) { return ty === 'audio/ogg;codecs=opus' }
+      constructor(stream, opts) { this.opts = opts; this.mimeType = opts?.mimeType || ''; this.state = 'inactive'; recorders.push(this) }
+      start(slice) { this.slice = slice; this.state = 'recording' }
+      stop() { this.state = 'inactive'; this.ondataavailable?.({ data: new Blob(['abc'], { type: this.mimeType }) }); this.onstop?.() }
+    }
+    window.AudioContext = vi.fn(function Ctx() {
+      const g = { started: graphs.length, close: vi.fn(async () => {}) }
+      graphs.push(g)
+      return {
+        createAnalyser: () => ({ fftSize: 0, getByteTimeDomainData: (a) => a.fill(128) }),
+        createMediaStreamSource: () => ({ connect: () => {} }),
+        resume: async () => {},
+        close: g.close,
+      }
+    })
+  })
+  afterEach(() => {
+    Object.defineProperty(navigator, 'mediaDevices', { configurable: true, value: saved.md })
+    window.MediaRecorder = saved.MR
+    if (saved.AC) window.AudioContext = saved.AC; else delete window.AudioContext
+  })
+
+  it('listens to the mic before recording, shows the level, and lets the mic go on Stop', async () => {
+    const { user } = openModal()
+    await user.click(await screen.findByRole('button', { name: /Or record live/ }))
+    expect(graphs).toHaveLength(1)
+    expect(recorders).toHaveLength(1)
+    // the format the browser has from the editor's list, data every 100 ms
+    expect(recorders[0].opts).toEqual({ mimeType: 'audio/ogg;codecs=opus' })
+    expect(recorders[0].slice).toBe(100)
+    expect(screen.getByRole('img', { name: 'Microphone level' })).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Stop' }))
+    expect(graphs[0].close).toHaveBeenCalled()
+    await waitFor(() => expect(screen.queryByRole('img', { name: 'Microphone level' })).toBeNull())
+    // the recording lands as a track (its extension comes from the mocked audioUpload)
+    expect(await screen.findByText(/^recording-/)).toBeInTheDocument()
+  })
+})
