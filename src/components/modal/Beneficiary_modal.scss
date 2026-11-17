@@ -65,7 +65,7 @@
       display: flex;
       align-items: center;
       gap: 2px;
-      margin-left: -6px;
+      margin-left: -10px;
       font-size: 16px;
       font-weight: 900;
       .v2-iconbtn { flex: none; color: var(--muted); }
@@ -73,7 +73,6 @@
         min-width: 1.5ch;
         padding: 0;
         border: 0;
-        border-bottom: 2px solid var(--border);
         text-align: center;
         background: transparent;
         color: var(--text);
@@ -83,7 +82,7 @@
         outline: none;
         -moz-appearance: textfield;
         &::-webkit-inner-spin-button, &::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
-        &:focus { border-bottom-color: var(--accent); }
+        &:focus { color: var(--accent); }
       }
     }
     .bene-tile__lock { color: var(--muted); margin-right: 4px; }

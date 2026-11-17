@@ -289,7 +289,7 @@ function Beneficiary_modal({ isOpen, close, setBeneficiaries, setBeneficiaryList
                     <IconButton
                       icon="remove"
                       label={t('modals.beneficiary.lower', { account: sh.item.account })}
-                      size={28}
+                      size={36}
                       variant="ghost"
                       round
                       disabled={sh.item.percent <= (sh.item.minPercent || 1)}
@@ -316,7 +316,7 @@ function Beneficiary_modal({ isOpen, close, setBeneficiaries, setBeneficiaryList
                     <IconButton
                       icon="add"
                       label={t('modals.beneficiary.raise', { account: sh.item.account })}
-                      size={28}
+                      size={36}
                       variant="ghost"
                       round
                       disabled={remaingPercent <= 0}
