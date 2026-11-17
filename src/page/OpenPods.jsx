@@ -43,7 +43,7 @@ const CREATE_FORM_KEYS = [
   'thumbnailChange', 'thumbnailRemove', 'uploading', 'uploadFailed',
   'descriptionLabel', 'tagsLabel', 'tagsPlaceholder', 'tagsPlaceholderMore',
   'removeTag', 'languageLabel', 'boostToggle', 'minBoost', 'payoutAccount',
-  'payoutPlaceholder', 'announceStream', 'announceSession', 'announceStreamStrong',
+  'payoutPlaceholder', 'goalLabel', 'goalHint', 'goalFor', 'goalForPlaceholder', 'goalAmount', 'announceStream', 'announceSession', 'announceStreamStrong',
   'announceStreamRest', 'announcePostStrong', 'announcePostRest', 'whenEnds',
   'autoVod', 'autoVodPro', 'autoVodFree', 'autoDownload', 'autoDownloadPro',
   'autoDownloadFree', 'clips', 'clipsPro', 'clipsFree', 'unlockPro', 'limitPro',
