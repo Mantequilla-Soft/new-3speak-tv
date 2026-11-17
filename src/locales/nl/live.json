@@ -406,8 +406,8 @@
         "body": "Kijkers kunnen de laatste 30 seconden opslaan terwijl je live bent."
       },
       "rtmp": {
-        "title": "RTMP-restream",
-        "body": "Zend tegelijk uit naar andere platforms."
+        "title": "Restream naar andere platforms",
+        "body": "Stuur je stream tegelijk naar YouTube, Twitch, Kick, Restream.io en meer."
       },
       "obs": {
         "title": "Streamen vanuit OBS",

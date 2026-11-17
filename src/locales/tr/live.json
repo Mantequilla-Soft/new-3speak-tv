@@ -406,8 +406,8 @@
         "body": "Sen canlıyken izleyiciler son 30 saniyeyi kaydedebilir."
       },
       "rtmp": {
-        "title": "RTMP yeniden yayın",
-        "body": "Aynı anda başka platformlara da yayın yap."
+        "title": "Diğer platformlara yeniden yayın",
+        "body": "Yayınını aynı anda YouTube, Twitch, Kick, Restream.io ve daha fazlasına gönder."
       },
       "obs": {
         "title": "OBS'den yayın",

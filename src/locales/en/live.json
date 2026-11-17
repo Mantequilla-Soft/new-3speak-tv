@@ -406,8 +406,8 @@
         "body": "Viewers can save the last 30 seconds while you are live."
       },
       "rtmp": {
-        "title": "RTMP restream",
-        "body": "Broadcast to other platforms at the same time."
+        "title": "Restream to other platforms",
+        "body": "Send your stream to YouTube, Twitch, Kick, Restream.io and more at the same time."
       },
       "obs": {
         "title": "Stream from OBS",

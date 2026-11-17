@@ -406,8 +406,8 @@
         "body": "Watazamaji wanaweza kuhifadhi sekunde 30 za mwisho ukiwa mubashara."
       },
       "rtmp": {
-        "title": "Kutiririsha upya kwa RTMP",
-        "body": "Tangaza kwenye majukwaa mengine kwa wakati mmoja."
+        "title": "Tiririsha kwenye majukwaa mengine",
+        "body": "Tuma mtiririko wako kwa YouTube, Twitch, Kick, Restream.io na mengine kwa wakati mmoja."
       },
       "obs": {
         "title": "Tiririsha kutoka OBS",

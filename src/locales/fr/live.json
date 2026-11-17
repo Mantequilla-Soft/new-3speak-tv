@@ -407,8 +407,8 @@
         "body": "Les spectateurs peuvent enregistrer les 30 dernières secondes pendant ton live."
       },
       "rtmp": {
-        "title": "Restream RTMP",
-        "body": "Diffuse sur d'autres plateformes en même temps."
+        "title": "Restream vers d'autres plateformes",
+        "body": "Diffuse ton live sur YouTube, Twitch, Kick, Restream.io et d'autres en même temps."
       },
       "obs": {
         "title": "Streamer depuis OBS",

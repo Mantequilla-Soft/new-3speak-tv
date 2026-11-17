@@ -408,8 +408,8 @@
         "body": "Widzowie mogą zapisać ostatnie 30 sekund, gdy jesteś na żywo."
       },
       "rtmp": {
-        "title": "Restream RTMP",
-        "body": "Nadawaj jednocześnie na inne platformy."
+        "title": "Restream na inne platformy",
+        "body": "Wysyłaj transmisję jednocześnie na YouTube, Twitch, Kick, Restream.io i inne."
       },
       "obs": {
         "title": "Streamuj z OBS",

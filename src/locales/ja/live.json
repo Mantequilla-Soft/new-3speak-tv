@@ -405,8 +405,8 @@
         "body": "ライブ中、視聴者が直近 30 秒を保存できます。"
       },
       "rtmp": {
-        "title": "RTMP 同時配信",
-        "body": "ほかのプラットフォームにも同時に配信できます。"
+        "title": "ほかのプラットフォームへ同時配信",
+        "body": "YouTube、Twitch、Kick、Restream.io などにも同時に配信できます。"
       },
       "obs": {
         "title": "OBS から配信",

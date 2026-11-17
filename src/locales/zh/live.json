@@ -405,8 +405,8 @@
         "body": "你直播时，观众可以保存最近 30 秒。"
       },
       "rtmp": {
-        "title": "RTMP 转推",
-        "body": "同时向其他平台直播。"
+        "title": "转推到其他平台",
+        "body": "同时把直播推送到 YouTube、Twitch、Kick、Restream.io 等平台。"
       },
       "obs": {
         "title": "通过 OBS 直播",

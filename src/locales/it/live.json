@@ -407,8 +407,8 @@
         "body": "Gli spettatori possono salvare gli ultimi 30 secondi mentre sei in diretta."
       },
       "rtmp": {
-        "title": "Restream RTMP",
-        "body": "Trasmetti su altre piattaforme contemporaneamente."
+        "title": "Restream su altre piattaforme",
+        "body": "Invia la tua diretta a YouTube, Twitch, Kick, Restream.io e altro contemporaneamente."
       },
       "obs": {
         "title": "Trasmetti da OBS",

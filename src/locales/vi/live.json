@@ -405,8 +405,8 @@
         "body": "Người xem có thể lưu 30 giây cuối khi bạn đang phát."
       },
       "rtmp": {
-        "title": "Phát lại qua RTMP",
-        "body": "Phát đồng thời lên các nền tảng khác."
+        "title": "Phát lại lên nền tảng khác",
+        "body": "Phát đồng thời lên YouTube, Twitch, Kick, Restream.io và nhiều nền tảng khác."
       },
       "obs": {
         "title": "Phát từ OBS",

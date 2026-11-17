@@ -407,8 +407,8 @@
         "body": "Os espectadores podem salvar os últimos 30 segundos enquanto você está ao vivo."
       },
       "rtmp": {
-        "title": "Retransmissão RTMP",
-        "body": "Transmita para outras plataformas ao mesmo tempo."
+        "title": "Retransmita para outras plataformas",
+        "body": "Envie sua transmissão para YouTube, Twitch, Kick, Restream.io e mais ao mesmo tempo."
       },
       "obs": {
         "title": "Transmitir pelo OBS",

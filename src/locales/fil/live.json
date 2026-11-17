@@ -406,8 +406,8 @@
         "body": "Puwedeng i-save ng mga manonood ang huling 30 segundo habang live ka."
       },
       "rtmp": {
-        "title": "RTMP restream",
-        "body": "Mag-broadcast sa ibang platform nang sabay."
+        "title": "Mag-restream sa ibang platform",
+        "body": "Ipadala ang stream mo sa YouTube, Twitch, Kick, Restream.io at iba pa nang sabay."
       },
       "obs": {
         "title": "Mag-stream mula sa OBS",

@@ -405,8 +405,8 @@
         "body": "Penonton bisa menyimpan 30 detik terakhir saat kamu siaran."
       },
       "rtmp": {
-        "title": "Restream RTMP",
-        "body": "Siarkan ke platform lain secara bersamaan."
+        "title": "Restream ke platform lain",
+        "body": "Kirim siaranmu ke YouTube, Twitch, Kick, Restream.io, dan lainnya secara bersamaan."
       },
       "obs": {
         "title": "Siaran dari OBS",
