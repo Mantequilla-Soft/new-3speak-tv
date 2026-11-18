@@ -102,5 +102,42 @@
     "memoPlaceholder": "Para qué es, por ejemplo un número de factura",
     "subRequest": "Al escanear este código se piden {{amount}} {{coin}}. 3Speak y las billeteras de Hive que leen códigos de pago lo completan.",
     "subMemo": "Al escanear este código se completan tu nombre de cuenta y el memo en 3Speak y en las billeteras de Hive que leen códigos de pago."
+  },
+  "points": {
+    "title": "Puntos del canal",
+    "sub": "Se ganan en los directos de 3Speak y se gastan en predicciones e impulsos.",
+    "keptUntil": "Se conservan hasta el {{date}}. Mira, chatea o transmite para no perderlos.",
+    "startsAt_one": "Todos empiezan con {{n}} punto.",
+    "startsAt_many": "Todos empiezan con {{n}} puntos.",
+    "startsAt_other": "Todos empiezan con {{n}} puntos.",
+    "earnTitle": "Cómo ganar puntos",
+    "earn": {
+      "watch": "Ver un directo",
+      "chat": "Chatear",
+      "stream": "Transmitir",
+      "raid": "Raids y batallas",
+      "boost": "Enviar impulsos"
+    },
+    "rate": {
+      "perMinute": "{{n}} por minuto",
+      "perWord": "{{n}} por palabra",
+      "upTo": "Hasta {{n}}"
+    },
+    "historyTitle": "Historial de puntos",
+    "history": {
+      "watch": "Directos vistos",
+      "stream": "Transmisión",
+      "chat": "Chat",
+      "raid": "Raid a @{{user}}",
+      "battle": "Batalla con @{{user}}",
+      "boost": "Impulso a un directo",
+      "spend": "Impulso con puntos",
+      "refund": "Puntos devueltos",
+      "prediction": "Predicción",
+      "expire": "Reiniciado tras {{days}} días sin actividad"
+    },
+    "empty": "Todavía no hay movimientos de puntos.",
+    "more": "Ver más",
+    "onHive": "en Hive"
   }
 }

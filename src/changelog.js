@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.115',
+    category: 'live',
+    date: '2026-11-18',
+    summary: 'Channel points: earn them by watching, chatting, streaming, raids, battles and boosts, spend them on boosts, and see them in your wallet.',
+  },
+  {
     version: '2.0.114',
     category: 'live',
     date: '2026-11-18',

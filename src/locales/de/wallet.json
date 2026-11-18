@@ -101,5 +101,41 @@
     "memoPlaceholder": "Wofür es ist, zum Beispiel eine Rechnungsnummer",
     "subRequest": "Wer diesen Code scannt, wird um {{amount}} {{coin}} gebeten. 3Speak und Hive-Wallets, die Zahlungscodes lesen, tragen das ein.",
     "subMemo": "Wer diesen Code scannt, bekommt deinen Kontonamen und das Memo eingetragen, in 3Speak und in Hive-Wallets, die Zahlungscodes lesen."
+  },
+  "points": {
+    "title": "Kanalpunkte",
+    "sub": "Gesammelt in 3Speak-Livestreams, ausgegeben für Vorhersagen und Boosts.",
+    "keptUntil": "Gültig bis {{date}}. Schau zu, chatte oder streame, damit sie bleiben.",
+    "startsAt_one": "Jeder startet mit {{n}} Punkt.",
+    "startsAt_other": "Jeder startet mit {{n}} Punkten.",
+    "earnTitle": "So sammelst du Punkte",
+    "earn": {
+      "watch": "Einen Stream ansehen",
+      "chat": "Chatten",
+      "stream": "Streamen",
+      "raid": "Raids und Battles",
+      "boost": "Boosten"
+    },
+    "rate": {
+      "perMinute": "{{n}} pro Minute",
+      "perWord": "{{n}} pro Wort",
+      "upTo": "Bis zu {{n}}"
+    },
+    "historyTitle": "Punkteverlauf",
+    "history": {
+      "watch": "Streams angesehen",
+      "stream": "Gestreamt",
+      "chat": "Gechattet",
+      "raid": "@{{user}} geraidet",
+      "battle": "Battle mit @{{user}}",
+      "boost": "Einen Stream geboostet",
+      "spend": "Punkte-Boost",
+      "refund": "Punkte zurück",
+      "prediction": "Vorhersage",
+      "expire": "Zurückgesetzt nach {{days}} Tagen ohne Aktivität"
+    },
+    "empty": "Noch keine Punktebewegungen.",
+    "more": "Mehr anzeigen",
+    "onHive": "auf Hive"
   }
 }

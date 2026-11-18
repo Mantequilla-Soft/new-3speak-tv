@@ -100,5 +100,40 @@
     "memoPlaceholder": "Untuk apa, misalnya nomor tagihan",
     "subRequest": "Memindai kode ini meminta {{amount}} {{coin}}. 3Speak dan dompet Hive yang bisa membaca kode pembayaran akan mengisinya.",
     "subMemo": "Memindai kode ini mengisi nama akunmu dan memonya di 3Speak dan di dompet Hive yang bisa membaca kode pembayaran."
+  },
+  "points": {
+    "title": "Poin channel",
+    "sub": "Didapat di siaran langsung 3Speak, dipakai untuk prediksi dan boost.",
+    "keptUntil": "Berlaku hingga {{date}}. Tonton, chat, atau streaming agar poinmu tetap ada.",
+    "startsAt_other": "Semua orang mulai dengan {{n}} poin.",
+    "earnTitle": "Cara mendapatkan poin",
+    "earn": {
+      "watch": "Menonton siaran",
+      "chat": "Mengobrol",
+      "stream": "Streaming",
+      "raid": "Raid dan battle",
+      "boost": "Mengirim boost"
+    },
+    "rate": {
+      "perMinute": "{{n}} per menit",
+      "perWord": "{{n}} per kata",
+      "upTo": "Hingga {{n}}"
+    },
+    "historyTitle": "Riwayat poin",
+    "history": {
+      "watch": "Menonton siaran",
+      "stream": "Streaming",
+      "chat": "Mengobrol",
+      "raid": "Raid ke @{{user}}",
+      "battle": "Battle dengan @{{user}}",
+      "boost": "Mem-boost siaran",
+      "spend": "Boost poin",
+      "refund": "Poin dikembalikan",
+      "prediction": "Prediksi",
+      "expire": "Diatur ulang setelah {{days}} hari tanpa aktivitas"
+    },
+    "empty": "Belum ada pergerakan poin.",
+    "more": "Tampilkan lebih banyak",
+    "onHive": "di Hive"
   }
 }

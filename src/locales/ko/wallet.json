@@ -100,5 +100,40 @@
     "memoPlaceholder": "용도, 예: 청구서 번호",
     "subRequest": "이 코드를 스캔하면 {{amount}} {{coin}}을(를) 요청해요. 3Speak와 결제 코드를 읽는 Hive 지갑이 자동으로 채워요.",
     "subMemo": "이 코드를 스캔하면 3Speak와 결제 코드를 읽는 Hive 지갑에서 계정 이름과 메모가 채워져요."
+  },
+  "points": {
+    "title": "채널 포인트",
+    "sub": "3Speak 라이브 방송에서 모으고 예측과 부스트에 써요.",
+    "keptUntil": "{{date}}까지 유지돼요. 시청, 채팅, 방송을 하면 계속 유지할 수 있어요.",
+    "startsAt_other": "모두 {{n}} 포인트로 시작해요.",
+    "earnTitle": "모으는 방법",
+    "earn": {
+      "watch": "방송 시청",
+      "chat": "채팅",
+      "stream": "방송하기",
+      "raid": "레이드와 배틀",
+      "boost": "부스트"
+    },
+    "rate": {
+      "perMinute": "분당 {{n}}",
+      "perWord": "단어당 {{n}}",
+      "upTo": "최대 {{n}}"
+    },
+    "historyTitle": "포인트 내역",
+    "history": {
+      "watch": "방송 시청",
+      "stream": "방송",
+      "chat": "채팅",
+      "raid": "@{{user}}님에게 레이드",
+      "battle": "@{{user}}님과 배틀",
+      "boost": "방송에 부스트",
+      "spend": "포인트 부스트",
+      "refund": "포인트 환불",
+      "prediction": "예측",
+      "expire": "{{days}}일 동안 활동이 없어 초기화됨"
+    },
+    "empty": "아직 포인트 내역이 없어요.",
+    "more": "더보기",
+    "onHive": "Hive에서 보기"
   }
 }

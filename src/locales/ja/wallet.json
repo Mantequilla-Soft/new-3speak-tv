@@ -100,5 +100,40 @@
     "memoPlaceholder": "用途（例：請求書番号）",
     "subRequest": "このコードをスキャンすると {{amount}} {{coin}} が求められます。3Speak と支払いコードを読める Hive ウォレットが自動で入力します。",
     "subMemo": "このコードをスキャンすると、3Speak と支払いコードを読める Hive ウォレットであなたのアカウント名とメモが入力されます。"
+  },
+  "points": {
+    "title": "チャンネルポイント",
+    "sub": "3Speak のライブ配信で貯まり、予想とブーストに使えます。",
+    "keptUntil": "{{date}} まで保持されます。視聴、チャット、配信を続けると維持できます。",
+    "startsAt_other": "最初は全員 {{n}} ポイントから始まります。",
+    "earnTitle": "貯め方",
+    "earn": {
+      "watch": "配信の視聴",
+      "chat": "チャット",
+      "stream": "配信",
+      "raid": "レイドとバトル",
+      "boost": "ブースト"
+    },
+    "rate": {
+      "perMinute": "1 分ごとに {{n}}",
+      "perWord": "1 語ごとに {{n}}",
+      "upTo": "最大 {{n}}"
+    },
+    "historyTitle": "ポイント履歴",
+    "history": {
+      "watch": "配信を視聴",
+      "stream": "配信",
+      "chat": "チャット",
+      "raid": "@{{user}} さんにレイド",
+      "battle": "@{{user}} さんとバトル",
+      "boost": "配信をブースト",
+      "spend": "ポイントでブースト",
+      "refund": "ポイント返却",
+      "prediction": "予想",
+      "expire": "{{days}}日間アクティビティがなかったためリセット"
+    },
+    "empty": "ポイントの動きはまだありません。",
+    "more": "もっと見る",
+    "onHive": "Hive 上"
   }
 }

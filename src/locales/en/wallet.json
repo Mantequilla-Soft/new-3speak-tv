@@ -101,5 +101,41 @@
     "memoPlaceholder": "What it is for, like an invoice number",
     "subRequest": "Scanning this code asks for {{amount}} {{coin}}. 3Speak and Hive wallets that read payment codes fill it in.",
     "subMemo": "Scanning this code fills in your account name and the memo in 3Speak and in Hive wallets that read payment codes."
+  },
+  "points": {
+    "title": "Channel points",
+    "sub": "Earned in 3Speak live streams, spent on predictions and boosts.",
+    "keptUntil": "Kept until {{date}}. Watch, chat or stream to keep them.",
+    "startsAt_one": "Everyone starts with {{n}} point.",
+    "startsAt_other": "Everyone starts with {{n}} points.",
+    "earnTitle": "How to earn",
+    "earn": {
+      "watch": "Watching a stream",
+      "chat": "Chatting",
+      "stream": "Streaming",
+      "raid": "Raids and battles",
+      "boost": "Boosting"
+    },
+    "rate": {
+      "perMinute": "{{n}} a minute",
+      "perWord": "{{n}} a word",
+      "upTo": "Up to {{n}}"
+    },
+    "historyTitle": "Points history",
+    "history": {
+      "watch": "Watched streams",
+      "stream": "Streamed",
+      "chat": "Chatted",
+      "raid": "Raided @{{user}}",
+      "battle": "Battle with @{{user}}",
+      "boost": "Boosted a stream",
+      "spend": "Points boost",
+      "refund": "Points back",
+      "prediction": "Prediction",
+      "expire": "Reset after {{days}} days without activity"
+    },
+    "empty": "No points movements yet.",
+    "more": "Show more",
+    "onHive": "on Hive"
   }
 }

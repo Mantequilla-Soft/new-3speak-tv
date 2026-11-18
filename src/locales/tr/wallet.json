@@ -101,5 +101,41 @@
     "memoPlaceholder": "Ne için olduğu, örneğin bir fatura numarası",
     "subRequest": "Bu kodu tarayan kişiden {{amount}} {{coin}} istenir. 3Speak ve ödeme kodlarını okuyan Hive cüzdanları bunu doldurur.",
     "subMemo": "Bu kodu taramak, 3Speak'te ve ödeme kodlarını okuyan Hive cüzdanlarında hesap adını ve notu doldurur."
+  },
+  "points": {
+    "title": "Kanal puanları",
+    "sub": "3Speak canlı yayınlarında kazanılır, tahminlere ve boostlara harcanır.",
+    "keptUntil": "{{date}} tarihine kadar geçerli. Korumak için izle, sohbet et ya da yayın yap.",
+    "startsAt_one": "Herkes {{n}} puanla başlar.",
+    "startsAt_other": "Herkes {{n}} puanla başlar.",
+    "earnTitle": "Nasıl kazanılır",
+    "earn": {
+      "watch": "Yayın izlemek",
+      "chat": "Sohbet etmek",
+      "stream": "Yayın yapmak",
+      "raid": "Baskınlar ve kapışmalar",
+      "boost": "Boost göndermek"
+    },
+    "rate": {
+      "perMinute": "Dakikada {{n}}",
+      "perWord": "Kelime başına {{n}}",
+      "upTo": "En fazla {{n}}"
+    },
+    "historyTitle": "Puan geçmişi",
+    "history": {
+      "watch": "İzlenen yayınlar",
+      "stream": "Yayın",
+      "chat": "Sohbet",
+      "raid": "@{{user}} kanalına baskın",
+      "battle": "@{{user}} ile kapışma",
+      "boost": "Bir yayına boost",
+      "spend": "Puanla boost",
+      "refund": "Puan iadesi",
+      "prediction": "Tahmin",
+      "expire": "{{days}} gün etkinlik olmadığı için başa döndü"
+    },
+    "empty": "Henüz puan hareketi yok.",
+    "more": "Daha fazla göster",
+    "onHive": "Hive'da"
   }
 }

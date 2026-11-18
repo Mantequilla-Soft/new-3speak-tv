@@ -9,6 +9,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import ReceiveDialog from '../components/Wallet/ReceiveDialog';
 import WalletOpModal from '../components/Wallet/WalletOpModal';
 import WalletPending from '../components/Wallet/WalletPending';
+import PointsCard from '../components/Wallet/PointsCard';
 import { loadWalletState } from '../lib/walletOps';
 import { toastIn } from '../utils/toast';
 import { ENABLE_SUBS } from '../utils/config';
@@ -359,6 +360,7 @@ function Wallet() {
             <TrxHistory user={user} onLoaded={onLoaded} />
             <aside className="wallet-v2__side">
               {ops && <WalletPending user={user} state={ops} own={own} onChanged={refreshAll} />}
+              <PointsCard user={user} own={own} />
               <div className="wallet-v2__card">
                 <div className="wallet-v2__card-head">
                   <b>{t('wallet.earnings.title')}</b>

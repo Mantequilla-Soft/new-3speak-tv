@@ -102,5 +102,42 @@
     "memoPlaceholder": "À quoi il sert, par exemple un numéro de facture",
     "subRequest": "Scanner ce code demande {{amount}} {{coin}}. 3Speak et les portefeuilles Hive qui lisent les codes de paiement le remplissent.",
     "subMemo": "Scanner ce code remplit votre nom de compte et le mémo dans 3Speak et dans les portefeuilles Hive qui lisent les codes de paiement."
+  },
+  "points": {
+    "title": "Points de chaîne",
+    "sub": "Gagnés dans les lives 3Speak, dépensés en prédictions et en boosts.",
+    "keptUntil": "Conservés jusqu'au {{date}}. Regardez, discutez ou streamez pour les garder.",
+    "startsAt_one": "Chacun commence avec {{n}} point.",
+    "startsAt_many": "Chacun commence avec {{n}} points.",
+    "startsAt_other": "Chacun commence avec {{n}} points.",
+    "earnTitle": "Comment en gagner",
+    "earn": {
+      "watch": "Regarder un live",
+      "chat": "Discuter dans le chat",
+      "stream": "Streamer",
+      "raid": "Raids et battles",
+      "boost": "Envoyer des boosts"
+    },
+    "rate": {
+      "perMinute": "{{n}} par minute",
+      "perWord": "{{n}} par mot",
+      "upTo": "Jusqu'à {{n}}"
+    },
+    "historyTitle": "Historique des points",
+    "history": {
+      "watch": "Lives regardés",
+      "stream": "Live diffusé",
+      "chat": "Messages dans le chat",
+      "raid": "Raid sur @{{user}}",
+      "battle": "Battle contre @{{user}}",
+      "boost": "Boost d'un live",
+      "spend": "Boost en points",
+      "refund": "Points remboursés",
+      "prediction": "Prédiction",
+      "expire": "Réinitialisé après {{days}} jours sans activité"
+    },
+    "empty": "Aucun mouvement de points pour l'instant.",
+    "more": "Afficher plus",
+    "onHive": "sur Hive"
   }
 }

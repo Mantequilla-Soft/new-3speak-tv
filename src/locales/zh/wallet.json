@@ -100,5 +100,40 @@
     "memoPlaceholder": "用途，例如发票编号",
     "subRequest": "扫描此码会请求 {{amount}} {{coin}}。3Speak 和能读取付款码的 Hive 钱包会自动填写。",
     "subMemo": "扫描此码会在 3Speak 和能读取付款码的 Hive 钱包中填入你的账户名和备注。"
+  },
+  "points": {
+    "title": "频道积分",
+    "sub": "在 3Speak 直播中赚取，可用于预测和助力。",
+    "keptUntil": "保留至 {{date}}。观看、聊天或直播即可继续保留。",
+    "startsAt_other": "每个人初始都有 {{n}} 积分。",
+    "earnTitle": "如何赚取",
+    "earn": {
+      "watch": "观看直播",
+      "chat": "聊天",
+      "stream": "直播",
+      "raid": "突袭和对战",
+      "boost": "助力"
+    },
+    "rate": {
+      "perMinute": "每分钟 {{n}}",
+      "perWord": "每个词 {{n}}",
+      "upTo": "最多 {{n}}"
+    },
+    "historyTitle": "积分记录",
+    "history": {
+      "watch": "观看直播",
+      "stream": "直播",
+      "chat": "聊天",
+      "raid": "突袭 @{{user}}",
+      "battle": "与 @{{user}} 对战",
+      "boost": "助力了一场直播",
+      "spend": "积分助力",
+      "refund": "积分退回",
+      "prediction": "预测",
+      "expire": "{{days}} 天无活动，已重置"
+    },
+    "empty": "暂无积分变动。",
+    "more": "显示更多",
+    "onHive": "在 Hive 上"
   }
 }
