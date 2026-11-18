@@ -322,6 +322,9 @@ describe('an all-audio playlist', () => {
     const { user } = mount()
     await user.click(await screen.findByRole('button', { name: /Embed/ }))
     const dialog = screen.getByRole('dialog', { name: 'Embed this playlist' })
+    // Opens on For Hive: the play.3speak.tv link, owner first.
+    expect(within(dialog).getByRole('textbox', { name: 'Link for Hive posts' }).value).toMatch(/\/watch\?v=[^/]+\/pl-1$/)
+    await user.click(within(dialog).getByRole('tab', { name: 'Website' }))
     expect(within(dialog).getByRole('textbox', { name: 'Embed code' }).value).toContain('play?list=pl-1')
   })
 })
