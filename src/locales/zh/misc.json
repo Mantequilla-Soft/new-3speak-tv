@@ -169,7 +169,8 @@
     "tabWebsite": "网站",
     "tabHive": "用于 Hive",
     "hiveLink": "用于 Hive 帖子的链接",
-    "hivePlaylistHint": "将此链接粘贴到 Hive 帖子或 wave 中。显示 3Speak 视频的 Hive 应用（如 Ecency）会直接在帖子中播放该播放列表。"
+    "hivePlaylistHint": "将此链接粘贴到 Hive 帖子或 wave 中。显示 3Speak 视频的 Hive 应用（如 Ecency）会直接在帖子中播放该播放列表。",
+    "videoPlaylistHint": "将其粘贴到任何网站或博客文章中。它会按顺序播放播放列表中的所有视频，包括之后添加的视频。"
   },
   "incubation": {
     "requestFailed": "请求失败（{{status}}）",

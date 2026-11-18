@@ -169,7 +169,8 @@
     "tabWebsite": "웹사이트",
     "tabHive": "Hive용",
     "hiveLink": "Hive 게시물용 링크",
-    "hivePlaylistHint": "이 링크를 Hive 게시물이나 wave에 붙여 넣으세요. Ecency처럼 3Speak 영상을 보여 주는 Hive 앱에서는 게시물 안에서 바로 재생목록이 재생됩니다."
+    "hivePlaylistHint": "이 링크를 Hive 게시물이나 wave에 붙여 넣으세요. Ecency처럼 3Speak 영상을 보여 주는 Hive 앱에서는 게시물 안에서 바로 재생목록이 재생됩니다.",
+    "videoPlaylistHint": "웹사이트나 블로그 글에 붙여 넣으세요. 나중에 추가된 영상을 포함해 재생목록의 모든 영상을 순서대로 재생합니다."
   },
   "incubation": {
     "requestFailed": "요청 실패({{status}})",

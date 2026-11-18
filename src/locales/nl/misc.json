@@ -169,7 +169,8 @@
     "tabWebsite": "Website",
     "tabHive": "Voor Hive",
     "hiveLink": "Link voor Hive-posts",
-    "hivePlaylistHint": "Plak deze link in een Hive-post of wave. Hive-apps die 3Speak-video’s tonen, zoals Ecency, spelen de playlist direct in de post af."
+    "hivePlaylistHint": "Plak deze link in een Hive-post of wave. Hive-apps die 3Speak-video’s tonen, zoals Ecency, spelen de playlist direct in de post af.",
+    "videoPlaylistHint": "Plak dit in een website of blogpost. Het speelt alle video's van de playlist op volgorde af, ook video's die later worden toegevoegd."
   },
   "incubation": {
     "requestFailed": "Verzoek mislukt ({{status}})",

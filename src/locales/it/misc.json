@@ -169,7 +169,8 @@
     "tabWebsite": "Sito web",
     "tabHive": "Per Hive",
     "hiveLink": "Link per i post su Hive",
-    "hivePlaylistHint": "Incolla questo link in un post o in una wave su Hive. Le app di Hive che mostrano i video di 3Speak, come Ecency, riproducono la playlist direttamente nel post."
+    "hivePlaylistHint": "Incolla questo link in un post o in una wave su Hive. Le app di Hive che mostrano i video di 3Speak, come Ecency, riproducono la playlist direttamente nel post.",
+    "videoPlaylistHint": "Incollalo in qualsiasi sito o post di blog. Riproduce in ordine tutti i video della playlist, anche quelli aggiunti in seguito."
   },
   "incubation": {
     "requestFailed": "Richiesta non riuscita ({{status}})",

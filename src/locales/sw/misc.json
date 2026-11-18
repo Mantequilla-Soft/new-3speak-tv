@@ -169,7 +169,8 @@
     "tabWebsite": "Tovuti",
     "tabHive": "Kwa Hive",
     "hiveLink": "Kiungo cha machapisho ya Hive",
-    "hivePlaylistHint": "Bandika kiungo hiki kwenye chapisho au wave ya Hive. Programu za Hive zinazoonyesha video za 3Speak, kama Ecency, hucheza orodha moja kwa moja kwenye chapisho."
+    "hivePlaylistHint": "Bandika kiungo hiki kwenye chapisho au wave ya Hive. Programu za Hive zinazoonyesha video za 3Speak, kama Ecency, hucheza orodha moja kwa moja kwenye chapisho.",
+    "videoPlaylistHint": "Bandika hii kwenye tovuti au chapisho lolote la blogu. Inacheza video zote za orodha kwa mpangilio, pamoja na zitakazoongezwa baadaye."
   },
   "incubation": {
     "requestFailed": "Ombi limeshindwa ({{status}})",

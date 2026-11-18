@@ -169,7 +169,8 @@
     "tabWebsite": "Situs web",
     "tabHive": "Untuk Hive",
     "hiveLink": "Tautan untuk postingan Hive",
-    "hivePlaylistHint": "Tempel tautan ini di postingan atau wave Hive. Aplikasi Hive yang menampilkan video 3Speak, seperti Ecency, memutar playlist langsung di postingan."
+    "hivePlaylistHint": "Tempel tautan ini di postingan atau wave Hive. Aplikasi Hive yang menampilkan video 3Speak, seperti Ecency, memutar playlist langsung di postingan.",
+    "videoPlaylistHint": "Tempel ini di situs web atau postingan blog mana pun. Ini memutar semua video di playlist secara berurutan, termasuk yang ditambahkan nanti."
   },
   "incubation": {
     "requestFailed": "Permintaan gagal ({{status}})",

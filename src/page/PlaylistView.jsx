@@ -157,6 +157,9 @@ function PlaylistView() {
 
   // Track numbers on audio tiles count the tracks only, in playlist order.
   const audioTracks = useMemo(() => displayVideos.filter(v => v.isAudio && v.audioDoc), [displayVideos]);
+  // Any video in it makes it a video playlist for the embed (play.3speak.tv plays the
+  // videos; the audio player only audio-only playlists), as the player decides.
+  const hasVideoItems = useMemo(() => listedVideos.some(v => !(v.isAudio && v.audioDoc)), [listedVideos]);
 
   // Check if there are unsaved changes
   const hasChanges = pendingChanges.length > 0;
@@ -830,14 +833,14 @@ function PlaylistView() {
                   <Button as="a" variant="secondary" size={36} icon="rss_feed" className="pod-btn" href={feedHref} target="_blank" rel="noreferrer" title={t('playlists.view.podcastFeedTitle', { name: playlist.name })}>
                     RSS
                   </Button>
-                  {/* Every audio track of the playlist in one player on another site */}
-                  {audioTracks.length > 0 && (
+                  {/* The whole playlist in one player on another site or in a Hive post */}
+                  {(audioTracks.length > 0 || hasVideoItems) && (
                     <Button
                       variant="secondary"
                       size={36}
                       icon="code"
                       className="pod-btn"
-                      onClick={() => openEmbedCode({ kind: 'playlist', id: playlistId, title: playlist.name, owner: playlist.owner })}
+                      onClick={() => openEmbedCode({ kind: 'playlist', id: playlistId, title: playlist.name, owner: playlist.owner, video: hasVideoItems })}
                       title={t('chat.share.embedOnWebsite')}
                     >
                       {t('misc.embed.embed')}
@@ -964,7 +967,8 @@ function PlaylistView() {
             </div>
           )}
 
-          <div className="pv-actions">
+          {/* Four tiles beside Play all leave it no room: it then takes its own row. */}
+          <div className={`pv-actions${(shuffleable.length > 1 ? 1 : 0) + 1 + (isPrivate ? 0 : 1) + (!isPrivate && hasVideoItems ? 1 : 0) > 3 ? ' pv-actions--wrap' : ''}`}>
             {firstVideo ? (
               <Button
                 as={Link}
@@ -1006,6 +1010,15 @@ function PlaylistView() {
                   rel="noreferrer"
                   title={t('playlists.view.podcastFeedTitle', { name: playlist.name })}
                 />
+                {/* The playlist's videos in one player, on another site or in a Hive post */}
+                {hasVideoItems && (
+                  <ProfileTile
+                    icon="code"
+                    label={t('misc.embed.embed')}
+                    aria-label={t('chat.share.embedOnWebsite')}
+                    onClick={() => openEmbedCode({ kind: 'playlist', id: playlistId, title: playlist.name, owner: playlist.owner, video: true })}
+                  />
+                )}
               </>
             )}
           </div>

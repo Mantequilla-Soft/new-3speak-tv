@@ -169,7 +169,8 @@
     "tabWebsite": "Site web",
     "tabHive": "Pour Hive",
     "hiveLink": "Lien pour les publications Hive",
-    "hivePlaylistHint": "Collez ce lien dans une publication ou une wave Hive. Les applis Hive qui affichent les vidéos 3Speak, comme Ecency, lisent la playlist directement dans la publication."
+    "hivePlaylistHint": "Collez ce lien dans une publication ou une wave Hive. Les applis Hive qui affichent les vidéos 3Speak, comme Ecency, lisent la playlist directement dans la publication.",
+    "videoPlaylistHint": "Collez ceci dans un site web ou un article de blog. Il lit dans l'ordre toutes les vidéos de la playlist, y compris celles ajoutées plus tard."
   },
   "incubation": {
     "requestFailed": "Échec de la requête ({{status}})",

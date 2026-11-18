@@ -45,3 +45,13 @@ describe('playlist link for Hive posts', () => {
       .toMatch(/\?v=[A-Za-z0-9_\-./]+$/);
   });
 });
+
+describe('video playlist embed code', () => {
+  it('is the video player snippet with owner/id as v, 16:9 responsive by default', async () => {
+    const { buildEmbedHtml } = await import('../../src/utils/embedCode');
+    const html = buildEmbedHtml('badadib', 'a972c863bbaf2f4d0ddec1a401bcda4d', { title: 'gaming' });
+    expect(html).toContain(`src="${EMBED_PLAYER_BASE}/watch?v=badadib/a972c863bbaf2f4d0ddec1a401bcda4d&mode=iframe"`);
+    expect(html).toContain('padding-bottom:56.25%');
+    expect(html).toContain('title="gaming"');
+  });
+});

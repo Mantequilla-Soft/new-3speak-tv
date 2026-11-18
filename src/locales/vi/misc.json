@@ -169,7 +169,8 @@
     "tabWebsite": "Trang web",
     "tabHive": "Cho Hive",
     "hiveLink": "Liên kết cho bài đăng Hive",
-    "hivePlaylistHint": "Dán liên kết này vào một bài đăng hoặc wave trên Hive. Các ứng dụng Hive hiển thị video 3Speak, như Ecency, sẽ phát danh sách phát ngay trong bài đăng."
+    "hivePlaylistHint": "Dán liên kết này vào một bài đăng hoặc wave trên Hive. Các ứng dụng Hive hiển thị video 3Speak, như Ecency, sẽ phát danh sách phát ngay trong bài đăng.",
+    "videoPlaylistHint": "Dán đoạn này vào bất kỳ trang web hoặc bài blog nào. Nó phát lần lượt mọi video trong danh sách phát, kể cả những video được thêm sau."
   },
   "incubation": {
     "requestFailed": "Yêu cầu thất bại ({{status}})",

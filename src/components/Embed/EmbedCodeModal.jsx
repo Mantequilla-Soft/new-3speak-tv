@@ -6,8 +6,8 @@ import { Icon } from '../v2/Icon'
 import { cx } from '../v2/helpers'
 import { toastIn } from '../../utils/toast'
 import {
-  AUDIO_EMBED_SIZES, PLAYLIST_EMBED_SIZES, buildAudioEmbedHtml, buildHivePlaylistLink, buildPlaylistEmbedHtml,
-  buildPodcastEmbedHtml,
+  AUDIO_EMBED_SIZES, EMBED_SIZES, PLAYLIST_EMBED_SIZES, buildAudioEmbedHtml, buildEmbedHtml, buildHivePlaylistLink,
+  buildPlaylistEmbedHtml, buildPodcastEmbedHtml,
 } from '../../utils/embedCode'
 import './EmbedCodeModal.scss'
 
@@ -22,6 +22,8 @@ const toast = toastIn('Audio')
  *  - kind 'audio':    id = the audio's own permlink (embed-audio `permlink`)
  *  - kind 'playlist': id = the 3speak.tv playlist id; the embed plays its audio tracks.
  *                     With `owner`, a "For Hive" tab offers the link for Hive posts.
+ *                     With `video` (it holds videos), the snippet is the video player's:
+ *                     play.3speak.tv plays the playlist's videos in one 16:9 player.
  *  - kind 'podcast':  id = an outside show's id (the checker's); the embed plays its episodes
  */
 let current = null
@@ -50,11 +52,16 @@ export default function EmbedCodeHost() {
 function EmbedCodeModal({ target, onClose }) {
   const { t } = useTranslation()
   const isList = target.kind === 'playlist' || target.kind === 'podcast'
-  const sizes = isList ? PLAYLIST_EMBED_SIZES : AUDIO_EMBED_SIZES
+  // A playlist of videos embeds the video player: owner/id is the same `v` shape as a
+  // video, so the video snippet and its 16:9 sizes apply as they are.
+  const isVideoList = target.kind === 'playlist' && !!target.video && !!target.owner
+  const sizes = isVideoList ? EMBED_SIZES : isList ? PLAYLIST_EMBED_SIZES : AUDIO_EMBED_SIZES
   const [size, setSize] = useState(sizes[0].id)
   const codeRef = useRef(null)
   const spec = sizes.find((s) => s.id === size) || sizes[0]
-  const build = { playlist: buildPlaylistEmbedHtml, podcast: buildPodcastEmbedHtml }[target.kind] || buildAudioEmbedHtml
+  const build = isVideoList
+    ? (id, opts) => buildEmbedHtml(target.owner, id, opts)
+    : { playlist: buildPlaylistEmbedHtml, podcast: buildPodcastEmbedHtml }[target.kind] || buildAudioEmbedHtml
   // "For Hive": a link Hive apps already show as a player (buildHivePlaylistLink).
   const hiveLink = target.kind === 'playlist' && target.owner ? buildHivePlaylistLink(target.owner, target.id) : null
   // For Hive comes first and is where the popup opens, when there is a Hive link.
@@ -62,7 +69,8 @@ function EmbedCodeModal({ target, onClose }) {
   const forHive = tab === 'forhive' && !!hiveLink
   const code = forHive ? hiveLink : build(target.id, { size, title: target.title })
   const heading = { playlist: 'misc.embed.playlistTitle', podcast: 'misc.embed.podcastTitle' }[target.kind] || 'misc.embed.audioTitle'
-  const hint = { playlist: 'misc.embed.playlistHint', podcast: 'misc.embed.podcastHint' }[target.kind] || 'chat.share.embedHint'
+  const hint = isVideoList ? 'misc.embed.videoPlaylistHint'
+    : { playlist: 'misc.embed.playlistHint', podcast: 'misc.embed.podcastHint' }[target.kind] || 'chat.share.embedHint'
 
   const copy = async () => {
     try {
@@ -121,17 +129,21 @@ function EmbedCodeModal({ target, onClose }) {
               </button>
             ))}
           </div>
-          {/* A sketch of the embedded player (cover, play, progress), not the live
-              embed: "minimal" drops the cover, "with title" adds the title line. */}
-          <div className={cx('embed-code-strip', `is-${size}`)} aria-hidden="true">
-            {size !== 'minimal' && <span className="embed-code-strip__art" />}
-            <Icon name="play_circle" size={20} />
-            <span className="embed-code-strip__main">
-              {size === 'full' && target.title && <span className="embed-code-strip__title">{target.title}</span>}
-              <span className="embed-code-strip__bar" />
-            </span>
-          </div>
-          <p className="embed-code-size">{t('misc.embed.heightSub', { height: spec.height })}</p>
+          {!isVideoList && (
+            <>
+              {/* A sketch of the embedded player (cover, play, progress), not the live
+                  embed: "minimal" drops the cover, "with title" adds the title line. */}
+              <div className={cx('embed-code-strip', `is-${size}`)} aria-hidden="true">
+                {size !== 'minimal' && <span className="embed-code-strip__art" />}
+                <Icon name="play_circle" size={20} />
+                <span className="embed-code-strip__main">
+                  {size === 'full' && target.title && <span className="embed-code-strip__title">{target.title}</span>}
+                  <span className="embed-code-strip__bar" />
+                </span>
+              </div>
+              <p className="embed-code-size">{t('misc.embed.heightSub', { height: spec.height })}</p>
+            </>
+          )}
         </>
       )}
       <textarea
