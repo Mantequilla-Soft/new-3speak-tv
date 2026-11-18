@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.114',
+    category: 'live',
+    date: '2026-11-18',
+    summary: 'Tidier stream studio: each panel has sub-tabs with the main tools first, stream health has its own tab, and boost history sits in Boosts.',
+  },
+  {
     version: '2.0.113',
     category: 'playlists',
     date: '2026-11-18',

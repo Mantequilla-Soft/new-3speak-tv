@@ -8,9 +8,27 @@
 @use "../../styles/v2" as v2;
 @use "./hangouts-skin" as hh;
 
+// The sub-tabs at the top of the studio panels (SDK StudioSubtabs): flat, an
+// accent line under the open one. Body level, since the phone sheets are
+// portalled out of .openpod-modal.
+@mixin subtabs {
+  .hh-subtabs { gap: 4px; border-bottom: 1px solid var(--border); margin: 0 0 4px; }
+  .hh-subtabs__tab {
+    padding: 8px 10px;
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 700;
+    &:hover { color: var(--text); }
+    &.is-active { color: var(--text); border-bottom-color: var(--accent); }
+  }
+  .hh-subtabs__dot { top: 6px; right: 1px; background: var(--accent); }
+  .hh-boost-settings > .hh-subtabs { margin: 12px 20px 0; }
+  .hh-overlays > .hh-subtabs { margin: 12px 20px 0; }
+  .hh-overlays--embedded > .hh-subtabs { margin: 12px 4px 0; }
+}
+
 @mixin studio-tools {
-  // Header: the Overlays button, labelled like Share ("Aa" is its glyph).
-  .hh-studio__overlays-btn .hh-studio__icon { font-size: 15px; font-weight: 900; letter-spacing: -0.02em; }
+  // Phone header: the Overlays button ("Aa" is its glyph).
   .hh-studio__hbtn-aa { font-size: 13px; font-weight: 900; letter-spacing: -0.02em; }
 
   // The connection pill opens the health panel: a flat v2 card below it.

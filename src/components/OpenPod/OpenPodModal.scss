@@ -390,6 +390,8 @@ div.hh-battle-panel {
 
 /* The studio's Overlays panel (SDK StudioOverlaysPanel, portalled to <body>):
    the Boost settings sheet look. */
+@include tools.subtabs;
+
 div.hh-overlays {
   @include tools.overlays-panel;
   // In the studio's right rail (the Overlays tab): part of the panel.

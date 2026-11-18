@@ -571,12 +571,7 @@
     &:hover { background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); }
   }
   .hh-studio__header-actions .hh-btn--primary { background: var(--accent-tint-strong); color: var(--accent); }
-  .hh-studio__boost-history-btn,
-  .hh-studio__boost-settings-btn:not(.hh-studio__boost-settings-btn--off) { width: 40px; padding: 0; }
   .hh-studio__share-btn .hh-studio__icon { @include glyph-box("link", 20px); }
-  .hh-studio__boost-history-btn .hh-studio__icon { @include glyph-box("payments", 20px); }
-  .hh-studio__boost-settings-btn .hh-studio__icon { @include glyph-box("rocket_launch", 20px); }
-  .hh-studio__header-actions .hh-studio__boost-settings-btn--off { color: var(--muted); }
   // Close: the round icon button dialogs use (the label stays as aria-label).
   .hh-studio__close {
     @include glyph-box("close", 22px, 40px);
@@ -669,6 +664,7 @@
   .hh-studio__vtab--live .hh-studio__vtab-icon { @include glyph("bar_chart", 20px); }
   .hh-studio__vtab--overlays .hh-studio__vtab-icon { @include glyph("text_fields", 20px); }
   .hh-studio__vtab--boosts .hh-studio__vtab-icon { @include glyph("rocket_launch", 20px); }
+  .hh-studio__vtab--health .hh-studio__vtab-icon { @include glyph("monitor_heart", 20px); }
   .hh-studio__vtab--settings .hh-studio__vtab-icon { @include glyph("settings", 20px); }
   .hh-studio__side-head { font-size: 15px; font-weight: 700; color: var(--text); }
   .hh-studio__side-pin {
@@ -1404,8 +1400,4 @@
     line-height: 1.4;
   }
   .hh-battle-invite__sub { color: var(--muted); opacity: 1; font-size: 13px; }
-
-  // The studio header's battle button: an icon button like Boost history.
-  .hh-studio__battle-btn { width: 40px; padding: 0; }
-  .hh-studio__battle-btn .hh-studio__icon { @include glyph-box("trophy", 20px); }
 }
