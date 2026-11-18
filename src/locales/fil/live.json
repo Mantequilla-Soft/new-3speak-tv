@@ -68,7 +68,14 @@
       "goalProgress": "{progress} / {target} HBD",
       "goalReached": "Naabot ang goal!",
       "topSupporters": "Mga top supporter",
-      "supporterAmount": "{amount} HBD"
+      "supporterAmount": "{amount} HBD",
+      "assetPoints": "Points",
+      "pointsAmount": "{points} points",
+      "pointsBalance": "May {points} points ka.",
+      "pointsHint": "Nagagastos ang points, walang natatanggap na pera ang streamer. Kumita ng points sa panonood, pag-chat, pag-stream at pagpapadala ng boost.",
+      "errPointsMinimum": "Ang boost gamit ang points ay hindi bababa sa {min} points.",
+      "errPointsBalance": "{points} points lang ang mayroon ka.",
+      "errSignIn": "Mag-sign in para mag-boost gamit ang points."
     }
   },
   "clip": {

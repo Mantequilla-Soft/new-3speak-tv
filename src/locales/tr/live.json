@@ -68,7 +68,14 @@
       "goalProgress": "{progress} / {target} HBD",
       "goalReached": "Hedefe ulaşıldı!",
       "topSupporters": "En çok destekleyenler",
-      "supporterAmount": "{amount} HBD"
+      "supporterAmount": "{amount} HBD",
+      "assetPoints": "Puan",
+      "pointsAmount": "{points} puan",
+      "pointsBalance": "{points} puanın var.",
+      "pointsHint": "Puanlar harcanır, yayıncı para almaz. İzleyerek, sohbet ederek, yayın yaparak ve boost göndererek puan kazan.",
+      "errPointsMinimum": "Puanla boost en az {min} puan olmalı.",
+      "errPointsBalance": "Yalnızca {points} puanın var.",
+      "errSignIn": "Puanla boost göndermek için giriş yap."
     }
   },
   "clip": {

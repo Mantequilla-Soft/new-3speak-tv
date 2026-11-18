@@ -70,7 +70,14 @@
       "goalProgress": "{progress} / {target} HBD",
       "goalReached": "Цель достигнута!",
       "topSupporters": "Главные поддержавшие",
-      "supporterAmount": "{amount} HBD"
+      "supporterAmount": "{amount} HBD",
+      "assetPoints": "Очки",
+      "pointsAmount": "{points} очков",
+      "pointsBalance": "У вас {points} очков.",
+      "pointsHint": "Очки тратятся, стример не получает денег. Зарабатывайте очки: смотрите, общайтесь в чате, ведите стримы и отправляйте бусты.",
+      "errPointsMinimum": "Буст за очки: минимум {min} очков.",
+      "errPointsBalance": "У вас только {points} очков.",
+      "errSignIn": "Войдите, чтобы отправить буст за очки."
     }
   },
   "clip": {

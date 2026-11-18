@@ -68,7 +68,14 @@
       "goalProgress": "{progress} / {target} HBD",
       "goalReached": "লক্ষ্য পূরণ হয়েছে!",
       "topSupporters": "সেরা সমর্থক",
-      "supporterAmount": "{amount} HBD"
+      "supporterAmount": "{amount} HBD",
+      "assetPoints": "পয়েন্ট",
+      "pointsAmount": "{points} পয়েন্ট",
+      "pointsBalance": "আপনার {points} পয়েন্ট আছে।",
+      "pointsHint": "পয়েন্ট খরচ হয়ে যায়, স্ট্রিমার কোনো টাকা পান না। দেখে, চ্যাট করে, স্ট্রিম করে আর বুস্ট পাঠিয়ে পয়েন্ট আয় করুন।",
+      "errPointsMinimum": "পয়েন্ট দিয়ে বুস্ট কমপক্ষে {min} পয়েন্টের হতে হবে।",
+      "errPointsBalance": "আপনার মাত্র {points} পয়েন্ট আছে।",
+      "errSignIn": "পয়েন্ট দিয়ে বুস্ট করতে সাইন ইন করুন।"
     }
   },
   "clip": {

@@ -67,7 +67,14 @@
       "goalProgress": "{progress} / {target} HBD",
       "goalReached": "ถึงเป้าหมายแล้ว!",
       "topSupporters": "ผู้สนับสนุนอันดับต้น",
-      "supporterAmount": "{amount} HBD"
+      "supporterAmount": "{amount} HBD",
+      "assetPoints": "แต้ม",
+      "pointsAmount": "{points} แต้ม",
+      "pointsBalance": "คุณมี {points} แต้ม",
+      "pointsHint": "แต้มจะถูกใช้ไป สตรีมเมอร์ไม่ได้รับเงิน สะสมแต้มได้จากการดู แชท สตรีม และส่งบูสต์",
+      "errPointsMinimum": "บูสต์ด้วยแต้มต้องมีอย่างน้อย {min} แต้ม",
+      "errPointsBalance": "คุณมีแค่ {points} แต้ม",
+      "errSignIn": "ลงชื่อเข้าใช้เพื่อบูสต์ด้วยแต้ม"
     }
   },
   "clip": {

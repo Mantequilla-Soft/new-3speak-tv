@@ -69,7 +69,14 @@
       "goalProgress": "{progress} / {target} HBD",
       "goalReached": "¡Meta alcanzada!",
       "topSupporters": "Principales seguidores",
-      "supporterAmount": "{amount} HBD"
+      "supporterAmount": "{amount} HBD",
+      "assetPoints": "Puntos",
+      "pointsAmount": "{points} puntos",
+      "pointsBalance": "Tienes {points} puntos.",
+      "pointsHint": "Los puntos se gastan, el streamer no recibe dinero. Gana puntos viendo, chateando, transmitiendo y enviando impulsos.",
+      "errPointsMinimum": "Un impulso con puntos es de al menos {min} puntos.",
+      "errPointsBalance": "Solo tienes {points} puntos.",
+      "errSignIn": "Inicia sesión para enviar un impulso con puntos."
     }
   },
   "clip": {

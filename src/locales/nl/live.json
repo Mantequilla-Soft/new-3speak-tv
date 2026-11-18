@@ -68,7 +68,14 @@
       "goalProgress": "{progress} / {target} HBD",
       "goalReached": "Doel bereikt!",
       "topSupporters": "Topsupporters",
-      "supporterAmount": "{amount} HBD"
+      "supporterAmount": "{amount} HBD",
+      "assetPoints": "Punten",
+      "pointsAmount": "{points} punten",
+      "pointsBalance": "Je hebt {points} punten.",
+      "pointsHint": "Punten worden uitgegeven, de streamer krijgt geen geld. Verdien punten door te kijken, te chatten, te streamen en te boosten.",
+      "errPointsMinimum": "Een puntenboost is minstens {min} punten.",
+      "errPointsBalance": "Je hebt maar {points} punten.",
+      "errSignIn": "Log in om met punten te boosten."
     }
   },
   "clip": {

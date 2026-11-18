@@ -67,7 +67,14 @@
       "goalProgress": "{progress} / {target} HBD",
       "goalReached": "Đã đạt mục tiêu!",
       "topSupporters": "Người ủng hộ hàng đầu",
-      "supporterAmount": "{amount} HBD"
+      "supporterAmount": "{amount} HBD",
+      "assetPoints": "Điểm",
+      "pointsAmount": "{points} điểm",
+      "pointsBalance": "Bạn có {points} điểm.",
+      "pointsHint": "Điểm sẽ bị trừ, người phát không nhận được tiền. Kiếm điểm bằng cách xem, trò chuyện, phát trực tiếp và gửi boost.",
+      "errPointsMinimum": "Boost bằng điểm tối thiểu là {min} điểm.",
+      "errPointsBalance": "Bạn chỉ có {points} điểm.",
+      "errSignIn": "Đăng nhập để gửi boost bằng điểm."
     }
   },
   "clip": {

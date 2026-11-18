@@ -67,7 +67,14 @@
       "goalProgress": "{progress} / {target} HBD",
       "goalReached": "目標達成！",
       "topSupporters": "トップサポーター",
-      "supporterAmount": "{amount} HBD"
+      "supporterAmount": "{amount} HBD",
+      "assetPoints": "ポイント",
+      "pointsAmount": "{points} ポイント",
+      "pointsBalance": "所持ポイント: {points}",
+      "pointsHint": "ポイントは消費され、配信者にお金は入りません。ポイントは視聴、チャット、配信、ブーストで貯まります。",
+      "errPointsMinimum": "ポイントでのブーストは {min} ポイント以上です。",
+      "errPointsBalance": "所持ポイントは {points} だけです。",
+      "errSignIn": "ポイントでブーストするにはログインしてください。"
     }
   },
   "clip": {

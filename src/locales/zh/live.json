@@ -67,7 +67,14 @@
       "goalProgress": "{progress} / {target} HBD",
       "goalReached": "目标达成！",
       "topSupporters": "头号支持者",
-      "supporterAmount": "{amount} HBD"
+      "supporterAmount": "{amount} HBD",
+      "assetPoints": "积分",
+      "pointsAmount": "{points} 积分",
+      "pointsBalance": "你有 {points} 积分。",
+      "pointsHint": "积分会被消耗，主播不会收到钱。观看、聊天、直播和助力都能赚取积分。",
+      "errPointsMinimum": "积分助力至少需要 {min} 积分。",
+      "errPointsBalance": "你只有 {points} 积分。",
+      "errSignIn": "登录后即可用积分助力。"
     }
   },
   "clip": {

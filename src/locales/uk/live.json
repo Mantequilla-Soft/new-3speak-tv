@@ -70,7 +70,14 @@
       "goalProgress": "{progress} / {target} HBD",
       "goalReached": "Ціль досягнуто!",
       "topSupporters": "Топ прихильників",
-      "supporterAmount": "{amount} HBD"
+      "supporterAmount": "{amount} HBD",
+      "assetPoints": "Бали",
+      "pointsAmount": "{points} балів",
+      "pointsBalance": "У вас {points} балів.",
+      "pointsHint": "Бали витрачаються, стрімер не отримує грошей. Заробляйте бали: дивіться, спілкуйтеся в чаті, ведіть стріми та надсилайте бусти.",
+      "errPointsMinimum": "Буст за бали: щонайменше {min} балів.",
+      "errPointsBalance": "У вас лише {points} балів.",
+      "errSignIn": "Увійдіть, щоб надіслати буст за бали."
     }
   },
   "clip": {

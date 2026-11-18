@@ -67,7 +67,14 @@
       "goalProgress": "{progress} / {target} HBD",
       "goalReached": "목표 달성!",
       "topSupporters": "최고 후원자",
-      "supporterAmount": "{amount} HBD"
+      "supporterAmount": "{amount} HBD",
+      "assetPoints": "포인트",
+      "pointsAmount": "{points} 포인트",
+      "pointsBalance": "보유 포인트: {points}",
+      "pointsHint": "포인트는 소모되며 스트리머는 돈을 받지 않아요. 시청, 채팅, 방송, 부스트로 포인트를 모을 수 있어요.",
+      "errPointsMinimum": "포인트 부스트는 최소 {min} 포인트예요.",
+      "errPointsBalance": "보유 포인트가 {points}밖에 없어요.",
+      "errSignIn": "포인트로 부스트하려면 로그인하세요."
     }
   },
   "clip": {

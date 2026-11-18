@@ -69,7 +69,14 @@
       "goalProgress": "{progress} / {target} HBD",
       "goalReached": "Obiettivo raggiunto!",
       "topSupporters": "Sostenitori principali",
-      "supporterAmount": "{amount} HBD"
+      "supporterAmount": "{amount} HBD",
+      "assetPoints": "Punti",
+      "pointsAmount": "{points} punti",
+      "pointsBalance": "Hai {points} punti.",
+      "pointsHint": "I punti vengono spesi, lo streamer non riceve denaro. Guadagna punti guardando, chattando, facendo stream e inviando boost.",
+      "errPointsMinimum": "Un boost in punti è di almeno {min} punti.",
+      "errPointsBalance": "Hai solo {points} punti.",
+      "errSignIn": "Accedi per inviare un boost con i punti."
     }
   },
   "clip": {

@@ -68,7 +68,14 @@
       "goalProgress": "{progress} / {target} HBD",
       "goalReached": "लक्ष्य पूरा हुआ!",
       "topSupporters": "टॉप सपोर्टर्स",
-      "supporterAmount": "{amount} HBD"
+      "supporterAmount": "{amount} HBD",
+      "assetPoints": "पॉइंट",
+      "pointsAmount": "{points} पॉइंट",
+      "pointsBalance": "आपके पास {points} पॉइंट हैं।",
+      "pointsHint": "पॉइंट खर्च हो जाते हैं, स्ट्रीमर को कोई पैसा नहीं मिलता। देखकर, चैट करके, स्ट्रीम करके और बूस्ट भेजकर पॉइंट कमाएँ।",
+      "errPointsMinimum": "पॉइंट वाला बूस्ट कम से कम {min} पॉइंट का होता है।",
+      "errPointsBalance": "आपके पास सिर्फ़ {points} पॉइंट हैं।",
+      "errSignIn": "पॉइंट से बूस्ट करने के लिए साइन इन करें।"
     }
   },
   "clip": {
