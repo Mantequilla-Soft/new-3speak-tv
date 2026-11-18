@@ -57,7 +57,8 @@ function EmbedCodeModal({ target, onClose }) {
   const build = { playlist: buildPlaylistEmbedHtml, podcast: buildPodcastEmbedHtml }[target.kind] || buildAudioEmbedHtml
   // "For Hive": a link Hive apps already show as a player (buildHivePlaylistLink).
   const hiveLink = target.kind === 'playlist' && target.owner ? buildHivePlaylistLink(target.owner, target.id) : null
-  const [tab, setTab] = useState('site')
+  // For Hive comes first and is where the popup opens, when there is a Hive link.
+  const [tab, setTab] = useState(hiveLink ? 'forhive' : 'site')
   const forHive = tab === 'forhive' && !!hiveLink
   const code = forHive ? hiveLink : build(target.id, { size, title: target.title })
   const heading = { playlist: 'misc.embed.playlistTitle', podcast: 'misc.embed.podcastTitle' }[target.kind] || 'misc.embed.audioTitle'
@@ -99,8 +100,8 @@ function EmbedCodeModal({ target, onClose }) {
           value={tab}
           onChange={setTab}
           options={[
-            { value: 'site', label: t('misc.embed.tabWebsite') },
             { value: 'forhive', label: t('misc.embed.tabHive') },
+            { value: 'site', label: t('misc.embed.tabWebsite') },
           ]}
         />
       )}
