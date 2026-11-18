@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.116',
+    category: 'general',
+    date: '2026-11-18',
+    summary: 'Simpler Create menu: pick Video, Audio, Streams or Others first, then what to make, with a Back button to go back.',
+  },
+  {
     version: '2.0.115',
     category: 'live',
     date: '2026-11-18',

@@ -210,7 +210,9 @@
       "video": "Film",
       "audio": "Audio",
       "live": "Na żywo",
-      "others": "Inne"
+      "others": "Inne",
+      "streams": "Transmisje",
+      "edit": "Edycja"
     },
     "subtitles": {
       "regularVideo": "Klasyczny film na Twój kanał",
@@ -223,6 +225,12 @@
       "goLiveNow": "Nadawaj na żywo dla obserwujących",
       "communitySnap": "Szybki wpis w zakładce społeczności",
       "playlist": "Zbierz filmy w listę do udostępnienia"
+    },
+    "categories": {
+      "video": "Prześlij, nagraj lub edytuj wideo",
+      "audio": "Muzyka, podcasty i edycja dźwięku",
+      "streams": "Nadawaj na żywo sam lub z gośćmi",
+      "others": "Snapy i playlisty"
     }
   },
   "chat": {

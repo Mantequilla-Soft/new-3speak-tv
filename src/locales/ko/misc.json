@@ -210,7 +210,9 @@
       "video": "동영상",
       "audio": "오디오",
       "live": "라이브",
-      "others": "기타"
+      "others": "기타",
+      "streams": "방송",
+      "edit": "편집"
     },
     "subtitles": {
       "regularVideo": "채널용 일반 동영상",
@@ -223,6 +225,12 @@
       "goLiveNow": "팔로워에게 라이브 방송",
       "communitySnap": "커뮤니티 탭에 간단히 게시",
       "playlist": "동영상을 공유할 수 있는 목록으로 묶기"
+    },
+    "categories": {
+      "video": "동영상 업로드, 녹화, 편집",
+      "audio": "음악, 팟캐스트, 오디오 편집",
+      "streams": "혼자 또는 게스트와 라이브 방송",
+      "others": "스냅과 재생목록"
     }
   },
   "chat": {

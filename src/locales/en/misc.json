@@ -210,7 +210,9 @@
       "video": "Video",
       "audio": "Audio",
       "live": "Live",
-      "others": "Others"
+      "others": "Others",
+      "streams": "Streams",
+      "edit": "Edit"
     },
     "subtitles": {
       "regularVideo": "Classic video for your channel",
@@ -223,6 +225,12 @@
       "goLiveNow": "Stream live to your followers",
       "communitySnap": "Quick post on your community tab",
       "playlist": "Group videos into a shareable list"
+    },
+    "categories": {
+      "video": "Upload, record or edit a video",
+      "audio": "Music, podcasts and audio editing",
+      "streams": "Go live alone or with guests",
+      "others": "Snaps and playlists"
     }
   },
   "chat": {

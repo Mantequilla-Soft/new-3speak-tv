@@ -210,7 +210,9 @@
       "video": "视频",
       "audio": "音频",
       "live": "直播",
-      "others": "其他"
+      "others": "其他",
+      "streams": "直播",
+      "edit": "编辑"
     },
     "subtitles": {
       "regularVideo": "发布到频道的普通视频",
@@ -223,6 +225,12 @@
       "goLiveNow": "向你的关注者直播",
       "communitySnap": "在社区标签页快速发帖",
       "playlist": "把视频整理成可分享的列表"
+    },
+    "categories": {
+      "video": "上传、录制或剪辑视频",
+      "audio": "音乐、播客和音频编辑",
+      "streams": "独自或与嘉宾一起直播",
+      "others": "快拍和播放列表"
     }
   },
   "chat": {

@@ -210,7 +210,9 @@
       "video": "動画",
       "audio": "音声",
       "live": "ライブ",
-      "others": "その他"
+      "others": "その他",
+      "streams": "配信",
+      "edit": "編集"
     },
     "subtitles": {
       "regularVideo": "チャンネル向けの通常の動画",
@@ -223,6 +225,12 @@
       "goLiveNow": "フォロワーに向けてライブ配信",
       "communitySnap": "コミュニティタブに手軽に投稿",
       "playlist": "動画をまとめて共有できるリストに"
+    },
+    "categories": {
+      "video": "動画をアップロード・録画・編集",
+      "audio": "音楽、ポッドキャスト、音声編集",
+      "streams": "ひとりで、またはゲストと配信",
+      "others": "スナップとプレイリスト"
     }
   },
   "chat": {

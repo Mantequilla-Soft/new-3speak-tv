@@ -210,7 +210,9 @@
       "video": "Video",
       "audio": "Âm thanh",
       "live": "Trực tiếp",
-      "others": "Khác"
+      "others": "Khác",
+      "streams": "Phát trực tiếp",
+      "edit": "Chỉnh sửa"
     },
     "subtitles": {
       "regularVideo": "Video truyền thống cho kênh của bạn",
@@ -223,6 +225,12 @@
       "goLiveNow": "Phát trực tiếp cho người theo dõi",
       "communitySnap": "Bài đăng nhanh trên tab cộng đồng",
       "playlist": "Gom video thành danh sách để chia sẻ"
+    },
+    "categories": {
+      "video": "Tải lên, quay hoặc chỉnh sửa video",
+      "audio": "Nhạc, podcast và chỉnh sửa âm thanh",
+      "streams": "Phát trực tiếp một mình hoặc cùng khách mời",
+      "others": "Snap và danh sách phát"
     }
   },
   "chat": {

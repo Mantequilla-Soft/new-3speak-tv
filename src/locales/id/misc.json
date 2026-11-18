@@ -210,7 +210,9 @@
       "video": "Video",
       "audio": "Audio",
       "live": "Live",
-      "others": "Lainnya"
+      "others": "Lainnya",
+      "streams": "Siaran",
+      "edit": "Sunting"
     },
     "subtitles": {
       "regularVideo": "Video klasik untuk kanalmu",
@@ -223,6 +225,12 @@
       "goLiveNow": "Siaran langsung untuk pengikutmu",
       "communitySnap": "Postingan cepat di tab komunitasmu",
       "playlist": "Kumpulkan video dalam daftar yang bisa dibagikan"
+    },
+    "categories": {
+      "video": "Unggah, rekam, atau sunting video",
+      "audio": "Musik, podcast, dan penyuntingan audio",
+      "streams": "Siaran langsung sendiri atau bersama tamu",
+      "others": "Snap dan playlist"
     }
   },
   "chat": {

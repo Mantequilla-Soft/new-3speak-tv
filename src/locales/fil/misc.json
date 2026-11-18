@@ -210,7 +210,9 @@
       "video": "Video",
       "audio": "Audio",
       "live": "Live",
-      "others": "Iba pa"
+      "others": "Iba pa",
+      "streams": "Mga stream",
+      "edit": "I-edit"
     },
     "subtitles": {
       "regularVideo": "Klasikong video para sa channel mo",
@@ -223,6 +225,12 @@
       "goLiveNow": "Mag-stream nang live para sa mga follower mo",
       "communitySnap": "Mabilis na post sa community tab mo",
       "playlist": "Pagsamahin ang mga video sa listahang maibabahagi"
+    },
+    "categories": {
+      "video": "Mag-upload, mag-record o mag-edit ng video",
+      "audio": "Musika, podcast at pag-edit ng audio",
+      "streams": "Mag-live nang mag-isa o kasama ang mga bisita",
+      "others": "Mga snap at playlist"
     }
   },
   "chat": {

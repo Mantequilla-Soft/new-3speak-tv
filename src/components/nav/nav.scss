@@ -412,44 +412,19 @@
   @include compact { display: none !important; }
 }
 
-// ── The Create menu (UploadLinks inside), design 44c ───────────────────────
-// One column grouped Video / Audio / Live / Others, the same in the desktop
-// flyout and the narrow-screen sheet. Rows: a 32px icon well, the 12/700 label
-// and its 10px subtitle; UploadLinks.scss draws the inside of a row.
-@mixin share-items {
-  .share-menu-layout { display: flex; flex-direction: column; min-width: 0; }
-  .share-menu-group { display: flex; flex-direction: column; min-width: 0; }
-
-  .nav-upload-flyout-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    min-height: 44px;
-    padding: 6px 10px;
-    border-radius: var(--r-md);
-    color: var(--text);
-    text-decoration: none;
-    white-space: normal;
-    cursor: pointer;
-    transition: background var(--t-fast) var(--ease);
-
-    &:hover,
-    &:focus-visible {
-      background: var(--bg-hover);
-      color: var(--text);
-    }
-  }
-}
+// ── The Create menu (UploadLinks inside) ──────────────────────────────────
+// Category tiles, then a category's entries as tiles with a Back button, the
+// same in the desktop flyout and the narrow-screen sheet; UploadLinks.scss
+// draws the tiles.
 
 // Wide screens only (below 1025px it is the sheet, Nav.jsx): a 24-radius menu
-// card with 8 padding (44c), its groups side by side (owner 2026-11-12: "a
-// horizontal menu again for desktop"), one column each, a hairline between.
+// card with 8 padding (44c), a fixed width so it does not jump between views.
 .nav-upload-flyout {
   @include v2.menu;
   position: absolute;
   top: calc(100% + 10px);
   right: 0;
-  width: max-content;
+  width: 400px;
   // It hangs off .nav-right (positioned, only the buttons wide): cap it at the
   // bar's inner width (the window minus the page padding and the bar's 16px).
   max-width: calc(100vw - 2 * var(--page-pad) - 32px);
@@ -467,32 +442,10 @@
     transform: translateY(-4px);
   }
 
-  @include share-items;
-
-  .share-menu-layout {
-    flex-direction: row;
-    align-items: stretch;
-  }
-
-  .share-menu-group {
-    flex: 0 1 220px;
-    width: 220px;
-    min-width: 0;
-    padding: 0 4px;
-
-    + .share-menu-group { border-left: 1px solid var(--border); }
-  }
-
   @media (prefers-reduced-motion: reduce) {
     animation: none;
     transition: none;
   }
-}
-
-// The same menu as a v2 Dialog (bottom sheet on phones, dialog on tablets):
-// the same single column.
-.nav-upload-sheet {
-  @include share-items;
 }
 
 @keyframes nav-tabs-in {

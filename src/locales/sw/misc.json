@@ -210,7 +210,9 @@
       "video": "Video",
       "audio": "Sauti",
       "live": "Mubashara",
-      "others": "Nyingine"
+      "others": "Nyingine",
+      "streams": "Matangazo",
+      "edit": "Hariri"
     },
     "subtitles": {
       "regularVideo": "Video ya kawaida kwa chaneli yako",
@@ -223,6 +225,12 @@
       "goLiveNow": "Tiririsha mubashara kwa wafuasi wako",
       "communitySnap": "Chapisho la haraka kwenye kichupo cha jumuiya",
       "playlist": "Kusanya video kwenye orodha ya kushiriki"
+    },
+    "categories": {
+      "video": "Pakia, rekodi au hariri video",
+      "audio": "Muziki, podikasti na uhariri wa sauti",
+      "streams": "Tangaza mubashara peke yako au na wageni",
+      "others": "Snap na orodha za kucheza"
     }
   },
   "chat": {

@@ -210,7 +210,9 @@
       "video": "Video",
       "audio": "Ses",
       "live": "Canlı",
-      "others": "Diğer"
+      "others": "Diğer",
+      "streams": "Yayınlar",
+      "edit": "Düzenle"
     },
     "subtitles": {
       "regularVideo": "Kanalın için klasik video",
@@ -223,6 +225,12 @@
       "goLiveNow": "Takipçilerine canlı yayın yap",
       "communitySnap": "Topluluk sekmende hızlı gönderi",
       "playlist": "Videoları paylaşılabilir bir listede topla"
+    },
+    "categories": {
+      "video": "Video yükle, kaydet veya düzenle",
+      "audio": "Müzik, podcast ve ses düzenleme",
+      "streams": "Tek başına ya da konuklarla canlı yayın yap",
+      "others": "Snap'ler ve oynatma listeleri"
     }
   },
   "chat": {

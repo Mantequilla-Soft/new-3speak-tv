@@ -210,7 +210,9 @@
       "video": "Video",
       "audio": "Audio",
       "live": "Live",
-      "others": "Overig"
+      "others": "Overig",
+      "streams": "Streams",
+      "edit": "Bewerken"
     },
     "subtitles": {
       "regularVideo": "Klassieke video voor je kanaal",
@@ -223,6 +225,12 @@
       "goLiveNow": "Stream live voor je volgers",
       "communitySnap": "Snel bericht op je community-tabblad",
       "playlist": "Groepeer video's in een deelbare lijst"
+    },
+    "categories": {
+      "video": "Een video uploaden, opnemen of bewerken",
+      "audio": "Muziek, podcasts en audiobewerking",
+      "streams": "Alleen of met gasten live gaan",
+      "others": "Snaps en playlists"
     }
   },
   "chat": {

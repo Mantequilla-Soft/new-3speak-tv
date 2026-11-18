@@ -210,7 +210,9 @@
       "video": "Vidéo",
       "audio": "Audio",
       "live": "Live",
-      "others": "Autres"
+      "others": "Autres",
+      "streams": "Directs",
+      "edit": "Montage"
     },
     "subtitles": {
       "regularVideo": "Vidéo classique pour ta chaîne",
@@ -223,6 +225,12 @@
       "goLiveNow": "Diffuse en direct pour tes abonnés",
       "communitySnap": "Publication rapide dans ton onglet communauté",
       "playlist": "Regroupez des vidéos dans une liste à partager"
+    },
+    "categories": {
+      "video": "Mettre en ligne, enregistrer ou monter une vidéo",
+      "audio": "Musique, podcasts et montage audio",
+      "streams": "Passer en direct seul ou avec des invités",
+      "others": "Snaps et playlists"
     }
   },
   "chat": {

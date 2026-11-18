@@ -1,7 +1,8 @@
 // @vitest-environment jsdom
-// The share menu's entries (components/UploadLinks.jsx), here the Audio editor:
-// it sits right after "Music / Audio" in their own "Audio" category, only
-// exists with the editor feature on,
+// The Create menu (components/UploadLinks.jsx): category tiles first, a
+// category's entries as tiles behind them. Then the Audio editor: it sits
+// right after "Music / Audio" in the Audio category, only exists with the
+// editor feature on,
 // goes through the same upload gate as every upload entry and then asks App.jsx
 // to open the editor in audio mode (open-audio-editor, no file).
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
@@ -47,67 +48,96 @@ afterEach(() => {
 })
 
 const entry = () => screen.queryByTitle('Audio Editor')
+const titles = () => [...document.querySelectorAll('.share-link')].map((a) => a.getAttribute('title'))
+const cats = () => [...document.querySelectorAll('.share-menu-cat .share-menu-label')].map((el) => el.textContent)
+// Opens a category tile: its entries replace the categories.
+async function openCat(user, name) {
+  await user.click(screen.getByRole('button', { name: new RegExp(`^${name}`) }))
+}
+// Renders the menu and opens the Audio category, where the editor lives.
+async function renderAudio(props = {}) {
+  const r = renderWithProviders(<UploadLinks linkClass="share-link" {...props} />)
+  await openCat(r.user, 'Audio')
+  return r
+}
+
+describe('UploadLinks: category tiles', () => {
+  it('starts with the categories as tiles, no entries yet', () => {
+    useAppStore.setState({ user: 'badadib' })
+    renderWithProviders(<UploadLinks linkClass="share-link" />)
+    expect(cats()).toEqual(['Video', 'Audio', 'Others']) // no streams: openpods off in this test
+    expect(titles()).toEqual([])
+    expect(screen.getByRole('button', { name: /^Video/ })).toHaveTextContent('Upload, record or edit a video')
+  })
+
+  it('leaves out a category with nothing in it (signed out: no Others)', () => {
+    renderWithProviders(<UploadLinks linkClass="share-link" />)
+    expect(cats()).toEqual(['Video', 'Audio'])
+  })
+
+  it('shows a category\'s entries as tiles with a Back button to the categories', async () => {
+    const onStep = vi.fn()
+    const { user } = renderWithProviders(<UploadLinks linkClass="share-link" onStep={onStep} />)
+    await openCat(user, 'Video')
+    expect(titles()).toEqual(['Regular Video', 'Vertical Short', 'Shorts Editor', 'Video Editor'])
+    expect(cats()).toEqual([])
+    const back = screen.getByRole('button', { name: 'Back' })
+    expect(back).toHaveFocus()
+    await user.click(back)
+    expect(cats()).toEqual(['Video', 'Audio'])
+    expect(screen.getByRole('button', { name: /^Video/ })).toHaveFocus()
+    expect(onStep).toHaveBeenCalledTimes(2)
+  })
+
+  it('keeps a click on a tile or Back from reaching the menu around it (the flyout closes on clicks)', async () => {
+    const outer = vi.fn()
+    const { user } = renderWithProviders(<div onClick={outer}><UploadLinks linkClass="share-link" /></div>)
+    await openCat(user, 'Audio')
+    await user.click(screen.getByRole('button', { name: 'Back' }))
+    expect(outer).not.toHaveBeenCalled()
+  })
+
+  it('puts the 24h story under Video for a Hive account, Snap and Playlist under Others', async () => {
+    useAppStore.setState({ user: 'badadib' })
+    const { user } = renderWithProviders(<UploadLinks linkClass="share-link" />)
+    await openCat(user, 'Video')
+    // the story gets its own row, the editors below under an "Edit" heading
+    expect(titles()).toEqual(['Regular Video', 'Vertical Short', 'Story (24h)', 'Shorts Editor', 'Video Editor'])
+    const cells = [...document.querySelector('.share-menu-grid').children]
+    expect(cells[3]).toHaveClass('share-menu-subheading')
+    expect(cells[3]).toHaveTextContent('Edit')
+    await user.click(screen.getByRole('button', { name: 'Back' }))
+    await openCat(user, 'Others')
+    expect(titles()).toEqual(['Community Snap', 'Playlist'])
+  })
+})
 
 describe('UploadLinks: Audio editor entry', () => {
-  it('sits right after Music / Audio, with what it does under it', () => {
-    renderWithProviders(<UploadLinks linkClass="share-link" />)
-    const links = [...document.querySelectorAll('.share-link')].map((a) => a.getAttribute('title'))
-    const at = links.indexOf('Music / Audio')
-    expect(at).toBeGreaterThanOrEqual(0)
-    expect(links[at + 1]).toBe('Audio Editor')
+  it('sits right after Music / Audio in the Audio category, with what it does under it', async () => {
+    await renderAudio()
+    expect(titles()).toEqual(['Music / Audio', 'Audio Editor'])
     expect(entry()).toHaveTextContent('Cut, clean up and level')
   })
 
-  it('the video entries sit under Video, audio upload and the audio editor under their own Audio category', () => {
-    renderWithProviders(<UploadLinks linkClass="share-link" />)
-    // headings and entries in menu order
-    const order = [...document.querySelectorAll('.share-menu-heading, .share-link')]
-      .map((el) => (el.classList.contains('share-menu-heading') ? `# ${el.textContent}` : el.getAttribute('title')))
-    const audio = order.indexOf('# Audio')
-    expect(order[0]).toBe('# Video')
-    expect(order).not.toContain('# Upload')
-    expect(audio).toBeGreaterThan(order.indexOf('# Video'))
-    expect(order.slice(audio + 1, audio + 3)).toEqual(['Music / Audio', 'Audio Editor'])
-    // the video entries stay under Video, before the Audio heading
-    expect(order.indexOf('Shorts Editor')).toBeLessThan(audio)
-  })
-
-  it('wraps each category in its own group (the desktop flyout lays them out as columns)', () => {
-    renderWithProviders(<UploadLinks linkClass="share-link" />)
-    const groups = [...document.querySelectorAll('.share-menu-group')]
-    expect(groups.map((g) => g.querySelector('.share-menu-heading')?.textContent)).toEqual(['Video', 'Audio']) // signed out: no Others
-    // every entry sits inside a group, under its heading
-    for (const link of document.querySelectorAll('.share-link')) expect(link.closest('.share-menu-group')).not.toBeNull()
-    expect([...groups[1].querySelectorAll('.share-link')].map((a) => a.getAttribute('title'))).toEqual(['Music / Audio', 'Audio Editor'])
-  })
-
-  it('puts the categories side by side in one layout box (columns come from nav.scss)', () => {
-    renderWithProviders(<UploadLinks linkClass="share-link" />)
-    const layout = document.querySelector('.share-menu-layout')
-    expect(layout).not.toBeNull()
-    for (const g of document.querySelectorAll('.share-menu-group')) expect(g.parentElement).toBe(layout)
-  })
-
-  it('keeps the Audio category for the audio upload without the editor feature', () => {
+  it('keeps the Audio category for the audio upload without the editor feature', async () => {
     m.editor = false
-    renderWithProviders(<UploadLinks linkClass="share-link" />)
-    const order = [...document.querySelectorAll('.share-menu-heading, .share-link')]
-      .map((el) => (el.classList.contains('share-menu-heading') ? `# ${el.textContent}` : el.getAttribute('title')))
-    const audio = order.indexOf('# Audio')
-    expect(audio).toBeGreaterThan(0)
-    expect(order[audio + 1]).toBe('Music / Audio')
+    await renderAudio()
+    expect(titles()).toEqual(['Music / Audio'])
   })
 
-  it('is not there without the editor feature', () => {
+  it('is not there without the editor feature', async () => {
     m.editor = false
-    renderWithProviders(<UploadLinks linkClass="share-link" />)
+    const { user } = await renderAudio()
     expect(entry()).toBeNull()
+    await user.click(screen.getByRole('button', { name: 'Back' }))
+    await openCat(user, 'Video')
     expect(screen.queryByTitle('Shorts Editor')).toBeNull()
+    expect(document.querySelector('.share-menu-subheading')).toBeNull()
   })
 
   it('opens the editor in audio mode without a file, and closes the menu', async () => {
     const onClick = vi.fn()
-    const { user } = renderWithProviders(<UploadLinks linkClass="share-link" onClick={onClick} />)
+    const { user } = await renderAudio({ onClick })
     await user.click(entry())
     await waitFor(() => expect(events).toHaveLength(1))
     expect(events[0].detail).toBeNull()
@@ -116,7 +146,7 @@ describe('UploadLinks: Audio editor entry', () => {
 
   it('shows the support notice instead for a creator who may not upload', async () => {
     m.settings = { canUpload: false }
-    const { user } = renderWithProviders(<UploadLinks linkClass="share-link" />)
+    const { user } = await renderAudio()
     await user.click(entry())
     await waitFor(() => expect(useSupportBlock.getState().block).toEqual({ reason: 'upload' }))
     expect(events).toHaveLength(0)
@@ -124,7 +154,7 @@ describe('UploadLinks: Audio editor entry', () => {
 
   it('quotes the admin\'s block note in that notice', async () => {
     m.settings = { canUpload: false, uploadBlockedReason: 'Only your own videos.' }
-    const { user } = renderWithProviders(<UploadLinks linkClass="share-link" />)
+    const { user } = await renderAudio()
     await user.click(entry())
     await waitFor(() => expect(useSupportBlock.getState().block).toEqual({ reason: 'upload', note: 'Only your own videos.' }))
   })
@@ -133,12 +163,12 @@ describe('UploadLinks: Audio editor entry', () => {
     const { getCreatorSettings } = await import('../../../src/utils/creatorSettings')
     getCreatorSettings.mockClear()
     useAppStore.setState({ user: null, incubationHandle: 'Newbie' })
-    const { user, unmount } = renderWithProviders(<UploadLinks linkClass="share-link" />)
+    const { user, unmount } = await renderAudio()
     await user.click(entry())
     await waitFor(() => expect(getCreatorSettings).toHaveBeenCalledWith('~newbie'))
     unmount()
     useAppStore.setState({ user: 'badadib', incubationHandle: null })
-    const again = renderWithProviders(<UploadLinks linkClass="share-link" />)
+    const again = await renderAudio()
     await again.user.click(entry())
     await waitFor(() => expect(getCreatorSettings).toHaveBeenLastCalledWith('badadib'))
   })
@@ -148,22 +178,21 @@ describe('UploadLinks: Audio editor entry', () => {
     Object.defineProperty(audio, 'paused', { configurable: true, get: () => false })
     audio.pause = vi.fn()
     document.body.appendChild(audio)
-    const { user } = renderWithProviders(<UploadLinks linkClass="share-link" />)
+    const { user } = await renderAudio()
     await user.click(entry())
     expect(audio.pause).toHaveBeenCalled()
     audio.remove()
   })
 
-  it('offers the video editor for a landscape video under Video, after the Shorts Editor, without the editor feature not at all', async () => {
+  it('offers the video editor for a landscape video under Video, after the Shorts Editor', async () => {
     const opened = []
     const onVideo = (e) => opened.push(e)
     window.addEventListener('open-video-editor', onVideo)
     try {
       const { user } = renderWithProviders(<UploadLinks linkClass="share-link" />)
-      const order = [...document.querySelectorAll('.share-menu-heading, .share-link')]
-        .map((el) => (el.classList.contains('share-menu-heading') ? `# ${el.textContent}` : el.getAttribute('title')))
+      await openCat(user, 'Video')
+      const order = titles()
       expect(order.indexOf('Video Editor')).toBe(order.indexOf('Shorts Editor') + 1)
-      expect(order.indexOf('Video Editor')).toBeLessThan(order.indexOf('# Audio'))
       expect(screen.getByTitle('Video Editor')).toHaveTextContent('Edit a landscape video up to 10 minutes')
       await user.click(screen.getByTitle('Video Editor'))
       await waitFor(() => expect(opened).toHaveLength(1))

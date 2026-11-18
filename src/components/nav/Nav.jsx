@@ -117,7 +117,7 @@ function NavUploadDropdown() {
       </button>
       {menu.rendered && !asSheet && (
         <div className={`nav-upload-flyout${menu.leaving ? ' nav-upload-flyout--leaving' : ''}`} onClick={menu.close}>
-          <UploadLinks linkClass="nav-upload-flyout-item" iconClass="nav-upload-flyout-icon" />
+          <UploadLinks linkClass="nav-upload-flyout-item" iconClass="nav-upload-flyout-icon" onStep={menu.hold} />
         </div>
       )}
       {/* The v2 Dialog: a bottom sheet under 768px, a centred dialog on a
