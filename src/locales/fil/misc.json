@@ -164,7 +164,12 @@
     "audioMinimal": "Minimal",
     "heightSub": "Buong lapad, {{height}} px ang taas · Responsive",
     "podcastTitle": "I-embed ang podcast na ito",
-    "podcastHint": "Pinapatugtog ang bawat episode ng show, pati ang mga bago sa paglabas nila."
+    "podcastHint": "Pinapatugtog ang bawat episode ng show, pati ang mga bago sa paglabas nila.",
+    "embedWhere": "Saan ie-embed",
+    "tabWebsite": "Website",
+    "tabHive": "Para sa Hive",
+    "hiveLink": "Link para sa mga post sa Hive",
+    "hivePlaylistHint": "I-paste ang link na ito sa isang Hive post o wave. Ang mga Hive app na nagpapakita ng mga 3Speak video, gaya ng Ecency, ay pinapatugtog ang playlist mismo sa post."
   },
   "incubation": {
     "requestFailed": "Pumalya ang request ({{status}})",

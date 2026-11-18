@@ -164,7 +164,12 @@
     "audioMinimal": "최소",
     "heightSub": "전체 너비, 높이 {{height}} px · 반응형",
     "podcastTitle": "이 팟캐스트 임베드",
-    "podcastHint": "새 에피소드가 나오는 대로 포함해 프로그램의 모든 에피소드를 재생해요."
+    "podcastHint": "새 에피소드가 나오는 대로 포함해 프로그램의 모든 에피소드를 재생해요.",
+    "embedWhere": "삽입할 곳",
+    "tabWebsite": "웹사이트",
+    "tabHive": "Hive용",
+    "hiveLink": "Hive 게시물용 링크",
+    "hivePlaylistHint": "이 링크를 Hive 게시물이나 wave에 붙여 넣으세요. Ecency처럼 3Speak 영상을 보여 주는 Hive 앱에서는 게시물 안에서 바로 재생목록이 재생됩니다."
   },
   "incubation": {
     "requestFailed": "요청 실패({{status}})",

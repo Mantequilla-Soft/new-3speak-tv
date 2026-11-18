@@ -164,7 +164,12 @@
     "audioMinimal": "ミニマル",
     "heightSub": "幅いっぱい、高さ {{height}} px · レスポンシブ",
     "podcastTitle": "このポッドキャストを埋め込む",
-    "podcastHint": "番組のすべてのエピソードを、新しいものも公開され次第再生します。"
+    "podcastHint": "番組のすべてのエピソードを、新しいものも公開され次第再生します。",
+    "embedWhere": "埋め込み先",
+    "tabWebsite": "ウェブサイト",
+    "tabHive": "Hive 用",
+    "hiveLink": "Hive 投稿用のリンク",
+    "hivePlaylistHint": "このリンクを Hive の投稿や wave に貼り付けてください。Ecency など 3Speak の動画を表示する Hive アプリでは、投稿内でそのままプレイリストを再生できます。"
   },
   "incubation": {
     "requestFailed": "リクエストに失敗しました（{{status}}）",

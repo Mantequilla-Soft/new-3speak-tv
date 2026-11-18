@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.112',
+    category: 'playlists',
+    date: '2026-11-18',
+    summary: 'Playlist embed popup has a For Hive tab with a link that Hive apps like Ecency show as the playlist player in posts and waves.',
+  },
+  {
     version: '2.0.111',
     category: 'live',
     date: '2026-11-17',

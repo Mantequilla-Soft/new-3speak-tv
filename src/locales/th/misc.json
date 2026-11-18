@@ -164,7 +164,12 @@
     "audioMinimal": "เรียบง่าย",
     "heightSub": "กว้างเต็ม สูง {{height}} px · ปรับขนาดอัตโนมัติ",
     "podcastTitle": "ฝังพอดแคสต์นี้",
-    "podcastHint": "เล่นทุกตอนของรายการ รวมถึงตอนใหม่เมื่อออก"
+    "podcastHint": "เล่นทุกตอนของรายการ รวมถึงตอนใหม่เมื่อออก",
+    "embedWhere": "ฝังที่ไหน",
+    "tabWebsite": "เว็บไซต์",
+    "tabHive": "สำหรับ Hive",
+    "hiveLink": "ลิงก์สำหรับโพสต์ Hive",
+    "hivePlaylistHint": "วางลิงก์นี้ในโพสต์หรือ wave บน Hive แอป Hive ที่แสดงวิดีโอ 3Speak เช่น Ecency จะเล่นเพลย์ลิสต์ในโพสต์ได้ทันที"
   },
   "incubation": {
     "requestFailed": "คำขอล้มเหลว ({{status}})",

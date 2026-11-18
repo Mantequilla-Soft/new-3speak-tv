@@ -164,7 +164,12 @@
     "audioMinimal": "Minimaal",
     "heightSub": "Volledige breedte, {{height}} px hoog · Responsief",
     "podcastTitle": "Deze podcast insluiten",
-    "podcastHint": "Speelt elke aflevering van het programma, ook nieuwe zodra ze verschijnen."
+    "podcastHint": "Speelt elke aflevering van het programma, ook nieuwe zodra ze verschijnen.",
+    "embedWhere": "Waar insluiten",
+    "tabWebsite": "Website",
+    "tabHive": "Voor Hive",
+    "hiveLink": "Link voor Hive-posts",
+    "hivePlaylistHint": "Plak deze link in een Hive-post of wave. Hive-apps die 3Speak-video’s tonen, zoals Ecency, spelen de playlist direct in de post af."
   },
   "incubation": {
     "requestFailed": "Verzoek mislukt ({{status}})",

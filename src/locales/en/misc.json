@@ -164,7 +164,12 @@
     "audioMinimal": "Minimal",
     "heightSub": "Full width, {{height}} px tall · Responsive",
     "podcastTitle": "Embed this podcast",
-    "podcastHint": "Plays every episode of the show, including new ones as they come out."
+    "podcastHint": "Plays every episode of the show, including new ones as they come out.",
+    "embedWhere": "Where to embed",
+    "tabWebsite": "Website",
+    "tabHive": "For Hive",
+    "hiveLink": "Link for Hive posts",
+    "hivePlaylistHint": "Paste this link into a Hive post or wave. Hive apps that show 3Speak videos, like Ecency, play the playlist right in the post."
   },
   "incubation": {
     "requestFailed": "Request failed ({{status}})",

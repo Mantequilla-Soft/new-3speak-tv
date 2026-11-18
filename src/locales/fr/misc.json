@@ -164,7 +164,12 @@
     "audioMinimal": "Minimal",
     "heightSub": "Pleine largeur, {{height}} px de haut · Adaptatif",
     "podcastTitle": "Intégrer ce podcast",
-    "podcastHint": "Lit tous les épisodes de l'émission, y compris les nouveaux dès leur sortie."
+    "podcastHint": "Lit tous les épisodes de l'émission, y compris les nouveaux dès leur sortie.",
+    "embedWhere": "Où intégrer",
+    "tabWebsite": "Site web",
+    "tabHive": "Pour Hive",
+    "hiveLink": "Lien pour les publications Hive",
+    "hivePlaylistHint": "Collez ce lien dans une publication ou une wave Hive. Les applis Hive qui affichent les vidéos 3Speak, comme Ecency, lisent la playlist directement dans la publication."
   },
   "incubation": {
     "requestFailed": "Échec de la requête ({{status}})",

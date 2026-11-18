@@ -164,7 +164,12 @@
     "audioMinimal": "Minimal",
     "heightSub": "Tam genişlik, {{height}} px yükseklik · Duyarlı",
     "podcastTitle": "Bu podcast'i yerleştir",
-    "podcastHint": "Programın tüm bölümlerini, yenileri çıktıkça onları da çalar."
+    "podcastHint": "Programın tüm bölümlerini, yenileri çıktıkça onları da çalar.",
+    "embedWhere": "Nereye yerleştirilecek",
+    "tabWebsite": "Web sitesi",
+    "tabHive": "Hive için",
+    "hiveLink": "Hive gönderileri için bağlantı",
+    "hivePlaylistHint": "Bu bağlantıyı bir Hive gönderisine veya wave’e yapıştırın. Ecency gibi 3Speak videolarını gösteren Hive uygulamaları çalma listesini doğrudan gönderide çalar."
   },
   "incubation": {
     "requestFailed": "İstek başarısız ({{status}})",

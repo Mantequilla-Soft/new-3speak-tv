@@ -164,7 +164,12 @@
     "audioMinimal": "Ndogo kabisa",
     "heightSub": "Upana kamili, urefu {{height}} px · Inayojirekebisha",
     "podcastTitle": "Pachika podikasti hii",
-    "podcastHint": "Inacheza kila kipindi cha podikasti, pamoja na vipya vinapotoka."
+    "podcastHint": "Inacheza kila kipindi cha podikasti, pamoja na vipya vinapotoka.",
+    "embedWhere": "Mahali pa kupachika",
+    "tabWebsite": "Tovuti",
+    "tabHive": "Kwa Hive",
+    "hiveLink": "Kiungo cha machapisho ya Hive",
+    "hivePlaylistHint": "Bandika kiungo hiki kwenye chapisho au wave ya Hive. Programu za Hive zinazoonyesha video za 3Speak, kama Ecency, hucheza orodha moja kwa moja kwenye chapisho."
   },
   "incubation": {
     "requestFailed": "Ombi limeshindwa ({{status}})",

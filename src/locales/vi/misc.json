@@ -164,7 +164,12 @@
     "audioMinimal": "Tối giản",
     "heightSub": "Toàn chiều rộng, cao {{height}} px · Tự co giãn",
     "podcastTitle": "Nhúng podcast này",
-    "podcastHint": "Phát mọi tập của chương trình, kể cả các tập mới ngay khi ra mắt."
+    "podcastHint": "Phát mọi tập của chương trình, kể cả các tập mới ngay khi ra mắt.",
+    "embedWhere": "Nơi nhúng",
+    "tabWebsite": "Trang web",
+    "tabHive": "Cho Hive",
+    "hiveLink": "Liên kết cho bài đăng Hive",
+    "hivePlaylistHint": "Dán liên kết này vào một bài đăng hoặc wave trên Hive. Các ứng dụng Hive hiển thị video 3Speak, như Ecency, sẽ phát danh sách phát ngay trong bài đăng."
   },
   "incubation": {
     "requestFailed": "Yêu cầu thất bại ({{status}})",

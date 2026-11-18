@@ -164,7 +164,12 @@
     "audioMinimal": "极简",
     "heightSub": "全宽，高 {{height}} px · 自适应",
     "podcastTitle": "嵌入此播客",
-    "podcastHint": "播放节目的所有单集，新单集一发布也会包含在内。"
+    "podcastHint": "播放节目的所有单集，新单集一发布也会包含在内。",
+    "embedWhere": "嵌入位置",
+    "tabWebsite": "网站",
+    "tabHive": "用于 Hive",
+    "hiveLink": "用于 Hive 帖子的链接",
+    "hivePlaylistHint": "将此链接粘贴到 Hive 帖子或 wave 中。显示 3Speak 视频的 Hive 应用（如 Ecency）会直接在帖子中播放该播放列表。"
   },
   "incubation": {
     "requestFailed": "请求失败（{{status}}）",

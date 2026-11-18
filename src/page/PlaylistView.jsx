@@ -837,7 +837,7 @@ function PlaylistView() {
                       size={36}
                       icon="code"
                       className="pod-btn"
-                      onClick={() => openEmbedCode({ kind: 'playlist', id: playlistId, title: playlist.name })}
+                      onClick={() => openEmbedCode({ kind: 'playlist', id: playlistId, title: playlist.name, owner: playlist.owner })}
                       title={t('chat.share.embedOnWebsite')}
                     >
                       {t('misc.embed.embed')}

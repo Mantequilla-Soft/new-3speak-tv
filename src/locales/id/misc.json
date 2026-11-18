@@ -164,7 +164,12 @@
     "audioMinimal": "Minimal",
     "heightSub": "Lebar penuh, tinggi {{height}} px · Responsif",
     "podcastTitle": "Sematkan podcast ini",
-    "podcastHint": "Memutar semua episode acara, termasuk episode baru begitu terbit."
+    "podcastHint": "Memutar semua episode acara, termasuk episode baru begitu terbit.",
+    "embedWhere": "Tempat menyematkan",
+    "tabWebsite": "Situs web",
+    "tabHive": "Untuk Hive",
+    "hiveLink": "Tautan untuk postingan Hive",
+    "hivePlaylistHint": "Tempel tautan ini di postingan atau wave Hive. Aplikasi Hive yang menampilkan video 3Speak, seperti Ecency, memutar playlist langsung di postingan."
   },
   "incubation": {
     "requestFailed": "Permintaan gagal ({{status}})",

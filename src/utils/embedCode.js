@@ -123,6 +123,17 @@ export function buildAudioEmbedHtml(permlink, { size = 'full', title = '' } = {}
   return audioIframe(buildAudioEmbedSrc(permlink, spec.id), spec.height, label);
 }
 
+/**
+ * "For Hive": a link to paste into a Hive post or wave. Hive apps (Ecency and its
+ * Waves, ...) embed play.3speak.tv video links and keep only `v`, so the playlist
+ * rides on the video link shape, owner first: the public player sees it is a
+ * playlist, not a video, and opens the audio playlist player in its place
+ * (snapievideoplayer audioEmbed.js). Without the owner, `v` would read as a stream.
+ */
+export function buildHivePlaylistLink(owner, playlistId) {
+  return `${EMBED_PLAYER_BASE}/watch?v=${encodeURIComponent(owner)}/${encodeURIComponent(playlistId)}`;
+}
+
 /** Ready-to-paste HTML for a playlist. `size` is a PLAYLIST_EMBED_SIZES id. */
 export function buildPlaylistEmbedHtml(playlistId, { size = 'medium', title = '' } = {}) {
   const spec = PLAYLIST_EMBED_SIZES.find((s) => s.id === size) || PLAYLIST_EMBED_SIZES[0];

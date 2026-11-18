@@ -164,7 +164,12 @@
     "audioMinimal": "न्यूनतम",
     "heightSub": "पूरी चौड़ाई, {{height}} px ऊँचाई · रिस्पॉन्सिव",
     "podcastTitle": "यह पॉडकास्ट एम्बेड करें",
-    "podcastHint": "शो के सभी एपिसोड चलाता है, नए एपिसोड भी, जैसे ही वे आते हैं।"
+    "podcastHint": "शो के सभी एपिसोड चलाता है, नए एपिसोड भी, जैसे ही वे आते हैं।",
+    "embedWhere": "कहाँ एम्बेड करें",
+    "tabWebsite": "वेबसाइट",
+    "tabHive": "Hive के लिए",
+    "hiveLink": "Hive पोस्ट के लिए लिंक",
+    "hivePlaylistHint": "इस लिंक को किसी Hive पोस्ट या wave में पेस्ट करें। 3Speak वीडियो दिखाने वाले Hive ऐप, जैसे Ecency, प्लेलिस्ट को सीधे पोस्ट में चलाते हैं।"
   },
   "incubation": {
     "requestFailed": "रिक्वेस्ट फ़ेल हुई ({{status}})",
