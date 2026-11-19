@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.138',
+    category: 'live',
+    date: '2026-11-19',
+    summary: 'Watching a stream on a phone, tap Fullscreen or turn your phone: the stream fills the screen with the chat in a column you can fold away.',
+  },
+  {
     version: '2.0.137',
     category: 'home',
     date: '2026-11-19',
