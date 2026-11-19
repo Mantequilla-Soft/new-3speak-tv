@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.118',
+    category: 'live',
+    date: '2026-11-19',
+    summary: 'Recordings of live streams carry a small VOD badge on their thumbnails, so you can tell them apart from regular uploads.',
+  },
+  {
     version: '2.0.117',
     category: 'live',
     date: '2026-11-19',

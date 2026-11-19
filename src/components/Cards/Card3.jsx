@@ -428,6 +428,7 @@ function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0
               const shortCard = isShortCard(video, shortsGrid);
               const duration = Number(video.spkvideo?.duration || video.duration) || 0;
               const gatedBadge = video.gated && !shortCard;
+              const vodBadge = video.streamVod && !shortCard && !video._liveStream;
               const newBadge = !!isNew?.(video);
               const views = (() => {
                 // Prefer the count already in the feed payload (the only source that
@@ -516,7 +517,7 @@ function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0
               {/* Status pills, stacked at the top-left (the options button owns
                   the top-right). LIVE and PRO are solid accent; the rest are
                   scrim pills with the tone on their icon (43c). */}
-              {(video._liveStream || gatedBadge || newBadge || badgeLabel || video.status || video.publish_type || video.unlisted) && (
+              {(video._liveStream || gatedBadge || vodBadge || newBadge || badgeLabel || video.status || video.publish_type || video.unlisted) && (
                 <div className="card-badges">
                   {/* Live tile. A group-chat (conference) room reads "LIVE CHAT";
                       a standalone stream reads "LIVE". */}
@@ -531,6 +532,11 @@ function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0
                     <span className="card-pill card-gated-badge" title={t('cards.badges.gatedTitle')}>
                       <Icon name="lock" size={12} fill /> {t('cards.badges.pro')}
                     </span>
+                  )}
+
+                  {/* The recording of a live stream (the checker's `streamVod`). */}
+                  {vodBadge && (
+                    <span className="card-pill card-vod-badge" title={t('cards.badges.vodTitle')}>{t('cards.badges.vod')}</span>
                   )}
 
                   {/* A page-wide label, cyan (First Uploads: "First", 49c) */}

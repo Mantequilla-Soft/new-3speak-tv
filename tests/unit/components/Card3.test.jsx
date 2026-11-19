@@ -162,6 +162,21 @@ describe('a grid of video cards', () => {
     expect(within(card('Title v')).getByText(label)).toBeInTheDocument()
   })
 
+  it('badges the recording of a live stream VOD, but not a Short or a running stream', () => {
+    mount({
+      videos: [
+        video('badadib', 'rec', { streamVod: true }),
+        video('badadib', 'plain'),
+        video('badadib', 'short', { streamVod: true, _short: true }),
+        video('badadib', 'on-air', { streamVod: true, _liveStream: true, roomName: 'room-2', thumbnail: '/t.jpg' }),
+      ],
+    })
+    expect(within(card('Title rec')).getByTitle('Recording of a live stream')).toHaveTextContent('VOD')
+    expect(within(card('Title plain')).queryByText('VOD')).not.toBeInTheDocument()
+    expect(within(card('Title short')).queryByText('VOD')).not.toBeInTheDocument()
+    expect(within(card('Title on-air')).queryByText('VOD')).not.toBeInTheDocument()
+  })
+
   it('a scheduled video opens in scheduled mode', () => {
     mount({ videos: [video('badadib', 'later', { _scheduled: true })] })
     expect(card('Title later')).toHaveAttribute('href', '/@badadib/later?scheduled=1')
