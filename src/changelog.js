@@ -18,6 +18,18 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.142',
+    category: 'audio',
+    date: '2026-11-19',
+    summary: 'Writing a comment in the full audio player on a phone, the comment box now stays above the keyboard.',
+  },
+  {
+    version: '2.0.141',
+    category: 'live',
+    date: '2026-11-19',
+    summary: 'On a phone, the stream studio has a Rotate button to go live in landscape, with the controls on the right edge and their panels opening beside them.',
+  },
+  {
     version: '2.0.140',
     category: 'playlists',
     date: '2026-11-19',
