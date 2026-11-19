@@ -22,7 +22,9 @@
     "outcomeWon": "{option} の勝ち",
     "youWon": "{points} ポイントが戻りました",
     "cancelled": "中止になりました。ポイントはそのままです",
-    "close": "閉じる"
+    "close": "閉じる",
+    "showResult": "結果を表示",
+    "hideResult": "結果を隠す"
   },
   "replay": {
     "tab": "ライブチャットのリプレイ",

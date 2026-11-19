@@ -18,6 +18,54 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.129',
+    category: 'live',
+    date: '2026-11-19',
+    summary: 'The OBS chat dock can run polls, predictions, raids and boost settings, with its own link that can be reset.',
+  },
+  {
+    version: '2.0.128',
+    category: 'live',
+    date: '2026-11-19',
+    summary: "A stream page notices when the stream ends: the live badge and clock go away, or it moves to the stream's post.",
+  },
+  {
+    version: '2.0.127',
+    category: 'live',
+    date: '2026-11-19',
+    summary: 'Viewers can set the volume of live streams, or mute them, and the setting is remembered on their device.',
+  },
+  {
+    version: '2.0.126',
+    category: 'live',
+    date: '2026-11-19',
+    summary: 'After a stream ends, Back home goes to the home page, and stream pages are no longer reopened on your next visit.',
+  },
+  {
+    version: '2.0.125',
+    category: 'live',
+    date: '2026-11-19',
+    summary: 'Hosts can place the studio countdown in any corner or the middle of the picture.',
+  },
+  {
+    version: '2.0.124',
+    category: 'live',
+    date: '2026-11-19',
+    summary: 'Poll and prediction results stay in the stream chat and fold to one line after five minutes.',
+  },
+  {
+    version: '2.0.123',
+    category: 'live',
+    date: '2026-11-19',
+    summary: 'Boosting a stream while logged in with ButrAuth now opens the wallet prompt instead of failing with "not logged in".',
+  },
+  {
+    version: '2.0.122',
+    category: 'live',
+    date: '2026-11-19',
+    summary: 'On phones, the live chat under a stream is only as tall as its messages instead of leaving a large empty box.',
+  },
+  {
     version: '2.0.121',
     category: 'upload',
     date: '2026-11-19',

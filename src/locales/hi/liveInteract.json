@@ -22,7 +22,9 @@
     "outcomeWon": "{option} जीता",
     "youWon": "आपको {points} पॉइंट वापस मिले",
     "cancelled": "रद्द, सबके पॉइंट वैसे ही रहेंगे",
-    "close": "बंद करें"
+    "close": "बंद करें",
+    "showResult": "नतीजा दिखाएं",
+    "hideResult": "नतीजा छिपाएं"
   },
   "replay": {
     "tab": "लाइव चैट रीप्ले",

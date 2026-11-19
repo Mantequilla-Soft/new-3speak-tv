@@ -10,6 +10,7 @@ import StreamSignInButton from '../openpods/StreamSignInButton';
 import LiveAdLayer from '../openpods/LiveAdLayer';
 import StreamFullscreenButton from '../openpods/StreamFullscreenButton';
 import StreamWatermark from '../openpods/StreamWatermark';
+import StreamVolumeControl, { useStreamVolume } from '../openpods/StreamVolume';
 import { useBoostLabels } from '../openpods/boostLabels';
 import { useBattleLabels } from '../openpods/battleLabels';
 import { LiveCaptionsOverlay, LiveCaptionsToggle, useCaptionsPref } from '../openpods/LiveCaptions';
@@ -99,6 +100,8 @@ export default function LiveStreamPlayer({ roomName, chatSlot = null, onChatSent
   const [prerollHold, setPrerollHold] = useState(false);
   // Rewind (H14) in the Pro DVR's last minutes; the live sound waits meanwhile.
   const rewind = useStreamRewind(endpoint?.api, roomName, sessionToken);
+  // The viewer's own level and mute, the same on every stream.
+  const vol = useStreamVolume();
   // The goal bar <StreamVideo> draws over the picture, in the site language.
   const boostLabels = useBoostLabels();
   const battleLabels = useBattleLabels();
@@ -120,7 +123,7 @@ export default function LiveStreamPlayer({ roomName, chatSlot = null, onChatSent
         aioha={aioha}
       >
         {connectReady && endpointReady && (
-          <StandaloneWatch key={`${joinKey}:${endpoint.api}`} roomName={roomName} audioMuted={prerollHold || rewind.active} onRaid={onRaid} liveLabels={liveLabels}>
+          <StandaloneWatch key={`${joinKey}:${endpoint.api}`} roomName={roomName} audioMuted={prerollHold || rewind.active || vol.muted} audioVolume={vol.volume} onRaid={onRaid} liveLabels={liveLabels}>
             <StreamVideo showLiveBadge boostLabels={boostLabels} battleLabels={battleLabels} />
             {/* A free host's stream from OBS: the page draws the 3Speak mark
                 the browser studio would have burned into the picture. */}
@@ -136,6 +139,7 @@ export default function LiveStreamPlayer({ roomName, chatSlot = null, onChatSent
             )} />
             <StreamRewindPlayer rewind={rewind} />
             <StreamRewindButton rewind={rewind} variant="overlay" />
+            <StreamVolumeControl volume={vol.volume} muted={vol.muted} onVolume={vol.setVolume} onToggleMute={vol.toggleMute} />
             <StreamBoostButton variant="overlay" />
             <LiveCaptionsOverlay show={captionsOn} />
             <LiveCaptionsToggle variant="overlay" on={captionsOn} onToggle={toggleCaptions} />

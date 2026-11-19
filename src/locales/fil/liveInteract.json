@@ -22,7 +22,9 @@
     "outcomeWon": "Nanalo ang {option}",
     "youWon": "Nabawi mo ang {points} points",
     "cancelled": "Kinansela, walang nawalan ng points",
-    "close": "Isara"
+    "close": "Isara",
+    "showResult": "Ipakita ang resulta",
+    "hideResult": "Itago ang resulta"
   },
   "replay": {
     "tab": "Replay ng live chat",

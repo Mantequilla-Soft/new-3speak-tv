@@ -176,9 +176,15 @@
     },
     "chatBox": {
       "title": "Twój czat w OBS",
-      "desc": "dodaj jako własny dok przeglądarki",
+      "desc": "dodaj jako niestandardowy dok przeglądarki: czat, ankiety, przewidywania, rajdy i ustawienia boostów. Zachowaj link dla siebie.",
       "copy": "Kopiuj URL czatu",
-      "copied": "Skopiowano URL czatu"
+      "copied": "Skopiowano URL czatu",
+      "resetTitle": "Zresetować link doku?",
+      "resetConfirm": "Doki ze starym linkiem od razu przestają obsługiwać ankiety, rajdy i ustawienia boostów; ich czat działa dalej. Potem wklej nowy link do OBS.",
+      "resetButton": "Zresetuj link",
+      "resetDone": "Nowy link doku utworzony i skopiowany. Wklej go do OBS.",
+      "resetDoneNoCopy": "Nowy link doku utworzony. Skopiuj go ponownie i wklej do OBS.",
+      "resetFailed": "Nie udało się zresetować linku doku."
     },
     "card": {
       "copyUrl": "Kopiuj URL serwera",
@@ -294,7 +300,14 @@
       "viewers": "Oglądający teraz",
       "liveFor": "Czas na żywo",
       "timeLeft": "Pozostały czas do końca transmisji",
-      "boosts": "Boosty otrzymane w tej transmisji"
+      "boosts": "Boosty otrzymane w tej transmisji",
+      "controlInvalid": "Ten link doku został zresetowany, więc ankiety, rajdy i ustawienia boostów są tu wyłączone. Skopiuj ponownie URL czatu z karty Szablony w Stream Studio.",
+      "tabs": {
+        "label": "Dok",
+        "chat": "Czat",
+        "live": "Ankiety i rajdy",
+        "boosts": "Boosty"
+      }
     },
     "pro": {
       "title": "Streamowanie z OBS jest częścią 3Speak Pro",

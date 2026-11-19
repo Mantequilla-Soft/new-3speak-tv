@@ -331,7 +331,10 @@
     "topSupporters": "Topsupporters",
     "noSupporters": "Nog geen boosts",
     "full": "Volledig scherm",
-    "loginToChat": "Log in om te chatten"
+    "loginToChat": "Log in om te chatten",
+    "ended": "Deze stream is afgelopen.",
+    "volume": "Volume",
+    "sound": "Geluid"
   },
   "pullToRefresh": {
     "pull": "Trek om te vernieuwen",

@@ -22,7 +22,9 @@
     "outcomeWon": "{option} 获胜",
     "youWon": "你拿回了 {points} 积分",
     "cancelled": "已取消，大家的积分不变",
-    "close": "关闭"
+    "close": "关闭",
+    "showResult": "显示结果",
+    "hideResult": "隐藏结果"
   },
   "replay": {
     "tab": "直播聊天回放",

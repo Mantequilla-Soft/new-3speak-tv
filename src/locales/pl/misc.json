@@ -333,7 +333,10 @@
     "topSupporters": "Najwięksi wspierający",
     "noSupporters": "Brak boostów",
     "full": "Pełny ekran",
-    "loginToChat": "Zaloguj się, aby czatować"
+    "loginToChat": "Zaloguj się, aby czatować",
+    "ended": "Ta transmisja się zakończyła.",
+    "volume": "Głośność",
+    "sound": "Dźwięk"
   },
   "pullToRefresh": {
     "pull": "Pociągnij, aby odświeżyć",

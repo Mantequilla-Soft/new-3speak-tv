@@ -173,9 +173,15 @@
     },
     "chatBox": {
       "title": "Obrolanmu di OBS",
-      "desc": "tambahkan sebagai dock browser kustom",
+      "desc": "tambahkan sebagai custom browser dock: chat, polling, prediksi, raid, dan pengaturan boost. Jaga tautan ini tetap pribadi.",
       "copy": "Salin URL obrolan",
-      "copied": "URL obrolan disalin"
+      "copied": "URL obrolan disalin",
+      "resetTitle": "Setel ulang tautan dock?",
+      "resetConfirm": "Dock dengan tautan lama langsung berhenti menjalankan polling, raid, dan pengaturan boost; chat-nya tetap jalan. Setelah itu tempel tautan baru ke OBS.",
+      "resetButton": "Setel ulang tautan",
+      "resetDone": "Tautan dock baru dibuat dan disalin. Tempel ke OBS.",
+      "resetDoneNoCopy": "Tautan dock baru dibuat. Salin lagi dan tempel ke OBS.",
+      "resetFailed": "Tautan dock tidak bisa disetel ulang."
     },
     "card": {
       "copyUrl": "Salin URL server",
@@ -291,7 +297,14 @@
       "viewers": "Penonton yang menonton",
       "liveFor": "Lama siaran",
       "timeLeft": "Sisa waktu sebelum siaran berakhir",
-      "boosts": "Boost yang diterima di siaran ini"
+      "boosts": "Boost yang diterima di siaran ini",
+      "controlInvalid": "Tautan dock ini sudah disetel ulang, jadi polling, raid, dan pengaturan boost mati di sini. Salin lagi URL chat dari tab Templat di Stream Studio.",
+      "tabs": {
+        "label": "Dock",
+        "chat": "Chat",
+        "live": "Polling dan raid",
+        "boosts": "Boost"
+      }
     },
     "pro": {
       "title": "Streaming dari OBS adalah bagian dari 3Speak Pro",

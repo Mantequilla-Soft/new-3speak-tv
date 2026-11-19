@@ -98,26 +98,85 @@
   }
 }
 
-// Dock header: viewers, time live, time left, boosts, goal. Pinned to the top of the
-// dock: the chat is stacked from the bottom and overflows at the top, so a bar
-// in the flow would be pushed out of view by a long chat. The dock reserves its
-// height (--with-counters) and older lines slide under it.
-.obs-chat--with-counters {
-  padding-top: 52px;
+// Dock: a header (viewers, time live, time left, boosts, goal, then the tabs
+// when the link carries the dock key) over a body. The chat stacks from the
+// bottom of the body and overflows at its top, so the header always stays.
+.obs-chat--dock {
+  justify-content: flex-start;
+  padding: 0;
+}
+
+.obs-chat__head {
+  flex: none;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
 }
 
 .obs-chat__counters {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1;
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
   padding: 8px;
-  background: var(--bg);
-  border-bottom: 1px solid var(--border);
+}
+
+.obs-chat__body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 8px;
+  overflow: hidden;
+
+  // A control panel reads from the top and scrolls.
+  &.is-panel {
+    justify-content: flex-start;
+    overflow-y: auto;
+    padding: 0;
+  }
+}
+
+// Chat, Live, Boosts: the dock's own segmented row.
+.obs-chat__tabs {
+  display: flex;
+  gap: 4px;
+  margin: 0 8px 8px;
+  padding: 4px;
+  border-radius: var(--r-md);
+  background: var(--surface);
+
+  button {
+    flex: 1;
+    height: 32px;
+    border: 0;
+    border-radius: var(--r-sm);
+    background: transparent;
+    color: var(--muted);
+    font: inherit;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+
+    &.is-on {
+      background: var(--surface-2);
+      color: var(--text);
+    }
+  }
+}
+
+.obs-chat__notice {
+  margin: 0 8px 8px;
+  padding: 8px 10px;
+  border-radius: var(--r-sm);
+  background: var(--accent-tint);
+  color: var(--text);
+  font-size: 12px;
+}
+
+// The studio's panels (hangouts SDK) at the dock's size.
+.obs-chat__panel {
+  font-size: 13px;
+  line-height: 1.4;
 }
 
 .obs-chat__counter {
@@ -170,3 +229,6 @@
   from { opacity: 0; transform: translateY(.4em); }
   to { opacity: 1; transform: none; }
 }
+
+// Offline or a broken link: the dock's single line keeps its margin.
+.obs-chat--dock > p { margin: 8px; }

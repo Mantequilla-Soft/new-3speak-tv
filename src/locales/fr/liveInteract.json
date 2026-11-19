@@ -22,7 +22,9 @@
     "outcomeWon": "{option} l’emporte",
     "youWon": "Vous récupérez {points} points",
     "cancelled": "Annulée, chacun garde ses points",
-    "close": "Fermer"
+    "close": "Fermer",
+    "showResult": "Voir le résultat",
+    "hideResult": "Masquer le résultat"
   },
   "replay": {
     "tab": "Rediffusion du chat en direct",

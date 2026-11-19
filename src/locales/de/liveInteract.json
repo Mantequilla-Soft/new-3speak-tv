@@ -22,7 +22,9 @@
     "outcomeWon": "{option} hat gewonnen",
     "youWon": "Du bekommst {points} Punkte zurück",
     "cancelled": "Abgebrochen, alle behalten ihre Punkte",
-    "close": "Schließen"
+    "close": "Schließen",
+    "showResult": "Ergebnis zeigen",
+    "hideResult": "Ergebnis ausblenden"
   },
   "replay": {
     "tab": "Live-Chat-Wiederholung",

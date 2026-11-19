@@ -330,7 +330,10 @@
     "topSupporters": "Pendukung teratas",
     "noSupporters": "Belum ada boost",
     "full": "Layar penuh",
-    "loginToChat": "Masuk untuk chat"
+    "loginToChat": "Masuk untuk chat",
+    "ended": "Siaran ini sudah berakhir.",
+    "volume": "Volume",
+    "sound": "Suara"
   },
   "pullToRefresh": {
     "pull": "Tarik untuk memuat ulang",

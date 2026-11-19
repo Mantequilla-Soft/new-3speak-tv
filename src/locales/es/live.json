@@ -175,9 +175,15 @@
     },
     "chatBox": {
       "title": "Tu chat en OBS",
-      "desc": "añádelo como dock de navegador personalizado",
+      "desc": "añádelo como dock de navegador personalizado: chat, encuestas, predicciones, raids y ajustes de boosts. Mantén el enlace en privado.",
       "copy": "Copiar URL del chat",
-      "copied": "URL del chat copiada"
+      "copied": "URL del chat copiada",
+      "resetTitle": "¿Restablecer el enlace del dock?",
+      "resetConfirm": "Los docks con el enlace anterior dejan de manejar encuestas, raids y ajustes de boosts al instante; su chat sigue funcionando. Después pega el enlace nuevo en OBS.",
+      "resetButton": "Restablecer enlace",
+      "resetDone": "Nuevo enlace del dock creado y copiado. Pégalo en OBS.",
+      "resetDoneNoCopy": "Nuevo enlace del dock creado. Cópialo de nuevo y pégalo en OBS.",
+      "resetFailed": "No se pudo restablecer el enlace del dock."
     },
     "card": {
       "copyUrl": "Copiar URL del servidor",
@@ -293,7 +299,14 @@
       "viewers": "Espectadores viendo",
       "liveFor": "Tiempo en vivo",
       "timeLeft": "Tiempo restante antes de que termine la transmisión",
-      "boosts": "Boosts recibidos en esta transmisión"
+      "boosts": "Boosts recibidos en esta transmisión",
+      "controlInvalid": "Este enlace del dock se restableció, así que aquí no hay encuestas, raids ni ajustes de boosts. Copia de nuevo la URL del chat desde la pestaña Plantillas del Stream Studio.",
+      "tabs": {
+        "label": "Dock",
+        "chat": "Chat",
+        "live": "Encuestas y raids",
+        "boosts": "Boosts"
+      }
     },
     "pro": {
       "title": "Transmitir desde OBS es parte de 3Speak Pro",

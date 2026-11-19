@@ -16,6 +16,7 @@ import StreamFullscreenButton from '../components/openpods/StreamFullscreenButto
 import StreamWatermark from '../components/openpods/StreamWatermark';
 import StreamSignInButton from '../components/openpods/StreamSignInButton';
 import StreamBoostGoalBar from '../components/openpods/StreamBoostGoalBar';
+import StreamVolumeControl, { useStreamVolume } from '../components/openpods/StreamVolume';
 import { LiveCaptionsOverlay, LiveCaptionsToggle, useCaptionsPref } from '../components/openpods/LiveCaptions';
 import { useBoostLabels } from '../components/openpods/boostLabels';
 import { useBattleLabels } from '../components/openpods/battleLabels';
@@ -99,6 +100,9 @@ function StreamChatBar({ canChat, needsSignIn = false, onSignIn, signingIn = fal
 
 /** Time on air for the live strip (18c): "1:24:08", from the server's go-live
  *  stamp. Nothing while the host has not pressed Start yet. */
+/** How often an open stream page checks that the room still exists. */
+const ROOM_CHECK_MS = 15000;
+
 function LiveClock({ since }) {
   const start = since ? new Date(since).getTime() : NaN;
   const [now, setNow] = useState(() => Date.now());
@@ -270,6 +274,8 @@ export default function WatchStream() {
   // Rewind (H14): the Pro DVR's last minutes over the live picture; the live
   // sound is held while it plays.
   const rewind = useStreamRewind(endpoint?.api, streamId, sessionToken);
+  // The viewer's own level and mute, the same on every stream.
+  const vol = useStreamVolume();
   // Swipe/scroll to the next live stream, shorts-style. No-op when nothing else
   // is live.
   const { containerRef: pagerRef, hasNext: hasNextLive } = useLiveStreamPager({
@@ -313,6 +319,20 @@ export default function WatchStream() {
     return () => { alive = false; };
   }, [streamId]);
 
+  // The host ended the stream: its room goes. Without this the page kept the
+  // LIVE pill and a running clock over "The streamer is offline".
+  useEffect(() => {
+    if (state.status !== 'live' || !endpoint?.api) return undefined;
+    let alive = true;
+    const id = setInterval(async () => {
+      try {
+        const res = await fetch(`${endpoint.api}/rooms/${encodeURIComponent(streamId)}`);
+        if (alive && res.status === 404) setState((s) => (s.status === 'live' ? { ...s, status: 'ended' } : s));
+      } catch { /* a moment offline: ask again next time */ }
+    }, ROOM_CHECK_MS);
+    return () => { alive = false; clearInterval(id); };
+  }, [state.status, endpoint?.api, streamId]);
+
   const post = state.room?.post || {};
   const tags = Array.isArray(post.tags) ? post.tags : [];
 
@@ -348,13 +368,20 @@ export default function WatchStream() {
 
   if (state.status === 'loading') return <BarLoader />;
 
+  // An announced stream that ended: its post page shows the recording as it
+  // processes, then plays it.
+  if (state.status === 'ended' && state.hivePost && state.room?.host) {
+    return <Navigate to={`/@${state.room.host}/${streamId}`} replace />;
+  }
+
   if (state.status !== 'live') {
     const notLive = state.status === 'notlive';
+    const ended = state.status === 'ended';
     return (
       <div className="ws-error">
         <EmptyState
-          icon={notLive ? 'live_tv' : 'search_off'}
-          title={notLive ? t('misc.watchStream.notLive') : t('misc.watchStream.notFound')}
+          icon={notLive || ended ? 'live_tv' : 'search_off'}
+          title={ended ? t('misc.watchStream.ended') : notLive ? t('misc.watchStream.notLive') : t('misc.watchStream.notFound')}
           action={(
             <div className="ws-error__actions">
               <Button variant="primary" next className="ws-error-btn" onClick={() => navigate('/openpods')}>
@@ -407,7 +434,7 @@ export default function WatchStream() {
           aioha={aioha}
         >
           {!connectReady ? <BarLoader /> : (
-            <StandaloneWatch key={joinKey} roomName={streamId} connecting={<BarLoader />} audioMuted={prerollHold || rewind.active} onRaid={onRaid} liveLabels={liveLabels}>
+            <StandaloneWatch key={joinKey} roomName={streamId} connecting={<BarLoader />} audioMuted={prerollHold || rewind.active || vol.muted} audioVolume={vol.volume} onRaid={onRaid} liveLabels={liveLabels}>
               <main className={`short-main no-bottom-bar ws-shorts${isLandscape ? ' ws-shorts--landscape' : ''}${!infoVisible ? ' ws-info-hidden' : ''}${prerollHold ? ' ws-preroll-on' : ''}${chatOverlayOn ? '' : ' ws-chat-off'}${controlsHidden ? ' ws-controls-hidden' : ''}`}>
                 <div className="videoWrapper">
                   <div className="videoContainer" ref={pagerRef} onClick={revealInfo}>
@@ -485,6 +512,7 @@ export default function WatchStream() {
                       </div>
                       <CollabRequest variant="rail" canRequest={canInteract} />
                       <StreamBoostButton variant="rail" />
+                      <StreamVolumeControl variant="rail" volume={vol.volume} muted={vol.muted} onVolume={vol.setVolume} onToggleMute={vol.toggleMute} />
                       <LiveCaptionsToggle variant="rail" on={captionsOn} onToggle={toggleCaptions} />
                       {canCrop && (
                         <div className="actionItem" onClick={toggleVertical}>
@@ -568,7 +596,7 @@ export default function WatchStream() {
       >
         {!connectReady ? <BarLoader /> : (
 
-        <StandaloneWatch key={joinKey} roomName={streamId} connecting={<BarLoader />} audioMuted={prerollHold || rewind.active} onRaid={onRaid} liveLabels={liveLabels}>
+        <StandaloneWatch key={joinKey} roomName={streamId} connecting={<BarLoader />} audioMuted={prerollHold || rewind.active || vol.muted} audioVolume={vol.volume} onRaid={onRaid} liveLabels={liveLabels}>
           {/* Live strip (18c): LIVE, time on air, who is watching, playback quality. */}
           <div className="ws-strip">
             <StatusPill tone="live" className="ws-live-tag">{t('feeds.live.badge')}</StatusPill>
@@ -586,6 +614,7 @@ export default function WatchStream() {
               <div className="ws-player">
                 <StreamVideo showLiveBadge={false} boostLabels={boostLabels} battleLabels={battleLabels} />
                 <StreamWatermark show={showWatermark} />
+                <StreamVolumeControl volume={vol.volume} muted={vol.muted} onVolume={vol.setVolume} onToggleMute={vol.toggleMute} />
                 <LiveCaptionsOverlay show={captionsOn} />
                 <StreamRewindPlayer rewind={rewind} />
                 <LiveAdLayer host={host} room={streamId} onPreroll={setPrerollHold} />

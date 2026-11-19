@@ -330,7 +330,10 @@
     "topSupporters": "头号支持者",
     "noSupporters": "还没有助力",
     "full": "全屏",
-    "loginToChat": "登录后聊天"
+    "loginToChat": "登录后聊天",
+    "ended": "本次直播已结束。",
+    "volume": "音量",
+    "sound": "声音"
   },
   "pullToRefresh": {
     "pull": "下拉刷新",

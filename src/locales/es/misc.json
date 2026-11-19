@@ -332,7 +332,10 @@
     "topSupporters": "Principales seguidores",
     "noSupporters": "Aún no hay boosts",
     "full": "Pantalla completa",
-    "loginToChat": "Inicia sesión para chatear"
+    "loginToChat": "Inicia sesión para chatear",
+    "ended": "Esta transmisión ha terminado.",
+    "volume": "Volumen",
+    "sound": "Sonido"
   },
   "pullToRefresh": {
     "pull": "Desliza para actualizar",

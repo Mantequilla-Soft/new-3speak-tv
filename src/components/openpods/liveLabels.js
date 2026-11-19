@@ -13,7 +13,8 @@ export const LIVE_LABEL_KEYS = (
   'raidLine raidTitle raidBody raidGoNow raidStay '
   + 'pollBadge predictionBadge endsIn finalResults votes youVoted '
   + 'signInToVote voteFailed pot balance stakeButton stakePlaceholder '
-  + 'yourStake waitingForResult outcomeWon youWon cancelled close'
+  + 'yourStake waitingForResult outcomeWon youWon cancelled close '
+  + 'showResult hideResult'
 ).split(' ');
 
 /** The labels object for `t`, keys whose text is missing left out. */

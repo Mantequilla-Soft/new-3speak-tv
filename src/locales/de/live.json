@@ -174,9 +174,15 @@
     },
     "chatBox": {
       "title": "Dein Chat in OBS",
-      "desc": "als benutzerdefiniertes Browser-Dock hinzufügen",
+      "desc": "als benutzerdefiniertes Browser-Dock hinzufügen: Chat, Umfragen, Vorhersagen, Raids und Boost-Einstellungen. Halte den Link privat.",
       "copy": "Chat-URL kopieren",
-      "copied": "Chat-URL kopiert"
+      "copied": "Chat-URL kopiert",
+      "resetTitle": "Dock-Link zurücksetzen?",
+      "resetConfirm": "Docks mit dem alten Link können sofort keine Umfragen, Raids und Boost-Einstellungen mehr steuern; ihr Chat läuft weiter. Füge danach den neuen Link in OBS ein.",
+      "resetButton": "Link zurücksetzen",
+      "resetDone": "Neuer Dock-Link erstellt und kopiert. Füge ihn in OBS ein.",
+      "resetDoneNoCopy": "Neuer Dock-Link erstellt. Kopiere ihn erneut und füge ihn in OBS ein.",
+      "resetFailed": "Dock-Link konnte nicht zurückgesetzt werden."
     },
     "card": {
       "copyUrl": "Server-URL kopieren",
@@ -292,7 +298,14 @@
       "viewers": "Zuschauer gerade dabei",
       "liveFor": "Live seit",
       "timeLeft": "Verbleibende Zeit bis zum Streamende",
-      "boosts": "Boosts in diesem Stream"
+      "boosts": "Boosts in diesem Stream",
+      "controlInvalid": "Dieser Dock-Link wurde zurückgesetzt, Umfragen, Raids und Boost-Einstellungen sind hier aus. Kopiere die Chat-URL erneut im Tab Vorlagen des Stream Studios.",
+      "tabs": {
+        "label": "Dock",
+        "chat": "Chat",
+        "live": "Umfragen und Raids",
+        "boosts": "Boosts"
+      }
     },
     "pro": {
       "title": "Streamen aus OBS ist Teil von 3Speak Pro",

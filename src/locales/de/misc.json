@@ -331,7 +331,10 @@
     "topSupporters": "Top-Unterstützer",
     "noSupporters": "Noch keine Boosts",
     "full": "Vollbild",
-    "loginToChat": "Zum Chatten anmelden"
+    "loginToChat": "Zum Chatten anmelden",
+    "ended": "Dieser Stream ist beendet.",
+    "volume": "Lautstärke",
+    "sound": "Ton"
   },
   "pullToRefresh": {
     "pull": "Zum Aktualisieren ziehen",

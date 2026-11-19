@@ -332,7 +332,10 @@
     "topSupporters": "Maiores apoiadores",
     "noSupporters": "Ainda sem boosts",
     "full": "Tela cheia",
-    "loginToChat": "Entre para conversar"
+    "loginToChat": "Entre para conversar",
+    "ended": "Esta transmissão terminou.",
+    "volume": "Volume",
+    "sound": "Som"
   },
   "pullToRefresh": {
     "pull": "Puxe para atualizar",

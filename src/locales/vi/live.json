@@ -173,9 +173,15 @@
     },
     "chatBox": {
       "title": "Trò chuyện của bạn trong OBS",
-      "desc": "thêm làm dock trình duyệt tùy chỉnh",
+      "desc": "thêm làm custom browser dock: trò chuyện, bình chọn, dự đoán, raid và cài đặt boost. Hãy giữ liên kết riêng tư.",
       "copy": "Sao chép URL trò chuyện",
-      "copied": "Đã sao chép URL trò chuyện"
+      "copied": "Đã sao chép URL trò chuyện",
+      "resetTitle": "Đặt lại liên kết dock?",
+      "resetConfirm": "Các dock dùng liên kết cũ sẽ ngừng điều khiển bình chọn, raid và cài đặt boost ngay lập tức; phần trò chuyện vẫn chạy. Sau đó dán liên kết mới vào OBS.",
+      "resetButton": "Đặt lại liên kết",
+      "resetDone": "Đã tạo và sao chép liên kết dock mới. Dán vào OBS.",
+      "resetDoneNoCopy": "Đã tạo liên kết dock mới. Sao chép lại và dán vào OBS.",
+      "resetFailed": "Không đặt lại được liên kết dock."
     },
     "card": {
       "copyUrl": "Sao chép URL máy chủ",
@@ -291,7 +297,14 @@
       "viewers": "Người đang xem",
       "liveFor": "Thời gian phát",
       "timeLeft": "Thời gian còn lại trước khi buổi phát kết thúc",
-      "boosts": "Boost nhận được trong buổi phát này"
+      "boosts": "Boost nhận được trong buổi phát này",
+      "controlInvalid": "Liên kết dock này đã được đặt lại nên bình chọn, raid và cài đặt boost bị tắt ở đây. Sao chép lại URL trò chuyện từ thẻ Mẫu trong Stream Studio.",
+      "tabs": {
+        "label": "Dock",
+        "chat": "Trò chuyện",
+        "live": "Bình chọn và raid",
+        "boosts": "Boost"
+      }
     },
     "pro": {
       "title": "Phát trực tiếp từ OBS là một phần của 3Speak Pro",

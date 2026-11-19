@@ -22,7 +22,9 @@
     "outcomeWon": "{option} imeshinda",
     "youWon": "Umerudishiwa pointi {points}",
     "cancelled": "Imeghairiwa, kila mtu anabaki na pointi zake",
-    "close": "Funga"
+    "close": "Funga",
+    "showResult": "Onyesha matokeo",
+    "hideResult": "Ficha matokeo"
   },
   "replay": {
     "tab": "Marudio ya gumzo la moja kwa moja",

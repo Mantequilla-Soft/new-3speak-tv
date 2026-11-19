@@ -22,7 +22,9 @@
     "outcomeWon": "{option} kazandı",
     "youWon": "{points} puan geri aldın",
     "cancelled": "İptal edildi, herkes puanını korur",
-    "close": "Kapat"
+    "close": "Kapat",
+    "showResult": "Sonucu göster",
+    "hideResult": "Sonucu gizle"
   },
   "replay": {
     "tab": "Canlı sohbet tekrarı",

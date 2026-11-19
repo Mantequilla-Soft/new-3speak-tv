@@ -22,7 +22,9 @@
     "outcomeWon": "{option} heeft gewonnen",
     "youWon": "Je krijgt {points} punten terug",
     "cancelled": "Geannuleerd, iedereen houdt zijn punten",
-    "close": "Sluiten"
+    "close": "Sluiten",
+    "showResult": "Uitslag tonen",
+    "hideResult": "Uitslag verbergen"
   },
   "replay": {
     "tab": "Herhaling van de livechat",

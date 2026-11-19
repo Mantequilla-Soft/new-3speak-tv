@@ -22,7 +22,9 @@
     "outcomeWon": "{option} menang",
     "youWon": "Kamu mendapat {points} poin kembali",
     "cancelled": "Dibatalkan, semua tetap memegang poinnya",
-    "close": "Tutup"
+    "close": "Tutup",
+    "showResult": "Lihat hasilnya",
+    "hideResult": "Sembunyikan hasilnya"
   },
   "replay": {
     "tab": "Tayangan ulang obrolan live",

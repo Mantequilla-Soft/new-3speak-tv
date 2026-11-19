@@ -174,9 +174,15 @@
     },
     "chatBox": {
       "title": "Ang chat mo sa OBS",
-      "desc": "idagdag bilang custom browser dock",
+      "desc": "idagdag bilang custom browser dock: chat, poll, prediksyon, raid at boost settings. Panatilihing pribado ang link.",
       "copy": "Kopyahin ang chat URL",
-      "copied": "Nakopya ang chat URL"
+      "copied": "Nakopya ang chat URL",
+      "resetTitle": "I-reset ang dock link?",
+      "resetConfirm": "Agad na hihinto ang mga dock na may lumang link sa pagpapatakbo ng poll, raid at boost settings; tuloy pa rin ang chat nila. Pagkatapos, i-paste ang bagong link sa OBS.",
+      "resetButton": "I-reset ang link",
+      "resetDone": "Nagawa at nakopya ang bagong dock link. I-paste ito sa OBS.",
+      "resetDoneNoCopy": "Nagawa ang bagong dock link. Kopyahin ulit at i-paste sa OBS.",
+      "resetFailed": "Hindi ma-reset ang dock link."
     },
     "card": {
       "copyUrl": "I-copy ang server URL",
@@ -292,7 +298,14 @@
       "viewers": "Mga nanonood ngayon",
       "liveFor": "Tagal ng live",
       "timeLeft": "Natitirang oras bago matapos ang stream",
-      "boosts": "Mga boost na natanggap sa stream na ito"
+      "boosts": "Mga boost na natanggap sa stream na ito",
+      "controlInvalid": "Na-reset ang dock link na ito kaya patay dito ang poll, raid at boost settings. Kopyahin ulit ang chat URL mula sa tab na Templates ng Stream Studio.",
+      "tabs": {
+        "label": "Dock",
+        "chat": "Chat",
+        "live": "Poll at raid",
+        "boosts": "Boost"
+      }
     },
     "pro": {
       "title": "Bahagi ng 3Speak Pro ang pag-stream mula sa OBS",

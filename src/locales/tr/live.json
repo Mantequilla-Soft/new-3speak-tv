@@ -174,9 +174,15 @@
     },
     "chatBox": {
       "title": "OBS'de sohbetin",
-      "desc": "özel tarayıcı dock'u olarak ekle",
+      "desc": "özel tarayıcı paneli olarak ekle: sohbet, anketler, tahminler, baskınlar ve boost ayarları. Bağlantıyı gizli tut.",
       "copy": "Sohbet URL'sini kopyala",
-      "copied": "Sohbet URL'si kopyalandı"
+      "copied": "Sohbet URL'si kopyalandı",
+      "resetTitle": "Panel bağlantısı sıfırlansın mı?",
+      "resetConfirm": "Eski bağlantıyı kullanan paneller anketleri, baskınları ve boost ayarlarını hemen yönetemez olur; sohbetleri çalışmaya devam eder. Ardından yeni bağlantıyı OBS'ye yapıştır.",
+      "resetButton": "Bağlantıyı sıfırla",
+      "resetDone": "Yeni panel bağlantısı oluşturuldu ve kopyalandı. OBS'ye yapıştır.",
+      "resetDoneNoCopy": "Yeni panel bağlantısı oluşturuldu. Tekrar kopyalayıp OBS'ye yapıştır.",
+      "resetFailed": "Panel bağlantısı sıfırlanamadı."
     },
     "card": {
       "copyUrl": "Sunucu URL'sini kopyala",
@@ -292,7 +298,14 @@
       "viewers": "Şu an izleyenler",
       "liveFor": "Yayın süresi",
       "timeLeft": "Yayının bitmesine kalan süre",
-      "boosts": "Bu yayında alınan boostlar"
+      "boosts": "Bu yayında alınan boostlar",
+      "controlInvalid": "Bu panel bağlantısı sıfırlandı, bu yüzden burada anketler, baskınlar ve boost ayarları kapalı. Sohbet URL'sini Stream Studio'daki Şablonlar sekmesinden tekrar kopyala.",
+      "tabs": {
+        "label": "Panel",
+        "chat": "Sohbet",
+        "live": "Anketler ve baskınlar",
+        "boosts": "Boostlar"
+      }
     },
     "pro": {
       "title": "OBS'ten yayın yapmak 3Speak Pro'nun bir parçasıdır",

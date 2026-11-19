@@ -22,7 +22,9 @@
     "outcomeWon": "{option} 승리",
     "youWon": "{points} 포인트를 돌려받았습니다",
     "cancelled": "취소됨, 모두 포인트를 그대로 유지합니다",
-    "close": "닫기"
+    "close": "닫기",
+    "showResult": "결과 보기",
+    "hideResult": "결과 숨기기"
   },
   "replay": {
     "tab": "라이브 채팅 다시 보기",

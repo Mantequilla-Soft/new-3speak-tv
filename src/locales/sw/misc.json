@@ -331,7 +331,10 @@
     "topSupporters": "Wafadhili wakuu",
     "noSupporters": "Bado hakuna boosts",
     "full": "Skrini nzima",
-    "loginToChat": "Ingia ili upige gumzo"
+    "loginToChat": "Ingia ili upige gumzo",
+    "ended": "Mtiririko huu umeisha.",
+    "volume": "Sauti (kiwango)",
+    "sound": "Sauti"
   },
   "pullToRefresh": {
     "pull": "Vuta ili kuonyesha upya",

@@ -330,7 +330,10 @@
     "topSupporters": "トップサポーター",
     "noSupporters": "まだブーストはありません",
     "full": "全画面",
-    "loginToChat": "ログインしてチャット"
+    "loginToChat": "ログインしてチャット",
+    "ended": "この配信は終了しました。",
+    "volume": "音量",
+    "sound": "サウンド"
   },
   "pullToRefresh": {
     "pull": "引っ張って更新",

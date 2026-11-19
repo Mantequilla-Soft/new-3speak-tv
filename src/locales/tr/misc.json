@@ -331,7 +331,10 @@
     "topSupporters": "En çok destekleyenler",
     "noSupporters": "Henüz boost yok",
     "full": "Tam ekran",
-    "loginToChat": "Sohbet için giriş yap"
+    "loginToChat": "Sohbet için giriş yap",
+    "ended": "Bu yayın sona erdi.",
+    "volume": "Ses düzeyi",
+    "sound": "Ses"
   },
   "pullToRefresh": {
     "pull": "Yenilemek için çek",

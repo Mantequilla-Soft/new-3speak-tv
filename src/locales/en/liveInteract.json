@@ -22,7 +22,9 @@
     "outcomeWon": "{option} won",
     "youWon": "You got {points} points back",
     "cancelled": "Cancelled, everyone keeps their points",
-    "close": "Close"
+    "close": "Close",
+    "showResult": "Show the result",
+    "hideResult": "Hide the result"
   },
   "replay": {
     "tab": "Live chat replay",
