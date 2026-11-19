@@ -140,6 +140,38 @@
   .hh-studio__rail--left { left: 0.6rem; }
   .hh-studio__rail--right { right: 0.6rem; }
 
+  // A phone turned sideways (the studio's Rotate button), for a landscape
+  // stream: the picture keeps the middle and the left. The session controls
+  // stand in one column on the right edge (Start/End in the bottom corner),
+  // the camera controls in a row along the top next to it, as 40px icon tiles
+  // (the label stays as the tooltip); their panels open as popups beside the
+  // column (the SDK's .hh-sheet rule). Restated here because the shorts rail
+  // above would otherwise win over the SDK's own landscape rules.
+  @media (orientation: landscape) and (max-height: 500px) {
+    .hh-studio__body--mobile .hh-studio__rail { gap: 0.25rem; }
+    .hh-studio__body--mobile .hh-studio__rail--right {
+      top: 0.5rem;
+      bottom: max(0.5rem, env(safe-area-inset-bottom, 0px));
+      right: max(0.5rem, env(safe-area-inset-right, 0px));
+      justify-content: flex-end;
+      flex-wrap: wrap-reverse; // more tiles than fit: a second column grows inward
+      align-content: flex-start;
+    }
+    .hh-studio__body--mobile .hh-studio__rail--left {
+      top: 0.5rem;
+      bottom: auto;
+      left: auto;
+      right: calc(max(0.5rem, env(safe-area-inset-right, 0px)) + 3rem);
+      flex-direction: row;
+    }
+    .hh-studio__body--mobile .hh-studio__rbtn {
+      width: 40px;
+      height: 40px;
+      padding: 0;
+      .hh-studio__rbtn-label { display: none; }
+    }
+  }
+
   .hh-studio__rbtn {
     @include rail.rail-item;
 
