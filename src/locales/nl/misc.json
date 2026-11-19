@@ -338,7 +338,9 @@
     "pollMove": "Sleep om te verplaatsen",
     "pollHide": "Sluiten",
     "pollShow": "Peiling openen",
-    "predictionShow": "Voorspelling openen"
+    "predictionShow": "Voorspelling openen",
+    "chatHide": "Chat verbergen",
+    "chatShow": "Chat tonen"
   },
   "pullToRefresh": {
     "pull": "Trek om te vernieuwen",

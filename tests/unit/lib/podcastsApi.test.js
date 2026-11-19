@@ -145,6 +145,15 @@ describe('outside shows in a playlist', () => {
     expect(bodyOf(`${API}/bundle`)).toEqual({ urls: ['https://a/rss'], cursor: '2026-11-01T00:00:00.000Z|x' })
     expect(fetchMock.mock.calls.some((c) => c[0] === '/api/podcasts/signature')).toBe(false)
   })
+
+  it('narrows to one show, and to a season only together with a show', async () => {
+    routes[`${API}/bundle`] = reply(200, { feeds: [], episodes: [] })
+    await P.fetchPlaylistBundle(['https://a/rss'], null, { feedId: 'f1', season: 2 })
+    expect(bodyOf(`${API}/bundle`)).toEqual({ urls: ['https://a/rss'], feed_id: 'f1', season: 2 })
+    fetchMock.mockClear()
+    await P.fetchPlaylistBundle(['https://a/rss'], null, { season: 2 })
+    expect(bodyOf(`${API}/bundle`)).toEqual({ urls: ['https://a/rss'] })
+  })
 })
 
 describe('listenVouch', () => {

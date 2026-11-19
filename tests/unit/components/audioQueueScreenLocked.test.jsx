@@ -223,4 +223,45 @@ describe('the queue with the screen locked', () => {
     expect(spots[1].paused).toBe(false)
     expect(audio().paused).toBe(true)
   })
+
+  // The owner's report again (2026-11-19, a podcast in the installed app): the
+  // next track did not start. The load used to wait for React to render the next
+  // track; a phone lets the audio go before that. Now the end event itself
+  // gives the element its next source and play(), before any render.
+  it('starts the next track inside the end event itself, before React renders', async () => {
+    await startQueueThenLock()
+    const el = audio()
+    HTMLMediaElement.prototype.play.mockClear()
+    el._paused = true
+    el.dispatchEvent(new Event('pause'))
+    // No act(): nothing React would flush afterwards counts here.
+    el.dispatchEvent(new Event('ended'))
+    expect(el.getAttribute('src')).toBe('https://ipfs-audio.3speak.tv/ipfs/cid2')
+    expect(HTMLMediaElement.prototype.play).toHaveBeenCalledTimes(1)
+    expect(el.paused).toBe(false)
+    // React catching up keeps that load: no second source, still playing.
+    await act(async () => {})
+    expect(store().audioCurrent).toBe(B)
+    expect(el.getAttribute('src')).toBe('https://ipfs-audio.3speak.tv/ipfs/cid2')
+    expect(el.paused).toBe(false)
+    expect(session.metadata).toMatchObject({ title: 'Track 2' })
+  })
+
+  // Back in the app, Play on that next track did nothing until another track was
+  // picked and this one again: its source had failed to load in the background.
+  it('Play on a track whose source failed loads it again and plays', async () => {
+    await startQueueThenLock()
+    await reachEnd()
+    const el = audio()
+    await act(async () => { el._paused = true; el.dispatchEvent(new Event('pause')) })
+    Object.defineProperty(el, 'error', { value: { code: 2 }, configurable: true })
+    const setSrc = vi.spyOn(el, 'setAttribute')
+    HTMLMediaElement.prototype.play.mockClear()
+    await act(async () => { setHidden(false) })
+    await act(async () => { session.handlers.play() })
+    expect(setSrc).toHaveBeenCalledWith('src', 'https://ipfs-audio.3speak.tv/ipfs/cid2')
+    expect(HTMLMediaElement.prototype.play).toHaveBeenCalled()
+    expect(store().audioCurrent).toBe(B)
+  })
 })
+

@@ -340,7 +340,9 @@
     "pollMove": "Перетащите, чтобы переместить",
     "pollHide": "Закрыть",
     "pollShow": "Открыть опрос",
-    "predictionShow": "Открыть прогноз"
+    "predictionShow": "Открыть прогноз",
+    "chatHide": "Скрыть чат",
+    "chatShow": "Показать чат"
   },
   "pullToRefresh": {
     "pull": "Потяните, чтобы обновить",

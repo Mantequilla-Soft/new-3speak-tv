@@ -133,6 +133,12 @@
     "saveFailed": "Gagal menyimpan: {{error}}",
     "fromShows": "Dari acara lain:",
     "video": "Video",
-    "pending_other": "{{count}} acara masih dibaca. Episodenya muncul dalam beberapa menit."
+    "pending_other": "{{count}} acara masih dibaca. Episodenya muncul dalam beberapa menit.",
+    "filter": {
+      "label": "Acara",
+      "all": "Semua acara",
+      "own": "Unggahan 3Speak",
+      "none": "Tidak ada episode yang cocok dengan filter ini."
+    }
   }
 }

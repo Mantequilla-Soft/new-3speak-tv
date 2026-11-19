@@ -22,6 +22,7 @@ import { useBoostLabels } from '../components/openpods/boostLabels';
 import { useBattleLabels } from '../components/openpods/battleLabels';
 import { useLiveLabels, raidPath } from '../components/openpods/liveLabels';
 import FloatingStreamPoll from '../components/openpods/FloatingStreamPoll';
+import { toggleStreamFullscreen, releaseStreamOrientation } from '../utils/streamFullscreen';
 import { useStreamSession } from '../hooks/useStreamSession';
 import { useLiveStreamPager } from '../hooks/useLiveStreamPager';
 import { useStreamChatMirror } from '../hooks/useStreamChatMirror';
@@ -232,6 +233,25 @@ export default function WatchStream() {
   }, []);
   const mobileLayout = isMobile || phoneLandscape;
 
+  // Fullscreen (phones, a landscape stream): the whole page goes fullscreen, so
+  // the boost and report dialogs still show over it, and the phone turns
+  // sideways. Sideways or fullscreen, the page takes the wide layout.
+  const [phoneFull, setPhoneFull] = useState(false);
+  useEffect(() => {
+    const sync = () => {
+      const on = !!document.fullscreenElement;
+      setPhoneFull(on);
+      if (!on) releaseStreamOrientation();
+    };
+    document.addEventListener('fullscreenchange', sync);
+    return () => {
+      document.removeEventListener('fullscreenchange', sync);
+      if (document.fullscreenElement) document.exitFullscreen?.().catch(() => { /* already left */ });
+    };
+  }, []);
+  const wide = phoneLandscape || phoneFull;
+  const toggleFullscreen = () => { toggleStreamFullscreen(); };
+
   // Landscape only (mobile): the author/info block auto-hides 3s after it last
   // appeared and comes back on a screen tap. Portrait keeps it always visible.
   const [infoVisible, setInfoVisible] = useState(true);
@@ -239,14 +259,18 @@ export default function WatchStream() {
   const revealInfo = useCallback(() => {
     setInfoVisible(true);
     if (hideTimerRef.current) clearTimeout(hideTimerRef.current);
-    if (isLandscape) hideTimerRef.current = setTimeout(() => setInfoVisible(false), 3000);
-  }, [isLandscape]);
+    if (wide) hideTimerRef.current = setTimeout(() => setInfoVisible(false), 3000);
+  }, [wide]);
   useEffect(() => {
     revealInfo();
     return () => { if (hideTimerRef.current) clearTimeout(hideTimerRef.current); };
   }, [revealInfo]);
 
   const [chatOverlayOn, setChatOverlayOn] = useState(readChatOverlayPref);
+  const toggleChat = () => setChatOverlayOn((v) => {
+    try { localStorage.setItem(CHAT_OVERLAY_KEY, v ? '0' : '1'); } catch { /* storage off */ }
+    return !v;
+  });
   // H11: the viewer's live captions switch (shown only while the host captions).
   const [captionsOn, toggleCaptions] = useCaptionsPref();
   // Phones: the viewer's "clean view". Everything over the picture goes (rail,
@@ -267,8 +291,8 @@ export default function WatchStream() {
       return next;
     });
   };
-  const canCrop = !isLandscape && streamLandscape === true;
-  const verticalOn = !isLandscape && verticalPref;
+  const canCrop = !isLandscape && !phoneFull && streamLandscape === true;
+  const verticalOn = !isLandscape && !phoneFull && verticalPref;
   // While LiveAdLayer holds the stream for a pre-roll: the stream's sound is off
   // and, on phones, its chrome (chat, rail, caption) steps out of the ad's way.
   const [prerollHold, setPrerollHold] = useState(false);
@@ -281,7 +305,7 @@ export default function WatchStream() {
   // is live.
   const { containerRef: pagerRef, hasNext: hasNextLive } = useLiveStreamPager({
     currentRoom: streamId,
-    enabled: mobileLayout,
+    enabled: mobileLayout && !wide,
   });
 
   // Detect the live stream via the room lookup (works for unlisted too), then
@@ -436,7 +460,7 @@ export default function WatchStream() {
         >
           {!connectReady ? <BarLoader /> : (
             <StandaloneWatch key={joinKey} roomName={streamId} connecting={<BarLoader />} audioMuted={prerollHold || rewind.active || vol.muted} audioVolume={vol.volume} onRaid={onRaid} liveLabels={liveLabels}>
-              <main className={`short-main no-bottom-bar ws-shorts${isLandscape ? ' ws-shorts--landscape' : ''}${!infoVisible ? ' ws-info-hidden' : ''}${prerollHold ? ' ws-preroll-on' : ''}${chatOverlayOn ? '' : ' ws-chat-off'}${controlsHidden ? ' ws-controls-hidden' : ''}`}>
+              <main className={`short-main no-bottom-bar ws-shorts${wide ? ' ws-shorts--landscape' : ''}${!infoVisible ? ' ws-info-hidden' : ''}${prerollHold ? ' ws-preroll-on' : ''}${chatOverlayOn ? '' : ' ws-chat-off'}${controlsHidden ? ' ws-controls-hidden' : ''}`}>
                 <div className="videoWrapper">
                   <div className="videoContainer" ref={pagerRef} onClick={revealInfo}>
                     {/* The goal bar goes in the info block below, not over the bottom
@@ -502,10 +526,7 @@ export default function WatchStream() {
                     </div>
 
                     <div className="actionSidebar" onClick={(e) => e.stopPropagation()}>
-                      <div className="actionItem" onClick={() => setChatOverlayOn((v) => {
-                        try { localStorage.setItem(CHAT_OVERLAY_KEY, v ? '0' : '1'); } catch { /* storage off */ }
-                        return !v;
-                      })}>
+                      <div className="actionItem" onClick={toggleChat}>
                         <div className={`actionButton${chatOverlayOn ? ' liked' : ''}`}>
                           <Icon name="chat" size={24} fill={chatOverlayOn} />
                         </div>
@@ -521,6 +542,12 @@ export default function WatchStream() {
                             <Icon name={verticalPref ? 'crop_landscape' : 'crop_portrait'} size={24} />
                           </div>
                           <span className="actionLabel">{verticalPref ? t('misc.watchStream.fullView') : t('misc.watchStream.verticalView')}</span>
+                        </div>
+                      )}
+                      {streamLandscape === true && (
+                        <div className="actionItem" onClick={toggleFullscreen} role="button" aria-pressed={phoneFull}>
+                          <div className="actionButton"><Icon name={phoneFull ? 'fullscreen_exit' : 'fullscreen'} size={24} /></div>
+                          <span className="actionLabel">{phoneFull ? t('player.controls.exitFullscreen') : t('player.controls.fullscreen')}</span>
                         </div>
                       )}
                       <div className="actionItem" onClick={copyLink}>
@@ -559,6 +586,22 @@ export default function WatchStream() {
                     )}
                   </div>
                 </div>
+                {/* Wide (sideways or fullscreen): the chat is a column on the right
+                    that folds away; folded, a tab on the edge opens it again. */}
+                {wide && (chatOverlayOn ? (
+                  <div className="ws-side" onClick={(e) => e.stopPropagation()}>
+                    <div className="ws-side__head">
+                      <span>{t('misc.watchStream.chat')}</span>
+                      <button type="button" onClick={toggleChat} aria-label={t('misc.watchStream.chatHide')} title={t('misc.watchStream.chatHide')}>
+                        <Icon name="chevron_right" size={22} />
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <button type="button" className="ws-side-open" onClick={(e) => { e.stopPropagation(); toggleChat(); }} aria-label={t('misc.watchStream.chatShow')} title={t('misc.watchStream.chatShow')}>
+                    <Icon name="chat" size={20} />
+                  </button>
+                ))}
                 {/* Chat switched off on the rail: the composer (and its "sign in to
                     chat" prompt) goes with the messages. */}
                 {chatOverlayOn && !controlsHidden && (

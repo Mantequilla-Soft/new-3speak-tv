@@ -338,7 +338,9 @@
     "pollMove": "Drag to move",
     "pollHide": "Close",
     "pollShow": "Open the poll",
-    "predictionShow": "Open the prediction"
+    "predictionShow": "Open the prediction",
+    "chatHide": "Hide the chat",
+    "chatShow": "Show the chat"
   },
   "pullToRefresh": {
     "pull": "Pull to refresh",

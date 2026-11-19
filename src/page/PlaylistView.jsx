@@ -28,7 +28,7 @@ import PlaylistEpisodeTile from '../components/Podcasts/PlaylistEpisodeTile';
 import PlaylistFeedsModal from '../components/Podcasts/PlaylistFeedsModal';
 import PlaylistMergedList from '../components/Podcasts/PlaylistMergedList';
 import { PODCAST_PLACEHOLDER, artUrl, episodeToTrack, podcastPath } from '../lib/podcasts';
-import { playlistFeedsOf, usePlaylistBundle, mergeByDate } from '../lib/playlistFeeds';
+import { playlistFeedsOf, usePlaylistBundle, mergeByDate, OWN_ITEMS } from '../lib/playlistFeeds';
 import { fixVideoThumbnail, fallbackImg, squareCover } from '../utils/fixThumbnails';
 import { fetchVideosForPlaylist } from '../utils/playlistVideos';
 import useHoverPreview from '../hooks/useHoverPreview';
@@ -187,12 +187,29 @@ function PlaylistView() {
     [playlistJsonMeta, isHiddenFromViewer],
   );
   const hasFeeds = feedUrls.length > 0;
-  const bundle = usePlaylistBundle(feedUrls);
+  // The show picker: '' everything, OWN_ITEMS the playlist's own 3Speak items, else
+  // one outside show's id; with a show, a season of it (0 = all). The checker does
+  // the narrowing, so paging stays right.
+  const [showFilter, setShowFilter] = useState('');
+  const [seasonFilter, setSeasonFilter] = useState(0);
+  const feedFilter = showFilter && showFilter !== OWN_ITEMS ? showFilter : '';
+  const ownOnly = showFilter === OWN_ITEMS;
+  const pickShow = (value) => { setShowFilter(value); setSeasonFilter(0); };
+  const bundle = usePlaylistBundle(feedUrls, { feedId: feedFilter, season: seasonFilter });
   const bundlePages = bundle.data?.pages || [];
   const outsideFeeds = bundlePages[0]?.feeds || [];
   const outsideTotal = bundlePages[0]?.total || 0;
+  // The count of every outside episode, kept while a show is picked (that answer counts one show).
+  const [allOutsideTotal, setAllOutsideTotal] = useState(0);
+  if (!feedFilter && !bundle.isPlaceholderData && bundlePages[0] && outsideTotal !== allOutsideTotal) setAllOutsideTotal(outsideTotal);
+  const showSeasons = feedFilter && !bundle.isPlaceholderData ? (bundlePages[0]?.seasons || []) : [];
   const pendingFeeds = bundlePages[0]?.missing?.length || 0;
-  const outsideEpisodes = useMemo(() => (bundle.data?.pages || []).flatMap((p) => p.episodes || []), [bundle.data]);
+  // While another pick loads, the last answer stays on screen: narrowed here too.
+  const outsideEpisodes = useMemo(() => (bundle.data?.pages || []).flatMap((p) => p.episodes || [])
+    .filter((ep) => (!feedFilter || ep.feed_id === feedFilter) && (!seasonFilter || ep.season === seasonFilter)),
+  [bundle.data, feedFilter, seasonFilter]);
+  // A show the owner has just taken out of the playlist can't stay picked.
+  if (feedFilter && outsideFeeds.length && !bundle.isPlaceholderData && !outsideFeeds.some((f) => f.id === feedFilter)) pickShow('');
 
   // The playlist's type and audio kind (lib/playlistType.js): what the owner
   // chose, else worked out from the items. Until the items load only a stored
@@ -225,13 +242,40 @@ function PlaylistView() {
     ? `${e.ep.title || ''} ${e.feed?.title || ''} ${e.ep.summary || ''}`
     : `${e.video.title || ''} ${e.video.audioDoc?.title || ''} ${e.video.summary || ''}`).toLowerCase();
   const merged = hasFeeds
-    ? mergeByDate(listedVideos, outsideEpisodes, outsideFeeds, { complete: !bundle.hasNextPage })
+    ? mergeByDate(feedFilter ? [] : listedVideos, ownOnly ? [] : outsideEpisodes, outsideFeeds, { complete: ownOnly || !bundle.hasNextPage })
       .filter((e) => (!since || e.at >= since * 1000) && (!episodeQuery || mergedText(e).includes(episodeQuery)))
     : [];
   const mergedTracks = merged.flatMap((e) => (e.kind === 'episode'
     ? [episodeToTrack(e.ep, e.feed)]
     : e.video.isAudio && e.video.audioDoc ? [trackItem(e.video)] : []));
-  const itemCount = listedVideos.length + outsideTotal;
+  const itemCount = listedVideos.length + (feedFilter ? allOutsideTotal : outsideTotal);
+  // What the picked show holds: the section's count.
+  const shownCount = ownOnly ? listedVideos.length : feedFilter ? outsideTotal : itemCount;
+  const showPicker = hasFeeds && (outsideFeeds.length > 1 || (outsideFeeds.length > 0 && listedVideos.length > 0)) && (
+    <>
+      <select
+        className="pod-show-select pv-show-select"
+        value={showFilter}
+        onChange={(e) => pickShow(e.target.value)}
+        aria-label={t('playlists.feeds.filter.label')}
+      >
+        <option value="">{t('playlists.feeds.filter.all')}</option>
+        {listedVideos.length > 0 && <option value={OWN_ITEMS}>{t('playlists.feeds.filter.own')}</option>}
+        {outsideFeeds.map((f) => <option key={f.id} value={f.id}>{f.title || f.url}</option>)}
+      </select>
+      {showSeasons.length > 0 && (
+        <select
+          className="pod-show-select pv-show-select"
+          value={seasonFilter}
+          onChange={(e) => setSeasonFilter(Number(e.target.value))}
+          aria-label={t('audio.podcasts.seasons.label')}
+        >
+          <option value={0}>{t('audio.podcasts.seasons.all')}</option>
+          {showSeasons.map((n) => <option key={n} value={n}>{t('audio.podcasts.seasons.season', { n })}</option>)}
+        </select>
+      )}
+    </>
+  );
   const mergedList = (
     <PlaylistMergedList
       entries={merged}
@@ -241,12 +285,13 @@ function PlaylistView() {
       playlistId={playlistId}
       allVideos={allVideos}
       loading={videosLoading || bundle.isLoading}
-      hasMore={!!bundle.hasNextPage}
+      hasMore={!ownOnly && !!bundle.hasNextPage}
       loadingMore={bundle.isFetchingNextPage}
       onLoadMore={() => bundle.fetchNextPage()}
       pending={pendingFeeds}
       emptyText={episodeQuery
         ? t('audio.podcasts.episodeSearch.none', { q: episodeSearch.trim() })
+        : showFilter ? t('playlists.feeds.filter.none')
         : dateFilter !== 'all' ? t('playlists.view.emptyPeriod') : t('playlists.view.empty')}
       onAddToPlaylist={authenticatedUser ? (v) => setPlaylistTarget({
         author: v.audioDoc.owner,
@@ -861,9 +906,10 @@ function PlaylistView() {
           <div className="pod-section-head pod-section-head--filters">
             <h2 className="pod-section-title">
               {t('audio.podcasts.episodesTitle')}
-              {itemCount > 0 && <span className="audio-section-count">{itemCount}</span>}
+              {shownCount > 0 && <span className="audio-section-count">{shownCount}</span>}
             </h2>
             <div className="pod-filters">
+              {showPicker}
               {dateFilters('pod-filter-dates')}
             </div>
           </div>
@@ -1026,10 +1072,11 @@ function PlaylistView() {
 
         <section className="pv-main">
           <div className="playlist-toolbar">
+            {showPicker}
             {dateFilters()}
             {dateFilter !== 'all' && (
               <span className="filter-count">{hasFeeds
-                ? t('playlists.view.filterCount', { shown: merged.length, count: itemCount })
+                ? t('playlists.view.filterCount', { shown: merged.length, count: shownCount })
                 : t('playlists.view.filterCount', { shown: displayVideos.length, count: listedVideos.length })}</span>
             )}
             {isOwner ? <div className="owner-actions">{ownerButtons}</div> : null}

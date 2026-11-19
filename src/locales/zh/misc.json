@@ -337,7 +337,9 @@
     "pollMove": "拖动以移动",
     "pollHide": "关闭",
     "pollShow": "打开投票",
-    "predictionShow": "打开预测"
+    "predictionShow": "打开预测",
+    "chatHide": "隐藏聊天",
+    "chatShow": "显示聊天"
   },
   "pullToRefresh": {
     "pull": "下拉刷新",

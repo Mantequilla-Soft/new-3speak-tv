@@ -8,7 +8,7 @@
  * the playlist page merges them by date with the playlist's 3Speak items, and
  * the playlist's RSS feed carries them too.
  */
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, keepPreviousData } from '@tanstack/react-query';
 import { fetchPlaylistBundle, feedKey, threeSpeakPost } from './podcasts';
 
 // Same cap as the checker's (MAX_PLAYLIST_FEEDS).
@@ -58,17 +58,26 @@ export function withPlaylistFeeds(jsonMeta, feeds) {
 /** Is `url` the RSS feed of the playlist `playlistId` itself? */
 export const isOwnPlaylistFeed = (url, playlistId) => feedKey(url).endsWith(`/rss/playlist/${playlistId}.xml`);
 
-/** A playlist's outside shows and their episodes, paged newest first. */
-export function usePlaylistBundle(urls) {
+/**
+ * A playlist's outside shows and their episodes, paged newest first. `feedId`
+ * lists one show only (its first page then names the show's `seasons`), `season`
+ * one season of it. The list on screen stays while another filter loads, so the
+ * show picker keeps its options.
+ */
+export function usePlaylistBundle(urls, { feedId = '', season = 0 } = {}) {
   return useInfiniteQuery({
-    queryKey: ['podcasts', 'bundle', urls.join('\n')],
+    queryKey: ['podcasts', 'bundle', urls.join('\n'), feedId, feedId ? season : 0],
     enabled: urls.length > 0,
     initialPageParam: null,
-    queryFn: ({ pageParam }) => fetchPlaylistBundle(urls, pageParam),
+    queryFn: ({ pageParam }) => fetchPlaylistBundle(urls, pageParam, { feedId, season }),
     getNextPageParam: (last) => last.next_cursor || undefined,
+    placeholderData: keepPreviousData,
     staleTime: 60 * 1000,
   });
 }
+
+/** The show picker's choice for "the playlist's own 3Speak items" (a show id is 24 hex digits). */
+export const OWN_ITEMS = 'own';
 
 const timeOf = (v) => {
   const ms = v ? new Date(v).getTime() : NaN;

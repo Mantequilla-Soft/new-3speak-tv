@@ -338,7 +338,9 @@
     "pollMove": "I-drag para ilipat",
     "pollHide": "Isara",
     "pollShow": "Buksan ang poll",
-    "predictionShow": "Buksan ang prediksyon"
+    "predictionShow": "Buksan ang prediksyon",
+    "chatHide": "Itago ang chat",
+    "chatShow": "Ipakita ang chat"
   },
   "pullToRefresh": {
     "pull": "Hilahin para mag-refresh",

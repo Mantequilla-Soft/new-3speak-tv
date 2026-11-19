@@ -140,6 +140,12 @@
     "fromShows": "Uit andere shows:",
     "video": "Video",
     "pending_one": "{{count}} show wordt nog ingelezen. De afleveringen verschijnen binnen een paar minuten.",
-    "pending_other": "{{count}} shows worden nog ingelezen. De afleveringen verschijnen binnen een paar minuten."
+    "pending_other": "{{count}} shows worden nog ingelezen. De afleveringen verschijnen binnen een paar minuten.",
+    "filter": {
+      "label": "Show",
+      "all": "Alle shows",
+      "own": "3Speak-uploads",
+      "none": "Geen afleveringen passen bij deze filters."
+    }
   }
 }

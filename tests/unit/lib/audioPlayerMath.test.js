@@ -9,6 +9,7 @@ import {
   withTimestamp, clipRange, CLIP_MIN, CLIP_MAX,
   skipRate, levelDb, createSilenceDetector, savedMs, fmtSaved,
   corsKnown, rememberCors, CORS_CACHE_KEY, hostOf, isHlsTrack,
+  nextTrackOf, sourceBroken,
 } from '../../../src/components/GlobalAudioPlayer/playerMath.js'
 
 function memoryStorage() {
@@ -262,3 +263,26 @@ describe('swipes on the phone player', async () => {
     expect(fullSwipeCollapses(0, -120)).toBe(false)
   })
 })
+
+describe('queue', () => {
+  const t = (n) => ({ _id: `id-${n}` })
+  const [A, B, C] = [t(1), t(2), t(3)]
+
+  it('nextTrackOf: the next in the queue, else the next on the page list (which goes along)', () => {
+    expect(nextTrackOf({ audioCurrent: A, audioQueue: [A, B, C] })).toEqual({ track: B, list: null })
+    expect(nextTrackOf({ audioCurrent: C, audioQueue: [A, B, C], audioAutoplayList: [] })).toBeNull()
+    expect(nextTrackOf({ audioCurrent: C, audioQueue: [B], audioAutoplayList: [] })).toEqual({ track: B, list: null })
+    expect(nextTrackOf({ audioCurrent: A, audioQueue: [], audioAutoplayList: [A, B] })).toEqual({ track: B, list: [A, B] })
+    expect(nextTrackOf({ audioCurrent: null, audioQueue: [A] })).toBeNull()
+  })
+
+  it('sourceBroken: an error, no source at all, or nothing loaded', () => {
+    const el = (o) => ({ error: null, networkState: 1, currentSrc: 'https://x/a.mp3', getAttribute: () => 'https://x/a.mp3', ...o })
+    expect(sourceBroken(el())).toBe(false)
+    expect(sourceBroken(el({ error: { code: 2 } }))).toBe(true)
+    expect(sourceBroken(el({ networkState: 3 }))).toBe(true)
+    expect(sourceBroken(el({ currentSrc: '', getAttribute: () => null }))).toBe(true)
+    expect(sourceBroken(null)).toBe(false)
+  })
+})
+

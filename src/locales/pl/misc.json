@@ -340,7 +340,9 @@
     "pollMove": "Przeciągnij, aby przesunąć",
     "pollHide": "Zamknij",
     "pollShow": "Otwórz ankietę",
-    "predictionShow": "Otwórz prognozę"
+    "predictionShow": "Otwórz prognozę",
+    "chatHide": "Ukryj czat",
+    "chatShow": "Pokaż czat"
   },
   "pullToRefresh": {
     "pull": "Pociągnij, aby odświeżyć",

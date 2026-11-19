@@ -140,6 +140,12 @@
     "fromShows": "Aus anderen Shows:",
     "video": "Video",
     "pending_one": "{{count}} Show wird noch eingelesen. Ihre Folgen erscheinen in ein paar Minuten.",
-    "pending_other": "{{count}} Shows werden noch eingelesen. Ihre Folgen erscheinen in ein paar Minuten."
+    "pending_other": "{{count}} Shows werden noch eingelesen. Ihre Folgen erscheinen in ein paar Minuten.",
+    "filter": {
+      "label": "Show",
+      "all": "Alle Shows",
+      "own": "3Speak-Uploads",
+      "none": "Keine Folgen passen zu diesen Filtern."
+    }
   }
 }

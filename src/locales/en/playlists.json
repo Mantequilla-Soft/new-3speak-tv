@@ -140,6 +140,12 @@
     "fromShows": "From other shows:",
     "video": "Video",
     "pending_one": "{{count}} show is still being read. Its episodes appear within a few minutes.",
-    "pending_other": "{{count}} shows are still being read. Their episodes appear within a few minutes."
+    "pending_other": "{{count}} shows are still being read. Their episodes appear within a few minutes.",
+    "filter": {
+      "label": "Show",
+      "all": "All shows",
+      "own": "3Speak uploads",
+      "none": "No episodes match these filters."
+    }
   }
 }

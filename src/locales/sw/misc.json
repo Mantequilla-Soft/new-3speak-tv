@@ -338,7 +338,9 @@
     "pollMove": "Buruta ili kusogeza",
     "pollHide": "Funga",
     "pollShow": "Fungua kura ya maoni",
-    "predictionShow": "Fungua utabiri"
+    "predictionShow": "Fungua utabiri",
+    "chatHide": "Ficha gumzo",
+    "chatShow": "Onyesha gumzo"
   },
   "pullToRefresh": {
     "pull": "Vuta ili kuonyesha upya",

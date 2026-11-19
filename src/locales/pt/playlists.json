@@ -147,6 +147,12 @@
     "video": "Vídeo",
     "pending_one": "{{count}} programa ainda está sendo lido. Os episódios aparecem em alguns minutos.",
     "pending_many": "{{count}} programas ainda estão sendo lidos. Os episódios aparecem em alguns minutos.",
-    "pending_other": "{{count}} programas ainda estão sendo lidos. Os episódios aparecem em alguns minutos."
+    "pending_other": "{{count}} programas ainda estão sendo lidos. Os episódios aparecem em alguns minutos.",
+    "filter": {
+      "label": "Programa",
+      "all": "Todos os programas",
+      "own": "Envios do 3Speak",
+      "none": "Nenhum episódio corresponde a estes filtros."
+    }
   }
 }

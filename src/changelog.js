@@ -18,6 +18,24 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.140',
+    category: 'playlists',
+    date: '2026-11-19',
+    summary: 'Playlists with outside podcast shows can now be filtered by show, and by season within a show.',
+  },
+  {
+    version: '2.0.139',
+    category: 'audio',
+    date: '2026-11-19',
+    summary: 'With your phone locked, the audio queue moves on to the next episode by itself, and Play starts a track again if it failed to load.',
+  },
+  {
+    version: '2.0.138',
+    category: 'live',
+    date: '2026-11-19',
+    summary: 'Watching a stream on a phone, tap Fullscreen or turn your phone: the stream fills the screen with the chat in a column you can fold away.',
+  },
+  {
     version: '2.0.137',
     category: 'home',
     date: '2026-11-19',

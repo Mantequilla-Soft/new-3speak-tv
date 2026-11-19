@@ -405,4 +405,37 @@ describe('a playlist with external shows in it', () => {
     await screen.findByText('Outside Show: Outside ep')
     expect(screen.queryByRole('button', { name: 'External shows' })).not.toBeInTheDocument()
   })
+
+  it('narrows the list to one show, then to one of its seasons', async () => {
+    const bodies = []
+    vi.stubGlobal('fetch', vi.fn(async (url, init) => {
+      if (!String(url).endsWith('/podcasts/bundle')) return { ok: true, status: 200, json: async () => ({}) }
+      const body = JSON.parse(init.body)
+      bodies.push(body)
+      const s2 = { id: 'f1:bbbbbbbbbbbbbbbb', feed_id: 'f1', title: 'Season two ep', season: 2, audio_url: 'https://cdn.example/2.mp3', published_at: '2026-10-15T00:00:00.000Z' }
+      const answer = !body.feed_id ? { ...bundle, episodes: [...bundle.episodes, s2], total: 2 }
+        : body.season === 2 ? { ...bundle, episodes: [s2], total: 1, seasons: [1, 2] }
+          : { ...bundle, episodes: [...bundle.episodes, s2], total: 2, seasons: [1, 2] }
+      return { ok: true, status: 200, json: async () => answer }
+    }))
+    const { user } = mount()
+    await screen.findByText('Outside Show: Outside ep')
+    expect(screen.queryByRole('combobox', { name: 'Season' })).not.toBeInTheDocument()
+
+    await user.selectOptions(screen.getByRole('combobox', { name: 'Show' }), 'Outside Show')
+    await waitFor(() => expect(screen.queryByText(/Track 1/)).not.toBeInTheDocument())
+    expect(bodies.at(-1)).toEqual({ urls: [SHOW_URL], feed_id: 'f1' })
+    // The playlist still counts everything; the section counts the show.
+    expect(screen.getByText('4 episodes')).toBeInTheDocument()
+
+    await user.selectOptions(await screen.findByRole('combobox', { name: 'Season' }), 'Season 2')
+    await waitFor(() => expect(screen.queryByText('Outside Show: Outside ep')).not.toBeInTheDocument())
+    expect(screen.getByText('Outside Show: Season two ep')).toBeInTheDocument()
+    expect(bodies.at(-1)).toEqual({ urls: [SHOW_URL], feed_id: 'f1', season: 2 })
+
+    await user.selectOptions(screen.getByRole('combobox', { name: 'Show' }), '3Speak uploads')
+    await waitFor(() => expect(screen.queryByText(/Outside Show:/)).not.toBeInTheDocument())
+    expect(screen.getAllByRole('listitem').map((li) => li.textContent)).toEqual([expect.stringContaining('Track 1'), expect.stringContaining('Track 2')])
+    expect(screen.queryByRole('combobox', { name: 'Season' })).not.toBeInTheDocument()
+  })
 })

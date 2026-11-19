@@ -205,7 +205,13 @@ export async function resolveFeed(user, url) {
 }
 
 /** One page of a playlist's outside shows and their episodes, newest first (checker /podcasts/bundle). */
-export const fetchPlaylistBundle = (urls, cursor = null) => post('bundle', { urls, ...(cursor ? { cursor } : {}) });
+/** A page of a playlist's outside shows; `feedId` narrows to one show, `season` (with it) to one season. */
+export const fetchPlaylistBundle = (urls, cursor = null, { feedId = '', season = 0 } = {}) => post('bundle', {
+  urls,
+  ...(cursor ? { cursor } : {}),
+  ...(feedId ? { feed_id: feedId } : {}),
+  ...(feedId && season ? { season } : {}),
+});
 
 /** The user-facing reason a URL could not be followed. */
 /** The message for a failed follow; `info` is the checker's result row (Spotify & co. name the platform). */

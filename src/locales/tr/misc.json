@@ -338,7 +338,9 @@
     "pollMove": "Taşımak için sürükleyin",
     "pollHide": "Kapat",
     "pollShow": "Anketi aç",
-    "predictionShow": "Tahmini aç"
+    "predictionShow": "Tahmini aç",
+    "chatHide": "Sohbeti gizle",
+    "chatShow": "Sohbeti göster"
   },
   "pullToRefresh": {
     "pull": "Yenilemek için çek",

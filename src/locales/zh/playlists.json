@@ -133,6 +133,12 @@
     "saveFailed": "保存失败：{{error}}",
     "fromShows": "来自其他节目：",
     "video": "视频",
-    "pending_other": "仍有 {{count}} 档节目正在读取，单集会在几分钟内出现。"
+    "pending_other": "仍有 {{count}} 档节目正在读取，单集会在几分钟内出现。",
+    "filter": {
+      "label": "节目",
+      "all": "全部节目",
+      "own": "3Speak 上传",
+      "none": "没有符合这些筛选条件的剧集。"
+    }
   }
 }

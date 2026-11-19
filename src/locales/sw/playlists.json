@@ -140,6 +140,12 @@
     "fromShows": "Kutoka vipindi vingine:",
     "video": "Video",
     "pending_one": "Kipindi {{count}} bado kinasomwa. Vipindi vyake vitaonekana ndani ya dakika chache.",
-    "pending_other": "Vipindi {{count}} bado vinasomwa. Vipindi vyake vitaonekana ndani ya dakika chache."
+    "pending_other": "Vipindi {{count}} bado vinasomwa. Vipindi vyake vitaonekana ndani ya dakika chache.",
+    "filter": {
+      "label": "Kipindi",
+      "all": "Vipindi vyote",
+      "own": "Vilivyopakiwa 3Speak",
+      "none": "Hakuna vipindi vinavyolingana na vichujio hivi."
+    }
   }
 }

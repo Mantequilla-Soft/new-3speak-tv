@@ -47,7 +47,7 @@ import {
   fmt, SPEEDS, SPEED_KEY, normalizeSpeed, formatSpeed, SKIP_BACK, SKIP_FORWARD, skipTarget,
   SWIPE_SKIP, barSwipe, fullSwipeCollapses,
   SLEEP_OPTIONS, startSleepTimer, sleepRemainingMs, sleepFadeFactor,
-  chapterMarkers, chapterJumps, corsKnown, hlsPlayback,
+  chapterMarkers, chapterJumps, corsKnown, hlsPlayback, nextTrackOf, sourceBroken,
   createSilenceDetector, skipRate, levelDb, savedMs, fmtSaved,
 } from './playerMath';
 import { attach, detach, canRoute, markNoCors, webAudioSupported, warmUp } from './audioEffects';
@@ -266,6 +266,9 @@ function GlobalAudioPlayer() {
   const routedRef = useRef(false);
   // What the element is playing: { id, src, local } (local = a saved copy).
   const srcRef = useRef({ id: null, src: null, local: false });
+  // The next track, started on this element from the end of the last one
+  // (startNextInPlace): { id, src, el }. The load effect then keeps that load.
+  const preStartRef = useRef(null);
   // The saved copy's object URL for the current track, kept across a swap.
   const localUrlRef = useRef({ id: null, url: null });
   // Position and play state carried over to the next element.
@@ -505,6 +508,36 @@ function GlobalAudioPlayer() {
     setSleepLeft(null);
   }, []);
 
+  // The next track, started on THIS element inside the last one's `ended` event.
+  // A phone with the screen off only lets audio go on in an element that is
+  // already playing, and only from within that moment: by the time React has
+  // rendered the next track and its load effect runs, Android may have let the
+  // audio go, and that play() never starts (the queue stopped after a track).
+  // Only what can start at once: no saved copy or private feed to open first, no
+  // HLS, no swap to or from the Web Audio element. The rest waits for the load
+  // effect, as before.
+  const startNextInPlace = (el) => {
+    const next = nextTrackOf(useAppStore.getState())?.track;
+    if (!next || next.live || isVideoTrack(next)) return;
+    if (!(next.audio_cid || next.external) || (next.external && next.private)) return;
+    if (isDownloaded(next._id)) return;
+    const src = next.external ? next.src : `${AUDIO_CDN}/${next.audio_cid}`;
+    if (!src) return;
+    const f = fxRef.current;
+    let want = (f.boost || f.skip) && !fxBlockedRef.current && webAudioSupported()
+      && corsKnown(src, { storage: lsStorage(), origin: window.location.origin }) === true;
+    if (want && !routedRef.current && pageAway()) want = false;
+    if (want !== routedRef.current) return;
+    preStartRef.current = { id: next._id, src, el };
+    setAudioSrc(el, src, routedRef.current);
+    el.defaultPlaybackRate = speedRef.current;
+    el.playbackRate = speedRef.current;
+    const startAt = next.external ? resumePosition(useAppStore.getState().user, next._id) : 0;
+    if (startAt) el.addEventListener('loadedmetadata', () => { el.currentTime = startAt; }, { once: true });
+    if (routedRef.current) graphRef.current?.resume();
+    el.play().catch(() => {});
+  };
+
   // Wire <audio> element events to slice
   useEffect(() => {
     const el = audioRef.current; if (!el) return;
@@ -534,6 +567,9 @@ function GlobalAudioPlayer() {
     const saveHistory = (pos) => noteListen(audioCurrent, pos, Number(audioCurrent?.duration) || el.duration || 0);
     const h = {
       timeupdate: () => {
+        // The next track already plays here (started from `ended`) while this
+        // binding still belongs to the last one: its times are not this track's.
+        if (preStartRef.current && preStartRef.current.id !== audioCurrent?._id) return;
         audioSetCurrentTime(el.currentTime);
         saveProgress(el.currentTime);
         saveHistory(el.currentTime);
@@ -570,6 +606,7 @@ function GlobalAudioPlayer() {
         audioSetIsPlaying(false);
         // "Sleep at the end of this episode": stop here, don't start the next one.
         if (sleepRef.current?.mode === 'end') { endSleep(); return; }
+        startNextInPlace(el);
         playNext();
       },
       // Outside podcast feeds don't always say how long an episode is; only then
@@ -696,6 +733,11 @@ function GlobalAudioPlayer() {
       const { audioRestoredAt, audioStartAt } = useAppStore.getState();
       const restoring = audioRestoredAt != null;
       let play = !restoring;
+      // Started from the end of the last track (startNextInPlace): the element
+      // already loads and plays it; loading it again would cut that off.
+      const pre = preStartRef.current;
+      const preStarted = fresh && !local && !!pre && pre.id === track._id && pre.src === src && pre.el === el;
+      if (pre && (preStarted || pre.id !== track._id || pre.el !== el)) preStartRef.current = null;
       if (fresh || !el.getAttribute('src')) {
         const ho = handoverRef.current;
         handoverRef.current = null;
@@ -733,11 +775,11 @@ function GlobalAudioPlayer() {
           if (audioStartAt != null) useAppStore.setState({ audioStartAt: null });
           return;
         }
-        setAudioSrc(el, src, routedRef.current);
+        if (!preStarted) setAudioSrc(el, src, routedRef.current);
         el.defaultPlaybackRate = track.live ? 1 : speedRef.current;
         el.playbackRate = el.defaultPlaybackRate;
-        pendingStartRef.current = startAt || null;
-        if (startAt) {
+        pendingStartRef.current = preStarted ? null : startAt || null;
+        if (startAt && !preStarted) {
           el.addEventListener('loadedmetadata', () => {
             el.currentTime = startAt;
             pendingStartRef.current = null;
@@ -1138,13 +1180,34 @@ function GlobalAudioPlayer() {
     }
   }, [activeCueIdx]);
 
+  // Play, or load the track again when its source is broken (a load that failed
+  // with the screen off left the element unable to play: Play did nothing until
+  // the listener picked another track and came back).
+  // Picks up where it was, when it got anywhere.
+  const reloadCurrent = useCallback((at = 0) => {
+    srcRef.current = { id: null, src: null, local: false };
+    useAppStore.setState((st) => ({
+      audioPlayNonce: st.audioPlayNonce + 1,
+      audioRestoredAt: null,
+      audioStartAt: at > 0 ? at : null,
+    }));
+  }, []);
+  const playOrReload = useCallback((el) => {
+    if (sourceBroken(el)) { reloadCurrent(el.currentTime); return; }
+    el.play().catch((err) => {
+      // Cut off by a pause or a new load: nothing broken.
+      if (err?.name !== 'AbortError' && sourceBroken(el)) reloadCurrent(el.currentTime);
+    });
+  }, [reloadCurrent]);
+
   const togglePlay = useCallback(() => {
     const el = audioRef.current; if (!el) return;
     // While a spot plays, the button is the spot's.
     if (toggleAudioAd()) return;
+    if (!el.paused) { el.pause(); return; }
     // From the click itself: some browsers only start Web Audio inside one.
-    if (el.paused) graphRef.current?.resume();
-    el.paused ? el.play().catch(() => {}) : el.pause();
+    graphRef.current?.resume();
+    playOrReload(el);
   }, [toggleAudioAd]);
 
   const seekTo = useCallback((sec) => {
@@ -1161,17 +1224,12 @@ function GlobalAudioPlayer() {
   const playNext = useCallback(() => {
     // From the store, not this render: the end of a track, the lock screen's
     // Next and the queue all act on what the queue is at that moment.
-    const { audioCurrent, audioQueue, audioAutoplayList } = useAppStore.getState();
-    if (!audioCurrent) return;
-    if (audioQueue.length > 0) {
-      const i = audioQueue.findIndex(x => x._id === audioCurrent._id);
-      if (i >= 0 && i < audioQueue.length - 1) { audioPlay(audioQueue[i + 1]); return; }
-      if (i === -1) { audioPlay(audioQueue[0]); return; }
-    }
-    // The page's list goes along: audioPlay without it would make the next track
-    // a list of one, and the album or page would stop after it.
-    const i = audioAutoplayList.findIndex(x => x._id === audioCurrent._id);
-    if (i >= 0 && i < audioAutoplayList.length - 1) audioPlay(audioAutoplayList[i + 1], audioAutoplayList);
+    // The page's list goes along (nextTrackOf): audioPlay without it would make
+    // the next track a list of one, and the album or page would stop after it.
+    const next = nextTrackOf(useAppStore.getState());
+    if (!next) return;
+    if (next.list) audioPlay(next.track, next.list);
+    else audioPlay(next.track);
   }, [audioPlay]);
 
   const playPrev = useCallback(() => {
@@ -1233,8 +1291,8 @@ function GlobalAudioPlayer() {
   // The buttons are told once and call the latest Next / Previous through a
   // ref. They used to be taken away and set again on every track change, which
   // left the lock screen without them for a moment each time a track began.
-  const sessionActionsRef = useRef({ playNext, playPrev });
-  sessionActionsRef.current = { playNext, playPrev };
+  const sessionActionsRef = useRef({ playNext, playPrev, playOrReload });
+  sessionActionsRef.current = { playNext, playPrev, playOrReload };
   useEffect(() => {
     const ms = typeof navigator !== 'undefined' ? navigator.mediaSession : undefined;
     if (!ms?.setActionHandler) return undefined;
@@ -1242,7 +1300,7 @@ function GlobalAudioPlayer() {
     // An action a browser does not know throws; it just goes without that button.
     const set = (action, fn) => { try { ms.setActionHandler(action, fn); } catch { /* unsupported */ } };
     const handlers = {
-      play: () => { el()?.play().catch(() => {}); },
+      play: () => { const a = el(); if (a) sessionActionsRef.current.playOrReload(a); },
       pause: () => { el()?.pause(); },
       previoustrack: () => sessionActionsRef.current.playPrev(),
       nexttrack: () => sessionActionsRef.current.playNext(),
