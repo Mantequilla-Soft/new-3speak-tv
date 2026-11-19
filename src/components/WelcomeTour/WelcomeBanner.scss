@@ -29,12 +29,52 @@
   }
 
   @include v2.mobile { padding: 16px; }
+
+  // Phones and tablets: a bottom sheet over the page, above the bottom nav.
+  @include v2.below-wide {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 900;
+    max-width: 640px;
+    max-height: 88dvh;
+    margin: 0 auto;
+    padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+    border-radius: var(--r-3xl) var(--r-3xl) 0 0;
+    border-bottom: 0;
+    background: linear-gradient(160deg, color-mix(in srgb, var(--accent) 22%, var(--surface)), var(--surface)) var(--surface);
+    box-shadow: var(--shadow-float);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    animation: welcome-sheet-up var(--t-base) var(--ease);
+  }
+
+  &.is-touring { display: none; }
 }
 
-// The feedback button shares that corner: it waits until the card is closed.
-@include v2.wide {
-  body:has(.welcome-banner) .review-fab { display: none; }
+.welcome-banner-backdrop {
+  display: none;
+
+  @include v2.below-wide {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 899;
+    background: color-mix(in srgb, var(--media-black) 55%, transparent);
+  }
+
+  &.is-touring { display: none; }
 }
+
+@keyframes welcome-sheet-up {
+  from { transform: translateY(100%); }
+  to { transform: none; }
+}
+
+// The feedback button shares that corner (and would sit on the sheet): it
+// waits until the card is closed.
+body:has(.welcome-banner:not(.is-touring)) .review-fab { display: none; }
 
 .welcome-banner-head {
   display: flex;

@@ -1,8 +1,8 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useTranslation, Trans } from 'react-i18next';
 import { useAppStore } from '../../lib/store';
-import { markWelcomeDone, resetWelcome, startWelcomeTour, useWelcomeDone } from './welcomeState';
+import { START_TOUR_EVENT, markWelcomeDone, resetWelcome, startWelcomeTour, useWelcomeDone } from './welcomeState';
 import { Button, Icon, IconButton } from '../v2/ui';
 import './WelcomeBanner.scss';
 
@@ -34,14 +34,25 @@ export default function WelcomeBanner() {
     setParams((p) => { p.delete('welcome'); return p; }, { replace: true });
   }, [replay, setParams]);
 
+  // Phones and tablets show it as a sheet over the page: it steps aside while
+  // the tour runs (until the next visit, as long as it is not closed).
+  const [touring, setTouring] = useState(false);
+  useEffect(() => {
+    const onTour = () => setTouring(true);
+    window.addEventListener(START_TOUR_EVENT, onTour);
+    return () => window.removeEventListener(START_TOUR_EVENT, onTour);
+  }, []);
+
   // Wait for the stored session: a logged-in reload would flash it otherwise.
   if (!authChecked || authenticated || done) return null;
 
   return (
     // The welcome card (design 33d): a 520 wide card with the accent hero
-    // tint, floating in the lower right of a wide screen; in the page above
-    // the feeds on narrower ones.
-    <section className="welcome-banner" aria-labelledby="welcome-banner-title">
+    // tint, floating in the lower right of a wide screen; a bottom sheet over
+    // the page on narrower ones (in the page, the home hero covered it).
+    <>
+    <div className={`welcome-banner-backdrop${touring ? ' is-touring' : ''}`} onClick={markWelcomeDone} aria-hidden="true" />
+    <section className={`welcome-banner${touring ? ' is-touring' : ''}`} aria-labelledby="welcome-banner-title">
       <div className="welcome-banner-head">
         <div className="welcome-banner-titles">
           <h2 id="welcome-banner-title">{t('welcome.banner.title')}</h2>
@@ -75,5 +86,6 @@ export default function WelcomeBanner() {
         </Button>
       </div>
     </section>
+    </>
   );
 }
