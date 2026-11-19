@@ -298,6 +298,7 @@
     "pickTemplatePlaceholder": "Pilih template…",
     "templateLoaded": "“{{name}}” dimuat ke Siaran baru",
     "chatOverlay": {
+      "title": "Panel obrolan",
       "invalid": "Tautan overlay obrolan ini tidak valid. Salin lagi dari template-mu di Stream Studio.",
       "offline": "Kamu sedang tidak live. Pesan obrolan baru akan muncul di sini saat kamu live.",
       "empty": "Kamu sedang live. Pesan obrolan baru muncul di sini.",

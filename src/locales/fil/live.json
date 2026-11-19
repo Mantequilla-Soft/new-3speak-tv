@@ -299,6 +299,7 @@
     "pickTemplatePlaceholder": "Pumili ng template…",
     "templateLoaded": "Na-load ang “{{name}}” sa Bagong stream",
     "chatOverlay": {
+      "title": "Chat dock",
       "invalid": "Hindi valid ang link ng chat overlay na ito. Kopyahin ulit mula sa template mo sa Stream Studio.",
       "offline": "Hindi ka live ngayon. Lalabas dito ang mga bagong mensahe sa chat kapag nag-live ka.",
       "empty": "Live ka na. Lalabas dito ang mga bagong mensahe sa chat.",

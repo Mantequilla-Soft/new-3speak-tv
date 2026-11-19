@@ -298,6 +298,7 @@
     "pickTemplatePlaceholder": "选择模板…",
     "templateLoaded": "已将“{{name}}”载入新直播",
     "chatOverlay": {
+      "title": "聊天面板",
       "invalid": "这个聊天叠加层链接无效。请从 Stream Studio 中的模板重新复制。",
       "offline": "当前未在直播。开播后，新的聊天消息会显示在这里。",
       "empty": "正在直播。新的聊天消息会显示在这里。",

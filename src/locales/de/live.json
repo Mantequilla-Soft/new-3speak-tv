@@ -299,6 +299,7 @@
     "pickTemplatePlaceholder": "Vorlage wählen…",
     "templateLoaded": "„{{name}}“ in Neuer Stream geladen",
     "chatOverlay": {
+      "title": "Chat-Dock",
       "invalid": "Dieser Chat-Overlay-Link ist ungültig. Kopiere ihn erneut aus deiner Vorlage im Stream Studio.",
       "offline": "Gerade nicht live. Neue Chat-Nachrichten erscheinen hier, sobald du live gehst.",
       "empty": "Du bist live. Neue Chat-Nachrichten erscheinen hier.",

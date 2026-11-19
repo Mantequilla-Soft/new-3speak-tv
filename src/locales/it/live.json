@@ -300,6 +300,7 @@
     "pickTemplatePlaceholder": "Scegli un modello…",
     "templateLoaded": "“{{name}}” caricato in Nuova diretta",
     "chatOverlay": {
+      "title": "Pannello chat",
       "invalid": "Questo link dell'overlay chat non è valido. Copialo di nuovo dal tuo modello nello Stream Studio.",
       "offline": "Non sei in diretta ora. I nuovi messaggi della chat compariranno qui quando vai in diretta.",
       "empty": "Sei in diretta. I nuovi messaggi della chat compaiono qui.",

@@ -298,6 +298,7 @@
     "pickTemplatePlaceholder": "Chọn mẫu…",
     "templateLoaded": "Đã tải “{{name}}” vào Buổi phát mới",
     "chatOverlay": {
+      "title": "Bảng trò chuyện",
       "invalid": "Liên kết lớp phủ trò chuyện này không hợp lệ. Hãy sao chép lại từ mẫu của bạn trong Stream Studio.",
       "offline": "Hiện bạn không phát trực tiếp. Tin nhắn trò chuyện mới sẽ hiện ở đây khi bạn phát trực tiếp.",
       "empty": "Bạn đang phát trực tiếp. Tin nhắn trò chuyện mới hiện ở đây.",

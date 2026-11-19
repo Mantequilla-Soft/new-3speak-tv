@@ -299,6 +299,7 @@
     "pickTemplatePlaceholder": "Chagua kiolezo…",
     "templateLoaded": "“{{name}}” imepakiwa kwenye Mubashara mpya",
     "chatOverlay": {
+      "title": "Paneli ya gumzo",
       "invalid": "Kiungo hiki cha kiwekelea cha gumzo si sahihi. Kinakili tena kutoka kwenye kiolezo chako katika Stream Studio.",
       "offline": "Hauko mubashara sasa. Ujumbe mpya wa gumzo utaonekana hapa utakapoenda mubashara.",
       "empty": "Uko mubashara. Ujumbe mpya wa gumzo huonekana hapa.",

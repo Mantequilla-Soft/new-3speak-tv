@@ -8,6 +8,7 @@ import { CHECKER_URL } from "../utils/config";
 import { fetchBoostTotals } from "../utils/boostSummary";
 import { Icon } from "../components/v2/Icon";
 import "./ObsChatOverlay.scss";
+import mark from "../assets/image/3S_mark.svg";
 
 // A streamer's live chat for OBS. The URL carries the user's chat overlay key
 // (copied from the Templates tab of the Stream Studio), so one link covers all
@@ -309,6 +310,17 @@ function DockCounters({ room }) {
   );
 }
 
+/** The dock's top line: the 3Speak mark and what this panel is. */
+function DockBrand() {
+  const { t } = useTranslation();
+  return (
+    <div className="obs-chat__brand">
+      <img src={mark} alt="3Speak" />
+      <span>{t("live.obs.chatOverlay.title")}</span>
+    </div>
+  );
+}
+
 function ChatFeed({ fade, max, dock }) {
   const { t } = useTranslation();
   const { messages } = useChat();
@@ -384,13 +396,14 @@ export default function ObsChatOverlay() {
   const cls = `obs-chat${opts.dock ? " obs-chat--dock" : ""}`;
 
   if (missingKey || invalid) {
-    return <div className={cls} style={style} data-theme="dark"><p className="obs-chat__invalid">{t("live.obs.chatOverlay.invalid")}</p></div>;
+    return <div className={cls} style={style} data-theme="dark">{opts.dock && <DockBrand />}<p className="obs-chat__invalid">{t("live.obs.chatOverlay.invalid")}</p></div>;
   }
   const token = grant && grant.room === room ? grant.token : null;
   if (!room || !token) {
     // Over the video: nothing at all. In a dock: say why it's empty.
     return (
       <div className={cls} style={style} data-theme="dark">
+        {opts.dock && <DockBrand />}
         {opts.dock && <p className="obs-chat__status">{t("live.obs.chatOverlay.offline")}</p>}
       </div>
     );
@@ -404,6 +417,7 @@ export default function ObsChatOverlay() {
             {/* Header and body: the chat stacks from the bottom and overflows
                 at the top, under the header, which stays put. */}
             <div className="obs-chat__head">
+              <DockBrand />
               <DockCounters room={room} />
               {dockSession === "invalid" && <p className="obs-chat__notice">{t("live.obs.chatOverlay.controlInvalid")}</p>}
               {controls && (

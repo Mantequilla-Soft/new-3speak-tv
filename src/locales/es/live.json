@@ -300,6 +300,7 @@
     "pickTemplatePlaceholder": "Elige una plantilla…",
     "templateLoaded": "“{{name}}” cargada en Nueva transmisión",
     "chatOverlay": {
+      "title": "Panel de chat",
       "invalid": "Este enlace del overlay de chat no es válido. Vuelve a copiarlo desde tu plantilla en el Stream Studio.",
       "offline": "No estás en vivo ahora. Los mensajes nuevos del chat aparecerán aquí cuando salgas en vivo.",
       "empty": "Estás en vivo. Los mensajes nuevos del chat aparecen aquí.",
