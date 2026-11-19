@@ -57,6 +57,7 @@
   "editor": {
     "back": "Terug",
     "close": "Sluiten",
+    "done": "Klaar",
     "name": "Naam",
     "namePlaceholder": "Geef deze automatisering een naam",
     "enabled": "Automatisering aan",

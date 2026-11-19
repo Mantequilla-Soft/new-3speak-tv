@@ -55,6 +55,7 @@
   "editor": {
     "back": "Quay lại",
     "close": "Đóng",
+    "done": "Xong",
     "name": "Tên",
     "namePlaceholder": "Đặt tên cho tự động hóa này",
     "enabled": "Bật tự động hóa",

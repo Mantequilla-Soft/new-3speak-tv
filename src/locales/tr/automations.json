@@ -57,6 +57,7 @@
   "editor": {
     "back": "Geri",
     "close": "Kapat",
+    "done": "Tamam",
     "name": "Ad",
     "namePlaceholder": "Bu otomasyona bir ad ver",
     "enabled": "Otomasyon açık",

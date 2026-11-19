@@ -226,3 +226,71 @@ $flat: (0 0 0 transparent);
   }
   &__err { font-size: 13px; color: var(--accent); }
 }
+
+// ── Phones: the side panel and the toolbox are bottom sheets ─────────────────
+// The designer's own mobile layout lays its panel over the whole canvas; here
+// the panel (properties or the event) and the open toolbox slide up from the
+// bottom over a backdrop instead, above the app's bottom bar.
+.aut-editor.is-narrow {
+  .aut-editor__canvas {
+    height: max(400px, calc(100dvh - var(--topbar-h, 64px) - var(--bottom-bar-clearance, 0px) - 150px));
+  }
+
+  .sqd-smart-editor {
+    position: fixed;
+    inset: auto 0 0 0;
+    max-height: 78dvh;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    z-index: 1001;
+    border-radius: 20px 20px 0 0;
+    border-top: 1px solid var(--border);
+    background: var(--surface);
+    box-shadow: var(--shadow-sheet, none);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  // The designer's X sits on the canvas; the sheet has its own Done.
+  .sqd-smart-editor-toggle:not(.sqd-collapsed) { display: none; }
+
+  &.is-toolbox-open .sqd-toolbox {
+    position: fixed;
+    inset: auto 0 0 0;
+    width: auto;
+    z-index: 1001;
+    border-radius: 20px 20px 0 0;
+    padding-bottom: env(safe-area-inset-bottom);
+
+    .sqd-toolbox-header { padding: 14px 16px 8px; }
+    .sqd-toolbox-item-text { font-size: 13px; }
+  }
+}
+
+.aut-sheet-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: var(--overlay, rgba(0, 0, 0, 0.5));
+}
+
+.aut-sheet-head {
+  position: sticky;
+  top: -16px;
+  margin: -16px -16px 0;
+  padding: 8px 12px 4px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  background: var(--surface);
+  z-index: 1;
+
+  &__grab {
+    position: absolute;
+    left: 50%;
+    top: 8px;
+    width: 40px;
+    height: 4px;
+    margin-left: -20px;
+    border-radius: 999px;
+    background: var(--border);
+  }
+}

@@ -55,6 +55,7 @@
   "editor": {
     "back": "Kembali",
     "close": "Tutup",
+    "done": "Selesai",
     "name": "Nama",
     "namePlaceholder": "Beri nama otomatisasi ini",
     "enabled": "Otomatisasi aktif",

@@ -59,6 +59,7 @@
   "editor": {
     "back": "Atrás",
     "close": "Cerrar",
+    "done": "Listo",
     "name": "Nombre",
     "namePlaceholder": "Ponle nombre a esta automatización",
     "enabled": "Automatización activada",

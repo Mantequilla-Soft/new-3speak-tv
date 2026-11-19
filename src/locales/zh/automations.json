@@ -55,6 +55,7 @@
   "editor": {
     "back": "返回",
     "close": "关闭",
+    "done": "完成",
     "name": "名称",
     "namePlaceholder": "为这个自动化命名",
     "enabled": "开启自动化",

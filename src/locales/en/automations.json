@@ -57,6 +57,7 @@
   "editor": {
     "back": "Back",
     "close": "Close",
+    "done": "Done",
     "name": "Name",
     "namePlaceholder": "Name this automation",
     "enabled": "Automation on",

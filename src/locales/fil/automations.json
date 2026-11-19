@@ -57,6 +57,7 @@
   "editor": {
     "back": "Bumalik",
     "close": "Isara",
+    "done": "Tapos",
     "name": "Pangalan",
     "namePlaceholder": "Pangalanan ang automation na ito",
     "enabled": "Naka-on ang automation",

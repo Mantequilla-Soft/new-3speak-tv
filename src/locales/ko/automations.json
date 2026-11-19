@@ -55,6 +55,7 @@
   "editor": {
     "back": "뒤로",
     "close": "닫기",
+    "done": "완료",
     "name": "이름",
     "namePlaceholder": "이 자동화의 이름",
     "enabled": "자동화 켜기",

@@ -55,6 +55,7 @@
   "editor": {
     "back": "戻る",
     "close": "閉じる",
+    "done": "完了",
     "name": "名前",
     "namePlaceholder": "このオートメーションの名前",
     "enabled": "オートメーションをオン",

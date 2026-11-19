@@ -6,7 +6,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { screen, fireEvent, waitFor } from '@testing-library/react'
 import { createRequire } from 'node:module'
-import { renderWithProviders } from '../components/_render.jsx'
+import { renderWithProviders, stubMatchMedia } from '../components/_render.jsx'
 
 vi.mock('../../../src/hive-api/aioha', async () => (await import('../components/_render.jsx')).aiohaModule())
 vi.mock('../../../src/utils/postingAuthority', () => ({ addThreespeakToPostingAuth: vi.fn(async () => {}), waitForThreespeakPostingAuth: vi.fn(async () => true) }))
@@ -179,6 +179,18 @@ describe('the editor', () => {
     expect(screen.getByTestId('designer').getAttribute('data-steps')).toBe('1')
     // An unnamed automation takes the template's name.
     expect(screen.getByRole('textbox', { name: 'Name' }).value).toBe('Thank everyone who tips')
+  })
+
+  it('leaves the Templates button out on a phone, where the canvas needs the room', async () => {
+    stubMatchMedia(true)
+    try {
+      page('/automations/aaaaaaaaaaaa')
+      await screen.findByTestId('designer')
+      expect(screen.queryByRole('button', { name: 'Templates' })).toBeNull()
+      expect(screen.getByRole('button', { name: 'Test' })).toBeTruthy()
+    } finally {
+      stubMatchMedia(false)
+    }
   })
 
   it('says when an automation is gone', async () => {

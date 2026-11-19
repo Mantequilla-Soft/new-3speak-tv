@@ -59,6 +59,7 @@
   "editor": {
     "back": "Retour",
     "close": "Fermer",
+    "done": "Terminé",
     "name": "Nom",
     "namePlaceholder": "Nommez cette automatisation",
     "enabled": "Automatisation activée",

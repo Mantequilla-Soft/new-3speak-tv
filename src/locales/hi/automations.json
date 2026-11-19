@@ -57,6 +57,7 @@
   "editor": {
     "back": "वापस",
     "close": "बंद करें",
+    "done": "हो गया",
     "name": "नाम",
     "namePlaceholder": "इस ऑटोमेशन को नाम दें",
     "enabled": "ऑटोमेशन चालू",

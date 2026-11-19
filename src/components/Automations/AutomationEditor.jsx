@@ -166,7 +166,19 @@ function AccountsField({ value, onChange, readOnly, max }) {
   );
 }
 
-function RootEditor({ catalog }) {
+/** On a phone the panels are bottom sheets: a handle and a Done button on top. */
+function SheetHead({ onClose }) {
+  const { t } = useTranslation();
+  if (!onClose) return null;
+  return (
+    <div className="aut-sheet-head">
+      <span className="aut-sheet-head__grab" aria-hidden="true" />
+      <Button size={32} variant="ghost" onClick={onClose}>{t('automations.editor.done')}</Button>
+    </div>
+  );
+}
+
+function RootEditor({ catalog, onClose }) {
   const { t } = useTranslation();
   const { properties, setProperty, definition, isReadonly } = useRootEditor();
   const event = properties.event;
@@ -176,6 +188,7 @@ function RootEditor({ catalog }) {
     .map(([g, ids]) => [g, ids.filter((id) => catalog.events[id])]).filter(([, ids]) => ids.length);
   return (
     <div className="aut-panel">
+      <SheetHead onClose={onClose} />
       <h3 className="aut-panel__title"><Icon name="flag" size={18} />{t('automations.editor.whenTitle')}</h3>
       <div className="v2-field">
         <label className="v2-eyebrow" htmlFor="aut-event">{t('automations.editor.event')}</label>
@@ -204,7 +217,7 @@ function RootEditor({ catalog }) {
   );
 }
 
-function StepEditor({ catalog }) {
+function StepEditor({ catalog, onClose }) {
   const { t } = useTranslation();
   const { type, componentType, name, setName, properties, setProperty, definition, isReadonly, id } = useStepEditor();
   const event = definition.properties.event;
@@ -215,6 +228,7 @@ function StepEditor({ catalog }) {
 
   return (
     <div className="aut-panel">
+      <SheetHead onClose={onClose} />
       <h3 className="aut-panel__title">
         <Icon name={componentType === 'switch' ? 'call_split' : task?.icon || 'bolt'} size={18} />
         {componentType === 'switch' ? t('automations.if.label') : t(`automations.tasks.${type}.label`)}
@@ -328,7 +342,25 @@ export default function AutomationEditor({ catalog, workflow, start, grant, onGr
   // The designer's own words (toolbox, control bar, context menu).
   const designerText = useMemo(() => (key, fallback) => t(`automations.designer.${key}`, { defaultValue: fallback }), [t]);
 
-  const onDefinitionChange = (next) => { setDefinition(next); setDirty(true); setError(''); };
+  const onDefinitionChange = (next) => {
+    setDefinition(next);
+    setDirty(true);
+    setError('');
+    // A step dropped from the toolbox sheet: fold the sheet so the flow shows.
+    if (narrow) setToolboxCollapsed(true);
+  };
+  // Phone: tapping a step opens its properties as a bottom sheet; closing the
+  // sheet also unselects, so the next tap on the same step opens it again.
+  const onSelect = (id) => {
+    setSelectedStepId(id);
+    if (narrow && id) { setEditorCollapsed(false); setToolboxCollapsed(true); }
+  };
+  const closeSheets = () => {
+    setEditorCollapsed(true);
+    setToolboxCollapsed(true);
+    setSelectedStepId(null);
+  };
+  const sheetOpen = narrow && (!editorCollapsed || !toolboxCollapsed);
   // A template replaces what is on the canvas (the name too, while there is none).
   const applyTemplate = ({ name: tplName, definition: def }) => {
     setDefinition(wrapDefinition(def));
@@ -377,7 +409,7 @@ export default function AutomationEditor({ catalog, workflow, start, grant, onGr
   };
 
   return (
-    <div className="aut-editor">
+    <div className={cx('aut-editor', narrow && 'is-narrow', narrow && !toolboxCollapsed && 'is-toolbox-open')}>
       <div className="aut-editor__bar">
         <Button variant="ghost" size={36} icon="arrow_back" onClick={onClose} aria-label={t('automations.editor.back')}>{t('automations.editor.back')}</Button>
         <input className="v2-input aut-editor__name" value={name} maxLength={80} placeholder={t('automations.editor.namePlaceholder')}
@@ -387,7 +419,8 @@ export default function AutomationEditor({ catalog, workflow, start, grant, onGr
           <Toggle checked={enabled} label={t('automations.editor.enabled')} disabled={!!busy || (!workflow && !enabled && empty)}
             onChange={(on) => (workflow && !dirty ? save(on) : setEnabled(on))} />
         </label>
-        <Button size={36} variant="ghost" icon="auto_awesome" onClick={() => setPicking(true)} disabled={!!busy}>{t('automations.templates.button')}</Button>
+        {/* Phones start from the templates on the New page; the canvas needs the room here. */}
+        {!narrow && <Button size={36} variant="ghost" icon="auto_awesome" onClick={() => setPicking(true)} disabled={!!busy}>{t('automations.templates.button')}</Button>}
         <Button size={36} icon="science" onClick={runTest} loading={busy === 'test'} disabled={!!busy || empty}>{t('automations.editor.test')}</Button>
         <Button variant="primary" size={36} icon="save" onClick={() => save()} loading={busy === 'save'} disabled={!!busy || (!dirty && !!workflow)}>
           {t('automations.editor.save')}
@@ -402,7 +435,7 @@ export default function AutomationEditor({ catalog, workflow, start, grant, onGr
           definition={definition}
           onDefinitionChange={onDefinitionChange}
           selectedStepId={selectedStepId}
-          onSelectedStepIdChanged={setSelectedStepId}
+          onSelectedStepIdChanged={onSelect}
           theme="3speak"
           stepsConfiguration={stepsConfiguration}
           validatorConfiguration={validatorConfiguration}
@@ -413,12 +446,13 @@ export default function AutomationEditor({ catalog, workflow, start, grant, onGr
           contextMenu
           undoStackSize={20}
           isToolboxCollapsed={toolboxCollapsed}
-          onIsToolboxCollapsedChanged={setToolboxCollapsed}
+          onIsToolboxCollapsedChanged={(c) => { setToolboxCollapsed(c); if (narrow && !c) setEditorCollapsed(true); }}
           isEditorCollapsed={editorCollapsed}
           onIsEditorCollapsedChanged={setEditorCollapsed}
-          rootEditor={<RootEditor catalog={catalog} />}
-          stepEditor={<StepEditor catalog={catalog} />}
+          rootEditor={<RootEditor catalog={catalog} onClose={narrow ? closeSheets : undefined} />}
+          stepEditor={<StepEditor catalog={catalog} onClose={narrow ? closeSheets : undefined} />}
         />
+        {sheetOpen && <div className="aut-sheet-backdrop" onClick={closeSheets} aria-hidden="true" />}
         {empty && <div className="aut-editor__hint" aria-hidden="true"><Icon name="drag_pan" size={18} />{t('automations.editor.emptyHint')}</div>}
       </div>
       {test && <TestResult result={test} definition={definition.value} onClose={() => setTest(null)} />}
