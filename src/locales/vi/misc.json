@@ -333,7 +333,11 @@
     "loginToChat": "Đăng nhập để chat",
     "ended": "Buổi phát trực tiếp này đã kết thúc.",
     "volume": "Âm lượng",
-    "sound": "Âm thanh"
+    "sound": "Âm thanh",
+    "pollMove": "Kéo để di chuyển",
+    "pollHide": "Đóng",
+    "pollShow": "Mở cuộc thăm dò",
+    "predictionShow": "Mở dự đoán"
   },
   "pullToRefresh": {
     "pull": "Kéo để làm mới",

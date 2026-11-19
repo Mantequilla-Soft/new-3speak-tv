@@ -333,7 +333,11 @@
     "loginToChat": "ログインしてチャット",
     "ended": "この配信は終了しました。",
     "volume": "音量",
-    "sound": "サウンド"
+    "sound": "サウンド",
+    "pollMove": "ドラッグして移動",
+    "pollHide": "閉じる",
+    "pollShow": "投票を開く",
+    "predictionShow": "予想を開く"
   },
   "pullToRefresh": {
     "pull": "引っ張って更新",

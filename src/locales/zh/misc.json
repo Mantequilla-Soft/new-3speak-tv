@@ -333,7 +333,11 @@
     "loginToChat": "登录后聊天",
     "ended": "本次直播已结束。",
     "volume": "音量",
-    "sound": "声音"
+    "sound": "声音",
+    "pollMove": "拖动以移动",
+    "pollHide": "关闭",
+    "pollShow": "打开投票",
+    "predictionShow": "打开预测"
   },
   "pullToRefresh": {
     "pull": "下拉刷新",

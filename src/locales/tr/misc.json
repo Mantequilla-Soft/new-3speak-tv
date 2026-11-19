@@ -334,7 +334,11 @@
     "loginToChat": "Sohbet için giriş yap",
     "ended": "Bu yayın sona erdi.",
     "volume": "Ses düzeyi",
-    "sound": "Ses"
+    "sound": "Ses",
+    "pollMove": "Taşımak için sürükleyin",
+    "pollHide": "Kapat",
+    "pollShow": "Anketi aç",
+    "predictionShow": "Tahmini aç"
   },
   "pullToRefresh": {
     "pull": "Yenilemek için çek",

@@ -334,7 +334,11 @@
     "loginToChat": "Mag-log in para mag-chat",
     "ended": "Tapos na ang stream na ito.",
     "volume": "Lakas ng tunog",
-    "sound": "Tunog"
+    "sound": "Tunog",
+    "pollMove": "I-drag para ilipat",
+    "pollHide": "Isara",
+    "pollShow": "Buksan ang poll",
+    "predictionShow": "Buksan ang prediksyon"
   },
   "pullToRefresh": {
     "pull": "Hilahin para mag-refresh",

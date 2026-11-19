@@ -21,6 +21,7 @@ import { LiveCaptionsOverlay, LiveCaptionsToggle, useCaptionsPref } from '../com
 import { useBoostLabels } from '../components/openpods/boostLabels';
 import { useBattleLabels } from '../components/openpods/battleLabels';
 import { useLiveLabels, raidPath } from '../components/openpods/liveLabels';
+import FloatingStreamPoll from '../components/openpods/FloatingStreamPoll';
 import { useStreamSession } from '../hooks/useStreamSession';
 import { useLiveStreamPager } from '../hooks/useLiveStreamPager';
 import { useStreamChatMirror } from '../hooks/useStreamChatMirror';
@@ -546,6 +547,9 @@ export default function WatchStream() {
                         <Icon name="visibility" size={20} />
                       </button>
                     )}
+
+                    {/* The running poll / prediction: its own layer, chat on or off. */}
+                    <FloatingStreamPoll roomName={streamId} labels={liveLabels} />
 
                     {chatOverlayOn && (
                       <div className="ws-shorts__chat">

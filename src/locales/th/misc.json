@@ -333,7 +333,11 @@
     "loginToChat": "เข้าสู่ระบบเพื่อแชต",
     "ended": "สตรีมนี้จบแล้ว",
     "volume": "ระดับเสียง",
-    "sound": "เสียง"
+    "sound": "เสียง",
+    "pollMove": "ลากเพื่อย้าย",
+    "pollHide": "ปิด",
+    "pollShow": "เปิดโพล",
+    "predictionShow": "เปิดการทำนาย"
   },
   "pullToRefresh": {
     "pull": "ดึงลงเพื่อรีเฟรช",

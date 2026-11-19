@@ -334,7 +334,11 @@
     "loginToChat": "Log in to chat",
     "ended": "This stream has ended.",
     "volume": "Volume",
-    "sound": "Sound"
+    "sound": "Sound",
+    "pollMove": "Drag to move",
+    "pollHide": "Close",
+    "pollShow": "Open the poll",
+    "predictionShow": "Open the prediction"
   },
   "pullToRefresh": {
     "pull": "Pull to refresh",

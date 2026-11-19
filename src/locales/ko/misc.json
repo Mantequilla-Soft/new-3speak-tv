@@ -333,7 +333,11 @@
     "loginToChat": "로그인하고 채팅하기",
     "ended": "이 방송은 종료되었습니다.",
     "volume": "볼륨",
-    "sound": "소리"
+    "sound": "소리",
+    "pollMove": "드래그해서 이동",
+    "pollHide": "닫기",
+    "pollShow": "투표 열기",
+    "predictionShow": "예측 열기"
   },
   "pullToRefresh": {
     "pull": "당겨서 새로고침",

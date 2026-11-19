@@ -335,7 +335,11 @@
     "loginToChat": "Accedi per chattare",
     "ended": "Questa diretta è terminata.",
     "volume": "Volume",
-    "sound": "Audio"
+    "sound": "Audio",
+    "pollMove": "Trascina per spostare",
+    "pollHide": "Chiudi",
+    "pollShow": "Apri il sondaggio",
+    "predictionShow": "Apri la previsione"
   },
   "pullToRefresh": {
     "pull": "Trascina per aggiornare",
