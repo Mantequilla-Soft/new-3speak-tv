@@ -3,8 +3,13 @@ import { useTranslation } from 'react-i18next';
 import { Icon } from '../v2/Icon';
 import './PullToRefresh.scss';
 
-const THRESHOLD = 70;
-const MAX_PULL = 120;
+export const THRESHOLD = 70;
+export const MAX_PULL = 120;
+
+// Pages that refresh their own content (the feeds) mount this component; while
+// one is on screen, the app-wide pull (GlobalPullToRefresh) stands aside.
+let ownersOnScreen = 0;
+export const pageHasOwnPullToRefresh = () => ownersOnScreen > 0;
 
 const PullToRefresh = ({ onRefresh, children }) => {
   const { t } = useTranslation();
@@ -12,6 +17,10 @@ const PullToRefresh = ({ onRefresh, children }) => {
   const [refreshing, setRefreshing] = useState(false);
   const startY = useRef(null);
   const containerRef = useRef(null);
+  useEffect(() => {
+    ownersOnScreen += 1;
+    return () => { ownersOnScreen -= 1; };
+  }, []);
 
   const handleTouchStart = useCallback((e) => {
     if (refreshing) return;

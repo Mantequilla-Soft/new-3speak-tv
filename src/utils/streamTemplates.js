@@ -33,6 +33,7 @@ export const TEMPLATE_LIMITS = {
   tagLength: 40,
   beneficiaries: 8,
   templates: 20,
+  goalTitle: 80,
 };
 
 /** An API error that keeps the HTTP status and the server's `error` code. */
@@ -100,7 +101,8 @@ export function emptyTemplate() {
     tags: [],
     language: 'en',
     visibility: 'public',
-    boost: { enabled: true, minBoostUsd: 0.1, creatorPayoutAccount: '' },
+    // The goal as the form edits it (strings); goalTarget '' = no goal.
+    boost: { enabled: true, minBoostUsd: 0.1, creatorPayoutAccount: '', goalTitle: '', goalTarget: '', goalPosition: 'top-right' },
     recording: { publishVod: false, allowClips: true },
     announce: {
       enabled: true,
@@ -125,9 +127,31 @@ export function templateToForm(tpl) {
     tags: Array.isArray(tpl.tags) ? tpl.tags : [],
     language: tpl.language || 'en',
     visibility: tpl.visibility || 'public',
-    boost: { ...base.boost, ...(tpl.boost || {}) },
+    boost: boostToForm(base.boost, tpl.boost),
     recording: { ...base.recording, ...(tpl.recording || {}) },
     announce: { ...base.announce, ...(tpl.announce || {}) },
+  };
+}
+
+function boostToForm(base, stored) {
+  const { goal, ...rest } = stored || {};
+  return {
+    ...base,
+    ...rest,
+    goalTitle: goal?.title || '',
+    goalTarget: goal?.targetHbd > 0 ? String(goal.targetHbd) : '',
+    goalPosition: goal?.position || base.goalPosition,
+  };
+}
+
+/** The form's goal fields → the stored goal, or null for none (no amount). */
+function formGoal(boost) {
+  const target = Number(boost.goalTarget);
+  if (!boost.enabled || !Number.isFinite(target) || target <= 0) return null;
+  return {
+    title: String(boost.goalTitle || '').replace(/\s+/g, ' ').trim().slice(0, TEMPLATE_LIMITS.goalTitle),
+    targetHbd: target,
+    position: boost.goalPosition || 'top-right',
   };
 }
 
@@ -146,6 +170,7 @@ export function formToInput(form, { isPremium }) {
       enabled: !!form.boost.enabled,
       minBoostUsd: Number.isFinite(minUsd) ? Math.max(0, minUsd) : 0,
       creatorPayoutAccount: (form.boost.creatorPayoutAccount || '').trim().toLowerCase().replace(/^@/, ''),
+      goal: formGoal(form.boost),
     },
     // Pro-only perks. The server enforces this too; sending false for a free
     // account just keeps the stored template honest.
@@ -186,6 +211,10 @@ export function applyTemplateToSetup(tpl) {
     boostEnabled: !!f.boost.enabled,
     minBoostUsd: String(f.boost.minBoostUsd ?? '0.1'),
     creatorPayoutAccount: f.boost.creatorPayoutAccount || '',
+    // The create form's Boosts step reads these for its goal bar.
+    goalTitle: f.boost.goalTitle || '',
+    goalTarget: f.boost.goalTarget || '',
+    goalPosition: f.boost.goalPosition || 'top-right',
     notifyOnHive: !!f.announce.enabled,
     announceType: 'post',
   }, 'standalone');

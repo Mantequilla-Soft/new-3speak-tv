@@ -260,7 +260,14 @@
       "created": "템플릿을 만들었어요",
       "liveConflict": "이 템플릿은 지금 라이브 중이에요. 이름을 바꾸기 전에 OBS에서 방송을 중지하세요.",
       "invalid": "올바르지 않은 항목이 있어요. 확인 후 다시 시도해 주세요.",
-      "saveFailed": "템플릿을 저장하지 못했어요."
+      "saveFailed": "템플릿을 저장하지 못했어요.",
+      "tabs": {
+        "label": "템플릿 항목",
+        "details": "세부 정보",
+        "audience": "시청자",
+        "boosts": "부스트",
+        "recording": "녹화"
+      }
     },
     "unavailableNow": "지금은 템플릿을 사용할 수 없어요. 잠시 후 다시 시도하세요.",
     "tabs": {

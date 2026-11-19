@@ -15,7 +15,7 @@ import {
 import AnnounceOptions from './AnnounceOptions';
 import MarkdownComposer from '../studio/MarkdownComposer';
 import {
-  Banner, Button, ChoiceCard, Dialog, EmptyState, Icon, IconButton, Menu, MenuRow, SettingRow, StatusPill, Toggle,
+  Banner, Button, ChoiceCard, Dialog, EmptyState, Icon, IconButton, Menu, MenuRow, Segmented, SettingRow, StatusPill, Toggle,
 } from '../v2/ui';
 import { cx } from '../v2/helpers';
 import useLayoutMediaQuery from '../../hooks/useLayoutMediaQuery';
@@ -532,6 +532,14 @@ function PostingAuthNotice({ user }) {
 }
 
 // ─── Create / edit form ────────────────────────────────────────────────────
+// The template editor's tabs (one form, every pane kept mounted).
+const EDITOR_TABS = ['details', 'audience', 'boosts', 'recording'];
+// The goal bar's places and their labels (live.createForm), as the create form lists them.
+const GOAL_POSITIONS = [
+  ['top-right', 'goalPosTopRight'], ['bottom-right', 'goalPosBottomRight'], ['bottom-left', 'goalPosBottomLeft'],
+  ['top', 'goalPosTop'], ['bottom', 'goalPosBottom'],
+];
+
 function TemplateEditor({ token, user, whipBase, existing, isPremium, onSaved, onClose }) {
   const { t } = useTranslation();
   const [form, setForm] = useState(() => (existing ? templateToForm(existing) : emptyTemplate()));
@@ -540,6 +548,7 @@ function TemplateEditor({ token, user, whipBase, existing, isPremium, onSaved, o
   const [saving, setSaving] = useState(false);
   const [nameError, setNameError] = useState(null);
   const [formError, setFormError] = useState(null);
+  const [tab, setTab] = useState('details');
   const fileRef = useRef(null);
 
   const set = (patch) => setForm((f) => ({ ...f, ...patch }));
@@ -604,8 +613,9 @@ function TemplateEditor({ token, user, whipBase, existing, isPremium, onSaved, o
     e?.preventDefault();
     setNameError(null);
     setFormError(null);
-    if (!form.name.trim() || !slug) { setNameError(t('live.obs.form.nameRequired')); return; }
-    if (!form.title.trim()) { setFormError(t('live.obs.form.titleRequired')); return; }
+    // Name and title live on the first tab: show them where the problem is.
+    if (!form.name.trim() || !slug) { setTab('details'); setNameError(t('live.obs.form.nameRequired')); return; }
+    if (!form.title.trim()) { setTab('details'); setFormError(t('live.obs.form.titleRequired')); return; }
     setSaving(true);
     try {
       const input = formToInput(form, { isPremium });
@@ -616,7 +626,7 @@ function TemplateEditor({ token, user, whipBase, existing, isPremium, onSaved, o
       onSaved(data.template);
     } catch (err) {
       const e2 = templateSaveError(err, t);
-      if (e2.field === 'name') setNameError(e2.message); else setFormError(e2.message);
+      if (e2.field === 'name') { setTab('details'); setNameError(e2.message); } else setFormError(e2.message);
     } finally {
       setSaving(false);
     }
@@ -650,202 +660,261 @@ function TemplateEditor({ token, user, whipBase, existing, isPremium, onSaved, o
         onSubmit={save}
         onKeyDown={(e) => { if (e.key === 'Enter' && e.target instanceof HTMLInputElement) e.preventDefault(); }}
       >
-        <NameField
-          value={form.name}
-          onChange={(v) => { set({ name: v }); setNameError(null); }}
-          whipBase={whipBase}
-          user={user}
-          error={nameError}
+        <Segmented
+          size={36}
+          className="st-tabs"
+          label={t('live.obs.form.tabs.label')}
+          value={tab}
+          onChange={setTab}
+          options={EDITOR_TABS.map((id) => ({ value: id, label: t(`live.obs.form.tabs.${id}`) }))}
         />
-
-        <label className="v2-field st-field">
-          <span className="v2-eyebrow">{t('live.obs.form.title')}</span>
-          <input
-            className="v2-input"
-            value={form.title}
-            maxLength={TEMPLATE_LIMITS.title}
-            placeholder={t('live.obs.form.titlePlaceholder')}
-            onChange={(e) => set({ title: e.target.value })}
+        {/* Every pane stays mounted: the announcement block and the description
+            editor read their values once, so unmounting would lose edits. */}
+        <div className="st-pane" role="tabpanel" hidden={tab !== 'details'}>
+          <NameField
+            value={form.name}
+            onChange={(v) => { set({ name: v }); setNameError(null); }}
+            whipBase={whipBase}
+            user={user}
+            error={nameError}
           />
-        </label>
 
-        <div className="v2-field st-field">
-          <span className="v2-eyebrow">{t('live.obs.form.description')}</span>
-          <MarkdownComposer
-            value={form.description}
-            onChange={(v) => set({ description: String(v ?? '').slice(0, TEMPLATE_LIMITS.description) })}
-            placeholder={t('live.lobby.descriptionPlaceholder')}
-          />
-        </div>
+          <label className="v2-field st-field">
+            <span className="v2-eyebrow">{t('live.obs.form.title')}</span>
+            <input
+              className="v2-input"
+              value={form.title}
+              maxLength={TEMPLATE_LIMITS.title}
+              placeholder={t('live.obs.form.titlePlaceholder')}
+              onChange={(e) => set({ title: e.target.value })}
+            />
+          </label>
 
-        <div className="v2-field st-field">
-          <span className="v2-eyebrow">{t('live.obs.form.thumbnail')}</span>
-          <div className="st-thumb">
-            {form.thumbnail
-              ? <img src={form.thumbnail} alt="" />
-              : <div className="st-thumb__empty"><Icon name="add_photo_alternate" size={24} /></div>}
-            <div className="st-thumb__actions">
-              {IMAGE_KEY && (
-                <Button variant="secondary" size={36} icon="upload" onClick={() => fileRef.current?.click()} disabled={uploading} loading={uploading}>
-                  {uploading ? t('live.obs.form.uploading') : t('live.obs.form.upload')}
-                </Button>
-              )}
-              {form.thumbnail && (
-                <Button variant="ghost" size={36} icon="close" onClick={() => set({ thumbnail: '' })}>
-                  {t('common.actions.remove')}
-                </Button>
-              )}
-              <input ref={fileRef} type="file" accept="image/*" hidden onChange={onImage} />
+          <div className="v2-field st-field">
+            <span className="v2-eyebrow">{t('live.obs.form.description')}</span>
+            <MarkdownComposer
+              value={form.description}
+              onChange={(v) => set({ description: String(v ?? '').slice(0, TEMPLATE_LIMITS.description) })}
+              placeholder={t('live.lobby.descriptionPlaceholder')}
+            />
+          </div>
+
+          <div className="v2-field st-field">
+            <span className="v2-eyebrow">{t('live.obs.form.thumbnail')}</span>
+            <div className="st-thumb">
+              {form.thumbnail
+                ? <img src={form.thumbnail} alt="" />
+                : <div className="st-thumb__empty"><Icon name="add_photo_alternate" size={24} /></div>}
+              <div className="st-thumb__actions">
+                {IMAGE_KEY && (
+                  <Button variant="secondary" size={36} icon="upload" onClick={() => fileRef.current?.click()} disabled={uploading} loading={uploading}>
+                    {uploading ? t('live.obs.form.uploading') : t('live.obs.form.upload')}
+                  </Button>
+                )}
+                {form.thumbnail && (
+                  <Button variant="ghost" size={36} icon="close" onClick={() => set({ thumbnail: '' })}>
+                    {t('common.actions.remove')}
+                  </Button>
+                )}
+                <input ref={fileRef} type="file" accept="image/*" hidden onChange={onImage} />
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className="v2-field st-field">
-          <span className="v2-eyebrow">
-            {t('live.obs.form.tags')} <span className="v2-field__opt num">({form.tags.length}/{TEMPLATE_LIMITS.tags})</span>
-          </span>
-          <div className="st-tags">
-            {form.tags.map((tag) => (
-              <span key={tag} className="st-tag">
-                {tag}
-                <button type="button" onClick={() => set({ tags: form.tags.filter((x) => x !== tag) })} aria-label={t('common.actions.remove')}>
-                  <Icon name="close" size={14} />
-                </button>
-              </span>
-            ))}
-            {form.tags.length < TEMPLATE_LIMITS.tags && (
-              <input
-                className="st-tags__input"
-                value={tagInput}
-                placeholder={t('live.obs.form.tagsPlaceholder')}
-                onChange={(e) => {
-                  const v = e.target.value;
-                  if (/[\s,]$/.test(v)) addTag(v); else setTagInput(v);
-                }}
-                onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); addTag(); } }}
-                onBlur={() => tagInput && addTag()}
-              />
-            )}
-          </div>
-        </div>
-
-        <label className="v2-field st-field">
-          <span className="v2-eyebrow">{t('live.obs.form.language')}</span>
-          <select className="v2-input is-select" value={form.language} onChange={(e) => set({ language: e.target.value })}>
-            {LANGUAGE_CODES.map((c) => <option key={c} value={c}>{languageName(c)}</option>)}
-          </select>
-        </label>
-
-        <div className="v2-field st-field">
-          <span className="v2-eyebrow">{t('live.obs.form.visibility')}</span>
-          <div className="st-tiles" role="radiogroup" aria-label={t('live.obs.form.visibility')}>
-            {visibilities.map((v) => (
-              <ChoiceCard
-                key={v.id}
-                tone="cyan"
-                icon={visIcons[v.id]}
-                title={v.label}
-                sub={v.desc}
-                selected={form.visibility === v.id}
-                className={cx('st-tile', form.visibility === v.id && 'is-active')}
-                onClick={() => set({ visibility: v.id })}
-              />
-            ))}
-          </div>
-        </div>
-
-        {/* Boost */}
-        <div className="st-group">
-          <SettingRow
-            icon="rocket_launch"
-            title={t('live.obs.form.boost')}
-            control={<Toggle checked={!!form.boost.enabled} label={t('live.obs.form.boost')} onChange={(on) => setIn('boost', { enabled: on })} />}
-          />
-          {form.boost.enabled && (
-            <div className="st-row">
-              <label className="v2-field st-field">
-                <span className="v2-eyebrow">{t('live.obs.form.minBoost')}</span>
+          <div className="v2-field st-field">
+            <span className="v2-eyebrow">
+              {t('live.obs.form.tags')} <span className="v2-field__opt num">({form.tags.length}/{TEMPLATE_LIMITS.tags})</span>
+            </span>
+            <div className="st-tags">
+              {form.tags.map((tag) => (
+                <span key={tag} className="st-tag">
+                  {tag}
+                  <button type="button" onClick={() => set({ tags: form.tags.filter((x) => x !== tag) })} aria-label={t('common.actions.remove')}>
+                    <Icon name="close" size={14} />
+                  </button>
+                </span>
+              ))}
+              {form.tags.length < TEMPLATE_LIMITS.tags && (
                 <input
-                  className="v2-input num"
-                  type="number"
-                  min="0"
-                  step="0.01"
-                  value={form.boost.minBoostUsd}
-                  onChange={(e) => setIn('boost', { minBoostUsd: e.target.value })}
+                  className="st-tags__input"
+                  value={tagInput}
+                  placeholder={t('live.obs.form.tagsPlaceholder')}
+                  onChange={(e) => {
+                    const v = e.target.value;
+                    if (/[\s,]$/.test(v)) addTag(v); else setTagInput(v);
+                  }}
+                  onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); addTag(); } }}
+                  onBlur={() => tagInput && addTag()}
                 />
-              </label>
-              <label className="v2-field st-field">
-                <span className="v2-eyebrow">{t('live.obs.form.payoutAccount')}</span>
-                <input
-                  className="v2-input"
-                  maxLength={16}
-                  value={form.boost.creatorPayoutAccount}
-                  placeholder={t('live.obs.form.payoutPlaceholder')}
-                  onChange={(e) => setIn('boost', { creatorPayoutAccount: e.target.value })}
-                />
-              </label>
+              )}
             </div>
-          )}
-        </div>
+          </div>
 
-        {/* Recording: Pro perks */}
-        <div className="st-group">
-          <span className="v2-eyebrow">{t('live.obs.form.whenEnds')}</span>
-          {/* Everyone may publish the recording; a free one is as long as a free
-              stream (the server stops it there). Clips stay Pro. */}
-          <SettingRow
-            icon="video_library"
-            title={t('live.obs.form.publishVod')}
-            sub={!isPremium ? t('live.obs.form.publishVodFree') : undefined}
-            control={(
-              <Toggle
-                checked={!!form.recording.publishVod}
-                label={t('live.obs.form.publishVod')}
-                onChange={(on) => setIn('recording', { publishVod: on })}
-              />
-            )}
-          />
-          <SettingRow
-            icon="content_cut"
-            className={isPremium ? undefined : 'is-locked'}
-            title={t('live.obs.form.allowClips')}
-            sub={!isPremium ? t('live.obs.form.proOnly') : undefined}
-            control={(
-              <Toggle
-                checked={isPremium && !!form.recording.allowClips}
-                disabled={!isPremium}
-                label={t('live.obs.form.allowClips')}
-                onChange={(on) => setIn('recording', { allowClips: on })}
-              />
-            )}
-          />
+          <label className="v2-field st-field">
+            <span className="v2-eyebrow">{t('live.obs.form.language')}</span>
+            <select className="v2-input is-select" value={form.language} onChange={(e) => set({ language: e.target.value })}>
+              {LANGUAGE_CODES.map((c) => <option key={c} value={c}>{languageName(c)}</option>)}
+            </select>
+          </label>
         </div>
+        <div className="st-pane" role="tabpanel" hidden={tab !== 'audience'}>
+          <div className="v2-field st-field">
+            <span className="v2-eyebrow">{t('live.obs.form.visibility')}</span>
+            <div className="st-tiles" role="radiogroup" aria-label={t('live.obs.form.visibility')}>
+              {visibilities.map((v) => (
+                <ChoiceCard
+                  key={v.id}
+                  tone="cyan"
+                  icon={visIcons[v.id]}
+                  title={v.label}
+                  sub={v.desc}
+                  selected={form.visibility === v.id}
+                  className={cx('st-tile', form.visibility === v.id && 'is-active')}
+                  onClick={() => set({ visibility: v.id })}
+                />
+              ))}
+            </div>
+          </div>
 
-        {/* Hive announcement */}
-        <div className="st-group st-announce">
-          <SettingRow
-            icon="campaign"
-            title={t('live.obs.form.announce')}
-            sub={form.announce.enabled && form.visibility === 'unlisted' ? t('live.obs.form.announceUnlisted') : undefined}
-            control={(
-              <Toggle
-                checked={!!form.announce.enabled}
-                label={t('live.obs.form.announce')}
-                onChange={(on) => setIn('announce', { enabled: on })}
-              />
+
+          {/* Hive announcement */}
+          <div className="st-group st-announce">
+            <SettingRow
+              icon="campaign"
+              title={t('live.obs.form.announce')}
+              sub={form.announce.enabled && form.visibility === 'unlisted' ? t('live.obs.form.announceUnlisted') : undefined}
+              control={(
+                <Toggle
+                  checked={!!form.announce.enabled}
+                  label={t('live.obs.form.announce')}
+                  onChange={(on) => setIn('announce', { enabled: on })}
+                />
+              )}
+            />
+            {form.announce.enabled && (
+              <>
+                <PostingAuthNotice user={user} />
+                <AnnounceOptions
+                  announceType="post"
+                  isPremium={isPremium}
+                  initialConfig={announceInitial}
+                  onChange={onAnnounceChange}
+                />
+              </>
             )}
-          />
-          {form.announce.enabled && (
-            <>
-              <PostingAuthNotice user={user} />
-              <AnnounceOptions
-                announceType="post"
-                isPremium={isPremium}
-                initialConfig={announceInitial}
-                onChange={onAnnounceChange}
-              />
-            </>
-          )}
+          </div>
+        </div>
+        <div className="st-pane" role="tabpanel" hidden={tab !== 'boosts'}>
+          {/* Boost */}
+          <div className="st-group">
+            <SettingRow
+              icon="rocket_launch"
+              title={t('live.obs.form.boost')}
+              control={<Toggle checked={!!form.boost.enabled} label={t('live.obs.form.boost')} onChange={(on) => setIn('boost', { enabled: on })} />}
+            />
+            {form.boost.enabled && (
+              <div className="st-row">
+                <label className="v2-field st-field">
+                  <span className="v2-eyebrow">{t('live.obs.form.minBoost')}</span>
+                  <input
+                    className="v2-input num"
+                    type="number"
+                    min="0"
+                    step="0.01"
+                    value={form.boost.minBoostUsd}
+                    onChange={(e) => setIn('boost', { minBoostUsd: e.target.value })}
+                  />
+                </label>
+                <label className="v2-field st-field">
+                  <span className="v2-eyebrow">{t('live.obs.form.payoutAccount')}</span>
+                  <input
+                    className="v2-input"
+                    maxLength={16}
+                    value={form.boost.creatorPayoutAccount}
+                    placeholder={t('live.obs.form.payoutPlaceholder')}
+                    onChange={(e) => setIn('boost', { creatorPayoutAccount: e.target.value })}
+                  />
+                </label>
+              </div>
+            )}
+            {form.boost.enabled && (
+              <>
+                <div className="v2-field st-field">
+                  <span className="v2-eyebrow">{t('live.createForm.goalLabel')}</span>
+                  <span className="st-hint">{t('live.createForm.goalHint')}</span>
+                </div>
+                <div className="st-row">
+                  <label className="v2-field st-field">
+                    <span className="v2-eyebrow">{t('live.createForm.goalFor')}</span>
+                    <input
+                      className="v2-input"
+                      maxLength={TEMPLATE_LIMITS.goalTitle}
+                      value={form.boost.goalTitle}
+                      placeholder={t('live.createForm.goalForPlaceholder')}
+                      onChange={(e) => setIn('boost', { goalTitle: e.target.value })}
+                    />
+                  </label>
+                  <label className="v2-field st-field">
+                    <span className="v2-eyebrow">{t('live.createForm.goalAmount')}</span>
+                    <input
+                      className="v2-input num"
+                      type="number"
+                      min="0"
+                      step="0.001"
+                      value={form.boost.goalTarget}
+                      placeholder="50"
+                      onChange={(e) => setIn('boost', { goalTarget: e.target.value })}
+                    />
+                  </label>
+                </div>
+                <label className="v2-field st-field">
+                  <span className="v2-eyebrow">{t('live.createForm.goalWhere')}</span>
+                  <select
+                    className="v2-input is-select"
+                    value={form.boost.goalPosition}
+                    disabled={!(Number(form.boost.goalTarget) > 0)}
+                    onChange={(e) => setIn('boost', { goalPosition: e.target.value })}
+                  >
+                    {GOAL_POSITIONS.map(([id, key]) => <option key={id} value={id}>{t(`live.createForm.${key}`)}</option>)}
+                  </select>
+                </label>
+              </>
+            )}
+          </div>
+        </div>
+        <div className="st-pane" role="tabpanel" hidden={tab !== 'recording'}>
+          {/* Recording: Pro perks */}
+          <div className="st-group">
+            <span className="v2-eyebrow">{t('live.obs.form.whenEnds')}</span>
+            {/* Everyone may publish the recording; a free one is as long as a free
+                stream (the server stops it there). Clips stay Pro. */}
+            <SettingRow
+              icon="video_library"
+              title={t('live.obs.form.publishVod')}
+              sub={!isPremium ? t('live.obs.form.publishVodFree') : undefined}
+              control={(
+                <Toggle
+                  checked={!!form.recording.publishVod}
+                  label={t('live.obs.form.publishVod')}
+                  onChange={(on) => setIn('recording', { publishVod: on })}
+                />
+              )}
+            />
+            <SettingRow
+              icon="content_cut"
+              className={isPremium ? undefined : 'is-locked'}
+              title={t('live.obs.form.allowClips')}
+              sub={!isPremium ? t('live.obs.form.proOnly') : undefined}
+              control={(
+                <Toggle
+                  checked={isPremium && !!form.recording.allowClips}
+                  disabled={!isPremium}
+                  label={t('live.obs.form.allowClips')}
+                  onChange={(on) => setIn('recording', { allowClips: on })}
+                />
+              )}
+            />
+          </div>
         </div>
       </form>
     </Sheet>

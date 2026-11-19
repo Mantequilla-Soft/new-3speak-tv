@@ -118,7 +118,7 @@ describe('form mapping', () => {
     expect(templateToForm(null)).toEqual(emptyTemplate())
     const f = templateToForm({ name: 'n', tags: 'notarray', boost: { enabled: false }, announce: { community: 'hive-1' } })
     expect(f.tags).toEqual([])
-    expect(f.boost).toEqual({ enabled: false, minBoostUsd: 0.1, creatorPayoutAccount: '' })
+    expect(f.boost).toEqual({ enabled: false, minBoostUsd: 0.1, creatorPayoutAccount: '', goalTitle: '', goalTarget: '', goalPosition: 'top-right' })
     expect(f.announce.community).toBe('hive-1')
     expect(f.announce.beneficiaries).toEqual([])
     expect(f.recording).toEqual({ publishVod: false, allowClips: true })
@@ -130,7 +130,7 @@ describe('form mapping', () => {
     const out = formToInput(form, { isPremium: false })
     expect(out.name).toBe('Name')
     expect(out.title).toBe('Title')
-    expect(out.boost).toEqual({ enabled: true, minBoostUsd: 0, creatorPayoutAccount: 'bob' })
+    expect(out.boost).toEqual({ enabled: true, minBoostUsd: 0, creatorPayoutAccount: 'bob', goal: null })
     expect(formToInput({ ...form, boost: { ...form.boost, minBoostUsd: 'abc' } }, {}).boost.minBoostUsd).toBe(0)
     expect(formToInput({ ...form, boost: { ...form.boost, minBoostUsd: '2.5' } }, {}).boost.minBoostUsd).toBe(2.5)
   })
@@ -153,16 +153,25 @@ describe('form mapping', () => {
     expect(out.announce.community).toBe('hive-181335')
   })
 
+  it('a stored goal round-trips through the form; no amount or boosts off means no goal', async () => {
+    const { templateToForm, formToInput } = await load()
+    const f = templateToForm({ name: 'n', title: 't', boost: { enabled: true, goal: { title: 'A new mic', targetHbd: 50, position: 'bottom-left' } } })
+    expect(f.boost).toMatchObject({ goalTitle: 'A new mic', goalTarget: '50', goalPosition: 'bottom-left' })
+    expect(formToInput(f, {}).boost.goal).toEqual({ title: 'A new mic', targetHbd: 50, position: 'bottom-left' })
+    expect(formToInput({ ...f, boost: { ...f.boost, goalTarget: '' } }, {}).boost.goal).toBeNull()
+    expect(formToInput({ ...f, boost: { ...f.boost, enabled: false } }, {}).boost.goal).toBeNull()
+  })
+
   it('applyTemplateToSetup writes the draft, announcement and recording prefs', async () => {
     const { applyTemplateToSetup } = await load()
     applyTemplateToSetup({
-      title: 'T', tags: ['a'], boost: { minBoostUsd: 0.5 },
+      title: 'T', tags: ['a'], boost: { minBoostUsd: 0.5, goal: { title: 'Mic', targetHbd: 5, position: 'top' } },
       announce: { enabled: false, beneficiaries: [{ account: 'x', weight: 500, extra: 1 }, { account: 'y', weight: 0 }] },
       recording: { publishVod: true, allowClips: false },
     })
     const [draft, mode] = vi.mocked(writePostDraft).mock.calls.at(-1)
     expect(mode).toBe('standalone')
-    expect(draft).toMatchObject({ title: 'T', tags: ['a'], minBoostUsd: '0.5', notifyOnHive: false, mode: 'standalone' })
+    expect(draft).toMatchObject({ title: 'T', tags: ['a'], minBoostUsd: '0.5', notifyOnHive: false, mode: 'standalone', goalTitle: 'Mic', goalTarget: '5', goalPosition: 'top' })
     expect(vi.mocked(setAnnounceConfig).mock.calls.at(-1)[0]).toMatchObject({
       announceEnabled: false, community: 'hive-181335', beneList: [{ account: 'x', weight: 500 }],
     })

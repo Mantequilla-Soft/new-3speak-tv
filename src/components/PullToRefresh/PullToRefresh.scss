@@ -46,3 +46,24 @@
   .ptr-indicator { transition: none; }
   .ptr-spinner.ptr-active .material-symbols-rounded { animation: none; }
 }
+
+// The app-wide pull (GlobalPullToRefresh): the same tile, floating down from
+// the top edge over the page instead of opening a gap in a feed.
+.ptr-global {
+  position: fixed;
+  top: calc(env(safe-area-inset-top, 0px) - 64px);
+  left: 50%;
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  pointer-events: none;
+
+  .ptr-spinner { box-shadow: var(--shadow-md, 0 4px 14px rgb(0 0 0 / .25)); }
+  .ptr-label {
+    padding: 2px 8px;
+    border-radius: var(--r-sm);
+    background: var(--surface);
+  }
+}

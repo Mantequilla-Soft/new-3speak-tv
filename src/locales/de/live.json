@@ -261,7 +261,14 @@
       "created": "Vorlage erstellt",
       "liveConflict": "Diese Vorlage ist gerade live. Beende den Stream in OBS, bevor du sie umbenennst.",
       "invalid": "Einige Felder sind ungültig. Bitte prüf sie und versuch es noch einmal.",
-      "saveFailed": "Die Vorlage konnte nicht gespeichert werden."
+      "saveFailed": "Die Vorlage konnte nicht gespeichert werden.",
+      "tabs": {
+        "label": "Bereiche der Vorlage",
+        "details": "Details",
+        "audience": "Publikum",
+        "boosts": "Boosts",
+        "recording": "Aufnahme"
+      }
     },
     "unavailableNow": "Vorlagen sind gerade nicht verfügbar. Bitte versuch es gleich noch einmal.",
     "tabs": {

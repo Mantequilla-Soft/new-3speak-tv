@@ -260,7 +260,14 @@
       "created": "Template dibuat",
       "liveConflict": "Template ini sedang live. Hentikan siaran di OBS sebelum mengganti namanya.",
       "invalid": "Beberapa kolom tidak valid. Periksa lalu coba lagi.",
-      "saveFailed": "Template tidak dapat disimpan."
+      "saveFailed": "Template tidak dapat disimpan.",
+      "tabs": {
+        "label": "Bagian templat",
+        "details": "Detail",
+        "audience": "Penonton",
+        "boosts": "Boost",
+        "recording": "Rekaman"
+      }
     },
     "unavailableNow": "Template sedang tidak tersedia. Coba lagi sebentar lagi.",
     "tabs": {

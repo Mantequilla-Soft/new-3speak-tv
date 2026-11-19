@@ -260,7 +260,14 @@
       "created": "模板已创建",
       "liveConflict": "该模板正在直播。重命名前请先在 OBS 中停止直播。",
       "invalid": "部分字段无效。请检查后重试。",
-      "saveFailed": "无法保存模板。"
+      "saveFailed": "无法保存模板。",
+      "tabs": {
+        "label": "模板分区",
+        "details": "详情",
+        "audience": "观众",
+        "boosts": "助推",
+        "recording": "录制"
+      }
     },
     "unavailableNow": "模板暂时不可用。请稍后再试。",
     "tabs": {

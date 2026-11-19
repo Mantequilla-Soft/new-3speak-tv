@@ -263,7 +263,14 @@
       "created": "Szablon utworzony",
       "liveConflict": "Ten szablon jest teraz na żywo. Zatrzymaj transmisję w OBS, zanim zmienisz jego nazwę.",
       "invalid": "Niektóre pola są nieprawidłowe. Sprawdź je i spróbuj ponownie.",
-      "saveFailed": "Nie udało się zapisać szablonu."
+      "saveFailed": "Nie udało się zapisać szablonu.",
+      "tabs": {
+        "label": "Sekcje szablonu",
+        "details": "Szczegóły",
+        "audience": "Widzowie",
+        "boosts": "Boosty",
+        "recording": "Nagranie"
+      }
     },
     "unavailableNow": "Szablony są teraz niedostępne. Spróbuj ponownie za chwilę.",
     "tabs": {

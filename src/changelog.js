@@ -18,6 +18,18 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.131',
+    category: 'general',
+    date: '2026-11-19',
+    summary: 'Pull down at the top of any page on a phone or tablet to reload it.',
+  },
+  {
+    version: '2.0.130',
+    category: 'live',
+    date: '2026-11-19',
+    summary: 'Stream templates can set a boost goal, and the template editor is split into Details, Audience, Boosts and Recording tabs.',
+  },
+  {
     version: '2.0.129',
     category: 'live',
     date: '2026-11-19',

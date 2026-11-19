@@ -261,7 +261,14 @@
       "created": "Şablon oluşturuldu",
       "liveConflict": "Bu şablon şu anda canlı yayında. Adını değiştirmeden önce OBS'te yayını durdur.",
       "invalid": "Bazı alanlar geçersiz. Lütfen kontrol edip tekrar dene.",
-      "saveFailed": "Şablon kaydedilemedi."
+      "saveFailed": "Şablon kaydedilemedi.",
+      "tabs": {
+        "label": "Şablon bölümleri",
+        "details": "Ayrıntılar",
+        "audience": "İzleyiciler",
+        "boosts": "Boostlar",
+        "recording": "Kayıt"
+      }
     },
     "unavailableNow": "Şablonlar şu anda kullanılamıyor. Lütfen biraz sonra tekrar dene.",
     "tabs": {
