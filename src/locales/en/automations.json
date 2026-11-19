@@ -2,7 +2,7 @@
   "menuEntry": "Automations",
   "title": "Automations",
   "beta": "Beta",
-  "subtitle": "Let 3Speak do the follow-up work when something happens on your channel: post a snap or a Short, comment, or tell your Discord.",
+  "subtitle": "Let 3Speak do the follow-up work when something happens on your channel or in your wallet: post a snap, a Short, an audio or a video, comment, upvote, reblog, or tell your Discord.",
   "howItWorks": "3Speak looks at your channel every {{minutes}} minutes. Each new post starts the automations that are switched on for it, and everything they post goes out as you, through the posting permission you gave 3Speak. Posts an automation makes never start another one.",
   "gate": {
     "signIn": "Sign in to set up automations.",
@@ -54,27 +54,6 @@
       "cancelled": "Stopped"
     }
   },
-  "starters": {
-    "title": "New automation",
-    "sub": "Start from an example and change it as you like, or start empty.",
-    "discordLiveText": "{title} is live now: {url}",
-    "snap_video": {
-      "title": "Snap every new video",
-      "sub": "When you publish a video, a snap with its title and link goes out."
-    },
-    "short_video": {
-      "title": "A Short from every new video",
-      "sub": "When you publish a video, its first 30 seconds become an upright Short."
-    },
-    "discord_live": {
-      "title": "Tell Discord when I go live",
-      "sub": "When you start a stream, your Discord server gets a message."
-    },
-    "blank": {
-      "title": "Start empty",
-      "sub": "Pick the event and build the steps yourself."
-    }
-  },
   "editor": {
     "back": "Back",
     "close": "Close",
@@ -94,7 +73,9 @@
     "stepName": "Step name",
     "optional": "optional",
     "tagsHint": "Up to {{max}} tags, separated by spaces.",
-    "emptyHint": "Drag a step from the toolbox onto the line"
+    "emptyHint": "Drag a step from the toolbox onto the line",
+    "accounts": "Accounts",
+    "accountsHint": "Up to {{max}} Hive accounts, separated by spaces."
   },
   "test": {
     "title": "Test run",
@@ -102,7 +83,14 @@
     "onPost": "Tested on your newest matching post: {{title}}",
     "nothingPosted": "Nothing was posted. This is what each step would do.",
     "shortDetail": "A Short from second {{start}}, {{length}} seconds long.",
-    "noSteps": "No step would run for this post."
+    "noSteps": "No step would run for this post.",
+    "voteOn": "Upvote {{on}} at {{weight}}%.",
+    "reblogOn": "Reblog {{on}}.",
+    "skipped": {
+      "self": "Skipped: that is you.",
+      "no_sender": "Skipped: nobody to upvote (a Lightning tip or a stream boost has no Hive sender).",
+      "no_recent_post": "Skipped: they have no post from the last 7 days."
+    }
   },
   "events": {
     "video_published": {
@@ -128,6 +116,30 @@
     "stream_started": {
       "label": "I go live",
       "desc": "When the post for your live stream goes out."
+    },
+    "tip_received": {
+      "label": "I get a tip",
+      "desc": "A HIVE, HBD or Lightning tip for one of your videos (the memo links it)."
+    },
+    "boost_received": {
+      "label": "I get a boost",
+      "desc": "A boost on one of your posts, or on your stream."
+    },
+    "power_up": {
+      "label": "Power up",
+      "desc": "You power up, or someone powers up HIVE to your account."
+    },
+    "poll_ended": {
+      "label": "My poll ends",
+      "desc": "One of your snap polls has ended."
+    },
+    "stream_poll_ended": {
+      "label": "A poll in my stream ends",
+      "desc": "A poll or prediction in one of your streams of the last three days has ended."
+    },
+    "someone_posted": {
+      "label": "Someone I pick posts",
+      "desc": "A post of an account you list below: a video, Short, audio, podcast, snap, stream or text post."
     }
   },
   "tasks": {
@@ -155,11 +167,47 @@
         "vertical": "Crops the middle of a wide video to 9:16."
       }
     },
+    "post_audio": {
+      "label": "Post an audio",
+      "desc": "Posts the sound of the new video as an audio post with its cover, about 10 minutes later.",
+      "props": {
+        "title": "Title",
+        "audioType": "Kind of audio",
+        "tags": "Tags"
+      }
+    },
+    "post_video": {
+      "label": "Post a video",
+      "desc": "Posts the new audio as a video with its cover as the picture, about 10 minutes later.",
+      "props": {
+        "title": "Title",
+        "tags": "Tags"
+      }
+    },
     "post_comment": {
       "label": "Comment on the post",
-      "desc": "A comment of yours under the new post, for links, credits or a question.",
+      "desc": "A comment of yours under the post, for links, credits, thanks or results.",
       "props": {
         "text": "Comment"
+      }
+    },
+    "upvote_post": {
+      "label": "Upvote the post",
+      "desc": "Your upvote on their post.",
+      "props": {
+        "weight": "Vote weight in %"
+      }
+    },
+    "reblog": {
+      "label": "Reblog the post",
+      "desc": "Puts their post on your blog.",
+      "props": {}
+    },
+    "upvote_sender": {
+      "label": "Upvote the sender",
+      "desc": "Your upvote on the newest post of whoever tipped, boosted or powered you up (when it still pays out).",
+      "props": {
+        "weight": "Vote weight in %"
       }
     },
     "send_discord": {
@@ -181,11 +229,15 @@
     "pickField": "Pick what to check",
     "operator": "Condition",
     "value": "Value",
-    "seconds": "Seconds",
     "branchesNote": "Drag steps into the Yes and No paths on the canvas.",
     "branch": {
       "yes": "Yes",
       "no": "No"
+    },
+    "units": {
+      "seconds": "Seconds",
+      "amount": "Amount",
+      "count": "Number"
     }
   },
   "fields": {
@@ -198,7 +250,19 @@
     "platform": "Imported from",
     "kind": "Kind",
     "audioType": "Kind of audio",
-    "imported": "Imported"
+    "imported": "Imported",
+    "from": "From",
+    "amount": "Amount",
+    "asset": "Currency",
+    "message": "Message",
+    "via": "Paid with",
+    "boostKind": "Boosted",
+    "self": "By me",
+    "question": "Question",
+    "winner": "Winner",
+    "votes": "Votes",
+    "author": "Account",
+    "postKind": "Kind of post"
   },
   "ops": {
     "contains": "contains",
@@ -227,15 +291,30 @@
     "song": "Music",
     "voice_message": "Voice message",
     "yes": "Yes",
-    "no": "No"
+    "no": "No",
+    "HIVE": "HIVE",
+    "HBD": "HBD",
+    "hive": "Hive wallet",
+    "lightning": "Lightning",
+    "post": "A post",
+    "stream": "A stream",
+    "audio": "Audio",
+    "snap": "Snap"
   },
   "placeholders": {
     "title": "the post's title",
     "description": "the start of its description",
     "url": "its link on 3Speak",
-    "author": "your account name",
+    "author": "the account that posted it (you, for your own posts)",
     "tags": "its tags as #hashtags",
-    "platform": "where it was imported from"
+    "platform": "where it was imported from",
+    "from": "who sent it",
+    "amount": "how much",
+    "message": "the message that came with it",
+    "question": "the poll's question",
+    "results": "every answer with its votes",
+    "winner": "the answer with the most votes",
+    "votes": "how many voted"
   },
   "problems": {
     "required": "This can't be empty.",
@@ -260,7 +339,13 @@
     "no_grant": "Allow 3Speak to publish for you first.",
     "pro_required": "Paused: automations need 3Speak Pro.",
     "not_found": "This automation does not exist (any more).",
-    "unknown": "This can't be used."
+    "unknown": "This can't be used.",
+    "no_post": "There is no post to answer under.",
+    "no_audio": "This post has no 3Speak audio.",
+    "no_accounts": "List at least one account.",
+    "too_many_accounts": "At most {{max}} accounts.",
+    "bad_account": "One of the accounts is not a Hive account name.",
+    "bad_account_named": "\"{{name}}\" is not a Hive account name."
   },
   "designer": {
     "contextMenu": {
@@ -286,5 +371,111 @@
       "search": "Search…",
       "title": "Steps"
     }
+  },
+  "templates": {
+    "button": "Templates",
+    "title": "Templates",
+    "newTitle": "New automation",
+    "sub": "Start from a template and change it as you like, or start empty.",
+    "replaces": "Picking a template replaces the steps on the canvas.",
+    "groups": {
+      "videos": "Videos",
+      "audio": "Audio and podcasts",
+      "live": "Live",
+      "polls": "Polls",
+      "thanks": "Tips, boosts and power ups",
+      "others": "Other accounts",
+      "own": "Your own"
+    },
+    "items": {
+      "snap_video": {
+        "title": "Snap every new video",
+        "sub": "When you publish a video, a snap with its title and link goes out."
+      },
+      "short_video": {
+        "title": "A Short from every new video",
+        "sub": "When you publish a video, its first 30 seconds become an upright Short."
+      },
+      "long_video_short": {
+        "title": "Short for long videos, snap for short ones",
+        "sub": "Videos over 5 minutes get a Short from second 30, shorter ones a snap."
+      },
+      "audio_from_video": {
+        "title": "Audio version of every video",
+        "sub": "When you publish a video, its sound is posted as a podcast episode."
+      },
+      "imported_discord": {
+        "title": "Tell Discord about imported videos",
+        "sub": "When the importer brings in a video, your Discord server hears about it."
+      },
+      "video_from_podcast": {
+        "title": "Video version of every episode",
+        "sub": "When you post a podcast episode, it is posted as a video with its cover."
+      },
+      "podcast_snap": {
+        "title": "Snap every new episode",
+        "sub": "When you post a podcast episode, a snap with its link goes out."
+      },
+      "discord_live": {
+        "title": "Tell Discord when I go live",
+        "sub": "When you start a stream, your Discord server gets a message."
+      },
+      "stream_poll_snap": {
+        "title": "Snap the results of stream polls",
+        "sub": "When a poll in your stream ends, a snap shows how people voted."
+      },
+      "poll_results": {
+        "title": "Reply with the results of my polls",
+        "sub": "When one of your polls ends, a reply under it shows the results."
+      },
+      "thank_tips": {
+        "title": "Thank everyone who tips",
+        "sub": "A thank-you under the video, and an upvote on the tipper's newest post."
+      },
+      "thank_boosts": {
+        "title": "Thank everyone who boosts",
+        "sub": "A thank-you snap, and an upvote on the booster's newest post."
+      },
+      "power_up_snap": {
+        "title": "Share my power ups",
+        "sub": "When you power up, a snap says how much. When someone powers you up, they get an upvote."
+      },
+      "vote_friends": {
+        "title": "Upvote my friends' new videos",
+        "sub": "When an account you list publishes a video, it gets your upvote."
+      },
+      "reblog_friends": {
+        "title": "Reblog my friends' new videos",
+        "sub": "When an account you list publishes a video, it goes on your blog."
+      },
+      "blank": {
+        "title": "Start empty",
+        "sub": "Pick the event and build the steps yourself."
+      }
+    },
+    "texts": {
+      "longerThan5": "Longer than 5 minutes?",
+      "importedDiscord": "New on my channel: {title}\n{url}",
+      "podcastSnap": "New episode: {title}\n\n{url}",
+      "discordLive": "{title} is live now: {url}",
+      "streamPollSnap": "Poll from my stream: {question}\n\n{results}\n\n{url}",
+      "pollResults": "The poll is closed. Results:\n\n{results}\n\nThanks to all {votes} voters!",
+      "viaLightning": "Paid with Lightning?",
+      "thanksLightning": "Thank you for the {amount} HIVE tip! ⚡",
+      "thanksTip": "Thank you @{from} for the {amount} tip! 🙏",
+      "boostOnPost": "Boost on a post?",
+      "thanksBoost": "Thank you @{from} for boosting {url} 🚀\n\n{message}",
+      "thanksStreamBoost": "Thank you for the boost on my stream! 🚀 {url}",
+      "byMe": "Powered up by me?",
+      "poweredUp": "Just powered up {amount} HIVE! 💪",
+      "isVideo": "A video?"
+    }
+  },
+  "eventGroups": {
+    "channel": "My channel",
+    "wallet": "My wallet",
+    "polls": "Polls",
+    "others": "Other accounts",
+    "more": "More"
   }
 }

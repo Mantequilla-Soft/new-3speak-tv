@@ -34,6 +34,10 @@ const BETA = new Set([...TEAM, ...String(process.env.AUTOMATIONS_BETA_USERS || '
 const MONGO_URI = process.env.AUTOMATIONS_MONGODB_URI || process.env.MONGODB_URI || ''
 const MONGO_DB = process.env.AUTOMATIONS_DATABASE_NAME || process.env.DATABASE_NAME || ''
 
+// Where snap polls and stream polls are read (see the catalog's sources).
+const POLLS_API = (process.env.AUTOMATIONS_POLLS_API || 'https://polls.hivehub.dev').replace(/\/+$/, '')
+const LIVE_API = (process.env.AUTOMATIONS_LIVE_API || 'https://live.3speak.tv').replace(/\/+$/, '')
+
 const MAX_WORKFLOWS = 10
 const MAX_RUNS_PER_DAY = 50
 const MAX_AGE_MS = 24 * 3600 * 1000
@@ -124,14 +128,34 @@ const publicWorkflow = (w) => ({
 })
 const publicRun = (r) => ({
   id: r._id, status: r.status, createdAt: r.createdAt, finishedAt: r.finishedAt || null, attempts: r.attempts || 0,
-  error: r.error || null, post: { author: r.event.author, permlink: r.event.permlink, title: r.event.values.title || '', url: r.event.values.url },
+  error: r.error || null,
+  post: { author: r.event.author, permlink: r.event.permlink, title: r.event.values.title || r.event.values.question || r.event.values.message || '', url: r.event.values.url || '' },
+  event: r.event.events?.[0] || null, values: { from: r.event.values.from || '', amount: r.event.values.amount ?? null, asset: r.event.values.asset || '' },
   steps: r.steps || {},
 })
 
-// Values for a test run when the creator has no post of that kind yet.
+// Values for a test run when the creator has nothing of that kind yet.
 const SAMPLE = {
   title: 'My new video', description: 'What this video is about.', tags: ['threespeak', 'hive'], duration: 245,
   community: 'hive-181335', platform: 'youtube', kind: 'video', audioType: 'podcast', imported: 'no',
+  from: 'badadib', amount: 5, asset: 'HIVE', message: 'Love this one!', via: 'hive', boostKind: 'post', self: 'no',
+  question: 'What should the next video be about?', results: 'Cats: 12 (60%)\nDogs: 8 (40%)', winner: 'Cats', votes: 20,
+  postKind: 'video',
+}
+function sampleEvent(event, user) {
+  const e = catalog.EVENTS[event]
+  const url = e.media === 'audio' ? `https://3speak.tv/audio/${user}/example` : e.source === 'polls' ? `https://3speak.tv/@${user}/example` : `https://3speak.tv/watch?v=${user}/example`
+  return {
+    author: e.post === 'none' ? '' : user,
+    permlink: e.post === 'none' ? '' : 'example',
+    values: { ...SAMPLE, author: user, url, ...(e.media === 'audio' ? { audioPermlink: 'example' } : {}) },
+  }
+}
+// someone_posted without a post of theirs yet: the first listed account's example.
+function sampleFor(event, user, accounts) {
+  const ev = sampleEvent(event, user)
+  if (event !== 'someone_posted' || !accounts?.length) return ev
+  return { ...ev, author: accounts[0], values: { ...ev.values, author: accounts[0], url: `https://3speak.tv/watch?v=${accounts[0]}/example` } }
 }
 
 // ── Running a workflow ───────────────────────────────────────────────────────
@@ -317,7 +341,7 @@ function mountAutomations(app, deps) {
   })
 
   // A test run of the definition in the body (the editor's, saved or not) on the
-  // creator's newest post of that kind, or on example values when there is none.
+  // creator's newest event of that kind, or on example values when there is none.
   // Nothing is posted: every task only says what it would do.
   app.post('/api/automations/test', ...mw, async (req, res) => {
     const user = await gate(req, res); if (!user) return
@@ -325,23 +349,26 @@ function mountAutomations(app, deps) {
       const v = catalog.validateDefinition(req.body?.definition)
       if (v.error) return badDefinition(res, v)
       const want = v.definition.properties.event
-      const posts = await recentPosts(user).catch(() => [])
-      let event = null
-      for (const p of posts) {
-        const c = catalog.classifyPost(p)
-        if (c && c.events.includes(want)) { event = { author: p.author, permlink: p.permlink, values: { ...c.values } }; break }
-      }
-      const sample = !event
-      if (sample) {
-        const kind = catalog.EVENTS[want].media
-        event = { author: user, permlink: 'example', values: { ...SAMPLE, author: user, url: kind === 'audio' ? `https://3speak.tv/audio/${user}/example` : `https://3speak.tv/watch?v=${user}/example` } }
-      }
+      const listed = v.definition.properties.accounts || []
+      const found = (await gather(user, new Set([catalog.EVENTS[want].source]), listed).catch(() => []))
+        .filter((it) => it.events.includes(want) && (!listed.length || listed.includes(it.values.author)))
+        .sort((a, b) => b.at - a.at)[0]
+      const sample = !found
+      const event = found
+        ? { author: found.post?.author || '', permlink: found.post?.permlink || '', values: { ...found.values } }
+        : sampleFor(want, user, listed)
       const out = await execute({ definition: v.definition, event, user, marker: { test: true }, dryRun: true, deps: taskDeps })
-      res.json({ sample, post: { author: event.author, permlink: event.permlink, title: event.values.title, url: event.values.url }, status: out.status, error: out.error || null, steps: out.steps })
+      res.json({
+        sample,
+        post: { author: event.author, permlink: event.permlink, title: event.values.title || event.values.question || event.values.message || '', url: event.values.url || '' },
+        status: out.status, error: out.error || null, steps: out.steps,
+      })
     } catch (e) { fail(res, e) }
   })
 
-  // ── Watching posts ─────────────────────────────────────────────────────────
+  // ── Watching ───────────────────────────────────────────────────────────────
+  // Every source gives items { key, at, events, values, post? }; only the
+  // sources some switched-on workflow of the creator needs are read.
   async function recentPosts(user) {
     const [posts, replies] = await Promise.all([
       deps.hiveCall('bridge.get_account_posts', { sort: 'posts', account: user, limit: 10 }),
@@ -350,6 +377,71 @@ function mountAutomations(app, deps) {
     return [...(posts || []), ...(replies || [])]
       .filter((p) => p && p.author === user)
       .sort((a, b) => (a.created < b.created ? 1 : -1))
+  }
+  const hiveTime = (s) => Date.parse(`${String(s).replace(/Z$/, '')}Z`)
+
+  const SOURCES = {
+    // Their newest posts and replies, a few accounts at a time.
+    async watched(_user, accounts) {
+      const out = []
+      for (let i = 0; i < accounts.length; i += 5) {
+        const lists = await Promise.all(accounts.slice(i, i + 5).map((a) => recentPosts(a).catch(() => [])))
+        for (const p of lists.flat()) {
+          const c = catalog.classifyWatched(p)
+          if (c) out.push({ key: `w:${p.author}/${p.permlink}`, at: hiveTime(p.created), ...c })
+        }
+      }
+      return out
+    },
+    async posts(user) {
+      return (await recentPosts(user)).flatMap((p) => {
+        const c = catalog.classifyPost(p)
+        return c ? [{ key: `${p.author}/${p.permlink}`, at: hiveTime(p.created), ...c, post: { author: p.author, permlink: p.permlink } }] : []
+      })
+    },
+    // Transfers and power ups that came in (op filter: transfer = 2, transfer_to_vesting = 3).
+    async history(user) {
+      const rows = await deps.hiveCall('condenser_api.get_account_history', [user, -1, 100, (1 << 2) | (1 << 3), 0])
+      return (rows || []).flatMap(([index, h]) => {
+        const c = catalog.classifyHistory(h?.op, user)
+        return c ? [{ key: `h:${index}`, at: hiveTime(h.timestamp), ...c }] : []
+      })
+    },
+    async polls(user) {
+      const r = await taskDeps.fetch(`${POLLS_API}/rpc/poll?author=eq.${encodeURIComponent(user)}&order=created.desc&limit=20`, { signal: AbortSignal.timeout(10000) })
+      if (!r.ok) throw new Error(`polls API ${r.status}`)
+      return (await r.json()).flatMap((row) => {
+        const c = catalog.classifyPoll(row)
+        return c ? [{ key: `p:${row.permlink}`, at: hiveTime(row.end_time), ...c }] : []
+      })
+    },
+    // The polls of the creator's streams of the last days (the live server keeps
+    // them per stream; a server without polls answers 404: nothing to see).
+    async stream_polls(user) {
+      const rooms = (await recentPosts(user)).flatMap((p) => {
+        const room = catalog.classifyPost(p)?.events.includes('stream_started') ? p.permlink : null
+        return room && hiveTime(p.created) > now() - 3 * 24 * 3600 * 1000 ? [room] : []
+      })
+      const out = []
+      for (const room of rooms.slice(0, 5)) {
+        const r = await taskDeps.fetch(`${LIVE_API}/rooms/${encodeURIComponent(room)}/polls`, { signal: AbortSignal.timeout(10000) }).catch(() => null)
+        if (!r?.ok) continue
+        for (const view of (await r.json())?.polls || []) {
+          const c = catalog.classifyStreamPoll({ ...view, room: view.room || room }, user)
+          if (c) out.push({ key: `sp:${view.id}`, at: Date.parse(view.endedAt || view.endsAt) || 0, ...c })
+        }
+      }
+      return out
+    },
+  }
+
+  // `accounts`: the other accounts the creator's someone_posted workflows list.
+  async function gather(user, sources, accounts = []) {
+    const lists = await Promise.all([...sources].map((name) => SOURCES[name](user, accounts).catch((e) => {
+      console.warn(`[automations] @${user} ${name}: ${e.message}`)
+      return []
+    })))
+    return lists.flat()
   }
 
   async function checkUser(user, workflows) {
@@ -362,28 +454,29 @@ function mountAutomations(app, deps) {
     const seen = new Set(st.seen)
     const t = now()
     let fresh = 0
-    for (const post of (await recentPosts(user)).reverse()) {
-      const ref = `${post.author}/${post.permlink}`
-      const created = Date.parse(`${String(post.created).replace(/Z$/, '')}Z`)
-      if (seen.has(ref) || !(created > t - MAX_AGE_MS)) continue
-      seen.add(ref)
+    const sources = new Set(workflows.map((w) => catalog.EVENTS[w.definition.properties.event]?.source).filter(Boolean))
+    const accounts = [...new Set(workflows.flatMap((w) => w.definition.properties.accounts || []))]
+    const items = (await gather(user, sources, accounts)).sort((a, b) => a.at - b.at)
+    for (const it of items) {
+      if (seen.has(it.key) || !(it.at > t - MAX_AGE_MS)) continue
+      seen.add(it.key)
       fresh += 1
-      const c = catalog.classifyPost(post)
-      if (!c) continue
       for (const w of workflows) {
-        if (!c.events.includes(w.definition.properties.event)) continue
-        if (!(created >= Date.parse(w.enabledAt))) continue
+        if (!it.events.includes(w.definition.properties.event)) continue
+        // Someone's post starts only the workflows that list them.
+        if (it.events.includes('someone_posted') && !(w.definition.properties.accounts || []).includes(it.values.author)) continue
+        if (!(it.at >= Date.parse(w.enabledAt))) continue
         if ((await store.countRunsSince(user, new Date(t - 24 * 3600 * 1000).toISOString())) >= MAX_RUNS_PER_DAY) {
-          console.warn(`[automations] @${user} reached ${MAX_RUNS_PER_DAY} runs today, ${ref} skipped`)
+          console.warn(`[automations] @${user} reached ${MAX_RUNS_PER_DAY} runs today, ${it.key} skipped`)
           continue
         }
         await store.addRun({
           _id: newId(), env: ENV, user, workflowId: w._id, workflowName: w.name,
           definition: w.definition,
-          event: { author: post.author, permlink: post.permlink, created: new Date(created).toISOString(), events: c.events, values: c.values },
+          event: { author: it.post?.author || '', permlink: it.post?.permlink || '', key: it.key, created: new Date(it.at).toISOString(), events: it.events, values: it.values },
           status: 'queued', steps: {}, attempts: 0, nextAt: t, createdAt: new Date(t).toISOString(),
         })
-        console.log(`[automations] @${user} ${ref} → "${w.name}"`)
+        console.log(`[automations] @${user} ${it.key} → "${w.name}"`)
       }
     }
     if (fresh) await store.putState({ ...st, seen: [...seen].slice(-SEEN_MAX) })

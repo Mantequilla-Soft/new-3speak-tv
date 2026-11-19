@@ -2668,14 +2668,23 @@ if (process.env.VIDEO_IMPORT_ENABLED === 'true') {
 // 🤖 Automations (closed beta, Pro): a creator's own workflows. See automations.cjs.
 // OFF unless AUTOMATIONS_ENABLED=true. Every post a task makes goes out as the
 // creator, signed by @threespeak under their posting grant, and only as a reply
-// (a snap, a comment) or a scheduled Short: `broadcastAutomation` refuses
-// anything else.
+// (a snap, a comment), an upvote, a reblog, or a scheduled post (Short, audio, video):
+// `broadcastAutomation` refuses anything else.
 {
   const batch = require('./import-batch.cjs')
+  const isOwnReblog = (json, user) => {
+    try {
+      const [action, body] = JSON.parse(json)
+      return action === 'reblog' && body?.account === user && !!body.author && !!body.permlink
+    } catch { return false }
+  }
   async function broadcastAutomation(user, ops) {
     if (!POSTING_WIF) throw new Error('Server is not configured')
     const ok = Array.isArray(ops) && ops.length > 0 && ops.length <= 2
-      && ops.every(([type, op]) => type === 'comment' && op.author === user && op.parent_author)
+      && ops.every(([type, op]) => (type === 'comment' && op.author === user && op.parent_author)
+        || (type === 'vote' && op.voter === user && op.weight > 0 && op.weight <= 10000)
+        || (type === 'custom_json' && op.id === 'follow' && op.required_auths?.length === 0
+          && op.required_posting_auths?.length === 1 && op.required_posting_auths[0] === user && isOwnReblog(op.json, user)))
     if (!ok) throw new Error('Operation not allowed')
     if (!(await hasThreespeakPostingGrant(user))) throw Object.assign(new Error('3Speak may no longer publish for you'), { code: 'no_grant' })
     return client.broadcast.sendOperations(ops, PrivateKey.fromString(POSTING_WIF))
@@ -2702,6 +2711,9 @@ if (process.env.VIDEO_IMPORT_ENABLED === 'true') {
     tusUpload: batch.tusUpload,
     commissionEncode: batch.commissionEncode,
     buildPost: batch.buildPost,
+    buildAudioPost: batch.buildAudioPost,
+    uploadAudio: batch.uploadAudio,
+    setAudioThumbnail: batch.setAudioThumbnail,
     scheduleOnChecker: batch.scheduleOnChecker,
     signScheduledPost: (fields) => (POSTING_WIF ? signScheduledPost(POSTING_WIF, fields) : null),
   })

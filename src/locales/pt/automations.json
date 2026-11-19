@@ -2,7 +2,7 @@
   "menuEntry": "Automações",
   "title": "Automações",
   "beta": "Beta",
-  "subtitle": "Deixe o 3Speak fazer o trabalho de acompanhamento quando algo acontece no seu canal: publicar um snap ou um Short, comentar ou avisar o seu Discord.",
+  "subtitle": "Deixe o 3Speak fazer o trabalho de acompanhamento quando algo acontece no seu canal ou na sua carteira: publicar um snap, um Short, um áudio ou um vídeo, comentar, votar, reblogar ou avisar o seu Discord.",
   "howItWorks": "O 3Speak verifica o seu canal a cada {{minutes}} minutos. Cada nova publicação inicia as automações ativadas para ela, e tudo o que elas publicam sai em seu nome, com a permissão de publicação que você deu ao 3Speak. Publicações feitas por uma automação nunca iniciam outra.",
   "gate": {
     "signIn": "Entre para configurar automações.",
@@ -56,27 +56,6 @@
       "cancelled": "Interrompida"
     }
   },
-  "starters": {
-    "title": "Nova automação",
-    "sub": "Comece com um exemplo e mude como quiser, ou comece do zero.",
-    "discordLiveText": "{title} está ao vivo agora: {url}",
-    "snap_video": {
-      "title": "Um snap para cada vídeo novo",
-      "sub": "Quando você publica um vídeo, sai um snap com o título e o link."
-    },
-    "short_video": {
-      "title": "Um Short de cada vídeo novo",
-      "sub": "Quando você publica um vídeo, os primeiros 30 segundos viram um Short vertical."
-    },
-    "discord_live": {
-      "title": "Avisar o Discord quando eu entrar ao vivo",
-      "sub": "Quando você inicia uma transmissão, o seu servidor do Discord recebe uma mensagem."
-    },
-    "blank": {
-      "title": "Começar do zero",
-      "sub": "Escolha o evento e crie as etapas você mesmo."
-    }
-  },
   "editor": {
     "back": "Voltar",
     "close": "Fechar",
@@ -96,7 +75,9 @@
     "stepName": "Nome da etapa",
     "optional": "opcional",
     "tagsHint": "Até {{max}} tags, separadas por espaços.",
-    "emptyHint": "Arraste uma etapa da caixa de ferramentas para a linha"
+    "emptyHint": "Arraste uma etapa da caixa de ferramentas para a linha",
+    "accounts": "Contas",
+    "accountsHint": "Até {{max}} contas Hive, separadas por espaços."
   },
   "test": {
     "title": "Execução de teste",
@@ -104,7 +85,14 @@
     "onPost": "Testado na sua publicação correspondente mais recente: {{title}}",
     "nothingPosted": "Nada foi publicado. Isto é o que cada etapa faria.",
     "shortDetail": "Um Short a partir do segundo {{start}}, com {{length}} segundos.",
-    "noSteps": "Nenhuma etapa seria executada para esta publicação."
+    "noSteps": "Nenhuma etapa seria executada para esta publicação.",
+    "voteOn": "Votar em {{on}} com {{weight}}%.",
+    "reblogOn": "Reblogar {{on}}.",
+    "skipped": {
+      "self": "Ignorado: é você.",
+      "no_sender": "Ignorado: ninguém para votar (uma gorjeta via Lightning ou um boost na transmissão não tem remetente Hive).",
+      "no_recent_post": "Ignorado: essa conta não publicou nada nos últimos 7 dias."
+    }
   },
   "events": {
     "video_published": {
@@ -130,6 +118,30 @@
     "stream_started": {
       "label": "Entro ao vivo",
       "desc": "Quando a publicação da sua transmissão ao vivo sai."
+    },
+    "tip_received": {
+      "label": "Recebo uma gorjeta",
+      "desc": "Uma gorjeta em HIVE, HBD ou Lightning para um dos seus vídeos (o memo aponta para ele)."
+    },
+    "boost_received": {
+      "label": "Recebo um boost",
+      "desc": "Um boost em uma das suas publicações, ou na sua transmissão."
+    },
+    "power_up": {
+      "label": "Power up",
+      "desc": "Você faz um power up, ou alguém faz um power up de HIVE para a sua conta."
+    },
+    "poll_ended": {
+      "label": "Minha enquete termina",
+      "desc": "Uma das suas enquetes em snaps terminou."
+    },
+    "stream_poll_ended": {
+      "label": "Uma enquete na minha transmissão termina",
+      "desc": "Uma enquete ou previsão em uma das suas transmissões dos últimos três dias terminou."
+    },
+    "someone_posted": {
+      "label": "Alguém que eu escolho publica",
+      "desc": "Uma publicação de uma conta que você lista abaixo: um vídeo, Short, áudio, podcast, snap, transmissão ou post de texto."
     }
   },
   "tasks": {
@@ -157,11 +169,47 @@
         "vertical": "Corta o centro de um vídeo largo para 9:16."
       }
     },
+    "post_audio": {
+      "label": "Publicar um áudio",
+      "desc": "Publica o som do novo vídeo como áudio com a capa, cerca de 10 minutos depois.",
+      "props": {
+        "title": "Título",
+        "audioType": "Tipo de áudio",
+        "tags": "Tags"
+      }
+    },
+    "post_video": {
+      "label": "Publicar um vídeo",
+      "desc": "Publica o novo áudio como vídeo com a capa como imagem, cerca de 10 minutos depois.",
+      "props": {
+        "title": "Título",
+        "tags": "Tags"
+      }
+    },
     "post_comment": {
       "label": "Comentar na publicação",
-      "desc": "Um comentário seu na nova publicação, para links, créditos ou uma pergunta.",
+      "desc": "Um comentário seu na publicação, para links, créditos, agradecimentos ou resultados.",
       "props": {
         "text": "Comentário"
+      }
+    },
+    "upvote_post": {
+      "label": "Votar na publicação",
+      "desc": "O seu voto na publicação da pessoa.",
+      "props": {
+        "weight": "Peso do voto em %"
+      }
+    },
+    "reblog": {
+      "label": "Reblogar a publicação",
+      "desc": "Coloca a publicação da pessoa no seu blog.",
+      "props": {}
+    },
+    "upvote_sender": {
+      "label": "Votar em quem enviou",
+      "desc": "O seu voto na publicação mais recente de quem lhe deu gorjeta, boost ou power up (enquanto ela ainda paga).",
+      "props": {
+        "weight": "Peso do voto em %"
       }
     },
     "send_discord": {
@@ -183,11 +231,15 @@
     "pickField": "Escolha o que verificar",
     "operator": "Condição",
     "value": "Valor",
-    "seconds": "Segundos",
     "branchesNote": "Arraste etapas para os caminhos Sim e Não na tela.",
     "branch": {
       "yes": "Sim",
       "no": "Não"
+    },
+    "units": {
+      "seconds": "Segundos",
+      "amount": "Valor",
+      "count": "Número"
     }
   },
   "fields": {
@@ -200,7 +252,19 @@
     "platform": "Importado de",
     "kind": "Tipo",
     "audioType": "Tipo de áudio",
-    "imported": "Importado"
+    "imported": "Importado",
+    "from": "De",
+    "amount": "Valor",
+    "asset": "Moeda",
+    "message": "Mensagem",
+    "via": "Pago com",
+    "boostKind": "Com boost",
+    "self": "Por mim",
+    "question": "Pergunta",
+    "winner": "Vencedora",
+    "votes": "Votos",
+    "author": "Conta",
+    "postKind": "Tipo de publicação"
   },
   "ops": {
     "contains": "contém",
@@ -229,15 +293,30 @@
     "song": "Música",
     "voice_message": "Mensagem de voz",
     "yes": "Sim",
-    "no": "Não"
+    "no": "Não",
+    "HIVE": "HIVE",
+    "HBD": "HBD",
+    "hive": "Carteira Hive",
+    "lightning": "Lightning",
+    "post": "Uma publicação",
+    "stream": "Uma transmissão",
+    "audio": "Áudio",
+    "snap": "Snap"
   },
   "placeholders": {
     "title": "o título da publicação",
     "description": "o início da descrição",
     "url": "o link no 3Speak",
-    "author": "o nome da sua conta",
+    "author": "a conta que publicou (você, nas suas próprias publicações)",
     "tags": "as tags como #hashtags",
-    "platform": "de onde foi importado"
+    "platform": "de onde foi importado",
+    "from": "quem enviou",
+    "amount": "quanto",
+    "message": "a mensagem que veio junto",
+    "question": "a pergunta da enquete",
+    "results": "cada resposta com os seus votos",
+    "winner": "a resposta com mais votos",
+    "votes": "quantos votaram"
   },
   "problems": {
     "required": "Isto não pode ficar vazio.",
@@ -262,7 +341,13 @@
     "no_grant": "Primeiro permita que o 3Speak publique por você.",
     "pro_required": "Pausada: as automações precisam do 3Speak Pro.",
     "not_found": "Esta automação não existe (mais).",
-    "unknown": "Isto não pode ser usado."
+    "unknown": "Isto não pode ser usado.",
+    "no_post": "Não há publicação para responder.",
+    "no_audio": "Esta publicação não tem áudio do 3Speak.",
+    "no_accounts": "Liste pelo menos uma conta.",
+    "too_many_accounts": "No máximo {{max}} contas.",
+    "bad_account": "Uma das contas não é um nome de conta Hive.",
+    "bad_account_named": "\"{{name}}\" não é um nome de conta Hive."
   },
   "designer": {
     "contextMenu": {
@@ -288,5 +373,111 @@
       "search": "Pesquisar…",
       "title": "Etapas"
     }
+  },
+  "templates": {
+    "button": "Modelos",
+    "title": "Modelos",
+    "newTitle": "Nova automação",
+    "sub": "Comece com um modelo e mude como quiser, ou comece do zero.",
+    "replaces": "Escolher um modelo substitui as etapas na tela.",
+    "groups": {
+      "videos": "Vídeos",
+      "audio": "Áudio e podcasts",
+      "live": "Ao vivo",
+      "polls": "Enquetes",
+      "thanks": "Gorjetas, boosts e power ups",
+      "others": "Outras contas",
+      "own": "A sua"
+    },
+    "items": {
+      "snap_video": {
+        "title": "Um snap para cada vídeo novo",
+        "sub": "Quando você publica um vídeo, sai um snap com o título e o link."
+      },
+      "short_video": {
+        "title": "Um Short de cada vídeo novo",
+        "sub": "Quando você publica um vídeo, os primeiros 30 segundos viram um Short vertical."
+      },
+      "long_video_short": {
+        "title": "Short para vídeos longos, snap para os curtos",
+        "sub": "Vídeos com mais de 5 minutos ganham um Short a partir do segundo 30, os mais curtos um snap."
+      },
+      "audio_from_video": {
+        "title": "Versão em áudio de cada vídeo",
+        "sub": "Quando você publica um vídeo, o som dele é publicado como episódio de podcast."
+      },
+      "imported_discord": {
+        "title": "Avisar o Discord sobre vídeos importados",
+        "sub": "Quando o importador traz um vídeo, o seu servidor do Discord fica sabendo."
+      },
+      "video_from_podcast": {
+        "title": "Versão em vídeo de cada episódio",
+        "sub": "Quando você publica um episódio de podcast, ele é publicado como vídeo com a capa."
+      },
+      "podcast_snap": {
+        "title": "Um snap para cada episódio novo",
+        "sub": "Quando você publica um episódio de podcast, sai um snap com o link."
+      },
+      "discord_live": {
+        "title": "Avisar o Discord quando eu entrar ao vivo",
+        "sub": "Quando você inicia uma transmissão, o seu servidor do Discord recebe uma mensagem."
+      },
+      "stream_poll_snap": {
+        "title": "Um snap com os resultados das enquetes ao vivo",
+        "sub": "Quando uma enquete na sua transmissão termina, um snap mostra como as pessoas votaram."
+      },
+      "poll_results": {
+        "title": "Responder com os resultados das minhas enquetes",
+        "sub": "Quando uma das suas enquetes termina, uma resposta embaixo mostra os resultados."
+      },
+      "thank_tips": {
+        "title": "Agradecer a todos que dão gorjeta",
+        "sub": "Um agradecimento no vídeo e um voto na publicação mais recente de quem deu a gorjeta."
+      },
+      "thank_boosts": {
+        "title": "Agradecer a todos que dão boost",
+        "sub": "Um snap de agradecimento e um voto na publicação mais recente de quem deu o boost."
+      },
+      "power_up_snap": {
+        "title": "Compartilhar meus power ups",
+        "sub": "Quando você faz um power up, um snap diz quanto. Quando alguém faz um power up para você, ganha um voto."
+      },
+      "vote_friends": {
+        "title": "Votar nos vídeos novos dos meus amigos",
+        "sub": "Quando uma conta da sua lista publica um vídeo, ele ganha o seu voto."
+      },
+      "reblog_friends": {
+        "title": "Reblogar os vídeos novos dos meus amigos",
+        "sub": "Quando uma conta da sua lista publica um vídeo, ele vai para o seu blog."
+      },
+      "blank": {
+        "title": "Começar do zero",
+        "sub": "Escolha o evento e crie as etapas você mesmo."
+      }
+    },
+    "texts": {
+      "longerThan5": "Mais de 5 minutos?",
+      "importedDiscord": "Novo no meu canal: {title}\n{url}",
+      "podcastSnap": "Novo episódio: {title}\n\n{url}",
+      "discordLive": "{title} está ao vivo agora: {url}",
+      "streamPollSnap": "Enquete da minha live: {question}\n\n{results}\n\n{url}",
+      "pollResults": "A enquete foi encerrada. Resultados:\n\n{results}\n\nObrigado a todos os {votes} que votaram!",
+      "viaLightning": "Pago com Lightning?",
+      "thanksLightning": "Obrigado pela gorjeta de {amount} HIVE! ⚡",
+      "thanksTip": "Obrigado @{from} pela gorjeta de {amount}! 🙏",
+      "boostOnPost": "Boost em uma publicação?",
+      "thanksBoost": "Obrigado @{from} pelo boost em {url} 🚀\n\n{message}",
+      "thanksStreamBoost": "Obrigado pelo boost na minha live! 🚀 {url}",
+      "byMe": "Power up feito por mim?",
+      "poweredUp": "Acabei de fazer power up de {amount} HIVE! 💪",
+      "isVideo": "Um vídeo?"
+    }
+  },
+  "eventGroups": {
+    "channel": "Meu canal",
+    "wallet": "Minha carteira",
+    "polls": "Enquetes",
+    "others": "Outras contas",
+    "more": "Mais"
   }
 }

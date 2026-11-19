@@ -1,14 +1,15 @@
 import { lazy, Suspense, useCallback, useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Banner, Button, Card, ChoiceCard, Dialog, EmptyState, Icon, StatusPill, Toggle } from '../components/v2/ui';
+import { Banner, Button, Card, Dialog, EmptyState, Icon, StatusPill, Toggle } from '../components/v2/ui';
 import Skeleton from '../components/Wallet/Skeleton';
 import { useAppStore } from '../lib/store';
 import { automationsEnabledFor } from '../utils/config';
 import { deleteAutomation, getAutomationRuns, getAutomations, restoreProCheck, skipProCheck, updateAutomation } from '../lib/automations';
 import { addThreespeakToPostingAuth, waitForThreespeakPostingAuth } from '../utils/postingAuthority';
 import { getCurrentProvider, Providers } from '../hive-api/aioha';
-import { countSteps, starters } from '../components/Automations/designer';
+import { countSteps } from '../components/Automations/designer';
+import TemplatePicker from '../components/Automations/TemplatePicker';
 import './Automations.scss';
 
 // The designer (and its stylesheet) loads only when a workflow is opened.
@@ -106,18 +107,12 @@ function StarterPicker({ catalog, onPick, onClose }) {
     <div className="aut-starters">
       <div className="aut-page__header">
         <div>
-          <h1>{t('automations.starters.title')}</h1>
-          <p className="aut-page__sub">{t('automations.starters.sub')}</p>
+          <h1>{t('automations.templates.newTitle')}</h1>
+          <p className="aut-page__sub">{t('automations.templates.sub')}</p>
         </div>
         <Button variant="ghost" size={36} icon="arrow_back" onClick={onClose}>{t('automations.editor.back')}</Button>
       </div>
-      <div className="aut-starters__grid" role="radiogroup">
-        {starters(catalog, t).map((s) => (
-          <ChoiceCard key={s.id} icon={s.id === 'blank' ? 'add' : 'auto_awesome'} title={t(`automations.starters.${s.id}.title`)}
-            sub={t(`automations.starters.${s.id}.sub`)}
-            onClick={() => onPick({ name: s.id === 'blank' ? '' : t(`automations.starters.${s.id}.title`), definition: { properties: { event: s.event }, sequence: s.sequence } })} />
-        ))}
-      </div>
+      <TemplatePicker catalog={catalog} onPick={onPick} />
     </div>
   );
 }

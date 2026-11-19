@@ -925,6 +925,12 @@ const PAGE_CARDS = {
     description: 'Bring your videos from YouTube or TikTok to 3Speak. Title, description, tags and thumbnail are filled in for you.',
     image: '/og/youtube-import.jpg',
   },
+  // Automations (closed beta): the card is ready for when links get shared.
+  '/automations': {
+    title: '3S | Automations on 3Speak',
+    description: 'Put your channel on autopilot: when you post, get tipped or boosted, 3Speak posts snaps, Shorts and audio, comments, upvotes and reblogs for you.',
+    image: '/og/automations.jpg',
+  },
   // Live only once streaming is open to everyone (VITE_ENABLE_OPENPODS): nginx is the switch.
   '/openpods': {
     title: '3S | Go live on 3Speak',

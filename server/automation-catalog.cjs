@@ -17,36 +17,70 @@
 // something the runner would not understand.
 
 // ── Events ───────────────────────────────────────────────────────────────────
-// `media`: what the post carries, which decides the tasks that fit.
-// Fields: text, tags (a list), number (seconds), choice (one of `options`).
+// Each event has:
+//   source        where the watcher finds it (automations.cjs): the creator's
+//                 posts, their wallet history, their snap polls (the Hive Open
+//                 Polls API), or the polls of their streams (the live server)
+//   media         what it carries: a video, an audio, a stream, or nothing
+//   post          whether there is a post to answer under: always, maybe (a tip
+//                 names the video it was for only when the memo links it), none
+//   fields        what if-steps can check
+//   placeholders  what templates can use
+// Field types: text, tags (a list), number (seconds, or an amount), choice.
 const FIELD = {
   title: { type: 'text' },
   description: { type: 'text' },
   tags: { type: 'tags' },
-  duration: { type: 'number' },
+  duration: { type: 'number', unit: 'seconds' },
   community: { type: 'text' },
   url: { type: 'text' },
   platform: { type: 'choice', options: ['youtube', 'tiktok', 'instagram', 'rumble', 'bitchute', 'rss'] },
   kind: { type: 'choice', options: ['video', 'short'] },
   audioType: { type: 'choice', options: ['podcast', 'interview', 'audiobook', 'song', 'voice_message'] },
   imported: { type: 'choice', options: ['yes', 'no'] },
+  from: { type: 'text' },
+  amount: { type: 'number', unit: 'amount' },
+  asset: { type: 'choice', options: ['HIVE', 'HBD'] },
+  message: { type: 'text' },
+  via: { type: 'choice', options: ['hive', 'lightning'] },
+  boostKind: { type: 'choice', options: ['post', 'stream'] },
+  self: { type: 'choice', options: ['yes', 'no'] },
+  question: { type: 'text' },
+  winner: { type: 'text' },
+  votes: { type: 'number', unit: 'count' },
+  author: { type: 'text' },
+  postKind: { type: 'choice', options: ['video', 'short', 'audio', 'podcast', 'snap', 'stream', 'post'] },
 }
+
+const POST_PLACEHOLDERS = ['title', 'description', 'url', 'author', 'tags', 'platform']
+const MONEY_PLACEHOLDERS = ['from', 'amount', 'message', 'url', 'author']
+const POLL_PLACEHOLDERS = ['question', 'results', 'winner', 'votes', 'url', 'author']
 
 const EVENTS = {
-  video_published: { media: 'video', fields: ['title', 'description', 'tags', 'duration', 'community', 'url'] },
-  short_published: { media: 'video', fields: ['description', 'tags', 'duration', 'url'] },
-  video_imported: { media: 'video', fields: ['title', 'description', 'tags', 'duration', 'platform', 'kind', 'url'] },
-  podcast_published: { media: 'audio', fields: ['title', 'description', 'tags', 'duration', 'audioType', 'imported', 'url'] },
-  audio_published: { media: 'audio', fields: ['title', 'description', 'tags', 'duration', 'audioType', 'imported', 'url'] },
-  stream_started: { media: 'stream', fields: ['title', 'description', 'tags', 'url'] },
+  video_published: { source: 'posts', media: 'video', post: 'always', fields: ['title', 'description', 'tags', 'duration', 'community', 'url'], placeholders: POST_PLACEHOLDERS },
+  short_published: { source: 'posts', media: 'video', post: 'always', fields: ['description', 'tags', 'duration', 'url'], placeholders: POST_PLACEHOLDERS },
+  video_imported: { source: 'posts', media: 'video', post: 'always', fields: ['title', 'description', 'tags', 'duration', 'platform', 'kind', 'url'], placeholders: POST_PLACEHOLDERS },
+  podcast_published: { source: 'posts', media: 'audio', post: 'always', fields: ['title', 'description', 'tags', 'duration', 'audioType', 'imported', 'url'], placeholders: POST_PLACEHOLDERS },
+  audio_published: { source: 'posts', media: 'audio', post: 'always', fields: ['title', 'description', 'tags', 'duration', 'audioType', 'imported', 'url'], placeholders: POST_PLACEHOLDERS },
+  stream_started: { source: 'posts', media: 'stream', post: 'always', fields: ['title', 'description', 'tags', 'url'], placeholders: POST_PLACEHOLDERS },
+  tip_received: { source: 'history', media: 'none', post: 'maybe', fields: ['from', 'amount', 'asset', 'message', 'via', 'url'], placeholders: MONEY_PLACEHOLDERS },
+  boost_received: { source: 'history', media: 'none', post: 'maybe', fields: ['from', 'amount', 'asset', 'message', 'boostKind', 'url'], placeholders: MONEY_PLACEHOLDERS },
+  power_up: { source: 'history', media: 'none', post: 'none', fields: ['from', 'amount', 'self'], placeholders: ['from', 'amount', 'author'] },
+  poll_ended: { source: 'polls', media: 'none', post: 'always', fields: ['question', 'winner', 'votes'], placeholders: POLL_PLACEHOLDERS },
+  stream_poll_ended: { source: 'stream_polls', media: 'stream', post: 'always', fields: ['question', 'winner', 'votes'], placeholders: POLL_PLACEHOLDERS },
+  // Posts of other accounts the creator lists in the workflow (properties.accounts):
+  // for voting, reblogging or sharing them.
+  someone_posted: { source: 'watched', media: 'none', post: 'always', accounts: true, fields: ['author', 'postKind', 'title', 'description', 'tags', 'url'], placeholders: POST_PLACEHOLDERS },
 }
+const eventsWhere = (test) => Object.keys(EVENTS).filter((id) => test(EVENTS[id], id))
 
 // ── Tasks ────────────────────────────────────────────────────────────────────
-// Property types: template (text with {placeholders}), text, tags, number, boolean.
-// `events`: the events a task fits (all when absent). `max`: how often it may
-// appear in one workflow.
-const PLACEHOLDERS = ['title', 'description', 'url', 'author', 'tags', 'platform']
+// Property types: template (text with {placeholders}), text, tags, number,
+// boolean, choice (one of `options`). `events`: the events a task fits (all
+// when absent). `max`: how often it may appear in one workflow.
+const PLACEHOLDERS = [...new Set([...POST_PLACEHOLDERS, ...MONEY_PLACEHOLDERS, ...POLL_PLACEHOLDERS])]
 const TEMPLATE_MAX = 1000
+const VIDEO_EVENTS = ['video_published', 'video_imported']
 
 const TASKS = {
   post_snap: {
@@ -58,7 +92,7 @@ const TASKS = {
   },
   post_short: {
     icon: 'smart_display',
-    events: ['video_published', 'video_imported'],
+    events: VIDEO_EVENTS,
     max: 1,
     props: {
       start: { type: 'number', min: 0, max: 36000, default: 0 },
@@ -68,10 +102,52 @@ const TASKS = {
       tags: { type: 'tags', max: 8, default: [] },
     },
   },
+  post_audio: {
+    icon: 'headphones',
+    events: VIDEO_EVENTS,
+    max: 1,
+    props: {
+      title: { type: 'template', required: true, max: 250, default: '{title}' },
+      audioType: { type: 'choice', options: FIELD.audioType.options, default: 'podcast' },
+      tags: { type: 'tags', max: 8, default: [] },
+    },
+  },
+  post_video: {
+    icon: 'movie',
+    events: ['podcast_published', 'audio_published'],
+    max: 1,
+    props: {
+      title: { type: 'template', required: true, max: 250, default: '{title}' },
+      tags: { type: 'tags', max: 8, default: [] },
+    },
+  },
   post_comment: {
     icon: 'chat_bubble',
+    events: eventsWhere((e) => e.post !== 'none'),
     props: {
       text: { type: 'template', required: true, max: TEMPLATE_MAX, default: '' },
+    },
+  },
+  upvote_post: {
+    icon: 'thumb_up',
+    events: ['someone_posted'],
+    max: 1,
+    props: {
+      weight: { type: 'number', min: 1, max: 100, default: 50 },
+    },
+  },
+  reblog: {
+    icon: 'repeat',
+    events: ['someone_posted'],
+    max: 1,
+    props: {},
+  },
+  upvote_sender: {
+    icon: 'thumb_up',
+    events: eventsWhere((e) => e.fields.includes('from')),
+    max: 1,
+    props: {
+      weight: { type: 'number', min: 1, max: 100, default: 50 },
     },
   },
   send_discord: {
@@ -94,14 +170,17 @@ const OPERATORS = {
 }
 const BRANCHES = ['yes', 'no']
 
-const LIMITS = { steps: 12, depth: 3, name: 80, value: 200 }
+const LIMITS = { steps: 12, depth: 3, name: 80, value: 200, accounts: 20 }
+const ACCOUNT_RE = /^[a-z][a-z0-9.-]{2,15}$/
 const DISCORD_WEBHOOK_RE = /^https:\/\/(?:canary\.|ptb\.)?(?:discord|discordapp)\.com\/api\/webhooks\/\d{5,25}\/[\w-]{20,100}$/
 const TAG_RE = /^[a-z0-9][a-z0-9-]{1,23}$/
 
 /** The catalog as the browser gets it. */
 function publicCatalog() {
   return {
-    events: Object.fromEntries(Object.entries(EVENTS).map(([id, e]) => [id, { media: e.media, fields: e.fields.map((f) => ({ id: f, ...FIELD[f] })) }])),
+    events: Object.fromEntries(Object.entries(EVENTS).map(([id, e]) => [id, {
+      media: e.media, post: e.post, accounts: !!e.accounts, placeholders: e.placeholders, fields: e.fields.map((f) => ({ id: f, ...FIELD[f] })),
+    }])),
     tasks: TASKS,
     operators: OPERATORS,
     branches: BRANCHES,
@@ -141,6 +220,10 @@ function cleanProp(spec, value) {
     }
     case 'boolean':
       return { value: value === undefined ? !!spec.default : value === true }
+    case 'choice': {
+      const v = value === undefined ? spec.default : String(value)
+      return spec.options.includes(v) ? { value: v } : { error: 'bad_value' }
+    }
     default:
       return { error: 'unknown' }
   }
@@ -156,7 +239,8 @@ function cleanCondition(props, event) {
   let value = String(props?.value ?? '').trim()
   if (value.length > LIMITS.value) return { error: 'too_long' }
   if (field.type === 'number') {
-    if (!/^\d{1,6}$/.test(value)) return { error: 'bad_value' }
+    // Seconds and counts are whole; amounts may have up to 3 decimals.
+    if (!/^\d{1,6}(\.\d{1,3})?$/.test(value)) return { error: 'bad_value' }
     value = String(Number(value))
   } else if (field.type === 'choice') {
     if (!field.options.includes(value)) return { error: 'bad_value' }
@@ -220,10 +304,19 @@ function validateDefinition(def) {
     return { sequence: out }
   }
 
+  // An event about other accounts needs them listed (1 to LIMITS.accounts).
+  let accounts
+  if (EVENTS[event].accounts) {
+    accounts = [...new Set((Array.isArray(def.properties.accounts) ? def.properties.accounts : [])
+      .map((a) => String(a).trim().toLowerCase().replace(/^@/, '')).filter(Boolean))]
+    if (!accounts.length) return { error: 'no_accounts' }
+    if (accounts.length > LIMITS.accounts) return { error: 'too_many_accounts' }
+    if (!accounts.every((a) => ACCOUNT_RE.test(a))) return { error: 'bad_account' }
+  }
   const r = walk(def.sequence || [], 0)
   if (r.error) return r
   if (!r.sequence.length) return { error: 'empty' }
-  return { definition: { properties: { event }, sequence: r.sequence } }
+  return { definition: { properties: { event, ...(accounts ? { accounts } : {}) }, sequence: r.sequence } }
 }
 
 /** Does the condition hold for this event's values? */
@@ -274,7 +367,9 @@ function classifyPost(post, site = 'https://3speak.tv') {
   const underSnaps = isReply && SNAPS_CONTAINERS.has(post.parent_author)
   if (isReply && !underSnaps) return null
   const tags = cleanTags(meta.tags || [])
+  const image = Array.isArray(meta.image) && typeof meta.image[0] === 'string' ? meta.image[0] : ''
   const base = {
+    image,
     title: String(post.title || '').trim(),
     description: '',
     tags,
@@ -297,6 +392,8 @@ function classifyPost(post, site = 'https://3speak.tv') {
       imported: imported ? 'yes' : 'no',
       platform: imported,
       url: `${site}/audio/${ref}`,
+      // The audio service's id of the file (the play link in the body), for post_video.
+      audioPermlink: (String(post.body || '').match(/audio\.3speak\.tv\/play\?a=([\w-]+)/) || [])[1] || '',
     }
     // A podcast episode is audio too: both kinds of workflow run.
     return { events: ['podcast', 'interview'].includes(audioType) ? ['podcast_published', 'audio_published'] : ['audio_published'], values }
@@ -321,6 +418,143 @@ function classifyPost(post, site = 'https://3speak.tv') {
   return { events: [isShort ? 'short_published' : 'video_published'], values }
 }
 
+// ── Reading other accounts' posts ────────────────────────────────────────────
+// A post of a watched account → someone_posted with what kind it is: the 3Speak
+// kinds as classifyPost tells them, a text snap (a reply under @peak.snaps), or
+// any other top-level post. Replies to anything else are not posts.
+const KIND_OF_EVENT = {
+  video_published: 'video', video_imported: 'video', short_published: 'short',
+  podcast_published: 'podcast', audio_published: 'audio', stream_started: 'stream',
+}
+function classifyWatched(post, site = 'https://3speak.tv') {
+  if (!post?.author || !post?.permlink) return null
+  const own = classifyPost(post, site)
+  let postKind
+  let values
+  if (own) {
+    postKind = own.values.kind === 'short' && own.events.includes('video_imported') ? 'short' : KIND_OF_EVENT[own.events[0]]
+    values = own.values
+  } else {
+    if (parseMeta(post)[MARKER]) return null
+    const underSnaps = !!post.parent_author && SNAPS_CONTAINERS.has(post.parent_author)
+    if (post.parent_author && !underSnaps) return null
+    postKind = underSnaps ? 'snap' : 'post'
+    values = {
+      title: String(post.title || '').trim(), description: firstText(post.body), tags: cleanTags(parseMeta(post).tags || []),
+      author: post.author, url: `${site}/@${post.author}/${post.permlink}`, platform: '', image: '',
+    }
+  }
+  return { events: ['someone_posted'], values: { ...values, author: post.author, postKind }, post: { author: post.author, permlink: post.permlink } }
+}
+
+// ── Reading the wallet history ───────────────────────────────────────────────
+// One operation of condenser_api.get_account_history → { events, values, post? }
+// or null. Only what came IN counts:
+//   a transfer whose memo links a 3Speak video   tip_received (HIVE or HBD,
+//     or Lightning: v4v.app converts the sats and keeps the comment and link)
+//   the same with #boost                          boost_received on that post
+//   "boost payout:<stream>:<tx>" from the live server's escrow
+//                                                 boost_received on the stream
+//   transfer_to_vesting to the creator            power_up (self: by them)
+const LINK_RE = /https:\/\/3speak\.tv\/(?:watch|shorts)\?v=([a-z0-9.-]{3,16})\/([\w-]{1,255})/
+const PAYOUT_RE = /^boost payout:([\w-]{1,128}):/
+
+function parseAmount(str) {
+  const m = String(str || '').match(/^(\d+(?:\.\d+)?) (HIVE|HBD)$/)
+  return m ? { amount: Number(m[1]), asset: m[2] } : null
+}
+
+function classifyHistory(op, user, site = 'https://3speak.tv') {
+  if (!Array.isArray(op) || !op[1]) return null
+  const [type, data] = op
+  if (type === 'transfer_to_vesting') {
+    if (data.to !== user && !(data.to === '' && data.from === user)) return null
+    const a = parseAmount(data.amount)
+    if (!a) return null
+    return { events: ['power_up'], values: { from: data.from, amount: a.amount, author: user, self: data.from === user ? 'yes' : 'no' } }
+  }
+  if (type !== 'transfer' || data.to !== user || data.from === user) return null
+  const a = parseAmount(data.amount)
+  const memo = String(data.memo || '')
+  if (!a || memo.startsWith('#')) return null
+  const base = { amount: a.amount, asset: a.asset, author: user, title: '' }
+
+  const payout = memo.match(PAYOUT_RE)
+  if (payout) {
+    return {
+      events: ['boost_received'],
+      values: { ...base, from: '', message: '', boostKind: 'stream', url: `${site}/watch?v=${user}/${payout[1]}` },
+      post: { author: user, permlink: payout[1] },
+    }
+  }
+  const link = memo.match(LINK_RE)
+  if (!link) return null
+  const lightning = data.from === 'v4vapp'
+  // v4v.app: "Converted … for <user> | <comment> <link> #lightningaddress | § … | Thank you…"
+  const text = (lightning ? memo.split('|')[1] || '' : memo)
+    .replace(LINK_RE, '').replace(/#(boost|stream|lightningaddress)\b/g, '').replace(/\s+/g, ' ').trim().slice(0, 250)
+  const values = {
+    ...base,
+    from: lightning ? '' : data.from,
+    message: text,
+    via: lightning ? 'lightning' : 'hive',
+    url: link[0],
+  }
+  // A tip for someone else's video (the link names another channel) is still a
+  // tip to this creator, but there is no post of theirs to answer under.
+  const post = link[1] === user ? { author: link[1], permlink: link[2] } : undefined
+  if (/#boost\b/.test(memo)) return { events: ['boost_received'], values: { ...values, boostKind: 'post' }, post }
+  if (/#stream\b/.test(memo)) return null
+  return { events: ['tip_received'], values, post }
+}
+
+// ── Reading polls ────────────────────────────────────────────────────────────
+// "Yes: 12 votes (60%)", one line each, most votes first.
+function resultLines(options) {
+  const total = options.reduce((n, o) => n + o.votes, 0)
+  return [...options].sort((a, b) => b.votes - a.votes)
+    .map((o) => `${o.label}: ${o.votes} (${total ? Math.round((o.votes / total) * 100) : 0}%)`)
+    .join('\n')
+}
+const winnerOf = (options) => {
+  const top = Math.max(0, ...options.map((o) => o.votes))
+  return top ? options.filter((o) => o.votes === top).map((o) => o.label).join(' / ') : ''
+}
+
+/** A row of the Hive Open Polls API (polls.hivehub.dev /rpc/poll) → poll_ended, once it has ended. */
+function classifyPoll(row, site = 'https://3speak.tv') {
+  if (!row || row.status !== 'Ended' || !row.author || !row.permlink) return null
+  const options = [...(row.poll_choices || [])].sort((a, b) => a.choice_num - b.choice_num)
+    .map((c) => ({ label: String(c.choice_text || ''), votes: Number(c.votes?.total_votes) || 0 }))
+  return {
+    events: ['poll_ended'],
+    values: {
+      question: String(row.question || '').trim(), results: resultLines(options), winner: winnerOf(options),
+      votes: Number(row.poll_stats?.total_voting_accounts_num) || options.reduce((n, o) => n + o.votes, 0),
+      author: row.author, url: `${site}/@${row.author}/${row.permlink}`, title: '',
+    },
+    post: { author: row.author, permlink: row.permlink },
+  }
+}
+
+/** A poll of the live server (GET /rooms/:room/polls) → stream_poll_ended, once closed or resolved. */
+function classifyStreamPoll(view, user, site = 'https://3speak.tv') {
+  if (!view || !['closed', 'resolved'].includes(view.status) || !view.room) return null
+  const options = (view.options || []).map((o) => ({ label: String(o.label || ''), votes: Number(o.votes) || 0 }))
+  // A prediction is decided by the host: its winner is the option they picked.
+  const winner = view.kind === 'prediction' && Number.isInteger(view.winner) && options[view.winner]
+    ? options[view.winner].label
+    : winnerOf(options)
+  return {
+    events: ['stream_poll_ended'],
+    values: {
+      question: String(view.question || '').trim(), results: resultLines(options), winner,
+      votes: Number(view.total) || 0, author: user, url: `${site}/watch?v=${user}/${view.room}`, title: '',
+    },
+    post: { author: user, permlink: view.room },
+  }
+}
+
 // The post's own words: the body without links, embeds, images and the
 // "Watch on 3speak.tv" footer, cut to a few hundred characters.
 function firstText(body) {
@@ -338,5 +572,6 @@ function firstText(body) {
 
 module.exports = {
   EVENTS, TASKS, FIELD, OPERATORS, BRANCHES, IF_TYPE, LIMITS, PLACEHOLDERS, MARKER, DISCORD_WEBHOOK_RE,
-  publicCatalog, validateDefinition, testCondition, renderTemplate, classifyPost, taskFits, cleanTags,
+  publicCatalog, validateDefinition, testCondition, renderTemplate, classifyPost, classifyHistory, classifyPoll, classifyStreamPoll,
+  classifyWatched, taskFits, cleanTags, parseAmount,
 }

@@ -166,6 +166,21 @@ describe('the editor', () => {
     expect(api.testAutomation.mock.calls[0][0].sequence[0].id).toBe('s1')
   })
 
+  it('offers the templates by group, also from inside the editor', async () => {
+    page('/automations/new')
+    expect(await screen.findByRole('radiogroup', { name: 'Tips, boosts and power ups' })).toBeTruthy()
+    fireEvent.click(screen.getByRole('radio', { name: /Start empty/ }))
+    const designer = await screen.findByTestId('designer')
+    expect(designer.getAttribute('data-steps')).toBe('0')
+
+    fireEvent.click(screen.getByRole('button', { name: 'Templates' }))
+    fireEvent.click(await screen.findByRole('radio', { name: /Thank everyone who tips/ }))
+    await waitFor(() => expect(screen.getByTestId('designer').getAttribute('data-event')).toBe('tip_received'))
+    expect(screen.getByTestId('designer').getAttribute('data-steps')).toBe('1')
+    // An unnamed automation takes the template's name.
+    expect(screen.getByRole('textbox', { name: 'Name' }).value).toBe('Thank everyone who tips')
+  })
+
   it('says when an automation is gone', async () => {
     page('/automations/zzzzzzzzzzzz')
     expect(await screen.findByText(/does not exist/)).toBeTruthy()

@@ -95,6 +95,58 @@ describe('catalog: which posts start which events', () => {
   })
 })
 
+describe('catalog: wallet history, polls and other accounts', () => {
+  const tx = (from, amount, memo, to = 'alice') => ['transfer', { from, to, amount, memo }]
+  it('tells tips, boosts and power ups apart, and ignores the rest', () => {
+    expect(catalog.classifyHistory(tx('fan', '1.000 HIVE', 'nice https://3speak.tv/watch?v=alice/cats'), 'alice')).toMatchObject({
+      events: ['tip_received'], values: { from: 'fan', amount: 1, asset: 'HIVE', message: 'nice', via: 'hive' }, post: { author: 'alice', permlink: 'cats' },
+    })
+    const ln = catalog.classifyHistory(tx('v4vapp', '0.820 HIVE', 'Converted 100 sats to 0.820 HIVE for alice | so good https://3speak.tv/watch?v=alice/cats #lightningaddress | § x | Thank you'), 'alice')
+    expect(ln.values).toMatchObject({ from: '', via: 'lightning', message: 'so good', amount: 0.82 })
+    expect(catalog.classifyHistory(tx('fan', '2.000 HBD', 'go https://3speak.tv/watch?v=alice/cats #boost'), 'alice')).toMatchObject({ events: ['boost_received'], values: { boostKind: 'post', asset: 'HBD' } })
+    expect(catalog.classifyHistory(tx('escrow', '0.950 HBD', 'boost payout:alice-1abc:tx'), 'alice')).toMatchObject({ events: ['boost_received'], values: { boostKind: 'stream', from: '' }, post: { permlink: 'alice-1abc' } })
+    // A tip for someone else's video: still a tip, but nothing of hers to answer under.
+    expect(catalog.classifyHistory(tx('fan', '1.000 HIVE', 'https://3speak.tv/watch?v=bob/x'), 'alice').post).toBeUndefined()
+    expect(catalog.classifyHistory(tx('spammer', '0.001 HIVE', 'visit spam.example'), 'alice')).toBeNull()
+    expect(catalog.classifyHistory(tx('alice', '1.000 HIVE', 'https://3speak.tv/watch?v=bob/x', 'bob'), 'alice')).toBeNull()
+    expect(catalog.classifyHistory(tx('fan', '1.000 HIVE', '#encrypted'), 'alice')).toBeNull()
+    expect(catalog.classifyHistory(['transfer_to_vesting', { from: 'alice', to: 'alice', amount: '10.000 HIVE' }], 'alice').values).toEqual({ from: 'alice', amount: 10, author: 'alice', self: 'yes' })
+    expect(catalog.classifyHistory(['transfer_to_vesting', { from: 'fan', to: 'alice', amount: '5.000 HIVE' }], 'alice').values.self).toBe('no')
+  })
+
+  it('reads ended snap polls and stream polls with their results', () => {
+    const row = { status: 'Ended', author: 'alice', permlink: 'p1', question: 'Cats or dogs?', poll_stats: { total_voting_accounts_num: 5 },
+      poll_choices: [{ choice_num: 1, choice_text: 'Cats', votes: { total_votes: 3 } }, { choice_num: 2, choice_text: 'Dogs', votes: { total_votes: 2 } }] }
+    expect(catalog.classifyPoll(row)).toMatchObject({ events: ['poll_ended'], values: { winner: 'Cats', votes: 5, results: 'Cats: 3 (60%)\nDogs: 2 (40%)' }, post: { author: 'alice', permlink: 'p1' } })
+    expect(catalog.classifyPoll({ ...row, status: 'Active' })).toBeNull()
+    const view = { id: 'q', room: 'alice-1abc', kind: 'prediction', status: 'resolved', question: 'Who wins?', total: 4, winner: 1, options: [{ label: 'A', votes: 3 }, { label: 'B', votes: 1 }] }
+    expect(catalog.classifyStreamPoll(view, 'alice').values).toMatchObject({ winner: 'B', votes: 4, url: 'https://3speak.tv/watch?v=alice/alice-1abc' })
+    expect(catalog.classifyStreamPoll({ ...view, status: 'open' }, 'alice')).toBeNull()
+  })
+
+  it('tells what kind of post someone else made', () => {
+    const at = Date.now()
+    expect(catalog.classifyWatched({ ...videoPost('v', at), author: 'bob' }).values).toMatchObject({ author: 'bob', postKind: 'video' })
+    expect(catalog.classifyWatched({ author: 'bob', permlink: 's', parent_author: 'peak.snaps', body: 'hi', json_metadata: '{}' }).values.postKind).toBe('snap')
+    expect(catalog.classifyWatched({ author: 'bob', permlink: 't', parent_author: '', title: 'Text', body: 'b', json_metadata: '{}' }).values.postKind).toBe('post')
+    expect(catalog.classifyWatched({ author: 'bob', permlink: 'r', parent_author: 'carol', body: 'b', json_metadata: '{}' })).toBeNull()
+  })
+
+  it('needs the accounts for someone_posted, and keeps tasks to the events they fit', () => {
+    const one = (event, sequence, extra = {}) => catalog.validateDefinition({ properties: { event, ...extra }, sequence })
+    expect(one('someone_posted', [task('a', 'reblog')]).error).toBe('no_accounts')
+    expect(one('someone_posted', [task('a', 'reblog')], { accounts: ['Bad Name'] }).error).toBe('bad_account')
+    expect(one('someone_posted', [task('a', 'reblog')], { accounts: ['@Bob', 'bob'] }).definition.properties.accounts).toEqual(['bob'])
+    expect(one('video_published', [task('a', 'reblog')]).error).toBe('task_not_for_event')
+    expect(one('video_published', [task('a', 'upvote_sender')]).error).toBe('task_not_for_event')
+    expect(one('power_up', [task('a', 'post_comment', { text: 'x' })]).error).toBe('task_not_for_event')
+    expect(one('tip_received', [task('a', 'upvote_sender', { weight: 30 })]).error).toBeUndefined()
+    expect(one('podcast_published', [task('a', 'post_video', { title: '{title}' })]).error).toBeUndefined()
+    expect(one('video_published', [task('a', 'post_audio', { title: '{title}', audioType: 'opera' })])).toMatchObject({ error: 'bad_value', property: 'audioType' })
+    expect(one('tip_received', [ifStep('i', { field: 'amount', op: 'gt', value: '0.5' })]).error).toBeUndefined()
+  })
+})
+
 describe('tasks', () => {
   it('cuts an upright clip from the chosen second', () => {
     const args = tasks.clipArgs('https://gw/ipfs/x/720p/index.m3u8', '/tmp/o.mp4', { start: 12, length: 30, vertical: true })
@@ -125,6 +177,11 @@ describe('routes and runs', () => {
       discord: [],
       discordStatus: 204,
       source: null,
+      // Other accounts' posts, the wallet history, snap polls, stream polls.
+      others: {},
+      history: [],
+      polls: [],
+      streamPolls: {},
     })
   }
 
@@ -141,12 +198,22 @@ describe('routes and runs', () => {
       resolveUser: async (req) => req.headers['x-test-user'] || null,
       isPro: async (u) => !!st.pro[u],
       hasPostingGrant: async () => st.grant,
-      hiveCall: async (method, params) => (params.sort === 'posts' ? st.posts.filter((p) => !p.parent_author) : st.posts.filter((p) => p.parent_author)),
+      hiveCall: async (method, params) => {
+        if (method === 'condenser_api.get_account_history') return st.history
+        const list = params.account === 'alice' ? st.posts : (st.others[params.account] || [])
+        return params.sort === 'posts' ? list.filter((p) => !p.parent_author) : list.filter((p) => p.parent_author)
+      },
       broadcast: async (user, ops) => { st.broadcasts.push({ user, ops }) },
       snapsContainer: async () => ({ author: 'peak.snaps', permlink: 'snaps-container' }),
       indexSnap: async () => ({}),
       videoSource: async () => st.source,
-      fetch: async (url, init) => { st.discord.push({ url, body: JSON.parse(init.body) }); return { ok: st.discordStatus < 300, status: st.discordStatus } },
+      fetch: async (url, init) => {
+        if (url.startsWith('https://polls.hivehub.dev/')) return { ok: true, status: 200, json: async () => st.polls }
+        const room = url.match(/^https:\/\/live\.3speak\.tv\/rooms\/([^/]+)\/polls$/)
+        if (room) return st.streamPolls[room[1]] ? { ok: true, status: 200, json: async () => ({ polls: st.streamPolls[room[1]] }) } : { ok: false, status: 404 }
+        st.discord.push({ url, body: JSON.parse(init.body) })
+        return { ok: st.discordStatus < 300, status: st.discordStatus }
+      },
     })
     await new Promise((resolve) => { server = app.listen(0, resolve) })
     base = `http://127.0.0.1:${server.address().port}`
@@ -193,7 +260,7 @@ describe('routes and runs', () => {
     // The post watcher goes by it too.
     const definition = def('video_published', [task('a1', 'post_comment', { text: 'Hi' })])
     await call('carol', 'POST', '', { name: 'Hi', definition, enabled: true })
-    st.posts = [{ ...videoPost('carolvid', st.now + MIN), author: 'carol' }]
+    st.others.carol = [{ ...videoPost('carolvid', st.now + MIN), author: 'carol' }]
     await later(6)
     expect(st.broadcasts.map((b) => b.user)).toEqual(['carol'])
 
@@ -304,6 +371,52 @@ describe('routes and runs', () => {
     await call('alice', 'PUT', `/${id}`, { enabled: false })
     await later(11)
     expect((await call('alice', 'GET', `/${id}/runs`)).body.runs[0].status).toBe('cancelled')
+  })
+
+  it('thanks a tipper under the video and upvotes their newest post', async () => {
+    const definition = def('tip_received', [
+      task('c1', 'post_comment', { text: 'Thanks @{from} for {amount} {message}' }),
+      task('u1', 'upvote_sender', { weight: 25 }),
+    ])
+    await call('alice', 'POST', '', { name: 'Thanks', definition, enabled: true })
+    st.others.fan = [{ ...videoPost('fanvid', st.now - 3600 * 1000), author: 'fan' }]
+    st.history = [[7, { timestamp: hiveTime(st.now + MIN), op: ['transfer', { from: 'fan', to: 'alice', amount: '3.000 HBD', memo: 'yay https://3speak.tv/watch?v=alice/cats' }] }]]
+    await later(6)
+    expect(st.broadcasts.map((b) => b.ops[0][0])).toEqual(['comment', 'vote'])
+    expect(st.broadcasts[0].ops[0][1]).toMatchObject({ parent_author: 'alice', parent_permlink: 'cats', body: 'Thanks @fan for 3 yay' })
+    expect(st.broadcasts[1].ops[0][1]).toEqual({ voter: 'alice', author: 'fan', permlink: 'fanvid', weight: 2500 })
+    // The same transfer is never a second run.
+    await later(6)
+    expect(st.broadcasts).toHaveLength(2)
+  })
+
+  it('upvotes and reblogs new posts of the listed accounts only', async () => {
+    const definition = { properties: { event: 'someone_posted', accounts: ['bob'] }, sequence: [
+      ifStep('i1', { field: 'postKind', op: 'is', value: 'video' }, [task('v1', 'upvote_post', { weight: 10 }), task('r1', 'reblog')], []),
+    ] }
+    await call('alice', 'POST', '', { name: 'Friends', definition, enabled: true })
+    st.others.bob = [{ ...videoPost('bobvid', st.now + MIN), author: 'bob' }, { author: 'bob', permlink: 'bobsnap', parent_author: 'peak.snaps', body: 'hi', created: hiveTime(st.now + MIN), json_metadata: '{}' }]
+    st.others.carol = [{ ...videoPost('carolvid', st.now + MIN), author: 'carol' }]
+    await later(6)
+    expect(st.broadcasts.map((b) => b.ops[0][0])).toEqual(['vote', 'custom_json'])
+    expect(st.broadcasts[0].ops[0][1]).toMatchObject({ voter: 'alice', author: 'bob', permlink: 'bobvid', weight: 1000 })
+    expect(JSON.parse(st.broadcasts[1].ops[0][1].json)).toEqual(['reblog', { account: 'alice', author: 'bob', permlink: 'bobvid' }])
+  })
+
+  it('replies to an ended poll with its results', async () => {
+    await call('alice', 'POST', '', { name: 'Results', definition: def('poll_ended', [task('c1', 'post_comment', { text: '{question}\n{results}' })]), enabled: true })
+    st.polls = [{ status: 'Ended', author: 'alice', permlink: 'poll1', end_time: hiveTime(st.now + MIN), question: 'Tea?', poll_choices: [{ choice_num: 1, choice_text: 'Yes', votes: { total_votes: 1 } }] }]
+    await later(6)
+    expect(st.broadcasts[0].ops[0][1]).toMatchObject({ parent_author: 'alice', parent_permlink: 'poll1', body: 'Tea?\nYes: 1 (100%)' })
+  })
+
+  it('test-runs money events on example values when the wallet has none', async () => {
+    const r = await call('alice', 'POST', '/test', { definition: def('power_up', [task('s1', 'post_snap', { text: 'Powered up {amount}!' }), task('u1', 'upvote_sender')]) })
+    expect(r.body).toMatchObject({ sample: true, status: 'done' })
+    expect(r.body.steps.s1.result.text).toBe('Powered up 5!')
+    // The example sender (@badadib) has no post in the last week here.
+    expect(r.body.steps.u1.result).toEqual({ skipped: 'no_recent_post' })
+    expect(st.broadcasts).toHaveLength(0)
   })
 
   it('pauses workflows while the grant is gone, and shows why', async () => {

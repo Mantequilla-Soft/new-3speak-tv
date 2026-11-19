@@ -2,7 +2,7 @@
   "menuEntry": "Automations",
   "title": "Automations",
   "beta": "Beta",
-  "subtitle": "Hayaan ang 3Speak na gawin ang kasunod na trabaho kapag may nangyari sa channel mo: mag-post ng snap o Short, mag-comment, o sabihan ang Discord mo.",
+  "subtitle": "Hayaan ang 3Speak na gawin ang kasunod na trabaho kapag may nangyari sa channel o wallet mo: mag-post ng snap, Short, audio o video, mag-comment, mag-upvote, mag-reblog, o sabihan ang Discord mo.",
   "howItWorks": "Tinitingnan ng 3Speak ang channel mo kada {{minutes}} minuto. Bawat bagong post ay nagsisimula ng mga automation na naka-on para dito, at lahat ng ipo-post nila ay lalabas bilang ikaw, gamit ang posting permission na ibinigay mo sa 3Speak. Hindi kailanman nagsisimula ng ibang automation ang mga post na gawa ng isang automation.",
   "gate": {
     "signIn": "Mag-sign in para mag-set up ng automations.",
@@ -54,27 +54,6 @@
       "cancelled": "Itinigil"
     }
   },
-  "starters": {
-    "title": "Bagong automation",
-    "sub": "Magsimula sa isang halimbawa at baguhin ayon sa gusto mo, o magsimula nang walang laman.",
-    "discordLiveText": "{title} ay live na ngayon: {url}",
-    "snap_video": {
-      "title": "Snap sa bawat bagong video",
-      "sub": "Kapag nag-publish ka ng video, may lalabas na snap na may pamagat at link nito."
-    },
-    "short_video": {
-      "title": "Short mula sa bawat bagong video",
-      "sub": "Kapag nag-publish ka ng video, ang unang 30 segundo nito ay magiging patayong Short."
-    },
-    "discord_live": {
-      "title": "Sabihan ang Discord kapag nag-live ako",
-      "sub": "Kapag nagsimula ka ng stream, makakatanggap ng mensahe ang Discord server mo."
-    },
-    "blank": {
-      "title": "Magsimula nang walang laman",
-      "sub": "Piliin ang event at ikaw mismo ang bumuo ng mga hakbang."
-    }
-  },
   "editor": {
     "back": "Bumalik",
     "close": "Isara",
@@ -94,7 +73,9 @@
     "stepName": "Pangalan ng hakbang",
     "optional": "opsyonal",
     "tagsHint": "Hanggang {{max}} tags, pinaghihiwalay ng space.",
-    "emptyHint": "I-drag ang isang hakbang mula sa toolbox papunta sa linya"
+    "emptyHint": "I-drag ang isang hakbang mula sa toolbox papunta sa linya",
+    "accounts": "Mga account",
+    "accountsHint": "Hanggang {{max}} Hive account, pinaghihiwalay ng space."
   },
   "test": {
     "title": "Test run",
@@ -102,7 +83,14 @@
     "onPost": "Sinubukan sa pinakabago mong tumutugmang post: {{title}}",
     "nothingPosted": "Walang na-post. Ito ang gagawin ng bawat hakbang.",
     "shortDetail": "Isang Short mula sa segundo {{start}}, {{length}} segundo ang haba.",
-    "noSteps": "Walang hakbang na tatakbo para sa post na ito."
+    "noSteps": "Walang hakbang na tatakbo para sa post na ito.",
+    "voteOn": "I-upvote ang {{on}} sa {{weight}}%.",
+    "reblogOn": "I-reblog ang {{on}}.",
+    "skipped": {
+      "self": "Nilaktawan: ikaw iyan.",
+      "no_sender": "Nilaktawan: walang mau-upvote (walang Hive sender ang Lightning tip o stream boost).",
+      "no_recent_post": "Nilaktawan: wala silang post sa nakaraang 7 araw."
+    }
   },
   "events": {
     "video_published": {
@@ -128,6 +116,30 @@
     "stream_started": {
       "label": "Nag-live ako",
       "desc": "Kapag lumabas na ang post para sa live stream mo."
+    },
+    "tip_received": {
+      "label": "Nakatanggap ako ng tip",
+      "desc": "Isang HIVE, HBD o Lightning tip para sa isa sa mga video mo (ini-link ito ng memo)."
+    },
+    "boost_received": {
+      "label": "Nakatanggap ako ng boost",
+      "desc": "Isang boost sa isa sa mga post mo, o sa stream mo."
+    },
+    "power_up": {
+      "label": "Power up",
+      "desc": "Nag-power up ka, o may nag-power up ng HIVE sa account mo."
+    },
+    "poll_ended": {
+      "label": "Natapos ang poll ko",
+      "desc": "Natapos na ang isa sa mga snap poll mo."
+    },
+    "stream_poll_ended": {
+      "label": "Natapos ang poll sa stream ko",
+      "desc": "Natapos na ang isang poll o prediction sa isa sa mga stream mo sa nakaraang tatlong araw."
+    },
+    "someone_posted": {
+      "label": "Nag-post ang taong pinili ko",
+      "desc": "Post ng account na nakalista mo sa ibaba: video, Short, audio, podcast, snap, stream o text post."
     }
   },
   "tasks": {
@@ -155,11 +167,47 @@
         "vertical": "Kino-crop ang gitna ng malapad na video sa 9:16."
       }
     },
+    "post_audio": {
+      "label": "Mag-post ng audio",
+      "desc": "Ipino-post ang tunog ng bagong video bilang audio post kasama ang cover nito, mga 10 minuto pagkatapos.",
+      "props": {
+        "title": "Pamagat",
+        "audioType": "Uri ng audio",
+        "tags": "Mga tag"
+      }
+    },
+    "post_video": {
+      "label": "Mag-post ng video",
+      "desc": "Ipino-post ang bagong audio bilang video na ang cover nito ang larawan, mga 10 minuto pagkatapos.",
+      "props": {
+        "title": "Pamagat",
+        "tags": "Mga tag"
+      }
+    },
     "post_comment": {
       "label": "Mag-comment sa post",
-      "desc": "Isang comment mo sa ilalim ng bagong post, para sa mga link, credits o tanong.",
+      "desc": "Isang comment mo sa ilalim ng post, para sa mga link, credits, pasasalamat o resulta.",
       "props": {
         "text": "Comment"
+      }
+    },
+    "upvote_post": {
+      "label": "I-upvote ang post",
+      "desc": "Ang upvote mo sa post nila.",
+      "props": {
+        "weight": "Vote weight sa %"
+      }
+    },
+    "reblog": {
+      "label": "I-reblog ang post",
+      "desc": "Inilalagay ang post nila sa blog mo.",
+      "props": {}
+    },
+    "upvote_sender": {
+      "label": "I-upvote ang nagpadala",
+      "desc": "Ang upvote mo sa pinakabagong post ng nag-tip, nag-boost o nag-power up sa iyo (kung nagbabayad pa ito).",
+      "props": {
+        "weight": "Vote weight sa %"
       }
     },
     "send_discord": {
@@ -181,11 +229,15 @@
     "pickField": "Piliin ang titingnan",
     "operator": "Kondisyon",
     "value": "Value",
-    "seconds": "Segundo",
     "branchesNote": "I-drag ang mga hakbang sa mga daan ng Oo at Hindi sa canvas.",
     "branch": {
       "yes": "Oo",
       "no": "Hindi"
+    },
+    "units": {
+      "seconds": "Segundo",
+      "amount": "Halaga",
+      "count": "Bilang"
     }
   },
   "fields": {
@@ -198,7 +250,19 @@
     "platform": "In-import mula sa",
     "kind": "Uri",
     "audioType": "Uri ng audio",
-    "imported": "In-import"
+    "imported": "In-import",
+    "from": "Mula kay",
+    "amount": "Halaga",
+    "asset": "Currency",
+    "message": "Mensahe",
+    "via": "Ibinayad gamit ang",
+    "boostKind": "Na-boost",
+    "self": "Ako ang gumawa",
+    "question": "Tanong",
+    "winner": "Nanalo",
+    "votes": "Mga boto",
+    "author": "Account",
+    "postKind": "Uri ng post"
   },
   "ops": {
     "contains": "naglalaman ng",
@@ -227,15 +291,30 @@
     "song": "Musika",
     "voice_message": "Voice message",
     "yes": "Oo",
-    "no": "Hindi"
+    "no": "Hindi",
+    "HIVE": "HIVE",
+    "HBD": "HBD",
+    "hive": "Hive wallet",
+    "lightning": "Lightning",
+    "post": "Isang post",
+    "stream": "Isang stream",
+    "audio": "Audio",
+    "snap": "Snap"
   },
   "placeholders": {
     "title": "pamagat ng post",
     "description": "simula ng description nito",
     "url": "link nito sa 3Speak",
-    "author": "pangalan ng account mo",
+    "author": "ang account na nag-post nito (ikaw, para sa sarili mong post)",
     "tags": "mga tag nito bilang #hashtags",
-    "platform": "kung saan ito in-import"
+    "platform": "kung saan ito in-import",
+    "from": "kung sino ang nagpadala",
+    "amount": "magkano",
+    "message": "ang mensaheng kasama nito",
+    "question": "ang tanong ng poll",
+    "results": "bawat sagot kasama ang mga boto nito",
+    "winner": "ang sagot na may pinakamaraming boto",
+    "votes": "ilan ang bumoto"
   },
   "problems": {
     "required": "Hindi ito puwedeng walang laman.",
@@ -260,7 +339,13 @@
     "no_grant": "Payagan muna ang 3Speak na mag-publish para sa iyo.",
     "pro_required": "Naka-pause: kailangan ng 3Speak Pro ang automations.",
     "not_found": "Wala (na) ang automation na ito.",
-    "unknown": "Hindi ito magagamit."
+    "unknown": "Hindi ito magagamit.",
+    "no_post": "Walang post na sasagutin.",
+    "no_audio": "Walang 3Speak audio ang post na ito.",
+    "no_accounts": "Maglista ng kahit isang account.",
+    "too_many_accounts": "Hanggang {{max}} account lang.",
+    "bad_account": "Hindi Hive account name ang isa sa mga account.",
+    "bad_account_named": "Hindi Hive account name ang \"{{name}}\"."
   },
   "designer": {
     "contextMenu": {
@@ -286,5 +371,111 @@
       "search": "Maghanap…",
       "title": "Mga hakbang"
     }
+  },
+  "templates": {
+    "button": "Mga template",
+    "title": "Mga template",
+    "newTitle": "Bagong automation",
+    "sub": "Magsimula sa isang template at baguhin ayon sa gusto mo, o magsimula nang walang laman.",
+    "replaces": "Kapag pumili ka ng template, papalitan ang mga hakbang sa canvas.",
+    "groups": {
+      "videos": "Mga video",
+      "audio": "Audio at podcast",
+      "live": "Live",
+      "polls": "Mga poll",
+      "thanks": "Tip, boost at power up",
+      "others": "Ibang account",
+      "own": "Sarili mong gawa"
+    },
+    "items": {
+      "snap_video": {
+        "title": "Snap sa bawat bagong video",
+        "sub": "Kapag nag-publish ka ng video, may lalabas na snap na may pamagat at link nito."
+      },
+      "short_video": {
+        "title": "Short mula sa bawat bagong video",
+        "sub": "Kapag nag-publish ka ng video, ang unang 30 segundo nito ay magiging patayong Short."
+      },
+      "long_video_short": {
+        "title": "Short para sa mahahabang video, snap para sa maiikli",
+        "sub": "Ang mga video na lampas 5 minuto ay may Short mula segundo 30, ang mas maiikli ay snap."
+      },
+      "audio_from_video": {
+        "title": "Audio version ng bawat video",
+        "sub": "Kapag nag-publish ka ng video, ipo-post ang tunog nito bilang podcast episode."
+      },
+      "imported_discord": {
+        "title": "Sabihan ang Discord tungkol sa mga in-import na video",
+        "sub": "Kapag may dinalang video ang importer, malalaman ito ng Discord server mo."
+      },
+      "video_from_podcast": {
+        "title": "Video version ng bawat episode",
+        "sub": "Kapag nag-post ka ng podcast episode, ipo-post ito bilang video kasama ang cover nito."
+      },
+      "podcast_snap": {
+        "title": "Snap sa bawat bagong episode",
+        "sub": "Kapag nag-post ka ng podcast episode, may lalabas na snap na may link nito."
+      },
+      "discord_live": {
+        "title": "Sabihan ang Discord kapag nag-live ako",
+        "sub": "Kapag nagsimula ka ng stream, makakatanggap ng mensahe ang Discord server mo."
+      },
+      "stream_poll_snap": {
+        "title": "I-snap ang resulta ng mga poll sa stream",
+        "sub": "Kapag natapos ang poll sa stream mo, ipapakita ng isang snap kung paano bumoto ang mga tao."
+      },
+      "poll_results": {
+        "title": "Sumagot gamit ang resulta ng mga poll ko",
+        "sub": "Kapag natapos ang isa sa mga poll mo, ipapakita ng isang reply sa ilalim nito ang resulta."
+      },
+      "thank_tips": {
+        "title": "Pasalamatan ang lahat ng nag-tip",
+        "sub": "Isang pasasalamat sa ilalim ng video, at upvote sa pinakabagong post ng nag-tip."
+      },
+      "thank_boosts": {
+        "title": "Pasalamatan ang lahat ng nag-boost",
+        "sub": "Isang snap ng pasasalamat, at upvote sa pinakabagong post ng nag-boost."
+      },
+      "power_up_snap": {
+        "title": "Ibahagi ang mga power up ko",
+        "sub": "Kapag nag-power up ka, sasabihin ng isang snap kung magkano. Kapag may nag-power up sa iyo, makakatanggap sila ng upvote."
+      },
+      "vote_friends": {
+        "title": "I-upvote ang mga bagong video ng mga kaibigan ko",
+        "sub": "Kapag nag-publish ng video ang account na nakalista mo, makakatanggap ito ng upvote mo."
+      },
+      "reblog_friends": {
+        "title": "I-reblog ang mga bagong video ng mga kaibigan ko",
+        "sub": "Kapag nag-publish ng video ang account na nakalista mo, mapupunta ito sa blog mo."
+      },
+      "blank": {
+        "title": "Magsimula nang walang laman",
+        "sub": "Piliin ang event at ikaw mismo ang bumuo ng mga hakbang."
+      }
+    },
+    "texts": {
+      "longerThan5": "Mas mahaba sa 5 minuto?",
+      "importedDiscord": "Bago sa channel ko: {title}\n{url}",
+      "podcastSnap": "Bagong episode: {title}\n\n{url}",
+      "discordLive": "Live na ngayon ang {title}: {url}",
+      "streamPollSnap": "Poll mula sa stream ko: {question}\n\n{results}\n\n{url}",
+      "pollResults": "Sarado na ang poll. Mga resulta:\n\n{results}\n\nSalamat sa lahat ng {votes} na bumoto!",
+      "viaLightning": "Binayaran gamit ang Lightning?",
+      "thanksLightning": "Salamat sa {amount} HIVE na tip! ⚡",
+      "thanksTip": "Salamat @{from} sa {amount} na tip! 🙏",
+      "boostOnPost": "Boost sa isang post?",
+      "thanksBoost": "Salamat @{from} sa pag-boost ng {url} 🚀\n\n{message}",
+      "thanksStreamBoost": "Salamat sa boost sa stream ko! 🚀 {url}",
+      "byMe": "Ako ang nag-power up?",
+      "poweredUp": "Kaka-power up ko lang ng {amount} HIVE! 💪",
+      "isVideo": "Video ba?"
+    }
+  },
+  "eventGroups": {
+    "channel": "Ang channel ko",
+    "wallet": "Ang wallet ko",
+    "polls": "Mga poll",
+    "others": "Ibang account",
+    "more": "Iba pa"
   }
 }

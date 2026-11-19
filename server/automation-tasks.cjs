@@ -72,6 +72,7 @@ async function postSnap(step, event, ctx, deps) {
 
 // ── Comment on the post ──────────────────────────────────────────────────────
 async function postComment(step, event, ctx, deps) {
+  if (!event.author || !event.permlink) throw failure('There is no post to answer under (the tip or boost named none of your videos)', 'no_post')
   const body = renderTemplate(step.properties.text, event.values)
   if (!body) throw failure('The comment is empty for this post', 'empty_text')
   if (ctx.dryRun) return { would: 'post_comment', text: body, on: `@${event.author}/${event.permlink}` }
@@ -115,7 +116,7 @@ async function sendDiscord(step, event, ctx, deps) {
 // publishes as a reply under @peak.snaps once the encode is done.
 let clipping = Promise.resolve()
 
-function runFfmpeg(args) {
+function runFfmpeg(args, timeoutMs = CLIP_TIMEOUT_MS) {
   return new Promise((resolve, reject) => {
     const child = spawn('ffmpeg', args, { stdio: ['ignore', 'ignore', 'pipe'] })
     // Disposable work: let anything else on the box win the CPU and memory.
@@ -124,7 +125,7 @@ function runFfmpeg(args) {
       try { os.setPriority(child.pid, 10) } catch { /* not fatal */ }
     }
     let err = ''
-    const timer = setTimeout(() => { child.kill('SIGKILL'); reject(new Error('ffmpeg timed out')) }, CLIP_TIMEOUT_MS)
+    const timer = setTimeout(() => { child.kill('SIGKILL'); reject(new Error('ffmpeg timed out')) }, timeoutMs)
     child.stderr.on('data', (d) => { if (err.length < 4000) err += d })
     child.on('error', (e) => { clearTimeout(timer); reject(e) })
     child.on('close', (code) => {
@@ -278,11 +279,215 @@ async function postShort(step, event, ctx, deps) {
   return { url: `${SITE}/shorts?v=${ctx.user}/${permlink}`, permlink, scheduledOn }
 }
 
+// The clip, the audio or the video file of a task, in a temp dir that is always
+// removed; one ffmpeg job at a time on the whole server.
+async function inTempDir(fn) {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'automation-'))
+  try { return await fn(dir) } finally { fs.rmSync(dir, { recursive: true, force: true }) }
+}
+function oneAtATime(job) {
+  const turn = clipping.then(job)
+  clipping = turn.catch(() => {})
+  return turn
+}
+
+// Schedules a finished post through the checker, like the importer does
+// (import-batch.cjs), with the automation's marker and no import record.
+async function schedulePost(ctx, deps, post, { permlink, parent, thumbnail, embedPermlink }) {
+  delete post.jsonMetadata.imported_from
+  post.jsonMetadata[MARKER] = ctx.marker
+  const scheduledOn = new Date(Date.now() + SHORT_POST_LEAD_MS).toISOString()
+  await deps.scheduleOnChecker({
+    owner: ctx.user,
+    permlink,
+    scheduledOn,
+    title: post.postTitle ?? post.title,
+    description: post.description,
+    body: post.body,
+    tags: post.tags,
+    jsonMetadata: post.jsonMetadata,
+    beneficiaries: post.beneficiaries,
+    payoutOptions: 'default',
+    thumbnail,
+    parentAuthor: parent.author,
+    parentPermlink: parent.permlink,
+    ...(embedPermlink ? { embedPermlink } : {}),
+    reblog: false,
+  }, deps.signScheduledPost)
+  return { permlink, scheduledOn }
+}
+
+// ── Post an audio of the video ───────────────────────────────────────────────
+// The sound of the new video as an MP3, uploaded to the audio service and
+// posted like an imported episode (buildAudioPost), with the video's cover.
+const AUDIO_MAX_S = 4 * 3600
+
+async function postAudio(step, event, ctx, deps) {
+  const title = renderTemplate(step.properties.title, event.values).slice(0, 250)
+  if (!title) throw failure('The title is empty for this post', 'empty_text')
+  const duration = Number(event.values.duration) || 0
+  if (duration > AUDIO_MAX_S) throw failure('The video is longer than 4 hours', 'too_long')
+  const { audioType, tags } = step.properties
+  if (ctx.dryRun) return { would: 'post_audio', title, audioType, tags }
+  if (ctx.saved?.permlink) return { url: `${SITE}/@${ctx.user}/${ctx.saved.permlink}`, permlink: ctx.saved.permlink, scheduledOn: ctx.saved.scheduledOn }
+
+  let upload = ctx.saved?.upload || null
+  if (!upload) {
+    const source = await (deps.videoSource || videoSource)(event.author, event.permlink)
+    if (!source?.variantUrl) throw retryable('The video is not ready yet', 'video_not_ready')
+    upload = await inTempDir(async (dir) => {
+      const file = path.join(dir, 'audio.mp3')
+      await oneAtATime(() => runFfmpeg([
+        '-hide_banner', '-loglevel', 'error', '-nostdin', '-y', '-i', source.variantUrl,
+        '-vn', '-c:a', 'libmp3lame', '-b:a', '128k', '-ac', '2', file,
+      ], CLIP_TIMEOUT_MS + duration * 200))
+      const up = await deps.uploadAudio({ file, user: ctx.user, title, duration, format: 'mp3', mime: 'audio/mpeg', category: audioType })
+      return { ...up, duration }
+    })
+    await ctx.save({ upload })
+  }
+  const cover = event.values.image || null
+  if (cover) await deps.setAudioThumbnail(ctx.user, upload.permlink, cover).catch(() => false)
+  const premium = await deps.isPro(ctx.user).catch(() => false)
+  const post = deps.buildAudioPost({
+    user: ctx.user,
+    source: { title, description: event.values.description || title, tags, platform: '3speak', sourceId: '', sourceUrl: '' },
+    playUrl: upload.playUrl,
+    thumbnailUrl: cover,
+    options: { audio: { type: audioType, target: 'post', fromSource: false, titleTemplate: title, useNotes: true, tags, hashtags: false }, community: event.values.community || SHORTS_COMMUNITY, payout: 'default', beneficiaries: [], ads: true },
+    premium,
+    duration: upload.duration,
+  })
+  const done = await schedulePost(ctx, deps, post, { permlink: permlinkFor(title, 'audio'), parent: { author: '', permlink: event.values.community || SHORTS_COMMUNITY }, thumbnail: cover })
+  await ctx.save({ upload, ...done })
+  return { url: `${SITE}/@${ctx.user}/${done.permlink}`, ...done }
+}
+
+// ── Post a video of the audio ────────────────────────────────────────────────
+// The episode's cover held still over its sound (1280x720), uploaded and posted
+// like an imported video. The file comes from the audio service's IPFS copy
+// (the checker's audio row for the post's play link).
+const AUDIO_GATEWAY = (process.env.AUDIO_IPFS_GATEWAY || 'https://ipfs-audio.3speak.tv/ipfs').replace(/\/+$/, '')
+const CHECKER = (process.env.CHECKER_URL || 'https://checker.3speak.tv').replace(/\/+$/, '')
+
+async function audioRow(owner, permlink, fetchFn) {
+  const r = await fetchFn(`${CHECKER}/audio?owner=${encodeURIComponent(owner)}&permlink=${encodeURIComponent(permlink)}&limit=1`, { signal: AbortSignal.timeout(10000) })
+  if (!r.ok) return null
+  const d = await r.json()
+  return (d?.audio || []).find((a) => a.owner === owner && a.permlink === permlink) || null
+}
+
+async function postVideo(step, event, ctx, deps) {
+  const title = renderTemplate(step.properties.title, event.values).slice(0, 250)
+  if (!title) throw failure('The title is empty for this post', 'empty_text')
+  if (!event.values.audioPermlink) throw failure('This post has no 3Speak audio to turn into a video', 'no_audio')
+  const { tags } = step.properties
+  if (ctx.dryRun) return { would: 'post_video', title, tags }
+  if (ctx.saved?.permlink) return { url: `${SITE}/watch?v=${ctx.user}/${ctx.saved.permlink}`, permlink: ctx.saved.permlink, scheduledOn: ctx.saved.scheduledOn }
+
+  let upload = ctx.saved?.upload || null
+  if (!upload) {
+    const row = await audioRow(event.author, event.values.audioPermlink, deps.fetch)
+    if (!row?.audio_cid) throw retryable('The audio is not ready yet', 'audio_not_ready')
+    const duration = Math.round(Number(row.duration) || Number(event.values.duration) || 0)
+    if (duration > AUDIO_MAX_S) throw failure('The audio is longer than 4 hours', 'too_long')
+    const cover = row.thumbnail_url || event.values.image || ''
+    upload = await inTempDir(async (dir) => {
+      const file = path.join(dir, 'video.mp4')
+      const picture = cover
+        ? ['-loop', '1', '-framerate', '2', '-i', cover]
+        : ['-f', 'lavfi', '-i', 'color=c=0x111111:s=1280x720:r=2']
+      await oneAtATime(() => runFfmpeg([
+        '-hide_banner', '-loglevel', 'error', '-nostdin', '-y',
+        ...picture, '-i', `${AUDIO_GATEWAY}/${row.audio_cid}`,
+        '-vf', 'scale=1280:720:force_original_aspect_ratio=decrease,pad=1280:720:(ow-iw)/2:(oh-ih)/2:color=0x111111,format=yuv420p',
+        '-c:v', 'libx264', '-preset', 'veryfast', '-tune', 'stillimage', '-r', '2',
+        '-c:a', 'aac', '-b:a', '160k', '-shortest', '-movflags', '+faststart', file,
+      ], CLIP_TIMEOUT_MS + duration * 300))
+      const token = await deps.mintUploadToken(ctx.user, false)
+      const embedUrl = await deps.tusUpload({ file, token: token.token, user: ctx.user, isShort: false, duration, onProgress: () => {} }) || token.embed_url
+      if (!embedUrl || !/[?&]v=[^/]+\/[^&]+/.test(embedUrl)) throw failure('The upload gave no video link', 'upload_failed')
+      await deps.commissionEncode(token)
+      return { embedUrl, thumbnailUrl: cover || null, duration }
+    })
+    await ctx.save({ upload })
+  }
+  const premium = await deps.isPro(ctx.user).catch(() => false)
+  const community = event.values.community || SHORTS_COMMUNITY
+  // The post's own link goes into its body, so the permlink comes first.
+  const permlink = permlinkFor(title, 'video')
+  const post = deps.buildPost({
+    user: ctx.user,
+    source: { title, description: event.values.description || title, tags, platform: '3speak', sourceId: '', sourceUrl: '' },
+    media: { duration: upload.duration, width: 1280, height: 720 },
+    embedUrl: upload.embedUrl,
+    thumbnailUrl: upload.thumbnailUrl,
+    options: { community, nsfw: false, payout: 'default', beneficiaries: [], reusable: true, ads: true },
+    isShort: false,
+    permlink,
+    premium,
+  })
+  const done = await schedulePost(ctx, deps, post, { permlink, parent: { author: '', permlink: community }, thumbnail: upload.thumbnailUrl, embedPermlink: post.embedPermlink })
+  await ctx.save({ upload, ...done })
+  return { url: `${SITE}/watch?v=${ctx.user}/${done.permlink}`, ...done }
+}
+
+// ── Upvote the sender's newest post ──────────────────────────────────────────
+// A thank-you for a tip, a boost or a power up from someone else: a vote of the
+// creator's on the sender's newest top-level post, if it still pays out.
+const PAYOUT_WINDOW_MS = 7 * 24 * 3600 * 1000 - 3600 * 1000
+
+async function upvoteSender(step, event, ctx, deps) {
+  const from = String(event.values.from || '')
+  if (!from || from === ctx.user) return { skipped: from ? 'self' : 'no_sender' }
+  const [latest] = await deps.hiveCall('bridge.get_account_posts', { sort: 'posts', account: from, limit: 1 }) || []
+  const created = latest ? Date.parse(`${String(latest.created).replace(/Z$/, '')}Z`) : 0
+  if (!latest || !(Date.now() - created < PAYOUT_WINDOW_MS)) return { skipped: 'no_recent_post' }
+  const weight = Math.round(step.properties.weight * 100)
+  const on = `@${latest.author}/${latest.permlink}`
+  if (ctx.dryRun) return { would: 'upvote_sender', on, weight: step.properties.weight }
+  if (ctx.saved?.voted) return { on, weight: step.properties.weight }
+  await deps.broadcast(ctx.user, [['vote', { voter: ctx.user, author: latest.author, permlink: latest.permlink, weight }]])
+  await ctx.save({ voted: true })
+  return { on, weight: step.properties.weight, url: `${SITE}/@${latest.author}/${latest.permlink}` }
+}
+
+// ── Upvote / reblog someone's post ───────────────────────────────────────────
+async function upvotePost(step, event, ctx, deps) {
+  const on = `@${event.author}/${event.permlink}`
+  if (event.author === ctx.user) return { skipped: 'self' }
+  if (ctx.dryRun) return { would: 'upvote_post', on, weight: step.properties.weight }
+  if (ctx.saved?.voted) return { on, weight: step.properties.weight }
+  await deps.broadcast(ctx.user, [['vote', { voter: ctx.user, author: event.author, permlink: event.permlink, weight: Math.round(step.properties.weight * 100) }]])
+  await ctx.save({ voted: true })
+  return { on, weight: step.properties.weight, url: event.values.url }
+}
+
+async function reblog(step, event, ctx, deps) {
+  const on = `@${event.author}/${event.permlink}`
+  if (event.author === ctx.user) return { skipped: 'self' }
+  if (ctx.dryRun) return { would: 'reblog', on }
+  if (ctx.saved?.reblogged) return { on }
+  await deps.broadcast(ctx.user, [['custom_json', {
+    required_auths: [],
+    required_posting_auths: [ctx.user],
+    id: 'follow',
+    json: JSON.stringify(['reblog', { account: ctx.user, author: event.author, permlink: event.permlink }]),
+  }]])
+  await ctx.save({ reblogged: true })
+  return { on, url: event.values.url }
+}
+
 const HANDLERS = {
   post_snap: postSnap,
   post_comment: postComment,
   send_discord: sendDiscord,
   post_short: postShort,
+  post_audio: postAudio,
+  post_video: postVideo,
+  upvote_sender: upvoteSender,
+  upvote_post: upvotePost,
+  reblog,
 }
 
 module.exports = { HANDLERS, clipArgs, pickVariant, videoSource, retryable, failure }

@@ -2,7 +2,7 @@
   "menuEntry": "Automatyzacje",
   "title": "Automatyzacje",
   "beta": "Beta",
-  "subtitle": "Niech 3Speak zrobi resztę, gdy coś dzieje się na twoim kanale: opublikuje snap albo Short, doda komentarz lub da znać na twoim Discordzie.",
+  "subtitle": "Niech 3Speak zrobi resztę, gdy coś dzieje się na twoim kanale albo w twoim portfelu: opublikuje snap, Shorta, audio lub film, doda komentarz, da upvote, zrobi reblog albo da znać na twoim Discordzie.",
   "howItWorks": "3Speak sprawdza twój kanał co {{minutes}} min. Każdy nowy post uruchamia automatyzacje, które są dla niego włączone, a wszystko, co publikują, wychodzi w twoim imieniu, dzięki uprawnieniu do publikowania, które dałeś 3Speak. Posty utworzone przez automatyzację nigdy nie uruchamiają kolejnej.",
   "gate": {
     "signIn": "Zaloguj się, aby ustawić automatyzacje.",
@@ -58,27 +58,6 @@
       "cancelled": "Zatrzymano"
     }
   },
-  "starters": {
-    "title": "Nowa automatyzacja",
-    "sub": "Zacznij od przykładu i zmień go po swojemu albo zacznij od zera.",
-    "discordLiveText": "{title} jest teraz na żywo: {url}",
-    "snap_video": {
-      "title": "Snap do każdego nowego filmu",
-      "sub": "Gdy publikujesz film, wychodzi snap z jego tytułem i linkiem."
-    },
-    "short_video": {
-      "title": "Short z każdego nowego filmu",
-      "sub": "Gdy publikujesz film, jego pierwsze 30 sekund staje się pionowym Shortem."
-    },
-    "discord_live": {
-      "title": "Daj znać na Discordzie, gdy nadaję na żywo",
-      "sub": "Gdy zaczynasz stream, twój serwer Discord dostaje wiadomość."
-    },
-    "blank": {
-      "title": "Zacznij od zera",
-      "sub": "Wybierz zdarzenie i sam zbuduj kroki."
-    }
-  },
   "editor": {
     "back": "Wstecz",
     "close": "Zamknij",
@@ -98,7 +77,9 @@
     "stepName": "Nazwa kroku",
     "optional": "opcjonalnie",
     "tagsHint": "Do {{max}} tagów, oddzielonych spacjami.",
-    "emptyHint": "Przeciągnij krok z przybornika na linię"
+    "emptyHint": "Przeciągnij krok z przybornika na linię",
+    "accounts": "Konta",
+    "accountsHint": "Do {{max}} kont Hive, oddzielonych spacjami."
   },
   "test": {
     "title": "Uruchomienie testowe",
@@ -106,7 +87,14 @@
     "onPost": "Przetestowano na twoim najnowszym pasującym poście: {{title}}",
     "nothingPosted": "Nic nie zostało opublikowane. Oto co zrobiłby każdy krok.",
     "shortDetail": "Short od sekundy {{start}}, o długości {{length}} s.",
-    "noSteps": "Dla tego posta nie uruchomiłby się żaden krok."
+    "noSteps": "Dla tego posta nie uruchomiłby się żaden krok.",
+    "voteOn": "Upvote dla {{on}} z wagą {{weight}}%.",
+    "reblogOn": "Reblog {{on}}.",
+    "skipped": {
+      "self": "Pominięto: to ty.",
+      "no_sender": "Pominięto: nie ma komu dać upvote (napiwek przez Lightning ani boost na streamie nie ma nadawcy na Hive).",
+      "no_recent_post": "Pominięto: to konto nie ma żadnego posta z ostatnich 7 dni."
+    }
   },
   "events": {
     "video_published": {
@@ -132,6 +120,30 @@
     "stream_started": {
       "label": "Zaczynam nadawać na żywo",
       "desc": "Gdy wychodzi post twojej transmisji na żywo."
+    },
+    "tip_received": {
+      "label": "Dostaję napiwek",
+      "desc": "Napiwek w HIVE, HBD lub przez Lightning za jeden z twoich filmów (memo do niego linkuje)."
+    },
+    "boost_received": {
+      "label": "Dostaję boost",
+      "desc": "Boost na jeden z twoich postów albo na twój stream."
+    },
+    "power_up": {
+      "label": "Power up",
+      "desc": "Robisz power up albo ktoś robi power up HIVE na twoje konto."
+    },
+    "poll_ended": {
+      "label": "Moja ankieta się kończy",
+      "desc": "Jedna z twoich ankiet w snapach się zakończyła."
+    },
+    "stream_poll_ended": {
+      "label": "Kończy się ankieta na moim streamie",
+      "desc": "Zakończyła się ankieta lub przewidywanie na jednym z twoich streamów z ostatnich trzech dni."
+    },
+    "someone_posted": {
+      "label": "Ktoś, kogo wybiorę, publikuje",
+      "desc": "Post konta, które podasz poniżej: film, Short, audio, podcast, snap, stream albo post tekstowy."
     }
   },
   "tasks": {
@@ -159,11 +171,47 @@
         "vertical": "Przycina środek szerokiego filmu do 9:16."
       }
     },
+    "post_audio": {
+      "label": "Opublikuj audio",
+      "desc": "Publikuje dźwięk z nowego filmu jako post audio z jego okładką, mniej więcej 10 minut później.",
+      "props": {
+        "title": "Tytuł",
+        "audioType": "Rodzaj audio",
+        "tags": "Tagi"
+      }
+    },
+    "post_video": {
+      "label": "Opublikuj film",
+      "desc": "Publikuje nowe audio jako film z okładką w roli obrazu, mniej więcej 10 minut później.",
+      "props": {
+        "title": "Tytuł",
+        "tags": "Tagi"
+      }
+    },
     "post_comment": {
       "label": "Skomentuj post",
-      "desc": "Twój komentarz pod nowym postem, na linki, podziękowania albo pytanie.",
+      "desc": "Twój komentarz pod postem, na linki, podziękowania, wyniki albo informacje o autorach.",
       "props": {
         "text": "Komentarz"
+      }
+    },
+    "upvote_post": {
+      "label": "Daj upvote postowi",
+      "desc": "Twój upvote na ich poście.",
+      "props": {
+        "weight": "Waga głosu w %"
+      }
+    },
+    "reblog": {
+      "label": "Zrób reblog posta",
+      "desc": "Umieszcza ich post na twoim blogu.",
+      "props": {}
+    },
+    "upvote_sender": {
+      "label": "Daj upvote nadawcy",
+      "desc": "Twój upvote na najnowszym poście osoby, która dała ci napiwek, boost albo power up (jeśli ten post jeszcze wypłaca).",
+      "props": {
+        "weight": "Waga głosu w %"
       }
     },
     "send_discord": {
@@ -185,11 +233,15 @@
     "pickField": "Wybierz, co sprawdzić",
     "operator": "Warunek",
     "value": "Wartość",
-    "seconds": "Sekundy",
     "branchesNote": "Przeciągnij kroki na ścieżki Tak i Nie na obszarze roboczym.",
     "branch": {
       "yes": "Tak",
       "no": "Nie"
+    },
+    "units": {
+      "seconds": "Sekundy",
+      "amount": "Kwota",
+      "count": "Liczba"
     }
   },
   "fields": {
@@ -202,7 +254,19 @@
     "platform": "Zaimportowano z",
     "kind": "Rodzaj",
     "audioType": "Rodzaj audio",
-    "imported": "Zaimportowany"
+    "imported": "Zaimportowany",
+    "from": "Od",
+    "amount": "Kwota",
+    "asset": "Waluta",
+    "message": "Wiadomość",
+    "via": "Zapłacono przez",
+    "boostKind": "Co dostało boost",
+    "self": "Przeze mnie",
+    "question": "Pytanie",
+    "winner": "Zwycięzca",
+    "votes": "Głosy",
+    "author": "Konto",
+    "postKind": "Rodzaj posta"
   },
   "ops": {
     "contains": "zawiera",
@@ -231,15 +295,30 @@
     "song": "Muzyka",
     "voice_message": "Wiadomość głosowa",
     "yes": "Tak",
-    "no": "Nie"
+    "no": "Nie",
+    "HIVE": "HIVE",
+    "HBD": "HBD",
+    "hive": "Portfel Hive",
+    "lightning": "Lightning",
+    "post": "Post",
+    "stream": "Stream",
+    "audio": "Audio",
+    "snap": "Snap"
   },
   "placeholders": {
     "title": "tytuł posta",
     "description": "początek opisu",
     "url": "link do posta na 3Speak",
-    "author": "nazwa twojego konta",
+    "author": "konto, które to opublikowało (ty, przy twoich własnych postach)",
     "tags": "tagi jako #hashtagi",
-    "platform": "skąd został zaimportowany"
+    "platform": "skąd został zaimportowany",
+    "from": "kto to wysłał",
+    "amount": "ile",
+    "message": "dołączona wiadomość",
+    "question": "pytanie ankiety",
+    "results": "każda odpowiedź z liczbą głosów",
+    "winner": "odpowiedź z największą liczbą głosów",
+    "votes": "ile osób zagłosowało"
   },
   "problems": {
     "required": "To pole nie może być puste.",
@@ -264,7 +343,13 @@
     "no_grant": "Najpierw pozwól 3Speak publikować za ciebie.",
     "pro_required": "Wstrzymano: automatyzacje wymagają 3Speak Pro.",
     "not_found": "Ta automatyzacja nie istnieje (już).",
-    "unknown": "Tego nie można użyć."
+    "unknown": "Tego nie można użyć.",
+    "no_post": "Nie ma posta, pod którym można odpowiedzieć.",
+    "no_audio": "Ten post nie ma audio 3Speak.",
+    "no_accounts": "Podaj co najmniej jedno konto.",
+    "too_many_accounts": "Najwyżej {{max}} kont.",
+    "bad_account": "Jedno z kont nie jest nazwą konta Hive.",
+    "bad_account_named": "\"{{name}}\" nie jest nazwą konta Hive."
   },
   "designer": {
     "contextMenu": {
@@ -290,5 +375,111 @@
       "search": "Szukaj…",
       "title": "Kroki"
     }
+  },
+  "templates": {
+    "button": "Szablony",
+    "title": "Szablony",
+    "newTitle": "Nowa automatyzacja",
+    "sub": "Zacznij od szablonu i zmień go po swojemu albo zacznij od zera.",
+    "replaces": "Wybranie szablonu zastępuje kroki na obszarze roboczym.",
+    "groups": {
+      "videos": "Filmy",
+      "audio": "Audio i podcasty",
+      "live": "Na żywo",
+      "polls": "Ankiety",
+      "thanks": "Napiwki, boosty i power upy",
+      "others": "Inne konta",
+      "own": "Własna"
+    },
+    "items": {
+      "snap_video": {
+        "title": "Snap do każdego nowego filmu",
+        "sub": "Gdy publikujesz film, wychodzi snap z jego tytułem i linkiem."
+      },
+      "short_video": {
+        "title": "Short z każdego nowego filmu",
+        "sub": "Gdy publikujesz film, jego pierwsze 30 sekund staje się pionowym Shortem."
+      },
+      "long_video_short": {
+        "title": "Short do długich filmów, snap do krótkich",
+        "sub": "Filmy dłuższe niż 5 minut dostają Shorta od 30. sekundy, krótsze snapa."
+      },
+      "audio_from_video": {
+        "title": "Wersja audio każdego filmu",
+        "sub": "Gdy publikujesz film, jego dźwięk wychodzi jako odcinek podcastu."
+      },
+      "imported_discord": {
+        "title": "Daj znać na Discordzie o zaimportowanych filmach",
+        "sub": "Gdy importer ściągnie film, twój serwer Discord się o tym dowie."
+      },
+      "video_from_podcast": {
+        "title": "Wersja wideo każdego odcinka",
+        "sub": "Gdy publikujesz odcinek podcastu, wychodzi on też jako film z okładką."
+      },
+      "podcast_snap": {
+        "title": "Snap do każdego nowego odcinka",
+        "sub": "Gdy publikujesz odcinek podcastu, wychodzi snap z linkiem do niego."
+      },
+      "discord_live": {
+        "title": "Daj znać na Discordzie, gdy nadaję na żywo",
+        "sub": "Gdy zaczynasz stream, twój serwer Discord dostaje wiadomość."
+      },
+      "stream_poll_snap": {
+        "title": "Snap z wynikami ankiet ze streamu",
+        "sub": "Gdy kończy się ankieta na twoim streamie, snap pokazuje, jak głosowali ludzie."
+      },
+      "poll_results": {
+        "title": "Odpowiedź z wynikami moich ankiet",
+        "sub": "Gdy kończy się jedna z twoich ankiet, odpowiedź pod nią pokazuje wyniki."
+      },
+      "thank_tips": {
+        "title": "Podziękuj każdemu za napiwek",
+        "sub": "Podziękowanie pod filmem i upvote na najnowszym poście osoby, która dała napiwek."
+      },
+      "thank_boosts": {
+        "title": "Podziękuj każdemu za boost",
+        "sub": "Snap z podziękowaniem i upvote na najnowszym poście osoby, która dała boost."
+      },
+      "power_up_snap": {
+        "title": "Dziel się moimi power upami",
+        "sub": "Gdy robisz power up, snap mówi, ile. Gdy ktoś robi power up na twoje konto, dostaje upvote."
+      },
+      "vote_friends": {
+        "title": "Upvote dla nowych filmów moich znajomych",
+        "sub": "Gdy konto z twojej listy publikuje film, dostaje on twój upvote."
+      },
+      "reblog_friends": {
+        "title": "Reblog nowych filmów moich znajomych",
+        "sub": "Gdy konto z twojej listy publikuje film, trafia on na twój blog."
+      },
+      "blank": {
+        "title": "Zacznij od zera",
+        "sub": "Wybierz zdarzenie i sam zbuduj kroki."
+      }
+    },
+    "texts": {
+      "longerThan5": "Dłuższy niż 5 minut?",
+      "importedDiscord": "Nowość na moim kanale: {title}\n{url}",
+      "podcastSnap": "Nowy odcinek: {title}\n\n{url}",
+      "discordLive": "{title} jest teraz na żywo: {url}",
+      "streamPollSnap": "Ankieta z mojego streamu: {question}\n\n{results}\n\n{url}",
+      "pollResults": "Ankieta zakończona. Wyniki:\n\n{results}\n\nDzięki wszystkim, którzy zagłosowali ({votes})!",
+      "viaLightning": "Zapłacono przez Lightning?",
+      "thanksLightning": "Dzięki za napiwek {amount} HIVE! ⚡",
+      "thanksTip": "Dzięki @{from} za napiwek {amount}! 🙏",
+      "boostOnPost": "Boost na poście?",
+      "thanksBoost": "Dzięki @{from} za boost dla {url} 🚀\n\n{message}",
+      "thanksStreamBoost": "Dzięki za boost na moim streamie! 🚀 {url}",
+      "byMe": "Power up zrobiony przeze mnie?",
+      "poweredUp": "Właśnie zrobiłem power up {amount} HIVE! 💪",
+      "isVideo": "Film?"
+    }
+  },
+  "eventGroups": {
+    "channel": "Mój kanał",
+    "wallet": "Mój portfel",
+    "polls": "Ankiety",
+    "others": "Inne konta",
+    "more": "Więcej"
   }
 }

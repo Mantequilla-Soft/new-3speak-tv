@@ -6,7 +6,8 @@ import 'sequential-workflow-designer/css/designer.css';
 import { Banner, Button, Dialog, Field, Icon, StatusPill, Toggle } from '../v2/ui';
 import { cx } from '../v2/helpers';
 import { createAutomation, testAutomation, updateAutomation } from '../../lib/automations';
-import { conditionProblem, emptyDefinition, IF_TYPE, propertyProblem, stepIconUrl, stepProblem, toolboxGroups } from './designer';
+import { conditionProblem, emptyDefinition, IF_TYPE, placeholdersFor, propertyProblem, stepIconUrl, stepProblem, toolboxGroups } from './designer';
+import TemplatePicker from './TemplatePicker';
 import './AutomationEditor.scss';
 
 // 🤖 The workflow editor: Sequential Workflow Designer with 3Speak's events,
@@ -18,11 +19,20 @@ import './AutomationEditor.scss';
 
 const fieldLabel = (t, id) => t(`automations.fields.${id}`);
 
-function PlaceholderChips({ catalog, onPick }) {
+// The event picker's groups, in this order (labels in automations.eventGroups.*).
+const EVENT_GROUPS = [
+  ['channel', ['video_published', 'short_published', 'video_imported', 'podcast_published', 'audio_published', 'stream_started']],
+  ['wallet', ['tip_received', 'boost_received', 'power_up']],
+  ['polls', ['poll_ended', 'stream_poll_ended']],
+  ['others', ['someone_posted']],
+];
+const ACCOUNT_RE = /^[a-z][a-z0-9.-]{2,15}$/;
+
+function PlaceholderChips({ catalog, event, onPick }) {
   const { t } = useTranslation();
   return (
     <div className="aut-chips" aria-label={t('automations.editor.placeholders')}>
-      {catalog.placeholders.map((p) => (
+      {placeholdersFor(catalog, event).map((p) => (
         <button key={p} type="button" className="aut-chip" onClick={() => onPick(`{${p}}`)} title={t(`automations.placeholders.${p}`)}>{`{${p}}`}</button>
       ))}
     </div>
@@ -61,6 +71,16 @@ function PropertyField({ type, name, spec, value, onChange, readOnly }) {
           setTagText(e.target.value);
           onChange(e.target.value.split(/[\s,]+/).map((x) => x.toLowerCase().replace(/^#/, '')).filter(Boolean));
         }} />
+    );
+  }
+  if (spec.type === 'choice') {
+    return (
+      <div className="v2-field">
+        <label className="v2-eyebrow" htmlFor={`aut-prop-${name}`}>{label}</label>
+        <select id={`aut-prop-${name}`} className="v2-input is-select" value={value} disabled={readOnly} onChange={(e) => onChange(e.target.value)}>
+          {spec.options.map((o) => <option key={o} value={o}>{t(`automations.choices.${o}`)}</option>)}
+        </select>
+      </div>
     );
   }
   if (spec.type === 'number') {
@@ -116,8 +136,9 @@ function ConditionFields({ catalog, event, properties, setProperty, readOnly }) 
         </div>
       )}
       {field && field.type !== 'choice' && (
-        <Field label={field.type === 'number' ? t('automations.if.seconds') : t('automations.if.value')}
-          type={field.type === 'number' ? 'number' : 'text'} inputMode={field.type === 'number' ? 'numeric' : undefined} min={0}
+        <Field label={field.type === 'number' ? t(`automations.if.units.${field.unit || 'count'}`) : t('automations.if.value')}
+          type={field.type === 'number' ? 'number' : 'text'} inputMode={field.type === 'number' ? 'decimal' : undefined} min={0}
+          step={field.unit === 'amount' ? '0.001' : '1'}
           value={properties.value ?? ''} readOnly={readOnly}
           error={problem === 'bad_value' && String(properties.value ?? '').trim() ? t('automations.problems.bad_value') : undefined}
           onChange={(e) => setProperty('value', e.target.value)} />
@@ -127,26 +148,55 @@ function ConditionFields({ catalog, event, properties, setProperty, readOnly }) 
   );
 }
 
+/** The accounts someone_posted watches: names as typed, kept as a list. */
+function AccountsField({ value, onChange, readOnly, max }) {
+  const { t } = useTranslation();
+  const [text, setText] = useState(() => (value || []).join(' '));
+  const list = text.split(/[\s,]+/).map((a) => a.trim().toLowerCase().replace(/^@/, '')).filter(Boolean);
+  const bad = list.find((a) => !ACCOUNT_RE.test(a));
+  const error = bad ? t('automations.problems.bad_account_named', { name: bad })
+    : list.length > max ? t('automations.problems.too_many_accounts', { max }) : undefined;
+  return (
+    <Field label={t('automations.editor.accounts')} hint={t('automations.editor.accountsHint', { max })} error={error}
+      as="textarea" rows={2} value={text} readOnly={readOnly} spellCheck={false} placeholder="badadib"
+      onChange={(e) => {
+        setText(e.target.value);
+        onChange([...new Set(e.target.value.split(/[\s,]+/).map((a) => a.trim().toLowerCase().replace(/^@/, '')).filter(Boolean))]);
+      }} />
+  );
+}
+
 function RootEditor({ catalog }) {
   const { t } = useTranslation();
   const { properties, setProperty, definition, isReadonly } = useRootEditor();
   const event = properties.event;
   const misfits = definition.sequence.length > 0;
+  const known = new Set(EVENT_GROUPS.flatMap(([, ids]) => ids));
+  const groups = [...EVENT_GROUPS, ['more', Object.keys(catalog.events).filter((id) => !known.has(id))]]
+    .map(([g, ids]) => [g, ids.filter((id) => catalog.events[id])]).filter(([, ids]) => ids.length);
   return (
     <div className="aut-panel">
       <h3 className="aut-panel__title"><Icon name="flag" size={18} />{t('automations.editor.whenTitle')}</h3>
       <div className="v2-field">
         <label className="v2-eyebrow" htmlFor="aut-event">{t('automations.editor.event')}</label>
         <select id="aut-event" className="v2-input is-select" value={event} disabled={isReadonly} onChange={(e) => setProperty('event', e.target.value)}>
-          {Object.keys(catalog.events).map((id) => <option key={id} value={id}>{t(`automations.events.${id}.label`)}</option>)}
+          {groups.map(([g, ids]) => (
+            <optgroup key={g} label={t(`automations.eventGroups.${g}`)}>
+              {ids.map((id) => <option key={id} value={id}>{t(`automations.events.${id}.label`)}</option>)}
+            </optgroup>
+          ))}
         </select>
       </div>
       <p className="aut-note">{t(`automations.events.${event}.desc`)}</p>
+      {catalog.events[event]?.accounts && (
+        <AccountsField key={event} value={properties.accounts} readOnly={isReadonly} max={catalog.limits.accounts || 20}
+          onChange={(list) => setProperty('accounts', list)} />
+      )}
       {misfits && <p className="aut-note">{t('automations.editor.eventChangeNote')}</p>}
       <div className="aut-panel__section">
         <span className="v2-eyebrow">{t('automations.editor.placeholders')}</span>
         <ul className="aut-placeholder-list">
-          {catalog.placeholders.map((p) => <li key={p}><code>{`{${p}}`}</code> {t(`automations.placeholders.${p}`)}</li>)}
+          {placeholdersFor(catalog, event).map((p) => <li key={p}><code>{`{${p}}`}</code> {t(`automations.placeholders.${p}`)}</li>)}
         </ul>
       </div>
       <p className="aut-note">{t('automations.editor.howTo')}</p>
@@ -185,7 +235,7 @@ function StepEditor({ catalog }) {
       {task && focusKey && !isReadonly && (
         <div className="aut-panel__section">
           <span className="v2-eyebrow">{t('automations.editor.insert')}</span>
-          <PlaceholderChips catalog={catalog} onPick={(p) => setProperty(focusKey, `${properties[focusKey] || ''}${p}`)} />
+          <PlaceholderChips catalog={catalog} event={event} onPick={(p) => setProperty(focusKey, `${properties[focusKey] || ''}${p}`)} />
         </div>
       )}
     </div>
@@ -227,6 +277,9 @@ function TestResult({ result, definition, onClose }) {
               {out.text && <pre className="aut-test__text">{out.text}</pre>}
               {out.caption && <pre className="aut-test__text">{out.caption}</pre>}
               {out.would === 'post_short' && <span className="aut-note">{t('automations.test.shortDetail', { start: out.start, length: out.length })}</span>}
+              {out.title && <pre className="aut-test__text">{out.title}</pre>}
+              {out.on && <span className="aut-note">{out.weight ? t('automations.test.voteOn', { on: out.on, weight: out.weight }) : t('automations.test.reblogOn', { on: out.on })}</span>}
+              {out.skipped && <span className="aut-note">{t(`automations.test.skipped.${out.skipped}`)}</span>}
               {r.error && <span className="aut-test__err">{r.error}</span>}
             </li>
           );
@@ -250,6 +303,7 @@ export default function AutomationEditor({ catalog, workflow, start, grant, onGr
   const [busy, setBusy] = useState('');
   const [error, setError] = useState('');
   const [test, setTest] = useState(null);
+  const [picking, setPicking] = useState(false);
   const [dirty, setDirty] = useState(!workflow);
   // On a phone the toolbox and the side panel start folded away, or they cover the flow.
   const [narrow] = useState(() => typeof window !== 'undefined' && !!window.matchMedia?.('(max-width: 720px)').matches);
@@ -264,7 +318,9 @@ export default function AutomationEditor({ catalog, workflow, start, grant, onGr
   const stepsConfiguration = useMemo(() => ({ iconUrlProvider: stepIconUrl(catalog), isDuplicable: () => true }), [catalog]);
   const validatorConfiguration = useMemo(() => ({
     step: (step, _parent, def) => !stepProblem(catalog, def.properties.event, step, def),
-    root: (def) => !!catalog.events[def.properties.event],
+    // An event about other accounts needs at least one of them.
+    root: (def) => !!catalog.events[def.properties.event]
+      && (!catalog.events[def.properties.event].accounts || (def.properties.accounts || []).length > 0),
   }), [catalog]);
   const extensions = useMemo(() => [StepsDesignerExtension.create({
     switch: { branchNameLabelResolver: (branch) => t(`automations.if.branch.${branch}`, { defaultValue: branch }) },
@@ -273,12 +329,21 @@ export default function AutomationEditor({ catalog, workflow, start, grant, onGr
   const designerText = useMemo(() => (key, fallback) => t(`automations.designer.${key}`, { defaultValue: fallback }), [t]);
 
   const onDefinitionChange = (next) => { setDefinition(next); setDirty(true); setError(''); };
+  // A template replaces what is on the canvas (the name too, while there is none).
+  const applyTemplate = ({ name: tplName, definition: def }) => {
+    setDefinition(wrapDefinition(def));
+    if (!name.trim() && tplName) setName(tplName);
+    setSelectedStepId(null);
+    setDirty(true);
+    setError('');
+    setPicking(false);
+  };
   const empty = definition.value.sequence.length === 0;
 
   const explain = (e) => {
     if (e.stepId) setSelectedStepId(e.stepId);
     const key = e.code && `automations.problems.${e.code}`;
-    return key && i18n.exists(key) ? t(key) : e.message;
+    return key && i18n.exists(key) ? t(key, { max: catalog.limits.accounts || 20, name: '' }) : e.message;
   };
 
   const save = async (nextEnabled = enabled) => {
@@ -322,6 +387,7 @@ export default function AutomationEditor({ catalog, workflow, start, grant, onGr
           <Toggle checked={enabled} label={t('automations.editor.enabled')} disabled={!!busy || (!workflow && !enabled && empty)}
             onChange={(on) => (workflow && !dirty ? save(on) : setEnabled(on))} />
         </label>
+        <Button size={36} variant="ghost" icon="auto_awesome" onClick={() => setPicking(true)} disabled={!!busy}>{t('automations.templates.button')}</Button>
         <Button size={36} icon="science" onClick={runTest} loading={busy === 'test'} disabled={!!busy || empty}>{t('automations.editor.test')}</Button>
         <Button variant="primary" size={36} icon="save" onClick={() => save()} loading={busy === 'save'} disabled={!!busy || (!dirty && !!workflow)}>
           {t('automations.editor.save')}
@@ -356,6 +422,12 @@ export default function AutomationEditor({ catalog, workflow, start, grant, onGr
         {empty && <div className="aut-editor__hint" aria-hidden="true"><Icon name="drag_pan" size={18} />{t('automations.editor.emptyHint')}</div>}
       </div>
       {test && <TestResult result={test} definition={definition.value} onClose={() => setTest(null)} />}
+      {picking && (
+        <Dialog open onClose={() => setPicking(false)} title={t('automations.templates.title')} closeLabel={t('automations.editor.close')} width={760}>
+          {!empty && <Banner tone="info">{t('automations.templates.replaces')}</Banner>}
+          <TemplatePicker catalog={catalog} onPick={applyTemplate} blank={false} />
+        </Dialog>
+      )}
     </div>
   );
 }

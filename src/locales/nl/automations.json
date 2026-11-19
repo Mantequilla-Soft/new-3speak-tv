@@ -2,7 +2,7 @@
   "menuEntry": "Automatiseringen",
   "title": "Automatiseringen",
   "beta": "Bèta",
-  "subtitle": "Laat 3Speak het vervolgwerk doen als er iets op je kanaal gebeurt: een snap of Short plaatsen, reageren of je Discord laten weten.",
+  "subtitle": "Laat 3Speak het vervolgwerk doen als er iets op je kanaal of in je wallet gebeurt: een snap, een Short, audio of een video plaatsen, reageren, upvoten, rebloggen of je Discord laten weten.",
   "howItWorks": "3Speak kijkt elke {{minutes}} minuten naar je kanaal. Elke nieuwe post start de automatiseringen die ervoor aanstaan, en alles wat ze plaatsen gaat uit op jouw naam, via de plaatsingstoestemming die je 3Speak hebt gegeven. Posts van een automatisering starten nooit een andere.",
   "gate": {
     "signIn": "Log in om automatiseringen in te stellen.",
@@ -54,27 +54,6 @@
       "cancelled": "Gestopt"
     }
   },
-  "starters": {
-    "title": "Nieuwe automatisering",
-    "sub": "Begin met een voorbeeld en pas het aan zoals je wilt, of begin leeg.",
-    "discordLiveText": "{title} is nu live: {url}",
-    "snap_video": {
-      "title": "Een snap bij elke nieuwe video",
-      "sub": "Als je een video publiceert, gaat er een snap uit met de titel en link."
-    },
-    "short_video": {
-      "title": "Een Short uit elke nieuwe video",
-      "sub": "Als je een video publiceert, worden de eerste 30 seconden een staande Short."
-    },
-    "discord_live": {
-      "title": "Discord laten weten als ik live ga",
-      "sub": "Als je een stream start, krijgt je Discord-server een bericht."
-    },
-    "blank": {
-      "title": "Leeg beginnen",
-      "sub": "Kies de gebeurtenis en bouw de stappen zelf."
-    }
-  },
   "editor": {
     "back": "Terug",
     "close": "Sluiten",
@@ -94,7 +73,9 @@
     "stepName": "Naam van de stap",
     "optional": "optioneel",
     "tagsHint": "Tot {{max}} tags, gescheiden door spaties.",
-    "emptyHint": "Sleep een stap uit de gereedschapskist op de lijn"
+    "emptyHint": "Sleep een stap uit de gereedschapskist op de lijn",
+    "accounts": "Accounts",
+    "accountsHint": "Tot {{max}} Hive-accounts, gescheiden door spaties."
   },
   "test": {
     "title": "Testrun",
@@ -102,7 +83,14 @@
     "onPost": "Getest op je nieuwste passende post: {{title}}",
     "nothingPosted": "Er is niets geplaatst. Dit is wat elke stap zou doen.",
     "shortDetail": "Een Short vanaf seconde {{start}}, {{length}} seconden lang.",
-    "noSteps": "Voor deze post zou geen enkele stap draaien."
+    "noSteps": "Voor deze post zou geen enkele stap draaien.",
+    "voteOn": "{{on}} upvoten met {{weight}}%.",
+    "reblogOn": "{{on}} rebloggen.",
+    "skipped": {
+      "self": "Overgeslagen: dat ben jij.",
+      "no_sender": "Overgeslagen: niemand om te upvoten (een Lightning-fooi of een streamboost heeft geen Hive-afzender).",
+      "no_recent_post": "Overgeslagen: dit account heeft de afgelopen 7 dagen niets geplaatst."
+    }
   },
   "events": {
     "video_published": {
@@ -128,6 +116,30 @@
     "stream_started": {
       "label": "Ik ga live",
       "desc": "Als de post voor je livestream uitgaat."
+    },
+    "tip_received": {
+      "label": "Ik krijg een fooi",
+      "desc": "Een fooi in HIVE, HBD of via Lightning voor een van je video's (de memo linkt ernaar)."
+    },
+    "boost_received": {
+      "label": "Ik krijg een boost",
+      "desc": "Een boost op een van je posts, of op je stream."
+    },
+    "power_up": {
+      "label": "Power up",
+      "desc": "Je doet een powerup, of iemand doet een powerup van HIVE naar jouw account."
+    },
+    "poll_ended": {
+      "label": "Mijn peiling eindigt",
+      "desc": "Een van je snap-peilingen is afgelopen."
+    },
+    "stream_poll_ended": {
+      "label": "Een peiling in mijn stream eindigt",
+      "desc": "Een peiling of voorspelling in een van je streams van de afgelopen drie dagen is afgelopen."
+    },
+    "someone_posted": {
+      "label": "Iemand die ik kies plaatst iets",
+      "desc": "Een post van een account dat je hieronder opgeeft: een video, Short, audio, podcast, snap, stream of tekstpost."
     }
   },
   "tasks": {
@@ -155,11 +167,47 @@
         "vertical": "Snijdt het midden van een brede video bij tot 9:16."
       }
     },
+    "post_audio": {
+      "label": "Audio plaatsen",
+      "desc": "Plaatst het geluid van de nieuwe video als audiopost met de cover, ongeveer 10 minuten later.",
+      "props": {
+        "title": "Titel",
+        "audioType": "Soort audio",
+        "tags": "Tags"
+      }
+    },
+    "post_video": {
+      "label": "Een video plaatsen",
+      "desc": "Plaatst de nieuwe audio als video met de cover als beeld, ongeveer 10 minuten later.",
+      "props": {
+        "title": "Titel",
+        "tags": "Tags"
+      }
+    },
     "post_comment": {
       "label": "Reageren op de post",
-      "desc": "Een reactie van jou onder de nieuwe post, voor links, credits of een vraag.",
+      "desc": "Een reactie van jou onder de post, voor links, credits, bedankjes of resultaten.",
       "props": {
         "text": "Reactie"
+      }
+    },
+    "upvote_post": {
+      "label": "De post upvoten",
+      "desc": "Jouw upvote op hun post.",
+      "props": {
+        "weight": "Vote-gewicht in %"
+      }
+    },
+    "reblog": {
+      "label": "De post rebloggen",
+      "desc": "Zet hun post op je blog.",
+      "props": {}
+    },
+    "upvote_sender": {
+      "label": "De afzender upvoten",
+      "desc": "Jouw upvote op de nieuwste post van wie je een fooi, boost of powerup gaf (als die nog uitbetaalt).",
+      "props": {
+        "weight": "Vote-gewicht in %"
       }
     },
     "send_discord": {
@@ -181,11 +229,15 @@
     "pickField": "Kies wat je wilt controleren",
     "operator": "Voorwaarde",
     "value": "Waarde",
-    "seconds": "Seconden",
     "branchesNote": "Sleep stappen in de Ja- en Nee-paden op het canvas.",
     "branch": {
       "yes": "Ja",
       "no": "Nee"
+    },
+    "units": {
+      "seconds": "Seconden",
+      "amount": "Bedrag",
+      "count": "Aantal"
     }
   },
   "fields": {
@@ -198,7 +250,19 @@
     "platform": "Geïmporteerd van",
     "kind": "Soort",
     "audioType": "Soort audio",
-    "imported": "Geïmporteerd"
+    "imported": "Geïmporteerd",
+    "from": "Van",
+    "amount": "Bedrag",
+    "asset": "Munt",
+    "message": "Bericht",
+    "via": "Betaald met",
+    "boostKind": "Geboost",
+    "self": "Door mij",
+    "question": "Vraag",
+    "winner": "Winnaar",
+    "votes": "Stemmen",
+    "author": "Account",
+    "postKind": "Soort post"
   },
   "ops": {
     "contains": "bevat",
@@ -227,15 +291,30 @@
     "song": "Muziek",
     "voice_message": "Spraakbericht",
     "yes": "Ja",
-    "no": "Nee"
+    "no": "Nee",
+    "HIVE": "HIVE",
+    "HBD": "HBD",
+    "hive": "Hive-wallet",
+    "lightning": "Lightning",
+    "post": "Een post",
+    "stream": "Een stream",
+    "audio": "Audio",
+    "snap": "Snap"
   },
   "placeholders": {
     "title": "de titel van de post",
     "description": "het begin van de beschrijving",
     "url": "de link op 3Speak",
-    "author": "je accountnaam",
+    "author": "het account dat het plaatste (jij, bij je eigen posts)",
     "tags": "de tags als #hashtags",
-    "platform": "waar hij vandaan is geïmporteerd"
+    "platform": "waar hij vandaan is geïmporteerd",
+    "from": "wie het stuurde",
+    "amount": "hoeveel",
+    "message": "het bericht dat erbij zat",
+    "question": "de vraag van de peiling",
+    "results": "elk antwoord met zijn stemmen",
+    "winner": "het antwoord met de meeste stemmen",
+    "votes": "hoeveel mensen stemden"
   },
   "problems": {
     "required": "Dit mag niet leeg zijn.",
@@ -260,7 +339,13 @@
     "no_grant": "Geef 3Speak eerst toestemming om voor jou te publiceren.",
     "pro_required": "Gepauzeerd: automatiseringen hebben 3Speak Pro nodig.",
     "not_found": "Deze automatisering bestaat niet (meer).",
-    "unknown": "Dit kan niet worden gebruikt."
+    "unknown": "Dit kan niet worden gebruikt.",
+    "no_post": "Er is geen post om onder te reageren.",
+    "no_audio": "Deze post heeft geen 3Speak-audio.",
+    "no_accounts": "Geef minstens één account op.",
+    "too_many_accounts": "Hoogstens {{max}} accounts.",
+    "bad_account": "Een van de accounts is geen Hive-accountnaam.",
+    "bad_account_named": "\"{{name}}\" is geen Hive-accountnaam."
   },
   "designer": {
     "contextMenu": {
@@ -286,5 +371,111 @@
       "search": "Zoeken…",
       "title": "Stappen"
     }
+  },
+  "templates": {
+    "button": "Sjablonen",
+    "title": "Sjablonen",
+    "newTitle": "Nieuwe automatisering",
+    "sub": "Begin met een sjabloon en pas het aan zoals je wilt, of begin leeg.",
+    "replaces": "Een sjabloon kiezen vervangt de stappen op het canvas.",
+    "groups": {
+      "videos": "Video's",
+      "audio": "Audio en podcasts",
+      "live": "Live",
+      "polls": "Peilingen",
+      "thanks": "Fooien, boosts en powerups",
+      "others": "Andere accounts",
+      "own": "Zelf maken"
+    },
+    "items": {
+      "snap_video": {
+        "title": "Een snap bij elke nieuwe video",
+        "sub": "Als je een video publiceert, gaat er een snap uit met de titel en link."
+      },
+      "short_video": {
+        "title": "Een Short uit elke nieuwe video",
+        "sub": "Als je een video publiceert, worden de eerste 30 seconden een staande Short."
+      },
+      "long_video_short": {
+        "title": "Short voor lange video's, snap voor korte",
+        "sub": "Video's van meer dan 5 minuten krijgen een Short vanaf seconde 30, kortere een snap."
+      },
+      "audio_from_video": {
+        "title": "Audioversie van elke video",
+        "sub": "Als je een video publiceert, wordt het geluid als podcastaflevering geplaatst."
+      },
+      "imported_discord": {
+        "title": "Discord laten weten over geïmporteerde video's",
+        "sub": "Als de importer een video binnenhaalt, hoort je Discord-server ervan."
+      },
+      "video_from_podcast": {
+        "title": "Videoversie van elke aflevering",
+        "sub": "Als je een podcastaflevering plaatst, wordt die als video met de cover geplaatst."
+      },
+      "podcast_snap": {
+        "title": "Een snap bij elke nieuwe aflevering",
+        "sub": "Als je een podcastaflevering plaatst, gaat er een snap uit met de link."
+      },
+      "discord_live": {
+        "title": "Discord laten weten als ik live ga",
+        "sub": "Als je een stream start, krijgt je Discord-server een bericht."
+      },
+      "stream_poll_snap": {
+        "title": "Resultaten van streampeilingen in een snap",
+        "sub": "Als een peiling in je stream eindigt, laat een snap zien hoe er gestemd is."
+      },
+      "poll_results": {
+        "title": "Reageren met de resultaten van mijn peilingen",
+        "sub": "Als een van je peilingen eindigt, toont een reactie eronder de resultaten."
+      },
+      "thank_tips": {
+        "title": "Iedereen bedanken die een fooi geeft",
+        "sub": "Een bedankje onder de video, en een upvote op de nieuwste post van wie de fooi gaf."
+      },
+      "thank_boosts": {
+        "title": "Iedereen bedanken die boost",
+        "sub": "Een bedank-snap, en een upvote op de nieuwste post van wie de boost gaf."
+      },
+      "power_up_snap": {
+        "title": "Mijn powerups delen",
+        "sub": "Als je een powerup doet, zegt een snap hoeveel. Als iemand een powerup naar jou doet, krijgt die een upvote."
+      },
+      "vote_friends": {
+        "title": "Nieuwe video's van mijn vrienden upvoten",
+        "sub": "Als een account uit je lijst een video publiceert, krijgt die jouw upvote."
+      },
+      "reblog_friends": {
+        "title": "Nieuwe video's van mijn vrienden rebloggen",
+        "sub": "Als een account uit je lijst een video publiceert, komt die op je blog."
+      },
+      "blank": {
+        "title": "Leeg beginnen",
+        "sub": "Kies de gebeurtenis en bouw de stappen zelf."
+      }
+    },
+    "texts": {
+      "longerThan5": "Langer dan 5 minuten?",
+      "importedDiscord": "Nieuw op mijn kanaal: {title}\n{url}",
+      "podcastSnap": "Nieuwe aflevering: {title}\n\n{url}",
+      "discordLive": "{title} is nu live: {url}",
+      "streamPollSnap": "Peiling uit mijn stream: {question}\n\n{results}\n\n{url}",
+      "pollResults": "De peiling is gesloten. Resultaten:\n\n{results}\n\nBedankt aan alle {votes} stemmers!",
+      "viaLightning": "Betaald met Lightning?",
+      "thanksLightning": "Bedankt voor de fooi van {amount} HIVE! ⚡",
+      "thanksTip": "Bedankt @{from} voor de fooi van {amount}! 🙏",
+      "boostOnPost": "Boost op een post?",
+      "thanksBoost": "Bedankt @{from} voor het boosten van {url} 🚀\n\n{message}",
+      "thanksStreamBoost": "Bedankt voor de boost op mijn stream! 🚀 {url}",
+      "byMe": "Powerup door mij?",
+      "poweredUp": "Net een powerup van {amount} HIVE gedaan! 💪",
+      "isVideo": "Een video?"
+    }
+  },
+  "eventGroups": {
+    "channel": "Mijn kanaal",
+    "wallet": "Mijn wallet",
+    "polls": "Peilingen",
+    "others": "Andere accounts",
+    "more": "Meer"
   }
 }

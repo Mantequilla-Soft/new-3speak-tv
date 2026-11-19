@@ -2,7 +2,7 @@
   "menuEntry": "オートメーション",
   "title": "オートメーション",
   "beta": "ベータ",
-  "subtitle": "チャンネルで何かが起きたら、その後の作業を 3Speak におまかせ。Snap やショートの投稿、コメント、Discord への通知ができます。",
+  "subtitle": "チャンネルやウォレットで何かが起きたら、その後の作業を 3Speak におまかせ。Snap、ショート、音声、動画の投稿、コメント、アップボート、リブログ、Discord への通知ができます。",
   "howItWorks": "3Speak は {{minutes}} 分ごとにあなたのチャンネルを確認します。新しい投稿があると、その投稿に合うオンのオートメーションが動きます。投稿はすべて、あなたが 3Speak に与えた投稿許可を使い、あなたの名前で行われます。オートメーションが作った投稿から、別のオートメーションが動くことはありません。",
   "gate": {
     "signIn": "オートメーションを設定するにはサインインしてください。",
@@ -52,27 +52,6 @@
       "cancelled": "停止"
     }
   },
-  "starters": {
-    "title": "新しいオートメーション",
-    "sub": "例から始めて自由に変えるか、空の状態から始めましょう。",
-    "discordLiveText": "{title} がライブ配信中：{url}",
-    "snap_video": {
-      "title": "新しい動画ごとに Snap",
-      "sub": "動画を公開すると、タイトルとリンク付きの Snap が投稿されます。"
-    },
-    "short_video": {
-      "title": "新しい動画ごとにショート",
-      "sub": "動画を公開すると、最初の 30 秒が縦型のショートになります。"
-    },
-    "discord_live": {
-      "title": "ライブ開始を Discord に通知",
-      "sub": "配信を始めると、あなたの Discord サーバーにメッセージが届きます。"
-    },
-    "blank": {
-      "title": "空の状態から始める",
-      "sub": "イベントを選び、ステップを自分で組み立てます。"
-    }
-  },
   "editor": {
     "back": "戻る",
     "close": "閉じる",
@@ -92,7 +71,9 @@
     "stepName": "ステップ名",
     "optional": "任意",
     "tagsHint": "タグは最大 {{max}} 個まで、スペースで区切ります。",
-    "emptyHint": "ツールボックスからステップを線の上にドラッグ"
+    "emptyHint": "ツールボックスからステップを線の上にドラッグ",
+    "accounts": "アカウント",
+    "accountsHint": "Hive アカウントを最大 {{max}} 個まで、スペースで区切ります。"
   },
   "test": {
     "title": "テスト実行",
@@ -100,7 +81,14 @@
     "onPost": "条件に合う最新の投稿でテストしました：{{title}}",
     "nothingPosted": "何も投稿されていません。各ステップの動作は次のとおりです。",
     "shortDetail": "{{start}} 秒目から {{length}} 秒のショート。",
-    "noSteps": "この投稿で実行されるステップはありません。"
+    "noSteps": "この投稿で実行されるステップはありません。",
+    "voteOn": "{{on}} に {{weight}}% でアップボート。",
+    "reblogOn": "{{on}} をリブログ。",
+    "skipped": {
+      "self": "スキップ：あなた自身です。",
+      "no_sender": "スキップ：アップボートする相手がいません（Lightning の投げ銭や配信へのブーストには Hive の送り主がいません）。",
+      "no_recent_post": "スキップ：この 7 日間に投稿がありません。"
+    }
   },
   "events": {
     "video_published": {
@@ -126,6 +114,30 @@
     "stream_started": {
       "label": "ライブ配信を始めたとき",
       "desc": "ライブ配信の投稿が公開されたとき。"
+    },
+    "tip_received": {
+      "label": "投げ銭をもらったとき",
+      "desc": "あなたの動画への HIVE、HBD、Lightning の投げ銭（メモで動画とひも付けられます）。"
+    },
+    "boost_received": {
+      "label": "ブーストを受けたとき",
+      "desc": "あなたの投稿か配信へのブースト。"
+    },
+    "power_up": {
+      "label": "パワーアップ",
+      "desc": "あなたがパワーアップしたとき、または誰かがあなたのアカウントに HIVE をパワーアップしたとき。"
+    },
+    "poll_ended": {
+      "label": "自分の投票が終わったとき",
+      "desc": "あなたの Snap の投票が終了したとき。"
+    },
+    "stream_poll_ended": {
+      "label": "配信中の投票が終わったとき",
+      "desc": "過去 3 日間のあなたの配信で、投票か予想が終了したとき。"
+    },
+    "someone_posted": {
+      "label": "選んだ人が投稿したとき",
+      "desc": "下に挙げたアカウントの投稿：動画、ショート、音声、ポッドキャスト、Snap、配信、テキスト投稿。"
     }
   },
   "tasks": {
@@ -153,11 +165,47 @@
         "vertical": "横長の動画の中央を 9:16 に切り抜きます。"
       }
     },
+    "post_audio": {
+      "label": "音声を投稿",
+      "desc": "新しい動画の音を、カバー付きの音声投稿として約 10 分後に投稿します。",
+      "props": {
+        "title": "タイトル",
+        "audioType": "音声の種類",
+        "tags": "タグ"
+      }
+    },
+    "post_video": {
+      "label": "動画を投稿",
+      "desc": "新しい音声を、カバーを画像にした動画として約 10 分後に投稿します。",
+      "props": {
+        "title": "タイトル",
+        "tags": "タグ"
+      }
+    },
     "post_comment": {
       "label": "投稿にコメント",
-      "desc": "新しい投稿の下にあなたのコメントを付けます。リンク、クレジット、質問などに。",
+      "desc": "投稿の下にあなたのコメントを付けます。リンク、クレジット、お礼、結果などに。",
       "props": {
         "text": "コメント"
+      }
+    },
+    "upvote_post": {
+      "label": "投稿をアップボート",
+      "desc": "相手の投稿にあなたのアップボートを付けます。",
+      "props": {
+        "weight": "投票の重み（%）"
+      }
+    },
+    "reblog": {
+      "label": "投稿をリブログ",
+      "desc": "相手の投稿をあなたのブログに載せます。",
+      "props": {}
+    },
+    "upvote_sender": {
+      "label": "送り主をアップボート",
+      "desc": "投げ銭、ブースト、パワーアップしてくれた人の最新の投稿にアップボートします（まだ報酬が支払われる場合）。",
+      "props": {
+        "weight": "投票の重み（%）"
       }
     },
     "send_discord": {
@@ -179,11 +227,15 @@
     "pickField": "確認する項目を選ぶ",
     "operator": "条件",
     "value": "値",
-    "seconds": "秒",
     "branchesNote": "キャンバス上の「はい」と「いいえ」の道にステップをドラッグします。",
     "branch": {
       "yes": "はい",
       "no": "いいえ"
+    },
+    "units": {
+      "seconds": "秒",
+      "amount": "金額",
+      "count": "数"
     }
   },
   "fields": {
@@ -196,7 +248,19 @@
     "platform": "インポート元",
     "kind": "種類",
     "audioType": "音声の種類",
-    "imported": "インポート済み"
+    "imported": "インポート済み",
+    "from": "送り主",
+    "amount": "金額",
+    "asset": "通貨",
+    "message": "メッセージ",
+    "via": "支払い方法",
+    "boostKind": "ブースト先",
+    "self": "自分による",
+    "question": "質問",
+    "winner": "最多得票",
+    "votes": "票数",
+    "author": "アカウント",
+    "postKind": "投稿の種類"
   },
   "ops": {
     "contains": "を含む",
@@ -225,15 +289,30 @@
     "song": "音楽",
     "voice_message": "ボイスメッセージ",
     "yes": "はい",
-    "no": "いいえ"
+    "no": "いいえ",
+    "HIVE": "HIVE",
+    "HBD": "HBD",
+    "hive": "Hive ウォレット",
+    "lightning": "Lightning",
+    "post": "投稿",
+    "stream": "配信",
+    "audio": "音声",
+    "snap": "Snap"
   },
   "placeholders": {
     "title": "投稿のタイトル",
     "description": "説明の冒頭",
     "url": "3Speak 上のリンク",
-    "author": "あなたのアカウント名",
+    "author": "投稿したアカウント（自分の投稿ならあなた）",
     "tags": "#ハッシュタグ形式のタグ",
-    "platform": "インポート元"
+    "platform": "インポート元",
+    "from": "送り主",
+    "amount": "金額",
+    "message": "一緒に届いたメッセージ",
+    "question": "投票の質問",
+    "results": "各回答とその票数",
+    "winner": "最も票を集めた回答",
+    "votes": "投票した人数"
   },
   "problems": {
     "required": "空欄にはできません。",
@@ -258,7 +337,13 @@
     "no_grant": "まず 3Speak にあなたの代わりの投稿を許可してください。",
     "pro_required": "一時停止中：オートメーションには 3Speak Pro が必要です。",
     "not_found": "このオートメーションは存在しないか、すでに削除されています。",
-    "unknown": "これは使用できません。"
+    "unknown": "これは使用できません。",
+    "no_post": "返信先の投稿がありません。",
+    "no_audio": "この投稿には 3Speak の音声がありません。",
+    "no_accounts": "アカウントを 1 つ以上入力してください。",
+    "too_many_accounts": "アカウントは最大 {{max}} 個までです。",
+    "bad_account": "Hive のアカウント名ではないものが含まれています。",
+    "bad_account_named": "「{{name}}」は Hive のアカウント名ではありません。"
   },
   "designer": {
     "contextMenu": {
@@ -284,5 +369,111 @@
       "search": "検索…",
       "title": "ステップ"
     }
+  },
+  "templates": {
+    "button": "テンプレート",
+    "title": "テンプレート",
+    "newTitle": "新しいオートメーション",
+    "sub": "テンプレートから始めて自由に変えるか、空の状態から始めましょう。",
+    "replaces": "テンプレートを選ぶと、キャンバス上のステップが置き換わります。",
+    "groups": {
+      "videos": "動画",
+      "audio": "音声とポッドキャスト",
+      "live": "ライブ",
+      "polls": "投票",
+      "thanks": "投げ銭、ブースト、パワーアップ",
+      "others": "ほかのアカウント",
+      "own": "自分で作る"
+    },
+    "items": {
+      "snap_video": {
+        "title": "新しい動画ごとに Snap",
+        "sub": "動画を公開すると、タイトルとリンク付きの Snap が投稿されます。"
+      },
+      "short_video": {
+        "title": "新しい動画ごとにショート",
+        "sub": "動画を公開すると、最初の 30 秒が縦型のショートになります。"
+      },
+      "long_video_short": {
+        "title": "長い動画はショート、短い動画は Snap",
+        "sub": "5 分を超える動画は 30 秒目からショートに、それより短い動画は Snap になります。"
+      },
+      "audio_from_video": {
+        "title": "すべての動画の音声版",
+        "sub": "動画を公開すると、その音がポッドキャストのエピソードとして投稿されます。"
+      },
+      "imported_discord": {
+        "title": "インポートした動画を Discord に通知",
+        "sub": "インポーターが動画を取り込むと、あなたの Discord サーバーに知らせます。"
+      },
+      "video_from_podcast": {
+        "title": "すべてのエピソードの動画版",
+        "sub": "ポッドキャストのエピソードを投稿すると、カバー付きの動画として投稿されます。"
+      },
+      "podcast_snap": {
+        "title": "新しいエピソードごとに Snap",
+        "sub": "ポッドキャストのエピソードを投稿すると、リンク付きの Snap が投稿されます。"
+      },
+      "discord_live": {
+        "title": "ライブ開始を Discord に通知",
+        "sub": "配信を始めると、あなたの Discord サーバーにメッセージが届きます。"
+      },
+      "stream_poll_snap": {
+        "title": "配信の投票結果を Snap で共有",
+        "sub": "配信中の投票が終わると、みんなの投票結果を Snap で伝えます。"
+      },
+      "poll_results": {
+        "title": "投票の結果を返信で伝える",
+        "sub": "あなたの投票が終わると、その下に結果を返信します。"
+      },
+      "thank_tips": {
+        "title": "投げ銭してくれた人にお礼",
+        "sub": "動画の下にお礼のコメントを付け、投げ銭した人の最新の投稿にアップボートします。"
+      },
+      "thank_boosts": {
+        "title": "ブーストしてくれた人にお礼",
+        "sub": "お礼の Snap を投稿し、ブーストした人の最新の投稿にアップボートします。"
+      },
+      "power_up_snap": {
+        "title": "パワーアップを共有",
+        "sub": "パワーアップすると、その量を Snap で伝えます。誰かがあなたにパワーアップすると、その人にアップボートします。"
+      },
+      "vote_friends": {
+        "title": "友達の新しい動画をアップボート",
+        "sub": "リストに入れたアカウントが動画を公開すると、あなたがアップボートします。"
+      },
+      "reblog_friends": {
+        "title": "友達の新しい動画をリブログ",
+        "sub": "リストに入れたアカウントが動画を公開すると、あなたのブログに載せます。"
+      },
+      "blank": {
+        "title": "空の状態から始める",
+        "sub": "イベントを選び、ステップを自分で組み立てます。"
+      }
+    },
+    "texts": {
+      "longerThan5": "5 分より長い？",
+      "importedDiscord": "チャンネルに新着：{title}\n{url}",
+      "podcastSnap": "新しいエピソード：{title}\n\n{url}",
+      "discordLive": "{title} がライブ配信中：{url}",
+      "streamPollSnap": "配信での投票：{question}\n\n{results}\n\n{url}",
+      "pollResults": "投票を締め切りました。結果はこちら：\n\n{results}\n\n投票してくれた {votes} 人のみなさん、ありがとうございます！",
+      "viaLightning": "Lightning で支払い？",
+      "thanksLightning": "{amount} HIVE の投げ銭ありがとうございます！⚡",
+      "thanksTip": "@{from} さん、{amount} の投げ銭ありがとうございます！🙏",
+      "boostOnPost": "投稿へのブースト？",
+      "thanksBoost": "@{from} さん、{url} をブーストしてくれてありがとうございます 🚀\n\n{message}",
+      "thanksStreamBoost": "配信へのブーストありがとうございます！🚀 {url}",
+      "byMe": "自分でパワーアップ？",
+      "poweredUp": "{amount} HIVE をパワーアップしました！💪",
+      "isVideo": "動画？"
+    }
+  },
+  "eventGroups": {
+    "channel": "マイチャンネル",
+    "wallet": "マイウォレット",
+    "polls": "投票",
+    "others": "ほかのアカウント",
+    "more": "その他"
   }
 }
