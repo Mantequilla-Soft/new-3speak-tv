@@ -52,6 +52,37 @@ export function hlsPlayback(track, { canPlayNative = false, mse = false } = {}) 
   return null;
 }
 
+// ─── Queue ────────────────────────────────────────────────────────────────────
+
+/**
+ * What plays after `audioCurrent`: the next one in the queue, else the next on
+ * the page's list (which goes along as the new list). null at the end.
+ */
+export function nextTrackOf({ audioCurrent, audioQueue = [], audioAutoplayList = [] } = {}) {
+  if (!audioCurrent) return null;
+  if (audioQueue.length > 0) {
+    const i = audioQueue.findIndex((x) => x._id === audioCurrent._id);
+    if (i >= 0 && i < audioQueue.length - 1) return { track: audioQueue[i + 1], list: null };
+    if (i === -1) return { track: audioQueue[0], list: null };
+  }
+  const i = audioAutoplayList.findIndex((x) => x._id === audioCurrent._id);
+  if (i >= 0 && i < audioAutoplayList.length - 1) return { track: audioAutoplayList[i + 1], list: audioAutoplayList };
+  return null;
+}
+
+/**
+ * The element has nothing it can play: its source failed (often a load begun
+ * with the screen off), or it never got one. play() on it does nothing; the
+ * track has to be loaded again.
+ */
+export function sourceBroken(el) {
+  if (!el) return false;
+  if (el.error) return true;
+  // HTMLMediaElement.NETWORK_NO_SOURCE
+  if (el.networkState === 3) return true;
+  return !el.currentSrc && !el.getAttribute?.('src');
+}
+
 // ─── Playback speed ───────────────────────────────────────────────────────────
 
 // Up to 2x: faster than that, speech stops being worth listening to.
