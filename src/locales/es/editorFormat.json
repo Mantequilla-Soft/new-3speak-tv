@@ -1,0 +1,5 @@
+{
+  "videoEditor": "Editor de vídeo",
+  "videoEditorSub": "Edita un vídeo horizontal de hasta 10 minutos",
+  "editorTooLong": "El editor de vídeo admite vídeos de hasta {{minutes}} minutos"
+}

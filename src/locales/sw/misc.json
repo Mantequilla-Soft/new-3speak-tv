@@ -139,6 +139,13 @@
     "rumble": {
       "placeholder": "https://rumble.com/c/…",
       "help": "Bandika jina au kiungo cha chaneli yako ya Rumble. Weka hash popote kwenye maelezo ya chaneli."
+    },
+    "rss": {
+      "placeholder": "https://example.com/podcast.xml",
+      "help": "Bandika anwani ya mlisho wa RSS wa podikasti yako. Mwenyeji wa podikasti huionyesha kwenye mipangilio au ukurasa wa usambazaji wa kipindi.",
+      "flowTitle": "Unganisha mlisho wa RSS wa podikasti yako",
+      "step2": "<strong>Ibandike kwenye maelezo ya kipindi chako, au maelezo ya kipindi chako kipya zaidi</strong>, kwa mwenyeji wa podikasti yako. Hifadhi na uchapishe mabadiliko. Unaweza kuiondoa tena mlisho ukishathibitishwa.",
+      "step3": "Weka anwani ya mlisho wa RSS wa podikasti yako:"
     }
   },
   "snaps": {
@@ -157,7 +164,13 @@
     "audioMinimal": "Ndogo kabisa",
     "heightSub": "Upana kamili, urefu {{height}} px · Inayojirekebisha",
     "podcastTitle": "Pachika podikasti hii",
-    "podcastHint": "Inacheza kila kipindi cha podikasti, pamoja na vipya vinapotoka."
+    "podcastHint": "Inacheza kila kipindi cha podikasti, pamoja na vipya vinapotoka.",
+    "embedWhere": "Mahali pa kupachika",
+    "tabWebsite": "Tovuti",
+    "tabHive": "Kwa Hive",
+    "hiveLink": "Kiungo cha machapisho ya Hive",
+    "hivePlaylistHint": "Bandika kiungo hiki kwenye chapisho au wave ya Hive. Programu za Hive zinazoonyesha video za 3Speak, kama Ecency, hucheza orodha moja kwa moja kwenye chapisho.",
+    "videoPlaylistHint": "Bandika hii kwenye tovuti au chapisho lolote la blogu. Inacheza video zote za orodha kwa mpangilio, pamoja na zitakazoongezwa baadaye."
   },
   "incubation": {
     "requestFailed": "Ombi limeshindwa ({{status}})",
@@ -197,7 +210,9 @@
       "video": "Video",
       "audio": "Sauti",
       "live": "Mubashara",
-      "others": "Nyingine"
+      "others": "Nyingine",
+      "streams": "Matangazo",
+      "edit": "Hariri"
     },
     "subtitles": {
       "regularVideo": "Video ya kawaida kwa chaneli yako",
@@ -210,6 +225,12 @@
       "goLiveNow": "Tiririsha mubashara kwa wafuasi wako",
       "communitySnap": "Chapisho la haraka kwenye kichupo cha jumuiya",
       "playlist": "Kusanya video kwenye orodha ya kushiriki"
+    },
+    "categories": {
+      "video": "Pakia, rekodi au hariri video",
+      "audio": "Muziki, podikasti na uhariri wa sauti",
+      "streams": "Tangaza mubashara peke yako au na wageni",
+      "others": "Snap na orodha za kucheza"
     }
   },
   "chat": {

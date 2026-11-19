@@ -1,5 +1,5 @@
 {
-  "title": "Import your videos",
+  "title": "Import your content",
   "subtitle": "Bring your videos from YouTube or TikTok to 3Speak. Title, description, tags and thumbnail are filled in for you.",
   "noChannel": "You have not linked a YouTube channel yet. Link and verify it on your profile first, then come back here.",
   "linkChannel": "Go to my profile",
@@ -9,6 +9,7 @@
   "openOnYoutube": "Open on YouTube",
   "import": "Import this video",
   "useOwnFile": "I have the file already",
+  "openInUploader": "Edit and publish",
   "cancel": "Cancel",
   "retry": "Try again",
   "progress": {
@@ -31,9 +32,11 @@
     "blocked": "YouTube did not let our server download this video right now.",
     "notVideo": "That file is not a video.",
     "tooLongForShort": "This video is longer than {{minutes}} minutes, too long for a Short. Import it as a regular video instead.",
-    "proxyPaused": "YouTube imports are paused for a while. Please try again later."
+    "proxyPaused": "YouTube imports are paused for a while. Please try again later.",
+    "notAudio": "That file is not an audio file."
   },
   "entry": "Import videos",
+  "menuEntry": "Import content",
   "types": {
     "videos": "Videos",
     "shorts": "Shorts",
@@ -60,7 +63,8 @@
     "tiktok": "TikTok",
     "instagram": "Instagram",
     "bitchute": "BitChute",
-    "rumble": "Rumble"
+    "rumble": "Rumble",
+    "rss": "Podcast"
   },
   "tiktok": {
     "noLink": "You have not linked a TikTok account yet. Link and verify it on your profile first, then come back here.",
@@ -98,7 +102,7 @@
     "selectedCount": "{{count}} selected",
     "maxHint": "up to {{max}}",
     "clear": "Clear",
-    "importSelected": "Import selected ({{count}})",
+    "importSelected": "Publish in the background ({{count}})",
     "busy": "Your previous batch is still being imported",
     "steps": {
       "content": "Content",
@@ -135,7 +139,16 @@
     "stopConfirm": "Stop this import? Videos that are not published yet are cancelled, including ones already scheduled. Published videos stay.",
     "stopYes": "Yes, stop",
     "stopKeep": "Keep importing",
-    "countOf": "{{done}} of {{total}}"
+    "countOf": "{{done}} of {{total}}",
+    "audio": {
+      "formTitle": "Import {{count}} episodes",
+      "contentIntro": "Pick the kind of audio, and where each post's title, description and tags come from.",
+      "settingsIntro": "These settings apply to all the episodes you picked.",
+      "spacing": "Each episode is imported on our server and then published on its own, {{minutes}} minutes apart. The first goes out a few minutes after it is ready. You can close this page.",
+      "canLeave": "You can close this page now. Your episodes are imported and published on our server, also while you are away.",
+      "stopConfirm": "Stop this import? Episodes that are not published yet are cancelled, including ones already scheduled. Published episodes stay.",
+      "maxReached": "You can pick up to {{max}} episodes at once"
+    }
   },
   "bitchute": {
     "noLink": "You have not linked a BitChute account yet. Link and verify it on your profile first, then come back here.",
@@ -166,5 +179,85 @@
     "empty": "No public videos found on your Rumble channel.",
     "olderHint": "Don't see the video you want?",
     "olderHintAction": "Paste its link"
+  },
+  "rss": {
+    "noLink": "You have not linked a podcast RSS feed yet. Link and verify it on your profile first, then come back here.",
+    "latest": "Your podcast episodes",
+    "empty": "No episodes found in your podcast feed.",
+    "openOn": "Open the episode page",
+    "fallbackIntro": "You can still import it: download the episode yourself and pick the file here. Everything else stays filled in.",
+    "fallbackStep1": "Open the episode at your podcast host.",
+    "fallbackStep2": "Download its audio file (MP3 or M4A).",
+    "limits": "Episodes up to {{hours}} hours can be imported. They are published as audio posts with their show notes and cover.",
+    "show": "Podcast",
+    "unreadable": "cannot be read right now",
+    "unreadableAll": "Your podcast feed cannot be read right now. Check that it is online, then try again later.",
+    "import": "Import this audio",
+    "progressServer": "Fetching the audio: {{pct}}%",
+    "progressTransfer": "Loading the audio into the uploader: {{pct}}%"
+  },
+  "auto": {
+    "title": "Automatic import",
+    "unavailable": "Automatic imports are not available on this server yet.",
+    "off": "Off. Switch it on and every new episode of this show becomes an audio post on 3Speak.",
+    "onSince": "On since {{date}}. The feed is checked every {{minutes}} minutes.",
+    "pillOn": "On",
+    "pillOff": "Off",
+    "queued": "New episodes imported so far: {{count}}",
+    "lastCheck": "Last check: {{time}}",
+    "waiting": "Waiting for tomorrow: {{count}} (at most {{max}} a day)",
+    "skipped": "Skipped, longer than the import limit: {{titles}}",
+    "comesAuto": "New episode: the automatic import takes it at its next check",
+    "errors": {
+      "noLink": "This feed is no longer verified on your profile. Link it again to continue.",
+      "noGrant": "3Speak may no longer publish for you. Open the settings to allow it again.",
+      "unreadable": "Your feed could not be read at the last check. We try again at the next one.",
+      "generic": "The last check failed. We try again at the next one."
+    },
+    "edit": "Edit settings",
+    "setUp": "Set up automatic import",
+    "formTitle": "Automatic import",
+    "formIntro": "New episodes of <b>{{show}}</b> become audio posts with these settings, at most {{max}} a day, spaced out like a batch import.",
+    "enabled": "Import new episodes automatically",
+    "enabledInfo": "We check your feed regularly. Every episode that appears after you switch this on is downloaded and posted for you by @threespeak, with the settings below. Episodes already in the feed are left alone.",
+    "enabledOn": "New episodes are posted for you",
+    "enabledOff": "The settings are kept, nothing is posted",
+    "sections": {
+      "content": "Title, tags and description",
+      "post": "Post settings"
+    },
+    "kind": "Kind of audio",
+    "target": "Publish as",
+    "targetPost": "Standalone post",
+    "targetSnap": "Snap comment",
+    "targetPostHint": "A post with its title, in the community you pick below.",
+    "targetSnapHint": "A reply in the snaps feed, without a title, like a short. Community and blog do not apply.",
+    "fromSource": "Import from source",
+    "fromSourceInfo": "On: each post takes its episode's title, show notes and the #hashtags in them, as your feed has them. Off: set the title format, tags and description yourself.",
+    "fromSourceOn": "Title, description and tags come from each episode",
+    "fromSourceOff": "You set the title, tags and description below",
+    "titleLabel": "Title",
+    "titleHint": "Use {title} for the episode title, {show} for the show name, {episode} and {season} for their numbers, {date} for the release date.",
+    "sampleTitle": "Episode title",
+    "sampleShow": "My Show",
+    "titlePreview": "Example: {{title}}",
+    "tagsLabel": "Tags",
+    "tagsHint": "Up to 8, separated by spaces. Added to every post.",
+    "hashtags": "Also use hashtags from the show notes",
+    "hashtagsInfo": "Words written as #tag in an episode's show notes become tags of its post, after your own tags (10 tags at most).",
+    "hashtagsHint": "#tags in the notes become post tags",
+    "useNotes": "Use the show notes as the description",
+    "useNotesInfo": "The post's text is the episode's show notes from your feed, with their links. Turn it off to use the same text of your own for every episode.",
+    "useNotesOn": "Each post shows its episode's notes",
+    "useNotesOff": "Every post uses your text below",
+    "addendumLabel": "Text under the show notes",
+    "addendumHint": "Added to every post after the notes, for example links to your other channels.",
+    "optional": "optional",
+    "textLabel": "Description",
+    "textHint": "Used for every episode. {title}, {show}, {episode}, {season} and {date} work here too.",
+    "textRequired": "Write the description to use, or use the show notes.",
+    "onlyNew": "Only episodes that appear in your feed after you switch this on are imported, never older ones.",
+    "grantNeeded": "Automatic imports are posted for you by @threespeak, so it needs permission to publish on your account.",
+    "save": "Save"
   }
 }

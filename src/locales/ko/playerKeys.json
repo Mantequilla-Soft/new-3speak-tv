@@ -1,0 +1,29 @@
+{
+  "valueText": "{{total}} 중 {{time}}",
+  "seekLabel": "탐색",
+  "loop": "반복",
+  "loopOn": "반복 켜짐",
+  "loopOff": "이 동영상 반복",
+  "theater": "영화관 모드",
+  "theaterExit": "기본 보기",
+  "title": "키보드 단축키",
+  "sub": "입력 중일 때를 빼고 페이지 어디서나 작동합니다.",
+  "keySpace": "스페이스",
+  "keyShift": "Shift",
+  "list": {
+    "playPause": "재생 또는 일시정지",
+    "back10": "10초 뒤로",
+    "forward10": "10초 앞으로",
+    "arrows": "10초 뒤로 또는 앞으로",
+    "frame": "한 프레임 뒤로 또는 앞으로",
+    "percent": "동영상의 0%~90% 지점으로 이동",
+    "volume": "볼륨 높이기 또는 낮추기",
+    "mute": "음소거 또는 해제",
+    "captions": "자막 켜기 또는 끄기",
+    "fullscreen": "전체 화면",
+    "theater": "영화관 모드 켜기 또는 끄기",
+    "save": "저장",
+    "share": "공유",
+    "help": "이 목록 보기"
+  }
+}

@@ -44,6 +44,7 @@
     "title": "Hồ sơ bên ngoài đã liên kết",
     "intro": "Chứng minh bạn sở hữu một kênh YouTube (hoặc kênh khác) bằng cách dán mã hash 3Speak riêng của bạn vào phần mô tả hồ sơ công khai, rồi xác minh tại đây.",
     "openProfile": "Mở hồ sơ",
+    "importEpisodes": "Nhập các tập",
     "removeLink": "Gỡ liên kết",
     "empty": "Chưa liên kết hồ sơ bên ngoài nào.",
     "addPlatform": "Thêm nền tảng mới",
@@ -81,7 +82,6 @@
     "addCollaborator": "Thêm cộng tác viên",
     "saveSplit": "Lưu cách chia",
     "intro": "Thêm người dùng mà bạn muốn tự động nhận một phần phần thưởng của bài đăng này.",
-    "minPercent": "% (tối thiểu {{percent}}%)",
     "usernamePlaceholder": "Nhập tên người dùng",
     "minimumReward": "Phần thưởng tối thiểu là <strong>1%</strong>",
     "checking": "Đang kiểm tra <strong>@{{account}}</strong> trên Hive…",
@@ -89,7 +89,11 @@
     "notAdded": "<strong>@{{account}}</strong> chưa được thêm. Nhấn <strong>+</strong> để thêm, hoặc xóa trường này.",
     "infrastructure": "Hạ tầng: 10%",
     "videoEncoding": "Mã hóa video: 1%",
-    "defaults": "Người thụ hưởng mặc định ({{count}})"
+    "defaults": "Người thụ hưởng mặc định ({{count}})",
+    "raise": "Tăng phần của {{account}}",
+    "lower": "Giảm phần của {{account}}",
+    "minShare": "tối thiểu {{percent}}%",
+    "raiseHint": "Các phần có khóa có thể tăng để đóng góp nhiều hơn, nhưng không thể giảm dưới mức tối thiểu."
   },
   "qr": {
     "scan": "Quét mã QR này bằng Hive Keychain:",
@@ -137,7 +141,8 @@
       "title": "Nội dung Short",
       "hint": "Nội dung này đi kèm audiogram trong Short. Liên kết đến audio của bạn được tự động thêm vào.",
       "placeholder": "Đoạn này nói về gì? (không bắt buộc)"
-    }
+    },
+    "videoPodcastNotSupported": "Podcast video chưa có trong trình chỉnh sửa. Vui lòng thử lại sau."
   },
   "profile": {
     "mustLogin": "Bạn cần đăng nhập trước",

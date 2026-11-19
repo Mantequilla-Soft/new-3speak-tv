@@ -6,6 +6,7 @@ import { getFollowers, getRelationshipBetweenAccounts } from '../../hive-api/api
 import { followWithAioha, isLoggedIn } from '../../hive-api/aioha';
 import { useAppStore } from '../../lib/store';
 import PremiumBadge from '../PremiumBadge/PremiumBadge';
+import NotifyLevelButton from '../NotifyLevel/NotifyLevelButton';
 import { useTranslation } from 'react-i18next';
 import './AuthorBadge.scss';
 
@@ -193,6 +194,8 @@ function AuthorBadge({ author, onClick, followersCount, fetchFollowers, showFoll
           {followLoading ? '...' : following ? t('common.actions.following') : t('common.actions.follow')}
         </button>
       )}
+      {/* The bell (All / Highlights / Off) once followed; not in compact rows. */}
+      {showFollowBtn && following && me && !compact && <NotifyLevelButton creator={author} variant="compact" />}
     </div>
   );
 }

@@ -5,8 +5,6 @@
     "reactToMoment": "이 장면에 리액션",
     "mute": "음소거",
     "unmute": "음소거 해제",
-    "playerSize": "플레이어 크기: {{size}}",
-    "sizeStandard": "표준",
     "pip": "PIP 모드",
     "autoplayOn": "자동재생: 켜짐",
     "autoplayOff": "자동재생: 꺼짐",

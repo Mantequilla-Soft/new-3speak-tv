@@ -1,0 +1,70 @@
+{
+  "readyTitle": "Il tuo clip è pronto",
+  "readySub": "Gli ultimi 30 secondi della diretta.",
+  "postShort": "Pubblica come Short",
+  "download": "Scarica",
+  "delete": "Elimina",
+  "shareHost": "@{{host}} riceve il {{percent}}% delle ricompense dello Short: è la sua diretta.",
+  "shareClipper": "@{{clipper}} ha fatto questo clip e riceve il {{percent}}% delle ricompense dello Short.",
+  "loginToPost": "Accedi per pubblicare i clip come Short.",
+  "allClips": "Tutti i tuoi clip di questa diretta",
+  "postFailed": "Impossibile aprire il clip per pubblicarlo. Riprova.",
+  "deleteConfirm": "Eliminare questo clip?",
+  "deleteFailed": "Impossibile eliminare il clip.",
+  "title": "Momenti migliori",
+  "subHost": "Clip della tua diretta, pronti da pubblicare come Short. Restano 2 giorni.",
+  "subViewer": "I tuoi clip di questa diretta. Restano 2 giorni.",
+  "error": "Impossibile caricare i clip ora.",
+  "empty": "Ancora nessun clip. Qui compaiono i momenti con tanta chat e tanti boost.",
+  "at": "a {{time}}",
+  "source": {
+    "auto": "In evidenza",
+    "mine": "Il tuo clip",
+    "by": "Clip di @{{user}}",
+    "guest": "Clip di un ospite"
+  },
+  "reasons": {
+    "chat": "La chat si è accesa",
+    "boosts": "Boost",
+    "big_boost": "Grande boost"
+  },
+  "momentsTitle": "Altri momenti",
+  "momentsSub": "Crea uno Short dalla registrazione quando è stata elaborata.",
+  "makeShort": "Crea uno Short",
+  "notif": {
+    "host": "I clip della tua diretta sono pronti da pubblicare come Short ({{count}})",
+    "clipper": "I tuoi clip della diretta di @{{user}} sono pronti ({{count}})"
+  },
+  "pendingTitle": "Il tuo clip sarà pronto alla fine della diretta",
+  "pendingSub": "Viene tagliato dalla registrazione dopo la diretta. Lo trovi in I tuoi clip delle dirette.",
+  "status": {
+    "pending": "Pronto dopo la diretta",
+    "unavailable": "Impossibile da creare"
+  },
+  "reasonUnavailable": {
+    "past_cap": "Dopo i 30 minuti gratuiti",
+    "past_end": "Dopo la fine della registrazione",
+    "no_recording": "La diretta non è stata registrata",
+    "failed": "Impossibile da tagliare"
+  },
+  "summary": {
+    "title": "{{count}} clip della tua diretta",
+    "pending": "Vengono tagliati dalla registrazione e saranno pronti tra pochi minuti. Ti avviseremo.",
+    "ready": "Tutti i clip sono pronti.",
+    "byUser": "@{{user}}: {{count}}",
+    "auto": "Automatici: {{count}}",
+    "guests": "Ospiti: {{count}}"
+  },
+  "page": {
+    "title": "I tuoi clip delle dirette",
+    "sub": "I clip che hai fatto e quelli delle tue dirette. Restano {{hours}} ore.",
+    "empty": "Ancora nessun clip. Fai un clip di una diretta o vai in diretta: qui compaiono i clip dei tuoi spettatori.",
+    "select": "Seleziona",
+    "postSelected": "Pubblica i selezionati come Short ({{count}})",
+    "queueNext": "Pubblica il prossimo (ne restano {{count}})",
+    "queueClear": "Svuota",
+    "ofStream": "Diretta di @{{host}}",
+    "yours": "La tua diretta",
+    "open": "I tuoi clip delle dirette"
+  }
+}

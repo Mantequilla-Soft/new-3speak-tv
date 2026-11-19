@@ -71,13 +71,13 @@ describe('useLiveStreams', () => {
     expect(names(result)).toEqual(['pub'])
   })
 
-  it('keeps excluded hosts out of discovery feeds but not out of the pager', async () => {
-    deps.fetchAllEndpoints.mockResolvedValue([room({ name: 'ok' }), room({ name: 'spam', host: 'SPAM.host' })])
+  it('keeps excluded hosts out of every list, the scheduled tab too', async () => {
+    deps.fetchAllEndpoints.mockResolvedValue([room({ name: 'ok' }), room({ name: 'spam', host: 'SPAM.host' }), room({ name: 'soon', host: 'spam.host', live: false })])
     const feed = renderHook(() => useLiveStreams())
-    const pager = renderHook(() => useLiveStreams({ includeAllHosts: true }))
+    const scheduled = renderHook(() => useLiveStreams({ standby: true }))
     await flush()
     expect(names(feed.result)).toEqual(['ok'])
-    expect(names(pager.result)).toEqual(['ok', 'spam'])
+    expect(names(scheduled.result)).toEqual(['ok'])
   })
 
   it('the Follow feed shows only followed hosts, and nothing until the list loads', async () => {

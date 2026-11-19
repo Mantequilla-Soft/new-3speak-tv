@@ -1,0 +1,19 @@
+{
+  "title": "Shorts kutoka video hii",
+  "sub": "Zimechaguliwa na watazamaji wako: sehemu wanazorudia kutazama, kutoa maoni na kuzungumzia kwenye gumzo, na sentensi za kunukuu.",
+  "empty": "Bado hakuna mapendekezo. Yataonekana watu wakitazama, wakirudia na kutoa maoni kwenye video hii.",
+  "error": "Imeshindikana kupakia mapendekezo kwa sasa.",
+  "range": "{{start}} hadi {{end}}",
+  "seconds": "sek {{seconds}}",
+  "reasons": {
+    "replay": "Imerudiwa zaidi",
+    "comments_one": "Maoni {{count}} yanaelekeza hapa",
+    "comments_other": "Maoni {{count}} yanaelekeza hapa",
+    "chat": "Gumzo lilichangamka",
+    "quote": "Sentensi ya kunukuu"
+  },
+  "preview": "Hakiki",
+  "stop": "Simamisha",
+  "makeShort": "Tengeneza Short",
+  "foot": "Ni wewe tu unayeona haya. Marudio yanahesabiwa bila kujua nani alitazama."
+}

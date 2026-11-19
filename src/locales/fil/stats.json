@@ -91,6 +91,7 @@
   },
   "loadError": "Hindi ma-load ang stats mo ngayon.",
   "emptyRange": "Wala pang watch data sa panahong ito — subukan ang “Lahat”, o hintaying may manood ng mga video mo.",
+  "emptyRangeAudio": "Wala pang listening data sa range na ito. Subukan ang “Lahat”, o hintaying may makinig.",
   "tiles": {
     "avgViewDuration": "Avg na tagal ng view",
     "avgWatched": "Avg na napanood",

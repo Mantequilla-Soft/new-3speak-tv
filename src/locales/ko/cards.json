@@ -8,6 +8,8 @@
   "badges": {
     "gatedTitle": "멤버 전용",
     "pro": "PRO",
+    "vod": "VOD",
+    "vodTitle": "라이브 방송 녹화본",
     "new": "NEW",
     "first": "첫 업로드",
     "live": "● LIVE",

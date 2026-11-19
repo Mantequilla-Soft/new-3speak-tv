@@ -1,12 +1,17 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import './Wallet.scss';
 import TrxHistory from '../components/Wallet/TrxHistory';
 import { useAppStore } from '../lib/store';
 import { Client } from '@hiveio/dhive';
 import TransferModal from '../components/Wallet/TransferModal';
 import ProPlansPanel from '../components/Wallet/ProPlansPanel';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import ReceiveDialog from '../components/Wallet/ReceiveDialog';
+import WalletOpModal from '../components/Wallet/WalletOpModal';
+import WalletPending from '../components/Wallet/WalletPending';
+import PointsCard from '../components/Wallet/PointsCard';
+import { usePointsInfo } from '../components/Wallet/channelPoints';
+import { loadWalletState } from '../lib/walletOps';
 import { toastIn } from '../utils/toast';
 import { ENABLE_SUBS } from '../utils/config';
 import { IS_VSC_TESTNET, HIVE_TESTNET_NODES } from '../utils/vscContract';
@@ -46,6 +51,10 @@ function Wallet() {
   const [claiming, setClaiming] = useState(false);
   const [txns, setTxns] = useState(null);
   const [rc, setRc] = useState(null);
+  // Power, savings, conversions and delegations (lib/walletOps.js), and which
+  // of their sheets is open (WalletOpModal `mode`), or null.
+  const [opState, setOpState] = useState(null);
+  const [opMode, setOpMode] = useState(null);
 
   const [balances, setBalances] = useState({
     hp: 0,
@@ -67,6 +76,32 @@ function Wallet() {
     fetchPrices();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
+
+  // Only the newest read for the wallet on screen lands: a slow one for the wallet
+  // left behind (or refreshAll's late re-read of it), or an older one of the same
+  // wallet, must not overwrite it.
+  const opsSeq = useRef(0);
+  const opsUser = useRef(user);
+  useEffect(() => { opsUser.current = user; }, [user]);
+  const loadOps = useCallback(async () => {
+    if (!user || opsUser.current !== user) return;
+    const seq = ++opsSeq.current;
+    try {
+      const next = await loadWalletState((api, method, params) => client.call(api, method, params), user);
+      // Tagged with the account, so another wallet's state never shows here.
+      if (seq === opsSeq.current && opsUser.current === user) setOpState({ ...next, user });
+    } catch (err) {
+      console.error('Wallet state failed:', err);
+    }
+  }, [user]);
+  useEffect(() => { loadOps(); }, [loadOps]);
+  const ops = opState?.user === user ? opState : null;
+  // After a broadcast: the next block holds it, so read again a little later too.
+  const refreshAll = () => {
+    fetchBalances();
+    loadOps();
+    setTimeout(() => { fetchBalances(); loadOps(); }, 4000);
+  };
 
   // Resource credits, for the card beside the activity. Read only.
   useEffect(() => {
@@ -109,7 +144,8 @@ function Wallet() {
         hp: vestsToHP(parseFloat(account.vesting_shares.split(' ')[0])),
         hbd: parseFloat(account.hbd_balance.split(' ')[0]),
         hive: parseFloat(account.balance.split(' ')[0]),
-        savings_hbd: parseFloat(account.savings_hbd_balance.split(' ')[0])
+        savings_hbd: parseFloat(account.savings_hbd_balance.split(' ')[0]),
+        savings_hive: parseFloat(String(account.savings_balance || '0').split(' ')[0]) || 0
       });
 
       const num = (v) => parseFloat(String(v || '0').split(' ')[0]) || 0;
@@ -173,7 +209,7 @@ function Wallet() {
     setShowTransferModal(true);
   };
 
-  const total = balances.hive * usdPrices.HP + balances.hp * usdPrices.HP + balances.hbd * usdPrices.HBD + balances.savings_hbd * usdPrices.HBD;
+  const total = balances.hive * usdPrices.HP + balances.hp * usdPrices.HP + balances.hbd * usdPrices.HBD + balances.savings_hbd * usdPrices.HBD + (balances.savings_hive || 0) * usdPrices.HP;
   const pendingUsd = pending ? pending.hbd * usdPrices.HBD + (pending.hive + pending.hp) * usdPrices.HP : 0;
   const hasPending = own && pending && (pending.hbd > 0 || pending.hive > 0 || pending.hp > 0);
 
@@ -193,6 +229,12 @@ function Wallet() {
   };
 
   const scrollTo = (id) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  // Channel points: the balance card on the side, the movements in Activity
+  // (its Points filter), which the card's button opens.
+  const pointsInfo = usePointsInfo(user);
+  const [activityFilter, setActivityFilter] = useState('all');
+  const showPointsHistory = () => { setActivityFilter('points'); scrollTo('wallet-activity'); };
 
   // Earnings, 30 days: rewards claimed and HIVE/HBD received, from the
   // activity the list below already loaded.
@@ -227,8 +269,18 @@ function Wallet() {
     { id: 'hive', sym: 'H', name: 'HIVE', value: balances.hive * usdPrices.HP, amount: amt(balances.hive), send: 'HIVE' },
     { id: 'hbd', sym: '$', name: 'HBD', value: balances.hbd * usdPrices.HBD, amount: amt(balances.hbd), send: 'HBD' },
     { id: 'hp', sym: 'HP', name: t('wallet.coins.hp'), value: balances.hp * usdPrices.HP, amount: amt(balances.hp) },
-    { id: 'savings', icon: 'savings', name: t('wallet.coins.savings'), value: balances.savings_hbd * usdPrices.HBD, amount: amt(balances.savings_hbd) },
+    { id: 'savings', icon: 'savings', name: t('wallet.coins.savings'), value: balances.savings_hbd * usdPrices.HBD + (balances.savings_hive || 0) * usdPrices.HP,
+      amount: balances.savings_hive > 0 ? `${amt(balances.savings_hbd)} HBD · ${amt(balances.savings_hive)} HIVE` : amt(balances.savings_hbd) },
   ];
+
+  // Wallet operations beyond sending (WalletOpModal), own wallet only.
+  const opActs = own ? [
+    { id: 'powerUp', icon: 'trending_up' },
+    { id: 'powerDown', icon: 'trending_down' },
+    { id: 'savings', icon: 'savings' },
+    { id: 'convert', icon: 'swap_horiz' },
+    { id: 'delegate', icon: 'group_add' },
+  ] : [];
 
   return (
     <div className="wallet-v2">
@@ -299,9 +351,23 @@ function Wallet() {
             ))}
           </section>
 
+          <section className="wallet-v2__ops" aria-label={t('walletOps.actions.aria')}>
+            {opActs.map((a) => (
+              <Button key={a.id} variant="secondary" size={40} icon={a.icon} onClick={() => setOpMode(a.id)}>
+                {t(`walletOps.actions.${a.id}`)}
+              </Button>
+            ))}
+            {/* The curator page: votes, curation rewards, found-it-early badges. */}
+            <Button as={Link} to={`/curation/${user}`} variant="secondary" size={40} icon="how_to_vote">
+              {t('curation.page.open')}
+            </Button>
+          </section>
+
           <div className="wallet-v2__grid">
-            <TrxHistory user={user} onLoaded={onLoaded} />
+            <TrxHistory user={user} onLoaded={onLoaded} points={pointsInfo} filter={activityFilter} onFilter={setActivityFilter} />
             <aside className="wallet-v2__side">
+              {ops && <WalletPending user={user} state={ops} own={own} onChanged={refreshAll} />}
+              <PointsCard info={pointsInfo} own={own} onShowHistory={showPointsHistory} />
               <div className="wallet-v2__card">
                 <div className="wallet-v2__card-head">
                   <b>{t('wallet.earnings.title')}</b>
@@ -342,6 +408,10 @@ function Wallet() {
           recent={(txns?.list || []).filter((tx) => tx.type === 'send').map((tx) => tx.address)}
           prices={{ HIVE: usdPrices.HP, HBD: usdPrices.HBD }}
           fetchBalances={fetchBalances} />
+      )}
+
+      {opMode && own && (
+        <WalletOpModal mode={opMode} user={user} state={ops} onClose={() => setOpMode(null)} onDone={refreshAll} />
       )}
 
       <ReceiveDialog open={showReceive} onClose={() => setShowReceive(false)} user={user} />

@@ -91,6 +91,7 @@
   },
   "loadError": "İstatistiklerin şu an yüklenemedi.",
   "emptyRange": "Bu aralıkta henüz izlenme verisi yok. “Tümü”nü dene ya da insanların videolarını izlemesini bekle.",
+  "emptyRangeAudio": "Bu aralıkta henüz dinleme verisi yok. “Tümü”nü dene ya da birilerinin dinlemesini bekle.",
   "tiles": {
     "avgViewDuration": "Ort. izlenme süresi",
     "avgWatched": "Ort. izlenen",

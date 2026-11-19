@@ -28,7 +28,9 @@
     },
     "errors": {
       "pickStars": "Pumili ng star rating",
-      "sendFailed": "Hindi maipadala ang review mo. Subukan ulit."
+      "sendFailed": "Hindi maipadala ang review mo. Subukan ulit.",
+      "screenshotUnreadable": "Hindi namin mabasa ang file na iyan bilang larawan.",
+      "screenshotTooBig": "Masyadong malaki ang larawang iyan. Subukan ang mas maliit."
     },
     "thanks": "Salamat sa feedback mo! 🙏",
     "sendFeedback": "Ipadala ang feedback",
@@ -40,6 +42,12 @@
     "recommendLabel": "Irerekomenda mo ba ang 3Speak? <opt>(opsyonal)</opt>",
     "moreLabel": "Magkuwento pa <opt>(opsyonal)</opt>",
     "placeholder": "Ano ang nagustuhan mo? Ano pa ang puwedeng gumanda?",
+    "screenshotLabel": "Screenshot <opt>(opsyonal)</opt>",
+    "attachScreenshot": "Mag-attach ng screenshot",
+    "screenshotPreparing": "Inihahanda ang screenshot…",
+    "screenshotAlt": "Ang screenshot mo",
+    "removeScreenshot": "Alisin ang screenshot",
+    "screenshotHint": "Ang 3Speak team lang ang makakakita nito. Puwede ka ring mag-paste ng larawan dito.",
     "notNow": "Hindi muna",
     "sending": "Ipinapadala…"
   },
@@ -147,5 +155,23 @@
     "creator": "Creator",
     "empty": "Wala pang komento",
     "emptyHint": "Lumalabas sa timeline ng video ang mga komentong nakakabit sa isang sandali."
+  },
+  "focus": {
+    "open": "Focus mode",
+    "aria": "Focus mode: isulat ang komento mo",
+    "done": "Tapos na",
+    "sound": "Tunog ng makinilya",
+    "words_one": "{{count}} salita",
+    "words_other": "{{count}} salita",
+    "music": "Background music",
+    "musicOff": "Off",
+    "track1": "Ulan",
+    "track2": "Piano sa gabi",
+    "track3": "Fireplace"
+  },
+  "editor": {
+    "full": "Buong editor",
+    "compact": "Compact na editor",
+    "toolbar": "Pag-format"
   }
 }

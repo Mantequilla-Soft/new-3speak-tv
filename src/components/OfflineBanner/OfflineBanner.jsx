@@ -10,7 +10,8 @@ import './OfflineBanner.scss';
 /**
  * Offline, the app still opens (the service worker keeps it, src/sw.js) and
  * downloaded episodes still play (lib/podcastDownloads.js); the rest needs the
- * network. Says so, and leads to the downloads when there are any.
+ * network. Says so, and leads to the downloads (/downloads: videos and audio)
+ * when there are any.
  *
  * Out of the way once it has done its job: after "Open downloads" (until the
  * connection is back and lost again) and while something plays.
@@ -26,8 +27,10 @@ export default function OfflineBanner() {
   // A new time offline, a new notice.
   useEffect(() => { if (online) setDismissed(false); }, [online]);
   if (online || dismissed || playing) return null;
-  // Already on Mine (where offline sends the audio page): no link to it.
-  const onDownloads = pathname === '/audio' && !/[?&](view=(discover|trends)|podcast=|episode=|play=)/.test(search);
+  // Already on the downloads (the Downloads page, or Mine where offline sends the
+  // audio page): no link to them.
+  const onDownloads = pathname === '/downloads'
+    || (pathname === '/audio' && !/[?&](view=(discover|trends)|podcast=|episode=|play=)/.test(search));
   return (
     <div className="offline-banner" role="status">
       <Icon name="wifi_off" size={22} className="offline-banner-icon" />
@@ -36,7 +39,7 @@ export default function OfflineBanner() {
         <button
           type="button"
           className="v2-btn v2-btn--secondary h36 offline-banner-link"
-          onClick={() => { setDismissed(true); navigate('/audio?view=mine'); }}
+          onClick={() => { setDismissed(true); navigate('/downloads'); }}
         >
           {t('audio.offline.open')}
         </button>

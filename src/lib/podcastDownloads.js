@@ -15,8 +15,14 @@
  * - a 3Speak audio: our audio gateway, which allows CORS.
  *
  * Errors carry a `code` ('too_large', 'rate_limited' (also the checker's 503
- * busy), 'storage', 'failed',
+ * busy), 'storage', 'failed', 'cap',
  * 'cancelled', 'no_source') that the page turns into a message.
+ *
+ * Videos for offline (lib/videoDownloads.js) live in the same store, as one
+ * file per HLS segment (`<id>#<n>`) and one meta row naming them (`parts`); see
+ * downloadParts(). They expire (`expiresAt`, removed when the store opens or
+ * pruneExpired() runs). Every download counts against one storage cap, a setting
+ * kept per browser (downloadCap / setDownloadCap, 2 GB unless changed).
  */
 import { useSyncExternalStore } from 'react';
 import { CHECKER_URL } from '../utils/config';
@@ -30,6 +36,12 @@ const MIRROR_KEY = 'podcast-downloads-ids';
 // duration at 128 kbit/s, and never shown as done before it is.
 const GUESS_BYTES_PER_SEC = 16000;
 const EMIT_EVERY_MS = 250;
+const CAP_KEY = 'downloads-cap-bytes';
+// Decimal, the way the sizes are shown (lib/podcastLibrary.js fmtBytes).
+const GB = 1e9;
+export const DEFAULT_CAP_BYTES = 2 * GB;
+/** The storage caps a listener can pick (Downloads page). */
+export const CAP_CHOICES = [0.5 * GB, 1 * GB, 2 * GB, 5 * GB, 10 * GB];
 
 export function downloadError(code, status) {
   const err = new Error(code);
@@ -79,11 +91,25 @@ function idbBackend() {
       tx.objectStore('meta').put(meta);
       return done(tx);
     },
-    async remove(id) {
+    // `keys`: the entry's other files (a video's segments).
+    async remove(id, keys = []) {
       const db = await open();
       const tx = db.transaction(['files', 'meta'], 'readwrite');
       tx.objectStore('files').delete(id);
+      for (const k of keys) tx.objectStore('files').delete(k);
       tx.objectStore('meta').delete(id);
+      return done(tx);
+    },
+    async putFile(key, blob) {
+      const db = await open();
+      const tx = db.transaction('files', 'readwrite');
+      tx.objectStore('files').put(blob, key);
+      return done(tx);
+    },
+    async putMeta(meta) {
+      const db = await open();
+      const tx = db.transaction('meta', 'readwrite');
+      tx.objectStore('meta').put(meta);
       return done(tx);
     },
     async blob(id) {
@@ -134,13 +160,28 @@ async function refreshEstimate() {
   } catch { /* not offered */ }
 }
 
+// The other files an entry is made of (a video's segments).
+const partKeys = (m) => [
+  ...(Array.isArray(m?.parts) ? m.parts.map((p) => p?.key).filter(Boolean) : []),
+  ...(m?.thumbKey ? [m.thumbKey] : []),
+];
+const expired = (m, now) => Number.isFinite(m?.expiresAt) && m.expiresAt <= now;
+
 function load(store) {
   backend = store;
   index = new Map();
   loaded = false;
   ready = (async () => {
     try {
-      for (const m of (backend ? await backend.list() : [])) if (m?.id) index.set(m.id, m);
+      const now = Date.now();
+      for (const m of (backend ? await backend.list() : [])) {
+        if (!m?.id) continue;
+        if (expired(m, now)) {
+          try { await backend.remove(m.id, partKeys(m)); } catch { /* next time */ }
+          continue;
+        }
+        index.set(m.id, m);
+      }
     } catch { /* blocked storage: nothing saved here */ }
     loaded = true;
     writeMirror();
@@ -280,6 +321,23 @@ async function askPersist() {
   } catch { /* not offered */ }
 }
 
+// ─── The storage cap ──────────────────────────────────────────────────────────
+
+/** The most all downloads together may take, in bytes (a per-browser setting). */
+export function downloadCap() {
+  try {
+    const v = Number(localStorage.getItem(CAP_KEY));
+    return Number.isFinite(v) && v > 0 ? v : DEFAULT_CAP_BYTES;
+  } catch { return DEFAULT_CAP_BYTES; }
+}
+export function setDownloadCap(bytes) {
+  const v = Number(bytes);
+  if (!Number.isFinite(v) || v <= 0) return;
+  try { localStorage.setItem(CAP_KEY, String(Math.round(v))); } catch { /* storage off */ }
+  emit();
+}
+const usedNow = () => [...index.values()].reduce((n, m) => n + (m.bytes || 0), 0);
+
 // What the Downloads list needs to show and play a track later, without
 // anything only the current page knows.
 const storedTrack = (track) => JSON.parse(JSON.stringify(track));
@@ -298,6 +356,7 @@ export async function downloadTrack(track) {
     askPersist();
     const res = await openSource(track, ctrl.signal);
     const blob = await readAll(res, id, track, ctrl.signal);
+    if (usedNow() + blob.size > downloadCap()) throw downloadError('cap');
     const meta = { id, track: storedTrack(track), bytes: blob.size, type: blob.type, savedAt: Date.now() };
     try {
       await backend.put(meta, blob);
@@ -324,13 +383,91 @@ export function cancelDownload(id) {
   jobs.get(id)?.ctrl.abort();
 }
 
+/**
+ * Save an entry made of many files (a video's segments, lib/videoDownloads.js).
+ * `work({ signal, putPart, report, room })` fetches them: putPart(key, blob)
+ * stores one, report(0..1) moves the progress, room() is how many bytes the cap
+ * still allows. It resolves with the meta row ({ id, kind, track, bytes, parts:
+ * [{ key, ... }], expiresAt? }); a failure or cancel removes what was stored.
+ * Same job list and progress as downloadTrack, so the pages show both alike.
+ */
+export async function downloadParts(id, work) {
+  if (!id) throw downloadError('no_source');
+  if (jobs.has(id)) return jobs.get(id).promise;
+  const ctrl = new AbortController();
+  const written = [];
+  const promise = (async () => {
+    await ready;
+    if (index.has(id)) return;
+    if (!backend?.putFile || !backend?.putMeta) throw downloadError('storage');
+    askPersist();
+    const putPart = async (key, blob) => {
+      if (ctrl.signal.aborted) throw downloadError('cancelled');
+      try { await backend.putFile(key, blob); } catch { throw downloadError('storage'); }
+      written.push(key);
+    };
+    const report = (p) => {
+      progress = { ...progress, [id]: Math.max(0, Math.min(0.99, Number(p) || 0)) };
+      emitSoon();
+    };
+    const room = () => downloadCap() - usedNow();
+    try {
+      const meta = await work({ signal: ctrl.signal, putPart, report, room });
+      if (ctrl.signal.aborted) throw downloadError('cancelled');
+      const row = { ...meta, id, savedAt: Date.now() };
+      try { await backend.putMeta(row); } catch { throw downloadError('storage'); }
+      index.set(id, row);
+      writeMirror();
+      refreshEstimate();
+    } catch (err) {
+      if (written.length) { try { await backend.remove(id, written); } catch { /* left for the browser */ } }
+      throw err?.code ? err : downloadError(ctrl.signal.aborted ? 'cancelled' : 'failed');
+    }
+  })().finally(() => {
+    jobs.delete(id);
+    const { [id]: _gone, ...rest } = progress;
+    progress = rest;
+    emit();
+  });
+  jobs.set(id, { promise, ctrl });
+  progress = { ...progress, [id]: 0 };
+  emit();
+  return promise;
+}
+
+/** One stored file of an entry (a video segment), or null. */
+export async function partBlob(key) {
+  if (!key) return null;
+  await ready;
+  if (!backend) return null;
+  try { return (await backend.blob(key)) || null; } catch { return null; }
+}
+
+/** The saved entry with this id (its meta row), or null. */
+export function downloadEntry(id) {
+  return (loaded && index.get(id)) || null;
+}
+
+/** Remove what has expired. Resolves with how many went. */
+export async function pruneExpired(now = Date.now()) {
+  await ready;
+  const gone = [...index.values()].filter((m) => expired(m, now));
+  for (const m of gone) {
+    try { await backend?.remove(m.id, partKeys(m)); } catch { /* next time */ }
+    index.delete(m.id);
+  }
+  if (gone.length) { writeMirror(); emit(); refreshEstimate(); }
+  return gone.length;
+}
+
 /** Forget a saved track. */
 export async function removeDownload(id) {
   if (!id) return;
   cancelDownload(id);
   await ready;
   if (backend) {
-    try { await backend.remove(id); } catch { /* gone already */ }
+    const keys = partKeys(index.get(id));
+    try { await (keys.length ? backend.remove(id, keys) : backend.remove(id)); } catch { /* gone already */ }
   }
   index.delete(id);
   writeMirror();
@@ -341,7 +478,7 @@ export async function removeDownload(id) {
 // ─── React ────────────────────────────────────────────────────────────────────
 
 const subscribe = (fn) => { listeners.add(fn); return () => listeners.delete(fn); };
-const EMPTY = { items: [], progress: {}, usedBytes: 0, estimate: null, ready: false };
+const EMPTY = { items: [], progress: {}, usedBytes: 0, estimate: null, ready: false, cap: DEFAULT_CAP_BYTES };
 
 function getSnapshot() {
   if (!snapshot) {
@@ -353,14 +490,15 @@ function getSnapshot() {
       // How much this site keeps in the browser in all (the app's caches too) and may keep.
       estimate,
       ready: loaded,
+      cap: downloadCap(),
     };
   }
   return snapshot;
 }
 
 /**
- * React hook: { items: [{ id, track, bytes, savedAt }], progress: { [id]: 0..1 }, usedBytes,
- * estimate: { usage, quota } | null, ready }. Re-renders when any of it changes.
+ * React hook: { items: [{ id, track, bytes, savedAt, kind?, expiresAt? }], progress: { [id]: 0..1 },
+ * usedBytes, estimate: { usage, quota } | null, ready, cap }. Re-renders when any of it changes.
  */
 export function useDownloads() {
   return useSyncExternalStore(subscribe, getSnapshot, () => EMPTY);

@@ -44,6 +44,7 @@
     "title": "Połączone profile zewnętrzne",
     "intro": "Udowodnij, że jesteś właścicielem kanału YouTube (lub innego), wklejając swój unikalny hash 3Speak do publicznego opisu profilu, a potem weryfikując go tutaj.",
     "openProfile": "Otwórz profil",
+    "importEpisodes": "Importuj odcinki",
     "removeLink": "Usuń połączenie",
     "empty": "Brak połączonych profili zewnętrznych.",
     "addPlatform": "Dodaj nową platformę",
@@ -81,7 +82,6 @@
     "addCollaborator": "Dodaj współtwórcę",
     "saveSplit": "Zapisz podział",
     "intro": "Dodaj użytkownika, który ma automatycznie otrzymywać część nagród za ten post.",
-    "minPercent": "% (min. {{percent}}%)",
     "usernamePlaceholder": "Wpisz nazwę użytkownika",
     "minimumReward": "Minimalna nagroda to <strong>1%</strong>",
     "checking": "Sprawdzanie <strong>@{{account}}</strong> na Hive…",
@@ -89,7 +89,11 @@
     "notAdded": "<strong>@{{account}}</strong> nie zostało jeszcze dodane. Kliknij <strong>+</strong>, aby je dodać, albo wyczyść pole.",
     "infrastructure": "Infrastruktura: 10%",
     "videoEncoding": "Kodowanie wideo: 1%",
-    "defaults": "Domyślni beneficjenci ({{count}})"
+    "defaults": "Domyślni beneficjenci ({{count}})",
+    "raise": "Zwiększ udział {{account}}",
+    "lower": "Zmniejsz udział {{account}}",
+    "minShare": "min. {{percent}}%",
+    "raiseHint": "Udziały z kłódką można zwiększyć, by dać więcej, ale nie zmniejszyć poniżej minimum."
   },
   "qr": {
     "scan": "Zeskanuj ten kod QR w Hive Keychain:",
@@ -137,7 +141,8 @@
       "title": "Tekst Shorta",
       "hint": "Pojawi się z audiogramem w Shorcie. Link do Twojego audio zostanie dodany automatycznie.",
       "placeholder": "O czym jest ten fragment? (opcjonalnie)"
-    }
+    },
+    "videoPodcastNotSupported": "Wideopodcast nie jest jeszcze dostępny w edytorze. Spróbuj ponownie później."
   },
   "profile": {
     "mustLogin": "Najpierw musisz się zalogować",

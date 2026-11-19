@@ -1,0 +1,23 @@
+{
+  "openSound": "このサウンドを開く",
+  "kindLibrary": "音楽ライブラリ",
+  "kindOriginal": "オリジナルサウンド",
+  "untitled": "無題のサウンド",
+  "uses_other": "{{count}} 本の Shorts が使用",
+  "listen": "聴く",
+  "pause": "一時停止",
+  "useThisSound": "このサウンドを使う",
+  "splitNote": "このサウンドで作った Shorts は報酬の 15% を {{name}} に渡します。",
+  "license": "ライセンス: {{license}}",
+  "original": "オリジナル",
+  "shortsUsing": "このサウンドを使った Shorts",
+  "newest": "新着",
+  "top": "人気",
+  "noUsesTitle": "このサウンドを使った Shorts はまだありません",
+  "noUsesText": "最初の一本を: 「このサウンドを使う」でエディタが開きます。",
+  "trending": "人気のサウンド",
+  "notFound": "このサウンドが見つかりません",
+  "toShorts": "Shorts へ",
+  "signIn": "このサウンドで Short を作るにはログインしてください。",
+  "cannotUse": "現在このサウンドは使えません。"
+}

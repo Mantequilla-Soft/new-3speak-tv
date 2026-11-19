@@ -28,7 +28,9 @@
     },
     "errors": {
       "pickStars": "Bitte wähle eine Sternebewertung",
-      "sendFailed": "Deine Bewertung konnte nicht gesendet werden. Bitte versuch es nochmal."
+      "sendFailed": "Deine Bewertung konnte nicht gesendet werden. Bitte versuch es nochmal.",
+      "screenshotUnreadable": "Diese Datei ist kein Bild, das wir lesen können.",
+      "screenshotTooBig": "Das Bild ist zu groß. Bitte versuche ein kleineres."
     },
     "thanks": "Danke für dein Feedback! 🙏",
     "sendFeedback": "Feedback senden",
@@ -40,6 +42,12 @@
     "recommendLabel": "Würdest du 3Speak weiterempfehlen? <opt>(optional)</opt>",
     "moreLabel": "Erzähl uns mehr <opt>(optional)</opt>",
     "placeholder": "Was hat dir gefallen? Was könnte besser sein?",
+    "screenshotLabel": "Screenshot <opt>(optional)</opt>",
+    "attachScreenshot": "Screenshot anhängen",
+    "screenshotPreparing": "Screenshot wird vorbereitet…",
+    "screenshotAlt": "Dein Screenshot",
+    "removeScreenshot": "Screenshot entfernen",
+    "screenshotHint": "Nur das 3Speak-Team sieht ihn. Du kannst auch ein Bild hier einfügen.",
     "notNow": "Nicht jetzt",
     "sending": "Wird gesendet…"
   },
@@ -147,5 +155,23 @@
     "creator": "Creator",
     "empty": "Noch keine Kommentare",
     "emptyHint": "Kommentare zu einer bestimmten Stelle erscheinen auf der Zeitleiste des Videos."
+  },
+  "focus": {
+    "open": "Fokusmodus",
+    "aria": "Fokusmodus: Kommentar schreiben",
+    "done": "Fertig",
+    "sound": "Schreibmaschinenklang",
+    "words_one": "{{count}} Wort",
+    "words_other": "{{count}} Wörter",
+    "music": "Hintergrundmusik",
+    "musicOff": "Aus",
+    "track1": "Regen",
+    "track2": "Nachtklavier",
+    "track3": "Kaminfeuer"
+  },
+  "editor": {
+    "full": "Voller Editor",
+    "compact": "Kompakter Editor",
+    "toolbar": "Formatierung"
   }
 }

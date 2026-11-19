@@ -12,6 +12,11 @@ import {
   countryFlag,
   countryLatLng,
   countryName,
+  fetchCreatorReach,
+  fetchCreatorEarnings,
+  earnedTotal,
+  fmtHbd,
+  moneyTile,
 } from '../../../src/lib/creatorStats.js'
 
 const C = 'https://checker.3speak.tv'
@@ -32,6 +37,39 @@ describe('requests', () => {
       `${C}/creator-stats/video?username=alice&permlink=p%2F1`,
       `${C}/creator-stats/has-data?username=alice&permlink=p`,
     ])
+  })
+
+  it('reach, earnings and an audio upload\'s detail', async () => {
+    const f = vi.fn().mockResolvedValue({ ok: true, json: async () => ({ success: true }) })
+    vi.stubGlobal('fetch', f)
+    await fetchCreatorReach('alice', { days: 28, content: 'streams' })
+    await fetchCreatorEarnings('alice', { days: 90 })
+    await fetchCreatorEarnings('alice')
+    await fetchVideoAnalytics('alice', 'pod1', { kind: 'audio' })
+    expect(f.mock.calls.map((c) => c[0])).toEqual([
+      `${C}/creator-stats/reach?username=alice&days=28&content=streams`,
+      `${C}/creator-stats/earnings?username=alice&days=90`,
+      `${C}/creator-stats/earnings?username=alice&days=28`,
+      `${C}/creator-stats/video?username=alice&permlink=pod1&kind=audio`,
+    ])
+  })
+
+  it('earned total adds the HBD sources, never the sats', () => {
+    expect(earnedTotal({ votes: 1, curation: 0.5, tips: 0.25, ads: 0.25, boosts: 1, lightningSats: 5000 })).toBe(3)
+    expect(earnedTotal(null)).toBe(0)
+    expect(fmtHbd(3)).toBe('$3.00')
+  })
+
+  it('the money tile: every source over a range, else the payout of the posts it shows', () => {
+    const earnings = { totals: { votes: 2, tips: 1, lightningSats: 900 } }
+    expect(moneyTile({ content: 'all', days: 28, earnings, payout: 5 })).toEqual({ kind: 'earned', value: 3 })
+    // Filtered to some content: the earnings are channel-wide, so the payout.
+    expect(moneyTile({ content: 'shorts', days: 28, earnings, payout: 5 })).toEqual({ kind: 'payout', value: 5 })
+    // All time: the earnings reach back 12 months only.
+    expect(moneyTile({ content: 'all', days: 0, earnings, payout: 7 })).toEqual({ kind: 'payout', value: 7 })
+    // Still loading, or failed.
+    expect(moneyTile({ content: 'all', days: 28, earnings: null, payout: '1.5' })).toEqual({ kind: 'payout', value: 1.5 })
+    expect(moneyTile({ content: 'all', days: 28, earnings: { error: true }, payout: 0 })).toEqual({ kind: 'payout', value: 0 })
   })
 
   it('throws on an HTTP error or success:false', async () => {

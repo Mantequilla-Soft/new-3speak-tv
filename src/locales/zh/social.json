@@ -1,0 +1,102 @@
+{
+  "levels": {
+    "button": "通知",
+    "buttonTitle": "来自 @{{user}} 的通知：{{level}}",
+    "title": "来自 @{{user}} 的通知",
+    "sub": "设置中的设备开关仍然有效。",
+    "saveFailed": "无法保存。请重试。",
+    "all": {
+      "title": "全部",
+      "desc": "视频、短视频、快拍、音频和开播提醒。",
+      "saved": "你会收到 @{{user}} 的所有动态。"
+    },
+    "highlights": {
+      "title": "精选",
+      "desc": "视频、音频和开播提醒。不含短视频和快拍。",
+      "saved": "以后只接收 @{{user}} 的精选内容。"
+    },
+    "off": {
+      "title": "关闭",
+      "desc": "不接收这位创作者的通知。你仍然关注 TA。",
+      "saved": "已关闭来自 @{{user}} 的通知。"
+    }
+  },
+  "live": {
+    "badge": "直播",
+    "aria": "你关注的人正在直播",
+    "summary_other": "你关注的 {{count}} 人正在直播"
+  },
+  "notifs": {
+    "heading": "来自 3Speak",
+    "liveNow": "@{{user}} 正在直播",
+    "wasLive": "@{{user}} 开始了直播",
+    "collabInvite": "@{{user}} 邀请你合作",
+    "premiereStarted": "@{{user}} 的首映已开始"
+  },
+  "push": {
+    "live": {
+      "title": "开播",
+      "desc": "你关注的创作者开始直播时。"
+    }
+  },
+  "collab": {
+    "accept": "接受",
+    "decline": "拒绝",
+    "acceptedToast": "与 @{{user}} 的合作内容已出现在你的频道上。",
+    "declinedToast": "已拒绝邀请。",
+    "answerFailed": "无法发送你的回复。请重试。",
+    "row": "添加合作者",
+    "rowSub": "与共同创作者一起发布并分享收益",
+    "rowSet": "@{{user}} 获得你份额的 {{split}}%",
+    "modalTitle": "添加合作者",
+    "modalSub": "对方会收到邀请。对方接受后，视频会同时出现在两个频道。",
+    "accountLabel": "共同创作者",
+    "accountPlaceholder": "Hive 账号名",
+    "suggestions": "匹配的账号",
+    "splitLabel": "对方在你收益中的份额",
+    "splitPreview": "@{{user}} 获得收益的 {{share}}%，你保留 {{mine}}%。",
+    "inviteNote": "分成以 Hive 受益人的方式设置，即使对方拒绝也依然有效。",
+    "someone": "你的共同创作者",
+    "save": "保存",
+    "remove": "移除",
+    "noRoom": "未将 @{{user}} 添加为受益人：这条帖子的受益人数量已达到 Hive 允许的上限。",
+    "errors": {
+      "invalid": "这不是有效的 Hive 账号名。",
+      "self": "你不能和自己合作。",
+      "notFound": "@{{user}} 不是 Hive 账号。"
+    },
+    "cardWith": "与 {{users}}",
+    "cardBoth": "{{author}} 与 {{users}}",
+    "withLabel": "与",
+    "invitesTitle": "合作邀请"
+  },
+  "polls": {
+    "aria": "投票",
+    "addPoll": "投票",
+    "removePoll": "不加投票",
+    "editorAria": "投票选项",
+    "questionPlaceholder": "向你的粉丝提个问题",
+    "optionPlaceholder": "选项 {{n}}",
+    "removeOption": "移除选项 {{n}}",
+    "addOption": "添加选项",
+    "duration": "投票结束时间",
+    "days_other": "{{count}} 天",
+    "noEnd": "无结束日期",
+    "invalid": "投票需要 {{min}} 到 {{max}} 个不同的选项。",
+    "votes_other": "{{count}} 票",
+    "endsInDays_other": "{{count}} 天后结束",
+    "endsInHours_other": "{{count}} 小时后结束",
+    "closed": "投票已结束",
+    "open": "进行中",
+    "changeHint": "点按其他选项即可更改你的投票。",
+    "signIn": "登录后投票。",
+    "closedToast": "这个投票已经结束。",
+    "voteFailed": "投票未成功。请重试。",
+    "statsTitle": "投票",
+    "question": "问题",
+    "questionPlaceholderVideo": "向观众提一个问题",
+    "addPollTitle": "添加投票",
+    "removePollTitle": "移除投票",
+    "invalidVideo": "投票需要一个问题和 {{min}} 到 {{max}} 个不同的选项。"
+  }
+}

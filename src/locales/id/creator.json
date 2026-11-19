@@ -1,0 +1,108 @@
+{
+  "content": {
+    "streams": "Siaran",
+    "audio": "Audio",
+    "podcasts": "Podcast"
+  },
+  "reach": {
+    "title": "Jangkauan",
+    "impressions": "Impresi",
+    "ctr": "Rasio klik (CTR)",
+    "ctrShort": "CTR {{ctr}}",
+    "clicks": "Klik dari kartu",
+    "opens": "Dibuka",
+    "empty": "Belum ada impresi di rentang ini. Mulai sekarang impresi dihitung setiap kali salah satu kartumu tampil di layar seseorang selama satu detik.",
+    "foundTitle": "Tempat penonton menemukannya",
+    "shownTitle": "Tempat kartumu ditampilkan",
+    "since": "Impresi dihitung dari sampel tampilan halaman lalu diskalakan. Penghitungan dimulai pada {{date}}.",
+    "sampled": "Impresi dihitung dari sampel tampilan halaman lalu diskalakan.",
+    "detail": "{{impressions}} impresi · CTR {{ctr}}"
+  },
+  "sources": {
+    "home": "Beranda",
+    "discover": "Jelajahi",
+    "following": "Mengikuti",
+    "new": "Terbaru",
+    "trending": "Trending",
+    "interests": "Minat",
+    "search": "Pencarian",
+    "channel": "Halaman channel",
+    "related": "Di samping video lain",
+    "shorts": "Shorts",
+    "playlist": "Playlist",
+    "tag": "Tag",
+    "community": "Komunitas",
+    "other": "Tempat lain di 3Speak",
+    "direct": "Langsung atau tidak diketahui",
+    "search_engine": "Mesin pencari",
+    "social": "Media sosial",
+    "hive_apps": "Aplikasi Hive lain",
+    "external": "Situs web lain",
+    "embed": "Embed di situs lain"
+  },
+  "earnings": {
+    "title": "Penghasilan",
+    "empty": "Belum ada penghasilan di rentang ini.",
+    "unavailable": "Penghasilan tidak bisa dimuat sekarang. Coba lagi sebentar lagi.",
+    "chartLabel": "Penghasilan per hari selama {{days}} hari, ditumpuk per sumber",
+    "lastYear": "Semua menampilkan 12 bulan terakhir.",
+    "note": "Dalam HBD (sekitar satu dolar AS). Hadiah Hive dan tip HIVE dinilai dengan harga HIVE hari ini, Lightning tetap dalam sats.",
+    "sats_other": "{{count}} sats",
+    "sources": {
+      "votes": "Vote",
+      "curation": "Kurasi",
+      "tips": "Tip",
+      "ads": "Iklan",
+      "boosts": "Boost siaran",
+      "lightning": "Lightning"
+    }
+  },
+  "export": {
+    "daily": "Ekspor penghasilan harian (CSV)",
+    "content": "Ekspor tabel konten (CSV)",
+    "cols": {
+      "date": "Tanggal",
+      "total": "Total",
+      "title": "Judul",
+      "url": "Tautan",
+      "published": "Diterbitkan",
+      "watchSeconds": "Waktu tonton (detik)",
+      "earned": "Penghasilan dari vote"
+    }
+  },
+  "inbox": {
+    "tab": "Komentar",
+    "menu": "Kotak komentar",
+    "title": "Kotak komentar",
+    "sub_other": "Komentar di postinganmu dari {{count}} hari terakhir.",
+    "filtersLabel": "Tampilkan hanya",
+    "views": {
+      "unanswered": "Belum dibalas",
+      "all": "Semua",
+      "done": "Selesai"
+    },
+    "flags": {
+      "question": "Pertanyaan",
+      "firstTime": "Pertama kali",
+      "supporter": "Pendukung"
+    },
+    "answered": "Sudah dibalas",
+    "onPost": "di",
+    "onReply": "membalasmu di",
+    "reply": "Balas",
+    "replyVideo": "Balas dengan video",
+    "replyTo": "Balas ke @{{author}}",
+    "send": "Kirim",
+    "replied": "Balasanmu sudah ada di Hive.",
+    "replyFailed": "Balasan tidak bisa dikirim. Coba lagi.",
+    "markDone": "Tandai selesai",
+    "undone": "Urungkan",
+    "doneToast": "Ditandai selesai.",
+    "doneFailed": "Tidak bisa disimpan. Coba lagi.",
+    "error": "Komentar tidak bisa dimuat.",
+    "retry": "Coba lagi",
+    "allAnswered": "Kamu sudah membalas semuanya.",
+    "empty": "Tidak ada komentar di sini.",
+    "supportersNote": "Pendukung memberi vote pada postinganmu dalam 12 bulan terakhir atau memberimu tip di 3Speak. Pertama kali berarti komentar pertama mereka di postinganmu mana pun."
+  }
+}

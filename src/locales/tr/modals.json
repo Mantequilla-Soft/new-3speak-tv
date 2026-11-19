@@ -44,6 +44,7 @@
     "title": "Bağlı harici profiller",
     "intro": "Bir YouTube (veya başka bir) kanalın sahibi olduğunu kanıtlamak için sana özel 3Speak hash'ini herkese açık profil açıklamana yapıştır, sonra burada doğrula.",
     "openProfile": "Profili aç",
+    "importEpisodes": "Bölümleri içe aktar",
     "removeLink": "Bağlantıyı kaldır",
     "empty": "Henüz bağlı harici profil yok.",
     "addPlatform": "Yeni platform ekle",
@@ -81,7 +82,6 @@
     "addCollaborator": "Ortak çalışan ekle",
     "saveSplit": "Dağılımı kaydet",
     "intro": "Bu gönderinin ödüllerinden otomatik olarak pay almasını istediğin bir kullanıcı ekle.",
-    "minPercent": "% (en az %{{percent}})",
     "usernamePlaceholder": "Kullanıcı adını gir",
     "minimumReward": "En düşük ödül <strong>%1</strong>",
     "checking": "<strong>@{{account}}</strong> Hive'da kontrol ediliyor…",
@@ -89,7 +89,11 @@
     "notAdded": "<strong>@{{account}}</strong> henüz eklenmedi. Eklemek için <strong>+</strong> düğmesine tıkla ya da alanı temizle.",
     "infrastructure": "Altyapı: %10",
     "videoEncoding": "Video Kodlama: %1",
-    "defaults": "Varsayılan Lehtarlar ({{count}})"
+    "defaults": "Varsayılan Lehtarlar ({{count}})",
+    "raise": "{{account}} payını artır",
+    "lower": "{{account}} payını azalt",
+    "minShare": "en az %{{percent}}",
+    "raiseHint": "Kilitli paylar daha fazla vermek için artırılabilir ama alt sınırlarının altına indirilemez."
   },
   "qr": {
     "scan": "Bu QR kodunu Hive Keychain'de tara:",
@@ -137,7 +141,8 @@
       "title": "Short metni",
       "hint": "Short'ta audiogramla birlikte görünür. Sesine bir bağlantı otomatik eklenir.",
       "placeholder": "Bu bölüm ne hakkında? (isteğe bağlı)"
-    }
+    },
+    "videoPodcastNotSupported": "Video podcast henüz editörde kullanılamıyor. Lütfen daha sonra tekrar dene."
   },
   "profile": {
     "mustLogin": "Önce giriş yapmalısın",

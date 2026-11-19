@@ -1,4 +1,8 @@
 import { useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
+import { seekKeyTarget, timelineSliderProps } from '../../lib/sliderKeys';
+import useTimelineScrub from '../../hooks/useTimelineScrub';
+import ScrubOverlay from './ScrubOverlay';
 
 // Renders an embed-audio doc's pre-computed `waveform` (1-channel, ~800
 // peak samples, values roughly in [-1, 1]) as canvas-drawn vertical bars.
@@ -19,16 +23,28 @@ import { useEffect, useRef } from 'react';
 // rounded bar ends, an optional 2px --text playhead, and `pins` (comments tied
 // to a moment: { f: fraction, label, title, key }) drawn as small cyan tags
 // above the bars; a pin is a button that calls onPin(pin).
-export default function Waveform({ samples, audioRef, duration, onSeek, markers, pins, onPin, playhead = false, className = '', barPx = 3 }) {
+//
+// It is a real slider for the keyboard and screen readers (role="slider",
+// focusable, "1:05 of 4:00"; arrows 5 s, Page Up/Down 10 %, Home, End).
+// `currentTime` feeds aria-valuenow (the drawing reads the element itself);
+// without it the element's time at render is used.
+export default function Waveform({ samples, audioRef, duration, onSeek, markers, pins, onPin, playhead = false, className = '', barPx = 3, currentTime, label, local = false }) {
+  const { t } = useTranslation();
   const canvasRef = useRef(null);
   const containerRef = useRef(null);
   const stateRef = useRef({ samples, audioRef, duration, markers, playhead, barPx });
   stateRef.current = { samples, audioRef, duration, markers, playhead, barPx };
 
-  // Drag state lives in a ref so the rAF loop can read it without
-  // re-subscribing. `active` flips on pointerdown and back on pointerup;
-  // `fraction` is the latest pointer position in [0, 1] while dragging.
-  const dragRef = useRef({ active: false, fraction: 0 });
+  // Press and drag scrubs (hooks/useTimelineScrub.js: pointer capture, seek on
+  // release, live for a local file). The rAF loop reads the drag from
+  // `fractionRef` without re-subscribing; null while not dragging.
+  const scrub = useTimelineScrub({
+    duration,
+    local,
+    disabled: !onSeek,
+    onSeek: (sec) => { if (onSeek && duration > 0) onSeek(sec / duration); },
+  });
+  const dragFractionRef = scrub.fractionRef;
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -118,7 +134,7 @@ export default function Waveform({ samples, audioRef, duration, onSeek, markers,
       const t = el ? el.currentTime : 0;
       const progress = duration > 0 ? Math.min(1, Math.max(0, t / duration)) : 0;
 
-      const drag = dragRef.current;
+      const drag = { active: dragFractionRef.current != null, fraction: dragFractionRef.current ?? 0 };
 
       const samplesChanged = samples !== lastSamples;
       const progressChanged = progress !== lastProgress;
@@ -219,45 +235,27 @@ export default function Waveform({ samples, audioRef, duration, onSeek, markers,
     return () => { stopped = true; ro.disconnect(); mo?.disconnect(); };
   }, []);
 
-  // Pointer-event drag: covers click + mouse drag + touch drag in one path.
-  // setPointerCapture keeps the move/up events flowing to us even when the
-  // pointer leaves the canvas while the user is still pressing.
-  const fractionFor = (e) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    return Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width));
-  };
-
-  const onPointerDown = (e) => {
-    e.currentTarget.setPointerCapture(e.pointerId);
-    dragRef.current = { active: true, fraction: fractionFor(e) };
-  };
-
-  const onPointerMove = (e) => {
-    if (!dragRef.current.active) return;
-    dragRef.current = { active: true, fraction: fractionFor(e) };
-  };
-
-  const onPointerUp = (e) => {
-    if (!dragRef.current.active) return;
-    const finalF = fractionFor(e);
-    dragRef.current = { active: false, fraction: 0 };
-    if (onSeek) onSeek(finalF);
-  };
-
-  const onPointerCancel = () => {
-    dragRef.current = { active: false, fraction: 0 };
+  const played = Number.isFinite(currentTime) ? currentTime : (audioRef?.current?.currentTime || 0);
+  const now = scrub.dragging ? scrub.time : played;
+  const onKeyDown = (e) => {
+    if (e.ctrlKey || e.metaKey || e.altKey || !onSeek || !(duration > 0)) return;
+    const to = seekKeyTarget(e.key, Number.isFinite(currentTime) ? currentTime : (audioRef?.current?.currentTime || 0), duration);
+    if (to === null) return;
+    e.preventDefault();
+    e.stopPropagation();
+    onSeek(to / duration);
   };
 
   return (
     <div
       ref={containerRef}
-      className={`audio-np-waveform${className ? ` ${className}` : ''}`}
-      onPointerDown={onPointerDown}
-      onPointerMove={onPointerMove}
-      onPointerUp={onPointerUp}
-      onPointerCancel={onPointerCancel}
+      className={`audio-np-waveform${className ? ` ${className}` : ''}${scrub.dragging ? ' is-scrubbing' : ''}`}
+      {...(onSeek ? timelineSliderProps({ value: now, max: duration, label: label || t('playerKeys.seekLabel'), t }) : {})}
+      onKeyDown={onKeyDown}
+      {...scrub.handlers}
     >
       <canvas ref={canvasRef} />
+      <ScrubOverlay fraction={scrub.fraction} time={scrub.time} />
       {pins?.length > 0 && (
         <div className="audio-np-wave-pins">
           {pins.map((p) => (

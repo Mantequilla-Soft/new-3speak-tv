@@ -95,6 +95,35 @@
   }
 }
 
+// Hover peek: not the sheet but a floating card hung under the bell, like the
+// chat peek and the profile menu (top and right are set inline from the bell,
+// NotificationBell.jsx). Shorter than the sheet, fading in; `--leaving` fades it
+// out. Two classes, so it wins over the sheet's phone rules too (a mouse on a
+// narrow window can still peek).
+.notif-dropdown.notif-dropdown--popup {
+  top: calc(var(--nav-top-offset, 60px) + 6px);
+  right: 8px;
+  bottom: auto;
+  left: auto;
+  width: min(400px, calc(100vw - 16px));
+  max-width: none;
+  height: min(560px, calc(100dvh - var(--nav-top-offset, 60px) - 24px));
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--r-3xl);
+  box-shadow: var(--shadow-float);
+  overflow: hidden;
+  animation: notif-peek-in var(--t-base) var(--ease);
+
+  &.notif-dropdown--leaving { transform: translateY(-4px); }
+
+  .notif-dropdown-grab { display: none; }
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
 @include v2.mobile {
   .notif-scrim {
     display: block;
@@ -453,4 +482,7 @@
 }
 @keyframes notif-sheet-up {
   from { transform: translateY(100%); }
+}
+@keyframes notif-peek-in {
+  from { opacity: 0; transform: translateY(-4px); }
 }

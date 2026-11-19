@@ -173,8 +173,10 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
-  b { font-size: 14px; font-weight: 700; }
-  span { @include v2.text(meta); color: var(--muted); }
+  // Direct children only: the Pro button's own label is a span too, and must
+  // keep the button's colour (it read grey on red).
+  > b { font-size: 14px; font-weight: 700; }
+  > span { @include v2.text(meta); color: var(--muted); }
 }
 
 .st-pro__cta { margin-top: 6px; align-self: flex-start; }

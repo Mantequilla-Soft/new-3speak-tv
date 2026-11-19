@@ -287,8 +287,8 @@
     },
     "remix": {
       "label": "Autoriser remix et clip",
-      "info": "Autorisez d'autres personnes à créer des remix et des clips à partir de cette vidéo. Vous serez crédité comme auteur original et recevrez au minimum 5 % en tant que bénéficiaire.",
-      "hint": "Vous touchez au moins 5 % de chaque remix"
+      "info": "Autorisez les autres à faire des remix et des clips de cette vidéo. Vous êtes crédité comme auteur original et recevez 15 % des récompenses d’un remix (moins pour les remix de remix, au moins 5 %).",
+      "hint": "Vous recevez 15 % de chaque remix de cette vidéo"
     },
     "nsfw": {
       "label": "Marquer comme NSFW",
@@ -344,7 +344,13 @@
     "shareRewards": "Partager les récompenses",
     "shareRewardsSub": "Partager avec des collaborateurs",
     "advanced": "NSFW / gains",
-    "advancedSub": "Avancé"
+    "advancedSub": "Avancé",
+    "language": {
+      "label": "Langue",
+      "hint": "Parlée dans la vidéo",
+      "info": "La langue parlée dans la vidéo. Elle est enregistrée avec la publication sur Hive, pour que les spectateurs puissent plus tard trouver des vidéos dans leur langue.",
+      "none": "Pas de parole (musique, sons)"
+    }
   },
   "review": {
     "payoutDeclined": "Refusés (récompenses brûlées)",
@@ -365,7 +371,8 @@
     "postShort": "Publier le Short",
     "postStory": "Publier la story",
     "postVideo": "Publier la vidéo",
-    "backToTimeline": "Retour à la chronologie"
+    "backToTimeline": "Retour à la chronologie",
+    "benesDeclined": "Paiement refusé : ils ne reçoivent rien non plus, le crédit reste sur la publication."
   },
   "publishing": {
     "titleShort": "Publication du Short",

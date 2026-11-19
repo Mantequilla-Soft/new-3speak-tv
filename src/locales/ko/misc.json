@@ -139,6 +139,13 @@
     "rumble": {
       "placeholder": "https://rumble.com/c/…",
       "help": "Rumble 채널 이름이나 링크를 붙여넣으세요. 해시는 채널 설명 어디에든 넣으면 돼요."
+    },
+    "rss": {
+      "placeholder": "https://example.com/podcast.xml",
+      "help": "팟캐스트 RSS 피드 주소를 붙여 넣으세요. 호스팅 서비스의 쇼 설정이나 배포 페이지에 나와 있습니다.",
+      "flowTitle": "팟캐스트 RSS 피드 연결",
+      "step2": "팟캐스트 호스팅 서비스에서 <strong>쇼 설명이나 최신 에피소드 설명에 붙여 넣으세요</strong>. 변경 사항을 저장하고 게시하세요. 피드가 인증되면 다시 지워도 됩니다.",
+      "step3": "팟캐스트 RSS 피드 주소를 입력하세요:"
     }
   },
   "snaps": {
@@ -157,7 +164,13 @@
     "audioMinimal": "최소",
     "heightSub": "전체 너비, 높이 {{height}} px · 반응형",
     "podcastTitle": "이 팟캐스트 임베드",
-    "podcastHint": "새 에피소드가 나오는 대로 포함해 프로그램의 모든 에피소드를 재생해요."
+    "podcastHint": "새 에피소드가 나오는 대로 포함해 프로그램의 모든 에피소드를 재생해요.",
+    "embedWhere": "삽입할 곳",
+    "tabWebsite": "웹사이트",
+    "tabHive": "Hive용",
+    "hiveLink": "Hive 게시물용 링크",
+    "hivePlaylistHint": "이 링크를 Hive 게시물이나 wave에 붙여 넣으세요. Ecency처럼 3Speak 영상을 보여 주는 Hive 앱에서는 게시물 안에서 바로 재생목록이 재생됩니다.",
+    "videoPlaylistHint": "웹사이트나 블로그 글에 붙여 넣으세요. 나중에 추가된 영상을 포함해 재생목록의 모든 영상을 순서대로 재생합니다."
   },
   "incubation": {
     "requestFailed": "요청 실패({{status}})",
@@ -197,7 +210,9 @@
       "video": "동영상",
       "audio": "오디오",
       "live": "라이브",
-      "others": "기타"
+      "others": "기타",
+      "streams": "방송",
+      "edit": "편집"
     },
     "subtitles": {
       "regularVideo": "채널용 일반 동영상",
@@ -210,6 +225,12 @@
       "goLiveNow": "팔로워에게 라이브 방송",
       "communitySnap": "커뮤니티 탭에 간단히 게시",
       "playlist": "동영상을 공유할 수 있는 목록으로 묶기"
+    },
+    "categories": {
+      "video": "동영상 업로드, 녹화, 편집",
+      "audio": "음악, 팟캐스트, 오디오 편집",
+      "streams": "혼자 또는 게스트와 라이브 방송",
+      "others": "스냅과 재생목록"
     }
   },
   "chat": {

@@ -146,6 +146,16 @@
     "notes": "Catatan",
     "stillIndexing": "Audio untuk postingan ini masih diindeks — coba lagi dalam beberapa menit."
   },
+  "edit": {
+    "title": "Edit audio",
+    "editTitle": "Edit judul, catatan, tag, dan sampul",
+    "cover": "Sampul",
+    "coverAlt": "Pratinjau sampul",
+    "coverHint": "Unggah gambar atau tempel URL langsung. Gambar persegi terlihat paling bagus.",
+    "notesPlaceholder": "Ceritakan tentang audio ini kepada pendengar…",
+    "keptNote": "Tautan pemutar dan kredit musik di postingan tetap seperti semula.",
+    "updated": "Audio diperbarui!"
+  },
   "page": {
     "sections": {
       "popular": "Populer",
@@ -171,7 +181,6 @@
     },
     "all": "Semua",
     "musicGenre": "Genre musik",
-    "anyGenre": "Semua genre",
     "tracks_other": "{{count}} lagu",
     "noTracks": "Tidak ada lagu yang ditemukan.",
     "creators": "Kreator",
@@ -183,7 +192,7 @@
     "nothingPlaying": "Belum ada yang diputar.",
     "goExplore": "Cari sesuatu untuk didengarkan",
     "exploreViews": "Bagian",
-    "mostPlayed": "Paling banyak diputar"
+    "newUploads": "Unggahan baru"
   },
   "upload": {
     "title": "Unggah audio",
@@ -265,7 +274,10 @@
       "formats": "MP3, WAV, OGG, WEBM, M4A, FLAC, AAC · beberapa sekaligus",
       "stop": "Berhenti",
       "orRecord": "Atau rekam langsung",
+      "micPreparing": "Menyiapkan mikrofon...",
       "recordLimit": "Maksimal {{minutes}} menit per rekaman",
+      "level": "Level mikrofon",
+      "noSound": "Tidak ada suara yang masuk. Periksa apakah mikrofonmu tidak dibisukan atau dipakai aplikasi lain.",
       "record": "Rekam",
       "added": "Ditambahkan ({{count}})",
       "filesTitle": "File audio"
@@ -280,6 +292,7 @@
       "descriptionOptional": "Deskripsi (opsional)",
       "track": "Lagu",
       "category": "Kategori",
+      "categoryRequired": "Pilih kategori agar audiomu muncul di tab yang tepat.",
       "musicGenre": "Genre musik"
     },
     "playlist": {
@@ -365,6 +378,7 @@
     "tracks": {
       "helpAlbum": "Setiap lagu diterbitkan sebagai komentar di bawah postingan utama. Atur nilai bersama sekali dan terapkan ke semua, lalu ubah per lagu.",
       "helpSnaps": "Setiap lagu diterbitkan sebagai snap tersendiri. Atur nilai bersama sekali dan terapkan ke semua, lalu ubah per lagu.",
+      "helpSnapsSingle": "Audiomu diterbitkan sebagai snap tersendiri.",
       "applyToAllHeading": "Terapkan ke semua lagu",
       "applyNote_other": "<b>Terapkan ke semua {{count}} lagu:</b> deskripsi dan sampul bersama, lalu ubah lagu mana pun secara terpisah.",
       "sharedDescription": "Deskripsi bersama (opsional)",
@@ -387,6 +401,10 @@
       "earnings": "Penghasilan:",
       "earningsPpl": "Bayar per dengar (@{{account}})",
       "earningsNormal": "Reward postingan biasa",
+      "rewards": "Hadiah:",
+      "beneficiaries": "Penerima manfaat:",
+      "perTrack": "Diatur per trek",
+      "noBeneficiaries": "Tidak ada",
       "playlist": "Playlist:",
       "failedCount_other": "{{count}} lagu gagal.",
       "retryAllFailed": "Coba lagi semua yang gagal",
@@ -750,7 +768,9 @@
     "description": "Deskripsi",
     "noDescription": "Tidak ada deskripsi.",
     "comments": "Komentar",
-    "album": "Dari {{name}}"
+    "album": "Dari {{name}}",
+    "videoPodcast": "Podcast video",
+    "videoPodcastTitle": "Buat video dari episode ini: sampul, gelombang suara, dan teks"
   },
   "offline": {
     "notice": "Kamu sedang offline. Unduhanmu tetap bisa diputar.",

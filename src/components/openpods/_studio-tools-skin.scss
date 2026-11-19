@@ -1,0 +1,157 @@
+// The stream studio's newer tools in the v2 look: the Overlays panel (text
+// overlays, be right back music, templates), the stream health panel behind
+// the connection pill, the Phone version settings and the phone crop box over
+// the preview. Kept apart from _hangouts-skin.scss so it stays easy to merge.
+//
+// Usage: inside .openpod-modal  @include tools.studio-tools;
+//        at body level          div.hh-overlays { @include tools.overlays-panel; }
+@use "../../styles/v2" as v2;
+@use "./hangouts-skin" as hh;
+
+// The sub-tabs at the top of the studio panels (SDK StudioSubtabs): flat, an
+// accent line under the open one. Body level, since the phone sheets are
+// portalled out of .openpod-modal.
+@mixin subtabs {
+  .hh-subtabs { gap: 4px; border-bottom: 1px solid var(--border); margin: 0 0 4px; }
+  .hh-subtabs__tab {
+    padding: 8px 10px;
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 700;
+    &:hover { color: var(--text); }
+    &.is-active { color: var(--text); border-bottom-color: var(--accent); }
+  }
+  .hh-subtabs__dot { top: 6px; right: 1px; background: var(--accent); }
+  .hh-boost-settings > .hh-subtabs { margin: 12px 20px 0; }
+  .hh-overlays > .hh-subtabs { margin: 12px 20px 0; }
+  .hh-overlays--embedded > .hh-subtabs { margin: 12px 4px 0; }
+}
+
+@mixin studio-tools {
+  // Phone header: the Overlays button ("Aa" is its glyph).
+  .hh-studio__hbtn-aa { font-size: 13px; font-weight: 900; letter-spacing: -0.02em; }
+
+  // The connection pill opens the health panel: a flat v2 card below it.
+  .hh-health__pill { cursor: pointer; }
+  .hh-health__notice { font-size: 10px; font-weight: 900; text-transform: uppercase; }
+  .hh-health__panel {
+    border: 1px solid var(--border);
+    border-radius: var(--r-lg);
+    background: var(--surface);
+    color: var(--text);
+    box-shadow: var(--shadow-sheet);
+    padding: 14px 16px 16px;
+    font-size: 13px;
+  }
+  .hh-health__head { @include v2.text(title-sm); }
+  .hh-health__close {
+    @include hh.glyph-box("close", 18px, 32px);
+    border-radius: 50%;
+    color: var(--text);
+    &:hover { background: var(--bg-hover); }
+  }
+  .hh-health__verdict { font-size: 13px; }
+  .hh-health__verdict--good { color: var(--cyan); }
+  .hh-health__verdict--weak,
+  .hh-health__verdict--bad { color: var(--accent); }
+  .hh-health__grid dt { color: var(--muted); }
+  .hh-health__grid dd { color: var(--text); }
+  .hh-health__grid dd.is-bad { color: var(--accent); }
+  .hh-health__auto {
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+    font-size: 14px;
+    input { width: 18px; height: 18px; accent-color: var(--accent); }
+    em { color: var(--muted); font-size: 12px; }
+  }
+
+  // Settings tab: Phone version.
+  .hh-vsettings .hh-settings__icon { @include hh.glyph("smartphone", 20px); }
+  .hh-vsettings__chip {
+    min-height: 32px;
+    padding: 0 12px;
+    border: 0;
+    border-radius: var(--r-md);
+    background: var(--surface-2);
+    color: var(--text);
+    font-size: 12px;
+    font-weight: 700;
+    &.is-active { background: var(--accent-tint-strong); color: var(--accent); }
+  }
+  .hh-vsettings__error { color: var(--accent); }
+
+  // The phone crop box over the preview.
+  .hh-vcrop { border-color: var(--on-media); }
+  .hh-vcrop__label { background: var(--media-scrim); color: var(--on-media); font-weight: 900; }
+}
+
+// The Overlays panel (portalled to <body>): the same sheet as Boost settings,
+// centred on desktop, from the bottom on phones.
+@mixin overlays-panel {
+  @include hh.tokens;
+  @include hh.buttons;
+  border-radius: var(--r-3xl);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: var(--shadow-sheet);
+  font-family: var(--font-sans);
+
+  @include v2.mobile {
+    border-radius: 28px 28px 0 0;
+    border-bottom: 0;
+  }
+
+  .hh-overlays__header { padding: 18px 16px 6px 20px; font-size: 18px; font-weight: 700; }
+  .hh-overlays__close {
+    @include hh.glyph-box("close", 18px, 32px);
+    border-radius: 50%;
+    color: var(--text);
+    &:hover { background: var(--bg-hover); }
+  }
+  .hh-overlays__body { padding: 6px 20px 18px; gap: 14px; @include v2.scroll-y; }
+  .hh-overlays__intro,
+  .hh-overlays__hint { color: var(--muted); font-size: 12px; }
+  .hh-overlays__error { color: var(--accent); font-size: 13px; }
+  .hh-overlays__section { border-top: 1px solid var(--border); gap: 10px; padding-top: 14px; }
+  .hh-overlays__section-title { @include v2.text(eyebrow); color: var(--muted); letter-spacing: normal; text-transform: none; }
+  .hh-overlays__field > span { font-size: 14px; font-weight: 700; color: var(--text); }
+  .hh-overlays__input {
+    @include hh.field(44);
+    width: 100%;
+    background: var(--bg);
+  }
+  .hh-overlays__textarea { padding-top: 10px; padding-bottom: 10px; }
+  select.hh-overlays__input { padding-right: 32px; }
+  input[type="range"] { accent-color: var(--accent); }
+  .hh-overlays__seg {
+    border: 0;
+    border-radius: var(--r-md);
+    background: var(--surface-2);
+    padding: 2px;
+    button {
+      min-height: 30px;
+      border-radius: calc(var(--r-md) - 2px);
+      color: var(--text);
+      font-size: 12px;
+      font-weight: 700;
+      & + button { border-left: 0; }
+      &.is-active { background: var(--accent-tint-strong); color: var(--accent); }
+    }
+  }
+  .hh-overlays__chip {
+    border: 0;
+    border-radius: var(--r-md);
+    background: var(--surface-2);
+    button { color: var(--text); font-size: 12px; font-weight: 700; min-height: 32px; }
+    .hh-overlays__chip-x { color: var(--muted); }
+    &.is-active { background: var(--accent-tint-strong); button { color: var(--accent); } }
+  }
+  .hh-overlays__count { font-size: 20px; font-weight: 900; color: var(--text); }
+  .hh-overlays__toggle {
+    min-height: 44px;
+    font-size: 14px;
+    font-weight: 700;
+    input { width: 20px; height: 20px; accent-color: var(--accent); }
+  }
+}

@@ -1,0 +1,94 @@
+{
+  "actions": {
+    "powerUp": "Power-up",
+    "powerDown": "Power-down",
+    "savings": "Sparkonto",
+    "convert": "Umtauschen",
+    "delegate": "Delegieren",
+    "aria": "Dein Guthaben verwalten"
+  },
+  "common": {
+    "amount": "Betrag ({{coin}})",
+    "available": "Verfügbar: {{balance}}",
+    "max": "Max",
+    "to": "An Konto",
+    "toHint": "Für dein eigenes Konto einfach so lassen.",
+    "activeKey": "Braucht deinen Active Key",
+    "butrauth": "Mit Butter Auth angemeldet: Du bestätigst das im nächsten Schritt mit deiner Hive-Wallet oder deinem Active Key.",
+    "insufficient": "Das ist mehr, als du hast.",
+    "amountPositive": "Gib einen Betrag über null ein.",
+    "invalidAccount": "Es gibt kein Hive-Konto mit diesem Namen.",
+    "accountCheckFailed": "Das Konto lässt sich gerade nicht prüfen. Versuch es gleich noch einmal.",
+    "done": "Erledigt. Es kann ein paar Sekunden dauern, bis es hier erscheint.",
+    "failed": "Das hat nicht geklappt: {{error}}",
+    "loading": "Deine Wallet wird geladen..."
+  },
+  "powerUp": {
+    "title": "Power-up",
+    "note": "Hive Power gibt deinen Votes Gewicht und bringt Kurationsbelohnungen. Die Rückumwandlung in HIVE dauert 13 wöchentliche Auszahlungen.",
+    "submit": "Power-up von {{amount}} HIVE",
+    "submitTo": "Power-up von {{amount}} HIVE für @{{to}}"
+  },
+  "powerDown": {
+    "title": "Power-down",
+    "note": "Hive Power kommt in 13 wöchentlichen Auszahlungen als HIVE zurück, etwa {{weekly}} HP pro Woche.",
+    "replace": "Ein Power-down läuft bereits (noch {{left}} HP). Ein neuer ersetzt ihn.",
+    "submit": "Power-down von {{amount}} HP",
+    "stop": "Power-down stoppen",
+    "stopped": "Power-down gestoppt."
+  },
+  "savings": {
+    "title": "Sparkonto",
+    "deposit": "Einzahlen",
+    "withdraw": "Abheben",
+    "depositNote": "HBD im Sparkonto bringt {{rate}} % Zinsen im Jahr. Das Abheben dauert 3 Tage.",
+    "depositNoteHive": "HIVE im Sparkonto bringt keine Zinsen. Das Abheben dauert 3 Tage.",
+    "withdrawNote": "Kommt in 3 Tagen an. Bis dahin kannst du es abbrechen.",
+    "submitDeposit": "{{amount}} {{coin}} einzahlen",
+    "submitWithdraw": "{{amount}} {{coin}} abheben"
+  },
+  "convert": {
+    "title": "Umtauschen",
+    "hbdToHive": "HBD in HIVE",
+    "hiveToHbd": "HIVE in HBD",
+    "hbdNote": "Du bekommst in 3,5 Tagen etwa {{amount}} HIVE, zum Medianpreis dieser Tage. Der endgültige Betrag kann abweichen.",
+    "hiveNote": "Du bekommst jetzt etwa {{amount}} HBD. Die Hälfte deines HIVE wird als Sicherheit hinterlegt, der Rest kommt in 3,5 Tagen zurück. Es fällt eine Gebühr von 5 % an.",
+    "warning": "Ein Umtausch lässt sich nicht rückgängig machen. Handeln auf einem Markt kann günstiger sein.",
+    "submit": "{{amount}} {{coin}} umtauschen"
+  },
+  "delegate": {
+    "title": "Delegieren",
+    "toLabel": "Delegieren an",
+    "note": "Delegierte Hive Power bleibt deine, aber ihre Votes gehen an das andere Konto. Wenn du sie zurücknimmst, dauert es 5 Tage, bis sie wieder da ist.",
+    "current": "Du delegierst gerade {{hp}} HP an @{{to}}. Damit legst du einen neuen Betrag fest.",
+    "submit": "{{amount}} HP an @{{to}} delegieren",
+    "submitNoTo": "{{amount}} HP delegieren",
+    "yours": "Deine Delegationen",
+    "remove": "Entfernen",
+    "removed": "Delegation entfernt. Die HP kommen in 5 Tagen zurück.",
+    "self": "Du kannst nicht an dich selbst delegieren."
+  },
+  "pending": {
+    "title": "Läuft gerade",
+    "powerDown": "Power-down: {{weekly}} HP pro Woche, noch {{weeks}} Wochen",
+    "nextPayment": "Nächste Auszahlung: {{date}}",
+    "withdrawal": "Aus dem Sparkonto: {{amount}}",
+    "arrives": "Kommt am {{date}}",
+    "convertHbd": "{{amount}} wird in HIVE umgetauscht",
+    "convertHive": "{{amount}} als Sicherheit hinterlegt",
+    "ready": "Fertig am {{date}}",
+    "delegation": "An @{{to}} delegiert: {{hp}} HP",
+    "cancel": "Abbrechen",
+    "cancelled": "Abhebung abgebrochen. Das Guthaben bleibt im Sparkonto.",
+    "stop": "Stoppen",
+    "empty": "Gerade läuft nichts."
+  },
+  "activeAuth": {
+    "powerDown": "Power-down von {{amount}}",
+    "toSavings": "{{amount}} ins Sparkonto verschieben",
+    "fromSavings": "{{amount}} aus dem Sparkonto abheben",
+    "cancelSavings": "Eine Abhebung vom Sparkonto abbrechen",
+    "convert": "{{amount}} umtauschen",
+    "delegate": "{{amount}} an @{{to}} delegieren"
+  }
+}

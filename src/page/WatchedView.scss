@@ -151,6 +151,28 @@
       img { display: block; width: 100%; height: 100%; object-fit: cover; }
 
       @include v2.mobile { width: 110px; border-radius: var(--r-sm); }
+
+      // A podcast cover is square: whole, on the card's second surface.
+      &.is-podcast {
+        background: var(--surface-2);
+
+        img { object-fit: contain; }
+      }
+    }
+
+    // How far into an audio track the listener got: a thin bar along the
+    // thumbnail's foot, like a video's resume bar.
+    &__thumb { position: relative; }
+
+    &__progress {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 4px;
+      background: var(--surface-2);
+
+      span { display: block; height: 100%; background: var(--accent); }
     }
 
     &__text {

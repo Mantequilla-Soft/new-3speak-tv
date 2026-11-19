@@ -76,7 +76,8 @@
       "all": "Zote",
       "rewards": "Zawadi",
       "received": "Zilizopokelewa",
-      "sent": "Zilizotumwa"
+      "sent": "Zilizotumwa",
+      "points": "Pointi"
     },
     "from": "Kutoka kwa @{{user}}",
     "sentTo": "Imetumwa kwa @{{user}}",
@@ -101,5 +102,41 @@
     "memoPlaceholder": "Ni kwa ajili ya nini, kama namba ya ankara",
     "subRequest": "Kuchanganua msimbo huu kunaomba {{amount}} {{coin}}. 3Speak na pochi za Hive zinazosoma misimbo ya malipo hujaza hili.",
     "subMemo": "Kuchanganua msimbo huu kunajaza jina la akaunti yako na memo kwenye 3Speak na kwenye pochi za Hive zinazosoma misimbo ya malipo."
+  },
+  "points": {
+    "title": "Pointi za chaneli",
+    "sub": "Hupatikana kwenye mitiririko mubashara ya 3Speak, hutumika kwa utabiri na boost.",
+    "keptUntil": "Zinahifadhiwa hadi {{date}}. Tazama, chati au tiririsha ili uzibakize.",
+    "startsAt_one": "Kila mtu anaanza na pointi {{n}}.",
+    "startsAt_other": "Kila mtu anaanza na pointi {{n}}.",
+    "earnTitle": "Jinsi ya kupata pointi",
+    "earn": {
+      "watch": "Kutazama mtiririko",
+      "chat": "Kuchati",
+      "stream": "Kutiririsha",
+      "raid": "Uvamizi na mapambano",
+      "boost": "Kutuma boost"
+    },
+    "rate": {
+      "perMinute": "{{n}} kwa dakika",
+      "perWord": "{{n}} kwa neno",
+      "upTo": "Hadi {{n}}"
+    },
+    "historyTitle": "Historia ya pointi",
+    "history": {
+      "watch": "Mitiririko uliyotazama",
+      "stream": "Ulitiririsha",
+      "chat": "Ulichati",
+      "raid": "Ulimvamia @{{user}}",
+      "battle": "Pambano na @{{user}}",
+      "boost": "Ulituma boost kwa mtiririko",
+      "spend": "Boost ya pointi",
+      "refund": "Pointi zilizorudishwa",
+      "prediction": "Utabiri",
+      "expire": "Imewekwa upya baada ya siku {{days}} bila shughuli"
+    },
+    "empty": "Bado hakuna miamala ya pointi.",
+    "more": "Onyesha zaidi",
+    "onHive": "kwenye Hive"
   }
 }

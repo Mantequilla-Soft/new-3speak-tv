@@ -44,6 +44,7 @@
     "title": "Verknüpfte externe Profile",
     "intro": "Beweise, dass dir ein YouTube-Kanal (oder ein anderer) gehört, indem du deinen eindeutigen 3Speak-Hash in die öffentliche Profilbeschreibung einfügst und ihn hier verifizierst.",
     "openProfile": "Profil öffnen",
+    "importEpisodes": "Folgen importieren",
     "removeLink": "Verknüpfung entfernen",
     "empty": "Noch keine externen Profile verknüpft.",
     "addPlatform": "Neue Plattform hinzufügen",
@@ -81,7 +82,6 @@
     "addCollaborator": "Mitwirkende hinzufügen",
     "saveSplit": "Aufteilung speichern",
     "intro": "Füge einen Nutzer hinzu, der automatisch einen Teil der Belohnungen für diesen Post erhalten soll.",
-    "minPercent": "% (min. {{percent}} %)",
     "usernamePlaceholder": "Benutzername eingeben",
     "minimumReward": "Der Mindestanteil beträgt <strong>1 %</strong>",
     "checking": "<strong>@{{account}}</strong> wird auf Hive geprüft…",
@@ -89,7 +89,11 @@
     "notAdded": "<strong>@{{account}}</strong> wurde noch nicht hinzugefügt. Klicke auf <strong>+</strong>, um es hinzuzufügen, oder leere das Feld.",
     "infrastructure": "Infrastruktur: 10 %",
     "videoEncoding": "Video-Encoding: 1 %",
-    "defaults": "Standard-Begünstigte ({{count}})"
+    "defaults": "Standard-Begünstigte ({{count}})",
+    "raise": "Anteil von {{account}} erhöhen",
+    "lower": "Anteil von {{account}} senken",
+    "minShare": "min. {{percent}} %",
+    "raiseHint": "Anteile mit Schloss kannst du erhöhen, um mehr zu geben, aber nicht unter ihr Minimum senken."
   },
   "qr": {
     "scan": "Scanne diesen QR-Code in Hive Keychain:",
@@ -137,7 +141,8 @@
       "title": "Text für den Short",
       "hint": "Er erscheint mit dem Audiogramm im Short. Ein Link zu deinem Audio wird automatisch ergänzt.",
       "placeholder": "Worum geht es in diesem Ausschnitt? (optional)"
-    }
+    },
+    "videoPodcastNotSupported": "Der Video-Podcast ist im Editor noch nicht verfügbar. Bitte versuch es später noch einmal."
   },
   "profile": {
     "mustLogin": "Du musst dich zuerst anmelden",

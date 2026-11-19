@@ -156,6 +156,10 @@
       "title": "Cards grandes",
       "desc": "Cartões de vídeo maiores no início, perfil e playlists"
     },
+    "dataSaver": {
+      "title": "Economia de dados",
+      "desc": "Sem prévias de vídeo, e os vídeos começam em 360p. Liga sozinho quando o seu aparelho pede para economizar dados ou a conexão está lenta."
+    },
     "previews": {
       "title": "Prévias de vídeo",
       "desc": "Prévia sem som ao passar o mouse; no celular, o cartão do centro toca"
@@ -165,14 +169,22 @@
       "desc": "Clipes sem som no Destaque da página inicial. Desligado mostra imagens estáticas."
     }
   },
+  "startup": {
+    "resume": {
+      "title": "Continuar de onde parei",
+      "desc": "O 3Speak abre na última página em que você estava. Salvo apenas neste dispositivo."
+    }
+  },
+  "startPrompt": {
+    "title": "Continuar de onde parou?",
+    "intro": "O 3Speak pode abrir na última página em que você estava, em vez do Início. Fica salvo só neste dispositivo e você pode mudar quando quiser em Configurações, Geral.",
+    "notNow": "Agora não",
+    "turnOn": "Ativar"
+  },
   "shorts": {
     "commentBar": {
       "title": "Barra de comentários nos Shorts",
       "desc": "Um campo de comentário abaixo de cada Short"
-    },
-    "openOnStart": {
-      "title": "Abrir Shorts ao iniciar",
-      "desc": "Ir direto para os Shorts ao abrir o 3Speak"
     },
     "inFeeds": {
       "title": "Shorts nos feeds",
@@ -203,7 +215,21 @@
     "rpcNode": "Nó RPC da Hive",
     "yourData": "Seus dados",
     "privacyLink": "Como o 3Speak trata seus dados",
-    "getOrDelete": "Obter ou excluir"
+    "getOrDelete": "Obter ou excluir",
+    "node": {
+      "modeAuto": "Auto",
+      "auto": "Automático",
+      "autoHint": "O nó mais rápido que funcione, troca se falhar",
+      "own": "O teu próprio nó",
+      "use": "Usar",
+      "checking": "A verificar…",
+      "down": "Não responde",
+      "ms": "{{ms}} ms",
+      "badUrl": "Escreve um endereço que comece por https://",
+      "failed": "Este nó não respondeu ou não tem a API social (hivemind) de que o 3Speak precisa.",
+      "switched": "Agora a usar {{node}}",
+      "fallback": "Se o nó escolhido deixar de responder, o 3Speak usa os nós conhecidos até a página ser recarregada."
+    }
   },
   "dataRequest": {
     "emailRequired": "Digite um endereço de e-mail para podermos responder",

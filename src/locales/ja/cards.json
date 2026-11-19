@@ -8,6 +8,8 @@
   "badges": {
     "gatedTitle": "メンバー限定",
     "pro": "PRO",
+    "vod": "VOD",
+    "vodTitle": "ライブ配信の録画",
     "new": "NEW",
     "first": "初投稿",
     "live": "● LIVE",

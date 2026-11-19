@@ -287,8 +287,8 @@
     },
     "remix": {
       "label": "Permitir remix e clipe",
-      "info": "Permite que outras pessoas criem remixes e clipes deste vídeo. Você recebe o crédito como autor original e no mínimo 5% como beneficiário.",
-      "hint": "Você recebe pelo menos 5% de cada remix"
+      "info": "Permita que outros façam remixes e clipes deste vídeo. Você aparece como autor original e recebe 15% das recompensas de um remix (menos em remixes de remixes, pelo menos 5%).",
+      "hint": "Você recebe 15% de cada remix deste vídeo"
     },
     "nsfw": {
       "label": "Marcar como NSFW",
@@ -344,7 +344,13 @@
     "shareRewards": "Dividir recompensas",
     "shareRewardsSub": "Dividir com colaboradores",
     "advanced": "NSFW / pagamento",
-    "advancedSub": "Avançado"
+    "advancedSub": "Avançado",
+    "language": {
+      "label": "Idioma",
+      "hint": "Falado no vídeo",
+      "info": "O idioma falado no vídeo. Ele é salvo com o post na Hive, para que depois os espectadores possam encontrar vídeos no idioma deles.",
+      "none": "Sem fala (música, sons)"
+    }
   },
   "review": {
     "payoutDeclined": "Recusado (recompensas queimadas)",
@@ -365,7 +371,8 @@
     "postShort": "Publicar Short",
     "postStory": "Publicar story",
     "postVideo": "Publicar vídeo",
-    "backToTimeline": "Voltar à linha do tempo"
+    "backToTimeline": "Voltar à linha do tempo",
+    "benesDeclined": "Pagamento recusado: eles também não recebem nada; o crédito fica no post."
   },
   "publishing": {
     "titleShort": "Publicando Short",

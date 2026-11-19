@@ -1,5 +1,6 @@
 import { Icon } from '../v2/Icon';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 import { useAppStore } from '../../lib/store';
 import { useDownloads, cancelDownload } from '../../lib/podcastDownloads';
 import { fmtBytes } from '../../lib/podcastLibrary';
@@ -7,6 +8,7 @@ import { fmtDuration } from '../../lib/podcastFormat';
 import PodcastArt from './PodcastArt';
 import { forgetDownload } from './downloadActions';
 import useOnline from '../../hooks/useOnline';
+import { isVideoDownload } from '../../lib/videoDownloads';
 
 /**
  * Mine → Downloads: the episodes saved in this browser (lib/podcastDownloads.js),
@@ -15,7 +17,12 @@ import useOnline from '../../hooks/useOnline';
  */
 export default function DownloadsSection({ onOpenEpisode }) {
   const { t } = useTranslation();
-  const { items, progress, usedBytes, estimate } = useDownloads();
+  const all = useDownloads();
+  // Saved videos are listed on the Downloads page (/downloads), with these.
+  const items = all.items.filter((m) => !isVideoDownload(m));
+  const progress = Object.fromEntries(Object.entries(all.progress).filter(([id]) => !isVideoDownload({ id })));
+  const { usedBytes, estimate } = all;
+  const hasVideos = items.length < all.items.length;
   const audioCurrent = useAppStore((s) => s.audioCurrent);
   const audioIsPlaying = useAppStore((s) => s.audioIsPlaying);
   const audioPlayQueued = useAppStore((s) => s.audioPlayQueued);
@@ -35,6 +42,7 @@ export default function DownloadsSection({ onOpenEpisode }) {
       <div className="pod-app-head pod-downloads-head">
         <h2 className="pod-app-title is-eyebrow">{t('audio.podcasts.filters.downloaded')}</h2>
         {usedBytes > 0 && <span className="pod-downloads-size num">{fmtBytes(usedBytes)}</span>}
+        <Link className="pod-downloads-all" to="/downloads">{hasVideos ? t('downloads.allWithVideos') : t('downloads.all')}</Link>
       </div>
       <ul className="pod-dl-list">
         {running.filter((id) => !items.some((m) => m.id === id)).map((id) => (

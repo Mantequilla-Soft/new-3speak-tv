@@ -22,6 +22,12 @@ describe('sanitizeAudiograms', () => {
     expect(sanitizeAudiograms([good({ url: 'http://localhost:3104/rendered/audiogram-abc.mp4' })])).toHaveLength(1)
   })
 
+  it('keeps where in the episode the piece starts, when the editor sends it', () => {
+    expect(sanitizeAudiograms([good({ start: 73.04 })])[0].start).toBe(73)
+    expect(sanitizeAudiograms([good({ start: -1 })])[0]).not.toHaveProperty('start')
+    expect(sanitizeAudiograms([good({ start: 'x' })])[0]).not.toHaveProperty('start')
+  })
+
   it('drops anything else', () => {
     for (const bad of [
       good({ url: 'http://evil.example/rendered/audiogram-abc.mp4' }),
@@ -71,6 +77,11 @@ describe('the Short', () => {
     expect(audiogramShortMetadata({ embedUrl: 'e', owner: 'a', assetPermlink: 'p', duration: 3, episode }).image).toBeUndefined()
   })
 
+  it('metadata: the piece of the episode (start, duration) for the podcast feed\'s soundbite', () => {
+    const m = audiogramShortMetadata({ embedUrl: 'e', owner: 'badadib', assetPermlink: 'p', duration: 45.46, episode, start: 300 })
+    expect(m['3speak'].audiogram).toEqual({ author: 'alice', permlink: 'my-episode', start: 300, duration: 45.5 })
+  })
+
   it('permlinks: from the title, different per audiogram', () => {
     expect(audiogramPermlink('My Episode #12!', 0, 1234567)).toBe('my-episode-12-teaser-34567')
     expect(audiogramPermlink('My Episode #12!', 1, 1234567)).toBe('my-episode-12-teaser-34568')
@@ -106,6 +117,18 @@ describe('publishAudiogramShorts', () => {
     expect(d.pause).toHaveBeenCalledTimes(1)
     expect(steps.map(s => `${s.index}:${s.step}`)).toEqual(['0:upload', '0:post', '0:done', '1:upload', '1:post', '1:done'])
     expect(steps[2]).toMatchObject({ ok: true, permlink: res[0].permlink })
+  })
+
+  it('end to end: the editor\'s start and length land in the Short\'s 3speak.audiogram (the feed\'s soundbite)', async () => {
+    const d = deps()
+    const broadcast = vi.fn(async () => ({ success: true }))
+    // the editor's audiogramsToPost output, as it arrives
+    const fromEditor = [good({ start: 73, duration: 42.5 }), good({ start: 0 }), good()]
+    await publishAudiogramShorts({ audiograms: sanitizeAudiograms(fromEditor), user: 'alice', isPremium: false, episode, broadcast, deps: d })
+    const metaOf = (n) => JSON.parse(broadcast.mock.calls[n][0][0][1].json_metadata)['3speak'].audiogram
+    expect(metaOf(0)).toEqual({ author: 'alice', permlink: 'my-episode', start: 73, duration: 42.5 })
+    expect(metaOf(1)).toEqual({ author: 'alice', permlink: 'my-episode', start: 0, duration: 30 })
+    expect(metaOf(2)).toEqual({ author: 'alice', permlink: 'my-episode' })
   })
 
   it('uses the Short\'s own title and the thumbnail made in the upload', async () => {

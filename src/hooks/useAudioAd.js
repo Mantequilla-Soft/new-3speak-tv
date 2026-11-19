@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useAppStore } from '../lib/store';
 import { rememberAdSeenFor } from '../lib/adBreak';
 import { requestAudioAd, reportAudioAdHeard } from '../lib/audioAd';
+import { pageAway, onPageAwayChange } from '../utils/pageAway';
 
 /**
  * Spoken ticker spots in the global audio player (lib/audioAd.js).
@@ -28,12 +29,19 @@ const HOLD_MAX_MS = 2500;
 // A pre-roll that starts later than this into the track does not rewind it.
 const REWIND_WITHIN_S = 3;
 
-// Screen locked or app in the background: nothing may interrupt the track there.
-// A pause loses the lock screen's player (it shows nothing playing), and on iPhone
-// the track, or a spot on its own element, can't start again without a tap. So
-// the opening is not held, and a spot that comes due then is passed over for this
-// track (the next track asks again).
-const hidden = () => typeof document !== 'undefined' && document.visibilityState === 'hidden';
+// Screen locked or app in the background (utils/pageAway.js): nothing may
+// interrupt the track there. A pause loses the lock screen's player (it shows
+// nothing playing), a phone only lets background audio go on in the element that
+// already plays (a spot has its own element), and on iPhone the track can't start
+// again without a tap. So:
+// - a track that starts while the listener is away (the next one in the queue
+//   with the screen locked) asks for no spot at all;
+// - its opening is never held, and going away during a hold lets it go on at once
+//   (not after the hold's timer, which a hidden page runs late);
+// - a spot that comes due then is passed over for this track (the next asks again);
+// - going away while a spot plays ends the spot there (not reported as heard) and
+//   the track goes on.
+const hidden = pageAway;
 
 // Outside episodes carry spots too. One whose link names a 3Speak post
 // (lib/podcasts.js threeSpeakPost, the same check that gives it votes and comments)
@@ -73,6 +81,8 @@ export default function useAudioAd(audioRef, track, elementKey) {
     setPhase('idle');
     setHeard(false);
     if (!key) return undefined;
+    // Started while the listener is away: no spot for this track (see the top).
+    if (hidden()) { cur.pending = false; cur.done = true; return undefined; }
     const ref = requestOf(track);
 
     // Hold the opening while the answer is out (see the top).
@@ -98,6 +108,11 @@ export default function useAudioAd(audioRef, track, elementKey) {
       if (!main.paused) hold();
     }
     timer = setTimeout(() => { release(); resumeHeld(); }, HOLD_MAX_MS);
+    // Away during the hold: the track goes on now, and the answer finds the
+    // spot passed over (due).
+    const stopAway = onPageAwayChange(() => {
+      if (cur.pending && hidden()) { release(); resumeHeld(); }
+    });
 
     requestAudioAd({ ...ref, viewer: useAppStore.getState().user || null }).then((a) => {
       if (s.current !== cur) return;
@@ -112,6 +127,7 @@ export default function useAudioAd(audioRef, track, elementKey) {
       setSpot(a);
     });
     return () => {
+      stopAway();
       release();
       cur.done = true;
       cur.active = false;
@@ -196,6 +212,9 @@ export default function useAudioAd(audioRef, track, elementKey) {
     const onAdEnded = () => finish(true);
     const onAdError = () => finish(false);
 
+    // Away while the spot plays: it ends there and the track goes on (see the top).
+    const stopAway = onPageAwayChange(() => { if (cur.active && hidden()) finish(false); });
+
     // A spot that stops making progress while it should be playing is dropped.
     const watchdog = setInterval(() => {
       if (cur.active && !ad.paused && Date.now() - cur.lastProgressAt > STALL_MS) finish(false);
@@ -217,6 +236,7 @@ export default function useAudioAd(audioRef, track, elementKey) {
       else if (cur.held) { cur.held = false; main.play().catch(() => {}); }
     }
     return () => {
+      stopAway();
       clearInterval(watchdog);
       main.removeEventListener('play', onMainPlay);
       main.removeEventListener('timeupdate', onMainTime);

@@ -32,7 +32,6 @@ const AUDIO_EMBED_BASE = (import.meta.env.VITE_AUDIO_EMBED_BASE || 'https://audi
   .trim()
   .replace(/\/+$/, '');
 
-const HIVE_API_URL = import.meta.env.VITE_HIVE_API_URL || 'https://api.hive.blog';
 const FEED_URL = import.meta.env.VITE_FEED_URL || 'https://legacy.3speak.tv';
 const CHECKER_URL = import.meta.env.VITE_CHECKER_URL || 'https://checker.3speak.tv';
 // Every checker instance this app may use (checker.3speak.tv, checker-us.3speak.tv,
@@ -49,7 +48,7 @@ const CHECKER_URLS = (import.meta.env.VITE_CHECKER_URLS || '')
 // cannot be verified on this box — it has no H.264 decoder in any browser.
 const SHORTS_ADS_ENABLED = String(import.meta.env.VITE_SHORTS_ADS || '').toLowerCase() === 'true';
 
-// ▶️ Video import (/youtube-import and its entry buttons): OFF unless
+// ▶️ Video import (/import and its entry buttons): OFF unless
 // VITE_VIDEO_IMPORT=true (owner's call 2026-10-06; on for develop/preview).
 const VIDEO_IMPORT_ENABLED = import.meta.env.VITE_VIDEO_IMPORT === 'true';
 // Which platforms can be LINKED on a profile: one switch each,
@@ -63,6 +62,8 @@ const SOCIAL_LINK_ENABLED = {
   instagram: flag(import.meta.env.VITE_SOCIAL_LINK_INSTAGRAM, false),
   rumble: flag(import.meta.env.VITE_SOCIAL_LINK_RUMBLE, false),
   bitchute: flag(import.meta.env.VITE_SOCIAL_LINK_BITCHUTE, false),
+  // A podcast RSS feed: what the podcast import (and its automatic import) works from.
+  rss: flag(import.meta.env.VITE_SOCIAL_LINK_RSS, true),
 };
 const TAG_FEED_URL = CHECKER_URL;
 const PLAYLISTS_API_URL = import.meta.env.VITE_PLAYLISTS_API_URL || 'https://3speak-playlists.okinoko.io/api';
@@ -220,13 +221,32 @@ const parseList = (s) => (s || '')
   .map((x) => x.trim())
   .filter(Boolean);
 
-const HIVE_API_NODES = (() => {
+// The known nodes Settings offers to pick from.
+const HIVE_KNOWN_NODES = (() => {
   const primary = import.meta.env.VITE_HIVE_API_URL || DEFAULT_HIVE_PRIMARY;
   const fallbacks = import.meta.env.VITE_HIVE_API_FALLBACKS
     ? parseList(import.meta.env.VITE_HIVE_API_FALLBACKS)
     : DEFAULT_HIVE_FALLBACKS;
   return [...new Set([primary, ...fallbacks])];
 })();
+
+// A node picked in Settings (a known one or the viewer's own) instead of the
+// automatic choice: it goes first everywhere, the known nodes stay behind it
+// as failover (utils/hiveNode.js). Read once at load; Settings reloads the
+// page after a change.
+export const HIVE_NODE_CHOICE_KEY = 'hive-rpc-node-manual';
+const HIVE_NODE_CHOICE = (() => {
+  try {
+    const v = (typeof localStorage !== 'undefined' && localStorage.getItem(HIVE_NODE_CHOICE_KEY)) || '';
+    return /^https:\/\/[^\s]+$/.test(v) ? v.replace(/\/+$/, '') : null;
+  } catch { return null; }
+})();
+
+const HIVE_API_NODES = HIVE_NODE_CHOICE
+  ? [...new Set([HIVE_NODE_CHOICE, ...HIVE_KNOWN_NODES])]
+  : HIVE_KNOWN_NODES;
+// Raw JSON-RPC callers that do not go through utils/hiveNode use this one.
+const HIVE_API_URL = HIVE_NODE_CHOICE || import.meta.env.VITE_HIVE_API_URL || 'https://api.hive.blog';
 
 /**
  * Append nsfw=true to a URL when NSFW content is enabled.
@@ -314,6 +334,18 @@ const warmupRailEnabledFor = (user) => ENABLE_WARMUP_RAIL
   || isTestUser(user)
   || (!!user && WARMUP_BETA_USERS.has(String(user).toLowerCase()));
 
+// 🤖 Automations (/automations): a Pro creator's own workflows, "when I publish
+// a video, post a snap and a Short". A closed beta: the team accounts above plus
+// VITE_AUTOMATIONS_BETA_USERS see it, nobody else even gets the menu entry. The
+// server (server/automations.cjs) has its own list and also checks Pro, so this
+// only decides who sees the page.
+const AUTOMATIONS_BETA_USERS = new Set(
+  (import.meta.env.VITE_AUTOMATIONS_BETA_USERS || '')
+    .split(',').map((s) => s.trim().toLowerCase()).filter(Boolean),
+);
+const automationsEnabledFor = (user) => isTestUser(user)
+  || (!!user && AUTOMATIONS_BETA_USERS.has(String(user).toLowerCase()));
+
 // Advertising (the /advertise page and the creator's ad opt-out in Settings).
 // OFF by default — set VITE_ENABLE_ADS=true to open it to everyone. Until then the
 // team accounts above see it, plus anyone listed in VITE_ADS_BETA_USERS so testers
@@ -374,16 +406,22 @@ const tickerEnabledFor = (user) => ENABLE_TICKER || adsBetaUserFor(user);
 // a flag is a UI decision, and this one must fail closed at the loader.
 const ENABLE_THIRDPARTY_ADS = import.meta.env.VITE_ENABLE_THIRDPARTY_ADS === 'true';
 
-// Hosts whose live streams / rooms are kept OUT of the discovery feeds
-// (discover, follow, new). Same spirit as the checker's LEADERBOARD_EXCLUDED_USERS
-// — the account still works normally and its streams stay reachable by direct
-// link; they just don't get surfaced in the feeds. Comma-separated override.
+// Hosts whose live streams / rooms are shown nowhere: not in the feeds, the
+// /live page, the swipe between streams, or (to anyone but the host) their
+// profile. Same spirit as the checker's LEADERBOARD_EXCLUDED_USERS — the account
+// still works normally and its streams stay reachable by direct link.
+// Comma-separated override.
 const FEED_EXCLUDED_HOSTS = new Set(
-  (import.meta.env.VITE_FEED_EXCLUDED_HOSTS ?? 'badadib')
+  (import.meta.env.VITE_FEED_EXCLUDED_HOSTS ?? 'badadib,ashenadib')
     .split(',')
     .map((s) => s.trim().toLowerCase())
     .filter(Boolean),
 );
+// True when `viewer` should not see `host`'s rooms; the host always sees their own.
+const hidesHostStreams = (host, viewer) => {
+  const h = String(host || '').toLowerCase();
+  return FEED_EXCLUDED_HOSTS.has(h) && h !== String(viewer || '').toLowerCase();
+};
 
 // Mobile-only in-browser camera recorder with a voice-driven teleprompter
 // (prototype). When on, the video upload step shows a "Record" button on phones
@@ -424,6 +462,8 @@ export {
   VIDEO_CDN_DOMAIN,
   HIVE_API_URL,
   HIVE_API_NODES,
+  HIVE_KNOWN_NODES,
+  HIVE_NODE_CHOICE,
   UPLOAD_TOKEN,
   UPLOAD_URL,
   TAG_FEED_URL,
@@ -489,9 +529,11 @@ export {
   selfPromoEnabledFor,
   tickerEnabledFor,
   adsBetaUserFor,
+  automationsEnabledFor,
   warmupRailEnabledFor,
   ENABLE_THIRDPARTY_ADS,
   FEED_EXCLUDED_HOSTS,
+  hidesHostStreams,
   ENABLE_CAMERA_RECORD,
   cameraRecordEnabledFor,
   adWizardEnabledFor,

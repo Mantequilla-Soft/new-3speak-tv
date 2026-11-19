@@ -28,7 +28,9 @@
     },
     "errors": {
       "pickStars": "请选择星级评分",
-      "sendFailed": "评价发送失败，请重试。"
+      "sendFailed": "评价发送失败，请重试。",
+      "screenshotUnreadable": "这个文件不是我们能读取的图片。",
+      "screenshotTooBig": "图片太大了，请换一张小一点的。"
     },
     "thanks": "感谢你的反馈！🙏",
     "sendFeedback": "发送反馈",
@@ -39,6 +41,12 @@
     "recommendLabel": "你会推荐 3Speak 吗？<opt>（可选）</opt>",
     "moreLabel": "详细说说 <opt>（可选）</opt>",
     "placeholder": "你喜欢什么？哪里可以做得更好？",
+    "screenshotLabel": "截图 <opt>(可选)</opt>",
+    "attachScreenshot": "附上截图",
+    "screenshotPreparing": "正在准备截图…",
+    "screenshotAlt": "你的截图",
+    "removeScreenshot": "移除截图",
+    "screenshotHint": "只有 3Speak 团队能看到。你也可以在这里粘贴图片。",
     "notNow": "以后再说",
     "sending": "发送中…"
   },
@@ -141,5 +149,22 @@
     "creator": "创作者",
     "empty": "还没有评论",
     "emptyHint": "关联到某个时间点的评论会显示在视频的时间轴上。"
+  },
+  "focus": {
+    "open": "专注模式",
+    "aria": "专注模式：撰写评论",
+    "done": "完成",
+    "sound": "打字机音效",
+    "words_other": "{{count}} 个词",
+    "music": "背景音乐",
+    "musicOff": "关",
+    "track1": "雨声",
+    "track2": "夜曲钢琴",
+    "track3": "壁炉"
+  },
+  "editor": {
+    "full": "完整编辑器",
+    "compact": "精简编辑器",
+    "toolbar": "格式"
   }
 }

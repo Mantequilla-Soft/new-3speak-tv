@@ -146,6 +146,16 @@
     "notes": "Ghi chú",
     "stillIndexing": "Âm thanh của bài đăng này vẫn đang được lập chỉ mục — hãy thử lại sau vài phút."
   },
+  "edit": {
+    "title": "Sửa âm thanh",
+    "editTitle": "Sửa tiêu đề, ghi chú, thẻ và ảnh bìa",
+    "cover": "Ảnh bìa",
+    "coverAlt": "Xem trước ảnh bìa",
+    "coverHint": "Tải ảnh lên hoặc dán URL trực tiếp. Ảnh vuông trông đẹp nhất.",
+    "notesPlaceholder": "Kể cho người nghe về bản âm thanh này…",
+    "keptNote": "Liên kết trình phát và phần ghi công nhạc trong bài vẫn giữ nguyên.",
+    "updated": "Đã cập nhật âm thanh!"
+  },
   "page": {
     "sections": {
       "popular": "Phổ biến",
@@ -171,7 +181,6 @@
     },
     "all": "Tất cả",
     "musicGenre": "Thể loại nhạc",
-    "anyGenre": "Mọi thể loại",
     "tracks_other": "{{count}} bản nhạc",
     "noTracks": "Không tìm thấy bản nhạc nào.",
     "creators": "Nhà sáng tạo",
@@ -183,7 +192,7 @@
     "nothingPlaying": "Chưa có gì đang phát.",
     "goExplore": "Tìm nội dung để nghe",
     "exploreViews": "Mục",
-    "mostPlayed": "Nghe nhiều nhất"
+    "newUploads": "Tải lên mới"
   },
   "upload": {
     "title": "Tải âm thanh lên",
@@ -265,7 +274,10 @@
       "formats": "MP3, WAV, OGG, WEBM, M4A, FLAC, AAC · nhiều tệp cùng lúc",
       "stop": "Dừng",
       "orRecord": "Hoặc ghi âm trực tiếp",
+      "micPreparing": "Đang chuẩn bị micrô...",
       "recordLimit": "Tối đa {{minutes}} phút mỗi lần ghi",
+      "level": "Mức micrô",
+      "noSound": "Không có âm thanh nào. Hãy kiểm tra micrô không bị tắt tiếng hoặc đang được ứng dụng khác dùng.",
       "record": "Ghi âm",
       "added": "Đã thêm ({{count}})",
       "filesTitle": "Tệp âm thanh"
@@ -280,6 +292,7 @@
       "descriptionOptional": "Mô tả (không bắt buộc)",
       "track": "Bản nhạc",
       "category": "Danh mục",
+      "categoryRequired": "Chọn một danh mục để âm thanh của bạn hiện đúng tab.",
       "musicGenre": "Thể loại nhạc"
     },
     "playlist": {
@@ -365,6 +378,7 @@
     "tracks": {
       "helpAlbum": "Mỗi bản nhạc được xuất bản dưới dạng bình luận trong bài chính. Đặt giá trị chung một lần và áp dụng cho tất cả, rồi chỉnh riêng cho từng bản nhạc.",
       "helpSnaps": "Mỗi bản nhạc được xuất bản thành một snap riêng. Đặt giá trị chung một lần và áp dụng cho tất cả, rồi chỉnh riêng cho từng bản nhạc.",
+      "helpSnapsSingle": "Âm thanh của bạn được đăng thành một snap riêng.",
       "applyToAllHeading": "Áp dụng cho tất cả bản nhạc",
       "applyNote_other": "<b>Áp dụng cho cả {{count}} bản nhạc:</b> mô tả và ảnh bìa chung, sau đó chỉnh riêng từng bản nhạc.",
       "sharedDescription": "Mô tả chung (không bắt buộc)",
@@ -387,6 +401,10 @@
       "earnings": "Thu nhập:",
       "earningsPpl": "Trả theo lượt nghe (@{{account}})",
       "earningsNormal": "Phần thưởng bài đăng thông thường",
+      "rewards": "Phần thưởng:",
+      "beneficiaries": "Người thụ hưởng:",
+      "perTrack": "Đặt riêng từng bản",
+      "noBeneficiaries": "Không có",
       "playlist": "Danh sách phát:",
       "failedCount_other": "{{count}} bản nhạc thất bại.",
       "retryAllFailed": "Thử lại tất cả bản lỗi",
@@ -750,7 +768,9 @@
     "description": "Mô tả",
     "noDescription": "Không có mô tả.",
     "comments": "Bình luận",
-    "album": "Từ {{name}}"
+    "album": "Từ {{name}}",
+    "videoPodcast": "Podcast video",
+    "videoPodcastTitle": "Tạo video từ tập này: ảnh bìa, dạng sóng âm và phụ đề"
   },
   "offline": {
     "notice": "Bạn đang ngoại tuyến. Nội dung đã tải vẫn phát được.",

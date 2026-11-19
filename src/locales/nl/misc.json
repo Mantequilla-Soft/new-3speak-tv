@@ -139,6 +139,13 @@
     "rumble": {
       "placeholder": "https://rumble.com/c/…",
       "help": "Plak de naam of link van je Rumble-kanaal. Zet de hash ergens in de beschrijving van je kanaal."
+    },
+    "rss": {
+      "placeholder": "https://example.com/podcast.xml",
+      "help": "Plak het adres van de RSS-feed van je podcast. Je podcasthost toont het in de instellingen of op de distributiepagina van de show.",
+      "flowTitle": "Je podcast-RSS-feed koppelen",
+      "step2": "<strong>Plak hem in de beschrijving van je show of van je nieuwste aflevering</strong>, bij je podcasthost. Sla de wijziging op en publiceer hem. Je kunt hem weer weghalen zodra de feed geverifieerd is.",
+      "step3": "Vul het adres van de RSS-feed van je podcast in:"
     }
   },
   "snaps": {
@@ -157,7 +164,13 @@
     "audioMinimal": "Minimaal",
     "heightSub": "Volledige breedte, {{height}} px hoog · Responsief",
     "podcastTitle": "Deze podcast insluiten",
-    "podcastHint": "Speelt elke aflevering van het programma, ook nieuwe zodra ze verschijnen."
+    "podcastHint": "Speelt elke aflevering van het programma, ook nieuwe zodra ze verschijnen.",
+    "embedWhere": "Waar insluiten",
+    "tabWebsite": "Website",
+    "tabHive": "Voor Hive",
+    "hiveLink": "Link voor Hive-posts",
+    "hivePlaylistHint": "Plak deze link in een Hive-post of wave. Hive-apps die 3Speak-video’s tonen, zoals Ecency, spelen de playlist direct in de post af.",
+    "videoPlaylistHint": "Plak dit in een website of blogpost. Het speelt alle video's van de playlist op volgorde af, ook video's die later worden toegevoegd."
   },
   "incubation": {
     "requestFailed": "Verzoek mislukt ({{status}})",
@@ -197,7 +210,9 @@
       "video": "Video",
       "audio": "Audio",
       "live": "Live",
-      "others": "Overig"
+      "others": "Overig",
+      "streams": "Streams",
+      "edit": "Bewerken"
     },
     "subtitles": {
       "regularVideo": "Klassieke video voor je kanaal",
@@ -210,6 +225,12 @@
       "goLiveNow": "Stream live voor je volgers",
       "communitySnap": "Snel bericht op je community-tabblad",
       "playlist": "Groepeer video's in een deelbare lijst"
+    },
+    "categories": {
+      "video": "Een video uploaden, opnemen of bewerken",
+      "audio": "Muziek, podcasts en audiobewerking",
+      "streams": "Alleen of met gasten live gaan",
+      "others": "Snaps en playlists"
     }
   },
   "chat": {

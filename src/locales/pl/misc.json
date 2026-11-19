@@ -139,6 +139,13 @@
     "rumble": {
       "placeholder": "https://rumble.com/c/…",
       "help": "Wklej nazwę lub link swojego kanału Rumble. Umieść hash w dowolnym miejscu opisu kanału."
+    },
+    "rss": {
+      "placeholder": "https://example.com/podcast.xml",
+      "help": "Wklej adres kanału RSS swojego podcastu. Twój hosting pokazuje go w ustawieniach lub na stronie dystrybucji audycji.",
+      "flowTitle": "Połącz kanał RSS swojego podcastu",
+      "step2": "<strong>Wklej go do opisu swojej audycji lub najnowszego odcinka</strong> u swojego hostingu podcastów. Zapisz i opublikuj zmianę. Po weryfikacji kanału możesz go usunąć.",
+      "step3": "Wpisz adres kanału RSS swojego podcastu:"
     }
   },
   "snaps": {
@@ -157,7 +164,13 @@
     "audioMinimal": "Minimalny",
     "heightSub": "Pełna szerokość, {{height}} px wysokości · Responsywnie",
     "podcastTitle": "Osadź ten podcast",
-    "podcastHint": "Odtwarza wszystkie odcinki audycji, także nowe, gdy tylko się ukażą."
+    "podcastHint": "Odtwarza wszystkie odcinki audycji, także nowe, gdy tylko się ukażą.",
+    "embedWhere": "Gdzie osadzić",
+    "tabWebsite": "Strona WWW",
+    "tabHive": "Dla Hive",
+    "hiveLink": "Link do postów na Hive",
+    "hivePlaylistHint": "Wklej ten link do posta lub wave’a na Hive. Aplikacje Hive, które pokazują filmy z 3Speak, jak Ecency, odtwarzają playlistę bezpośrednio w poście.",
+    "videoPlaylistHint": "Wklej to na dowolną stronę lub do wpisu na blogu. Odtwarza po kolei wszystkie filmy z playlisty, także te dodane później."
   },
   "incubation": {
     "requestFailed": "Żądanie nie powiodło się ({{status}})",
@@ -197,7 +210,9 @@
       "video": "Film",
       "audio": "Audio",
       "live": "Na żywo",
-      "others": "Inne"
+      "others": "Inne",
+      "streams": "Transmisje",
+      "edit": "Edycja"
     },
     "subtitles": {
       "regularVideo": "Klasyczny film na Twój kanał",
@@ -210,6 +225,12 @@
       "goLiveNow": "Nadawaj na żywo dla obserwujących",
       "communitySnap": "Szybki wpis w zakładce społeczności",
       "playlist": "Zbierz filmy w listę do udostępnienia"
+    },
+    "categories": {
+      "video": "Prześlij, nagraj lub edytuj wideo",
+      "audio": "Muzyka, podcasty i edycja dźwięku",
+      "streams": "Nadawaj na żywo sam lub z gośćmi",
+      "others": "Snapy i playlisty"
     }
   },
   "chat": {

@@ -2,7 +2,8 @@ import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import Card3 from '../Cards/Card3';
-import { MY_VIDEOS_URL } from '../../utils/config';
+import { MY_VIDEOS_URL, hidesHostStreams } from '../../utils/config';
+import { useAppStore } from '../../lib/store';
 import { fetchAllEndpoints } from '../../utils/hangoutsEndpoints';
 import { useTranslation } from 'react-i18next';
 import { StatusPill } from '../v2/ui';
@@ -11,8 +12,10 @@ import './ProfileStreams.scss';
 
 /** Live/standby OpenPods rooms hosted by this user, on every configured
  *  hangouts deployment (a stream from OBS lives on the one with templates). */
-async function fetchHostStreams(username) {
+async function fetchHostStreams(username, viewer) {
   if (!username) return [];
+  // Hidden hosts (config FEED_EXCLUDED_HOSTS): their rooms only to themselves.
+  if (hidesHostStreams(username, viewer)) return [];
   try {
     const rooms = await fetchAllEndpoints('/streams');
     return (Array.isArray(rooms) ? rooms : []).filter(
@@ -33,9 +36,10 @@ async function fetchStreamVods(username) {
 /** This host's open rooms, shared (one query key) by the Streams tab and the
  *  live block on top of the Videos tab. */
 function useHostRooms(user) {
+  const viewer = useAppStore((s) => s.user);
   return useQuery({
-    queryKey: ['profile-streams-live', user],
-    queryFn: () => fetchHostStreams(user),
+    queryKey: ['profile-streams-live', user, viewer],
+    queryFn: () => fetchHostStreams(user, viewer),
     enabled: !!user,
     refetchInterval: 30000, // live status changes minute to minute
     staleTime: 15000,

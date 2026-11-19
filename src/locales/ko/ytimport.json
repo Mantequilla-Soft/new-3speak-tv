@@ -1,5 +1,5 @@
 {
-  "title": "동영상 가져오기",
+  "title": "내 콘텐츠 가져오기",
   "subtitle": "YouTube나 TikTok의 동영상을 3Speak으로 가져오세요. 제목, 설명, 태그, 썸네일은 자동으로 채워집니다.",
   "noChannel": "아직 YouTube 채널을 연결하지 않았습니다. 먼저 프로필에서 연결하고 인증한 다음 이곳으로 돌아오세요.",
   "linkChannel": "내 프로필로 이동",
@@ -9,6 +9,7 @@
   "openOnYoutube": "YouTube에서 열기",
   "import": "이 동영상 가져오기",
   "useOwnFile": "이미 파일이 있어요",
+  "openInUploader": "편집하고 게시",
   "cancel": "취소",
   "retry": "다시 시도",
   "progress": {
@@ -31,9 +32,11 @@
     "blocked": "지금은 YouTube가 우리 서버의 이 동영상 다운로드를 허용하지 않았습니다.",
     "notVideo": "해당 파일은 동영상이 아닙니다.",
     "tooLongForShort": "이 동영상은 길이가 {{minutes}}분을 넘어 Shorts에는 너무 깁니다. 대신 일반 동영상으로 가져오세요.",
-    "proxyPaused": "YouTube 가져오기가 잠시 중지되었어요. 나중에 다시 시도해 주세요."
+    "proxyPaused": "YouTube 가져오기가 잠시 중지되었어요. 나중에 다시 시도해 주세요.",
+    "notAudio": "이 파일은 오디오 파일이 아닙니다."
   },
   "entry": "동영상 가져오기",
+  "menuEntry": "콘텐츠 가져오기",
   "types": {
     "videos": "동영상",
     "shorts": "Shorts",
@@ -60,7 +63,8 @@
     "tiktok": "TikTok",
     "instagram": "Instagram",
     "bitchute": "BitChute",
-    "rumble": "Rumble"
+    "rumble": "Rumble",
+    "rss": "팟캐스트"
   },
   "tiktok": {
     "noLink": "아직 TikTok 계정을 연결하지 않았습니다. 먼저 프로필에서 연결하고 인증한 다음 이곳으로 돌아오세요.",
@@ -98,7 +102,7 @@
     "selectedCount": "{{count}}개 선택됨",
     "maxHint": "최대 {{max}}개",
     "clear": "선택 해제",
-    "importSelected": "선택 항목 가져오기 ({{count}})",
+    "importSelected": "백그라운드에서 게시 ({{count}})",
     "busy": "이전 일괄 가져오기가 아직 진행 중이에요",
     "steps": {
       "content": "콘텐츠",
@@ -135,7 +139,16 @@
     "stopConfirm": "이 가져오기를 중지할까요? 아직 게시되지 않은 동영상은 예약된 것을 포함해 취소됩니다. 게시된 동영상은 그대로 남습니다.",
     "stopYes": "네, 중지",
     "stopKeep": "계속 가져오기",
-    "countOf": "{{total}}개 중 {{done}}개"
+    "countOf": "{{total}}개 중 {{done}}개",
+    "audio": {
+      "formTitle": "에피소드 {{count}}개 가져오기",
+      "contentIntro": "오디오 종류와 각 게시물의 제목, 설명, 태그를 어디서 가져올지 골라요.",
+      "settingsIntro": "아래 설정은 선택한 모든 에피소드에 적용돼요.",
+      "spacing": "각 에피소드는 서버에서 가져온 뒤 {{minutes}}분 간격으로 하나씩 게시돼요. 첫 에피소드는 준비된 뒤 몇 분 후에 올라가요. 이 페이지는 닫아도 돼요.",
+      "canLeave": "이제 이 페이지를 닫아도 돼요. 에피소드는 자리를 비운 동안에도 저희 서버에서 가져오고 게시돼요.",
+      "stopConfirm": "이 가져오기를 중지할까요? 아직 게시되지 않은 에피소드는 예약된 것을 포함해 취소됩니다. 게시된 에피소드는 그대로 남습니다.",
+      "maxReached": "한 번에 최대 {{max}}개의 에피소드를 고를 수 있어요"
+    }
   },
   "bitchute": {
     "noLink": "아직 BitChute 계정을 연결하지 않았습니다. 먼저 프로필에서 연결하고 인증한 다음 이곳으로 돌아오세요.",
@@ -166,5 +179,85 @@
     "empty": "Rumble 채널에서 공개 동영상을 찾지 못했어요.",
     "olderHint": "원하는 영상이 보이지 않나요?",
     "olderHintAction": "링크 붙여넣기"
+  },
+  "rss": {
+    "noLink": "아직 팟캐스트 RSS 피드를 연결하지 않았습니다. 먼저 프로필에서 연결하고 인증한 뒤 다시 오세요.",
+    "latest": "내 팟캐스트 에피소드",
+    "empty": "팟캐스트 피드에서 에피소드를 찾을 수 없습니다.",
+    "openOn": "에피소드 페이지 열기",
+    "fallbackIntro": "그래도 가져올 수 있습니다. 에피소드를 직접 내려받아 여기서 파일을 선택하세요. 나머지는 그대로 채워져 있습니다.",
+    "fallbackStep1": "팟캐스트 호스팅 서비스에서 에피소드를 엽니다.",
+    "fallbackStep2": "오디오 파일(MP3 또는 M4A)을 내려받습니다.",
+    "limits": "최대 {{hours}}시간 길이의 에피소드를 가져올 수 있습니다. 쇼노트와 커버가 포함된 오디오 게시물로 게시됩니다.",
+    "show": "팟캐스트",
+    "unreadable": "지금은 읽을 수 없음",
+    "unreadableAll": "지금은 팟캐스트 피드를 읽을 수 없습니다. 온라인 상태인지 확인한 뒤 나중에 다시 시도하세요.",
+    "import": "이 오디오 가져오기",
+    "progressServer": "오디오를 가져오는 중: {{pct}}%",
+    "progressTransfer": "오디오를 업로더로 불러오는 중: {{pct}}%"
+  },
+  "auto": {
+    "title": "자동 가져오기",
+    "unavailable": "이 서버에서는 아직 자동 가져오기를 사용할 수 없습니다.",
+    "off": "꺼짐. 켜면 이 프로그램의 새 에피소드가 모두 3Speak 오디오 게시물이 됩니다.",
+    "onSince": "{{date}}부터 켜짐. 피드는 {{minutes}}분마다 확인됩니다.",
+    "pillOn": "켜짐",
+    "pillOff": "꺼짐",
+    "queued": "지금까지 가져온 새 에피소드: {{count}}",
+    "lastCheck": "마지막 확인: {{time}}",
+    "waiting": "내일 대기 중: {{count}} (하루 최대 {{max}}개)",
+    "skipped": "가져오기 제한보다 길어서 건너뜀: {{titles}}",
+    "comesAuto": "새 에피소드: 다음 확인 때 자동 가져오기가 가져갑니다",
+    "errors": {
+      "noLink": "이 피드는 더 이상 프로필에서 인증된 상태가 아닙니다. 계속하려면 다시 연결하세요.",
+      "noGrant": "3Speak가 더 이상 대신 게시하지 못할 수 있습니다. 설정을 열어 다시 허용하세요.",
+      "unreadable": "마지막 확인 때 피드를 읽을 수 없었습니다. 다음 확인 때 다시 시도합니다.",
+      "generic": "마지막 확인에 실패했습니다. 다음 확인 때 다시 시도합니다."
+    },
+    "edit": "설정 수정",
+    "setUp": "자동 가져오기 설정",
+    "formTitle": "자동 가져오기",
+    "formIntro": "<b>{{show}}</b>의 새 에피소드는 이 설정으로 오디오 게시물이 됩니다. 하루 최대 {{max}}개이며, 일괄 가져오기처럼 간격을 두고 게시됩니다.",
+    "enabled": "새 에피소드 자동으로 가져오기",
+    "enabledInfo": "피드를 정기적으로 확인합니다. 이 기능을 켠 뒤 올라오는 모든 에피소드는 아래 설정대로 @threespeak가 내려받아 대신 게시합니다. 이미 피드에 있는 에피소드는 그대로 둡니다.",
+    "enabledOn": "새 에피소드가 대신 게시됩니다",
+    "enabledOff": "설정은 유지되며, 아무것도 게시되지 않습니다",
+    "sections": {
+      "content": "제목, 태그 및 설명",
+      "post": "게시물 설정"
+    },
+    "kind": "오디오 종류",
+    "target": "게시 형식",
+    "targetPost": "단독 게시물",
+    "targetSnap": "스냅 댓글",
+    "targetPostHint": "제목이 있는 게시물로, 아래에서 고른 커뮤니티에 게시됩니다.",
+    "targetSnapHint": "스냅 피드의 답글로, 쇼츠처럼 제목 없이 게시됩니다. 커뮤니티와 블로그는 적용되지 않습니다.",
+    "fromSource": "소스에서 가져오기",
+    "fromSourceInfo": "켜짐: 각 게시물이 에피소드 제목, 쇼노트와 그 안의 #해시태그를 피드 그대로 사용합니다. 꺼짐: 제목 형식, 태그, 설명을 직접 정합니다.",
+    "fromSourceOn": "제목, 설명, 태그는 각 에피소드에서 가져옵니다",
+    "fromSourceOff": "제목, 태그, 설명은 아래에서 정합니다",
+    "titleLabel": "제목",
+    "titleHint": "에피소드 제목은 {title}, 프로그램 이름은 {show}, 번호는 {episode}와 {season}, 공개 날짜는 {date}를 사용하세요.",
+    "sampleTitle": "에피소드 제목",
+    "sampleShow": "내 프로그램",
+    "titlePreview": "예: {{title}}",
+    "tagsLabel": "태그",
+    "tagsHint": "최대 8개, 공백으로 구분합니다. 모든 게시물에 추가됩니다.",
+    "hashtags": "쇼노트의 해시태그도 사용",
+    "hashtagsInfo": "에피소드 쇼노트에 #tag 형태로 쓴 단어는 직접 넣은 태그 다음에 그 게시물의 태그가 됩니다(최대 10개).",
+    "hashtagsHint": "노트의 #tags가 게시물 태그가 됩니다",
+    "useNotes": "쇼노트를 설명으로 사용",
+    "useNotesInfo": "게시물 본문은 피드에 있는 에피소드 쇼노트이며 링크도 포함됩니다. 끄면 모든 에피소드에 직접 쓴 같은 텍스트를 사용합니다.",
+    "useNotesOn": "각 게시물에 해당 에피소드의 노트가 표시됩니다",
+    "useNotesOff": "모든 게시물에 아래 텍스트를 사용합니다",
+    "addendumLabel": "쇼노트 아래 텍스트",
+    "addendumHint": "노트 다음에 모든 게시물에 추가됩니다. 예: 다른 채널 링크.",
+    "optional": "선택 사항",
+    "textLabel": "설명",
+    "textHint": "모든 에피소드에 사용됩니다. {title}, {show}, {episode}, {season}, {date}도 여기서 쓸 수 있습니다.",
+    "textRequired": "사용할 설명을 쓰거나 쇼노트를 사용하세요.",
+    "onlyNew": "이 기능을 켠 뒤 피드에 올라온 에피소드만 가져오며, 이전 에피소드는 가져오지 않습니다.",
+    "grantNeeded": "자동 가져오기는 @threespeak가 대신 게시하므로 내 계정에 게시할 권한이 필요합니다.",
+    "save": "저장"
   }
 }

@@ -67,6 +67,15 @@ describe('restoring a session on load', () => {
     expect(localStorage.getItem('user_id')).toBe('badadib')
   })
 
+  it('a Hive account drops a warm-up handle left from an earlier session in this browser', () => {
+    localStorage.setItem('incubation_handle', 'sunny-otter')
+    wallet.current = 'badadib'
+    wallet.live = true
+    state().initializeAuth()
+    expect(state()).toMatchObject({ user: 'badadib', incubationHandle: null })
+    expect(localStorage.getItem('incubation_handle')).toBeNull()
+  })
+
   it('a remembered account with a cookie login (no wallet) stays signed in', () => {
     localStorage.setItem('user_id', 'badadib')
     wallet.live = true
@@ -135,6 +144,9 @@ describe('warm-up accounts', () => {
     state().setIncubationUser('sunny-otter')
     state().setUser('badadib')
     expect(state()).toMatchObject({ user: 'badadib', userId: 'badadib', authenticated: true, incubationHandle: null })
+    // Posting reads the stored handle (hive-api/aioha.js): left there, the
+    // account's posts would go to the warm-up store instead of Hive.
+    expect(localStorage.getItem('incubation_handle')).toBeNull()
   })
 })
 

@@ -1,0 +1,5 @@
+{
+  "videoEditor": "Video Editor",
+  "videoEditorSub": "Mag-edit ng landscape na video hanggang 10 minuto",
+  "editorTooLong": "Tumatanggap ang video editor ng mga video hanggang {{minutes}} minuto"
+}

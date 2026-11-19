@@ -77,6 +77,10 @@ export const createAuthUserSlice = (set) => ({
 
       if (userId) {
         window.localStorage.setItem(LOCAL_STORAGE_USER_ID_KEY, userId);
+        // A Hive account wins over a warm-up handle left from an earlier
+        // session; hive-api/aioha.js reads the stored handle, and while it is
+        // there every post of this account goes to the warm-up store, not Hive.
+        window.localStorage.removeItem(LOCAL_STORAGE_HANDLE_KEY);
         set({ authenticated: true, user: userId, incubationHandle: null, authChecked: true });
       } else {
         set({ authenticated: false, user: null, incubationHandle: null, authChecked: true });
@@ -113,6 +117,10 @@ export const createAuthUserSlice = (set) => ({
     // Clears incubationHandle: reaching here means a real Hive account, which
     // is what graduation produces. Leaving it set would keep the UI offering
     // off-chain writes to someone who should now be posting to the chain.
+    // The stored handle goes too: hive-api/aioha.js reads that one, and a
+    // handle left from an earlier warm-up session in this browser sent this
+    // account's posts to the warm-up store instead of Hive.
+    try { window.localStorage.removeItem(LOCAL_STORAGE_HANDLE_KEY); } catch { /* ignore */ }
     set({ userId: username, user: username, authenticated: true, incubationHandle: null });
   },
 

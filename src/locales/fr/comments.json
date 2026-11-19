@@ -28,7 +28,9 @@
     },
     "errors": {
       "pickStars": "Veuillez choisir une note",
-      "sendFailed": "Impossible d'envoyer votre avis. Veuillez réessayer."
+      "sendFailed": "Impossible d'envoyer votre avis. Veuillez réessayer.",
+      "screenshotUnreadable": "Ce fichier n'est pas une image que nous pouvons lire.",
+      "screenshotTooBig": "Cette image est trop lourde. Essaie avec une plus petite."
     },
     "thanks": "Merci pour votre avis ! 🙏",
     "sendFeedback": "Envoyer mon avis",
@@ -41,6 +43,12 @@
     "recommendLabel": "Recommanderiez-vous 3Speak ? <opt>(facultatif)</opt>",
     "moreLabel": "Dites-nous en plus <opt>(facultatif)</opt>",
     "placeholder": "Qu'avez-vous aimé ? Qu'est-ce qui pourrait être mieux ?",
+    "screenshotLabel": "Capture d'écran <opt>(facultatif)</opt>",
+    "attachScreenshot": "Joindre une capture d'écran",
+    "screenshotPreparing": "Préparation de la capture…",
+    "screenshotAlt": "Ta capture d'écran",
+    "removeScreenshot": "Retirer la capture",
+    "screenshotHint": "Seule l'équipe 3Speak la voit. Tu peux aussi coller une image ici.",
     "notNow": "Pas maintenant",
     "sending": "Envoi…"
   },
@@ -153,5 +161,24 @@
     "creator": "Créateur",
     "empty": "Aucun commentaire pour l'instant",
     "emptyHint": "Les commentaires liés à un moment apparaissent sur la timeline de la vidéo."
+  },
+  "focus": {
+    "open": "Mode concentration",
+    "aria": "Mode concentration : écrivez votre commentaire",
+    "done": "Terminé",
+    "sound": "Son de machine à écrire",
+    "words_one": "{{count}} mot",
+    "words_many": "{{count}} mots",
+    "words_other": "{{count}} mots",
+    "music": "Musique de fond",
+    "musicOff": "Non",
+    "track1": "Pluie",
+    "track2": "Piano de nuit",
+    "track3": "Feu de cheminée"
+  },
+  "editor": {
+    "full": "Éditeur complet",
+    "compact": "Éditeur compact",
+    "toolbar": "Mise en forme"
   }
 }

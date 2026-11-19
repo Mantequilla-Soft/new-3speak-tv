@@ -1,0 +1,39 @@
+{
+  "labels": {
+    "raidLine": "{name} raidet mit {count} Zuschauern",
+    "raidTitle": "@{host} raidet einen anderen Stream",
+    "raidBody": "Alle Zuschauer wechseln in {seconds} s zu {title}.",
+    "raidGoNow": "Jetzt los",
+    "raidStay": "Hier bleiben",
+    "pollBadge": "Umfrage",
+    "predictionBadge": "Vorhersage",
+    "endsIn": "Endet in {time}",
+    "finalResults": "Endergebnis",
+    "votes": "Stimmen: {count}",
+    "youVoted": "Du hast abgestimmt",
+    "signInToVote": "Melde dich an, um abzustimmen",
+    "voteFailed": "Das hat nicht geklappt. Versuch es noch einmal.",
+    "pot": "Topf: {points} Punkte",
+    "balance": "Du hast {points} Punkte",
+    "stakeButton": "Setzen",
+    "stakePlaceholder": "Punkte",
+    "yourStake": "Du hast {points} Punkte auf {option} gesetzt",
+    "waitingForResult": "Warten auf das Ergebnis",
+    "outcomeWon": "{option} hat gewonnen",
+    "youWon": "Du bekommst {points} Punkte zurück",
+    "cancelled": "Abgebrochen, alle behalten ihre Punkte",
+    "close": "Schließen"
+  },
+  "replay": {
+    "tab": "Live-Chat-Wiederholung",
+    "label": "Der Live-Chat, im Takt mit dem Video",
+    "loading": "Live-Chat wird geladen",
+    "empty": "Im Live-Chat hat niemand geschrieben.",
+    "seekTo": "Zu {{time}} springen",
+    "poll": "Umfrage",
+    "prediction": "Vorhersage",
+    "votes": "Stimmen: {{count}}",
+    "won": "{{option}} hat gewonnen",
+    "follow": "Zurück zur aktuellen Stelle"
+  }
+}

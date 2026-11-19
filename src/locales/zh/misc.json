@@ -139,6 +139,13 @@
     "rumble": {
       "placeholder": "https://rumble.com/c/…",
       "help": "粘贴你的 Rumble 频道名称或链接。把哈希放在频道简介的任意位置。"
+    },
+    "rss": {
+      "placeholder": "https://example.com/podcast.xml",
+      "help": "粘贴你的播客 RSS 源地址。播客托管平台会在节目设置或分发页面中显示它。",
+      "flowTitle": "关联你的播客 RSS 源",
+      "step2": "在你的播客托管平台上，<strong>把它粘贴到节目简介或最新一集的简介中</strong>。保存并发布更改。RSS 源验证通过后即可删除。",
+      "step3": "输入你的播客 RSS 源地址："
     }
   },
   "snaps": {
@@ -157,7 +164,13 @@
     "audioMinimal": "极简",
     "heightSub": "全宽，高 {{height}} px · 自适应",
     "podcastTitle": "嵌入此播客",
-    "podcastHint": "播放节目的所有单集，新单集一发布也会包含在内。"
+    "podcastHint": "播放节目的所有单集，新单集一发布也会包含在内。",
+    "embedWhere": "嵌入位置",
+    "tabWebsite": "网站",
+    "tabHive": "用于 Hive",
+    "hiveLink": "用于 Hive 帖子的链接",
+    "hivePlaylistHint": "将此链接粘贴到 Hive 帖子或 wave 中。显示 3Speak 视频的 Hive 应用（如 Ecency）会直接在帖子中播放该播放列表。",
+    "videoPlaylistHint": "将其粘贴到任何网站或博客文章中。它会按顺序播放播放列表中的所有视频，包括之后添加的视频。"
   },
   "incubation": {
     "requestFailed": "请求失败（{{status}}）",
@@ -197,7 +210,9 @@
       "video": "视频",
       "audio": "音频",
       "live": "直播",
-      "others": "其他"
+      "others": "其他",
+      "streams": "直播",
+      "edit": "编辑"
     },
     "subtitles": {
       "regularVideo": "发布到频道的普通视频",
@@ -210,6 +225,12 @@
       "goLiveNow": "向你的关注者直播",
       "communitySnap": "在社区标签页快速发帖",
       "playlist": "把视频整理成可分享的列表"
+    },
+    "categories": {
+      "video": "上传、录制或剪辑视频",
+      "audio": "音乐、播客和音频编辑",
+      "streams": "独自或与嘉宾一起直播",
+      "others": "快拍和播放列表"
     }
   },
   "chat": {

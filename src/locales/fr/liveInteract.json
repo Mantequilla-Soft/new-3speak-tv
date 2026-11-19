@@ -1,0 +1,39 @@
+{
+  "labels": {
+    "raidLine": "{name} fait un raid avec {count} spectateurs",
+    "raidTitle": "@{host} fait un raid sur un autre live",
+    "raidBody": "Tous les spectateurs partent vers {title} dans {seconds} s.",
+    "raidGoNow": "Y aller",
+    "raidStay": "Rester ici",
+    "pollBadge": "Sondage",
+    "predictionBadge": "Prédiction",
+    "endsIn": "Se termine dans {time}",
+    "finalResults": "Résultats finaux",
+    "votes": "Votes : {count}",
+    "youVoted": "Vous avez voté",
+    "signInToVote": "Connectez-vous pour voter",
+    "voteFailed": "Cela n’a pas marché. Réessayez.",
+    "pot": "Cagnotte : {points} points",
+    "balance": "Vous avez {points} points",
+    "stakeButton": "Miser",
+    "stakePlaceholder": "Points",
+    "yourStake": "Vous avez misé {points} points sur {option}",
+    "waitingForResult": "En attente du résultat",
+    "outcomeWon": "{option} l’emporte",
+    "youWon": "Vous récupérez {points} points",
+    "cancelled": "Annulée, chacun garde ses points",
+    "close": "Fermer"
+  },
+  "replay": {
+    "tab": "Rediffusion du chat en direct",
+    "label": "Le chat en direct, au rythme de la vidéo",
+    "loading": "Chargement du chat en direct",
+    "empty": "Personne n’a écrit dans le chat en direct.",
+    "seekTo": "Aller à {{time}}",
+    "poll": "Sondage",
+    "prediction": "Prédiction",
+    "votes": "Votes : {{count}}",
+    "won": "{{option}} l’emporte",
+    "follow": "Revenir au moment actuel"
+  }
+}

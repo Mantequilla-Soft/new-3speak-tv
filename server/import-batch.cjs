@@ -1,5 +1,5 @@
 // ── ▶️ Batch import (up to 5 videos, fully server side) ───────────────────────
-// A creator ticks up to BATCH_MAX of their own videos on /youtube-import and fills
+// A creator ticks up to BATCH_MAX of their own videos on /import and fills
 // in one form (community, rewards, extra beneficiaries, remix, NSFW, add to blog,
 // ads, rolls). Title, description, tags and thumbnail come from each source.
 // The server then, one
@@ -19,11 +19,19 @@
 // every change and never deleted, so a broken service leaves the full trail for
 // fixing (owner's call 2026-10-05). Each document carries `env` (preview / prod):
 // a runner only ever touches its own. No Mongo configured = a JSON file instead.
+//
+// Podcast episodes (a verified RSS feed, platform 'rss') take the audio path
+// instead: download → cover → the 3Speak audio service (AUDIO_API_URL with
+// AUDIO_API_KEY, the key the audio uploader sends as VITE_3SPEAK_API_KEY) → an
+// audio post built like the audio uploader's (AudioUploadModal publishSinglePost)
+// → the same scheduled-posts slot. The audio row finds its post through the
+// checker's audio sync.
 
 const fs = require('fs')
 const path = require('path')
 const crypto = require('crypto')
 const { spawn } = require('child_process')
+const { Readable } = require('stream')
 const tus = require('tus-js-client')
 
 const BATCH_MAX = 5
@@ -46,6 +54,18 @@ const MONGO_URI = process.env.IMPORT_BATCH_MONGODB_URI || process.env.MONGODB_UR
 const MONGO_DB = process.env.IMPORT_BATCH_DATABASE_NAME || process.env.DATABASE_NAME || '' // '' = the URI's own database
 const MONGO_COLLECTION = 'import-batches'
 const ENV = process.env.IMPORT_BATCH_ENV || 'preview'
+const AUDIO_API_URL = (process.env.AUDIO_API_URL || 'https://audio.3speak.tv').replace(/\/+$/, '')
+const AUDIO_API_KEY = process.env.AUDIO_API_KEY || ''
+// What the audio service takes (src/utils/audioUpload.js SERVICE_FORMATS).
+const AUDIO_FORMATS = new Set(['mp3', 'm4a', 'ogg', 'webm', 'wav'])
+const AUDIO_APP_NAME = 'new-3speak-tv'
+const audioBatchReady = () => !!AUDIO_API_KEY
+// The audio service's categories (src/utils/audioUpload.js AUDIO_CATEGORIES).
+const AUDIO_TYPES = new Set(['podcast', 'interview', 'audiobook', 'song', 'voice_message'])
+// Tags of an audio snap, as the audio uploader writes them (AudioUploadModal HIVE_DEFAULT_TAGS).
+const SNAP_AUDIO_TAGS = ['audio', 'three-speak', 'mantequilla']
+// A post body stays well under what 3Speak takes (5000): notes + addendum together.
+const AUDIO_DESCRIPTION_MAX = 4500
 const HIVE_NODES = ['https://api.hive.blog', 'https://api.deathwing.me', 'https://hive-api.arcange.eu']
 const BROWSER_UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0 Safari/537.36'
 
@@ -141,12 +161,14 @@ function orientationOf(w, h) {
   if (w === h) return 'square'
   return w > h ? 'landscape' : 'vertical'
 }
-function beneficiariesFor(user, premium, extras) {
+// `encoder: false` for audio: nothing is encoded, so no encoder.pay (as the audio uploader).
+function beneficiariesFor(user, premium, extras, { encoder = true } = {}) {
   const m = new Map()
   for (const b of extras) m.set(b.account, Math.max(m.get(b.account) || 0, b.weight))
   if (!premium) m.set(LOCKED_FUND.account, Math.max(m.get(LOCKED_FUND.account) || 0, LOCKED_FUND.weight))
   else m.delete(LOCKED_FUND.account)
-  if (!premium || ENCODER_PREMIUM_PAYERS.has(user)) m.set(LOCKED_ENCODER.account, Math.max(m.get(LOCKED_ENCODER.account) || 0, LOCKED_ENCODER.weight))
+  if (!encoder) m.delete(LOCKED_ENCODER.account)
+  else if (!premium || ENCODER_PREMIUM_PAYERS.has(user)) m.set(LOCKED_ENCODER.account, Math.max(m.get(LOCKED_ENCODER.account) || 0, LOCKED_ENCODER.weight))
   else m.delete(LOCKED_ENCODER.account)
   // Hive wants them in byte order of the account name.
   return [...m.entries()].map(([account, weight]) => ({ account, weight }))
@@ -217,6 +239,108 @@ function buildPost({ user, source, media, embedUrl, thumbnailUrl, options, isSho
     jsonMetadata,
     embedPermlink,
     beneficiaries: options.payout === 'decline' ? [] : beneficiariesFor(user, premium, options.beneficiaries),
+  }
+}
+
+const PLACEHOLDER_RE = /\{(title|show|episode|season|date)\}/g
+function templateValues(source) {
+  const ep = source.episode || {}
+  return {
+    title: String(source.title || '').trim(),
+    show: String(ep.show || '').trim(),
+    episode: ep.number != null ? String(ep.number) : '',
+    season: ep.season != null ? String(ep.season) : '',
+    date: ep.publishedAt ? String(ep.publishedAt).slice(0, 10) : '',
+  }
+}
+
+/** "{show} #{episode}: {title}" → the episode's values; a missing one leaves no stray separators. */
+function renderTemplate(tpl, source) {
+  const values = templateValues(source)
+  return String(tpl || '')
+    .replace(PLACEHOLDER_RE, (_, k) => values[k])
+    .replace(/\(\s*\)|\[\s*\]/g, '')
+    .replace(/[ \t]+/g, ' ')
+    .replace(/\s*([:|·–-])\s*([:|·–-]\s*)+/g, ' $1 ')
+    .replace(/^[\s:|·–#-]+|[\s:|·–#-]+$/g, '')
+    .replace(/\s+#\s*(?=[:|·–-]|$)/g, '')
+    .trim()
+}
+
+/**
+ * The creator's own description: only the placeholders are filled in. It is
+ * markdown (headings, lists, rules, paragraphs), so none of the title's one-line
+ * clean-up applies to it.
+ */
+function renderText(text, source) {
+  const values = templateValues(source)
+  return String(text || '').replace(PLACEHOLDER_RE, (_, k) => values[k]).trim()
+}
+
+/**
+ * A podcast episode's post, as the audio uploader writes a single track: cover,
+ * the audio's play URL (what readers embed), the description; `audio` and
+ * `threespeak.audio` carry the kind of audio. `audioAds: false` only when the
+ * form turned ads off (the uploader also writes it only for an explicit choice).
+ *
+ * `options.audio` (the batch form, automatic imports) shapes it:
+ *   { type, fromSource, titleTemplate, useNotes, addendum, text, tags, hashtags }
+ * `fromSource` (or no settings at all): the episode's title, its notes, tags from
+ * their hashtags; only `type` and `target` count then.
+ * `target: 'snap'`: a reply in the snaps feed (to the @peak.snaps container) like
+ * the uploader's "Snap comments": no title on Hive, a MicroPost, the snap tags
+ * first; `title` stays the episode's for the audio row and the permlink.
+ */
+function buildAudioPost({ user, source, playUrl, thumbnailUrl, options, premium, duration }) {
+  const own = options.audio && options.audio.fromSource !== true
+  const a = own ? options.audio : {}
+  const typeWanted = options.audio?.type
+  const type = AUDIO_TYPES.has(typeWanted) ? typeWanted : 'podcast'
+  const snap = options.audio?.target === 'snap'
+  const title = (a.titleTemplate ? renderTemplate(a.titleTemplate, source) : String(source.title || '').trim()).slice(0, 250)
+    || String(source.title || '').slice(0, 250) || 'Episode'
+  const notes = String(source.description || '').trim()
+  const addendum = String(a.addendum || '').trim()
+  let description
+  if (a.useNotes === false) {
+    description = renderText(a.text, source) || title
+  } else {
+    const room = AUDIO_DESCRIPTION_MAX - (addendum ? addendum.length + 2 : 0)
+    const cut = notes.length > room ? `${notes.slice(0, Math.max(0, room - 1)).trimEnd()}…` : notes
+    description = [cut || title, addendum].filter(Boolean).join('\n\n')
+  }
+  const cover = thumbnailUrl ? `![${title.replace(/[[\]]/g, '')}](${thumbnailUrl})\n\n` : ''
+  const body = `${cover}${playUrl}\n\n${description}`.trim()
+  const tagSource = own
+    ? { tags: a.tags || [], description: a.hashtags === false ? '' : notes }
+    : source
+  const tags = tagsFor(tagSource, snap ? SNAP_AUDIO_TAGS : [options.community], options.nsfw)
+  const secs = Math.round(Number(duration) || 0)
+  const jsonMetadata = {
+    app: AUDIO_APP_NAME,
+    tags,
+    audio: { type },
+    oa: { v: 1, object: snap ? 'MicroPost' : 'Article' },
+    'threespeak.audio': { type, ...(secs > 0 ? { duration: secs } : {}) },
+    ...(thumbnailUrl ? { image: [thumbnailUrl] } : {}),
+    ...(options.ads === false ? { '3speak': { audioAds: false } } : {}),
+    imported_from: {
+      platform: source.platform,
+      id: String(source.sourceId).replace(/^[a-z]+:/, ''),
+      url: source.sourceUrl,
+    },
+  }
+  return {
+    title,
+    // What goes on Hive: snaps carry no title, like the rest of the snaps feed.
+    postTitle: snap ? '' : title,
+    snap,
+    description,
+    body,
+    tags,
+    type,
+    jsonMetadata,
+    beneficiaries: options.payout === 'decline' ? [] : beneficiariesFor(user, premium, options.beneficiaries, { encoder: false }),
   }
 }
 
@@ -301,6 +425,63 @@ function tusUpload({ file, token, user, isShort, duration, onProgress }) {
     })
     upload.start()
   })
+}
+
+// The audio service's upload (src/utils/audioUpload.js uploadAudioTo3Speak), from
+// the server: the file streamed as multipart, never read into memory whole (a
+// three-hour episode is a few hundred MB). → { permlink, playUrl }
+async function uploadAudio({ file, user, title, duration, format, mime, category = 'podcast', onProgress }) {
+  const boundary = `----3speak-${crypto.randomBytes(12).toString('hex')}`
+  const field = (name, value) => `--${boundary}\r\nContent-Disposition: form-data; name="${name}"\r\n\r\n${value}\r\n`
+  const head = Buffer.from([
+    field('duration', String(Math.max(0, Math.round(duration || 0)))),
+    field('format', format),
+    field('title', String(title || '').replace(/[\r\n]+/g, ' ')),
+    field('category', AUDIO_TYPES.has(category) ? category : 'podcast'),
+    `--${boundary}\r\nContent-Disposition: form-data; name="audio"; filename="recording.${format}"\r\nContent-Type: ${mime}\r\n\r\n`,
+  ].join(''))
+  const tail = Buffer.from(`\r\n--${boundary}--\r\n`)
+  const size = fs.statSync(file).size
+  async function* parts() {
+    yield head
+    let sent = 0
+    for await (const chunk of fs.createReadStream(file, { highWaterMark: 1024 * 1024 })) {
+      sent += chunk.length
+      onProgress?.(sent / size)
+      yield chunk
+    }
+    yield tail
+  }
+  const r = await fetch(`${AUDIO_API_URL}/api/audio/upload`, {
+    method: 'POST',
+    headers: { 'Content-Type': `multipart/form-data; boundary=${boundary}`, 'X-API-Key': AUDIO_API_KEY, 'X-User': user },
+    body: Readable.from(parts()),
+    duplex: 'half',
+    signal: AbortSignal.timeout(30 * 60 * 1000),
+  })
+  const d = await r.json().catch(() => ({}))
+  if (!r.ok || !d.permlink || !d.playUrl) {
+    // Busy or down (429, 5xx): worth another go later; anything else it refused.
+    const code = r.status === 429 || r.status >= 500 ? 'audio_service' : 'audio_rejected'
+    throw Object.assign(new Error(`audio upload: HTTP ${r.status} ${d.error || d.message || ''}`.trim()), { code })
+  }
+  return { permlink: d.permlink, playUrl: String(d.playUrl).replace(/^http:/, 'https:') }
+}
+
+// The audio row's cover (what audio tiles and players show), set like the audio
+// uploader does (AudioUploadModal pushAudioThumb): the checker's PUT
+// /video/thumbnail also covers embed-audio. Never fails the import.
+async function setAudioThumbnail(owner, audioPermlink, thumbnail) {
+  if (!thumbnail || !CHECKER_API_KEY) return false
+  try {
+    const r = await fetch(`${CHECKER_BASE}/video/thumbnail`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${CHECKER_API_KEY}` },
+      body: JSON.stringify({ owner, permlink: audioPermlink, thumbnail }),
+      signal: AbortSignal.timeout(15000),
+    })
+    return r.ok
+  } catch { return false }
 }
 
 // When the embed service deferred the encode anyway, commission it now.
@@ -424,6 +605,7 @@ function mountImportBatch(app, deps) {
   const publicBatch = (b, live = {}) => ({
     id: b.id,
     createdAt: b.createdAt,
+    ...(b.auto ? { auto: true } : {}),
     options: { community: b.options.community, payout: b.options.payout, nsfw: b.options.nsfw, ads: b.options.ads, rolls: b.options.rolls !== false, reusable: b.options.reusable !== false, reblog: b.options.reblog === true },
     items: b.items.map((it) => {
       const c = it.permlink ? live[it.permlink] : null
@@ -498,6 +680,7 @@ function mountImportBatch(app, deps) {
       deps.removeJob(job)
       return fail(b, it, job.errorCode || 'download_failed', err)
     }
+    if (it.source.platform === 'rss') return processAudioItem(b, it, job)
     const media = job.media || {}
     const isShort = media.height > media.width && (media.duration || it.source.duration || 0) > 0
       && (media.duration || it.source.duration) <= SHORTS_MAX_DURATION_SEC
@@ -566,6 +749,134 @@ function mountImportBatch(app, deps) {
     }
   }
 
+  // A podcast episode, after its download: cover, audio service, audio post, slot.
+  async function processAudioItem(b, it, job) {
+    const { user } = b
+    const media = job.media || {}
+    it.isShort = false
+    try {
+      it.status = 'uploading'; it.progress = 50; save(b)
+      // Read from the file and converted to MP3 when needed by the download
+      // itself (audio-format.cjs), so this only guards against a job without it.
+      const format = job.audioFormat
+      if (!AUDIO_FORMATS.has(format)) {
+        throw Object.assign(new Error('The episode file was not checked as audio the audio service takes'), { code: 'format' })
+      }
+      // The show's cover (non-fatal, like the video thumbnail).
+      let thumbnailUrl = null
+      try {
+        if (it.source.thumbUrl) {
+          const t = await fetchBytes(it.source.thumbUrl)
+          if (t.buf.length > 2000 && t.type.startsWith('image/')) thumbnailUrl = await deps.uploadImage(t.buf, t.type)
+        }
+      } catch (e) { console.warn(`[import-batch] @${user} ${it.source.sourceId} cover skipped: ${e.message}`) }
+      it.thumbnailUrl = thumbnailUrl
+
+      const duration = Math.round(media.duration || it.source.duration || 0)
+      if (deps.enrichSource) it.source = await deps.enrichSource(it.source).catch(() => it.source)
+      // The post's title and kind, known before the upload: the audio row carries them too.
+      const draft = buildAudioPost({ user, source: it.source, playUrl: '', thumbnailUrl, options: b.options, premium: false, duration })
+      const up = await uploadAudio({
+        file: job.file, user, title: draft.title, duration, format, mime: job.mime, category: draft.type,
+        onProgress: (f) => { it.progress = 50 + f * 45 },
+      })
+      deps.removeJob(job)
+      if (it.status === 'cancelled') return
+      if (thumbnailUrl && !(await setAudioThumbnail(user, up.permlink, thumbnailUrl))) {
+        console.warn(`[import-batch] @${user} ${it.source.sourceId} cover not set on audio ${up.permlink}`)
+      }
+
+      it.status = 'scheduling'; it.progress = 96; it.audioPermlink = up.permlink; save(b)
+      if (!(await deps.hasPostingGrant(user))) throw Object.assign(new Error('@threespeak no longer has posting authority on your account'), { code: 'no_grant' })
+      const premium = await deps.isPremium(user).catch(() => false)
+      const permlink = permlinkFor(draft.title)
+      const post = buildAudioPost({ user, source: it.source, playUrl: up.playUrl, thumbnailUrl, options: b.options, premium, duration })
+      // A snap replies to the newest @peak.snaps container (they rotate every
+      // 8-13 h and older ones keep taking replies, so a slot hours away is fine).
+      const parent = post.snap ? await snapsContainer() : { author: '', permlink: b.options.community }
+      const lastSlot = lastSlotOf(user)
+      const slot = Math.max(Date.now() + FIRST_POST_LEAD_MS, lastSlot ? lastSlot + POST_SPACING_MS : 0)
+      await scheduleOnChecker({
+        owner: user,
+        permlink,
+        scheduledOn: new Date(slot).toISOString(),
+        title: post.postTitle,
+        description: post.description,
+        body: post.body,
+        tags: post.tags,
+        jsonMetadata: post.jsonMetadata,
+        beneficiaries: post.beneficiaries,
+        payoutOptions: b.options.payout,
+        thumbnail: thumbnailUrl,
+        parentAuthor: parent.author,
+        parentPermlink: parent.permlink,
+        // "Add to my blog" is for posts; a snap is a reply.
+        reblog: !post.snap && b.options.reblog === true,
+      }, deps.signScheduledPost)
+      it.status = 'scheduled'; it.progress = 100; it.permlink = permlink; it.scheduledOn = new Date(slot).toISOString()
+      save(b)
+      await deps.recordImport(user, it.source.sourceId, permlink).catch((e) => console.warn(`[import-batch] could not record ${it.source.sourceId}: ${e.message}`))
+      console.log(`[import-batch] @${user} ${it.source.sourceId} → ${permlink} (${post.type}${post.snap ? ' snap' : ''}${b.auto ? ', automatic' : ''}, audio ${up.permlink}) at ${it.scheduledOn}`)
+      deps.onAudioScheduled?.(b, it)
+    } catch (e) {
+      deps.removeJob(job)
+      return fail(b, it, e.code || 'upload_failed', e.message)
+    }
+  }
+
+  // The batch form's settings, checked like Hive will: { options } | { error }.
+  async function parseOptions(user, raw) {
+    const o = raw || {}
+    const community = String(o.community || 'hive-181335')
+    if (!COMMUNITY_RE.test(community)) return { error: 'Invalid community' }
+    const payout = ['default', 'powerup', 'decline'].includes(o.payout) ? o.payout : 'default'
+    const extras = []
+    for (const b of Array.isArray(o.beneficiaries) ? o.beneficiaries.slice(0, HIVE_MAX_BENEFICIARIES) : []) {
+      const account = String(b?.account || '').toLowerCase().replace(/^@/, '')
+      const weight = Math.round(Number(b?.percent) * 100)
+      if (!HIVE_NAME_RE.test(account) || account === user || !(weight >= 1 && weight <= 10000)) {
+        return { error: `Invalid beneficiary: ${account || '(empty)'}` }
+      }
+      extras.push({ account, weight })
+    }
+    const premium = await deps.isPremium(user).catch(() => false)
+    const all = beneficiariesFor(user, premium, extras)
+    if (all.length > HIVE_MAX_BENEFICIARIES) return { error: `Hive allows at most ${HIVE_MAX_BENEFICIARIES} beneficiaries` }
+    if (all.reduce((sum, b) => sum + b.weight, 0) > 10000) return { error: 'Beneficiaries add up to more than 100%' }
+    const options = {
+      community, payout, beneficiaries: extras, nsfw: o.nsfw === true, ads: o.ads !== false,
+      rolls: o.rolls !== false, reusable: o.reusable !== false, reblog: o.reblog === true,
+    }
+    // Podcast episodes: the kind of audio, and the post's content from each episode
+    // or from the creator's own fields (same checks as the automatic import).
+    if (o.audio && typeof o.audio === 'object') {
+      const parsed = require('./import-auto.cjs').parseSettings(o.audio, AUDIO_TYPES)
+      if (parsed.error) return { error: parsed.error }
+      options.audio = parsed.settings
+    }
+    return { options }
+  }
+
+  /**
+   * A batch from the server itself (automatic imports): already resolved sources,
+   * checked options. Queued behind everyone else's items like any batch.
+   */
+  function enqueue(user, sources, options, meta = {}) {
+    const batch = {
+      id: crypto.randomBytes(8).toString('hex'),
+      user,
+      createdAt: new Date().toISOString(),
+      options,
+      ...meta,
+      items: sources.map((source) => ({ source, status: 'queued', progress: 0 })),
+    }
+    store.batches.push(batch)
+    save(batch)
+    console.log(`[import-batch] @${user} batch ${batch.id}: ${sources.length} item(s)${meta.auto ? ' (automatic import)' : ''}`)
+    kick()
+    return publicBatch(batch)
+  }
+
   // ── Routes ─────────────────────────────────────────────────────────────────
   app.get('/api/yt-import/batch', ...mw, async (req, res) => {
     const user = await auth(req, res); if (!user) return
@@ -573,7 +884,7 @@ function mountImportBatch(app, deps) {
     try {
       const mine = batchesOf(user).slice(-5).reverse()
       const live = mine.some((b) => b.items.some((it) => it.status === 'scheduled')) ? await checkerStatuses(user) : {}
-      res.json({ max: BATCH_MAX, spacingMin: Math.round(POST_SPACING_MS / 60000), granted: await deps.hasPostingGrant(user), batches: mine.map((b) => publicBatch(b, live)) })
+      res.json({ max: BATCH_MAX, spacingMin: Math.round(POST_SPACING_MS / 60000), granted: await deps.hasPostingGrant(user), audio: audioBatchReady(), batches: mine.map((b) => publicBatch(b, live)) })
     } catch (e) { res.status(500).json({ error: 'Something went wrong' }); console.warn('[import-batch] list:', e.message) }
   })
 
@@ -595,27 +906,9 @@ function mountImportBatch(app, deps) {
       }
 
       // One-time form.
-      const o = req.body?.options || {}
-      const community = String(o.community || 'hive-181335')
-      if (!COMMUNITY_RE.test(community)) return res.status(400).json({ error: 'Invalid community' })
-      const payout = ['default', 'powerup', 'decline'].includes(o.payout) ? o.payout : 'default'
-      const extras = []
-      for (const b of Array.isArray(o.beneficiaries) ? o.beneficiaries.slice(0, HIVE_MAX_BENEFICIARIES) : []) {
-        const account = String(b?.account || '').toLowerCase().replace(/^@/, '')
-        const weight = Math.round(Number(b?.percent) * 100)
-        if (!HIVE_NAME_RE.test(account) || account === user || !(weight >= 1 && weight <= 10000)) {
-          return res.status(400).json({ error: `Invalid beneficiary: ${account || '(empty)'}` })
-        }
-        extras.push({ account, weight })
-      }
-      const premium = await deps.isPremium(user).catch(() => false)
-      const all = beneficiariesFor(user, premium, extras)
-      if (all.length > HIVE_MAX_BENEFICIARIES) return res.status(400).json({ error: `Hive allows at most ${HIVE_MAX_BENEFICIARIES} beneficiaries` })
-      if (all.reduce((s, b) => s + b.weight, 0) > 10000) return res.status(400).json({ error: 'Beneficiaries add up to more than 100%' })
-      const options = {
-        community, payout, beneficiaries: extras, nsfw: o.nsfw === true, ads: o.ads !== false,
-        rolls: o.rolls !== false, reusable: o.reusable !== false, reblog: o.reblog === true,
-      }
+      const parsed = await parseOptions(user, req.body?.options)
+      if (parsed.error) return res.status(400).json({ error: parsed.error })
+      const { options } = parsed
 
       // Every video is resolved and ownership-checked now, not later.
       const sources = []
@@ -627,6 +920,9 @@ function mountImportBatch(app, deps) {
         } catch (e) {
           return res.status(e.status || 400).json({ error: e.message || 'A video could not be checked', errorCode: e.code || 'bad_item' })
         }
+      }
+      if (sources.some((s) => s.platform === 'rss') && !audioBatchReady()) {
+        return res.status(503).json({ error: 'Podcast episodes cannot be batch imported on this server yet', errorCode: 'audio_unavailable' })
       }
       // Never post the same video twice from a batch. The page already greys these
       // out; this is the check that holds. A failed read does not block a batch.
@@ -681,7 +977,22 @@ function mountImportBatch(app, deps) {
     res.json(publicBatch(b, await checkerStatuses(user)))
   })
 
+  /**
+   * How the newest batch item for this source ended up: { status, errorCode } or
+   * null (none). The automatic import reads it to retry a failure that may pass.
+   */
+  function outcomeOf(user, sourceId) {
+    for (let i = store.batches.length - 1; i >= 0; i -= 1) {
+      const b = store.batches[i]
+      if (b.user !== user) continue
+      const it = b.items.find((x) => x.source.sourceId === sourceId)
+      if (it) return { status: it.status, errorCode: it.errorCode || null }
+    }
+    return null
+  }
+
   ready.then((ok) => { if (ok) kick() })
+  return { ready, enqueue, parseOptions, outcomeOf }
 }
 
 /**
@@ -703,4 +1014,4 @@ function batchSourcesFor(user) {
   return out
 }
 
-module.exports = { mountImportBatch, batchSourcesFor, buildPost, beneficiariesFor, tagsFor, permlinkFor, scheduleOnChecker, cancelOnChecker }
+module.exports = { mountImportBatch, batchSourcesFor, buildPost, buildAudioPost, renderTemplate, renderText, uploadAudio, setAudioThumbnail, audioBatchReady, AUDIO_TYPES, beneficiariesFor, tagsFor, permlinkFor, scheduleOnChecker, cancelOnChecker, mintUploadToken, tusUpload, commissionEncode, snapsContainer }

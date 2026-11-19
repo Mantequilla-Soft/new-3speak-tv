@@ -1,0 +1,482 @@
+{
+  "menuEntry": "Otomasyonlar",
+  "title": "Otomasyonlar",
+  "beta": "Beta",
+  "subtitle": "Kanalında ya da cüzdanında bir şey olduğunda gerisini 3Speak halletsin: bir snap, Short, ses ya da video paylaşsın, yorum yapsın, upvote versin, reblog yapsın veya Discord'una haber versin.",
+  "howItWorks": "3Speak kanalına her {{minutes}} dakikada bir bakar. Her yeni gönderi, onun için açık olan otomasyonları başlatır ve paylaştıkları her şey, 3Speak'e verdiğin paylaşım izniyle senin adına yayınlanır. Bir otomasyonun yaptığı gönderiler asla başka bir otomasyonu başlatmaz.",
+  "gate": {
+    "signIn": "Otomasyon kurmak için giriş yap.",
+    "closedTitle": "Kullanılamıyor",
+    "closed": "Otomasyonlar kapalı testte ve hesabına henüz açık değil.",
+    "unavailable": "Otomasyonlar şu anda bu sunucuda kullanılamıyor.",
+    "proTitle": "Bir 3Speak Pro özelliği",
+    "pro": "Otomasyonlar 3Speak Pro'nun bir parçası.",
+    "getPro": "3Speak Pro al",
+    "skipPro": "Pro kontrolünü atla (testçi)",
+    "skipProHint": "Test hesabı olarak otomasyonları Pro olmadan deneyebilirsin.",
+    "proSkipped": "Test modu: Pro kontrolü hesabın için atlandı.",
+    "restorePro": "Pro kontrolünü yeniden kullan"
+  },
+  "grant": {
+    "needed": "Otomasyonlar senin yerine paylaşır. Önce 3Speak'in hesabında yayınlamasına izin ver.",
+    "button": "3Speak'in yayınlamasına izin ver"
+  },
+  "list": {
+    "new": "Yeni otomasyon",
+    "emptyTitle": "Henüz otomasyon yok",
+    "empty": "Bir örnekle başla ya da kendininkini kur: onu neyin başlatacağını seç, sonra ne olması gerektiğini sürükleyip bırak.",
+    "steps_one": "{{count}} adım",
+    "steps_other": "{{count}} adım",
+    "lastRun": "Son çalışma:",
+    "edit": "Düzenle",
+    "runs": "Çalışmalar",
+    "delete": "Sil",
+    "cancel": "İptal",
+    "notFound": "Bu otomasyon yok (artık yok).",
+    "deleteTitle": "\"{{name}}\" silinsin mi?",
+    "deleteBody": "Otomasyon ve çalışma geçmişi silinir. Daha önce yaptığı gönderiler kalır.",
+    "on": "Açık",
+    "off": "Kapalı"
+  },
+  "runs": {
+    "title": "\"{{name}}\" çalışmaları",
+    "empty": "Henüz çalışma yok",
+    "emptyHint": "Otomasyon açıkken yeni bir gönderin koşullara uyduğunda bir çalışma başlar.",
+    "steps": "{{count}} adımdan {{done}} tanesi tamam",
+    "attempts_one": "{{count}} deneme",
+    "attempts_other": "{{count}} deneme",
+    "status": {
+      "queued": "Sırada",
+      "running": "Çalışıyor",
+      "waiting": "Bekliyor",
+      "done": "Tamam",
+      "failed": "Başarısız",
+      "cancelled": "Durduruldu"
+    }
+  },
+  "editor": {
+    "back": "Geri",
+    "close": "Kapat",
+    "done": "Tamam",
+    "name": "Ad",
+    "namePlaceholder": "Bu otomasyona bir ad ver",
+    "enabled": "Otomasyon açık",
+    "test": "Test et",
+    "save": "Kaydet",
+    "toolboxTasks": "Bunu yap",
+    "toolboxLogic": "Karar ver",
+    "whenTitle": "Bu olduğunda",
+    "event": "Olay",
+    "eventChangeNote": "Yeni olaya uymayan adımlar bir uyarı rozeti alır.",
+    "placeholders": "Yer tutucular",
+    "insert": "Ekle",
+    "howTo": "Adımları araç kutusundan çizginin üzerine sürükle. Değiştirmek için bir adımı, olayı değiştirmek için boş alanı seç.",
+    "stepName": "Adım adı",
+    "optional": "isteğe bağlı",
+    "tagsHint": "Boşlukla ayrılmış en fazla {{max}} etiket.",
+    "emptyHint": "Araç kutusundan çizginin üzerine bir adım sürükle",
+    "accounts": "Hesaplar",
+    "accountsHint": "Boşlukla ayrılmış en fazla {{max}} Hive hesabı."
+  },
+  "test": {
+    "title": "Test çalışması",
+    "sample": "Henüz bu türde bir gönderin yok, bu yüzden test örnek değerler kullandı.",
+    "onPost": "Uyan en yeni gönderinde test edildi: {{title}}",
+    "nothingPosted": "Hiçbir şey paylaşılmadı. Her adımın yapacağı şey bu.",
+    "shortDetail": "{{start}}. saniyeden başlayan, {{length}} saniyelik bir Short.",
+    "noSteps": "Bu gönderi için hiçbir adım çalışmazdı.",
+    "voteOn": "{{on}} için %{{weight}} upvote.",
+    "reblogOn": "{{on}} için reblog.",
+    "skipped": {
+      "self": "Atlandı: bu sensin.",
+      "no_sender": "Atlandı: upvote verilecek kimse yok (Lightning bahşişinin ya da yayın boost'unun Hive'da göndereni yok).",
+      "no_recent_post": "Atlandı: bu hesabın son 7 günde hiç gönderisi yok."
+    }
+  },
+  "events": {
+    "video_published": {
+      "label": "Bir video yayınlıyorum",
+      "desc": "Kendin yüklediğin videolar. İçe aktarılan videoların kendi olayı var."
+    },
+    "short_published": {
+      "label": "Bir Short yayınlıyorum",
+      "desc": "Yükleyiciden, düzenleyiciden veya bir klipten paylaştığın Shorts."
+    },
+    "video_imported": {
+      "label": "Bir videom içe aktarılıyor",
+      "desc": "İçe aktarıcının YouTube, TikTok ve diğerlerinden getirdiği videolar ve Shorts."
+    },
+    "podcast_published": {
+      "label": "Bir podcast bölümü paylaşıyorum",
+      "desc": "Yüklenen ya da akışından içe aktarılan podcast ve röportaj bölümleri."
+    },
+    "audio_published": {
+      "label": "Herhangi bir ses paylaşıyorum",
+      "desc": "Her ses gönderisi: podcastler, müzik, sesli kitaplar ve sesli mesajlar."
+    },
+    "stream_started": {
+      "label": "Canlı yayına geçiyorum",
+      "desc": "Canlı yayınının gönderisi paylaşıldığında."
+    },
+    "tip_received": {
+      "label": "Bahşiş alıyorum",
+      "desc": "Videolarından biri için HIVE, HBD ya da Lightning ile gelen bahşiş (memo videoya bağlantı verir)."
+    },
+    "boost_received": {
+      "label": "Boost alıyorum",
+      "desc": "Gönderilerinden birine ya da yayınına gelen bir boost."
+    },
+    "power_up": {
+      "label": "Power up",
+      "desc": "Sen power up yaparsın ya da biri hesabına HIVE power up yapar."
+    },
+    "poll_ended": {
+      "label": "Anketim bitiyor",
+      "desc": "Snap anketlerinden biri sona erdi."
+    },
+    "stream_poll_ended": {
+      "label": "Yayınımdaki bir anket bitiyor",
+      "desc": "Son üç gündeki yayınlarından birindeki bir anket ya da tahmin sona erdi."
+    },
+    "someone_posted": {
+      "label": "Seçtiğim biri paylaşıyor",
+      "desc": "Aşağıda listelediğin bir hesabın gönderisi: video, Short, ses, podcast, snap, yayın ya da metin gönderisi."
+    }
+  },
+  "tasks": {
+    "post_snap": {
+      "label": "Snap paylaş",
+      "desc": "Snaps akışında, profilinin Topluluk sekmesinde kısa bir metin gönderisi.",
+      "props": {
+        "text": "Snap metni",
+        "tags": "Etiketler"
+      }
+    },
+    "post_short": {
+      "label": "Short paylaş",
+      "desc": "Yeni videodan bir klip keser ve yaklaşık 10 dakika sonra Short olarak paylaşır.",
+      "props": {
+        "start": "Başlangıç saniyesi",
+        "length": "Saniye cinsinden uzunluk",
+        "vertical": "Dikey",
+        "caption": "Açıklama metni",
+        "tags": "Etiketler"
+      },
+      "hints": {
+        "start": "Klibin videoda başladığı yer.",
+        "length": "5 ile 60 saniye arası.",
+        "vertical": "Geniş bir videonun ortasını 9:16 olarak kırpar."
+      }
+    },
+    "post_audio": {
+      "label": "Ses paylaş",
+      "desc": "Yeni videonun sesini, kapağıyla birlikte ses gönderisi olarak yaklaşık 10 dakika sonra paylaşır.",
+      "props": {
+        "title": "Başlık",
+        "audioType": "Ses türü",
+        "tags": "Etiketler"
+      }
+    },
+    "post_video": {
+      "label": "Video paylaş",
+      "desc": "Yeni sesi, kapağını görsel olarak kullanan bir video olarak yaklaşık 10 dakika sonra paylaşır.",
+      "props": {
+        "title": "Başlık",
+        "tags": "Etiketler"
+      }
+    },
+    "post_comment": {
+      "label": "Gönderiye yorum yap",
+      "desc": "Gönderinin altında senden bir yorum: bağlantılar, emeği geçenler, teşekkürler ya da sonuçlar için.",
+      "props": {
+        "text": "Yorum"
+      }
+    },
+    "upvote_post": {
+      "label": "Gönderiye upvote ver",
+      "desc": "Onun gönderisine senin upvote'un.",
+      "props": {
+        "weight": "Oy ağırlığı (%)"
+      }
+    },
+    "reblog": {
+      "label": "Gönderiyi reblog yap",
+      "desc": "Onun gönderisini senin blog'una koyar.",
+      "props": {}
+    },
+    "upvote_sender": {
+      "label": "Gönderene upvote ver",
+      "desc": "Sana bahşiş, boost ya da power up gönderen kişinin en yeni gönderisine senin upvote'un (hâlâ ödeme yapıyorsa).",
+      "props": {
+        "weight": "Oy ağırlığı (%)"
+      }
+    },
+    "send_discord": {
+      "label": "Discord'a gönder",
+      "desc": "Bir webhook üzerinden Discord sunucundaki bir kanala mesaj. Kimse etiketlenmez.",
+      "props": {
+        "webhook": "Webhook adresi",
+        "text": "Mesaj"
+      },
+      "hints": {
+        "webhook": "Discord'da: kanal ayarları, Entegrasyonlar, Webhook'lar, Webhook URL'sini Kopyala."
+      }
+    }
+  },
+  "if": {
+    "label": "Eğer",
+    "desc": "Koşul sağlanırsa Evet yolunu, sağlanmazsa Hayır yolunu izler.",
+    "field": "Kontrol et",
+    "pickField": "Neyin kontrol edileceğini seç",
+    "operator": "Koşul",
+    "value": "Değer",
+    "branchesNote": "Adımları tuvaldeki Evet ve Hayır yollarına sürükle.",
+    "branch": {
+      "yes": "Evet",
+      "no": "Hayır"
+    },
+    "units": {
+      "seconds": "Saniye",
+      "amount": "Miktar",
+      "count": "Sayı"
+    }
+  },
+  "fields": {
+    "title": "Başlık",
+    "description": "Açıklama",
+    "tags": "Etiketler",
+    "duration": "Uzunluk",
+    "community": "Topluluk",
+    "url": "Bağlantı",
+    "platform": "İçe aktarıldığı yer",
+    "kind": "Tür",
+    "audioType": "Ses türü",
+    "imported": "İçe aktarıldı",
+    "from": "Gönderen",
+    "amount": "Miktar",
+    "asset": "Para birimi",
+    "message": "Mesaj",
+    "via": "Ödeme yolu",
+    "boostKind": "Boost verilen",
+    "self": "Benim tarafımdan",
+    "question": "Soru",
+    "winner": "Kazanan",
+    "votes": "Oylar",
+    "author": "Hesap",
+    "postKind": "Gönderi türü"
+  },
+  "ops": {
+    "contains": "içerir",
+    "not_contains": "içermez",
+    "equals": "tam olarak şudur",
+    "starts_with": "şununla başlar",
+    "has_tag": "şu etikete sahip",
+    "not_has_tag": "şu etikete sahip değil",
+    "gt": "şundan uzun",
+    "lt": "şundan kısa",
+    "is": "şudur",
+    "is_not": "şu değildir"
+  },
+  "choices": {
+    "youtube": "YouTube",
+    "tiktok": "TikTok",
+    "instagram": "Instagram",
+    "rumble": "Rumble",
+    "bitchute": "BitChute",
+    "rss": "Podcast akışı",
+    "video": "Video",
+    "short": "Short",
+    "podcast": "Podcast",
+    "interview": "Röportaj",
+    "audiobook": "Sesli kitap",
+    "song": "Müzik",
+    "voice_message": "Sesli mesaj",
+    "yes": "Evet",
+    "no": "Hayır",
+    "HIVE": "HIVE",
+    "HBD": "HBD",
+    "hive": "Hive cüzdanı",
+    "lightning": "Lightning",
+    "post": "Bir gönderi",
+    "stream": "Bir yayın",
+    "audio": "Ses",
+    "snap": "Snap"
+  },
+  "placeholders": {
+    "title": "gönderinin başlığı",
+    "description": "açıklamasının başı",
+    "url": "3Speak'teki bağlantısı",
+    "author": "onu paylaşan hesap (kendi gönderilerinde sen)",
+    "tags": "#hashtag olarak etiketleri",
+    "platform": "nereden içe aktarıldığı",
+    "from": "kimin gönderdiği",
+    "amount": "ne kadar",
+    "message": "birlikte gelen mesaj",
+    "question": "anketin sorusu",
+    "results": "her cevap ve aldığı oylar",
+    "winner": "en çok oy alan cevap",
+    "votes": "kaç kişinin oy verdiği"
+  },
+  "problems": {
+    "required": "Bu boş olamaz.",
+    "too_long": "Bu çok uzun.",
+    "over_limit": "Çok fazla.",
+    "bad_tag": "Etiketler 2 ile 24 arası harf, rakam veya tireden oluşur.",
+    "bad_webhook": "Bu bir Discord webhook adresi değil.",
+    "out_of_range": "Bu sayı aralığın dışında.",
+    "bad_field": "Neyin kontrol edileceğini seç.",
+    "bad_operator": "Bir koşul seç.",
+    "bad_value": "Koşula uyan bir değer gir.",
+    "unknown_step": "3Speak bu adımı tanımıyor.",
+    "task_not_for_event": "Bu adım olaya uymuyor (bir Short için video gerekir).",
+    "too_many_of_type": "Bu adım bir otomasyonda bu kadar sık yer alamaz.",
+    "too_many_steps": "Bir otomasyonda en fazla 12 adım olabilir.",
+    "too_deep": "Eğer adımları en fazla 3 seviye iç içe olabilir.",
+    "bad_id": "Bir adım bozuk. Onu sil ve yeniden ekle.",
+    "bad_sequence": "Otomasyon bozuk. Yeni bir tane başlat.",
+    "empty": "En az bir adım ekle.",
+    "no_event": "Onu başlatan olayı seç.",
+    "no_name": "Otomasyona bir ad ver.",
+    "no_grant": "Önce 3Speak'in senin adına yayınlamasına izin ver.",
+    "pro_required": "Duraklatıldı: otomasyonlar için 3Speak Pro gerekir.",
+    "not_found": "Bu otomasyon yok (artık yok).",
+    "unknown": "Bu kullanılamaz.",
+    "no_post": "Altına cevap yazılacak bir gönderi yok.",
+    "no_audio": "Bu gönderinin 3Speak sesi yok.",
+    "no_accounts": "En az bir hesap yaz.",
+    "too_many_accounts": "En fazla {{max}} hesap.",
+    "bad_account": "Hesaplardan biri geçerli bir Hive hesap adı değil.",
+    "bad_account_named": "\"{{name}}\" geçerli bir Hive hesap adı değil."
+  },
+  "designer": {
+    "contextMenu": {
+      "delete": "Sil",
+      "duplicate": "Çoğalt",
+      "resetView": "Görünümü sıfırla",
+      "select": "Seç",
+      "unselect": "Seçimi kaldır"
+    },
+    "controlBar": {
+      "deleteSelectedStep": "Seçili adımı sil",
+      "redo": "Yinele",
+      "resetView": "Görünümü sıfırla",
+      "turnOnOffDragAndDrop": "Adımları taşımayı aç veya kapat",
+      "undo": "Geri al",
+      "zoomIn": "Yakınlaştır",
+      "zoomOut": "Uzaklaştır"
+    },
+    "smartEditor": {
+      "toggle": "Paneli göster veya gizle"
+    },
+    "toolbox": {
+      "search": "Ara…",
+      "title": "Adımlar"
+    }
+  },
+  "templates": {
+    "button": "Şablonlar",
+    "title": "Şablonlar",
+    "newTitle": "Yeni otomasyon",
+    "sub": "Bir şablonla başla ve istediğin gibi değiştir ya da boş başla.",
+    "replaces": "Bir şablon seçmek tuvaldeki adımların yerine geçer.",
+    "groups": {
+      "videos": "Videolar",
+      "audio": "Ses ve podcast'ler",
+      "live": "Canlı",
+      "polls": "Anketler",
+      "thanks": "Bahşişler, boost'lar ve power up'lar",
+      "others": "Diğer hesaplar",
+      "own": "Kendin oluştur"
+    },
+    "items": {
+      "snap_video": {
+        "title": "Her yeni videoya bir snap",
+        "sub": "Bir video yayınladığında, başlığı ve bağlantısıyla bir snap paylaşılır."
+      },
+      "short_video": {
+        "title": "Her yeni videodan bir Short",
+        "sub": "Bir video yayınladığında, ilk 30 saniyesi dikey bir Short olur."
+      },
+      "long_video_short": {
+        "title": "Uzun videolara Short, kısalara snap",
+        "sub": "5 dakikadan uzun videolar 30. saniyeden başlayan bir Short, daha kısalar bir snap alır."
+      },
+      "audio_from_video": {
+        "title": "Her videonun ses sürümü",
+        "sub": "Bir video yayınladığında, sesi bir podcast bölümü olarak paylaşılır."
+      },
+      "imported_discord": {
+        "title": "İçe aktarılan videoları Discord'a bildir",
+        "sub": "İçe aktarıcı bir video getirdiğinde, Discord sunucun bundan haberdar olur."
+      },
+      "video_from_podcast": {
+        "title": "Her bölümün video sürümü",
+        "sub": "Bir podcast bölümü paylaştığında, kapağıyla birlikte video olarak da paylaşılır."
+      },
+      "podcast_snap": {
+        "title": "Her yeni bölüme bir snap",
+        "sub": "Bir podcast bölümü paylaştığında, bağlantısıyla bir snap paylaşılır."
+      },
+      "discord_live": {
+        "title": "Canlı yayına geçince Discord'a haber ver",
+        "sub": "Bir yayın başlattığında, Discord sunucuna bir mesaj gider."
+      },
+      "stream_poll_snap": {
+        "title": "Yayın anketlerinin sonuçlarını snap olarak paylaş",
+        "sub": "Yayınındaki bir anket bittiğinde, bir snap insanların nasıl oy verdiğini gösterir."
+      },
+      "poll_results": {
+        "title": "Anketlerimin sonuçlarıyla cevap ver",
+        "sub": "Anketlerinden biri bittiğinde, altına yazılan bir cevap sonuçları gösterir."
+      },
+      "thank_tips": {
+        "title": "Bahşiş veren herkese teşekkür et",
+        "sub": "Videonun altına bir teşekkür ve bahşiş verenin en yeni gönderisine bir upvote."
+      },
+      "thank_boosts": {
+        "title": "Boost veren herkese teşekkür et",
+        "sub": "Bir teşekkür snap'i ve boost verenin en yeni gönderisine bir upvote."
+      },
+      "power_up_snap": {
+        "title": "Power up'larımı paylaş",
+        "sub": "Power up yaptığında, bir snap ne kadar olduğunu söyler. Biri sana power up yaptığında, bir upvote alır."
+      },
+      "vote_friends": {
+        "title": "Arkadaşlarımın yeni videolarına upvote ver",
+        "sub": "Listendeki bir hesap video yayınladığında, video senin upvote'unu alır."
+      },
+      "reblog_friends": {
+        "title": "Arkadaşlarımın yeni videolarını reblog yap",
+        "sub": "Listendeki bir hesap video yayınladığında, video senin blog'una gelir."
+      },
+      "blank": {
+        "title": "Boş başla",
+        "sub": "Olayı seç ve adımları kendin kur."
+      }
+    },
+    "texts": {
+      "longerThan5": "5 dakikadan uzun mu?",
+      "importedDiscord": "Kanalımda yeni: {title}\n{url}",
+      "podcastSnap": "Yeni bölüm: {title}\n\n{url}",
+      "discordLive": "{title} şimdi canlı: {url}",
+      "streamPollSnap": "Yayınımdan anket: {question}\n\n{results}\n\n{url}",
+      "pollResults": "Anket kapandı. Sonuçlar:\n\n{results}\n\nOy veren {votes} kişinin hepsine teşekkürler!",
+      "viaLightning": "Lightning ile mi ödendi?",
+      "thanksLightning": "{amount} HIVE bahşiş için teşekkürler! ⚡",
+      "thanksTip": "{amount} bahşiş için teşekkürler @{from}! 🙏",
+      "boostOnPost": "Bir gönderiye boost mu?",
+      "thanksBoost": "{url} için verdiğin boost'a teşekkürler @{from} 🚀\n\n{message}",
+      "thanksStreamBoost": "Yayınıma verilen boost için teşekkürler! 🚀 {url}",
+      "byMe": "Power up'ı ben mi yaptım?",
+      "poweredUp": "Az önce {amount} HIVE power up yaptım! 💪",
+      "isVideo": "Video mu?"
+    }
+  },
+  "eventGroups": {
+    "channel": "Kanalım",
+    "wallet": "Cüzdanım",
+    "polls": "Anketler",
+    "others": "Diğer hesaplar",
+    "more": "Daha fazla"
+  }
+}

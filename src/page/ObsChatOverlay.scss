@@ -98,7 +98,7 @@
   }
 }
 
-// Dock header: viewers, time live, time left, boosts. Pinned to the top of the
+// Dock header: viewers, time live, time left, boosts, goal. Pinned to the top of the
 // dock: the chat is stacked from the bottom and overflows at the top, so a bar
 // in the flow would be pushed out of view by a long chat. The dock reserves its
 // height (--with-counters) and older lines slide under it.
@@ -140,6 +140,13 @@
     background: var(--accent-tint-strong);
     color: var(--accent);
     .material-symbols-rounded { color: var(--accent); }
+  }
+
+  // The host's boost goal, reached: cyan, as the studio marks what is done.
+  &.is-reached {
+    background: var(--cyan-tint);
+    color: var(--cyan);
+    .material-symbols-rounded { color: var(--cyan); }
   }
 }
 

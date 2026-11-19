@@ -8,6 +8,8 @@
   "badges": {
     "gatedTitle": "仅限会员",
     "pro": "PRO",
+    "vod": "VOD",
+    "vodTitle": "直播回放",
     "new": "新",
     "first": "首发",
     "live": "● 直播中",

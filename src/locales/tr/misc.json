@@ -139,6 +139,13 @@
     "rumble": {
       "placeholder": "https://rumble.com/c/…",
       "help": "Rumble kanalının adını veya bağlantısını yapıştır. Hash'i kanal açıklamasında herhangi bir yere koy."
+    },
+    "rss": {
+      "placeholder": "https://example.com/podcast.xml",
+      "help": "Podcastinin RSS besleme adresini yapıştır. Barındırma hizmetin bunu programın ayarlarında veya dağıtım sayfasında gösterir.",
+      "flowTitle": "Podcast RSS beslemeni bağla",
+      "step2": "<strong>Bunu programının ya da en yeni bölümünün açıklamasına yapıştır</strong>, podcast barındırma hizmetinde. Değişikliği kaydet ve yayınla. Besleme doğrulandıktan sonra kaldırabilirsin.",
+      "step3": "Podcastinin RSS besleme adresini gir:"
     }
   },
   "snaps": {
@@ -157,7 +164,13 @@
     "audioMinimal": "Minimal",
     "heightSub": "Tam genişlik, {{height}} px yükseklik · Duyarlı",
     "podcastTitle": "Bu podcast'i yerleştir",
-    "podcastHint": "Programın tüm bölümlerini, yenileri çıktıkça onları da çalar."
+    "podcastHint": "Programın tüm bölümlerini, yenileri çıktıkça onları da çalar.",
+    "embedWhere": "Nereye yerleştirilecek",
+    "tabWebsite": "Web sitesi",
+    "tabHive": "Hive için",
+    "hiveLink": "Hive gönderileri için bağlantı",
+    "hivePlaylistHint": "Bu bağlantıyı bir Hive gönderisine veya wave’e yapıştırın. Ecency gibi 3Speak videolarını gösteren Hive uygulamaları çalma listesini doğrudan gönderide çalar.",
+    "videoPlaylistHint": "Bunu herhangi bir web sitesine veya blog yazısına yapıştırın. Çalma listesindeki tüm videoları, sonradan eklenenler dahil, sırayla oynatır."
   },
   "incubation": {
     "requestFailed": "İstek başarısız ({{status}})",
@@ -197,7 +210,9 @@
       "video": "Video",
       "audio": "Ses",
       "live": "Canlı",
-      "others": "Diğer"
+      "others": "Diğer",
+      "streams": "Yayınlar",
+      "edit": "Düzenle"
     },
     "subtitles": {
       "regularVideo": "Kanalın için klasik video",
@@ -210,6 +225,12 @@
       "goLiveNow": "Takipçilerine canlı yayın yap",
       "communitySnap": "Topluluk sekmende hızlı gönderi",
       "playlist": "Videoları paylaşılabilir bir listede topla"
+    },
+    "categories": {
+      "video": "Video yükle, kaydet veya düzenle",
+      "audio": "Müzik, podcast ve ses düzenleme",
+      "streams": "Tek başına ya da konuklarla canlı yayın yap",
+      "others": "Snap'ler ve oynatma listeleri"
     }
   },
   "chat": {

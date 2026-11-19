@@ -156,6 +156,10 @@
       "title": "Large cards",
       "desc": "Bigger video cards on home, profile and playlists"
     },
+    "dataSaver": {
+      "title": "Data saver",
+      "desc": "No video previews, and videos start at 360p. Turns on by itself when your device asks to save data or the connection is slow."
+    },
     "previews": {
       "title": "Video previews",
       "desc": "Muted preview on hover; on mobile the centred card plays"
@@ -165,14 +169,22 @@
       "desc": "Muted clips in the Spotlight on Home. Off shows still pictures."
     }
   },
+  "startup": {
+    "resume": {
+      "title": "Continue where I left off",
+      "desc": "Open 3Speak on the page you were last on. Saved on this device only."
+    }
+  },
+  "startPrompt": {
+    "title": "Pick up where you left off?",
+    "intro": "3Speak can open on the page you were last on instead of Home. It is saved on this device only, and you can change it any time in Settings, General.",
+    "notNow": "Not now",
+    "turnOn": "Turn on"
+  },
   "shorts": {
     "commentBar": {
       "title": "Comment bar on shorts",
       "desc": "A comment input under each Short"
-    },
-    "openOnStart": {
-      "title": "Open Shorts on start",
-      "desc": "Go straight to Shorts when you open 3Speak"
     },
     "inFeeds": {
       "title": "Shorts inside the feeds",
@@ -203,7 +215,21 @@
     "rpcNode": "Hive RPC node",
     "yourData": "Your data",
     "privacyLink": "How 3Speak handles your data",
-    "getOrDelete": "Get or delete"
+    "getOrDelete": "Get or delete",
+    "node": {
+      "modeAuto": "Auto",
+      "auto": "Automatic",
+      "autoHint": "The fastest node that works, switching if it fails",
+      "own": "Your own node",
+      "use": "Use",
+      "checking": "Checking…",
+      "down": "Not answering",
+      "ms": "{{ms}} ms",
+      "badUrl": "Enter an address that starts with https://",
+      "failed": "This node did not answer, or it lacks the social API (hivemind) that 3Speak needs.",
+      "switched": "Now using {{node}}",
+      "fallback": "If the node you picked stops answering, 3Speak uses the known nodes until the page is reloaded."
+    }
   },
   "dataRequest": {
     "emailRequired": "Enter an email address so we can reply",

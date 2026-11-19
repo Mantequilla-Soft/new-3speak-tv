@@ -139,6 +139,13 @@
     "rumble": {
       "placeholder": "https://rumble.com/c/…",
       "help": "Dán tên hoặc liên kết kênh Rumble của bạn. Đặt mã hash ở bất kỳ đâu trong phần mô tả kênh."
+    },
+    "rss": {
+      "placeholder": "https://example.com/podcast.xml",
+      "help": "Dán địa chỉ nguồn cấp RSS của podcast. Dịch vụ lưu trữ hiển thị nó trong phần cài đặt hoặc trang phân phối của chương trình.",
+      "flowTitle": "Liên kết nguồn cấp RSS podcast của bạn",
+      "step2": "<strong>Dán nó vào mô tả chương trình hoặc mô tả của tập mới nhất</strong> trên dịch vụ lưu trữ podcast. Lưu và xuất bản thay đổi. Bạn có thể xóa nó sau khi nguồn cấp được xác minh.",
+      "step3": "Nhập địa chỉ nguồn cấp RSS của podcast:"
     }
   },
   "snaps": {
@@ -157,7 +164,13 @@
     "audioMinimal": "Tối giản",
     "heightSub": "Toàn chiều rộng, cao {{height}} px · Tự co giãn",
     "podcastTitle": "Nhúng podcast này",
-    "podcastHint": "Phát mọi tập của chương trình, kể cả các tập mới ngay khi ra mắt."
+    "podcastHint": "Phát mọi tập của chương trình, kể cả các tập mới ngay khi ra mắt.",
+    "embedWhere": "Nơi nhúng",
+    "tabWebsite": "Trang web",
+    "tabHive": "Cho Hive",
+    "hiveLink": "Liên kết cho bài đăng Hive",
+    "hivePlaylistHint": "Dán liên kết này vào một bài đăng hoặc wave trên Hive. Các ứng dụng Hive hiển thị video 3Speak, như Ecency, sẽ phát danh sách phát ngay trong bài đăng.",
+    "videoPlaylistHint": "Dán đoạn này vào bất kỳ trang web hoặc bài blog nào. Nó phát lần lượt mọi video trong danh sách phát, kể cả những video được thêm sau."
   },
   "incubation": {
     "requestFailed": "Yêu cầu thất bại ({{status}})",
@@ -197,7 +210,9 @@
       "video": "Video",
       "audio": "Âm thanh",
       "live": "Trực tiếp",
-      "others": "Khác"
+      "others": "Khác",
+      "streams": "Phát trực tiếp",
+      "edit": "Chỉnh sửa"
     },
     "subtitles": {
       "regularVideo": "Video truyền thống cho kênh của bạn",
@@ -210,6 +225,12 @@
       "goLiveNow": "Phát trực tiếp cho người theo dõi",
       "communitySnap": "Bài đăng nhanh trên tab cộng đồng",
       "playlist": "Gom video thành danh sách để chia sẻ"
+    },
+    "categories": {
+      "video": "Tải lên, quay hoặc chỉnh sửa video",
+      "audio": "Nhạc, podcast và chỉnh sửa âm thanh",
+      "streams": "Phát trực tiếp một mình hoặc cùng khách mời",
+      "others": "Snap và danh sách phát"
     }
   },
   "chat": {

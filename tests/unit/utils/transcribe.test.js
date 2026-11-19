@@ -229,5 +229,151 @@ describe('streaming', () => {
 
   it('lists the server languages as tags', async () => {
     expect(await T.transcriptLanguages()).toEqual(['en-US'])
+    expect(await T.liveLanguages()).toEqual(['en-US'])
+  })
+})
+
+// A fake Whisper socket (/transcribe): takes the audio in, says how far it got
+// once a second of audio has come, and answers eof with the rest and done
+class FakeWhisper {
+  constructor(url) {
+    this.url = url
+    this.readyState = 0
+    this.bufferedAmount = 0
+    this.sent = []
+    this.samples = 0
+    this.texts = [...(FakeWhisper.texts || [])]
+    sockets.push(this)
+    setTimeout(() => { this.readyState = 1; this.onopen?.() }, 0)
+  }
+
+  say(msg) { setTimeout(() => this.onmessage?.({ data: JSON.stringify(msg) }), 0) }
+
+  send(data) {
+    this.sent.push(data)
+    if (typeof data === 'string') {
+      if (JSON.parse(data).type === 'eof') {
+        this.texts.forEach((text) => this.say({ type: 'final', text }))
+        this.say({ type: 'progress', sec: this.samples / 16000 })
+        this.say({ type: 'done' })
+      }
+      return
+    }
+    this.samples += data.byteLength / 2
+    if (FakeWhisper.dropAt && this.samples >= FakeWhisper.dropAt) {
+      FakeWhisper.dropAt = 0
+      this.say({ type: 'final', text: 'First part.' })
+      this.say({ type: 'progress', sec: 0.5 })
+      setTimeout(() => { this.readyState = 3; this.onclose?.({ code: 1011 }) }, 5)
+    }
+  }
+
+  close() { this.readyState = 3 }
+}
+
+const decoder = (n) => class {
+  decodeAudioData() {
+    return Promise.resolve({ length: n, numberOfChannels: 1, getChannelData: () => new Float32Array(n).fill(0.2) })
+  }
+}
+
+describe('Whisper', () => {
+  beforeEach(() => { FakeWhisper.texts = []; FakeWhisper.dropAt = 0 })
+
+  it('keeps its punctuation, and splits its stretches of speech at the sentence ends', () => {
+    expect(T.whisperSentences(['Hello there. This is', 'the show! Is it?', '  ', '大家好。欢迎'])).toEqual([
+      'Hello there.', 'This is the show!', 'Is it?', '大家好。', '欢迎',
+    ])
+  })
+
+  it('reports how far the server says it recognized, and a drop carries it', async () => {
+    const heard = []
+    FakeWhisper.dropAt = 16000
+    const err = await T.runSession({
+      pcm: tone(32000), url: 'wss://x/transcribe', lang: 'de-DE', WebSocketImpl: FakeWhisper, idleMs: 5000, onHeard: (n) => heard.push(n),
+    }).catch((e) => e)
+    expect(heard).toEqual([8000])
+    expect(err).toMatchObject({ code: 'connection', heard: 8000, finals: ['First part.'] })
+  })
+
+  it('transcribe(): Whisper sentences, the progress follows recognition, and a drop goes on from what was recognized', async () => {
+    window.OfflineAudioContext = decoder(32000)
+    FakeWhisper.texts = ['Second part, with commas.']
+    FakeWhisper.dropAt = 16000
+    const progress = []
+    const out = await T.transcribe(new Blob([new Uint8Array(100)], { type: 'audio/webm' }), {
+      durationSec: 2, url: 'wss://x/transcribe', engine: 'whisper', WebSocketImpl: FakeWhisper, idleMs: 5000,
+      onProgress: (p) => progress.push(p),
+    })
+    expect(out).toEqual(['First part.', 'Second part, with commas.'])
+    expect(sockets).toHaveLength(2)
+    // the second session starts at the half second Whisper had recognized
+    // (the silent tail starts at the next whole frame: 1600 samples less)
+    const audio = sockets[1].sent.filter((b) => typeof b !== 'string').reduce((n, b) => n + b.byteLength / 2, 0)
+    expect(audio).toBe(32000 - 8000 + 24000 - 1600)
+    const listening = progress.filter((p) => p.phase === 'listening').map((p) => p.done)
+    expect(listening[0]).toBeCloseTo(0.25, 2)
+  }, 10000)
+})
+
+describe('speech server offers', () => {
+  it('passes the stream captions offer (/live) beside the transcripts one', async () => {
+    vi.resetModules()
+    globalThis.fetch = vi.fn(async () => ({
+      ok: true,
+      json: async () => ({ models: ['en-us'], transcribe: null, live: { engine: 'whisper', langs: ['en', 'de'] } }),
+    }))
+    const W = await import('../../../src/utils/transcribe.js')
+    const info = await W.speechInfo()
+    expect(info.live).toEqual({ engine: 'whisper', langs: ['en', 'de'] })
+    expect(info.transcribe).toBeNull()
+  })
+
+  it('uses Whisper on /transcribe when the server has it, for the site languages; the teleprompter keeps the live models', async () => {
+    vi.resetModules()
+    globalThis.fetch = vi.fn(async (url) => ({
+      ok: true,
+      json: async () => (String(url).includes('stt-langs')
+        ? { models: ['en-us', 'de'], transcribe: { engine: 'whisper', langs: ['en', 'de', 'tl'] } }
+        : { token: '123.abc' }),
+    }))
+    const W = await import('../../../src/utils/transcribe.js')
+    expect(await W.transcriptLanguages()).toEqual(['en-US', 'de-DE', 'fil-PH'])
+    expect(await W.liveLanguages()).toEqual(['en-US', 'de-DE'])
+    window.OfflineAudioContext = decoder(8000)
+    FakeWhisper.texts = ['Hallo zusammen.']
+    const out = await W.transcribe(new Blob([new Uint8Array(100)], { type: 'audio/webm' }), {
+      lang: 'de-DE', durationSec: 0.5, WebSocketImpl: FakeWhisper, idleMs: 5000,
+    })
+    expect(sockets[0].url).toBe('wss://stt.test/transcribe?lang=de-DE&token=123.abc')
+    expect(out).toEqual(['Hallo zusammen.'])
+  })
+
+  it('makes the transcript on the live socket when /transcribe never opens', async () => {
+    vi.resetModules()
+    globalThis.fetch = vi.fn(async (url) => ({
+      ok: true,
+      json: async () => (String(url).includes('stt-langs')
+        ? { models: ['en-us'], transcribe: { engine: 'whisper', langs: ['en'] } }
+        : { token: '123.abc' }),
+    }))
+    const W = await import('../../../src/utils/transcribe.js')
+    window.OfflineAudioContext = decoder(8000)
+    FakeSocket.phrases = ['plain words']
+    class Router {
+      constructor(url) {
+        if (!url.includes('/transcribe')) return new FakeSocket(url)
+        sockets.push(this)
+        this.url = url
+        setTimeout(() => { this.readyState = 3; this.onclose?.({ code: 1006 }) }, 0)
+      }
+
+      close() {}
+    }
+    const out = await W.transcribe(new Blob([new Uint8Array(100)], { type: 'audio/webm' }), {
+      durationSec: 0.5, WebSocketImpl: Router, idleMs: 40,
+    })
+    expect(sockets.map((x) => new URL(x.url).pathname)).toEqual(['/transcribe', '/stt'])
+    expect(out).toEqual(['Plain words.'])
   })
 })

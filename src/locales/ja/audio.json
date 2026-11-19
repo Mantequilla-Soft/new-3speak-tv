@@ -146,6 +146,16 @@
     "notes": "ノート",
     "stillIndexing": "この投稿の音声はまだインデックス中です。数分後にもう一度お試しください。"
   },
+  "edit": {
+    "title": "音声を編集",
+    "editTitle": "タイトル、概要、タグ、カバーを編集",
+    "cover": "カバー",
+    "coverAlt": "カバーのプレビュー",
+    "coverHint": "画像をアップロードするか、直接URLを貼り付けてください。正方形の画像がおすすめです。",
+    "notesPlaceholder": "この音声についてリスナーに伝えましょう…",
+    "keptNote": "投稿内のプレーヤーリンクと音楽クレジットはそのまま残ります。",
+    "updated": "音声を更新しました！"
+  },
   "page": {
     "sections": {
       "popular": "人気",
@@ -171,7 +181,6 @@
     },
     "all": "すべて",
     "musicGenre": "音楽ジャンル",
-    "anyGenre": "すべてのジャンル",
     "tracks_other": "{{count}} トラック",
     "noTracks": "トラックが見つかりません。",
     "creators": "クリエイター",
@@ -183,7 +192,7 @@
     "nothingPlaying": "まだ何も再生していません。",
     "goExplore": "聴くものを探す",
     "exploreViews": "セクション",
-    "mostPlayed": "よく再生されている"
+    "newUploads": "新着アップロード"
   },
   "upload": {
     "title": "音声をアップロード",
@@ -265,7 +274,10 @@
       "formats": "MP3、WAV、OGG、WEBM、M4A、FLAC、AAC · 複数可",
       "stop": "停止",
       "orRecord": "またはその場で録音",
+      "micPreparing": "マイクを準備しています...",
       "recordLimit": "1 回の録音は最大 {{minutes}} 分",
+      "level": "マイクの音量",
+      "noSound": "音が入っていません。マイクがミュートになっていないか、ほかのアプリが使っていないか確認してください。",
       "record": "録音",
       "added": "追加済み（{{count}}）",
       "filesTitle": "音声ファイル"
@@ -280,6 +292,7 @@
       "descriptionOptional": "説明（任意）",
       "track": "トラック",
       "category": "カテゴリー",
+      "categoryRequired": "正しいタブに表示されるよう、カテゴリーを選んでください。",
       "musicGenre": "音楽ジャンル"
     },
     "playlist": {
@@ -365,6 +378,7 @@
     "tracks": {
       "helpAlbum": "各トラックはメイン投稿へのコメントとして公開されます。共通の値を一度設定してすべてに適用し、トラックごとに上書きできます。",
       "helpSnaps": "各トラックは独立した Snap として公開されます。共通の値を一度設定してすべてに適用し、トラックごとに上書きできます。",
+      "helpSnapsSingle": "あなたの音声は単独のスナップとして公開されます。",
       "applyToAllHeading": "すべてのトラックに適用",
       "applyNote_other": "<b>全 {{count}} トラックに適用:</b> 説明とカバーを共通にして、あとで各トラックを個別に変更できます。",
       "sharedDescription": "共通の説明（任意）",
@@ -387,6 +401,10 @@
       "earnings": "報酬:",
       "earningsPpl": "再生ごとの報酬（@{{account}}）",
       "earningsNormal": "通常の投稿報酬",
+      "rewards": "報酬:",
+      "beneficiaries": "受取人:",
+      "perTrack": "トラックごとに設定",
+      "noBeneficiaries": "なし",
       "playlist": "再生リスト:",
       "failedCount_other": "{{count}} トラックが失敗しました。",
       "retryAllFailed": "失敗したものをすべて再試行",
@@ -750,7 +768,9 @@
     "description": "説明",
     "noDescription": "説明はありません。",
     "comments": "コメント",
-    "album": "{{name}} より"
+    "album": "{{name}} より",
+    "videoPodcast": "ビデオポッドキャスト",
+    "videoPodcastTitle": "このエピソードを動画に：カバー、波形、字幕付き"
   },
   "offline": {
     "notice": "オフラインです。ダウンロード済みのものは再生できます。",

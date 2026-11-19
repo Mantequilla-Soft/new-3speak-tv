@@ -14,14 +14,13 @@ import { FEED_EXCLUDED_HOSTS } from '../utils/config';
  * `following: true` filters to streamers the signed-in user follows (Follow
  * feed). Includes unlisted streams for now (the /streams endpoint does).
  *
- * Hosts in FEED_EXCLUDED_HOSTS are dropped by default, since every caller but
- * one is a discovery feed. `includeAllHosts: true` opts out — used by the
- * watch-page pager, which navigates between streams rather than surfacing them.
+ * Hosts in FEED_EXCLUDED_HOSTS are always dropped, the watch-page pager
+ * included: swiping from another stream must not land on theirs.
  *
  * `standby: true` also keeps the rooms that are open but not broadcasting yet
  * (the /live page's Scheduled tab), each marked `_standby`.
  */
-export function useLiveStreams({ following = false, includeAllHosts = false, standby = false } = {}) {
+export function useLiveStreams({ following = false, standby = false } = {}) {
   const [streams, setStreams] = useState([]);
   const [followSet, setFollowSet] = useState(null); // null = not loaded
   const user = useAppStore((s) => s.user);
@@ -57,8 +56,8 @@ export function useLiveStreams({ following = false, includeAllHosts = false, sta
     // them in discovery. Public rooms show to everyone. (Unlisted never reaches
     // the client — the server drops it from /streams.)
     if (!authenticated) list = list.filter((s) => s.visibility !== 'hive-internal');
-    // Keep excluded hosts out of the discovery feeds (discover / follow / new).
-    if (!includeAllHosts && FEED_EXCLUDED_HOSTS.size) {
+    // Keep excluded hosts out of every list (feeds, /live, the pager).
+    if (FEED_EXCLUDED_HOSTS.size) {
       list = list.filter((s) => !FEED_EXCLUDED_HOSTS.has(String(s.host || '').toLowerCase()));
     }
     if (following) list = followSet ? list.filter((s) => followSet.has(s.host)) : [];
@@ -79,5 +78,5 @@ export function useLiveStreams({ following = false, includeAllHosts = false, sta
       views: s.viewers ?? 0,
       ...(standby ? { _standby: !s.live } : {}),
     }));
-  }, [streams, following, followSet, authenticated, includeAllHosts, standby]);
+  }, [streams, following, followSet, authenticated, standby]);
 }

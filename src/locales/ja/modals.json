@@ -44,6 +44,7 @@
     "title": "リンクした外部プロフィール",
     "intro": "YouTube（またはほかの）チャンネルの所有者であることを証明するには、あなた専用の 3Speak ハッシュを公開プロフィールの説明に貼り付けてから、ここで確認してください。",
     "openProfile": "プロフィールを開く",
+    "importEpisodes": "エピソードをインポート",
     "removeLink": "リンクを削除",
     "empty": "リンクした外部プロフィールはまだありません。",
     "addPlatform": "新しいプラットフォームを追加",
@@ -81,7 +82,6 @@
     "addCollaborator": "共同制作者を追加",
     "saveSplit": "分配を保存",
     "intro": "この投稿の報酬の一部を自動的に受け取るユーザーを追加します。",
-    "minPercent": "%（最小 {{percent}}%）",
     "usernamePlaceholder": "ユーザー名を入力",
     "minimumReward": "最小の報酬は <strong>1%</strong> です",
     "checking": "Hive で <strong>@{{account}}</strong> を確認中…",
@@ -89,7 +89,11 @@
     "notAdded": "<strong>@{{account}}</strong> はまだ追加されていません。<strong>+</strong> をクリックして追加するか、入力欄をクリアしてください。",
     "infrastructure": "インフラ: 10%",
     "videoEncoding": "動画エンコード: 1%",
-    "defaults": "デフォルトの受益者（{{count}}）"
+    "defaults": "デフォルトの受益者（{{count}}）",
+    "raise": "{{account}} の割合を上げる",
+    "lower": "{{account}} の割合を下げる",
+    "minShare": "最低 {{percent}}%",
+    "raiseHint": "鍵付きの割合は、より多く渡すために上げられますが、最低値より下げることはできません。"
   },
   "qr": {
     "scan": "Hive Keychain でこの QR をスキャン:",
@@ -137,7 +141,8 @@
       "title": "ショートのテキスト",
       "hint": "ショートでオーディオグラムと一緒に表示されます。音声へのリンクは自動で追加されます。",
       "placeholder": "この部分は何について？（任意）"
-    }
+    },
+    "videoPodcastNotSupported": "ビデオポッドキャストはまだエディターで使えません。あとでもう一度お試しください。"
   },
   "profile": {
     "mustLogin": "先にログインしてください",

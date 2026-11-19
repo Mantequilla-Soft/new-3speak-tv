@@ -1,0 +1,480 @@
+{
+  "menuEntry": "Otomatisasi",
+  "title": "Otomatisasi",
+  "beta": "Beta",
+  "subtitle": "Biarkan 3Speak mengerjakan tindak lanjut saat sesuatu terjadi di kanal atau dompetmu: posting snap, Shorts, audio, atau video, berkomentar, upvote, reblog, atau memberi tahu Discord-mu.",
+  "howItWorks": "3Speak memeriksa kanalmu setiap {{minutes}} menit. Setiap postingan baru menjalankan otomatisasi yang aktif untuknya, dan semua yang diposting keluar atas namamu, lewat izin posting yang kamu berikan ke 3Speak. Postingan yang dibuat otomatisasi tidak pernah memicu otomatisasi lain.",
+  "gate": {
+    "signIn": "Masuk untuk menyiapkan otomatisasi.",
+    "closedTitle": "Belum tersedia",
+    "closed": "Otomatisasi sedang dalam uji tertutup dan belum dibuka untuk akunmu.",
+    "unavailable": "Otomatisasi sedang tidak tersedia di server ini.",
+    "proTitle": "Fitur 3Speak Pro",
+    "pro": "Otomatisasi adalah bagian dari 3Speak Pro.",
+    "getPro": "Dapatkan 3Speak Pro",
+    "skipPro": "Lewati pemeriksaan Pro (penguji)",
+    "skipProHint": "Sebagai akun uji, kamu bisa mencoba otomatisasi tanpa Pro.",
+    "proSkipped": "Mode uji: pemeriksaan Pro dilewati untuk akunmu.",
+    "restorePro": "Gunakan pemeriksaan Pro lagi"
+  },
+  "grant": {
+    "needed": "Otomatisasi memposting untukmu. Izinkan 3Speak memposting di akunmu terlebih dahulu.",
+    "button": "Izinkan 3Speak memposting"
+  },
+  "list": {
+    "new": "Otomatisasi baru",
+    "emptyTitle": "Belum ada otomatisasi",
+    "empty": "Mulai dari contoh atau buat sendiri: pilih pemicunya, lalu seret apa yang harus terjadi.",
+    "steps_other": "{{count}} langkah",
+    "lastRun": "Terakhir dijalankan:",
+    "edit": "Edit",
+    "runs": "Riwayat jalan",
+    "delete": "Hapus",
+    "cancel": "Batal",
+    "notFound": "Otomatisasi ini tidak ada (lagi).",
+    "deleteTitle": "Hapus \"{{name}}\"?",
+    "deleteBody": "Otomatisasi dan riwayat jalannya akan dihapus. Postingan yang sudah dibuat tetap ada.",
+    "on": "Aktif",
+    "off": "Nonaktif"
+  },
+  "runs": {
+    "title": "Riwayat jalan \"{{name}}\"",
+    "empty": "Belum pernah dijalankan",
+    "emptyHint": "Otomatisasi berjalan saat postingan barumu cocok dan otomatisasinya sedang aktif.",
+    "steps": "{{done}} dari {{count}} langkah selesai",
+    "attempts_other": "{{count}} kali coba",
+    "status": {
+      "queued": "Dalam antrean",
+      "running": "Berjalan",
+      "waiting": "Menunggu",
+      "done": "Selesai",
+      "failed": "Gagal",
+      "cancelled": "Dihentikan"
+    }
+  },
+  "editor": {
+    "back": "Kembali",
+    "close": "Tutup",
+    "done": "Selesai",
+    "name": "Nama",
+    "namePlaceholder": "Beri nama otomatisasi ini",
+    "enabled": "Otomatisasi aktif",
+    "test": "Uji",
+    "save": "Simpan",
+    "toolboxTasks": "Lakukan ini",
+    "toolboxLogic": "Putuskan",
+    "whenTitle": "Saat ini terjadi",
+    "event": "Peristiwa",
+    "eventChangeNote": "Langkah yang tidak cocok dengan peristiwa baru akan diberi lencana peringatan.",
+    "placeholders": "Penanda isian",
+    "insert": "Sisipkan",
+    "howTo": "Seret langkah dari kotak alat ke garis. Pilih langkah untuk mengubahnya, atau pilih ruang kosong untuk mengubah peristiwa.",
+    "stepName": "Nama langkah",
+    "optional": "opsional",
+    "tagsHint": "Maksimal {{max}} tag, dipisahkan spasi.",
+    "emptyHint": "Seret langkah dari kotak alat ke garis",
+    "accounts": "Akun",
+    "accountsHint": "Maksimal {{max}} akun Hive, dipisahkan dengan spasi."
+  },
+  "test": {
+    "title": "Uji coba",
+    "sample": "Kamu belum punya postingan jenis ini, jadi pengujian memakai nilai contoh.",
+    "onPost": "Diuji pada postingan cocok terbarumu: {{title}}",
+    "nothingPosted": "Tidak ada yang diposting. Ini yang akan dilakukan setiap langkah.",
+    "shortDetail": "Shorts mulai detik ke-{{start}}, sepanjang {{length}} detik.",
+    "noSteps": "Tidak ada langkah yang akan berjalan untuk postingan ini.",
+    "voteOn": "Upvote {{on}} sebesar {{weight}}%.",
+    "reblogOn": "Reblog {{on}}.",
+    "skipped": {
+      "self": "Dilewati: itu kamu sendiri.",
+      "no_sender": "Dilewati: tidak ada yang bisa di-upvote (tip Lightning atau boost siaran tidak punya pengirim Hive).",
+      "no_recent_post": "Dilewati: mereka tidak punya postingan dalam 7 hari terakhir."
+    }
+  },
+  "events": {
+    "video_published": {
+      "label": "Aku menerbitkan video",
+      "desc": "Video yang kamu unggah sendiri. Video impor punya peristiwa sendiri."
+    },
+    "short_published": {
+      "label": "Aku menerbitkan Shorts",
+      "desc": "Shorts yang kamu posting, dari pengunggah, editor, atau klip."
+    },
+    "video_imported": {
+      "label": "Videoku diimpor",
+      "desc": "Video dan Shorts yang dibawa pengimpor dari YouTube, TikTok, dan lainnya."
+    },
+    "podcast_published": {
+      "label": "Aku memposting episode podcast",
+      "desc": "Episode podcast dan wawancara, diunggah atau diimpor dari feed-mu."
+    },
+    "audio_published": {
+      "label": "Aku memposting audio apa pun",
+      "desc": "Semua postingan audio: podcast, musik, buku audio, dan pesan suara."
+    },
+    "stream_started": {
+      "label": "Aku mulai live",
+      "desc": "Saat postingan untuk siaran langsungmu terbit."
+    },
+    "tip_received": {
+      "label": "Aku menerima tip",
+      "desc": "Tip HIVE, HBD, atau Lightning untuk salah satu videomu (memonya menautkan videonya)."
+    },
+    "boost_received": {
+      "label": "Aku menerima boost",
+      "desc": "Boost pada salah satu postinganmu, atau pada siaranmu."
+    },
+    "power_up": {
+      "label": "Power up",
+      "desc": "Kamu melakukan power up, atau seseorang melakukan power up HIVE ke akunmu."
+    },
+    "poll_ended": {
+      "label": "Polling-ku berakhir",
+      "desc": "Salah satu polling snap-mu sudah berakhir."
+    },
+    "stream_poll_ended": {
+      "label": "Polling di siaranku berakhir",
+      "desc": "Polling atau prediksi di salah satu siaranmu dalam tiga hari terakhir sudah berakhir."
+    },
+    "someone_posted": {
+      "label": "Orang yang kupilih memposting",
+      "desc": "Postingan dari akun yang kamu daftarkan di bawah: video, Shorts, audio, podcast, snap, siaran, atau postingan teks."
+    }
+  },
+  "tasks": {
+    "post_snap": {
+      "label": "Posting snap",
+      "desc": "Postingan teks pendek di feed snaps, pada tab Komunitas di profilmu.",
+      "props": {
+        "text": "Teks snap",
+        "tags": "Tag"
+      }
+    },
+    "post_short": {
+      "label": "Posting Shorts",
+      "desc": "Memotong klip dari video baru dan mempostingnya sebagai Shorts, sekitar 10 menit kemudian.",
+      "props": {
+        "start": "Mulai di detik",
+        "length": "Durasi dalam detik",
+        "vertical": "Vertikal",
+        "caption": "Keterangan",
+        "tags": "Tag"
+      },
+      "hints": {
+        "start": "Titik awal klip di dalam video.",
+        "length": "5 sampai 60 detik.",
+        "vertical": "Memotong bagian tengah video lebar menjadi 9:16."
+      }
+    },
+    "post_audio": {
+      "label": "Posting audio",
+      "desc": "Memposting suara dari video baru sebagai postingan audio dengan sampulnya, sekitar 10 menit kemudian.",
+      "props": {
+        "title": "Judul",
+        "audioType": "Jenis audio",
+        "tags": "Tag"
+      }
+    },
+    "post_video": {
+      "label": "Posting video",
+      "desc": "Memposting audio baru sebagai video dengan sampulnya sebagai gambar, sekitar 10 menit kemudian.",
+      "props": {
+        "title": "Judul",
+        "tags": "Tag"
+      }
+    },
+    "post_comment": {
+      "label": "Komentari postingan",
+      "desc": "Komentarmu di bawah postingan, untuk tautan, kredit, ucapan terima kasih, atau hasil.",
+      "props": {
+        "text": "Komentar"
+      }
+    },
+    "upvote_post": {
+      "label": "Upvote postingannya",
+      "desc": "Upvote darimu untuk postingan mereka.",
+      "props": {
+        "weight": "Bobot vote dalam %"
+      }
+    },
+    "reblog": {
+      "label": "Reblog postingannya",
+      "desc": "Menaruh postingan mereka di blogmu.",
+      "props": {}
+    },
+    "upvote_sender": {
+      "label": "Upvote pengirimnya",
+      "desc": "Upvote darimu untuk postingan terbaru orang yang memberi tip, boost, atau power up kepadamu (selama masih membayar reward).",
+      "props": {
+        "weight": "Bobot vote dalam %"
+      }
+    },
+    "send_discord": {
+      "label": "Kirim ke Discord",
+      "desc": "Pesan ke salah satu kanal server Discord-mu lewat webhook. Tidak ada yang di-mention.",
+      "props": {
+        "webhook": "Alamat webhook",
+        "text": "Pesan"
+      },
+      "hints": {
+        "webhook": "Di Discord: pengaturan kanal, Integrasi, Webhook, Salin URL Webhook."
+      }
+    }
+  },
+  "if": {
+    "label": "Jika",
+    "desc": "Mengambil jalur Ya jika kondisinya terpenuhi, jika tidak jalur Tidak.",
+    "field": "Periksa",
+    "pickField": "Pilih yang akan diperiksa",
+    "operator": "Kondisi",
+    "value": "Nilai",
+    "branchesNote": "Seret langkah ke jalur Ya dan Tidak di kanvas.",
+    "branch": {
+      "yes": "Ya",
+      "no": "Tidak"
+    },
+    "units": {
+      "seconds": "Detik",
+      "amount": "Jumlah",
+      "count": "Angka"
+    }
+  },
+  "fields": {
+    "title": "Judul",
+    "description": "Deskripsi",
+    "tags": "Tag",
+    "duration": "Durasi",
+    "community": "Komunitas",
+    "url": "Tautan",
+    "platform": "Diimpor dari",
+    "kind": "Jenis",
+    "audioType": "Jenis audio",
+    "imported": "Diimpor",
+    "from": "Dari",
+    "amount": "Jumlah",
+    "asset": "Mata uang",
+    "message": "Pesan",
+    "via": "Dibayar dengan",
+    "boostKind": "Yang di-boost",
+    "self": "Olehku",
+    "question": "Pertanyaan",
+    "winner": "Pemenang",
+    "votes": "Suara",
+    "author": "Akun",
+    "postKind": "Jenis postingan"
+  },
+  "ops": {
+    "contains": "berisi",
+    "not_contains": "tidak berisi",
+    "equals": "sama persis dengan",
+    "starts_with": "diawali dengan",
+    "has_tag": "punya tag",
+    "not_has_tag": "tidak punya tag",
+    "gt": "lebih panjang dari",
+    "lt": "lebih pendek dari",
+    "is": "adalah",
+    "is_not": "bukan"
+  },
+  "choices": {
+    "youtube": "YouTube",
+    "tiktok": "TikTok",
+    "instagram": "Instagram",
+    "rumble": "Rumble",
+    "bitchute": "BitChute",
+    "rss": "Feed podcast",
+    "video": "Video",
+    "short": "Shorts",
+    "podcast": "Podcast",
+    "interview": "Wawancara",
+    "audiobook": "Buku audio",
+    "song": "Musik",
+    "voice_message": "Pesan suara",
+    "yes": "Ya",
+    "no": "Tidak",
+    "HIVE": "HIVE",
+    "HBD": "HBD",
+    "hive": "Dompet Hive",
+    "lightning": "Lightning",
+    "post": "Postingan",
+    "stream": "Siaran",
+    "audio": "Audio",
+    "snap": "Snap"
+  },
+  "placeholders": {
+    "title": "judul postingan",
+    "description": "awal deskripsinya",
+    "url": "tautannya di 3Speak",
+    "author": "akun yang mempostingnya (kamu, untuk postinganmu sendiri)",
+    "tags": "tag-nya sebagai #hashtag",
+    "platform": "asal impornya",
+    "from": "siapa yang mengirimnya",
+    "amount": "berapa banyak",
+    "message": "pesan yang menyertainya",
+    "question": "pertanyaan polling",
+    "results": "setiap jawaban beserta jumlah suaranya",
+    "winner": "jawaban dengan suara terbanyak",
+    "votes": "berapa orang yang memilih"
+  },
+  "problems": {
+    "required": "Ini tidak boleh kosong.",
+    "too_long": "Ini terlalu panjang.",
+    "over_limit": "Terlalu banyak.",
+    "bad_tag": "Tag terdiri dari 2 sampai 24 huruf, angka, atau tanda hubung.",
+    "bad_webhook": "Ini bukan alamat webhook Discord.",
+    "out_of_range": "Angka ini di luar rentang.",
+    "bad_field": "Pilih yang akan diperiksa.",
+    "bad_operator": "Pilih kondisi.",
+    "bad_value": "Masukkan nilai yang sesuai dengan kondisinya.",
+    "unknown_step": "3Speak tidak mengenali langkah ini.",
+    "task_not_for_event": "Langkah ini tidak cocok dengan peristiwanya (Shorts butuh video).",
+    "too_many_of_type": "Langkah ini tidak boleh muncul sesering itu dalam satu otomatisasi.",
+    "too_many_steps": "Satu otomatisasi paling banyak punya 12 langkah.",
+    "too_deep": "Langkah Jika paling dalam bisa bersarang 3 tingkat.",
+    "bad_id": "Ada langkah yang rusak. Hapus lalu tambahkan lagi.",
+    "bad_sequence": "Otomatisasi ini rusak. Buat yang baru.",
+    "empty": "Tambahkan minimal satu langkah.",
+    "no_event": "Pilih peristiwa yang memicunya.",
+    "no_name": "Beri nama otomatisasinya.",
+    "no_grant": "Izinkan 3Speak memposting untukmu terlebih dahulu.",
+    "pro_required": "Dijeda: otomatisasi membutuhkan 3Speak Pro.",
+    "not_found": "Otomatisasi ini tidak ada (lagi).",
+    "unknown": "Ini tidak dapat digunakan.",
+    "no_post": "Tidak ada postingan untuk dibalas.",
+    "no_audio": "Postingan ini tidak punya audio 3Speak.",
+    "no_accounts": "Daftarkan setidaknya satu akun.",
+    "too_many_accounts": "Maksimal {{max}} akun.",
+    "bad_account": "Salah satu akun bukan nama akun Hive.",
+    "bad_account_named": "\"{{name}}\" bukan nama akun Hive."
+  },
+  "designer": {
+    "contextMenu": {
+      "delete": "Hapus",
+      "duplicate": "Duplikat",
+      "resetView": "Atur ulang tampilan",
+      "select": "Pilih",
+      "unselect": "Batalkan pilihan"
+    },
+    "controlBar": {
+      "deleteSelectedStep": "Hapus langkah terpilih",
+      "redo": "Ulangi",
+      "resetView": "Atur ulang tampilan",
+      "turnOnOffDragAndDrop": "Aktifkan atau nonaktifkan pemindahan langkah",
+      "undo": "Urungkan",
+      "zoomIn": "Perbesar",
+      "zoomOut": "Perkecil"
+    },
+    "smartEditor": {
+      "toggle": "Tampilkan atau sembunyikan panel"
+    },
+    "toolbox": {
+      "search": "Cari…",
+      "title": "Langkah"
+    }
+  },
+  "templates": {
+    "button": "Template",
+    "title": "Template",
+    "newTitle": "Otomatisasi baru",
+    "sub": "Mulai dari template lalu ubah sesukamu, atau mulai dari kosong.",
+    "replaces": "Memilih template akan mengganti langkah-langkah di kanvas.",
+    "groups": {
+      "videos": "Video",
+      "audio": "Audio dan podcast",
+      "live": "Live",
+      "polls": "Polling",
+      "thanks": "Tip, boost, dan power up",
+      "others": "Akun lain",
+      "own": "Buatanmu sendiri"
+    },
+    "items": {
+      "snap_video": {
+        "title": "Snap untuk setiap video baru",
+        "sub": "Saat kamu menerbitkan video, snap berisi judul dan tautannya akan diposting."
+      },
+      "short_video": {
+        "title": "Shorts dari setiap video baru",
+        "sub": "Saat kamu menerbitkan video, 30 detik pertamanya menjadi Shorts tegak."
+      },
+      "long_video_short": {
+        "title": "Shorts untuk video panjang, snap untuk yang pendek",
+        "sub": "Video lebih dari 5 menit mendapat Shorts mulai detik ke-30, yang lebih pendek mendapat snap."
+      },
+      "audio_from_video": {
+        "title": "Versi audio dari setiap video",
+        "sub": "Saat kamu menerbitkan video, suaranya diposting sebagai episode podcast."
+      },
+      "imported_discord": {
+        "title": "Kabari Discord soal video impor",
+        "sub": "Saat pengimpor membawa masuk video, server Discord-mu mendapat kabar."
+      },
+      "video_from_podcast": {
+        "title": "Versi video dari setiap episode",
+        "sub": "Saat kamu memposting episode podcast, episode itu diposting sebagai video dengan sampulnya."
+      },
+      "podcast_snap": {
+        "title": "Snap untuk setiap episode baru",
+        "sub": "Saat kamu memposting episode podcast, snap berisi tautannya akan diposting."
+      },
+      "discord_live": {
+        "title": "Kabari Discord saat aku live",
+        "sub": "Saat kamu memulai siaran, server Discord-mu menerima pesan."
+      },
+      "stream_poll_snap": {
+        "title": "Snap hasil polling siaran",
+        "sub": "Saat polling di siaranmu berakhir, sebuah snap menunjukkan pilihan orang-orang."
+      },
+      "poll_results": {
+        "title": "Balas dengan hasil polling-ku",
+        "sub": "Saat salah satu polling-mu berakhir, balasan di bawahnya menunjukkan hasilnya."
+      },
+      "thank_tips": {
+        "title": "Berterima kasih kepada setiap pemberi tip",
+        "sub": "Ucapan terima kasih di bawah video, dan upvote untuk postingan terbaru si pemberi tip."
+      },
+      "thank_boosts": {
+        "title": "Berterima kasih kepada setiap pemberi boost",
+        "sub": "Snap ucapan terima kasih, dan upvote untuk postingan terbaru si pemberi boost."
+      },
+      "power_up_snap": {
+        "title": "Bagikan power up-ku",
+        "sub": "Saat kamu power up, sebuah snap menyebut jumlahnya. Saat seseorang melakukan power up untukmu, mereka mendapat upvote."
+      },
+      "vote_friends": {
+        "title": "Upvote video baru teman-temanku",
+        "sub": "Saat akun yang kamu daftarkan menerbitkan video, video itu mendapat upvote darimu."
+      },
+      "reblog_friends": {
+        "title": "Reblog video baru teman-temanku",
+        "sub": "Saat akun yang kamu daftarkan menerbitkan video, video itu masuk ke blogmu."
+      },
+      "blank": {
+        "title": "Mulai dari kosong",
+        "sub": "Pilih peristiwanya dan susun langkahnya sendiri."
+      }
+    },
+    "texts": {
+      "longerThan5": "Lebih dari 5 menit?",
+      "importedDiscord": "Baru di kanalku: {title}\n{url}",
+      "podcastSnap": "Episode baru: {title}\n\n{url}",
+      "discordLive": "{title} sedang live: {url}",
+      "streamPollSnap": "Polling dari siaranku: {question}\n\n{results}\n\n{url}",
+      "pollResults": "Polling sudah ditutup. Hasilnya:\n\n{results}\n\nTerima kasih untuk semua {votes} pemilih!",
+      "viaLightning": "Dibayar dengan Lightning?",
+      "thanksLightning": "Terima kasih atas tip {amount} HIVE-nya! ⚡",
+      "thanksTip": "Terima kasih @{from} atas tip {amount}-nya! 🙏",
+      "boostOnPost": "Boost pada postingan?",
+      "thanksBoost": "Terima kasih @{from} sudah nge-boost {url} 🚀\n\n{message}",
+      "thanksStreamBoost": "Terima kasih atas boost di siaranku! 🚀 {url}",
+      "byMe": "Power up olehku?",
+      "poweredUp": "Baru saja power up {amount} HIVE! 💪",
+      "isVideo": "Video?"
+    }
+  },
+  "eventGroups": {
+    "channel": "Kanalku",
+    "wallet": "Dompetku",
+    "polls": "Polling",
+    "others": "Akun lain",
+    "more": "Lainnya"
+  }
+}

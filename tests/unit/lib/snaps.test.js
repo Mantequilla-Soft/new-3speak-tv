@@ -135,6 +135,14 @@ describe('publishSnap', () => {
     expect(lastMeta().community).toBeUndefined()
   })
 
+  it('a poll snap carries its poll block', async () => {
+    const poll = { options: ['Music', 'Code'], ends_at: '2026-11-16T10:00:00.000Z' }
+    await run(publishSnap({ user: 'a', body: 'Which topic next?', poll }))
+    expect(lastMeta().poll).toEqual(poll)
+    await run(publishSnap({ user: 'a', body: 'x', poll: { nope: true } }))
+    expect(lastMeta().poll).toBeUndefined()
+  })
+
   it('an NSFW snap keeps its nsfw tag even with the maximum number of user tags', async () => {
     const tags = Array.from({ length: 9 }, (_, i) => `t${i}`)
     await run(publishSnap({ user: 'a', body: 'x', tags, nsfw: true }))
@@ -183,6 +191,12 @@ describe('updateSnap', () => {
     expect(meta).toEqual({ app: '3speak/snap', format: 'markdown', tags: ['community', 'y'], type: 'snap', community: 'hive-7' })
     expect(options).toBeNull()
     expect(out.indexed).toEqual({ body: 'New text' })
+  })
+
+  it('an edit keeps the poll it was published with', async () => {
+    hivePost = { author: 'alice', parent_author: 'p', parent_permlink: 'c', json_metadata: '{"poll":{"options":["A","B"],"ends_at":null}}' }
+    await run(updateSnap({ user: 'alice', permlink: 'p', body: 'x' }))
+    expect(lastMeta().poll).toEqual({ options: ['A', 'B'], ends_at: null })
   })
 
   it('drops an invalid or unreadable community', async () => {

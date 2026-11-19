@@ -35,6 +35,14 @@
     "hide": "ซ่อน",
     "markSeen": "ทำเครื่องหมายว่าดูแล้วทั้งหมด"
   },
+  "continueWatching": {
+    "aria": "ดูต่อ",
+    "rest": "ให้ดูต่อ",
+    "remove": "นำออกจากดูต่อ",
+    "removed": "นำออกจากดูต่อแล้ว",
+    "removeFailed": "นำออกไม่ได้ โปรดลองอีกครั้ง",
+    "progress": "ดูแล้ว {{pct}}%"
+  },
   "tagMeta": {
     "videos_other": "{{num}} วิดีโอ",
     "thisWeek": "{{num}} ในสัปดาห์นี้"

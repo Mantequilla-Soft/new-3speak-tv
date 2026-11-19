@@ -1,0 +1,14 @@
+{
+  "bar": {
+    "title": "बैटल",
+    "startsIn": "{seconds} में शुरू",
+    "timeLeft": "{time} बाकी",
+    "counting": "आख़िरी बूस्ट गिने जा रहे हैं…",
+    "amount": "{amount} HBD",
+    "wins": "@{name} जीते!",
+    "tie": "मुकाबला बराबर!",
+    "endedEarly": "बैटल जल्दी खत्म हो गया",
+    "dropped": "बैटल खत्म: @{name} चले गए",
+    "boostHint": "यहाँ के बूस्ट @{name} के लिए गिने जाते हैं"
+  }
+}

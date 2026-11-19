@@ -1,0 +1,94 @@
+{
+  "actions": {
+    "powerUp": "Power up",
+    "powerDown": "Power down",
+    "savings": "Akiba",
+    "convert": "Badilisha",
+    "delegate": "Kabidhi",
+    "aria": "Simamia fedha zako"
+  },
+  "common": {
+    "amount": "Kiasi ({{coin}})",
+    "available": "Kinachopatikana: {{balance}}",
+    "max": "Zote",
+    "to": "Kwa akaunti",
+    "toHint": "Acha kama ilivyo kwa akaunti yako mwenyewe.",
+    "activeKey": "Inahitaji active key yako",
+    "butrauth": "Umeingia kwa Butter Auth: utaidhinisha hili kwa pochi yako ya Hive au active key yako katika hatua inayofuata.",
+    "insufficient": "Hicho ni zaidi ya ulicho nacho.",
+    "amountPositive": "Weka kiasi kilicho juu ya sifuri.",
+    "invalidAccount": "Hakuna akaunti ya Hive yenye jina hilo.",
+    "accountCheckFailed": "Imeshindwa kukagua akaunti hiyo kwa sasa. Jaribu tena baada ya muda mfupi.",
+    "done": "Imekamilika. Inaweza kuchukua sekunde chache kuonekana hapa.",
+    "failed": "Haikufanikiwa: {{error}}",
+    "loading": "Inapakia pochi yako..."
+  },
+  "powerUp": {
+    "title": "Power up",
+    "note": "Hive Power inazipa kura zako uzito na inapata zawadi za uteuzi. Kuirudisha kuwa HIVE huchukua malipo 13 ya kila wiki.",
+    "submit": "Power up {{amount}} HIVE",
+    "submitTo": "Power up {{amount}} HIVE kwa @{{to}}"
+  },
+  "powerDown": {
+    "title": "Power down",
+    "note": "Hive Power inarudi kama HIVE kwa malipo 13 ya kila wiki, karibu {{weekly}} HP kwa wiki.",
+    "replace": "Power down inaendelea ({{left}} HP zimebaki). Ukianzisha mpya, itachukua nafasi yake.",
+    "submit": "Power down {{amount}} HP",
+    "stop": "Simamisha power down",
+    "stopped": "Power down imesimamishwa."
+  },
+  "savings": {
+    "title": "Akiba",
+    "deposit": "Weka",
+    "withdraw": "Toa",
+    "depositNote": "HBD kwenye akiba inapata {{rate}}% kwa mwaka. Kuitoa huchukua siku 3.",
+    "depositNoteHive": "HIVE kwenye akiba haipati riba. Kuitoa huchukua siku 3.",
+    "withdrawNote": "Inafika baada ya siku 3. Unaweza kughairi hadi wakati huo.",
+    "submitDeposit": "Weka {{amount}} {{coin}}",
+    "submitWithdraw": "Toa {{amount}} {{coin}}"
+  },
+  "convert": {
+    "title": "Badilisha",
+    "hbdToHive": "HBD kwenda HIVE",
+    "hiveToHbd": "HIVE kwenda HBD",
+    "hbdNote": "Utapata karibu {{amount}} HIVE baada ya siku 3.5, kwa bei ya wastani ya siku hizo. Kiasi cha mwisho kinaweza kutofautiana.",
+    "hiveNote": "Utapata karibu {{amount}} HBD sasa hivi. Nusu ya HIVE yako inashikiliwa kama dhamana na iliyobaki inarudi baada ya siku 3.5. Ada ya 5% inatozwa.",
+    "warning": "Ubadilishaji hauwezi kutenduliwa. Kufanya biashara sokoni kunaweza kuwa nafuu zaidi.",
+    "submit": "Badilisha {{amount}} {{coin}}"
+  },
+  "delegate": {
+    "title": "Kabidhi",
+    "toLabel": "Kabidhi kwa",
+    "note": "Hive Power uliyokabidhi inabaki kuwa yako, lakini nguvu yake ya kura inaenda kwa akaunti nyingine. Ukiiondoa, inachukua siku 5 kurudi.",
+    "current": "Sasa unakabidhi {{hp}} HP kwa @{{to}}. Hii inaweka kiasi kipya.",
+    "submit": "Kabidhi {{amount}} HP kwa @{{to}}",
+    "submitNoTo": "Kabidhi {{amount}} HP",
+    "yours": "Ukabidhi wako",
+    "remove": "Ondoa",
+    "removed": "Ukabidhi umeondolewa. HP zinarudi baada ya siku 5.",
+    "self": "Huwezi kujikabidhi mwenyewe."
+  },
+  "pending": {
+    "title": "Yanayoendelea",
+    "powerDown": "Power down: {{weekly}} HP kwa wiki, wiki {{weeks}} zimebaki",
+    "nextPayment": "Malipo yajayo {{date}}",
+    "withdrawal": "Kutoka akiba: {{amount}}",
+    "arrives": "Inafika {{date}}",
+    "convertHbd": "Inabadilisha {{amount}} kuwa HIVE",
+    "convertHive": "{{amount}} zimeshikiliwa kama dhamana",
+    "ready": "Tayari {{date}}",
+    "delegation": "Imekabidhiwa kwa @{{to}}: {{hp}} HP",
+    "cancel": "Ghairi",
+    "cancelled": "Utoaji umeghairiwa. Fedha zinabaki kwenye akiba.",
+    "stop": "Simamisha",
+    "empty": "Hakuna kinachoendelea."
+  },
+  "activeAuth": {
+    "powerDown": "Power down {{amount}}",
+    "toSavings": "Hamisha {{amount}} kwenda akiba",
+    "fromSavings": "Toa {{amount}} kutoka akiba",
+    "cancelSavings": "Ghairi utoaji kutoka akiba",
+    "convert": "Badilisha {{amount}}",
+    "delegate": "Kabidhi {{amount}} kwa @{{to}}"
+  }
+}

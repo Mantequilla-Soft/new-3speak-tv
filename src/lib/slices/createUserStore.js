@@ -1,4 +1,4 @@
-import { HIVE_API_URL } from "../../utils/config";
+import { getHiveUrl } from "../../utils/hiveNode";
 import axios from "axios";
 
 
@@ -22,7 +22,7 @@ export const createUserDetailsSlice = (set) => ({
       };
       // Make a POST request using Axios with headers and body
       const response = await axios.post(
-        HIVE_API_URL,
+        getHiveUrl(),
         body,
         {
           headers: {

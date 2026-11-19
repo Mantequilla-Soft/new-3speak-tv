@@ -156,6 +156,10 @@
       "title": "큰 카드",
       "desc": "홈, 프로필, 재생목록에서 더 큰 동영상 카드"
     },
+    "dataSaver": {
+      "title": "데이터 절약",
+      "desc": "영상 미리보기를 끄고, 영상은 360p로 시작합니다. 기기가 데이터 절약을 요청하거나 연결이 느리면 저절로 켜집니다."
+    },
     "previews": {
       "title": "동영상 미리보기",
       "desc": "마우스를 올리면 음소거 미리보기, 모바일에서는 가운데 카드가 재생돼요"
@@ -165,14 +169,22 @@
       "desc": "홈 스포트라이트에서 소리 없는 클립을 재생해요. 끄면 정지 이미지만 보여요."
     }
   },
+  "startup": {
+    "resume": {
+      "title": "마지막 위치에서 계속하기",
+      "desc": "마지막으로 보던 페이지에서 3Speak이 열립니다. 이 기기에만 저장됩니다."
+    }
+  },
+  "startPrompt": {
+    "title": "마지막 위치에서 계속할까요?",
+    "intro": "3Speak을 홈 대신 마지막으로 보던 페이지에서 열 수 있습니다. 이 기기에만 저장되며 설정의 일반에서 언제든 바꿀 수 있습니다.",
+    "notNow": "나중에",
+    "turnOn": "켜기"
+  },
   "shorts": {
     "commentBar": {
       "title": "쇼츠 댓글 입력창",
       "desc": "각 쇼츠 아래에 댓글 입력창"
-    },
-    "openOnStart": {
-      "title": "시작할 때 쇼츠 열기",
-      "desc": "3Speak를 열면 바로 쇼츠로 이동해요"
     },
     "inFeeds": {
       "title": "피드 안의 쇼츠",
@@ -203,7 +215,21 @@
     "rpcNode": "Hive RPC 노드",
     "yourData": "내 데이터",
     "privacyLink": "3Speak의 데이터 처리 방식",
-    "getOrDelete": "받기 또는 삭제"
+    "getOrDelete": "받기 또는 삭제",
+    "node": {
+      "modeAuto": "자동",
+      "auto": "자동",
+      "autoHint": "작동하는 가장 빠른 노드, 실패 시 전환",
+      "own": "내 노드",
+      "use": "사용",
+      "checking": "확인 중…",
+      "down": "응답 없음",
+      "ms": "{{ms}} ms",
+      "badUrl": "https:// 로 시작하는 주소를 입력하세요",
+      "failed": "이 노드가 응답하지 않거나 3Speak에 필요한 소셜 API(hivemind)가 없어요.",
+      "switched": "이제 {{node}} 사용 중",
+      "fallback": "선택한 노드가 응답하지 않으면 페이지를 새로 고칠 때까지 3Speak가 알려진 노드를 사용해요."
+    }
   },
   "dataRequest": {
     "emailRequired": "답변을 받을 이메일 주소를 입력하세요",

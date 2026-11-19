@@ -1,0 +1,5 @@
+{
+  "videoEditor": "Editor video",
+  "videoEditorSub": "Modifica un video orizzontale fino a 10 minuti",
+  "editorTooLong": "L'editor video accetta video fino a {{minutes}} minuti"
+}

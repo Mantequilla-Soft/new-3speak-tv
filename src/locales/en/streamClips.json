@@ -1,0 +1,70 @@
+{
+  "readyTitle": "Your clip is ready",
+  "readySub": "The last 30 seconds of the stream.",
+  "postShort": "Post as Short",
+  "download": "Download",
+  "delete": "Delete",
+  "shareHost": "@{{host}} gets {{percent}}% of the Short's rewards: it is their stream.",
+  "shareClipper": "@{{clipper}} made this clip and gets {{percent}}% of the Short's rewards.",
+  "loginToPost": "Log in to post clips as Shorts.",
+  "allClips": "All your clips of this stream",
+  "postFailed": "The clip could not be opened for posting. Try again.",
+  "deleteConfirm": "Delete this clip?",
+  "deleteFailed": "The clip could not be deleted.",
+  "title": "Best moments",
+  "subHost": "Clips from your stream, ready to post as Shorts. They stay for 2 days.",
+  "subViewer": "Your clips of this stream. They stay for 2 days.",
+  "error": "Clips could not be loaded right now.",
+  "empty": "No clips yet. Busy moments in chat and boosts show up here.",
+  "at": "at {{time}}",
+  "source": {
+    "auto": "Highlight",
+    "mine": "Your clip",
+    "by": "Clipped by @{{user}}",
+    "guest": "Clipped by a guest"
+  },
+  "reasons": {
+    "chat": "Chat lit up",
+    "boosts": "Boosts",
+    "big_boost": "Big boost"
+  },
+  "momentsTitle": "More moments",
+  "momentsSub": "Make a Short from the replay once it has processed.",
+  "makeShort": "Make a Short",
+  "notif": {
+    "host": "Your stream's clips are ready to post as Shorts ({{count}})",
+    "clipper": "Your clips of @{{user}}'s stream are ready ({{count}})"
+  },
+  "pendingTitle": "Your clip will be ready when the stream ends",
+  "pendingSub": "It is cut from the stream's recording after the stream. You find it under Your stream clips.",
+  "status": {
+    "pending": "Ready after the stream",
+    "unavailable": "Could not be made"
+  },
+  "reasonUnavailable": {
+    "past_cap": "After the free 30 minutes",
+    "past_end": "After the recording ended",
+    "no_recording": "The stream was not recorded",
+    "failed": "Could not be cut"
+  },
+  "summary": {
+    "title": "{{count}} clips from your stream",
+    "pending": "They are cut from the recording now and will be ready in a few minutes. We will let you know.",
+    "ready": "All clips are ready.",
+    "byUser": "@{{user}}: {{count}}",
+    "auto": "Automatic: {{count}}",
+    "guests": "Guests: {{count}}"
+  },
+  "page": {
+    "title": "Your stream clips",
+    "sub": "Clips you made and clips of your streams. Clips are kept for {{hours}} hours.",
+    "empty": "No clips yet. Clip a live stream, or go live: your viewers' clips show up here.",
+    "select": "Select",
+    "postSelected": "Post selected as Shorts ({{count}})",
+    "queueNext": "Post the next one ({{count}} left)",
+    "queueClear": "Clear",
+    "ofStream": "@{{host}}'s stream",
+    "yours": "Your stream",
+    "open": "Your stream clips"
+  }
+}

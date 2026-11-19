@@ -156,6 +156,10 @@
       "title": "Kartu besar",
       "desc": "Kartu video lebih besar di beranda, profil, dan playlist"
     },
+    "dataSaver": {
+      "title": "Penghemat data",
+      "desc": "Tanpa pratinjau video, dan video mulai di 360p. Menyala sendiri saat perangkat Anda meminta hemat data atau koneksi lambat."
+    },
     "previews": {
       "title": "Pratinjau video",
       "desc": "Pratinjau tanpa suara saat kursor diarahkan; di seluler kartu di tengah yang diputar"
@@ -165,14 +169,22 @@
       "desc": "Klip tanpa suara di Spotlight Beranda. Mati menampilkan gambar diam."
     }
   },
+  "startup": {
+    "resume": {
+      "title": "Lanjutkan dari terakhir kali",
+      "desc": "3Speak terbuka di halaman terakhir yang kamu buka. Hanya disimpan di perangkat ini."
+    }
+  },
+  "startPrompt": {
+    "title": "Lanjutkan dari terakhir kali?",
+    "intro": "3Speak bisa terbuka di halaman terakhir yang kamu buka, bukan di Beranda. Ini hanya disimpan di perangkat ini, dan bisa kamu ubah kapan saja di Pengaturan, Umum.",
+    "notNow": "Nanti saja",
+    "turnOn": "Aktifkan"
+  },
   "shorts": {
     "commentBar": {
       "title": "Bilah komentar di Shorts",
       "desc": "Kolom komentar di bawah setiap Short"
-    },
-    "openOnStart": {
-      "title": "Buka Shorts saat mulai",
-      "desc": "Langsung ke Shorts saat kamu membuka 3Speak"
     },
     "inFeeds": {
       "title": "Shorts di dalam feed",
@@ -203,7 +215,21 @@
     "rpcNode": "Node RPC Hive",
     "yourData": "Datamu",
     "privacyLink": "Cara 3Speak menangani datamu",
-    "getOrDelete": "Dapatkan atau hapus"
+    "getOrDelete": "Dapatkan atau hapus",
+    "node": {
+      "modeAuto": "Otomatis",
+      "auto": "Otomatis",
+      "autoHint": "Node tercepat yang berfungsi, berganti jika gagal",
+      "own": "Node milikmu",
+      "use": "Gunakan",
+      "checking": "Memeriksa…",
+      "down": "Tidak merespons",
+      "ms": "{{ms}} md",
+      "badUrl": "Masukkan alamat yang diawali https://",
+      "failed": "Node ini tidak merespons atau tidak punya API sosial (hivemind) yang dibutuhkan 3Speak.",
+      "switched": "Sekarang memakai {{node}}",
+      "fallback": "Jika node pilihanmu berhenti merespons, 3Speak memakai node yang dikenal sampai halaman dimuat ulang."
+    }
   },
   "dataRequest": {
     "emailRequired": "Masukkan alamat email agar kami bisa membalas",

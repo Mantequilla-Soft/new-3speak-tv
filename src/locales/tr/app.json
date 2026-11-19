@@ -94,6 +94,12 @@
     "notNow": "Şimdi değil",
     "save": "İlgi alanlarını kaydet"
   },
+  "socialLinks": {
+    "title": "YouTube'un veya başka kanalların var mı?",
+    "body": "Sosyal medya profillerini 3Speak hesabına bağla ve içeriklerini oradan içe aktar.",
+    "note": "Bir profilin bağlantısını istediğin zaman Ayarlar'dan kaldırabilirsin.",
+    "link": "Profilleri bağla"
+  },
   "emojiGif": {
     "emoji": "Emoji",
     "searchEmoji": "Emoji ara",

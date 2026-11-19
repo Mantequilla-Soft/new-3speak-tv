@@ -44,6 +44,7 @@
     "title": "Wasifu wa nje uliounganishwa",
     "intro": "Thibitisha kwamba unamiliki chaneli ya YouTube (au nyingine) kwa kubandika hash yako ya kipekee ya 3Speak kwenye maelezo ya wasifu wako wa umma, kisha uithibitishe hapa.",
     "openProfile": "Fungua wasifu",
+    "importEpisodes": "Leta vipindi",
     "removeLink": "Ondoa kiungo",
     "empty": "Bado hakuna wasifu wa nje uliounganishwa.",
     "addPlatform": "Ongeza jukwaa jipya",
@@ -81,7 +82,6 @@
     "addCollaborator": "Ongeza mshirika",
     "saveSplit": "Hifadhi mgawanyo",
     "intro": "Ongeza mtumiaji unayetaka apokee kiotomatiki sehemu ya zawadi za chapisho hili.",
-    "minPercent": "% (angalau {{percent}}%)",
     "usernamePlaceholder": "Weka jina la mtumiaji",
     "minimumReward": "Zawadi ya chini ni <strong>1%</strong>",
     "checking": "Inakagua <strong>@{{account}}</strong> kwenye Hive…",
@@ -89,7 +89,11 @@
     "notAdded": "<strong>@{{account}}</strong> bado haijaongezwa. Bofya <strong>+</strong> ili kuiongeza, au futa sehemu hiyo.",
     "infrastructure": "Miundombinu: 10%",
     "videoEncoding": "Usimbaji wa video: 1%",
-    "defaults": "Wanufaika chaguo-msingi ({{count}})"
+    "defaults": "Wanufaika chaguo-msingi ({{count}})",
+    "raise": "Ongeza sehemu ya {{account}}",
+    "lower": "Punguza sehemu ya {{account}}",
+    "minShare": "angalau {{percent}}%",
+    "raiseHint": "Sehemu zenye kufuli zinaweza kuongezwa ili kutoa zaidi, lakini haziwezi kushushwa chini ya kiwango cha chini."
   },
   "qr": {
     "scan": "Changanua QR hii kwenye Hive Keychain:",
@@ -137,7 +141,8 @@
       "title": "Maandishi ya Short",
       "hint": "Yanaambatana na audiogramu kwenye Short. Kiungo cha sauti yako kinaongezwa kiotomatiki.",
       "placeholder": "Kipande hiki kinahusu nini? (si lazima)"
-    }
+    },
+    "videoPodcastNotSupported": "Podikasti ya video bado haipatikani kwenye kihariri. Tafadhali jaribu tena baadaye."
   },
   "profile": {
     "mustLogin": "Lazima uingie kwanza",

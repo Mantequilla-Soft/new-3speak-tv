@@ -94,6 +94,12 @@
     "notNow": "나중에",
     "save": "관심사 저장"
   },
+  "socialLinks": {
+    "title": "YouTube나 다른 채널이 있나요?",
+    "body": "소셜 미디어 프로필을 3Speak 계정에 연결하고 그곳의 콘텐츠를 가져오세요.",
+    "note": "연결은 설정에서 언제든지 해제할 수 있어요.",
+    "link": "프로필 연결"
+  },
   "emojiGif": {
     "emoji": "이모지",
     "searchEmoji": "이모지 검색",

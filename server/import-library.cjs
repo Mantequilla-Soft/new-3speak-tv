@@ -1,5 +1,5 @@
 // ── Import library: every video detail from every platform, kept forever ─────
-// Owner's call 2026-10-05: when a creator opens a channel on /youtube-import, the
+// Owner's call 2026-10-05: when a creator opens a channel on /import, the
 // whole channel is read ONCE (the first page right away, the rest in the
 // background) and kept; after that the page only reads from here, no platform is
 // asked again, and nothing is ever deleted. The creator can ask for a channel to

@@ -156,6 +156,10 @@
       "title": "大卡片",
       "desc": "在首页、个人主页和播放列表中显示更大的视频卡片"
     },
+    "dataSaver": {
+      "title": "省流量模式",
+      "desc": "不播放视频预览，视频从 360p 开始播放。当设备要求节省流量或网络较慢时会自动开启。"
+    },
     "previews": {
       "title": "视频预览",
       "desc": "悬停时播放静音预览；在手机上，居中的卡片会自动播放"
@@ -165,14 +169,22 @@
       "desc": "在首页焦点中播放静音片段。关闭后只显示静态图片。"
     }
   },
+  "startup": {
+    "resume": {
+      "title": "从上次离开的地方继续",
+      "desc": "打开 3Speak 时回到你上次所在的页面。仅保存在此设备上。"
+    }
+  },
+  "startPrompt": {
+    "title": "从上次离开的地方继续？",
+    "intro": "3Speak 可以在你上次所在的页面打开，而不是首页。只保存在此设备上，你可以随时在“设置 > 通用”中更改。",
+    "notNow": "以后再说",
+    "turnOn": "开启"
+  },
   "shorts": {
     "commentBar": {
       "title": "短视频评论栏",
       "desc": "在每个短视频下方显示评论输入框"
-    },
-    "openOnStart": {
-      "title": "启动时打开短视频",
-      "desc": "打开 3Speak 时直接进入短视频"
     },
     "inFeeds": {
       "title": "在信息流中显示短视频",
@@ -203,7 +215,21 @@
     "rpcNode": "Hive RPC 节点",
     "yourData": "你的数据",
     "privacyLink": "3Speak 如何处理你的数据",
-    "getOrDelete": "获取或删除"
+    "getOrDelete": "获取或删除",
+    "node": {
+      "modeAuto": "自动",
+      "auto": "自动",
+      "autoHint": "使用最快的可用节点，出错时自动切换",
+      "own": "你自己的节点",
+      "use": "使用",
+      "checking": "检查中…",
+      "down": "无响应",
+      "ms": "{{ms}} 毫秒",
+      "badUrl": "请输入以 https:// 开头的地址",
+      "failed": "该节点没有响应，或缺少 3Speak 所需的社交 API（hivemind）。",
+      "switched": "正在使用 {{node}}",
+      "fallback": "如果你选择的节点停止响应，3Speak 会在页面重新加载前使用已知节点。"
+    }
   },
   "dataRequest": {
     "emailRequired": "请输入邮箱地址，以便我们回复你",

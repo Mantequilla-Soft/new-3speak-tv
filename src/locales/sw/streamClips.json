@@ -1,0 +1,70 @@
+{
+  "readyTitle": "Klipu yako iko tayari",
+  "readySub": "Sekunde 30 za mwisho za mtiririko.",
+  "postShort": "Chapisha kama Short",
+  "download": "Pakua",
+  "delete": "Futa",
+  "shareHost": "@{{host}} anapata {{percent}}% ya zawadi za Short: ni mtiririko wake.",
+  "shareClipper": "@{{clipper}} alitengeneza klipu hii na anapata {{percent}}% ya zawadi za Short.",
+  "loginToPost": "Ingia ili kuchapisha klipu kama Shorts.",
+  "allClips": "Klipu zako zote za mtiririko huu",
+  "postFailed": "Klipu haikuweza kufunguliwa kwa kuchapishwa. Jaribu tena.",
+  "deleteConfirm": "Futa klipu hii?",
+  "deleteFailed": "Klipu haikuweza kufutwa.",
+  "title": "Matukio bora",
+  "subHost": "Klipu kutoka kwa mtiririko wako, tayari kuchapishwa kama Shorts. Zinabaki kwa siku 2.",
+  "subViewer": "Klipu zako za mtiririko huu. Zinabaki kwa siku 2.",
+  "error": "Klipu hazikuweza kupakiwa sasa.",
+  "empty": "Bado hakuna klipu. Matukio yenye gumzo na boosts nyingi yataonekana hapa.",
+  "at": "saa {{time}}",
+  "source": {
+    "auto": "Kivutio",
+    "mine": "Klipu yako",
+    "by": "Imeklipiwa na @{{user}}",
+    "guest": "Imeklipiwa na mgeni"
+  },
+  "reasons": {
+    "chat": "Gumzo lilipamba moto",
+    "boosts": "Boosts",
+    "big_boost": "Boost kubwa"
+  },
+  "momentsTitle": "Matukio zaidi",
+  "momentsSub": "Tengeneza Short kutoka kwa rekodi ikishachakatwa.",
+  "makeShort": "Tengeneza Short",
+  "notif": {
+    "host": "Klipu za mtiririko wako ziko tayari kuchapishwa kama Shorts ({{count}})",
+    "clipper": "Klipu zako za mtiririko wa @{{user}} ziko tayari ({{count}})"
+  },
+  "pendingTitle": "Klipu yako itakuwa tayari mtiririko ukiisha",
+  "pendingSub": "Inakatwa kutoka kwa rekodi baada ya mtiririko. Utaipata katika Klipu zako za mitiririko.",
+  "status": {
+    "pending": "Tayari baada ya mtiririko",
+    "unavailable": "Haikuweza kutengenezwa"
+  },
+  "reasonUnavailable": {
+    "past_cap": "Baada ya dakika 30 za bure",
+    "past_end": "Baada ya rekodi kuisha",
+    "no_recording": "Mtiririko haukurekodiwa",
+    "failed": "Haikuweza kukatwa"
+  },
+  "summary": {
+    "title": "Klipu {{count}} kutoka kwa mtiririko wako",
+    "pending": "Zinakatwa kutoka kwa rekodi sasa na zitakuwa tayari baada ya dakika chache. Tutakujulisha.",
+    "ready": "Klipu zote ziko tayari.",
+    "byUser": "@{{user}}: {{count}}",
+    "auto": "Za kiotomatiki: {{count}}",
+    "guests": "Wageni: {{count}}"
+  },
+  "page": {
+    "title": "Klipu zako za mitiririko",
+    "sub": "Klipu ulizotengeneza na klipu za mitiririko yako. Klipu zinahifadhiwa kwa saa {{hours}}.",
+    "empty": "Bado hakuna klipu. Klipu mtiririko mubashara, au nenda mubashara: klipu za watazamaji wako zinaonekana hapa.",
+    "select": "Chagua",
+    "postSelected": "Chapisha zilizochaguliwa kama Shorts ({{count}})",
+    "queueNext": "Chapisha inayofuata (zimebaki {{count}})",
+    "queueClear": "Futa",
+    "ofStream": "Mtiririko wa @{{host}}",
+    "yours": "Mtiririko wako",
+    "open": "Klipu zako za mitiririko"
+  }
+}

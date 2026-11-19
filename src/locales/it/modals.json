@@ -44,6 +44,7 @@
     "title": "Profili esterni collegati",
     "intro": "Dimostra di possedere un canale YouTube (o di altro tipo) incollando il tuo hash 3Speak univoco nella descrizione del tuo profilo pubblico, poi verificalo qui.",
     "openProfile": "Apri profilo",
+    "importEpisodes": "Importa episodi",
     "removeLink": "Rimuovi collegamento",
     "empty": "Ancora nessun profilo esterno collegato.",
     "addPlatform": "Aggiungi una nuova piattaforma",
@@ -81,7 +82,6 @@
     "addCollaborator": "Aggiungi un collaboratore",
     "saveSplit": "Salva ripartizione",
     "intro": "Aggiungi un utente che deve ricevere automaticamente una parte delle ricompense di questo post.",
-    "minPercent": "% (min {{percent}}%)",
     "usernamePlaceholder": "Inserisci il nome utente",
     "minimumReward": "La ricompensa minima è <strong>1%</strong>",
     "checking": "Verifica di <strong>@{{account}}</strong> su Hive…",
@@ -89,7 +89,11 @@
     "notAdded": "<strong>@{{account}}</strong> non è ancora stato aggiunto. Fai clic su <strong>+</strong> per aggiungerlo, o svuota il campo.",
     "infrastructure": "Infrastruttura: 10%",
     "videoEncoding": "Codifica video: 1%",
-    "defaults": "Beneficiari predefiniti ({{count}})"
+    "defaults": "Beneficiari predefiniti ({{count}})",
+    "raise": "Aumenta la quota di {{account}}",
+    "lower": "Riduci la quota di {{account}}",
+    "minShare": "min. {{percent}}%",
+    "raiseHint": "Le quote con il lucchetto si possono aumentare per dare di più, ma non ridurre sotto il minimo."
   },
   "qr": {
     "scan": "Scansiona questo QR in Hive Keychain:",
@@ -137,7 +141,8 @@
       "title": "Testo dello Short",
       "hint": "Accompagna l'audiogramma nello Short. Un link al tuo audio viene aggiunto automaticamente.",
       "placeholder": "Di cosa parla questo pezzo? (facoltativo)"
-    }
+    },
+    "videoPodcastNotSupported": "Il video podcast non è ancora disponibile nell'editor. Riprova più tardi."
   },
   "profile": {
     "mustLogin": "Prima devi accedere",

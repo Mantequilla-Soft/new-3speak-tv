@@ -1,0 +1,70 @@
+{
+  "readyTitle": "你的剪辑已准备好",
+  "readySub": "直播的最后 30 秒。",
+  "postShort": "发布为短视频",
+  "download": "下载",
+  "delete": "删除",
+  "shareHost": "@{{host}} 获得这条短视频 {{percent}}% 的奖励：这是 TA 的直播。",
+  "shareClipper": "@{{clipper}} 制作了这段剪辑，获得这条短视频 {{percent}}% 的奖励。",
+  "loginToPost": "登录后即可把剪辑发布为短视频。",
+  "allClips": "查看你在这场直播中的所有剪辑",
+  "postFailed": "无法打开剪辑进行发布，请重试。",
+  "deleteConfirm": "删除这段剪辑？",
+  "deleteFailed": "无法删除这段剪辑。",
+  "title": "精彩时刻",
+  "subHost": "你直播中的剪辑，可直接发布为短视频，保留 2 天。",
+  "subViewer": "你在这场直播中的剪辑，保留 2 天。",
+  "error": "暂时无法加载剪辑。",
+  "empty": "还没有剪辑。聊天和打赏热烈的时刻会显示在这里。",
+  "at": "在 {{time}}",
+  "source": {
+    "auto": "精彩片段",
+    "mine": "你的剪辑",
+    "by": "@{{user}} 的剪辑",
+    "guest": "访客的剪辑"
+  },
+  "reasons": {
+    "chat": "聊天火热",
+    "boosts": "打赏",
+    "big_boost": "大额打赏"
+  },
+  "momentsTitle": "更多时刻",
+  "momentsSub": "回放处理完成后，可以用它制作短视频。",
+  "makeShort": "制作短视频",
+  "notif": {
+    "host": "你直播的剪辑已可发布为短视频（{{count}}）",
+    "clipper": "你在 @{{user}} 直播中的剪辑已准备好（{{count}}）"
+  },
+  "pendingTitle": "直播结束后你的剪辑就会准备好",
+  "pendingSub": "直播结束后会从录像中剪出，你可以在「我的直播剪辑」中找到。",
+  "status": {
+    "pending": "直播后可用",
+    "unavailable": "无法生成"
+  },
+  "reasonUnavailable": {
+    "past_cap": "超出免费的 30 分钟",
+    "past_end": "录像结束之后",
+    "no_recording": "这场直播没有录像",
+    "failed": "无法剪出"
+  },
+  "summary": {
+    "title": "你直播的 {{count}} 段剪辑",
+    "pending": "正在从录像中剪出，几分钟后即可使用，届时会通知你。",
+    "ready": "所有剪辑都已准备好。",
+    "byUser": "@{{user}}：{{count}}",
+    "auto": "自动：{{count}}",
+    "guests": "访客：{{count}}"
+  },
+  "page": {
+    "title": "我的直播剪辑",
+    "sub": "你制作的剪辑和你直播的剪辑。剪辑保留 {{hours}} 小时。",
+    "empty": "还没有剪辑。剪辑一场直播或开始直播：观众的剪辑会显示在这里。",
+    "select": "选择",
+    "postSelected": "将所选发布为短视频（{{count}}）",
+    "queueNext": "发布下一个（还剩 {{count}}）",
+    "queueClear": "清空",
+    "ofStream": "@{{host}} 的直播",
+    "yours": "你的直播",
+    "open": "我的直播剪辑"
+  }
+}

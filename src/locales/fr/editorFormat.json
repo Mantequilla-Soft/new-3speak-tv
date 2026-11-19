@@ -1,0 +1,5 @@
+{
+  "videoEditor": "Éditeur vidéo",
+  "videoEditorSub": "Montez une vidéo paysage jusqu'à 10 minutes",
+  "editorTooLong": "L'éditeur vidéo accepte les vidéos jusqu'à {{minutes}} minutes"
+}

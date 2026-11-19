@@ -23,10 +23,8 @@ import { Segmented, Chip, Button, EmptyState } from '../components/v2/ui';
 import { Icon } from '../components/v2/Icon';
 import { cx } from '../components/v2/helpers';
 import AudioPlaylistTile from '../components/AudioPlaylistTile/AudioPlaylistTile';
-import PodcastsTab, { VIEWS as EXPLORE_VIEWS, VIEW_KEY as EXPLORE_VIEW_KEY } from '../components/Podcasts/PodcastsTab';
+import PodcastsTab, { VIEW_KEY as EXPLORE_VIEW_KEY } from '../components/Podcasts/PodcastsTab';
 import { isLoggedIn } from '../hive-api/aioha';
-import { creatorKey, getCreatorSettings, isUploadBlocked } from '../utils/creatorSettings';
-import { useSupportBlock } from '../lib/supportBlockStore';
 
 import './Audio.scss';
 
@@ -98,6 +96,12 @@ const DATE_PRESETS = [
 ];
 
 const DEFAULT_DATE_PRESET = 30;
+
+// The page's own views: Mine | Discover | New uploads (3Speak audio, newest
+// first). Trends belongs to the outside podcasts only: it is a Discover | Trends
+// switch under the External chip (?type=external&view=trends). Anywhere else a
+// `view=trends` (an old link, a saved choice) opens Discover.
+const AUDIO_VIEWS = ['mine', 'discover', 'new'];
 
 // Logarithmic-feel snap stops from 0s (no minimum) to 4h
 const DURATION_STOPS = [0, 5, 10, 15, 30, 45, 60, 120, 180, 300, 600, 900, 1800, 3600, 7200, 10800, 14400];
@@ -190,14 +194,16 @@ function Audio() {
   // chips; under Discover and Trends the type chips pick 3Speak audio or the
   // outside podcasts (External). Without one: the last one picked, else Discover.
   const online = useOnline();
+  const rawView = params.get('view');
   const exploreView = (() => {
-    const v = params.get('view');
-    if (EXPLORE_VIEWS.includes(v)) return v;
+    const v = rawView;
+    if (v === 'trends') return 'discover';
+    if (AUDIO_VIEWS.includes(v)) return v;
     // Offline, only what was saved here plays: open on Mine (the downloads).
     if (!online) return 'mine';
     try {
       const saved = localStorage.getItem(EXPLORE_VIEW_KEY);
-      if (EXPLORE_VIEWS.includes(saved)) return saved;
+      if (AUDIO_VIEWS.includes(saved)) return saved;
     } catch { /* storage off */ }
     return 'discover';
   })();
@@ -210,6 +216,17 @@ function Audio() {
     try { localStorage.setItem(EXPLORE_VIEW_KEY, v); } catch { /* storage off */ }
   };
   const onMine = exploreView === 'mine';
+  // Under External: the outside podcasts' own Discover | Trends.
+  const externalView = external && rawView === 'trends' ? 'trends' : 'discover';
+  const showExternalView = (v) => {
+    const next = new URLSearchParams(params);
+    for (const k of ['podcast', 'episode', 'play', 't', 'end']) next.delete(k);
+    next.set('type', 'external');
+    next.set('view', v);
+    setParams(next);
+  };
+  // What the podcasts tab shows: Mine, or the External chip's own view.
+  const podcastsView = onMine ? 'mine' : external ? externalView : 'discover';
 
   // An empty Mine (no followed podcasts, nothing downloaded) has nothing to
   // show: Discover instead, in place, once both are known.
@@ -341,22 +358,26 @@ function Audio() {
   const dateActive = datePreset !== DEFAULT_DATE_PRESET;
   const typeActive = !!typeFilter;
   const genreActive = typeFilter === 'song' && !!genreFilter;
-  const isFiltered = activeTags.length > 0 || dateActive || durationActive || typeActive || genreActive;
+  // Music filters by genre (its chips take the topic tags' place), so picked
+  // topic tags rest while Music is on.
+  const tagsInUse = useMemo(() => (typeFilter === 'song' ? [] : activeTags), [typeFilter, activeTags]);
+  const isFiltered = tagsInUse.length > 0 || dateActive || durationActive || typeActive || genreActive;
 
   // Build query params for filtered mode
   const filterParams = useMemo(() => {
     const p = new URLSearchParams();
     p.set('limit', '50');
-    activeTags.forEach(tag => p.append('auto_tag', tag));
+    tagsInUse.forEach(tag => p.append('auto_tag', tag));
     if (datePreset) p.set('from', datePreset);
     p.set('min_duration', String(minDur));
     p.set('max_duration', String(maxDur));
     if (typeFilter) p.set('category', typeFilter);
     if (typeFilter === 'song' && genreFilter) p.set('genre', genreFilter);
     if (showNsfw) p.set('nsfw', 'true');
-    p.set('sort', 'popular');
+    // New uploads: newest first (the checker's default order); else most played.
+    if (exploreView !== 'new') p.set('sort', 'popular');
     return p.toString();
-  }, [activeTags, datePreset, minDur, maxDur, typeFilter, genreFilter, showNsfw]);
+  }, [tagsInUse, datePreset, minDur, maxDur, typeFilter, genreFilter, showNsfw, exploreView]);
 
   // ─── Data queries ──────────────────
   const groupedParams = useMemo(() => {
@@ -410,14 +431,14 @@ function Audio() {
       const { data } = await axios.get(withViewer(`${CHECKER_URL}/audio?${filterParams}`, user));
       return (data.audio || []).filter((it) => !isHiddenOwner(it.owner));
     },
-    // Discover lists them once a filter is set; Trends always does.
-    enabled: (isFiltered || exploreView === 'trends') && !selectedCreator && !external,
+    // Discover lists them once a filter is set; New uploads always does.
+    enabled: (isFiltered || exploreView === 'new') && !selectedCreator && !external,
   });
 
   const creatorsParams = useMemo(() => {
     const p = new URLSearchParams();
     p.set('limit', '30');
-    activeTags.forEach(tag => p.append('auto_tag', tag));
+    tagsInUse.forEach(tag => p.append('auto_tag', tag));
     if (datePreset) p.set('from', datePreset);
     p.set('min_duration', String(minDur));
     p.set('max_duration', String(maxDur));
@@ -425,7 +446,7 @@ function Audio() {
     if (typeFilter === 'song' && genreFilter) p.set('genre', genreFilter);
     if (showNsfw) p.set('nsfw', 'true');
     return p.toString();
-  }, [activeTags, datePreset, minDur, maxDur, typeFilter, genreFilter, showNsfw]);
+  }, [tagsInUse, datePreset, minDur, maxDur, typeFilter, genreFilter, showNsfw]);
 
   const { data: creators } = useQuery({
     queryKey: ['audio-creators', creatorsParams, user || null],
@@ -511,18 +532,6 @@ function Audio() {
     setGenreFilter('');
   };
 
-  // The audio upload, gated like the Create menu's (components/UploadLinks.jsx).
-  const uploadAudio = async () => {
-    const st = useAppStore.getState();
-    const settings = await getCreatorSettings(creatorKey(st.user, st.incubationHandle));
-    if (isUploadBlocked(settings)) {
-      const note = settings?.uploadBlockedReason;
-      useSupportBlock.getState().showSupportBlock('upload', note ? { note } : undefined);
-      return;
-    }
-    window.dispatchEvent(new CustomEvent('open-audio-upload'));
-  };
-
   // Discover (28e): six new releases as big tiles, then the popular list
   // ranked beside the albums and playlists, then the other sections.
   const recentList = grouped?.recent || [];
@@ -567,15 +576,9 @@ function Audio() {
             options={[
               { value: 'mine', label: t('audio.podcasts.views.mine') },
               { value: 'discover', label: t('audio.podcasts.views.discover') },
-              { value: 'trends', label: t('audio.podcasts.views.trends') },
+              { value: 'new', label: t('audio.page.newUploads') },
             ]}
           />
-        )}
-        {/* Upload audio (28e): the Create menu's audio upload, with its checks. */}
-        {loggedIn && !playerView && !external && !onMine && (
-          <Button variant="primary" size={48} trailing="upload" className="audio-upload-btn" onClick={uploadAudio}>
-            {t('audio.upload.title')}
-          </Button>
         )}
       </header>
 
@@ -630,16 +633,18 @@ function Audio() {
               title={t('audio.podcasts.chipHint')}
             >{t('audio.podcasts.chip')}</Chip>
           </div>
-          {typeFilter === 'song' && !external && (
-            <select
-              className="v2-input is-select h32 audio-genre-select"
-              value={genreFilter}
-              onChange={(e) => setGenreFilter(e.target.value)}
-              aria-label={t('audio.page.musicGenre')}
-            >
-              <option value="">{t('audio.page.anyGenre')}</option>
-              {MUSIC_GENRE_FILTERS.map((g) => <option key={g} value={g}>{g}</option>)}
-            </select>
+          {external && !inShow && (
+            <Segmented
+              className="audio-external-views"
+              block={false}
+              label={t('audio.podcasts.chip')}
+              value={externalView}
+              onChange={showExternalView}
+              options={[
+                { value: 'discover', label: t('audio.podcasts.views.discover') },
+                { value: 'trends', label: t('audio.podcasts.views.trends') },
+              ]}
+            />
           )}
           {!external && (
             <Segmented
@@ -653,19 +658,33 @@ function Audio() {
         </div>
       )}
 
-      {/* Tags + duration */}
+      {/* Tags (genres under Music) + duration */}
       {!selectedCreator && !external && !item && !onMine && (
         <div className="audio-filter-row">
-          <div className="audio-topic-tags v2-chips">
-            {isFiltered && (
-              <Chip size={28} icon="close" className="audio-clear-chip" onClick={clearFilters}>{t('common.actions.reset')}</Chip>
-            )}
-            {autoTags?.map(tag => (
-              <Chip key={tag.name} size={28} selected={activeTags.includes(tag.name)} onClick={() => toggleTag(tag.name)}>
-                #{tag.name}
-              </Chip>
-            ))}
-          </div>
+          {typeFilter === 'song' ? (
+            /* One genre at a time; a second click clears it, like the dates. */
+            <div className="audio-topic-tags audio-genre-chips v2-chips" role="group" aria-label={t('audio.page.musicGenre')}>
+              {isFiltered && (
+                <Chip size={28} icon="close" className="audio-clear-chip" onClick={clearFilters}>{t('common.actions.reset')}</Chip>
+              )}
+              {MUSIC_GENRE_FILTERS.map((g) => (
+                <Chip key={g} size={28} selected={genreFilter === g} onClick={() => setGenreFilter((prev) => (prev === g ? '' : g))}>
+                  {g}
+                </Chip>
+              ))}
+            </div>
+          ) : (
+            <div className="audio-topic-tags v2-chips">
+              {isFiltered && (
+                <Chip size={28} icon="close" className="audio-clear-chip" onClick={clearFilters}>{t('common.actions.reset')}</Chip>
+              )}
+              {autoTags?.map(tag => (
+                <Chip key={tag.name} size={28} selected={activeTags.includes(tag.name)} onClick={() => toggleTag(tag.name)}>
+                  {tag.name}
+                </Chip>
+              ))}
+            </div>
+          )}
           <DurationFilter
             minIdx={minDurIdx}
             maxIdx={maxDurIdx}
@@ -676,11 +695,11 @@ function Audio() {
 
       {/* ─── What the chosen view shows ──────── */}
       {params.has('podcast') || params.has('episode') ? (
-        <PodcastsTab view={exploreView} hideNav />
+        <PodcastsTab view={podcastsView} hideNav />
       ) : item ? (
-        <AudioItemView owner={item.owner} id={item.id} onBack={closeItem} />
+        <AudioItemView key={`${item.owner}/${item.id}`} owner={item.owner} id={item.id} onBack={closeItem} />
       ) : onMine || external ? (
-        <PodcastsTab view={exploreView} hideNav />
+        <PodcastsTab view={podcastsView} hideNav />
       ) : selectedCreator ? (
         <div className="audio-creator-view">
           <div className="audio-creator-header">
@@ -691,11 +710,11 @@ function Audio() {
             <div className="audio-tile-grid"><AudioTileSkeleton count={5} /></div>
           ) : creatorAudio?.length > 0 ? tileGrid(creatorAudio) : noResults(t('audio.page.noTracks'))}
         </div>
-      ) : exploreView === 'trends' ? (
-        /* ─── Trends: the most played for the chosen type, time and filters ─── */
+      ) : exploreView === 'new' ? (
+        /* ─── New uploads: everything for the chosen type, time and filters, newest first ─── */
         <section className="audio-section">
           <h2 className="audio-section-title">
-            {t('audio.page.mostPlayed')}
+            {t('audio.page.newUploads')}
             {filteredAudio && <span className="audio-section-count">{t('audio.page.tracks', { count: filteredAudio.length })}</span>}
           </h2>
           {filteredLoading ? (
@@ -708,7 +727,7 @@ function Audio() {
             /* ─── Filtered results ────── */
             <section className="audio-section">
               <h2 className="audio-section-title">
-                {[activeTags.map(tag => `#${tag}`).join(' '), datePreset ? (() => { const preset = DATE_PRESETS.find(p => p.days === datePreset); return preset ? t(preset.labelKey) : ''; })() : ''].filter(Boolean).join(' · ')}
+                {[genreActive ? genreFilter : tagsInUse.join(', '), datePreset ? (() => { const preset = DATE_PRESETS.find(p => p.days === datePreset); return preset ? t(preset.labelKey) : ''; })() : ''].filter(Boolean).join(' · ')}
                 {filteredAudio && <span className="audio-section-count">{t('audio.page.tracks', { count: filteredAudio.length })}</span>}
               </h2>
               {filteredLoading ? (

@@ -37,6 +37,14 @@
     "hide": "Itago",
     "markSeen": "Markahang nakita na lahat"
   },
+  "continueWatching": {
+    "aria": "Ituloy ang panonood",
+    "rest": "na itutuloy panoorin",
+    "remove": "Alisin sa Ituloy ang panonood",
+    "removed": "Inalis sa Ituloy ang panonood",
+    "removeFailed": "Hindi ito maalis. Pakisubukang muli.",
+    "progress": "{{pct}}% napanood"
+  },
   "tagMeta": {
     "videos_one": "{{num}} video",
     "videos_other": "{{num}} video",

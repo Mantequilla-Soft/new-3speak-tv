@@ -1,0 +1,94 @@
+{
+  "actions": {
+    "powerUp": "파워업",
+    "powerDown": "파워다운",
+    "savings": "저축",
+    "convert": "전환",
+    "delegate": "위임",
+    "aria": "자금 관리"
+  },
+  "common": {
+    "amount": "금액({{coin}})",
+    "available": "사용 가능: {{balance}}",
+    "max": "최대",
+    "to": "받는 계정",
+    "toHint": "내 계정이라면 그대로 두세요.",
+    "activeKey": "액티브 키가 필요해요",
+    "butrauth": "Butter Auth로 로그인했어요: 다음 단계에서 Hive 지갑이나 액티브 키로 승인해요.",
+    "insufficient": "가진 것보다 많아요.",
+    "amountPositive": "0보다 큰 금액을 입력하세요.",
+    "invalidAccount": "그런 이름의 Hive 계정이 없어요.",
+    "accountCheckFailed": "지금은 그 계정을 확인할 수 없어요. 잠시 후 다시 시도해 주세요.",
+    "done": "완료했어요. 여기에 표시되기까지 몇 초 걸릴 수 있어요.",
+    "failed": "처리되지 않았어요: {{error}}",
+    "loading": "지갑을 불러오는 중..."
+  },
+  "powerUp": {
+    "title": "파워업",
+    "note": "Hive Power는 투표에 무게를 더하고 큐레이션 보상을 받게 해 줘요. 다시 HIVE로 바꾸려면 매주 13번에 나눠 지급돼요.",
+    "submit": "{{amount}} HIVE 파워업",
+    "submitTo": "@{{to}}님에게 {{amount}} HIVE 파워업"
+  },
+  "powerDown": {
+    "title": "파워다운",
+    "note": "Hive Power는 매주 13번에 나눠 HIVE로 돌아와요. 일주일에 약 {{weekly}} HP씩이에요.",
+    "replace": "진행 중인 파워다운이 있어요({{left}} HP 남음). 새로 시작하면 기존 것을 대체해요.",
+    "submit": "{{amount}} HP 파워다운",
+    "stop": "파워다운 중지",
+    "stopped": "파워다운을 중지했어요."
+  },
+  "savings": {
+    "title": "저축",
+    "deposit": "입금",
+    "withdraw": "출금",
+    "depositNote": "저축에 넣은 HBD는 연 {{rate}}%의 이자를 받아요. 출금에는 3일이 걸려요.",
+    "depositNoteHive": "저축에 넣은 HIVE는 이자가 없어요. 출금에는 3일이 걸려요.",
+    "withdrawNote": "3일 후에 도착해요. 그 전까지는 취소할 수 있어요.",
+    "submitDeposit": "{{amount}} {{coin}} 입금",
+    "submitWithdraw": "{{amount}} {{coin}} 출금"
+  },
+  "convert": {
+    "title": "전환",
+    "hbdToHive": "HBD를 HIVE로",
+    "hiveToHbd": "HIVE를 HBD로",
+    "hbdNote": "3.5일 후에 그 기간의 중간 가격으로 약 {{amount}} HIVE를 받아요. 최종 금액은 달라질 수 있어요.",
+    "hiveNote": "지금 약 {{amount}} HBD를 받아요. HIVE의 절반은 담보로 잡히고 나머지는 3.5일 후에 돌아와요. 5% 수수료가 붙어요.",
+    "warning": "전환은 되돌릴 수 없어요. 마켓에서 거래하는 편이 더 저렴할 수 있어요.",
+    "submit": "{{amount}} {{coin}} 전환"
+  },
+  "delegate": {
+    "title": "위임",
+    "toLabel": "위임할 계정",
+    "note": "위임한 Hive Power는 계속 내 것이지만, 그 투표 영향력은 다른 계정이 쓰게 돼요. 위임을 해제하면 돌아오기까지 5일이 걸려요.",
+    "current": "지금 @{{to}}님에게 {{hp}} HP를 위임하고 있어요. 새 금액으로 바뀌어요.",
+    "submit": "@{{to}}님에게 {{amount}} HP 위임",
+    "submitNoTo": "{{amount}} HP 위임",
+    "yours": "내 위임",
+    "remove": "해제",
+    "removed": "위임을 해제했어요. HP는 5일 후에 돌아와요.",
+    "self": "자기 자신에게는 위임할 수 없어요."
+  },
+  "pending": {
+    "title": "진행 중",
+    "powerDown": "파워다운: 매주 {{weekly}} HP, {{weeks}}주 남음",
+    "nextPayment": "다음 지급 {{date}}",
+    "withdrawal": "저축에서 출금: {{amount}}",
+    "arrives": "{{date}} 도착",
+    "convertHbd": "{{amount}}를 HIVE로 전환 중",
+    "convertHive": "{{amount}} 담보로 보관 중",
+    "ready": "{{date}} 완료",
+    "delegation": "@{{to}}님에게 위임: {{hp}} HP",
+    "cancel": "취소",
+    "cancelled": "출금을 취소했어요. 자금은 저축에 그대로 있어요.",
+    "stop": "중지",
+    "empty": "진행 중인 항목이 없어요."
+  },
+  "activeAuth": {
+    "powerDown": "{{amount}} 파워다운",
+    "toSavings": "{{amount}}를 저축으로 이동",
+    "fromSavings": "저축에서 {{amount}} 출금",
+    "cancelSavings": "저축 출금 취소",
+    "convert": "{{amount}} 전환",
+    "delegate": "@{{to}}님에게 {{amount}} 위임"
+  }
+}

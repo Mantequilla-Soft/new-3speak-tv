@@ -184,7 +184,18 @@ async function divertToIncubation([opType, opData]) {
 const PLAYLIST_OP_PREFIX = '3speak_playlist_';
 const isPlaylistOp = (id) => typeof id === 'string' && id.startsWith(PLAYLIST_OP_PREFIX);
 
+// A vote cast here, on Hive, is reported to the checker so the voter's curator
+// page lists it (lib/curation.js noteSiteVote). Off-chain warm-up votes are not.
 export const voteWithAioha = async (author, permlink, weight = 10000, viewerTag = null) => {
+  const result = await castVote(author, permlink, weight, viewerTag);
+  if (result?.success && !result.incubation) {
+    const voter = isManteAuthLogin() ? localStorage.getItem('user_id') : aioha.getCurrentUser();
+    import('../lib/curation').then((m) => m.noteSiteVote(voter, author, permlink, weight)).catch(() => {});
+  }
+  return result;
+};
+
+const castVote = async (author, permlink, weight, viewerTag) => {
   const tag = viewerTag ? String(viewerTag).trim().toLowerCase() : null;
 
   // Ops for a given voter: the vote (weight may be NEGATIVE = downvote), plus the

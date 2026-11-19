@@ -117,8 +117,11 @@
   --bottom-nav-float-gap: 0px;
   /* What a fixed element at the bottom of the screen must clear: the bottom
      bar (56 + the iPhone home-indicator area) where it shows, below 1025px;
-     0 on desktop and on the mobile Shorts view, which have no bottom bar. */
+     on desktop the docked Powered by Hive bar (--hive-bar-h, App.css); 0 on
+     the mobile Shorts view and the full-height desktop views, which have none. */
   --bottom-bar-clearance: 0px;
+  --hive-bar-h: 0px;
+  --hive-bar-gap: 0px;
 
   /* elevation: only floating layers get a shadow */
   --shadow-float: 0 20px 60px rgba(0, 0, 0, .2);
@@ -211,6 +214,10 @@
 @media (max-width: 1024px) {
   :root { --bottom-bar-clearance: calc(var(--bottom-nav-float-h) + var(--bottom-nav-float-gap) + 8px); }
   :root:has(.shorts-mobile-container) { --bottom-bar-clearance: 0px; }
+}
+@media (min-width: 1025px) {
+  :root { --hive-bar-h: 30px; --hive-bar-gap: 10px; --bottom-bar-clearance: calc(var(--hive-bar-h) + var(--hive-bar-gap) + 8px); }
+  :root:has(.galaxy-page, .short-main, .shorts-story-feed, .spotlight-page) { --hive-bar-h: 0px; --hive-bar-gap: 0px; --bottom-bar-clearance: 0px; }
 }
 
 /* ─── 3. Base ────────────────────────────────────────────────────────────── */

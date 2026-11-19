@@ -150,6 +150,16 @@
     "notes": "Notas",
     "stillIndexing": "El audio de esta publicación aún se está indexando; inténtalo de nuevo en unos minutos."
   },
+  "edit": {
+    "title": "Editar audio",
+    "editTitle": "Editar título, notas, etiquetas y portada",
+    "cover": "Portada",
+    "coverAlt": "Vista previa de la portada",
+    "coverHint": "Sube una imagen o pega una URL directa. Una imagen cuadrada se ve mejor.",
+    "notesPlaceholder": "Cuéntales a los oyentes sobre este audio…",
+    "keptNote": "El enlace del reproductor y los créditos de música de la publicación se mantienen como están.",
+    "updated": "¡Audio actualizado!"
+  },
   "page": {
     "sections": {
       "popular": "Populares",
@@ -175,7 +185,6 @@
     },
     "all": "Todo",
     "musicGenre": "Género musical",
-    "anyGenre": "Cualquier género",
     "tracks_one": "{{count}} pista",
     "tracks_many": "{{count}} pistas",
     "tracks_other": "{{count}} pistas",
@@ -189,7 +198,7 @@
     "nothingPlaying": "Todavía no suena nada.",
     "goExplore": "Busca algo para escuchar",
     "exploreViews": "Secciones",
-    "mostPlayed": "Lo más escuchado"
+    "newUploads": "Nuevas subidas"
   },
   "upload": {
     "title": "Subir audio",
@@ -285,7 +294,10 @@
       "formats": "MP3, WAV, OGG, WEBM, M4A, FLAC, AAC · varios a la vez",
       "stop": "Detener",
       "orRecord": "O graba en vivo",
+      "micPreparing": "Preparando el micrófono...",
       "recordLimit": "Hasta {{minutes}} min por grabación",
+      "level": "Nivel del micrófono",
+      "noSound": "No llega ningún sonido. Comprueba que tu micrófono no esté silenciado ni en uso por otra app.",
       "record": "Grabar",
       "added": "Agregados ({{count}})",
       "filesTitle": "Archivos de audio"
@@ -300,6 +312,7 @@
       "descriptionOptional": "Descripción (opcional)",
       "track": "Pista",
       "category": "Categoría",
+      "categoryRequired": "Elige una categoría para que tu audio aparezca en la pestaña correcta.",
       "musicGenre": "Género musical"
     },
     "playlist": {
@@ -389,6 +402,7 @@
     "tracks": {
       "helpAlbum": "Cada pista se publica como comentario bajo la publicación principal. Define los valores comunes una vez y aplícalos a todas; luego ajusta cada pista si quieres.",
       "helpSnaps": "Cada pista se publica como su propio snap. Define los valores comunes una vez y aplícalos a todas; luego ajusta cada pista si quieres.",
+      "helpSnapsSingle": "Tu audio se publica como su propio snap.",
       "applyToAllHeading": "Aplicar a todas las pistas",
       "applyNote_one": "<b>Aplicar a {{count}} pista:</b> descripción y portada compartidas; luego cambia cualquier pista por separado.",
       "applyNote_many": "<b>Aplicar a las {{count}} pistas:</b> descripción y portada compartidas; luego cambia cualquier pista por separado.",
@@ -425,6 +439,10 @@
       "earnings": "Ingresos:",
       "earningsPpl": "Pago por escucha (@{{account}})",
       "earningsNormal": "Recompensas normales de publicación",
+      "rewards": "Recompensas:",
+      "beneficiaries": "Beneficiarios:",
+      "perTrack": "Definido por pista",
+      "noBeneficiaries": "Ninguno",
       "playlist": "Playlist:",
       "failedCount_one": "Falló {{count}} pista.",
       "failedCount_many": "Fallaron {{count}} pistas.",
@@ -810,7 +828,9 @@
     "description": "Descripción",
     "noDescription": "Sin descripción.",
     "comments": "Comentarios",
-    "album": "De {{name}}"
+    "album": "De {{name}}",
+    "videoPodcast": "Videopódcast",
+    "videoPodcastTitle": "Haz un video de este episodio: su portada, una onda de audio y subtítulos"
   },
   "offline": {
     "notice": "Estás sin conexión. Tus descargas se siguen reproduciendo.",

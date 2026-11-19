@@ -37,6 +37,14 @@
     "hide": "Gizle",
     "markSeen": "Tümünü görüldü işaretle"
   },
+  "continueWatching": {
+    "aria": "İzlemeye devam et",
+    "rest": "izlemeye devam etmek için",
+    "remove": "İzlemeye devam et listesinden kaldır",
+    "removed": "İzlemeye devam et listesinden kaldırıldı",
+    "removeFailed": "Kaldırılamadı. Lütfen tekrar dene.",
+    "progress": "%{{pct}} izlendi"
+  },
   "tagMeta": {
     "videos_one": "{{num}} video",
     "videos_other": "{{num}} video",

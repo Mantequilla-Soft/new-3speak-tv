@@ -139,6 +139,13 @@
     "rumble": {
       "placeholder": "https://rumble.com/c/…",
       "help": "Tempel nama atau tautan kanal Rumble-mu. Taruh hash di mana saja di deskripsi kanal."
+    },
+    "rss": {
+      "placeholder": "https://example.com/podcast.xml",
+      "help": "Tempel alamat feed RSS podcast-mu. Layanan hosting menampilkannya di pengaturan atau halaman distribusi acara.",
+      "flowTitle": "Tautkan feed RSS podcast-mu",
+      "step2": "<strong>Tempel di deskripsi acaramu atau deskripsi episode terbarumu</strong>, di layanan hosting podcast-mu. Simpan dan terbitkan perubahannya. Kamu bisa menghapusnya lagi setelah feed terverifikasi.",
+      "step3": "Masukkan alamat feed RSS podcast-mu:"
     }
   },
   "snaps": {
@@ -157,7 +164,13 @@
     "audioMinimal": "Minimal",
     "heightSub": "Lebar penuh, tinggi {{height}} px · Responsif",
     "podcastTitle": "Sematkan podcast ini",
-    "podcastHint": "Memutar semua episode acara, termasuk episode baru begitu terbit."
+    "podcastHint": "Memutar semua episode acara, termasuk episode baru begitu terbit.",
+    "embedWhere": "Tempat menyematkan",
+    "tabWebsite": "Situs web",
+    "tabHive": "Untuk Hive",
+    "hiveLink": "Tautan untuk postingan Hive",
+    "hivePlaylistHint": "Tempel tautan ini di postingan atau wave Hive. Aplikasi Hive yang menampilkan video 3Speak, seperti Ecency, memutar playlist langsung di postingan.",
+    "videoPlaylistHint": "Tempel ini di situs web atau postingan blog mana pun. Ini memutar semua video di playlist secara berurutan, termasuk yang ditambahkan nanti."
   },
   "incubation": {
     "requestFailed": "Permintaan gagal ({{status}})",
@@ -197,7 +210,9 @@
       "video": "Video",
       "audio": "Audio",
       "live": "Live",
-      "others": "Lainnya"
+      "others": "Lainnya",
+      "streams": "Siaran",
+      "edit": "Sunting"
     },
     "subtitles": {
       "regularVideo": "Video klasik untuk kanalmu",
@@ -210,6 +225,12 @@
       "goLiveNow": "Siaran langsung untuk pengikutmu",
       "communitySnap": "Postingan cepat di tab komunitasmu",
       "playlist": "Kumpulkan video dalam daftar yang bisa dibagikan"
+    },
+    "categories": {
+      "video": "Unggah, rekam, atau sunting video",
+      "audio": "Musik, podcast, dan penyuntingan audio",
+      "streams": "Siaran langsung sendiri atau bersama tamu",
+      "others": "Snap dan playlist"
     }
   },
   "chat": {

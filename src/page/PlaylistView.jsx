@@ -4,6 +4,8 @@ import axios from 'axios';
 import { useState, useMemo, useRef, useId } from 'react';
 import PlaylistTypePicker from '../components/PlaylistTypePicker/PlaylistTypePicker';
 import { resolvePlaylistType, playlistTypeFields } from '../lib/playlistType';
+import { isSeries } from '../lib/series';
+import SeriesModal from '../components/Episodes/SeriesModal';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import BarLoader from '../components/Loader/BarLoader';
@@ -155,6 +157,9 @@ function PlaylistView() {
 
   // Track numbers on audio tiles count the tracks only, in playlist order.
   const audioTracks = useMemo(() => displayVideos.filter(v => v.isAudio && v.audioDoc), [displayVideos]);
+  // Any video in it makes it a video playlist for the embed (play.3speak.tv plays the
+  // videos; the audio player only audio-only playlists), as the player decides.
+  const hasVideoItems = useMemo(() => listedVideos.some(v => !(v.isAudio && v.audioDoc)), [listedVideos]);
 
   // Check if there are unsaved changes
   const hasChanges = pendingChanges.length > 0;
@@ -171,6 +176,9 @@ function PlaylistView() {
     } catch { return {}; }
   }, [playlist]);
   const playlistTags = useMemo(() => playlistJsonMeta.tags || [], [playlistJsonMeta]);
+  // A series (lib/series.js): its parts in order, "Part 1" first; the owner adds parts.
+  const series = isSeries(playlist);
+  const [addingParts, setAddingParts] = useState(false);
 
   // Outside podcast shows the owner added (lib/playlistFeeds.js): their episodes
   // are merged by date with the playlist's own items.
@@ -564,6 +572,11 @@ function PlaylistView() {
   };
   const ownerButtons = isOwner && (
     <>
+      {series && (
+        <Button variant="secondary" size={40} icon="add" className="pod-btn" onClick={() => setAddingParts(true)} disabled={isSaving}>
+          {t('episodes.series.addParts')}
+        </Button>
+      )}
       <Button variant="secondary" size={40} icon="edit" className="pod-btn" onClick={handleOpenEdit} disabled={isSaving}>
         {t('common.actions.edit')}
       </Button>
@@ -820,14 +833,14 @@ function PlaylistView() {
                   <Button as="a" variant="secondary" size={36} icon="rss_feed" className="pod-btn" href={feedHref} target="_blank" rel="noreferrer" title={t('playlists.view.podcastFeedTitle', { name: playlist.name })}>
                     RSS
                   </Button>
-                  {/* Every audio track of the playlist in one player on another site */}
-                  {audioTracks.length > 0 && (
+                  {/* The whole playlist in one player on another site or in a Hive post */}
+                  {(audioTracks.length > 0 || hasVideoItems) && (
                     <Button
                       variant="secondary"
                       size={36}
                       icon="code"
                       className="pod-btn"
-                      onClick={() => openEmbedCode({ kind: 'playlist', id: playlistId, title: playlist.name })}
+                      onClick={() => openEmbedCode({ kind: 'playlist', id: playlistId, title: playlist.name, owner: playlist.owner, video: hasVideoItems })}
                       title={t('chat.share.embedOnWebsite')}
                     >
                       {t('misc.embed.embed')}
@@ -917,9 +930,12 @@ function PlaylistView() {
             </span>
           </div>
           <StatusPill tone="cyan" className="pv-kind">
-            {t('profile.layout.types.playlist')} · {isPrivate ? t('playlists.private') : t('playlists.public')}
+            {series ? t('episodes.series.kind') : t('profile.layout.types.playlist')} · {isPrivate ? t('playlists.private') : t('playlists.public')}
           </StatusPill>
           <h1 className="pv-title">{playlist.name}</h1>
+          {isOwner && series && (
+            <SeriesModal open={addingParts} onClose={() => setAddingParts(false)} owner={playlist.owner} series={playlist} />
+          )}
           <div className="pv-owner">
             <AccountImg account={playlist.owner} alt="" className="pv-owner-avatar" />
             <Link to={`/@${playlist.owner}`} className="owner">@{playlist.owner}</Link>
@@ -951,7 +967,8 @@ function PlaylistView() {
             </div>
           )}
 
-          <div className="pv-actions">
+          {/* Four tiles beside Play all leave it no room: it then takes its own row. */}
+          <div className={`pv-actions${(shuffleable.length > 1 ? 1 : 0) + 1 + (isPrivate ? 0 : 1) + (!isPrivate && hasVideoItems ? 1 : 0) > 3 ? ' pv-actions--wrap' : ''}`}>
             {firstVideo ? (
               <Button
                 as={Link}
@@ -993,6 +1010,15 @@ function PlaylistView() {
                   rel="noreferrer"
                   title={t('playlists.view.podcastFeedTitle', { name: playlist.name })}
                 />
+                {/* The playlist's videos in one player, on another site or in a Hive post */}
+                {hasVideoItems && (
+                  <ProfileTile
+                    icon="code"
+                    label={t('misc.embed.embed')}
+                    aria-label={t('chat.share.embedOnWebsite')}
+                    onClick={() => openEmbedCode({ kind: 'playlist', id: playlistId, title: playlist.name, owner: playlist.owner, video: true })}
+                  />
+                )}
               </>
             )}
           </div>

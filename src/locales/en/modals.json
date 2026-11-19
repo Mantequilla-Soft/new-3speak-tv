@@ -44,6 +44,7 @@
     "title": "Linked external profiles",
     "intro": "Prove you own a YouTube (or other) channel by pasting your unique 3Speak hash into your public profile description, then verifying it here.",
     "openProfile": "Open profile",
+    "importEpisodes": "Import episodes",
     "removeLink": "Remove link",
     "empty": "No external profiles linked yet.",
     "addPlatform": "Add a new platform",
@@ -81,7 +82,6 @@
     "addCollaborator": "Add a collaborator",
     "saveSplit": "Save split",
     "intro": "Add a user you want to automatically receive a portion of the rewards for this post.",
-    "minPercent": "% (min {{percent}}%)",
     "usernamePlaceholder": "Enter username",
     "minimumReward": "Minimum reward is <strong>1%</strong>",
     "checking": "Checking <strong>@{{account}}</strong> on Hive…",
@@ -89,7 +89,11 @@
     "notAdded": "<strong>@{{account}}</strong> is not added yet. Click <strong>+</strong> to add it, or clear the field.",
     "infrastructure": "Infrastructure: 10%",
     "videoEncoding": "Video Encoding: 1%",
-    "defaults": "Default Beneficiaries ({{count}})"
+    "defaults": "Default Beneficiaries ({{count}})",
+    "raise": "Raise the share of {{account}}",
+    "lower": "Lower the share of {{account}}",
+    "minShare": "min {{percent}}%",
+    "raiseHint": "Shares with a lock can be raised to give more, but not lowered below their minimum."
   },
   "qr": {
     "scan": "Scan this QR in Hive Keychain:",
@@ -137,7 +141,8 @@
       "title": "Text for the Short",
       "hint": "It goes with the audiogram in the Short. A link to your audio is added for you.",
       "placeholder": "What is this piece about? (optional)"
-    }
+    },
+    "videoPodcastNotSupported": "The video podcast is not available in the editor yet. Please try again later."
   },
   "profile": {
     "mustLogin": "You must login first",

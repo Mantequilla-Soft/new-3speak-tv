@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { toastIn } from '../../utils/toast';
 import {
   getHash,
@@ -11,7 +12,7 @@ import {
   warmupSocial,
 } from '../../utils/socialVerifier';
 import { useTranslation, Trans } from 'react-i18next';
-import { SOCIAL_LINK_ENABLED } from '../../utils/config';
+import { SOCIAL_LINK_ENABLED, VIDEO_IMPORT_ENABLED } from '../../utils/config';
 import DialogShell from './DialogShell';
 import { Button, IconButton } from '../v2/ui';
 import { Icon } from '../v2/Icon';
@@ -29,6 +30,7 @@ const PLATFORM_ICONS = {
   bitchute: 'play_circle',
   rumble: 'live_tv',
   soundcloud: 'cloud',
+  rss: 'podcasts',
 };
 
 // `warmup`: a warm-up user (no Hive account) doing the optional "link your
@@ -40,7 +42,8 @@ const PLATFORM_ICONS = {
 // its link chips, since nothing else would.
 export const SOCIAL_LINKS_CHANGED = '3speak:social-links-changed';
 
-export default function AddSocialLink_modal({ isOpen, onClose, hiveUsername, onChange, warmup = false, inline = false }) {
+// `onNavigate`: called when a row's link leaves for another page (Settings closes itself).
+export default function AddSocialLink_modal({ isOpen, onClose, hiveUsername, onChange, warmup = false, inline = false, onNavigate }) {
   const { t } = useTranslation();
   const [warmupPlatforms, setWarmupPlatforms] = useState([]);
   const [step, setStep] = useState('list'); // 'list' | 'flow'
@@ -202,7 +205,7 @@ export default function AddSocialLink_modal({ isOpen, onClose, hiveUsername, onC
   };
 
   const title = step === 'flow' && selectedPlatform
-    ? t('modals.socialLink.flowTitle', { platform: platformLabel(selectedPlatform) })
+    ? t(PLATFORMS[selectedPlatform]?.flowTitleKey || 'modals.socialLink.flowTitle', { platform: platformLabel(selectedPlatform) })
     : t('modals.socialLink.title');
 
   const actions = step === 'flow' && selectedPlatform ? (
@@ -253,6 +256,20 @@ export default function AddSocialLink_modal({ isOpen, onClose, hiveUsername, onC
                       <strong>{platformLabel(link.platform)}</strong>
                       <span className="social-link-list__id">{link.platform_username}</span>
                     </div>
+                    {/* A verified podcast feed: straight to its episodes in the importer. */}
+                    {link.platform === 'rss' && VIDEO_IMPORT_ENABLED && !warmup && (
+                      <IconButton
+                        as={Link}
+                        to="/import?platform=rss"
+                        className="social-link-list__import"
+                        icon="download"
+                        label={t('modals.socialLink.importEpisodes')}
+                        size={32}
+                        variant="ghost"
+                        round
+                        onClick={() => (inline ? onNavigate?.() : handleClose())}
+                      />
+                    )}
                     {url && (
                       <IconButton
                         as="a"
@@ -326,13 +343,13 @@ export default function AddSocialLink_modal({ isOpen, onClose, hiveUsername, onC
             <li>
               <span className="social-link-steps__n">2</span>
               <div className="social-link-steps__body">
-                <Trans i18nKey="modals.socialLink.step2" values={{ platform: platformLabel(selectedPlatform) }} components={{ strong: <strong /> }} />
+                <Trans i18nKey={PLATFORMS[selectedPlatform]?.step2Key || 'modals.socialLink.step2'} values={{ platform: platformLabel(selectedPlatform) }} components={{ strong: <strong /> }} />
               </div>
             </li>
             <li>
               <span className="social-link-steps__n">3</span>
               <div className="social-link-steps__body">
-                <strong>{t('modals.socialLink.step3', { platform: platformLabel(selectedPlatform) })}</strong>
+                <strong>{t(PLATFORMS[selectedPlatform]?.step3Key || 'modals.socialLink.step3', { platform: platformLabel(selectedPlatform) })}</strong>
                 <input
                   className="v2-input social-link-input"
                   type="text"

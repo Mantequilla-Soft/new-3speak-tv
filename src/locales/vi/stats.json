@@ -88,6 +88,7 @@
   },
   "loadError": "Hiện không thể tải số liệu thống kê của bạn.",
   "emptyRange": "Chưa có dữ liệu xem trong khoảng này — hãy thử “Tất cả”, hoặc chờ mọi người xem video của bạn.",
+  "emptyRangeAudio": "Chưa có dữ liệu nghe trong khoảng này. Thử “Tất cả” hoặc chờ mọi người nghe.",
   "tiles": {
     "avgViewDuration": "Thời lượng xem TB",
     "avgWatched": "Tỷ lệ xem TB",

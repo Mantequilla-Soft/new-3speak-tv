@@ -417,6 +417,8 @@ html[data-card-size="large"] .card-container .card {
   &.card-gated-badge { background: var(--accent); color: var(--on-accent); text-transform: uppercase; }
   &.card-gated-badge .material-symbols-rounded { display: none; }
   &.card-new-badge { --pill-tone: var(--accent); text-transform: uppercase; }
+  // A stream recording (VOD): light words on the scrim, quieter than LIVE
+  &.card-vod-badge { --pill-tone: var(--on-media); }
   // A page-wide label (49c "FIRST"): solid cyan
   &.card-page-badge { background: var(--cyan); color: var(--bg); text-transform: uppercase; }
 }

@@ -25,6 +25,7 @@ import LeaderboardBadges from "../components/LeaderboardBadges/LeaderboardBadges
 import SupportersList from "../components/Supporters/SupportersList";
 import HiveBadges from "../components/HiveBadges/HiveBadges";
 import ProfileStreams, { ProfileLiveNow } from "../components/Userprofilepage/ProfileStreams";
+import UpcomingPremieres from "../components/Premiere/UpcomingPremieres";
 import AddSocialLink_modal, { SOCIAL_LINKS_CHANGED } from "../components/modal/AddSocialLink_modal";
 import EditVideoHintModal from "../components/modal/EditVideoHintModal";
 import { fetchScheduledPosts, normalizeScheduledForCard } from "../utils/scheduledPosts";
@@ -44,6 +45,7 @@ import { createPlaylist } from "../utils/playlistOperations";
 import PlaylistTypePicker from "../components/PlaylistTypePicker/PlaylistTypePicker";
 import { useQueryClient } from "@tanstack/react-query";
 import ProfileHeader from "../components/ProfileHeader/ProfileHeader";
+import CollabInvites from "../components/Collabs/CollabInvites";
 import ProfileStats from "../components/ProfileHeader/ProfileStats";
 import ProfileOverview from "../components/Userprofilepage/ProfileOverview";
 import ProfileEmptyState from "../components/Userprofilepage/ProfileEmptyState";
@@ -53,6 +55,8 @@ import { Icon } from "../components/v2/Icon";
 import { ProfileTile, ProfileMoreMenu, ProfileTabs, ProfileSearch, ProfileSearchResults } from "../components/Userprofilepage/ProfileActions";
 import { requestLayoutEdit } from "../lib/profileLayout";
 import { useTranslation } from "react-i18next";
+const CommentInbox = React.lazy(() => import("../components/CommentInbox/CommentInbox"));
+const CurationView = React.lazy(() => import("./Curation").then((m) => ({ default: m.CurationView })));
 
 // Every toast from this module is headed "Profile"; the message becomes the
 // line under it. See utils/toast.js.
@@ -86,6 +90,8 @@ function ProfilePage() {
     if (tab === 'streams') return 'streams';
     if (tab === 'links') return 'links';
     if (tab === 'stats') return 'stats';
+    if (tab === 'comments') return 'comments';
+    if (tab === 'curation') return 'curation';
     if (tab === 'video') return 'video';
     // Same landing tab as the public profile — one profile screen, one behaviour.
     return 'overview';
@@ -102,6 +108,8 @@ function ProfilePage() {
     else if (tab === 'streams') setShow('streams');
     else if (tab === 'links') setShow('links');
     else if (tab === 'stats') setShow('stats');
+    else if (tab === 'comments') setShow('comments');
+    else if (tab === 'curation') setShow('curation');
     else if (tab === 'video') setShow('video');
     else if (!tab) setShow('overview');
   }, [searchParams]);
@@ -550,8 +558,11 @@ function ProfilePage() {
     streamCount > 0 && { value: 'streams', label: t('profile.tabs.streams') },
     { value: 'supports', label: t('profile.tabs.supporters') },
     hasGated && { value: 'members', label: t('profile.tabs.members') },
+    { value: 'curation', label: t('curation.page.title') },
     { value: 'links', label: t('profile.tabs.links') },
     { value: 'stats', label: t('profile.tabs.analytics') },
+    // The comment inbox (the account menu's "Comment inbox" opens it here)
+    { value: 'comments', label: t('creator.inbox.tab') },
   ].filter(Boolean);
 
   const uploads = inProgress?.count > 0 ? inProgress.videos : [];
@@ -651,6 +662,9 @@ function ProfilePage() {
         }
       />
 
+      {/* Pending collab invites to this channel (lib/collabs.js). */}
+      {user && <CollabInvites user={user} />}
+
       {/* ================= TABS ================= */}
       <ProfileTabs
         tabs={tabs}
@@ -729,6 +743,7 @@ function ProfilePage() {
           <>
             {/* A live stream comes first, ahead of the videos. */}
             <ProfileLiveNow user={user} />
+            <UpcomingPremieres owner={user} />
             {isLoading ? (
               <BarLoader />
             ) : videoListItems.length === 0 ? (
@@ -763,6 +778,12 @@ function ProfilePage() {
           <SpotlightEditor username={user} />
         ) : show === "stats" ? (
           <CreatorStats user={user} />
+        ) : show === "comments" ? (
+          <React.Suspense fallback={<BarLoader />}><CommentInbox user={user} /></React.Suspense>
+        ) : show === "curation" ? (
+          <div className="watched-view-container curation-page is-tab">
+            <React.Suspense fallback={<BarLoader />}><CurationView user={user} withSub /></React.Suspense>
+          </div>
         ) : show === "playlists" ? (
           <>
             <div className="profile-tab-actions">

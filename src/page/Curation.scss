@@ -1,0 +1,49 @@
+@use "../styles/v2" as v2;
+
+// The curator page (/curation/:user): three stat tiles, then the picks as watch
+// history rows (WatchedView.scss) with the reward and the early badge on the right.
+.curation-page {
+  &__stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    margin-bottom: 16px;
+    .v2-stat { @include v2.card(24); padding: 16px; min-width: 0; }
+    @include v2.mobile {
+      gap: 8px;
+      .v2-stat { padding: 12px; b { font-size: 18px; } }
+    }
+  }
+  &__right {
+    flex: none;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+    max-width: 40%;
+    @include v2.mobile { .v2-pill { display: none; } }
+  }
+  &__hp {
+    @include v2.mono(13, 700);
+    white-space: nowrap;
+    &.is-pending { color: var(--muted); font-weight: 500; font-size: 12px; }
+  }
+  &__note {
+    margin: 16px 0 0;
+    @include v2.text(meta);
+    color: var(--muted);
+  }
+}
+
+// As a profile tab (ProfilePage / UserProfilePage): the tab's own width and
+// spacing, the period as a line over the tiles instead of the page header.
+.curation-page.is-tab {
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+.curation-page__sub {
+  margin: 0 0 12px;
+  @include v2.text(body-sm);
+  color: var(--muted);
+}

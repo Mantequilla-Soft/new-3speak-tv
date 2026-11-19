@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 import { Dialog } from '../v2/ui';
 import { Icon } from '../v2/Icon';
@@ -8,6 +8,7 @@ import { toastIn } from '../../utils/toast';
 import { CHECKER_URL } from '../../utils/config';
 import { APP_VERSION } from '../../version';
 import { useReviewModal } from '../../lib/reviewStore';
+import { shrinkScreenshot } from '../../utils/shrinkScreenshot';
 import './ReviewModal.scss';
 
 // Every toast from this module is headed "Feedback"; the message becomes the
@@ -43,8 +44,12 @@ const STAR_LABELS = ['', 'comments.review.stars.poor', 'comments.review.stars.fa
  * Reusable feedback/review popup. Hand it { area, username, permlink } and an
  * onClose. Writes a review (1–5 stars + aspects + recommend + comment) to the
  * checker's `reviews` collection. area: 'global' | 'stream' | 'upload' | …
+ *
+ * allowScreenshot (default: only for the global feedback) adds an optional
+ * screenshot, picked or pasted, shrunk to a JPEG here. The checker keeps it
+ * private (not on a public image host).
  */
-function ReviewModal({ area = 'global', username = null, permlink = null, onClose }) {
+function ReviewModal({ area = 'global', username = null, permlink = null, allowScreenshot = area === 'global', onClose }) {
   const { t } = useTranslation();
   const location = useLocation();
   const [stars, setStars] = useState(0);
@@ -56,6 +61,37 @@ function ReviewModal({ area = 'global', username = null, permlink = null, onClos
   const [recommend, setRecommend] = useState(null); // true | false | null
   const [comment, setComment] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const [screenshot, setScreenshot] = useState(null); // JPEG data URL
+  const [preparingShot, setPreparingShot] = useState(false);
+  const fileInput = useRef(null);
+
+  const takeScreenshot = async (file) => {
+    setPreparingShot(true);
+    try {
+      setScreenshot(await shrinkScreenshot(file));
+    } catch (e) {
+      toast.error(t(e?.code === 'tooBig' ? 'comments.review.errors.screenshotTooBig' : 'comments.review.errors.screenshotUnreadable'));
+    } finally {
+      setPreparingShot(false);
+    }
+  };
+
+  const onPickFile = (e) => {
+    const file = e.target.files?.[0];
+    e.target.value = ''; // picking the same file again still fires a change
+    if (file) takeScreenshot(file);
+  };
+
+  // A pasted image anywhere in the popup (the note field included) becomes the
+  // screenshot. Pasted text is left alone.
+  const onPaste = (e) => {
+    if (!allowScreenshot || submitting) return;
+    const item = [...(e.clipboardData?.items || [])].find((i) => i.kind === 'file' && i.type.startsWith('image/'));
+    const file = item?.getAsFile();
+    if (!file) return;
+    e.preventDefault();
+    takeScreenshot(file);
+  };
 
   const toggleAspect = (k) =>
     setAspects((prev) => (prev.includes(k) ? prev.filter((a) => a !== k) : [...prev, k]));
@@ -77,6 +113,7 @@ function ReviewModal({ area = 'global', username = null, permlink = null, onClos
         comment: comment.trim(),
         app_version: APP_VERSION,
         path: location.pathname,
+        ...(screenshot ? { screenshot } : {}),
       });
       toast.success(t('comments.review.thanks'));
       onClose?.();
@@ -94,7 +131,7 @@ function ReviewModal({ area = 'global', username = null, permlink = null, onClos
   // press inside it from reaching outside-click handlers of whatever opened it
   // (a menu or another dialog): React events bubble through the portal.
   return (
-    <div className="review-portal-guard" onMouseDown={(e) => e.stopPropagation()}>
+    <div className="review-portal-guard" onMouseDown={(e) => e.stopPropagation()} onPaste={onPaste}>
       <Dialog
         open
         onClose={onClose}
@@ -109,7 +146,7 @@ function ReviewModal({ area = 'global', username = null, permlink = null, onClos
             <button type="button" className="v2-btn v2-btn--secondary h40 is-center review-cancel" onClick={onClose} disabled={submitting}>
               <span className="v2-btn__label">{t('comments.review.notNow')}</span>
             </button>
-            <button type="button" className="v2-btn v2-btn--primary h40 is-center review-submit" onClick={submit} disabled={submitting || !stars}>
+            <button type="button" className="v2-btn v2-btn--primary h40 is-center review-submit" onClick={submit} disabled={submitting || preparingShot || !stars}>
               <span className="v2-btn__label">{submitting ? t('comments.review.sending') : t('comments.review.sendFeedback')}</span>
               <Icon name={submitting ? 'progress_activity' : 'send'} size={18} className={submitting ? 'v2-spin' : undefined} />
             </button>
@@ -194,6 +231,49 @@ function ReviewModal({ area = 'global', username = null, permlink = null, onClos
               placeholder={t('comments.review.placeholder')}
             />
           </div>
+
+          {allowScreenshot && (
+            <div className="review-field">
+              <label className="v2-eyebrow" htmlFor="review-shot">
+                <Trans i18nKey="comments.review.screenshotLabel" components={{ opt: <span className="v2-field__opt" /> }} />
+              </label>
+              <input
+                ref={fileInput}
+                id="review-shot"
+                type="file"
+                accept="image/*"
+                className="review-shot__input"
+                onChange={onPickFile}
+                disabled={submitting || preparingShot}
+              />
+              {screenshot ? (
+                <div className="review-shot__preview">
+                  <img src={screenshot} alt={t('comments.review.screenshotAlt')} />
+                  <button
+                    type="button"
+                    className="review-shot__remove"
+                    onClick={() => setScreenshot(null)}
+                    disabled={submitting}
+                    aria-label={t('comments.review.removeScreenshot')}
+                    title={t('comments.review.removeScreenshot')}
+                  >
+                    <Icon name="close" size={18} />
+                  </button>
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  className="review-shot__add"
+                  onClick={() => fileInput.current?.click()}
+                  disabled={submitting || preparingShot}
+                >
+                  <Icon name={preparingShot ? 'progress_activity' : 'add_photo_alternate'} size={20} className={preparingShot ? 'v2-spin' : undefined} />
+                  <span>{preparingShot ? t('comments.review.screenshotPreparing') : t('comments.review.attachScreenshot')}</span>
+                </button>
+              )}
+              <span className="v2-field__hint">{t('comments.review.screenshotHint')}</span>
+            </div>
+          )}
       </Dialog>
     </div>
   );

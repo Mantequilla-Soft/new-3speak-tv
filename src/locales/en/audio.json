@@ -148,6 +148,16 @@
     "notes": "Notes",
     "stillIndexing": "Audio for this post is still being indexed — try again in a few minutes."
   },
+  "edit": {
+    "title": "Edit audio",
+    "editTitle": "Edit title, show notes, tags and cover",
+    "cover": "Cover",
+    "coverAlt": "Cover preview",
+    "coverHint": "Upload an image or paste a direct URL. A square image looks best.",
+    "notesPlaceholder": "Tell listeners about this audio…",
+    "keptNote": "The player link and any music credits in the post stay as they are.",
+    "updated": "Audio updated!"
+  },
   "page": {
     "sections": {
       "popular": "Popular",
@@ -173,7 +183,6 @@
     },
     "all": "All",
     "musicGenre": "Music genre",
-    "anyGenre": "Any genre",
     "tracks_one": "{{count}} track",
     "tracks_other": "{{count}} tracks",
     "noTracks": "No tracks found.",
@@ -186,7 +195,7 @@
     "nothingPlaying": "Nothing is playing yet.",
     "goExplore": "Find something to listen to",
     "exploreViews": "Explore sections",
-    "mostPlayed": "Most played"
+    "newUploads": "New uploads"
   },
   "upload": {
     "title": "Upload audio",
@@ -275,7 +284,10 @@
       "formats": "MP3, WAV, OGG, WEBM, M4A, FLAC, AAC · several at once",
       "stop": "Stop",
       "orRecord": "Or record live",
+      "micPreparing": "Getting the microphone ready...",
       "recordLimit": "Up to {{minutes}} min per recording",
+      "level": "Microphone level",
+      "noSound": "No sound is coming in. Check that your microphone isn't muted or in use by another app.",
       "record": "Record",
       "added": "Added ({{count}})",
       "filesTitle": "Audio files"
@@ -290,6 +302,7 @@
       "descriptionOptional": "Description (optional)",
       "track": "Track",
       "category": "Category",
+      "categoryRequired": "Pick a category so your audio shows up on the right tab.",
       "musicGenre": "Music genre"
     },
     "playlist": {
@@ -377,6 +390,7 @@
     "tracks": {
       "helpAlbum": "Each track is published as a comment under the main post. Set shared values once and apply them to all, then override per track.",
       "helpSnaps": "Each track is published as its own snap. Set shared values once and apply them to all, then override per track.",
+      "helpSnapsSingle": "Your audio is published as its own snap.",
       "applyToAllHeading": "Apply to all tracks",
       "applyNote_one": "<b>Apply to all {{count}} track:</b> shared description and cover, then change any track on its own.",
       "applyNote_other": "<b>Apply to all {{count}} tracks:</b> shared description and cover, then change any track on its own.",
@@ -406,6 +420,10 @@
       "earnings": "Earnings:",
       "earningsPpl": "Pay-per-listen (@{{account}})",
       "earningsNormal": "Normal post rewards",
+      "rewards": "Rewards:",
+      "beneficiaries": "Beneficiaries:",
+      "perTrack": "Set per track",
+      "noBeneficiaries": "None",
       "playlist": "Playlist:",
       "failedCount_one": "{{count}} track failed.",
       "failedCount_other": "{{count}} tracks failed.",
@@ -780,7 +798,9 @@
     "description": "Description",
     "noDescription": "No description.",
     "comments": "Comments",
-    "album": "From {{name}}"
+    "album": "From {{name}}",
+    "videoPodcast": "Video podcast",
+    "videoPodcastTitle": "Make a video of this episode: its cover, a waveform and captions"
   },
   "offline": {
     "notice": "You're offline. Your downloads still play.",

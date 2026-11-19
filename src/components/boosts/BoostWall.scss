@@ -1,0 +1,53 @@
+@use "../../styles/v2" as v2;
+
+// A post's boost wall: rows of avatar, name, amount, message and age. Tokens only.
+.boost-wall {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+
+  &__total { margin: 0; font-size: 13px; color: var(--muted); }
+  &__empty, &__note { margin: 0; @include v2.text(meta); color: var(--muted); }
+  &__note { font-size: 11px; }
+
+  &__list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+  &__item { display: flex; gap: 10px; min-width: 0; }
+  &__avatar {
+    flex: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: var(--surface-2);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    &.is-bolt { color: var(--accent); }
+  }
+  &__body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+  &__head { display: flex; align-items: baseline; gap: 8px; min-width: 0; }
+  &__name {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+    text-decoration: none;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  a.boost-wall__name:hover { text-decoration: underline; }
+  &__amount { margin-left: auto; font-size: 13px; white-space: nowrap; }
+  &__msg { margin: 0; font-size: 13px; color: var(--text); overflow-wrap: anywhere; }
+  &__meta {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    font-size: 11px;
+    color: var(--muted);
+    .material-symbols-rounded { color: var(--accent); }
+  }
+  &__item.is-boost .boost-wall__msg { font-weight: 500; }
+}

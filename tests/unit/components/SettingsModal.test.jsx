@@ -56,7 +56,7 @@ vi.mock('../../../src/lib/supportLinks', async (importOriginal) => ({
   saveSupportLinks: (...a) => m.saveLinks(...a),
 }))
 vi.mock('../../../src/hooks/useCardSize', () => ({ default: () => 'small', useIsCardSizeMobile: () => m.cardMobile }))
-vi.mock('../../../src/utils/hiveNode', () => ({ getHiveUrl: () => 'https://api.hive.example' }))
+vi.mock('../../../src/utils/hiveNode', () => ({ getHiveUrl: () => 'https://api.hive.example', KNOWN_NODES: ['https://api.hive.example'], getNodeChoice: () => null, checkNode: async () => ({ ok: true, ms: 1 }), setNodeChoice: () => {} }))
 vi.mock('../../../src/hooks/getUserDetails', () => ({ useGetMyQuery: () => undefined }))
 vi.mock('../../../src/version', () => ({ APP_VERSION: '9.8.7' }))
 vi.mock('../../../src/components/tip-reward/OtherWays', () => ({ SUPPORT_SITE_ICONS: {} }))
@@ -110,7 +110,7 @@ beforeEach(() => {
   })
   useAppStore.setState({
     user: null, authenticated: false, theme: 'light', showNsfw: false, hideWatched: true, hideAi: true,
-    privateMode: false, previewEnabled: true, openShortsOnStart: false, inlineShorts: true,
+    privateMode: false, previewEnabled: true, resumeLastPage: false, inlineShorts: true,
     shortsCommentBar: false, interests: [], homeCardSize: 'small',
   })
 })
@@ -137,6 +137,13 @@ describe('the settings window', () => {
     signIn()
     mount()
     expect(tabs()).toEqual(['General', 'Content', 'Connections', 'About'])
+  })
+
+  it('opens on the tab it is given (the linked-profiles prompt opens Connections)', () => {
+    signIn()
+    mount({ initialTab: 'connections' })
+    expect(screen.getByRole('tab', { name: 'Connections' })).toHaveAttribute('aria-selected', 'true')
+    expect(screen.getByText('Linked profiles of listener')).toBeInTheDocument()
   })
 
   it('shows "Ads & rewards" only when the checker lets the account in', async () => {
@@ -229,6 +236,15 @@ describe('settings: General and Content', () => {
     expect(useAppStore.getState().previewEnabled).toBe(false)
   })
 
+  it('continue where I left off sits with the language on the General card, off until turned on', async () => {
+    const { user } = mount()
+    const card = screen.getByRole('heading', { name: 'General' }).closest('section')
+    expect(within(card).getByRole('switch', { name: 'Continue where I left off' })).toBeInTheDocument()
+    expect(sw('Continue where I left off')).toHaveAttribute('aria-checked', 'false')
+    await user.click(sw('Continue where I left off'))
+    expect(useAppStore.getState().resumeLastPage).toBe(true)
+  })
+
   it('offers large cards only on a phone-sized screen', () => {
     mount()
     expect(screen.queryByRole('switch', { name: 'Large cards' })).not.toBeInTheDocument()
@@ -259,13 +275,15 @@ describe('settings: General and Content', () => {
     expect(useAppStore.getState()).toMatchObject({ showNsfw: true, hideWatched: false, hideAi: false, privateMode: true })
   })
 
-  it('the Shorts card sets how shorts open and whether they show in feeds', async () => {
+  it('Shorts inside the feeds is on the Feed card; there is no Open Shorts on start, and no Shorts card on a desktop', async () => {
     const { user } = mount()
     await user.click(screen.getByRole('tab', { name: 'Content' }))
     expect(screen.queryByRole('switch', { name: 'Comment bar on shorts' })).not.toBeInTheDocument()
-    await user.click(sw('Open Shorts on start'))
-    await user.click(sw('Shorts inside the feeds'))
-    expect(useAppStore.getState()).toMatchObject({ openShortsOnStart: true, inlineShorts: false })
+    expect(screen.queryByRole('switch', { name: /Open Shorts on start/ })).toBeNull()
+    expect(screen.queryByRole('heading', { name: 'Shorts' })).toBeNull()
+    const feedCard = screen.getByRole('heading', { name: 'Feed' }).closest('section')
+    await user.click(within(feedCard).getByRole('switch', { name: 'Shorts inside the feeds' }))
+    expect(useAppStore.getState().inlineShorts).toBe(false)
   })
 
   it('offers the shorts comment bar on a phone, where it is drawn', async () => {
@@ -328,7 +346,7 @@ describe('settings: General and Content', () => {
   it('About: five quick taps on the node row unlock Butter Auth', async () => {
     const { user } = mount()
     await user.click(screen.getByRole('tab', { name: 'About' }))
-    const row = screen.getByText('Hive RPC node')
+    const row = screen.getByRole('button', { name: /Hive RPC node/ })
     // The unlock reloads the page 600 ms later; that timer is dropped unrun.
     vi.useFakeTimers({ shouldAdvanceTime: true })
     try {

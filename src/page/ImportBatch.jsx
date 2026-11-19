@@ -1,12 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation, Trans } from "react-i18next";
-import { Button, Icon, SettingRow, Toggle } from "../components/v2/ui";
+import { Button, Icon } from "../components/v2/ui";
 import { cx } from "../components/v2/helpers";
 import CommunityModal from "../components/modal/Community_modal";
 import Beneficiary_modal from "../components/modal/Beneficiary_modal";
-import SettingInfo, { SettingSheet } from "../components/embed-studio/SettingInfo";
+import { SettingSheet } from "../components/embed-studio/SettingInfo";
 import { createImportBatch, cancelImportBatch, fmtDuration } from "../lib/youtubeImport";
+import { PickTile, ToggleTile } from "./ImportTiles";
+import { AudioContentFields, audioContentState, audioContentSettings, audioContentMissingText } from "./PodcastAutoImport";
 import { addThreespeakToPostingAuth, waitForThreespeakPostingAuth } from "../utils/postingAuthority";
 import { getCurrentProvider, Providers } from "../hive-api/aioha";
 import AccountImg from "../components/HiveAvatar/AccountImg";
@@ -25,40 +27,6 @@ import {
 const DEFAULT_COMMUNITY = 'hive-181335';
 const PAYOUTS = ['default', 'powerup', 'decline'];
 
-/** One on/off setting: a SettingRow with a Toggle (STYLE_GUIDE §11). */
-function ToggleTile({ label, info, hint, checked, onChange, disabled }) {
-  return (
-    <SettingRow
-      className="yt-batch-setting"
-      title={<>{label}<SettingInfo title={label}>{info}</SettingInfo></>}
-      sub={hint}
-      control={<Toggle checked={!!checked} onChange={onChange} disabled={disabled} label={label} />}
-    />
-  );
-}
-
-/** A setting that opens a picker: title, hint and the current value. */
-function PickTile({ label, info, hint, value, onOpen, disabled, className }) {
-  const open = () => { if (!disabled) onOpen(); };
-  return (
-    <div
-      className={cx('yt-batch-pick', disabled && 'is-disabled', className)}
-      role="button"
-      tabIndex={disabled ? -1 : 0}
-      aria-disabled={disabled || undefined}
-      onClick={open}
-      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); } }}
-    >
-      <div className="yt-batch-pick__body">
-        <b>{label}<SettingInfo title={label}>{info}</SettingInfo></b>
-        <span>{hint}</span>
-      </div>
-      <span className="yt-batch-pick__value">{value}</span>
-      <Icon name="chevron_right" size={18} className="yt-batch-pick__go" />
-    </div>
-  );
-}
-
 /**
  * The one-time form, as a two-step wizard: Content (the picked videos) and
  * Settings. Title, description, tags and thumbnail come from each video; the
@@ -68,6 +36,16 @@ function PickTile({ label, info, hint, value, onOpen, disabled, className }) {
  */
 export function BatchForm({ user, videos, spacingMin, granted, onGranted, onClose, onStarted }) {
   const { t } = useTranslation();
+  // Podcast episodes: the kind of audio and where each post's content comes from.
+  const audioItems = videos.filter((v) => v.platform === 'rss');
+  const hasAudio = audioItems.length > 0;
+  const allAudio = hasAudio && audioItems.length === videos.length;
+  const [content, setContent] = useState(() => audioContentState());
+  const sample = { title: audioItems[0]?.title || '', show: audioItems[0]?.channelTitle || '', episode: 12 };
+  // Only podcast episodes: say "episodes", not "videos".
+  // Every item a podcast episode going out as a snap: no community, no blog.
+  const allSnaps = allAudio && content.target === 'snap';
+  const bk = (key) => (allAudio ? `ytimport.batch.audio.${key}` : `ytimport.batch.${key}`);
   const [step, setStep] = useState(1);
   const [community, setCommunity] = useState(DEFAULT_COMMUNITY);
   const [communityOpen, setCommunityOpen] = useState(false);
@@ -87,19 +65,20 @@ export function BatchForm({ user, videos, spacingMin, granted, onGranted, onClos
   // Beneficiaries in the wizard's dialog, starting from the same locked rows.
   // Pro drops them like EmbedUploadContext does; the server enforces its own copy.
   const isPremium = usePremiumStatus(user)?.premium === true;
-  const [list, setList] = useState([
+  // Audio is not encoded: an all-podcast batch has no encoder.pay row.
+  const [list, setList] = useState(() => [
     { account: LOCKED_FUND_ACCOUNT, percent: LOCKED_FUND_PERCENT, locked: true, minPercent: LOCKED_FUND_PERCENT },
-    { account: LOCKED_ENCODER_ACCOUNT, percent: LOCKED_ENCODER_PERCENT, locked: true, minPercent: LOCKED_ENCODER_PERCENT },
+    ...(allAudio ? [] : [{ account: LOCKED_ENCODER_ACCOUNT, percent: LOCKED_ENCODER_PERCENT, locked: true, minPercent: LOCKED_ENCODER_PERCENT }]),
   ]);
-  const [remaining, setRemaining] = useState(100 - LOCKED_FUND_PERCENT - LOCKED_ENCODER_PERCENT);
+  const [remaining, setRemaining] = useState(100 - LOCKED_FUND_PERCENT - (allAudio ? 0 : LOCKED_ENCODER_PERCENT));
   const prunedRef = useRef(false);
   useEffect(() => {
     if (!isPremium || prunedRef.current) return;
     prunedRef.current = true;
-    const keepEncoder = chargesEncoder({ isPremium, username: user, includeEncoder: true });
+    const keepEncoder = !allAudio && chargesEncoder({ isPremium, username: user, includeEncoder: true });
     setList((prev) => prev.filter((b) => b.account !== LOCKED_FUND_ACCOUNT && (keepEncoder || b.account !== LOCKED_ENCODER_ACCOUNT)));
-    setRemaining((prev) => Math.min(100, prev + (keepEncoder ? LOCKED_FUND_PERCENT : LOCKED_FUND_PERCENT + LOCKED_ENCODER_PERCENT)));
-  }, [isPremium, user]);
+    setRemaining((prev) => Math.min(100, prev + (keepEncoder || allAudio ? LOCKED_FUND_PERCENT : LOCKED_FUND_PERCENT + LOCKED_ENCODER_PERCENT)));
+  }, [isPremium, user, allAudio]);
 
   // Ads and rolls tiles only when the account carries them, as in the wizard.
   const [accountAdsOn, setAccountAdsOn] = useState(false);
@@ -155,6 +134,7 @@ export function BatchForm({ user, videos, spacingMin, granted, onGranted, onClos
         reblog: addToBlog,
         ads: accountAdsOn ? ads : true,
         rolls: accountRollsOn && ads ? rolls : true,
+        ...(hasAudio ? { audio: audioContentSettings(content) } : {}),
       });
       onStarted(batch);
     } catch (e) {
@@ -166,13 +146,13 @@ export function BatchForm({ user, videos, spacingMin, granted, onGranted, onClos
   };
 
   return (
-    <div className="yt-batch-modal" role="dialog" aria-modal="true" aria-label={t('ytimport.batch.formTitle', { count: videos.length })}>
+    <div className="yt-batch-modal" role="dialog" aria-modal="true" aria-label={t(bk('formTitle'), { count: videos.length })}>
       <div className="yt-batch-modal__overlay" onClick={busy || granting ? undefined : onClose} />
       <div className="yt-batch-modal__sheet">
         <div className="v2-dialog__grab" aria-hidden="true" />
-        <ModalHeader title={t('ytimport.batch.formTitle', { count: videos.length })} onClose={busy || granting ? undefined : onClose} />
+        <ModalHeader title={t(bk('formTitle'), { count: videos.length })} onClose={busy || granting ? undefined : onClose} />
         {/* 4px step bar with the labels under it (§11 multi-step pattern). */}
-        <ol className="yt-batch-steps" aria-label={t('ytimport.batch.formTitle', { count: videos.length })}>
+        <ol className="yt-batch-steps" aria-label={t(bk('formTitle'), { count: videos.length })}>
           {[t('ytimport.batch.steps.content'), t('ytimport.batch.steps.settings')].map((label, i) => (
             <li key={label} className={cx(i + 1 <= step && 'is-on')} aria-current={i + 1 === step ? 'step' : undefined}>
               <span className="yt-batch-steps__bar" />
@@ -184,7 +164,7 @@ export function BatchForm({ user, videos, spacingMin, granted, onGranted, onClos
 
         {step === 1 && (
           <>
-            <p className="yt-import__note">{t('ytimport.batch.contentIntro')}</p>
+            <p className="yt-import__note">{t(bk('contentIntro'))}</p>
             <ul className="yt-batch-modal__picked">
               {videos.map((v) => (
                 <li key={v.id}>
@@ -198,22 +178,30 @@ export function BatchForm({ user, videos, spacingMin, granted, onGranted, onClos
                 </li>
               ))}
             </ul>
+            {hasAudio && (
+              <>
+                <h3 className="yt-auto-form__section">{t('ytimport.auto.sections.content')}</h3>
+                <AudioContentFields value={content} onChange={setContent} sample={sample} disabled={busy} />
+              </>
+            )}
           </>
         )}
 
         {step === 2 && (
           <>
-            <p className="yt-import__note">{t('ytimport.batch.settingsIntro')}</p>
+            <p className="yt-import__note">{t(bk('settingsIntro'))}</p>
             <div className={cx('yt-batch-modal__tiles', busy && 'is-busy')}>
-              <PickTile
-                className="community-tile"
-                label={t('upload.details.community.label')}
-                info={t('upload.details.community.info')}
-                hint={t('upload.details.community.hint')}
-                value={<span className="community-value"><AccountImg account={communityName} alt="" /><span>{communityTitle}</span></span>}
-                onOpen={() => setCommunityOpen(true)}
-                disabled={busy}
-              />
+              {!allSnaps && (
+                <PickTile
+                  className="community-tile"
+                  label={t('upload.details.community.label')}
+                  info={t('upload.details.community.info')}
+                  hint={t('upload.details.community.hint')}
+                  value={<span className="community-value"><AccountImg account={communityName} alt="" /><span>{communityTitle}</span></span>}
+                  onOpen={() => setCommunityOpen(true)}
+                  disabled={busy}
+                />
+              )}
               <PickTile
                 label={t('upload.details.rewards.label')}
                 info={t('upload.details.rewards.info')}
@@ -234,12 +222,16 @@ export function BatchForm({ user, videos, spacingMin, granted, onGranted, onClos
                   disabled={busy}
                 />
               )}
-              <ToggleTile label={t('upload.details.remix.label')} info={t('upload.details.remix.info')} hint={t('upload.details.remix.hint')}
-                checked={reusable} onChange={setReusable} disabled={busy} />
+              {!allAudio && (
+                <ToggleTile label={t('upload.details.remix.label')} info={t('upload.details.remix.info')} hint={t('upload.details.remix.hint')}
+                  checked={reusable} onChange={setReusable} disabled={busy} />
+              )}
               <ToggleTile label={t('upload.details.nsfw.label')} info={<Trans i18nKey="upload.details.nsfw.info" components={{ code: <code /> }} />}
                 hint={t('upload.details.nsfw.hint')} checked={nsfw} onChange={setNsfw} disabled={busy} />
-              <ToggleTile label={t('upload.details.addToBlog.label')} info={t('upload.details.addToBlog.info')} hint={t('upload.details.addToBlog.hint')}
-                checked={addToBlog} onChange={setAddToBlog} disabled={busy} />
+              {!allSnaps && (
+                <ToggleTile label={t('upload.details.addToBlog.label')} info={t('upload.details.addToBlog.info')} hint={t('upload.details.addToBlog.hint')}
+                  checked={addToBlog} onChange={setAddToBlog} disabled={busy} />
+              )}
               {accountAdsOn && (
                 <ToggleTile label={t('upload.details.ads.label')} info={t('upload.details.ads.info')}
                   hint={ads ? t('upload.details.ads.hintOn') : t('upload.details.ads.hintOff')} checked={ads} onChange={setAds} disabled={busy} />
@@ -251,7 +243,7 @@ export function BatchForm({ user, videos, spacingMin, granted, onGranted, onClos
             </div>
 
             {hasShorts && <p className="yt-batch-modal__small"><Icon name="view_day" size={14} />{t('ytimport.batch.shortsNote')}</p>}
-            <p className="yt-batch-modal__small"><Icon name="schedule" size={14} />{t('ytimport.batch.spacing', { minutes: spacingMin })}</p>
+            <p className="yt-batch-modal__small"><Icon name="schedule" size={14} />{t(bk('spacing'), { minutes: spacingMin })}</p>
 
             <SettingSheet title={t('upload.details.rewards.label')} open={rewardsOpen} onClose={() => setRewardsOpen(false)}>
               <div className="option-sheet">
@@ -290,7 +282,11 @@ export function BatchForm({ user, videos, spacingMin, granted, onGranted, onClos
           {step === 1 ? (
             <>
               <Button variant="secondary" size={44} center className="is-half" onClick={onClose}>{t('ytimport.cancel')}</Button>
-              <Button variant="primary" size={44} center className="is-half" onClick={() => setStep(2)}>{t('common.actions.next')}</Button>
+              <Button variant="primary" size={44} center className="is-half" onClick={() => {
+                if (hasAudio && audioContentMissingText(content)) { setError(t('ytimport.auto.textRequired')); return; }
+                setError('');
+                setStep(2);
+              }}>{t('common.actions.next')}</Button>
             </>
           ) : (
             <>
@@ -339,6 +335,9 @@ const STATE_ICON = {
 /** The creator's newest batch: one row per video with its state. */
 export function BatchStatus({ batch, user, onChange }) {
   const { t } = useTranslation();
+  // A batch of podcast episodes only: say "episodes", not "videos".
+  const audioBatch = batch.items.length > 0 && batch.items.every((it) => it.platform === 'rss');
+  const statusKey = (key) => (audioBatch ? `ytimport.batch.audio.${key}` : `ytimport.batch.${key}`);
   const [stopping, setStopping] = useState(false);
   // Stopping also cancels posts that are already scheduled, so it asks first.
   const [confirming, setConfirming] = useState(false);
@@ -378,7 +377,7 @@ export function BatchStatus({ batch, user, onChange }) {
       </div>
       {stoppable && confirming && (
         <div className="yt-batch-status__confirm" role="alert">
-          <p>{t('ytimport.batch.stopConfirm')}</p>
+          <p>{t(statusKey('stopConfirm'))}</p>
           <div className="yt-import__actions">
             <Button variant="primary" size={36} icon="stop_circle" loading={stopping} onClick={stop} disabled={stopping}>
               {t('ytimport.batch.stopYes')}
@@ -392,7 +391,7 @@ export function BatchStatus({ batch, user, onChange }) {
       {/* Everything happens on the server (import-batch.cjs), so say so: people
           otherwise keep the tab open for hours. */}
       {stoppable && (
-        <p className="yt-batch-status__leave"><Icon name="check" size={16} /> {t('ytimport.batch.canLeave')}</p>
+        <p className="yt-batch-status__leave"><Icon name="check" size={16} /> {t(statusKey('canLeave'))}</p>
       )}
       <ul>
         {batch.items.map((it) => (

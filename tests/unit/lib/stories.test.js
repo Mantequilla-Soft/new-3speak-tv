@@ -32,6 +32,16 @@ vi.mock('../../../src/lib/store', () => ({
   useAppStore: (selector) => (selector ? selector(h.store) : h.store),
 }))
 vi.mock('../../../src/i18n', () => ({ t: (key) => key }))
+// Levels and the checker's own notifications (lib/notifyLevels.js) ride along in
+// useStoryNotifications; stand-ins here so the stories queries stay the only ones.
+const nl = vi.hoisted(() => ({ levels: {}, items: [], markSeen: vi.fn() }))
+vi.mock('../../../src/lib/notifyLevels', () => ({
+  useNotifyLevels: () => nl.levels,
+  levelOf: (levels, c) => levels[c] || 'all',
+  levelAllows: (level, kind) => level === 'all' || (level === 'highlights' && kind !== 'stories' && kind !== 'shorts'),
+  useCheckerNotifications: () => ({ items: nl.items, unseenCount: nl.items.filter((n) => !n.seen).length }),
+  markCheckerNotificationsSeen: nl.markSeen,
+}))
 vi.mock('../../../src/hive-api/aioha', () => ({
   ...h.aioha,
   KeyTypes: { Posting: 'posting' },
@@ -185,6 +195,25 @@ describe('useStoryNotifications', () => {
     expect(result.current.unseenCount).toBe(0)
     act(() => { window.dispatchEvent(new StorageEvent('storage', { key: SEEN_KEY })) })
     expect(result.current.unseenCount).toBe(1)
+  })
+
+  it('leaves out stories of creators at Highlights or Off', () => {
+    nl.levels = { bob: 'highlights', carol: 'off' }
+    h.query = { data: { stories: [{ owner: 'alice', permlink: 'a' }, { owner: 'bob', permlink: 'b' }, { owner: 'carol', permlink: 'c' }] } }
+    const { result } = renderHook(() => useStoryNotifications('me'))
+    expect(result.current.stories.map((s) => s.owner)).toEqual(['alice'])
+    nl.levels = {}
+  })
+
+  it('carries the checker notifications, counted unseen and marked seen with the stories', () => {
+    nl.items = [{ id: 'live:1', type: 'live', actor: 'badadib', at: '2026-11-15T10:00:00Z', seen: false }]
+    h.query = { data: { stories: [] } }
+    const { result } = renderHook(() => useStoryNotifications('me'))
+    expect(result.current.stories).toEqual([expect.objectContaining({ id: 'live:1', _checker: true, _viewer: 'me' })])
+    expect(result.current.unseenCount).toBe(1)
+    markStoriesSeen(result.current.stories)
+    expect(nl.markSeen).toHaveBeenCalledWith('me')
+    nl.items = []
   })
 
   it('queries the followed stories only for a signed-in user', async () => {

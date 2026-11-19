@@ -151,6 +151,18 @@ export const PLATFORMS = {
     inputPlaceholderKey: 'misc.social.bitchute.placeholder',
     inputHelpKey: 'misc.social.bitchute.help',
   },
+  rss: {
+    label: 'Podcast RSS',
+    // The checker stores the normalised feed URL itself (3speakchecks
+    // platforms/rss.js): the code goes in the show description or the newest
+    // episode, so the flow's title and steps say so (the *Key overrides).
+    profileUrl: (canonical) => canonical,
+    inputPlaceholderKey: 'misc.social.rss.placeholder',
+    inputHelpKey: 'misc.social.rss.help',
+    flowTitleKey: 'misc.social.rss.flowTitle',
+    step2Key: 'misc.social.rss.step2',
+    step3Key: 'misc.social.rss.step3',
+  },
   rumble: {
     label: 'Rumble',
     // The checker stores "c/<name>" or "user/<name>" (see 3speakchecks platforms/rumble.js).

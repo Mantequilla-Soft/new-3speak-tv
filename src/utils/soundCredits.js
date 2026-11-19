@@ -9,6 +9,8 @@
  * only, https links only, real-looking Hive account names, a few entries at most.
  */
 
+import { libraryCreditSoundId, isSoundId } from '../lib/sounds';
+
 const MAX_CREDITS = 4;
 // Every sound creator costs a beneficiary slot, and Hive allows only eight
 export const MAX_SOUND_AUTHORS = 2;
@@ -46,7 +48,9 @@ export function sanitizeMusicCredits(raw) {
     if (!c || typeof c !== 'object') continue;
     const title = cleanText(c.title);
     if (!title) continue;
-    const id = cleanText(c.id, 120) || title;
+    // A sound id (lib/sounds.js) is kept as it is: cleanText would drop its `_`.
+    const rawId = typeof c.id === 'string' ? c.id.trim().toLowerCase() : '';
+    const id = isSoundId(rawId) ? rawId : cleanText(c.id, 120) || title;
     if (seen.has(id)) continue;
     seen.add(id);
     const is3speak = c.source === '3speak';
@@ -107,11 +111,29 @@ export function primarySoundMetadata(credits) {
   return {
     title: c.title,
     artist: c.artist,
+    // The sound's id (lib/sounds.js), so its sound page lists this post
+    ...(libraryCreditSoundId(c) ? { id: libraryCreditSoundId(c) } : {}),
     ...(c.account ? { account: c.account } : {}),
     ...(c.source ? { source: c.source } : {}),
     ...(c.sourceUrl ? { url: c.sourceUrl } : {}),
     ...(c.license ? { license: c.license } : {}),
   };
+}
+
+/**
+ * The credits of a Short made with "Use this sound" (lib/sounds.js soundCredit):
+ * the editor's own (it keeps the sound's credit on its music clip and sends the
+ * songs still on the timeline, `canLoadSound`), with the sound first when it is
+ * among them, so it is the Short's sound (`video.sound`). A sound taken off the
+ * timeline is not credited. Sanitized like any credit.
+ */
+export function withSoundCredit(rawCredits, soundCredit) {
+  const credits = sanitizeMusicCredits(rawCredits);
+  if (!soundCredit) return credits;
+  const [sound] = sanitizeMusicCredits([soundCredit]);
+  const used = sound && credits.find((c) => c.id === sound.id);
+  if (!used) return credits;
+  return [used, ...credits.filter((c) => c !== used)];
 }
 
 /** Ticker label for a short: the song if it has one, else the creator's original audio. */

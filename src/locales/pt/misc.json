@@ -139,6 +139,13 @@
     "rumble": {
       "placeholder": "https://rumble.com/c/…",
       "help": "Cole o nome ou o link do seu canal do Rumble. Coloque o hash em qualquer lugar da descrição do canal."
+    },
+    "rss": {
+      "placeholder": "https://example.com/podcast.xml",
+      "help": "Cole o endereço do feed RSS do seu podcast. Sua hospedagem mostra ele nas configurações ou na página de distribuição do programa.",
+      "flowTitle": "Vincular o feed RSS do seu podcast",
+      "step2": "<strong>Cole-o na descrição do seu programa ou do seu episódio mais recente</strong>, na sua hospedagem de podcast. Salve e publique a alteração. Você pode removê-lo depois que o feed for verificado.",
+      "step3": "Digite o endereço do feed RSS do seu podcast:"
     }
   },
   "snaps": {
@@ -157,7 +164,13 @@
     "audioMinimal": "Mínimo",
     "heightSub": "Largura total, {{height}} px de altura · Responsivo",
     "podcastTitle": "Incorporar este podcast",
-    "podcastHint": "Toca todos os episódios do programa, inclusive os novos assim que saírem."
+    "podcastHint": "Toca todos os episódios do programa, inclusive os novos assim que saírem.",
+    "embedWhere": "Onde incorporar",
+    "tabWebsite": "Site",
+    "tabHive": "Para Hive",
+    "hiveLink": "Link para posts no Hive",
+    "hivePlaylistHint": "Cole este link em um post ou wave no Hive. Apps do Hive que mostram vídeos do 3Speak, como o Ecency, tocam a playlist direto no post.",
+    "videoPlaylistHint": "Cole isto em qualquer site ou post de blog. Ele toca em ordem todos os vídeos da playlist, inclusive os adicionados depois."
   },
   "incubation": {
     "requestFailed": "A solicitação falhou ({{status}})",
@@ -197,7 +210,9 @@
       "video": "Vídeo",
       "audio": "Áudio",
       "live": "Ao vivo",
-      "others": "Outros"
+      "others": "Outros",
+      "streams": "Transmissões",
+      "edit": "Editar"
     },
     "subtitles": {
       "regularVideo": "Vídeo clássico para o seu canal",
@@ -210,6 +225,12 @@
       "goLiveNow": "Transmita ao vivo para seus seguidores",
       "communitySnap": "Post rápido na sua aba de comunidade",
       "playlist": "Junte vídeos em uma lista para compartilhar"
+    },
+    "categories": {
+      "video": "Envie, grave ou edite um vídeo",
+      "audio": "Música, podcasts e edição de áudio",
+      "streams": "Transmita sozinho ou com convidados",
+      "others": "Snaps e playlists"
     }
   },
   "chat": {

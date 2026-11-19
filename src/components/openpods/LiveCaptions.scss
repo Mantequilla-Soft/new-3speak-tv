@@ -1,0 +1,77 @@
+@use "../../styles/v2" as v2;
+@use "./hangouts-skin" as hh;
+
+// Live captions (H11). The SDK draws the overlay (.hh-captions) and the studio
+// setting (.hh-captions-setting); this is their v2 look. Caption text is white
+// on the media scrim in both themes, like every other text over video.
+
+.hh-captions {
+  left: 16px;
+  right: 16px;
+  bottom: 64px;
+
+  .hh-captions__line > span {
+    background: var(--media-scrim-strong);
+    color: var(--on-media);
+    border-radius: var(--r-sm);
+  }
+  .hh-captions__note {
+    @include v2.text(meta);
+    background: var(--media-scrim);
+    color: var(--on-media);
+    border-radius: var(--r-md);
+  }
+  .hh-captions__switch { color: var(--on-media); }
+
+  @include v2.mobile {
+    left: 12px;
+    right: 72px; // clear of the action rail
+    bottom: 132px; // above the caption, author row and chat composer
+    .hh-captions__line { font-size: 15px; }
+  }
+}
+
+// Watch page player box and the video page's live player: above the bottom
+// row of buttons and the goal bar.
+.ws-player .hh-captions,
+.live-stream-player .hh-captions { bottom: 72px; }
+
+// The CC chip over the video page's live player (next to the boost chip).
+.live-captions-chip {
+  position: absolute;
+  right: 10px;
+  bottom: 54px;
+  z-index: 6;
+  display: inline-grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: none;
+  border-radius: var(--r-md);
+  background: var(--media-scrim);
+  color: var(--on-media);
+  cursor: pointer;
+  transition: background var(--t-fast) var(--ease);
+  &:hover { background: var(--media-scrim-strong); }
+  &.is-on { color: var(--accent); }
+}
+
+// Studio: the setting as one more settings card.
+.openpod-modal .hh-captions-setting {
+  .hh-settings__icon { @include hh.glyph("closed_caption", 20px); }
+  .hh-captions-setting__lang {
+    color: var(--muted);
+    font-size: 12px;
+    select { @include hh.field(40); border-color: var(--border); }
+  }
+  .hh-captions-setting__status {
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.45;
+  }
+  .hh-captions-setting__status--full,
+  .hh-captions-setting__status--unavailable,
+  .hh-captions-setting__status--error { color: var(--accent); }
+  .hh-captions-setting__dot { background: var(--accent); }
+}

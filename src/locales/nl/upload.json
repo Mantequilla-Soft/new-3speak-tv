@@ -286,8 +286,8 @@
     },
     "remix": {
       "label": "Remix en clip toestaan",
-      "info": "Sta anderen toe om remixes en clips van deze video te maken. Jij wordt vermeld als oorspronkelijke maker en ontvangt minimaal 5% als begunstigde.",
-      "hint": "Je krijgt minstens 5% van elke remix"
+      "info": "Laat anderen remixes en clips van deze video maken. Je wordt genoemd als maker van het origineel en krijgt 15% van de beloningen van een remix (minder bij remixes van remixes, minstens 5%).",
+      "hint": "Je krijgt 15% van elke remix van deze video"
     },
     "nsfw": {
       "label": "Markeren als NSFW",
@@ -341,7 +341,13 @@
     "shareRewards": "Beloningen delen",
     "shareRewardsSub": "Verdelen met medewerkers",
     "advanced": "NSFW / uitbetaling",
-    "advancedSub": "Geavanceerd"
+    "advancedSub": "Geavanceerd",
+    "language": {
+      "label": "Taal",
+      "hint": "Gesproken in de video",
+      "info": "De taal die in de video gesproken wordt. Die wordt met de post op Hive opgeslagen, zodat kijkers later video's in hun taal kunnen vinden.",
+      "none": "Geen spraak (muziek, geluiden)"
+    }
   },
   "review": {
     "payoutDeclined": "Geweigerd (beloningen worden verbrand)",
@@ -362,7 +368,8 @@
     "postShort": "Short plaatsen",
     "postStory": "Story plaatsen",
     "postVideo": "Video plaatsen",
-    "backToTimeline": "Terug naar tijdlijn"
+    "backToTimeline": "Terug naar tijdlijn",
+    "benesDeclined": "Uitbetaling geweigerd: zij krijgen ook niets, de vermelding blijft bij de post."
   },
   "publishing": {
     "titleShort": "Short publiceren",

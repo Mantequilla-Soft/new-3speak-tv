@@ -8,6 +8,21 @@ import {createPostProcessingSlice} from "./slices/createPostProcessingSlice"
 import { createThemeSlice } from './slices/createThemeSlice';
 import { createMiniPlayerSlice } from './slices/createMiniPlayerSlice';
 import { createAudioPlayerSlice } from './slices/createAudioPlayerSlice';
+import { markStartPromptAnswered } from './lastPage';
+
+// Someone opening 3Speak for the very first time in this browser: nothing any
+// earlier visit leaves behind (the saved settings, the app-version marker, the
+// cookie answer). Read once, when the store is created, before any of them is
+// written. "Continue where I left off" starts ON for them (owner 2026-11-16);
+// everyone who used 3Speak before keeps it off until they say yes
+// (components/StartPrompt asks once).
+const FIRST_VISIT = (() => {
+  try {
+    return ['user-store', '3speak_app_version', '3speak_cookie_consent'].every((k) => localStorage.getItem(k) == null);
+  } catch {
+    return false;
+  }
+})();
 
 export const useAppStore = create(
   persist(
@@ -37,6 +52,10 @@ export const useAppStore = create(
       // Hover/scroll video previews on cards (default on).
       previewEnabled: true,
       setPreviewEnabled: (val) => a[0]({ previewEnabled: typeof val === 'function' ? val(a[1]().previewEnabled) : val }),
+      // Data saver (lib/dataSaver.js): true / false is the viewer's choice,
+      // null follows the connection (Save-Data or 2G).
+      dataSaver: null,
+      setDataSaver: (val) => a[0]({ dataSaver: val === true ? true : val === false ? false : null }),
       // The Spotlight's muted clips (owner 2026-11-12); off = pictures only.
       heroPreviewEnabled: true,
       setHeroPreviewEnabled: (val) => a[0]({ heroPreviewEnabled: typeof val === 'function' ? val(a[1]().heroPreviewEnabled) : val }),
@@ -60,9 +79,13 @@ export const useAppStore = create(
       // entirely, it doesn't just hide the rows.
       inlineShorts: true,
       setInlineShorts: (val) => a[0]({ inlineShorts: !!(typeof val === 'function' ? val(a[1]().inlineShorts) : val) }),
-      // Land on /shorts instead of the home feed when 3Speak is opened. Off by default.
-      openShortsOnStart: false,
-      setOpenShortsOnStart: (val) => a[0]({ openShortsOnStart: !!(typeof val === 'function' ? val(a[1]().openShortsOnStart) : val) }),
+      // Open 3Speak on the page it was last on (components/ResumeLastPage). On for a
+      // first visit, off for anyone who used 3Speak before (FIRST_VISIT above).
+      resumeLastPage: FIRST_VISIT,
+      setResumeLastPage: (val) => {
+        markStartPromptAnswered(); // a choice made in Settings: the popup does not ask
+        a[0]({ resumeLastPage: !!(typeof val === 'function' ? val(a[1]().resumeLastPage) : val) });
+      },
       // Hide videos the user has already watched from discovery feeds (default ON).
       hideWatched: true,
       setHideWatched: (val) => a[0]({ hideWatched: typeof val === 'function' ? val(a[1]().hideWatched) : val }),
@@ -102,12 +125,14 @@ export const useAppStore = create(
       // so it becomes 'large'; a saved 'large' was picked and stays.
       // v4 (owner 2026-11-12): "Simple feeds" is gone; a saved value is dropped,
       // so everyone is back on the recommended feeds.
-      version: 4,
+      // v5 (owner 2026-11-16): "Open Shorts on start" is gone; a saved value is dropped.
+      version: 5,
       migrate: (persistedState, version) => {
         if (version < 1 && persistedState) persistedState.hideWatched = true;
         if (version < 2 && persistedState) persistedState.hideAi = true;
         if (version < 3 && persistedState && persistedState.homeCardSize !== 'large') persistedState.homeCardSize = 'large';
         if (version < 4 && persistedState) delete persistedState.simpleFeed;
+        if (version < 5 && persistedState) delete persistedState.openShortsOnStart;
         return persistedState;
       },
       partialize: (state) => ({
@@ -120,10 +145,11 @@ export const useAppStore = create(
         spotlightSize: state.spotlightSize,
         previewEnabled: state.previewEnabled,
         heroPreviewEnabled: state.heroPreviewEnabled,
+        dataSaver: state.dataSaver,
         interests: state.interests,
         shortsFeedMode: state.shortsFeedMode,
         shortsCommentBar: state.shortsCommentBar,
-        openShortsOnStart: state.openShortsOnStart,
+        resumeLastPage: state.resumeLastPage,
         inlineShorts: state.inlineShorts,
         hideWatched: state.hideWatched,
         hideAi: state.hideAi,
@@ -132,3 +158,8 @@ export const useAppStore = create(
     }
   )
 );
+
+// Save the first visit's default at once: the next visit reads it before React
+// starts (lib/lastPage resumeOnStart), and by then this no longer counts as a
+// first visit (the app-version marker is written on the first load).
+if (FIRST_VISIT) useAppStore.setState({ resumeLastPage: true });

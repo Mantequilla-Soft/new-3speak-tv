@@ -28,7 +28,9 @@
     },
     "errors": {
       "pickStars": "별점을 선택해 주세요",
-      "sendFailed": "리뷰를 보내지 못했어요. 다시 시도해 주세요."
+      "sendFailed": "리뷰를 보내지 못했어요. 다시 시도해 주세요.",
+      "screenshotUnreadable": "읽을 수 있는 이미지 파일이 아닙니다.",
+      "screenshotTooBig": "이미지가 너무 큽니다. 더 작은 이미지로 시도해 주세요."
     },
     "thanks": "피드백 감사합니다! 🙏",
     "sendFeedback": "피드백 보내기",
@@ -39,6 +41,12 @@
     "recommendLabel": "3Speak를 추천하시겠어요? <opt>(선택)</opt>",
     "moreLabel": "자세히 알려주세요 <opt>(선택)</opt>",
     "placeholder": "어떤 점이 좋았나요? 어떤 점이 개선되면 좋을까요?",
+    "screenshotLabel": "스크린샷 <opt>(선택 사항)</opt>",
+    "attachScreenshot": "스크린샷 첨부",
+    "screenshotPreparing": "스크린샷 준비 중…",
+    "screenshotAlt": "내 스크린샷",
+    "removeScreenshot": "스크린샷 삭제",
+    "screenshotHint": "3Speak 팀만 볼 수 있어요. 여기에 이미지를 붙여넣을 수도 있어요.",
     "notNow": "나중에",
     "sending": "보내는 중…"
   },
@@ -141,5 +149,22 @@
     "creator": "크리에이터",
     "empty": "아직 댓글이 없어요",
     "emptyHint": "특정 장면에 단 댓글은 동영상 타임라인에 표시돼요."
+  },
+  "focus": {
+    "open": "집중 모드",
+    "aria": "집중 모드: 댓글 쓰기",
+    "done": "완료",
+    "sound": "타자기 소리",
+    "words_other": "{{count}}단어",
+    "music": "배경 음악",
+    "musicOff": "끔",
+    "track1": "빗소리",
+    "track2": "밤의 피아노",
+    "track3": "벽난로"
+  },
+  "editor": {
+    "full": "전체 편집기",
+    "compact": "간단한 편집기",
+    "toolbar": "서식"
   }
 }

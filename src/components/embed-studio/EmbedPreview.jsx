@@ -41,6 +41,7 @@ function EmbedPreview() {
     statusText,
     statusMessages,
     publishToEmbed,
+    saveAsDraft,
     user,
     fromStories,
     isStory,
@@ -62,6 +63,21 @@ function EmbedPreview() {
     chapters,
     timelineLinks,
     videoDuration,
+    collaborator,
+    isScheduled,
+    scheduleDateTime,
+    isPremiere,
+    seriesId,
+    pollOn,
+    pollQuestion,
+    pollOptions,
+    pollDays,
+    gated,
+    gatedAllowlist,
+    isChannelTrailer,
+    addToBlog,
+    videoAdsEnabled,
+    videoRollsEnabled,
   } = useEmbedUpload();
 
   // Last step: 5 for a long-form video (after Timeline), 4 for a short.
@@ -185,6 +201,50 @@ function EmbedPreview() {
     ? { name: "hive-181335", title: "Threespeak" }
     : { name: community.name, title: community.title || community.name };
 
+  const yes = t("common.actions.yes");
+  const filledOptions = (pollOptions || []).filter((o) => String(o || '').trim()).length;
+  const extraSettings = quickStory ? [] : [
+    collaborator?.account && {
+      key: 'collab',
+      icon: 'group_add',
+      label: t("social.collab.accountLabel"),
+      value: (
+        <span className="ep-setting__value--community">
+          <AccountImg account={collaborator.account} alt="" />
+          @{collaborator.account} · <span className="num">{collaborator.split}%</span>
+        </span>
+      ),
+    },
+    saveAsDraft && { key: 'draft', icon: 'edit_note', label: t("episodes.drafts.row"), value: yes },
+    isScheduled && scheduleDateTime && {
+      key: 'schedule',
+      icon: 'event',
+      label: t("upload.details.schedule.short"),
+      value: (
+        <>
+          {new Date(scheduleDateTime).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' })}
+          {isPremiere && <> <StatusPill tone="accent">{t("premieres.badge")}</StatusPill></>}
+        </>
+      ),
+    },
+    pollOn && {
+      key: 'poll',
+      icon: 'poll',
+      label: t("social.polls.aria"),
+      value: `${pollQuestion ? `${pollQuestion} · ` : ''}${filledOptions} · ${t("social.polls.days", { count: pollDays || 1 })}`,
+    },
+    fromStories && seriesId && { key: 'series', icon: 'video_library', label: t("episodes.series.kind"), value: yes },
+    gated && {
+      key: 'gated',
+      icon: 'lock',
+      label: t("upload.details.gated.label"),
+      value: gatedAllowlist?.length ? `${yes} · +${gatedAllowlist.length}` : yes,
+    },
+    isChannelTrailer && { key: 'trailer', icon: 'smart_display', label: t("upload.details.trailer.label"), value: yes },
+    community && !addToBlog && { key: 'blog', icon: 'article', label: t("upload.details.addToBlog.label"), value: t("common.actions.no") },
+    !fromStories && videoAdsEnabled === false && { key: 'ads', icon: 'ads_click', label: t("upload.details.ads.label"), value: t("common.actions.no") },
+    !fromStories && videoRollsEnabled === false && { key: 'rolls', icon: 'play_circle', label: t("upload.details.rolls.label"), value: t("common.actions.no") },
+  ].filter(Boolean);
   const payoutLabel = declineRewards
     ? t("upload.review.payoutDeclined")
     : rewardPowerup
@@ -228,9 +288,9 @@ function EmbedPreview() {
   }
   // Show what publishing will actually set: the chosen list plus the locked
   // splits (3Speak fund, encoder, remix author), via the same rule publish uses.
-  // Declining rewards publishes with no beneficiaries at all.
+  // Shown (and published) with a declined payout too: they earn nothing then,
+  // which the card says.
   const userBeneficiaries = (() => {
-    if (declineRewards) return [];
     const beneMap = new Map();
     for (const b of beneList) {
       if (b && b.account) beneMap.set(b.account, Math.max(beneMap.get(b.account) || 0, Number(b.weight) || 0));
@@ -303,8 +363,10 @@ function EmbedPreview() {
       !gateSatisfied && { key: "watch", label: t("upload.review.watchAdToPublish"), onClick: startGateAd, icon: "play_circle" },
       {
         key: "post",
-        icon: "send",
-        label: fromStories ? t(isStory ? 'upload.review.postStory' : 'upload.review.postShort') : t('upload.review.postVideo'),
+        icon: saveAsDraft && !fromStories ? "edit_note" : "send",
+        label: fromStories
+          ? t(isStory ? 'upload.review.postStory' : 'upload.review.postShort')
+          : (saveAsDraft ? t('episodes.drafts.saveButton') : t('upload.review.postVideo')),
         onClick: handlePostVideo,
         disabled: !gateSatisfied || publishing,
         title: gateSatisfied ? undefined : t('upload.review.watchSponsorFirst'),
@@ -481,6 +543,7 @@ function EmbedPreview() {
                         {userBeneficiaries.map((b, i) => (
                           <span className="ep-bene" key={i}>@{b.account} · <span className="num">{(Number(b.weight) / 100).toFixed(0)}%</span></span>
                         ))}
+                        {declineRewards && <span className="ep-muted ep-benes__note">{t("upload.review.benesDeclined")}</span>}
                       </span>
                     )}
                   </span>
@@ -513,6 +576,16 @@ function EmbedPreview() {
                     {isNsfw ? <StatusPill tone="accent">{t("common.actions.yes")}</StatusPill> : <span className="ep-muted">{t("common.actions.no")}</span>}
                   </span>
                 </div>
+
+                {/* The other choices of the details step, each only when it was
+                    made, so the card lists everything this post will carry. */}
+                {extraSettings.map((row) => (
+                  <div className="ep-setting" key={row.key}>
+                    <span className="ep-setting__icon"><Icon name={row.icon} size={18} /></span>
+                    <span className="ep-setting__label">{row.label}</span>
+                    <span className="ep-setting__value">{row.value}</span>
+                  </div>
+                ))}
 
                 {/* Watch-ad-to-publish (35d): the sponsor spot this account owes,
                     shown before the button that plays it. */}

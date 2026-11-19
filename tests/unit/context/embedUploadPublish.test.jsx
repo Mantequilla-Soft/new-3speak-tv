@@ -31,6 +31,12 @@ vi.mock('../../../src/lib/advertiseData', () => h.mocks.advertise)
 vi.mock('../../../src/lib/youtubeImport', () => h.mocks.youtubeImport)
 vi.mock('../../../src/lib/stories', () => h.mocks.stories)
 vi.mock('../../../src/hive-api/hiveApi', () => h.mocks.hiveApi)
+// A Short's series (lib/series.js): the playlist add after the post is out.
+const addToPlaylist = vi.hoisted(() => vi.fn(async () => ({ success: true })))
+vi.mock('../../../src/utils/playlistOperations', () => ({ addToPlaylist }))
+// The shorts editor's captions (lib/captionEdit.js): saved after the post is out.
+const saveCaptionEdit = vi.hoisted(() => vi.fn(async () => ({ cid: 'QmCaps', cues: [] })))
+vi.mock('../../../src/lib/captionEdit', () => ({ saveCaptionEdit }))
 // The owner's signature is a fake; the error wording is the real module's (its
 // t() is the same key-echo as the provider's).
 vi.mock('../../../src/i18n', () => h.mocks.appI18n)
@@ -104,6 +110,8 @@ describe('before anything is sent', () => {
     ['a video has no title', null, (c) => c.setTitle('  '), 'upload.details.errors.titleRequired'],
     ['there is no description', null, (c) => c.setDescription(' '), 'upload.details.errors.descriptionRequired'],
     ['a video has no tags', null, (c) => c.setTagsPreview([]), 'upload.details.errors.tagRequired'],
+    ['a poll has no question', null, (c) => { c.setPollOn(true); c.setPollOptions(['Yes', 'No']) }, 'social.polls.invalidVideo {"min":2,"max":4}'],
+    ['a poll has one option', null, (c) => { c.setPollOn(true); c.setPollQuestion('Cats?'); c.setPollOptions(['Yes', '']) }, 'social.polls.invalidVideo {"min":2,"max":4}'],
   ])('refuses when %s', async (_label, arrange, setup, message) => {
     arrange?.()
     const { result } = await ready(setup)
@@ -154,6 +162,7 @@ describe('a regular video', () => {
       app: '3speak/embed',
       format: 'markdown',
       tags: ['hive-181335', 'travel'],
+      language: 'en',
       links: [h.EMBED_URL],
       video: {
         platform: '3speak',
@@ -307,10 +316,11 @@ describe('the post\'s community, tags and payout', () => {
     expect(meta().tags).toEqual(['hive-100', 'travel', 'hive-181335', 'nsfw'])
   })
 
-  it('declined rewards carry no payout and no beneficiaries', async () => {
-    const { result } = await ready((c) => c.SetDeclineRewards(true))
+  it('declined rewards carry no payout, but the beneficiaries stay on the post (the credit, at no reward)', async () => {
+    const { result } = await ready((c) => { c.SetDeclineRewards(true); c.setOriginalAuthor('alice'); c.setOriginalPermlink('orig-video') })
     await publish(result)
-    expect(optionsOp()).toMatchObject({ max_accepted_payout: '0.000 HBD', extensions: [] })
+    expect(optionsOp()).toMatchObject({ max_accepted_payout: '0.000 HBD' })
+    expect(optionsOp().extensions[0][1].beneficiaries).toEqual(expect.arrayContaining([{ account: 'alice', weight: 1500 }, ...LOCKED_SPLITS]))
   })
 
   it('"power up" takes the rewards fully in HP', async () => {
@@ -332,6 +342,41 @@ describe('the post\'s community, tags and payout', () => {
       { account: 'threespeakfund', weight: 1000 },
       { account: 'zed', weight: 500 },
     ] }]])
+  })
+
+  it('a collaborator is named in the metadata, gets half the creator\'s share, and is invited', async () => {
+    const { result } = await ready((c) => c.setCollaborator({ account: 'fan', split: 50 }))
+    await publish(result)
+    expect(meta().collaborators).toEqual(['fan'])
+    // 100 % minus the locked 11 % = 89 %, half of it 44.5 %.
+    expect(optionsOp().extensions).toEqual([[0, { beneficiaries: [
+      { account: 'encoder.pay', weight: 100 },
+      { account: 'fan', weight: 4450 },
+      { account: 'threespeakfund', weight: 1000 },
+    ] }]])
+    await waitFor(() => expect(fetchTo('/collabs/register')).toHaveLength(1))
+    expect(JSON.parse(fetchTo('/collabs/register')[0][1].body)).toEqual({ author: 'badadib', permlink: PERMLINK })
+  })
+
+  it('names the spoken language, remembered for the next upload', async () => {
+    const { result } = await ready((c) => c.setContentLanguage('de'))
+    await publish(result)
+    expect(meta().language).toBe('de')
+    expect(localStorage.getItem('3speak_content_language')).toBe('de')
+  })
+
+  it('a video without speech is marked zxx', async () => {
+    const { result } = await ready((c) => c.setContentLanguage('zxx'))
+    await publish(result)
+    expect(meta().language).toBe('zxx')
+  })
+
+  it('the creator can never be their own collaborator', async () => {
+    const { result } = await ready((c) => c.setCollaborator({ account: 'badadib', split: 50 }))
+    await publish(result)
+    expect(meta().collaborators).toBeUndefined()
+    expect(optionsOp().extensions).toEqual([[0, { beneficiaries: LOCKED_SPLITS }]])
+    expect(fetchTo('/collabs/register')).toHaveLength(0)
   })
 
   it('unreadable beneficiaries fall back to the locked ones', async () => {
@@ -404,6 +449,23 @@ describe('a short', () => {
     expect(h.tus.uploads[0].options.metadata.short).toBe('true')
   })
 
+  it('a live-stream clip posted by its host gives the clipper a locked 30 % and records where it came from (H13)', async () => {
+    const { result } = await ready((c) => { asShort(c); c.setStreamClip({ room: 'badadib-r1', host: 'badadib', clipper: 'fan', offsetSec: 754, share: { account: 'fan', percent: 30, role: 'clipper' } }) })
+    await publish(result)
+    expect(meta().video.streamClip).toEqual({ room: 'badadib-r1', host: 'badadib', clipper: 'fan', offset: 754 })
+    expect(optionsOp().extensions).toEqual([[0, { beneficiaries: [
+      { account: 'encoder.pay', weight: 100 },
+      { account: 'fan', weight: 3000 },
+      { account: 'threespeakfund', weight: 1000 },
+    ] }]])
+  })
+
+  it('a stream clip never pays the poster themselves', async () => {
+    const { result } = await ready((c) => { asShort(c); c.setStreamClip({ room: 'r', host: 'badadib', clipper: 'badadib', share: { account: 'badadib', percent: 10 } }) })
+    await publish(result)
+    expect(optionsOp().extensions).toEqual([[0, { beneficiaries: LOCKED_SPLITS }]])
+  })
+
   it('a short\'s title becomes its heading and its permlink', async () => {
     const { result } = await ready((c) => { asShort(c); c.setTitle('Golden hour') })
     await publish(result)
@@ -426,7 +488,7 @@ describe('a short', () => {
     expect(h.fns.resolveSnapsContainer).not.toHaveBeenCalled()
     expect(postOp()).toMatchObject({ parent_author: 'alice', parent_permlink: 'orig-short' })
     expect(postOp().body).toContain(`*Based on a video by [@alice](${window.location.origin}/shorts?v=alice/orig-short)*`)
-    expect(optionsOp().extensions[0][1].beneficiaries).toContainEqual({ account: 'alice', weight: 500 })
+    expect(optionsOp().extensions[0][1].beneficiaries).toContainEqual({ account: 'alice', weight: 1500 })
   })
 })
 
@@ -487,8 +549,8 @@ describe('a remix of a regular video', () => {
       remixChain: [{ author: 'alice', permlink: 'orig-video' }, { author: 'bob', permlink: 'first' }],
     })
     expect(optionsOp().extensions[0][1].beneficiaries).toEqual([
-      { account: 'alice', weight: 500 },
-      { account: 'bob', weight: 500 },
+      { account: 'alice', weight: 1500 },
+      { account: 'bob', weight: 1000 },
       ...LOCKED_SPLITS,
     ])
   })
@@ -678,7 +740,10 @@ describe('a scheduled post', () => {
       parentPermlink: 'hive-181335',
       embedPermlink: 'asset-1',
       reblog: true,
+      // Listing as a premiere is opt-in: off unless switched on.
+      premiere: false,
     })
+    expect(body.jsonMetadata.video.premiere).toBeUndefined()
     expect(body.body).toContain(h.EMBED_URL)
     expect(body.jsonMetadata.app).toBe('3speak/embed')
     expect(body).toMatchObject({ signature: 'OWNER-SIG', timestamp: 4242 })
@@ -686,6 +751,14 @@ describe('a scheduled post', () => {
     expect(fetchTo('/hive')).toHaveLength(0)
     expect(result.current).toMatchObject({ completed: true, uploading: false, uploadProgress: 100 })
     expect(h.fns.toastSuccess).toHaveBeenCalledWith('upload.publishing.scheduled')
+  })
+
+  it('"List as a premiere" goes to the checker and into the post\'s metadata', async () => {
+    const { result } = await ready((c) => { asScheduled(c); c.setIsPremiere(true) })
+    await publish(result)
+    const [, body] = scheduleCall()
+    expect(body.premiere).toBe(true)
+    expect(body.jsonMetadata.video.premiere).toBe(true)
   })
 
   it('asks once for @threespeak posting authority when it is missing', async () => {
@@ -800,5 +873,99 @@ describe('a prefilled upload (pushed to the embed service by another uploader)',
     expect(meta()).not.toHaveProperty('threespeak.video')
     expect(fetchTo('/video/hangout-rec-1/hive')[0][0]).toBe(`${h.RELIABLE_BASE}/video/hangout-rec-1/hive`)
     expect(result.current.completed).toBe(true)
+  })
+})
+
+describe('a poll on the video', () => {
+  it('goes into json_metadata as our block and the Hive Open Polls fields, with its own question', async () => {
+    const { result } = await ready((c) => { c.setPollOn(true); c.setPollQuestion('Cats or dogs?'); c.setPollOptions(['Cats', 'Dogs']); c.setPollDays(3) })
+    await publish(result)
+    const m = meta()
+    expect(m.poll).toEqual({ options: ['Cats', 'Dogs'], ends_at: expect.any(String) })
+    expect(m).toMatchObject({ content_type: 'poll', version: 0.8, question: 'Cats or dogs?', choices: ['Cats', 'Dogs'], preferred_interpretation: 'number_of_votes', max_choices_voted: 1 })
+    expect(m.end_time).toBe(Math.floor(Date.parse(m.poll.ends_at) / 1000))
+  })
+
+  it('no poll unless one was added', async () => {
+    const { result } = await ready((c) => { c.setPollQuestion('Left over'); c.setPollOptions(['A', 'B']) })
+    await publish(result)
+    expect(meta()).not.toHaveProperty('poll')
+    expect(meta()).not.toHaveProperty('content_type')
+  })
+})
+
+describe('drafts and a Short\'s series', () => {
+  beforeEach(() => addToPlaylist.mockClear())
+  const draftCall = () => h.fns.axiosPost.mock.calls.find(([url]) => url.endsWith('/scheduled-posts/create'))
+
+  it('a video has no season or episode numbers (only audio episodes do)', async () => {
+    const { result } = await ready()
+    expect(result.current).not.toHaveProperty('setSeasonNum')
+    await publish(result)
+    expect(meta().video).not.toHaveProperty('season')
+    expect(meta().video).not.toHaveProperty('episode')
+  })
+
+  it('a draft is kept on the checker without a time, signed as a draft, and nothing is broadcast', async () => {
+    const { result } = await ready((c) => { c.setSaveAsDraft(true) })
+    await publish(result)
+    const [, body] = draftCall()
+    expect(body).toMatchObject({ owner: 'badadib', permlink: PERMLINK, draft: true, embedPermlink: 'asset-1', title: 'My First Video!' })
+    expect(body).not.toHaveProperty('scheduledOn')
+    expect(h.fns.proveScheduledPost).toHaveBeenCalledWith({ action: 'draft', owner: 'badadib', permlink: PERMLINK })
+    nothingPosted()
+    expect(result.current.completed).toBe(true)
+    expect(h.fns.toastSuccess).toHaveBeenCalledWith('episodes.drafts.saved')
+  })
+
+  it('a Short picked for a series is added at its end once it is out', async () => {
+    const { result } = await ready((c) => {
+      c.setFromStories(true); c.setTitle(''); c.setDescription('Sunset at the beach'); c.setTagsPreview([]); c.setSeriesId('pl-garden-1')
+    })
+    await publish(result)
+    expect(addToPlaylist).toHaveBeenCalledWith('pl-garden-1', 'badadib', 'sunset-at-the-beach-42', 100000)
+    expect(addToPlaylist.mock.invocationCallOrder[0]).toBeGreaterThan(h.fns.broadcastViaThreespeak.mock.invocationCallOrder[0])
+  })
+
+  it('a failed series add is a warning: the Short is published', async () => {
+    addToPlaylist.mockRejectedValueOnce(new Error('indexer down'))
+    const { result } = await ready((c) => {
+      c.setFromStories(true); c.setTitle(''); c.setDescription('Sunset'); c.setTagsPreview([]); c.setSeriesId('pl-garden-1')
+    })
+    await publish(result)
+    expect(h.fns.toastError).toHaveBeenCalledWith('episodes.series.addFailed')
+    expect(result.current.completed).toBe(true)
+  })
+})
+
+describe('a Short with the shorts editor\'s auto captions', () => {
+  const CUES = [{ start: 0, end: 1.5, text: 'Hello badadib fans' }]
+  const asEditorShort = (subs) => (c) => {
+    c.setFromStories(true); c.setTitle(''); c.setDescription('Sunset at the beach'); c.setTagsPreview([])
+    c.setEditorSubtitles(subs)
+  }
+  beforeEach(() => saveCaptionEdit.mockClear())
+
+  it('they become its subtitles once it is out, under its Hive permlink, burnt-in ones marked', async () => {
+    const { result } = await ready(asEditorShort({ language: 'de', cues: CUES, burnedIn: true }))
+    await publish(result)
+    expect(saveCaptionEdit).toHaveBeenCalledWith({ author: 'badadib', permlink: 'sunset-at-the-beach-42', lang: 'de', cues: CUES, burnedIn: true })
+    expect(saveCaptionEdit.mock.invocationCallOrder[0]).toBeGreaterThan(h.fns.broadcastViaThreespeak.mock.invocationCallOrder[0])
+    expect(result.current.statusMessages).toContainEqual(expect.objectContaining({ message: 'editorLink.captionsSaved', type: 'success' }))
+    expect(result.current.completed).toBe(true)
+  })
+
+  it('a failed save is a warning: the Short is published', async () => {
+    saveCaptionEdit.mockRejectedValueOnce(new Error('checker down'))
+    const { result } = await ready(asEditorShort({ language: 'en', cues: CUES, burnedIn: false }))
+    await publish(result)
+    expect(result.current.statusMessages).toContainEqual(expect.objectContaining({ message: 'editorLink.captionsFailed', type: 'warning' }))
+    expect(result.current.completed).toBe(true)
+  })
+
+  it('no captions from the editor: nothing is saved', async () => {
+    const { result } = await ready(asEditorShort(null))
+    await publish(result)
+    expect(saveCaptionEdit).not.toHaveBeenCalled()
   })
 })

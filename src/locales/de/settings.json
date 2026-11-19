@@ -156,6 +156,10 @@
       "title": "Große Karten",
       "desc": "Größere Videokarten auf Startseite, Profil und Playlists"
     },
+    "dataSaver": {
+      "title": "Datensparmodus",
+      "desc": "Keine Videovorschauen, und Videos starten in 360p. Schaltet sich von selbst ein, wenn dein Gerät Daten sparen will oder die Verbindung langsam ist."
+    },
     "previews": {
       "title": "Videovorschau",
       "desc": "Stumme Vorschau beim Darüberfahren, auf dem Handy spielt die mittlere Karte"
@@ -165,14 +169,22 @@
       "desc": "Stumme Clips im Spotlight auf der Startseite. Aus zeigt Standbilder."
     }
   },
+  "startup": {
+    "resume": {
+      "title": "Dort weitermachen, wo ich war",
+      "desc": "3Speak öffnet die Seite, auf der du zuletzt warst. Nur auf diesem Gerät gespeichert."
+    }
+  },
+  "startPrompt": {
+    "title": "Dort weitermachen, wo du warst?",
+    "intro": "3Speak kann statt der Startseite die Seite öffnen, auf der du zuletzt warst. Das wird nur auf diesem Gerät gespeichert, und du kannst es jederzeit unter Einstellungen, Allgemein ändern.",
+    "notNow": "Nicht jetzt",
+    "turnOn": "Einschalten"
+  },
   "shorts": {
     "commentBar": {
       "title": "Kommentarleiste bei Shorts",
       "desc": "Ein Kommentarfeld unter jedem Short"
-    },
-    "openOnStart": {
-      "title": "Shorts beim Start öffnen",
-      "desc": "Beim Öffnen von 3Speak direkt zu den Shorts"
     },
     "inFeeds": {
       "title": "Shorts in den Feeds",
@@ -203,7 +215,21 @@
     "rpcNode": "Hive-RPC-Node",
     "yourData": "Deine Daten",
     "privacyLink": "Wie 3Speak mit deinen Daten umgeht",
-    "getOrDelete": "Abrufen oder löschen"
+    "getOrDelete": "Abrufen oder löschen",
+    "node": {
+      "modeAuto": "Auto",
+      "auto": "Automatisch",
+      "autoHint": "Der schnellste funktionierende Node, wechselt bei Ausfall",
+      "own": "Eigener Node",
+      "use": "Verwenden",
+      "checking": "Prüfe…",
+      "down": "Antwortet nicht",
+      "ms": "{{ms}} ms",
+      "badUrl": "Gib eine Adresse ein, die mit https:// beginnt",
+      "failed": "Dieser Node hat nicht geantwortet oder ihm fehlt die Social-API (hivemind), die 3Speak braucht.",
+      "switched": "Jetzt mit {{node}}",
+      "fallback": "Antwortet der gewählte Node nicht mehr, nutzt 3Speak die bekannten Nodes, bis die Seite neu geladen wird."
+    }
   },
   "dataRequest": {
     "emailRequired": "Gib eine E-Mail-Adresse ein, damit wir antworten können",

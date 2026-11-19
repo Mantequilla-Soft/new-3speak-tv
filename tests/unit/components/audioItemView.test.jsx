@@ -5,6 +5,7 @@
 import { describe, it, expect, vi } from 'vitest'
 import React from 'react'
 import { renderToString } from 'react-dom/server'
+import { render as rtlRender, screen, fireEvent } from '@testing-library/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { MemoryRouter } from 'react-router-dom'
 
@@ -17,7 +18,14 @@ vi.mock('../../../src/lib/store', () => {
   useAppStore.getState = () => state
   return { useAppStore }
 })
-vi.mock('../../../src/components/playVideo/BlogContent', () => ({ default: ({ permlink }) => <div className="blog-stub">{permlink}</div> }))
+// The editor is on (preview); the creator's "Video podcast" needs it.
+vi.mock('../../../src/utils/config', async (orig) => ({ ...(await orig()), FEATURE_EDITOR: true }))
+vi.mock('../../../src/hive-api/aioha', async (orig) => ({ ...(await orig()), isLoggedIn: () => state.walletSession ?? state.authenticated }))
+vi.mock('../../../src/components/playVideo/BlogContent', () => ({ default: ({ permlink, description }) => <div className="blog-stub">{permlink}{description ? ` ${description}` : ''}</div> }))
+// The edit dialog, tested on its own: here a button that "saves" new notes.
+vi.mock('../../../src/components/AudioEdit/EditAudioModal', () => ({
+  default: ({ onSaved, onClose }) => <button type="button" onClick={() => { onSaved({ title: 'T', body: 'Edited notes', json_metadata: '{}', cover: null }); onClose() }}>stub save</button>,
+}))
 
 const doc = {
   _id: 'a1', owner: 'epodcaster', permlink: 'f48l7vyi', post_permlink: 'my-show-ep-1', title: 'My Show, Episode 1',
@@ -53,6 +61,63 @@ describe('a 3Speak audio page', () => {
     expect(html).toContain('my-show-ep-1')
   })
 
+  it('the creator gets Edit even before a wallet session is up (two logins in one browser)', async () => {
+    Object.assign(state, { authenticated: true, user: 'epodcaster', walletSession: false })
+    try {
+      expect(await render('/audio?play=epodcaster/f48l7vyi', doc)).toContain('Edit')
+    } finally {
+      Object.assign(state, { authenticated: false, user: '', walletSession: undefined })
+    }
+  })
+
+  it('the creator gets Edit where everyone else gets Tip', async () => {
+    Object.assign(state, { authenticated: true, user: 'epodcaster' })
+    try {
+      const own = await render('/audio?play=epodcaster/f48l7vyi', doc)
+      expect(own).toContain('Edit')
+      expect(own).not.toContain('Tip')
+      state.user = 'someoneelse'
+      const other = await render('/audio?play=epodcaster/f48l7vyi', doc)
+      expect(other).toContain('Tip')
+      expect(other).not.toMatch(/>Edit</)
+    } finally {
+      Object.assign(state, { authenticated: false, user: '' })
+    }
+  })
+
+  it('the creator can make a video podcast of the episode; nobody else sees it', async () => {
+    Object.assign(state, { authenticated: true, user: 'epodcaster' })
+    try {
+      expect(await render('/audio?play=epodcaster/f48l7vyi', doc)).toContain('Video podcast')
+      state.user = 'someoneelse'
+      expect(await render('/audio?play=epodcaster/f48l7vyi', doc)).not.toContain('Video podcast')
+    } finally {
+      Object.assign(state, { authenticated: false, user: '' })
+    }
+  })
+
+  it('"Video podcast" opens the audio editor with the episode\'s audio, title, cover and length', async () => {
+    Object.assign(state, { authenticated: true, user: 'epodcaster' })
+    const { default: AudioItemView } = await import('../../../src/components/AudioItem/AudioItemView.jsx')
+    const qc = new QueryClient()
+    qc.setQueryData(['audio-item', 'epodcaster', 'f48l7vyi'], { ...doc, thumbnail_url: 'https://img.test/c.jpg' })
+    qc.setQueryData(['audio-item-post', 'epodcaster', 'my-show-ep-1'], { title: 'My Show, Episode 1', active_votes: [], children: 0 })
+    const seen = vi.fn()
+    window.addEventListener('open-audio-editor', seen)
+    try {
+      rtlRender(<QueryClientProvider client={qc}><MemoryRouter><AudioItemView owner="epodcaster" id="f48l7vyi" onBack={() => {}} /></MemoryRouter></QueryClientProvider>)
+      fireEvent.click(screen.getByRole('button', { name: /Video podcast/ }))
+      expect(seen).toHaveBeenCalledTimes(1)
+      const { episode } = seen.mock.calls[0][0].detail
+      expect(episode).toMatchObject({ title: 'My Show, Episode 1', durationSec: 1800 })
+      expect(episode.url).toMatch(/^https:\/\/.+\/Qm1$/)
+      expect(episode.cover).toMatch(/^https?:\/\//)
+    } finally {
+      window.removeEventListener('open-audio-editor', seen)
+      Object.assign(state, { authenticated: false, user: '' })
+    }
+  })
+
   it('offers the shared clip on the Play button', async () => {
     const html = await render('/audio?play=epodcaster/f48l7vyi&t=754&end=800', doc)
     expect(html).toContain('Play 12:34 to 13:20')
@@ -68,6 +133,31 @@ describe('a 3Speak audio page', () => {
     expect(await render('/audio?play=epodcaster/f48l7vyi', { ...doc, category: 'song' }, { type: 'video' })).toContain('Play track')
     const podcast = { type: 'audio', audio_kind: 'podcast' }
     expect(await render('/audio?play=epodcaster/f48l7vyi', { ...doc, category: 'song' }, podcast)).toContain('Play episode')
+  })
+
+  it('notes just saved show on that audio only, not on the next one the page opens', async () => {
+    const { default: AudioItemView } = await import('../../../src/components/AudioItem/AudioItemView.jsx')
+    const qc = new QueryClient()
+    qc.setQueryData(['audio-item', 'epodcaster', 'f48l7vyi'], doc)
+    qc.setQueryData(['audio-item', 'epodcaster', 'g2'], { ...doc, _id: 'a2', permlink: 'g2', post_permlink: 'my-show-ep-2' })
+    qc.setQueryData(['audio-item-post', 'epodcaster', 'my-show-ep-1'], { active_votes: [], children: 0 })
+    qc.setQueryData(['audio-item-post', 'epodcaster', 'my-show-ep-2'], { active_votes: [], children: 0 })
+    const view = (id) => (
+      <QueryClientProvider client={qc}><MemoryRouter><AudioItemView owner="epodcaster" id={id} onBack={() => {}} /></MemoryRouter></QueryClientProvider>
+    )
+    Object.assign(state, { authenticated: true, user: 'epodcaster' })
+    try {
+      const { container, rerender, unmount } = rtlRender(view('f48l7vyi'))
+      fireEvent.click(screen.getByRole('button', { name: /Edit/ }))
+      fireEvent.click(await screen.findByRole('button', { name: 'stub save' }))
+      expect(container.querySelector('.blog-stub').textContent).toBe('my-show-ep-1 Edited notes')
+      // The same mounted view, now on another audio (a link from the player).
+      rerender(view('g2'))
+      expect(container.querySelector('.blog-stub').textContent).toBe('my-show-ep-2')
+      unmount()
+    } finally {
+      Object.assign(state, { authenticated: false, user: '' })
+    }
   })
 
   it('says so when the audio is gone', async () => {

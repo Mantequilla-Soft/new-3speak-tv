@@ -1,0 +1,107 @@
+{
+  "levels": {
+    "button": "Notify",
+    "buttonTitle": "Notifications from @{{user}}: {{level}}",
+    "title": "Notifications from @{{user}}",
+    "sub": "Your device switches in Settings still apply.",
+    "saveFailed": "Could not save. Please try again.",
+    "all": {
+      "title": "All",
+      "desc": "Videos, shorts, stories, audio and when they go live.",
+      "saved": "You will hear about everything from @{{user}}."
+    },
+    "highlights": {
+      "title": "Highlights",
+      "desc": "Videos, audio and when they go live. No shorts or stories.",
+      "saved": "Only highlights from @{{user}} from now on."
+    },
+    "off": {
+      "title": "Off",
+      "desc": "No notifications from this creator. You still follow them.",
+      "saved": "Notifications from @{{user}} are off."
+    }
+  },
+  "live": {
+    "badge": "LIVE",
+    "aria": "Live now from people you follow",
+    "summary_one": "{{count}} person you follow is live now",
+    "summary_other": "{{count}} people you follow are live now"
+  },
+  "notifs": {
+    "heading": "From 3Speak",
+    "liveNow": "@{{user}} is live",
+    "wasLive": "@{{user}} went live",
+    "collabInvite": "@{{user}} invited you to a collab",
+    "premiereStarted": "@{{user}}'s premiere has started"
+  },
+  "push": {
+    "live": {
+      "title": "Going live",
+      "desc": "When a creator you follow starts a live stream."
+    }
+  },
+  "collab": {
+    "accept": "Accept",
+    "decline": "Decline",
+    "acceptedToast": "The collab with @{{user}} is now on your channel.",
+    "declinedToast": "Invite declined.",
+    "answerFailed": "Could not send your answer. Please try again.",
+    "row": "Add a collaborator",
+    "rowSub": "Post it with a co-creator and share the payout",
+    "rowSet": "@{{user}} gets {{split}}% of your share",
+    "modalTitle": "Add a collaborator",
+    "modalSub": "They get an invite. Once they accept, the video is on both channels.",
+    "accountLabel": "Co-creator",
+    "accountPlaceholder": "Hive account name",
+    "suggestions": "Matching accounts",
+    "splitLabel": "Their share of your payout",
+    "splitPreview": "@{{user}} gets {{share}}% of the payout, you keep {{mine}}%.",
+    "inviteNote": "The split is a Hive beneficiary, so it applies even if they decline.",
+    "someone": "your co-creator",
+    "save": "Save",
+    "remove": "Remove",
+    "noRoom": "@{{user}} was not added as a beneficiary: the post already has the most beneficiaries Hive allows.",
+    "errors": {
+      "invalid": "That is not a valid Hive account name.",
+      "self": "You cannot collaborate with yourself.",
+      "notFound": "@{{user}} is not a Hive account."
+    },
+    "cardWith": "with {{users}}",
+    "cardBoth": "{{author}} with {{users}}",
+    "withLabel": "with",
+    "invitesTitle": "Collab invites"
+  },
+  "polls": {
+    "aria": "Poll",
+    "addPoll": "Poll",
+    "removePoll": "No poll",
+    "editorAria": "Poll options",
+    "questionPlaceholder": "Ask your followers a question",
+    "optionPlaceholder": "Option {{n}}",
+    "removeOption": "Remove option {{n}}",
+    "addOption": "Add option",
+    "duration": "Poll ends",
+    "days_one": "{{count}} day",
+    "days_other": "{{count}} days",
+    "noEnd": "No end date",
+    "invalid": "A poll needs {{min}} to {{max}} different options.",
+    "votes_one": "{{count}} vote",
+    "votes_other": "{{count}} votes",
+    "endsInDays_one": "Ends in {{count}} day",
+    "endsInDays_other": "Ends in {{count}} days",
+    "endsInHours_one": "Ends in {{count}} hour",
+    "endsInHours_other": "Ends in {{count}} hours",
+    "closed": "Poll closed",
+    "open": "Open",
+    "changeHint": "Tap another option to change your vote.",
+    "signIn": "Sign in to vote.",
+    "closedToast": "This poll has ended.",
+    "voteFailed": "Your vote did not go through. Please try again.",
+    "statsTitle": "Polls",
+    "question": "Question",
+    "questionPlaceholderVideo": "Ask your viewers a question",
+    "addPollTitle": "Add a poll",
+    "removePollTitle": "Remove the poll",
+    "invalidVideo": "A poll needs a question and {{min}} to {{max}} different options."
+  }
+}

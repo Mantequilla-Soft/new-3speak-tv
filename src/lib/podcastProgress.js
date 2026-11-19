@@ -91,8 +91,12 @@ const VOUCH_RETRY_MS = 5 * 60 * 1000;
 let vouchFailed = null;    // { user, at }
 let vouchInFlight = null;  // { user, promise }
 
-// The shared helper (lib/sessionVouch.js), with this module's action word.
-const fetchVouch = (user) => fetchSessionVouch('progress', user);
+// The shared helper (lib/sessionVouch.js), with this module's action word. It
+// names the account the page acts for: with two logins in one browser (a Butter
+// Auth cookie and a wallet session) the API would otherwise vouch for the first
+// one it finds, the proof would name the other account, and every caller of
+// sessionVouch (poll votes, the comment inbox, Continue watching ...) got null.
+const fetchVouch = (user) => fetchSessionVouch('progress', user, { named: true });
 
 /**
  * Our API's word for who this session is (action 'progress', payload 'session'),

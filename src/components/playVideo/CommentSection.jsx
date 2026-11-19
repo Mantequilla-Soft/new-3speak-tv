@@ -18,24 +18,26 @@ import CommentVoteTooltip from '../tooltip/CommentVoteTooltip';
 import { toastIn } from '../../utils/toast';
 import { estimate, getVotePower } from '../../utils/hiveUtils';
 import { markByReputation, getUserReputation } from '../../utils/reputation';
-import { markByHidden } from '../../utils/hiddenCreators';
+import { markByHidden, dropMuted } from '../../utils/hiddenCreators';
 import AuthorBadge from '../AuthorBadge/AuthorBadge';
 import AccountImg from '../HiveAvatar/AccountImg';
 import PayoutAmount from '../PayoutAmount/PayoutAmount';
 import { commentWithAioha } from '../../hive-api/aioha';
+import PollCard from '../Polls/PollCard';
+import { pollFromMeta, translatePollOptions } from '../../lib/polls';
 import { HIVE_API_NODES } from '../../utils/config';
 import TimeAgo from '../TimeAgo/TimeAgo';
 import { Link } from 'react-router-dom';
-import EmojiGifPicker from '../common/EmojiGifPicker/EmojiGifPicker';
-import { insertAtCursor, gifMarkdown } from '../../utils/composerInsert';
-import useEmojiShortcodes from '../../hooks/useEmojiShortcodes';
+import Composer from '../common/Composer/Composer';
+import { FocusBackdropProvider } from '../common/FocusWriter/focusBackdrop';
+import { fixVideoThumbnail, fallbackImg } from '../../utils/fixThumbnails';
 import { getHiveRenderer } from '../../lib/hiveRenderer';
 import { setCommentPinned } from '../../lib/commentPins';
 import {
-  readCommentSort, saveCommentSort, sortComments, pinnedFirst, useCommentImageUpload, CommentImageButton, CommentDropZone,
+  readCommentSort, saveCommentSort, sortComments, pinnedFirst,
 } from './commentTools';
 import {
-  linkifyTimestamps, handleTimestampClick, linkTimestampsInMarkdown, unlinkTimestampsInMarkdown,
+  linkifyTimestamps, handleTimestampClick, linkTimestampsInMarkdown, unlinkTimestampsInMarkdown, stripTimestampEmbeds,
 } from '../../utils/timestamps';
 
 // Every toast from this module is headed "Comment"; the message becomes the
@@ -64,11 +66,6 @@ function parseTimeInput(str) {
   if (parts.length === 1) return parts[0];
   return null;
 }
-
-// Replace timestamp-linked 3speak URLs so the renderer doesn't embed them
-// Matches [0:00] or [1:23:45] style text linking to 3speak/play.3speak URLs
-const stripTimestampEmbeds = (body) =>
-  body.replace(/\[(\d{1,2}:\d{2}(?::\d{2})?)\]\((https?:\/\/(?:3speak\.tv|play\.3speak\.tv)[^)]*)\)/g, '$1');
 
 // A timestamped comment's body ENDS with the "replied to [0:42](…) on [host](…)"
 // line that handlePostComment appends. It is ours, not the author's words, so an
@@ -107,7 +104,9 @@ function ComposerModeTabs({ value, onChange }) {
  * (design 02 / 43a). Without it (posts, audio) the composer sits on top and the
  * list flows with the page.
  */
-function CommentSection({ videoDetails, author, permlink, currentTime, duration, onSeek, onPause, onRefreshReactions, pinnedComments, pinnable = false, panel = false }) {
+// `backdrop`: the picture behind focus mode (focusBackdrop.js); without it the
+// video's thumbnail, when it has one.
+function CommentSection({ videoDetails, author, permlink, currentTime, duration, onSeek, onPause, onRefreshReactions, pinnedComments, pinnable = false, panel = false, backdrop = null }) {
   const { t } = useI18n();
   const { user, incubationHandle } = useAppStore();
   // The name to SHOW. For an incubating user there is no Hive account, so
@@ -115,6 +114,8 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
   const displayName = user || incubationHandle;
   const { translate, getTranslation, clearTranslation, translating } = useTranslation();
   const [commentInfo, setCommentInfo] = useState('');
+  // A poll on a new comment (not a reply): the comment's text is the question.
+  const [uploadingImage, setUploadingImage] = useState(false);
   const [activeTab, setActiveTab] = useState('comment'); // 'comment' | 'react'
   // The side panel's composer rests as one line (02: the moment, "Join the
   // discussion…", send) and opens into the full one (43a) when used.
@@ -134,8 +135,6 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
   const [renderedBodies, setRenderedBodies] = useState({});
   const commentInputRef = useRef(null);
   // ":fire:" → 🔥 and the ":" emoji list, as in the chat.
-  const commentEmoji = useEmojiShortcodes(commentInputRef, commentInfo, setCommentInfo);
-  const commentImages = useCommentImageUpload(commentInputRef, commentInfo, setCommentInfo, user);
 
   // Write / Preview: the preview goes through what a posted comment goes
   // through (handlePostComment's linkTimestampsInMarkdown, then the fetch's
@@ -259,8 +258,9 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
         try {
           const replies = await client.call('condenser_api', 'get_content_replies', [author, permlink]);
           const commentsWithChildren = await loadNestedComments(replies);
-          // Mark low-reputation accounts (rep < 15) — also caches reputations
-          markedComments = await markByHidden(await markByReputation(commentsWithChildren));
+          // Mark low-reputation accounts (rep < 15), which also caches reputations.
+          // Bots on the comment mutelist go entirely, with the replies under them.
+          markedComments = dropMuted(await markByHidden(await markByReputation(commentsWithChildren), { viewer: displayName }));
         } catch (err) {
           // Normal for an off-chain post; anything else is worth a line.
           console.warn('[comments] no Hive thread:', err?.message);
@@ -441,10 +441,12 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
     return onSeek ? linkifyTimestamps(html, duration) : html;
   };
 
-  const handlePostComment = async (replyTimestamp) => {
+  // `extraMeta`: what the editor adds to json_metadata (a poll's fields).
+  // Resolves false when nothing was posted, so the editor keeps its poll.
+  const handlePostComment = async (replyTimestamp, extraMeta = {}) => {
     const textToPost = replyToComment ? replyText : commentInfo;
 
-    if (!textToPost.trim()) return;
+    if (!textToPost.trim()) return false;
 
     // Determine if we're replying to the main post or a comment
     const isReplyingToMainPost = !replyToComment;
@@ -456,6 +458,9 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
     try {
       // Build json_metadata with optional timestamp
       const metadata = { app: '3speak/new-version' };
+      // A poll (lib/polls.js, from the editor): our block and the Hive Open
+      // Polls fields, so PeakD and Ecency show it too.
+      Object.assign(metadata, extraMeta);
       if (isReplyingToMainPost) {
         const timestampSec = parseTimeInput(timelineInput);
         if (timestampSec !== null && timestampSec > 0) {
@@ -590,12 +595,14 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
         setActiveReply(null);
         setReplyToComment(null);
         onRefreshReactions?.();
-      } else {
-        toast.error(t('comments.section.postFailed'));
+        return true;
       }
+      toast.error(t('comments.section.postFailed'));
+      return false;
     } catch (err) {
       console.error('Comment failed:', err);
       toast.error(err.message || t('comments.section.postFailed'));
+      return false;
     }
   };
 
@@ -694,6 +701,7 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
   const countComments = (comments) => {
     if (!comments || comments.length === 0) return 0;
     return comments.reduce((sum, c) => {
+      if (c.isMuted) return sum; // removed with its replies, never counted
       if (c.isLowReputation || c.isHidden) return sum + countComments(c.children || []);
       return sum + 1 + countComments(c.children || []);
     }, 0);
@@ -702,7 +710,7 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
   const commentCount = countComments(commentList);
 
   const composerCompact = panel && !composerOpen && !commentInfo && activeTab === 'comment'
-    && !(commentImages.pending?.length) && !commentImages.uploading;
+    && !uploadingImage;
   const openComposer = useCallback(() => setComposerOpen(true), []);
   // Opened from the one-line box: the full box takes the focus over.
   const wasCompact = useRef(composerCompact);
@@ -716,11 +724,11 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
   const onComposerBlur = (e) => {
     if (!panel || commentInfo || activeTab !== 'comment') return;
     const next = e.relatedTarget;
-    if (next && (e.currentTarget.contains(next) || next.closest?.('.egp-emoji-popover, .egp-gif-popover'))) return;
+    if (next && (e.currentTarget.contains(next) || next.closest?.('.egp-emoji-popover, .egp-gif-popover, .focus-writer'))) return;
     setTimeout(() => {
       const el = commentInputRef.current;
       if (el && document.activeElement === el) return;
-      if (document.activeElement?.closest?.('.egp-emoji-popover, .egp-gif-popover, .add-comment-wrap')) return;
+      if (document.activeElement?.closest?.('.egp-emoji-popover, .egp-gif-popover, .focus-writer, .add-comment-wrap')) return;
       setComposerOpen(false);
     }, 0);
   };
@@ -753,72 +761,47 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
     // `add-comment-wrap` stays: PostView's Reply button finds the box through it.
     <div className={cx('comment-composer add-comment-wrap', activeTab === 'react' && 'is-react')} onBlur={onComposerBlur}>
       {activeTab === 'comment' ? (
-        <>
-          <CommentDropZone
-            images={commentImages}
-            value={commentInfo}
-            setValue={setCommentInfo}
-            toHtml={toPreviewHtml}
-            previewClassName="comment-content"
-            onPreviewClick={onPreviewClick}
-            tabsLead={<ComposerModeTabs value={activeTab} onChange={setActiveTab} />}
-          >
-            <textarea
-              ref={commentInputRef}
-              placeholder={t('comments.section.commentPlaceholder')}
-              className="textarea-box"
-              value={commentInfo}
-              onChange={(e) => {
-                setCommentInfo(commentEmoji.change(e));
-                e.target.style.height = 'auto';
-                e.target.style.height = e.target.scrollHeight + 'px';
-              }}
-              onKeyDown={commentEmoji.keyDown}
-              onBlur={commentEmoji.blur}
-              onFocus={handleTextareaFocus}
-              onPaste={commentImages.onPaste}
-            />
-            {commentEmoji.popup}
-          </CommentDropZone>
-          <div className="comment-form-row">
-            <div className="comment-compose-tools">
-              <EmojiGifPicker
-                portal={panel}
-                onPickEmoji={(em) => insertAtCursor(commentInputRef.current, commentInfo, em, setCommentInfo)}
-                onPickGif={(url) => insertAtCursor(commentInputRef.current, commentInfo, gifMarkdown(url), setCommentInfo)}
+        <Composer
+          value={commentInfo}
+          onChange={setCommentInfo}
+          inputRef={commentInputRef}
+          placeholder={t('comments.section.commentPlaceholder')}
+          toHtml={toPreviewHtml}
+          previewClassName="comment-content"
+          onPreviewClick={onPreviewClick}
+          tabsLead={<ComposerModeTabs value={activeTab} onChange={setActiveTab} />}
+          pickerProps={{ portal: panel }}
+          // A poll goes on Hive: not on an off-chain post.
+          polls={!videoDetails?._incubation}
+          textareaProps={{ onFocus: handleTextareaFocus }}
+          onUploadingChange={setUploadingImage}
+          extraTools={
+            // The moment of the video this comment is about: follows the
+            // playhead until typed in by hand.
+            <div className="comment-timestamp">
+              <label className="comment-timestamp-label" htmlFor={momentId}>{t('comments.section.at')}</label>
+              <input
+                id={momentId}
+                type="text"
+                inputMode="numeric"
+                className="comment-timestamp-input"
+                value={timelineInput}
+                onChange={handleTimelineInputChange}
+                onBlur={handleTimelineInputBlur}
+                placeholder="0:00"
               />
-              <CommentImageButton uploading={commentImages.uploading} onFiles={commentImages.upload} />
-              {/* The moment of the video this comment is about: follows the
-                  playhead until typed in by hand. */}
-              <div className="comment-timestamp">
-                <label className="comment-timestamp-label" htmlFor={momentId}>{t('comments.section.at')}</label>
-                <input
-                  id={momentId}
-                  type="text"
-                  inputMode="numeric"
-                  className="comment-timestamp-input"
-                  value={timelineInput}
-                  onChange={handleTimelineInputChange}
-                  onBlur={handleTimelineInputBlur}
-                  placeholder="0:00"
-                />
-              </div>
             </div>
-            <div className="btn-wrap">
-              {(commentInfo || panel) && (
-                <Button variant="ghost" size={32} onClick={() => {
-                  setCommentInfo('');
-                  setReplyToComment(null);
-                  setComposerOpen(false);
-                }}>{t('common.actions.cancel')}</Button>
-              )}
-              <Button variant="primary" size={32} trailing="send" onClick={() => {
-                setReplyToComment(null);
-                handlePostComment();
-              }}>{t('comments.section.commentButton')}</Button>
-            </div>
-          </div>
-        </>
+          }
+          onCancel={(commentInfo || panel) ? () => {
+            setCommentInfo('');
+            setReplyToComment(null);
+            setComposerOpen(false);
+          } : undefined}
+          onSubmit={({ meta }) => {
+            setReplyToComment(null);
+            return handlePostComment(undefined, meta);
+          }}
+        />
       ) : (
         <>
           <div className="comment-write-tabs">
@@ -911,7 +894,9 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
     </div>
   );
 
+  const thumb = backdrop || (videoDetails ? fixVideoThumbnail(videoDetails) : null);
   return (
+    <FocusBackdropProvider value={thumb && thumb !== fallbackImg ? thumb : null}>
     <div className={cx('vid-comment-wrap', panel ? 'is-panel' : 'is-page')}>
       <div className="comments-header-row">
         {/* The panel's tab already carries the count (02). */}
@@ -928,6 +913,7 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
       </div>
       {panel ? <>{list}{composer}</> : <>{composer}{list}</>}
     </div>
+    </FocusBackdropProvider>
   );
 }
 
@@ -993,9 +979,6 @@ function Comment({
   const editInputRef = useRef(null);
   const [editing, setEditing] = useState(false);
   const [editText, setEditText] = useState('');
-  const editEmoji = useEmojiShortcodes(editInputRef, editText, setEditText);
-  const editImages = useCommentImageUpload(editInputRef, editText, setEditText, currentUser);
-  const replyImages = useCommentImageUpload(replyInputRef, replyText, setReplyText, currentUser);
   const [savingEdit, setSavingEdit] = useState(false);
   // Off-chain replies (onChain: false) live in our own store, not on Hive, so a
   // Hive edit cannot reach them.
@@ -1030,6 +1013,7 @@ function Comment({
   // Replying here opens the thread, so the new reply lands in view.
   useEffect(() => { if (isReplying) setShowReplies(true); }, [isReplying]);
   const [translatedText, setTranslatedText] = useState(null);
+  const [translatedOptions, setTranslatedOptions] = useState(null);
   const [translateError, setTranslateError] = useState(false);
   const [isReportOpen, setIsReportOpen] = useState(false);
 
@@ -1039,6 +1023,9 @@ function Comment({
     try {
       const result = await onTranslate?.(comment.permlink, comment.body, langCode);
       if (result) setTranslatedText(result);
+      // A poll's answers go with the text.
+      const poll = pollFromMeta(comment.jsonMetadata);
+      if (poll) setTranslatedOptions(await translatePollOptions(onTranslate, comment.permlink, poll.options, langCode).catch(() => null));
     } catch {
       setTranslateError(true);
     }
@@ -1046,7 +1033,9 @@ function Comment({
 
   const handleDismissTranslation = () => {
     setTranslatedText(null);
+    setTranslatedOptions(null);
     clearTranslation?.(comment.permlink);
+    clearTranslation?.(`${comment.permlink}#poll`);
   };
 
   // Inherit timestamp from the parent comment (not editable)
@@ -1056,6 +1045,9 @@ function Comment({
   useEffect(() => {
     if (isReplying) setReplyTab('comment');
   }, [isReplying]);
+
+  // Muted (a bot on the global comment mutelist): not shown at all, no Show bar.
+  if (comment.isMuted) return null;
 
   // Hidden (a low score, or a creator you hid): a one-line bar with Show (28a, 43a).
   if ((comment.isLowReputation || comment.isHidden) && !revealHidden) {
@@ -1104,7 +1096,7 @@ function Comment({
   }
 
   // Panel (02): replies fold under an "N replies" link; on a page they show.
-  const visibleReplies = (comment.children || []).filter((c) => !c.isLowReputation && !c.isHidden).length;
+  const visibleReplies = (comment.children || []).filter((c) => !c.isLowReputation && !c.isHidden && !c.isMuted).length;
 
   return (
     <div className={cx('comment-container', depth > 0 && 'is-reply')}>
@@ -1142,53 +1134,32 @@ function Comment({
           </div>
           {editing ? (
             <div className="comment-composer comment-edit-wrap">
-              <CommentDropZone
-                images={editImages}
+              <Composer
                 value={editText}
-                setValue={setEditText}
+                onChange={setEditText}
+                inputRef={editInputRef}
                 disabled={savingEdit}
                 toHtml={toPreviewHtml}
                 previewClassName="comment-content"
                 onPreviewClick={onBodyClick}
-              >
-              <textarea
-                ref={editInputRef}
-                className="textarea-box"
-                value={editText}
-                disabled={savingEdit}
-                onChange={(e) => {
-                  setEditText(editEmoji.change(e));
-                  e.target.style.height = 'auto';
-                  e.target.style.height = e.target.scrollHeight + 'px';
-                }}
-                onKeyDown={editEmoji.keyDown}
-                onBlur={editEmoji.blur}
-                onPaste={editImages.onPaste}
+                pickerProps={{ portal: panel }}
+                onCancel={() => setEditing(false)}
+                onSubmit={saveEdit}
+                submitting={savingEdit}
+                submitIcon={null}
+                submitLabel={savingEdit ? t('comments.section.saving') : t('common.actions.save')}
               />
-              {editEmoji.popup}
-              </CommentDropZone>
-              <div className="comment-form-row">
-                <div className="comment-compose-tools">
-                  <EmojiGifPicker
-                    portal={panel}
-                    onPickEmoji={(em) => insertAtCursor(editInputRef.current, editText, em, setEditText)}
-                    onPickGif={(url) => insertAtCursor(editInputRef.current, editText, gifMarkdown(url), setEditText)}
-                  />
-                  <CommentImageButton uploading={editImages.uploading} onFiles={editImages.upload} />
-                </div>
-                <div className="btn-wrap">
-                  <Button variant="ghost" size={32} onClick={() => setEditing(false)}>{t('common.actions.cancel')}</Button>
-                  <Button variant="primary" size={32} loading={savingEdit} onClick={saveEdit}>
-                    {savingEdit ? t('comments.section.saving') : t('common.actions.save')}
-                  </Button>
-                </div>
-              </div>
             </div>
           ) : (
             <MarkdownView
               html={processedBody(comment?.body || '', comment?.permlink)}
               onClick={onBodyClick}
             />
+          )}
+          {/* A poll in the comment (ours, or PeakD's or Ecency's): the text is
+              the question. Not on an off-chain comment, which Hive cannot see. */}
+          {!editing && comment?.onChain !== false && pollFromMeta(comment?.jsonMetadata) && (
+            <PollCard snap={{ owner: comment.author?.username, permlink: comment.permlink, poll: pollFromMeta(comment.jsonMetadata) }} labels={translatedOptions} />
           )}
           {translatedText && (
             <div className="comment-translation">
@@ -1308,47 +1279,25 @@ function Comment({
         <div className="comment-composer is-reply">
           {/* Comment tab */}
           {replyTab === 'comment' ? (
-            <>
-              <CommentDropZone
-                images={replyImages}
-                value={replyText}
-                setValue={setReplyText}
-                toHtml={toPreviewHtml}
-                previewClassName="comment-content"
-                onPreviewClick={onBodyClick}
-                tabsLead={<ComposerModeTabs value={replyTab} onChange={setReplyTab} />}
-              >
-              <textarea
-                ref={replyInputRef}
-                placeholder={t('comments.section.replyPlaceholder')}
-                className="textarea-box sub"
-                value={replyText}
-                onChange={(e) => {
-                  setReplyText(e.target.value);
-                  e.target.style.height = 'auto';
-                  e.target.style.height = e.target.scrollHeight + 'px';
-                }}
-                onPaste={replyImages.onPaste}
-              />
-              </CommentDropZone>
-              <div className="comment-form-row">
-                <div className="comment-compose-tools">
-                  <EmojiGifPicker
-                    portal={panel}
-                    onPickEmoji={(em) => insertAtCursor(replyInputRef.current, replyText, em, setReplyText)}
-                    onPickGif={(url) => insertAtCursor(replyInputRef.current, replyText, gifMarkdown(url), setReplyText)}
-                  />
-                  <CommentImageButton uploading={replyImages.uploading} onFiles={replyImages.upload} />
-                  {replyTimestamp != null && (
-                    <span className="comment-timestamp comment-timestamp--fixed">{t('comments.section.atTime', { time: formatTimeInput(replyTimestamp) })}</span>
-                  )}
-                </div>
-                <div className="btn-wrap">
-                  <Button variant="ghost" size={32} onClick={() => { setReplyText(""); setActiveReply(null); }}>{t('common.actions.cancel')}</Button>
-                  <Button variant="primary" size={32} trailing="send" onClick={() => handlePostComment(replyTimestamp)}>{t('comments.section.commentButton')}</Button>
-                </div>
-              </div>
-            </>
+            <Composer
+              value={replyText}
+              onChange={setReplyText}
+              inputRef={replyInputRef}
+              placeholder={t('comments.section.replyPlaceholder')}
+              textareaClassName="textarea-box sub"
+              toHtml={toPreviewHtml}
+              previewClassName="comment-content"
+              onPreviewClick={onBodyClick}
+              tabsLead={<ComposerModeTabs value={replyTab} onChange={setReplyTab} />}
+              pickerProps={{ portal: panel }}
+              // A poll goes on Hive: not under an off-chain comment.
+              polls={comment.onChain !== false}
+              extraTools={replyTimestamp != null && (
+                <span className="comment-timestamp comment-timestamp--fixed">{t('comments.section.atTime', { time: formatTimeInput(replyTimestamp) })}</span>
+              )}
+              onCancel={() => { setReplyText(""); setActiveReply(null); }}
+              onSubmit={({ meta }) => handlePostComment(replyTimestamp, meta)}
+            />
           ) : (
             <>
               <div className="comment-write-tabs">

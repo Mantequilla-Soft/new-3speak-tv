@@ -31,6 +31,7 @@ const flush = () => new Promise((r) => setTimeout(r, 0))
 
 beforeEach(() => {
   sessionStorage.clear()
+  localStorage.clear()
   calls.length = 0
   fakeFetch.mockClear()
   health = {}
@@ -120,5 +121,91 @@ describe('hiveClient', () => {
     expect(mod.getHiveClient()).toBe(mod.hiveClient)
     expect(typeof mod.hiveClient.call).toBe('function')
     expect(mod.hiveClient.database).toBeTruthy()
+  })
+})
+
+describe('a node chosen in Settings', () => {
+  const OWN = 'https://node.example.com'
+
+  it('is used straight away, without a race, even while unhealthy probes run', async () => {
+    localStorage.setItem('hive-rpc-node-manual', OWN + '/')
+    NODES.forEach((n) => { health[n] = { hived: true, hivemind: true } })
+    const mod = await load()
+    expect(mod.getHiveUrl()).toBe(OWN)
+    expect(mod.getNodeChoice()).toBe(OWN)
+    expect(await mod.ensureHealthyNode()).toBe(OWN)
+    for (let i = 0; i < 5; i++) await flush()
+    expect(mod.getHiveUrl()).toBe(OWN)
+    expect(mod.KNOWN_NODES).toEqual(NODES)
+  })
+
+  it('goes first for raw callers too (config)', async () => {
+    localStorage.setItem('hive-rpc-node-manual', OWN)
+    vi.resetModules()
+    const cfg = await import('../../../src/utils/config.js')
+    expect(cfg.HIVE_API_URL).toBe(OWN)
+    expect(cfg.HIVE_API_NODES).toEqual([OWN, ...NODES])
+    expect(cfg.HIVE_KNOWN_NODES).toEqual(NODES)
+  })
+
+  it('ignores anything that is not an https address', async () => {
+    localStorage.setItem('hive-rpc-node-manual', 'http://node.example.com')
+    const mod = await load()
+    expect(mod.getNodeChoice()).toBeNull()
+    expect(mod.getHiveUrl()).toBe(NODES[0])
+  })
+
+  it('the known nodes take over when it fails', async () => {
+    localStorage.setItem('hive-rpc-node-manual', OWN)
+    NODES.forEach((n) => { health[n] = { hived: true, hivemind: true } })
+    const mod = await load()
+    await mod.ensureHealthyNode()
+    for (let i = 0; i < 5; i++) await flush()
+    expect(mod.demoteNode(OWN)).toBe(NODES[0])
+  })
+
+  it('setNodeChoice saves or clears it and drops the session pin', async () => {
+    const mod = await load()
+    sessionStorage.setItem('hive-rpc-node-v2', NODES[2])
+    mod.setNodeChoice(OWN + '/')
+    expect(localStorage.getItem('hive-rpc-node-manual')).toBe(OWN)
+    expect(sessionStorage.getItem('hive-rpc-node-v2')).toBeNull()
+    mod.setNodeChoice(null)
+    expect(localStorage.getItem('hive-rpc-node-manual')).toBeNull()
+  })
+
+  it('checkNode needs both layers', async () => {
+    health[OWN] = { hived: true, hivemind: false }
+    const mod = await load()
+    expect((await mod.checkNode(OWN)).ok).toBe(false)
+    health[OWN] = { hived: true, hivemind: true }
+    const r = await mod.checkNode(OWN + '/')
+    expect(r.ok).toBe(true)
+    expect(typeof r.ms).toBe('number')
+  })
+})
+
+describe('switching in Settings, without a reload', () => {
+  const OWN = 'https://node.example.com'
+
+  it('a picked node is in use at once, for dhive and raw callers, with the known nodes behind it', async () => {
+    NODES.forEach((n) => { health[n] = { hived: true, hivemind: true } })
+    const mod = await load()
+    await mod.ensureHealthyNode()
+    expect(await mod.setNodeChoice(OWN)).toBe(OWN)
+    expect(mod.getHiveUrl()).toBe(OWN)
+    expect(mod.getNodeChoice()).toBe(OWN)
+    expect(mod.getHiveNodes()).toEqual([OWN, ...NODES])
+  })
+
+  it('back to automatic runs a fresh race among the known nodes only', async () => {
+    localStorage.setItem('hive-rpc-node-manual', OWN)
+    health[NODES[1]] = { hived: true, hivemind: true }
+    const mod = await load()
+    expect(mod.getHiveUrl()).toBe(OWN)
+    expect(await mod.setNodeChoice(null)).toBe(NODES[1])
+    expect(mod.getHiveUrl()).toBe(NODES[1])
+    expect(mod.getNodeChoice()).toBeNull()
+    expect(calls.some((c) => c.url === OWN)).toBe(false)
   })
 })

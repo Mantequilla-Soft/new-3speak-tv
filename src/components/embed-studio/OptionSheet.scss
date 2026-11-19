@@ -1,0 +1,36 @@
+@use "../../styles/v2" as v2;
+
+// The choice list inside a SettingSheet (rewards, schedule): used by the upload
+// details (EmbedDetails.scss), the scheduled-post editor and the import forms
+// (src/page/ImportTiles.jsx), which load it themselves: the studio's styles are
+// not there on the import page.
+.option-sheet {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.option-sheet__item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: var(--r-lg);
+  border: 2px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
+
+  strong { @include v2.text(label); }
+  span { @include v2.text(meta-sm); color: var(--muted); line-height: 1.35; }
+  &:hover { background: var(--bg-hover); }
+  &.is-active {
+    border-color: var(--cyan);
+    background: var(--cyan-tint);
+  }
+}

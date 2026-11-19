@@ -133,6 +133,24 @@ describe('broadcast', () => {
     expect(broken.body).toEqual({ error: 'Invalid custom_json payload' })
   })
 
+  it('custom_json: polls carries only a vote on a poll (Hive Open Polls)', async () => {
+    const polls = (json) => ['custom_json', { id: 'polls', required_auths: [], required_posting_auths: ['alice'], json }]
+    expect((await broadcast([polls(JSON.stringify({ poll: 'badadib/test-test-12345', action: 'vote', choices: [2] }))])).status).toBe(200)
+    // [0] takes a vote back
+    expect((await broadcast([polls(JSON.stringify({ poll: 'badadib/test-test-12345', action: 'vote', choices: [0] }))])).status).toBe(200)
+    for (const bad of [
+      JSON.stringify({ poll: 'badadib/test-test-12345', action: 'create', choices: [1] }),
+      JSON.stringify({ poll: 'badadib/test-test-12345', action: 'vote', choices: [1], extra: 'x' }),
+      JSON.stringify({ poll: 'not a poll', action: 'vote', choices: [1] }),
+      JSON.stringify({ poll: 'badadib/test-test-12345', action: 'vote', choices: ['1'] }),
+      JSON.stringify(['vote', { poll: 'badadib/x' }]),
+      'not json',
+    ]) {
+      const r = await broadcast([polls(bad)])
+      expect(r.status, bad).toBe(403)
+    }
+  })
+
   it('custom_json: acting for another account needs posting authority over it', async () => {
     const r = await broadcast([follow(['bob'])])
     expect(r.status).toBe(403)

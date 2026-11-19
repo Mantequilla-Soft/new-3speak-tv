@@ -1,3 +1,6 @@
+@use "../../styles/v2" as v2;
+@use "./hangouts-skin" as hh;
+
 // Boost button on the live surfaces. The `rail` variant borrows the shorts
 // action-rail classes and the `button` variant is a v2 DockTile, so only the
 // over-the-player chip is styled here.
@@ -46,6 +49,10 @@ div.hh-boost-dialog__overlay {
 }
 
 div.hh-boost-dialog {
+  // Portalled to <body>, outside any skinned root: the v2 tokens for the SDK's
+  // own parts inside (the goal bar, top supporters).
+  @include hh.tokens;
+  @include hh.boost-goal;
   width: min(440px, 100%);
   max-height: calc(100dvh - 48px);
   overflow-y: auto;
@@ -163,6 +170,25 @@ div.hh-boost-dialog {
     font-weight: 700;
     &.is-active { background: var(--text); color: var(--bg); }
   }
+
+  // Preset amounts: the site's chips (v2 Chip), the picked one inverted.
+  .hh-boost-dialog__presets { gap: 6px; }
+  .hh-boost-dialog__preset {
+    @include v2.control(32);
+    @include v2.text(label);
+    min-height: 0;
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+    background: var(--surface-2);
+    color: var(--text);
+    white-space: nowrap;
+    &:hover:not(:disabled) { border-color: transparent; background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); }
+    &.is-active,
+    &.is-active:hover:not(:disabled) { background: var(--text); color: var(--bg); }
+  }
+
+  // Top supporters close the form, under a divider.
+  .hh-boost-dialog__top { padding-top: 12px; border-top: 1px solid var(--border); }
 
   .hh-boost-dialog__footer {
     display: flex;

@@ -1,0 +1,18 @@
+{
+  "title": "Shorts từ video này",
+  "sub": "Do người xem chọn: những đoạn họ xem lại, bình luận và bàn tán trong chat, cùng những câu đáng trích dẫn.",
+  "empty": "Chưa có gợi ý. Gợi ý sẽ xuất hiện khi mọi người xem, xem lại và bình luận video này.",
+  "error": "Hiện không tải được gợi ý.",
+  "range": "{{start}} đến {{end}}",
+  "seconds": "{{seconds}} giây",
+  "reasons": {
+    "replay": "Được xem lại nhiều nhất",
+    "comments_other": "{{count}} bình luận chỉ đến đây",
+    "chat": "Chat sôi nổi",
+    "quote": "Câu đáng trích dẫn"
+  },
+  "preview": "Xem trước",
+  "stop": "Dừng",
+  "makeShort": "Tạo Short",
+  "foot": "Chỉ bạn thấy những gợi ý này. Lượt xem lại được đếm mà không biết ai đã xem."
+}

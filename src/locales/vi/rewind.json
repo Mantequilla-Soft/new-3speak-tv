@@ -1,0 +1,11 @@
+{
+  "label": "Tua lại",
+  "goLive": "Về trực tiếp",
+  "title": "Tua lại tối đa {{minutes}} phút",
+  "error": "Hiện không thể tua lại.",
+  "back10": "Lùi 10 giây",
+  "forward10": "Tới 10 giây",
+  "play": "Phát",
+  "pause": "Tạm dừng",
+  "seek": "Vị trí trong buổi phát"
+}

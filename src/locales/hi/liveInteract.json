@@ -1,0 +1,39 @@
+{
+  "labels": {
+    "raidLine": "{name} {count} दर्शकों के साथ रेड कर रहे हैं",
+    "raidTitle": "@{host} किसी दूसरी स्ट्रीम पर रेड कर रहे हैं",
+    "raidBody": "देख रहे सभी लोग {seconds} सेकंड में {title} पर चले जाएँगे।",
+    "raidGoNow": "अभी जाएँ",
+    "raidStay": "यहीं रहें",
+    "pollBadge": "पोल",
+    "predictionBadge": "अनुमान",
+    "endsIn": "{time} में खत्म",
+    "finalResults": "अंतिम नतीजे",
+    "votes": "वोट: {count}",
+    "youVoted": "आपने वोट दिया",
+    "signInToVote": "वोट देने के लिए साइन इन करें",
+    "voteFailed": "यह नहीं हुआ। फिर से कोशिश करें।",
+    "pot": "कुल दांव: {points} पॉइंट",
+    "balance": "आपके पास {points} पॉइंट हैं",
+    "stakeButton": "दांव लगाएँ",
+    "stakePlaceholder": "पॉइंट",
+    "yourStake": "आपने {option} पर {points} पॉइंट लगाए",
+    "waitingForResult": "नतीजे का इंतज़ार",
+    "outcomeWon": "{option} जीता",
+    "youWon": "आपको {points} पॉइंट वापस मिले",
+    "cancelled": "रद्द, सबके पॉइंट वैसे ही रहेंगे",
+    "close": "बंद करें"
+  },
+  "replay": {
+    "tab": "लाइव चैट रीप्ले",
+    "label": "वीडियो के साथ चलती लाइव चैट",
+    "loading": "लाइव चैट लोड हो रही है",
+    "empty": "लाइव चैट में किसी ने कुछ नहीं लिखा।",
+    "seekTo": "{{time}} पर जाएँ",
+    "poll": "पोल",
+    "prediction": "अनुमान",
+    "votes": "वोट: {{count}}",
+    "won": "{{option}} जीता",
+    "follow": "अभी के पल पर लौटें"
+  }
+}

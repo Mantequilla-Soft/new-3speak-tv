@@ -1,0 +1,482 @@
+{
+  "menuEntry": "Uendeshaji otomatiki",
+  "title": "Uendeshaji otomatiki",
+  "beta": "Beta",
+  "subtitle": "Acha 3Speak ifanye kazi ya ufuatiliaji jambo linapotokea kwenye chaneli au pochi yako: chapisha snap, Short, sauti au video, toa maoni, toa upvote, reblog, au ijulishe Discord yako.",
+  "howItWorks": "3Speak huangalia chaneli yako kila dakika {{minutes}}. Kila chapisho jipya huanzisha mitiririko otomatiki iliyowashwa kwa ajili yake, na kila kitu inachochapisha hutoka kwa jina lako, kupitia ruhusa ya kuchapisha uliyoipa 3Speak. Machapisho yanayotengenezwa na mtiririko otomatiki hayaanzishi mwingine kamwe.",
+  "gate": {
+    "signIn": "Ingia ili kuweka mitiririko otomatiki.",
+    "closedTitle": "Haipatikani",
+    "closed": "Mitiririko otomatiki iko kwenye majaribio ya faragha na bado haijafunguliwa kwa akaunti yako.",
+    "unavailable": "Mitiririko otomatiki haipatikani kwenye seva hii kwa sasa.",
+    "proTitle": "Kipengele cha 3Speak Pro",
+    "pro": "Mitiririko otomatiki ni sehemu ya 3Speak Pro.",
+    "getPro": "Pata 3Speak Pro",
+    "skipPro": "Ruka ukaguzi wa Pro (mjaribu)",
+    "skipProHint": "Kama akaunti ya majaribio, unaweza kujaribu otomatiki bila Pro.",
+    "proSkipped": "Hali ya majaribio: ukaguzi wa Pro umerukwa kwa akaunti yako.",
+    "restorePro": "Tumia ukaguzi wa Pro tena"
+  },
+  "grant": {
+    "needed": "Mitiririko otomatiki inachapisha kwa niaba yako. Kwanza iruhusu 3Speak ichapishe kwenye akaunti yako.",
+    "button": "Iruhusu 3Speak ichapishe"
+  },
+  "list": {
+    "new": "Mtiririko otomatiki mpya",
+    "emptyTitle": "Bado hakuna mitiririko otomatiki",
+    "empty": "Anza na mfano au jenga wako mwenyewe: chagua kinachouanzisha, kisha buruta ndani kinachopaswa kutokea.",
+    "steps_one": "hatua {{count}}",
+    "steps_other": "hatua {{count}}",
+    "lastRun": "Iliendeshwa mwisho:",
+    "edit": "Hariri",
+    "runs": "Mizunguko",
+    "delete": "Futa",
+    "cancel": "Ghairi",
+    "notFound": "Mtiririko otomatiki huu haupo (tena).",
+    "deleteTitle": "Futa \"{{name}}\"?",
+    "deleteBody": "Mtiririko otomatiki na historia ya mizunguko yake vitafutwa. Machapisho uliyokwisha kutengeneza yanabaki.",
+    "on": "Umewashwa",
+    "off": "Umezimwa"
+  },
+  "runs": {
+    "title": "Mizunguko ya \"{{name}}\"",
+    "empty": "Bado hakuna mizunguko",
+    "emptyHint": "Mzunguko huanza chapisho lako jipya linapolingana wakati mtiririko otomatiki umewashwa.",
+    "steps": "Hatua {{done}} kati ya {{count}} zimekamilika",
+    "attempts_one": "jaribio {{count}}",
+    "attempts_other": "majaribio {{count}}",
+    "status": {
+      "queued": "Kwenye foleni",
+      "running": "Inaendelea",
+      "waiting": "Inasubiri",
+      "done": "Imekamilika",
+      "failed": "Imeshindwa",
+      "cancelled": "Imesimamishwa"
+    }
+  },
+  "editor": {
+    "back": "Rudi",
+    "close": "Funga",
+    "done": "Imekamilika",
+    "name": "Jina",
+    "namePlaceholder": "Upe jina mtiririko otomatiki huu",
+    "enabled": "Mtiririko otomatiki umewashwa",
+    "test": "Jaribu",
+    "save": "Hifadhi",
+    "toolboxTasks": "Fanya hivi",
+    "toolboxLogic": "Amua",
+    "whenTitle": "Hili linapotokea",
+    "event": "Tukio",
+    "eventChangeNote": "Hatua zisizofaa tukio jipya zinapata beji ya onyo.",
+    "placeholders": "Vishika nafasi",
+    "insert": "Weka",
+    "howTo": "Buruta hatua kutoka kisanduku cha zana hadi kwenye mstari. Chagua hatua ili kuibadilisha, au nafasi tupu ili kubadilisha tukio.",
+    "stepName": "Jina la hatua",
+    "optional": "si lazima",
+    "tagsHint": "Hadi lebo {{max}}, zikitenganishwa kwa nafasi.",
+    "emptyHint": "Buruta hatua kutoka kisanduku cha zana hadi kwenye mstari",
+    "accounts": "Akaunti",
+    "accountsHint": "Hadi akaunti {{max}} za Hive, zikitenganishwa kwa nafasi."
+  },
+  "test": {
+    "title": "Jaribio",
+    "sample": "Bado huna chapisho la aina hii, kwa hiyo jaribio lilitumia thamani za mfano.",
+    "onPost": "Imejaribiwa kwenye chapisho lako jipya zaidi linalolingana: {{title}}",
+    "nothingPosted": "Hakuna kilichochapishwa. Hiki ndicho kila hatua ingefanya.",
+    "shortDetail": "Short kuanzia sekunde {{start}}, yenye urefu wa sekunde {{length}}.",
+    "noSteps": "Hakuna hatua itakayoendeshwa kwa chapisho hili.",
+    "voteOn": "Toa upvote ya {{weight}}% kwa {{on}}.",
+    "reblogOn": "Reblog {{on}}.",
+    "skipped": {
+      "self": "Imerukwa: huyo ni wewe.",
+      "no_sender": "Imerukwa: hakuna wa kupewa upvote (bakshishi ya Lightning au boost ya mtiririko haina mtumaji wa Hive).",
+      "no_recent_post": "Imerukwa: hawana chapisho la siku 7 zilizopita."
+    }
+  },
+  "events": {
+    "video_published": {
+      "label": "Ninachapisha video",
+      "desc": "Video unazopakia mwenyewe. Video zilizoingizwa zina tukio lao."
+    },
+    "short_published": {
+      "label": "Ninachapisha Short",
+      "desc": "Shorts unazochapisha, kutoka kipakiaji, kihariri au klipu."
+    },
+    "video_imported": {
+      "label": "Video yangu imeingizwa",
+      "desc": "Video na Shorts ambazo kiingizaji huleta kutoka YouTube, TikTok na nyinginezo."
+    },
+    "podcast_published": {
+      "label": "Ninachapisha kipindi cha podikasti",
+      "desc": "Vipindi vya podikasti na mahojiano, vilivyopakiwa au kuingizwa kutoka mlisho wako."
+    },
+    "audio_published": {
+      "label": "Ninachapisha sauti yoyote",
+      "desc": "Kila chapisho la sauti: podikasti, muziki, vitabu vya sauti na jumbe za sauti."
+    },
+    "stream_started": {
+      "label": "Ninaanza mubashara",
+      "desc": "Chapisho la mtiririko wako mubashara linapotoka."
+    },
+    "tip_received": {
+      "label": "Ninapokea bakshishi",
+      "desc": "Bakshishi ya HIVE, HBD au Lightning kwa moja ya video zako (memo inaiunganisha na video)."
+    },
+    "boost_received": {
+      "label": "Ninapokea boost",
+      "desc": "Boost kwenye moja ya machapisho yako, au kwenye mtiririko wako."
+    },
+    "power_up": {
+      "label": "Power up",
+      "desc": "Unafanya power up, au mtu anafanya power up ya HIVE kwenye akaunti yako."
+    },
+    "poll_ended": {
+      "label": "Kura yangu ya maoni inaisha",
+      "desc": "Moja ya kura zako za maoni za snap imeisha."
+    },
+    "stream_poll_ended": {
+      "label": "Kura ya maoni kwenye mtiririko wangu inaisha",
+      "desc": "Kura ya maoni au utabiri katika moja ya mitiririko yako ya siku tatu zilizopita umeisha."
+    },
+    "someone_posted": {
+      "label": "Mtu niliyemchagua anachapisha",
+      "desc": "Chapisho la akaunti unayoorodhesha hapa chini: video, Short, sauti, podikasti, snap, mtiririko au chapisho la maandishi."
+    }
+  },
+  "tasks": {
+    "post_snap": {
+      "label": "Chapisha snap",
+      "desc": "Chapisho fupi la maandishi kwenye mlisho wa snaps, kwenye kichupo cha Jumuiya cha wasifu wako.",
+      "props": {
+        "text": "Maandishi ya snap",
+        "tags": "Lebo"
+      }
+    },
+    "post_short": {
+      "label": "Chapisha Short",
+      "desc": "Hukata klipu kutoka video mpya na kuichapisha kama Short, takriban dakika 10 baadaye.",
+      "props": {
+        "start": "Anza kwenye sekunde",
+        "length": "Urefu kwa sekunde",
+        "vertical": "Wima",
+        "caption": "Maelezo mafupi",
+        "tags": "Lebo"
+      },
+      "hints": {
+        "start": "Mahali klipu inapoanzia kwenye video.",
+        "length": "Sekunde 5 hadi 60.",
+        "vertical": "Hukata sehemu ya kati ya video pana kuwa 9:16."
+      }
+    },
+    "post_audio": {
+      "label": "Chapisha sauti",
+      "desc": "Huchapisha sauti ya video mpya kama chapisho la sauti pamoja na jalada lake, takriban dakika 10 baadaye.",
+      "props": {
+        "title": "Kichwa",
+        "audioType": "Aina ya sauti",
+        "tags": "Lebo"
+      }
+    },
+    "post_video": {
+      "label": "Chapisha video",
+      "desc": "Huchapisha sauti mpya kama video yenye jalada lake kama picha, takriban dakika 10 baadaye.",
+      "props": {
+        "title": "Kichwa",
+        "tags": "Lebo"
+      }
+    },
+    "post_comment": {
+      "label": "Toa maoni kwenye chapisho",
+      "desc": "Maoni yako chini ya chapisho, kwa viungo, shukrani kwa wachangiaji, pongezi au matokeo.",
+      "props": {
+        "text": "Maoni"
+      }
+    },
+    "upvote_post": {
+      "label": "Toa upvote kwa chapisho",
+      "desc": "Upvote yako kwenye chapisho lao.",
+      "props": {
+        "weight": "Uzito wa kura kwa %"
+      }
+    },
+    "reblog": {
+      "label": "Reblog chapisho",
+      "desc": "Huweka chapisho lao kwenye blogu yako.",
+      "props": {}
+    },
+    "upvote_sender": {
+      "label": "Toa upvote kwa mtumaji",
+      "desc": "Upvote yako kwenye chapisho jipya zaidi la aliyekupa bakshishi, boost au power up (likiwa bado linalipa).",
+      "props": {
+        "weight": "Uzito wa kura kwa %"
+      }
+    },
+    "send_discord": {
+      "label": "Tuma kwa Discord",
+      "desc": "Ujumbe kwa chaneli ya seva yako ya Discord kupitia webhook. Hakuna anayetajwa.",
+      "props": {
+        "webhook": "Anwani ya webhook",
+        "text": "Ujumbe"
+      },
+      "hints": {
+        "webhook": "Kwenye Discord: mipangilio ya chaneli, Integrations, Webhooks, Copy Webhook URL."
+      }
+    }
+  },
+  "if": {
+    "label": "Ikiwa",
+    "desc": "Huchukua njia ya Ndiyo sharti likitimia, la sivyo njia ya Hapana.",
+    "field": "Kagua",
+    "pickField": "Chagua cha kukagua",
+    "operator": "Sharti",
+    "value": "Thamani",
+    "branchesNote": "Buruta hatua kwenye njia za Ndiyo na Hapana kwenye turubai.",
+    "branch": {
+      "yes": "Ndiyo",
+      "no": "Hapana"
+    },
+    "units": {
+      "seconds": "Sekunde",
+      "amount": "Kiasi",
+      "count": "Idadi"
+    }
+  },
+  "fields": {
+    "title": "Kichwa",
+    "description": "Maelezo",
+    "tags": "Lebo",
+    "duration": "Urefu",
+    "community": "Jumuiya",
+    "url": "Kiungo",
+    "platform": "Imeingizwa kutoka",
+    "kind": "Aina",
+    "audioType": "Aina ya sauti",
+    "imported": "Imeingizwa",
+    "from": "Kutoka kwa",
+    "amount": "Kiasi",
+    "asset": "Sarafu",
+    "message": "Ujumbe",
+    "via": "Imelipwa kwa",
+    "boostKind": "Kilichopewa boost",
+    "self": "Na mimi",
+    "question": "Swali",
+    "winner": "Jibu lililoshinda",
+    "votes": "Kura",
+    "author": "Akaunti",
+    "postKind": "Aina ya chapisho"
+  },
+  "ops": {
+    "contains": "ina",
+    "not_contains": "haina",
+    "equals": "ni sawa kabisa na",
+    "starts_with": "inaanza na",
+    "has_tag": "ina lebo",
+    "not_has_tag": "haina lebo",
+    "gt": "ni ndefu kuliko",
+    "lt": "ni fupi kuliko",
+    "is": "ni",
+    "is_not": "si"
+  },
+  "choices": {
+    "youtube": "YouTube",
+    "tiktok": "TikTok",
+    "instagram": "Instagram",
+    "rumble": "Rumble",
+    "bitchute": "BitChute",
+    "rss": "Mlisho wa podikasti",
+    "video": "Video",
+    "short": "Short",
+    "podcast": "Podikasti",
+    "interview": "Mahojiano",
+    "audiobook": "Kitabu cha sauti",
+    "song": "Muziki",
+    "voice_message": "Ujumbe wa sauti",
+    "yes": "Ndiyo",
+    "no": "Hapana",
+    "HIVE": "HIVE",
+    "HBD": "HBD",
+    "hive": "Pochi ya Hive",
+    "lightning": "Lightning",
+    "post": "Chapisho",
+    "stream": "Mtiririko",
+    "audio": "Sauti",
+    "snap": "Snap"
+  },
+  "placeholders": {
+    "title": "kichwa cha chapisho",
+    "description": "mwanzo wa maelezo yake",
+    "url": "kiungo chake kwenye 3Speak",
+    "author": "akaunti iliyochapisha (wewe, kwa machapisho yako mwenyewe)",
+    "tags": "lebo zake kama #hashtags",
+    "platform": "mahali kilipoingizwa kutoka",
+    "from": "aliyetuma",
+    "amount": "kiasi gani",
+    "message": "ujumbe ulioambatana nayo",
+    "question": "swali la kura ya maoni",
+    "results": "kila jibu pamoja na kura zake",
+    "winner": "jibu lenye kura nyingi zaidi",
+    "votes": "idadi ya waliopiga kura"
+  },
+  "problems": {
+    "required": "Hiki hakiwezi kuwa tupu.",
+    "too_long": "Hiki ni kirefu mno.",
+    "over_limit": "Ni nyingi mno.",
+    "bad_tag": "Lebo ni herufi, namba au vistari 2 hadi 24.",
+    "bad_webhook": "Hii si anwani ya webhook ya Discord.",
+    "out_of_range": "Namba hii iko nje ya kiwango.",
+    "bad_field": "Chagua cha kukagua.",
+    "bad_operator": "Chagua sharti.",
+    "bad_value": "Weka thamani inayofaa sharti.",
+    "unknown_step": "3Speak haiijui hatua hii.",
+    "task_not_for_event": "Hatua hii haifai tukio hili (Short inahitaji video).",
+    "too_many_of_type": "Hatua hii haiwezi kujitokeza mara nyingi hivyo katika mtiririko otomatiki mmoja.",
+    "too_many_steps": "Mtiririko otomatiki unaweza kuwa na hatua 12 tu zaidi.",
+    "too_deep": "Hatua za Ikiwa zinaweza kuwekwa ndani ya nyingine hadi ngazi 3 tu.",
+    "bad_id": "Hatua moja imeharibika. Ifute kisha uiongeze tena.",
+    "bad_sequence": "Mtiririko otomatiki umeharibika. Anzisha mpya.",
+    "empty": "Ongeza angalau hatua moja.",
+    "no_event": "Chagua tukio linaloianzisha.",
+    "no_name": "Upe jina mtiririko otomatiki.",
+    "no_grant": "Kwanza iruhusu 3Speak ichapishe kwa niaba yako.",
+    "pro_required": "Imesitishwa: mitiririko otomatiki inahitaji 3Speak Pro.",
+    "not_found": "Mtiririko otomatiki huu haupo (tena).",
+    "unknown": "Hiki hakiwezi kutumika.",
+    "no_post": "Hakuna chapisho la kujibu chini yake.",
+    "no_audio": "Chapisho hili halina sauti ya 3Speak.",
+    "no_accounts": "Orodhesha angalau akaunti moja.",
+    "too_many_accounts": "Akaunti {{max}} kwa juu kabisa.",
+    "bad_account": "Moja ya akaunti si jina la akaunti ya Hive.",
+    "bad_account_named": "\"{{name}}\" si jina la akaunti ya Hive."
+  },
+  "designer": {
+    "contextMenu": {
+      "delete": "Futa",
+      "duplicate": "Nakili",
+      "resetView": "Weka upya mwonekano",
+      "select": "Chagua",
+      "unselect": "Ondoa chaguo"
+    },
+    "controlBar": {
+      "deleteSelectedStep": "Futa hatua iliyochaguliwa",
+      "redo": "Rudia",
+      "resetView": "Weka upya mwonekano",
+      "turnOnOffDragAndDrop": "Washa au zima kusogeza hatua",
+      "undo": "Tendua",
+      "zoomIn": "Kuza",
+      "zoomOut": "Punguza"
+    },
+    "smartEditor": {
+      "toggle": "Onyesha au ficha paneli"
+    },
+    "toolbox": {
+      "search": "Tafuta…",
+      "title": "Hatua"
+    }
+  },
+  "templates": {
+    "button": "Violezo",
+    "title": "Violezo",
+    "newTitle": "Mtiririko otomatiki mpya",
+    "sub": "Anza na kiolezo na ukibadilishe upendavyo, au anza bila kitu.",
+    "replaces": "Kuchagua kiolezo hubadilisha hatua zilizo kwenye turubai.",
+    "groups": {
+      "videos": "Video",
+      "audio": "Sauti na podikasti",
+      "live": "Mubashara",
+      "polls": "Kura za maoni",
+      "thanks": "Bakshishi, boosts na power up",
+      "others": "Akaunti nyingine",
+      "own": "Yako mwenyewe"
+    },
+    "items": {
+      "snap_video": {
+        "title": "Snap kwa kila video mpya",
+        "sub": "Unapochapisha video, snap yenye kichwa na kiungo chake inatoka."
+      },
+      "short_video": {
+        "title": "Short kutoka kila video mpya",
+        "sub": "Unapochapisha video, sekunde zake 30 za kwanza zinakuwa Short ya wima."
+      },
+      "long_video_short": {
+        "title": "Short kwa video ndefu, snap kwa fupi",
+        "sub": "Video za zaidi ya dakika 5 zinapata Short kuanzia sekunde ya 30, fupi zaidi zinapata snap."
+      },
+      "audio_from_video": {
+        "title": "Toleo la sauti la kila video",
+        "sub": "Unapochapisha video, sauti yake inachapishwa kama kipindi cha podikasti."
+      },
+      "imported_discord": {
+        "title": "Ijulishe Discord kuhusu video zilizoingizwa",
+        "sub": "Kiingizaji kinapoleta video, seva yako ya Discord inajulishwa."
+      },
+      "video_from_podcast": {
+        "title": "Toleo la video la kila kipindi",
+        "sub": "Unapochapisha kipindi cha podikasti, kinachapishwa kama video pamoja na jalada lake."
+      },
+      "podcast_snap": {
+        "title": "Snap kwa kila kipindi kipya",
+        "sub": "Unapochapisha kipindi cha podikasti, snap yenye kiungo chake inatoka."
+      },
+      "discord_live": {
+        "title": "Ijulishe Discord ninapoanza mubashara",
+        "sub": "Unapoanza mtiririko, seva yako ya Discord inapokea ujumbe."
+      },
+      "stream_poll_snap": {
+        "title": "Snap ya matokeo ya kura za maoni za mtiririko",
+        "sub": "Kura ya maoni kwenye mtiririko wako inapoisha, snap inaonyesha watu walivyopiga kura."
+      },
+      "poll_results": {
+        "title": "Jibu kwa matokeo ya kura zangu za maoni",
+        "sub": "Moja ya kura zako za maoni inapoisha, jibu chini yake linaonyesha matokeo."
+      },
+      "thank_tips": {
+        "title": "Washukuru wote wanaotoa bakshishi",
+        "sub": "Shukrani chini ya video, na upvote kwenye chapisho jipya zaidi la aliyetoa bakshishi."
+      },
+      "thank_boosts": {
+        "title": "Washukuru wote wanaotoa boost",
+        "sub": "Snap ya shukrani, na upvote kwenye chapisho jipya zaidi la aliyetoa boost."
+      },
+      "power_up_snap": {
+        "title": "Shiriki power up zangu",
+        "sub": "Unapofanya power up, snap inasema ni kiasi gani. Mtu akikufanyia power up, anapata upvote."
+      },
+      "vote_friends": {
+        "title": "Toa upvote kwa video mpya za marafiki zangu",
+        "sub": "Akaunti uliyoorodhesha inapochapisha video, inapata upvote yako."
+      },
+      "reblog_friends": {
+        "title": "Reblog video mpya za marafiki zangu",
+        "sub": "Akaunti uliyoorodhesha inapochapisha video, inaingia kwenye blogu yako."
+      },
+      "blank": {
+        "title": "Anza bila kitu",
+        "sub": "Chagua tukio na ujenge hatua mwenyewe."
+      }
+    },
+    "texts": {
+      "longerThan5": "Zaidi ya dakika 5?",
+      "importedDiscord": "Mpya kwenye chaneli yangu: {title}\n{url}",
+      "podcastSnap": "Kipindi kipya: {title}\n\n{url}",
+      "discordLive": "{title} iko mubashara sasa: {url}",
+      "streamPollSnap": "Kura ya maoni kutoka mtiririko wangu: {question}\n\n{results}\n\n{url}",
+      "pollResults": "Kura ya maoni imefungwa. Matokeo:\n\n{results}\n\nAsanteni nyote {votes} mliopiga kura!",
+      "viaLightning": "Imelipwa kwa Lightning?",
+      "thanksLightning": "Asante kwa bakshishi ya {amount} HIVE! ⚡",
+      "thanksTip": "Asante @{from} kwa bakshishi ya {amount}! 🙏",
+      "boostOnPost": "Boost kwenye chapisho?",
+      "thanksBoost": "Asante @{from} kwa kutoa boost kwa {url} 🚀\n\n{message}",
+      "thanksStreamBoost": "Asante kwa boost kwenye mtiririko wangu! 🚀 {url}",
+      "byMe": "Power up imefanywa na mimi?",
+      "poweredUp": "Nimefanya power up ya {amount} HIVE sasa hivi! 💪",
+      "isVideo": "Ni video?"
+    }
+  },
+  "eventGroups": {
+    "channel": "Chaneli yangu",
+    "wallet": "Pochi yangu",
+    "polls": "Kura za maoni",
+    "others": "Akaunti nyingine",
+    "more": "Zaidi"
+  }
+}

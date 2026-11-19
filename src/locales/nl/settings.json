@@ -156,6 +156,10 @@
       "title": "Grote kaarten",
       "desc": "Grotere videokaarten op home, profiel en playlists"
     },
+    "dataSaver": {
+      "title": "Databesparing",
+      "desc": "Geen videovoorbeelden, en video's starten in 360p. Gaat vanzelf aan als je apparaat data wil besparen of de verbinding traag is."
+    },
     "previews": {
       "title": "Videovoorbeelden",
       "desc": "Stille preview bij hoveren; op mobiel speelt de middelste kaart"
@@ -165,14 +169,22 @@
       "desc": "Clips zonder geluid in de Spotlight op Home. Uit toont stilstaande beelden."
     }
   },
+  "startup": {
+    "resume": {
+      "title": "Verdergaan waar ik was",
+      "desc": "3Speak opent op de pagina waar je het laatst was. Alleen op dit apparaat bewaard."
+    }
+  },
+  "startPrompt": {
+    "title": "Verdergaan waar je was?",
+    "intro": "3Speak kan openen op de pagina waar je het laatst was in plaats van Home. Dit wordt alleen op dit apparaat bewaard en je kunt het altijd wijzigen in Instellingen, Algemeen.",
+    "notNow": "Niet nu",
+    "turnOn": "Aanzetten"
+  },
   "shorts": {
     "commentBar": {
       "title": "Reactiebalk bij Shorts",
       "desc": "Een reactieveld onder elke Short"
-    },
-    "openOnStart": {
-      "title": "Shorts openen bij het starten",
-      "desc": "Ga direct naar Shorts als je 3Speak opent"
     },
     "inFeeds": {
       "title": "Shorts in de feeds",
@@ -203,7 +215,21 @@
     "rpcNode": "Hive RPC-node",
     "yourData": "Je gegevens",
     "privacyLink": "Hoe 3Speak met je gegevens omgaat",
-    "getOrDelete": "Opvragen of verwijderen"
+    "getOrDelete": "Opvragen of verwijderen",
+    "node": {
+      "modeAuto": "Auto",
+      "auto": "Automatisch",
+      "autoHint": "De snelste node die werkt, wisselt als hij uitvalt",
+      "own": "Je eigen node",
+      "use": "Gebruiken",
+      "checking": "Controleren…",
+      "down": "Reageert niet",
+      "ms": "{{ms}} ms",
+      "badUrl": "Voer een adres in dat begint met https://",
+      "failed": "Deze node reageerde niet of mist de sociale API (hivemind) die 3Speak nodig heeft.",
+      "switched": "Nu via {{node}}",
+      "fallback": "Als de gekozen node niet meer reageert, gebruikt 3Speak de bekende nodes tot de pagina opnieuw wordt geladen."
+    }
   },
   "dataRequest": {
     "emailRequired": "Vul een e-mailadres in zodat we kunnen antwoorden",

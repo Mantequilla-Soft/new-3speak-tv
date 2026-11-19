@@ -1,0 +1,30 @@
+{
+  "studio": {
+    "title": "Manukuu ya moja kwa moja",
+    "toggle": "Onyesha watazamaji manukuu ya moja kwa moja",
+    "hint": "Ukiwa mubashara, sauti ya kipaza sauti chako hubadilishwa kuwa maandishi. Watazamaji wanaweza kuwasha manukuu, na vivinjari vingi huyatafsiri kwa lugha ya mtazamaji.",
+    "language": "Lugha unayozungumza",
+    "onlyLanguage": "Manukuu yanaelewa {lang} pekee.",
+    "statusOff": "Yamezimwa",
+    "statusWaiting": "Yataanza ukienda mubashara.",
+    "statusMicOff": "Washa kipaza sauti ili kupata manukuu.",
+    "statusStarting": "Inaanzisha manukuu…",
+    "statusOn": "Manukuu yamewashwa.",
+    "statusFull": "Nafasi zote za manukuu zinatumika sasa. Tutajaribu tena baada ya dakika moja.",
+    "statusUnavailable": "Manukuu ya moja kwa moja hayapatikani sasa.",
+    "statusError": "Manukuu yamesimama kwa sababu huduma ya sauti haikupatikana. Yazime na uyawashe tena ili kujaribu upya."
+  },
+  "viewer": {
+    "translatedFrom": "Yametafsiriwa kutoka {lang} kwenye kifaa chako",
+    "showOriginal": "Onyesha asili",
+    "translateTo": "Tafsiri kwa {lang}",
+    "noTranslator": "Kwa {lang}: kivinjari hiki hakiwezi kutafsiri manukuu",
+    "label": "Manukuu",
+    "show": "Onyesha manukuu ya moja kwa moja",
+    "hide": "Ficha manukuu ya moja kwa moja"
+  },
+  "vod": {
+    "saved": "Manukuu yako ya moja kwa moja yameongezwa kwenye marudio.",
+    "failed": "Manukuu ya moja kwa moja hayakuweza kuongezwa kwenye marudio."
+  }
+}

@@ -139,6 +139,13 @@
     "rumble": {
       "placeholder": "https://rumble.com/c/…",
       "help": "Colle le nom ou le lien de ta chaîne Rumble. Place le hash n'importe où dans la description de la chaîne."
+    },
+    "rss": {
+      "placeholder": "https://example.com/podcast.xml",
+      "help": "Colle l'adresse du flux RSS de ton podcast. Ton hébergeur l'affiche dans les réglages ou la page de diffusion de l'émission.",
+      "flowTitle": "Lier le flux RSS de ton podcast",
+      "step2": "<strong>Colle-le dans la description de ton émission ou de ton épisode le plus récent</strong>, chez ton hébergeur de podcast. Enregistre et publie la modification. Tu pourras le retirer une fois le flux vérifié.",
+      "step3": "Saisis l'adresse du flux RSS de ton podcast :"
     }
   },
   "snaps": {
@@ -157,7 +164,13 @@
     "audioMinimal": "Minimal",
     "heightSub": "Pleine largeur, {{height}} px de haut · Adaptatif",
     "podcastTitle": "Intégrer ce podcast",
-    "podcastHint": "Lit tous les épisodes de l'émission, y compris les nouveaux dès leur sortie."
+    "podcastHint": "Lit tous les épisodes de l'émission, y compris les nouveaux dès leur sortie.",
+    "embedWhere": "Où intégrer",
+    "tabWebsite": "Site web",
+    "tabHive": "Pour Hive",
+    "hiveLink": "Lien pour les publications Hive",
+    "hivePlaylistHint": "Collez ce lien dans une publication ou une wave Hive. Les applis Hive qui affichent les vidéos 3Speak, comme Ecency, lisent la playlist directement dans la publication.",
+    "videoPlaylistHint": "Collez ceci dans un site web ou un article de blog. Il lit dans l'ordre toutes les vidéos de la playlist, y compris celles ajoutées plus tard."
   },
   "incubation": {
     "requestFailed": "Échec de la requête ({{status}})",
@@ -197,7 +210,9 @@
       "video": "Vidéo",
       "audio": "Audio",
       "live": "Live",
-      "others": "Autres"
+      "others": "Autres",
+      "streams": "Directs",
+      "edit": "Montage"
     },
     "subtitles": {
       "regularVideo": "Vidéo classique pour ta chaîne",
@@ -210,6 +225,12 @@
       "goLiveNow": "Diffuse en direct pour tes abonnés",
       "communitySnap": "Publication rapide dans ton onglet communauté",
       "playlist": "Regroupez des vidéos dans une liste à partager"
+    },
+    "categories": {
+      "video": "Mettre en ligne, enregistrer ou monter une vidéo",
+      "audio": "Musique, podcasts et montage audio",
+      "streams": "Passer en direct seul ou avec des invités",
+      "others": "Snaps et playlists"
     }
   },
   "chat": {

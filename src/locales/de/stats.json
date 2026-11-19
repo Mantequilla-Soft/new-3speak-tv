@@ -91,6 +91,7 @@
   },
   "loadError": "Deine Statistiken konnten gerade nicht geladen werden.",
   "emptyRange": "In diesem Zeitraum noch keine Wiedergabedaten – probier „Alle“ oder warte, bis Leute deine Videos ansehen.",
+  "emptyRangeAudio": "Noch keine Hördaten in diesem Zeitraum. Probier „Alle“ oder warte, bis jemand zuhört.",
   "tiles": {
     "avgViewDuration": "Ø Wiedergabedauer",
     "avgWatched": "Ø angesehen",

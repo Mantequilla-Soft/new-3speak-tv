@@ -28,7 +28,9 @@
     },
     "errors": {
       "pickStars": "Lütfen bir yıldız puanı seç",
-      "sendFailed": "Değerlendirmen gönderilemedi. Lütfen tekrar dene."
+      "sendFailed": "Değerlendirmen gönderilemedi. Lütfen tekrar dene.",
+      "screenshotUnreadable": "Bu dosya okuyabildiğimiz bir görsel değil.",
+      "screenshotTooBig": "Bu görsel çok büyük. Lütfen daha küçük bir tane dene."
     },
     "thanks": "Geri bildirimin için teşekkürler! 🙏",
     "sendFeedback": "Geri bildirim gönder",
@@ -40,6 +42,12 @@
     "recommendLabel": "3Speak'i tavsiye eder misin? <opt>(isteğe bağlı)</opt>",
     "moreLabel": "Biraz daha anlat <opt>(isteğe bağlı)</opt>",
     "placeholder": "Neyi beğendin? Ne daha iyi olabilir?",
+    "screenshotLabel": "Ekran görüntüsü <opt>(isteğe bağlı)</opt>",
+    "attachScreenshot": "Ekran görüntüsü ekle",
+    "screenshotPreparing": "Ekran görüntüsü hazırlanıyor…",
+    "screenshotAlt": "Ekran görüntün",
+    "removeScreenshot": "Ekran görüntüsünü kaldır",
+    "screenshotHint": "Yalnızca 3Speak ekibi görür. Buraya bir görsel de yapıştırabilirsin.",
     "notNow": "Şimdi değil",
     "sending": "Gönderiliyor…"
   },
@@ -147,5 +155,23 @@
     "creator": "İçerik üreticisi",
     "empty": "Henüz yorum yok",
     "emptyHint": "Belirli bir ana bağlı yorumlar videonun zaman çizelgesinde görünür."
+  },
+  "focus": {
+    "open": "Odak modu",
+    "aria": "Odak modu: yorumunu yaz",
+    "done": "Bitti",
+    "sound": "Daktilo sesi",
+    "words_one": "{{count}} kelime",
+    "words_other": "{{count}} kelime",
+    "music": "Arka plan müziği",
+    "musicOff": "Kapalı",
+    "track1": "Yağmur",
+    "track2": "Gece piyanosu",
+    "track3": "Şömine"
+  },
+  "editor": {
+    "full": "Tam düzenleyici",
+    "compact": "Kompakt düzenleyici",
+    "toolbar": "Biçimlendirme"
   }
 }

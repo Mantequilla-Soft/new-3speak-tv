@@ -1,0 +1,117 @@
+{
+  "levels": {
+    "button": "Powiadamiaj",
+    "buttonTitle": "Powiadomienia od @{{user}}: {{level}}",
+    "title": "Powiadomienia od @{{user}}",
+    "sub": "Przełączniki urządzenia w Ustawieniach nadal obowiązują.",
+    "saveFailed": "Nie udało się zapisać. Spróbuj ponownie.",
+    "all": {
+      "title": "Wszystko",
+      "desc": "Filmy, Shorts, relacje, audio i rozpoczęcie transmisji na żywo.",
+      "saved": "Dowiesz się o wszystkim od @{{user}}."
+    },
+    "highlights": {
+      "title": "Najważniejsze",
+      "desc": "Filmy, audio i rozpoczęcie transmisji na żywo. Bez Shorts i relacji.",
+      "saved": "Od teraz tylko najważniejsze od @{{user}}."
+    },
+    "off": {
+      "title": "Wyłączone",
+      "desc": "Brak powiadomień od tego twórcy. Nadal go obserwujesz.",
+      "saved": "Powiadomienia od @{{user}} są wyłączone."
+    }
+  },
+  "live": {
+    "badge": "NA ŻYWO",
+    "aria": "Teraz na żywo: osoby, które obserwujesz",
+    "summary_one": "{{count}} obserwowana osoba nadaje teraz na żywo",
+    "summary_few": "{{count}} obserwowane osoby nadają teraz na żywo",
+    "summary_many": "{{count}} obserwowanych osób nadaje teraz na żywo",
+    "summary_other": "Obserwowane osoby na żywo: {{count}}"
+  },
+  "notifs": {
+    "heading": "Od 3Speak",
+    "liveNow": "@{{user}} nadaje na żywo",
+    "wasLive": "@{{user}} rozpoczął(-ęła) transmisję na żywo",
+    "collabInvite": "@{{user}} zaprasza cię do wspólnego posta",
+    "premiereStarted": "Premiera @{{user}} właśnie się zaczęła"
+  },
+  "push": {
+    "live": {
+      "title": "Start transmisji",
+      "desc": "Gdy obserwowany twórca rozpoczyna transmisję na żywo."
+    }
+  },
+  "collab": {
+    "accept": "Akceptuj",
+    "decline": "Odrzuć",
+    "acceptedToast": "Wspólny post z @{{user}} jest teraz na twoim kanale.",
+    "declinedToast": "Zaproszenie odrzucone.",
+    "answerFailed": "Nie udało się wysłać odpowiedzi. Spróbuj ponownie.",
+    "row": "Dodaj współtwórcę",
+    "rowSub": "Opublikuj ze współtwórcą i podziel się wypłatą",
+    "rowSet": "@{{user}} dostaje {{split}}% twojej części",
+    "modalTitle": "Dodaj współtwórcę",
+    "modalSub": "Współtwórca dostanie zaproszenie. Gdy je zaakceptuje, film pojawi się na obu kanałach.",
+    "accountLabel": "Współtwórca",
+    "accountPlaceholder": "Nazwa konta Hive",
+    "suggestions": "Pasujące konta",
+    "splitLabel": "Jego część twojej wypłaty",
+    "splitPreview": "@{{user}} dostaje {{share}}% wypłaty, ty zachowujesz {{mine}}%.",
+    "inviteNote": "Podział to beneficjent w Hive, więc obowiązuje nawet wtedy, gdy zaproszenie zostanie odrzucone.",
+    "someone": "twój współtwórca",
+    "save": "Zapisz",
+    "remove": "Usuń",
+    "noRoom": "@{{user}} nie został(a) dodany(-a) jako beneficjent: post ma już maksymalną liczbę beneficjentów, na jaką pozwala Hive.",
+    "errors": {
+      "invalid": "To nie jest prawidłowa nazwa konta Hive.",
+      "self": "Nie możesz współtworzyć z samym sobą.",
+      "notFound": "@{{user}} nie jest kontem Hive."
+    },
+    "cardWith": "z {{users}}",
+    "cardBoth": "{{author}} z {{users}}",
+    "withLabel": "z",
+    "invitesTitle": "Zaproszenia do współpracy"
+  },
+  "polls": {
+    "aria": "Ankieta",
+    "addPoll": "Ankieta",
+    "removePoll": "Bez ankiety",
+    "editorAria": "Opcje ankiety",
+    "questionPlaceholder": "Zadaj pytanie obserwującym",
+    "optionPlaceholder": "Opcja {{n}}",
+    "removeOption": "Usuń opcję {{n}}",
+    "addOption": "Dodaj opcję",
+    "duration": "Koniec ankiety",
+    "days_one": "{{count}} dzień",
+    "days_few": "{{count}} dni",
+    "days_many": "{{count}} dni",
+    "days_other": "{{count}} dnia",
+    "noEnd": "Bez daty końca",
+    "invalid": "Ankieta musi mieć od {{min}} do {{max}} różnych opcji.",
+    "votes_one": "{{count}} głos",
+    "votes_few": "{{count}} głosy",
+    "votes_many": "{{count}} głosów",
+    "votes_other": "{{count}} głosu",
+    "endsInDays_one": "Kończy się za {{count}} dzień",
+    "endsInDays_few": "Kończy się za {{count}} dni",
+    "endsInDays_many": "Kończy się za {{count}} dni",
+    "endsInDays_other": "Kończy się za {{count}} dnia",
+    "endsInHours_one": "Kończy się za {{count}} godzinę",
+    "endsInHours_few": "Kończy się za {{count}} godziny",
+    "endsInHours_many": "Kończy się za {{count}} godzin",
+    "endsInHours_other": "Kończy się za {{count}} godziny",
+    "closed": "Ankieta zakończona",
+    "open": "Otwarta",
+    "changeHint": "Stuknij inną opcję, aby zmienić głos.",
+    "signIn": "Zaloguj się, aby zagłosować.",
+    "closedToast": "Ta ankieta się zakończyła.",
+    "voteFailed": "Twój głos nie został zapisany. Spróbuj ponownie.",
+    "statsTitle": "Ankiety",
+    "question": "Pytanie",
+    "questionPlaceholderVideo": "Zadaj widzom pytanie",
+    "addPollTitle": "Dodaj ankietę",
+    "removePollTitle": "Usuń ankietę",
+    "invalidVideo": "Ankieta potrzebuje pytania i od {{min}} do {{max}} różnych odpowiedzi."
+  }
+}

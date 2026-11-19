@@ -1,0 +1,11 @@
+{
+  "label": "Voltar",
+  "goLive": "Ir ao vivo",
+  "title": "Volte até {{minutes}} min",
+  "error": "Voltar não está disponível agora.",
+  "back10": "Voltar 10 segundos",
+  "forward10": "Avançar 10 segundos",
+  "play": "Reproduzir",
+  "pause": "Pausar",
+  "seek": "Posição na transmissão"
+}

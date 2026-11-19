@@ -151,6 +151,28 @@ describe('a playlist page', () => {
   })
 })
 
+describe('a playlist of videos: embed', () => {
+  it('has an Embed tile that gives the For Hive link and the 16:9 video player snippet', async () => {
+    const { user } = mount()
+    await user.click(await screen.findByRole('button', { name: 'Embed on a website' }))
+    const dialog = screen.getByRole('dialog', { name: 'Embed this playlist' })
+    expect(within(dialog).getByRole('textbox', { name: 'Link for Hive posts' }).value).toMatch(/\/watch\?v=badadib\/pl-1$/)
+    await user.click(within(dialog).getByRole('tab', { name: 'Website' }))
+    const code = within(dialog).getByRole('textbox', { name: 'Embed code' }).value
+    expect(code).toMatch(/\/watch\?v=badadib\/pl-1&mode=iframe"/)
+    expect(code).toContain('padding-bottom:56.25%')
+    expect(within(dialog).getByText(/plays every video of the playlist/)).toBeTruthy()
+  })
+
+  it('a private playlist has none, even for its owner', async () => {
+    m.playlist = { ...PLAYLIST, access: 'private' }
+    signIn('badadib')
+    mount()
+    await screen.findByText('First video')
+    expect(screen.queryByRole('button', { name: 'Embed on a website' })).toBeNull()
+  })
+})
+
 describe('a playlist page: the owner\'s tools', () => {
   beforeEach(() => signIn('badadib'))
 
@@ -322,6 +344,9 @@ describe('an all-audio playlist', () => {
     const { user } = mount()
     await user.click(await screen.findByRole('button', { name: /Embed/ }))
     const dialog = screen.getByRole('dialog', { name: 'Embed this playlist' })
+    // Opens on For Hive: the play.3speak.tv link, owner first.
+    expect(within(dialog).getByRole('textbox', { name: 'Link for Hive posts' }).value).toMatch(/\/watch\?v=[^/]+\/pl-1$/)
+    await user.click(within(dialog).getByRole('tab', { name: 'Website' }))
     expect(within(dialog).getByRole('textbox', { name: 'Embed code' }).value).toContain('play?list=pl-1')
   })
 })

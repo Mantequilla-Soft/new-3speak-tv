@@ -35,6 +35,14 @@
     "hide": "숨기기",
     "markSeen": "모두 본 것으로 표시"
   },
+  "continueWatching": {
+    "aria": "이어서 보기",
+    "rest": "이어서 볼 수 있어요",
+    "remove": "이어서 보기에서 삭제",
+    "removed": "이어서 보기에서 삭제했어요",
+    "removeFailed": "삭제하지 못했어요. 다시 시도해 주세요.",
+    "progress": "{{pct}}% 시청함"
+  },
   "tagMeta": {
     "videos_other": "동영상 {{num}}개",
     "thisWeek": "이번 주 {{num}}개"

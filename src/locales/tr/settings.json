@@ -156,6 +156,10 @@
       "title": "Büyük kartlar",
       "desc": "Ana sayfa, profil ve oynatma listelerinde daha büyük video kartları"
     },
+    "dataSaver": {
+      "title": "Veri tasarrufu",
+      "desc": "Video önizlemesi yok ve videolar 360p ile başlar. Cihazın veri tasarrufu istediğinde veya bağlantı yavaş olduğunda kendiliğinden açılır."
+    },
     "previews": {
       "title": "Video önizlemeleri",
       "desc": "Üzerine gelince sessiz önizleme; mobilde ortadaki kart oynar"
@@ -165,14 +169,22 @@
       "desc": "Ana sayfadaki Spotlight’ta sessiz klipler. Kapalıyken sabit görseller gösterilir."
     }
   },
+  "startup": {
+    "resume": {
+      "title": "Kaldığım yerden devam et",
+      "desc": "3Speak en son bulunduğun sayfada açılır. Yalnızca bu cihazda saklanır."
+    }
+  },
+  "startPrompt": {
+    "title": "Kaldığın yerden devam etmek ister misin?",
+    "intro": "3Speak, Ana sayfa yerine en son bulunduğun sayfada açılabilir. Bu yalnızca bu cihazda saklanır ve istediğin zaman Ayarlar, Genel bölümünden değiştirebilirsin.",
+    "notNow": "Şimdi değil",
+    "turnOn": "Aç"
+  },
   "shorts": {
     "commentBar": {
       "title": "Shorts'ta yorum çubuğu",
       "desc": "Her Short'un altında bir yorum alanı"
-    },
-    "openOnStart": {
-      "title": "Açılışta Shorts'u aç",
-      "desc": "3Speak'i açtığında doğrudan Shorts'a git"
     },
     "inFeeds": {
       "title": "Akışlarda Shorts",
@@ -203,7 +215,21 @@
     "rpcNode": "Hive RPC düğümü",
     "yourData": "Verilerin",
     "privacyLink": "3Speak verilerini nasıl işler",
-    "getOrDelete": "Al veya sil"
+    "getOrDelete": "Al veya sil",
+    "node": {
+      "modeAuto": "Otomatik",
+      "auto": "Otomatik",
+      "autoHint": "Çalışan en hızlı düğüm, arızada değiştirilir",
+      "own": "Kendi düğümün",
+      "use": "Kullan",
+      "checking": "Kontrol ediliyor…",
+      "down": "Yanıt vermiyor",
+      "ms": "{{ms}} ms",
+      "badUrl": "https:// ile başlayan bir adres gir",
+      "failed": "Bu düğüm yanıt vermedi ya da 3Speak'in ihtiyaç duyduğu sosyal API (hivemind) yok.",
+      "switched": "Şimdi {{node}} kullanılıyor",
+      "fallback": "Seçtiğin düğüm yanıt vermeyi bırakırsa 3Speak sayfa yenilenene kadar bilinen düğümleri kullanır."
+    }
   },
   "dataRequest": {
     "emailRequired": "Sana yanıt verebilmemiz için bir e-posta adresi gir",

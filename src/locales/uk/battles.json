@@ -1,0 +1,14 @@
+{
+  "bar": {
+    "title": "Батл",
+    "startsIn": "Старт через {seconds}",
+    "timeLeft": "Залишилося {time}",
+    "counting": "Рахуємо останні бусти…",
+    "amount": "{amount} HBD",
+    "wins": "Перемагає @{name}!",
+    "tie": "Нічия!",
+    "endedEarly": "Батл завершився достроково",
+    "dropped": "Батл завершено: @{name} пішов",
+    "boostHint": "Бусти тут зараховуються @{name}"
+  }
+}

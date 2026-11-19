@@ -9,6 +9,7 @@ import { renderHook, act } from '@testing-library/react'
 
 let standalone
 beforeEach(() => {
+  localStorage.clear()
   vi.resetModules()
   standalone = false
   window.matchMedia = vi.fn((query) => ({ matches: query === '(display-mode: standalone)' && standalone }))
@@ -64,7 +65,11 @@ describe('usePwaInstall', () => {
     expect(menuB.result.current.canInstallPrompt).toBe(false)
 
     event.choose({ outcome: 'accepted' })
-    await act(() => done)
+    let outcome
+    await act(async () => { outcome = await done })
+    // The answer comes back, and an accepted install is remembered (no sheet again).
+    expect(outcome).toBe('accepted')
+    expect(JSON.parse(localStorage.getItem('3speak_install_prompt'))).toEqual({ installed: true })
     await act(() => menuB.result.current.promptInstall())
     expect(event.prompt).toHaveBeenCalledTimes(1)
   })
@@ -72,7 +77,7 @@ describe('usePwaInstall', () => {
   it('does nothing when asked to prompt without an event', async () => {
     const { usePwaInstall } = await load()
     const { result } = renderHook(() => usePwaInstall())
-    await expect(result.current.promptInstall()).resolves.toBeUndefined()
+    await expect(result.current.promptInstall()).resolves.toBeNull()
   })
 
   it.each([
@@ -94,6 +99,13 @@ describe('usePwaInstall', () => {
     window.dispatchEvent(installPrompt())
     const { result } = renderHook(() => usePwaInstall())
     expect(result.current.showInstall).toBe(false)
+  })
+
+  it('forgets an earlier install once the browser offers it again (the app was uninstalled)', async () => {
+    const { readInstallPromptState } = await load()
+    localStorage.setItem('3speak_install_prompt', JSON.stringify({ installed: true, until: 123 }))
+    window.dispatchEvent(installPrompt())
+    expect(readInstallPromptState()).toEqual({ until: 123 })
   })
 
   it('stops updating a menu after it unmounts', async () => {

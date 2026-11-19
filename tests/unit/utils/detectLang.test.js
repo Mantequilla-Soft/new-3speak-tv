@@ -20,6 +20,14 @@ describe('detectScriptLang', () => {
     expect(detectScriptLang('Ik denk dat het niet een goed idee is voor ons')).toBe('nl-NL')
   })
 
+  it('knows Ukrainian, Polish, Turkish and Vietnamese, and English with many "I"s stays English', () => {
+    expect(detectScriptLang('Привіт усім, це моє нове відео про їжу')).toBe('uk-UA')
+    expect(detectScriptLang('Myślę, że to jest bardzo dobry pomysł, ale nie wiem jak')).toBe('pl-PL')
+    expect(detectScriptLang('Bu video için çok teşekkür ederim ve daha fazlası gelecek')).toBe('tr-TR')
+    expect(detectScriptLang('Tôi nghĩ rằng đây là một video không có những điều mới')).toBe('vi-VN')
+    expect(detectScriptLang('I know I can do it, I said, and I will do it now')).toBe('en-US')
+  })
+
   it('falls back to English for short or unclear text', () => {
     expect(detectScriptLang('')).toBe('en-US')
     expect(detectScriptLang(null)).toBe('en-US')
@@ -51,7 +59,11 @@ describe('modelIdToTag', () => {
     expect(modelIdToTag('de')).toBe('de-DE')
     expect(modelIdToTag('cn')).toBe('zh-CN')
     expect(modelIdToTag(' EN ')).toBe('en-US')
-    expect(modelIdToTag('uk')).toBe('uk-UK')
+    // the speech server's folder names, Whisper's Tagalog as the site's Filipino
+    expect(modelIdToTag('uk')).toBe('uk-UA')
+    expect(modelIdToTag('vi')).toBe('vi-VN')
+    expect(modelIdToTag('tl')).toBe('fil-PH')
+    expect(modelIdToTag('xx')).toBe('xx-XX')
     expect(modelIdToTag('')).toBe('')
     expect(modelIdToTag(null)).toBe('')
   })

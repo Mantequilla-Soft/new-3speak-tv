@@ -1,4 +1,5 @@
 @use "../../styles/v2" as v2;
+@use "./OptionSheet";
 
 // Upload details (EmbedDetails.jsx), design 21c + 35c, and the shared publish
 // option tiles. The tiles (.advance-option > .beneficiary-wrap) and the sheets
@@ -342,6 +343,8 @@
   .opt-tile__spacer { flex: 1; }
   .opt-tile__chev { color: var(--muted); }
   .opt-tile__switch { display: inline-flex; }
+  // Language: the picker sits under the label
+  .opt-tile__select { margin-top: 8px; width: 100%; }
 
   .opt-tile__head + .wrap { margin-top: auto; }
   > .tile-value { margin-top: 2px; }
@@ -425,36 +428,7 @@
 }
 
 // ── Sheets (rewards, schedule, guest list) ───────────────────────────────────
-.option-sheet {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.option-sheet__item {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 2px;
-  width: 100%;
-  padding: 10px 12px;
-  border-radius: var(--r-lg);
-  border: 2px solid var(--border);
-  background: transparent;
-  color: var(--text);
-  font: inherit;
-  text-align: left;
-  cursor: pointer;
-  transition: border-color var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
-
-  strong { @include v2.text(label); }
-  span { @include v2.text(meta-sm); color: var(--muted); line-height: 1.35; }
-  &:hover { background: var(--bg-hover); }
-  &.is-active {
-    border-color: var(--cyan);
-    background: var(--cyan-tint);
-  }
-}
+// .option-sheet and its items: OptionSheet.scss (shared with the import forms).
 
 .schedule-sheet__note {
   margin: 10px 0 0;
@@ -505,4 +479,20 @@
     color: var(--text);
     .guest-tile & { padding-right: 10px; }
   }
+}
+
+// The poll card (EmbedDetails): the small poll button and its name, the
+// editor (components/Polls/PollEditor) under it once the poll is on.
+.details-poll {
+  .details-poll__head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .details-poll__label {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .snap-poll-editor { margin-top: 12px; }
 }

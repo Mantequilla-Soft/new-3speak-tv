@@ -148,6 +148,16 @@
     "notes": "Notlar",
     "stillIndexing": "Bu gönderinin sesi hâlâ dizinleniyor; birkaç dakika sonra tekrar dene."
   },
+  "edit": {
+    "title": "Sesi düzenle",
+    "editTitle": "Başlığı, notları, etiketleri ve kapağı düzenle",
+    "cover": "Kapak",
+    "coverAlt": "Kapak önizlemesi",
+    "coverHint": "Bir görsel yükle veya doğrudan bir URL yapıştır. Kare bir görsel en iyi görünür.",
+    "notesPlaceholder": "Dinleyicilere bu ses kaydından bahset…",
+    "keptNote": "Gönderideki oynatıcı bağlantısı ve müzik bilgileri olduğu gibi kalır.",
+    "updated": "Ses güncellendi!"
+  },
   "page": {
     "sections": {
       "popular": "Popüler",
@@ -173,7 +183,6 @@
     },
     "all": "Tümü",
     "musicGenre": "Müzik türü",
-    "anyGenre": "Tüm türler",
     "tracks_one": "{{count}} parça",
     "tracks_other": "{{count}} parça",
     "noTracks": "Parça bulunamadı.",
@@ -186,7 +195,7 @@
     "nothingPlaying": "Henüz çalan bir şey yok.",
     "goExplore": "Dinleyecek bir şey bul",
     "exploreViews": "Gezinme",
-    "mostPlayed": "En çok dinlenenler"
+    "newUploads": "Yeni yüklemeler"
   },
   "upload": {
     "title": "Ses yükle",
@@ -275,7 +284,10 @@
       "formats": "MP3, WAV, OGG, WEBM, M4A, FLAC, AAC · birden fazla olabilir",
       "stop": "Durdur",
       "orRecord": "Ya da canlı kaydet",
+      "micPreparing": "Mikrofon hazırlanıyor...",
       "recordLimit": "Kayıt başına en fazla {{minutes}} dk",
+      "level": "Mikrofon seviyesi",
+      "noSound": "Ses gelmiyor. Mikrofonunun sessizde olmadığını veya başka bir uygulama tarafından kullanılmadığını kontrol et.",
       "record": "Kaydet",
       "added": "Eklenenler ({{count}})",
       "filesTitle": "Ses dosyaları"
@@ -290,6 +302,7 @@
       "descriptionOptional": "Açıklama (isteğe bağlı)",
       "track": "Parça",
       "category": "Kategori",
+      "categoryRequired": "Sesinin doğru sekmede görünmesi için bir kategori seç.",
       "musicGenre": "Müzik türü"
     },
     "playlist": {
@@ -377,6 +390,7 @@
     "tracks": {
       "helpAlbum": "Her parça ana gönderinin altında bir yorum olarak yayınlanır. Ortak değerleri bir kez ayarlayıp hepsine uygula, sonra parça bazında değiştir.",
       "helpSnaps": "Her parça kendi snap'i olarak yayınlanır. Ortak değerleri bir kez ayarlayıp hepsine uygula, sonra parça bazında değiştir.",
+      "helpSnapsSingle": "Sesin kendi snap'i olarak yayımlanır.",
       "applyToAllHeading": "Tüm parçalara uygula",
       "applyNote_one": "<b>{{count}} parçanın tümüne uygula:</b> ortak açıklama ve kapak, sonra istediğin parçayı ayrıca değiştir.",
       "applyNote_other": "<b>{{count}} parçanın tümüne uygula:</b> ortak açıklama ve kapak, sonra istediğin parçayı ayrıca değiştir.",
@@ -406,6 +420,10 @@
       "earnings": "Kazanç:",
       "earningsPpl": "Dinleme başına ödeme (@{{account}})",
       "earningsNormal": "Normal gönderi ödülleri",
+      "rewards": "Ödüller:",
+      "beneficiaries": "Faydalanıcılar:",
+      "perTrack": "Her parça için ayrı",
+      "noBeneficiaries": "Yok",
       "playlist": "Oynatma listesi:",
       "failedCount_one": "{{count}} parça başarısız oldu.",
       "failedCount_other": "{{count}} parça başarısız oldu.",
@@ -780,7 +798,9 @@
     "description": "Açıklama",
     "noDescription": "Açıklama yok.",
     "comments": "Yorumlar",
-    "album": "{{name}} albümünden"
+    "album": "{{name}} albümünden",
+    "videoPodcast": "Video podcast",
+    "videoPodcastTitle": "Bu bölümden video yap: kapak, ses dalgası ve altyazılar"
   },
   "offline": {
     "notice": "Çevrimdışısın. İndirdiklerin yine de çalar.",

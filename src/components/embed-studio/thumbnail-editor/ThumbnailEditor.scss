@@ -812,12 +812,13 @@ $gap: 10px;
     position: sticky;
     top: 0;
     z-index: 2;
-    height: 30vh;
+    height: 22vh;
     background: var(--surface);
     box-shadow: 0 8px 0 var(--surface);
   }
-  .thumb-modal--portrait .thumb-modal__canvas { height: 42vh; }
-  .thumb-modal--square .thumb-modal__canvas { height: 38vh; }
+  // Kept small so the settings under it stay in view while you scroll them.
+  .thumb-modal--portrait .thumb-modal__canvas { height: 30vh; }
+  .thumb-modal--square .thumb-modal__canvas { height: 26vh; }
 
   // Nothing to show yet (phones start here): the player is the picture, so it
   // moves to the top. While picking, the result keeps a small strip.

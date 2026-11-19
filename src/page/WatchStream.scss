@@ -13,6 +13,7 @@
   @include hh.tokens;
   @include hh.buttons;
   @include hh.quality-select;
+  @include hh.boost-goal;
   box-sizing: border-box;
   max-width: var(--content-max);
   margin: 0 auto;
@@ -165,6 +166,18 @@
   z-index: 9;
   max-width: min(420px, calc(100% - 36px));
 }
+/* The host's boost goal (SDK StreamBoostGoal via StreamVideo): bottom-left
+   under the boost toasts, which step up above it while a goal shows. */
+.ws-player .hh-boost-goal--overlay {
+  left: 18px;
+  right: auto;
+  bottom: 18px;
+  width: min(360px, calc(100% - 36px));
+  margin: 0;
+  z-index: 7;
+}
+.ws-player:has(.hh-boost-goal--overlay) .hh-boost-overlay { bottom: 80px; }
+
 .ws-page .hh-boost-overlay__item,
 .ws-shorts .hh-boost-overlay__item {
   min-height: 52px;
@@ -420,6 +433,7 @@
 // it sits over video, so it uses the media tokens in both themes.
 .ws-shorts {
   @include hh.tokens;
+  @include hh.boost-goal;
 
   // Everything anchored to the bottom sits above the docked chat bar.
   .bottomOverlay { padding-bottom: 72px; }
@@ -442,6 +456,15 @@
     color: var(--on-media);
     font-size: 11px;
     font-weight: 700;
+  }
+  // The host's boost goal (StreamBoostGoalBar), slim, at the top of the info
+  // block: in the flow, so it moves and hides with the caption.
+  &__goal.hh-boost-goal--overlay {
+    position: static;
+    width: min(320px, 100%);
+    max-width: none;
+    margin: 0 0 8px;
+    box-sizing: border-box;
   }
   &__desc {
     margin-top: 4px;
@@ -741,3 +764,18 @@
   &:hover,
   &:focus-visible { opacity: 1; }
 }
+
+/* The live battle meter (SDK StreamBattleBar via StreamVideo). Desktop: under
+   the creator badge, left. Phones: under the back button and quality picker,
+   with the boost toasts stepping down below it while a battle runs. */
+.ws-page, .ws-shorts { @include hh.battle; }
+.ws-player .hh-battle-bar--overlay {
+  top: 78px;
+  left: 18px;
+  right: auto;
+  width: min(380px, calc(100% - 36px));
+  margin: 0;
+  z-index: 8;
+}
+.ws-shorts .hh-battle-bar--overlay { top: calc(60px + var(--safe-top, 0px)); }
+.ws-shorts:has(.hh-battle-bar--overlay) .hh-boost-overlay { top: calc(136px + var(--safe-top, 0px)); }

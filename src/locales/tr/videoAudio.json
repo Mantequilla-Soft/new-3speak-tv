@@ -1,0 +1,7 @@
+{
+  "playAsAudio": "Ses olarak oynat",
+  "listen": "Dinle",
+  "label": "Video",
+  "failed": "Bu video şu anda ses olarak oynatılamıyor.",
+  "unsupported": "Bu tarayıcı bu videoyu ses olarak oynatamıyor."
+}

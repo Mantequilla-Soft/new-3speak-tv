@@ -1,0 +1,35 @@
+{
+  "title": "Boost",
+  "button": "Boost",
+  "buttonTitle": "Send a boost with a message to the creator",
+  "messageLabel": "Your boostagram",
+  "messagePlaceholder": "Say something to the creator",
+  "messageHint": "Shown with the amount on this post's boost wall.",
+  "wall": {
+    "title": "Boosts",
+    "empty": "No boosts yet. Be the first to boost this post.",
+    "lightning": "Lightning supporter",
+    "streamed": "streamed while listening",
+    "boost": "Boost",
+    "total": "{{amount}} in total",
+    "failed": "The boost wall could not be loaded.",
+    "note": "Only payments that can be seen on Hive show here: HIVE and HBD, and Lightning through v4v.app."
+  },
+  "stream": {
+    "tile": "Stream",
+    "tileOn": "{{sats}} sats",
+    "title": "Stream sats",
+    "intro": "While you listen, send a few sats to the creator every minute, from your Lightning wallet in the browser.",
+    "toggle": "Stream sats while I listen",
+    "rate": "Sats per minute",
+    "cap": "Monthly limit (sats)",
+    "spent": "This month: {{spent}} of {{cap}} sats",
+    "session": "Sent for this track: {{sats}} sats",
+    "budget": "Your wallet asks before each payment unless you give 3Speak a budget in it. Payments stop when you say no, or at your monthly limit.",
+    "capped": "Your monthly limit is reached. Streaming is paused until next month.",
+    "stopped": "Streaming stopped: the wallet did not pay.",
+    "on": "Streaming {{sats}} sats a minute to @{{to}}.",
+    "off": "Streaming is off.",
+    "save": "Save"
+  }
+}

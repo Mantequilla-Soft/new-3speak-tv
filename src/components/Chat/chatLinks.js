@@ -1,5 +1,5 @@
 import { getPostDetails, getAccounts } from '../../hive-api/hiveApi'
-import { HIVE_API_URL } from '../../utils/config'
+import { getHiveUrl } from '../../utils/hiveNode'
 import { formatTimeAgo } from '../../i18n'
 
 // Frontends we recognize links for.
@@ -58,7 +58,7 @@ function parseJM(jm) {
 }
 
 async function hiveRpc(method, params) {
-  const res = await fetch(HIVE_API_URL, {
+  const res = await fetch(getHiveUrl(), {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ jsonrpc: '2.0', method, params, id: 1 }),

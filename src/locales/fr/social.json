@@ -1,0 +1,112 @@
+{
+  "levels": {
+    "button": "Alertes",
+    "buttonTitle": "Notifications de @{{user}} : {{level}}",
+    "title": "Notifications de @{{user}}",
+    "sub": "Les réglages de votre appareil dans Paramètres s'appliquent toujours.",
+    "saveFailed": "Enregistrement impossible. Veuillez réessayer.",
+    "all": {
+      "title": "Tout",
+      "desc": "Vidéos, shorts, stories, audio et quand ils passent en direct.",
+      "saved": "Vous serez informé de tout ce que publie @{{user}}."
+    },
+    "highlights": {
+      "title": "Essentiel",
+      "desc": "Vidéos, audio et quand ils passent en direct. Pas de shorts ni de stories.",
+      "saved": "Désormais, seulement l'essentiel de @{{user}}."
+    },
+    "off": {
+      "title": "Désactivées",
+      "desc": "Aucune notification de ce créateur. Vous restez abonné.",
+      "saved": "Les notifications de @{{user}} sont désactivées."
+    }
+  },
+  "live": {
+    "badge": "LIVE",
+    "aria": "En direct maintenant : vos abonnements",
+    "summary_one": "{{count}} personne que vous suivez est en direct",
+    "summary_many": "{{count}} personnes que vous suivez sont en direct",
+    "summary_other": "{{count}} personnes que vous suivez sont en direct"
+  },
+  "notifs": {
+    "heading": "De 3Speak",
+    "liveNow": "@{{user}} est en direct",
+    "wasLive": "@{{user}} est passé en direct",
+    "collabInvite": "@{{user}} vous a invité à une collaboration",
+    "premiereStarted": "La première de @{{user}} a commencé"
+  },
+  "push": {
+    "live": {
+      "title": "Passage en direct",
+      "desc": "Quand un créateur que vous suivez lance un direct."
+    }
+  },
+  "collab": {
+    "accept": "Accepter",
+    "decline": "Refuser",
+    "acceptedToast": "La collaboration avec @{{user}} est maintenant sur votre chaîne.",
+    "declinedToast": "Invitation refusée.",
+    "answerFailed": "Impossible d'envoyer votre réponse. Veuillez réessayer.",
+    "row": "Ajouter un collaborateur",
+    "rowSub": "Publiez avec un co-créateur et partagez les gains",
+    "rowSet": "@{{user}} reçoit {{split}} % de votre part",
+    "modalTitle": "Ajouter un collaborateur",
+    "modalSub": "Il reçoit une invitation. Dès qu'il accepte, la vidéo apparaît sur les deux chaînes.",
+    "accountLabel": "Co-créateur",
+    "accountPlaceholder": "Nom de compte Hive",
+    "suggestions": "Comptes correspondants",
+    "splitLabel": "Sa part de vos gains",
+    "splitPreview": "@{{user}} reçoit {{share}} % des gains, vous gardez {{mine}} %.",
+    "inviteNote": "Le partage est un bénéficiaire Hive, il s'applique donc même s'il refuse.",
+    "someone": "votre co-créateur",
+    "save": "Enregistrer",
+    "remove": "Retirer",
+    "noRoom": "@{{user}} n'a pas été ajouté comme bénéficiaire : la publication a déjà le nombre maximal de bénéficiaires autorisé par Hive.",
+    "errors": {
+      "invalid": "Ce n'est pas un nom de compte Hive valide.",
+      "self": "Vous ne pouvez pas collaborer avec vous-même.",
+      "notFound": "@{{user}} n'est pas un compte Hive."
+    },
+    "cardWith": "avec {{users}}",
+    "cardBoth": "{{author}} avec {{users}}",
+    "withLabel": "avec",
+    "invitesTitle": "Invitations à collaborer"
+  },
+  "polls": {
+    "aria": "Sondage",
+    "addPoll": "Sondage",
+    "removePoll": "Pas de sondage",
+    "editorAria": "Options du sondage",
+    "questionPlaceholder": "Posez une question à vos abonnés",
+    "optionPlaceholder": "Option {{n}}",
+    "removeOption": "Retirer l'option {{n}}",
+    "addOption": "Ajouter une option",
+    "duration": "Fin du sondage",
+    "days_one": "{{count}} jour",
+    "days_many": "{{count}} jours",
+    "days_other": "{{count}} jours",
+    "noEnd": "Sans date de fin",
+    "invalid": "Un sondage doit avoir de {{min}} à {{max}} options différentes.",
+    "votes_one": "{{count}} vote",
+    "votes_many": "{{count}} votes",
+    "votes_other": "{{count}} votes",
+    "endsInDays_one": "Se termine dans {{count}} jour",
+    "endsInDays_many": "Se termine dans {{count}} jours",
+    "endsInDays_other": "Se termine dans {{count}} jours",
+    "endsInHours_one": "Se termine dans {{count}} heure",
+    "endsInHours_many": "Se termine dans {{count}} heures",
+    "endsInHours_other": "Se termine dans {{count}} heures",
+    "closed": "Sondage terminé",
+    "open": "Ouvert",
+    "changeHint": "Touchez une autre option pour changer votre vote.",
+    "signIn": "Connectez-vous pour voter.",
+    "closedToast": "Ce sondage est terminé.",
+    "voteFailed": "Votre vote n'a pas été pris en compte. Veuillez réessayer.",
+    "statsTitle": "Sondages",
+    "question": "Question",
+    "questionPlaceholderVideo": "Pose une question à tes spectateurs",
+    "addPollTitle": "Ajouter un sondage",
+    "removePollTitle": "Retirer le sondage",
+    "invalidVideo": "Un sondage a besoin d'une question et de {{min}} à {{max}} options différentes."
+  }
+}

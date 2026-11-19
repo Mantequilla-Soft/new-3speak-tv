@@ -1,0 +1,14 @@
+{
+  "bar": {
+    "title": "ব্যাটল",
+    "startsIn": "{seconds} পরে শুরু",
+    "timeLeft": "{time} বাকি",
+    "counting": "শেষ বুস্টগুলো গোনা হচ্ছে…",
+    "amount": "{amount} HBD",
+    "wins": "@{name} জিতেছেন!",
+    "tie": "ড্র!",
+    "endedEarly": "ব্যাটল আগেভাগে শেষ হয়েছে",
+    "dropped": "ব্যাটল শেষ: @{name} চলে গেছেন",
+    "boostHint": "এখানের বুস্ট @{name}-এর জন্য গোনা হয়"
+  }
+}

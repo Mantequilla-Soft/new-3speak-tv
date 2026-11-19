@@ -1,0 +1,235 @@
+// Comment focus mode (FocusWriter.jsx): a sheet of paper in a dark room, a
+// typehead on the typing point and a warm cone of light from it up over the
+// written lines. The same colours in light and dark theme. The paper is moved
+// by FocusWriter (a transform); the light and the typehead stay on the point.
+.focus-writer {
+  --fw-room: #121216;
+  --fw-paper: #f3f2f6;
+  --fw-ink: #2c2b32;
+  --fw-faint: #8f8d99;
+
+  position: fixed;
+  inset: 0;
+  z-index: 1000000;
+  overflow: hidden;
+  height: 100dvh;
+  background: var(--fw-room);
+  color: var(--fw-ink);
+  touch-action: none;
+  animation: focus-writer-in 280ms ease-out;
+}
+
+@keyframes focus-writer-in {
+  from { opacity: 0; }
+}
+
+// The picture of what the comment is about, behind the room: blurred,
+// dimmed, larger than the screen so its edges never show, drifting a little
+// against the mouse (--mx / --my, set by FocusWriter).
+.focus-writer__backdrop {
+  position: absolute;
+  inset: -12%;
+  pointer-events: none;
+  transform: translate3d(calc(var(--mx, 0) * -24px), calc(var(--my, 0) * -16px), 0);
+  transition: transform 900ms cubic-bezier(0.2, 0.7, 0.3, 1);
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: blur(28px) brightness(0.42) saturate(1.15);
+    animation: focus-writer-in 600ms ease-out;
+  }
+}
+
+.focus-writer__sheet {
+  position: absolute;
+  top: 0;
+  left: 0;
+  box-sizing: border-box;
+  width: min(760px, calc(100vw - 32px));
+  min-height: 40vh;
+  padding: 64px 72px;
+  background: var(--fw-paper);
+  border-radius: 2px;
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.3),
+    0 40px 90px rgba(0, 0, 0, 0.6);
+  will-change: transform;
+  // The carriage: quick for a letter, a little longer for a new line.
+  transition: transform 110ms cubic-bezier(0.2, 0.7, 0.3, 1);
+
+  .focus-writer.is-looking & { transition-duration: 60ms; }
+}
+
+.focus-writer__input {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 1.75em;
+  padding: 0;
+  overflow: hidden;
+  resize: none;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: var(--fw-ink);
+  caret-color: #3a3942;
+  font-family: 'Courier Prime', 'Courier New', Courier, monospace;
+  font-size: 20px;
+  line-height: 1.75;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+
+  &::placeholder { color: var(--fw-faint); opacity: 1; }
+  &::selection { background: rgba(44, 43, 50, 0.16); }
+}
+
+// The platen: the machine's roller and body under the typing line, hiding the
+// blank paper still to come.
+.focus-writer__platen {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, #3a3a42 0, #55545e 3px, #1c1c22 10px, #141418 18px) top / 100% 18px no-repeat,
+    #141418;
+  box-shadow: 0 -6px 18px rgba(0, 0, 0, 0.55);
+  transition: top 110ms ease;
+}
+
+// The light (FocusWriter Light): an SVG over the whole room.
+.focus-writer__light {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+
+  &.is-warm { mix-blend-mode: multiply; }
+}
+
+// The typehead: the type guide with its notch under the letter being typed,
+// the ribbon behind it.
+.focus-writer__head {
+  position: fixed;
+  width: 72px;
+  height: 34px;
+  margin-left: -36px;
+  pointer-events: none;
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.35));
+  transition: left 110ms cubic-bezier(0.2, 0.7, 0.3, 1), top 110ms ease, opacity 300ms ease;
+
+  svg { display: block; }
+  .fw-pointer { fill: #3a3942; }
+  .fw-pill { fill: #dcdbe2; stroke: #b4b2bd; stroke-width: 1; }
+  .fw-dot { fill: #8f8d99; }
+
+  .focus-writer.is-looking & { opacity: 0.25; }
+}
+
+.focus-writer__bar {
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: max(12px, env(safe-area-inset-top)) 16px 12px;
+  color: #d9cfbc;
+  transition: opacity 400ms ease;
+
+  .focus-writer.is-typing & { opacity: 0.15; }
+  &:hover, &:focus-within { opacity: 1; }
+}
+
+.focus-writer__count {
+  font-size: 13px;
+  letter-spacing: 0.04em;
+}
+
+.focus-writer__actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+// Background music: Off, 1, 2, 3 in one pill.
+.focus-writer__music {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  height: 36px;
+  padding: 0 4px 0 10px;
+  border: 1px solid rgba(241, 232, 212, 0.25);
+  border-radius: var(--r-full, 999px);
+  background: rgba(17, 15, 12, 0.6);
+
+  > .material-symbols-rounded,
+  > svg,
+  > span:first-child { margin-right: 4px; opacity: 0.7; }
+
+  button {
+    min-width: 30px;
+    height: 28px;
+    padding: 0 8px;
+    border: 0;
+    border-radius: var(--r-full, 999px);
+    background: transparent;
+    color: inherit;
+    font: 600 13px var(--font-sans);
+    cursor: pointer;
+
+    &:hover { background: rgba(241, 232, 212, 0.12); }
+    &[aria-pressed='true'] { background: var(--fw-paper); color: var(--fw-ink); }
+    &:focus-visible { outline: 2px solid var(--fw-paper); outline-offset: 1px; }
+  }
+}
+
+.focus-writer__icon,
+.focus-writer__done {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  border: 1px solid rgba(241, 232, 212, 0.25);
+  border-radius: var(--r-full, 999px);
+  background: rgba(17, 15, 12, 0.6);
+  color: inherit;
+  font: 600 14px var(--font-sans);
+  cursor: pointer;
+
+  &:hover { background: rgba(241, 232, 212, 0.12); }
+  &:focus-visible { outline: 2px solid var(--fw-paper); outline-offset: 2px; }
+}
+
+.focus-writer__icon {
+  justify-content: center;
+  width: 36px;
+  padding: 0;
+
+  &[aria-pressed='false'] { opacity: 0.6; }
+}
+
+.focus-writer__done { padding: 0 14px; }
+
+@media (max-width: 640px) {
+  .focus-writer__count { display: none; }
+  .focus-writer__done { padding: 0 10px; }
+  .focus-writer__sheet {
+    width: calc(100vw - 16px);
+    padding: 32px 20px;
+  }
+  .focus-writer__input { font-size: 17px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .focus-writer { animation: none; }
+  .focus-writer__sheet,
+  .focus-writer__head,
+  .focus-writer__backdrop { transition: none; }
+  .focus-writer__backdrop { transform: none; }
+}

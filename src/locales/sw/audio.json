@@ -148,6 +148,16 @@
     "notes": "Madokezo",
     "stillIndexing": "Sauti ya chapisho hili bado inaorodheshwa — jaribu tena baada ya dakika chache."
   },
+  "edit": {
+    "title": "Hariri sauti",
+    "editTitle": "Hariri kichwa, maelezo, lebo na jalada",
+    "cover": "Jalada",
+    "coverAlt": "Onyesho la jalada",
+    "coverHint": "Pakia picha au bandika URL ya moja kwa moja. Picha ya mraba inaonekana vizuri zaidi.",
+    "notesPlaceholder": "Waambie wasikilizaji kuhusu sauti hii…",
+    "keptNote": "Kiungo cha kicheza sauti na sifa za muziki katika chapisho vinabaki kama vilivyo.",
+    "updated": "Sauti imesasishwa!"
+  },
   "page": {
     "sections": {
       "popular": "Maarufu",
@@ -173,7 +183,6 @@
     },
     "all": "Zote",
     "musicGenre": "Aina ya muziki",
-    "anyGenre": "Aina yoyote",
     "tracks_one": "wimbo {{count}}",
     "tracks_other": "nyimbo {{count}}",
     "noTracks": "Hakuna nyimbo zilizopatikana.",
@@ -186,7 +195,7 @@
     "nothingPlaying": "Bado hakuna kinachocheza.",
     "goExplore": "Tafuta kitu cha kusikiliza",
     "exploreViews": "Sehemu",
-    "mostPlayed": "Zinazosikilizwa zaidi"
+    "newUploads": "Vipakiwa vipya"
   },
   "upload": {
     "title": "Pakia sauti",
@@ -275,7 +284,10 @@
       "formats": "MP3, WAV, OGG, WEBM, M4A, FLAC, AAC · kadhaa kwa wakati mmoja",
       "stop": "Simamisha",
       "orRecord": "Au rekodi moja kwa moja",
+      "micPreparing": "Inaandaa maikrofoni...",
       "recordLimit": "Hadi dakika {{minutes}} kwa kila rekodi",
+      "level": "Kiwango cha maikrofoni",
+      "noSound": "Hakuna sauti inayoingia. Hakikisha maikrofoni yako haijanyamazishwa au haitumiwi na programu nyingine.",
       "record": "Rekodi",
       "added": "Zimeongezwa ({{count}})",
       "filesTitle": "Faili za sauti"
@@ -290,6 +302,7 @@
       "descriptionOptional": "Maelezo (si lazima)",
       "track": "Wimbo",
       "category": "Kategoria",
+      "categoryRequired": "Chagua kategoria ili sauti yako ionekane kwenye kichupo sahihi.",
       "musicGenre": "Aina ya muziki"
     },
     "playlist": {
@@ -377,6 +390,7 @@
     "tracks": {
       "helpAlbum": "Kila wimbo huchapishwa kama maoni chini ya chapisho kuu. Weka thamani za pamoja mara moja na uzitumie kwa zote, kisha ubadilishe kwa kila wimbo.",
       "helpSnaps": "Kila wimbo huchapishwa kama snap yake. Weka thamani za pamoja mara moja na uzitumie kwa zote, kisha ubadilishe kwa kila wimbo.",
+      "helpSnapsSingle": "Sauti yako inachapishwa kama snap yake yenyewe.",
       "applyToAllHeading": "Tumia kwa nyimbo zote",
       "applyNote_one": "<b>Tumia kwa wimbo wote {{count}}:</b> maelezo na jalada la pamoja, kisha badilisha wimbo wowote peke yake.",
       "applyNote_other": "<b>Tumia kwa nyimbo zote {{count}}:</b> maelezo na jalada la pamoja, kisha badilisha wimbo wowote peke yake.",
@@ -406,6 +420,10 @@
       "earnings": "Mapato:",
       "earningsPpl": "Malipo kwa kila usikilizaji (@{{account}})",
       "earningsNormal": "Zawadi za kawaida za chapisho",
+      "rewards": "Zawadi:",
+      "beneficiaries": "Wanufaika:",
+      "perTrack": "Imewekwa kwa kila wimbo",
+      "noBeneficiaries": "Hakuna",
       "playlist": "Orodha ya kucheza:",
       "failedCount_one": "Wimbo {{count}} umeshindwa.",
       "failedCount_other": "Nyimbo {{count}} zimeshindwa.",
@@ -780,7 +798,9 @@
     "description": "Maelezo",
     "noDescription": "Hakuna maelezo.",
     "comments": "Maoni",
-    "album": "Kutoka {{name}}"
+    "album": "Kutoka {{name}}",
+    "videoPodcast": "Podikasti ya video",
+    "videoPodcastTitle": "Tengeneza video ya kipindi hiki: jalada, mawimbi ya sauti na manukuu"
   },
   "offline": {
     "notice": "Uko nje ya mtandao. Vipakuliwa vyako bado vinacheza.",

@@ -94,6 +94,12 @@
     "notNow": "Agora não",
     "save": "Salvar interesses"
   },
+  "socialLinks": {
+    "title": "Tens YouTube ou outros canais?",
+    "body": "Liga os teus perfis de redes sociais à tua conta 3Speak e importa o teu conteúdo a partir deles.",
+    "note": "Podes desligar um perfil a qualquer momento nas Definições.",
+    "link": "Ligar perfis"
+  },
   "emojiGif": {
     "emoji": "Emoji",
     "searchEmoji": "Pesquisar emoji",

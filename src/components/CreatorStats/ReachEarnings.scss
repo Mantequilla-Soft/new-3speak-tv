@@ -1,0 +1,91 @@
+@use "../../styles/v2" as v2;
+
+// Reach + Earnings cards on creator stats (ReachEarnings.jsx). They sit in
+// .creator-stats' grid and use its card / well / bar styles; only what is new
+// lives here. Earnings series: votes accent, curation accent half, tips cyan,
+// ads cyan half, boosts muted (no colours beyond the page's own).
+.creator-stats {
+  .re-block { display: flex; flex-direction: column; gap: 8px; }
+
+  .re-block-title {
+    @include v2.text(meta);
+    color: var(--text);
+    font-weight: 700;
+  }
+
+  .re-bar-side { @include v2.mono(11, 500); color: var(--muted); }
+
+  .re-total { @include v2.mono(16, 700); color: var(--text); }
+
+  .re-chart {
+    position: relative;
+    height: 180px;
+    border-radius: var(--r-md);
+    background: var(--bg);
+    padding: 8px 6px 0;
+    touch-action: pan-y;
+
+    svg { display: block; width: 100%; height: 100%; }
+
+    @include v2.mobile { height: 150px; }
+  }
+
+  .re-seg {
+    &.is-votes { fill: var(--accent); }
+    &.is-curation { fill: color-mix(in srgb, var(--accent) 45%, transparent); }
+    &.is-tips { fill: var(--cyan); }
+    &.is-ads { fill: color-mix(in srgb, var(--cyan) 45%, transparent); }
+    &.is-boosts { fill: var(--muted); }
+  }
+
+  .re-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    margin-right: 6px;
+    border-radius: 2px;
+    vertical-align: baseline;
+
+    &.is-votes { background: var(--accent); }
+    &.is-curation { background: color-mix(in srgb, var(--accent) 45%, transparent); }
+    &.is-tips { background: var(--cyan); }
+    &.is-ads { background: color-mix(in srgb, var(--cyan) 45%, transparent); }
+    &.is-boosts { background: var(--muted); }
+  }
+
+  .re-tip {
+    position: absolute;
+    top: 6px;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 130px;
+    padding: 6px 8px;
+    border-radius: var(--r-sm);
+    background: var(--text);
+    color: var(--bg);
+    font-size: 11px;
+    pointer-events: none;
+    white-space: nowrap;
+    z-index: 1;
+
+    &.is-left { transform: translateX(-100%); }
+    &:not(.is-left) { transform: translateX(0); }
+  }
+
+  .re-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 14px;
+    @include v2.text(meta);
+
+    b { color: var(--text); font-weight: 700; margin-left: 4px; }
+  }
+
+  .re-exports {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+}

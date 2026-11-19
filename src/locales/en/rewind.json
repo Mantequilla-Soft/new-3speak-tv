@@ -1,0 +1,11 @@
+{
+  "label": "Rewind",
+  "goLive": "Go live",
+  "title": "Rewind up to {{minutes}} min",
+  "error": "Rewind is not available right now.",
+  "back10": "Back 10 seconds",
+  "forward10": "Forward 10 seconds",
+  "play": "Play",
+  "pause": "Pause",
+  "seek": "Position in the stream"
+}

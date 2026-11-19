@@ -1,0 +1,70 @@
+{
+  "readyTitle": "Je clip is klaar",
+  "readySub": "De laatste 30 seconden van de stream.",
+  "postShort": "Posten als Short",
+  "download": "Downloaden",
+  "delete": "Verwijderen",
+  "shareHost": "@{{host}} krijgt {{percent}}% van de beloningen van de Short: het is hun stream.",
+  "shareClipper": "@{{clipper}} maakte deze clip en krijgt {{percent}}% van de beloningen van de Short.",
+  "loginToPost": "Log in om clips als Shorts te posten.",
+  "allClips": "Al je clips van deze stream",
+  "postFailed": "De clip kon niet worden geopend om te posten. Probeer het opnieuw.",
+  "deleteConfirm": "Deze clip verwijderen?",
+  "deleteFailed": "De clip kon niet worden verwijderd.",
+  "title": "Beste momenten",
+  "subHost": "Clips uit je stream, klaar om als Shorts te posten. Ze blijven 2 dagen.",
+  "subViewer": "Je clips van deze stream. Ze blijven 2 dagen.",
+  "error": "Clips konden nu niet worden geladen.",
+  "empty": "Nog geen clips. Drukke momenten in de chat en boosts verschijnen hier.",
+  "at": "op {{time}}",
+  "source": {
+    "auto": "Hoogtepunt",
+    "mine": "Jouw clip",
+    "by": "Geclipt door @{{user}}",
+    "guest": "Geclipt door een gast"
+  },
+  "reasons": {
+    "chat": "De chat ging los",
+    "boosts": "Boosts",
+    "big_boost": "Grote boost"
+  },
+  "momentsTitle": "Meer momenten",
+  "momentsSub": "Maak een Short van de opname zodra die verwerkt is.",
+  "makeShort": "Maak een Short",
+  "notif": {
+    "host": "De clips van je stream staan klaar om als Shorts te posten ({{count}})",
+    "clipper": "Je clips van de stream van @{{user}} zijn klaar ({{count}})"
+  },
+  "pendingTitle": "Je clip is klaar als de stream eindigt",
+  "pendingSub": "Hij wordt na de stream uit de opname geknipt. Je vindt hem bij Je streamclips.",
+  "status": {
+    "pending": "Klaar na de stream",
+    "unavailable": "Kon niet worden gemaakt"
+  },
+  "reasonUnavailable": {
+    "past_cap": "Na de gratis 30 minuten",
+    "past_end": "Na het einde van de opname",
+    "no_recording": "De stream is niet opgenomen",
+    "failed": "Kon niet worden geknipt"
+  },
+  "summary": {
+    "title": "{{count}} clips uit je stream",
+    "pending": "Ze worden nu uit de opname geknipt en zijn over een paar minuten klaar. We laten het je weten.",
+    "ready": "Alle clips zijn klaar.",
+    "byUser": "@{{user}}: {{count}}",
+    "auto": "Automatisch: {{count}}",
+    "guests": "Gasten: {{count}}"
+  },
+  "page": {
+    "title": "Je streamclips",
+    "sub": "Clips die jij maakte en clips van je streams. Clips blijven {{hours}} uur.",
+    "empty": "Nog geen clips. Clip een livestream of ga live: de clips van je kijkers verschijnen hier.",
+    "select": "Selecteren",
+    "postSelected": "Geselecteerde als Shorts posten ({{count}})",
+    "queueNext": "Post de volgende (nog {{count}})",
+    "queueClear": "Wissen",
+    "ofStream": "Stream van @{{host}}",
+    "yours": "Jouw stream",
+    "open": "Je streamclips"
+  }
+}

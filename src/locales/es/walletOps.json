@@ -1,0 +1,94 @@
+{
+  "actions": {
+    "powerUp": "Power up",
+    "powerDown": "Power down",
+    "savings": "Ahorros",
+    "convert": "Convertir",
+    "delegate": "Delegar",
+    "aria": "Administra tus fondos"
+  },
+  "common": {
+    "amount": "Monto ({{coin}})",
+    "available": "Disponible: {{balance}}",
+    "max": "Máx.",
+    "to": "A la cuenta",
+    "toHint": "Déjalo así para tu propia cuenta.",
+    "activeKey": "Requiere tu clave activa",
+    "butrauth": "Iniciaste sesión con Butter Auth: en el siguiente paso lo apruebas con tu billetera de Hive o con tu clave activa.",
+    "insufficient": "Es más de lo que tienes.",
+    "amountPositive": "Ingresa un monto mayor que cero.",
+    "invalidAccount": "No existe ninguna cuenta de Hive con ese nombre.",
+    "accountCheckFailed": "Ahora mismo no se puede comprobar esa cuenta. Inténtalo de nuevo en un momento.",
+    "done": "Listo. Puede tardar unos segundos en aparecer aquí.",
+    "failed": "No se completó: {{error}}",
+    "loading": "Cargando tu billetera..."
+  },
+  "powerUp": {
+    "title": "Power up",
+    "note": "El Hive Power da peso a tus votos y genera recompensas de curación. Convertirlo de nuevo en HIVE lleva 13 pagos semanales.",
+    "submit": "Power up de {{amount}} HIVE",
+    "submitTo": "Power up de {{amount}} HIVE para @{{to}}"
+  },
+  "powerDown": {
+    "title": "Power down",
+    "note": "El Hive Power vuelve como HIVE en 13 pagos semanales, unos {{weekly}} HP por semana.",
+    "replace": "Hay un power down en curso (quedan {{left}} HP). Si inicias uno nuevo, lo reemplaza.",
+    "submit": "Power down de {{amount}} HP",
+    "stop": "Detener el power down",
+    "stopped": "Power down detenido."
+  },
+  "savings": {
+    "title": "Ahorros",
+    "deposit": "Depositar",
+    "withdraw": "Retirar",
+    "depositNote": "El HBD en ahorros genera un {{rate}}% anual. Retirarlo tarda 3 días.",
+    "depositNoteHive": "El HIVE en ahorros no genera intereses. Retirarlo tarda 3 días.",
+    "withdrawNote": "Llega en 3 días. Puedes cancelarlo hasta entonces.",
+    "submitDeposit": "Depositar {{amount}} {{coin}}",
+    "submitWithdraw": "Retirar {{amount}} {{coin}}"
+  },
+  "convert": {
+    "title": "Convertir",
+    "hbdToHive": "HBD a HIVE",
+    "hiveToHbd": "HIVE a HBD",
+    "hbdNote": "Recibes unos {{amount}} HIVE en 3,5 días, al precio medio de esos días. El monto final puede variar.",
+    "hiveNote": "Recibes unos {{amount}} HBD ahora. La mitad de tu HIVE queda retenida como garantía y el resto vuelve en 3,5 días. Se cobra una comisión del 5%.",
+    "warning": "Una conversión no se puede deshacer. Operar en un mercado puede salir más barato.",
+    "submit": "Convertir {{amount}} {{coin}}"
+  },
+  "delegate": {
+    "title": "Delegar",
+    "toLabel": "Delegar a",
+    "note": "El Hive Power delegado sigue siendo tuyo, pero sus votos pasan a la otra cuenta. Cuando lo retiras, tarda 5 días en volver.",
+    "current": "Ahora delegas {{hp}} HP a @{{to}}. Esto fija un monto nuevo.",
+    "submit": "Delegar {{amount}} HP a @{{to}}",
+    "submitNoTo": "Delegar {{amount}} HP",
+    "yours": "Tus delegaciones",
+    "remove": "Quitar",
+    "removed": "Delegación quitada. El HP vuelve en 5 días.",
+    "self": "No puedes delegarte a ti mismo."
+  },
+  "pending": {
+    "title": "En curso",
+    "powerDown": "Power down: {{weekly}} HP por semana, quedan {{weeks}} semanas",
+    "nextPayment": "Próximo pago: {{date}}",
+    "withdrawal": "Desde ahorros: {{amount}}",
+    "arrives": "Llega el {{date}}",
+    "convertHbd": "Convirtiendo {{amount}} a HIVE",
+    "convertHive": "{{amount}} retenidos como garantía",
+    "ready": "Listo el {{date}}",
+    "delegation": "Delegado a @{{to}}: {{hp}} HP",
+    "cancel": "Cancelar",
+    "cancelled": "Retiro cancelado. Los fondos se quedan en ahorros.",
+    "stop": "Detener",
+    "empty": "No hay nada en curso."
+  },
+  "activeAuth": {
+    "powerDown": "Power down de {{amount}}",
+    "toSavings": "Pasar {{amount}} a ahorros",
+    "fromSavings": "Retirar {{amount}} de ahorros",
+    "cancelSavings": "Cancelar un retiro de ahorros",
+    "convert": "Convertir {{amount}}",
+    "delegate": "Delegar {{amount}} a @{{to}}"
+  }
+}

@@ -1,0 +1,34 @@
+@use "../../styles/v2" as v2;
+
+// The checker's own notifications (CheckerNotifications.jsx): rows, wash and dot
+// come from StoryNotifications.scss / PodcastNotifications.scss. Here: the round
+// avatar where an episode has its cover, the LIVE tag and the invite buttons.
+.checker-notif {
+  .podcast-notif-art .hive-avatar {
+    display: block;
+    width: 44px;
+    height: 44px;
+  }
+  .podcast-notif-cover { border-radius: 50%; }
+}
+
+.checker-notif-live {
+  display: inline-block;
+  margin-right: 6px;
+  padding: 0 6px;
+  border-radius: var(--r-sm);
+  background: var(--accent);
+  color: var(--on-accent);
+  font-family: var(--font-sans, inherit);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  line-height: 16px;
+}
+
+.checker-notif-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 6px;
+  flex-wrap: wrap;
+}

@@ -94,6 +94,12 @@
     "notNow": "Not now",
     "save": "Save interests"
   },
+  "socialLinks": {
+    "title": "Do you have YouTube or other channels?",
+    "body": "Link your social media profiles to your 3Speak account and import your content from there.",
+    "note": "You can unlink a profile anytime in Settings.",
+    "link": "Link profiles"
+  },
   "emojiGif": {
     "emoji": "Emoji",
     "searchEmoji": "Search emoji",

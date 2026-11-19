@@ -1,0 +1,112 @@
+{
+  "levels": {
+    "button": "Avisos",
+    "buttonTitle": "Notificações de @{{user}}: {{level}}",
+    "title": "Notificações de @{{user}}",
+    "sub": "As opções do seu dispositivo em Configurações continuam valendo.",
+    "saveFailed": "Não foi possível salvar. Tente de novo.",
+    "all": {
+      "title": "Tudo",
+      "desc": "Vídeos, shorts, stories, áudio e quando entram ao vivo.",
+      "saved": "Você vai saber de tudo de @{{user}}."
+    },
+    "highlights": {
+      "title": "Destaques",
+      "desc": "Vídeos, áudio e quando entram ao vivo. Sem shorts nem stories.",
+      "saved": "A partir de agora, só os destaques de @{{user}}."
+    },
+    "off": {
+      "title": "Desativadas",
+      "desc": "Nenhuma notificação deste criador. Você continua seguindo.",
+      "saved": "As notificações de @{{user}} estão desativadas."
+    }
+  },
+  "live": {
+    "badge": "AO VIVO",
+    "aria": "Ao vivo agora: pessoas que você segue",
+    "summary_one": "{{count}} pessoa que você segue está ao vivo agora",
+    "summary_many": "{{count}} pessoas que você segue estão ao vivo agora",
+    "summary_other": "{{count}} pessoas que você segue estão ao vivo agora"
+  },
+  "notifs": {
+    "heading": "Do 3Speak",
+    "liveNow": "@{{user}} está ao vivo",
+    "wasLive": "@{{user}} entrou ao vivo",
+    "collabInvite": "@{{user}} convidou você para uma colaboração",
+    "premiereStarted": "A estreia de @{{user}} começou"
+  },
+  "push": {
+    "live": {
+      "title": "Entrando ao vivo",
+      "desc": "Quando um criador que você segue começa uma transmissão ao vivo."
+    }
+  },
+  "collab": {
+    "accept": "Aceitar",
+    "decline": "Recusar",
+    "acceptedToast": "A colaboração com @{{user}} já está no seu canal.",
+    "declinedToast": "Convite recusado.",
+    "answerFailed": "Não foi possível enviar sua resposta. Tente de novo.",
+    "row": "Adicionar um colaborador",
+    "rowSub": "Publique com um cocriador e dividam os ganhos",
+    "rowSet": "@{{user}} recebe {{split}}% da sua parte",
+    "modalTitle": "Adicionar um colaborador",
+    "modalSub": "A pessoa recebe um convite. Quando aceitar, o vídeo aparece nos dois canais.",
+    "accountLabel": "Cocriador",
+    "accountPlaceholder": "Nome da conta Hive",
+    "suggestions": "Contas correspondentes",
+    "splitLabel": "A parte dela nos seus ganhos",
+    "splitPreview": "@{{user}} recebe {{share}}% dos ganhos, você fica com {{mine}}%.",
+    "inviteNote": "A divisão é um beneficiário da Hive, então vale mesmo se a pessoa recusar.",
+    "someone": "seu cocriador",
+    "save": "Salvar",
+    "remove": "Remover",
+    "noRoom": "@{{user}} não foi adicionado como beneficiário: o post já tem o máximo de beneficiários que a Hive permite.",
+    "errors": {
+      "invalid": "Esse não é um nome de conta Hive válido.",
+      "self": "Você não pode colaborar consigo mesmo.",
+      "notFound": "@{{user}} não é uma conta Hive."
+    },
+    "cardWith": "com {{users}}",
+    "cardBoth": "{{author}} com {{users}}",
+    "withLabel": "com",
+    "invitesTitle": "Convites de colaboração"
+  },
+  "polls": {
+    "aria": "Enquete",
+    "addPoll": "Enquete",
+    "removePoll": "Sem enquete",
+    "editorAria": "Opções da enquete",
+    "questionPlaceholder": "Faça uma pergunta aos seus seguidores",
+    "optionPlaceholder": "Opção {{n}}",
+    "removeOption": "Remover opção {{n}}",
+    "addOption": "Adicionar opção",
+    "duration": "A enquete termina",
+    "days_one": "{{count}} dia",
+    "days_many": "{{count}} dias",
+    "days_other": "{{count}} dias",
+    "noEnd": "Sem data de término",
+    "invalid": "Uma enquete precisa de {{min}} a {{max}} opções diferentes.",
+    "votes_one": "{{count}} voto",
+    "votes_many": "{{count}} votos",
+    "votes_other": "{{count}} votos",
+    "endsInDays_one": "Termina em {{count}} dia",
+    "endsInDays_many": "Termina em {{count}} dias",
+    "endsInDays_other": "Termina em {{count}} dias",
+    "endsInHours_one": "Termina em {{count}} hora",
+    "endsInHours_many": "Termina em {{count}} horas",
+    "endsInHours_other": "Termina em {{count}} horas",
+    "closed": "Enquete encerrada",
+    "open": "Aberta",
+    "changeHint": "Toque em outra opção para mudar seu voto.",
+    "signIn": "Entre para votar.",
+    "closedToast": "Esta enquete terminou.",
+    "voteFailed": "Seu voto não foi registrado. Tente de novo.",
+    "statsTitle": "Enquetes",
+    "question": "Pergunta",
+    "questionPlaceholderVideo": "Faça uma pergunta aos seus espectadores",
+    "addPollTitle": "Adicionar uma enquete",
+    "removePollTitle": "Remover a enquete",
+    "invalidVideo": "Uma enquete precisa de uma pergunta e de {{min}} a {{max}} opções diferentes."
+  }
+}

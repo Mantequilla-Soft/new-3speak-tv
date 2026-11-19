@@ -1,0 +1,480 @@
+{
+  "menuEntry": "自动化",
+  "title": "自动化",
+  "beta": "测试版",
+  "subtitle": "当你的频道或钱包有新动态时，让 3Speak 帮你完成后续工作：发布 Snap、短视频、音频或视频，发表评论、点赞、转发，或通知你的 Discord。",
+  "howItWorks": "3Speak 每 {{minutes}} 分钟查看一次你的频道。每条新帖子都会触发为它开启的自动化，自动化发布的所有内容都以你的身份、通过你授予 3Speak 的发帖权限发出。自动化发布的帖子不会再触发其他自动化。",
+  "gate": {
+    "signIn": "登录后即可设置自动化。",
+    "closedTitle": "暂不可用",
+    "closed": "自动化正在封闭测试中，暂未向你的账号开放。",
+    "unavailable": "此服务器目前无法使用自动化。",
+    "proTitle": "3Speak Pro 功能",
+    "pro": "自动化是 3Speak Pro 的一部分。",
+    "getPro": "获取 3Speak Pro",
+    "skipPro": "跳过 Pro 检查（测试者）",
+    "skipProHint": "作为测试账号，你可以在没有 Pro 的情况下试用自动化。",
+    "proSkipped": "测试模式：你的账号已跳过 Pro 检查。",
+    "restorePro": "重新启用 Pro 检查"
+  },
+  "grant": {
+    "needed": "自动化会替你发帖。请先允许 3Speak 在你的账号上发布内容。",
+    "button": "允许 3Speak 发布"
+  },
+  "list": {
+    "new": "新建自动化",
+    "emptyTitle": "还没有自动化",
+    "empty": "从示例开始，或自己搭建：选择触发条件，再拖入要执行的步骤。",
+    "steps_other": "{{count}} 个步骤",
+    "lastRun": "上次运行：",
+    "edit": "编辑",
+    "runs": "运行记录",
+    "delete": "删除",
+    "cancel": "取消",
+    "notFound": "此自动化不存在或已被删除。",
+    "deleteTitle": "删除“{{name}}”？",
+    "deleteBody": "自动化及其运行记录将被删除。已经发布的帖子会保留。",
+    "on": "开",
+    "off": "关"
+  },
+  "runs": {
+    "title": "“{{name}}”的运行记录",
+    "empty": "还没有运行记录",
+    "emptyHint": "自动化开启时，只要你有符合条件的新帖子，就会开始运行。",
+    "steps": "已完成 {{done}}/{{count}} 个步骤",
+    "attempts_other": "尝试 {{count}} 次",
+    "status": {
+      "queued": "排队中",
+      "running": "运行中",
+      "waiting": "等待中",
+      "done": "已完成",
+      "failed": "失败",
+      "cancelled": "已停止"
+    }
+  },
+  "editor": {
+    "back": "返回",
+    "close": "关闭",
+    "done": "完成",
+    "name": "名称",
+    "namePlaceholder": "为这个自动化命名",
+    "enabled": "开启自动化",
+    "test": "测试",
+    "save": "保存",
+    "toolboxTasks": "执行",
+    "toolboxLogic": "判断",
+    "whenTitle": "当发生以下情况时",
+    "event": "事件",
+    "eventChangeNote": "不适用于新事件的步骤会显示警告标记。",
+    "placeholders": "占位符",
+    "insert": "插入",
+    "howTo": "把工具箱中的步骤拖到连线上。选中一个步骤可以修改它，选中空白处可以修改事件。",
+    "stepName": "步骤名称",
+    "optional": "可选",
+    "tagsHint": "最多 {{max}} 个标签，用空格分隔。",
+    "emptyHint": "把工具箱中的步骤拖到连线上",
+    "accounts": "账号",
+    "accountsHint": "最多 {{max}} 个 Hive 账号，用空格分隔。"
+  },
+  "test": {
+    "title": "测试运行",
+    "sample": "你还没有这类帖子，所以测试使用了示例数据。",
+    "onPost": "已用你最新的符合条件的帖子测试：{{title}}",
+    "nothingPosted": "没有发布任何内容。以下是每个步骤将会执行的操作。",
+    "shortDetail": "从第 {{start}} 秒开始、时长 {{length}} 秒的短视频。",
+    "noSteps": "这条帖子不会运行任何步骤。",
+    "voteOn": "以 {{weight}}% 的权重为 {{on}} 点赞。",
+    "reblogOn": "转发 {{on}}。",
+    "skipped": {
+      "self": "已跳过：这是你自己。",
+      "no_sender": "已跳过：没有可点赞的人（Lightning 打赏或直播助力没有 Hive 发送者）。",
+      "no_recent_post": "已跳过：对方最近 7 天没有发帖。"
+    }
+  },
+  "events": {
+    "video_published": {
+      "label": "我发布视频",
+      "desc": "你自己上传的视频。导入的视频有单独的事件。"
+    },
+    "short_published": {
+      "label": "我发布短视频",
+      "desc": "你发布的短视频，来自上传、编辑器或剪辑。"
+    },
+    "video_imported": {
+      "label": "我的视频被导入",
+      "desc": "导入工具从 YouTube、TikTok 等平台导入的视频和短视频。"
+    },
+    "podcast_published": {
+      "label": "我发布播客单集",
+      "desc": "播客和访谈单集，上传的或从你的订阅源导入的。"
+    },
+    "audio_published": {
+      "label": "我发布任意音频",
+      "desc": "所有音频帖子：播客、音乐、有声书和语音消息。"
+    },
+    "stream_started": {
+      "label": "我开始直播",
+      "desc": "当你的直播帖子发出时。"
+    },
+    "tip_received": {
+      "label": "我收到打赏",
+      "desc": "你的某个视频收到 HIVE、HBD 或 Lightning 打赏（通过备注关联视频）。"
+    },
+    "boost_received": {
+      "label": "我收到助力",
+      "desc": "你的某篇帖子或你的直播收到助力。"
+    },
+    "power_up": {
+      "label": "Power up",
+      "desc": "你进行了 Power up，或有人为你的账号 Power up 了 HIVE。"
+    },
+    "poll_ended": {
+      "label": "我的投票结束",
+      "desc": "你的某个 Snap 投票已结束。"
+    },
+    "stream_poll_ended": {
+      "label": "我直播中的投票结束",
+      "desc": "你最近三天某场直播中的投票或预测已结束。"
+    },
+    "someone_posted": {
+      "label": "我选的人发帖",
+      "desc": "你在下方列出的账号发布的帖子：视频、短视频、音频、播客、Snap、直播或文字帖。"
+    }
+  },
+  "tasks": {
+    "post_snap": {
+      "label": "发布 Snap",
+      "desc": "Snaps 动态中的一条简短文字帖，显示在你个人主页的社区标签页。",
+      "props": {
+        "text": "Snap 文字",
+        "tags": "标签"
+      }
+    },
+    "post_short": {
+      "label": "发布短视频",
+      "desc": "从新视频中剪出一段片段，大约 10 分钟后作为短视频发布。",
+      "props": {
+        "start": "从第几秒开始",
+        "length": "时长（秒）",
+        "vertical": "竖屏",
+        "caption": "说明文字",
+        "tags": "标签"
+      },
+      "hints": {
+        "start": "片段在视频中的起始位置。",
+        "length": "5 到 60 秒。",
+        "vertical": "把宽屏视频的中间部分裁成 9:16。"
+      }
+    },
+    "post_audio": {
+      "label": "发布音频",
+      "desc": "约 10 分钟后，把新视频的声音连同封面作为音频帖发布。",
+      "props": {
+        "title": "标题",
+        "audioType": "音频类型",
+        "tags": "标签"
+      }
+    },
+    "post_video": {
+      "label": "发布视频",
+      "desc": "约 10 分钟后，把新音频以封面作为画面发布成视频。",
+      "props": {
+        "title": "标题",
+        "tags": "标签"
+      }
+    },
+    "post_comment": {
+      "label": "评论这条帖子",
+      "desc": "在帖子下发表你的评论，可用于链接、致谢、感谢或结果。",
+      "props": {
+        "text": "评论"
+      }
+    },
+    "upvote_post": {
+      "label": "为帖子点赞",
+      "desc": "你为对方的帖子点赞。",
+      "props": {
+        "weight": "点赞权重（%）"
+      }
+    },
+    "reblog": {
+      "label": "转发帖子",
+      "desc": "把对方的帖子放到你的博客上。",
+      "props": {}
+    },
+    "upvote_sender": {
+      "label": "为发送者点赞",
+      "desc": "为给你打赏、助力或 Power up 的人的最新帖子点赞（前提是它仍在发放奖励）。",
+      "props": {
+        "weight": "点赞权重（%）"
+      }
+    },
+    "send_discord": {
+      "label": "发送到 Discord",
+      "desc": "通过 Webhook 向你的 Discord 服务器的某个频道发送消息。不会提醒任何人。",
+      "props": {
+        "webhook": "Webhook 地址",
+        "text": "消息"
+      },
+      "hints": {
+        "webhook": "在 Discord 中：频道设置、整合、Webhook、复制 Webhook URL。"
+      }
+    }
+  },
+  "if": {
+    "label": "如果",
+    "desc": "条件成立时走“是”路径，否则走“否”路径。",
+    "field": "检查项",
+    "pickField": "选择要检查的内容",
+    "operator": "条件",
+    "value": "值",
+    "branchesNote": "把步骤拖到画布上的“是”和“否”路径中。",
+    "branch": {
+      "yes": "是",
+      "no": "否"
+    },
+    "units": {
+      "seconds": "秒",
+      "amount": "金额",
+      "count": "数量"
+    }
+  },
+  "fields": {
+    "title": "标题",
+    "description": "描述",
+    "tags": "标签",
+    "duration": "时长",
+    "community": "社区",
+    "url": "链接",
+    "platform": "导入来源",
+    "kind": "类型",
+    "audioType": "音频类型",
+    "imported": "已导入",
+    "from": "来自",
+    "amount": "金额",
+    "asset": "币种",
+    "message": "留言",
+    "via": "支付方式",
+    "boostKind": "助力对象",
+    "self": "由我发起",
+    "question": "问题",
+    "winner": "胜出选项",
+    "votes": "票数",
+    "author": "账号",
+    "postKind": "帖子类型"
+  },
+  "ops": {
+    "contains": "包含",
+    "not_contains": "不包含",
+    "equals": "完全等于",
+    "starts_with": "开头是",
+    "has_tag": "带有标签",
+    "not_has_tag": "没有标签",
+    "gt": "长于",
+    "lt": "短于",
+    "is": "是",
+    "is_not": "不是"
+  },
+  "choices": {
+    "youtube": "YouTube",
+    "tiktok": "TikTok",
+    "instagram": "Instagram",
+    "rumble": "Rumble",
+    "bitchute": "BitChute",
+    "rss": "播客订阅源",
+    "video": "视频",
+    "short": "短视频",
+    "podcast": "播客",
+    "interview": "访谈",
+    "audiobook": "有声书",
+    "song": "音乐",
+    "voice_message": "语音消息",
+    "yes": "是",
+    "no": "否",
+    "HIVE": "HIVE",
+    "HBD": "HBD",
+    "hive": "Hive 钱包",
+    "lightning": "Lightning",
+    "post": "帖子",
+    "stream": "直播",
+    "audio": "音频",
+    "snap": "Snap"
+  },
+  "placeholders": {
+    "title": "帖子的标题",
+    "description": "描述的开头部分",
+    "url": "它在 3Speak 上的链接",
+    "author": "发帖的账号（你自己的帖子就是你）",
+    "tags": "以 #话题标签 形式显示的标签",
+    "platform": "导入来源",
+    "from": "发送者",
+    "amount": "金额",
+    "message": "随附的留言",
+    "question": "投票的问题",
+    "results": "每个选项及其票数",
+    "winner": "得票最多的选项",
+    "votes": "投票人数"
+  },
+  "problems": {
+    "required": "不能为空。",
+    "too_long": "太长了。",
+    "over_limit": "太多了。",
+    "bad_tag": "标签为 2 到 24 个字母、数字或连字符。",
+    "bad_webhook": "这不是 Discord 的 Webhook 地址。",
+    "out_of_range": "数字超出范围。",
+    "bad_field": "请选择要检查的内容。",
+    "bad_operator": "请选择一个条件。",
+    "bad_value": "请输入符合条件的值。",
+    "unknown_step": "3Speak 无法识别这个步骤。",
+    "task_not_for_event": "这个步骤不适用于该事件（短视频需要一个视频）。",
+    "too_many_of_type": "这个步骤在一个自动化中不能出现这么多次。",
+    "too_many_steps": "一个自动化最多只能有 12 个步骤。",
+    "too_deep": "“如果”步骤最多只能嵌套 3 层。",
+    "bad_id": "有一个步骤已损坏。请删除后重新添加。",
+    "bad_sequence": "这个自动化已损坏。请新建一个。",
+    "empty": "请至少添加一个步骤。",
+    "no_event": "请选择触发它的事件。",
+    "no_name": "请为自动化命名。",
+    "no_grant": "请先允许 3Speak 替你发布。",
+    "pro_required": "已暂停：自动化需要 3Speak Pro。",
+    "not_found": "此自动化不存在或已被删除。",
+    "unknown": "无法使用此项。",
+    "no_post": "没有可以回复的帖子。",
+    "no_audio": "这篇帖子没有 3Speak 音频。",
+    "no_accounts": "请至少填写一个账号。",
+    "too_many_accounts": "最多 {{max}} 个账号。",
+    "bad_account": "其中有一个不是 Hive 账号名。",
+    "bad_account_named": "“{{name}}”不是 Hive 账号名。"
+  },
+  "designer": {
+    "contextMenu": {
+      "delete": "删除",
+      "duplicate": "复制",
+      "resetView": "重置视图",
+      "select": "选择",
+      "unselect": "取消选择"
+    },
+    "controlBar": {
+      "deleteSelectedStep": "删除所选步骤",
+      "redo": "重做",
+      "resetView": "重置视图",
+      "turnOnOffDragAndDrop": "开启或关闭步骤移动",
+      "undo": "撤销",
+      "zoomIn": "放大",
+      "zoomOut": "缩小"
+    },
+    "smartEditor": {
+      "toggle": "显示或隐藏面板"
+    },
+    "toolbox": {
+      "search": "搜索…",
+      "title": "步骤"
+    }
+  },
+  "templates": {
+    "button": "模板",
+    "title": "模板",
+    "newTitle": "新建自动化",
+    "sub": "从模板开始并随意修改，或从空白开始。",
+    "replaces": "选择模板会替换画布上的步骤。",
+    "groups": {
+      "videos": "视频",
+      "audio": "音频和播客",
+      "live": "直播",
+      "polls": "投票",
+      "thanks": "打赏、助力和 Power up",
+      "others": "其他账号",
+      "own": "自己创建"
+    },
+    "items": {
+      "snap_video": {
+        "title": "每个新视频都发一条 Snap",
+        "sub": "你发布视频时，会发出一条带有标题和链接的 Snap。"
+      },
+      "short_video": {
+        "title": "每个新视频都生成一条短视频",
+        "sub": "你发布视频时，它的前 30 秒会变成一条竖屏短视频。"
+      },
+      "long_video_short": {
+        "title": "长视频发短视频，短视频发 Snap",
+        "sub": "超过 5 分钟的视频从第 30 秒起截取一条短视频，较短的视频则发一条 Snap。"
+      },
+      "audio_from_video": {
+        "title": "每个视频都有音频版",
+        "sub": "你发布视频时，它的声音会作为播客单集发布。"
+      },
+      "imported_discord": {
+        "title": "把导入的视频告诉 Discord",
+        "sub": "导入工具导入视频时，你的 Discord 服务器会收到通知。"
+      },
+      "video_from_podcast": {
+        "title": "每个单集都有视频版",
+        "sub": "你发布播客单集时，它会连同封面作为视频发布。"
+      },
+      "podcast_snap": {
+        "title": "每个新单集都发一条 Snap",
+        "sub": "你发布播客单集时，会发出一条带链接的 Snap。"
+      },
+      "discord_live": {
+        "title": "开播时通知 Discord",
+        "sub": "你开始直播时，你的 Discord 服务器会收到一条消息。"
+      },
+      "stream_poll_snap": {
+        "title": "用 Snap 分享直播投票结果",
+        "sub": "你直播中的投票结束时，一条 Snap 会展示大家的投票情况。"
+      },
+      "poll_results": {
+        "title": "回复我的投票结果",
+        "sub": "你的投票结束时，会在其下方回复投票结果。"
+      },
+      "thank_tips": {
+        "title": "感谢每位打赏的人",
+        "sub": "在视频下留言致谢，并为打赏者的最新帖子点赞。"
+      },
+      "thank_boosts": {
+        "title": "感谢每位助力的人",
+        "sub": "发一条感谢的 Snap，并为助力者的最新帖子点赞。"
+      },
+      "power_up_snap": {
+        "title": "分享我的 Power up",
+        "sub": "你 Power up 时，一条 Snap 会说明数额。有人为你 Power up 时，对方会收到你的点赞。"
+      },
+      "vote_friends": {
+        "title": "为朋友的新视频点赞",
+        "sub": "你列出的账号发布视频时，会收到你的点赞。"
+      },
+      "reblog_friends": {
+        "title": "转发朋友的新视频",
+        "sub": "你列出的账号发布视频时，它会出现在你的博客上。"
+      },
+      "blank": {
+        "title": "从空白开始",
+        "sub": "选择事件，自己搭建步骤。"
+      }
+    },
+    "texts": {
+      "longerThan5": "超过 5 分钟？",
+      "importedDiscord": "我的频道有新视频：{title}\n{url}",
+      "podcastSnap": "新单集：{title}\n\n{url}",
+      "discordLive": "{title} 正在直播：{url}",
+      "streamPollSnap": "我直播中的投票：{question}\n\n{results}\n\n{url}",
+      "pollResults": "投票已结束。结果如下：\n\n{results}\n\n感谢全部 {votes} 位投票者！",
+      "viaLightning": "通过 Lightning 支付？",
+      "thanksLightning": "感谢你打赏的 {amount} HIVE！⚡",
+      "thanksTip": "感谢 @{from} 打赏的 {amount}！🙏",
+      "boostOnPost": "助力的是帖子？",
+      "thanksBoost": "感谢 @{from} 为 {url} 助力 🚀\n\n{message}",
+      "thanksStreamBoost": "感谢你为我的直播助力！🚀 {url}",
+      "byMe": "是我自己 Power up 的？",
+      "poweredUp": "刚刚 Power up 了 {amount} HIVE！💪",
+      "isVideo": "是视频？"
+    }
+  },
+  "eventGroups": {
+    "channel": "我的频道",
+    "wallet": "我的钱包",
+    "polls": "投票",
+    "others": "其他账号",
+    "more": "更多"
+  }
+}

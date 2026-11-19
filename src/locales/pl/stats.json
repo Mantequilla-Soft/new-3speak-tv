@@ -97,6 +97,7 @@
   },
   "loadError": "Nie udało się teraz wczytać statystyk.",
   "emptyRange": "Brak danych o oglądaniu w tym okresie — wybierz „Wszystko” albo poczekaj, aż ludzie obejrzą twoje filmy.",
+  "emptyRangeAudio": "Brak jeszcze danych o słuchaniu w tym okresie. Wybierz „Wszystko” lub poczekaj, aż ktoś posłucha.",
   "tiles": {
     "avgViewDuration": "Śr. czas oglądania",
     "avgWatched": "Śr. obejrzana część",

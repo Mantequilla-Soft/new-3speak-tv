@@ -138,7 +138,8 @@ describe('saving to the checker', () => {
     })
     const [sig] = callsTo('/api/podcasts/signature')
     expect(sig[1]).toMatchObject({ method: 'POST', credentials: 'include' })
-    expect(bodyOf(sig)).toEqual({ action: 'progress', payload: 'session' })
+    // Named: with two logins in one browser the API vouches for exactly this account
+    expect(bodyOf(sig)).toEqual({ action: 'progress', payload: 'session', username: 'alice' })
   })
 
   it('sends at most 20 episodes per save, and the rest next time', async () => {

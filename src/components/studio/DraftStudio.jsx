@@ -3,14 +3,23 @@ import axios from 'axios';
 import "./DraftStudio.scss";
 import FilterBar from '../Draft/FilterBar';
 import VideoCard from '../Draft/VideoCard';
-import { Link, useNavigate } from 'react-router-dom';
+import DraftCard from '../Draft/DraftCard';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAppStore } from '../../lib/store';
-import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useQuery, useQueryClient } from '@tanstack/react-query';
+import { fetchDrafts } from '../../utils/scheduledPosts';
 import { MY_VIDEOS_URL } from '../../utils/config';
 import { useTranslation } from 'react-i18next';
 import { fetchCreatorOverview, fetchCreatorFollows, fetchCreatorTimeseries, fmtDuration, fmtCount } from '../../lib/creatorStats';
 import { Button, EmptyState } from '../v2/ui';
 import mark from '../../assets/image/3S_mark.svg';
+
+// The tabs a link can open with ?show= (the upload windows link here).
+const SHOW_TABS = ['unsent', 'scheduled', 'published', 'publish_manual'];
+const showTabOf = (search) => {
+  const show = new URLSearchParams(search).get('show');
+  return SHOW_TABS.includes(show) ? show : null;
+};
 
 // Hive makes a block every 3 seconds: 28 days of blocks.
 const BLOCKS_28D = 28 * 24 * 1200;
@@ -60,7 +69,17 @@ const DraftStudio = () => {
   const { user } = useAppStore();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState('all');
+  // ?show=unsent (the drafts) or ?show=scheduled opens that tab, also when the
+  // studio is already open (a new navigation, even to the same address, has a new key).
+  const location = useLocation();
+  const [filter, setFilter] = useState(() => showTabOf(location.search) || 'all');
+  const [linkKey, setLinkKey] = useState(location.key);
+  if (linkKey !== location.key) {
+    setLinkKey(location.key);
+    const show = showTabOf(location.search);
+    if (show) setFilter(show);
+  }
+  const queryClient = useQueryClient();
 
   const pageSize = 20;
 
@@ -113,7 +132,8 @@ const DraftStudio = () => {
     queryFn: fetchVideos,
     getNextPageParam: (lastPage, allPages) =>
       lastPage.length < pageSize ? undefined : allPages.length,
-    enabled: !!user,
+    // The Drafts tab reads the checker, not the my-videos API.
+    enabled: !!user && filter !== 'unsent',
   });
 
   /* ===============================
@@ -132,6 +152,19 @@ const DraftStudio = () => {
     enabled: !!user,
     staleTime: 30 * 1000,
   });
+
+  // Drafts (checker scheduled posts with status "draft"): video and audio posts
+  // saved from a details step, waiting to be published or scheduled.
+  const { data: drafts = [] } = useQuery({
+    queryKey: ['scheduled-drafts', user],
+    queryFn: () => fetchDrafts(user),
+    enabled: !!user,
+    staleTime: 30 * 1000,
+  });
+  const refreshDrafts = () => {
+    queryClient.invalidateQueries({ queryKey: ['scheduled-drafts', user] });
+    queryClient.invalidateQueries({ queryKey: ['scheduled-posts', user] });
+  };
 
   const scheduledItems = (scheduledData || []).map((doc) => normalizeScheduledDoc(doc, t('studio.drafts.untitled')));
   const publishedItems = data?.pages.flat() || [];
@@ -248,9 +281,12 @@ const DraftStudio = () => {
     return m;
   })();
   const scheduledCount = (counts?.scheduled || 0) + scheduledItems.length;
-  const filterCounts = counts
-    ? { all: counts.all + scheduledItems.length, published: counts.published, scheduled: scheduledCount, publish_manual: counts.publish_manual }
-    : (scheduledItems.length ? { scheduled: scheduledItems.length } : undefined);
+  const filterCounts = {
+    ...(counts
+      ? { all: counts.all + scheduledItems.length, published: counts.published, scheduled: scheduledCount, publish_manual: counts.publish_manual }
+      : (scheduledItems.length ? { scheduled: scheduledItems.length } : {})),
+    ...(drafts.length ? { unsent: drafts.length } : {}),
+  };
 
   const openStats = () => navigate('/profile?tab=stats');
   const listLoading = loading || isLoading;
@@ -283,7 +319,17 @@ const DraftStudio = () => {
         counts={filterCounts}
       />
 
-      {listLoading ? (
+      {filter === 'unsent' ? (
+        drafts.length === 0 ? (
+          <EmptyState className="studio__empty" icon="edit_note" title={t('episodes.drafts.empty')}>
+            {t('episodes.drafts.emptyHint')}
+          </EmptyState>
+        ) : (
+          <div className="studio__list">
+            {drafts.map((d) => <DraftCard key={d.id || d.permlink} draft={d} owner={user} onChanged={refreshDrafts} />)}
+          </div>
+        )
+      ) : listLoading ? (
         <div className="studio__list" aria-busy="true">
           {[0, 1, 2, 3].map((k) => <div key={k} className="studio__ghost v2-skeleton" />)}
         </div>

@@ -1,4 +1,6 @@
 import PropTypes from "prop-types";
+import WatchCollaborators from './WatchCollaborators';
+import { usePostCollaborators } from '../../lib/collabs';
 import { getHiveUrl } from '../../utils/hiveNode';
 import "./PlayVideo.scss";
 import VideoControls from "../VideoControls/VideoControls";
@@ -8,10 +10,14 @@ import { fetchHiveProfile, fetchPlaySource } from "../../lib/videoData";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import BlogContent from "./BlogContent";
+import PollCard from "../Polls/PollCard";
+import { pollFromMeta, pollQuestionFromMeta } from "../../lib/polls";
 import CommentSection from "./CommentSection";
 import LiveStreamPlayer from "./LiveStreamPlayer";
 import VideoStats from "../CreatorStats/VideoStats";
 import { fetchVideoHasStats } from "../../lib/creatorStats";
+import ShortsFromVideo from "../ShortsFromVideo/ShortsFromVideo";
+import { useClipPreview, useShortRangeParam } from "../../hooks/useClipPreview";
 import ShareChooserModal from "../Chat/ShareChooserModal";
 import { useAppStore } from '../../lib/store';
 import { fetchIncubationLikes, voteIncubation } from '../../lib/incubation';
@@ -21,6 +27,8 @@ import BeneficiariesTooltip from "../tooltip/BeneficiariesTooltip";
 import { useNavigate } from "react-router-dom";
 import BarLoader from "../Loader/BarLoader";
 import TipModal from "../../components/tip-reward/TipModal";
+import BoostWall from "../boosts/BoostWall";
+import { useBoostWall } from "../../lib/boosts";
 import { toastIn } from '../../utils/toast';
 import { TailChase } from 'ldrs/react';
 import 'ldrs/react/TailChase.css';
@@ -70,6 +78,7 @@ import useUnstickPlayerWhileTyping from '../../hooks/useUnstickPlayerWhileTyping
 import Transcript from './Transcript';
 import WatchTabs, { useWideWatch, useSideTab } from './WatchTabs';
 import WatchDock from './WatchDock';
+import useListenAndSaveTiles from './useListenAndSaveTiles';
 import { SupportersPane, VotersPane, ChapterCards, ChapterList, UpNextList, MediaState, compactNumber } from './WatchPanels';
 import { listSubtitleLanguages } from '../../hooks/useSubtitles';
 import { canSubscribe, setCommunitySubscription } from '../Communities/communitySubscribe';
@@ -77,6 +86,8 @@ import { Button as UiButton, Segmented, StatusPill } from '../v2/ui';
 import { Icon } from '../v2/Icon';
 import { cx } from '../v2/helpers';
 import { SUPPORTED_LANGUAGES } from '../../utils/translate';
+import KeyboardShortcuts from './KeyboardShortcuts';
+import { isTypingTarget, volumeAfter, percentSeekTarget, captionToggleTarget, arrowsSetVolume } from '../../lib/playerKeys';
 
 // Every toast from this module is headed "Video"; the message becomes the
 // line under it. See utils/toast.js.
@@ -87,7 +98,7 @@ dayjs.extend(relativeTime);
 // Stable identity for "no chapters", so memo deps don't change every render.
 const EMPTY_CHAPTERS = [];
 
-const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, mediaBlocked = false, onRetryPlayback = null, mediaLoading = false, playlistData, onClosePlaylist, videoControls, cinemaReactionPanel, videoRef, wrapperRef, onVideoEdited, overrideBody, scheduled = false, scheduledOn = null, mediaScheduledOn = null, onEditScheduled, isLive = false, streamRoom = null, liveChatSlot = null, onLiveChatSent = null, vodAssetPending = false, onStreamRoomMeta = null, belowPlayerSlot = null, sponsorLabel = null, adCountdown = null, bannerHit = null, tickerSlot = null, adSkip = null, adPlaying = false, adLocked = false, timelineLinks = null, timelineResetKey = null, tickerShown = false, surfActive = false, onReact = null, upNext = null, playerOverlay = null }) => {
+const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, mediaBlocked = false, onRetryPlayback = null, mediaLoading = false, playlistData, onClosePlaylist, videoControls, cinemaReactionPanel, videoRef, wrapperRef, onVideoEdited, overrideBody, scheduled = false, scheduledOn = null, mediaScheduledOn = null, onEditScheduled, isLive = false, streamRoom = null, liveChatSlot = null, onLiveChatSent = null, vodAssetPending = false, onStreamRoomMeta = null, belowPlayerSlot = null, sponsorLabel = null, adCountdown = null, bannerHit = null, tickerSlot = null, adSkip = null, adPlaying = false, adLocked = false, timelineLinks = null, timelineResetKey = null, tickerShown = false, surfActive = false, onReact = null, upNext = null, playerOverlay = null, premiereTab = null }) => {
   const { t } = useTranslation();
   const { user, authenticated } = useAppStore();
   const isPremium = !!usePremiumStatus(user)?.premium;
@@ -100,6 +111,9 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
   // a Hive user — because there is nothing on chain to act on. A different
   // situation from the viewer lacking an account, so it gets its own wording.
   const postIsOffChain = !!videoDetails?._incubation;
+  const videoMeta = videoDetails?.json_metadata ?? videoDetails?.jsonMetadata;
+  const videoPoll = useMemo(() => pollFromMeta(videoMeta), [videoMeta]);
+  const videoPollQuestion = useMemo(() => pollQuestionFromMeta(videoMeta), [videoMeta]);
   const lockedForIncubation = viewerHasNoAccount || postIsOffChain;
 
   // VOTING is the exception to that lock. A vote on an off-chain post is stored
@@ -398,6 +412,12 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
   // S saves, Shift+S shares: the keys the action menu shows on its tiles (07d).
   // Filled in below, once the handlers exist.
   const menuKeysRef = useRef({});
+  // The "?" sheet listing every key (KeyboardShortcuts).
+  const [keysOpen, setKeysOpen] = useState(false);
+  // Channel surfing (SurfBar): the up / down arrows change the channel then.
+  const surfActiveRef = useRef(surfActive);
+  surfActiveRef.current = surfActive;
+  const wideRef = useRef(false);
   // Frame length, measured from the decoder while the video plays (the smallest
   // gap between two presented frames: a dropped frame only makes a gap larger).
   const frameSecRef = useRef(1 / 30);
@@ -427,7 +447,7 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
       if (!vc || e.defaultPrevented || e.ctrlKey || e.metaKey || e.altKey) return;
       const tgt = e.target;
       const tag = tgt?.tagName;
-      if (tgt?.isContentEditable || tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+      if (isTypingTarget(tgt)) return;
       // A dialog the key was pressed in, or a modal that's open, owns the
       // keyboard. Not any [role=dialog] on the page: the cookie banner is one,
       // and it would switch the shortcuts off for every new visitor.
@@ -445,6 +465,75 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
           // Refused while an ad break holds the playhead; don't claim a skip.
           if (!adLockedRef.current) flashActionRef.current('forward');
           vc.onSeekForward?.();
+          break;
+        case 'j':
+        case 'J':
+          e.preventDefault();
+          flashActionRef.current('back');
+          vc.onSeekBackward?.();
+          break;
+        case 'l':
+        case 'L':
+          e.preventDefault();
+          if (!adLockedRef.current) flashActionRef.current('forward');
+          vc.onSeekForward?.();
+          break;
+        case 'k':
+        case 'K':
+          e.preventDefault();
+          flashActionRef.current(vc.isPlaying ? 'pause' : 'play');
+          vc.onTogglePlay?.();
+          break;
+        case 'f':
+        case 'F':
+          e.preventDefault();
+          vc.onToggleFullscreen?.();
+          break;
+        case 'm':
+        case 'M':
+          e.preventDefault();
+          flashActionRef.current(vc.isMuted ? 'unmuted' : 'muted');
+          vc.onToggleMute?.();
+          break;
+        case 'c':
+        case 'C': {
+          if (!vc.onSubtitleChange) break;
+          let remembered = null;
+          try { remembered = localStorage.getItem('3speak-subtitle-lang'); } catch { /* storage off */ }
+          const next = captionToggleTarget(vc.subtitleLanguages, vc.selectedSubtitleLang, {
+            remembered, uiLang: document.documentElement.lang,
+          });
+          if (next === undefined) break;
+          e.preventDefault();
+          flashActionRef.current(next ? 'captions' : 'captionsOff');
+          vc.onSubtitleChange(next);
+          break;
+        }
+        case 't':
+        case 'T':
+          if (!vc.onToggleTheater || !wideRef.current || document.fullscreenElement) break;
+          e.preventDefault();
+          vc.onToggleTheater();
+          break;
+        case 'ArrowUp':
+        case 'ArrowDown': {
+          // Volume only while the player is what the viewer is at, and never while
+          // surfing: the surf bar's channel up / down (lib/playerKeys.js).
+          const wrap = wrapperRef && typeof wrapperRef === 'object' ? wrapperRef.current : null;
+          if (!vc.onVolumeChange || !arrowsSetVolume(tgt, wrap, {
+            surfing: surfActiveRef.current,
+            fullscreen: !!document.fullscreenElement,
+            viewportHeight: window.innerHeight,
+          })) break;
+          e.preventDefault();
+          const vol = volumeAfter(vc.volume, vc.isMuted, e.key === 'ArrowUp' ? 1 : -1);
+          flashActionRef.current(vol > 0 ? 'volume' : 'muted');
+          vc.onVolumeChange(vol);
+          break;
+        }
+        case '?':
+          e.preventDefault();
+          setKeysOpen(true);
           break;
         case ' ':
         case 'Spacebar': {
@@ -481,12 +570,18 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
           vc.onSeek?.(to);
           break;
         }
-        default:
+        default: {
+          // 0 to 9: that tenth of the video (0 is the start).
+          const to = percentSeekTarget(e.key, vc.duration);
+          if (to === null) break;
+          e.preventDefault();
+          vc.onSeek?.(to);
+        }
       }
     };
     document.addEventListener('keydown', onKey);
     return () => document.removeEventListener('keydown', onKey);
-  }, [isLive]);
+  }, [isLive, wrapperRef]);
 
   // A timestamp clicked in the description or a comment. The reader is usually
   // scrolled down past the player by then, so bring it back into view, and
@@ -521,6 +616,8 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
   const [pinnedBeneficiaries, setPinnedBeneficiaries] = useState(false);
   const payoutRef = useRef(null);
   const [isTipModalOpen, setIsTipModalOpen] = useState(false);
+  // The Boost button's window: the tip window with a message for the boost wall.
+  const [isBoostOpen, setIsBoostOpen] = useState(false);
   const [tipNudgeVisible, setTipNudgeVisible] = useState(false);
   const tipNudgeShownRef = useRef(false);
   const [isVoted, setIsVoted] = useState(false);
@@ -543,6 +640,8 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
   useUnstickPlayerWhileTyping();
   const [shareChooserOpen, setShareChooserOpen] = useState(false);
   const [isFollowingCreator, setIsFollowingCreator] = useState(null);
+  // A collab post's co-creators who accepted (lib/collabs.js): on the video beside the author.
+  const collaborators = usePostCollaborators(postIsOffChain || scheduled ? null : author, permlink);
   const [followLoading, setFollowLoading] = useState(false);
 
   // Reshare state
@@ -606,8 +705,8 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
   // stopped autoplay-next and channel surfing at the end of almost everything.
   useEffect(() => {
     const isVotePopupOpen = showTooltip && authenticated && isLoggedIn();
-    videoControls?.onPopupOpen?.(isTipModalOpen || isVotePopupOpen);
-  }, [isTipModalOpen, showTooltip, authenticated]); // eslint-disable-line react-hooks/exhaustive-deps
+    videoControls?.onPopupOpen?.(isTipModalOpen || isBoostOpen || isVotePopupOpen);
+  }, [isTipModalOpen, isBoostOpen, showTooltip, authenticated]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Watch Later detection
   const { data: myPlaylists = [], refetch: refetchPlaylists } = useMyPlaylists({ enabled: !!user });
@@ -1141,6 +1240,7 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
   // description below, supporters and voters in a card beside them. Narrow: one
   // column, and every panel is a chip tab above one fixed scroll area.
   const wide = useWideWatch();
+  wideRef.current = wide;
   const isOwner = !!user && user.toLowerCase() === String(author || '').toLowerCase();
   const loggedInOnChain = authenticated && isLoggedIn();
   // The live chat's portal target, when Watch did not hand one in.
@@ -1165,9 +1265,13 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
   const chapters = videoControls?.chapters || EMPTY_CHAPTERS;
   const nowSec = videoControls?.currentTime || 0;
   const chapterAt = chapters.findIndex((c) => nowSec >= c.start && nowSec < c.end);
+  // A running premiere's chat is the 'chat' tab, so it opens first like a
+  // stream's; afterwards its replay is a tab of its own after the discussion.
+  const premiereLive = !!premiereTab?.live && !isLive;
   const sideIds = [
-    isLive && 'chat',
+    (isLive || premiereLive) && 'chat',
     'discussion',
+    premiereTab && !premiereLive && 'premiere',
     hasSubtitles && 'transcript',
     !wide && chapters.length > 0 && 'chapters',
     !wide && !scheduled && 'supporters',
@@ -1202,6 +1306,33 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
     videoControls.onSeek(sec);
     if (videoControls.isPlaying === false) videoControls.onTogglePlay?.();
   }, [videoControls]);
+
+  // Shorts from this video (the owner's clip suggestions, under the stats).
+  // Preview plays the range and pauses at its end; Make a Short opens the editor
+  // on it, as the clip tool does. Their own video, so no `reusable` check, only
+  // the remix chain (a remix still pays its earlier creators).
+  const canSuggestShorts = isOwner && !isLive && !scheduled;
+  const clipPreview = useClipPreview({
+    currentTime: videoControls?.currentTime,
+    seek: seekFromText,
+    pause: () => controlsRef.current?.onPause?.(),
+  });
+  const makeShortFrom = async ({ start, end }) => {
+    if (!videoUrlSelected) {
+      toast.error(t('watch.clip.noVideoUrl'));
+      return;
+    }
+    if (!(await remixAllowed())) return;
+    videoControls?.onPause?.();
+    clipPreview.stop();
+    setEditorVideoUrl(videoUrlSelected);
+    setEditorVideoName(`${author} - ${videoDetails?.title || permlink} (clip)`);
+    setEditorVideoType('video');
+    setEditorClipStart(start);
+    setEditorClipEnd(end);
+    setShowEditorModal(true);
+  };
+  useShortRangeParam({ ready: canSuggestShorts && FEATURE_EDITOR && !!videoUrlSelected, open: makeShortFrom });
 
   // The creator chip on the player shows with the controls (and while paused),
   // never over a spot, the preload cover or a media state.
@@ -1240,7 +1371,19 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
     }
   }, [community_id, joinBusy, authenticated, incubationHandle, communitySubscribed, comunity_name, t]);
 
+  // Listen and Download in the More menu (before the loading return: it is a hook).
+  const listenSaveTiles = useListenAndSaveTiles({
+    author, permlink, videoDetails,
+    currentTime: videoControls?.currentTime,
+    available: !!videoDetails && !isLive && !scheduled && !mediaUnavailable && !mediaBlocked,
+  });
+
   // Loading state - show loader if essential data is missing
+  // The post's boost wall (lib/boosts.js): a Hive post that is out, not a stream.
+  // A hook, so it stays above the loading return below.
+  const hasBoosts = !scheduled && !isLive && !postIsOffChain;
+  const boostWall = useBoostWall(author, permlink, hasBoosts);
+
   if (!videoDetails) {
     return <BarLoader />;
   }
@@ -1363,6 +1506,8 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
       },
     });
   };
+  // Listen (the global audio player) and Download (offline), for every viewer.
+  const [listenTile, downloadTile] = listenSaveTiles;
   const moreTiles = [
     {
       id: 'save',
@@ -1376,6 +1521,8 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
     },
     { ...shareTile, kbd: isLive ? null : '⇧S', keys: isLive ? null : 'Shift+S' },
     { ...tipTile, narrowOnly: true },
+    listenTile,
+    downloadTile,
     !isLive && { id: 'react', icon: 'videocam', label: t('comments.section.reactTab'), title: t('player.controls.reactToMoment'), onClick: () => { openSide('discussion'); onReact?.(); } },
     titleMeta.hasSummary && { id: 'summary', icon: 'auto_awesome', label: t('watch.summary.title'), title: t('watch.summary.buttonTitle'), onClick: () => setSummaryOpen(true) },
     {
@@ -1443,6 +1590,11 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
       {t('watch.actions.support', { name: videoDetails?.author?.id || author })}
     </UiButton>
   ) : null;
+  const boostCount = boostWall.data?.count || undefined;
+  const openBoost = () => { videoControls?.onPause?.(); setIsBoostOpen(true); };
+  const boostsPane = hasBoosts ? (
+    <BoostWall author={author} permlink={permlink} onBoost={!isOwner ? openBoost : undefined} />
+  ) : null;
   const votersPane = (
     <VotersPane
       voters={tooltipVoters}
@@ -1462,6 +1614,14 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
       // The portal target <LiveStreamPlayer> draws the room's chat into, so it
       // shares the player's single LiveKit connection. Empty until it connects.
       content: <div className="wv2-chat" ref={setChatSlotEl} />,
+    },
+    premiereLive && {
+      id: 'chat',
+      label: t('premieres.chat.liveTab'),
+      icon: 'theaters',
+      keepMounted: true,
+      flush: true,
+      content: premiereTab.render(seekFromText),
     },
     {
       id: 'discussion',
@@ -1486,6 +1646,13 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
         />
       ),
     },
+    premiereTab && !premiereLive && {
+      id: 'premiere',
+      // A stream VOD's chat replay brings its own label (Watch.jsx).
+      label: premiereTab.label || t('premieres.chat.replayTab'),
+      flush: true,
+      content: premiereTab.render(seekFromText, videoControls?.currentTime || 0),
+    },
     hasSubtitles && {
       id: 'transcript',
       label: t('comments.tabs.transcript'),
@@ -1504,7 +1671,7 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
       id: 'chapters',
       label: t('audio.player.chapters'),
       count: chapters.length,
-      content: <ChapterList chapters={chapters} current={chapterAt} onSeek={seekChapter} />,
+      content: <ChapterList chapters={chapters} current={chapterAt} onSeek={seekChapter} videoId={videoControls?.previewVideoId} />,
     },
     !wide && !scheduled && {
       id: 'supporters',
@@ -1515,6 +1682,12 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
           {supportButton}
         </>
       ),
+    },
+    !wide && hasBoosts && {
+      id: 'boosts',
+      label: t('boosts.wall.title'),
+      count: boostCount || null,
+      content: boostsPane,
     },
     !wide && !scheduled && {
       id: 'voters',
@@ -1533,7 +1706,7 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
   // the clip bar. Between the player and the title on purpose: they comment on
   // the thing just above them.
   const clipBar = FEATURE_EDITOR && clipMode ? (
-    <div className={cx('wv2-clipbar', wide && 'is-over')} role="status">
+    <div className="wv2-clipbar" role="status">
       <Icon name="content_cut" size={24} className="wv2-clipbar__icon" />
       <span className="wv2-clipbar__label">
         {clipMode === 'start' && t('watch.clip.barStart')}
@@ -1543,7 +1716,7 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
       {clipMode === 'start' && <UiButton variant="primary" size={36} onClick={handleSetClipStart}>{t('watch.clip.setStart')}</UiButton>}
       {clipMode === 'end' && <UiButton variant="primary" size={36} onClick={handleSetClipEnd}>{t('watch.clip.setEnd')}</UiButton>}
       {clipMode === 'done' && <UiButton variant="primary" size={36} onClick={handleCreateClip}>{t('watch.clip.createClip')}</UiButton>}
-      <UiButton variant={wide ? 'media' : 'secondary'} size={36} onClick={handleCancelClip}>{t('common.actions.cancel')}</UiButton>
+      <UiButton variant="secondary" size={36} onClick={handleCancelClip}>{t('common.actions.cancel')}</UiButton>
     </div>
   ) : null;
 
@@ -1664,6 +1837,10 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                     isFollowing={postIsOffChain ? undefined : isFollowingCreator}
                     onFollow={(_, willFollow) => setIsFollowingCreator(willFollow)}
                   />
+                  {/* A collab post: every co-creator who accepted, each with Follow. */}
+                  {collaborators.map((c) => (
+                    <AuthorBadge key={c.account} author={c.account} fetchFollowers showFollow />
+                  ))}
                 </div>
               )}
               {/* Branded preload cover — the SAME splash as the site's initial load
@@ -1832,7 +2009,6 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                   </button>
                 </div>
               )}
-              {wide && clipBar}
               {videoControls && (
                 <>
                   <div
@@ -1890,6 +2066,10 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                       {actionFlash.kind === 'pause' && <Icon name="pause" fill className="video-action-flash__icon" />}
                       {actionFlash.kind === 'back' && <Icon name="replay_10" className="video-action-flash__icon" />}
                       {actionFlash.kind === 'forward' && <Icon name="forward_10" className="video-action-flash__icon" />}
+                      {actionFlash.kind === 'muted' && <Icon name="volume_off" className="video-action-flash__icon" />}
+                      {(actionFlash.kind === 'unmuted' || actionFlash.kind === 'volume') && <Icon name="volume_up" className="video-action-flash__icon" />}
+                      {actionFlash.kind === 'captions' && <Icon name="closed_caption" className="video-action-flash__icon" />}
+                      {actionFlash.kind === 'captionsOff' && <Icon name="closed_caption_disabled" className="video-action-flash__icon" />}
                     </div>
                   )}
                   <VideoControls
@@ -1917,9 +2097,6 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                     getPlaybackHeight={videoControls.getPlaybackHeight}
                     onMarkerSelect={videoControls.onMarkerSelect}
                     onReactToMoment={() => { openSide('discussion'); videoControls.onReactToMoment?.(); }}
-                    onCycleReactionSize={videoControls.onCycleReactionSize}
-                    reactionSizeLabel={videoControls.reactionSizeLabel}
-                    reactionSizeShort={videoControls.reactionSizeShort}
                     onTogglePip={videoControls.onTogglePip}
                     qualityLevels={videoControls.qualityLevels}
                     currentQuality={videoControls.currentQuality}
@@ -1938,6 +2115,11 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                     onPlaybackRateChange={videoControls.onPlaybackRateChange}
                     onHoldControls={videoControls.onHoldControls}
                     onReleaseControls={videoControls.onReleaseControls}
+                    isTheater={!!videoControls.isTheater}
+                    onToggleTheater={wide ? videoControls.onToggleTheater : null}
+                    loop={!!videoControls.loop}
+                    onToggleLoop={videoControls.onToggleLoop}
+                    onShowShortcuts={() => setKeysOpen(true)}
                   />
                 </>
               )}
@@ -1962,7 +2144,9 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
           {/* Notices that belong to the video rather than the page — the
               supporters-only paywall, the creator's guest list, channel surfing. */}
           {belowPlayerSlot}
-          {!wide && clipBar}
+          {/* Under the player in every layout: over the picture the timeline
+              and the controls covered it. */}
+          {clipBar}
 
           {/* Title, meta and tags on the left, the dock on the right (02);
               stacked when the column is narrow. */}
@@ -1988,6 +2172,8 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                 <span>{t('nav.search.views', { count: view || 0, formatted: compactNumber(view || 0) })}</span>
                 <span aria-hidden="true">·</span>
                 <span>{formatRelativeTime(videoDetails?.created_at)}</span>
+                {/* Collab post: "with @fan" once the co-creator accepted. */}
+                {!postIsOffChain && !scheduled && <WatchCollaborators author={author} permlink={permlink} />}
                 {!postIsOffChain && !scheduled && (
                   <>
                     <span aria-hidden="true">·</span>
@@ -2188,10 +2374,20 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
           {canSeeVideoStats && videoStatsOpen && (
             <div className="watch-stats-panel">
               <VideoStats username={author} permlink={permlink} compact onSeek={videoControls?.onSeek} />
+              {canSuggestShorts && (
+                <ShortsFromVideo
+                  owner={author}
+                  permlink={permlink}
+                  onPreview={videoControls?.onSeek ? clipPreview.toggle : null}
+                  onMakeShort={makeShortFrom}
+                  canMake={FEATURE_EDITOR && !!videoUrlSelected}
+                  previewing={clipPreview.previewing?.start ?? null}
+                />
+              )}
             </div>
           )}
 
-          {wide && <ChapterCards chapters={chapters} current={chapterAt} onSeek={seekChapter} />}
+          {wide && <ChapterCards chapters={chapters} current={chapterAt} onSeek={seekChapter} videoId={videoControls?.previewVideoId} />}
 
           <div className="wv2-desc">
             {/* BlogContent falls back to fetching the post from Hive, which has
@@ -2208,6 +2404,14 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
               onSeek={isLive ? null : seekFromText}
             />
           </div>
+
+          {/* The video's poll (ours, or one made on PeakD or Ecency), on Hive
+              only: not on a scheduled or off-chain post. */}
+          {videoPoll && !postIsOffChain && !scheduled && (
+            <div className="wv2-poll">
+              <PollCard snap={{ owner: author, permlink, poll: videoPoll }} question={videoPollQuestion} />
+            </div>
+          )}
 
           {/* Cinema reaction size: the reactions run full width under the description. */}
           {cinemaReactionPanel && (
@@ -2227,17 +2431,20 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                 label={t('watch.voters.cardLabel')}
                 options={[
                   { value: 'supporters', label: t('profile.tabs.supporters') },
+                  ...(hasBoosts ? [{ value: 'boosts', label: t('boosts.wall.title'), count: boostCount }] : []),
                   { value: 'voters', label: t('watch.voters.title'), count: postIsOffChain ? (offChainVotes || undefined) : (tooltipVoters.length || undefined) },
                 ]}
               />
               <div className="wv2-credits__body">
-                {creditTab === 'supporters' ? <SupportersPane author={author} avatars /> : votersPane}
+                {creditTab === 'supporters' ? <SupportersPane author={author} avatars /> : creditTab === 'boosts' && boostsPane ? boostsPane : votersPane}
               </div>
-              {supportButton}
+              {creditTab !== 'boosts' && supportButton}
             </div>
           </aside>
         )}
       </div>
+
+      <KeyboardShortcuts open={keysOpen} onClose={() => setKeysOpen(false)} wide={wide} />
 
       <ShareChooserModal
         open={shareChooserOpen}
@@ -2263,6 +2470,17 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
           memoLink={isLive ? undefined : `https://3speak.tv/watch?v=${author}/${permlink}`}
           isOpen={isTipModalOpen}
           onClose={() => setIsTipModalOpen(false)}
+        />
+      )}
+
+      {isBoostOpen && (
+        <TipModal
+          boost
+          recipient={author}
+          permlink={permlink}
+          memoLink={`https://3speak.tv/watch?v=${author}/${permlink}`}
+          isOpen
+          onClose={() => setIsBoostOpen(false)}
         />
       )}
 

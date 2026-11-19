@@ -800,3 +800,76 @@
   .tagsv2-count { position: static; margin-left: auto; }
   &.is-partial > .tagsv2-count { position: static; }
 }
+
+// ─── About: the Hive RPC node choice (HiveNodePicker) ───
+.settings-node {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-left: 12px;
+  border-left: 2px solid var(--border);
+
+  .settings-copy-well input { font-family: var(--font-mono); }
+}
+
+.settings-node-opt.v2-well {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 40px;
+  padding: 6px 12px;
+  border: 0;
+  border-radius: var(--r-lg);
+  color: var(--text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+
+  &:hover:not(:disabled) { background: color-mix(in srgb, var(--text) 4%, var(--bg)); }
+  &:disabled { cursor: progress; }
+}
+
+.settings-node-dot {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  border: 2px solid var(--muted);
+
+  .is-on > & {
+    border-color: var(--cyan);
+    &::after { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--cyan); }
+  }
+}
+
+.settings-node-label {
+  flex: 1;
+  min-width: 0;
+  @include v2.text(meta);
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  &.mono { @include v2.mono(12, 700); }
+}
+
+.settings-node-meta {
+  flex: none;
+  max-width: 55%;
+  @include v2.text(meta);
+  color: var(--muted);
+  text-align: right;
+}
+
+.settings-node-error {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  @include v2.text(meta);
+  color: var(--accent);
+}

@@ -4,6 +4,7 @@ import { SendBoostDialog, useStreamContext } from '@snapie/hangouts-react';
 import { useAppStore } from '../../lib/store';
 import { withHiveAuthWaiting } from '../../hive-api/aioha';
 import { DockTile, Icon } from '../v2/ui';
+import { useBoostLabels } from './boostLabels';
 import './StreamBoostButton.scss';
 
 /**
@@ -29,6 +30,8 @@ export default function StreamBoostButton({ variant = 'button' }) {
   const authenticated = useAppStore((s) => s.authenticated);
   const user = useAppStore((s) => s.user);
   const [open, setOpen] = useState(false);
+  // The dialog (with its goal bar and top supporters) in the site language.
+  const labels = useBoostLabels();
 
   // Boosts are real Hive transfers, so a guest or signed-out viewer has nothing
   // to send them with. Hide rather than disable — an inert boost button on a
@@ -68,6 +71,7 @@ export default function StreamBoostButton({ variant = 'button' }) {
           // A room created before boosts were configurable has no block at all;
           // treat that as enabled with no minimum rather than refusing to open.
           boostConfig={boostConfig ?? { enabled: true, minBoostUsd: 0 }}
+          labels={labels}
           onClose={() => setOpen(false)}
         />
       )}

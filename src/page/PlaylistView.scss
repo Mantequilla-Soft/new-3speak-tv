@@ -140,6 +140,14 @@
     gap: 8px;
     margin-top: 4px;
 
+    // Four tiles (Shuffle, Share, RSS, Embed) beside Play all squeezed it to "P.":
+    // Play all takes its own row and the tiles go under it.
+    &.pv-actions--wrap {
+      flex-wrap: wrap;
+
+      .pv-play.v2-btn { flex-basis: 100%; }
+    }
+
     .pv-play.v2-btn {
       flex: 1;
       min-width: 0;

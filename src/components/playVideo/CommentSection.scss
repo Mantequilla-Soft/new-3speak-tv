@@ -120,6 +120,14 @@
 
     // One line to start with, so the list keeps the room; it grows as you type.
     .textarea-box { min-height: 44px; max-height: 160px; }
+
+    // The full editor (Composer, toolbar and Split view) is taller than the
+    // panel has room for: the composer scrolls inside at most most of the
+    // panel, and the text box itself scrolls past a third of the screen.
+    max-height: 75%;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    .composer.is-full .editor-panel textarea { max-height: 32vh; overflow-y: auto; }
   }
 
   // At rest (02): the moment, "Join the discussion…" and a round send, one line.

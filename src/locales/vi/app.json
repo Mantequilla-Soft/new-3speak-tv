@@ -94,6 +94,12 @@
     "notNow": "Để sau",
     "save": "Lưu sở thích"
   },
+  "socialLinks": {
+    "title": "Bạn có YouTube hoặc kênh khác không?",
+    "body": "Liên kết hồ sơ mạng xã hội với tài khoản 3Speak và nhập nội dung của bạn từ đó.",
+    "note": "Bạn có thể hủy liên kết hồ sơ bất cứ lúc nào trong Cài đặt.",
+    "link": "Liên kết hồ sơ"
+  },
   "emojiGif": {
     "emoji": "Emoji",
     "searchEmoji": "Tìm emoji",

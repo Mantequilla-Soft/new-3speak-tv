@@ -1,0 +1,480 @@
+{
+  "menuEntry": "자동화",
+  "title": "자동화",
+  "beta": "베타",
+  "subtitle": "채널이나 지갑에 무슨 일이 생기면 후속 작업은 3Speak에 맡기세요. Snap, 쇼츠, 오디오, 동영상 게시, 댓글, 업보트, 리블로그, Discord 알림까지 할 수 있어요.",
+  "howItWorks": "3Speak가 {{minutes}}분마다 채널을 확인해요. 새 게시물이 올라오면 그 게시물에 맞게 켜 둔 자동화가 실행되고, 자동화가 올리는 모든 글은 3Speak에 준 게시 권한으로 내 이름으로 게시돼요. 자동화가 만든 게시물은 다른 자동화를 실행하지 않아요.",
+  "gate": {
+    "signIn": "로그인하면 자동화를 설정할 수 있어요.",
+    "closedTitle": "이용할 수 없음",
+    "closed": "자동화는 비공개 테스트 중이라 아직 내 계정에서는 사용할 수 없어요.",
+    "unavailable": "지금은 이 서버에서 자동화를 사용할 수 없어요.",
+    "proTitle": "3Speak Pro 기능",
+    "pro": "자동화는 3Speak Pro에 포함된 기능이에요.",
+    "getPro": "3Speak Pro 시작하기",
+    "skipPro": "Pro 확인 건너뛰기(테스터)",
+    "skipProHint": "테스트 계정은 Pro 없이 자동화를 사용해 볼 수 있어요.",
+    "proSkipped": "테스트 모드: 이 계정은 Pro 확인을 건너뛰고 있어요.",
+    "restorePro": "Pro 확인 다시 사용"
+  },
+  "grant": {
+    "needed": "자동화는 나 대신 게시해요. 먼저 3Speak가 내 계정으로 게시하도록 허용해 주세요.",
+    "button": "3Speak 게시 허용"
+  },
+  "list": {
+    "new": "새 자동화",
+    "emptyTitle": "아직 자동화가 없어요",
+    "empty": "예시로 시작하거나 직접 만들어 보세요. 시작 조건을 고르고 실행할 작업을 끌어다 놓으면 돼요.",
+    "steps_other": "{{count}}단계",
+    "lastRun": "마지막 실행:",
+    "edit": "편집",
+    "runs": "실행 기록",
+    "delete": "삭제",
+    "cancel": "취소",
+    "notFound": "이 자동화가 없거나 이미 삭제되었어요.",
+    "deleteTitle": "\"{{name}}\"을(를) 삭제할까요?",
+    "deleteBody": "자동화와 실행 기록이 삭제돼요. 이미 게시된 글은 그대로 남아요.",
+    "on": "켜짐",
+    "off": "꺼짐"
+  },
+  "runs": {
+    "title": "\"{{name}}\" 실행 기록",
+    "empty": "아직 실행 기록이 없어요",
+    "emptyHint": "자동화가 켜져 있을 때 조건에 맞는 새 게시물을 올리면 실행돼요.",
+    "steps": "{{count}}단계 중 {{done}}단계 완료",
+    "attempts_other": "{{count}}회 시도",
+    "status": {
+      "queued": "대기열",
+      "running": "실행 중",
+      "waiting": "기다리는 중",
+      "done": "완료",
+      "failed": "실패",
+      "cancelled": "중지됨"
+    }
+  },
+  "editor": {
+    "back": "뒤로",
+    "close": "닫기",
+    "done": "완료",
+    "name": "이름",
+    "namePlaceholder": "이 자동화의 이름",
+    "enabled": "자동화 켜기",
+    "test": "테스트",
+    "save": "저장",
+    "toolboxTasks": "실행",
+    "toolboxLogic": "판단",
+    "whenTitle": "이런 일이 생기면",
+    "event": "이벤트",
+    "eventChangeNote": "새 이벤트에 맞지 않는 단계에는 경고 배지가 붙어요.",
+    "placeholders": "자리 표시자",
+    "insert": "넣기",
+    "howTo": "도구 상자에서 단계를 선 위로 끌어다 놓으세요. 단계를 선택하면 수정할 수 있고, 빈 곳을 선택하면 이벤트를 바꿀 수 있어요.",
+    "stepName": "단계 이름",
+    "optional": "선택 사항",
+    "tagsHint": "태그는 최대 {{max}}개, 공백으로 구분해요.",
+    "emptyHint": "도구 상자에서 단계를 선 위로 끌어다 놓으세요",
+    "accounts": "계정",
+    "accountsHint": "Hive 계정을 최대 {{max}}개까지, 공백으로 구분해 적어요."
+  },
+  "test": {
+    "title": "테스트 실행",
+    "sample": "아직 이런 종류의 게시물이 없어서 예시 값으로 테스트했어요.",
+    "onPost": "조건에 맞는 최신 게시물로 테스트했어요: {{title}}",
+    "nothingPosted": "아무것도 게시되지 않았어요. 각 단계는 이렇게 동작해요.",
+    "shortDetail": "{{start}}초부터 {{length}}초 길이의 쇼츠.",
+    "noSteps": "이 게시물에는 실행될 단계가 없어요.",
+    "voteOn": "{{on}}에 {{weight}}%로 업보트해요.",
+    "reblogOn": "{{on}}을(를) 리블로그해요.",
+    "skipped": {
+      "self": "건너뜀: 본인이에요.",
+      "no_sender": "건너뜀: 업보트할 사람이 없어요 (Lightning 팁이나 스트림 부스트에는 Hive 보낸 사람이 없어요).",
+      "no_recent_post": "건너뜀: 최근 7일 동안 올린 게시물이 없어요."
+    }
+  },
+  "events": {
+    "video_published": {
+      "label": "동영상을 게시할 때",
+      "desc": "직접 업로드한 동영상이에요. 가져온 동영상은 별도 이벤트가 있어요."
+    },
+    "short_published": {
+      "label": "쇼츠를 게시할 때",
+      "desc": "업로더, 편집기 또는 클립에서 올린 쇼츠예요."
+    },
+    "video_imported": {
+      "label": "내 동영상을 가져올 때",
+      "desc": "가져오기 도구가 YouTube, TikTok 등에서 가져온 동영상과 쇼츠예요."
+    },
+    "podcast_published": {
+      "label": "팟캐스트 에피소드를 올릴 때",
+      "desc": "업로드했거나 내 피드에서 가져온 팟캐스트 및 인터뷰 에피소드예요."
+    },
+    "audio_published": {
+      "label": "오디오를 올릴 때",
+      "desc": "모든 오디오 게시물: 팟캐스트, 음악, 오디오북, 음성 메시지."
+    },
+    "stream_started": {
+      "label": "라이브를 시작할 때",
+      "desc": "라이브 방송 게시물이 올라갈 때예요."
+    },
+    "tip_received": {
+      "label": "팁을 받을 때",
+      "desc": "내 동영상에 들어온 HIVE, HBD 또는 Lightning 팁이에요 (메모로 동영상을 연결해요)."
+    },
+    "boost_received": {
+      "label": "부스트를 받을 때",
+      "desc": "내 게시물이나 내 스트림에 들어온 부스트예요."
+    },
+    "power_up": {
+      "label": "파워업",
+      "desc": "내가 파워업하거나, 누군가 내 계정으로 HIVE를 파워업할 때예요."
+    },
+    "poll_ended": {
+      "label": "내 투표가 끝날 때",
+      "desc": "내 Snap 투표 중 하나가 끝났을 때예요."
+    },
+    "stream_poll_ended": {
+      "label": "내 스트림의 투표가 끝날 때",
+      "desc": "최근 3일 동안의 내 스트림에서 투표나 예측이 끝났을 때예요."
+    },
+    "someone_posted": {
+      "label": "내가 고른 사람이 게시할 때",
+      "desc": "아래에 적은 계정의 게시물이에요: 동영상, 쇼츠, 오디오, 팟캐스트, Snap, 스트림 또는 글."
+    }
+  },
+  "tasks": {
+    "post_snap": {
+      "label": "Snap 올리기",
+      "desc": "Snaps 피드에 올라가는 짧은 글로, 프로필의 커뮤니티 탭에 보여요.",
+      "props": {
+        "text": "Snap 내용",
+        "tags": "태그"
+      }
+    },
+    "post_short": {
+      "label": "쇼츠 올리기",
+      "desc": "새 동영상에서 클립을 잘라 약 10분 뒤에 쇼츠로 게시해요.",
+      "props": {
+        "start": "시작 시점(초)",
+        "length": "길이(초)",
+        "vertical": "세로형",
+        "caption": "캡션",
+        "tags": "태그"
+      },
+      "hints": {
+        "start": "동영상에서 클립이 시작되는 위치예요.",
+        "length": "5~60초.",
+        "vertical": "가로 동영상의 가운데를 9:16으로 잘라요."
+      }
+    },
+    "post_audio": {
+      "label": "오디오 올리기",
+      "desc": "약 10분 뒤에 새 동영상의 소리를 커버와 함께 오디오 게시물로 올려요.",
+      "props": {
+        "title": "제목",
+        "audioType": "오디오 종류",
+        "tags": "태그"
+      }
+    },
+    "post_video": {
+      "label": "동영상 올리기",
+      "desc": "약 10분 뒤에 새 오디오를 커버를 화면으로 한 동영상으로 올려요.",
+      "props": {
+        "title": "제목",
+        "tags": "태그"
+      }
+    },
+    "post_comment": {
+      "label": "게시물에 댓글 달기",
+      "desc": "게시물 아래에 내 댓글을 달아요. 링크, 크레딧, 감사 인사나 결과 등에 써 보세요.",
+      "props": {
+        "text": "댓글"
+      }
+    },
+    "upvote_post": {
+      "label": "게시물 업보트",
+      "desc": "상대의 게시물에 내 업보트를 줘요.",
+      "props": {
+        "weight": "보팅 비율(%)"
+      }
+    },
+    "reblog": {
+      "label": "게시물 리블로그",
+      "desc": "상대의 게시물을 내 블로그에 올려요.",
+      "props": {}
+    },
+    "upvote_sender": {
+      "label": "보낸 사람 업보트",
+      "desc": "나에게 팁, 부스트 또는 파워업을 보낸 사람의 최신 게시물에 업보트해요 (아직 보상이 지급되는 경우).",
+      "props": {
+        "weight": "보팅 비율(%)"
+      }
+    },
+    "send_discord": {
+      "label": "Discord로 보내기",
+      "desc": "웹후크로 내 Discord 서버의 채널에 메시지를 보내요. 아무도 멘션 알림을 받지 않아요.",
+      "props": {
+        "webhook": "웹후크 주소",
+        "text": "메시지"
+      },
+      "hints": {
+        "webhook": "Discord에서: 채널 설정, 연동, 웹후크, 웹후크 URL 복사."
+      }
+    }
+  },
+  "if": {
+    "label": "만약",
+    "desc": "조건이 맞으면 예 경로로, 아니면 아니요 경로로 가요.",
+    "field": "확인 항목",
+    "pickField": "확인할 항목 선택",
+    "operator": "조건",
+    "value": "값",
+    "branchesNote": "캔버스의 예 경로와 아니요 경로에 단계를 끌어다 놓으세요.",
+    "branch": {
+      "yes": "예",
+      "no": "아니요"
+    },
+    "units": {
+      "seconds": "초",
+      "amount": "금액",
+      "count": "개수"
+    }
+  },
+  "fields": {
+    "title": "제목",
+    "description": "설명",
+    "tags": "태그",
+    "duration": "길이",
+    "community": "커뮤니티",
+    "url": "링크",
+    "platform": "가져온 곳",
+    "kind": "종류",
+    "audioType": "오디오 종류",
+    "imported": "가져옴",
+    "from": "보낸 사람",
+    "amount": "금액",
+    "asset": "통화",
+    "message": "메시지",
+    "via": "결제 수단",
+    "boostKind": "부스트 대상",
+    "self": "내가 한 것",
+    "question": "질문",
+    "winner": "1위 답",
+    "votes": "투표 수",
+    "author": "계정",
+    "postKind": "게시물 종류"
+  },
+  "ops": {
+    "contains": "포함",
+    "not_contains": "포함하지 않음",
+    "equals": "정확히 일치",
+    "starts_with": "다음으로 시작",
+    "has_tag": "태그 있음",
+    "not_has_tag": "태그 없음",
+    "gt": "보다 김",
+    "lt": "보다 짧음",
+    "is": "같음",
+    "is_not": "같지 않음"
+  },
+  "choices": {
+    "youtube": "YouTube",
+    "tiktok": "TikTok",
+    "instagram": "Instagram",
+    "rumble": "Rumble",
+    "bitchute": "BitChute",
+    "rss": "팟캐스트 피드",
+    "video": "동영상",
+    "short": "쇼츠",
+    "podcast": "팟캐스트",
+    "interview": "인터뷰",
+    "audiobook": "오디오북",
+    "song": "음악",
+    "voice_message": "음성 메시지",
+    "yes": "예",
+    "no": "아니요",
+    "HIVE": "HIVE",
+    "HBD": "HBD",
+    "hive": "Hive 지갑",
+    "lightning": "Lightning",
+    "post": "게시물",
+    "stream": "스트림",
+    "audio": "오디오",
+    "snap": "Snap"
+  },
+  "placeholders": {
+    "title": "게시물 제목",
+    "description": "설명의 앞부분",
+    "url": "3Speak 링크",
+    "author": "게시한 계정 (내 게시물이면 나)",
+    "tags": "#해시태그 형식의 태그",
+    "platform": "가져온 곳",
+    "from": "보낸 사람",
+    "amount": "금액",
+    "message": "함께 온 메시지",
+    "question": "투표 질문",
+    "results": "모든 답과 득표 수",
+    "winner": "가장 많이 득표한 답",
+    "votes": "투표한 사람 수"
+  },
+  "problems": {
+    "required": "비워 둘 수 없어요.",
+    "too_long": "너무 길어요.",
+    "over_limit": "너무 많아요.",
+    "bad_tag": "태그는 2~24자의 문자, 숫자 또는 하이픈이에요.",
+    "bad_webhook": "Discord 웹후크 주소가 아니에요.",
+    "out_of_range": "숫자가 범위를 벗어났어요.",
+    "bad_field": "확인할 항목을 고르세요.",
+    "bad_operator": "조건을 고르세요.",
+    "bad_value": "조건에 맞는 값을 입력하세요.",
+    "unknown_step": "3Speak가 알 수 없는 단계예요.",
+    "task_not_for_event": "이 단계는 이벤트에 맞지 않아요(쇼츠에는 동영상이 필요해요).",
+    "too_many_of_type": "이 단계는 한 자동화에 이만큼 넣을 수 없어요.",
+    "too_many_steps": "자동화 하나에는 최대 12단계까지 넣을 수 있어요.",
+    "too_deep": "만약 단계는 최대 3단계 깊이까지만 중첩할 수 있어요.",
+    "bad_id": "단계 하나가 손상됐어요. 삭제하고 다시 추가하세요.",
+    "bad_sequence": "자동화가 손상됐어요. 새로 만들어 주세요.",
+    "empty": "단계를 하나 이상 추가하세요.",
+    "no_event": "시작할 이벤트를 고르세요.",
+    "no_name": "자동화 이름을 정해 주세요.",
+    "no_grant": "먼저 3Speak가 나 대신 게시하도록 허용해 주세요.",
+    "pro_required": "일시 중지됨: 자동화에는 3Speak Pro가 필요해요.",
+    "not_found": "이 자동화가 없거나 이미 삭제되었어요.",
+    "unknown": "사용할 수 없어요.",
+    "no_post": "답글을 달 게시물이 없어요.",
+    "no_audio": "이 게시물에는 3Speak 오디오가 없어요.",
+    "no_accounts": "계정을 하나 이상 적어 주세요.",
+    "too_many_accounts": "계정은 최대 {{max}}개까지예요.",
+    "bad_account": "계정 중 하나가 Hive 계정 이름이 아니에요.",
+    "bad_account_named": "\"{{name}}\"은(는) Hive 계정 이름이 아니에요."
+  },
+  "designer": {
+    "contextMenu": {
+      "delete": "삭제",
+      "duplicate": "복제",
+      "resetView": "보기 초기화",
+      "select": "선택",
+      "unselect": "선택 해제"
+    },
+    "controlBar": {
+      "deleteSelectedStep": "선택한 단계 삭제",
+      "redo": "다시 실행",
+      "resetView": "보기 초기화",
+      "turnOnOffDragAndDrop": "단계 이동 켜기/끄기",
+      "undo": "실행 취소",
+      "zoomIn": "확대",
+      "zoomOut": "축소"
+    },
+    "smartEditor": {
+      "toggle": "패널 보기/숨기기"
+    },
+    "toolbox": {
+      "search": "검색…",
+      "title": "단계"
+    }
+  },
+  "templates": {
+    "button": "템플릿",
+    "title": "템플릿",
+    "newTitle": "새 자동화",
+    "sub": "템플릿으로 시작해서 마음대로 바꾸거나, 빈 상태로 시작하세요.",
+    "replaces": "템플릿을 고르면 캔버스의 단계가 바뀌어요.",
+    "groups": {
+      "videos": "동영상",
+      "audio": "오디오와 팟캐스트",
+      "live": "라이브",
+      "polls": "투표",
+      "thanks": "팁, 부스트, 파워업",
+      "others": "다른 계정",
+      "own": "직접 만들기"
+    },
+    "items": {
+      "snap_video": {
+        "title": "새 동영상마다 Snap 올리기",
+        "sub": "동영상을 게시하면 제목과 링크가 담긴 Snap이 올라가요."
+      },
+      "short_video": {
+        "title": "새 동영상마다 쇼츠 만들기",
+        "sub": "동영상을 게시하면 처음 30초가 세로형 쇼츠가 돼요."
+      },
+      "long_video_short": {
+        "title": "긴 동영상은 쇼츠, 짧은 동영상은 Snap",
+        "sub": "5분이 넘는 동영상은 30초부터 쇼츠로, 더 짧은 동영상은 Snap으로 올려요."
+      },
+      "audio_from_video": {
+        "title": "모든 동영상의 오디오 버전",
+        "sub": "동영상을 게시하면 그 소리가 팟캐스트 에피소드로 올라가요."
+      },
+      "imported_discord": {
+        "title": "가져온 동영상을 Discord에 알리기",
+        "sub": "가져오기 도구가 동영상을 가져오면 내 Discord 서버에 알려요."
+      },
+      "video_from_podcast": {
+        "title": "모든 에피소드의 동영상 버전",
+        "sub": "팟캐스트 에피소드를 올리면 커버와 함께 동영상으로 올라가요."
+      },
+      "podcast_snap": {
+        "title": "새 에피소드마다 Snap 올리기",
+        "sub": "팟캐스트 에피소드를 올리면 링크가 담긴 Snap이 올라가요."
+      },
+      "discord_live": {
+        "title": "라이브를 시작하면 Discord에 알리기",
+        "sub": "스트림을 시작하면 내 Discord 서버에 메시지가 가요."
+      },
+      "stream_poll_snap": {
+        "title": "스트림 투표 결과를 Snap으로",
+        "sub": "스트림의 투표가 끝나면 사람들이 어떻게 투표했는지 Snap으로 보여 줘요."
+      },
+      "poll_results": {
+        "title": "내 투표 결과를 답글로",
+        "sub": "내 투표가 끝나면 그 아래에 결과를 답글로 달아요."
+      },
+      "thank_tips": {
+        "title": "팁을 준 모두에게 감사하기",
+        "sub": "동영상 아래에 감사 댓글을 달고, 팁을 준 사람의 최신 게시물에 업보트해요."
+      },
+      "thank_boosts": {
+        "title": "부스트한 모두에게 감사하기",
+        "sub": "감사 Snap을 올리고, 부스트한 사람의 최신 게시물에 업보트해요."
+      },
+      "power_up_snap": {
+        "title": "내 파워업 공유하기",
+        "sub": "파워업하면 얼마나 했는지 Snap으로 알려요. 누군가 나에게 파워업해 주면 그 사람에게 업보트해요."
+      },
+      "vote_friends": {
+        "title": "친구의 새 동영상 업보트",
+        "sub": "목록에 적은 계정이 동영상을 게시하면 내 업보트를 줘요."
+      },
+      "reblog_friends": {
+        "title": "친구의 새 동영상 리블로그",
+        "sub": "목록에 적은 계정이 동영상을 게시하면 내 블로그에 올라가요."
+      },
+      "blank": {
+        "title": "빈 상태로 시작",
+        "sub": "이벤트를 고르고 단계를 직접 만들어요."
+      }
+    },
+    "texts": {
+      "longerThan5": "5분보다 긴가요?",
+      "importedDiscord": "내 채널에 새로 올라왔어요: {title}\n{url}",
+      "podcastSnap": "새 에피소드: {title}\n\n{url}",
+      "discordLive": "{title} 지금 라이브 중: {url}",
+      "streamPollSnap": "제 스트림 투표: {question}\n\n{results}\n\n{url}",
+      "pollResults": "투표가 끝났어요. 결과는:\n\n{results}\n\n투표해 주신 {votes}분 모두 감사해요!",
+      "viaLightning": "Lightning으로 결제했나요?",
+      "thanksLightning": "{amount} HIVE 팁 감사해요! ⚡",
+      "thanksTip": "@{from} 님, {amount} 팁 감사해요! 🙏",
+      "boostOnPost": "게시물에 부스트했나요?",
+      "thanksBoost": "@{from} 님, {url} 부스트해 주셔서 감사해요 🚀\n\n{message}",
+      "thanksStreamBoost": "제 스트림에 부스트해 주셔서 감사해요! 🚀 {url}",
+      "byMe": "내가 파워업했나요?",
+      "poweredUp": "방금 {amount} HIVE를 파워업했어요! 💪",
+      "isVideo": "동영상인가요?"
+    }
+  },
+  "eventGroups": {
+    "channel": "내 채널",
+    "wallet": "내 지갑",
+    "polls": "투표",
+    "others": "다른 계정",
+    "more": "더 보기"
+  }
+}

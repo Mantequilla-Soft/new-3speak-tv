@@ -1,0 +1,18 @@
+{
+  "title": "Shorts dari video ini",
+  "sub": "Dipilih oleh penontonmu: bagian yang mereka putar ulang, komentari, dan ramaikan di chat, serta kalimat yang layak dikutip.",
+  "empty": "Belum ada saran. Saran muncul setelah orang menonton, memutar ulang, dan mengomentari video ini.",
+  "error": "Saran tidak dapat dimuat sekarang.",
+  "range": "{{start}} sampai {{end}}",
+  "seconds": "{{seconds}} dtk",
+  "reasons": {
+    "replay": "Paling sering diputar ulang",
+    "comments_other": "{{count}} komentar menunjuk ke sini",
+    "chat": "Chat ramai",
+    "quote": "Kalimat layak kutip"
+  },
+  "preview": "Pratinjau",
+  "stop": "Berhenti",
+  "makeShort": "Buat Short",
+  "foot": "Hanya kamu yang melihat ini. Putar ulang dihitung tanpa mengetahui siapa yang menonton."
+}

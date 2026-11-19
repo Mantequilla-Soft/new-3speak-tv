@@ -549,6 +549,7 @@ function PostView({ author: authorProp, permlink: permlinkProp }) {
           author={author}
           permlink={permlink}
           setIsVoted={() => {}}
+          backdrop={resolvedThumbnail}
         />
       </div>
 

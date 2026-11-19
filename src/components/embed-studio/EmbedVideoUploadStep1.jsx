@@ -15,6 +15,7 @@ import StepActions from './StepActions';
 import { StepProgress } from '../legacy-studio/StepProgress';
 import EmbedUploadProgressBar from './EmbedUploadProgressBar';
 import { Button, Icon, StatusPill, Toggle } from '../v2/ui';
+import { EDITOR_VIDEO_MAX_SEC } from '../../utils/editorFormat';
 import { SHORTS_MAX_DURATION_SEC, shortsMaxDurationLabel, cameraRecordEnabledFor, VIDEO_IMPORT_ENABLED, FEATURE_EDITOR, storiesEnabledFor } from '../../utils/config';
 import { isChromium } from '../../utils/browser';
 import { useTranslation, Trans } from 'react-i18next';
@@ -27,6 +28,7 @@ function EmbedVideoUploadStep1() {
   const { t } = useTranslation();
   const {
     setVideoDuration,
+    videoDuration,
     videoFile,
     setVideoFile,
     setPrevVideoFile,
@@ -478,14 +480,27 @@ function EmbedVideoUploadStep1() {
                   <Button variant="secondary" size={44} icon="swap_horiz" onClick={openPicker}>
                     {t("upload.select.replace")}
                   </Button>
-                  {/* Shorts: open the picked clip in the shorts editor, already on
-                      the timeline. A render posted from there replaces this file. */}
+                  {/* Open the picked clip in the editor, already on the timeline: a Short
+                      in the shorts editor, a normal video as a landscape project (up to
+                      10 minutes). A render posted from there replaces this file. */}
                   {fromStories && FEATURE_EDITOR && (
                     <Button
                       variant="secondary"
                       size={44}
                       icon="content_cut"
                       onClick={() => window.dispatchEvent(new CustomEvent('open-shorts-editor', { detail: { file: videoFile } }))}
+                    >
+                      {t("upload.select.editVideo")}
+                    </Button>
+                  )}
+                  {!fromStories && FEATURE_EDITOR && (
+                    <Button
+                      variant="secondary"
+                      size={44}
+                      icon="content_cut"
+                      disabled={videoDuration > EDITOR_VIDEO_MAX_SEC + 1}
+                      title={videoDuration > EDITOR_VIDEO_MAX_SEC + 1 ? t('editorFormat.editorTooLong', { minutes: EDITOR_VIDEO_MAX_SEC / 60 }) : undefined}
+                      onClick={() => window.dispatchEvent(new CustomEvent('open-video-editor', { detail: { file: videoFile } }))}
                     >
                       {t("upload.select.editVideo")}
                     </Button>
@@ -599,7 +614,7 @@ function EmbedVideoUploadStep1() {
                       size={44}
                       icon="download"
                       className="yt-import-entry"
-                      onClick={() => navigate(`/youtube-import?mode=${fromStories ? 'shorts' : 'videos'}`)}
+                      onClick={() => navigate(`/import?mode=${fromStories ? 'shorts' : 'videos'}`)}
                     >
                       {t('ytimport.entry')}
                     </Button>

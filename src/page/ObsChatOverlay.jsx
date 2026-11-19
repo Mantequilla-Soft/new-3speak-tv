@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { LiveKitRoom, useParticipants } from "@livekit/components-react";
-import { useChat, resolveStreamCap } from "@snapie/hangouts-react";
+import { useChat, resolveStreamCap, BoostAlerts } from "@snapie/hangouts-react";
 import { useTranslation } from "react-i18next";
 import { getHangoutsEndpoints, defaultEndpoint } from "../utils/hangoutsEndpoints";
 import { CHECKER_URL } from "../utils/config";
+import { fetchBoostTotals } from "../utils/boostSummary";
 import { Icon } from "../components/v2/Icon";
 import "./ObsChatOverlay.scss";
 
@@ -22,6 +23,10 @@ import "./ObsChatOverlay.scss";
 //
 // Query options: fade (seconds before a message fades, 0 = never), max
 // (lines), size (text px). Defaults: dock 0 / 50 / 14, overlay 30 / 10 / 16.
+// alerts (1/0): play the host's boost alerts (chime, read aloud, goal reached,
+// as set in the studio's Boost settings). On by default in the dock, the OBS
+// stand-in for the studio; off over the video, so a streamer running both does
+// not hear every boost twice.
 
 const API = (import.meta.env.VITE_HANGOUTS_TEMPLATES_API_URL || import.meta.env.VITE_HANGOUTS_API_URL || "")
   .replace(/\/$/, "");
@@ -46,6 +51,7 @@ function readOptions() {
     fade: clampInt(p.get("fade"), 0, 3600, dock ? 0 : 30),
     max: clampInt(p.get("max"), 1, 50, dock ? 50 : 10),
     size: clampInt(p.get("size"), 10, 64, dock ? 14 : 16),
+    alerts: p.has("alerts") ? p.get("alerts") === "1" : dock,
   };
 }
 
@@ -106,10 +112,17 @@ function clock(ms) {
   return h ? `${h}:${String(m).padStart(2, "0")}:${sec}` : `${m}:${sec}`;
 }
 
+/** 12.5 -> "12.5", 50 -> "50", 100 -> "100": an HBD amount without trailing zeros. */
+function hbd(n) {
+  const v = Number(n) || 0;
+  return v >= 100 ? String(Math.round(v)) : String(Number(v.toFixed(2)));
+}
+
 /**
  * The dock's header: viewers, time live, time left before the stream's cap ends
- * it, and boosts received. An OBS streamer has no studio, so this is the only
- * place they see these numbers while live.
+ * it, boosts received and, when the host set one, the boost goal. An OBS
+ * streamer has no studio, so this is the only place they see these numbers
+ * while live.
  *
  * Viewers are counted like the studio counts them: everyone in the room but the
  * host and the silent `obs-` observers (this dock among them). The cap is the
@@ -120,7 +133,11 @@ function DockCounters({ room }) {
   const participants = useParticipants();
   const [info, setInfo] = useState(null);       // { host, liveAt }
   const [premium, setPremium] = useState(null); // unknown until the checker answers
-  const [boostUsd, setBoostUsd] = useState(0);
+  // `source`: 'summary' (total in HBD) or 'ledger' (an older server: USD).
+  const [boosts, setBoosts] = useState({ total: 0, count: 0, goal: null, source: null });
+  // The server answered 404 for the summary (older than 0.26.23): read the
+  // ledger from then on instead of asking again every poll.
+  const legacyRef = useRef(false);
   const [now, setNow] = useState(() => Date.now());
 
   useEffect(() => {
@@ -130,11 +147,14 @@ function DockCounters({ room }) {
 
   useEffect(() => {
     let alive = true;
+    // A new room may be on a newer server: ask for the summary again.
+    legacyRef.current = false;
     const poll = async () => {
       try {
         const [r, b] = await Promise.all([
           fetch(`${API}/rooms/${encodeURIComponent(room)}`, { cache: "no-store" }),
-          fetch(`${API}/boosts/ledger?room=${encodeURIComponent(room)}`, { cache: "no-store" }),
+          // The stream's tally (goal, total, top supporters); the ledger on an old server.
+          fetchBoostTotals(API, room, { legacy: legacyRef.current }).catch(() => null),
         ]);
         if (!alive) return;
         if (r.ok) {
@@ -142,12 +162,9 @@ function DockCounters({ room }) {
           const at = d?.liveAt ? Date.parse(d.liveAt) : NaN;
           setInfo({ host: d?.host || null, liveAt: Number.isFinite(at) ? at : null });
         }
-        if (b.ok) {
-          const rows = await b.json();
-          if (Array.isArray(rows)) {
-            setBoostUsd(rows.filter((x) => x.status !== "rejected")
-              .reduce((sum, x) => sum + (Number(x.usdAmount) || 0), 0));
-          }
+        if (b) {
+          if (b.source === "ledger") legacyRef.current = true;
+          setBoosts({ total: b.total, count: b.count, goal: b.goal, source: b.source });
         }
       } catch { /* keep the last numbers through a blip */ }
     };
@@ -174,6 +191,13 @@ function DockCounters({ room }) {
   const capMs = premium == null ? null : resolveStreamCap(premium).capMs;
   const left = capMs != null && elapsed != null ? capMs - elapsed : null;
   const showLeft = left != null && (!premium || left < PRO_LEFT_SHOWN_MS);
+  const { goal } = boosts;
+  // The tally in what it was counted in: HBD from the summary, USD from the ledger.
+  const totalText = boosts.source === "ledger" ? `$${boosts.total.toFixed(2)}` : `${hbd(boosts.total)} HBD`;
+  const goalTitle = goal ? goal.title || t("live.boost.dialog.goalDefaultTitle") : "";
+  const goalText = goal
+    ? t("live.boost.dialog.goalProgress").replace("{progress}", hbd(goal.progress)).replace("{target}", hbd(goal.target))
+    : "";
 
   return (
     <div className="obs-chat__counters" role="status">
@@ -190,9 +214,14 @@ function DockCounters({ room }) {
           <Icon name="hourglass_bottom" size={16} /><span className="num">{clock(left)}</span>
         </span>
       )}
-      <span className="obs-chat__counter" title={t("live.obs.chatOverlay.boosts")} aria-label={`${t("live.obs.chatOverlay.boosts")}: $${boostUsd.toFixed(2)}`}>
-        <Icon name="rocket_launch" size={16} /><span className="num">${boostUsd.toFixed(2)}</span>
+      <span className="obs-chat__counter" title={t("live.obs.chatOverlay.boosts")} aria-label={`${t("live.obs.chatOverlay.boosts")}: ${totalText}`}>
+        <Icon name="rocket_launch" size={16} /><span className="num">{totalText}</span>
       </span>
+      {goal && (
+        <span className={`obs-chat__counter obs-chat__goal${goal.reached ? " is-reached" : ""}`} title={goalTitle} aria-label={`${goalTitle}: ${goalText}`}>
+          <Icon name={goal.reached ? "check_circle" : "savings"} size={16} /><span className="num">{goalText}</span>
+        </span>
+      )}
     </div>
   );
 }
@@ -211,7 +240,7 @@ function ChatFeed({ fade, max, dock }) {
 }
 
 export default function ObsChatOverlay() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [opts] = useState(readOptions);
   const [room, setRoom] = useState(null);
   // The observer token together with the room it was minted for, so a room
@@ -285,6 +314,14 @@ export default function ObsChatOverlay() {
     <div className={`${cls}${opts.dock ? " obs-chat--with-counters" : ""}`} style={style} data-theme="dark">
       <LiveKitRoom key={room} serverUrl={livekitUrl()} token={token} connect audio={false} video={false}>
         {opts.dock && <DockCounters room={room} />}
+        {/* The host's boost alerts, per their Boost settings: an OBS streamer
+            has no studio to play them. */}
+        {opts.alerts && (
+          <BoostAlerts
+            speechTemplate={t("live.boost.alertSpeech")}
+            speechLang={i18n.resolvedLanguage || i18n.language}
+          />
+        )}
         <ChatFeed fade={opts.fade} max={opts.max} dock={opts.dock} />
       </LiveKitRoom>
     </div>

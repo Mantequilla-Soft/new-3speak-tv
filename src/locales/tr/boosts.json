@@ -1,0 +1,35 @@
+{
+  "title": "Boost",
+  "button": "Boost",
+  "buttonTitle": "İçerik üreticisine mesajla birlikte boost gönder",
+  "messageLabel": "Boostagram'ın",
+  "messagePlaceholder": "İçerik üreticisine bir şey söyle",
+  "messageHint": "Bu gönderinin boost duvarında miktarla birlikte gösterilir.",
+  "wall": {
+    "title": "Boost'lar",
+    "empty": "Henüz boost yok. Bu gönderiye ilk boost'u sen gönder.",
+    "lightning": "Lightning destekçisi",
+    "streamed": "dinlerken gönderildi",
+    "boost": "Boost",
+    "total": "Toplam {{amount}}",
+    "failed": "Boost duvarı yüklenemedi.",
+    "note": "Burada yalnızca Hive'da görülebilen ödemeler gösterilir: HIVE ve HBD, ayrıca v4v.app üzerinden Lightning."
+  },
+  "stream": {
+    "tile": "Akış",
+    "tileOn": "{{sats}} sats",
+    "title": "Sats akışı",
+    "intro": "Sen dinlerken, tarayıcındaki Lightning cüzdanından içerik üreticisine her dakika birkaç sats gönder.",
+    "toggle": "Dinlerken sats gönder",
+    "rate": "Dakika başına sats",
+    "cap": "Aylık limit (sats)",
+    "spent": "Bu ay: {{spent}} / {{cap}} sats",
+    "session": "Bu parça için gönderilen: {{sats}} sats",
+    "budget": "Cüzdanında 3Speak'e bir bütçe tanımlamadıkça cüzdanın her ödemeden önce sorar. Hayır dediğinde ya da aylık limitine ulaşıldığında ödemeler durur.",
+    "capped": "Aylık limitine ulaşıldı. Akış gelecek aya kadar duraklatıldı.",
+    "stopped": "Akış durdu: cüzdan ödeme yapmadı.",
+    "on": "@{{to}} hesabına dakikada {{sats}} sats gönderiliyor.",
+    "off": "Akış kapalı.",
+    "save": "Kaydet"
+  }
+}

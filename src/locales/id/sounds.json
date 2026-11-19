@@ -1,0 +1,23 @@
+{
+  "openSound": "Buka suara ini",
+  "kindLibrary": "Pustaka musik",
+  "kindOriginal": "Suara asli",
+  "untitled": "Suara tanpa judul",
+  "uses_other": "{{count}} Short memakainya",
+  "listen": "Dengarkan",
+  "pause": "Jeda",
+  "useThisSound": "Pakai suara ini",
+  "splitNote": "Short yang dibuat dengan suara ini memberi {{name}} 15% dari hadiahnya.",
+  "license": "Lisensi: {{license}}",
+  "original": "Asli",
+  "shortsUsing": "Short yang memakai suara ini",
+  "newest": "Terbaru",
+  "top": "Teratas",
+  "noUsesTitle": "Belum ada Short dengan suara ini",
+  "noUsesText": "Jadilah yang pertama: Pakai suara ini membuka editor dengannya.",
+  "trending": "Suara yang sedang tren",
+  "notFound": "Suara ini tidak ditemukan",
+  "toShorts": "Ke Shorts",
+  "signIn": "Masuk untuk membuat Short dengan suara ini.",
+  "cannotUse": "Suara ini tidak bisa dipakai saat ini."
+}

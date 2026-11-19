@@ -1,0 +1,112 @@
+{
+  "content": {
+    "streams": "Transmisiones",
+    "audio": "Audio",
+    "podcasts": "Podcasts"
+  },
+  "reach": {
+    "title": "Alcance",
+    "impressions": "Impresiones",
+    "ctr": "Tasa de clics",
+    "ctrShort": "CTR {{ctr}}",
+    "clicks": "Clics desde tarjetas",
+    "opens": "Aperturas",
+    "empty": "Aún no hay impresiones en este periodo. A partir de ahora se cuentan cada vez que una de tus tarjetas está un segundo en la pantalla de alguien.",
+    "foundTitle": "Dónde lo encontraron los espectadores",
+    "shownTitle": "Dónde se mostraron tus tarjetas",
+    "since": "Las impresiones se cuentan a partir de una muestra de visitas y se extrapolan. El conteo empezó el {{date}}.",
+    "sampled": "Las impresiones se cuentan a partir de una muestra de visitas y se extrapolan.",
+    "detail": "{{impressions}} impresiones · CTR {{ctr}}"
+  },
+  "sources": {
+    "home": "Inicio",
+    "discover": "Descubrir",
+    "following": "Siguiendo",
+    "new": "Nuevos",
+    "trending": "Tendencias",
+    "interests": "Intereses",
+    "search": "Búsqueda",
+    "channel": "Páginas de canal",
+    "related": "Junto a otros videos",
+    "shorts": "Shorts",
+    "playlist": "Listas",
+    "tag": "Etiquetas",
+    "community": "Comunidades",
+    "other": "En otra parte de 3Speak",
+    "direct": "Directo o desconocido",
+    "search_engine": "Buscadores",
+    "social": "Redes sociales",
+    "hive_apps": "Otras apps de Hive",
+    "external": "Otros sitios web",
+    "embed": "Insertado en otros sitios"
+  },
+  "earnings": {
+    "title": "Ganancias",
+    "empty": "Aún no hay ganancias en este periodo.",
+    "unavailable": "No se pudieron cargar las ganancias ahora. Inténtalo de nuevo en un minuto.",
+    "chartLabel": "Ganancias por día durante {{days}} días, apiladas por fuente",
+    "lastYear": "Todo muestra los últimos 12 meses.",
+    "note": "En HBD (aprox. un dólar estadounidense). Las recompensas de Hive y las propinas en HIVE se valoran al precio actual de HIVE, Lightning se queda en sats.",
+    "sats_one": "{{count}} sat",
+    "sats_many": "{{count}} sats",
+    "sats_other": "{{count}} sats",
+    "sources": {
+      "votes": "Votos",
+      "curation": "Curación",
+      "tips": "Propinas",
+      "ads": "Anuncios",
+      "boosts": "Impulsos en directo",
+      "lightning": "Lightning"
+    }
+  },
+  "export": {
+    "daily": "Exportar ganancias diarias (CSV)",
+    "content": "Exportar tabla de contenido (CSV)",
+    "cols": {
+      "date": "Fecha",
+      "total": "Total",
+      "title": "Título",
+      "url": "Enlace",
+      "published": "Publicado",
+      "watchSeconds": "Tiempo de visualización (segundos)",
+      "earned": "Ganado con votos"
+    }
+  },
+  "inbox": {
+    "tab": "Comentarios",
+    "menu": "Bandeja de comentarios",
+    "title": "Bandeja de comentarios",
+    "sub_one": "Comentarios en tus publicaciones del último {{count}} día.",
+    "sub_many": "Comentarios en tus publicaciones de los últimos {{count}} días.",
+    "sub_other": "Comentarios en tus publicaciones de los últimos {{count}} días.",
+    "filtersLabel": "Mostrar solo",
+    "views": {
+      "unanswered": "Sin responder",
+      "all": "Todos",
+      "done": "Hechos"
+    },
+    "flags": {
+      "question": "Preguntas",
+      "firstTime": "Primera vez",
+      "supporter": "Patrocinadores"
+    },
+    "answered": "Respondido",
+    "onPost": "en",
+    "onReply": "te respondió en",
+    "reply": "Responder",
+    "replyVideo": "Responder con un video",
+    "replyTo": "Responder a @{{author}}",
+    "send": "Enviar",
+    "replied": "Tu respuesta está en Hive.",
+    "replyFailed": "No se pudo publicar la respuesta. Inténtalo de nuevo.",
+    "markDone": "Marcar como hecho",
+    "undone": "Deshacer",
+    "doneToast": "Marcado como hecho.",
+    "doneFailed": "No se pudo guardar. Inténtalo de nuevo.",
+    "error": "No se pudieron cargar los comentarios.",
+    "retry": "Intentar de nuevo",
+    "allAnswered": "Has respondido a todos.",
+    "empty": "No hay comentarios aquí.",
+    "supportersNote": "Los patrocinadores votaron tus publicaciones en los últimos 12 meses o te dieron propina en 3Speak. Primera vez significa su primer comentario en cualquiera de tus publicaciones."
+  }
+}

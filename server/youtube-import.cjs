@@ -56,6 +56,11 @@ const MAX_HEIGHT = Math.max(144, Number(process.env.YT_IMPORT_MAX_HEIGHT) || 480
 const MAX_HEIGHT_PREMIUM = Math.max(MAX_HEIGHT, Number(process.env.YT_IMPORT_MAX_HEIGHT_PREMIUM) || 1080)
 const CHECKER_URL = (process.env.CHECKER_URL || VERIFIER_URL).replace(/\/+$/, '')
 const LIMIT_MESSAGE = `This video is longer than the ${Math.round(MAX_DURATION_S / 60)}-minute import limit`
+// Podcast episodes (verified RSS feeds) come straight from their host through the
+// checker, no proxy, so they get a limit of their own: shows run long.
+const RSS_MAX_DURATION_S = Number(process.env.RSS_IMPORT_MAX_DURATION_S) || 4 * 3600
+const RSS_LIMIT_MESSAGE = `This episode is longer than the ${Math.round(RSS_MAX_DURATION_S / 3600)}-hour import limit`
+const limitMessageFor = (platform) => (platform === 'rss' ? RSS_LIMIT_MESSAGE : LIMIT_MESSAGE)
 const MAX_CONCURRENT = Number(process.env.YT_IMPORT_MAX_CONCURRENT) || 2
 const MAX_JOBS_PER_DAY = Number(process.env.YT_IMPORT_MAX_PER_DAY) || 20
 const FILE_TTL_MS = 3 * 3600 * 1000
@@ -89,15 +94,16 @@ function proxyForAttempt() {
     .replace(/\{port:(\d+)-(\d+)\}/g, (_, a, b) => String(Number(a) + crypto.randomInt(Number(b) - Number(a) + 1)))
 }
 // Which sources can be imported from: one switch each, IMPORT_SOURCE_<NAME>=
-// true|false. Default: YouTube only (owner's call 2026-10-06). The older
+// true|false. Default: YouTube only (owner's call 2026-10-06), plus podcast RSS
+// feeds (2026-11-14: no proxy traffic, the checker fetches them). The older
 // INSTAGRAM_IMPORT_ENABLED=true still counts for Instagram.
-const IMPORT_SOURCES = ['youtube', 'tiktok', 'instagram', 'rumble', 'bitchute']
+const IMPORT_SOURCES = ['youtube', 'tiktok', 'instagram', 'rumble', 'bitchute', 'rss']
 function sourceEnabled(name) {
   const v = process.env[`IMPORT_SOURCE_${String(name).toUpperCase()}`]
   if (v === 'true') return true
   if (v === 'false') return false
   if (name === 'instagram' && process.env.INSTAGRAM_IMPORT_ENABLED === 'true') return true
-  return name === 'youtube'
+  return name === 'youtube' || name === 'rss'
 }
 const enabledSources = () => IMPORT_SOURCES.filter(sourceEnabled)
 const sourceOff = (res, name) => res.status(403).json({ error: `Importing from ${name} is not available`, errorCode: 'source_disabled' })
@@ -108,6 +114,7 @@ const scrubSecrets = (text) => String(text || '').replace(/\/\/[^\s/@]+@/g, '//*
 // BitChute + Rumble readers (import-platforms.cjs). Rumble pages need the
 // residential proxy (Cloudflare); its files and everything BitChute go direct.
 const platforms = require('./import-platforms.cjs')
+const { prepareAudio } = require('./audio-format.cjs')
 const rumble = platforms.createRumble({ proxyForAttempt, scrub: scrubSecrets })
 
 // ── Discord alerts ───────────────────────────────────────────────────────────
@@ -161,7 +168,7 @@ function alertDiscord({ title, color, user, platform, videoId, url, code, messag
 // to preview/prod: a post from either is on Hive all the same. Without Mongo, a
 // JSON file on this server stands in (temp file + rename).
 const IMPORTS_FILE = process.env.YT_IMPORT_STORE || path.join(__dirname, 'data', 'yt-imports.json')
-const SOURCE_RE = /^(?:[A-Za-z0-9_-]{11}|tiktok:\d{8,25}|instagram:[A-Za-z0-9_-]{5,40}|bitchute:[A-Za-z0-9_-]{6,20}|rumble:v[a-z0-9]{3,15})$/
+const SOURCE_RE = /^(?:[A-Za-z0-9_-]{11}|tiktok:\d{8,25}|instagram:[A-Za-z0-9_-]{5,40}|bitchute:[A-Za-z0-9_-]{6,20}|rumble:v[a-z0-9]{3,15}|rss:[A-Za-z0-9_-]{16})$/
 let library = null // set when the routes are mounted
 let importsStore = null
 function loadImports() {
@@ -205,7 +212,8 @@ function videoUrlOf(job) {
 
 function alertJobFailed(job, code, message) {
   const viaSession = job.platform === 'tiktok' && !!tiktokSession()
-  const route = job.platform === 'instagram' ? 'Instagram browser service + CDN'
+  const route = job.platform === 'rss' ? 'podcast host via the checker'
+    : job.platform === 'instagram' ? 'Instagram browser service + CDN'
     : job.platform === 'bitchute' || job.platform === 'rumble' ? `${job.platform} CDN (direct)`
     : viaSession ? 'TikTok session (yt-dlp)' : (YTDLP_PROXY ? 'yt-dlp via proxy' : 'yt-dlp direct')
   alertDiscord({
@@ -277,7 +285,7 @@ async function verifiedLinks(user) {
   const r = await fetch(`${VERIFIER_URL}/verify/links/${encodeURIComponent(user)}`, { signal: AbortSignal.timeout(8000) })
   if (!r.ok) throw Object.assign(new Error('Could not load your linked accounts'), { status: 502 })
   const data = await r.json()
-  const out = { youtube: [], tiktok: [], instagram: [], bitchute: [], rumble: [] }
+  const out = { youtube: [], tiktok: [], instagram: [], bitchute: [], rumble: [], rss: [] }
   for (const l of data?.links || []) {
     if (l.verified === false) continue
     const id = String(l.platform_username || '')
@@ -286,10 +294,102 @@ async function verifiedLinks(user) {
     if (l.platform === 'instagram' && IG_HANDLE_RE.test(id)) out.instagram.push(id.toLowerCase())
     if (l.platform === 'bitchute' && platforms.BITCHUTE_CHANNEL_RE.test(id)) out.bitchute.push(id)
     if (l.platform === 'rumble' && platforms.RUMBLE_CHANNEL_RE.test(id.toLowerCase())) out.rumble.push(id.toLowerCase())
+    if (l.platform === 'rss' && /^https?:\/\//i.test(id)) out.rss.push(id)
   }
   return out
 }
 const verifiedChannels = async (user) => (await verifiedLinks(user)).youtube
+
+// ── Podcasts (verified RSS feeds) ────────────────────────────────────────────
+// The checker keeps outside shows and their episodes (routes/podcasts.js there).
+// GET /podcasts/verified names the shows this user proved they publish (the code
+// was in the feed) with their rows; episodes, notes and audio come from the
+// checker too, the audio through its owner-checked download. This server never
+// fetches a URL out of a feed: those are the creator's, and the checker's fetch
+// guard is the one built for that.
+const RSS_EPISODE_RE = /^[0-9a-f]{24}:[A-Za-z0-9_-]{16}$/
+const FEED_ID_RE = /^[0-9a-f]{24}$/
+async function checkerJson(pathAndQuery, timeoutMs = 40000) {
+  const r = await fetch(`${VERIFIER_URL}${pathAndQuery}`, { signal: AbortSignal.timeout(timeoutMs) })
+  const body = await r.json().catch(() => ({}))
+  if (!r.ok) throw Object.assign(new Error('Could not read your podcast'), { status: 502, upstreamStatus: r.status })
+  return body
+}
+const verifiedPodcasts = async (user) => (await checkerJson(`/podcasts/verified?user=${encodeURIComponent(user)}`)).feeds || []
+
+/** The show notes as plain text with links (the post body), capped below Hive's 3Speak body limit. */
+function notesText(html, max = 4000) {
+  let text = ''
+  try {
+    text = require('html-to-text').convert(String(html || ''), {
+      wordwrap: false,
+      selectors: [{ selector: 'a', options: { hideLinkIfSameAsText: true } }, { selector: 'img', format: 'skip' }],
+    })
+  } catch { text = String(html || '').replace(/<[^>]+>/g, ' ') }
+  text = text.replace(/\n{3,}/g, '\n\n').trim()
+  return text.length > max ? `${text.slice(0, max - 1).trimEnd()}…` : text
+}
+
+const episodeArt = (feed, ep) => {
+  const art = ep.art || feed.art || ''
+  return art ? `${VERIFIER_URL}/podcasts/art/${art}/512.jpg` : ''
+}
+// The episodes of a show on the checker, newest first.
+async function feedEpisodes(feedId, limit = 30, offset = 0) {
+  if (!FEED_ID_RE.test(String(feedId || ''))) return []
+  const data = await checkerJson(`/podcasts/feed/${feedId}/older?offset=${offset}&limit=${Math.min(200, limit)}`)
+  return (data.episodes || []).filter((ep) => RSS_EPISODE_RE.test(String(ep.id || '')))
+}
+// An episode as a batch source (import-batch.cjs), for the automatic import.
+function rssSourceOf(feed, ep) {
+  const key = String(ep.id).split(':')[1]
+  const thumb = episodeArt(feed, ep)
+  return {
+    sourceId: `rss:${key}`, platform: 'rss', title: ep.title || 'Episode', description: ep.summary || '', tags: [],
+    thumbnail: thumb, thumbUrl: thumb, sourceUrl: ep.link || feed.link || '', duration: Math.round(Number(ep.duration) || 0),
+    videoKey: `rss-${key}`, tiktokId: null, igShortcode: null,
+    direct: { platform: 'rss', episodeId: ep.id, mime: ep.mime || '' },
+    episode: { show: feed.title || '', number: typeof ep.episode === 'number' ? ep.episode : null, season: typeof ep.season === 'number' ? ep.season : null, publishedAt: ep.published_at || null },
+  }
+}
+
+// An episode becomes a token the job route accepts, like a BitChute video does.
+function rssEntry(user, feed, ep) {
+  const token = crypto.randomBytes(12).toString('hex')
+  const key = String(ep.id).split(':')[1]
+  const video = {
+    id: `rss:${key}`,
+    platform: 'rss',
+    kind: 'audio',
+    token,
+    feedId: feed.id,
+    episodeId: ep.id,
+    sourceUrl: ep.link || feed.link || '',
+    channelTitle: feed.title || '',
+    title: ep.title || 'Episode',
+    description: ep.summary || '',
+    tags: [],
+    publishedAt: ep.published_at || null,
+    // The checker's art proxy (CORS-readable), so the page can use it as the post's cover.
+    thumbnail: episodeArt(feed, ep),
+    duration: Math.round(Number(ep.duration) || 0),
+    tooLong: Number(ep.duration) > RSS_MAX_DURATION_S,
+    privacy: 'public',
+    type: 'podcast',
+  }
+  resolved.set(token, {
+    user, platform: 'rss', videoKey: `rss-${key}`, sourceUrl: video.sourceUrl, thumbUrl: video.thumbnail,
+    video, direct: { platform: 'rss', episodeId: ep.id, mime: ep.mime || '' }, createdAt: Date.now(),
+    episode: rssSourceOf(feed, ep).episode,
+  })
+  return video
+}
+
+const AUDIO_EXT = { 'audio/mpeg': 'mp3', 'audio/mp3': 'mp3', 'audio/mp4': 'm4a', 'audio/x-m4a': 'm4a', 'audio/aac': 'aac', 'audio/ogg': 'ogg', 'audio/opus': 'opus', 'audio/wav': 'wav', 'audio/x-wav': 'wav', 'audio/flac': 'flac' }
+// Only the name of the downloaded file: what it really holds is read from the
+// file itself before anything uses it (audio-format.cjs). An unknown type is
+// never called an MP3.
+const audioExt = (mime) => AUDIO_EXT[String(mime || '').split(';')[0].trim().toLowerCase()] || 'bin'
 
 // ── TikTok ───────────────────────────────────────────────────────────────────
 // TikTok has no way to list someone's videos without an approved app, so the
@@ -679,9 +779,10 @@ function startDownload(job) {
     })
     return
   }
-  // BitChute / Rumble: direct MP4 from their CDNs (no proxy, no yt-dlp).
-  if ((job.platform === 'bitchute' || job.platform === 'rumble') && job.direct) {
-    directPlatformDownload(job).catch((e) => {
+  // BitChute / Rumble: direct MP4 from their CDNs (no proxy, no yt-dlp); a podcast
+  // episode through the checker.
+  if ((job.platform === 'bitchute' || job.platform === 'rumble' || job.platform === 'rss') && job.direct) {
+    (job.platform === 'rss' ? directPodcastDownload(job) : directPlatformDownload(job)).catch((e) => {
       if (job.status === 'cancelled') return
       job.status = 'failed'
       job.errorCode = e.code || 'download_failed'
@@ -708,13 +809,15 @@ function startDownload(job) {
 }
 
 // Streams a direct MP4 link into the job dir with progress, then measures it.
-async function streamToJob(job, dir, url, headers, via) {
+// `prepare(file)` → { file, mime, format } runs before the job is done (a
+// podcast episode is converted when the audio service cannot take it).
+async function streamToJob(job, dir, url, headers, via, { ext = 'mp4', prepare = null } = {}) {
   job.abort = new AbortController()
   const r = await fetch(url, { headers, signal: job.abort.signal })
   if (!r.ok || !r.body) throw new Error(`HTTP ${r.status}`)
   const total = Number(r.headers.get('content-length')) || 0
   if (total > 6 * 1024 ** 3) throw new Error('file too large')
-  const file = path.join(dir, `${job.videoId}.mp4`)
+  let file = path.join(dir, `${job.videoId}.${ext}`)
   let got = 0
   const meter = new Transform({
     transform(chunk, _enc, cb) {
@@ -725,6 +828,13 @@ async function streamToJob(job, dir, url, headers, via) {
   })
   await pipeline(Readable.fromWeb(r.body), meter, fs.createWriteStream(file))
   if (job.status === 'cancelled') return
+  if (prepare) {
+    const ready = await prepare(file)
+    if (job.status === 'cancelled') return
+    file = ready.file
+    job.mime = ready.mime
+    job.audioFormat = ready.format
+  }
   job.file = file
   job.size = fs.statSync(file).size
   job.attempt = 1
@@ -789,6 +899,24 @@ async function directPlatformDownload(job) {
   await streamToJob(job, dir, url, { 'User-Agent': BROWSER_UA }, via)
   if (job.media?.duration > MAX_DURATION_S) {
     job.status = 'failed'; job.errorCode = 'too_long'; job.error = LIMIT_MESSAGE
+  }
+}
+
+// A podcast episode: through the checker's owner-checked download (which re-checks
+// that the episode's show is one this user verified), never from the feed's URL.
+async function directPodcastDownload(job) {
+  const dir = path.join(WORK_DIR, job.id)
+  fs.rmSync(dir, { recursive: true, force: true })
+  fs.mkdirSync(dir, { recursive: true })
+  job.progress = 0
+  const id = String(job.direct?.episodeId || '')
+  if (!RSS_EPISODE_RE.test(id)) throw Object.assign(new Error('Look the episode up again'), { code: 'expired' })
+  const url = `${VERIFIER_URL}/podcasts/verified/${encodeURIComponent(job.user)}/episode/${encodeURIComponent(id)}/download`
+  // The type and format come from the file (converted to MP3 when the audio
+  // service cannot take it), not from what the feed says it is.
+  await streamToJob(job, dir, url, {}, 'podcast host (checker)', { ext: audioExt(job.direct.mime), prepare: prepareAudio })
+  if (job.media?.duration > RSS_MAX_DURATION_S) {
+    job.status = 'failed'; job.errorCode = 'too_long'; job.error = RSS_LIMIT_MESSAGE
   }
 }
 
@@ -1034,6 +1162,7 @@ function mountYoutubeImport(app, { resolveUser, limiter, uploadImage, hasPosting
         limits: {
           maxHeight: premium ? MAX_HEIGHT_PREMIUM : MAX_HEIGHT,
           maxDurationS: MAX_DURATION_S,
+          podcastMaxDurationS: RSS_MAX_DURATION_S,
           baseHeight: MAX_HEIGHT,
           premiumHeight: MAX_HEIGHT_PREMIUM,
         },
@@ -1386,6 +1515,38 @@ function mountYoutubeImport(app, { resolveUser, limiter, uploadImage, hasPosting
     } catch (e) { res.status(e.status || 500).json({ error: e.status ? e.message : 'Something went wrong', errorCode: e.code || undefined }) }
   })
 
+  // ── Podcasts: the episodes of the user's verified RSS feeds ────────────────
+  // 25 per page, newest first, read from the checker (which re-reads a show nobody
+  // follows when its copy is older than 10 minutes). `feed` picks one of several
+  // verified shows; `shows` lists them all, with `code` for one that cannot be read.
+  app.get('/api/yt-import/rss/videos', ...mw, async (req, res) => {
+    const user = await auth(req, res); if (!user) return
+    if (!sourceEnabled('rss')) return sourceOff(res, 'rss')
+    try {
+      const list = await verifiedPodcasts(user)
+      if (!list.length) return res.status(403).json({ error: 'Link and verify your podcast RSS feed on your profile first', errorCode: 'no_link' })
+      const shows = list.map((s) => ({ url: s.url, id: s.feed?.id || null, title: s.feed?.title || '', code: s.code || null }))
+      const wanted = String(req.query.feed || '')
+      const show = list.find((s) => s.feed && (!FEED_ID_RE.test(wanted) || s.feed.id === wanted))
+      if (!show) return res.json({ shows, feedId: null, videos: [], page: 0, hasMore: false, total: 0 })
+      const page = Math.max(0, Math.min(1000, Number(req.query.page) || 0))
+      const data = await checkerJson(`/podcasts/feed/${show.feed.id}/older?offset=${page * PAGE}&limit=${PAGE}`)
+      const videos = (data.episodes || []).filter((ep) => RSS_EPISODE_RE.test(String(ep.id || ''))).map((ep) => rssEntry(user, show.feed, ep))
+      res.json({ shows, feedId: show.feed.id, videos, page, hasMore: (data.next_offset || 0) < (data.total || 0), total: data.total || 0 })
+    } catch (e) { sendError(res, e) }
+  })
+
+  // The full show notes of a looked-up episode, as the post's description.
+  app.get('/api/yt-import/rss/notes/:token', ...mw, async (req, res) => {
+    const user = await auth(req, res); if (!user) return
+    const entry = resolved.get(String(req.params.token || ''))
+    if (!entry || entry.user !== user || entry.platform !== 'rss') return res.status(404).json({ error: 'Look the episode up again', errorCode: 'expired' })
+    try {
+      const data = await checkerJson(`/podcasts/episode/${encodeURIComponent(entry.direct.episodeId)}/notes`)
+      res.json({ text: notesText(data.html) || entry.video.description })
+    } catch { res.json({ text: entry.video.description }) }
+  })
+
   // Thumbnail of a looked-up TikTok / Instagram video (signed CDN URL kept server side).
   // ── Covers (TikTok / Instagram / BitChute / Rumble) ─────────────────────────
   // Kept as images in the library (import-covers): saved the first time a list
@@ -1480,7 +1641,7 @@ function mountYoutubeImport(app, { resolveUser, limiter, uploadImage, hasPosting
     if (!sourceEnabled(entry ? entry.platform : 'youtube')) return sourceOff(res, entry ? entry.platform : 'youtube')
     const videoId = entry ? entry.videoKey : String(req.body?.videoId || '')
     if (!entry && !VIDEO_ID_RE.test(videoId)) return res.status(400).json({ error: 'invalid video id' })
-    if (!fs.existsSync(YTDLP_BIN)) return res.status(503).json({ error: 'Downloader is not installed on this server', errorCode: 'no_downloader' })
+    if (entry?.platform !== 'rss' && !fs.existsSync(YTDLP_BIN)) return res.status(503).json({ error: 'Downloader is not installed on this server', errorCode: 'no_downloader' })
     if (ytdlpUpdating) return res.status(503).json({ error: 'The importer is updating itself, try again in a minute', errorCode: 'busy' })
     if (needsProxy(entry || { platform: 'youtube' }) && await traffic.pausedNow()) {
       return res.status(503).json({ error: PROXY_PAUSED_MESSAGE, errorCode: 'proxy_paused' })
@@ -1490,6 +1651,7 @@ function mountYoutubeImport(app, { resolveUser, limiter, uploadImage, hasPosting
       if (entry) {
         // Ownership was checked when the link was looked up (oEmbed / media info author).
         video = entry.video
+        if (entry.platform === 'rss' && video.tooLong) return res.status(400).json({ error: RSS_LIMIT_MESSAGE, errorCode: 'too_long' })
       } else {
         const [channels, [ytVideo]] = await Promise.all([verifiedChannels(user), videoDetails([videoId])])
         video = ytVideo
@@ -1561,7 +1723,7 @@ function mountYoutubeImport(app, { resolveUser, limiter, uploadImage, hasPosting
     const job = await ownJob(req, res); if (!job) return
     if (job.status !== 'done' || !job.file) return res.status(409).json({ error: 'Not ready' })
     res.set('Cache-Control', 'no-store')
-    res.sendFile(job.file, { headers: { 'Content-Type': 'video/mp4' } })
+    res.sendFile(job.file, { headers: { 'Content-Type': job.mime || 'video/mp4' } })
   })
 
   app.delete('/api/yt-import/jobs/:id', async (req, res) => {
@@ -1583,7 +1745,7 @@ function mountYoutubeImport(app, { resolveUser, limiter, uploadImage, hasPosting
       const entry = resolved.get(String(item.token))
       if (!entry || entry.user !== user) throw bad(404, 'Look the video up again', 'expired')
       const v = entry.video
-      if (v.tooLong) throw bad(400, LIMIT_MESSAGE, 'too_long')
+      if (v.tooLong) throw bad(400, limitMessageFor(entry.platform), 'too_long')
       let { title, description } = v
       // An Instagram reel picked before its details arrived: read them now.
       if (entry.platform === 'instagram' && !description && entry.igShortcode) {
@@ -1595,6 +1757,7 @@ function mountYoutubeImport(app, { resolveUser, limiter, uploadImage, hasPosting
         thumbnail: v.thumbnail, thumbUrl: entry.thumbUrl, sourceUrl: entry.sourceUrl, duration: v.duration || 0,
         videoKey: entry.videoKey, tiktokId: entry.tiktokId || null, igShortcode: entry.igShortcode || null,
         direct: entry.direct || null,
+        ...(entry.episode ? { episode: entry.episode } : {}),
       }
     }
     const videoId = String(item?.videoId || '')
@@ -1652,10 +1815,19 @@ function mountYoutubeImport(app, { resolveUser, limiter, uploadImage, hasPosting
   }
 
   if (uploadImage && hasPostingGrant) {
-    require('./import-batch.cjs').mountImportBatch(app, {
+    const batchModule = require('./import-batch.cjs')
+    const batch = batchModule.mountImportBatch(app, {
       auth, mw, resolveSource,
-      // Just before a post is built: a Rumble video's description (from its page).
+      // Just before a post is built: a Rumble video's description (from its page),
+      // a podcast episode's full show notes (the list only has a short summary).
       enrichSource: async (src) => {
+        if (src.platform === 'rss') {
+          const id = String(src.direct?.episodeId || '')
+          if (!RSS_EPISODE_RE.test(id)) return src
+          const d = await checkerJson(`/podcasts/episode/${encodeURIComponent(id)}/notes`).catch(() => null)
+          const text = notesText(d?.html)
+          return text ? { ...src, description: text } : src
+        }
         if (src.platform !== 'rumble' || src.description) return src
         const page = await rumble.videoPage(src.sourceUrl).catch(() => null)
         return page?.description ? { ...src, description: page.description } : src
@@ -1676,7 +1848,21 @@ function mountYoutubeImport(app, { resolveUser, limiter, uploadImage, hasPosting
       alert: alertDiscord,
       coverFor,
     })
+    // Automatic podcast imports (import-auto.cjs): new episodes of a verified feed
+    // become one-item batches as they appear.
+    require('./import-auto.cjs').mountImportAuto(app, {
+      auth, mw, batch,
+      verifiedPodcasts,
+      feedEpisodes,
+      rssSourceOf,
+      hasPostingGrant,
+      knownImports,
+      audioReady: () => sourceEnabled('rss') && batchModule.audioBatchReady(),
+      audioTypes: batchModule.AUDIO_TYPES,
+      maxDurationS: RSS_MAX_DURATION_S,
+      alert: alertDiscord,
+    })
   }
 }
 
-module.exports = { mountYoutubeImport }
+module.exports = { mountYoutubeImport, _test: { notesText, rssEntry, rssSourceOf, audioExt, verifiedLinks, resolved, SOURCE_RE } }

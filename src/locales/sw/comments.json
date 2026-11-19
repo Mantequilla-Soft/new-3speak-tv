@@ -28,7 +28,9 @@
     },
     "errors": {
       "pickStars": "Tafadhali chagua idadi ya nyota",
-      "sendFailed": "Imeshindwa kutuma tathmini yako. Tafadhali jaribu tena."
+      "sendFailed": "Imeshindwa kutuma tathmini yako. Tafadhali jaribu tena.",
+      "screenshotUnreadable": "Faili hiyo si picha tunayoweza kusoma.",
+      "screenshotTooBig": "Picha hiyo ni kubwa mno. Tafadhali jaribu ndogo zaidi."
     },
     "thanks": "Asante kwa maoni yako! 🙏",
     "sendFeedback": "Tuma maoni",
@@ -40,6 +42,12 @@
     "recommendLabel": "Je, ungependekeza 3Speak? <opt>(si lazima)</opt>",
     "moreLabel": "Tuambie zaidi <opt>(si lazima)</opt>",
     "placeholder": "Ulipenda nini? Nini kingeweza kuwa bora?",
+    "screenshotLabel": "Picha ya skrini <opt>(si lazima)</opt>",
+    "attachScreenshot": "Ambatisha picha ya skrini",
+    "screenshotPreparing": "Inaandaa picha ya skrini…",
+    "screenshotAlt": "Picha yako ya skrini",
+    "removeScreenshot": "Ondoa picha ya skrini",
+    "screenshotHint": "Ni timu ya 3Speak pekee inayoiona. Unaweza pia kubandika picha hapa.",
     "notNow": "Si sasa",
     "sending": "Inatuma…"
   },
@@ -147,5 +155,23 @@
     "creator": "Mtayarishi",
     "empty": "Bado hakuna maoni",
     "emptyHint": "Maoni yaliyofungwa kwenye wakati fulani huonekana kwenye mfuatano wa muda wa video."
+  },
+  "focus": {
+    "open": "Hali ya kuzingatia",
+    "aria": "Hali ya kuzingatia: andika maoni yako",
+    "done": "Imekamilika",
+    "sound": "Sauti ya taipureta",
+    "words_one": "neno {{count}}",
+    "words_other": "maneno {{count}}",
+    "music": "Muziki wa nyuma",
+    "musicOff": "Zima",
+    "track1": "Mvua",
+    "track2": "Piano ya usiku",
+    "track3": "Moto wa meko"
+  },
+  "editor": {
+    "full": "Kihariri kamili",
+    "compact": "Kihariri kifupi",
+    "toolbar": "Uumbizaji"
   }
 }

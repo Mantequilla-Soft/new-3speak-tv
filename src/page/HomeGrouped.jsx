@@ -19,6 +19,9 @@ import { getFeedSeed, refreshHomeFeeds } from "../utils/feedSeed";
 import ShortsStories from "../components/ShortsStories/ShortsStories";
 import WelcomeBanner from "../components/WelcomeTour/WelcomeBanner";
 import NewFromFollowing from "../components/NewFromFollowing/NewFromFollowing";
+import ContinueWatching from "../components/ContinueWatching/ContinueWatching";
+import LiveFromFollowing from "../components/LiveFromFollowing/LiveFromFollowing";
+import UpcomingPremieres from "../components/Premiere/UpcomingPremieres";
 import SuggestedCreators from "../components/SuggestedCreators/SuggestedCreators";
 import { useWarmupVideos, useFollowedWarmupVideos } from "../hooks/useWarmupVideos";
 import { useLiveStreams } from "../hooks/useLiveStreams";
@@ -1154,6 +1157,7 @@ const HomeGrouped = () => {
       <>
         <Card3 windowed
           videos={s.videos}
+          surface={s.key === 'home' ? (authenticated ? 'following' : 'trending') : s.key}
           loading={false}
           getContentForVideo={getContentForVideo}
           isWatched={isWatched}
@@ -1201,8 +1205,17 @@ const HomeGrouped = () => {
       {/* The Spotlight (20a): the featured videos, full width under the bar. */}
       <HomeHero videos={spotlight} pending={featuredLoading && !spotlight.length} />
       <ShortsStories tiles />
-      {/* Logged-in only, and renders nothing when there's nothing unwatched. */}
-      <NewFromFollowing />
+      {/* Live now from people you follow: full width above the two strips,
+          only while someone followed is live. */}
+      <LiveFromFollowing />
+      {/* Logged-in only; each renders nothing when it has nothing to show.
+          Side by side from tablet width up, stacked on a phone. */}
+      <div className="home-strips">
+        <NewFromFollowing />
+        <ContinueWatching />
+      </div>
+      {/* Premieres coming up (and running), from every creator; nothing when none. */}
+      <UpcomingPremieres />
       {/* A creator blocked from uploading: the banner sits here on Home, under
           the Spotlight and over the feed tabs (the app-level copy hides it). */}
       <UploadBlockNotice inline />

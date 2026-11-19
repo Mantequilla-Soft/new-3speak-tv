@@ -12,6 +12,7 @@ import { getSinceTimestamp, formatRelativeDate } from '../utils/dateFilters';
 import { FeedToolbar, Pagination } from '../components/FeedToolbar/FeedToolbar';
 import { fixVideoThumbnail, fallbackImg } from '../utils/fixThumbnails';
 import { watchPath } from '../utils/urls';
+import { episodePath, artUrl, onArtError, PODCAST_PLACEHOLDER } from '../lib/podcasts';
 import { useTranslation } from 'react-i18next';
 import './WatchedView.scss';
 
@@ -60,30 +61,44 @@ async function fetchWatchedPage(username, type, since, page) {
 
 const authorOf = (v) => String(v.author?.username || v.author || v.owner || '').replace(/^@/, '');
 
+/** How far into an audio card's track the listener got, 0..1, or null to show no bar. */
+const progressShare = (p) => (p && p.dur > 0 ? (p.done ? 1 : Math.min(1, Math.max(0, p.pos / p.dur))) : null);
+
 /**
  * One history row (45c, 24d): the thumbnail, the title, "@author · Watched 2h
  * ago", and (own history) remove. A video opens its watch page, a short the
  * shorts player; an audio row plays through the global player like the audio
- * page's tile.
+ * page's tile. An outside podcast episode (`_podcast`) shows its show's cover and
+ * name and opens the episode in the podcast player. Audio rows show how far the
+ * listener got.
  */
 function WatchedRow({ item, kind, contextItems, canRemove, onRemove }) {
   const { t } = useTranslation();
   const audioPlay = useAppStore((s) => s.audioPlay);
+  const podcast = !!item._podcast;
   const author = authorOf(item);
   const title = item.title || item.hive_title || item.permlink;
-  const thumb = kind === 'audio'
-    ? (item.thumbnail_url ? fixVideoThumbnail({ thumbnail_url: item.thumbnail_url }) : fallbackImg)
-    : fixVideoThumbnail(item, kind === 'shorts');
+  const thumb = podcast
+    ? (item.art ? artUrl(item.art, 256) : PODCAST_PLACEHOLDER)
+    : kind === 'audio'
+      ? (item.thumbnail_url ? fixVideoThumbnail({ thumbnail_url: item.thumbnail_url }) : fallbackImg)
+      : fixVideoThumbnail(item, kind === 'shorts');
   const when = t(item._audio ? 'misc.watched.listenedAt' : 'misc.watched.watchedAt', { when: formatRelativeDate(item.watched_at) });
+  const share = item._audio ? progressShare(item.progress) : null;
 
   const body = (
     <>
-      <span className={`watched-row__thumb${kind === 'shorts' ? ' is-short' : ''}`}>
-        <img src={thumb} alt="" loading="lazy" onError={(e) => { e.currentTarget.src = fallbackImg; }} />
+      <span className={`watched-row__thumb${kind === 'shorts' ? ' is-short' : ''}${podcast ? ' is-podcast' : ''}`}>
+        <img src={thumb} alt="" loading="lazy" onError={podcast ? onArtError : (e) => { e.currentTarget.src = fallbackImg; }} />
+        {share != null && (
+          <span className="watched-row__progress" aria-hidden="true">
+            <span style={{ width: `${Math.round(share * 100)}%` }} />
+          </span>
+        )}
       </span>
       <span className="watched-row__text">
         <b>{title}</b>
-        <span>@{author} · {when}</span>
+        <span>{podcast ? item.show : `@${author}`} · {when}</span>
       </span>
     </>
   );
@@ -96,7 +111,9 @@ function WatchedRow({ item, kind, contextItems, canRemove, onRemove }) {
 
   return (
     <li className="watched-row">
-      {kind === 'audio' ? (
+      {podcast ? (
+        <Link className="watched-row__main" to={episodePath(item._id)}>{body}</Link>
+      ) : kind === 'audio' ? (
         <button type="button" className="watched-row__main" onClick={play}>{body}</button>
       ) : (
         <Link className="watched-row__main" to={kind === 'shorts' ? `/shorts?v=${author}/${item.permlink}` : watchPath(author, item.permlink)}>
@@ -167,6 +184,9 @@ function WatchedView() {
     () => (data?.videos || []).filter((v) => !deletedKeys.has(v._historyKey)),
     [data, deletedKeys],
   );
+  // What playing an audio row queues after it: the 3Speak tracks only. An
+  // outside episode's card has no audio URL; it opens in the podcast player.
+  const playable = useMemo(() => filtered.filter((v) => !v._podcast), [filtered]);
 
   // History rows are keyed by what the player recorded, which is not always the
   // card's own author/permlink (Hive permlink vs asset id), so delete by that key.
@@ -260,7 +280,7 @@ function WatchedView() {
                 key={item._historyKey}
                 item={item}
                 kind={apiType}
-                contextItems={filtered}
+                contextItems={playable}
                 canRemove={isOwner}
                 onRemove={handleDelete}
               />

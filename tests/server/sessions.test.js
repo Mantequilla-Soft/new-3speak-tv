@@ -291,6 +291,43 @@ describe('editor token', () => {
   })
 })
 
+describe('stream captions token (Pro only)', () => {
+  const get = (user, opts = {}) => api.request(`/api/stt-token?scope=live&user=${user}`, {
+    ...opts,
+    headers: { 'X-API-Key': api.env.EMBED_API_KEY, ...(opts.headers || {}) },
+  })
+
+  it('is minted for a signed-in Pro account, signed over "<exp>.live"', async () => {
+    api.setFixtures({ ...FIXTURES, fetch: [{ url: 'https://checker.test.invalid/premium/dora', json: { premium: true } }] })
+    const r = await get('dora', as('dora'))
+    expect(r.status).toBe(200)
+    const [exp, scope, sig] = r.body.token.split('.')
+    expect(scope).toBe('live')
+    expect(Number(exp)).toBe(r.body.exp)
+    expect(sig).toBe(crypto.createHmac('sha256', api.env.STT_SIGNING_SECRET).update(`${exp}.live`).digest('hex'))
+  })
+
+  it('refuses a free account', async () => {
+    api.setFixtures({ ...FIXTURES, fetch: [{ url: 'https://checker.test.invalid/premium/fred', json: { premium: false } }] })
+    const r = await get('fred', as('fred'))
+    expect(r.status).toBe(403)
+    expect(r.body).toEqual({ error: 'pro-only' })
+  })
+
+  it('refuses without a verified session of that account', async () => {
+    api.setFixtures({ ...FIXTURES, fetch: [{ url: 'https://checker.test.invalid/premium/gina', json: { premium: true } }] })
+    expect((await get('gina')).status).toBe(401)
+    const other = await get('gina', as('hank'))
+    expect(other.status).toBe(401)
+    expect(other.body).toEqual({ error: 'sign-in-needed' })
+  })
+
+  it('the plain token is unchanged', async () => {
+    const r = await api.request('/api/stt-token', { headers: { 'X-API-Key': api.env.EMBED_API_KEY } })
+    expect(r.body.token).toMatch(/^\d+\.[0-9a-f]{64}$/)
+  })
+})
+
 describe('delegated signers', () => {
   it('OpenPods: signs a hangouts challenge for the signed-in account with the service key', async () => {
     const challenge = 'hivehangouts:alice:1700000000:abcdef'

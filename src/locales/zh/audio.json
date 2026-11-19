@@ -146,6 +146,16 @@
     "notes": "笔记",
     "stillIndexing": "这条帖子的音频仍在索引中——请几分钟后再试。"
   },
+  "edit": {
+    "title": "编辑音频",
+    "editTitle": "编辑标题、节目说明、标签和封面",
+    "cover": "封面",
+    "coverAlt": "封面预览",
+    "coverHint": "上传图片或粘贴直接链接。方形图片效果最好。",
+    "notesPlaceholder": "向听众介绍这段音频…",
+    "keptNote": "帖子中的播放器链接和音乐署名保持不变。",
+    "updated": "音频已更新！"
+  },
   "page": {
     "sections": {
       "popular": "热门",
@@ -171,7 +181,6 @@
     },
     "all": "全部",
     "musicGenre": "音乐流派",
-    "anyGenre": "任意流派",
     "tracks_other": "{{count}} 首曲目",
     "noTracks": "没有找到曲目。",
     "creators": "创作者",
@@ -183,7 +192,7 @@
     "nothingPlaying": "还没有在播放的内容。",
     "goExplore": "找点东西听",
     "exploreViews": "分区",
-    "mostPlayed": "播放最多"
+    "newUploads": "最新上传"
   },
   "upload": {
     "title": "上传音频",
@@ -265,7 +274,10 @@
       "formats": "MP3、WAV、OGG、WEBM、M4A、FLAC、AAC · 可同时选多个",
       "stop": "停止",
       "orRecord": "或者现场录制",
+      "micPreparing": "正在准备麦克风...",
       "recordLimit": "每段录音最长 {{minutes}} 分钟",
+      "level": "麦克风音量",
+      "noSound": "没有收到声音。请检查麦克风是否被静音或正被其他应用使用。",
       "record": "录制",
       "added": "已添加（{{count}}）",
       "filesTitle": "音频文件"
@@ -280,6 +292,7 @@
       "descriptionOptional": "简介（可选）",
       "track": "曲目",
       "category": "类别",
+      "categoryRequired": "请选择一个分类，让你的音频显示在正确的标签页中。",
       "musicGenre": "音乐流派"
     },
     "playlist": {
@@ -365,6 +378,7 @@
     "tracks": {
       "helpAlbum": "每首曲目都会作为主帖下的评论发布。共享的设置只需填写一次并应用到全部，然后再按曲目单独修改。",
       "helpSnaps": "每首曲目都会作为单独的 Snap 发布。共享的设置只需填写一次并应用到全部，然后再按曲目单独修改。",
+      "helpSnapsSingle": "你的音频将作为单独的快拍发布。",
       "applyToAllHeading": "应用到所有曲目",
       "applyNote_other": "<b>应用到全部 {{count}} 首曲目：</b>共享描述和封面，之后可单独修改任意曲目。",
       "sharedDescription": "共享简介（可选）",
@@ -387,6 +401,10 @@
       "earnings": "收益：",
       "earningsPpl": "按收听付费（@{{account}}）",
       "earningsNormal": "普通帖子奖励",
+      "rewards": "奖励：",
+      "beneficiaries": "受益人：",
+      "perTrack": "按音轨分别设置",
+      "noBeneficiaries": "无",
       "playlist": "播放列表：",
       "failedCount_other": "{{count}} 首曲目失败。",
       "retryAllFailed": "重试所有失败项",
@@ -750,7 +768,9 @@
     "description": "简介",
     "noDescription": "暂无简介。",
     "comments": "评论",
-    "album": "来自 {{name}}"
+    "album": "来自 {{name}}",
+    "videoPodcast": "视频播客",
+    "videoPodcastTitle": "把这一集做成视频：封面、波形和字幕"
   },
   "offline": {
     "notice": "你已离线。已下载的内容仍可播放。",

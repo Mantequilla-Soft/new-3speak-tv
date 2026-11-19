@@ -50,6 +50,10 @@ function Beneficiary_modal({ isOpen, close, setBeneficiaries, setBeneficiaryList
   const [acctStatus, setAcctStatus] = useState('idle');
   // "Add a collaborator" opens the add row (17e).
   const [adding, setAdding] = useState(false);
+  // A locked share's percent while it is being typed (index -> text), applied
+  // on blur or Enter: applied per keystroke, the "1" of a "15" snapped back to
+  // the minimum and nothing above it could be typed.
+  const [drafts, setDrafts] = useState({});
 
 
   useEffect(() => {
@@ -177,13 +181,16 @@ function Beneficiary_modal({ isOpen, close, setBeneficiaries, setBeneficiaryList
     const item = list[index];
     if (!item.locked) return;
     const minP = item.minPercent || 1;
-    const value = Math.max(minP, parseFloat(newPercent) || minP);
-    const diff = value - item.percent;
-    if (diff > remaingPercent) {
+    // Raised as far as what is left with you allows, never below the minimum
+    let value = Math.round(Math.max(minP, parseFloat(newPercent) || minP) * 100) / 100;
+    if (value - item.percent > remaingPercent) {
       setError(t('modals.beneficiary.errors.cannotIncrease', { percent: remaingPercent }));
-      return;
+      value = item.percent + remaingPercent;
+    } else {
+      setError('');
     }
-    setError('');
+    const diff = value - item.percent;
+    if (!diff) return;
     const updatedList = list.map((it, i) => i === index ? { ...it, percent: value } : it);
     setList(updatedList);
     setRemaingPercent(prev => prev - diff);
@@ -276,20 +283,48 @@ function Beneficiary_modal({ isOpen, close, setBeneficiaries, setBeneficiaryList
             <span className="bene-tile__body">
               <span className="bene-tile__who">{sh.name}</span>
               {sh.item?.locked ? (
-                <span className="bene-tile__edit">
-                  <input
-                    type="number"
-                    className="bene-tile__pct-input num"
-                    style={{ width: `${String(sh.item.percent).length + 0.5}ch` }}
-                    value={sh.item.percent}
-                    min={sh.item.minPercent || 1}
-                    step="1"
-                    aria-label={`@${sh.item.account} %`}
-                    title={t('modals.beneficiary.minPercent', { percent: sh.item.minPercent })}
-                    onChange={(e) => handleLockedPercentChange(sh.index, e.target.value)}
-                  />
-                  <span aria-hidden="true">%</span>
-                </span>
+                <>
+                  {/* Locked shares can be raised, never lowered below their minimum */}
+                  <span className="bene-tile__edit">
+                    <IconButton
+                      icon="remove"
+                      label={t('modals.beneficiary.lower', { account: sh.item.account })}
+                      size={36}
+                      variant="ghost"
+                      round
+                      disabled={sh.item.percent <= (sh.item.minPercent || 1)}
+                      onClick={() => handleLockedPercentChange(sh.index, sh.item.percent - 1)}
+                    />
+                    <input
+                      type="number"
+                      inputMode="decimal"
+                      className="bene-tile__pct-input num"
+                      style={{ width: `${String(drafts[sh.index] ?? sh.item.percent).length + 0.5}ch` }}
+                      value={drafts[sh.index] ?? sh.item.percent}
+                      min={sh.item.minPercent || 1}
+                      step="1"
+                      aria-label={`@${sh.item.account} %`}
+                      onChange={(e) => setDrafts((d) => ({ ...d, [sh.index]: e.target.value }))}
+                      onBlur={() => {
+                        if (drafts[sh.index] === undefined) return;
+                        handleLockedPercentChange(sh.index, drafts[sh.index]);
+                        setDrafts((d) => { const next = { ...d }; delete next[sh.index]; return next; });
+                      }}
+                      onKeyDown={(e) => { if (e.key === 'Enter') e.currentTarget.blur(); }}
+                    />
+                    <span aria-hidden="true">%</span>
+                    <IconButton
+                      icon="add"
+                      label={t('modals.beneficiary.raise', { account: sh.item.account })}
+                      size={36}
+                      variant="ghost"
+                      round
+                      disabled={remaingPercent <= 0}
+                      onClick={() => handleLockedPercentChange(sh.index, sh.item.percent + 1)}
+                    />
+                  </span>
+                  <span className="bene-tile__min">{t('modals.beneficiary.minShare', { percent: sh.item.minPercent || 1 })}</span>
+                </>
               ) : (
                 <b className="bene-tile__pct num">{sh.percent}%</b>
               )}
@@ -367,6 +402,7 @@ function Beneficiary_modal({ isOpen, close, setBeneficiaries, setBeneficiaryList
       )}
 
       <p className="bene-text">{t('modals.beneficiary.intro')}</p>
+      {list.some((item) => item.locked) && <p className="bene-text">{t('modals.beneficiary.raiseHint')}</p>}
 
       {defaults.length > 0 && (
         <div className="default-bene-wrap">

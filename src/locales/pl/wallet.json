@@ -76,7 +76,8 @@
       "all": "Wszystko",
       "rewards": "Nagrody",
       "received": "Otrzymane",
-      "sent": "Wysłane"
+      "sent": "Wysłane",
+      "points": "Punkty"
     },
     "from": "Od @{{user}}",
     "sentTo": "Wysłano do @{{user}}",
@@ -103,5 +104,43 @@
     "memoPlaceholder": "Na co to jest, np. numer faktury",
     "subRequest": "Zeskanowanie tego kodu prosi o {{amount}} {{coin}}. 3Speak i portfele Hive, które czytają kody płatności, uzupełniają to same.",
     "subMemo": "Zeskanowanie tego kodu uzupełnia nazwę Twojego konta i memo w 3Speak i w portfelach Hive, które czytają kody płatności."
+  },
+  "points": {
+    "title": "Punkty kanału",
+    "sub": "Zdobywane na streamach na żywo w 3Speak, wydawane na przewidywania i boosty.",
+    "keptUntil": "Ważne do {{date}}. Oglądaj, czatuj lub streamuj, żeby je zachować.",
+    "startsAt_one": "Na start każdy dostaje {{n}} punkt.",
+    "startsAt_few": "Na start każdy dostaje {{n}} punkty.",
+    "startsAt_many": "Na start każdy dostaje {{n}} punktów.",
+    "startsAt_other": "Na start każdy dostaje {{n}} punktu.",
+    "earnTitle": "Jak zdobywać punkty",
+    "earn": {
+      "watch": "Oglądanie streamu",
+      "chat": "Czatowanie",
+      "stream": "Streamowanie",
+      "raid": "Rajdy i pojedynki",
+      "boost": "Boostowanie"
+    },
+    "rate": {
+      "perMinute": "{{n}} na minutę",
+      "perWord": "{{n}} za słowo",
+      "upTo": "Do {{n}}"
+    },
+    "historyTitle": "Historia punktów",
+    "history": {
+      "watch": "Obejrzane streamy",
+      "stream": "Stream",
+      "chat": "Czat",
+      "raid": "Rajd na @{{user}}",
+      "battle": "Pojedynek z @{{user}}",
+      "boost": "Boost streamu",
+      "spend": "Boost za punkty",
+      "refund": "Zwrot punktów",
+      "prediction": "Przewidywanie",
+      "expire": "Zresetowano po {{days}} dniach bez aktywności"
+    },
+    "empty": "Na razie brak ruchów punktów.",
+    "more": "Pokaż więcej",
+    "onHive": "na Hive"
   }
 }

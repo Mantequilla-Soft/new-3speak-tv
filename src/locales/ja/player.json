@@ -5,8 +5,6 @@
     "reactToMoment": "この場面にリアクション",
     "mute": "ミュート",
     "unmute": "ミュート解除",
-    "playerSize": "プレーヤーのサイズ: {{size}}",
-    "sizeStandard": "標準",
     "pip": "ピクチャー イン ピクチャー",
     "autoplayOn": "自動再生: オン",
     "autoplayOff": "自動再生: オフ",

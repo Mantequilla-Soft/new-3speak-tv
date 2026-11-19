@@ -1,0 +1,27 @@
+// The wallet's channel points card (PointsCard.jsx): balance, how to earn,
+// and the button to its movements in the Activity list.
+@use "../../styles/v2" as v2;
+
+.points-card {
+  &__balance { @include v2.mono(18, 700); color: var(--cyan); }
+
+  &__earn {
+    margin-top: 12px;
+    summary {
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+      list-style: none;
+      &::-webkit-details-marker { display: none; }
+      &::after { content: " ▾"; color: var(--muted); }
+    }
+    &[open] summary::after { content: " ▴"; }
+    dl { margin: 8px 0 0; display: flex; flex-direction: column; gap: 6px; }
+    dl > div { display: flex; justify-content: space-between; gap: 8px; font-size: 12px; }
+    dt { color: var(--muted); }
+    dd { margin: 0; font-weight: 700; color: var(--text); }
+  }
+
+  &__more { margin-top: 12px; width: 100%; justify-content: center; }
+}

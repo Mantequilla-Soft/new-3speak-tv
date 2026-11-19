@@ -286,8 +286,8 @@
     },
     "remix": {
       "label": "Remix und Clip erlauben",
-      "info": "Erlaube anderen, Remixe und Clips aus diesem Video zu erstellen. Du wirst als Originalautor genannt und erhältst als Begünstigter mindestens 5 %.",
-      "hint": "Du bekommst mindestens 5 % jedes Remixes"
+      "info": "Erlaube anderen, Remixe und Clips aus diesem Video zu machen. Du wirst als Original genannt und bekommst 15 % der Belohnungen eines Remixes (bei Remixen von Remixen weniger, mindestens 5 %).",
+      "hint": "Du bekommst 15 % jedes Remixes dieses Videos"
     },
     "nsfw": {
       "label": "Als NSFW markieren",
@@ -341,7 +341,13 @@
     "shareRewards": "Belohnungen teilen",
     "shareRewardsSub": "Mit Mitwirkenden aufteilen",
     "advanced": "NSFW / Auszahlung",
-    "advancedSub": "Erweitert"
+    "advancedSub": "Erweitert",
+    "language": {
+      "label": "Sprache",
+      "hint": "Im Video gesprochen",
+      "info": "Die Sprache, die im Video gesprochen wird. Sie wird mit dem Beitrag auf Hive gespeichert, damit Zuschauer später Videos in ihrer Sprache finden können.",
+      "none": "Keine Sprache (Musik, Geräusche)"
+    }
   },
   "review": {
     "payoutDeclined": "Abgelehnt (Belohnungen werden verbrannt)",
@@ -362,7 +368,8 @@
     "postShort": "Short posten",
     "postStory": "Story posten",
     "postVideo": "Video posten",
-    "backToTimeline": "Zurück zur Zeitleiste"
+    "backToTimeline": "Zurück zur Zeitleiste",
+    "benesDeclined": "Auszahlung abgelehnt: Sie bekommen auch nichts, die Nennung bleibt am Beitrag."
   },
   "publishing": {
     "titleShort": "Short wird veröffentlicht",

@@ -1,0 +1,30 @@
+{
+  "studio": {
+    "title": "Subtítulos en directo",
+    "toggle": "Mostrar subtítulos en directo a los espectadores",
+    "hint": "Mientras estás en directo, tu micrófono se convierte en texto. Los espectadores pueden activar los subtítulos y muchos navegadores los traducen a su idioma.",
+    "language": "Idioma en el que hablas",
+    "onlyLanguage": "Los subtítulos solo entienden {lang}.",
+    "statusOff": "Desactivados",
+    "statusWaiting": "Empiezan cuando sales en directo.",
+    "statusMicOff": "Activa el micrófono para los subtítulos.",
+    "statusStarting": "Iniciando subtítulos…",
+    "statusOn": "Los subtítulos están activados.",
+    "statusFull": "Todos los espacios de subtítulos están ocupados ahora. Lo intentamos de nuevo en un minuto.",
+    "statusUnavailable": "Los subtítulos en directo no están disponibles ahora.",
+    "statusError": "Los subtítulos se detuvieron porque no se pudo conectar con el servicio de voz. Desactívalos y actívalos para intentarlo de nuevo."
+  },
+  "viewer": {
+    "translatedFrom": "Traducido del {lang} en tu dispositivo",
+    "showOriginal": "Ver original",
+    "translateTo": "Traducir al {lang}",
+    "noTranslator": "En {lang}: este navegador no puede traducir subtítulos",
+    "label": "Subtítulos",
+    "show": "Mostrar subtítulos en directo",
+    "hide": "Ocultar subtítulos en directo"
+  },
+  "vod": {
+    "saved": "Tus subtítulos en directo se añadieron a la repetición.",
+    "failed": "No se pudieron añadir los subtítulos en directo a la repetición."
+  }
+}

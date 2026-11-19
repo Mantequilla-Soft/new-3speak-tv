@@ -1,4 +1,5 @@
 import { HangoutsProvider, ProPlans } from '@snapie/hangouts-react';
+import { PRO_PERK_GROUPS } from '@snapie/hangouts-react/dist/lib/proBenefits.js';
 // REQUIRED. The SDK ships its styles as a separate stylesheet, so every entry
 // point that renders SDK markup has to import it — the wallet is the only route
 // that mounts an SDK component without OpenPods/WatchStream also being loaded,
@@ -20,6 +21,20 @@ const toast = toastIn('Wallet');
 // /premium routes yet), so it is pointed separately. Once prod hangout-api
 // ships them this can be dropped and it will fall back to apiBaseUrl.
 const PREMIUM_API = (import.meta.env.VITE_HANGOUTS_PREMIUM_API_URL || '').replace(/\/$/, '');
+
+// The SDK's perk tabs, plus what is Pro on 3Speak that the SDK cannot know:
+// live captions (components/openpods/studioCaptions.js, Pro since 2026-11-17).
+// English like the rest of the SDK panel.
+const PERK_GROUPS = PRO_PERK_GROUPS.map((g) => (g.id === 'streaming'
+  ? {
+    ...g,
+    perks: [...g.perks, {
+      icon: '💬',
+      title: 'Live captions',
+      body: 'Your words as captions while you are live, written by Whisper, and kept as subtitles on the replay.',
+    }],
+  }
+  : g));
 
 /**
  * The 3Speak Pro section of the wallet, now rendered by the SDK.
@@ -59,6 +74,7 @@ export default function ProPlansPanel() {
       }}
     >
       <ProPlans
+        benefitGroups={PERK_GROUPS}
         onSelectUser={(u) => navigate(`/@${u}`)}
         onNotify={(kind, message) => (kind === 'success' ? toast.success(message) : toast.error(message))}
       />

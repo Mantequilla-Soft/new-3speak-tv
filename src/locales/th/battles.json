@@ -1,0 +1,14 @@
+{
+  "bar": {
+    "title": "แบทเทิล",
+    "startsIn": "เริ่มใน {seconds}",
+    "timeLeft": "เหลือ {time}",
+    "counting": "กำลังนับบูสต์สุดท้าย…",
+    "amount": "{amount} HBD",
+    "wins": "@{name} ชนะ!",
+    "tie": "เสมอ!",
+    "endedEarly": "แบทเทิลจบก่อนเวลา",
+    "dropped": "แบทเทิลจบแล้ว: @{name} ออกไปแล้ว",
+    "boostHint": "บูสต์ที่นี่นับให้ @{name}"
+  }
+}

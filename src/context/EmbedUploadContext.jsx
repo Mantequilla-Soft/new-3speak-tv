@@ -17,16 +17,23 @@ import { setChannelTrailer } from '../utils/channelTrailer';
 import { syncVideoAdOptOut } from '../lib/advertiseData';
 import { markImportPublished } from '../lib/youtubeImport';
 import { sanitizeMusicCredits, soundAuthorsOf, soundCreditsMarkdown, primarySoundMetadata } from '../utils/soundCredits';
+import { saveCaptionEdit } from '../lib/captionEdit';
+import { registerCollab, collabWeight } from '../lib/collabs';
 import { enforceLockedBeneficiaries, getLockedBeneficiaries, chargesEncoder, LOCKED_FUND_ACCOUNT, LOCKED_ENCODER_ACCOUNT } from '../utils/beneficiaries';
+import { applyClipShare, streamClipMetadata } from '../lib/streamClips';
 import { remixChainAuthors, remixChainMarkdown } from '../utils/remixChain';
 import { oaEnvelope, threespeakVideo, probeVideoOrientation, OA_ARTICLE, OA_MICROPOST, OA_COMMENT } from '../utils/openAttribute';
 import axios from 'axios';
 import { isWeakLinkForced } from '../utils/uploadFaults';
 import { useTranslation } from 'react-i18next';
 import { readAddToBlog, writeAddToBlog, reblogOp } from '../utils/addToBlog';
+import { readContentLanguage, writeContentLanguage } from '../utils/contentLanguage';
 import { timelineMeta, applyTimelineToDescription } from '../utils/videoTimeline';
 import { registerStory } from '../lib/stories';
 import { dataUrlToBlob } from '../utils/videoThumbnails';
+import { addToPlaylist } from '../utils/playlistOperations';
+import { SERIES_APPEND_POSITION } from '../lib/series';
+import { buildPollMeta, openPollFields, POLL_MIN_OPTIONS, POLL_MAX_OPTIONS } from '../lib/polls';
 
 // The body of a story posted without a caption (see publishToEmbed).
 const STORY_FALLBACK_CAPTION = 'My 24-hour story on 3Speak.';
@@ -186,6 +193,9 @@ export function EmbedUploadProvider({ children }) {
   const [declineRewards, SetDeclineRewards] = useState(false);
   const [rewardPowerup, setRewardPowerup] = useState(false);
   const [isNsfw, setIsNsfw] = useState(false);
+  // The language spoken in the video (utils/contentLanguage.js), remembered.
+  const [contentLanguage, setContentLanguageState] = useState(readContentLanguage);
+  const setContentLanguage = useCallback((code) => { setContentLanguageState(code); writeContentLanguage(code); }, []);
   // "Add to my blog" (utils/addToBlog.js): reblog a regular video right after
   // publishing so it reaches the creator's blog and followers' feeds. Never
   // for shorts, which are replies, not posts. On by default, remembered.
@@ -198,8 +208,29 @@ export function EmbedUploadProvider({ children }) {
   const [videoRollsEnabled, setVideoRollsEnabled] = useState(true);
   // "Mark as channel trailer" — pinned to the creator's profile after publish.
   const [isChannelTrailer, setIsChannelTrailer] = useState(false);
+  // Collab post (lib/collabs.js): { account, split } or null. Regular videos by
+  // a Hive account only; the co-creator gets an invite on the checker.
+  const [collaborator, setCollaborator] = useState(null);
+  // A live-stream clip posted as a Short (lib/streamClips.js): { room, host,
+  // clipper, offsetSec, share } or null. `share` is the other side's locked split.
+  const [streamClip, setStreamClip] = useState(null);
   const [isScheduled, setIsScheduled] = useState(false);
   const [scheduleDateTime, setScheduleDateTime] = useState('');
+  // "List as a premiere" (opt-in, scheduled posts only): a public countdown page
+  // with Notify me, and a shared start with a live chat (checker routes/premieres.js).
+  const [isPremiere, setIsPremiere] = useState(false);
+  // "Save as draft": the post is built and kept on the checker without a time
+  // (utils/scheduledPosts.js drafts) instead of going out; published later from
+  // the studio's Drafts. Exclusive with a schedule.
+  const [saveAsDraft, setSaveAsDraft] = useState(false);
+  // A Short's series (lib/series.js): the playlist it is added to as the next part.
+  const [seriesId, setSeriesId] = useState('');
+  // A poll on the video or Short (lib/polls.js): its own question, 2 to 4
+  // options and how many days it runs. Off until the creator adds one.
+  const [pollOn, setPollOn] = useState(false);
+  const [pollQuestion, setPollQuestion] = useState('');
+  const [pollOptions, setPollOptions] = useState(['', '']);
+  const [pollDays, setPollDays] = useState(1);
 
   // Community data
   const [communitiesData, setCommunitiesData] = useState([]);
@@ -264,6 +295,9 @@ export function EmbedUploadProvider({ children }) {
   // in the soundtrack ticker, 3Speak sound creators get a locked split)
   const [musicCredits, setMusicCreditsRaw] = useState([]);
   const setMusicCredits = useCallback((raw) => setMusicCreditsRaw(sanitizeMusicCredits(raw)), []);
+  // The shorts editor's auto captions ({ language, cues, burnedIn }, already
+  // checked: utils/editorSubtitles.js), saved as the Short's subtitles once it is published
+  const [editorSubtitles, setEditorSubtitles] = useState(null);
 
   // Reusable flag (allow others to remix/clip this video)
   const [reusable, setReusable] = useState(true);
@@ -303,7 +337,7 @@ export function EmbedUploadProvider({ children }) {
   // Hive permlink of the just-published post — used by the success screen to
   // offer promotion of the new video.
   const [publishedPermlink, setPublishedPermlink] = useState('');
-  // ▶️ Set when the video came from the importer (/youtube-import):
+  // ▶️ Set when the video came from the importer (/import):
   // { id: "<youtube id>" | "tiktok:<id>" | "instagram:<shortcode>", platform, url }. On publish it goes into
   // the post's json_metadata (imported_from) and is reported to our API, so the
   // import grid can mark it as already on 3Speak.
@@ -402,6 +436,19 @@ export function EmbedUploadProvider({ children }) {
     setChapters([]);
     setTimelineLinks([]);
     setTimelineSeeded(false);
+    // A stream clip's share (usePostClipAsShort) belongs to that clip: another
+    // video drops it and its locked row. The fund and encoder rows stay.
+    const clipShare = streamClip?.share;
+    if (clipShare?.account) {
+      const isClipRow = (b) => b.locked && b.account === clipShare.account
+        && b.account !== LOCKED_FUND_ACCOUNT && b.account !== LOCKED_ENCODER_ACCOUNT;
+      const dropped = list.filter(isClipRow).reduce((sum, b) => sum + (Number(b.percent) || 0), 0);
+      if (dropped) {
+        setList(list.filter((b) => !isClipRow(b)));
+        setRemaingPercent((prev) => prev + dropped);
+      }
+    }
+    setStreamClip(null);
     resetEarlyUpload();
   };
 
@@ -440,10 +487,19 @@ export function EmbedUploadProvider({ children }) {
     setVideoAdsEnabled(true);
     setVideoRollsEnabled(true);
     setIsChannelTrailer(false);
+    setCollaborator(null);
+    setStreamClip(null);
     SetDeclineRewards(false);
     setRewardPowerup(false);
     setIsScheduled(false);
+    setSaveAsDraft(false);
+    setSeriesId('');
+    setPollOn(false);
+    setPollQuestion('');
+    setPollOptions(['', '']);
+    setPollDays(1);
     setScheduleDateTime('');
+    setIsPremiere(false);
     setFromStories(false);
     setIsStory(false);
     setOriginalAuthor(null);
@@ -451,6 +507,7 @@ export function EmbedUploadProvider({ children }) {
     setOriginalShortPermlink(null);
     setRemixChain([]);
     setMusicCreditsRaw([]);
+    setEditorSubtitles(null);
     setReusable(true);
     setChapters([]);
     setTimelineLinks([]);
@@ -1532,6 +1589,12 @@ export function EmbedUploadProvider({ children }) {
       toast.error(t('upload.details.errors.tagRequired'));
       return;
     }
+    // A poll needs its question and 2 to 4 different options.
+    const pollMeta = pollOn && !incubationHandle && !isStory ? buildPollMeta(pollOptions, pollDays) : null;
+    if (pollOn && !incubationHandle && !isStory && (!pollMeta || !pollQuestion.trim())) {
+      toast.error(t('social.polls.invalidVideo', { min: POLL_MIN_OPTIONS, max: POLL_MAX_OPTIONS }));
+      return;
+    }
 
     // Backstop upload gate: blocks "Post Video/Short" for creators with
     // canUpload === false, even if they reached /embed-studio directly (bypassing
@@ -1812,10 +1875,22 @@ export function EmbedUploadProvider({ children }) {
       // file — a remix that reuses an existing embed never had one.
       const oaOrientation = await probeVideoOrientation(videoFile);
 
+      // Collab post: a regular video by a Hive account naming someone else.
+      const collab = (!fromStories && !incubationHandle && collaborator?.account && collaborator.account !== user)
+        ? collaborator : null;
+
       const jsonMetadata = {
         app: '3speak/embed',
         format: 'markdown',
         tags: [...baseTags, ...userTags],
+        // The language spoken in it (utils/contentLanguage.js).
+        ...(contentLanguage ? { language: contentLanguage } : {}),
+        // Who made it with the author (routes/collabs.js on the checker reads it
+        // back from the post and invites them). The split is a beneficiary below.
+        ...(collab ? { collaborators: [collab.account] } : {}),
+        // A poll: our block and the Hive Open Polls fields (PeakD and Ecency
+        // show it too); the question is the creator's own, not the title.
+        ...(pollMeta ? { poll: pollMeta, ...openPollFields(pollQuestion, pollMeta) } : {}),
         // Top-level `image: [url]` is the Hive-wide convention frontends read to
         // pick a post's cover (peakd, ecency, hive.blog, …). Only add it when we
         // actually have a thumbnail — otherwise we'd post `image: [null]` which
@@ -1836,7 +1911,12 @@ export function EmbedUploadProvider({ children }) {
           ...(thumbnailUrl ? { thumbnail: thumbnailUrl } : {}),
           ...(originalAuthor ? { originalAuthor, originalPermlink } : {}),
           ...(originalAuthor && remixChain.length ? { remixChain } : {}),
+          // Clipped from a live stream: whose show, who clipped it, where.
+          ...(streamClipMetadata(streamClip) ? { streamClip: streamClipMetadata(streamClip) } : {}),
           ...(musicCredits.length ? { sound: primarySoundMetadata(musicCredits) } : {}),
+          // Listed as a premiere: the watch page asks the checker for its
+          // countdown, shared start and chat (lib/premieres.js).
+          ...(isScheduled && scheduleDateTime && isPremiere && !fromStories ? { premiere: true } : {}),
           // Chapters + link toasters (utils/videoTimeline.js). Read by the watch
           // page and the embed player; nothing when the creator added none.
           ...timeline,
@@ -1889,7 +1969,7 @@ export function EmbedUploadProvider({ children }) {
             ...(isStory && fromStories ? { story: true } : {}),
           },
         } : {}),
-        // ▶️ Where an imported video came from (/youtube-import): provenance on the
+        // ▶️ Where an imported video came from (/import): provenance on the
         // creator's own signed record, for later features (dedupe, re-sync,
         // "originally on …") without depending on our server's bookkeeping.
         ...(importSource ? {
@@ -1901,41 +1981,52 @@ export function EmbedUploadProvider({ children }) {
         } : {}),
       };
 
-      // Build comment_options. When the author is declining payout, skip
-      // beneficiaries entirely — declaring beneficiaries against a 0 HBD
-      // payout reads weird on-chain and an empty beneficiaries extension
-      // would be rejected by Hive.
+      // Build comment_options. The beneficiaries go on the post even when the
+      // author declines the payout: they earn nothing then, but the credit to
+      // a remix's or a sound's creator stays on Hive with the post, as the
+      // review step shows it.
       let allBeneficiaries = [];
-      if (!declineRewards) {
-        let parsedBeneficiaries = beneficiaries;
-        if (typeof parsedBeneficiaries === 'string') {
-          try { parsedBeneficiaries = JSON.parse(parsedBeneficiaries); } catch { parsedBeneficiaries = []; }
-        }
+      let parsedBeneficiaries = beneficiaries;
+      if (typeof parsedBeneficiaries === 'string') {
+        try { parsedBeneficiaries = JSON.parse(parsedBeneficiaries); } catch { parsedBeneficiaries = []; }
+      }
 
-        // Start with user-set beneficiaries (from the UI list, includes locked items)
-        const beneMap = new Map();
-        for (const b of (Array.isArray(parsedBeneficiaries) ? parsedBeneficiaries : [])) {
-          beneMap.set(b.account, Math.max(beneMap.get(b.account) || 0, b.weight));
-        }
+      // Start with user-set beneficiaries (from the UI list, includes locked items)
+      const beneMap = new Map();
+      for (const b of (Array.isArray(parsedBeneficiaries) ? parsedBeneficiaries : [])) {
+        beneMap.set(b.account, Math.max(beneMap.get(b.account) || 0, b.weight));
+      }
 
       // Apply locked beneficiaries: 10% threespeakfund + 1% encoder.pay for
-      // non-Pro users (both skipped for Pro subscribers) + 5% to the original
-      // creator on remix/clip (kept for both tiers). encoder.pay rides on
+      // non-Pro users (both skipped for Pro subscribers) + the original
+      // creator's share on a remix/clip, 15% stepping down a chain (kept for
+      // both tiers). encoder.pay rides on
       // embed uploads specifically because they go through 3Speak's encoder.
       enforceLockedBeneficiaries(beneMap, {
-        isPremium,
-        username: user,
-        includeEncoder: true,
-        originalAuthor: originalAuthor && originalPermlink ? originalAuthor : null,
-        remixAuthors: originalAuthor && originalPermlink ? remixChainAuthors(remixChain, user) : [],
-        soundAuthors: soundAuthorsOf(musicCredits, user),
+      isPremium,
+      username: user,
+      includeEncoder: true,
+      originalAuthor: originalAuthor && originalPermlink ? originalAuthor : null,
+      remixAuthors: originalAuthor && originalPermlink ? remixChainAuthors(remixChain, user) : [],
+      soundAuthors: soundAuthorsOf(musicCredits, user),
       });
+      // A stream clip's share: the clipper (host posts) or the host (clipper posts).
+      applyClipShare(beneMap, streamClip, user);
 
-        // Convert map to sorted array (sorted by account name — required by Hive protocol)
-        allBeneficiaries = [...beneMap.entries()]
-          .map(([account, weight]) => ({ account, weight }))
-          .sort((a, b) => a.account.localeCompare(b.account));
+      // The collaborator's split: their share of what the author keeps after
+      // every other beneficiary (lib/collabs.js collabWeight). Skipped, with a
+      // note in the log, when Hive's beneficiary limit leaves no room.
+      if (collab) {
+        const others = [...beneMap.entries()].filter(([a]) => a !== collab.account).map(([account, weight]) => ({ account, weight }));
+        const w = collabWeight(others, collab.split);
+        if (w) beneMap.set(collab.account, w);
+        else addMessage(t('social.collab.noRoom', { user: collab.account }), 'error');
       }
+
+      // Convert map to sorted array (sorted by account name — required by Hive protocol)
+      allBeneficiaries = [...beneMap.entries()]
+        .map(([account, weight]) => ({ account, weight }))
+        .sort((a, b) => a.account.localeCompare(b.account));
 
       const commentOptions = {
         author: user,
@@ -1990,7 +2081,8 @@ export function EmbedUploadProvider({ children }) {
       // for an account_update2 signature on the first scheduled post ever),
       // then POST the fully-built post to the checker, which has a 5-minute
       // cron that broadcasts due posts as @threespeak on the user's behalf.
-      if (isScheduled && scheduleDateTime && !fromStories) {
+      const asDraft = saveAsDraft && !fromStories && !incubationHandle;
+      if (((isScheduled && scheduleDateTime) || asDraft) && !fromStories) {
         try {
           setStatusText(t('upload.publishing.checkingAuthority'));
           addMessage(t('upload.publishing.checkingAuthority'));
@@ -2003,7 +2095,8 @@ export function EmbedUploadProvider({ children }) {
           }
 
           // The HTML datetime-local string is local-tz; convert to a real ISO UTC.
-          const scheduledOnIso = new Date(scheduleDateTime).toISOString();
+          // A draft has no time at all.
+          const scheduledOnIso = asDraft ? null : new Date(scheduleDateTime).toISOString();
 
           // Auth: the app key, plus the owner's signature over this create
           // (utils/scheduledPostProof.js: @threespeak via our API for every login,
@@ -2024,18 +2117,18 @@ export function EmbedUploadProvider({ children }) {
             if (v) embedPermlink = v.split('/').pop() || null;
           } catch { /* leave null — link step in cron is best-effort */ }
 
-          setStatusText(t('upload.publishing.savingScheduled'));
-          addMessage(t('upload.publishing.savingScheduled'));
+          setStatusText(t(asDraft ? 'episodes.drafts.saving' : 'upload.publishing.savingScheduled'));
+          addMessage(t(asDraft ? 'episodes.drafts.saving' : 'upload.publishing.savingScheduled'));
           // Signed right before the write (the checker allows 5 minutes), over
-          // the very scheduledOn string the body carries.
-          const proof = await proveScheduledPost({
-            action: 'create', owner: assetOwner, permlink: hivePermlink, scheduledOn: scheduledOnIso,
-          });
+          // the very scheduledOn string the body carries (a draft: no time).
+          const proof = await proveScheduledPost(asDraft
+            ? { action: 'draft', owner: assetOwner, permlink: hivePermlink }
+            : { action: 'create', owner: assetOwner, permlink: hivePermlink, scheduledOn: scheduledOnIso });
           const resp = await axios.post(url, {
             ...proof,
             owner: assetOwner,
             permlink: hivePermlink,
-            scheduledOn: scheduledOnIso,
+            ...(asDraft ? { draft: true } : { scheduledOn: scheduledOnIso }),
             title,
             description: publishDescription,
             body: postBody,
@@ -2049,6 +2142,8 @@ export function EmbedUploadProvider({ children }) {
             embedPermlink,
             // "Add to my blog": the checker reblogs it once the cron publishes it.
             reblog: !!addToBlog && !fromStories,
+            // Opt-in: off unless the creator switched it on in the schedule sheet.
+            premiere: !!isPremiere,
           }, {
             headers: CHECKER_API_KEY ? { Authorization: `Bearer ${CHECKER_API_KEY}` } : {},
           });
@@ -2059,9 +2154,15 @@ export function EmbedUploadProvider({ children }) {
 
           // We deliberately SKIP the regular Hive broadcast and the embed-link
           // step here — the cron does both at publish time.
-          setStatusText(t('upload.publishing.scheduledFor', { when: new Date(scheduledOnIso).toLocaleString() }));
-          addMessage(t('upload.publishing.scheduledFor', { when: new Date(scheduledOnIso).toLocaleString() }), 'success');
-          toast.success(t('upload.publishing.scheduled'));
+          if (asDraft) {
+            setStatusText(t('episodes.drafts.saved'));
+            addMessage(t('episodes.drafts.savedLong'), 'success');
+            toast.success(t('episodes.drafts.saved'));
+          } else {
+            setStatusText(t('upload.publishing.scheduledFor', { when: new Date(scheduledOnIso).toLocaleString() }));
+            addMessage(t('upload.publishing.scheduledFor', { when: new Date(scheduledOnIso).toLocaleString() }), 'success');
+            toast.success(t('upload.publishing.scheduled'));
+          }
           setCompleted(true);
           setUploading(false);
           setUploadProgress(100);
@@ -2069,8 +2170,9 @@ export function EmbedUploadProvider({ children }) {
         } catch (schedErr) {
           console.error('Scheduled-post error:', schedErr);
           const msg = scheduledPostWriteError(schedErr, t('upload.errors.couldNotSchedule'));
-          addMessage(t('upload.errors.scheduleFailed', { msg }), 'error');
-          toast.error(t('upload.errors.scheduleFailed', { msg }));
+          const failKey = asDraft ? 'episodes.drafts.saveFailed' : 'upload.errors.scheduleFailed';
+          addMessage(t(failKey, { msg }), 'error');
+          toast.error(t(failKey, { msg }));
           throw schedErr;
         }
       }
@@ -2175,6 +2277,12 @@ export function EmbedUploadProvider({ children }) {
       }
 
       addMessage(t('upload.publishing.log.postedToHive'));
+
+      // Collab: the checker reads the post back and invites the co-creator.
+      // In the background: the upload is done either way.
+      if (collab && !result.incubation) {
+        registerCollab(user, hivePermlink).catch(() => {});
+      }
       setStatusText(t('upload.publishing.linkingEmbed'));
 
       // ─── Step 3: Link embed video to Hive post ───
@@ -2274,6 +2382,35 @@ export function EmbedUploadProvider({ children }) {
         }
       }
 
+      // ─── A Short's series: the next part ───
+      // After the post exists (the indexer checks the item). Non-fatal: the Short
+      // is out either way and can be added from the series page.
+      if (fromStories && seriesId && !result.incubation) {
+        try {
+          await addToPlaylist(seriesId, user, hivePermlink, SERIES_APPEND_POSITION);
+          addMessage(t('episodes.series.addedLog'), 'success');
+        } catch (seriesErr) {
+          console.warn('Failed to add the short to its series:', seriesErr);
+          addMessage(t('episodes.series.addFailed'), 'warning');
+          toast.error(t('episodes.series.addFailed'));
+        }
+      }
+
+      // ─── The shorts editor's captions: the Short's subtitles ───
+      // After the post exists, under its Hive permlink (what the watch page and
+      // the transcript ask for). The author adds the language (checker POST
+      // /subtitles/edit); burnt-in ones are marked so CC stays off for them by
+      // default. Non-fatal: the Short is out either way.
+      if (editorSubtitles?.cues?.length && !result.incubation && user) {
+        try {
+          await saveCaptionEdit({ author: user, permlink: hivePermlink, lang: editorSubtitles.language || 'en', cues: editorSubtitles.cues, burnedIn: editorSubtitles.burnedIn === true });
+          addMessage(t('editorLink.captionsSaved'), 'success');
+        } catch (capErr) {
+          console.warn('Failed to save the editor captions as subtitles:', capErr);
+          addMessage(t('editorLink.captionsFailed'), 'warning');
+        }
+      }
+
       // ─── Imported video: remember it is on 3Speak now ───
       // Non-fatal and silent: it only feeds the ✓ on the import page.
       if (importSource && !result.incubation) {
@@ -2328,11 +2465,21 @@ export function EmbedUploadProvider({ children }) {
     declineRewards, SetDeclineRewards,
     rewardPowerup, setRewardPowerup,
     isNsfw, setIsNsfw,
+    contentLanguage, setContentLanguage,
     videoAdsEnabled, setVideoAdsEnabled,
     videoRollsEnabled, setVideoRollsEnabled,
     isChannelTrailer, setIsChannelTrailer,
+    collaborator, setCollaborator,
+    streamClip, setStreamClip,
     isScheduled, setIsScheduled,
     scheduleDateTime, setScheduleDateTime,
+    isPremiere, setIsPremiere,
+    saveAsDraft, setSaveAsDraft,
+    seriesId, setSeriesId,
+    pollOn, setPollOn,
+    pollQuestion, setPollQuestion,
+    pollOptions, setPollOptions,
+    pollDays, setPollDays,
     // Community data
     communitiesData, setCommunitiesData,
     // Modals
@@ -2373,6 +2520,7 @@ export function EmbedUploadProvider({ children }) {
     originalShortPermlink, setOriginalShortPermlink,
     remixChain, setRemixChain,
     musicCredits, setMusicCredits,
+    editorSubtitles, setEditorSubtitles,
     // Reusable flag
     reusable, setReusable,
     // Timeline step

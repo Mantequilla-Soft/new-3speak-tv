@@ -1,7 +1,10 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useHangoutsContext } from '@snapie/hangouts-react';
 import { toastIn } from '../../utils/toast';
+import { makeClip, clipFileUrl } from '../../lib/streamClips';
 import { DockTile, Icon } from '../v2/ui';
+import ClipReadyModal from './ClipReadyModal';
 
 // Every toast from this module is headed "Live"; the message becomes the
 // line under it. See utils/toast.js.
@@ -9,8 +12,11 @@ const toast = toastIn('Live');
 
 // Viewer-facing "clip the last 30s" button for a live OpenPods stream. Only a
 // Pro host has DVR running, so the button appears only while /dvr/status reports
-// recording=true (which also hides it for non-Pro hosts). Both endpoints are
-// public; /clip is rate-limited server-side.
+// recording=true, or, without the Pro DVR, while the stream records its VOD
+// (clips: 'after': the clip is cut from the recording when the stream ends). Both endpoints are
+// public; /clip is rate-limited server-side. A signed-in clipper is credited
+// (H13): the clip is kept two days and opens in ClipReadyModal, ready to post as
+// a Short with the host as a beneficiary, or to download.
 // The room's own hangouts deployment (VITE_apiUrlS): DVR runs there.
 import { findRoomEndpoint } from '../../utils/hangoutsEndpoints';
 
@@ -19,6 +25,9 @@ export default function StreamClipButton({ roomName, variant = 'inline' }) {
   const [available, setAvailable] = useState(false);
   const [busy, setBusy] = useState(false);
   const [apiUrl, setApiUrl] = useState('');
+  const [ready, setReady] = useState(null);
+  // Inside the stream's HangoutsProvider: its session credits the clipper.
+  const { apiClient } = useHangoutsContext();
   useEffect(() => {
     let alive = true;
     if (roomName) findRoomEndpoint(roomName).then((ep) => { if (alive) setApiUrl((ep?.api || '').replace(/\/$/, '')); });
@@ -31,7 +40,7 @@ export default function StreamClipButton({ roomName, variant = 'inline' }) {
     const check = () => {
       fetch(`${apiUrl}/rooms/${encodeURIComponent(roomName)}/dvr/status`)
         .then((r) => (r.ok ? r.json() : null))
-        .then((d) => { if (alive) setAvailable(!!d?.recording); })
+        .then((d) => { if (alive) setAvailable(!!d?.recording || d?.clips === 'after'); })
         .catch(() => { if (alive) setAvailable(false); });
     };
     check();
@@ -46,45 +55,34 @@ export default function StreamClipButton({ roomName, variant = 'inline' }) {
     if (busy || !apiUrl) return;
     setBusy(true);
     try {
-      const r = await fetch(`${apiUrl}/rooms/${encodeURIComponent(roomName)}/dvr/clip`, { method: 'POST' });
-      if (!r.ok) throw new Error(String(r.status));
-      const { path } = await r.json();
-      // Fetch the file and SAVE it (download) rather than opening a new tab. The
-      // clip host sends CORS, so the cross-origin blob fetch is allowed; the
-      // object URL is same-origin so the <a download> actually downloads.
-      const fileResp = await fetch(`${apiUrl}${path}`);
-      if (!fileResp.ok) throw new Error('fetch');
-      const blob = await fileResp.blob();
-      const objUrl = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = objUrl;
-      a.download = `3speak-clip-${Date.now()}.mp4`;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      setTimeout(() => URL.revokeObjectURL(objUrl), 15000);
-      toast.success(t('live.clip.saved'));
+      const { path, clip: kept } = await makeClip(apiUrl, roomName, apiClient?.getSessionToken?.() || null);
+      setReady({ url: clipFileUrl(apiUrl, path), clip: kept || null });
     } catch (e) {
-      const msg = String(e?.message) === '429'
+      const msg = e?.status === 429
         ? t('live.clip.slowDown')
         : t('live.clip.failed');
       toast.error(msg);
     } finally {
       setBusy(false);
     }
-  }, [busy, roomName, apiUrl, t]);
+  }, [busy, roomName, apiUrl, apiClient, t]);
 
-  if (!available) return null;
+  const modal = <ClipReadyModal open={!!ready} url={ready?.url} clip={ready?.clip} room={roomName} api={apiUrl} token={apiClient?.getSessionToken?.() || null} onClose={() => setReady(null)} />;
+  if (!available) return ready ? modal : null;
 
   if (variant === 'sidebar') {
     return (
-      <div className="actionItem" onClick={clip} role="button" title={t('live.clip.title')}>
-        <div className={`actionButton${busy ? ' liked' : ''}`}><Icon name="content_cut" size={24} /></div>
-        <span className="actionLabel">{busy ? '…' : t('live.clip.label')}</span>
-      </div>
+      <>
+        <div className="actionItem" onClick={clip} role="button" title={t('live.clip.title')}>
+          <div className={`actionButton${busy ? ' liked' : ''}`}><Icon name="content_cut" size={24} /></div>
+          <span className="actionLabel">{busy ? '…' : t('live.clip.label')}</span>
+        </div>
+        {modal}
+      </>
     );
   }
   return (
+    <>
     <DockTile
       icon={busy ? 'progress_activity' : 'content_cut'}
       label={busy ? t('live.clip.clipping') : t('live.clip.label')}
@@ -93,5 +91,7 @@ export default function StreamClipButton({ roomName, variant = 'inline' }) {
       disabled={busy}
       title={t('live.clip.title')}
     />
+    {modal}
+    </>
   );
 }

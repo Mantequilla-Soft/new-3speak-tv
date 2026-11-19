@@ -1,0 +1,29 @@
+{
+  "valueText": "{{time}} sa {{total}}",
+  "seekLabel": "Lumipat ng posisyon",
+  "loop": "Ulitin",
+  "loopOn": "Naka-on ang pag-ulit",
+  "loopOff": "Ulitin ang video na ito",
+  "theater": "Theater mode",
+  "theaterExit": "Karaniwang view",
+  "title": "Mga keyboard shortcut",
+  "sub": "Gumagana kahit saan sa page, maliban habang nagta-type.",
+  "keySpace": "Space",
+  "keyShift": "Shift",
+  "list": {
+    "playPause": "I-play o i-pause",
+    "back10": "Bumalik ng 10 segundo",
+    "forward10": "Sumulong ng 10 segundo",
+    "arrows": "Bumalik o sumulong ng 10 segundo",
+    "frame": "Isang frame pabalik o pasulong",
+    "percent": "Tumalon sa 0% hanggang 90% ng video",
+    "volume": "Lakasan o hinaan ang volume",
+    "mute": "I-mute o i-unmute",
+    "captions": "Caption on o off",
+    "fullscreen": "Full screen",
+    "theater": "Theater mode on o off",
+    "save": "I-save",
+    "share": "Ibahagi",
+    "help": "Ipakita ang listahang ito"
+  }
+}

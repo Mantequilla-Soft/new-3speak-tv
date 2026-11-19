@@ -1,0 +1,5 @@
+{
+  "videoEditor": "Video-Editor",
+  "videoEditorSub": "Querformat-Video bis 10 Minuten schneiden",
+  "editorTooLong": "Der Video-Editor nimmt Videos bis {{minutes}} Minuten"
+}

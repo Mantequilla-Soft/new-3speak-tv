@@ -1,0 +1,23 @@
+{
+  "openSound": "打开这个声音",
+  "kindLibrary": "音乐库",
+  "kindOriginal": "原创声音",
+  "untitled": "未命名的声音",
+  "uses_other": "{{count}} 个短视频在用",
+  "listen": "收听",
+  "pause": "暂停",
+  "useThisSound": "使用这个声音",
+  "splitNote": "用这个声音制作的短视频会把 15% 的奖励分给 {{name}}。",
+  "license": "许可：{{license}}",
+  "original": "原作",
+  "shortsUsing": "使用这个声音的短视频",
+  "newest": "最新",
+  "top": "热门",
+  "noUsesTitle": "还没有短视频使用这个声音",
+  "noUsesText": "来做第一个吧：“使用这个声音”会用它打开编辑器。",
+  "trending": "热门声音",
+  "notFound": "找不到这个声音",
+  "toShorts": "前往短视频",
+  "signIn": "登录后即可用这个声音制作短视频。",
+  "cannotUse": "这个声音目前无法使用。"
+}

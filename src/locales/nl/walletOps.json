@@ -1,0 +1,94 @@
+{
+  "actions": {
+    "powerUp": "Power up",
+    "powerDown": "Power down",
+    "savings": "Spaarrekening",
+    "convert": "Omzetten",
+    "delegate": "Delegeren",
+    "aria": "Je tegoeden beheren"
+  },
+  "common": {
+    "amount": "Bedrag ({{coin}})",
+    "available": "Beschikbaar: {{balance}}",
+    "max": "Max",
+    "to": "Naar account",
+    "toHint": "Laat dit zo staan voor je eigen account.",
+    "activeKey": "Vraagt om je active key",
+    "butrauth": "Ingelogd met Butter Auth: je keurt dit in de volgende stap goed met je Hive-wallet of je active key.",
+    "insufficient": "Dat is meer dan je hebt.",
+    "amountPositive": "Vul een bedrag boven nul in.",
+    "invalidAccount": "Er is geen Hive-account met die naam.",
+    "accountCheckFailed": "Dat account kan nu niet worden gecontroleerd. Probeer het zo opnieuw.",
+    "done": "Klaar. Het kan een paar seconden duren voordat het hier te zien is.",
+    "failed": "Het is niet gelukt: {{error}}",
+    "loading": "Je wallet laden..."
+  },
+  "powerUp": {
+    "title": "Power up",
+    "note": "Hive Power geeft je stemmen gewicht en levert curatiebeloningen op. Terugzetten naar HIVE gaat in 13 wekelijkse betalingen.",
+    "submit": "{{amount}} HIVE powerup",
+    "submitTo": "{{amount}} HIVE powerup voor @{{to}}"
+  },
+  "powerDown": {
+    "title": "Power down",
+    "note": "Hive Power komt terug als HIVE in 13 wekelijkse betalingen, ongeveer {{weekly}} HP per week.",
+    "replace": "Er loopt al een power down (nog {{left}} HP). Als je een nieuwe start, vervangt die de huidige.",
+    "submit": "{{amount}} HP power down",
+    "stop": "Power down stoppen",
+    "stopped": "Power down gestopt."
+  },
+  "savings": {
+    "title": "Spaarrekening",
+    "deposit": "Storten",
+    "withdraw": "Opnemen",
+    "depositNote": "HBD op je spaarrekening levert {{rate}}% per jaar op. Opnemen duurt 3 dagen.",
+    "depositNoteHive": "HIVE op je spaarrekening levert geen rente op. Opnemen duurt 3 dagen.",
+    "withdrawNote": "Komt over 3 dagen aan. Tot dan kun je het annuleren.",
+    "submitDeposit": "{{amount}} {{coin}} storten",
+    "submitWithdraw": "{{amount}} {{coin}} opnemen"
+  },
+  "convert": {
+    "title": "Omzetten",
+    "hbdToHive": "HBD naar HIVE",
+    "hiveToHbd": "HIVE naar HBD",
+    "hbdNote": "Je krijgt over 3,5 dag ongeveer {{amount}} HIVE, tegen de mediaanprijs van die dagen. Het uiteindelijke bedrag kan afwijken.",
+    "hiveNote": "Je krijgt nu ongeveer {{amount}} HBD. De helft van je HIVE wordt als onderpand vastgehouden en de rest komt over 3,5 dag terug. Er geldt een vergoeding van 5%.",
+    "warning": "Een omzetting kan niet ongedaan worden gemaakt. Handelen op een markt kan goedkoper zijn.",
+    "submit": "{{amount}} {{coin}} omzetten"
+  },
+  "delegate": {
+    "title": "Delegeren",
+    "toLabel": "Delegeren aan",
+    "note": "Gedelegeerde Hive Power blijft van jou, maar geeft zijn stemkracht aan het andere account. Als je de delegatie intrekt, duurt het 5 dagen voordat hij terugkomt.",
+    "current": "Je delegeert nu {{hp}} HP aan @{{to}}. Hiermee stel je een nieuw bedrag in.",
+    "submit": "{{amount}} HP delegeren aan @{{to}}",
+    "submitNoTo": "{{amount}} HP delegeren",
+    "yours": "Je delegaties",
+    "remove": "Intrekken",
+    "removed": "Delegatie ingetrokken. De HP komt over 5 dagen terug.",
+    "self": "Je kunt niet aan jezelf delegeren."
+  },
+  "pending": {
+    "title": "Bezig",
+    "powerDown": "Power down: {{weekly}} HP per week, resterende weken: {{weeks}}",
+    "nextPayment": "Volgende betaling: {{date}}",
+    "withdrawal": "Van spaarrekening: {{amount}}",
+    "arrives": "Komt aan: {{date}}",
+    "convertHbd": "{{amount}} wordt omgezet naar HIVE",
+    "convertHive": "{{amount}} vastgehouden als onderpand",
+    "ready": "Klaar: {{date}}",
+    "delegation": "Gedelegeerd aan @{{to}}: {{hp}} HP",
+    "cancel": "Annuleren",
+    "cancelled": "Opname geannuleerd. Het tegoed blijft op je spaarrekening.",
+    "stop": "Stoppen",
+    "empty": "Er loopt nu niets."
+  },
+  "activeAuth": {
+    "powerDown": "{{amount}} power down",
+    "toSavings": "{{amount}} naar spaarrekening zetten",
+    "fromSavings": "{{amount}} van spaarrekening opnemen",
+    "cancelSavings": "Een opname van de spaarrekening annuleren",
+    "convert": "{{amount}} omzetten",
+    "delegate": "{{amount}} delegeren aan @{{to}}"
+  }
+}

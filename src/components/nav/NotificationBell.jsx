@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useMemo } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import useHoverPeek from '../../hooks/useHoverPeek';
 import { Link, useNavigate } from 'react-router-dom';
@@ -38,6 +38,10 @@ import './NotificationBell.scss';
 const toast = toastIn('Notifications');
 
 const PREVIEW_LIMIT = 20;
+// The hover popup hangs this far under the bell, and keeps this far off the
+// window's right edge (the same as the chat peek, Chat/ChatOverlay.jsx).
+const PEEK_GAP = 6;
+const PEEK_EDGE = 8;
 
 // The sheet's tabs (26a). Hive has no "upload" notification: Uploads are the 24h
 // stories of people you follow, Pods the new episodes of podcasts you follow.
@@ -61,9 +65,16 @@ const MAX_STACKED_AVATARS = 4;
 function NotificationBell() {
   const { t } = useTranslation();
   const { user, authenticated } = useAppStore();
-  // A mouse resting on the bell peeks at the list, a click keeps it open, and it
-  // fades in and out (hooks/useHoverPeek.js, `.notif-dropdown--leaving`).
+  // A mouse resting on the bell peeks at the list in a small popup hung under it
+  // (like chat and the profile menu); only a click opens the side sheet. Both
+  // fade in and out (hooks/useHoverPeek.js, `.notif-dropdown--leaving`).
   const { open, shown, leaving, close, toggle, hoverProps } = useHoverPeek();
+  // Popup or sheet: decided while shown, kept while it fades out, so a closing
+  // sheet does not turn into a popup on its way out (a peek that was clicked
+  // is still a "peek" to the hook).
+  const popupRef = useRef(true);
+  if (shown) popupRef.current = !open;
+  const asPopup = popupRef.current;
 
   // Browser push, opted into from here — this dropdown IS the notifications UI,
   // so it's where someone looks for "also tell me when I'm not on the site".
@@ -116,6 +127,15 @@ function NotificationBell() {
   // be the containing block of its position: fixed), so it is outside `ref`.
   const sheetRef = useRef(null);
   const navigate = useNavigate();
+
+  // The popup hangs under the bell, measured when a peek starts.
+  const [anchor, setAnchor] = useState(null);
+  useLayoutEffect(() => {
+    if (!shown || open) return;
+    const r = ref.current?.getBoundingClientRect();
+    if (!r) return;
+    setAnchor({ top: r.bottom + PEEK_GAP, right: Math.max(PEEK_EDGE, window.innerWidth - r.right) });
+  }, [shown, open]);
 
   const {
     notifications,
@@ -258,7 +278,14 @@ function NotificationBell() {
         <>
         {/* Phones: the sheet dims the page; a tap there closes it. */}
         {open && <div className="notif-scrim" onClick={close} aria-hidden="true" />}
-        <div ref={sheetRef} className={`notif-dropdown${leaving ? ' notif-dropdown--leaving' : ''}`} role="menu" aria-label={t('common.nav.notifications')} {...hoverProps}>
+        <div
+          ref={sheetRef}
+          className={`notif-dropdown${asPopup ? ' notif-dropdown--popup' : ''}${leaving ? ' notif-dropdown--leaving' : ''}`}
+          style={asPopup && anchor ? { top: anchor.top, right: anchor.right } : undefined}
+          role="menu"
+          aria-label={t('common.nav.notifications')}
+          {...hoverProps}
+        >
           <div className="notif-dropdown-grab" aria-hidden="true" />
           {/* 26a: a cyan bar, the title 20/700, then 40px buttons */}
           <div className="notif-dropdown-header">

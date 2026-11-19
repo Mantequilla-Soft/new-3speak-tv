@@ -76,7 +76,8 @@
       "all": "Lahat",
       "rewards": "Rewards",
       "received": "Natanggap",
-      "sent": "Naipadala"
+      "sent": "Naipadala",
+      "points": "Points"
     },
     "from": "Mula kay @{{user}}",
     "sentTo": "Ipinadala kay @{{user}}",
@@ -101,5 +102,41 @@
     "memoPlaceholder": "Para saan ito, gaya ng numero ng invoice",
     "subRequest": "Ang pag-scan sa code na ito ay humihingi ng {{amount}} {{coin}}. Pinupunan ito ng 3Speak at ng mga Hive wallet na nakakabasa ng payment code.",
     "subMemo": "Ang pag-scan sa code na ito ay pumupuno ng pangalan ng account mo at ng memo sa 3Speak at sa mga Hive wallet na nakakabasa ng payment code."
+  },
+  "points": {
+    "title": "Channel points",
+    "sub": "Kinikita sa mga live stream ng 3Speak, ginagastos sa mga hula at boost.",
+    "keptUntil": "Mananatili hanggang {{date}}. Manood, mag-chat o mag-stream para hindi mawala ang mga ito.",
+    "startsAt_one": "Nagsisimula ang lahat sa {{n}} point.",
+    "startsAt_other": "Nagsisimula ang lahat sa {{n}} points.",
+    "earnTitle": "Paano kumita",
+    "earn": {
+      "watch": "Panonood ng stream",
+      "chat": "Pag-chat",
+      "stream": "Pag-stream",
+      "raid": "Mga raid at laban",
+      "boost": "Pag-boost"
+    },
+    "rate": {
+      "perMinute": "{{n}} kada minuto",
+      "perWord": "{{n}} kada salita",
+      "upTo": "Hanggang {{n}}"
+    },
+    "historyTitle": "History ng points",
+    "history": {
+      "watch": "Mga pinanood na stream",
+      "stream": "Nag-stream",
+      "chat": "Nag-chat",
+      "raid": "Nag-raid kay @{{user}}",
+      "battle": "Laban kontra @{{user}}",
+      "boost": "Nag-boost ng stream",
+      "spend": "Boost gamit ang points",
+      "refund": "Ibinalik na points",
+      "prediction": "Hula",
+      "expire": "Na-reset matapos ang {{days}} araw na walang aktibidad"
+    },
+    "empty": "Wala pang galaw ng points.",
+    "more": "Ipakita pa",
+    "onHive": "nasa Hive"
   }
 }

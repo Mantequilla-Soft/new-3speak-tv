@@ -1,0 +1,21 @@
+{
+  "title": "Shorty z tego filmu",
+  "sub": "Wybrane przez widzów: fragmenty, które oglądają ponownie, komentują i o których piszą na czacie, oraz zdania warte cytowania.",
+  "empty": "Brak sugestii. Pojawią się, gdy ludzie obejrzą, powtórzą i skomentują ten film.",
+  "error": "Nie udało się teraz wczytać sugestii.",
+  "range": "{{start}} do {{end}}",
+  "seconds": "{{seconds}} s",
+  "reasons": {
+    "replay": "Najczęściej powtarzane",
+    "comments_one": "{{count}} komentarz wskazuje tutaj",
+    "comments_few": "{{count}} komentarze wskazują tutaj",
+    "comments_many": "{{count}} komentarzy wskazuje tutaj",
+    "comments_other": "{{count}} komentarza wskazuje tutaj",
+    "chat": "Czat ożył",
+    "quote": "Zdanie do cytowania"
+  },
+  "preview": "Podgląd",
+  "stop": "Zatrzymaj",
+  "makeShort": "Zrób Shorta",
+  "foot": "Widzisz to tylko Ty. Powtórki są liczone bez wiedzy, kto oglądał."
+}

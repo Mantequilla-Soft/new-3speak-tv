@@ -53,10 +53,17 @@ export function chargesEncoder({ isPremium, username, includeEncoder }) {
 // Hive refuses a post with more beneficiaries than this (HIVE_MAX_COMMENT_BENEFICIARIES)
 export const HIVE_MAX_BENEFICIARIES = 8;
 
-export const REMIX_AUTHOR_PERCENT = 5;
+// A remix or clip gives the author of the video it was made from
+// REMIX_AUTHOR_PERCENT; each earlier author further back in the remix chain
+// REMIX_STEP_PERCENT less, never below REMIX_MIN_PERCENT (15, 10, 5, 5 ...).
+export const REMIX_AUTHOR_PERCENT = 15;
+export const REMIX_STEP_PERCENT = 5;
+export const REMIX_MIN_PERCENT = 5;
 export const REMIX_AUTHOR_WEIGHT = REMIX_AUTHOR_PERCENT * 100;
+/** The share of the chain author `step` steps back (0 = the direct source). */
+export const remixPercentAt = (step) => Math.max(REMIX_MIN_PERCENT, REMIX_AUTHOR_PERCENT - step * REMIX_STEP_PERCENT);
 // A 3Speak creator whose sound (music library) is used in a short
-export const SOUND_AUTHOR_PERCENT = 5;
+export const SOUND_AUTHOR_PERCENT = 15;
 export const SOUND_AUTHOR_WEIGHT = SOUND_AUTHOR_PERCENT * 100;
 
 /**
@@ -92,14 +99,10 @@ export function getLockedBeneficiaries({ isPremium, originalAuthor, includeEncod
       minPercent: LOCKED_ENCODER_PERCENT,
     });
   }
-  for (const account of remixAccounts(originalAuthor, remixAuthors)) {
-    locked.push({
-      account,
-      percent: REMIX_AUTHOR_PERCENT,
-      locked: true,
-      minPercent: REMIX_AUTHOR_PERCENT,
-    });
-  }
+  remixAccounts(originalAuthor, remixAuthors).forEach((account, step) => {
+    const percent = remixPercentAt(step);
+    locked.push({ account, percent, locked: true, minPercent: percent });
+  });
   for (const account of soundAuthors) {
     const existing = locked.find(b => b.account === account);
     if (existing) {
@@ -148,9 +151,9 @@ export function enforceLockedBeneficiaries(beneMap, { isPremium, originalAuthor,
   } else {
     beneMap.delete(LOCKED_ENCODER_ACCOUNT);
   }
-  for (const account of remixAccounts(originalAuthor, remixAuthors)) {
-    beneMap.set(account, Math.max(beneMap.get(account) || 0, REMIX_AUTHOR_WEIGHT));
-  }
+  remixAccounts(originalAuthor, remixAuthors).forEach((account, step) => {
+    beneMap.set(account, Math.max(beneMap.get(account) || 0, remixPercentAt(step) * 100));
+  });
   // A sound split only where it fits (see getLockedBeneficiaries)
   for (const account of soundAuthors) {
     if (!beneMap.has(account) && beneMap.size >= HIVE_MAX_BENEFICIARIES) continue;
@@ -159,7 +162,8 @@ export function enforceLockedBeneficiaries(beneMap, { isPremium, originalAuthor,
   return beneMap;
 }
 
-// The remix source plus the earlier authors of its chain, each once
+// The remix source plus the earlier authors of its chain, nearest first, each
+// once (an author met twice keeps the nearer, bigger share)
 function remixAccounts(originalAuthor, remixAuthors) {
   return [...new Set([originalAuthor, ...remixAuthors].filter(Boolean))];
 }

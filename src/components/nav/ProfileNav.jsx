@@ -11,7 +11,7 @@ import { useChat } from '../../context/ChatContext';
 import { useServerUnread } from '../../hooks/useServerUnread';
 import { getVotePower } from '../../utils/hiveUtils';
 import { getHiveUrl, ensureHealthyNode } from '../../utils/hiveNode';
-import { adsEnabledFor, VIDEO_IMPORT_ENABLED } from '../../utils/config';
+import { adsEnabledFor, automationsEnabledFor, VIDEO_IMPORT_ENABLED } from '../../utils/config';
 import useCanImportVideos from '../../hooks/useCanImportVideos';
 import MountWhenOpened from '../common/LazyMount';
 import { useAvatarUrl } from '../../utils/avatarCache';
@@ -294,12 +294,23 @@ function ProfileNav({ isVisible, pinned = true, leaving = false, hoverProps, onc
                 {row('monitoring', t('nav.profile.analytics'))}
               </Link>
             )}
+            {!isIncubating && (
+              <Link to="/profile?tab=comments" className="pn-item" role="menuitem" onClick={onclose}>
+                {row('forum', t('creator.inbox.menu'))}
+              </Link>
+            )}
             {/* ▶️ Import your own videos from YouTube & co. (moved here from the profile
                 header). Needs a Hive account to publish, so not for incubating users,
                 and a verified link to a platform we import from. */}
             {VIDEO_IMPORT_ENABLED && !isIncubating && canImport && (
-              <Link to="/youtube-import" className="pn-item" role="menuitem" onClick={onclose}>
-                {row('move_to_inbox', t('ytimport.entry'))}
+              <Link to="/import" className="pn-item" role="menuitem" onClick={onclose}>
+                {row('move_to_inbox', t('ytimport.menuEntry'))}
+              </Link>
+            )}
+            {/* 🤖 Automations: closed beta, the same gate as the page. */}
+            {!isIncubating && automationsEnabledFor(user) && (
+              <Link to="/automations" className="pn-item" role="menuitem" onClick={onclose}>
+                {row('account_tree', t('automations.menuEntry'))}
               </Link>
             )}
             {/* Closed testing. Same gate as the /advertise page itself, so the menu can
@@ -392,10 +403,11 @@ function ProfileNav({ isVisible, pinned = true, leaving = false, hoverProps, onc
             </div>
           </div>
           {/* A plain, followed link to hive.io, as the Hive ecosystem asked
-              (issue #563): no nofollow / ugc / sponsored. */}
+              (issue #563): no nofollow / ugc / sponsored. The credit stays in
+              English in every language, like the site footer (owner 2026-11-16). */}
           <a href="https://hive.io" className="pn-powered" target="_blank" rel="noopener">
             <img src={hiveMark} alt="" width={16} height={14} />
-            {t('pages.about.hive.title')}
+            Powered by Hive
           </a>
         </div>
       </div>

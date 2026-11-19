@@ -190,7 +190,8 @@ $wide: 1025px;   // the side-by-side full player; the bottom nav shows up to 102
   position: fixed;
   z-index: 100;
   left: 50%;
-  bottom: 20px;
+  // On a wide desktop, 20px above the docked Powered by Hive bar (App.css).
+  bottom: calc(20px + var(--hive-bar-h, 0px) + var(--hive-bar-gap, 0px));
   translate: -50% 0;
   width: min(620px, calc(100vw - 48px));
   background: color-mix(in srgb, var(--surface) 85%, transparent);
@@ -671,7 +672,9 @@ $wide: 1025px;   // the side-by-side full player; the bottom nav shows up to 102
   display: flex;
   gap: 8px;
   margin-left: auto;
-  @include one-col { margin-left: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(56px, 1fr)); gap: 6px; }
+  // One row whatever the count (Hype, Vote, comments, Save, Tip, Share: six on a
+  // signed-in phone), each tile an equal share; a long label ends in "…".
+  @include one-col { margin-left: 0; display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 6px; }
 }
 // The dock tiles under the player: 64 square, radius 20 (27a).
 .v2-dock.gap-tile {
@@ -681,7 +684,12 @@ $wide: 1025px;   // the side-by-side full player; the bottom nav shows up to 102
   font-size: 11px;
   gap: 3px;
   @include one-col { width: auto; height: 60px; border-radius: var(--r-lg); }
+  // A 360 px phone: five tiles of about 60 px, the label gets the whole width.
+  @media (max-width: 400px) { padding: 0 2px; font-size: 10px; }
 }
+// Narrow phones keep five tiles in the row (Hype, Vote, comments, Tip, Share),
+// like the watch page's dock: Save stays in the player's ⋯ menu ("Add to playlist").
+@media (max-width: 400px) { .gap-docks .gap-tile--save { display: none; } }
 
 // The side panel: Queue, Comments, Chapters, Transcript, Description.
 .gap-side {
@@ -1510,4 +1518,11 @@ $wide: 1025px;   // the side-by-side full player; the bottom nav shows up to 102
   0% { opacity: 0; scale: .9; }
   15%, 70% { opacity: 1; scale: 1; }
   100% { opacity: 0; }
+}
+
+// The timeline is a slider (keyboard + screen readers): a ring on keyboard focus only.
+.audio-np-progress,
+.audio-np-waveform {
+  &:focus { outline: none; }
+  &:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: var(--r-sm); }
 }

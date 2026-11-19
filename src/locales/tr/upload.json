@@ -286,8 +286,8 @@
     },
     "remix": {
       "label": "Remix ve klibe izin ver",
-      "info": "Başkalarının bu videodan remix ve klip oluşturmasına izin ver. Orijinal yazar olarak gösterilirsin ve lehtar olarak en az %5 alırsın.",
-      "hint": "Her remixten en az %5 alırsın"
+      "info": "Başkalarının bu videodan remiks ve klip yapmasına izin ver. Orijinal yaratıcı olarak anılırsın ve bir remiksin ödüllerinin %15'ini alırsın (remikslerin remikslerinde daha az, en az %5).",
+      "hint": "Bu videonun her remiksinden %15 alırsın"
     },
     "nsfw": {
       "label": "NSFW olarak işaretle",
@@ -341,7 +341,13 @@
     "shareRewards": "Ödülleri paylaş",
     "shareRewardsSub": "Ortak çalışanlarla bölüş",
     "advanced": "NSFW / ödeme",
-    "advancedSub": "Gelişmiş"
+    "advancedSub": "Gelişmiş",
+    "language": {
+      "label": "Dil",
+      "hint": "Videoda konuşulan",
+      "info": "Videoda konuşulan dil. Gönderiyle birlikte Hive'a kaydedilir, böylece izleyiciler ileride kendi dillerindeki videoları bulabilir.",
+      "none": "Konuşma yok (müzik, sesler)"
+    }
   },
   "review": {
     "payoutDeclined": "Reddedildi (ödüller yakılır)",
@@ -362,7 +368,8 @@
     "postShort": "Shorts Paylaş",
     "postStory": "Hikâyeyi paylaş",
     "postVideo": "Video Paylaş",
-    "backToTimeline": "Zaman çizelgesine dön"
+    "backToTimeline": "Zaman çizelgesine dön",
+    "benesDeclined": "Ödeme reddedildi: onlar da bir şey almaz, anılma gönderide kalır."
   },
   "publishing": {
     "titleShort": "Short yayınlanıyor",

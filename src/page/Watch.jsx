@@ -33,7 +33,7 @@ import { readTimeline, chaptersWithEnds } from '../utils/videoTimeline';
 import { Button, EmptyState } from '../components/v2/ui';
 import { Icon } from '../components/v2/Icon';
 import { batchGetReputations, LOW_REP_THRESHOLD } from '../utils/reputation';
-import { batchCheckHidden, isCreatorHidden } from '../utils/hiddenCreators';
+import { batchCheckFlags, isCreatorHidden } from '../utils/hiddenCreators';
 import { usePlayer } from '@mantequilla-soft/3speak-player/react';
 import { useAdPlayback } from '../hooks/useAdPlayback';
 
@@ -54,6 +54,14 @@ import { usePremiumStatus } from '../hooks/usePremiumStatus';
 import { fetchScheduledPost, getScheduledEmbedRef } from '../utils/scheduledPosts';
 import EditScheduledModal from '../components/modal/EditScheduledModal';
 import { getHiveRenderer } from '../lib/hiveRenderer';
+import { reportOpen } from '../lib/cardReach';
+import { readTheater, saveTheater } from '../lib/playerKeys';
+import usePremiere from '../hooks/usePremiere';
+import PremiereCountdown from '../components/Premiere/PremiereCountdown';
+import PremiereBar from '../components/Premiere/PremiereBar';
+import PremiereChat from '../components/Premiere/PremiereChat';
+import StreamChatReplay from '../components/StreamChatReplay/StreamChatReplay';
+import { isDataSaverOn, pickStartLevel } from '../lib/dataSaver';
 
 // Stable identity so `related?.videos || EMPTY_LIST` doesn't hand a NEW [] to the
 // memo on every render.
@@ -82,6 +90,15 @@ function isPlayerInFocus(el) {
   if (!r.height) return false;
   const visible = Math.min(r.bottom, window.innerHeight) - Math.max(r.top, 0);
   return visible / r.height >= 0.5;
+}
+
+// Published within the last day (Hive dates are UTC without a zone): a premiere
+// published a little early, whose metadata may not say it is one.
+function isFreshPost(created) {
+  if (!created) return false;
+  const iso = /[zZ]|[+-]\d\d:?\d\d$/.test(created) ? created : `${created}Z`;
+  const at = Date.parse(iso);
+  return Number.isFinite(at) && Date.now() - at < 24 * 3600 * 1000;
 }
 
 // Seconds the "Next video in 3, 2, 1" card shows before autoplay-next moves on.
@@ -198,6 +215,12 @@ function Watch({ v2 = false, routeV = null }) {
   // The player's onError is registered once, so it reads scheduled mode from a ref.
   const scheduledRef = useRef(scheduled);
   scheduledRef.current = scheduled;
+
+  // Where this video was found: the card that was clicked, or the page that
+  // linked here (creator stats' "where viewers found it", lib/cardReach.js).
+  useEffect(() => {
+    if (!scheduled && v && author !== 'unknown') reportOpen(author, permlink);
+  }, [author, permlink, scheduled, v]);
 
   useEffect(() => {
     if (!scheduled || !author || !permlink || author === 'unknown') {
@@ -379,6 +402,18 @@ function Watch({ v2 = false, routeV = null }) {
   const [controlsVisible, setControlsVisible] = useState(false);
   const hideTimerRef = useRef(null);
   const [videoEnded, setVideoEnded] = useState(false);
+  // Theater (wide) mode: the player across the page, the side panel under it.
+  // Remembered in this browser, as YouTube does.
+  const [theater, setTheater] = useState(readTheater);
+  const toggleTheater = useCallback(() => {
+    setTheater((on) => { saveTheater(!on); return !on; });
+  }, []);
+  // Loop this video: it starts again from the top when it ends, instead of the
+  // autoplay-next. For this video only, like the player's own loop.
+  const [loop, setLoop] = useState(false);
+  const loopRef = useRef(false);
+  loopRef.current = loop;
+  useEffect(() => { setLoop(false); }, [author, permlink]);
   const [autoplayBlocked, setAutoplayBlocked] = useState(false);
   const clipModeActiveRef = useRef(false);
   const popupOpenRef = useRef(false);
@@ -928,26 +963,14 @@ function Watch({ v2 = false, routeV = null }) {
       const levels = player.getQualities();
       setQualityLevels(levels);
 
-      const storedPref = localStorage.getItem(QUALITY_STORAGE_KEY);
-      if (storedPref && storedPref !== 'auto' && levels.length > 0) {
-        const preferredHeight = parseInt(storedPref, 10);
-        // Find exact match or nearest available level at or below the stored height
-        let best = null;
-        for (const l of levels) {
-          if (l.height === preferredHeight) { best = l; break; }
-          if (l.height < preferredHeight && (!best || l.height > best.height)) {
-            best = l;
-          }
-        }
-        if (best) {
-          player.setQuality(best.index);
-          setCurrentQuality(best.index);
-        } else {
-          // All levels are above stored height — pick the lowest available
-          const lowest = levels.reduce((a, b) => a.height < b.height ? a : b);
-          player.setQuality(lowest.index);
-          setCurrentQuality(lowest.index);
-        }
+      // The stored quality (or the nearest below it), capped at 360p with
+      // data saver (lib/dataSaver.js); none = automatic.
+      let storedPref = null;
+      try { storedPref = localStorage.getItem(QUALITY_STORAGE_KEY); } catch { /* storage blocked */ }
+      const start = pickStartLevel(levels, storedPref, isDataSaverOn());
+      if (start) {
+        player.setQuality(start.index);
+        setCurrentQuality(start.index);
       } else {
         setCurrentQuality(player.getCurrentQuality());
       }
@@ -971,6 +994,11 @@ function Watch({ v2 = false, routeV = null }) {
       const el = videoElRef.current;
       if (el && Number.isFinite(el.duration) && el.duration > 0
         && el.currentTime < el.duration - 1.5) {
+        return;
+      }
+      if (loopRef.current) {
+        player.seek(adBreakRef.current.playerTimeFor?.(0) ?? 0);
+        player.play().catch(() => {});
         return;
       }
       // Don't autoplay when user is selecting clip start/end or a popup is open
@@ -1132,14 +1160,20 @@ function Watch({ v2 = false, routeV = null }) {
 
         // Batch-fetch reputations and hidden status; mark low-rep + hidden authors.
         const authors = markers.map(m => m.label);
-        const [reputations, hiddenSet] = await Promise.all([
+        const [reputations, { hidden: hiddenSet, muted: mutedSet }] = await Promise.all([
           batchGetReputations(authors),
-          batchCheckHidden(authors),
+          batchCheckFlags(authors),
         ]);
-        for (const m of markers) {
+        // Bots on the comment mutelist leave no marker, moment or reaction at all
+        // (never the viewer's own comments).
+        const me = String(useAppStore.getState().user || '').toLowerCase();
+        for (let i = markers.length - 1; i >= 0; i -= 1) {
+          const m = markers[i];
+          const name = String(m.label || '').toLowerCase();
+          if (mutedSet.has(name) && name !== me) { markers.splice(i, 1); continue; }
           const rep = reputations.get(m.label) ?? 25;
           m.isLowReputation = rep < LOW_REP_THRESHOLD;
-          m.isHidden = hiddenSet.has(String(m.label || '').toLowerCase());
+          m.isHidden = hiddenSet.has(name);
         }
 
         // Sort by timestamp: timestamped first (ascending), then no-timestamp at end
@@ -1221,21 +1255,12 @@ function Watch({ v2 = false, routeV = null }) {
     }, 100);
   }, []);
 
-  // The player sizes beside the reactions (48b: S / M / Std / Big / Cin).
-  const REACTION_SIZES = ['small', 'medium', 'standard', 'big', 'cinema'];
-  const REACTION_SIZE_LABEL_KEYS = { small: 'player.reactions.sizeNames.small', medium: 'player.reactions.sizeNames.medium', standard: 'player.reactions.sizeNames.standard', big: 'player.reactions.sizeNames.big', cinema: 'player.reactions.sizeNames.cinema' };
-  // A size picked straight from the reactions panel's size track.
+  // The player's size beside the reactions (48b: S / M / Std / Big / Cin), picked
+  // on the reactions panel's size track. The player controls have no size button
+  // any more: theater mode covers it (owner 2026-11-16).
   const chooseReactionSize = useCallback((next) => {
     setReactionSize(next);
     localStorage.setItem('3speak-reaction-size', next);
-  }, []);
-  const cycleReactionSize = useCallback(() => {
-    setReactionSize(prev => {
-      const idx = REACTION_SIZES.indexOf(prev);
-      const next = REACTION_SIZES[(idx + 1) % REACTION_SIZES.length];
-      localStorage.setItem('3speak-reaction-size', next);
-      return next;
-    });
   }, []);
 
   // Desktop: show controls on mouse movement, auto-hide after 3s
@@ -1430,6 +1455,41 @@ function Watch({ v2 = false, routeV = null }) {
     }
     return merged;
   }, [baseVideoDetails, editOverride]);
+
+  // 🎬 Premieres (lib/premieres.js): a scheduled video its creator listed as one.
+  // Asked of the checker only where one can be: a post not on Hive yet, one whose
+  // metadata says so (video.premiere, set at upload), or one a day old at most.
+  // Before the start the page is the countdown; at the start everyone plays it
+  // from the same second, with the premiere chat beside it; afterwards the chat
+  // stays as timecoded messages.
+  const premiereCandidate = !scheduled && !!author && author !== 'unknown' && !!permlink && (
+    (!videoLoading && !videoDetails)
+    || gatedMeta?.video?.premiere === true
+    || isFreshPost(videoDetails?.created_at)
+  );
+  const premiereInfo = usePremiere(author, permlink, { enabled: premiereCandidate });
+  const premiereState = premiereInfo.premiere ? premiereInfo.state : null;
+  // Started, but the Hive post has not reached us yet: ask again until it has.
+  useEffect(() => {
+    if (premiereState !== 'live' || videoDetails) return undefined;
+    refetchVideo();
+    const id = setInterval(() => refetchVideo(), 10 * 1000);
+    return () => clearInterval(id);
+  }, [premiereState, !!videoDetails, refetchVideo]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // A premiere that is running: start where everyone else is (now minus the
+  // start, by the checker's clock), once per video, when its first frame is in.
+  const premiereSyncedRef = useRef(null);
+  useEffect(() => {
+    if (premiereState !== 'live' || !videoReady || !player) return;
+    const key = `${author}/${permlink}`;
+    if (premiereSyncedRef.current === key) return;
+    premiereSyncedRef.current = key;
+    const at = premiereInfo.offset();
+    if (at == null) return;
+    seek(adBreakRef.current.playerTimeFor?.(at) ?? at);
+    player.play?.()?.catch?.(() => {});
+  }, [premiereState, videoReady, player, author, permlink]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // A finished OpenPods stream publishes its recording as a VOD under the SAME
   // owner/permlink, but the Hive post keeps `video.live: true` forever (we
@@ -1961,6 +2021,25 @@ function Watch({ v2 = false, routeV = null }) {
   //
   // The "not found" branch must therefore wait for loading to FINISH — otherwise
   // every video flashes an error before its metadata arrives.
+  // A premiere before its start (or started, while its post is on the way): the
+  // countdown with Notify me, in place of the page.
+  if (premiereInfo.premiere && (premiereState === 'soon' || (premiereState === 'live' && !videoDetails))) {
+    return (
+      <div className="play-container watch-page watch-premiere">
+        <SEOHead title={premiereInfo.premiere.title || permlink} author={author} url={`https://3speak.tv/@${author}/${permlink}`} />
+        <PremiereCountdown premiere={premiereInfo.premiere} serverNow={premiereInfo.serverNow} starting={premiereState === 'live'} />
+      </div>
+    );
+  }
+  // Not on Hive (yet): is it a premiere? Wait for that answer before "not found".
+  if (!isLoading && !videoDetails && premiereInfo.loading) {
+    return (
+      <div className="watch-error" role="status">
+        <Icon name="progress_activity" size={32} className="v2-spin" />
+      </div>
+    );
+  }
+
   if (!isLoading && !videoDetails) {
     return (
       <div className="watch-error">
@@ -1978,7 +2057,7 @@ function Watch({ v2 = false, routeV = null }) {
   }
 
   return (
-    <div className={`play-container watch-page${isReactionPlayerVisible && reactions.length > 0 ? ` reaction-${reactionSize}` : ''}${v2 ? ' watch-v2' : ''}`}>
+    <div className={`play-container watch-page${isReactionPlayerVisible && reactions.length > 0 ? ` reaction-${reactionSize}` : ''}${v2 ? ' watch-v2' : ''}${theater && !isLive ? ' is-theater' : ''}`}>
       {/* Put the video's title in the browser tab (Helmet → <title>). SEOHead
           appends " | 3Speak"; falls back to the default title when unknown. */}
       {videoDetails?.title && (
@@ -1992,6 +2071,14 @@ function Watch({ v2 = false, routeV = null }) {
       <PlayVideo
         belowPlayerSlot={(
           <>
+        {premiereState === 'live' && (
+          <PremiereBar
+            premiere={premiereInfo.premiere}
+            serverNow={premiereInfo.serverNow}
+            currentTime={adBreakRef.current.contentTime(playerState.currentTime)}
+            onJump={(sec) => { seek(adBreakRef.current.playerTimeFor?.(sec) ?? sec); player?.play?.()?.catch?.(() => {}); }}
+          />
+        )}
         {surfChannel && (
           <SurfBar
             channel={surfChannel}
@@ -2147,10 +2234,6 @@ function Watch({ v2 = false, routeV = null }) {
           previewVideoId: playerLoadId,
           getPlaybackHeight,
           onMarkerSelect: handleSelectReaction,
-          onCycleReactionSize: isReactionPlayerVisible && reactions.length > 0 ? cycleReactionSize : null,
-          reactionSizeLabel: REACTION_SIZE_LABEL_KEYS[reactionSize] ? t(REACTION_SIZE_LABEL_KEYS[reactionSize]) : reactionSize,
-          // The button's own short label (19a: "Std"); the full name is its tooltip.
-          reactionSizeShort: t(`player.reactions.sizes.${reactionSize}`, { defaultValue: '' }),
           onTogglePip: handleTogglePip,
           videoEnded,
           onReplay: handleReplay,
@@ -2193,12 +2276,32 @@ function Watch({ v2 = false, routeV = null }) {
           onPlaybackRateChange: choosePlaybackRate,
           onHoldControls: holdControls,
           onReleaseControls: releaseControls,
+          isTheater: theater,
+          onToggleTheater: isLive ? null : toggleTheater,
+          loop,
+          onToggleLoop: () => setLoop((v) => !v),
         }}
         // The reactions on the timeline: full width under the description at
         // the cinema size. No tab in the side panel (owner 2026-11-12).
         onReact={handleReactToMoment}
         upNext={suggestedVideos.slice(0, 10)}
         cinemaReactionPanel={reactionSize === 'cinema' && reactions.length > 0 ? reactionPanel : null}
+        // The premiere's chat: live beside the player while it runs, then the
+        // timecoded replay ("Premiere chat") whose times seek.
+        premiereTab={premiereState === 'live' || premiereState === 'ended' ? {
+          live: premiereState === 'live',
+          render: (onSeek) => (
+            <PremiereChat owner={author} permlink={permlink} live={premiereState === 'live'} onSeek={premiereState === 'ended' ? onSeek : null} />
+          ),
+        } : (videoDetails?.live && liveVodReady ? {
+          // A finished stream's VOD: its live chat (the timecoded Hive comments
+          // the chat mirror wrote) and its polls, following the video.
+          live: false,
+          label: t('liveInteract.replay.tab'),
+          render: (onSeek, currentTime) => (
+            <StreamChatReplay author={author} permlink={permlink} currentTime={currentTime} onSeek={onSeek} />
+          ),
+        } : null)}
       />
 
       {/* Next in the playlist (02): the next five from the same playlist, then

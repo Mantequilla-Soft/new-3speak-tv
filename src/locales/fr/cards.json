@@ -10,6 +10,8 @@
   "badges": {
     "gatedTitle": "Réservé aux membres",
     "pro": "PRO",
+    "vod": "VOD",
+    "vodTitle": "Enregistrement d'un direct",
     "new": "NOUVEAU",
     "first": "Première",
     "live": "● LIVE",

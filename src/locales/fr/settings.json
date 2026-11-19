@@ -156,6 +156,10 @@
       "title": "Grandes cartes",
       "desc": "Cartes vidéo plus grandes sur l'accueil, le profil et les playlists"
     },
+    "dataSaver": {
+      "title": "Économiseur de données",
+      "desc": "Pas d'aperçus vidéo, et les vidéos démarrent en 360p. S'active tout seul quand votre appareil demande d'économiser des données ou que la connexion est lente."
+    },
     "previews": {
       "title": "Aperçus vidéo",
       "desc": "Aperçu muet au survol ; sur mobile, la carte centrale se lance"
@@ -165,14 +169,22 @@
       "desc": "Clips muets dans la une de l’accueil. Désactivé affiche des images fixes."
     }
   },
+  "startup": {
+    "resume": {
+      "title": "Reprendre là où j'en étais",
+      "desc": "3Speak s'ouvre sur la dernière page que tu as consultée. Enregistré sur cet appareil uniquement."
+    }
+  },
+  "startPrompt": {
+    "title": "Reprendre là où tu en étais ?",
+    "intro": "3Speak peut s'ouvrir sur la dernière page que tu as consultée au lieu de l'accueil. C'est enregistré sur cet appareil uniquement, et tu peux le changer à tout moment dans Paramètres, Général.",
+    "notNow": "Pas maintenant",
+    "turnOn": "Activer"
+  },
   "shorts": {
     "commentBar": {
       "title": "Barre de commentaire sur les Shorts",
       "desc": "Un champ de commentaire sous chaque Short"
-    },
-    "openOnStart": {
-      "title": "Ouvrir les Shorts au démarrage",
-      "desc": "Aller directement aux Shorts à l'ouverture de 3Speak"
     },
     "inFeeds": {
       "title": "Shorts dans les fils",
@@ -203,7 +215,21 @@
     "rpcNode": "Nœud RPC Hive",
     "yourData": "Vos données",
     "privacyLink": "Comment 3Speak traite vos données",
-    "getOrDelete": "Obtenir ou supprimer"
+    "getOrDelete": "Obtenir ou supprimer",
+    "node": {
+      "modeAuto": "Auto",
+      "auto": "Automatique",
+      "autoHint": "Le nœud le plus rapide qui fonctionne, changé s'il tombe",
+      "own": "Ton propre nœud",
+      "use": "Utiliser",
+      "checking": "Vérification…",
+      "down": "Ne répond pas",
+      "ms": "{{ms}} ms",
+      "badUrl": "Saisis une adresse qui commence par https://",
+      "failed": "Ce nœud n'a pas répondu ou n'a pas l'API sociale (hivemind) dont 3Speak a besoin.",
+      "switched": "Maintenant sur {{node}}",
+      "fallback": "Si le nœud choisi ne répond plus, 3Speak utilise les nœuds connus jusqu'au rechargement de la page."
+    }
   },
   "dataRequest": {
     "emailRequired": "Saisissez une adresse e-mail pour que nous puissions vous répondre",

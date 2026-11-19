@@ -1,0 +1,39 @@
+{
+  "labels": {
+    "raidLine": "{name}, {count} izleyiciyle baskın yapıyor",
+    "raidTitle": "@{host} başka bir yayına baskın yapıyor",
+    "raidBody": "İzleyen herkes {seconds} sn içinde {title} yayınına geçiyor.",
+    "raidGoNow": "Şimdi git",
+    "raidStay": "Burada kal",
+    "pollBadge": "Anket",
+    "predictionBadge": "Tahmin",
+    "endsIn": "{time} sonra bitiyor",
+    "finalResults": "Sonuçlar",
+    "votes": "Oy: {count}",
+    "youVoted": "Oy verdin",
+    "signInToVote": "Oy vermek için giriş yap",
+    "voteFailed": "Olmadı. Tekrar dene.",
+    "pot": "Havuz: {points} puan",
+    "balance": "{points} puanın var",
+    "stakeButton": "Yatır",
+    "stakePlaceholder": "Puan",
+    "yourStake": "{option} için {points} puan yatırdın",
+    "waitingForResult": "Sonuç bekleniyor",
+    "outcomeWon": "{option} kazandı",
+    "youWon": "{points} puan geri aldın",
+    "cancelled": "İptal edildi, herkes puanını korur",
+    "close": "Kapat"
+  },
+  "replay": {
+    "tab": "Canlı sohbet tekrarı",
+    "label": "Canlı sohbet, videoyla birlikte",
+    "loading": "Canlı sohbet yükleniyor",
+    "empty": "Canlı sohbete kimse yazmadı.",
+    "seekTo": "{{time}} anına git",
+    "poll": "Anket",
+    "prediction": "Tahmin",
+    "votes": "Oy: {{count}}",
+    "won": "{{option}} kazandı",
+    "follow": "Şu ana dön"
+  }
+}

@@ -77,7 +77,7 @@ export default function ShareChooserModal({ open, url, title, embed, hivePost, s
   const { t } = useTranslation()
   const openChat = useOpenChat()
   const { setShareDraft, backToList } = useChat()
-  // 'share' | 'embed' | 'clip'. The component stays mounted between opens (the
+  // 'share' | 'embed' (Clip starts the page's clip mode instead). The component stays mounted between opens (the
   // parent just flips `open`), so the view is reset explicitly rather than on mount.
   const [view, setView] = useState('share')
   const [size, setSize] = useState('responsive')
@@ -177,6 +177,13 @@ export default function ShareChooserModal({ open, url, title, embed, hivePost, s
     }
   }
 
+  // Clip has nothing to show in here: it is done on the player (the page's
+  // clip bar), so picking it closes the sheet and starts clipping at once.
+  const pickTab = (v) => {
+    if (v === 'clip') { onClose?.(); onClip?.(); return }
+    setView(v)
+  }
+
   const tabs = [
     { value: 'share', label: t('common.actions.share') },
     canEmbed && { value: 'embed', label: t('chat.share.embed') },
@@ -186,10 +193,6 @@ export default function ShareChooserModal({ open, url, title, embed, hivePost, s
   const footer = view === 'embed' ? (
     <Button variant="primary" size={48} block trailing="content_copy" className="dlg-main share-embed-copy" onClick={copyEmbed}>
       {t('chat.share.copyEmbed')}
-    </Button>
-  ) : view === 'clip' ? (
-    <Button variant="primary" size={48} block trailing="content_cut" className="dlg-main" onClick={() => { onClose?.(); onClip?.() }}>
-      {t('watch.clip.clipVideo')}
     </Button>
   ) : (
     <Button variant="primary" size={48} block trailing="content_copy" className="dlg-main share-copy-link" onClick={copyLink}>
@@ -214,7 +217,7 @@ export default function ShareChooserModal({ open, url, title, embed, hivePost, s
         <SheetContext className="share-ctx" thumb={post.thumbnail} title={title} meta={ctxPost?.author ? `@${ctxPost.author}` : undefined} />
       )}
       {tabs.length > 1 && (
-        <Segmented className="share-tabs" size={36} label={t('common.actions.share')} value={view} onChange={setView} options={tabs} />
+        <Segmented className="share-tabs" size={36} label={t('common.actions.share')} value={view} onChange={pickTab} options={tabs} />
       )}
 
       {view === 'embed' && (
@@ -242,10 +245,6 @@ export default function ShareChooserModal({ open, url, title, embed, hivePost, s
             {size === 'responsive' ? t('chat.share.responsiveSub') : t('chat.share.fixedSub')}
           </p>
         </div>
-      )}
-
-      {view === 'clip' && (
-        <p className="share-embed-hint">{t('watch.clip.startHint')}</p>
       )}
 
       {view === 'share' && (

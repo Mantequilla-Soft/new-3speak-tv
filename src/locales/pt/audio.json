@@ -150,6 +150,16 @@
     "notes": "Notas",
     "stillIndexing": "O áudio deste post ainda está sendo indexado — tente de novo em alguns minutos."
   },
+  "edit": {
+    "title": "Editar áudio",
+    "editTitle": "Editar título, notas, tags e capa",
+    "cover": "Capa",
+    "coverAlt": "Pré-visualização da capa",
+    "coverHint": "Envie uma imagem ou cole uma URL direta. Uma imagem quadrada fica melhor.",
+    "notesPlaceholder": "Conte aos ouvintes sobre este áudio…",
+    "keptNote": "O link do player e os créditos de música do post ficam como estão.",
+    "updated": "Áudio atualizado!"
+  },
   "page": {
     "sections": {
       "popular": "Populares",
@@ -175,7 +185,6 @@
     },
     "all": "Todos",
     "musicGenre": "Gênero musical",
-    "anyGenre": "Qualquer gênero",
     "tracks_one": "{{count}} faixa",
     "tracks_many": "{{count}} faixas",
     "tracks_other": "{{count}} faixas",
@@ -189,7 +198,7 @@
     "nothingPlaying": "Nada está tocando ainda.",
     "goExplore": "Encontre algo para ouvir",
     "exploreViews": "Seções",
-    "mostPlayed": "Mais ouvidos"
+    "newUploads": "Novos envios"
   },
   "upload": {
     "title": "Enviar áudio",
@@ -285,7 +294,10 @@
       "formats": "MP3, WAV, OGG, WEBM, M4A, FLAC, AAC · vários de uma vez",
       "stop": "Parar",
       "orRecord": "Ou grave ao vivo",
+      "micPreparing": "Preparando o microfone...",
       "recordLimit": "Até {{minutes}} min por gravação",
+      "level": "Nível do microfone",
+      "noSound": "Não está chegando nenhum som. Verifique se o microfone não está mudo ou em uso por outro app.",
       "record": "Gravar",
       "added": "Adicionados ({{count}})",
       "filesTitle": "Arquivos de áudio"
@@ -300,6 +312,7 @@
       "descriptionOptional": "Descrição (opcional)",
       "track": "Faixa",
       "category": "Categoria",
+      "categoryRequired": "Escolha uma categoria para que seu áudio apareça na aba certa.",
       "musicGenre": "Gênero musical"
     },
     "playlist": {
@@ -389,6 +402,7 @@
     "tracks": {
       "helpAlbum": "Cada faixa é publicada como comentário no post principal. Defina os valores comuns uma vez, aplique a todas e depois ajuste faixa por faixa.",
       "helpSnaps": "Cada faixa é publicada como um snap próprio. Defina os valores comuns uma vez, aplique a todas e depois ajuste faixa por faixa.",
+      "helpSnapsSingle": "Seu áudio é publicado como um snap próprio.",
       "applyToAllHeading": "Aplicar a todas as faixas",
       "applyNote_one": "<b>Aplicar a {{count}} faixa:</b> descrição e capa compartilhadas, depois altere qualquer faixa separadamente.",
       "applyNote_many": "<b>Aplicar às {{count}} faixas:</b> descrição e capa compartilhadas, depois altere qualquer faixa separadamente.",
@@ -425,6 +439,10 @@
       "earnings": "Ganhos:",
       "earningsPpl": "Pagamento por audição (@{{account}})",
       "earningsNormal": "Recompensas normais do post",
+      "rewards": "Recompensas:",
+      "beneficiaries": "Beneficiários:",
+      "perTrack": "Definido por faixa",
+      "noBeneficiaries": "Nenhum",
       "playlist": "Playlist:",
       "failedCount_one": "{{count}} faixa falhou.",
       "failedCount_many": "{{count}} faixas falharam.",
@@ -810,7 +828,9 @@
     "description": "Descrição",
     "noDescription": "Sem descrição.",
     "comments": "Comentários",
-    "album": "De {{name}}"
+    "album": "De {{name}}",
+    "videoPodcast": "Videocast",
+    "videoPodcastTitle": "Crie um vídeo deste episódio: capa, forma de onda e legendas"
   },
   "offline": {
     "notice": "Você está offline. Seus downloads continuam tocando.",

@@ -52,6 +52,23 @@ $wide: 1024px;
     // Cinema: the player takes the whole width; the panels follow below it.
     .reaction-cinema > & { grid-template-columns: minmax(0, 1fr); grid-template-areas: "strip" "stage" "main" "side" "aside"; }
   }
+
+  // Theater (T, or the button by fullscreen): the player across the whole page,
+  // the side panel beside the details under it, with a height of its own.
+  @include wide {
+    .is-theater > & {
+      grid-template-columns: minmax(0, 1fr) var(--side-panel-w);
+      grid-template-areas: "strip strip" "stage stage" "main side" "main aside";
+    }
+    .is-theater > & .video-iframe-wrapper:not(:fullscreen) {
+      padding-top: 0;
+      aspect-ratio: 16 / 9;
+      // Never taller than the window under the top bar, so the controls stay on screen.
+      max-height: calc(100dvh - var(--nav-top-offset, 64px) - 96px);
+      min-height: 360px;
+    }
+    .is-theater > & .wv2-side.is-wide { height: 560px; align-self: start; }
+  }
 }
 
 /* ─── Stage: the player with its glow ─────────────────────────────────────── */
@@ -126,6 +143,11 @@ $wide: 1024px;
   transition: opacity var(--t-base) var(--ease);
 
   &.is-shown { opacity: 1; pointer-events: auto; }
+
+  // The author, then a collab post's co-creators, side by side.
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
 
   .author-badge {
     display: inline-flex;
@@ -246,16 +268,6 @@ $wide: 1024px;
 
   &__icon { color: var(--accent); }
   &__label { flex: 1; min-width: 160px; @include v2.text(body-sm); }
-
-  &.is-over {
-    position: absolute;
-    left: 14px;
-    right: 14px;
-    bottom: 64px;
-    z-index: 9;
-    background: var(--media-scrim-strong);
-    color: var(--on-media);
-  }
 }
 
 /* ─── Main column: community, title, meta, dock, chapters, description ───── */
@@ -584,11 +596,24 @@ $wide: 1024px;
   gap: 10px;
   min-width: 0;
 
-  &.is-scroll { @include v2.scroll-x; .wv2-chapter { flex: 0 0 200px; } }
+  // More chapters than fit: they scroll sideways, with a thin scrollbar to
+  // show there are more (and to drag with a mouse).
+  &.is-scroll {
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    padding-bottom: 8px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-strong, var(--muted)) transparent;
+    &::-webkit-scrollbar { height: 6px; }
+    &::-webkit-scrollbar-thumb { background: var(--border-strong, var(--muted)); border-radius: 3px; }
+    &::-webkit-scrollbar-track { background: transparent; }
+    .wv2-chapter { flex: 0 0 200px; }
+  }
 }
 
 .wv2-chapter {
-  flex: 1;
+  // A card's size, not a share of the row: two chapters stay two small cards.
+  flex: 0 1 200px;
   min-width: 0;
   display: flex;
   flex-direction: column;
@@ -617,6 +642,27 @@ $wide: 1024px;
   &__title { @include v2.text(body-sm); font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 }
 
+// A chapter's still (hooks/useChapterStills), over the placeholder once drawn;
+// the hidden low-res video it comes from.
+.wv2-chapter__still {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity var(--t-base) var(--ease);
+  &.is-drawn { opacity: 1; }
+}
+.chapter-stills-source {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  opacity: 0;
+  pointer-events: none;
+}
+
 // Chapters as a list (narrow Chapters tab, summary sheet).
 .wv2-chapter-list { display: flex; flex-direction: column; gap: 4px; padding-top: 6px; }
 .wv2-chapter-row {
@@ -635,8 +681,19 @@ $wide: 1024px;
   &:hover { background: var(--bg-hover); }
   &.is-on { border-color: var(--cyan); background: color-mix(in srgb, var(--cyan) 8%, transparent); }
 
-  &__thumb { width: 96px; aspect-ratio: 16 / 9; border-radius: var(--r-md); flex: none; @include v2.thumb-placeholder(6px); }
+  &__thumb { position: relative; overflow: hidden; width: 96px; aspect-ratio: 16 / 9; border-radius: var(--r-md); flex: none; @include v2.thumb-placeholder(6px); }
   &__text { display: flex; flex-direction: column; gap: 2px; min-width: 0; b { @include v2.text(body-sm); font-weight: 700; } }
+}
+
+// The video's poll (PollCard), a card like the description above it.
+.wv2-poll {
+  padding: 14px 18px;
+  border-radius: var(--r-xl);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  min-width: 0;
+
+  .poll-card { margin: 0; }
 }
 
 // Description card (02): 14px muted text, two lines, then a bold "Show more".

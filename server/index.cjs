@@ -498,7 +498,24 @@ const ALLOWED_CUSTOM_JSON_IDS = new Set([
   // proxied under @threespeak's delegated posting key — so the validation below
   // restricts this id to a plain subscribe/unsubscribe (the user's own action).
   'community',
+  // A vote on a poll (Hive Open Polls protocol, as PeakD and Ecency use it):
+  // { poll: '<author>/<permlink>', action: 'vote', choices: [n] }. Limited to
+  // exactly that shape by isPollVote below.
+  'polls',
 ])
+
+// The one `polls` payload we proxy: the user's own vote. Choice numbers count
+// from 1; an empty list or [0] takes the vote back.
+function isPollVote(json) {
+  let v
+  try { v = JSON.parse(json) } catch { return false }
+  if (!v || typeof v !== 'object' || Array.isArray(v)) return false
+  const keys = Object.keys(v)
+  if (keys.some((k) => !['poll', 'action', 'choices'].includes(k))) return false
+  if (v.action !== 'vote') return false
+  if (typeof v.poll !== 'string' || !/^[a-z0-9.-]{3,16}\/[a-z0-9-]{1,255}$/.test(v.poll)) return false
+  return Array.isArray(v.choices) && v.choices.length <= 20 && v.choices.every((c) => Number.isInteger(c) && c >= 0 && c <= 100)
+}
 
 // custom_json ids whose payload we further restrict to specific actions. The
 // json is a stringified ["<action>", {...}] tuple; only these first-element
@@ -1158,6 +1175,9 @@ async function broadcastAsThreespeak(hiveUsername, operations, res) {
       }
       if (!ALLOWED_CUSTOM_JSON_IDS.has(opData.id)) {
         return res.status(403).json({ error: 'custom_json id not allowed for this app' })
+      }
+      if (opData.id === 'polls' && !isPollVote(opData.json)) {
+        return res.status(403).json({ error: 'custom_json action not allowed for this app' })
       }
       // For ids with a restricted action set (e.g. `community`), the payload's
       // first element must be an allowed action — so we never proxy the id's
@@ -2645,6 +2665,60 @@ if (process.env.VIDEO_IMPORT_ENABLED === 'true') {
   console.log('[yt-import] video import is OFF (VIDEO_IMPORT_ENABLED is not true)')
 }
 
+// 🤖 Automations (closed beta, Pro): a creator's own workflows. See automations.cjs.
+// OFF unless AUTOMATIONS_ENABLED=true. Every post a task makes goes out as the
+// creator, signed by @threespeak under their posting grant, and only as a reply
+// (a snap, a comment), an upvote, a reblog, or a scheduled post (Short, audio, video):
+// `broadcastAutomation` refuses anything else.
+{
+  const batch = require('./import-batch.cjs')
+  const isOwnReblog = (json, user) => {
+    try {
+      const [action, body] = JSON.parse(json)
+      return action === 'reblog' && body?.account === user && !!body.author && !!body.permlink
+    } catch { return false }
+  }
+  async function broadcastAutomation(user, ops) {
+    if (!POSTING_WIF) throw new Error('Server is not configured')
+    const ok = Array.isArray(ops) && ops.length > 0 && ops.length <= 2
+      && ops.every(([type, op]) => (type === 'comment' && op.author === user && op.parent_author)
+        || (type === 'vote' && op.voter === user && op.weight > 0 && op.weight <= 10000)
+        || (type === 'custom_json' && op.id === 'follow' && op.required_auths?.length === 0
+          && op.required_posting_auths?.length === 1 && op.required_posting_auths[0] === user && isOwnReblog(op.json, user)))
+    if (!ok) throw new Error('Operation not allowed')
+    if (!(await hasThreespeakPostingGrant(user))) throw Object.assign(new Error('3Speak may no longer publish for you'), { code: 'no_grant' })
+    return client.broadcast.sendOperations(ops, PrivateKey.fromString(POSTING_WIF))
+  }
+  require('./automations.cjs').mountAutomations(app, {
+    resolveUser: resolveProvenViewer,
+    limiter: baseLimiter,
+    isPro: (user) => isPro(user),
+    hasPostingGrant: hasThreespeakPostingGrant,
+    hiveCall: (method, params) => {
+      const [api, name] = method.split('.')
+      return client.call(api, name, params)
+    },
+    broadcast: broadcastAutomation,
+    indexSnap: (author, permlink) => fetch(`${CHECKER_URL}/snaps`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ author, permlink }),
+      signal: AbortSignal.timeout(10000),
+    }),
+    uploadImage: uploadImageAsThreespeak,
+    snapsContainer: batch.snapsContainer,
+    mintUploadToken: batch.mintUploadToken,
+    tusUpload: batch.tusUpload,
+    commissionEncode: batch.commissionEncode,
+    buildPost: batch.buildPost,
+    buildAudioPost: batch.buildAudioPost,
+    uploadAudio: batch.uploadAudio,
+    setAudioThumbnail: batch.setAudioThumbnail,
+    scheduleOnChecker: batch.scheduleOnChecker,
+    signScheduledPost: (fields) => (POSTING_WIF ? signScheduledPost(POSTING_WIF, fields) : null),
+  })
+}
+
 // === Teleprompter STT token minting ===
 // Hands the browser a short-lived SIGNED token for the self-hosted STT WebSocket,
 // so the browser never holds STT_SIGNING_SECRET. Token = "<exp>.<hexHMAC(exp)>";
@@ -2655,12 +2729,30 @@ if (process.env.VIDEO_IMPORT_ENABLED === 'true') {
 const STT_SIGNING_SECRET = process.env.STT_SIGNING_SECRET || ''
 const STT_TOKEN_TTL = parseInt(process.env.STT_TOKEN_TTL || '300', 10) // seconds
 
-app.get('/api/stt-token', baseLimiter, (req, res) => {
+// ?scope=live&user=<account>: a token for the stream captions socket (/live,
+// Whisper), only for a VERIFIED session of that account and only when it is
+// Pro (live captions are a Pro feature, owner 2026-11-17). Signed over
+// "<exp>.live" so it opens /live and nothing else, and /stt tokens do not open
+// /live. 401 'sign-in-needed' / 403 'pro-only' otherwise.
+app.get('/api/stt-token', baseLimiter, async (req, res) => {
   if (!STT_SIGNING_SECRET) return res.status(503).json({ error: 'STT tokens not configured' })
   if (EMBED_API_KEY && req.get('X-API-Key') !== EMBED_API_KEY) {
     return res.status(401).json({ error: 'unauthorized' })
   }
   const exp = Math.floor(Date.now() / 1000) + STT_TOKEN_TTL
+  if (req.query.scope === 'live') {
+    const want = String(req.query.user || '').toLowerCase()
+    const butr = await resolveButrUser(req, res)
+    const ws = req.cookies?.[WSESSION_COOKIE_NAME]
+    const wallet = ws && verifyWalletSession(ws)
+    const verified = [butr, wallet].filter(Boolean).map(u => String(u).toLowerCase())
+    const user = want ? verified.find(u => u === want) : verified[0]
+    if (!user || !HIVE_USER_RE.test(user)) return res.status(401).json({ error: 'sign-in-needed' })
+    if (!(await isPro(user))) return res.status(403).json({ error: 'pro-only' })
+    const signed = `${exp}.live`
+    const sig = crypto.createHmac('sha256', STT_SIGNING_SECRET).update(signed).digest('hex')
+    return res.json({ token: `${signed}.${sig}`, exp })
+  }
   const sig = crypto.createHmac('sha256', STT_SIGNING_SECRET).update(String(exp)).digest('hex')
   res.json({ token: `${exp}.${sig}`, exp })
 })
@@ -2723,24 +2815,34 @@ app.post('/api/editor-token', baseLimiter, async (req, res) => {
 
 // Which languages the STT server actually has models for. Proxied server-side so
 // the browser doesn't need CORS on the STT box; cached for a minute.
+//   models:      the live (Vosk) models on disk, for the teleprompters (an older
+//                server only lists the ones loaded so far)
+//   transcribe:  { engine: 'whisper', langs } when whole-file transcripts run on
+//                Whisper (/transcribe), else null
+//   live:        { engine: 'whisper', langs } when stream captions run on
+//                Whisper (/live), else null
 const STT_HTTP_URL = (process.env.STT_HTTP_URL || '').replace(/\/+$/, '')
-let sttLangCache = { at: 0, models: [] }
+let sttLangCache = { at: 0, models: [], transcribe: null, live: null }
+
+const sttLangBody = () => ({ models: sttLangCache.models, transcribe: sttLangCache.transcribe, live: sttLangCache.live })
+const whisperOffer = (o) => (o && o.engine === 'whisper' && Array.isArray(o.langs)
+  ? { engine: 'whisper', langs: o.langs.filter((l) => typeof l === 'string') }
+  : null)
 
 app.get('/api/stt-langs', baseLimiter, async (req, res) => {
-  if (!STT_HTTP_URL) return res.json({ models: [] })
+  if (!STT_HTTP_URL) return res.json({ models: [], transcribe: null, live: null })
   const now = Date.now()
-  if (now - sttLangCache.at < 60000 && sttLangCache.models.length) {
-    return res.json({ models: sttLangCache.models })
-  }
+  if (now - sttLangCache.at < 60000 && sttLangCache.models.length) return res.json(sttLangBody())
   try {
     const r = await fetch(`${STT_HTTP_URL}/healthz`, { signal: AbortSignal.timeout(4000) })
-    if (!r.ok) return res.json({ models: sttLangCache.models })
+    if (!r.ok) return res.json(sttLangBody())
     const j = await r.json()
-    const models = Array.isArray(j.models_loaded) ? j.models_loaded : []
-    sttLangCache = { at: now, models }
-    return res.json({ models })
+    const list = Array.isArray(j.models_available) ? j.models_available : j.models_loaded
+    const models = Array.isArray(list) ? list.filter((m) => typeof m === 'string') : []
+    sttLangCache = { at: now, models, transcribe: whisperOffer(j.transcribe), live: whisperOffer(j.live) }
+    return res.json(sttLangBody())
   } catch {
-    return res.json({ models: sttLangCache.models })
+    return res.json(sttLangBody())
   }
 })
 

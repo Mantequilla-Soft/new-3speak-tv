@@ -91,6 +91,7 @@
   },
   "loadError": "Couldn’t load your stats right now.",
   "emptyRange": "No watch data in this range yet — try “All”, or wait for people to watch your videos.",
+  "emptyRangeAudio": "No listening data in this range yet. Try “All”, or wait for people to listen.",
   "tiles": {
     "avgViewDuration": "Avg view duration",
     "avgWatched": "Avg watched",

@@ -1,9 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { toastIn } from '../../utils/toast';
 import OriginalContentNotice from '../OriginalContentNotice/OriginalContentNotice';
 import { StepProgress } from '../legacy-studio/StepProgress';
 import CommunityModal from "../modal/Community_modal";
 import Beneficiary_modal from '../modal/Beneficiary_modal';
+import CollabModal from './CollabModal';
 import { Navigate } from 'react-router-dom';
 import { useEmbedUpload } from '../../context/EmbedUploadContext';
 import { useAppStore } from '../../lib/store';
@@ -25,6 +26,10 @@ import './EmbedDetails.scss';
 import { useTranslation, Trans } from 'react-i18next';
 import { SHORT_TITLE_MAX } from '../../utils/shortTitle';
 import { Button, Icon, IconButton, Toggle } from '../v2/ui';
+import PremiereSwitch from '../Premiere/PremiereSwitch';
+import ShortSeriesSelect from '../Episodes/ShortSeriesSelect';
+import PollEditor, { PollToggle } from '../Polls/PollEditor';
+import { CONTENT_LANGUAGES, NO_SPEECH, languageNamer } from '../../utils/contentLanguage';
 
 // Every toast from this module is headed "Upload"; the message becomes the
 // line under it. See utils/toast.js.
@@ -106,10 +111,18 @@ function EmbedDetails() {
     editedThumbnail,
     isScheduled, setIsScheduled,
     scheduleDateTime, setScheduleDateTime,
+    isPremiere, setIsPremiere,
+    saveAsDraft, setSaveAsDraft,
+    seriesId, setSeriesId,
+    pollOn, setPollOn,
+    pollQuestion, setPollQuestion,
+    pollOptions, setPollOptions,
+    pollDays, setPollDays,
     fromStories,
     isStory,
     reusable, setReusable,
     isNsfw, setIsNsfw,
+    contentLanguage, setContentLanguage,
     addToBlog, setAddToBlog,
     videoAdsEnabled, setVideoAdsEnabled,
     videoRollsEnabled, setVideoRollsEnabled,
@@ -117,6 +130,7 @@ function EmbedDetails() {
     gatedAllowlist, setGatedAllowlist,
     user,
     isChannelTrailer, setIsChannelTrailer,
+    collaborator, setCollaborator,
     originalAuthor, originalPermlink,
     startEarlyUpload,
   } = useEmbedUpload();
@@ -125,6 +139,12 @@ function EmbedDetails() {
   // hook returns null while loading, so the toggle stays hidden until we have a
   // definite yes rather than flashing in and out.
   const premiumStatus = usePremiumStatus(user);
+
+  // The spoken-language choices, by name in the site language.
+  const languageOptions = useMemo(() => {
+    const name = languageNamer();
+    return CONTENT_LANGUAGES.map((c) => [c, name(c)]).sort((a, b) => a[1].localeCompare(b[1]));
+  }, []);
   const isPro = premiumStatus?.premium === true;
 
   // Never leave a stale gated intent behind: if Pro lapses mid-session, or the
@@ -172,6 +192,7 @@ function EmbedDetails() {
   // The sheet edits a draft; only OK writes it back, so closing or pressing
   // Escape leaves the previously chosen time alone.
   const [scheduleDraft, setScheduleDraft] = useState('');
+  const [premiereDraft, setPremiereDraft] = useState(false);
   const [rewardsOpen, setRewardsOpen] = useState(false);
   const [guestsOpen, setGuestsOpen] = useState(false);
   const [tagsOpen, setTagsOpen] = useState(false);
@@ -253,6 +274,8 @@ function EmbedDetails() {
   useEffect(() => {
     setStep(3)
   }, [])
+  // "Add a collaborator" dialog (CollabModal.jsx). Above the early return below.
+  const [collabOpen, setCollabOpen] = useState(false);
 
   // 🔧 TEMPORARY DEV HACK — remove with the other ?devstep handling.
   // /embed-studio/details?devstep=3 renders the form with no upload behind it,
@@ -362,6 +385,7 @@ function EmbedDetails() {
   const openScheduleSheet = () => {
     const { minFormatted, minDate } = getMinMaxDates();
     setScheduleDraft((isScheduled && scheduleDateTime) || minFormatted || minDate?.toISOString().slice(0, 16) || '');
+    setPremiereDraft(!!isScheduled && !!isPremiere);
     setScheduleOpen(true);
   };
 
@@ -420,6 +444,25 @@ function EmbedDetails() {
         info={<Trans i18nKey="upload.details.nsfw.info" components={{ code: <code /> }} />}
         hint={t('upload.details.nsfw.hint')}
         control={tileSwitch(isNsfw, setIsNsfw, t('upload.details.nsfw.label'))}
+      />
+      <OptTile
+        icon="translate"
+        tone="cyan"
+        on
+        label={t('upload.details.language.label')}
+        info={t('upload.details.language.info')}
+        hint={t('upload.details.language.hint')}
+        extra={(
+          <select
+            className="v2-input is-select opt-tile__select"
+            value={contentLanguage}
+            onChange={(e) => setContentLanguage(e.target.value)}
+            aria-label={t('upload.details.language.label')}
+          >
+            {languageOptions.map(([code, name]) => <option key={code} value={code}>{name}</option>)}
+            <option value={NO_SPEECH}>{t('upload.details.language.none')}</option>
+          </select>
+        )}
       />
       {/* Regular videos only: a short is a reply, not a post, so there
           is nothing to put on a blog. */}
@@ -529,13 +572,32 @@ function EmbedDetails() {
   const nextLabel = t('upload.details.nextStep', { step: fromStories ? t('upload.steps.previewUpload') : t('upload.steps.timeline') });
   actions.primary = [{ key: 'proceed', label: nextLabel, onClick: process }];
 
+  // "Add a collaborator" (lib/collabs.js): the creator's own share now, for the
+  // modal's preview of the split.
+  const creatorPercent = Math.max(0, 100 - (list || []).reduce((n, b) => n + (Number(b.percent) || 0), 0));
+  // A draft and a schedule exclude each other: the last one chosen wins.
+  const toggleDraft = () => {
+    const next = !saveAsDraft;
+    setSaveAsDraft(next);
+    // A premiere needs a start time, so a draft is never one.
+    if (next) { setIsScheduled(false); setIsPremiere(false); }
+  };
+
   const settingRows = [
+    !fromStories && !incubationHandle && {
+      key: 'draft',
+      icon: 'edit_note',
+      title: t('episodes.drafts.row'),
+      sub: saveAsDraft ? t('episodes.drafts.rowOn') : t('episodes.drafts.rowOff'),
+      on: !!saveAsDraft,
+      onClick: toggleDraft,
+    },
     !fromStories && {
       key: 'schedule',
       icon: 'event',
       title: t('upload.details.schedule.short'),
       sub: isScheduled && scheduleDateTime
-        ? new Date(scheduleDateTime).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' })
+        ? `${new Date(scheduleDateTime).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' })}${isPremiere ? ` · ${t('premieres.badge')}` : ''}`
         : t('upload.details.schedule.publishLater'),
       on: !!isScheduled,
       onClick: openScheduleSheet,
@@ -549,6 +611,16 @@ function EmbedDetails() {
         : t('upload.details.shareRewardsSub'),
       on: list.length > 0,
       onClick: toggleBeneficiaryModal,
+    },
+    !fromStories && {
+      key: 'collab',
+      icon: 'group_add',
+      title: t('social.collab.row'),
+      sub: collaborator?.account
+        ? t('social.collab.rowSet', { user: collaborator.account, split: collaborator.split })
+        : t('social.collab.rowSub'),
+      on: !!collaborator?.account,
+      onClick: () => setCollabOpen(true),
     },
     {
       key: 'advanced',
@@ -604,6 +676,36 @@ function EmbedDetails() {
                   </div>
                 )}
               </section>
+
+              {/* The series a Short continues. A regular video has no season
+                  or episode numbers to set (owner 2026-11-16): only audio
+                  episodes have them. */}
+              {fromStories && !isStory && !incubationHandle && (
+                <section className="v2-card details-card input-group">
+                  <ShortSeriesSelect value={seriesId} onChange={setSeriesId} />
+                </section>
+              )}
+
+              {/* A poll on the video or Short (on Hive, so not for a warm-up
+                  account, nor on a 24h story): the small poll button opens it. */}
+              {!isStory && !incubationHandle && (
+                <section className="v2-card details-card input-group details-poll">
+                  <div className="details-poll__head">
+                    <PollToggle on={pollOn} onToggle={() => setPollOn((v) => !v)} />
+                    <span className="details-poll__label">{t('social.polls.addPollTitle')}</span>
+                  </div>
+                  {pollOn && (
+                    <PollEditor
+                      options={pollOptions}
+                      onOptions={setPollOptions}
+                      days={pollDays}
+                      onDays={setPollDays}
+                      question={pollQuestion}
+                      onQuestion={setPollQuestion}
+                    />
+                  )}
+                </section>
+              )}
 
               {/* Choices as tiles (21c): what the post is filed under. Each opens
                   its picker; Community is a Hive category, so it is left out for
@@ -782,7 +884,7 @@ function EmbedDetails() {
             footer={(
               <>
                 {isScheduled && (
-                  <Button variant="ghost" size={40} block icon="bolt" onClick={() => { setIsScheduled(false); setScheduleOpen(false); }}>
+                  <Button variant="ghost" size={40} block icon="bolt" onClick={() => { setIsScheduled(false); setIsPremiere(false); setScheduleOpen(false); }}>
                     {t('upload.details.schedule.publishNow')}
                   </Button>
                 )}
@@ -793,7 +895,7 @@ function EmbedDetails() {
                   trailing="event"
                   className="dlg-main"
                   disabled={!scheduleDraft}
-                  onClick={() => { setScheduleDateTime(scheduleDraft); setIsScheduled(true); setScheduleOpen(false); }}
+                  onClick={() => { setScheduleDateTime(scheduleDraft); setIsScheduled(true); setIsPremiere(premiereDraft); setSaveAsDraft(false); setScheduleOpen(false); }}
                 >
                   {t('upload.details.schedule.scheduleFor', { when: formatScheduleWhen(scheduleDraft) })}
                 </Button>
@@ -813,6 +915,8 @@ function EmbedDetails() {
                   <p className="schedule-sheet__note">
                     {t('upload.details.schedule.note')}
                   </p>
+                  {/* Opt-in (owner: "make listing as premiere optional"). */}
+                  <PremiereSwitch checked={premiereDraft} onChange={setPremiereDraft} />
                 </>
               );
             })()}
@@ -822,6 +926,14 @@ function EmbedDetails() {
         </div>
       </div>
       {isOpen && <CommunityModal isOpen={isOpen} data={communitiesData} close={closeCommunityModal} setCommunity={setCommunity} selected={community} />}
+      <CollabModal
+        open={collabOpen}
+        onClose={() => setCollabOpen(false)}
+        value={collaborator}
+        onSave={setCollaborator}
+        user={user}
+        creatorPercent={creatorPercent}
+      />
       {benficaryOpen && <Beneficiary_modal
         close={toggleBeneficiaryModal}
         isOpen={benficaryOpen}

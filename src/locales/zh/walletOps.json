@@ -1,0 +1,94 @@
+{
+  "actions": {
+    "powerUp": "Power up",
+    "powerDown": "Power down",
+    "savings": "储蓄",
+    "convert": "兑换",
+    "delegate": "委托",
+    "aria": "管理你的资金"
+  },
+  "common": {
+    "amount": "金额（{{coin}}）",
+    "available": "可用：{{balance}}",
+    "max": "最大",
+    "to": "目标账户",
+    "toHint": "如果是你自己的账户，保持不变即可。",
+    "activeKey": "需要你的 active 密钥",
+    "butrauth": "已通过 Butter Auth 登录：下一步你将用 Hive 钱包或 active 密钥确认此操作。",
+    "insufficient": "超出了你的余额。",
+    "amountPositive": "请输入大于零的金额。",
+    "invalidAccount": "没有这个名字的 Hive 账户。",
+    "accountCheckFailed": "暂时无法检查这个账户，请稍后再试。",
+    "done": "完成。可能需要几秒钟才会显示在这里。",
+    "failed": "操作未成功：{{error}}",
+    "loading": "正在加载你的钱包..."
+  },
+  "powerUp": {
+    "title": "Power up",
+    "note": "Hive Power 让你的点赞更有分量，并能获得策展奖励。换回 HIVE 需要分 13 周发放。",
+    "submit": "Power up {{amount}} HIVE",
+    "submitTo": "为 @{{to}} Power up {{amount}} HIVE"
+  },
+  "powerDown": {
+    "title": "Power down",
+    "note": "Hive Power 会分 13 周以 HIVE 返还，每周约 {{weekly}} HP。",
+    "replace": "已有一个 Power down 正在进行（剩余 {{left}} HP）。开始新的会替换它。",
+    "submit": "Power down {{amount}} HP",
+    "stop": "停止 Power down",
+    "stopped": "Power down 已停止。"
+  },
+  "savings": {
+    "title": "储蓄",
+    "deposit": "存入",
+    "withdraw": "取出",
+    "depositNote": "储蓄中的 HBD 年利率为 {{rate}}%。取出需要 3 天。",
+    "depositNoteHive": "储蓄中的 HIVE 没有利息。取出需要 3 天。",
+    "withdrawNote": "3 天后到账。在此之前可以取消。",
+    "submitDeposit": "存入 {{amount}} {{coin}}",
+    "submitWithdraw": "取出 {{amount}} {{coin}}"
+  },
+  "convert": {
+    "title": "兑换",
+    "hbdToHive": "HBD 换 HIVE",
+    "hiveToHbd": "HIVE 换 HBD",
+    "hbdNote": "3.5 天后你将按这几天的中位价格获得约 {{amount}} HIVE。最终金额可能有所不同。",
+    "hiveNote": "你现在获得约 {{amount}} HBD。你的一半 HIVE 会作为抵押暂扣，其余部分 3.5 天后返还。收取 5% 手续费。",
+    "warning": "兑换无法撤销。在市场上交易可能更便宜。",
+    "submit": "兑换 {{amount}} {{coin}}"
+  },
+  "delegate": {
+    "title": "委托",
+    "toLabel": "委托给",
+    "note": "委托出去的 Hive Power 仍归你所有，但它的点赞权重归对方账户使用。取消委托后，需要 5 天才能返还。",
+    "current": "你目前委托给 @{{to}} {{hp}} HP。此操作将设定新的数额。",
+    "submit": "委托 {{amount}} HP 给 @{{to}}",
+    "submitNoTo": "委托 {{amount}} HP",
+    "yours": "你的委托",
+    "remove": "取消",
+    "removed": "委托已取消。HP 将在 5 天后返还。",
+    "self": "不能委托给自己。"
+  },
+  "pending": {
+    "title": "进行中",
+    "powerDown": "Power down：每周 {{weekly}} HP，还剩 {{weeks}} 周",
+    "nextPayment": "下次发放 {{date}}",
+    "withdrawal": "从储蓄取出：{{amount}}",
+    "arrives": "{{date}} 到账",
+    "convertHbd": "正在将 {{amount}} 兑换为 HIVE",
+    "convertHive": "{{amount}} 作为抵押暂扣",
+    "ready": "{{date}} 完成",
+    "delegation": "委托给 @{{to}}：{{hp}} HP",
+    "cancel": "取消",
+    "cancelled": "取出已取消。资金保留在储蓄中。",
+    "stop": "停止",
+    "empty": "没有进行中的操作。"
+  },
+  "activeAuth": {
+    "powerDown": "Power down {{amount}}",
+    "toSavings": "将 {{amount}} 存入储蓄",
+    "fromSavings": "从储蓄取出 {{amount}}",
+    "cancelSavings": "取消储蓄取出",
+    "convert": "兑换 {{amount}}",
+    "delegate": "委托 {{amount}} 给 @{{to}}"
+  }
+}

@@ -28,7 +28,9 @@
     },
     "errors": {
       "pickStars": "星の数を選んでください",
-      "sendFailed": "レビューを送信できませんでした。もう一度お試しください。"
+      "sendFailed": "レビューを送信できませんでした。もう一度お試しください。",
+      "screenshotUnreadable": "このファイルは読み込める画像ではありません。",
+      "screenshotTooBig": "画像が大きすぎます。もっと小さい画像でお試しください。"
     },
     "thanks": "フィードバックありがとうございます！🙏",
     "sendFeedback": "フィードバックを送信",
@@ -39,6 +41,12 @@
     "recommendLabel": "3Speak を人に勧めたいですか？ <opt>（任意）</opt>",
     "moreLabel": "詳しく教えてください <opt>（任意）</opt>",
     "placeholder": "良かった点や改善してほしい点は？",
+    "screenshotLabel": "スクリーンショット <opt>(任意)</opt>",
+    "attachScreenshot": "スクリーンショットを添付",
+    "screenshotPreparing": "スクリーンショットを準備中…",
+    "screenshotAlt": "あなたのスクリーンショット",
+    "removeScreenshot": "スクリーンショットを削除",
+    "screenshotHint": "3Speakチームだけが見られます。ここに画像を貼り付けることもできます。",
     "notNow": "今はしない",
     "sending": "送信中…"
   },
@@ -141,5 +149,22 @@
     "creator": "クリエイター",
     "empty": "まだコメントはありません",
     "emptyHint": "特定の場面に付けたコメントは、動画のタイムラインに表示されます。"
+  },
+  "focus": {
+    "open": "集中モード",
+    "aria": "集中モード：コメントを書く",
+    "done": "完了",
+    "sound": "タイプライターの音",
+    "words_other": "{{count}} 語",
+    "music": "BGM",
+    "musicOff": "オフ",
+    "track1": "雨",
+    "track2": "夜のピアノ",
+    "track3": "暖炉"
+  },
+  "editor": {
+    "full": "フルエディター",
+    "compact": "コンパクトエディター",
+    "toolbar": "書式"
   }
 }

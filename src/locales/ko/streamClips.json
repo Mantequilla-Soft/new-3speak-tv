@@ -1,0 +1,70 @@
+{
+  "readyTitle": "클립이 준비되었어요",
+  "readySub": "방송의 마지막 30초입니다.",
+  "postShort": "쇼츠로 게시",
+  "download": "다운로드",
+  "delete": "삭제",
+  "shareHost": "@{{host}}님이 이 쇼츠 보상의 {{percent}}%를 받습니다. 그분의 방송이니까요.",
+  "shareClipper": "@{{clipper}}님이 이 클립을 만들었고 쇼츠 보상의 {{percent}}%를 받습니다.",
+  "loginToPost": "로그인하면 클립을 쇼츠로 게시할 수 있어요.",
+  "allClips": "이 방송의 내 클립 모두 보기",
+  "postFailed": "게시할 클립을 열 수 없었어요. 다시 시도해 주세요.",
+  "deleteConfirm": "이 클립을 삭제할까요?",
+  "deleteFailed": "클립을 삭제할 수 없었어요.",
+  "title": "베스트 순간",
+  "subHost": "방송에서 나온 클립이에요. 바로 쇼츠로 게시할 수 있으며 2일간 보관됩니다.",
+  "subViewer": "이 방송의 내 클립이에요. 2일간 보관됩니다.",
+  "error": "지금은 클립을 불러올 수 없어요.",
+  "empty": "아직 클립이 없어요. 채팅과 부스트가 몰린 순간이 여기에 표시됩니다.",
+  "at": "{{time}} 지점",
+  "source": {
+    "auto": "하이라이트",
+    "mine": "내 클립",
+    "by": "@{{user}}님의 클립",
+    "guest": "게스트의 클립"
+  },
+  "reasons": {
+    "chat": "채팅 폭발",
+    "boosts": "부스트",
+    "big_boost": "큰 부스트"
+  },
+  "momentsTitle": "다른 순간",
+  "momentsSub": "다시보기 처리가 끝나면 그걸로 쇼츠를 만들어 보세요.",
+  "makeShort": "쇼츠 만들기",
+  "notif": {
+    "host": "방송 클립을 쇼츠로 게시할 준비가 되었어요 ({{count}}개)",
+    "clipper": "@{{user}}님 방송에서 만든 클립이 준비되었어요 ({{count}}개)"
+  },
+  "pendingTitle": "방송이 끝나면 클립이 준비돼요",
+  "pendingSub": "방송이 끝난 뒤 녹화본에서 잘라냅니다. 내 방송 클립에서 확인할 수 있어요.",
+  "status": {
+    "pending": "방송 후 준비됨",
+    "unavailable": "만들 수 없었어요"
+  },
+  "reasonUnavailable": {
+    "past_cap": "무료 30분 이후예요",
+    "past_end": "녹화가 끝난 뒤예요",
+    "no_recording": "방송이 녹화되지 않았어요",
+    "failed": "잘라낼 수 없었어요"
+  },
+  "summary": {
+    "title": "방송 클립 {{count}}개",
+    "pending": "지금 녹화본에서 잘라내는 중이에요. 몇 분 뒤 준비되며 알려드릴게요.",
+    "ready": "모든 클립이 준비되었어요.",
+    "byUser": "@{{user}}: {{count}}",
+    "auto": "자동: {{count}}",
+    "guests": "게스트: {{count}}"
+  },
+  "page": {
+    "title": "내 방송 클립",
+    "sub": "내가 만든 클립과 내 방송의 클립이에요. 클립은 {{hours}}시간 동안 보관돼요.",
+    "empty": "아직 클립이 없어요. 라이브 방송을 클립하거나 방송을 시작해 보세요. 시청자의 클립이 여기에 표시돼요.",
+    "select": "선택",
+    "postSelected": "선택한 클립을 쇼츠로 게시 ({{count}}개)",
+    "queueNext": "다음 클립 게시 ({{count}}개 남음)",
+    "queueClear": "비우기",
+    "ofStream": "@{{host}}님의 방송",
+    "yours": "내 방송",
+    "open": "내 방송 클립"
+  }
+}

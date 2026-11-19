@@ -136,6 +136,13 @@
       "placeholder": "https://www.bitchute.com/channel/…",
       "help": "Paste your BitChute channel name or link. Put the hash anywhere in your channel description."
     },
+    "rss": {
+      "placeholder": "https://example.com/podcast.xml",
+      "help": "Paste the RSS feed address of your podcast. Your podcast host shows it in the show's settings or distribution page.",
+      "flowTitle": "Link your podcast RSS feed",
+      "step2": "<strong>Paste it into your show description, or into the description of your newest episode</strong>, at your podcast host. Save and publish the change. You can remove it again once the feed is verified.",
+      "step3": "Enter your podcast's RSS feed address:"
+    },
     "rumble": {
       "placeholder": "https://rumble.com/c/…",
       "help": "Paste your Rumble channel name or link. Put the hash anywhere in your channel description."
@@ -157,7 +164,13 @@
     "audioMinimal": "Minimal",
     "heightSub": "Full width, {{height}} px tall · Responsive",
     "podcastTitle": "Embed this podcast",
-    "podcastHint": "Plays every episode of the show, including new ones as they come out."
+    "podcastHint": "Plays every episode of the show, including new ones as they come out.",
+    "embedWhere": "Where to embed",
+    "tabWebsite": "Website",
+    "tabHive": "For Hive",
+    "hiveLink": "Link for Hive posts",
+    "hivePlaylistHint": "Paste this link into a Hive post or wave. Hive apps that show 3Speak videos, like Ecency, play the playlist right in the post.",
+    "videoPlaylistHint": "Paste this into any website or blog post. It plays every video of the playlist in order, including ones added later."
   },
   "incubation": {
     "requestFailed": "Request failed ({{status}})",
@@ -197,7 +210,9 @@
       "video": "Video",
       "audio": "Audio",
       "live": "Live",
-      "others": "Others"
+      "others": "Others",
+      "streams": "Streams",
+      "edit": "Edit"
     },
     "subtitles": {
       "regularVideo": "Classic video for your channel",
@@ -210,6 +225,12 @@
       "goLiveNow": "Stream live to your followers",
       "communitySnap": "Quick post on your community tab",
       "playlist": "Group videos into a shareable list"
+    },
+    "categories": {
+      "video": "Upload, record or edit a video",
+      "audio": "Music, podcasts and audio editing",
+      "streams": "Go live alone or with guests",
+      "others": "Snaps and playlists"
     }
   },
   "chat": {

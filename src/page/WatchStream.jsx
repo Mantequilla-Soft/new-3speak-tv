@@ -2,17 +2,24 @@ import { useEffect, useState, useRef, useCallback, useMemo } from 'react';
 import { useParams, useNavigate, Navigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import {
-  HangoutsProvider, StandaloneWatch, StreamVideo, StreamViewerCount, StreamQualityControl, ChatPanel, CollabRequest, useIsMobile, useChat, useBoostStore,
+  HangoutsProvider, StandaloneWatch, StreamVideo, StreamViewerCount, StreamQualityControl, ChatPanel, CollabRequest, useIsMobile, useChat, useBoostStore, useRoomBoost,
 } from '@snapie/hangouts-react';
 import '@snapie/hangouts-react/src/styles/hangouts.css';
 import StreamBoostButton from '../components/openpods/StreamBoostButton';
 import StreamReportButton from '../components/openpods/StreamReportButton';
 import StreamClipButton from '../components/openpods/StreamClipButton';
+import { StreamRewindButton, StreamRewindPlayer } from '../components/openpods/StreamRewind';
+import { useStreamRewind } from '../hooks/useStreamRewind';
 import CroppableStreamVideo from '../components/openpods/CroppableStreamVideo';
 import LiveAdLayer from '../components/openpods/LiveAdLayer';
 import StreamFullscreenButton from '../components/openpods/StreamFullscreenButton';
 import StreamWatermark from '../components/openpods/StreamWatermark';
 import StreamSignInButton from '../components/openpods/StreamSignInButton';
+import StreamBoostGoalBar from '../components/openpods/StreamBoostGoalBar';
+import { LiveCaptionsOverlay, LiveCaptionsToggle, useCaptionsPref } from '../components/openpods/LiveCaptions';
+import { useBoostLabels } from '../components/openpods/boostLabels';
+import { useBattleLabels } from '../components/openpods/battleLabels';
+import { useLiveLabels, raidPath } from '../components/openpods/liveLabels';
 import { useStreamSession } from '../hooks/useStreamSession';
 import { useLiveStreamPager } from '../hooks/useLiveStreamPager';
 import { useStreamChatMirror } from '../hooks/useStreamChatMirror';
@@ -108,25 +115,31 @@ function LiveClock({ since }) {
   return <span className="ws-clock" role="timer">{h > 0 ? `${h}:${pad(m)}:${pad(s % 60)}` : `${m}:${pad(s % 60)}`}</span>;
 }
 
-function SupporterRow({ rank, name, usd }) {
+function SupporterRow({ rank, name, amount }) {
   const avatar = useAvatarUrl(name, 'small');
   return (
     <li className="ws-supporters__row">
       <span className="ws-supporters__rank">{rank}</span>
       <img className="ws-supporters__avatar" src={avatar} alt="" loading="lazy" />
       <Link className="ws-supporters__name" to={`/@${name}`}>@{name}</Link>
-      <span className="ws-supporters__usd money">${usd.toFixed(2)}</span>
+      <span className="ws-supporters__usd money">{amount}</span>
     </li>
   );
 }
 
-/** "Top supporters" beside the chat (18c): the boosts sent during this stream,
- *  summed per sender. The SDK already keeps the room's boost list
- *  (BoostStoreProvider inside StandaloneWatch); nothing is fetched here. */
+/** "Top supporters" beside the chat (18c). The server's tally for the whole
+ *  stream (room metadata, hangouts server 0.26.23+), so a viewer who joined
+ *  late sees everyone; on an older server, the boosts seen since this page
+ *  opened, summed per sender (the SDK's BoostStoreProvider inside
+ *  StandaloneWatch keeps that list). Nothing is fetched here. */
 function TopSupporters() {
   const { t } = useTranslation();
   const boosts = useBoostStore();
+  const { top } = useRoomBoost();
   const rows = useMemo(() => {
+    if (top.length > 0) {
+      return top.map((s) => ({ name: s.account, amount: t('live.boost.dialog.supporterAmount').replace('{amount}', s.hbd.toFixed(2)) }));
+    }
     const bySender = new Map();
     for (const b of boosts || []) {
       if (!b?.sender) continue;
@@ -134,14 +147,14 @@ function TopSupporters() {
       row.usd += Number(b.usdAmount) || 0;
       bySender.set(b.sender, row);
     }
-    return [...bySender.values()].sort((a, b) => b.usd - a.usd);
-  }, [boosts]);
+    return [...bySender.values()].sort((a, b) => b.usd - a.usd).map((r) => ({ name: r.name, amount: `$${r.usd.toFixed(2)}` }));
+  }, [boosts, top, t]);
   if (!rows.length) {
     return <EmptyState icon="rocket_launch" title={t('misc.watchStream.noSupporters')} className="ws-supporters__empty" />;
   }
   return (
     <ol className="ws-supporters">
-      {rows.map((r, i) => <SupporterRow key={r.name} rank={i + 1} name={r.name} usd={r.usd} />)}
+      {rows.map((r, i) => <SupporterRow key={r.name} rank={i + 1} name={r.name} amount={r.amount} />)}
     </ol>
   );
 }
@@ -174,8 +187,15 @@ function keepChatScrollInside(el) {
 
 export default function WatchStream() {
   const { t } = useTranslation();
+  // The SDK's goal bar text in the site language (live.boost.dialog).
+  const boostLabels = useBoostLabels();
+  const battleLabels = useBattleLabels();
+  // Polls, predictions and raids in the site language (liveInteract.labels).
+  const liveLabels = useLiveLabels();
   const { streamId } = useParams();
   const navigate = useNavigate();
+  // The host raided another stream: go along to it.
+  const onRaid = useCallback((target) => navigate(raidPath(target)), [navigate]);
   const { aioha, sessionToken, hangoutsUser, connectReady, joinKey, needsSignIn, canInteract, signIn, signingIn } = useStreamSession();
 
   const [state, setState] = useState({ status: 'loading', room: null, hivePost: null });
@@ -222,6 +242,8 @@ export default function WatchStream() {
   }, [revealInfo]);
 
   const [chatOverlayOn, setChatOverlayOn] = useState(readChatOverlayPref);
+  // H11: the viewer's live captions switch (shown only while the host captions).
+  const [captionsOn, toggleCaptions] = useCaptionsPref();
   // Phones: the viewer's "clean view". Everything over the picture goes (rail,
   // caption, chat, composer, quality, back); one small button in the top-right
   // corner brings it all back.
@@ -245,6 +267,9 @@ export default function WatchStream() {
   // While LiveAdLayer holds the stream for a pre-roll: the stream's sound is off
   // and, on phones, its chrome (chat, rail, caption) steps out of the ad's way.
   const [prerollHold, setPrerollHold] = useState(false);
+  // Rewind (H14): the Pro DVR's last minutes over the live picture; the live
+  // sound is held while it plays.
+  const rewind = useStreamRewind(endpoint?.api, streamId, sessionToken);
   // Swipe/scroll to the next live stream, shorts-style. No-op when nothing else
   // is live.
   const { containerRef: pagerRef, hasNext: hasNextLive } = useLiveStreamPager({
@@ -382,14 +407,18 @@ export default function WatchStream() {
           aioha={aioha}
         >
           {!connectReady ? <BarLoader /> : (
-            <StandaloneWatch key={joinKey} roomName={streamId} connecting={<BarLoader />} audioMuted={prerollHold}>
+            <StandaloneWatch key={joinKey} roomName={streamId} connecting={<BarLoader />} audioMuted={prerollHold || rewind.active} onRaid={onRaid} liveLabels={liveLabels}>
               <main className={`short-main no-bottom-bar ws-shorts${isLandscape ? ' ws-shorts--landscape' : ''}${!infoVisible ? ' ws-info-hidden' : ''}${prerollHold ? ' ws-preroll-on' : ''}${chatOverlayOn ? '' : ' ws-chat-off'}${controlsHidden ? ' ws-controls-hidden' : ''}`}>
                 <div className="videoWrapper">
                   <div className="videoContainer" ref={pagerRef} onClick={revealInfo}>
-                    <CroppableStreamVideo vertical={verticalOn} onOrientation={setStreamLandscape} />
+                    {/* The goal bar goes in the info block below, not over the bottom
+                        of the picture, where the caption and chat composer are. */}
+                    <CroppableStreamVideo vertical={verticalOn} onOrientation={setStreamLandscape} showBoostGoal={false} />
                     {/* Free host streaming from OBS: draw the 3Speak mark the
                         browser studio would have burned in. Follows the crop. */}
                     <StreamWatermark show={showWatermark} />
+                    <LiveCaptionsOverlay show={captionsOn && !controlsHidden} />
+                    <StreamRewindPlayer rewind={rewind} />
                     {/* Ticker + drawn banner. Below the back button / quality row. */}
                     <LiveAdLayer
                       host={host}
@@ -425,6 +454,8 @@ export default function WatchStream() {
                     )}
 
                     <div className="bottomOverlay">
+                      {/* The host's boost goal, slim, above LIVE and the author. */}
+                      <StreamBoostGoalBar className="ws-shorts__goal" />
                       <div className="ws-shorts__live">
                         <StatusPill tone="live" className="ws-live-tag">{t('feeds.live.badge')}</StatusPill>
                         <StreamViewerCount render={(c) => (
@@ -454,6 +485,7 @@ export default function WatchStream() {
                       </div>
                       <CollabRequest variant="rail" canRequest={canInteract} />
                       <StreamBoostButton variant="rail" />
+                      <LiveCaptionsToggle variant="rail" on={captionsOn} onToggle={toggleCaptions} />
                       {canCrop && (
                         <div className="actionItem" onClick={toggleVertical}>
                           <div className="actionButton">
@@ -466,6 +498,7 @@ export default function WatchStream() {
                         <div className="actionButton"><Icon name={copied ? 'check' : 'share'} size={24} /></div>
                         <span className="actionLabel">{copied ? t('common.actions.copied') : t('common.actions.share')}</span>
                       </div>
+                      <StreamRewindButton rewind={rewind} variant="sidebar" />
                       <StreamClipButton roomName={streamId} variant="sidebar" />
                       <StreamReportButton roomName={streamId} host={host} variant="sidebar" />
                       <div className="actionItem" onClick={() => setControlsHidden(true)}>
@@ -489,7 +522,7 @@ export default function WatchStream() {
                     {chatOverlayOn && (
                       <div className="ws-shorts__chat">
                         {/* Messages only — the composer lives in the bottom bar. */}
-                        <ChatPanel readOnly readOnlyNotice="" />
+                        <ChatPanel readOnly readOnlyNotice="" liveLabels={liveLabels} />
                       </div>
                     )}
                   </div>
@@ -535,7 +568,7 @@ export default function WatchStream() {
       >
         {!connectReady ? <BarLoader /> : (
 
-        <StandaloneWatch key={joinKey} roomName={streamId} connecting={<BarLoader />} audioMuted={prerollHold}>
+        <StandaloneWatch key={joinKey} roomName={streamId} connecting={<BarLoader />} audioMuted={prerollHold || rewind.active} onRaid={onRaid} liveLabels={liveLabels}>
           {/* Live strip (18c): LIVE, time on air, who is watching, playback quality. */}
           <div className="ws-strip">
             <StatusPill tone="live" className="ws-live-tag">{t('feeds.live.badge')}</StatusPill>
@@ -551,8 +584,10 @@ export default function WatchStream() {
             {/* Main column: the player, then the title with the tile dock beside it. */}
             <div className="ws-col-main">
               <div className="ws-player">
-                <StreamVideo showLiveBadge={false} />
+                <StreamVideo showLiveBadge={false} boostLabels={boostLabels} battleLabels={battleLabels} />
                 <StreamWatermark show={showWatermark} />
+                <LiveCaptionsOverlay show={captionsOn} />
+                <StreamRewindPlayer rewind={rewind} />
                 <LiveAdLayer host={host} room={streamId} onPreroll={setPrerollHold} />
                 {/* The creator on the player, with Follow (18c). */}
                 <div className="ws-creator">
@@ -581,8 +616,10 @@ export default function WatchStream() {
                   {needsSignIn
                     ? <StreamSignInButton variant="dock" label={t('misc.watchStream.signInRaiseHand')} onSignIn={signIn} busy={signingIn} />
                     : <CollabRequest canRequest={canInteract} />}
+                  <StreamRewindButton rewind={rewind} />
                   <StreamClipButton roomName={streamId} />
                   <StreamBoostButton />
+                  <LiveCaptionsToggle on={captionsOn} onToggle={toggleCaptions} />
                   <DockTile icon={copied ? 'check' : 'ios_share'} label={copied ? t('common.actions.copied') : t('common.actions.share')} onClick={copyLink} title={t('misc.watchStream.copyLink')} />
                   <StreamReportButton roomName={streamId} host={host} />
                   <StreamFullscreenButton variant="dock" label={t('misc.watchStream.full')} />
@@ -611,6 +648,7 @@ export default function WatchStream() {
                     readOnly={!canInteract}
                     readOnlyNotice={chatNotice}
                     onMessageSent={mirrorChatToHive}
+                    liveLabels={liveLabels}
                   />
                 </div>
                 {chatTab === 'supporters' && (

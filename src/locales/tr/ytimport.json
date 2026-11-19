@@ -1,5 +1,5 @@
 {
-  "title": "Videolarınızı içe aktarın",
+  "title": "İçeriğini içe aktar",
   "subtitle": "Videolarınızı YouTube veya TikTok'tan 3Speak'e taşıyın. Başlık, açıklama, etiketler ve küçük resim sizin için doldurulur.",
   "noChannel": "Henüz bir YouTube kanalı bağlamadınız. Önce profilinizde bağlayıp doğrulayın, sonra buraya dönün.",
   "linkChannel": "Profilime git",
@@ -9,6 +9,7 @@
   "openOnYoutube": "YouTube'da aç",
   "import": "Bu videoyu içe aktar",
   "useOwnFile": "Dosya zaten bende",
+  "openInUploader": "Düzenle ve yayınla",
   "cancel": "İptal",
   "retry": "Tekrar dene",
   "progress": {
@@ -31,9 +32,11 @@
     "blocked": "YouTube şu anda sunucumuzun bu videoyu indirmesine izin vermedi.",
     "notVideo": "Bu dosya bir video değil.",
     "tooLongForShort": "Bu video {{minutes}} dakikadan uzun, bir Short için çok uzun. Bunun yerine normal video olarak içe aktarın.",
-    "proxyPaused": "YouTube içe aktarmaları bir süreliğine duraklatıldı. Lütfen daha sonra tekrar dene."
+    "proxyPaused": "YouTube içe aktarmaları bir süreliğine duraklatıldı. Lütfen daha sonra tekrar dene.",
+    "notAudio": "Bu dosya bir ses dosyası değil."
   },
   "entry": "Videoları içe aktar",
+  "menuEntry": "İçerik içe aktar",
   "types": {
     "videos": "Videolar",
     "shorts": "Shorts",
@@ -60,7 +63,8 @@
     "tiktok": "TikTok",
     "instagram": "Instagram",
     "bitchute": "BitChute",
-    "rumble": "Rumble"
+    "rumble": "Rumble",
+    "rss": "Podcast"
   },
   "tiktok": {
     "noLink": "Henüz bir TikTok hesabı bağlamadınız. Önce profilinizde bağlayıp doğrulayın, sonra buraya dönün.",
@@ -98,7 +102,7 @@
     "selectedCount": "{{count}} seçildi",
     "maxHint": "en fazla {{max}}",
     "clear": "Temizle",
-    "importSelected": "Seçilenleri içe aktar ({{count}})",
+    "importSelected": "Arka planda yayınla ({{count}})",
     "busy": "Önceki toplu içe aktarman hâlâ sürüyor",
     "steps": {
       "content": "İçerik",
@@ -135,7 +139,16 @@
     "stopConfirm": "Bu içe aktarma durdurulsun mu? Henüz yayınlanmamış videolar, zaten zamanlanmış olanlar dahil, iptal edilir. Yayınlanan videolar kalır.",
     "stopYes": "Evet, durdur",
     "stopKeep": "Aktarmaya devam et",
-    "countOf": "{{done}} / {{total}}"
+    "countOf": "{{done}} / {{total}}",
+    "audio": {
+      "formTitle": "{{count}} bölümü içe aktar",
+      "contentIntro": "Ses türünü ve her gönderinin başlığının, açıklamasının ve etiketlerinin nereden geleceğini seç.",
+      "settingsIntro": "Bu ayarlar seçtiğin tüm bölümlere uygulanır.",
+      "spacing": "Her bölüm sunucumuzda içe aktarılır ve ardından ayrı ayrı, {{minutes}} dakika arayla yayınlanır. İlki hazır olduktan birkaç dakika sonra yayına girer. Bu sayfayı kapatabilirsin.",
+      "canLeave": "Bu sayfayı artık kapatabilirsin. Bölümlerin sen yokken de sunucumuzda içe aktarılıp yayınlanır.",
+      "stopConfirm": "Bu içe aktarma durdurulsun mu? Henüz yayınlanmamış bölümler, zaten zamanlanmış olanlar dahil, iptal edilir. Yayınlanan bölümler kalır.",
+      "maxReached": "Tek seferde en fazla {{max}} bölüm seçebilirsin"
+    }
   },
   "bitchute": {
     "noLink": "Henüz bir BitChute hesabı bağlamadınız. Önce profilinizde bağlayıp doğrulayın, sonra buraya dönün.",
@@ -166,5 +179,85 @@
     "empty": "Rumble kanalında herkese açık video bulunamadı.",
     "olderHint": "Aradığın videoyu göremiyor musun?",
     "olderHintAction": "Bağlantısını yapıştır"
+  },
+  "rss": {
+    "noLink": "Henüz bir podcast RSS beslemesi bağlamadın. Önce profilinde bağlayıp doğrula, sonra buraya geri gel.",
+    "latest": "Podcast bölümlerin",
+    "empty": "Podcast beslemende bölüm bulunamadı.",
+    "openOn": "Bölüm sayfasını aç",
+    "fallbackIntro": "Yine de içe aktarabilirsin: bölümü kendin indir ve dosyayı burada seç. Diğer her şey dolu kalır.",
+    "fallbackStep1": "Bölümü podcast barındırma hizmetinde aç.",
+    "fallbackStep2": "Ses dosyasını indir (MP3 veya M4A).",
+    "limits": "{{hours}} saate kadar olan bölümler içe aktarılabilir. Notları ve kapaklarıyla ses gönderisi olarak yayınlanırlar.",
+    "show": "Podcast",
+    "unreadable": "şu anda okunamıyor",
+    "unreadableAll": "Podcast beslemen şu anda okunamıyor. Çevrimiçi olduğunu kontrol et ve daha sonra tekrar dene.",
+    "import": "Bu sesi içe aktar",
+    "progressServer": "Ses alınıyor: %{{pct}}",
+    "progressTransfer": "Ses yükleyiciye aktarılıyor: %{{pct}}"
+  },
+  "auto": {
+    "title": "Otomatik içe aktarma",
+    "unavailable": "Otomatik içe aktarma bu sunucuda henüz kullanılamıyor.",
+    "off": "Kapalı. Açarsan bu programın her yeni bölümü 3Speak'te bir ses gönderisi olur.",
+    "onSince": "{{date}} tarihinden beri açık. Besleme her {{minutes}} dakikada bir kontrol edilir.",
+    "pillOn": "Açık",
+    "pillOff": "Kapalı",
+    "queued": "Şimdiye kadar içe aktarılan yeni bölümler: {{count}}",
+    "lastCheck": "Son kontrol: {{time}}",
+    "waiting": "Yarını bekleyen: {{count}} (günde en fazla {{max}})",
+    "skipped": "Atlandı, içe aktarma sınırından uzun: {{titles}}",
+    "comesAuto": "Yeni bölüm: otomatik içe aktarma bir sonraki kontrolde alacak",
+    "errors": {
+      "noLink": "Bu besleme artık profilinde doğrulanmış değil. Devam etmek için onu yeniden bağla.",
+      "noGrant": "3Speak artık senin adına yayınlayamıyor. Yeniden izin vermek için ayarları aç.",
+      "unreadable": "Son kontrolde beslemen okunamadı. Bir sonrakinde tekrar deneyeceğiz.",
+      "generic": "Son kontrol başarısız oldu. Bir sonrakinde tekrar deneyeceğiz."
+    },
+    "edit": "Ayarları düzenle",
+    "setUp": "Otomatik içe aktarmayı kur",
+    "formTitle": "Otomatik içe aktarma",
+    "formIntro": "<b>{{show}}</b> programının yeni bölümleri bu ayarlarla ses gönderisine dönüşür, günde en fazla {{max}} tane, toplu içe aktarmadaki gibi aralıklarla.",
+    "enabled": "Yeni bölümleri otomatik olarak içe aktar",
+    "enabledInfo": "Beslemeni düzenli olarak kontrol ediyoruz. Bunu açtıktan sonra çıkan her bölüm indirilir ve aşağıdaki ayarlarla @threespeak tarafından senin adına yayınlanır. Beslemede zaten olan bölümlere dokunulmaz.",
+    "enabledOn": "Yeni bölümler senin adına yayınlanır",
+    "enabledOff": "Ayarlar saklanır, hiçbir şey yayınlanmaz",
+    "sections": {
+      "content": "Başlık, etiketler ve açıklama",
+      "post": "Gönderi ayarları"
+    },
+    "kind": "Ses türü",
+    "target": "Şu olarak yayınla",
+    "targetPost": "Ayrı gönderi",
+    "targetSnap": "Snap yorumu",
+    "targetPostHint": "Başlıklı bir gönderi, aşağıda seçtiğin toplulukta.",
+    "targetSnapHint": "Snaps akışında başlıksız bir yanıt, bir short gibi. Topluluk ve blog geçerli değildir.",
+    "fromSource": "Kaynaktan al",
+    "fromSourceInfo": "Açık: her gönderi bölümün başlığını, notlarını ve içindeki #hashtag'leri beslemende olduğu gibi alır. Kapalı: başlık biçimini, etiketleri ve açıklamayı kendin belirlersin.",
+    "fromSourceOn": "Başlık, açıklama ve etiketler her bölümden gelir",
+    "fromSourceOff": "Başlığı, etiketleri ve açıklamayı aşağıda sen belirlersin",
+    "titleLabel": "Başlık",
+    "titleHint": "Bölüm başlığı için {title}, program adı için {show}, numaraları için {episode} ve {season}, yayın tarihi için {date} kullan.",
+    "sampleTitle": "Bölüm başlığı",
+    "sampleShow": "Programım",
+    "titlePreview": "Örnek: {{title}}",
+    "tagsLabel": "Etiketler",
+    "tagsHint": "En fazla 8, boşlukla ayrılmış. Her gönderiye eklenir.",
+    "hashtags": "Bölüm notlarındaki hashtag'leri de kullan",
+    "hashtagsInfo": "Bir bölümün notlarında #tag olarak yazılan kelimeler, senin etiketlerinden sonra gönderinin etiketleri olur (en fazla 10 etiket).",
+    "hashtagsHint": "Notlardaki #tags gönderi etiketi olur",
+    "useNotes": "Bölüm notlarını açıklama olarak kullan",
+    "useNotesInfo": "Gönderinin metni, beslemendeki bölüm notlarıdır, bağlantılarıyla birlikte. Her bölüm için aynı kendi metnini kullanmak istersen kapat.",
+    "useNotesOn": "Her gönderi kendi bölümünün notlarını gösterir",
+    "useNotesOff": "Her gönderi aşağıdaki metnini kullanır",
+    "addendumLabel": "Bölüm notlarının altındaki metin",
+    "addendumHint": "Notlardan sonra her gönderiye eklenir, örneğin diğer kanallarına bağlantılar.",
+    "optional": "isteğe bağlı",
+    "textLabel": "Açıklama",
+    "textHint": "Her bölüm için kullanılır. {title}, {show}, {episode}, {season} ve {date} burada da çalışır.",
+    "textRequired": "Kullanılacak açıklamayı yaz ya da bölüm notlarını kullan.",
+    "onlyNew": "Yalnızca bunu açtıktan sonra beslemende çıkan bölümler içe aktarılır, eskiler asla.",
+    "grantNeeded": "Otomatik içe aktarmalar senin adına @threespeak tarafından yayınlanır, bu yüzden hesabında yayınlama izni gerekir.",
+    "save": "Kaydet"
   }
 }

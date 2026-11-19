@@ -44,6 +44,7 @@
     "title": "已关联的外部主页",
     "intro": "将你专属的 3Speak 哈希粘贴到你公开主页的简介中，然后在这里验证，即可证明你拥有某个 YouTube（或其他平台）频道。",
     "openProfile": "打开主页",
+    "importEpisodes": "导入单集",
     "removeLink": "移除关联",
     "empty": "还没有关联任何外部主页。",
     "addPlatform": "添加新平台",
@@ -81,7 +82,6 @@
     "addCollaborator": "添加合作者",
     "saveSplit": "保存分配",
     "intro": "添加一位用户，让其自动获得这篇帖子的一部分奖励。",
-    "minPercent": "%（最少 {{percent}}%）",
     "usernamePlaceholder": "输入用户名",
     "minimumReward": "最低奖励为 <strong>1%</strong>",
     "checking": "正在 Hive 上检查 <strong>@{{account}}</strong>…",
@@ -89,7 +89,11 @@
     "notAdded": "<strong>@{{account}}</strong> 还没有添加。点击 <strong>+</strong> 添加，或清空该字段。",
     "infrastructure": "基础设施：10%",
     "videoEncoding": "视频编码：1%",
-    "defaults": "默认受益人（{{count}}）"
+    "defaults": "默认受益人（{{count}}）",
+    "raise": "提高 {{account}} 的份额",
+    "lower": "降低 {{account}} 的份额",
+    "minShare": "最低 {{percent}}%",
+    "raiseHint": "带锁的份额可以提高以多分一些，但不能低于其最低值。"
   },
   "qr": {
     "scan": "在 Hive Keychain 中扫描此二维码：",
@@ -137,7 +141,8 @@
       "title": "短视频文字",
       "hint": "它会和音频波形视频一起出现在短视频中。会自动添加指向你音频的链接。",
       "placeholder": "这一段讲的是什么？（可选）"
-    }
+    },
+    "videoPodcastNotSupported": "编辑器暂时还不能制作视频播客，请稍后再试。"
   },
   "profile": {
     "mustLogin": "你需要先登录",

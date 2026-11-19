@@ -10,6 +10,7 @@ import { KeyTypes } from '@aioha/aioha';
 import { useMyPlaylists } from '../../hooks/useMyPlaylists';
 import { uploadAudioTo3Speak, getSnapsContainer, linkAudioToPost, audioFormatFor } from '../../utils/audioUpload';
 import { uploadThumbnail } from '../../utils/uploadThumbnail';
+import { markImportPublished } from '../../lib/youtubeImport';
 import { broadcastWithAioha, broadcastViaThreespeak, getCurrentProvider, Providers, commentWithAioha } from '../../hive-api/aioha';
 import { hasThreespeakPostingAuth, addThreespeakToPostingAuth } from '../../utils/postingAuthority';
 import { checkPostingRc } from '../../utils/rcCheck';
@@ -28,6 +29,8 @@ import CoverDesigner from './CoverDesigner';
 import ShortThumbDesigner from './ShortThumbDesigner';
 import AudiogramShortsSection from './AudiogramShortsSection';
 import AudioTeleprompter from './AudioTeleprompter';
+import RecordWave, { newRecordContext, openRecordGraph, waitForMic, QUIET_PEAK } from './RecordWave';
+import { reportClientError } from '../../utils/reportClientError';
 import TranscriptControl from './TranscriptControl';
 import { useTranscriptJobs } from '../../hooks/useTranscriptJobs';
 import { withTranscript, TRANSCRIPT_MAX_CHARS } from '../../utils/transcribe';
@@ -41,12 +44,18 @@ import UploadGate from '../ads/UploadGate';
 import { fetchUploadGateAd, confirmUploadGatePost, gateSessionId } from '../../lib/uploadGate';
 import { usePortalDoc } from '../../utils/portalDocument';
 import { readAddToBlog, writeAddToBlog, reblogOp } from '../../utils/addToBlog';
+import { episodeFields } from '../../utils/episodeNumbers';
+import { saveScheduledPost } from '../../utils/scheduledPosts';
+import { scheduledPostWriteError } from '../../utils/scheduledPostProof';
+import EpisodeNumberFields from '../Episodes/EpisodeNumberFields';
+import AudioPublishWhen, { scheduleTooSoon, SCHEDULE_MIN_LEAD_MIN } from './AudioPublishWhen';
 import PlaylistTypePicker from '../PlaylistTypePicker/PlaylistTypePicker';
 import MarkdownComposer from '../studio/MarkdownComposer';
 import { sanitizeAudiograms, publishAudiogramShorts } from '../../utils/audiogramShorts';
 import { playlistTypeFields, trackCategoryToKind, storedPlaylistType } from '../../lib/playlistType';
 import AudioClip from '../AudioClip/AudioClip';
 import { audioCategorySymbol } from '../AudioTile/audioSymbols';
+import Composer from '../common/Composer/Composer';
 
 // Every toast from this module is headed "Upload"; the message becomes the
 // line under it. See utils/toast.js.
@@ -99,6 +108,29 @@ const FLOWS = {
 };
 
 const MAX_RECORD_SEC = 300;
+// What the recorder is asked for, first one the browser has (as the editor's)
+const RECORD_TYPES = ['audio/webm;codecs=opus', 'audio/webm', 'audio/mp4', 'audio/ogg;codecs=opus'];
+// On a phone the first mic stream after a page load can deliver nothing but
+// zeros while the next one works (the second try always did, owner
+// 2026-11-17): a stream with no samples in MIC_WAIT_MS is let go and the mic
+// opened again, up to MIC_OPENS times
+const MIC_OPENS = 3;
+const MIC_WAIT_MS = 1500;
+const openMic = () => navigator.mediaDevices.getUserMedia({ audio: true });
+
+// What the mic said, for the report on a recording the level graph heard nothing in
+function micInfo(stream, graph) {
+  const tr = stream?.getAudioTracks?.()[0];
+  let set = {};
+  try { set = tr?.getSettings?.() || {}; } catch { /* ignore */ }
+  const pick = ['sampleRate', 'channelCount', 'echoCancellation', 'noiseSuppression', 'autoGainControl'];
+  return {
+    track: tr ? { muted: tr.muted, state: tr.readyState, enabled: tr.enabled } : null,
+    ctx: graph?.ctx?.state || null,
+    ctxRate: graph?.ctx?.sampleRate || null,
+    settings: Object.fromEntries(pick.filter((k) => k in set).map((k) => [k, set[k]])),
+  };
+}
 // A track's text with a transcript in it: room for the transcript (cut to
 // TRANSCRIPT_MAX_CHARS) and what the creator wrote around it
 const TRANSCRIPT_TEXT_MAX = TRANSCRIPT_MAX_CHARS + 5000;
@@ -331,6 +363,13 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
   const [communityOpen, setCommunityOpen] = useState(false);
   const [mainTitle, setMainTitle] = useState('');
   const [postDescription, setPostDescription] = useState('');
+  // A standalone post's season / episode (utils/episodeNumbers.js), as typed,
+  // and when it goes out: 'now', 'schedule' (at scheduleAt, datetime-local) or
+  // 'draft' (AudioPublishWhen; the checker's scheduled posts keep the other two).
+  const [seasonNum, setSeasonNum] = useState('');
+  const [episodeNum, setEpisodeNum] = useState('');
+  const [publishWhen, setPublishWhen] = useState('now');
+  const [scheduleAt, setScheduleAt] = useState('');
   const [postTagsInput, setPostTagsInput] = useState('');
   // The post cover the creator picked, designed or cleared themselves; until
   // they do (postThumbFrom null), the post cover is the playlist's (postThumb,
@@ -499,6 +538,21 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     setBeneOpen(true);
   }, [postBeneStr, sharedBeneStr, tracks, isPremium, mode, user]);
 
+  // The Review step's Rewards + Beneficiaries lines: the standalone post's own,
+  // else the tracks' (one value when they all agree, `null` = set per track).
+  const reviewRewards = useMemo(() => {
+    const parse = (json) => {
+      try { return (JSON.parse(json || '[]') || []).filter((b) => b && b.account); } catch { return []; }
+    };
+    if (mode === 'single') return { payout: postPayout || 'default', bene: parse(postBeneStr) };
+    const payouts = new Set(tracks.map((tr) => tr.payout || 'default'));
+    const benes = new Set(tracks.map((tr) => tr.beneStr || '[]'));
+    return {
+      payout: payouts.size === 1 ? [...payouts][0] : null,
+      bene: benes.size === 1 ? parse([...benes][0]) : null,
+    };
+  }, [mode, postPayout, postBeneStr, tracks]);
+
   // Write the modal's beneficiary JSON back to its target.
   const writeBeneToTarget = useCallback((json) => {
     if (beneTarget === 'main') setPostBeneStr(json);
@@ -511,6 +565,14 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
   const recordTimerRef = useRef(null);
   const recordChunksRef = useRef([]);
   const recordStreamRef = useRef(null);
+  const recordGraphRef = useRef(null);
+  // The loudest the level graph heard while recording, and how the mic was opened
+  const recordPeakRef = useRef(0);
+  const recordDiagRef = useRef(null);
+  const [recordGraph, setRecordGraph] = useState(null);
+  // Between the record click and the recorder starting: the mic is opened and
+  // checked first (waitForMic)
+  const [micPreparing, setMicPreparing] = useState(false);
   const objectUrlsRef = useRef(new Set());
 
   const { data: playlists = [], isLoading: playlistsLoading, refetch: refetchPlaylists } = useMyPlaylists({ limit: 50 });
@@ -553,32 +615,36 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     const url = URL.createObjectURL(blob);
     objectUrlsRef.current.add(url);
     const dur = await probeDuration(blob);
+    const id = newId();
     setTracks(prev => [...prev, {
-      id: newId(),
+      id,
       blob,
       filename,
-      title: defaultTitleFromFile(filename),
+      // An imported episode brings its own title, text and cover (extra.title/desc/thumb).
+      title: extra.title || defaultTitleFromFile(filename),
       durationSec: dur,
       objectUrl: url,
       source,
-      // Optional metadata captured in the Titles step. Caller may
-      // override the auto-derived type — e.g. an OpenPods recording
-      // hand-off pre-fills 'podcast'.
-      type: overrideType ?? playlistTrackTypeRef.current ?? (source === 'record' ? 'voice_message' : 'podcast'),
+      // No default category: the uploader has to pick one (a guessed
+      // 'podcast' / 'voice_message' filed music under the wrong tab). Only a
+      // caller's type (an OpenPods recording = 'podcast') or the chosen
+      // playlist's kind pre-fills it.
+      type: overrideType ?? playlistTrackTypeRef.current ?? null,
       edited: source === 'editor',
       musicCredits: sanitizeMusicCredits(extra.musicCredits),
       genre: '',
       bpm: '',
       // Per-track publish config (snaps + album-post comments). Chapters from
       // the audio editor start the description ("0:00 Intro" lines).
-      desc: chaptersText(sanitizeChapters(extra.chapters)),
+      desc: extra.desc || chaptersText(sanitizeChapters(extra.chapters)),
       chaptersText: chaptersText(sanitizeChapters(extra.chapters)),
       // Audiograms from the audio editor: posted as Shorts after this track's post
       audiograms: sanitizeAudiograms(extra.audiograms),
-      thumb: '',
+      thumb: extra.thumb || '',
       payout: 'default',      // default | powerup | decline
       beneStr: '[]',          // JSON beneficiary list
     }]);
+    return id;
   }, []);
 
   // When an initialTrack lands (e.g. an OpenPods recording handed off
@@ -586,22 +652,42 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
   // ref guard ensures one initial blob per open cycle even if the
   // parent re-renders mid-flight or the user dismisses then reopens.
   const consumedInitialRef = useRef(false);
+  // An imported podcast episode (the import page): its source id, reported back
+  // once the post is out so the import grid marks it as on 3Speak.
+  const importSourceRef = useRef(null);
   useEffect(() => {
     if (!isOpen) {
       consumedInitialRef.current = false;
+      importSourceRef.current = null;
       return;
     }
     if (consumedInitialRef.current) return;
     if (!initialTrack || !initialTrack.blob) return;
     consumedInitialRef.current = true;
-    addBlobAsTrack(
+    // An imported episode: its own title, show notes, tags and cover, all still
+    // editable, on the post AND on the track (a snap comment is the track's).
+    const pre = initialTrack.prefill;
+    const cover = pre?.coverUrl && /^https:\/\//.test(pre.coverUrl) ? pre.coverUrl : '';
+    const added = addBlobAsTrack(
       initialTrack.blob,
       initialTrack.filename || 'openpod-recording.ogg',
-      initialTrack.source === 'editor' ? 'editor' : 'record',
+      initialTrack.source === 'editor' ? 'editor' : initialTrack.source === 'import' ? 'file' : 'record',
       initialTrack.type ?? null,
-      { musicCredits: initialTrack.musicCredits, chapters: initialTrack.chapters, audiograms: initialTrack.audiograms },
+      {
+        musicCredits: initialTrack.musicCredits, chapters: initialTrack.chapters, audiograms: initialTrack.audiograms,
+        ...(pre ? { title: pre.title ? String(pre.title).slice(0, 255) : '', desc: pre.description ? String(pre.description) : '', thumb: cover } : {}),
+      },
     );
-  }, [isOpen, initialTrack, addBlobAsTrack]);
+    if (pre) {
+      if (pre.title) setMainTitle(String(pre.title).slice(0, 255));
+      if (pre.description) setPostDescription(String(pre.description));
+      if (Array.isArray(pre.tags) && pre.tags.length) setPostTagsInput(pre.tags.join(' '));
+      if (cover) setCoverFor('main', cover);
+      // Reported back for this track, however it is published (post or snap).
+      const sourceId = typeof pre.sourceId === 'string' ? pre.sourceId : null;
+      if (sourceId) added.then((trackId) => { importSourceRef.current = { sourceId, trackId }; });
+    }
+  }, [isOpen, initialTrack, addBlobAsTrack, setCoverFor]);
 
   const handleFiles = useCallback(async (fileList) => {
     const files = Array.from(fileList || []).filter(f => f.type.startsWith('audio/') || AUDIO_EXT_RE.test(f.name));
@@ -655,26 +741,70 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
   };
 
   const startRecording = async () => {
+    if (micPreparing || isRecording) return;
+    // Made in the click, before the permission prompt can use it up (RecordWave.jsx)
+    let ctx = newRecordContext();
+    setMicPreparing(true);
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const askedAt = performance.now();
+      let stream = await openMic();
+      const openMs = Math.round(performance.now() - askedAt);
       recordStreamRef.current = stream;
       recordChunksRef.current = [];
-      const mr = new MediaRecorder(stream);
+      // The level graph listens before the recorder starts, as in the editor's
+      // recorder, whose recordings have sound on phones where this one's were
+      // silent (owner 2026-11-17)
+      recordGraphRef.current?.close();
+      recordGraphRef.current = openRecordGraph(stream, ctx);
+      ctx = null;
+      const graph = recordGraphRef.current;
+      setRecordGraph(graph);
+      // Start only once the mic delivers; a dead stream goes first, then the
+      // mic is opened again, on the same graph (MIC_OPENS)
+      let opens = 1;
+      let ready = await waitForMic(stream, graph, { timeoutMs: MIC_WAIT_MS });
+      while (!ready && opens < MIC_OPENS && recordStreamRef.current === stream) {
+        stream.getTracks().forEach((tr) => tr.stop());
+        stream = await openMic();
+        opens += 1;
+        // Closed while it opened: let the new one go too
+        if (!recordStreamRef.current) { stream.getTracks().forEach((tr) => tr.stop()); return; }
+        recordStreamRef.current = stream;
+        graph?.attach(stream);
+        ready = await waitForMic(stream, graph, { timeoutMs: MIC_WAIT_MS });
+      }
+      recordPeakRef.current = 0;
+      recordDiagRef.current = { openMs, opens, ready, start: micInfo(stream, graph) };
+      // Closed while waiting: the cleanup let the mic go
+      if (recordStreamRef.current !== stream) return;
+      const want = RECORD_TYPES.find((ty) => { try { return MediaRecorder.isTypeSupported?.(ty); } catch { return false; } });
+      const mr = new MediaRecorder(stream, want ? { mimeType: want } : undefined);
       mr.ondataavailable = (e) => { if (e.data?.size > 0) recordChunksRef.current.push(e.data); };
       mr.onstop = async () => {
         // Safari's recorder makes audio/mp4, not webm: keep the type it reports.
         const type = mr.mimeType || recordChunksRef.current[0]?.type || 'audio/webm';
         const blob = new Blob(recordChunksRef.current, { type });
+        // The graph heard nothing the whole time: say what the mic looked like
+        if (recordGraphRef.current && recordPeakRef.current < QUIET_PEAK) {
+          reportClientError({
+            kind: 'render',
+            error: `record-silent ${JSON.stringify({ ...recordDiagRef.current, peak: Math.round(recordPeakRef.current * 1000) / 1000, end: micInfo(recordStreamRef.current, recordGraphRef.current).track, ctxEnd: recordGraphRef.current?.ctx?.state, type, size: blob.size })}`,
+          });
+        }
         recordStreamRef.current?.getTracks().forEach(tr => tr.stop());
         recordStreamRef.current = null;
+        recordGraphRef.current?.close();
+        recordGraphRef.current = null;
+        setRecordGraph(null);
         const idx = newId().slice(0, 4);
         await addBlobAsTrack(blob, `recording-${idx}.${audioFormatFor(blob)}`, 'record');
         setIsRecording(false);
         setRecordSec(0);
         stopRecordTimer();
       };
-      mr.start();
+      mr.start(100);
       mediaRecorderRef.current = mr;
+      setMicPreparing(false);
       setIsRecording(true);
       setRecordSec(0);
       recordTimerRef.current = setInterval(() => {
@@ -687,7 +817,15 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
         });
       }, 1000);
     } catch {
+      try { ctx?.close(); } catch { /* ignore */ }
+      recordGraphRef.current?.close();
+      recordGraphRef.current = null;
+      setRecordGraph(null);
+      recordStreamRef.current?.getTracks().forEach(tr => tr.stop());
+      recordStreamRef.current = null;
       toast.error(t('audio.upload.toasts.micDenied'));
+    } finally {
+      setMicPreparing(false);
     }
   };
 
@@ -707,6 +845,8 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
         try { mr.stop(); } catch {}
       }
       recordStreamRef.current?.getTracks().forEach(tr => tr.stop());
+      recordStreamRef.current = null;
+      recordGraphRef.current?.close();
       objectUrlsRef.current.forEach(u => URL.revokeObjectURL(u));
       objectUrlsRef.current.clear();
     };
@@ -1000,13 +1140,19 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
 
   // ── single (standalone post, audio embedded — uses the main composer) ──
   const publishSinglePost = useCallback(async (track) => {
+    // A scheduled time that has come too close while the creator was in the
+    // review step: say so before the upload, not after it (the checker would
+    // refuse the post and leave the audio without one).
+    if (!warmup && publishWhen === 'schedule' && scheduleTooSoon(scheduleAt)) {
+      throw new Error(t('episodes.when.tooSoon', { minutes: SCHEDULE_MIN_LEAD_MIN }));
+    }
     setTrackStatus(track.id, { state: 'uploading', stage: 'upload', message: undefined });
     // The post's title is the audio's title too: the track title is only the
     // filename-derived default here ("recording 4702"), and audio cards and the
     // audio page read the audio row, not the post.
     const postTitle = (mainTitle || track.title || '').trim() || 'Audio';
     const { permlink: audioPermlink, playUrl } = await uploadAudioTo3Speak({
-      blob: track.blob, filename: track.filename, durationSec: track.durationSec, username: owner, title: postTitle,
+      blob: track.blob, filename: track.filename, durationSec: track.durationSec, username: owner, title: postTitle, category: track.type,
     });
     setTrackStatus(track.id, { state: 'posting', stage: 'post', playUrl });
     // A warm-up post takes the audio's own id as its permlink, as a warm-up video
@@ -1030,12 +1176,61 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     const metaObj = {
       app: HIVE_APP_NAME,
       tags,
-      audio: withSound(audioMeta, credits),
+      // Season / episode ride in the bare audio block, which the checker reads
+      // (podcast feeds, the audio rows' "S2 E5").
+      audio: withSound({ ...audioMeta, ...episodeFields({ season: seasonNum, episode: episodeNum }) }, credits),
       ...oaEnvelope(OA_ARTICLE),
       ...threespeakAudio({ ...audioMeta, duration: track.durationSec }),
       ...audioAdsMeta,
     };
     if (postThumb) metaObj.image = [postThumb];
+
+    // Later, or not yet: the built post goes to the checker's scheduled posts
+    // (a draft has no time) and its cron publishes it as the creator under the
+    // @threespeak posting authority, playlist add included, and links the upload
+    // to it. Until then the checker keeps the upload out of the audio lists.
+    if (!warmup && publishWhen !== 'now') {
+      const scheduledOn = publishWhen === 'schedule' ? new Date(scheduleAt).toISOString() : null;
+      if (!(await hasThreespeakPostingAuth(user))) await addThreespeakToPostingAuth(user);
+      const co = buildCommentOptions(user, hivePermlink, {
+        payout: postPayout, beneStr: postBeneStr, isPremium, ppl: rewardMode === 'ppl',
+        soundAuthors: soundAuthorsOf(credits, user),
+      });
+      const beneficiaries = co?.[1]?.extensions?.[0]?.[1]?.beneficiaries || [];
+      try {
+        await saveScheduledPost({
+          owner: user,
+          permlink: hivePermlink,
+          scheduledOn,
+          post: {
+            title: postTitle,
+            description: desc,
+            body,
+            tags,
+            jsonMetadata: metaObj,
+            beneficiaries,
+            payoutOptions: postPayout === 'decline' || postPayout === 'powerup' ? postPayout : 'default',
+            thumbnail: postThumb || null,
+            parentAuthor: '',
+            parentPermlink: (community && community.name) || tags[0],
+            audioPermlink,
+            playlistAdd: playlistChoice ? { playlist_id: playlistChoice, position: 0 } : null,
+            reblog: !!addToBlog,
+          },
+        });
+      } catch (err) {
+        throw new Error(scheduledPostWriteError(err, t('upload.errors.couldNotSchedule')), { cause: err });
+      }
+      await pushAudioThumb(audioPermlink, postThumb);
+      setTrackStatus(track.id, {
+        state: 'success',
+        stage: undefined,
+        message: scheduledOn
+          ? t('upload.publishing.scheduledFor', { when: new Date(scheduledOn).toLocaleString() })
+          : t('episodes.drafts.saved'),
+      });
+      return;
+    }
 
     if (warmup) {
       // No Article envelope (`oa`): the warm-up service files an Article as a VIDEO,
@@ -1090,7 +1285,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     await pushAudioThumb(audioPermlink, postThumb);
     trackPostsRef.current[track.id] = { author: user, permlink: hivePermlink, title: postTitle };
     setTrackStatus(track.id, { state: 'success', stage: undefined });
-  }, [user, owner, warmup, mainTitle, community, postDescription, postTagsInput, postThumb, postPayout, postBeneStr, isPremium, rewardMode, playlistChoice, pushAudioThumb, shareToBlog, audioAds, mirrorAudioAds]);
+  }, [user, owner, warmup, mainTitle, community, postDescription, postTagsInput, postThumb, postPayout, postBeneStr, isPremium, rewardMode, playlistChoice, pushAudioThumb, shareToBlog, audioAds, mirrorAudioAds, seasonNum, episodeNum, publishWhen, scheduleAt, addToBlog, t]);
 
   // ── album main post (no audio — pure composer landing page) ──
   // Cached so a per-track retry doesn't re-broadcast the parent.
@@ -1174,7 +1369,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
   const publishTrackComment = useCallback(async (track, parent) => {
     setTrackStatus(track.id, { state: 'uploading', stage: 'upload', message: undefined });
     const { permlink: audioPermlink, playUrl } = await uploadAudioTo3Speak({
-      blob: track.blob, filename: track.filename, durationSec: track.durationSec, username: user, title: track.title,
+      blob: track.blob, filename: track.filename, durationSec: track.durationSec, username: user, title: track.title, category: track.type,
     });
     setTrackStatus(track.id, { state: 'posting', stage: 'post', playUrl });
     const hivePermlink = generatePermlink(track.title) || audioPermlink;
@@ -1239,8 +1434,18 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
 
   // Publish one track honoring the active mode (also used by retry).
   const publishOneTrack = useCallback(async (track, parent) => {
-    if (mode === 'single') return publishSinglePost(track);
-    return publishTrackComment(track, parent);
+    if (mode === 'single') await publishSinglePost(track);
+    else await publishTrackComment(track, parent);
+    // The imported episode is out (standalone post or snap): the import page
+    // marks it as on 3Speak (server record + an event for an open import page).
+    const imp = importSourceRef.current;
+    const out = trackPostsRef.current[track.id];
+    if (imp && imp.trackId === track.id && out?.permlink) {
+      importSourceRef.current = null;
+      markImportPublished(imp.sourceId, out.permlink)
+        .then(() => window.dispatchEvent(new CustomEvent('import-published', { detail: { source: imp.sourceId, permlink: out.permlink } })))
+        .catch(() => {});
+    }
   }, [mode, publishSinglePost, publishTrackComment]);
 
   // Where "Open post" / "Open playlist" go once every track is published.
@@ -1255,12 +1460,15 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
       const p = trackPostsRef.current[tracks[0]?.id];
       if (p) post = `/audio/${p.author}/${p.permlink}`;
     }
+    // Scheduled or kept as a draft: nothing is on Hive yet, so the studio list it waits in.
+    const deferred = mode === 'single' && !warmup && publishWhen !== 'now';
     return {
-      post,
-      playlist: playlistChoice ? `/playlist/${playlistChoice}` : null,
+      post: deferred ? null : post,
+      playlist: playlistChoice && !deferred ? `/playlist/${playlistChoice}` : null,
       profileAudio: mode === 'snaps' && user ? `/@${user}?tab=audio` : null,
+      waiting: deferred ? `/draft?show=${publishWhen === 'draft' ? 'unsent' : 'scheduled'}` : null,
     };
-  }, [mode, tracks, playlistChoice, user, warmup]);
+  }, [mode, tracks, playlistChoice, user, warmup, publishWhen]);
 
   // The modal stays mounted (App.jsx), so a closed session would otherwise
   // reopen with the last upload still in it. Every close starts fresh.
@@ -1279,6 +1487,10 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     replaceStatuses({});
     setMainTitle('');
     setPostDescription('');
+    setSeasonNum('');
+    setEpisodeNum('');
+    setPublishWhen('now');
+    setScheduleAt('');
     cancelAllTranscripts();
     postTranscriptRef.current = '';
     transcriptTargetRef.current = {};
@@ -1465,7 +1677,12 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
   const isLastStep = step >= flow.length - 1;
   const canNext = (() => {
     if (stepKey === 'source') return tracks.length > 0 && !isRecording && (!warmup || tracks.length === 1);
-    if (stepKey === 'post') return (tracks[0]?.title || mainTitle || '').trim().length > 0;
+    if (stepKey === 'post') {
+      return (tracks[0]?.title || mainTitle || '').trim().length > 0 && !!tracks[0]?.type
+        && (warmup || publishWhen !== 'schedule' || !scheduleTooSoon(scheduleAt));
+    }
+    // Every track needs its category picked before review.
+    if (stepKey === 'tracks') return tracks.every((tr) => !!tr.type);
     if (stepKey === 'mainpost') return (mainTitle || '').trim().length > 0;
     // Album posts must live inside a playlist so the main post + track
     // comments stay grouped as a single album.
@@ -1539,7 +1756,10 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     setIsPublishing(false);
 
     if (allOk) {
-      toast.success(t('audio.upload.toasts.published', { count: tracks.length }));
+      const deferred = mode === 'single' && !warmup && publishWhen !== 'now';
+      toast.success(deferred
+        ? (publishWhen === 'draft' ? t('episodes.drafts.saved') : t('upload.publishing.scheduled'))
+        : t('audio.upload.toasts.published', { count: tracks.length }));
       queryClient.invalidateQueries({ queryKey: ['myPlaylists', user] });
       // No auto-close: the review step now shows where everything landed.
       markDoneIfComplete();
@@ -1562,7 +1782,10 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
       : { key: 'community', icon: 'groups', label: community ? (community.title || community.name) : t('audio.upload.side.community'), on: !!community },
     { key: 'rss', icon: 'podcasts', label: t('audio.upload.side.rss'), on: !!chosenPlaylist },
   ];
-  const publishLabel = mode === 'album' && !warmup
+  const deferredSingle = mode === 'single' && !warmup && publishWhen !== 'now';
+  const publishLabel = deferredSingle
+    ? (publishWhen === 'draft' ? t('episodes.drafts.saveButton') : t('episodes.when.scheduleButton'))
+    : mode === 'album' && !warmup
     ? t('audio.upload.publishAlbum', { count: tracks.length })
     : shortsList.length > 0
       ? t('audio.upload.publishWithShorts', { count: shortsList.length })
@@ -1638,6 +1861,8 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
               tracks={tracks}
               isRecording={isRecording}
               recordSec={recordSec}
+              micPreparing={micPreparing}
+              recordWave={isRecording && <RecordWave analyser={recordGraph?.analyser} track={recordStreamRef.current?.getAudioTracks?.()[0]} onPeak={(p) => { if (p > recordPeakRef.current) recordPeakRef.current = p; }} />}
               isDragging={isDragging}
               fileInputRef={fileInputRef}
               onDrop={onDrop}
@@ -1710,6 +1935,8 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
               onDesignShortThumb={(trackId, url) => setShortThumbFor({ trackId, url })}
               shortsLocked={isPublishing}
               transcript={stepKey === 'post' ? transcriptPropsFor(tracks[0], 'post') : null}
+              numbers={stepKey === 'post' ? { season: seasonNum, episode: episodeNum, onSeason: setSeasonNum, onEpisode: setEpisodeNum } : null}
+              when={stepKey === 'post' && !warmup ? { value: publishWhen, onChange: setPublishWhen, scheduleAt, onScheduleAt: setScheduleAt } : null}
             />
           )}
           {stepKey === 'tracks' && (
@@ -1759,6 +1986,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
               shortStatus={shortStatus}
               onRetryShort={retryShort}
               showShorts={!warmup}
+              rewards={warmup ? null : reviewRewards}
             />
           )}
           {communityOpen && (
@@ -1947,10 +2175,10 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
 }
 
 function SourceStep({
-  tracks, isRecording, recordSec, isDragging, fileInputRef,
+  tracks, isRecording, recordSec, micPreparing = false, isDragging, fileInputRef,
   onDrop, onDragOver, onDragLeave, onPickFiles, onFilesSelected,
   onStart, onStop, onRemove, onEditTrack = null, editLocked = () => false,
-  teleprompter = null,
+  teleprompter = null, recordWave = null,
 }) {
   const { t } = useTranslation();
   const limit = t('audio.upload.source.recordLimit', { minutes: Math.round(MAX_RECORD_SEC / 60) });
@@ -1993,12 +2221,15 @@ function SourceStep({
             <small>{limit}</small>
           </div>
           <span className="audio-upload-rec-dot" aria-hidden="true" />
+          {recordWave}
         </div>
       ) : (
-        <button type="button" className="audio-upload-recorder" onClick={onStart} title={t('audio.upload.source.record')}>
-          <span className="audio-upload-rec-icon" aria-hidden="true"><Icon name="mic" size={24} /></span>
+        <button type="button" className="audio-upload-recorder" onClick={onStart} title={t('audio.upload.source.record')} disabled={micPreparing} aria-busy={micPreparing || undefined}>
+          <span className="audio-upload-rec-icon" aria-hidden="true">
+            {micPreparing ? <Icon name="progress_activity" size={24} className="v2-spin" /> : <Icon name="mic" size={24} />}
+          </span>
           <span className="audio-upload-rec-text">
-            <b>{t('audio.upload.source.orRecord')}</b>
+            <b>{micPreparing ? t('audio.upload.source.micPreparing') : t('audio.upload.source.orRecord')}</b>
             <small>{limit}</small>
           </span>
         </button>
@@ -2477,7 +2708,7 @@ const GENRE_CHIPS = ['Ambient', 'Electronic', 'Hip-Hop', 'Jazz', 'Rock', 'Classi
 // `tiles`: the 24a kind tiles (the post step); otherwise the 34c category chips.
 function TrackTypeFields({ track, patchTrack, disabled, tiles = false }) {
   const { t } = useTranslation();
-  const type = track.type || 'voice_message';
+  const type = track.type || null;
   const genre = String(track.genre || '');
   const setType = (value) => patchTrack(track.id, { type: value });
   return (
@@ -2519,6 +2750,7 @@ function TrackTypeFields({ track, patchTrack, disabled, tiles = false }) {
           </div>
         </>
       )}
+      {!type && <p className="audio-upload-kind-required" role="status">{t('audio.upload.fields.categoryRequired')}</p>}
       {type === 'song' && (
         <>
           <span className="audio-upload-chip-label" id={`genre-${track.id}`}>{t('audio.upload.fields.musicGenre')}</span>
@@ -2724,6 +2956,7 @@ function MainPostStep({
   addToBlog, setAddToBlog, warmup = false,
   onShortsChange = null, onDesignShortThumb = null, shortsLocked = false,
   transcript = null,
+  numbers = null, when = null,
 }) {
   const { t } = useTranslation();
   const isAlbum = variant === 'album';
@@ -2796,6 +3029,20 @@ function MainPostStep({
         </div>
         {!isAlbum && transcript && <TranscriptControl {...transcript} disabled={shortsLocked} />}
       </section>
+
+      {/* Season and episode, for listeners and podcast apps */}
+      {!isAlbum && numbers && (
+        <section className="audio-upload-card">
+          <EpisodeNumberFields {...numbers} />
+        </section>
+      )}
+
+      {/* Now, at a time, or kept as a draft */}
+      {!isAlbum && when && (
+        <section className="audio-upload-card">
+          <AudioPublishWhen {...when} />
+        </section>
+      )}
 
       {/* The audiograms going out as Shorts with it (not for warm-up: Shorts need the Hive account) */}
       {!isAlbum && singleTrack && !warmup && onShortsChange && singleTrack.audiograms?.length > 0 && (
@@ -2902,27 +3149,32 @@ function TracksStep({
   transcriptPropsFor = null,
 }) {
   const { t } = useTranslation();
+  // One track: no "apply to all" box (it would only copy onto that one track),
+  // and its card shows everything (title, rewards) with no Edit / Hide toggle.
+  const single = tracks.length === 1;
   const [openId, setOpenId] = useState(null);
   return (
     <div className="audio-upload-review audio-upload-post-form">
       <p className="audio-upload-step-help">
         {mode === 'album'
           ? t('audio.upload.tracks.helpAlbum')
-          : t('audio.upload.tracks.helpSnaps')}
+          : single ? t('audio.upload.tracks.helpSnapsSingle') : t('audio.upload.tracks.helpSnaps')}
       </p>
       <OriginalContentNotice />
 
+      {!single && (
       <div className="audio-upload-title-card">
         <p className="audio-upload-apply-note">
           <Trans i18nKey="audio.upload.tracks.applyNote" count={tracks.length} components={{ b: <b /> }} />
         </p>
-        <textarea
-          className="audio-upload-post-desc"
+        {/* The one editor (common/Composer), as on every post field. */}
+        <Composer
+          mode="full"
+          expandable={false}
           placeholder={t('audio.upload.tracks.sharedDescription')}
-          rows={3}
-          maxLength={5000}
+          textareaProps={{ maxLength: 5000 }}
           value={sharedDesc}
-          onChange={(e) => setSharedDesc(e.target.value)}
+          onChange={setSharedDesc}
         />
         <ThumbPicker
           value={sharedThumb}
@@ -2948,30 +3200,36 @@ function TracksStep({
           {t('audio.upload.tracks.applyToAll', { count: tracks.length })}
         </Button>
       </div>
+      )}
 
       {tracks.map((tr, i) => {
-        const expanded = openId === tr.id;
+        const expanded = single || openId === tr.id;
         let beneCount = 0;
         try { beneCount = (JSON.parse(tr.beneStr || '[]') || []).length; } catch { beneCount = 0; }
+        const toggle = single ? {} : {
+          role: 'button',
+          tabIndex: 0,
+          'aria-expanded': expanded,
+          onClick: () => setOpenId(expanded ? null : tr.id),
+          onKeyDown: (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setOpenId(expanded ? null : tr.id); } },
+        };
         return (
           <div key={tr.id} className="audio-upload-title-card">
-            <div
-              className="audio-upload-title-row audio-upload-track-head"
-              role="button"
-              tabIndex={0}
-              aria-expanded={expanded}
-              onClick={() => setOpenId(expanded ? null : tr.id)}
-              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setOpenId(expanded ? null : tr.id); } }}
-            >
+            <div className={cx('audio-upload-title-row audio-upload-track-head', single && 'is-static')} {...toggle}>
               <span className="audio-upload-title-num">{i + 1}</span>
               <span className="audio-upload-track-head-title">
                 {tr.title || tr.filename}
               </span>
-              <span className="audio-upload-community-change">
-                {expanded ? t('audio.upload.tracks.hide') : t('common.actions.edit')}
-                <Icon name={expanded ? 'expand_less' : 'expand_more'} size={18} />
-              </span>
+              {!single && (
+                <span className="audio-upload-community-change">
+                  {expanded ? t('audio.upload.tracks.hide') : t('common.actions.edit')}
+                  <Icon name={expanded ? 'expand_less' : 'expand_more'} size={18} />
+                </span>
+              )}
             </div>
+
+            {/* Always shown: every track needs its category, and Next waits for it. */}
+            <TrackTypeFields track={tr} patchTrack={patchTrack} />
 
             {expanded && (
               <>
@@ -2983,7 +3241,6 @@ function TracksStep({
                   onChange={(e) => patchTrack(tr.id, { title: e.target.value })}
                   maxLength={120}
                 />
-                <TrackTypeFields track={tr} patchTrack={patchTrack} />
                 <RewardRow
                   payout={tr.payout || 'default'}
                   setPayout={(v) => patchTrack(tr.id, { payout: v })}
@@ -2995,13 +3252,13 @@ function TracksStep({
 
             {/* The text this track's comment (or snap) carries. Always in view:
                 hidden behind Edit, people only ever found the shared field. */}
-            <textarea
-              className="audio-upload-post-desc audio-upload-track-text"
-              placeholder={mode === 'album' ? t('audio.upload.tracks.commentText') : t('audio.upload.tracks.snapText')}
+            <Composer
+              textareaClassName="textarea-box audio-upload-track-text"
               rows={tr.transcriptText ? 6 : 2}
-              maxLength={tr.transcriptText ? TRANSCRIPT_TEXT_MAX : 5000}
+              placeholder={mode === 'album' ? t('audio.upload.tracks.commentText') : t('audio.upload.tracks.snapText')}
+              textareaProps={{ maxLength: tr.transcriptText ? TRANSCRIPT_TEXT_MAX : 5000 }}
               value={tr.desc || ''}
-              onChange={(e) => patchTrack(tr.id, { desc: e.target.value })}
+              onChange={(desc) => patchTrack(tr.id, { desc })}
             />
             {transcriptPropsFor && (
               <TranscriptControl {...transcriptPropsFor(tr)} disabled={shortsLocked || editLocked(tr.id)} />
@@ -3043,7 +3300,7 @@ function TracksStep({
 function ReviewStep({
   tracks, playlists, playlistChoice, pendingPlaylist, publishStatus = {}, onRetry, onRetryAll, isPublishing,
   mode, rewardMode, community, mainError, onRetryMain, published, onNavigate, shortsCount = 0,
-  shortStatus = {}, onRetryShort = null, showShorts = true,
+  shortStatus = {}, onRetryShort = null, showShorts = true, rewards = null,
 }) {
   const chosen = playlists.find(p => p.id === playlistChoice)
     || (pendingPlaylist && pendingPlaylist.id === playlistChoice ? pendingPlaylist : null);
@@ -3076,6 +3333,26 @@ function ReviewStep({
           <Icon name="payments" size={18} />
           <strong>{t('audio.upload.review.earnings')}</strong> <span>{rewardMode === 'ppl' ? t('audio.upload.review.earningsPpl', { account: PPL_BENEFICIARY }) : t('audio.upload.review.earningsNormal')}</span>
         </div>
+        {rewards && (
+          <>
+            <div className="audio-upload-review-kv">
+              <Icon name="savings" size={18} />
+              <strong>{t('audio.upload.review.rewards')}</strong>{' '}
+              <span>{rewards.payout ? t(`audio.upload.reward.${rewards.payout}`) : t('audio.upload.review.perTrack')}</span>
+            </div>
+            <div className="audio-upload-review-kv">
+              <Icon name="group" size={18} />
+              <strong>{t('audio.upload.review.beneficiaries')}</strong>{' '}
+              <span>
+                {rewards.bene == null
+                  ? t('audio.upload.review.perTrack')
+                  : rewards.bene.length
+                    ? rewards.bene.map((b) => `@${b.account} ${(b.weight || 0) / 100}%`).join(', ')
+                    : t('audio.upload.review.noBeneficiaries')}
+              </span>
+            </div>
+          </>
+        )}
         {chosen && (
           <div className="audio-upload-review-kv">
             <Icon name="queue_music" size={18} />
@@ -3105,6 +3382,11 @@ function ReviewStep({
             {published.playlist && (
               <Button as={Link} variant="secondary" size={40} icon="queue_music" to={published.playlist} onClick={onNavigate}>
                 {t('audio.upload.done.openPlaylist')}
+              </Button>
+            )}
+            {published.waiting && (
+              <Button as={Link} variant="primary" size={40} next to={published.waiting} onClick={onNavigate}>
+                {t('episodes.drafts.openStudio')}
               </Button>
             )}
             {published.profileAudio && (

@@ -1,0 +1,122 @@
+@use "../../styles/v2" as v2;
+
+// "Shorts from this video": the creator's clip suggestions, under the video
+// stats (watch page panel and the profile's Stats detail). Flat rows on bg wells.
+.shorts-from-video {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+  color: var(--text);
+
+  .sfv-head { display: flex; flex-direction: column; gap: 2px; }
+
+  .sfv-title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0;
+    @include v2.text(title-sm);
+    line-height: 1.25;
+  }
+
+  .sfv-sub, .sfv-foot { margin: 0; font-size: 11px; line-height: 1.4; color: var(--muted); }
+  .sfv-foot { font-size: 10px; }
+
+  .sfv-skeleton { height: 120px; border-radius: var(--r-md); }
+
+  .sfv-empty {
+    margin: 0;
+    padding: 16px 12px;
+    border-radius: var(--r-md);
+    background: var(--bg);
+    @include v2.text(body-sm);
+    color: var(--muted);
+  }
+
+  .sfv-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .sfv-item {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "when actions"
+      "reasons actions"
+      "quote quote";
+    gap: 6px 12px;
+    align-items: center;
+    padding: 10px 12px;
+    border-radius: var(--r-md);
+    background: var(--bg);
+    border: 1px solid transparent;
+
+    &.is-playing { border-color: var(--accent); }
+
+    @include v2.mobile {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-areas: "when" "reasons" "quote" "actions";
+    }
+  }
+
+  .sfv-when {
+    grid-area: when;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    min-width: 0;
+
+    b { @include v2.mono(13, 700); }
+    span { font-size: 11px; color: var(--muted); }
+  }
+
+  .sfv-reasons { grid-area: reasons; display: flex; flex-wrap: wrap; gap: 4px; min-width: 0; }
+
+  .sfv-reason {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    min-height: 24px;
+    padding: 2px 8px;
+    border-radius: var(--r-sm);
+    background: var(--surface-2);
+    @include v2.text(meta);
+    color: var(--text);
+
+    > .material-symbols-rounded { color: var(--muted); }
+  }
+
+  .sfv-quote {
+    grid-area: quote;
+    min-width: 0;
+    font-size: 12px;
+    line-height: 1.4;
+    color: var(--muted);
+    overflow-wrap: anywhere;
+  }
+
+  .sfv-actions {
+    grid-area: actions;
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+
+    .v2-btn { gap: 4px; text-decoration: none; }
+
+    @include v2.mobile { .v2-btn { flex: 1 1 0; justify-content: center; } }
+  }
+}
+
+// Under the video stats (watch page panel, profile Stats detail): a rule between.
+.watch-stats-panel .shorts-from-video,
+.cs-detail .shorts-from-video {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}

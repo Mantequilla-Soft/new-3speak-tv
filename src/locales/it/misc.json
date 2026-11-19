@@ -139,6 +139,13 @@
     "rumble": {
       "placeholder": "https://rumble.com/c/…",
       "help": "Incolla il nome o il link del tuo canale Rumble. Inserisci l'hash in qualsiasi punto della descrizione del canale."
+    },
+    "rss": {
+      "placeholder": "https://example.com/podcast.xml",
+      "help": "Incolla l'indirizzo del feed RSS del tuo podcast. Il tuo host lo mostra nelle impostazioni o nella pagina di distribuzione dello show.",
+      "flowTitle": "Collega il feed RSS del tuo podcast",
+      "step2": "<strong>Incollalo nella descrizione del tuo show o del tuo episodio più recente</strong>, presso il tuo host di podcast. Salva e pubblica la modifica. Puoi rimuoverlo una volta verificato il feed.",
+      "step3": "Inserisci l'indirizzo del feed RSS del tuo podcast:"
     }
   },
   "snaps": {
@@ -157,7 +164,13 @@
     "audioMinimal": "Minimo",
     "heightSub": "Larghezza piena, {{height}} px di altezza · Responsive",
     "podcastTitle": "Incorpora questo podcast",
-    "podcastHint": "Riproduce tutti gli episodi del programma, anche i nuovi appena escono."
+    "podcastHint": "Riproduce tutti gli episodi del programma, anche i nuovi appena escono.",
+    "embedWhere": "Dove incorporare",
+    "tabWebsite": "Sito web",
+    "tabHive": "Per Hive",
+    "hiveLink": "Link per i post su Hive",
+    "hivePlaylistHint": "Incolla questo link in un post o in una wave su Hive. Le app di Hive che mostrano i video di 3Speak, come Ecency, riproducono la playlist direttamente nel post.",
+    "videoPlaylistHint": "Incollalo in qualsiasi sito o post di blog. Riproduce in ordine tutti i video della playlist, anche quelli aggiunti in seguito."
   },
   "incubation": {
     "requestFailed": "Richiesta non riuscita ({{status}})",
@@ -197,7 +210,9 @@
       "video": "Video",
       "audio": "Audio",
       "live": "Live",
-      "others": "Altro"
+      "others": "Altro",
+      "streams": "Dirette",
+      "edit": "Modifica"
     },
     "subtitles": {
       "regularVideo": "Video classico per il tuo canale",
@@ -210,6 +225,12 @@
       "goLiveNow": "Trasmetti in diretta per i tuoi follower",
       "communitySnap": "Post veloce nella scheda community",
       "playlist": "Raggruppa i video in un elenco da condividere"
+    },
+    "categories": {
+      "video": "Carica, registra o modifica un video",
+      "audio": "Musica, podcast e montaggio audio",
+      "streams": "Vai in diretta da solo o con ospiti",
+      "others": "Snap e playlist"
     }
   },
   "chat": {

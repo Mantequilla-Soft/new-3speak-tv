@@ -26,6 +26,17 @@
   }
 }
 
+// Parallax (HomeHero onPointerMove, a mouse only): --px / --py run from -1 to
+// 1 across the hero; the picture drifts against the pointer, the text a touch
+// with it, both easing after it. Still on touch screens and reduced motion.
+// The picture and the video are scaled up (1.1) so the drift never shows an edge:
+// 5% a side is 96px of a 1920 width and 28px of the 560 desktop height.
+.home-hero {
+  --hero-drift: translate3d(calc(var(--px, 0) * -48px), calc(var(--py, 0) * -24px), 0);
+}
+
+.home-hero__body { translate: calc(var(--px, 0) * 10px) calc(var(--py, 0) * 6px); }
+
 .home-hero__bg {
   position: absolute;
   top: 0;
@@ -52,7 +63,8 @@
   // (scaled up a touch so the blurred edges stay off-screen).
   img {
     filter: blur(6px);
-    transform: scale(1.04);
+    transform: var(--hero-drift) scale(1.1);
+    transition: transform 700ms cubic-bezier(.2, .7, .3, 1);
   }
 
   // The 3Speak card under it all while the first slide loads (owner
@@ -76,6 +88,7 @@
       height: 96px;
       filter: none;
       transform: none;
+      transition: none;
     }
 
     span {
@@ -112,8 +125,8 @@
   .home-hero__video {
     z-index: 0;
     filter: blur(3px);
-    transform: scale(1.03);
-    transition: opacity var(--t-xfade) ease-in-out;
+    transform: var(--hero-drift) scale(1.1);
+    transition: opacity var(--t-xfade) ease-in-out, transform 700ms cubic-bezier(.2, .7, .3, 1);
     &.is-top { z-index: 1; }
     &.is-off { opacity: 0; }
   }
@@ -390,7 +403,7 @@
 
 .home-hero__body {
   animation: home-hero-fade var(--t-slow) var(--ease) both;
-  transition: opacity var(--t-slow) var(--ease);
+  transition: opacity var(--t-slow) var(--ease), translate 700ms cubic-bezier(.2, .7, .3, 1);
   .home-hero.is-fading & { opacity: 0; }
 }
 
@@ -462,5 +475,7 @@
 @media (prefers-reduced-motion: reduce) {
   .home-hero__bg img.is-cur,
   .home-hero__body { animation: none; transition: none; }
+  .home-hero { --hero-drift: translate3d(0, 0, 0); }
+  .home-hero__body { translate: none; }
   .home-hero__seg-fill { animation: none; transform: none; }
 }

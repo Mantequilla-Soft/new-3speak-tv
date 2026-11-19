@@ -139,6 +139,13 @@
     "rumble": {
       "placeholder": "https://rumble.com/c/…",
       "help": "I-paste ang pangalan o link ng iyong Rumble channel. Ilagay ang hash kahit saan sa paglalarawan ng channel."
+    },
+    "rss": {
+      "placeholder": "https://example.com/podcast.xml",
+      "help": "I-paste ang address ng RSS feed ng podcast mo. Makikita ito sa settings o distribution page ng show sa podcast host mo.",
+      "flowTitle": "I-link ang podcast RSS feed mo",
+      "step2": "<strong>I-paste ito sa description ng show mo, o sa description ng pinakabagong episode mo</strong>, sa podcast host mo. I-save at i-publish ang pagbabago. Maaari mo itong alisin kapag na-verify na ang feed.",
+      "step3": "Ilagay ang address ng RSS feed ng podcast mo:"
     }
   },
   "snaps": {
@@ -157,7 +164,13 @@
     "audioMinimal": "Minimal",
     "heightSub": "Buong lapad, {{height}} px ang taas · Responsive",
     "podcastTitle": "I-embed ang podcast na ito",
-    "podcastHint": "Pinapatugtog ang bawat episode ng show, pati ang mga bago sa paglabas nila."
+    "podcastHint": "Pinapatugtog ang bawat episode ng show, pati ang mga bago sa paglabas nila.",
+    "embedWhere": "Saan ie-embed",
+    "tabWebsite": "Website",
+    "tabHive": "Para sa Hive",
+    "hiveLink": "Link para sa mga post sa Hive",
+    "hivePlaylistHint": "I-paste ang link na ito sa isang Hive post o wave. Ang mga Hive app na nagpapakita ng mga 3Speak video, gaya ng Ecency, ay pinapatugtog ang playlist mismo sa post.",
+    "videoPlaylistHint": "I-paste ito sa anumang website o blog post. Pinapatugtog nito nang sunod-sunod ang lahat ng video ng playlist, pati ang mga idaragdag pa."
   },
   "incubation": {
     "requestFailed": "Pumalya ang request ({{status}})",
@@ -197,7 +210,9 @@
       "video": "Video",
       "audio": "Audio",
       "live": "Live",
-      "others": "Iba pa"
+      "others": "Iba pa",
+      "streams": "Mga stream",
+      "edit": "I-edit"
     },
     "subtitles": {
       "regularVideo": "Klasikong video para sa channel mo",
@@ -210,6 +225,12 @@
       "goLiveNow": "Mag-stream nang live para sa mga follower mo",
       "communitySnap": "Mabilis na post sa community tab mo",
       "playlist": "Pagsamahin ang mga video sa listahang maibabahagi"
+    },
+    "categories": {
+      "video": "Mag-upload, mag-record o mag-edit ng video",
+      "audio": "Musika, podcast at pag-edit ng audio",
+      "streams": "Mag-live nang mag-isa o kasama ang mga bisita",
+      "others": "Mga snap at playlist"
     }
   },
   "chat": {

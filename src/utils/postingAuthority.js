@@ -40,9 +40,14 @@ function signOpInHiveSignerWindow(op, preWindow) {
 
 const THREESPEAK_AUTHORITY = 'threespeak';
 
+// Rebuilt when the node in use changes (failover, or a pick in Settings)
 let _client;
+let _clientUrl;
 function getClient() {
-  if (!_client) _client = new Client(getHiveUrl());
+  if (!_client || _clientUrl !== getHiveUrl()) {
+    _clientUrl = getHiveUrl();
+    _client = new Client(_clientUrl);
+  }
   return _client;
 }
 

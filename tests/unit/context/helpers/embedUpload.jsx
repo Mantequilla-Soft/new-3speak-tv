@@ -154,6 +154,8 @@ export const mocks = {
     HIVE_API_URL: 'https://hive.test',
     EMBED_DEBUG: false,
     CHECKER_API_KEY: 'checker-key',
+    // lib/collabs.js (collab invites after a post goes out).
+    CHECKER_URL: 'https://checker.test',
   },
   axios: { default: { post: call('axiosPost') } },
   tus: { Upload: FakeTusUpload },

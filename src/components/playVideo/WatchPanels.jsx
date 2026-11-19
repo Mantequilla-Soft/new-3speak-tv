@@ -11,6 +11,7 @@ import { useSupporters, formatSupportTotal } from '../../lib/supports';
 import { useRewardDisplay } from '../../utils/hivePrice';
 import { formatTimeAgo } from '../../i18n';
 import { fixVideoThumbnail, fallbackImg } from '../../utils/fixThumbnails';
+import useChapterStills, { STILLS_VIDEO_PROPS } from '../../hooks/useChapterStills';
 
 export const compactNumber = (n) => {
   const v = Number(n) || 0;
@@ -144,11 +145,17 @@ export function VotersPane({ voters, total, offChain, offChainCount }) {
   );
 }
 
-/** Chapter cards under the player (02): the playing one in cyan. */
-export function ChapterCards({ chapters, current, onSeek }) {
+/**
+ * Chapter cards under the player (02): the playing one in cyan, each with a
+ * still from the moment it starts (hooks/useChapterStills; `videoId` is the
+ * player's load id).
+ */
+export function ChapterCards({ chapters, current, onSeek, videoId = null }) {
+  const stills = useChapterStills(videoId, chapters);
   if (!chapters?.length) return null;
   return (
-    <div className={cx('wv2-chapters', chapters.length > 4 && 'is-scroll')}>
+    <div ref={stills.rootRef} className={cx('wv2-chapters', chapters.length > 4 && 'is-scroll')}>
+      {videoId && <video ref={stills.videoRef} {...STILLS_VIDEO_PROPS} />}
       {chapters.map((c, i) => (
         <button
           key={`${c.start}-${i}`}
@@ -157,7 +164,9 @@ export function ChapterCards({ chapters, current, onSeek }) {
           onClick={() => onSeek?.(c.start)}
           aria-current={i === current ? 'true' : undefined}
         >
-          <span className="wv2-chapter__thumb" aria-hidden="true" />
+          <span className="wv2-chapter__thumb" aria-hidden="true">
+            {videoId && <canvas ref={stills.canvasRef(i)} className={cx('wv2-chapter__still', stills.has(i) && 'is-drawn')} />}
+          </span>
           <span className="wv2-chapter__row">
             <span className="wv2-chapter__at num">{clockTime(c.start)}</span>
             <span className="wv2-chapter__title">{c.title}</span>
@@ -169,10 +178,12 @@ export function ChapterCards({ chapters, current, onSeek }) {
 }
 
 /** Chapters as a list (the narrow layout's Chapters tab, and the summary sheet). */
-export function ChapterList({ chapters, current, onSeek, className }) {
+export function ChapterList({ chapters, current, onSeek, className, videoId = null }) {
+  const stills = useChapterStills(videoId, chapters);
   if (!chapters?.length) return null;
   return (
-    <div className={cx('wv2-chapter-list', className)}>
+    <div ref={stills.rootRef} className={cx('wv2-chapter-list', className)}>
+      {videoId && <video ref={stills.videoRef} {...STILLS_VIDEO_PROPS} />}
       {chapters.map((c, i) => (
         <button
           key={`${c.start}-${i}`}
@@ -180,7 +191,9 @@ export function ChapterList({ chapters, current, onSeek, className }) {
           className={cx('wv2-chapter-row', i === current && 'is-on')}
           onClick={() => onSeek?.(c.start)}
         >
-          <span className="wv2-chapter-row__thumb" aria-hidden="true" />
+          <span className="wv2-chapter-row__thumb" aria-hidden="true">
+            {videoId && <canvas ref={stills.canvasRef(i)} className={cx('wv2-chapter__still', stills.has(i) && 'is-drawn')} />}
+          </span>
           <span className="wv2-chapter-row__text">
             <span className="wv2-chapter__at num">{clockTime(c.start)}</span>
             <b>{c.title}</b>

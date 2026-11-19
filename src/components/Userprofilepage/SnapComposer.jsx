@@ -2,9 +2,11 @@ import { useState } from 'react';
 import { toastIn } from '../../utils/toast';
 import { Icon } from '../v2/Icon';
 import { Button, Checkbox } from '../v2/ui';
-import MarkdownComposer from '../studio/MarkdownComposer';
+import Composer from '../common/Composer/Composer';
 import { useAppStore } from '../../lib/store';
 import { publishSnap, SNAP_TAG, MAX_USER_TAGS } from '../../lib/snaps';
+import '../Polls/PollCard.scss';
+import { buildPollMeta, POLL_MIN_OPTIONS, POLL_MAX_OPTIONS } from '../../lib/polls';
 import { useTranslation } from 'react-i18next';
 
 // Every toast from this module is headed "Post"; the message becomes the
@@ -33,6 +35,10 @@ export default function SnapComposer({ onPosted, community = '', placeholder }) 
   const [benPercent, setBenPercent] = useState('');
   const [showOptions, setShowOptions] = useState(false);
   const [posting, setPosting] = useState(false);
+  // A poll snap (lib/polls.js): the body is the question, 2 to 4 options and an end.
+  const [pollOn, setPollOn] = useState(false);
+  const [pollOptions, setPollOptions] = useState(['', '']);
+  const [pollDays, setPollDays] = useState(1);
 
   const totalBenWeight = beneficiaries.reduce((s, b) => s + Number(b.weight || 0), 0);
 
@@ -69,11 +75,16 @@ export default function SnapComposer({ onPosted, community = '', placeholder }) 
     if (!text) { toast.error(t('profile.snaps.writeSomething')); return; }
 
     // Include a tag still being typed, dedupe, and cap.
+    let poll = null;
+    if (pollOn) {
+      poll = buildPollMeta(pollOptions, pollDays);
+      if (!poll) { toast.error(t('social.polls.invalid', { min: POLL_MIN_OPTIONS, max: POLL_MAX_OPTIONS })); return; }
+    }
     const pending = tagInput.trim().toLowerCase().replace(/^#/, '').replace(/[^a-z0-9-]/g, '');
     const userTags = [...new Set([...tags, ...(pending && pending !== SNAP_TAG ? [pending] : [])])].slice(0, MAX_USER_TAGS);
     setPosting(true);
     try {
-      const res = await publishSnap({ user, body: text, tags: userTags, rewards, beneficiaries, nsfw, community });
+      const res = await publishSnap({ user, body: text, tags: userTags, rewards, beneficiaries, nsfw, community, poll });
       toast.success(t('profile.snaps.snapPosted'));
       const snap = res.indexed || {
         _id: `${user}/${res.permlink}`,
@@ -84,11 +95,13 @@ export default function SnapComposer({ onPosted, community = '', placeholder }) 
         tags: [SNAP_TAG, ...userTags, ...(nsfw ? ['nsfw'] : [])],
         nsfw,
         community: community || null,
+        ...(poll ? { poll } : {}),
         created: new Date().toISOString(),
       };
       // reset
       setBody(''); setTags([]); setTagInput(''); setRewards('default'); setNsfw(false);
       setBeneficiaries([]); setShowOptions(false);
+      setPollOn(false); setPollOptions(['', '']); setPollDays(1);
       onPosted?.(snap);
     } catch (e) {
       toast.error(e?.message || t('profile.snaps.snapFailed'));
@@ -101,11 +114,15 @@ export default function SnapComposer({ onPosted, community = '', placeholder }) 
 
   return (
     <div className="snap-composer">
-      <MarkdownComposer
+      {/* Not in a community's Discussion tab: polls live on the channel. */}
+      <Composer
+        mode="full"
         value={body}
         onChange={setBody}
-        placeholder={placeholder ?? t('profile.snaps.composerPlaceholder')}
+        placeholder={pollOn ? t('social.polls.questionPlaceholder') : (placeholder ?? t('profile.snaps.composerPlaceholder'))}
         previewContext="snap"
+        polls={!community}
+        pollState={{ on: pollOn, setOn: setPollOn, options: pollOptions, setOptions: setPollOptions, days: pollDays, setDays: setPollDays }}
       />
 
       <div className="snap-composer-row">

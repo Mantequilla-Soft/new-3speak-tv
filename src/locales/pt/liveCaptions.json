@@ -1,0 +1,30 @@
+{
+  "studio": {
+    "title": "Legendas ao vivo",
+    "toggle": "Mostrar legendas ao vivo aos espectadores",
+    "hint": "Enquanto estás ao vivo, o teu microfone é transformado em texto. Os espectadores podem ativar as legendas e muitos navegadores traduzem-nas para o idioma de cada um.",
+    "language": "Idioma em que falas",
+    "onlyLanguage": "As legendas só entendem {lang}.",
+    "statusOff": "Desativadas",
+    "statusWaiting": "Começam quando entras ao vivo.",
+    "statusMicOff": "Liga o microfone para as legendas.",
+    "statusStarting": "A iniciar legendas…",
+    "statusOn": "As legendas estão ativas.",
+    "statusFull": "Todos os lugares de legendas estão ocupados agora. Tentamos de novo dentro de um minuto.",
+    "statusUnavailable": "As legendas ao vivo não estão disponíveis agora.",
+    "statusError": "As legendas pararam porque não foi possível ligar ao serviço de voz. Desativa e ativa para tentar de novo."
+  },
+  "viewer": {
+    "translatedFrom": "Traduzido de {lang} no teu dispositivo",
+    "showOriginal": "Ver original",
+    "translateTo": "Traduzir para {lang}",
+    "noTranslator": "Em {lang}: este navegador não consegue traduzir legendas",
+    "label": "Legendas",
+    "show": "Mostrar legendas ao vivo",
+    "hide": "Ocultar legendas ao vivo"
+  },
+  "vod": {
+    "saved": "As tuas legendas ao vivo foram adicionadas à reprodução.",
+    "failed": "Não foi possível adicionar as legendas ao vivo à reprodução."
+  }
+}

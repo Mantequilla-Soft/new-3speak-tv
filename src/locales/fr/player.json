@@ -5,8 +5,6 @@
     "reactToMoment": "Réagir à ce moment",
     "mute": "Couper le son",
     "unmute": "Activer le son",
-    "playerSize": "Taille du lecteur : {{size}}",
-    "sizeStandard": "Standard",
     "pip": "Image dans l'image",
     "autoplayOn": "Lecture auto : activée",
     "autoplayOff": "Lecture auto : désactivée",

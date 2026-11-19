@@ -39,6 +39,14 @@
     "hide": "Masquer",
     "markSeen": "Tout marquer comme vu"
   },
+  "continueWatching": {
+    "aria": "Reprendre la lecture",
+    "rest": "à reprendre",
+    "remove": "Retirer de Reprendre la lecture",
+    "removed": "Retiré de Reprendre la lecture",
+    "removeFailed": "Impossible de le retirer. Réessaie.",
+    "progress": "{{pct}} % regardé"
+  },
   "tagMeta": {
     "videos_one": "{{num}} vidéo",
     "videos_many": "{{num}} vidéos",

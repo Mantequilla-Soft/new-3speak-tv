@@ -2,7 +2,8 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { getFollowers, getFollowing } from '../../utils/hiveUtils';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { CHECKER_URL, HIVE_API_URL } from '../../utils/config';
+import { CHECKER_URL } from '../../utils/config';
+import { getHiveUrl } from '../../utils/hiveNode';
 import { useTranslation } from 'react-i18next';
 import { formatNumber } from '../../i18n';
 import { Button, Segmented } from '../v2/ui';
@@ -24,7 +25,7 @@ const PAGE = 100;
 async function fetchDetails(names) {
   if (names.length === 0) return {};
   const [profiles, counts] = await Promise.all([
-    axios.post(HIVE_API_URL, {
+    axios.post(getHiveUrl(), {
       jsonrpc: '2.0', method: 'bridge.get_profiles', params: { accounts: names }, id: 1,
     }).then((r) => r.data?.result || []).catch(() => []),
     axios.post(`${CHECKER_URL}/users/counts`, { usernames: names })

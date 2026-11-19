@@ -1,0 +1,5 @@
+{
+  "videoEditor": "動画エディター",
+  "videoEditorSub": "最長10分の横長動画を編集",
+  "editorTooLong": "動画エディターで扱えるのは最長{{minutes}}分の動画です"
+}

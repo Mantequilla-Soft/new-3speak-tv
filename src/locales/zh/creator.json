@@ -1,0 +1,108 @@
+{
+  "content": {
+    "streams": "直播",
+    "audio": "音频",
+    "podcasts": "播客"
+  },
+  "reach": {
+    "title": "覆盖",
+    "impressions": "曝光",
+    "ctr": "点击率",
+    "ctrShort": "点击率 {{ctr}}",
+    "clicks": "卡片点击",
+    "opens": "打开次数",
+    "empty": "该时间段内还没有曝光。从现在起，只要你的卡片在别人的屏幕上显示一秒，就会计一次。",
+    "foundTitle": "观众在哪里发现",
+    "shownTitle": "你的卡片在哪里展示",
+    "since": "曝光按页面浏览的抽样统计并按比例推算。统计开始于 {{date}}。",
+    "sampled": "曝光按页面浏览的抽样统计并按比例推算。",
+    "detail": "{{impressions}} 次曝光 · 点击率 {{ctr}}"
+  },
+  "sources": {
+    "home": "首页",
+    "discover": "发现",
+    "following": "已关注",
+    "new": "最新",
+    "trending": "热门",
+    "interests": "兴趣",
+    "search": "搜索",
+    "channel": "频道页面",
+    "related": "其他视频旁边",
+    "shorts": "短视频",
+    "playlist": "播放列表",
+    "tag": "标签",
+    "community": "社区",
+    "other": "3Speak 其他位置",
+    "direct": "直接访问或未知",
+    "search_engine": "搜索引擎",
+    "social": "社交媒体",
+    "hive_apps": "其他 Hive 应用",
+    "external": "其他网站",
+    "embed": "其他网站上的嵌入"
+  },
+  "earnings": {
+    "title": "收入",
+    "empty": "该时间段内还没有收入。",
+    "unavailable": "暂时无法加载收入，请一分钟后再试。",
+    "chartLabel": "{{days}} 天内每日收入，按来源堆叠",
+    "lastYear": "全部显示最近 12 个月。",
+    "note": "以 HBD 计（约合 1 美元）。Hive 奖励和 HIVE 打赏按今天的 HIVE 价格折算，Lightning 仍以 sats 显示。",
+    "sats_other": "{{count}} sats",
+    "sources": {
+      "votes": "点赞",
+      "curation": "策展",
+      "tips": "打赏",
+      "ads": "广告",
+      "boosts": "直播助力",
+      "lightning": "Lightning"
+    }
+  },
+  "export": {
+    "daily": "导出每日收入（CSV）",
+    "content": "导出内容表（CSV）",
+    "cols": {
+      "date": "日期",
+      "total": "合计",
+      "title": "标题",
+      "url": "链接",
+      "published": "发布时间",
+      "watchSeconds": "观看时长（秒）",
+      "earned": "点赞收入"
+    }
+  },
+  "inbox": {
+    "tab": "评论",
+    "menu": "评论收件箱",
+    "title": "评论收件箱",
+    "sub_other": "最近 {{count}} 天内你的帖子收到的评论。",
+    "filtersLabel": "仅显示",
+    "views": {
+      "unanswered": "未回复",
+      "all": "全部",
+      "done": "已处理"
+    },
+    "flags": {
+      "question": "提问",
+      "firstTime": "首次评论",
+      "supporter": "支持者"
+    },
+    "answered": "已回复",
+    "onPost": "评论于",
+    "onReply": "回复了你，于",
+    "reply": "回复",
+    "replyVideo": "用视频回复",
+    "replyTo": "回复 @{{author}}",
+    "send": "发送",
+    "replied": "你的回复已发布到 Hive。",
+    "replyFailed": "回复发布失败，请重试。",
+    "markDone": "标为已处理",
+    "undone": "撤销",
+    "doneToast": "已标为已处理。",
+    "doneFailed": "无法保存，请重试。",
+    "error": "无法加载评论。",
+    "retry": "再试一次",
+    "allAnswered": "你已经回复了所有人。",
+    "empty": "这里没有评论。",
+    "supportersNote": "支持者是指最近 12 个月内给你的帖子点赞，或在 3Speak 上打赏过你的人。首次评论表示这是对方第一次在你的帖子下评论。"
+  }
+}

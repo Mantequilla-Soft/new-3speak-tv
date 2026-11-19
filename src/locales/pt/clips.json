@@ -1,0 +1,20 @@
+{
+  "title": "Shorts deste vídeo",
+  "sub": "Escolhidos pelos seus espectadores: as partes que eles repetem, comentam e discutem no chat, e frases que valem citar.",
+  "empty": "Ainda não há sugestões. Elas aparecem quando as pessoas assistem, repetem e comentam este vídeo.",
+  "error": "Não foi possível carregar as sugestões agora.",
+  "range": "{{start}} a {{end}}",
+  "seconds": "{{seconds}} s",
+  "reasons": {
+    "replay": "Mais repetido",
+    "comments_one": "{{count}} comentário aponta aqui",
+    "comments_many": "{{count}} comentários apontam aqui",
+    "comments_other": "{{count}} comentários apontam aqui",
+    "chat": "O chat agitou",
+    "quote": "Frase para citar"
+  },
+  "preview": "Prévia",
+  "stop": "Parar",
+  "makeShort": "Fazer um Short",
+  "foot": "Só você vê isto. As repetições são contadas sem saber quem assistiu."
+}

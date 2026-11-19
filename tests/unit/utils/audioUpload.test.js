@@ -60,6 +60,20 @@ describe('uploadAudioTo3Speak', () => {
     expect(out.playUrl).toBe('https://audio.example/play?a=u/abc12345')
   })
 
+  it('sends the track type as category, so songs land on the Music tab', async () => {
+    const blob = new Blob([new Uint8Array([1, 2, 3])], { type: 'audio/mpeg' })
+    await uploadAudioTo3Speak({ blob, username: 'u', title: 'T', category: 'song' })
+    expect(fetchMock.mock.calls[0][1].body.get('category')).toBe('song')
+  })
+
+  it('leaves category out when the type is missing or unknown', async () => {
+    const blob = new Blob([new Uint8Array([1, 2, 3])], { type: 'audio/mpeg' })
+    await uploadAudioTo3Speak({ blob, username: 'u', title: 'T' })
+    await uploadAudioTo3Speak({ blob, username: 'u', title: 'T', category: 'sounds' })
+    expect(fetchMock.mock.calls[0][1].body.has('category')).toBe(false)
+    expect(fetchMock.mock.calls[1][1].body.has('category')).toBe(false)
+  })
+
   it('refuses a file it cannot read, without POSTing', async () => {
     const unreadable = new Blob([new Uint8Array(10)])
     unreadable.arrayBuffer = () => Promise.reject(new DOMException('gone', 'NotReadableError'))

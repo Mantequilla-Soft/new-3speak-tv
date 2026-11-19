@@ -1,0 +1,5 @@
+{
+  "videoEditor": "Trình chỉnh sửa video",
+  "videoEditorSub": "Chỉnh sửa video ngang dài tối đa 10 phút",
+  "editorTooLong": "Trình chỉnh sửa video nhận video dài tối đa {{minutes}} phút"
+}

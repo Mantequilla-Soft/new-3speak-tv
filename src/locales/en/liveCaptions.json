@@ -1,0 +1,30 @@
+{
+  "studio": {
+    "title": "Live captions",
+    "toggle": "Show live captions to viewers",
+    "hint": "While you are live, your microphone is turned into text. Viewers can switch captions on, and many browsers translate them into the viewer's language.",
+    "language": "Language you speak",
+    "onlyLanguage": "Captions understand {lang} only.",
+    "statusOff": "Off",
+    "statusWaiting": "Starts when you go live.",
+    "statusMicOff": "Turn your microphone on for captions.",
+    "statusStarting": "Starting captions…",
+    "statusOn": "Captions are on.",
+    "statusFull": "All caption slots are in use right now. Trying again in a minute.",
+    "statusUnavailable": "Live captions are not available right now.",
+    "statusError": "Captions stopped because the speech service could not be reached. Switch them off and on to try again."
+  },
+  "viewer": {
+    "translatedFrom": "Translated from {lang} on your device",
+    "showOriginal": "Show original",
+    "translateTo": "Translate to {lang}",
+    "noTranslator": "In {lang}: this browser cannot translate captions",
+    "label": "Captions",
+    "show": "Show live captions",
+    "hide": "Hide live captions"
+  },
+  "vod": {
+    "saved": "Your live captions were added to the replay as subtitles.",
+    "failed": "The live captions could not be added to the replay."
+  }
+}

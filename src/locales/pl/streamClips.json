@@ -1,0 +1,70 @@
+{
+  "readyTitle": "Twój klip jest gotowy",
+  "readySub": "Ostatnie 30 sekund transmisji.",
+  "postShort": "Opublikuj jako Short",
+  "download": "Pobierz",
+  "delete": "Usuń",
+  "shareHost": "@{{host}} dostaje {{percent}}% nagród Shorta: to jego transmisja.",
+  "shareClipper": "@{{clipper}} zrobił ten klip i dostaje {{percent}}% nagród Shorta.",
+  "loginToPost": "Zaloguj się, aby publikować klipy jako Shorty.",
+  "allClips": "Wszystkie twoje klipy z tej transmisji",
+  "postFailed": "Nie udało się otworzyć klipu do publikacji. Spróbuj ponownie.",
+  "deleteConfirm": "Usunąć ten klip?",
+  "deleteFailed": "Nie udało się usunąć klipu.",
+  "title": "Najlepsze momenty",
+  "subHost": "Klipy z twojej transmisji, gotowe do publikacji jako Shorty. Zostają na 2 dni.",
+  "subViewer": "Twoje klipy z tej transmisji. Zostają na 2 dni.",
+  "error": "Nie udało się teraz wczytać klipów.",
+  "empty": "Nie ma jeszcze klipów. Tu pojawiają się momenty z ożywionym czatem i boostami.",
+  "at": "o {{time}}",
+  "source": {
+    "auto": "Wyróżnienie",
+    "mine": "Twój klip",
+    "by": "Klip od @{{user}}",
+    "guest": "Klip od gościa"
+  },
+  "reasons": {
+    "chat": "Czat zawrzał",
+    "boosts": "Boosty",
+    "big_boost": "Duży boost"
+  },
+  "momentsTitle": "Więcej momentów",
+  "momentsSub": "Zrób Shorta z nagrania, gdy zostanie przetworzone.",
+  "makeShort": "Zrób Shorta",
+  "notif": {
+    "host": "Klipy z twojej transmisji są gotowe do publikacji jako Shorty ({{count}})",
+    "clipper": "Twoje klipy z transmisji @{{user}} są gotowe ({{count}})"
+  },
+  "pendingTitle": "Twój klip będzie gotowy po zakończeniu transmisji",
+  "pendingSub": "Zostanie wycięty z nagrania po transmisji. Znajdziesz go w sekcji Twoje klipy z transmisji.",
+  "status": {
+    "pending": "Gotowy po transmisji",
+    "unavailable": "Nie udało się utworzyć"
+  },
+  "reasonUnavailable": {
+    "past_cap": "Po darmowych 30 minutach",
+    "past_end": "Po zakończeniu nagrania",
+    "no_recording": "Transmisja nie była nagrywana",
+    "failed": "Nie udało się wyciąć"
+  },
+  "summary": {
+    "title": "Klipy z twojej transmisji: {{count}}",
+    "pending": "Są teraz wycinane z nagrania i za kilka minut będą gotowe. Damy ci znać.",
+    "ready": "Wszystkie klipy są gotowe.",
+    "byUser": "@{{user}}: {{count}}",
+    "auto": "Automatyczne: {{count}}",
+    "guests": "Goście: {{count}}"
+  },
+  "page": {
+    "title": "Twoje klipy z transmisji",
+    "sub": "Klipy, które zrobiłeś, i klipy z twoich transmisji. Są przechowywane przez {{hours}} godz.",
+    "empty": "Nie ma jeszcze klipów. Zrób klip z transmisji albo nadawaj na żywo: tu pojawią się klipy twoich widzów.",
+    "select": "Zaznacz",
+    "postSelected": "Opublikuj zaznaczone jako Shorty ({{count}})",
+    "queueNext": "Opublikuj następny (zostało: {{count}})",
+    "queueClear": "Wyczyść",
+    "ofStream": "Transmisja @{{host}}",
+    "yours": "Twoja transmisja",
+    "open": "Twoje klipy z transmisji"
+  }
+}

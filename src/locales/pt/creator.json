@@ -1,0 +1,112 @@
+{
+  "content": {
+    "streams": "Transmissões",
+    "audio": "Áudio",
+    "podcasts": "Podcasts"
+  },
+  "reach": {
+    "title": "Alcance",
+    "impressions": "Impressões",
+    "ctr": "Taxa de cliques",
+    "ctrShort": "CTR {{ctr}}",
+    "clicks": "Cliques nos cards",
+    "opens": "Aberturas",
+    "empty": "Ainda não há impressões neste período. A partir de agora, elas são contadas sempre que um dos seus cards fica um segundo na tela de alguém.",
+    "foundTitle": "Onde os espectadores encontraram",
+    "shownTitle": "Onde seus cards foram exibidos",
+    "since": "As impressões são contadas a partir de uma amostra de visualizações e extrapoladas. A contagem começou em {{date}}.",
+    "sampled": "As impressões são contadas a partir de uma amostra de visualizações e extrapoladas.",
+    "detail": "{{impressions}} impressões · CTR {{ctr}}"
+  },
+  "sources": {
+    "home": "Início",
+    "discover": "Descobrir",
+    "following": "Seguindo",
+    "new": "Novos",
+    "trending": "Em alta",
+    "interests": "Interesses",
+    "search": "Pesquisa",
+    "channel": "Páginas de canal",
+    "related": "Ao lado de outros vídeos",
+    "shorts": "Shorts",
+    "playlist": "Playlists",
+    "tag": "Tags",
+    "community": "Comunidades",
+    "other": "Em outro lugar do 3Speak",
+    "direct": "Direto ou desconhecido",
+    "search_engine": "Buscadores",
+    "social": "Redes sociais",
+    "hive_apps": "Outros apps do Hive",
+    "external": "Outros sites",
+    "embed": "Incorporado em outros sites"
+  },
+  "earnings": {
+    "title": "Ganhos",
+    "empty": "Ainda não há ganhos neste período.",
+    "unavailable": "Não foi possível carregar os ganhos agora. Tente de novo em um minuto.",
+    "chartLabel": "Ganhos por dia ao longo de {{days}} dias, empilhados por fonte",
+    "lastYear": "Tudo mostra os últimos 12 meses.",
+    "note": "Em HBD (cerca de um dólar americano). Recompensas do Hive e gorjetas em HIVE são avaliadas pelo preço atual do HIVE, Lightning fica em sats.",
+    "sats_one": "{{count}} sat",
+    "sats_many": "{{count}} sats",
+    "sats_other": "{{count}} sats",
+    "sources": {
+      "votes": "Votos",
+      "curation": "Curadoria",
+      "tips": "Gorjetas",
+      "ads": "Anúncios",
+      "boosts": "Boosts em transmissões",
+      "lightning": "Lightning"
+    }
+  },
+  "export": {
+    "daily": "Exportar ganhos diários (CSV)",
+    "content": "Exportar tabela de conteúdo (CSV)",
+    "cols": {
+      "date": "Data",
+      "total": "Total",
+      "title": "Título",
+      "url": "Link",
+      "published": "Publicado",
+      "watchSeconds": "Tempo assistido (segundos)",
+      "earned": "Ganho com votos"
+    }
+  },
+  "inbox": {
+    "tab": "Comentários",
+    "menu": "Caixa de comentários",
+    "title": "Caixa de comentários",
+    "sub_one": "Comentários nos seus posts do último {{count}} dia.",
+    "sub_many": "Comentários nos seus posts dos últimos {{count}} dias.",
+    "sub_other": "Comentários nos seus posts dos últimos {{count}} dias.",
+    "filtersLabel": "Mostrar só",
+    "views": {
+      "unanswered": "Sem resposta",
+      "all": "Todos",
+      "done": "Concluídos"
+    },
+    "flags": {
+      "question": "Perguntas",
+      "firstTime": "Primeira vez",
+      "supporter": "Apoiadores"
+    },
+    "answered": "Respondido",
+    "onPost": "em",
+    "onReply": "respondeu você em",
+    "reply": "Responder",
+    "replyVideo": "Responder com um vídeo",
+    "replyTo": "Responder a @{{author}}",
+    "send": "Enviar",
+    "replied": "Sua resposta está no Hive.",
+    "replyFailed": "Não foi possível publicar a resposta. Tente de novo.",
+    "markDone": "Marcar como concluído",
+    "undone": "Desfazer",
+    "doneToast": "Marcado como concluído.",
+    "doneFailed": "Não foi possível salvar. Tente de novo.",
+    "error": "Não foi possível carregar os comentários.",
+    "retry": "Tentar de novo",
+    "allAnswered": "Você respondeu a todos.",
+    "empty": "Nenhum comentário aqui.",
+    "supportersNote": "Apoiadores votaram nos seus posts nos últimos 12 meses ou te deram gorjeta no 3Speak. Primeira vez significa o primeiro comentário da pessoa em qualquer um dos seus posts."
+  }
+}

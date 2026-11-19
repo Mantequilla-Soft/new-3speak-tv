@@ -1,0 +1,70 @@
+{
+  "readyTitle": "Klibin hazır",
+  "readySub": "Yayının son 30 saniyesi.",
+  "postShort": "Short olarak paylaş",
+  "download": "İndir",
+  "delete": "Sil",
+  "shareHost": "Short'un ödüllerinin %{{percent}} kadarı @{{host}} hesabına gider: yayın onun.",
+  "shareClipper": "Bu klibi @{{clipper}} yaptı ve Short'un ödüllerinin %{{percent}} kadarını alır.",
+  "loginToPost": "Klipleri Short olarak paylaşmak için giriş yap.",
+  "allClips": "Bu yayındaki tüm kliplerin",
+  "postFailed": "Klip paylaşım için açılamadı. Tekrar dene.",
+  "deleteConfirm": "Bu klip silinsin mi?",
+  "deleteFailed": "Klip silinemedi.",
+  "title": "En iyi anlar",
+  "subHost": "Yayınından klipler, Short olarak paylaşılmaya hazır. 2 gün kalır.",
+  "subViewer": "Bu yayındaki kliplerin. 2 gün kalır.",
+  "error": "Klipler şu anda yüklenemedi.",
+  "empty": "Henüz klip yok. Sohbetin ve boostların hareketlendiği anlar burada görünür.",
+  "at": "{{time}} anında",
+  "source": {
+    "auto": "Öne çıkan",
+    "mine": "Senin klibin",
+    "by": "@{{user}} tarafından kliplendi",
+    "guest": "Bir misafir tarafından kliplendi"
+  },
+  "reasons": {
+    "chat": "Sohbet coştu",
+    "boosts": "Boostlar",
+    "big_boost": "Büyük boost"
+  },
+  "momentsTitle": "Diğer anlar",
+  "momentsSub": "Kayıt işlendiğinde ondan bir Short yap.",
+  "makeShort": "Short yap",
+  "notif": {
+    "host": "Yayınının klipleri Short olarak paylaşılmaya hazır ({{count}})",
+    "clipper": "@{{user}} yayınındaki kliplerin hazır ({{count}})"
+  },
+  "pendingTitle": "Klibin yayın bitince hazır olacak",
+  "pendingSub": "Yayından sonra kayıttan kesilir. Onu Yayın kliplerin bölümünde bulursun.",
+  "status": {
+    "pending": "Yayından sonra hazır",
+    "unavailable": "Oluşturulamadı"
+  },
+  "reasonUnavailable": {
+    "past_cap": "Ücretsiz 30 dakikadan sonra",
+    "past_end": "Kayıt bittikten sonra",
+    "no_recording": "Yayın kaydedilmedi",
+    "failed": "Kesilemedi"
+  },
+  "summary": {
+    "title": "Yayınından {{count}} klip",
+    "pending": "Şu anda kayıttan kesiliyorlar, birkaç dakika içinde hazır olacaklar. Sana haber vereceğiz.",
+    "ready": "Tüm klipler hazır.",
+    "byUser": "@{{user}}: {{count}}",
+    "auto": "Otomatik: {{count}}",
+    "guests": "Misafirler: {{count}}"
+  },
+  "page": {
+    "title": "Yayın kliplerin",
+    "sub": "Yaptığın klipler ve yayınlarının klipleri. Klipler {{hours}} saat saklanır.",
+    "empty": "Henüz klip yok. Bir canlı yayını klipe al ya da canlı yayına geç: izleyicilerinin klipleri burada görünür.",
+    "select": "Seç",
+    "postSelected": "Seçilenleri Short olarak paylaş ({{count}})",
+    "queueNext": "Sıradakini paylaş ({{count}} kaldı)",
+    "queueClear": "Temizle",
+    "ofStream": "@{{host}} yayını",
+    "yours": "Senin yayının",
+    "open": "Yayın kliplerin"
+  }
+}

@@ -139,6 +139,13 @@
     "rumble": {
       "placeholder": "https://rumble.com/c/…",
       "help": "Rumble チャンネルの名前またはリンクを貼り付けてください。ハッシュはチャンネル説明のどこかに入れてください。"
+    },
+    "rss": {
+      "placeholder": "https://example.com/podcast.xml",
+      "help": "ポッドキャストのRSSフィードのアドレスを貼り付けてください。ホスティングサービスの番組設定や配信ページに表示されています。",
+      "flowTitle": "ポッドキャストのRSSフィードをリンク",
+      "step2": "ポッドキャストのホスティングサービスで、<strong>番組の説明、または最新エピソードの説明に貼り付けてください</strong>。変更を保存して公開します。フィードが認証されたら削除してかまいません。",
+      "step3": "ポッドキャストのRSSフィードのアドレスを入力してください："
     }
   },
   "snaps": {
@@ -157,7 +164,13 @@
     "audioMinimal": "ミニマル",
     "heightSub": "幅いっぱい、高さ {{height}} px · レスポンシブ",
     "podcastTitle": "このポッドキャストを埋め込む",
-    "podcastHint": "番組のすべてのエピソードを、新しいものも公開され次第再生します。"
+    "podcastHint": "番組のすべてのエピソードを、新しいものも公開され次第再生します。",
+    "embedWhere": "埋め込み先",
+    "tabWebsite": "ウェブサイト",
+    "tabHive": "Hive 用",
+    "hiveLink": "Hive 投稿用のリンク",
+    "hivePlaylistHint": "このリンクを Hive の投稿や wave に貼り付けてください。Ecency など 3Speak の動画を表示する Hive アプリでは、投稿内でそのままプレイリストを再生できます。",
+    "videoPlaylistHint": "ウェブサイトやブログ記事に貼り付けてください。プレイリストのすべての動画を、後から追加されたものも含めて順番に再生します。"
   },
   "incubation": {
     "requestFailed": "リクエストに失敗しました（{{status}}）",
@@ -197,7 +210,9 @@
       "video": "動画",
       "audio": "音声",
       "live": "ライブ",
-      "others": "その他"
+      "others": "その他",
+      "streams": "配信",
+      "edit": "編集"
     },
     "subtitles": {
       "regularVideo": "チャンネル向けの通常の動画",
@@ -210,6 +225,12 @@
       "goLiveNow": "フォロワーに向けてライブ配信",
       "communitySnap": "コミュニティタブに手軽に投稿",
       "playlist": "動画をまとめて共有できるリストに"
+    },
+    "categories": {
+      "video": "動画をアップロード・録画・編集",
+      "audio": "音楽、ポッドキャスト、音声編集",
+      "streams": "ひとりで、またはゲストと配信",
+      "others": "スナップとプレイリスト"
     }
   },
   "chat": {

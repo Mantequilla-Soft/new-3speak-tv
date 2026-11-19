@@ -76,7 +76,8 @@
       "all": "Tất cả",
       "rewards": "Phần thưởng",
       "received": "Đã nhận",
-      "sent": "Đã gửi"
+      "sent": "Đã gửi",
+      "points": "Điểm"
     },
     "from": "Từ @{{user}}",
     "sentTo": "Đã gửi cho @{{user}}",
@@ -100,5 +101,40 @@
     "memoPlaceholder": "Dùng cho việc gì, ví dụ số hóa đơn",
     "subRequest": "Quét mã này sẽ yêu cầu {{amount}} {{coin}}. 3Speak và các ví Hive đọc được mã thanh toán sẽ tự điền.",
     "subMemo": "Quét mã này sẽ điền tên tài khoản của bạn và ghi chú trong 3Speak và trong các ví Hive đọc được mã thanh toán."
+  },
+  "points": {
+    "title": "Điểm kênh",
+    "sub": "Kiếm được trong các buổi phát trực tiếp của 3Speak, dùng cho dự đoán và boost.",
+    "keptUntil": "Được giữ đến {{date}}. Hãy xem, trò chuyện hoặc phát trực tiếp để giữ điểm.",
+    "startsAt_other": "Mọi người bắt đầu với {{n}} điểm.",
+    "earnTitle": "Cách kiếm điểm",
+    "earn": {
+      "watch": "Xem buổi phát",
+      "chat": "Trò chuyện",
+      "stream": "Phát trực tiếp",
+      "raid": "Raid và đối đầu",
+      "boost": "Gửi boost"
+    },
+    "rate": {
+      "perMinute": "{{n}} mỗi phút",
+      "perWord": "{{n}} mỗi từ",
+      "upTo": "Tối đa {{n}}"
+    },
+    "historyTitle": "Lịch sử điểm",
+    "history": {
+      "watch": "Đã xem buổi phát",
+      "stream": "Đã phát trực tiếp",
+      "chat": "Đã trò chuyện",
+      "raid": "Đã raid @{{user}}",
+      "battle": "Đối đầu với @{{user}}",
+      "boost": "Đã boost một buổi phát",
+      "spend": "Boost bằng điểm",
+      "refund": "Hoàn điểm",
+      "prediction": "Dự đoán",
+      "expire": "Đặt lại sau {{days}} ngày không hoạt động"
+    },
+    "empty": "Chưa có biến động điểm nào.",
+    "more": "Hiện thêm",
+    "onHive": "trên Hive"
   }
 }

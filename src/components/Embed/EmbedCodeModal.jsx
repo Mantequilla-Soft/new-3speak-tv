@@ -1,12 +1,13 @@
 import { useRef, useState, useSyncExternalStore } from 'react'
 import { useTranslation } from 'react-i18next'
 import DialogShell from '../modal/DialogShell'
-import { Button } from '../v2/ui'
+import { Button, Segmented } from '../v2/ui'
 import { Icon } from '../v2/Icon'
 import { cx } from '../v2/helpers'
 import { toastIn } from '../../utils/toast'
 import {
-  AUDIO_EMBED_SIZES, PLAYLIST_EMBED_SIZES, buildAudioEmbedHtml, buildPlaylistEmbedHtml, buildPodcastEmbedHtml,
+  AUDIO_EMBED_SIZES, EMBED_SIZES, PLAYLIST_EMBED_SIZES, buildAudioEmbedHtml, buildEmbedHtml, buildHivePlaylistLink,
+  buildPlaylistEmbedHtml, buildPodcastEmbedHtml,
 } from '../../utils/embedCode'
 import './EmbedCodeModal.scss'
 
@@ -19,7 +20,10 @@ const toast = toastIn('Audio')
  * outside them, which would take a dialog they owned down with them.
  *
  *  - kind 'audio':    id = the audio's own permlink (embed-audio `permlink`)
- *  - kind 'playlist': id = the 3speak.tv playlist id; the embed plays its audio tracks
+ *  - kind 'playlist': id = the 3speak.tv playlist id; the embed plays its audio tracks.
+ *                     With `owner`, a "For Hive" tab offers the link for Hive posts.
+ *                     With `video` (it holds videos), the snippet is the video player's:
+ *                     play.3speak.tv plays the playlist's videos in one 16:9 player.
  *  - kind 'podcast':  id = an outside show's id (the checker's); the embed plays its episodes
  */
 let current = null
@@ -48,19 +52,30 @@ export default function EmbedCodeHost() {
 function EmbedCodeModal({ target, onClose }) {
   const { t } = useTranslation()
   const isList = target.kind === 'playlist' || target.kind === 'podcast'
-  const sizes = isList ? PLAYLIST_EMBED_SIZES : AUDIO_EMBED_SIZES
+  // A playlist of videos embeds the video player: owner/id is the same `v` shape as a
+  // video, so the video snippet and its 16:9 sizes apply as they are.
+  const isVideoList = target.kind === 'playlist' && !!target.video && !!target.owner
+  const sizes = isVideoList ? EMBED_SIZES : isList ? PLAYLIST_EMBED_SIZES : AUDIO_EMBED_SIZES
   const [size, setSize] = useState(sizes[0].id)
   const codeRef = useRef(null)
   const spec = sizes.find((s) => s.id === size) || sizes[0]
-  const build = { playlist: buildPlaylistEmbedHtml, podcast: buildPodcastEmbedHtml }[target.kind] || buildAudioEmbedHtml
-  const code = build(target.id, { size, title: target.title })
+  const build = isVideoList
+    ? (id, opts) => buildEmbedHtml(target.owner, id, opts)
+    : { playlist: buildPlaylistEmbedHtml, podcast: buildPodcastEmbedHtml }[target.kind] || buildAudioEmbedHtml
+  // "For Hive": a link Hive apps already show as a player (buildHivePlaylistLink).
+  const hiveLink = target.kind === 'playlist' && target.owner ? buildHivePlaylistLink(target.owner, target.id) : null
+  // For Hive comes first and is where the popup opens, when there is a Hive link.
+  const [tab, setTab] = useState(hiveLink ? 'forhive' : 'site')
+  const forHive = tab === 'forhive' && !!hiveLink
+  const code = forHive ? hiveLink : build(target.id, { size, title: target.title })
   const heading = { playlist: 'misc.embed.playlistTitle', podcast: 'misc.embed.podcastTitle' }[target.kind] || 'misc.embed.audioTitle'
-  const hint = { playlist: 'misc.embed.playlistHint', podcast: 'misc.embed.podcastHint' }[target.kind] || 'chat.share.embedHint'
+  const hint = isVideoList ? 'misc.embed.videoPlaylistHint'
+    : { playlist: 'misc.embed.playlistHint', podcast: 'misc.embed.podcastHint' }[target.kind] || 'chat.share.embedHint'
 
   const copy = async () => {
     try {
       await navigator.clipboard.writeText(code)
-      toast.success(t('chat.share.embedCopied'))
+      toast.success(t(forHive ? 'chat.share.hivePostCopied' : 'chat.share.embedCopied'))
     } catch {
       // Clipboard denied: select the code so it can be copied by hand.
       codeRef.current?.focus()
@@ -80,43 +95,66 @@ function EmbedCodeModal({ target, onClose }) {
       zIndex={1300}
       className="embed-code-dialog"
       footer={(
-        <Button variant="primary" icon="content_copy" onClick={copy}>{t('chat.share.copyEmbed')}</Button>
+        <Button variant="primary" icon="content_copy" onClick={copy}>
+          {t(forHive ? 'common.actions.copyLink' : 'chat.share.copyEmbed')}
+        </Button>
       )}
     >
-      <p className="embed-code-hint">{t(hint)}</p>
-      <div className="v2-seg is-block embed-code-sizes" role="group" aria-label={t('chat.share.embedSize')}>
-        {sizes.map((s) => (
-          <button
-            key={s.id}
-            type="button"
-            className={cx('v2-seg__opt', 'h28', size === s.id && 'is-on')}
-            aria-pressed={size === s.id}
-            onClick={() => setSize(s.id)}
-          >
-            {s.labelKey ? t(s.labelKey) : s.label}
-          </button>
-        ))}
-      </div>
-      {/* A sketch of the embedded player (cover, play, progress), not the live
-          embed: "minimal" drops the cover, "with title" adds the title line. */}
-      <div className={cx('embed-code-strip', `is-${size}`)} aria-hidden="true">
-        {size !== 'minimal' && <span className="embed-code-strip__art" />}
-        <Icon name="play_circle" size={20} />
-        <span className="embed-code-strip__main">
-          {size === 'full' && target.title && <span className="embed-code-strip__title">{target.title}</span>}
-          <span className="embed-code-strip__bar" />
-        </span>
-      </div>
-      <p className="embed-code-size">{t('misc.embed.heightSub', { height: spec.height })}</p>
+      {hiveLink && (
+        <Segmented
+          size={28}
+          className="embed-code-tabs"
+          label={t('misc.embed.embedWhere')}
+          value={tab}
+          onChange={setTab}
+          options={[
+            { value: 'forhive', label: t('misc.embed.tabHive') },
+            { value: 'site', label: t('misc.embed.tabWebsite') },
+          ]}
+        />
+      )}
+      <p className="embed-code-hint">{t(forHive ? 'misc.embed.hivePlaylistHint' : hint)}</p>
+      {!forHive && (
+        <>
+          <div className="v2-seg is-block embed-code-sizes" role="group" aria-label={t('chat.share.embedSize')}>
+            {sizes.map((s) => (
+              <button
+                key={s.id}
+                type="button"
+                className={cx('v2-seg__opt', 'h28', size === s.id && 'is-on')}
+                aria-pressed={size === s.id}
+                onClick={() => setSize(s.id)}
+              >
+                {s.labelKey ? t(s.labelKey) : s.label}
+              </button>
+            ))}
+          </div>
+          {!isVideoList && (
+            <>
+              {/* A sketch of the embedded player (cover, play, progress), not the live
+                  embed: "minimal" drops the cover, "with title" adds the title line. */}
+              <div className={cx('embed-code-strip', `is-${size}`)} aria-hidden="true">
+                {size !== 'minimal' && <span className="embed-code-strip__art" />}
+                <Icon name="play_circle" size={20} />
+                <span className="embed-code-strip__main">
+                  {size === 'full' && target.title && <span className="embed-code-strip__title">{target.title}</span>}
+                  <span className="embed-code-strip__bar" />
+                </span>
+              </div>
+              <p className="embed-code-size">{t('misc.embed.heightSub', { height: spec.height })}</p>
+            </>
+          )}
+        </>
+      )}
       <textarea
         ref={codeRef}
         className="embed-code-text"
         readOnly
-        rows={5}
+        rows={forHive ? 2 : 5}
         spellCheck={false}
         value={code}
         onFocus={(e) => e.target.select()}
-        aria-label={t('chat.share.embedCode')}
+        aria-label={t(forHive ? 'misc.embed.hiveLink' : 'chat.share.embedCode')}
       />
     </DialogShell>
   )

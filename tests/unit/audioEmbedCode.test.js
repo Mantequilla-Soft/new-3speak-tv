@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import {
   buildAudioEmbedHtml, buildAudioEmbedSrc, buildPlaylistEmbedHtml, buildPlaylistEmbedSrc,
 } from '../../src/utils/embedCode';
-import { AUDIO_EMBED_BASE } from '../../src/utils/config';
+import { AUDIO_EMBED_BASE, EMBED_PLAYER_BASE } from '../../src/utils/config';
 
 describe('audio and playlist embed code', () => {
   it('points an audio at the audio player, embedded look, chosen mode', () => {
@@ -32,5 +32,26 @@ describe('podcast embed code', () => {
     expect(buildPodcastEmbedSrc('6ae3c77f91d7738e82354365')).toBe(`${AUDIO_EMBED_BASE}/play?podcast=6ae3c77f91d7738e82354365&iframe=1`);
     expect(buildPodcastEmbedHtml('6ae3c77f91d7738e82354365', { size: 'short', title: 'Battle of the Nerds' }))
       .toContain('height="360"');
+  });
+});
+
+describe('playlist link for Hive posts', () => {
+  it('is the video link shape, owner first, on the public player', async () => {
+    const { buildHivePlaylistLink } = await import('../../src/utils/embedCode');
+    expect(buildHivePlaylistLink('badadib', '89824da022425799e9cd52e2a75e7e1e'))
+      .toBe(`${EMBED_PLAYER_BASE}/watch?v=badadib/89824da022425799e9cd52e2a75e7e1e`);
+    // Ecency keeps only [A-Za-z0-9_-./] of `v`: a UUID id fits as it is.
+    expect(buildHivePlaylistLink('badadib', '4bc07fe6-b8a0-439a-b97a-c77a8bfe5c32'))
+      .toMatch(/\?v=[A-Za-z0-9_\-./]+$/);
+  });
+});
+
+describe('video playlist embed code', () => {
+  it('is the video player snippet with owner/id as v, 16:9 responsive by default', async () => {
+    const { buildEmbedHtml } = await import('../../src/utils/embedCode');
+    const html = buildEmbedHtml('badadib', 'a972c863bbaf2f4d0ddec1a401bcda4d', { title: 'gaming' });
+    expect(html).toContain(`src="${EMBED_PLAYER_BASE}/watch?v=badadib/a972c863bbaf2f4d0ddec1a401bcda4d&mode=iframe"`);
+    expect(html).toContain('padding-bottom:56.25%');
+    expect(html).toContain('title="gaming"');
   });
 });

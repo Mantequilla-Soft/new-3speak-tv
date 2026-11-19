@@ -94,6 +94,7 @@
   },
   "loadError": "Impossible de charger vos statistiques pour le moment.",
   "emptyRange": "Aucune donnée de visionnage sur cette période — essayez « Tout », ou attendez que des gens regardent vos vidéos.",
+  "emptyRangeAudio": "Pas encore de données d’écoute sur cette période. Essayez « Tout » ou attendez que des gens écoutent.",
   "tiles": {
     "avgViewDuration": "Durée moy. de visionnage",
     "avgWatched": "Moy. regardée",

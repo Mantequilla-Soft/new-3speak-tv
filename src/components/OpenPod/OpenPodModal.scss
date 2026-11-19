@@ -1,6 +1,7 @@
 @use '../../styles/shorts-action-rail' as rail;
 @use '../../styles/v2' as v2;
 @use '../openpods/hangouts-skin' as hh;
+@use '../openpods/studio-tools-skin' as tools;
 
 /* The OpenPods room / stream studio (SDK HangoutsRoom) in a full-size v2 sheet,
    plus our own states around it: connecting (39c) and stream ended (39c). */
@@ -23,6 +24,12 @@
   @include hh.buttons(false);
   @include hh.studio;
   @include hh.room;
+  // The goal bar over the studio preview (SDK hh-studio__boost-goal).
+  @include hh.boost-goal;
+  // The battle meter and the invite card over the studio preview.
+  @include hh.battle;
+  // Overlays button, stream health panel, Phone version (studio tools).
+  @include tools.studio-tools;
   position: relative;
   background: var(--bg);
   color: var(--text);
@@ -191,6 +198,25 @@ div.hh-boost-settings {
     padding-bottom: env(safe-area-inset-bottom);
   }
 
+  // In the studio's Boosts tab (SDK `embedded`): part of the right panel, not
+  // a floating sheet.
+  &.hh-boost-settings--embedded {
+    position: static;
+    transform: none;
+    z-index: auto;
+    width: auto;
+    height: 100%;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    padding-bottom: 0;
+    .hh-boost-settings__body { flex: 1; min-height: 0; max-height: none; padding-top: 12px; }
+  }
+
   .hh-boost-settings__header {
     display: flex;
     align-items: center;
@@ -218,12 +244,25 @@ div.hh-boost-settings {
     &:hover { background: var(--bg-hover); }
   }
 
+  // Scrolls inside the sheet: Goal, On screen, Alerts and Preset amounts made
+  // it taller than a phone (the SDK caps its height).
   .hh-boost-settings__body {
     display: flex;
     flex-direction: column;
     gap: 14px;
     padding: 6px 20px 12px;
+    @include v2.scroll-y;
   }
+
+  // One group per setting area, each under a divider with an eyebrow title,
+  // like the create form's sections.
+  .hh-boost-settings__section {
+    gap: 10px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+  }
+  .hh-boost-settings__section-title { @include v2.text(eyebrow); color: var(--muted); }
+  .hh-boost-settings__try { align-self: flex-start; }
 
   .hh-boost-settings__row {
     display: flex;
@@ -260,5 +299,107 @@ div.hh-boost-settings {
     padding: 8px 20px 18px;
     border: 0;
     background: transparent;
+  }
+}
+
+/* The SDK's battle panel (BattlePanel, portalled to <body>), from the studio's
+   battle button: the same v2 sheet as Boost settings above, centred on
+   desktop, a bottom sheet on phones. */
+div.hh-battle-panel {
+  @include hh.tokens;
+  @include hh.buttons;
+  @include hh.battle;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10000;
+  width: min(420px, calc(100vw - 32px));
+  max-height: min(80vh, 640px);
+  box-sizing: border-box;
+  border-radius: var(--r-3xl);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: var(--shadow-sheet);
+  font-family: var(--font-sans);
+
+  @media (max-width: 767px) {
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    transform: none;
+    width: 100%;
+    max-height: 85vh;
+    border-radius: 28px 28px 0 0;
+    border-bottom: 0;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .hh-battle-panel__header {
+    gap: 8px;
+    padding: 18px 16px 6px 20px;
+    border: 0;
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .hh-battle-panel__icon { display: none; }
+  .hh-battle-panel__close {
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    margin-left: auto;
+    border-radius: 50%;
+    color: var(--text);
+    font-size: 16px;
+    &:hover { background: var(--bg-hover); }
+  }
+  .hh-battle-panel__body { gap: 14px; padding: 6px 20px 18px; @include v2.scroll-y; }
+  .hh-battle-panel__hint { font-size: 12px; line-height: 1.4; color: var(--muted); opacity: 1; }
+  .hh-battle-panel__note { font-size: 13px; font-weight: 700; color: var(--accent); }
+  .hh-battle-panel__error { font-size: 13px; color: var(--accent); }
+  .hh-battle-panel__label { @include v2.text(eyebrow); color: var(--muted); }
+  .hh-battle-panel__row {
+    min-height: 44px;
+    font-size: 14px;
+    font-weight: 700;
+    input[type="checkbox"] { width: 20px; height: 20px; accent-color: var(--accent); cursor: pointer; }
+  }
+  .hh-battle-panel__chip {
+    min-height: 36px;
+    padding: 0 14px;
+    border: 0;
+    border-radius: var(--r-md);
+    background: var(--surface-2);
+    color: var(--text);
+    font-size: 13px;
+    font-weight: 700;
+    &:hover { background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); }
+  }
+  .hh-battle-panel__chip--on { background: var(--accent-tint-strong); color: var(--accent); }
+  .hh-battle-panel__input { @include hh.field(44); height: 44px; background: var(--bg); }
+  .hh-battle-panel__refresh { color: var(--muted); }
+  .hh-battle-panel__item { min-height: 52px; padding: 6px 8px 6px 12px; border-radius: var(--r-md); background: var(--bg); }
+  .hh-battle-panel__host { font-size: 14px; }
+  .hh-battle-panel__title { font-size: 12px; color: var(--muted); opacity: 1; }
+  .hh-battle-panel__waiting { font-size: 14px; }
+  .hh-battle-panel__confirm { font-size: 14px; }
+}
+
+/* The studio's Overlays panel (SDK StudioOverlaysPanel, portalled to <body>):
+   the Boost settings sheet look. */
+@include tools.subtabs;
+
+div.hh-overlays {
+  @include tools.overlays-panel;
+  // In the studio's right rail (the Overlays tab): part of the panel.
+  &.hh-overlays--embedded {
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    .hh-overlays__body { padding: 8px 4px 12px; }
   }
 }

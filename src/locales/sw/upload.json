@@ -286,8 +286,8 @@
     },
     "remix": {
       "label": "Ruhusu remix na klipu",
-      "info": "Ruhusu wengine kutengeneza remix na klipu kutoka kwa video hii. Utatajwa kama mwandishi asili na utapokea angalau 5% kama mnufaika.",
-      "hint": "Unapata angalau 5% ya kila remix"
+      "info": "Ruhusu wengine kutengeneza remix na klipu kutoka video hii. Unatajwa kama mwandishi wa asili na unapata 15% ya zawadi za remix (kidogo kwa remix za remix, angalau 5%).",
+      "hint": "Unapata 15% ya kila remix ya video hii"
     },
     "nsfw": {
       "label": "Weka alama ya NSFW",
@@ -341,7 +341,13 @@
     "shareRewards": "Gawana zawadi",
     "shareRewardsSub": "Gawana na washirika",
     "advanced": "NSFW / malipo",
-    "advancedSub": "Ya hali ya juu"
+    "advancedSub": "Ya hali ya juu",
+    "language": {
+      "label": "Lugha",
+      "hint": "Inayozungumzwa kwenye video",
+      "info": "Lugha inayozungumzwa kwenye video. Huhifadhiwa pamoja na chapisho kwenye Hive, ili baadaye watazamaji waweze kupata video kwa lugha yao.",
+      "none": "Hakuna mazungumzo (muziki, sauti)"
+    }
   },
   "review": {
     "payoutDeclined": "Imekataliwa (zawadi zinachomwa)",
@@ -362,7 +368,8 @@
     "postShort": "Chapisha short",
     "postStory": "Chapisha Hadithi",
     "postVideo": "Chapisha video",
-    "backToTimeline": "Rudi kwenye ratiba ya muda"
+    "backToTimeline": "Rudi kwenye ratiba ya muda",
+    "benesDeclined": "Malipo yamekataliwa: wao pia hawapati chochote, utambuzi unabaki kwenye chapisho."
   },
   "publishing": {
     "titleShort": "Inachapisha Short",

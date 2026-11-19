@@ -156,6 +156,10 @@
       "title": "Tarjetas grandes",
       "desc": "Tarjetas de video más grandes en inicio, perfil y playlists"
     },
+    "dataSaver": {
+      "title": "Ahorro de datos",
+      "desc": "Sin vistas previas de video, y los videos empiezan en 360p. Se activa solo cuando tu dispositivo pide ahorrar datos o la conexión es lenta."
+    },
     "previews": {
       "title": "Vistas previas de video",
       "desc": "Vista previa silenciada al pasar el cursor; en el móvil se reproduce la tarjeta del centro"
@@ -165,14 +169,22 @@
       "desc": "Clips silenciados en el Destacado de Inicio. Desactivado muestra imágenes fijas."
     }
   },
+  "startup": {
+    "resume": {
+      "title": "Seguir donde lo dejé",
+      "desc": "3Speak se abre en la última página que visitaste. Solo se guarda en este dispositivo."
+    }
+  },
+  "startPrompt": {
+    "title": "¿Seguir donde lo dejaste?",
+    "intro": "3Speak puede abrirse en la última página que visitaste en lugar de Inicio. Solo se guarda en este dispositivo y puedes cambiarlo cuando quieras en Ajustes, General.",
+    "notNow": "Ahora no",
+    "turnOn": "Activar"
+  },
   "shorts": {
     "commentBar": {
       "title": "Barra de comentarios en Shorts",
       "desc": "Un campo de comentario bajo cada Short"
-    },
-    "openOnStart": {
-      "title": "Abrir Shorts al iniciar",
-      "desc": "Ve directo a Shorts al abrir 3Speak"
     },
     "inFeeds": {
       "title": "Shorts dentro de los feeds",
@@ -203,7 +215,21 @@
     "rpcNode": "Nodo RPC de Hive",
     "yourData": "Tus datos",
     "privacyLink": "Cómo 3Speak trata tus datos",
-    "getOrDelete": "Obtener o eliminar"
+    "getOrDelete": "Obtener o eliminar",
+    "node": {
+      "modeAuto": "Auto",
+      "auto": "Automático",
+      "autoHint": "El nodo más rápido que funcione; cambia si falla",
+      "own": "Tu propio nodo",
+      "use": "Usar",
+      "checking": "Comprobando…",
+      "down": "No responde",
+      "ms": "{{ms}} ms",
+      "badUrl": "Escribe una dirección que empiece por https://",
+      "failed": "Este nodo no respondió o le falta la API social (hivemind) que 3Speak necesita.",
+      "switched": "Ahora con {{node}}",
+      "fallback": "Si el nodo elegido deja de responder, 3Speak usa los nodos conocidos hasta que recargues la página."
+    }
   },
   "dataRequest": {
     "emailRequired": "Ingresa un correo electrónico para que podamos responderte",

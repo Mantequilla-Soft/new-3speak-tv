@@ -286,8 +286,8 @@
     },
     "remix": {
       "label": "Allow remix and clip",
-      "info": "Allow others to create remixes and clips from this video. You will be credited as original author and receive a minimum of 5% in beneficiaries.",
-      "hint": "You get at least 5% of every remix"
+      "info": "Allow others to create remixes and clips from this video. You are credited as the original author and get 15% of a remix's rewards (less for remixes of remixes, at least 5%).",
+      "hint": "You get 15% of every remix of this video"
     },
     "nsfw": {
       "label": "Mark as NSFW",
@@ -341,7 +341,13 @@
     "shareRewards": "Share rewards",
     "shareRewardsSub": "Split with collaborators",
     "advanced": "NSFW / payout",
-    "advancedSub": "Advanced"
+    "advancedSub": "Advanced",
+    "language": {
+      "label": "Language",
+      "hint": "Spoken in the video",
+      "info": "The language people speak in the video. It is saved with the post on Hive, so viewers can later find videos in their language.",
+      "none": "No speech (music, sounds)"
+    }
   },
   "review": {
     "payoutDeclined": "Declined (rewards burned)",
@@ -362,7 +368,8 @@
     "postShort": "Post Short",
     "postStory": "Post Story",
     "postVideo": "Post Video",
-    "backToTimeline": "Back to timeline"
+    "backToTimeline": "Back to timeline",
+    "benesDeclined": "Payout declined: they get nothing either, the credit stays on the post."
   },
   "publishing": {
     "titleShort": "Publishing short",

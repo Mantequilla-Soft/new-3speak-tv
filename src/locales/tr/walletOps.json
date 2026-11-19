@@ -1,0 +1,94 @@
+{
+  "actions": {
+    "powerUp": "Power up",
+    "powerDown": "Power down",
+    "savings": "Birikim",
+    "convert": "Dönüştür",
+    "delegate": "Delege et",
+    "aria": "Fonlarını yönet"
+  },
+  "common": {
+    "amount": "Miktar ({{coin}})",
+    "available": "Kullanılabilir: {{balance}}",
+    "max": "Maks",
+    "to": "Alıcı hesap",
+    "toHint": "Kendi hesabın için olduğu gibi bırak.",
+    "activeKey": "Active anahtarın gerekiyor",
+    "butrauth": "Butter Auth ile giriş yaptın: bir sonraki adımda bunu Hive cüzdanınla veya active anahtarınla onaylarsın.",
+    "insufficient": "Bu, sahip olduğundan fazla.",
+    "amountPositive": "Sıfırdan büyük bir miktar gir.",
+    "invalidAccount": "Bu adda bir Hive hesabı yok.",
+    "accountCheckFailed": "Bu hesap şu anda kontrol edilemiyor. Birazdan tekrar dene.",
+    "done": "Tamam. Burada görünmesi birkaç saniye sürebilir.",
+    "failed": "İşlem gerçekleşmedi: {{error}}",
+    "loading": "Cüzdanın yükleniyor..."
+  },
+  "powerUp": {
+    "title": "Power up",
+    "note": "Hive Power oylarına ağırlık kazandırır ve küratörlük ödülleri getirir. Tekrar HIVE'a çevirmek 13 haftalık ödeme sürer.",
+    "submit": "{{amount}} HIVE power up",
+    "submitTo": "@{{to}} için {{amount}} HIVE power up"
+  },
+  "powerDown": {
+    "title": "Power down",
+    "note": "Hive Power, 13 haftalık ödemeyle HIVE olarak geri gelir, haftada yaklaşık {{weekly}} HP.",
+    "replace": "Devam eden bir power down var (kalan: {{left}} HP). Yenisini başlatırsan onun yerini alır.",
+    "submit": "{{amount}} HP power down",
+    "stop": "Power down'u durdur",
+    "stopped": "Power down durduruldu."
+  },
+  "savings": {
+    "title": "Birikim",
+    "deposit": "Yatır",
+    "withdraw": "Çek",
+    "depositNote": "Birikimdeki HBD yılda %{{rate}} kazandırır. Çekmek 3 gün sürer.",
+    "depositNoteHive": "Birikimdeki HIVE faiz kazandırmaz. Çekmek 3 gün sürer.",
+    "withdrawNote": "3 gün içinde ulaşır. O zamana kadar iptal edebilirsin.",
+    "submitDeposit": "{{amount}} {{coin}} yatır",
+    "submitWithdraw": "{{amount}} {{coin}} çek"
+  },
+  "convert": {
+    "title": "Dönüştür",
+    "hbdToHive": "HBD'den HIVE'a",
+    "hiveToHbd": "HIVE'dan HBD'ye",
+    "hbdNote": "3,5 gün içinde, o günlerin medyan fiyatından yaklaşık {{amount}} HIVE alırsın. Son miktar farklı olabilir.",
+    "hiveNote": "Hemen yaklaşık {{amount}} HBD alırsın. HIVE'ının yarısı teminat olarak tutulur, kalanı 3,5 gün sonra geri gelir. %5 ücret uygulanır.",
+    "warning": "Dönüşüm geri alınamaz. Bir borsada işlem yapmak daha ucuz olabilir.",
+    "submit": "{{amount}} {{coin}} dönüştür"
+  },
+  "delegate": {
+    "title": "Delege et",
+    "toLabel": "Delege edilecek hesap",
+    "note": "Delege edilen Hive Power senin kalır, ama oy gücünü diğer hesaba verir. Geri aldığında geri gelmesi 5 gün sürer.",
+    "current": "Şu anda @{{to}} hesabına {{hp}} HP delege ediyorsun. Bu, yeni bir miktar belirler.",
+    "submit": "@{{to}} hesabına {{amount}} HP delege et",
+    "submitNoTo": "{{amount}} HP delege et",
+    "yours": "Delegasyonların",
+    "remove": "Kaldır",
+    "removed": "Delegasyon kaldırıldı. HP 5 gün içinde geri gelir.",
+    "self": "Kendine delege edemezsin."
+  },
+  "pending": {
+    "title": "Devam edenler",
+    "powerDown": "Power down: haftada {{weekly}} HP, kalan hafta: {{weeks}}",
+    "nextPayment": "Sonraki ödeme: {{date}}",
+    "withdrawal": "Birikimden: {{amount}}",
+    "arrives": "Ulaşma: {{date}}",
+    "convertHbd": "{{amount}} HIVE'a dönüştürülüyor",
+    "convertHive": "{{amount}} teminat olarak tutuluyor",
+    "ready": "Tamamlanma: {{date}}",
+    "delegation": "@{{to}} hesabına delege edildi: {{hp}} HP",
+    "cancel": "İptal et",
+    "cancelled": "Çekim iptal edildi. Fonlar birikimde kalır.",
+    "stop": "Durdur",
+    "empty": "Devam eden bir işlem yok."
+  },
+  "activeAuth": {
+    "powerDown": "{{amount}} power down",
+    "toSavings": "{{amount}} birikime aktar",
+    "fromSavings": "Birikimden {{amount}} çek",
+    "cancelSavings": "Bir birikim çekimini iptal et",
+    "convert": "{{amount}} dönüştür",
+    "delegate": "@{{to}} hesabına {{amount}} delege et"
+  }
+}

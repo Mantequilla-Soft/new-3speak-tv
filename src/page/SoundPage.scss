@@ -1,0 +1,64 @@
+@use "../styles/v2" as v2;
+
+.sound-page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.sound-head {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  padding: 20px;
+  @include v2.card(24);
+  @include v2.mobile { flex-direction: column; padding: 16px; gap: 16px; }
+
+  &__cover {
+    flex: none;
+    width: 120px;
+    aspect-ratio: 9 / 16;
+    border-radius: var(--r-lg);
+    overflow: hidden;
+    display: grid;
+    place-items: center;
+    background: var(--surface-2);
+    color: var(--accent);
+    img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    @include v2.mobile { width: 96px; }
+  }
+
+  &__info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  &__title { margin: 0; overflow-wrap: anywhere; }
+  &__by { font-size: 14px; font-weight: 700; color: var(--text); text-decoration: none; &:hover { color: var(--accent); } }
+  &__actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+  &__note { margin: 4px 0 0; font-size: 12px; color: var(--muted); }
+}
+
+.sound-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+  h2 { margin: 0; }
+  &__head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+}
+
+.sound-grid--one .card-container { max-width: 220px; grid-template-columns: 1fr; }
+
+.sound-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.sound-chip {
+  gap: 6px;
+  max-width: 100%;
+  text-decoration: none;
+  > .material-symbols-rounded { color: var(--accent); }
+  &__title { overflow: hidden; text-overflow: ellipsis; max-width: 220px; }
+  &__n { color: var(--muted); font-family: var(--font-mono); }
+}

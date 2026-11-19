@@ -44,6 +44,7 @@
     "title": "연결된 외부 프로필",
     "intro": "고유한 3Speak 해시를 공개 프로필 설명에 붙여넣은 다음 여기서 인증하면 YouTube(또는 다른) 채널의 소유자임을 증명할 수 있어요.",
     "openProfile": "프로필 열기",
+    "importEpisodes": "에피소드 가져오기",
     "removeLink": "연결 삭제",
     "empty": "아직 연결된 외부 프로필이 없어요.",
     "addPlatform": "새 플랫폼 추가",
@@ -81,7 +82,6 @@
     "addCollaborator": "협업자 추가",
     "saveSplit": "배분 저장",
     "intro": "이 게시물 보상의 일부를 자동으로 받을 사용자를 추가하세요.",
-    "minPercent": "%(최소 {{percent}}%)",
     "usernamePlaceholder": "사용자 이름 입력",
     "minimumReward": "최소 보상은 <strong>1%</strong>예요",
     "checking": "Hive에서 <strong>@{{account}}</strong> 확인 중…",
@@ -89,7 +89,11 @@
     "notAdded": "<strong>@{{account}}</strong>이(가) 아직 추가되지 않았어요. <strong>+</strong>를 눌러 추가하거나 입력란을 비우세요.",
     "infrastructure": "인프라: 10%",
     "videoEncoding": "동영상 인코딩: 1%",
-    "defaults": "기본 수혜자({{count}})"
+    "defaults": "기본 수혜자({{count}})",
+    "raise": "{{account}} 몫 올리기",
+    "lower": "{{account}} 몫 내리기",
+    "minShare": "최소 {{percent}}%",
+    "raiseHint": "자물쇠가 있는 몫은 더 주기 위해 올릴 수 있지만 최소치 아래로 내릴 수는 없어요."
   },
   "qr": {
     "scan": "Hive Keychain으로 이 QR을 스캔하세요:",
@@ -137,7 +141,8 @@
       "title": "쇼츠 텍스트",
       "hint": "쇼츠에서 오디오그램과 함께 표시됩니다. 오디오 링크는 자동으로 추가됩니다.",
       "placeholder": "이 부분은 어떤 내용인가요? (선택)"
-    }
+    },
+    "videoPodcastNotSupported": "비디오 팟캐스트는 아직 편집기에서 사용할 수 없습니다. 나중에 다시 시도해 주세요."
   },
   "profile": {
     "mustLogin": "먼저 로그인해야 해요",

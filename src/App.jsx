@@ -29,12 +29,13 @@ import ProfileNav from "./components/nav/ProfileNav";
 import ScrollToTop from "./components/ScrollToTop";
 import RouteErrorBoundary from "./components/RouteErrorBoundary";
 import lazyRoute from "./utils/lazyRoute";
-import { parseHivePath, profilePath, watchPath } from "./utils/urls";
+import { parseHivePath, profilePath, watchPath, lowercaseAccountPath } from "./utils/urls";
 import { ensure3SpeakStatus, getCachedPost } from "./utils/threeSpeakDetection";
 import { fetchPlaySource } from "./lib/videoData";
 import { useQueryClient } from "@tanstack/react-query";
 import RouteTitle from "./components/RouteTitle";
-import OpenShortsOnStart from "./components/OpenShortsOnStart";
+import ResumeLastPage from "./components/ResumeLastPage";
+import RouteFallback from "./components/RouteFallback";
 // import TestingLogin from "./page/Login/TestingLogin";
 import { Toaster } from 'sonner';
 import { toastIn } from './utils/toast';
@@ -77,6 +78,8 @@ const FaqPage = lazyRoute(() => import("./page/Faq"), "./page/Faq");
 const AdWizardPage = lazyRoute(() => import("./page/AdWizardPage"), "./page/AdWizardPage");
 const Audio = lazyRoute(() => import("./page/Audio"), "./page/Audio");
 const AudioPost = lazyRoute(() => import("./page/AudioPost"), "./page/AudioPost");
+const Downloads = lazyRoute(() => import("./page/Downloads"), "./page/Downloads");
+const SoundPage = lazyRoute(() => import("./page/SoundPage"), "./page/SoundPage");
 const AuthCallback = lazyRoute(() => import("./page/Login/AuthCallback"), "./page/Login/AuthCallback");
 const ChatPage = lazyRoute(() => import("./components/Chat/ChatPage"), "./components/Chat/ChatPage");
 const CommunityPage = lazyRoute(() => import("./components/Communities/CommunityPage"), "./components/Communities/CommunityPage");
@@ -95,6 +98,12 @@ const EmbedTimeline = lazyRoute(() => import("./components/embed-studio/EmbedTim
 const EmbedStudioPage = lazyRoute(() => import("./components/embed-studio/EmbedStudioPage"), "./components/embed-studio/EmbedStudioPage");
 const EmbedThumbnail = lazyRoute(() => import("./components/embed-studio/EmbedThumbnail"), "./components/embed-studio/EmbedThumbnail");
 const YoutubeImportPage = lazyRoute(() => import("./page/YoutubeImportPage"), "./page/YoutubeImportPage");
+const Automations = lazyRoute(() => import("./page/Automations"), "./page/Automations");
+// /youtube-import → /import, keeping ?platform= / ?mode=.
+function OldImportRedirect() {
+  const { search } = useLocation();
+  return <Navigate to={`/import${search}`} replace />;
+}
 const Feed = lazyRoute(() => import("./components/Feed/Feed"), "./components/Feed/Feed");
 const FirstUploads = lazyRoute(() => import("./page/FirstUploads"), "./page/FirstUploads");
 const FollowFeed = lazyRoute(() => import("./page/FollowFeed"), "./page/FollowFeed");
@@ -104,6 +113,8 @@ const Recap = lazyRoute(() => import("./page/Recap"), "./page/Recap");
 const Galaxy = lazyRoute(() => import("./page/Galaxy"), "./page/Galaxy");
 const InvitePage = lazyRoute(() => import("./page/Invite/InvitePage"), "./page/Invite/InvitePage");
 import InvitePopup from "./components/InvitePopup/InvitePopup";
+import InstallAppPrompt from "./components/InstallAppPrompt/InstallAppPrompt";
+import StartPrompt from "./components/StartPrompt/StartPrompt";
 const InviteLinks = lazyRoute(() => import("./page/Invite/InviteLinks"), "./page/Invite/InviteLinks");
 const Advertise = lazyRoute(() => import("./page/Advertise"), "./page/Advertise");
 const Legal = lazyRoute(() => import("./page/Legal"), "./page/Legal");
@@ -139,7 +150,10 @@ const ProfileRouter = lazyRoute(() => import("./components/Incubation/ProfileRou
 const Wallet = lazyRoute(() => import("./page/Wallet"), "./page/Wallet");
 const Watch = lazyRoute(() => import("./page/Watch"), "./page/Watch");
 const WatchStream = lazyRoute(() => import("./page/WatchStream"), "./page/WatchStream");
+const StreamClipsPage = lazyRoute(() => import("./page/StreamClipsPage"), "./page/StreamClipsPage");
+const StreamClipsHome = lazyRoute(() => import("./page/StreamClipsHome"), "./page/StreamClipsHome");
 const WatchedView = lazyRoute(() => import("./page/WatchedView"), "./page/WatchedView");
+const Curation = lazyRoute(() => import("./page/Curation"), "./page/Curation");
 const Translate = lazyRoute(() => import("./page/Translate/Translate"), "./page/Translate/Translate");
 
 function OpenPodModalMounter() {
@@ -174,6 +188,7 @@ import InterestsPrompt from "./components/InterestsPrompt/InterestsPrompt";
 import WelcomePrompt from "./components/WelcomePrompt/WelcomePrompt";
 import AdsPrompt from "./components/AdsPrompt/AdsPrompt";
 import ViewerRewardsPrompt from "./components/AdsPrompt/ViewerRewardsPrompt";
+import SocialLinksPrompt from "./components/SocialLinksPrompt/SocialLinksPrompt";
 import GraduatedFollowsPrompt from "./components/Incubation/GraduatedFollowsPrompt";
 import IncubationSessionSync from "./components/Incubation/IncubationSessionSync";
 import AvatarSync from "./components/HiveAvatar/AvatarSync";
@@ -197,6 +212,8 @@ import MountWhenOpened, { LazyBoundary } from "./components/common/LazyMount";
 // paint (LazyBoundary). See components/common/LazyMount.jsx.
 const MiniPlayer = lazy(() => import("./components/MiniPlayer/MiniPlayer"));
 const GlobalAudioPlayer = lazy(() => import("./components/GlobalAudioPlayer/GlobalAudioPlayer"));
+// "Notify me" for premieres: a toast when one the viewer asked about starts.
+const PremiereReminders = lazy(() => import("./components/Premiere/PremiereReminders"));
 const AudioUploadModal = lazy(() => import("./components/AudioUploadModal/AudioUploadModal"));
 const AddAccount_modal = lazy(() => import("./components/modal/AddAccount_modal"));
 const EditorModal = lazy(() => import("./components/modal/EditorModal"));
@@ -218,6 +235,12 @@ const toast = toastIn('Sign in');
 // parses the path and hands the names to the pages as props.
 const HiveLinkRedirect = () => {
   const location = useLocation();
+  // Hive account names are lowercase: /@Vynith is @vynith. Moved in place, so
+  // the address bar shows the real one and every lookup below finds the account.
+  const lowered = lowercaseAccountPath(location.pathname);
+  if (lowered !== location.pathname) {
+    return <Navigate to={`${lowered}${location.search}${location.hash}`} state={location.state} replace />;
+  }
   const hit = parseHivePath(location.pathname);
   if (!hit) return <NotFound />;
   if (hit.kind === 'shorts') {
@@ -288,7 +311,7 @@ const LegacyWatchRedirect = () => {
 const LegacyProfileRedirect = () => {
   const { user } = useParams();
   const location = useLocation();
-  return <Navigate to={profilePath(user, location.search)} state={location.state} replace />;
+  return <Navigate to={profilePath(String(user || '').toLowerCase(), location.search)} state={location.state} replace />;
 };
 
 // /login and /auth/login open the aioha modal and redirect to home
@@ -394,6 +417,8 @@ function App() {
           chapters: Array.isArray(detail.chapters) ? detail.chapters : null,
           // audiograms to post as Shorts with it (checked in EditorModal)
           audiograms: Array.isArray(detail.audiograms) ? detail.audiograms : null,
+          // An imported podcast episode: its title, notes, tags and cover (lib/youtubeImport.js)
+          prefill: detail.prefill && typeof detail.prefill === 'object' ? detail.prefill : null,
         });
       }
       setAudioUploadOpen(true);
@@ -789,6 +814,7 @@ function App() {
       <EmbedCodeHost />
       <SupportModal />
       <CookieConsent />
+      {authenticated && <LazyBoundary name="premiere-reminders"><PremiereReminders /></LazyBoundary>}
       <WelcomeTour />
       <GlobalReviewModal />
       <ReviewFab />
@@ -809,8 +835,8 @@ function App() {
           <UploadBlockNotice hidden={hideNavOnMobile} />
           {/* Browser-tab title for every route (watch/shorts set their own). */}
           <RouteTitle />
-          {/* Optional: land on /shorts when the app is opened (off by default). */}
-          <OpenShortsOnStart />
+          {/* Continue where I left off: records each page (the jump back is in main.jsx). */}
+          <ResumeLastPage />
           {/* <Toaster richColors position="top-right" /> */}
           {/* Every route below the index one is lazy, so the router needs a
               boundary. The fallback is deliberately EMPTY: the nav and
@@ -818,7 +844,7 @@ function App() {
               chunk arriving swaps in just the page body. A spinner here would
               flash on every navigation, which reads worse than the shell holding
               still for a moment. */}
-          <Suspense fallback={<div className="route-suspense-fallback" />}>
+          <Suspense fallback={<RouteFallback />}>
           <RouteErrorBoundary routeKey={location.pathname}>
             <Routes>
               <Route path="/" element={<HomeGrouped />} />
@@ -828,6 +854,10 @@ function App() {
               {/* Live OpenPods stream at /watch/<roomName> (path param, distinct
                   from the ?v= VOD route above). */}
               <Route path="/watch/:streamId" element={<WatchStream />} />
+              {/* A stream's clips after it ended (H13). */}
+              <Route path="/live/clips/:room" element={<StreamClipsPage />} />
+              {/* Your stream clips: made by you, and of your streams; the bell leads here. */}
+              <Route path="/clips" element={<StreamClipsHome />} />
               {/* Short alias for stream share links — see buildOpenPodShareUrl. */}
               <Route path="/l/:streamId" element={<WatchStream />} />
               {/* Opened by the LiveKit egress worker, never by a person: a
@@ -840,11 +870,18 @@ function App() {
               {/* Publish the backlog someone made before they had a Hive account. */}
               <Route path="/publish-backlog" element={<PublishBacklog />} />
               <Route path="/firstupload" element={<FirstUploads />} />
-              {VIDEO_IMPORT_ENABLED && <Route path="/youtube-import" element={<YoutubeImportPage />} />}
+              {VIDEO_IMPORT_ENABLED && <Route path="/import" element={<YoutubeImportPage />} />}
+              {/* The importer's old address (until 2026-11-15): links keep working, query included. */}
+              {VIDEO_IMPORT_ENABLED && <Route path="/youtube-import" element={<OldImportRedirect />} />}
+              {/* 🤖 Automations: closed beta, the page itself says so to anyone outside it. */}
+              <Route path="/automations" element={<Automations />} />
+              <Route path="/automations/:id" element={<Automations />} />
               <Route path="/trend" element={<Trend />} />
               <Route path="/discover" element={<Discover />} />
               <Route path="/audio" element={<Audio />} />
               <Route path="/audio/:author/:permlink" element={<AudioPost />} />
+              <Route path="/downloads" element={<Downloads />} />
+              <Route path="/sound/:id" element={<SoundPage />} />
               <Route path="/new" element={<NewVideos />} />
               <Route path="/login" element={<LoginRedirect openLoginModal={openLoginModal} />} />
               <Route path="/auth/login" element={<LoginRedirect openLoginModal={openLoginModal} />} />
@@ -914,6 +951,7 @@ function App() {
               <Route path="/user/:user" element={<LegacyProfileRedirect />} />
               <Route path="/playlist/:playlistId" element={<PlaylistView />} />
               <Route path="/watched/:username" element={<WatchedView />} />
+              <Route path="/curation/:user" element={<Curation />} />
               <Route path="/wallet/:user" element={<Wallet />} />
               <Route path="/test" element={<ProfileModal />} />
               <Route path="/image" element={<HiveImageUploader />} />
@@ -949,6 +987,10 @@ function App() {
         {/* After a 3speak.tv/invite/<code> link: "@alice invited you" over
             the home page. The code stays for any later sign-up. */}
         <InvitePopup openLoginModal={openLoginModal} />
+        {/* Phones: "Install as app", once, when the browser can (or Safari on an iPhone). */}
+        <InstallAppPrompt />
+        {/* "Pick up where you left off?": once, after the changelog popup. */}
+        <StartPrompt />
         <LoginModal
           displayed={loginModalOpen}
           intent={loginIntent}
@@ -968,6 +1010,8 @@ function App() {
         <InterestsPrompt />
         <AdsPrompt />
         <ViewerRewardsPrompt />
+        {/* No linked social profiles yet: link YouTube and the others, once. */}
+        <SocialLinksPrompt />
         {/* Offers an incubating user their own Hive account once BOTH
             butrauth (may they) and our own signal (have they earned it)
             agree. Shares the one-prompt-at-a-time gate with the others. */}
@@ -1000,6 +1044,9 @@ function App() {
               videoFile={editor.mode === 'video' ? editor.file : null}
               audioFile={editor.mode === 'audio' ? editor.file : null}
               audioTrackId={editor.audioTrackId}
+              sound={editor.mode === 'video' ? editor.sound : null}
+              aspect={editor.mode === 'video' ? editor.aspect : null}
+              episode={editor.mode === 'audio' ? editor.episode : null}
             />
           </MountWhenOpened>
         )}

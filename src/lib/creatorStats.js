@@ -46,9 +46,41 @@ export function fetchCreatorTimeseries(username, opts) {
   return get(`/creator-stats/timeseries?${qs(username, opts)}`);
 }
 
-// Per-video detail: retention curve + most-replayed buckets + stats.
-export function fetchVideoAnalytics(username, permlink) {
-  return get(`/creator-stats/video?username=${encodeURIComponent(username)}&permlink=${encodeURIComponent(permlink)}`);
+// Per-video detail: retention curve + most-replayed buckets + stats. `kind: 'audio'`
+// reads an audio upload's listening sessions instead.
+export function fetchVideoAnalytics(username, permlink, { kind } = {}) {
+  return get(`/creator-stats/video?username=${encodeURIComponent(username)}&permlink=${encodeURIComponent(permlink)}${kind === 'audio' ? '&kind=audio' : ''}`);
+}
+
+// Impressions, click-through rate and where viewers found the videos
+// (lib/cardReach.js counts them). opts: { days, content }.
+export function fetchCreatorReach(username, opts) {
+  return get(`/creator-stats/reach?${qs(username, opts)}`);
+}
+
+// Earnings per day and source: { series: [{ date, votes, curation, tips, ads,
+// boosts, lightningSats }], totals, byPost, rates }. 7 | 28 | 90 | 365 days.
+export function fetchCreatorEarnings(username, { days = 28 } = {}) {
+  return get(`/creator-stats/earnings?username=${encodeURIComponent(username)}&days=${days}`);
+}
+
+// The sources that are valued in HBD (Lightning stays in sats).
+export const EARNING_SOURCES = ['votes', 'curation', 'tips', 'ads', 'boosts'];
+export const fmtHbd = (v) => `$${Number(v || 0).toFixed(2)}`;
+export const earnedTotal = (row) => EARNING_SOURCES.reduce((n, k) => n + (Number(row?.[k]) || 0), 0);
+
+/**
+ * The stats page's money tile. The earnings by source are channel-wide and reach
+ * back 12 months at most, so they only answer for every kind of content over a
+ * range of days: { kind: 'earned', value } then. Filtered to some content, or
+ * over all time, the tile is the posts' payout (`payout`, which follows both):
+ * { kind: 'payout', value }. Also the payout while the earnings load or failed.
+ */
+export function moneyTile({ content = 'all', days = 0, earnings = null, payout = 0 } = {}) {
+  if (content === 'all' && days > 0 && earnings && !earnings.error && earnings.totals) {
+    return { kind: 'earned', value: earnedTotal(earnings.totals) };
+  }
+  return { kind: 'payout', value: Number(payout) || 0 };
 }
 
 // Lightweight check: does this video have any watch records? (gates the Stats button)

@@ -1,0 +1,39 @@
+{
+  "labels": {
+    "raidLine": "{name} melakukan raid bersama {count} penonton",
+    "raidTitle": "@{host} melakukan raid ke siaran lain",
+    "raidBody": "Semua yang menonton ikut pindah ke {title} dalam {seconds} dtk.",
+    "raidGoNow": "Pergi sekarang",
+    "raidStay": "Tetap di sini",
+    "pollBadge": "Polling",
+    "predictionBadge": "Prediksi",
+    "endsIn": "Berakhir dalam {time}",
+    "finalResults": "Hasil akhir",
+    "votes": "Suara: {count}",
+    "youVoted": "Kamu sudah memilih",
+    "signInToVote": "Masuk untuk memilih",
+    "voteFailed": "Tidak berhasil. Coba lagi.",
+    "pot": "Pot: {points} poin",
+    "balance": "Kamu punya {points} poin",
+    "stakeButton": "Pasang",
+    "stakePlaceholder": "Poin",
+    "yourStake": "Kamu memasang {points} poin di {option}",
+    "waitingForResult": "Menunggu hasilnya",
+    "outcomeWon": "{option} menang",
+    "youWon": "Kamu mendapat {points} poin kembali",
+    "cancelled": "Dibatalkan, semua tetap memegang poinnya",
+    "close": "Tutup"
+  },
+  "replay": {
+    "tab": "Tayangan ulang obrolan live",
+    "label": "Obrolan live, seirama dengan video",
+    "loading": "Memuat obrolan live",
+    "empty": "Tidak ada yang menulis di obrolan live.",
+    "seekTo": "Ke {{time}}",
+    "poll": "Polling",
+    "prediction": "Prediksi",
+    "votes": "Suara: {{count}}",
+    "won": "{{option}} menang",
+    "follow": "Kembali ke saat ini"
+  }
+}

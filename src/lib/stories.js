@@ -16,6 +16,9 @@ import {
   Providers,
 } from '../hive-api/aioha';
 import { t } from '../i18n';
+import {
+  useNotifyLevels, levelOf, levelAllows, useCheckerNotifications, markCheckerNotificationsSeen,
+} from './notifyLevels';
 
 // ─── Seen, on this device ───────────────────────────────────────────────────
 // The checker answers "seen" from watch_history, which is only written while the
@@ -60,9 +63,14 @@ export function markStorySeen(owner, ...permlinks) {
 
 /** Mark every story in a list seen (this browser only): "Mark all read". */
 export function markStoriesSeen(stories) {
+  let checkerUser = null;
   for (const s of stories || []) {
+    // The checker's own notifications ride along in this list (see
+    // useStoryNotifications), with one "seen until" for all of them.
+    if (s._checker) { if (!s.seen) checkerUser = s._viewer; continue; }
     if (!s.seen) markStorySeen(s.owner, s.permlink, s.hive_permlink);
   }
+  if (checkerUser) markCheckerNotificationsSeen(checkerUser);
 }
 
 // Re-render on a change from this tab (event) or another one (storage).
@@ -130,8 +138,17 @@ export function useStoryNotifications(user) {
     refetchInterval: 60 * 1000,
   });
 
+  // Per-creator levels: Highlights and Off leave stories out (lib/notifyLevels.js).
+  const levels = useNotifyLevels(user);
+  // The checker's own notifications ("went live", collab invites) travel in the
+  // same list, marked `_checker`, so every place that shows stories (the bell,
+  // /notifications) shows them and lights the same dot. StoryNotifications draws
+  // them as their own section; markStoriesSeen marks them seen.
+  const { items: checkerItems } = useCheckerNotifications(user);
+
   // The checker only returns live stories, and this refetches every minute.
   const stories = (data?.stories || [])
+    .filter((s) => levelAllows(levelOf(levels, s.owner), 'stories'))
     .map((s) => ({
       ...s,
       seen: s.seen || isStorySeenLocally(s.owner, s.permlink) || isStorySeenLocally(s.owner, s.hive_permlink),
@@ -139,7 +156,8 @@ export function useStoryNotifications(user) {
   // seenVersion only exists to recompute the above after markStorySeen().
   void seenVersion;
 
-  return { stories, unseenCount: stories.filter((s) => !s.seen).length };
+  const all = [...stories, ...checkerItems.map((n) => ({ ...n, _checker: true, _viewer: user }))];
+  return { stories: all, unseenCount: all.filter((s) => !s.seen).length };
 }
 
 // ─── The countdown ring ─────────────────────────────────────────────────────

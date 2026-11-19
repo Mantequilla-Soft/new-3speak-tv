@@ -1,0 +1,39 @@
+{
+  "labels": {
+    "raidLine": "{name} raidt met {count} kijkers",
+    "raidTitle": "@{host} raidt een andere stream",
+    "raidBody": "Iedereen die kijkt gaat over {seconds} s mee naar {title}.",
+    "raidGoNow": "Nu gaan",
+    "raidStay": "Hier blijven",
+    "pollBadge": "Peiling",
+    "predictionBadge": "Voorspelling",
+    "endsIn": "Eindigt over {time}",
+    "finalResults": "Eindstand",
+    "votes": "Stemmen: {count}",
+    "youVoted": "Je hebt gestemd",
+    "signInToVote": "Log in om te stemmen",
+    "voteFailed": "Dat lukte niet. Probeer het opnieuw.",
+    "pot": "Pot: {points} punten",
+    "balance": "Je hebt {points} punten",
+    "stakeButton": "Inzetten",
+    "stakePlaceholder": "Punten",
+    "yourStake": "Je hebt {points} punten op {option} gezet",
+    "waitingForResult": "Wachten op de uitslag",
+    "outcomeWon": "{option} heeft gewonnen",
+    "youWon": "Je krijgt {points} punten terug",
+    "cancelled": "Geannuleerd, iedereen houdt zijn punten",
+    "close": "Sluiten"
+  },
+  "replay": {
+    "tab": "Herhaling van de livechat",
+    "label": "De livechat, gelijk met de video",
+    "loading": "Livechat laden",
+    "empty": "Niemand schreef in de livechat.",
+    "seekTo": "Naar {{time}}",
+    "poll": "Peiling",
+    "prediction": "Voorspelling",
+    "votes": "Stemmen: {{count}}",
+    "won": "{{option}} heeft gewonnen",
+    "follow": "Terug naar nu"
+  }
+}

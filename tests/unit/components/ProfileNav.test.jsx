@@ -8,13 +8,14 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { act, screen, waitFor, within } from '@testing-library/react'
 import { useNavigate } from 'react-router-dom'
 import { renderWithProviders } from './_render.jsx'
+import i18n from '../../../src/i18n'
 
 const m = vi.hoisted(() => ({}))
 vi.mock('sonner', async () => (await import('./_render.jsx')).sonnerModule())
 vi.mock('../../../src/hive-api/aioha', async () => (await import('./_render.jsx')).aiohaModule())
 vi.mock('../../../src/utils/hiveUtils', () => ({ getVotePower: (...a) => m.votePower(...a) }))
 vi.mock('../../../src/utils/hiveNode', () => ({ getHiveUrl: () => 'https://api.hive.example/', ensureHealthyNode: async () => 'https://node.example/' }))
-vi.mock('../../../src/utils/config', async (importOriginal) => ({ ...(await importOriginal()), adsEnabledFor: () => m.ads }))
+vi.mock('../../../src/utils/config', async (importOriginal) => ({ ...(await importOriginal()), adsEnabledFor: () => m.ads, automationsEnabledFor: () => m.automations }))
 vi.mock('../../../src/hooks/useCanImportVideos', () => ({ default: () => false }))
 vi.mock('../../../src/hooks/getUserDetails', () => ({ useGetMyQuery: () => ({ data: null }) }))
 vi.mock('../../../src/utils/avatarCache', () => ({ useAvatarUrl: (u) => `/img/u/${u}/avatar` }))
@@ -52,7 +53,7 @@ function mount(props = {}) {
 beforeEach(() => {
   Object.assign(m, {
     votePower: vi.fn(async () => ({ vp: 8750, rcPercent: 64.321 })),
-    ads: false, backlog: 0, invites: [], translator: false,
+    ads: false, automations: false, backlog: 0, invites: [], translator: false,
     pwa: { canInstallPrompt: false, isIOS: false, showInstall: false, promptInstall: vi.fn() },
   })
   useAppStore.setState({ user: 'badadib', incubationHandle: null, LogOut: vi.fn() })
@@ -82,6 +83,16 @@ describe('the account menu', () => {
     expect(link.getAttribute('rel')).not.toMatch(/nofollow|ugc|sponsored/)
   })
 
+  it('keeps "Powered by Hive" in English in every language, like the site footer', async () => {
+    await i18n.changeLanguage('de')
+    try {
+      mount()
+      expect(screen.getByRole('link', { name: 'Powered by Hive' })).toHaveAttribute('href', 'https://hive.io')
+    } finally {
+      await i18n.changeLanguage('en')
+    }
+  })
+
   it('lists the pages every member gets, as menu items', () => {
     const { menu } = mount()
     // The visible label only: the Material Symbols glyph is ligature text.
@@ -90,8 +101,19 @@ describe('the account menu', () => {
     expect(items).toEqual([
       'Switch', 'Channel', 'Studio', 'Wallet', 'Playlists', 'History', 'Badges',
       // Settings as a row, About and FAQ along the bottom (owner 2026-11-12).
-      'Analytics', 'Groups', 'Live', 'Chat', 'Rankings', 'Settings', 'About 3Speak', 'FAQ',
+      'Analytics', 'Comment inbox', 'Groups', 'Live', 'Chat', 'Rankings', 'Settings', 'About 3Speak', 'FAQ',
     ])
+  })
+
+  it('the comment inbox is the Comments tab of your own profile', () => {
+    const { menu } = mount()
+    expect(within(menu()).getByRole('menuitem', { name: 'Comment inbox' })).toHaveAttribute('href', '/profile?tab=comments')
+  })
+
+  it('adds Automations (closed beta) only for the accounts in it', () => {
+    m.automations = true
+    const { menu } = mount()
+    expect(within(menu()).getByRole('menuitem', { name: 'Automations' })).toHaveAttribute('href', '/automations')
   })
 
   it('adds Advertise, invite links, the translation editor and the publish backlog for those who have them', async () => {
@@ -112,6 +134,7 @@ describe('the account menu', () => {
     expect(within(menu()).getByText('@newbie')).toBeInTheDocument()
     expect(within(menu()).queryByRole('menuitem', { name: 'Wallet' })).not.toBeInTheDocument()
     expect(within(menu()).queryByRole('menuitem', { name: 'Analytics' })).not.toBeInTheDocument()
+    expect(within(menu()).queryByRole('menuitem', { name: 'Comment inbox' })).not.toBeInTheDocument()
     expect(within(menu()).queryByText('VP')).not.toBeInTheDocument()
   })
 

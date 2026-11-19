@@ -1,15 +1,21 @@
 // Central Hive RPC node manager.
 //
-// The candidate list lives ONLY in config (HIVE_API_NODES) — no node is
+// The candidate list lives ONLY in config (HIVE_KNOWN_NODES) — no node is
 // hardcoded anywhere else. On app open we race every candidate with a cheap
 // health probe, pick the first that answers, and pin it for the whole
 // session (sessionStorage). All Hive access goes through the shared
 // `hiveClient` proxy / `getHiveUrl()` so everything uses that one node, with
 // the remaining nodes kept as fast dhive failover if it dies mid-session.
+//
+// Settings can replace the automatic pick with a node of the viewer's choice
+// (one of the known ones or their own, HIVE_NODE_CHOICE at load, setNodeChoice
+// after): that node is used without a race, and the known nodes only take
+// over if it fails. A change applies at once, no reload: every Hive call asks
+// getHiveUrl() / goes through hiveClient.
 
 import axios from 'axios';
 import { Client } from '@hiveio/dhive';
-import { HIVE_API_NODES } from './config';
+import { HIVE_KNOWN_NODES, HIVE_NODE_CHOICE, HIVE_NODE_CHOICE_KEY } from './config';
 
 // v2: the probe now also requires hivemind, so old (possibly hivemind-less)
 // pins from a previous build must not be trusted.
@@ -20,14 +26,17 @@ const CLIENT_OPTS = { timeout: 3000, failoverThreshold: 2, consoleOnFailover: tr
 
 // Ordered candidate list (de-duped). First entry is the provisional default
 // until the health pick resolves.
-const CANDIDATES = [...new Set(HIVE_API_NODES.filter(Boolean))];
+// (the known ones: a node picked in Settings is kept apart, in `choice`)
+const CANDIDATES = [...new Set(HIVE_KNOWN_NODES.filter(Boolean))];
 
 function sessionNode() {
   try { return sessionStorage.getItem(SESSION_KEY) || null; } catch { return null; }
 }
 
 // The currently-chosen primary node (sticky for the session).
-let chosen = sessionNode() || CANDIDATES[0];
+// The node picked in Settings, null = automatic
+let choice = HIVE_NODE_CHOICE;
+let chosen = choice || sessionNode() || CANDIDATES[0];
 
 function buildClient(primary) {
   const order = [primary, ...CANDIDATES.filter((n) => n !== primary)];
@@ -134,10 +143,23 @@ export function ensureHealthyNode() {
 
   const { first, healthy } = probeAll();
 
+  // The viewer's own pick: used as it is, the probes only build the failover
+  // list behind it.
+  if (choice) {
+    const mine = choice;
+    healthy.then((ok) => {
+      _healthy = ok.filter((n) => n !== mine);
+      if (choice === mine && chosen === mine) adoptHealthy(chosen, _healthy);
+    }).catch(() => { /* keep the known nodes */ });
+    _ensure = Promise.resolve(chosen);
+    return _ensure;
+  }
+
   // Runs in the background — never blocks the first Hive call. Narrows the
   // failover list to hivemind-capable nodes, and re-pins if the node we
   // adopted (including one restored from sessionStorage) turns out unusable.
   healthy.then((ok) => {
+    if (choice) return;            // picked in Settings meanwhile
     _healthy = ok;
     if (!ok.length) return;
     if (!ok.includes(chosen)) {
@@ -157,6 +179,7 @@ export function ensureHealthyNode() {
       return chosen;
     }
     const winner = await first;
+    if (choice) return chosen;     // picked in Settings meanwhile
     chosen = winner || CANDIDATES[0];
     try { sessionStorage.setItem(SESSION_KEY, chosen); } catch { /* ignore */ }
     adoptHealthy(chosen, null);
@@ -186,6 +209,8 @@ const _demoted = new Set();
 
 const norm = (url) => String(url || '').trim().replace(/\/+$/, '');
 const CANDIDATE_SET = new Set(CANDIDATES.map(norm));
+// A node of ours: a known one, or the one picked in Settings
+const isNode = (url) => CANDIDATE_SET.has(norm(url)) || (!!choice && norm(url) === norm(choice));
 
 /**
  * Stop using `url` for this session and pin the next usable node. Returns the
@@ -216,7 +241,7 @@ const NODE_FAILURE_STATUS = new Set([429, 500, 502, 503, 504]);
 // error. Retrying a broadcast is safe, the chain rejects a duplicate tx.
 axios.interceptors.response.use(undefined, (error) => {
   const cfg = error?.config;
-  if (!cfg || !CANDIDATE_SET.has(norm(cfg.url)) || axios.isCancel(error)) throw error;
+  if (!cfg || !isNode(cfg.url) || axios.isCancel(error)) throw error;
   const status = error.response?.status;
   if (status && !NODE_FAILURE_STATUS.has(status)) throw error;
   const tries = (cfg.hiveNodeTries || 0) + 1;
@@ -225,3 +250,53 @@ axios.interceptors.response.use(undefined, (error) => {
   if (norm(next) === norm(cfg.url)) throw error;
   return axios.request({ ...cfg, url: next, hiveNodeTries: tries });
 });
+
+// ---------------------------------------------------------------------------
+// The node choice in Settings (About).
+
+/** The known nodes Settings lists. */
+export const KNOWN_NODES = HIVE_KNOWN_NODES;
+
+/** The node picked in Settings, or null for automatic. */
+export function getNodeChoice() {
+  return choice;
+}
+
+/**
+ * Save the choice (a https:// URL, or null for automatic) and switch to it
+ * now. Automatic runs a fresh race; resolves with the node in use.
+ */
+export function setNodeChoice(url) {
+  choice = url ? norm(url) : null;
+  try {
+    if (choice) localStorage.setItem(HIVE_NODE_CHOICE_KEY, choice);
+    else localStorage.removeItem(HIVE_NODE_CHOICE_KEY);
+    // Automatic starts with a fresh race instead of the old session pin.
+    sessionStorage.removeItem(SESSION_KEY);
+  } catch { /* storage blocked: kept for this visit only */ }
+  _demoted.clear();
+  _ensure = null;
+  if (choice) {
+    chosen = choice;
+    adoptHealthy(chosen, (_healthy || CANDIDATES).filter((n) => n !== choice));
+  } else {
+    chosen = CANDIDATES[0];
+    adoptHealthy(chosen, _healthy);
+  }
+  return ensureHealthyNode();
+}
+
+/** The nodes in failover order, the one in use first (for raw callers). */
+export function getHiveNodes() {
+  return [...new Set([chosen, ...(choice ? [choice] : []), ...CANDIDATES])];
+}
+
+/**
+ * Whether `url` can serve 3Speak (hived and hivemind, reachable from this
+ * page, so CORS too), and how long it took. Resolves { ok, ms }.
+ */
+export async function checkNode(url) {
+  const started = Date.now();
+  const ok = await probe(norm(url)).catch(() => false);
+  return { ok, ms: Date.now() - started };
+}

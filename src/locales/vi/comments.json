@@ -28,7 +28,9 @@
     },
     "errors": {
       "pickStars": "Vui lòng chọn số sao",
-      "sendFailed": "Không thể gửi đánh giá của bạn. Vui lòng thử lại."
+      "sendFailed": "Không thể gửi đánh giá của bạn. Vui lòng thử lại.",
+      "screenshotUnreadable": "Tệp này không phải là ảnh mà chúng tôi đọc được.",
+      "screenshotTooBig": "Ảnh quá lớn. Hãy thử ảnh nhỏ hơn."
     },
     "thanks": "Cảm ơn góp ý của bạn! 🙏",
     "sendFeedback": "Gửi góp ý",
@@ -39,6 +41,12 @@
     "recommendLabel": "Bạn có giới thiệu 3Speak cho người khác không? <opt>(không bắt buộc)</opt>",
     "moreLabel": "Kể thêm cho chúng tôi <opt>(không bắt buộc)</opt>",
     "placeholder": "Bạn thích điều gì? Điều gì có thể tốt hơn?",
+    "screenshotLabel": "Ảnh chụp màn hình <opt>(không bắt buộc)</opt>",
+    "attachScreenshot": "Đính kèm ảnh chụp màn hình",
+    "screenshotPreparing": "Đang chuẩn bị ảnh…",
+    "screenshotAlt": "Ảnh chụp màn hình của bạn",
+    "removeScreenshot": "Xóa ảnh chụp màn hình",
+    "screenshotHint": "Chỉ đội ngũ 3Speak xem được. Bạn cũng có thể dán ảnh vào đây.",
     "notNow": "Để sau",
     "sending": "Đang gửi…"
   },
@@ -141,5 +149,22 @@
     "creator": "Nhà sáng tạo",
     "empty": "Chưa có bình luận nào",
     "emptyHint": "Bình luận gắn với một khoảnh khắc sẽ hiện trên dòng thời gian của video."
+  },
+  "focus": {
+    "open": "Chế độ tập trung",
+    "aria": "Chế độ tập trung: viết bình luận",
+    "done": "Xong",
+    "sound": "Âm thanh máy đánh chữ",
+    "words_other": "{{count}} từ",
+    "music": "Nhạc nền",
+    "musicOff": "Tắt",
+    "track1": "Mưa",
+    "track2": "Piano đêm",
+    "track3": "Lò sưởi"
+  },
+  "editor": {
+    "full": "Trình soạn thảo đầy đủ",
+    "compact": "Trình soạn thảo gọn",
+    "toolbar": "Định dạng"
   }
 }

@@ -285,8 +285,8 @@
     },
     "remix": {
       "label": "Cho phép remix và clip",
-      "info": "Cho phép người khác tạo remix và clip từ video này. Bạn sẽ được ghi nhận là tác giả gốc và nhận tối thiểu 5% dưới dạng người thụ hưởng.",
-      "hint": "Bạn nhận ít nhất 5% từ mỗi bản remix"
+      "info": "Cho phép người khác tạo bản remix và clip từ video này. Bạn được ghi là tác giả gốc và nhận 15% phần thưởng của một bản remix (ít hơn với remix của remix, tối thiểu 5%).",
+      "hint": "Bạn nhận 15% từ mỗi bản remix của video này"
     },
     "nsfw": {
       "label": "Đánh dấu là NSFW",
@@ -338,7 +338,13 @@
     "shareRewards": "Chia sẻ phần thưởng",
     "shareRewardsSub": "Chia với cộng tác viên",
     "advanced": "NSFW / phần thưởng",
-    "advancedSub": "Nâng cao"
+    "advancedSub": "Nâng cao",
+    "language": {
+      "label": "Ngôn ngữ",
+      "hint": "Nói trong video",
+      "info": "Ngôn ngữ được nói trong video. Nó được lưu cùng bài đăng trên Hive, để sau này người xem có thể tìm video bằng ngôn ngữ của họ.",
+      "none": "Không có lời nói (nhạc, âm thanh)"
+    }
   },
   "review": {
     "payoutDeclined": "Từ chối (phần thưởng bị hủy)",
@@ -359,7 +365,8 @@
     "postShort": "Đăng Shorts",
     "postStory": "Đăng tin",
     "postVideo": "Đăng video",
-    "backToTimeline": "Quay lại dòng thời gian"
+    "backToTimeline": "Quay lại dòng thời gian",
+    "benesDeclined": "Đã từ chối thanh toán: họ cũng không nhận được gì, phần ghi công vẫn ở bài đăng."
   },
   "publishing": {
     "titleShort": "Đang xuất bản Short",

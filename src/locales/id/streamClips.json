@@ -1,0 +1,70 @@
+{
+  "readyTitle": "Klipmu sudah siap",
+  "readySub": "30 detik terakhir dari siaran.",
+  "postShort": "Posting sebagai Short",
+  "download": "Unduh",
+  "delete": "Hapus",
+  "shareHost": "@{{host}} mendapat {{percent}}% hadiah Short ini: ini siarannya.",
+  "shareClipper": "@{{clipper}} membuat klip ini dan mendapat {{percent}}% hadiah Short ini.",
+  "loginToPost": "Masuk untuk memposting klip sebagai Short.",
+  "allClips": "Semua klipmu dari siaran ini",
+  "postFailed": "Klip tidak bisa dibuka untuk diposting. Coba lagi.",
+  "deleteConfirm": "Hapus klip ini?",
+  "deleteFailed": "Klip tidak bisa dihapus.",
+  "title": "Momen terbaik",
+  "subHost": "Klip dari siaranmu, siap diposting sebagai Short. Disimpan selama 2 hari.",
+  "subViewer": "Klipmu dari siaran ini. Disimpan selama 2 hari.",
+  "error": "Klip tidak bisa dimuat sekarang.",
+  "empty": "Belum ada klip. Momen ramai di chat dan boost muncul di sini.",
+  "at": "pada {{time}}",
+  "source": {
+    "auto": "Sorotan",
+    "mine": "Klipmu",
+    "by": "Diklip oleh @{{user}}",
+    "guest": "Diklip oleh tamu"
+  },
+  "reasons": {
+    "chat": "Chat ramai",
+    "boosts": "Boost",
+    "big_boost": "Boost besar"
+  },
+  "momentsTitle": "Momen lainnya",
+  "momentsSub": "Buat Short dari rekaman setelah selesai diproses.",
+  "makeShort": "Buat Short",
+  "notif": {
+    "host": "Klip dari siaranmu siap diposting sebagai Short ({{count}})",
+    "clipper": "Klipmu dari siaran @{{user}} sudah siap ({{count}})"
+  },
+  "pendingTitle": "Klipmu akan siap saat siaran berakhir",
+  "pendingSub": "Klip dipotong dari rekaman setelah siaran. Kamu bisa menemukannya di Klip siaranmu.",
+  "status": {
+    "pending": "Siap setelah siaran",
+    "unavailable": "Tidak bisa dibuat"
+  },
+  "reasonUnavailable": {
+    "past_cap": "Setelah 30 menit gratis",
+    "past_end": "Setelah rekaman berakhir",
+    "no_recording": "Siaran tidak direkam",
+    "failed": "Tidak bisa dipotong"
+  },
+  "summary": {
+    "title": "{{count}} klip dari siaranmu",
+    "pending": "Klip sedang dipotong dari rekaman dan akan siap dalam beberapa menit. Kami akan memberi tahu.",
+    "ready": "Semua klip sudah siap.",
+    "byUser": "@{{user}}: {{count}}",
+    "auto": "Otomatis: {{count}}",
+    "guests": "Tamu: {{count}}"
+  },
+  "page": {
+    "title": "Klip siaranmu",
+    "sub": "Klip yang kamu buat dan klip dari siaranmu. Klip disimpan selama {{hours}} jam.",
+    "empty": "Belum ada klip. Buat klip dari siaran langsung, atau mulai siaran: klip penontonmu muncul di sini.",
+    "select": "Pilih",
+    "postSelected": "Posting yang dipilih sebagai Short ({{count}})",
+    "queueNext": "Posting berikutnya ({{count}} lagi)",
+    "queueClear": "Kosongkan",
+    "ofStream": "Siaran @{{host}}",
+    "yours": "Siaranmu",
+    "open": "Klip siaranmu"
+  }
+}

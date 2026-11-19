@@ -1,0 +1,11 @@
+{
+  "label": "Przewiń",
+  "goLive": "Wróć na żywo",
+  "title": "Przewiń do {{minutes}} min wstecz",
+  "error": "Przewijanie jest teraz niedostępne.",
+  "back10": "10 sekund wstecz",
+  "forward10": "10 sekund do przodu",
+  "play": "Odtwórz",
+  "pause": "Pauza",
+  "seek": "Pozycja w transmisji"
+}

@@ -17,6 +17,7 @@ vi.mock('../../../src/utils/api', () => ({ api: { auth: {} } }))
 const axiosPost = vi.hoisted(() => vi.fn())
 vi.mock('axios', () => ({ default: { post: axiosPost } }))
 vi.mock('../../../src/utils/config', () => ({ HIVE_API_URL: 'https://hive.test', API_URL_FROM_WEST: 'https://west.test' }))
+vi.mock('../../../src/utils/hiveNode', () => ({ getHiveUrl: () => 'https://hive.test' }))
 
 const persisted = () => JSON.parse(localStorage.getItem('user-store'))
 
@@ -37,9 +38,28 @@ describe('first visit defaults', () => {
     expect(s).toMatchObject({
       theme: 'dark', homeCardSize: 'large', spotlightSize: 'small', previewEnabled: true,
       hideWatched: true, hideAi: true, inlineShorts: true, privateMode: false,
-      shortsFeedMode: 'discover', shortsCommentBar: false, openShortsOnStart: false,
+      shortsFeedMode: 'discover', shortsCommentBar: false, resumeLastPage: true,
       watchHistoryEnabled: true, showNsfw: false, interests: [], appUpdatedFrom: null,
     })
+  })
+})
+
+describe('Continue where I left off by default', () => {
+  it('is on for a first visit, saved at once so the next visit still has it', async () => {
+    const s = (await loadStore()).getState()
+    expect(s.resumeLastPage).toBe(true)
+    expect(persisted().state.resumeLastPage).toBe(true)
+  })
+
+  it('is off for anyone who used 3Speak before, whatever they left behind', async () => {
+    for (const key of ['3speak_app_version', '3speak_cookie_consent']) {
+      localStorage.clear()
+      localStorage.setItem(key, 'x')
+      expect((await loadStore()).getState().resumeLastPage).toBe(false)
+    }
+    localStorage.clear()
+    localStorage.setItem('user-store', JSON.stringify({ version: 5, state: { theme: 'light' } }))
+    expect((await loadStore()).getState().resumeLastPage).toBe(false)
   })
 })
 
@@ -48,13 +68,14 @@ describe('what survives a reload', () => {
     const store = await loadStore()
     store.getState().setUser('badadib')
     store.getState().setPrivateMode(true)
+    store.getState().setResumeLastPage(true)
     store.getState().setInterests(['music'])
     store.getState().setAppUpdatedFrom('1.80.0')
     store.getState().setMiniPlayer({ author: 'badadib', permlink: 'p' })
 
     const saved = persisted()
-    expect(saved.version).toBe(4)
-    expect(saved.state).toMatchObject({ user: 'badadib', privateMode: true, interests: ['music'], theme: 'dark' })
+    expect(saved.version).toBe(5)
+    expect(saved.state).toMatchObject({ user: 'badadib', privateMode: true, resumeLastPage: true, interests: ['music'], theme: 'dark' })
     expect(saved.state).not.toHaveProperty('appUpdatedFrom')
     expect(saved.state).not.toHaveProperty('miniPlayer')
     expect(saved.state).not.toHaveProperty('authenticated')
@@ -68,6 +89,13 @@ describe('what survives a reload', () => {
 })
 
 describe('migrating an older saved store', () => {
+  it('drops an old "Open Shorts on start" choice (the setting is gone)', async () => {
+    localStorage.setItem('user-store', JSON.stringify({ version: 4, state: { openShortsOnStart: true, theme: 'light' } }))
+    const s = (await loadStore()).getState()
+    expect(s.openShortsOnStart).toBeUndefined()
+    expect(s.theme).toBe('light')
+  })
+
   it('drops an old "Simple feeds" choice (the setting is gone)', async () => {
     localStorage.setItem('user-store', JSON.stringify({ version: 3, state: { simpleFeed: true, theme: 'light' } }))
     const s = (await loadStore()).getState()
@@ -118,7 +146,7 @@ describe('the setters', () => {
   it.each([
     ['setShortsCommentBar', 'shortsCommentBar'],
     ['setInlineShorts', 'inlineShorts'],
-    ['setOpenShortsOnStart', 'openShortsOnStart'],
+    ['setResumeLastPage', 'resumeLastPage'],
     ['setHideAi', 'hideAi'],
   ])('%s always stores a boolean, from a value or an updater', (setter, key) => {
     store.getState()[setter]('yes')

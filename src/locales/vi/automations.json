@@ -1,0 +1,480 @@
+{
+  "menuEntry": "Tự động hóa",
+  "title": "Tự động hóa",
+  "beta": "Beta",
+  "subtitle": "Để 3Speak lo phần việc tiếp theo khi có điều gì đó xảy ra trên kênh hoặc trong ví của bạn: đăng snap, Short, âm thanh hoặc video, bình luận, upvote, reblog, hoặc báo cho Discord của bạn.",
+  "howItWorks": "3Speak kiểm tra kênh của bạn mỗi {{minutes}} phút. Mỗi bài đăng mới sẽ khởi chạy các tự động hóa đang bật cho nó, và mọi thứ chúng đăng đều đứng tên bạn, qua quyền đăng bài bạn đã cấp cho 3Speak. Bài đăng do tự động hóa tạo ra không bao giờ khởi chạy tự động hóa khác.",
+  "gate": {
+    "signIn": "Đăng nhập để thiết lập tự động hóa.",
+    "closedTitle": "Chưa khả dụng",
+    "closed": "Tự động hóa đang thử nghiệm kín và chưa mở cho tài khoản của bạn.",
+    "unavailable": "Hiện máy chủ này chưa có tự động hóa.",
+    "proTitle": "Tính năng của 3Speak Pro",
+    "pro": "Tự động hóa là một phần của 3Speak Pro.",
+    "getPro": "Nâng cấp lên 3Speak Pro",
+    "skipPro": "Bỏ qua kiểm tra Pro (người thử nghiệm)",
+    "skipProHint": "Là tài khoản thử nghiệm, bạn có thể dùng thử tự động hóa mà không cần Pro.",
+    "proSkipped": "Chế độ thử nghiệm: đã bỏ qua kiểm tra Pro cho tài khoản của bạn.",
+    "restorePro": "Bật lại kiểm tra Pro"
+  },
+  "grant": {
+    "needed": "Tự động hóa đăng bài thay bạn. Trước tiên hãy cho phép 3Speak đăng bài trên tài khoản của bạn.",
+    "button": "Cho phép 3Speak đăng bài"
+  },
+  "list": {
+    "new": "Tự động hóa mới",
+    "emptyTitle": "Chưa có tự động hóa nào",
+    "empty": "Bắt đầu từ một mẫu hoặc tự tạo: chọn điều kích hoạt, rồi kéo vào những gì sẽ xảy ra.",
+    "steps_other": "{{count}} bước",
+    "lastRun": "Lần chạy gần nhất:",
+    "edit": "Sửa",
+    "runs": "Lượt chạy",
+    "delete": "Xóa",
+    "cancel": "Hủy",
+    "notFound": "Tự động hóa này không tồn tại (hoặc không còn nữa).",
+    "deleteTitle": "Xóa \"{{name}}\"?",
+    "deleteBody": "Tự động hóa và lịch sử chạy của nó sẽ bị xóa. Các bài nó đã đăng vẫn được giữ lại.",
+    "on": "Bật",
+    "off": "Tắt"
+  },
+  "runs": {
+    "title": "Lượt chạy của \"{{name}}\"",
+    "empty": "Chưa có lượt chạy nào",
+    "emptyHint": "Một lượt chạy bắt đầu khi bạn có bài đăng mới phù hợp trong lúc tự động hóa đang bật.",
+    "steps": "Đã xong {{done}}/{{count}} bước",
+    "attempts_other": "{{count}} lần thử",
+    "status": {
+      "queued": "Đang xếp hàng",
+      "running": "Đang chạy",
+      "waiting": "Đang chờ",
+      "done": "Xong",
+      "failed": "Thất bại",
+      "cancelled": "Đã dừng"
+    }
+  },
+  "editor": {
+    "back": "Quay lại",
+    "close": "Đóng",
+    "done": "Xong",
+    "name": "Tên",
+    "namePlaceholder": "Đặt tên cho tự động hóa này",
+    "enabled": "Bật tự động hóa",
+    "test": "Thử",
+    "save": "Lưu",
+    "toolboxTasks": "Làm việc này",
+    "toolboxLogic": "Quyết định",
+    "whenTitle": "Khi điều này xảy ra",
+    "event": "Sự kiện",
+    "eventChangeNote": "Các bước không hợp với sự kiện mới sẽ có huy hiệu cảnh báo.",
+    "placeholders": "Biến chèn",
+    "insert": "Chèn",
+    "howTo": "Kéo các bước từ hộp công cụ lên đường nối. Chọn một bước để sửa nó, hoặc chọn khoảng trống để đổi sự kiện.",
+    "stepName": "Tên bước",
+    "optional": "không bắt buộc",
+    "tagsHint": "Tối đa {{max}} thẻ, cách nhau bằng dấu cách.",
+    "emptyHint": "Kéo một bước từ hộp công cụ lên đường nối",
+    "accounts": "Tài khoản",
+    "accountsHint": "Tối đa {{max}} tài khoản Hive, cách nhau bằng dấu cách."
+  },
+  "test": {
+    "title": "Chạy thử",
+    "sample": "Bạn chưa có bài đăng loại này, nên bản thử đã dùng giá trị mẫu.",
+    "onPost": "Đã thử trên bài đăng phù hợp mới nhất của bạn: {{title}}",
+    "nothingPosted": "Chưa có gì được đăng. Đây là việc mỗi bước sẽ làm.",
+    "shortDetail": "Một Short từ giây {{start}}, dài {{length}} giây.",
+    "noSteps": "Không có bước nào chạy cho bài đăng này.",
+    "voteOn": "Upvote {{on}} với {{weight}}%.",
+    "reblogOn": "Reblog {{on}}.",
+    "skipped": {
+      "self": "Bỏ qua: đó là chính bạn.",
+      "no_sender": "Bỏ qua: không có ai để upvote (tip qua Lightning hoặc boost trên buổi phát trực tiếp không có người gửi trên Hive).",
+      "no_recent_post": "Bỏ qua: họ không có bài đăng nào trong 7 ngày qua."
+    }
+  },
+  "events": {
+    "video_published": {
+      "label": "Tôi đăng một video",
+      "desc": "Video bạn tự tải lên. Video được nhập có sự kiện riêng."
+    },
+    "short_published": {
+      "label": "Tôi đăng một Short",
+      "desc": "Shorts bạn đăng, từ trình tải lên, trình chỉnh sửa hoặc một clip."
+    },
+    "video_imported": {
+      "label": "Một video của tôi được nhập",
+      "desc": "Video và Shorts mà công cụ nhập mang về từ YouTube, TikTok và các nền tảng khác."
+    },
+    "podcast_published": {
+      "label": "Tôi đăng một tập podcast",
+      "desc": "Các tập podcast và phỏng vấn, được tải lên hoặc nhập từ nguồn cấp của bạn."
+    },
+    "audio_published": {
+      "label": "Tôi đăng bất kỳ âm thanh nào",
+      "desc": "Mọi bài đăng âm thanh: podcast, nhạc, sách nói và tin nhắn thoại."
+    },
+    "stream_started": {
+      "label": "Tôi phát trực tiếp",
+      "desc": "Khi bài đăng cho buổi phát trực tiếp của bạn được đăng."
+    },
+    "tip_received": {
+      "label": "Tôi nhận được tip",
+      "desc": "Một khoản tip HIVE, HBD hoặc Lightning cho một video của bạn (memo liên kết đến video)."
+    },
+    "boost_received": {
+      "label": "Tôi nhận được boost",
+      "desc": "Một boost cho một bài đăng của bạn, hoặc cho buổi phát trực tiếp của bạn."
+    },
+    "power_up": {
+      "label": "Power up",
+      "desc": "Bạn power up, hoặc ai đó power up HIVE vào tài khoản của bạn."
+    },
+    "poll_ended": {
+      "label": "Bình chọn của tôi kết thúc",
+      "desc": "Một bình chọn trong snap của bạn đã kết thúc."
+    },
+    "stream_poll_ended": {
+      "label": "Bình chọn trong buổi phát trực tiếp của tôi kết thúc",
+      "desc": "Một bình chọn hoặc dự đoán trong một buổi phát trực tiếp của bạn trong ba ngày qua đã kết thúc."
+    },
+    "someone_posted": {
+      "label": "Người tôi chọn đăng bài",
+      "desc": "Bài đăng của một tài khoản bạn liệt kê bên dưới: video, Short, âm thanh, podcast, snap, buổi phát trực tiếp hoặc bài viết."
+    }
+  },
+  "tasks": {
+    "post_snap": {
+      "label": "Đăng một snap",
+      "desc": "Một bài viết ngắn trong bảng tin snaps, trên tab Cộng đồng của hồ sơ bạn.",
+      "props": {
+        "text": "Nội dung snap",
+        "tags": "Thẻ"
+      }
+    },
+    "post_short": {
+      "label": "Đăng một Short",
+      "desc": "Cắt một clip từ video mới và đăng thành Short, khoảng 10 phút sau.",
+      "props": {
+        "start": "Bắt đầu từ giây",
+        "length": "Độ dài (giây)",
+        "vertical": "Dọc",
+        "caption": "Chú thích",
+        "tags": "Thẻ"
+      },
+      "hints": {
+        "start": "Vị trí clip bắt đầu trong video.",
+        "length": "Từ 5 đến 60 giây.",
+        "vertical": "Cắt phần giữa của video ngang thành 9:16."
+      }
+    },
+    "post_audio": {
+      "label": "Đăng âm thanh",
+      "desc": "Đăng phần tiếng của video mới thành bài âm thanh kèm ảnh bìa, khoảng 10 phút sau.",
+      "props": {
+        "title": "Tiêu đề",
+        "audioType": "Loại âm thanh",
+        "tags": "Thẻ"
+      }
+    },
+    "post_video": {
+      "label": "Đăng video",
+      "desc": "Đăng âm thanh mới thành video với ảnh bìa làm hình, khoảng 10 phút sau.",
+      "props": {
+        "title": "Tiêu đề",
+        "tags": "Thẻ"
+      }
+    },
+    "post_comment": {
+      "label": "Bình luận vào bài đăng",
+      "desc": "Một bình luận của bạn dưới bài đăng, để thêm liên kết, ghi công, lời cảm ơn hoặc kết quả.",
+      "props": {
+        "text": "Bình luận"
+      }
+    },
+    "upvote_post": {
+      "label": "Upvote bài đăng",
+      "desc": "Upvote của bạn cho bài đăng của họ.",
+      "props": {
+        "weight": "Mức vote theo %"
+      }
+    },
+    "reblog": {
+      "label": "Reblog bài đăng",
+      "desc": "Đưa bài đăng của họ lên blog của bạn.",
+      "props": {}
+    },
+    "upvote_sender": {
+      "label": "Upvote người gửi",
+      "desc": "Upvote của bạn cho bài đăng mới nhất của người đã tip, boost hoặc power up cho bạn (khi bài đó vẫn còn được trả thưởng).",
+      "props": {
+        "weight": "Mức vote theo %"
+      }
+    },
+    "send_discord": {
+      "label": "Gửi tới Discord",
+      "desc": "Một tin nhắn tới một kênh trong máy chủ Discord của bạn qua webhook. Không ai bị nhắc tên.",
+      "props": {
+        "webhook": "Địa chỉ webhook",
+        "text": "Tin nhắn"
+      },
+      "hints": {
+        "webhook": "Trong Discord: cài đặt kênh, Tích hợp, Webhook, Sao chép URL Webhook."
+      }
+    }
+  },
+  "if": {
+    "label": "Nếu",
+    "desc": "Đi theo nhánh Có khi điều kiện đúng, nếu không thì đi nhánh Không.",
+    "field": "Kiểm tra",
+    "pickField": "Chọn mục cần kiểm tra",
+    "operator": "Điều kiện",
+    "value": "Giá trị",
+    "branchesNote": "Kéo các bước vào nhánh Có và Không trên bảng vẽ.",
+    "branch": {
+      "yes": "Có",
+      "no": "Không"
+    },
+    "units": {
+      "seconds": "Giây",
+      "amount": "Số tiền",
+      "count": "Số lượng"
+    }
+  },
+  "fields": {
+    "title": "Tiêu đề",
+    "description": "Mô tả",
+    "tags": "Thẻ",
+    "duration": "Độ dài",
+    "community": "Cộng đồng",
+    "url": "Liên kết",
+    "platform": "Nhập từ",
+    "kind": "Loại",
+    "audioType": "Loại âm thanh",
+    "imported": "Đã nhập",
+    "from": "Từ",
+    "amount": "Số tiền",
+    "asset": "Loại tiền",
+    "message": "Lời nhắn",
+    "via": "Thanh toán bằng",
+    "boostKind": "Được boost",
+    "self": "Do tôi",
+    "question": "Câu hỏi",
+    "winner": "Lựa chọn thắng",
+    "votes": "Số phiếu",
+    "author": "Tài khoản",
+    "postKind": "Loại bài đăng"
+  },
+  "ops": {
+    "contains": "có chứa",
+    "not_contains": "không chứa",
+    "equals": "đúng bằng",
+    "starts_with": "bắt đầu bằng",
+    "has_tag": "có thẻ",
+    "not_has_tag": "không có thẻ",
+    "gt": "dài hơn",
+    "lt": "ngắn hơn",
+    "is": "là",
+    "is_not": "không phải là"
+  },
+  "choices": {
+    "youtube": "YouTube",
+    "tiktok": "TikTok",
+    "instagram": "Instagram",
+    "rumble": "Rumble",
+    "bitchute": "BitChute",
+    "rss": "Nguồn cấp podcast",
+    "video": "Video",
+    "short": "Short",
+    "podcast": "Podcast",
+    "interview": "Phỏng vấn",
+    "audiobook": "Sách nói",
+    "song": "Nhạc",
+    "voice_message": "Tin nhắn thoại",
+    "yes": "Có",
+    "no": "Không",
+    "HIVE": "HIVE",
+    "HBD": "HBD",
+    "hive": "Ví Hive",
+    "lightning": "Lightning",
+    "post": "Một bài đăng",
+    "stream": "Một buổi phát trực tiếp",
+    "audio": "Âm thanh",
+    "snap": "Snap"
+  },
+  "placeholders": {
+    "title": "tiêu đề bài đăng",
+    "description": "phần đầu mô tả",
+    "url": "liên kết của nó trên 3Speak",
+    "author": "tài khoản đã đăng bài (là bạn, với bài của chính bạn)",
+    "tags": "các thẻ dạng #hashtag",
+    "platform": "nơi nó được nhập về",
+    "from": "người gửi",
+    "amount": "số tiền",
+    "message": "lời nhắn gửi kèm",
+    "question": "câu hỏi của bình chọn",
+    "results": "mọi lựa chọn cùng số phiếu",
+    "winner": "lựa chọn có nhiều phiếu nhất",
+    "votes": "số người đã bình chọn"
+  },
+  "problems": {
+    "required": "Không được để trống.",
+    "too_long": "Quá dài.",
+    "over_limit": "Quá nhiều.",
+    "bad_tag": "Thẻ gồm 2 đến 24 chữ cái, chữ số hoặc dấu gạch ngang.",
+    "bad_webhook": "Đây không phải địa chỉ webhook Discord.",
+    "out_of_range": "Số này nằm ngoài phạm vi.",
+    "bad_field": "Chọn mục cần kiểm tra.",
+    "bad_operator": "Chọn một điều kiện.",
+    "bad_value": "Nhập giá trị phù hợp với điều kiện.",
+    "unknown_step": "3Speak không nhận ra bước này.",
+    "task_not_for_event": "Bước này không hợp với sự kiện (Short cần có video).",
+    "too_many_of_type": "Bước này không thể xuất hiện nhiều lần như vậy trong một tự động hóa.",
+    "too_many_steps": "Một tự động hóa có tối đa 12 bước.",
+    "too_deep": "Bước Nếu chỉ được lồng nhau tối đa 3 cấp.",
+    "bad_id": "Một bước bị lỗi. Hãy xóa và thêm lại.",
+    "bad_sequence": "Tự động hóa bị lỗi. Hãy tạo một cái mới.",
+    "empty": "Thêm ít nhất một bước.",
+    "no_event": "Chọn sự kiện kích hoạt.",
+    "no_name": "Đặt tên cho tự động hóa.",
+    "no_grant": "Trước tiên hãy cho phép 3Speak đăng bài thay bạn.",
+    "pro_required": "Đã tạm dừng: tự động hóa cần 3Speak Pro.",
+    "not_found": "Tự động hóa này không tồn tại (hoặc không còn nữa).",
+    "unknown": "Không thể dùng mục này.",
+    "no_post": "Không có bài đăng nào để trả lời.",
+    "no_audio": "Bài đăng này không có âm thanh 3Speak.",
+    "no_accounts": "Hãy liệt kê ít nhất một tài khoản.",
+    "too_many_accounts": "Tối đa {{max}} tài khoản.",
+    "bad_account": "Một trong các tài khoản không phải là tên tài khoản Hive.",
+    "bad_account_named": "\"{{name}}\" không phải là tên tài khoản Hive."
+  },
+  "designer": {
+    "contextMenu": {
+      "delete": "Xóa",
+      "duplicate": "Nhân bản",
+      "resetView": "Đặt lại khung nhìn",
+      "select": "Chọn",
+      "unselect": "Bỏ chọn"
+    },
+    "controlBar": {
+      "deleteSelectedStep": "Xóa bước đã chọn",
+      "redo": "Làm lại",
+      "resetView": "Đặt lại khung nhìn",
+      "turnOnOffDragAndDrop": "Bật hoặc tắt di chuyển bước",
+      "undo": "Hoàn tác",
+      "zoomIn": "Phóng to",
+      "zoomOut": "Thu nhỏ"
+    },
+    "smartEditor": {
+      "toggle": "Hiện hoặc ẩn bảng"
+    },
+    "toolbox": {
+      "search": "Tìm kiếm…",
+      "title": "Các bước"
+    }
+  },
+  "templates": {
+    "button": "Mẫu",
+    "title": "Mẫu",
+    "newTitle": "Tự động hóa mới",
+    "sub": "Bắt đầu từ một mẫu và sửa tùy ý, hoặc bắt đầu trống.",
+    "replaces": "Chọn một mẫu sẽ thay thế các bước trên khung vẽ.",
+    "groups": {
+      "videos": "Video",
+      "audio": "Âm thanh và podcast",
+      "live": "Trực tiếp",
+      "polls": "Bình chọn",
+      "thanks": "Tip, boost và power up",
+      "others": "Tài khoản khác",
+      "own": "Của riêng bạn"
+    },
+    "items": {
+      "snap_video": {
+        "title": "Snap cho mỗi video mới",
+        "sub": "Khi bạn đăng video, một snap với tiêu đề và liên kết sẽ được đăng."
+      },
+      "short_video": {
+        "title": "Một Short từ mỗi video mới",
+        "sub": "Khi bạn đăng video, 30 giây đầu tiên sẽ thành một Short dọc."
+      },
+      "long_video_short": {
+        "title": "Short cho video dài, snap cho video ngắn",
+        "sub": "Video dài hơn 5 phút có một Short từ giây thứ 30, video ngắn hơn có một snap."
+      },
+      "audio_from_video": {
+        "title": "Bản âm thanh của mỗi video",
+        "sub": "Khi bạn đăng video, phần tiếng của nó được đăng thành một tập podcast."
+      },
+      "imported_discord": {
+        "title": "Báo cho Discord về video đã nhập",
+        "sub": "Khi công cụ nhập đưa một video vào, máy chủ Discord của bạn sẽ được báo."
+      },
+      "video_from_podcast": {
+        "title": "Bản video của mỗi tập",
+        "sub": "Khi bạn đăng một tập podcast, nó được đăng thành video kèm ảnh bìa."
+      },
+      "podcast_snap": {
+        "title": "Snap cho mỗi tập mới",
+        "sub": "Khi bạn đăng một tập podcast, một snap kèm liên kết sẽ được đăng."
+      },
+      "discord_live": {
+        "title": "Báo cho Discord khi tôi phát trực tiếp",
+        "sub": "Khi bạn bắt đầu phát trực tiếp, máy chủ Discord của bạn nhận được một tin nhắn."
+      },
+      "stream_poll_snap": {
+        "title": "Snap kết quả bình chọn trong buổi phát",
+        "sub": "Khi một bình chọn trong buổi phát trực tiếp của bạn kết thúc, một snap cho thấy mọi người đã chọn thế nào."
+      },
+      "poll_results": {
+        "title": "Trả lời bằng kết quả bình chọn của tôi",
+        "sub": "Khi một bình chọn của bạn kết thúc, một trả lời bên dưới sẽ cho thấy kết quả."
+      },
+      "thank_tips": {
+        "title": "Cảm ơn mọi người đã tip",
+        "sub": "Một lời cảm ơn dưới video, và một upvote cho bài đăng mới nhất của người tip."
+      },
+      "thank_boosts": {
+        "title": "Cảm ơn mọi người đã boost",
+        "sub": "Một snap cảm ơn, và một upvote cho bài đăng mới nhất của người boost."
+      },
+      "power_up_snap": {
+        "title": "Chia sẻ các lần power up của tôi",
+        "sub": "Khi bạn power up, một snap cho biết bao nhiêu. Khi ai đó power up cho bạn, họ nhận được một upvote."
+      },
+      "vote_friends": {
+        "title": "Upvote video mới của bạn bè",
+        "sub": "Khi một tài khoản bạn liệt kê đăng video, video đó nhận được upvote của bạn."
+      },
+      "reblog_friends": {
+        "title": "Reblog video mới của bạn bè",
+        "sub": "Khi một tài khoản bạn liệt kê đăng video, video đó được đưa lên blog của bạn."
+      },
+      "blank": {
+        "title": "Bắt đầu trống",
+        "sub": "Tự chọn sự kiện và tạo các bước."
+      }
+    },
+    "texts": {
+      "longerThan5": "Dài hơn 5 phút?",
+      "importedDiscord": "Mới trên kênh của mình: {title}\n{url}",
+      "podcastSnap": "Tập mới: {title}\n\n{url}",
+      "discordLive": "{title} đang phát trực tiếp: {url}",
+      "streamPollSnap": "Bình chọn từ buổi phát trực tiếp của mình: {question}\n\n{results}\n\n{url}",
+      "pollResults": "Bình chọn đã kết thúc. Kết quả:\n\n{results}\n\nCảm ơn tất cả {votes} người đã bình chọn!",
+      "viaLightning": "Thanh toán bằng Lightning?",
+      "thanksLightning": "Cảm ơn bạn đã tip {amount} HIVE! ⚡",
+      "thanksTip": "Cảm ơn @{from} đã tip {amount}! 🙏",
+      "boostOnPost": "Boost cho một bài đăng?",
+      "thanksBoost": "Cảm ơn @{from} đã boost {url} 🚀\n\n{message}",
+      "thanksStreamBoost": "Cảm ơn bạn đã boost buổi phát trực tiếp của mình! 🚀 {url}",
+      "byMe": "Do tôi power up?",
+      "poweredUp": "Vừa power up {amount} HIVE! 💪",
+      "isVideo": "Là video?"
+    }
+  },
+  "eventGroups": {
+    "channel": "Kênh của tôi",
+    "wallet": "Ví của tôi",
+    "polls": "Bình chọn",
+    "others": "Tài khoản khác",
+    "more": "Thêm"
+  }
+}

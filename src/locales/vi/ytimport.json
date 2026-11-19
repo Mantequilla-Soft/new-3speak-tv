@@ -1,5 +1,5 @@
 {
-  "title": "Nhập video của bạn",
+  "title": "Nhập nội dung của bạn",
   "subtitle": "Đưa video của bạn từ YouTube hoặc TikTok sang 3Speak. Tiêu đề, mô tả, thẻ và ảnh thu nhỏ sẽ được điền sẵn cho bạn.",
   "noChannel": "Bạn chưa liên kết kênh YouTube. Hãy liên kết và xác minh trong hồ sơ của bạn trước, rồi quay lại đây.",
   "linkChannel": "Đến hồ sơ của tôi",
@@ -9,6 +9,7 @@
   "openOnYoutube": "Mở trên YouTube",
   "import": "Nhập video này",
   "useOwnFile": "Tôi đã có tệp",
+  "openInUploader": "Chỉnh sửa và đăng",
   "cancel": "Hủy",
   "retry": "Thử lại",
   "progress": {
@@ -31,9 +32,11 @@
     "blocked": "YouTube hiện không cho máy chủ của chúng tôi tải video này.",
     "notVideo": "Tệp đó không phải là video.",
     "tooLongForShort": "Video này dài hơn {{minutes}} phút, quá dài cho một Short. Hãy nhập nó dưới dạng video thường.",
-    "proxyPaused": "Tính năng nhập từ YouTube đang tạm dừng. Vui lòng thử lại sau."
+    "proxyPaused": "Tính năng nhập từ YouTube đang tạm dừng. Vui lòng thử lại sau.",
+    "notAudio": "Tệp đó không phải tệp âm thanh."
   },
   "entry": "Nhập video",
+  "menuEntry": "Nhập nội dung",
   "types": {
     "videos": "Video",
     "shorts": "Shorts",
@@ -60,7 +63,8 @@
     "tiktok": "TikTok",
     "instagram": "Instagram",
     "bitchute": "BitChute",
-    "rumble": "Rumble"
+    "rumble": "Rumble",
+    "rss": "Podcast"
   },
   "tiktok": {
     "noLink": "Bạn chưa liên kết tài khoản TikTok. Hãy liên kết và xác minh trong hồ sơ của bạn trước, rồi quay lại đây.",
@@ -98,7 +102,7 @@
     "selectedCount": "Đã chọn {{count}}",
     "maxHint": "tối đa {{max}}",
     "clear": "Xóa chọn",
-    "importSelected": "Nhập mục đã chọn ({{count}})",
+    "importSelected": "Đăng trong nền ({{count}})",
     "busy": "Lô nhập trước của bạn vẫn đang chạy",
     "steps": {
       "content": "Nội dung",
@@ -135,7 +139,16 @@
     "stopConfirm": "Dừng lần nhập này? Các video chưa đăng sẽ bị hủy, kể cả video đã lên lịch. Video đã đăng vẫn giữ nguyên.",
     "stopYes": "Có, dừng lại",
     "stopKeep": "Tiếp tục nhập",
-    "countOf": "{{done}}/{{total}}"
+    "countOf": "{{done}}/{{total}}",
+    "audio": {
+      "formTitle": "Nhập {{count}} tập",
+      "contentIntro": "Chọn loại âm thanh, và nguồn lấy tiêu đề, mô tả và thẻ của từng bài đăng.",
+      "settingsIntro": "Các cài đặt này áp dụng cho tất cả các tập bạn đã chọn.",
+      "spacing": "Mỗi tập được nhập trên máy chủ của chúng tôi rồi đăng riêng, cách nhau {{minutes}} phút. Tập đầu tiên lên sóng vài phút sau khi sẵn sàng. Bạn có thể đóng trang này.",
+      "canLeave": "Bạn có thể đóng trang này. Các tập của bạn được nhập và đăng trên máy chủ của chúng tôi, kể cả khi bạn không ở đây.",
+      "stopConfirm": "Dừng lần nhập này? Các tập chưa đăng sẽ bị hủy, kể cả tập đã lên lịch. Tập đã đăng vẫn giữ nguyên.",
+      "maxReached": "Bạn có thể chọn tối đa {{max}} tập một lần"
+    }
   },
   "bitchute": {
     "noLink": "Bạn chưa liên kết tài khoản BitChute. Hãy liên kết và xác minh trong hồ sơ của bạn trước, rồi quay lại đây.",
@@ -166,5 +179,85 @@
     "empty": "Không tìm thấy video công khai nào trên kênh Rumble của bạn.",
     "olderHint": "Không thấy video bạn muốn?",
     "olderHintAction": "Dán liên kết của video"
+  },
+  "rss": {
+    "noLink": "Bạn chưa liên kết nguồn cấp RSS podcast nào. Hãy liên kết và xác minh trong hồ sơ trước, rồi quay lại đây.",
+    "latest": "Các tập podcast của bạn",
+    "empty": "Không tìm thấy tập nào trong nguồn cấp podcast của bạn.",
+    "openOn": "Mở trang của tập",
+    "fallbackIntro": "Bạn vẫn có thể nhập: tự tải tập về và chọn tệp ở đây. Mọi thông tin khác vẫn được điền sẵn.",
+    "fallbackStep1": "Mở tập trên dịch vụ lưu trữ podcast của bạn.",
+    "fallbackStep2": "Tải tệp âm thanh của tập (MP3 hoặc M4A).",
+    "limits": "Có thể nhập các tập dài tối đa {{hours}} giờ. Chúng được đăng thành bài âm thanh kèm ghi chú và ảnh bìa.",
+    "show": "Podcast",
+    "unreadable": "hiện không đọc được",
+    "unreadableAll": "Hiện không đọc được nguồn cấp podcast của bạn. Hãy kiểm tra xem nó có trực tuyến không rồi thử lại sau.",
+    "import": "Nhập âm thanh này",
+    "progressServer": "Đang lấy âm thanh: {{pct}}%",
+    "progressTransfer": "Đang tải âm thanh vào trình tải lên: {{pct}}%"
+  },
+  "auto": {
+    "title": "Nhập tự động",
+    "unavailable": "Máy chủ này chưa hỗ trợ nhập tự động.",
+    "off": "Đang tắt. Bật lên và mỗi tập mới của chương trình này sẽ trở thành một bài âm thanh trên 3Speak.",
+    "onSince": "Bật từ {{date}}. Nguồn cấp được kiểm tra mỗi {{minutes}} phút.",
+    "pillOn": "Bật",
+    "pillOff": "Tắt",
+    "queued": "Số tập mới đã nhập: {{count}}",
+    "lastCheck": "Lần kiểm tra gần nhất: {{time}}",
+    "waiting": "Chờ đến ngày mai: {{count}} (tối đa {{max}} mỗi ngày)",
+    "skipped": "Đã bỏ qua, dài hơn giới hạn nhập: {{titles}}",
+    "comesAuto": "Tập mới: tính năng nhập tự động sẽ lấy tập này ở lần kiểm tra tới",
+    "errors": {
+      "noLink": "Nguồn cấp này không còn được xác minh trong hồ sơ của bạn. Hãy liên kết lại để tiếp tục.",
+      "noGrant": "3Speak có thể không còn được đăng thay bạn. Mở cài đặt để cho phép lại.",
+      "unreadable": "Không đọc được nguồn cấp của bạn ở lần kiểm tra gần nhất. Chúng tôi sẽ thử lại ở lần kiểm tra tiếp theo.",
+      "generic": "Lần kiểm tra gần nhất thất bại. Chúng tôi sẽ thử lại ở lần kiểm tra tiếp theo."
+    },
+    "edit": "Sửa cài đặt",
+    "setUp": "Thiết lập nhập tự động",
+    "formTitle": "Nhập tự động",
+    "formIntro": "Các tập mới của <b>{{show}}</b> trở thành bài âm thanh với các cài đặt này, tối đa {{max}} mỗi ngày, được giãn cách như khi nhập hàng loạt.",
+    "enabled": "Tự động nhập tập mới",
+    "enabledInfo": "Chúng tôi kiểm tra nguồn cấp của bạn thường xuyên. Mỗi tập xuất hiện sau khi bạn bật tính năng này sẽ được @threespeak tải về và đăng thay bạn, theo các cài đặt bên dưới. Các tập đã có sẵn trong nguồn cấp được giữ nguyên.",
+    "enabledOn": "Tập mới được đăng thay bạn",
+    "enabledOff": "Cài đặt được giữ lại, không có gì được đăng",
+    "sections": {
+      "content": "Tiêu đề, thẻ và mô tả",
+      "post": "Cài đặt bài đăng"
+    },
+    "kind": "Loại âm thanh",
+    "target": "Đăng dưới dạng",
+    "targetPost": "Bài đăng riêng",
+    "targetSnap": "Bình luận snap",
+    "targetPostHint": "Một bài đăng có tiêu đề, trong cộng đồng bạn chọn bên dưới.",
+    "targetSnapHint": "Một phản hồi trong nguồn snaps, không có tiêu đề, giống một short. Cộng đồng và blog không áp dụng.",
+    "fromSource": "Lấy từ nguồn",
+    "fromSourceInfo": "Bật: mỗi bài đăng lấy tiêu đề, ghi chú của tập và các #hashtag trong đó đúng như trong nguồn cấp của bạn. Tắt: bạn tự đặt định dạng tiêu đề, thẻ và mô tả.",
+    "fromSourceOn": "Tiêu đề, mô tả và thẻ lấy từ từng tập",
+    "fromSourceOff": "Bạn đặt tiêu đề, thẻ và mô tả bên dưới",
+    "titleLabel": "Tiêu đề",
+    "titleHint": "Dùng {title} cho tiêu đề tập, {show} cho tên chương trình, {episode} và {season} cho số tập và số mùa, {date} cho ngày phát hành.",
+    "sampleTitle": "Tiêu đề tập",
+    "sampleShow": "Chương trình của tôi",
+    "titlePreview": "Ví dụ: {{title}}",
+    "tagsLabel": "Thẻ",
+    "tagsHint": "Tối đa 8, cách nhau bằng dấu cách. Được thêm vào mọi bài đăng.",
+    "hashtags": "Dùng cả hashtag trong ghi chú chương trình",
+    "hashtagsInfo": "Những từ được viết dạng #tag trong ghi chú của một tập sẽ thành thẻ của bài đăng đó, sau các thẻ của riêng bạn (tối đa 10 thẻ).",
+    "hashtagsHint": "#tags trong ghi chú thành thẻ bài đăng",
+    "useNotes": "Dùng ghi chú chương trình làm mô tả",
+    "useNotesInfo": "Nội dung bài đăng là ghi chú của tập lấy từ nguồn cấp của bạn, kèm các liên kết. Tắt đi để dùng cùng một nội dung của riêng bạn cho mọi tập.",
+    "useNotesOn": "Mỗi bài hiển thị ghi chú của tập đó",
+    "useNotesOff": "Mọi bài dùng nội dung của bạn bên dưới",
+    "addendumLabel": "Nội dung dưới ghi chú chương trình",
+    "addendumHint": "Được thêm vào mọi bài sau phần ghi chú, ví dụ liên kết đến các kênh khác của bạn.",
+    "optional": "không bắt buộc",
+    "textLabel": "Mô tả",
+    "textHint": "Dùng cho mọi tập. {title}, {show}, {episode}, {season} và {date} cũng dùng được ở đây.",
+    "textRequired": "Hãy viết mô tả cần dùng, hoặc dùng ghi chú chương trình.",
+    "onlyNew": "Chỉ những tập xuất hiện trong nguồn cấp sau khi bạn bật tính năng này mới được nhập, không bao giờ nhập tập cũ hơn.",
+    "grantNeeded": "Các bài nhập tự động được @threespeak đăng thay bạn, nên cần quyền đăng bài trên tài khoản của bạn.",
+    "save": "Lưu"
   }
 }

@@ -1,0 +1,107 @@
+{
+  "levels": {
+    "button": "Abisuhan",
+    "buttonTitle": "Mga notification mula kay @{{user}}: {{level}}",
+    "title": "Mga notification mula kay @{{user}}",
+    "sub": "Gumagana pa rin ang mga device switch mo sa Settings.",
+    "saveFailed": "Hindi ma-save. Pakisubukang muli.",
+    "all": {
+      "title": "Lahat",
+      "desc": "Mga video, shorts, story, audio at kapag nag-live sila.",
+      "saved": "Aabisuhan ka sa lahat ng mula kay @{{user}}."
+    },
+    "highlights": {
+      "title": "Highlights",
+      "desc": "Mga video, audio at kapag nag-live sila. Walang shorts o story.",
+      "saved": "Highlights na lang mula kay @{{user}} simula ngayon."
+    },
+    "off": {
+      "title": "Off",
+      "desc": "Walang notification mula sa creator na ito. Fina-follow mo pa rin sila.",
+      "saved": "Naka-off ang mga notification mula kay @{{user}}."
+    }
+  },
+  "live": {
+    "badge": "LIVE",
+    "aria": "Live ngayon mula sa mga fina-follow mo",
+    "summary_one": "{{count}} fina-follow mo ang live ngayon",
+    "summary_other": "{{count}} fina-follow mo ang live ngayon"
+  },
+  "notifs": {
+    "heading": "Mula sa 3Speak",
+    "liveNow": "Live si @{{user}}",
+    "wasLive": "Nag-live si @{{user}}",
+    "collabInvite": "Inimbitahan ka ni @{{user}} sa isang collab",
+    "premiereStarted": "Nagsimula na ang premiere ni @{{user}}"
+  },
+  "push": {
+    "live": {
+      "title": "Pag-live",
+      "desc": "Kapag nagsimula ng live stream ang creator na fina-follow mo."
+    }
+  },
+  "collab": {
+    "accept": "Tanggapin",
+    "decline": "Tanggihan",
+    "acceptedToast": "Nasa channel mo na ang collab kasama si @{{user}}.",
+    "declinedToast": "Tinanggihan ang imbitasyon.",
+    "answerFailed": "Hindi maipadala ang sagot mo. Pakisubukang muli.",
+    "row": "Magdagdag ng collaborator",
+    "rowSub": "I-post kasama ang co-creator at hatiin ang payout",
+    "rowSet": "Makakakuha si @{{user}} ng {{split}}% ng share mo",
+    "modalTitle": "Magdagdag ng collaborator",
+    "modalSub": "Makakatanggap sila ng imbitasyon. Kapag tinanggap nila, nasa parehong channel na ang video.",
+    "accountLabel": "Co-creator",
+    "accountPlaceholder": "Pangalan ng Hive account",
+    "suggestions": "Mga tugmang account",
+    "splitLabel": "Share nila sa payout mo",
+    "splitPreview": "Makakakuha si @{{user}} ng {{share}}% ng payout, sa iyo ang {{mine}}%.",
+    "inviteNote": "Ang hatian ay isang Hive beneficiary, kaya may bisa ito kahit tanggihan nila.",
+    "someone": "ang co-creator mo",
+    "save": "I-save",
+    "remove": "Alisin",
+    "noRoom": "Hindi naidagdag si @{{user}} bilang beneficiary: nasa pinakamaraming beneficiary na pinapayagan ng Hive na ang post.",
+    "errors": {
+      "invalid": "Hindi iyan valid na pangalan ng Hive account.",
+      "self": "Hindi ka puwedeng mag-collab sa sarili mo.",
+      "notFound": "Hindi Hive account si @{{user}}."
+    },
+    "cardWith": "kasama ang {{users}}",
+    "cardBoth": "{{author}} kasama ang {{users}}",
+    "withLabel": "kasama",
+    "invitesTitle": "Mga imbitasyon sa collab"
+  },
+  "polls": {
+    "aria": "Poll",
+    "addPoll": "Poll",
+    "removePoll": "Walang poll",
+    "editorAria": "Mga opsyon ng poll",
+    "questionPlaceholder": "Magtanong sa mga follower mo",
+    "optionPlaceholder": "Opsyon {{n}}",
+    "removeOption": "Alisin ang opsyon {{n}}",
+    "addOption": "Magdagdag ng opsyon",
+    "duration": "Matatapos ang poll",
+    "days_one": "{{count}} araw",
+    "days_other": "{{count}} araw",
+    "noEnd": "Walang petsa ng pagtatapos",
+    "invalid": "Kailangan ng poll ng {{min}} hanggang {{max}} magkakaibang opsyon.",
+    "votes_one": "{{count}} boto",
+    "votes_other": "{{count}} boto",
+    "endsInDays_one": "Matatapos sa loob ng {{count}} araw",
+    "endsInDays_other": "Matatapos sa loob ng {{count}} araw",
+    "endsInHours_one": "Matatapos sa loob ng {{count}} oras",
+    "endsInHours_other": "Matatapos sa loob ng {{count}} oras",
+    "closed": "Sarado na ang poll",
+    "open": "Bukas",
+    "changeHint": "I-tap ang ibang opsyon para palitan ang boto mo.",
+    "signIn": "Mag-sign in para bumoto.",
+    "closedToast": "Tapos na ang poll na ito.",
+    "voteFailed": "Hindi pumasok ang boto mo. Pakisubukang muli.",
+    "statsTitle": "Mga poll",
+    "question": "Tanong",
+    "questionPlaceholderVideo": "Magtanong sa iyong mga manonood",
+    "addPollTitle": "Magdagdag ng poll",
+    "removePollTitle": "Alisin ang poll",
+    "invalidVideo": "Kailangan ng poll ng isang tanong at {{min}} hanggang {{max}} na magkakaibang pagpipilian."
+  }
+}

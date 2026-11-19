@@ -156,6 +156,10 @@
       "title": "Duże karty",
       "desc": "Większe karty filmów na stronie głównej, profilu i playlistach"
     },
+    "dataSaver": {
+      "title": "Oszczędzanie danych",
+      "desc": "Bez podglądów wideo, a filmy startują w 360p. Włącza się samo, gdy urządzenie prosi o oszczędzanie danych albo połączenie jest wolne."
+    },
     "previews": {
       "title": "Podglądy filmów",
       "desc": "Wyciszony podgląd po najechaniu; na telefonie odtwarza się środkowa karta"
@@ -165,14 +169,22 @@
       "desc": "Wyciszone klipy w Spotlight na stronie głównej. Wyłączone pokazuje obrazy."
     }
   },
+  "startup": {
+    "resume": {
+      "title": "Kontynuuj tam, gdzie skończyłem",
+      "desc": "3Speak otwiera się na stronie, na której byłeś ostatnio. Zapisywane tylko na tym urządzeniu."
+    }
+  },
+  "startPrompt": {
+    "title": "Kontynuować tam, gdzie skończyłeś?",
+    "intro": "3Speak może otwierać się na stronie, na której byłeś ostatnio, zamiast na stronie głównej. Zapisuje się to tylko na tym urządzeniu i możesz to zmienić w Ustawieniach, Ogólne.",
+    "notNow": "Nie teraz",
+    "turnOn": "Włącz"
+  },
   "shorts": {
     "commentBar": {
       "title": "Pasek komentarza w Shorts",
       "desc": "Pole komentarza pod każdym Shortem"
-    },
-    "openOnStart": {
-      "title": "Otwieraj Shorts na starcie",
-      "desc": "Po otwarciu 3Speak przechodź od razu do Shorts"
     },
     "inFeeds": {
       "title": "Shorts w kanałach",
@@ -203,7 +215,21 @@
     "rpcNode": "Węzeł RPC Hive",
     "yourData": "Twoje dane",
     "privacyLink": "Jak 3Speak przetwarza twoje dane",
-    "getOrDelete": "Pobierz lub usuń"
+    "getOrDelete": "Pobierz lub usuń",
+    "node": {
+      "modeAuto": "Auto",
+      "auto": "Automatycznie",
+      "autoHint": "Najszybszy działający węzeł, zmieniany przy awarii",
+      "own": "Własny węzeł",
+      "use": "Użyj",
+      "checking": "Sprawdzanie…",
+      "down": "Nie odpowiada",
+      "ms": "{{ms}} ms",
+      "badUrl": "Wpisz adres zaczynający się od https://",
+      "failed": "Ten węzeł nie odpowiedział lub nie ma społecznościowego API (hivemind), którego potrzebuje 3Speak.",
+      "switched": "Teraz przez {{node}}",
+      "fallback": "Jeśli wybrany węzeł przestanie odpowiadać, 3Speak użyje znanych węzłów do czasu przeładowania strony."
+    }
   },
   "dataRequest": {
     "emailRequired": "Podaj adres e-mail, abyśmy mogli odpowiedzieć",

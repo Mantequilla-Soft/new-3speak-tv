@@ -372,3 +372,41 @@
   .hh-pro__notice-retry { @include v2.btn(secondary, 28); border: 0; }
   .hh-pro__skeleton { border-radius: var(--r-md); }
 }
+
+// Power up / down, Savings, Convert, Delegate (WalletOpModal): one row of
+// buttons under the balances, wrapping on phones.
+.wallet-v2__ops {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+  @include v2.mobile {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    .v2-btn { justify-content: flex-start; min-width: 0; }
+  }
+}
+
+// "In progress": power down, savings withdrawals, conversions, delegations.
+.wallet-v2__pending {
+  ul { list-style: none; margin: 8px 0 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+  li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    > .material-symbols-rounded { color: var(--muted); flex: none; }
+    > div { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+    b { font-weight: 700; overflow-wrap: anywhere; }
+    span { color: var(--muted); font-size: 12px; }
+    .v2-btn { flex: none; }
+  }
+}
+
+// Every perk of the open tab in view (owner 2026-11-17): the SDK gives the list
+// a fixed 13rem (9.75rem on a phone) and scrolls the rest inside it, which hid
+// half of Live streaming.
+.wallet-v2__pro .hh-pro__perklist {
+  height: auto;
+  overflow: visible;
+}

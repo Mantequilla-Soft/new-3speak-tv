@@ -10,10 +10,12 @@ import { getCurrentProvider, Providers } from '../hive-api/aioha';
 const API = import.meta.env.VITE_THREESPEAK_API || '/api';
 
 // Which platforms fit which uploader: TikTok / Instagram are short-form only,
-// BitChute long-form only, YouTube and Rumble have both.
+// BitChute long-form only, YouTube and Rumble have both. Podcast episodes (a
+// verified RSS feed) go to the audio uploader.
 export const IMPORT_MODE_PLATFORMS = {
   shorts: ['youtube', 'tiktok', 'instagram', 'rumble'],
   videos: ['youtube', 'rumble', 'bitchute'],
+  audio: ['rss'],
 };
 
 function headers(json) {
@@ -76,6 +78,17 @@ export const listInstagramVideos = () => call('/instagram/videos');
 // BitChute / Rumble: a page (25, newest first) of the user's verified channel(s). { videos, hasMore }
 export const listPlatformVideos = (platform, page = 0) => call(`/${platform}/videos?page=${page}`);
 
+// Podcast: a page (25, newest first) of the episodes of one of the user's verified
+// RSS feeds (`feed` = its id; the first readable one when left out).
+// { shows: [{ url, id, title, code }], feedId, videos, page, hasMore, total }
+export const listPodcastEpisodes = ({ feed, page = 0 } = {}) => {
+  const qs = new URLSearchParams({ page: String(page) });
+  if (feed) qs.set('feed', feed);
+  return call(`/rss/videos?${qs}`);
+};
+// The full show notes of a listed episode as plain text: { text }
+export const getPodcastNotes = (token) => call(`/rss/notes/${encodeURIComponent(token)}`);
+
 // YouTube videos go by id; looked-up TikToks / Instagram posts by the token the lookup returned.
 // After publishing an imported video: source ("<youtube id>" / "tiktok:<id>" / "instagram:<shortcode>") is
 // now this 3Speak post. Feeds the ✓ "On 3Speak" mark in the import grid.
@@ -93,11 +106,17 @@ export const getImportJob = (id) => call(`/jobs/${encodeURIComponent(id)}`);
 export const getImportBatches = () => call('/batch');
 export const createImportBatch = (items, options) => call('/batch', { method: 'POST', body: { items, options } });
 export const cancelImportBatch = (id) => call(`/batch/${encodeURIComponent(id)}/cancel`, { method: 'POST' });
+// 🔁 Automatic podcast import (server/import-auto.cjs): per verified feed, new
+// episodes become audio posts with these settings. { available, intervalMin, maxPerDay, configs }
+export const getAutoImports = () => call('/auto');
+// { feedUrl, enabled, settings: { type, titleTemplate, useNotes, addendum, text, tags, hashtags }, options } → { config }
+export const saveAutoImport = (body) => call('/auto', { method: 'PUT', body });
 export const cancelImportJob = (id) => call(`/jobs/${encodeURIComponent(id)}`, { method: 'DELETE' }).catch(() => null);
 
 /** Pull the finished download into the browser as a File, reporting 0..1 progress. */
 export async function downloadImportFile(id, videoId, onProgress) {
   const res = await call(`/jobs/${encodeURIComponent(id)}/file`, { raw: true });
+  const type = String(res.headers.get('content-type') || 'video/mp4').split(';')[0].trim() || 'video/mp4';
   const total = Number(res.headers.get('content-length')) || 0;
   let blob;
   if (res.body && total && onProgress) {
@@ -111,19 +130,22 @@ export async function downloadImportFile(id, videoId, onProgress) {
       got += value.length;
       onProgress(got / total);
     }
-    blob = new Blob(chunks, { type: 'video/mp4' });
+    blob = new Blob(chunks, { type });
   } else {
     blob = await res.blob();
   }
-  return new File([blob], `import-${videoId}.mp4`, { type: 'video/mp4' });
+  return new File([blob], `import-${videoId}.${FILE_EXT[type] || 'mp4'}`, { type });
 }
+// Podcast episodes come as audio, in whatever format the show publishes.
+const FILE_EXT = { 'video/mp4': 'mp4', 'audio/mpeg': 'mp3', 'audio/mp4': 'm4a', 'audio/x-m4a': 'm4a', 'audio/aac': 'aac', 'audio/ogg': 'ogg', 'audio/opus': 'opus', 'audio/webm': 'webm', 'audio/wav': 'wav', 'audio/x-wav': 'wav', 'audio/flac': 'flac' };
 
 /** The video's thumbnail as a data URL (proxied by our API, so no CORS trouble). null on failure. */
 export async function fetchThumbnailDataUrl(video) {
   try {
     const src = video.platform !== 'youtube' ? video.thumbnail : `${API}/yt-import/thumb/${encodeURIComponent(video.id)}`;
     if (!src) return null;
-    const res = await fetch(src, { credentials: 'include' });
+    // A podcast cover comes from the checker's art proxy: public, no cookies.
+    const res = await fetch(src, { credentials: video.platform === 'rss' ? 'omit' : 'include' });
     if (!res.ok) return null;
     const blob = await res.blob();
     return await new Promise((resolve) => {
@@ -170,6 +192,30 @@ export function handOffToStudio(file, video, thumbnailDataUrl, mode = 'longform'
     tags: toHiveTags(video),
     thumbnail: thumbnailDataUrl || null,
   };
+}
+
+/**
+ * A podcast episode goes to the audio uploader (App.jsx opens it on this event)
+ * with its show's details filled in; `prefill.sourceId` is reported back as
+ * published (the ✓ in the import grid) once the post is out.
+ */
+export function handOffToAudioUpload(file, video, { description = '', coverUrl = '' } = {}) {
+  window.dispatchEvent(new CustomEvent('open-audio-upload', {
+    detail: {
+      blob: file,
+      filename: file.name,
+      type: 'podcast',
+      source: 'import',
+      prefill: {
+        title: String(video.title || '').slice(0, 255),
+        description: String(description || video.description || ''),
+        tags: toHiveTags(video),
+        coverUrl: coverUrl || '',
+        sourceId: video.id,
+        sourceUrl: video.sourceUrl || '',
+      },
+    },
+  }));
 }
 
 /** 754 → "12:34", 3754 → "1:02:34". */

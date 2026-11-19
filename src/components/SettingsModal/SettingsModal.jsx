@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { toastIn } from '../../utils/toast';
 import { useAppStore } from '../../lib/store';
 import { APP_VERSION } from '../../version';
-import { getHiveUrl } from '../../utils/hiveNode';
+import HiveNodePicker from './HiveNodePicker';
 import { fetchUserInterests, saveInterestsToHive } from '../../utils/interests';
 import { fetchAdAccess, fetchCreatorAdPrefs, fetchViewerAdPrefs, setViewerAdPrefs, setListenerAdPrefs } from '../../lib/advertiseData';
 import { resetViewerRewards } from '../../utils/viewerRewards';
@@ -34,6 +34,7 @@ import { Banner, Button, Icon, IconButton, Segmented, SettingRow, Toggle } from 
 import { cx } from '../v2/helpers';
 import './SettingsModal.scss';
 import useCardSize, { useIsCardSizeMobile } from '../../hooks/useCardSize';
+import { useDataSaver } from '../../lib/dataSaver';
 
 // Every toast from this module is headed "Settings"; the message becomes the
 // line under it. See utils/toast.js.
@@ -909,6 +910,7 @@ const KIND_COPY = {
   videos: { titleKey: 'settings.notifications.kinds.videos.title', descKey: 'settings.notifications.kinds.videos.desc' },
   shorts: { titleKey: 'settings.notifications.kinds.shorts.title', descKey: 'settings.notifications.kinds.shorts.desc' },
   audio: { titleKey: 'settings.notifications.kinds.audio.title', descKey: 'settings.notifications.kinds.audio.desc' },
+  live: { titleKey: 'social.push.live.title', descKey: 'social.push.live.desc' },
   podcasts: { titleKey: 'settings.notifications.kinds.podcasts.title', descKey: 'settings.notifications.kinds.podcasts.desc' },
   replies: { titleKey: 'settings.notifications.kinds.replies.title', descKey: 'settings.notifications.kinds.replies.desc' },
   mentions: { titleKey: 'settings.notifications.kinds.mentions.title', descKey: 'settings.notifications.kinds.mentions.desc' },
@@ -920,7 +922,7 @@ const KIND_COPY = {
 // The two groups answer different questions: what other people published, and
 // what happened to you.
 const KIND_GROUPS = [
-  { labelKey: 'settings.notifications.groups.creators', kinds: ['videos', 'shorts', 'audio', 'podcasts'] },
+  { labelKey: 'settings.notifications.groups.creators', kinds: ['videos', 'shorts', 'audio', 'live', 'podcasts'] },
   { labelKey: 'settings.notifications.groups.aboutYou', kinds: ['replies', 'mentions', 'follows', 'votes', 'reblogs'] },
 ];
 
@@ -1080,9 +1082,13 @@ const DROPDOWN_GAP = 8;
 const DROPDOWN_EDGE = 8;
 const DROPDOWN_WIDTH = 600;
 
-export default function SettingsModal({ isOpen, onClose, dropdown = null, leaving = false, hoverProps, typingProps }) {
+// `initialTab`: open on that tab (on a phone straight into that section), as the
+// linked-profiles prompt does with 'connections' (components/SocialLinksPrompt).
+export default function SettingsModal({ isOpen, onClose, dropdown = null, leaving = false, hoverProps, typingProps, initialTab = null }) {
   const { t } = useTranslation();
-  const { theme, showNsfw, setShowNsfw, toggleTheme, homeCardSize, setHomeCardSize, previewEnabled, setPreviewEnabled, shortsCommentBar, setShortsCommentBar, openShortsOnStart, setOpenShortsOnStart, inlineShorts, setInlineShorts, hideWatched, setHideWatched, hideAi, setHideAi, privateMode, setPrivateMode, heroPreviewEnabled, setHeroPreviewEnabled } = useAppStore();
+  const { theme, showNsfw, setShowNsfw, toggleTheme, homeCardSize, setHomeCardSize, previewEnabled, setPreviewEnabled, shortsCommentBar, setShortsCommentBar, resumeLastPage, setResumeLastPage, inlineShorts, setInlineShorts, hideWatched, setHideWatched, hideAi, setHideAi, privateMode, setPrivateMode, heroPreviewEnabled, setHeroPreviewEnabled, setDataSaver } = useAppStore();
+  // On by choice, or by itself on a data-saving connection (lib/dataSaver.js).
+  const dataSaver = useDataSaver();
   const cardSize = useCardSize();
   const cardSizeMobile = useIsCardSizeMobile();
   /* Whether the Ads & rewards page exists at all.
@@ -1123,7 +1129,7 @@ export default function SettingsModal({ isOpen, onClose, dropdown = null, leavin
     }),
     [rewardsVisible, notificationsVisible],
   );
-  const [tab, setTab] = useState('general');
+  const [tab, setTab] = useState(initialTab || 'general');
   // Losing the group (or logging out) while standing on that page would leave the modal
   // with no tab selected and nothing rendered.
   useEffect(() => {
@@ -1140,7 +1146,7 @@ export default function SettingsModal({ isOpen, onClose, dropdown = null, leavin
   // starts on the tiles again.
   const phone = useSyncExternalStore(subscribePhone, readPhone, () => false);
   const tiles = phone && !dropdown;
-  const [sectionOpen, setSectionOpen] = useState(false);
+  const [sectionOpen, setSectionOpen] = useState(!!initialTab);
   const [wasOpen, setWasOpen] = useState(isOpen);
   if (wasOpen !== isOpen) {
     setWasOpen(isOpen);
@@ -1245,9 +1251,17 @@ export default function SettingsModal({ isOpen, onClose, dropdown = null, leavin
   const panels = {
     general: (
       <>
-        {/* Order (owner 2026-11-12): language, appearance, notifications. */}
-        <Section tone="cyan" title={t('common.language.label')} className="settings-language">
+        {/* Order (owner 2026-11-12): general, appearance, notifications. The first card
+            (owner 2026-11-16) is the language and "Continue where I left off". */}
+        <Section tone="cyan" title={t('settings.tabs.general')} className="settings-language">
           <LanguagePicker onNavigate={onClose} />
+          <Row
+            tone="cyan"
+            title={t('settings.startup.resume.title')}
+            desc={t('settings.startup.resume.desc')}
+            checked={!!resumeLastPage}
+            onChange={(v) => setResumeLastPage(v)}
+          />
         </Section>
         <Section title={t('settings.appearance.title')}>
           <Row
@@ -1265,11 +1279,19 @@ export default function SettingsModal({ isOpen, onClose, dropdown = null, leavin
               onChange={(large) => setHomeCardSize(large ? 'large' : 'small')}
             />
           )}
+          <Row
+            title={t('settings.appearance.dataSaver.title')}
+            desc={t('settings.appearance.dataSaver.desc')}
+            checked={dataSaver}
+            onChange={(v) => setDataSaver(v)}
+          />
+          {/* Data saver keeps the previews off, whatever these say. */}
           {showPreviewSetting && (
             <Row
               title={t('settings.appearance.previews.title')}
               desc={t('settings.appearance.previews.desc')}
-              checked={previewEnabled !== false}
+              checked={previewEnabled !== false && !dataSaver}
+              disabled={dataSaver}
               onChange={(v) => setPreviewEnabled(v)}
             />
           )}
@@ -1278,7 +1300,8 @@ export default function SettingsModal({ isOpen, onClose, dropdown = null, leavin
             <Row
               title={t('settings.appearance.heroPreviews.title')}
               desc={t('settings.appearance.heroPreviews.desc')}
-              checked={heroPreviewEnabled !== false}
+              checked={heroPreviewEnabled !== false && !dataSaver}
+              disabled={dataSaver}
               onChange={(v) => setHeroPreviewEnabled(v)}
             />
           )}
@@ -1289,7 +1312,7 @@ export default function SettingsModal({ isOpen, onClose, dropdown = null, leavin
     ),
     content: (
       <>
-        {/* Order (owner 2026-11-12): feed, shorts, interests. */}
+        {/* Order (owner 2026-11-12): feed, shorts (phone only), interests. */}
         <Section tone="cyan" title={t('settings.contentTabs.feed')}>
           <Row
             tone="cyan"
@@ -1319,37 +1342,34 @@ export default function SettingsModal({ isOpen, onClose, dropdown = null, leavin
             checked={!!privateMode}
             onChange={(v) => setPrivateMode(v)}
           />
-        </Section>
-        <Section title={t('common.nav.shorts')}>
-          {/* Comment bar is only rendered under 768px, so it's hidden on desktop. */}
-          {showShortsCommentBarSetting && (
-            <Row
-              title={t('settings.shorts.commentBar.title')}
-              desc={t('settings.shorts.commentBar.desc')}
-              checked={!!shortsCommentBar}
-              onChange={(v) => setShortsCommentBar(v)}
-            />
-          )}
           <Row
-            title={t('settings.shorts.openOnStart.title')}
-            desc={t('settings.shorts.openOnStart.desc')}
-            checked={!!openShortsOnStart}
-            onChange={(v) => setOpenShortsOnStart(v)}
-          />
-          <Row
+            tone="cyan"
             title={t('settings.shorts.inFeeds.title')}
             desc={t('settings.shorts.inFeeds.desc')}
             checked={inlineShorts !== false}
             onChange={(v) => setInlineShorts(v)}
           />
         </Section>
+        {/* The Shorts card is only the comment bar now (owner 2026-11-16: "Open Shorts
+            on start" is gone, Shorts in the feeds moved to Feed), and that bar is
+            only rendered under 768px, so the card shows on a phone only. */}
+        {showShortsCommentBarSetting && (
+          <Section title={t('common.nav.shorts')}>
+            <Row
+              title={t('settings.shorts.commentBar.title')}
+              desc={t('settings.shorts.commentBar.desc')}
+              checked={!!shortsCommentBar}
+              onChange={(v) => setShortsCommentBar(v)}
+            />
+          </Section>
+        )}
         <InterestsSection />
       </>
     ),
     connections: (
       <>
         {/* Order (owner 2026-11-12): linked profiles, support links, Lightning. */}
-        {settingsUser && <AddSocialLink_modal isOpen inline hiveUsername={settingsUser} onClose={() => {}} />}
+        {settingsUser && <AddSocialLink_modal isOpen inline hiveUsername={settingsUser} onClose={() => {}} onNavigate={onClose} />}
         <SupportLinksSection />
         <LightningReceiveSection />
         {!rewardsVisible && <ReferralSection />}
@@ -1372,10 +1392,7 @@ export default function SettingsModal({ isOpen, onClose, dropdown = null, leavin
             <b className="mono">v{APP_VERSION}</b>
             <IconButton icon="content_copy" size={28} variant="ghost" label={t('common.actions.copy')} onClick={copyVersion} />
           </div>
-          <div className="settings-kv v2-well" onClick={handleButrUnlockTap}>
-            <span>{t('settings.about.rpcNode')}</span>
-            <b className="mono">{getHiveUrl()}</b>
-          </div>
+          <HiveNodePicker onRowTap={handleButrUnlockTap} />
           <button type="button" className="settings-kv v2-well is-link" onClick={showDataCard}>
             <span>{t('settings.about.yourData')}</span>
             <b>{t('settings.about.getOrDelete')}</b>

@@ -43,9 +43,6 @@
 
     @media (max-width: 1023px) {
       position: static;
-      // Narrow: the fallback stays inside the opened tile, so a column holding
-      // only that card is not shown.
-      &.is-fallback-only { display: none; }
     }
   }
 
@@ -240,8 +237,8 @@
     @include v2.mobile { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   }
 
-  // A tile: 2px frame (cyan when ticked for the batch), the cover, the title.
-  // The opened one spans its row with the import controls next to the cover.
+  // A tile: 2px frame (red when ticked), the cover, the title. The whole tile
+  // is one button: a click ticks it.
   &__card {
     position: relative;
     min-width: 0;
@@ -250,31 +247,17 @@
     border-radius: var(--r-lg);
     transition: border-color var(--t-fast) var(--ease);
 
-    &--picked { border-color: var(--cyan); }
+    // Ticked: a red frame (the tick top right fills red too).
+    &--picked { border-color: var(--accent); }
 
     // Already on 3Speak, too long, or waiting in a batch: dimmed, with its chip.
     &--tagged { opacity: .5; }
 
-    &--selected {
-      grid-column: 1 / -1;
-      display: flex;
-      gap: 16px;
-      align-items: flex-start;
-      padding: 8px;
-      border-color: var(--accent);
-      background: var(--surface);
-
-      .yt-import__pick { flex: 0 0 260px; cursor: default; }
-
-      @include v2.mobile {
-        flex-direction: column;
-        gap: 10px;
-        .yt-import__pick { flex-basis: auto; width: 100%; }
-      }
-    }
   }
 
-  &__grid--shorts .yt-import__card--selected .yt-import__pick { flex-basis: 170px; }
+
+  // Podcast covers are square.
+  &__grid--square .yt-import__thumb { aspect-ratio: 1; }
 
   &__pick {
     display: flex;
@@ -341,11 +324,13 @@
 
   &__card .yt-import__muted { padding: 0 2px; font-size: 11px; }
 
-  // The batch tick: a 24px square top right, a cyan check when on.
+  // The tick: a 24px square top right of the cover, red with a check when on.
+  // Only a sign: the whole tile is the button.
   &__tick {
     position: absolute;
-    top: 10px;
-    right: 10px;
+    top: 6px;
+    right: 6px;
+    pointer-events: none;
     width: 24px;
     height: 24px;
     padding: 0;
@@ -357,22 +342,11 @@
     place-items: center;
     cursor: pointer;
 
-    &.is-on { background: var(--cyan); border-color: var(--cyan); }
-    &:disabled { opacity: .45; cursor: not-allowed; }
+    &.is-on { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+    // Coming automatically / waiting in a batch.
+    &.is-clock { border-color: transparent; background: var(--media-scrim); color: var(--on-media); }
   }
 
-  &__card--selected > .yt-import__tick { top: 14px; right: auto; left: 14px; }
-
-  // ── The opened tile's controls ──
-  &__card-panel {
-    flex: 1;
-    min-width: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-
-    .yt-import__muted { margin: 0; }
-  }
 
   &__on-site {
     display: flex;
@@ -408,6 +382,35 @@
     .material-symbols-rounded { color: var(--cyan); }
   }
 
+  // The one item on its way to the uploader: progress, or the way out.
+  &__single {
+    @include v2.card;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 14px 16px;
+
+    .yt-import__muted { margin: 0; }
+  }
+  &__single-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+
+    b { @include v2.text(body-sm); font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  }
+  &__single-thumb {
+    flex: none;
+    width: 64px;
+    aspect-ratio: 16 / 9;
+    border-radius: var(--r-sm);
+    overflow: hidden;
+    @include v2.thumb-placeholder(4px);
+
+    img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  }
+
   // Couldn't fetch it: numbered steps and the manual-download pick (33c).
   &__fallback {
     display: flex;
@@ -431,14 +434,6 @@
 
   &__fallback-title { margin: 0; @include v2.text(title-sm); }
 
-  // One copy of the fallback at a time: the card beside the grid when there is a
-  // side column, the block inside the opened tile otherwise.
-  @media (min-width: 1024px) {
-    &.has-fallback .yt-import__card-panel .yt-import__fallback { display: none; }
-  }
-  @media (max-width: 1023px) {
-    .yt-import__fallback--card { display: none; }
-  }
 
   &__steps {
     list-style: none;
@@ -854,4 +849,101 @@
   }
 
   &__stop { width: 100%; }
+}
+
+// ── 🔁 Automatic podcast import: the card on the Podcast tab and its form ──
+.yt-auto {
+  @include v2.card;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px 16px;
+  margin-bottom: 16px;
+
+  &__head { display: flex; align-items: center; gap: 12px; }
+
+  &__icon {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    border-radius: var(--r-md);
+    background: var(--bg);
+    color: var(--muted);
+  }
+  &.is-on &__icon { color: var(--cyan); }
+
+  &__text {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+
+    b { @include v2.text(body-sm); font-weight: 700; }
+    > span { @include v2.text(meta); color: var(--muted); }
+  }
+
+  &__pill {
+    flex: none;
+    padding: 2px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+    background: var(--bg);
+    color: var(--muted);
+
+    &.is-on { color: var(--cyan); background: color-mix(in srgb, var(--cyan) 14%, transparent); }
+  }
+
+  &__facts {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    li { display: flex; align-items: center; gap: 6px; @include v2.text(meta); color: var(--muted); }
+    li.is-error { color: var(--text); .icon, span:first-child { color: var(--accent); } }
+  }
+
+  .yt-import__actions { margin-top: 0; }
+}
+
+.yt-auto-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  &__section {
+    margin: 6px 0 0;
+    @include v2.text(title-sm);
+  }
+
+  &__presets { display: flex; flex-wrap: wrap; gap: 6px; margin-top: -4px; }
+
+  &__chip {
+    padding: 4px 10px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 12px;
+    cursor: pointer;
+
+    &.is-on { border-color: var(--accent); }
+    &:disabled { opacity: .5; cursor: not-allowed; }
+  }
+
+  &__preview {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: -4px 0 0;
+    @include v2.text(meta);
+    color: var(--muted);
+    overflow-wrap: anywhere;
+  }
 }
