@@ -156,6 +156,10 @@
       "title": "Grandes cartes",
       "desc": "Cartes vidéo plus grandes sur l'accueil, le profil et les playlists"
     },
+    "dataSaver": {
+      "title": "Économiseur de données",
+      "desc": "Pas d'aperçus vidéo, et les vidéos démarrent en 360p. S'active tout seul quand votre appareil demande d'économiser des données ou que la connexion est lente."
+    },
     "previews": {
       "title": "Aperçus vidéo",
       "desc": "Aperçu muet au survol ; sur mobile, la carte centrale se lance"

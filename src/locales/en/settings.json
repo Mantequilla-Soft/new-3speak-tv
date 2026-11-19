@@ -156,6 +156,10 @@
       "title": "Large cards",
       "desc": "Bigger video cards on home, profile and playlists"
     },
+    "dataSaver": {
+      "title": "Data saver",
+      "desc": "No video previews, and videos start at 360p. Turns on by itself when your device asks to save data or the connection is slow."
+    },
     "previews": {
       "title": "Video previews",
       "desc": "Muted preview on hover; on mobile the centred card plays"

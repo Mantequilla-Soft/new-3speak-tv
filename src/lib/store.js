@@ -52,6 +52,10 @@ export const useAppStore = create(
       // Hover/scroll video previews on cards (default on).
       previewEnabled: true,
       setPreviewEnabled: (val) => a[0]({ previewEnabled: typeof val === 'function' ? val(a[1]().previewEnabled) : val }),
+      // Data saver (lib/dataSaver.js): true / false is the viewer's choice,
+      // null follows the connection (Save-Data or 2G).
+      dataSaver: null,
+      setDataSaver: (val) => a[0]({ dataSaver: val === true ? true : val === false ? false : null }),
       // The Spotlight's muted clips (owner 2026-11-12); off = pictures only.
       heroPreviewEnabled: true,
       setHeroPreviewEnabled: (val) => a[0]({ heroPreviewEnabled: typeof val === 'function' ? val(a[1]().heroPreviewEnabled) : val }),
@@ -141,6 +145,7 @@ export const useAppStore = create(
         spotlightSize: state.spotlightSize,
         previewEnabled: state.previewEnabled,
         heroPreviewEnabled: state.heroPreviewEnabled,
+        dataSaver: state.dataSaver,
         interests: state.interests,
         shortsFeedMode: state.shortsFeedMode,
         shortsCommentBar: state.shortsCommentBar,

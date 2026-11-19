@@ -156,6 +156,10 @@
       "title": "Kadi kubwa",
       "desc": "Kadi kubwa za video kwenye nyumbani, wasifu na orodha za kucheza"
     },
+    "dataSaver": {
+      "title": "Kuokoa data",
+      "desc": "Hakuna onyesho la awali la video, na video huanza kwa 360p. Huwaka yenyewe kifaa chako kinapoomba kuokoa data au muunganisho ni wa polepole."
+    },
     "previews": {
       "title": "Maonyesho ya video",
       "desc": "Onyesho lisilo na sauti ukielea juu; kwenye simu kadi iliyo katikati hucheza"

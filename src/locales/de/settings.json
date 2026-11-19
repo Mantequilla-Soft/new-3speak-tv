@@ -156,6 +156,10 @@
       "title": "Große Karten",
       "desc": "Größere Videokarten auf Startseite, Profil und Playlists"
     },
+    "dataSaver": {
+      "title": "Datensparmodus",
+      "desc": "Keine Videovorschauen, und Videos starten in 360p. Schaltet sich von selbst ein, wenn dein Gerät Daten sparen will oder die Verbindung langsam ist."
+    },
     "previews": {
       "title": "Videovorschau",
       "desc": "Stumme Vorschau beim Darüberfahren, auf dem Handy spielt die mittlere Karte"

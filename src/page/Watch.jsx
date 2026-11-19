@@ -61,6 +61,7 @@ import PremiereCountdown from '../components/Premiere/PremiereCountdown';
 import PremiereBar from '../components/Premiere/PremiereBar';
 import PremiereChat from '../components/Premiere/PremiereChat';
 import StreamChatReplay from '../components/StreamChatReplay/StreamChatReplay';
+import { isDataSaverOn, pickStartLevel } from '../lib/dataSaver';
 
 // Stable identity so `related?.videos || EMPTY_LIST` doesn't hand a NEW [] to the
 // memo on every render.
@@ -962,26 +963,14 @@ function Watch({ v2 = false, routeV = null }) {
       const levels = player.getQualities();
       setQualityLevels(levels);
 
-      const storedPref = localStorage.getItem(QUALITY_STORAGE_KEY);
-      if (storedPref && storedPref !== 'auto' && levels.length > 0) {
-        const preferredHeight = parseInt(storedPref, 10);
-        // Find exact match or nearest available level at or below the stored height
-        let best = null;
-        for (const l of levels) {
-          if (l.height === preferredHeight) { best = l; break; }
-          if (l.height < preferredHeight && (!best || l.height > best.height)) {
-            best = l;
-          }
-        }
-        if (best) {
-          player.setQuality(best.index);
-          setCurrentQuality(best.index);
-        } else {
-          // All levels are above stored height — pick the lowest available
-          const lowest = levels.reduce((a, b) => a.height < b.height ? a : b);
-          player.setQuality(lowest.index);
-          setCurrentQuality(lowest.index);
-        }
+      // The stored quality (or the nearest below it), capped at 360p with
+      // data saver (lib/dataSaver.js); none = automatic.
+      let storedPref = null;
+      try { storedPref = localStorage.getItem(QUALITY_STORAGE_KEY); } catch { /* storage blocked */ }
+      const start = pickStartLevel(levels, storedPref, isDataSaverOn());
+      if (start) {
+        player.setQuality(start.index);
+        setCurrentQuality(start.index);
       } else {
         setCurrentQuality(player.getCurrentQuality());
       }

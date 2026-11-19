@@ -6,6 +6,7 @@ import useCardSize from "./useCardSize";
 import useSubtitles, { prefetchSubtitles } from "./useSubtitles";
 import { heroReady } from "../lib/heroPriority";
 import SubtitleOverlay from "../components/SubtitleOverlay/SubtitleOverlay";
+import { useDataSaver } from "../lib/dataSaver";
 
 // The player SDK + hls.js (~1 MB of JavaScript) load on demand: the cards draw
 // with their pictures first, and the sources are only looked up after the
@@ -91,7 +92,9 @@ async function prefetchManifestAbortable(hlsUrl, signal, onGone) {
 // stacking context, so its children are always painted below this overlay. Call
 // `setLock(true)` while a popup is open so leaving the card doesn't kill the preview.
 export default function useHoverPreview({ renderControls } = {}) {
-  const previewEnabled = useAppStore((s) => s.previewEnabled !== false);
+  // Data saver (lib/dataSaver.js) turns the previews off as well.
+  const dataSaver = useDataSaver();
+  const previewEnabled = useAppStore((s) => s.previewEnabled !== false) && !dataSaver;
   const cardSize = useCardSize();
 
   const canHover = useMemo(

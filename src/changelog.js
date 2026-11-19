@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.120',
+    category: 'settings',
+    date: '2026-11-19',
+    summary: 'Data saver in Settings: no video previews and videos start at 360p. It turns on by itself on slow connections or when your phone saves data.',
+  },
+  {
     version: '2.0.119',
     category: 'live',
     date: '2026-11-19',

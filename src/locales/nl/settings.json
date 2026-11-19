@@ -156,6 +156,10 @@
       "title": "Grote kaarten",
       "desc": "Grotere videokaarten op home, profiel en playlists"
     },
+    "dataSaver": {
+      "title": "Databesparing",
+      "desc": "Geen videovoorbeelden, en video's starten in 360p. Gaat vanzelf aan als je apparaat data wil besparen of de verbinding traag is."
+    },
     "previews": {
       "title": "Videovoorbeelden",
       "desc": "Stille preview bij hoveren; op mobiel speelt de middelste kaart"

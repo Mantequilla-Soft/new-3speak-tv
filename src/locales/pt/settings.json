@@ -156,6 +156,10 @@
       "title": "Cards grandes",
       "desc": "Cartões de vídeo maiores no início, perfil e playlists"
     },
+    "dataSaver": {
+      "title": "Economia de dados",
+      "desc": "Sem prévias de vídeo, e os vídeos começam em 360p. Liga sozinho quando o seu aparelho pede para economizar dados ou a conexão está lenta."
+    },
     "previews": {
       "title": "Prévias de vídeo",
       "desc": "Prévia sem som ao passar o mouse; no celular, o cartão do centro toca"

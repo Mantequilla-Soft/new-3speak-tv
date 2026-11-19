@@ -156,6 +156,10 @@
       "title": "Schede grandi",
       "desc": "Schede video più grandi su home, profilo e playlist"
     },
+    "dataSaver": {
+      "title": "Risparmio dati",
+      "desc": "Niente anteprime video, e i video partono a 360p. Si attiva da solo quando il dispositivo chiede di risparmiare dati o la connessione è lenta."
+    },
     "previews": {
       "title": "Anteprime video",
       "desc": "Anteprima muta al passaggio del mouse; da mobile parte la scheda al centro"

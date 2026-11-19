@@ -156,6 +156,10 @@
       "title": "Duże karty",
       "desc": "Większe karty filmów na stronie głównej, profilu i playlistach"
     },
+    "dataSaver": {
+      "title": "Oszczędzanie danych",
+      "desc": "Bez podglądów wideo, a filmy startują w 360p. Włącza się samo, gdy urządzenie prosi o oszczędzanie danych albo połączenie jest wolne."
+    },
     "previews": {
       "title": "Podglądy filmów",
       "desc": "Wyciszony podgląd po najechaniu; na telefonie odtwarza się środkowa karta"

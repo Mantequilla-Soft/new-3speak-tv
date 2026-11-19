@@ -156,6 +156,10 @@
       "title": "Tarjetas grandes",
       "desc": "Tarjetas de video más grandes en inicio, perfil y playlists"
     },
+    "dataSaver": {
+      "title": "Ahorro de datos",
+      "desc": "Sin vistas previas de video, y los videos empiezan en 360p. Se activa solo cuando tu dispositivo pide ahorrar datos o la conexión es lenta."
+    },
     "previews": {
       "title": "Vistas previas de video",
       "desc": "Vista previa silenciada al pasar el cursor; en el móvil se reproduce la tarjeta del centro"

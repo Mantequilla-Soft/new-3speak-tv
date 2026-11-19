@@ -34,6 +34,7 @@ import { Banner, Button, Icon, IconButton, Segmented, SettingRow, Toggle } from 
 import { cx } from '../v2/helpers';
 import './SettingsModal.scss';
 import useCardSize, { useIsCardSizeMobile } from '../../hooks/useCardSize';
+import { useDataSaver } from '../../lib/dataSaver';
 
 // Every toast from this module is headed "Settings"; the message becomes the
 // line under it. See utils/toast.js.
@@ -1085,7 +1086,9 @@ const DROPDOWN_WIDTH = 600;
 // linked-profiles prompt does with 'connections' (components/SocialLinksPrompt).
 export default function SettingsModal({ isOpen, onClose, dropdown = null, leaving = false, hoverProps, typingProps, initialTab = null }) {
   const { t } = useTranslation();
-  const { theme, showNsfw, setShowNsfw, toggleTheme, homeCardSize, setHomeCardSize, previewEnabled, setPreviewEnabled, shortsCommentBar, setShortsCommentBar, resumeLastPage, setResumeLastPage, inlineShorts, setInlineShorts, hideWatched, setHideWatched, hideAi, setHideAi, privateMode, setPrivateMode, heroPreviewEnabled, setHeroPreviewEnabled } = useAppStore();
+  const { theme, showNsfw, setShowNsfw, toggleTheme, homeCardSize, setHomeCardSize, previewEnabled, setPreviewEnabled, shortsCommentBar, setShortsCommentBar, resumeLastPage, setResumeLastPage, inlineShorts, setInlineShorts, hideWatched, setHideWatched, hideAi, setHideAi, privateMode, setPrivateMode, heroPreviewEnabled, setHeroPreviewEnabled, setDataSaver } = useAppStore();
+  // On by choice, or by itself on a data-saving connection (lib/dataSaver.js).
+  const dataSaver = useDataSaver();
   const cardSize = useCardSize();
   const cardSizeMobile = useIsCardSizeMobile();
   /* Whether the Ads & rewards page exists at all.
@@ -1276,11 +1279,19 @@ export default function SettingsModal({ isOpen, onClose, dropdown = null, leavin
               onChange={(large) => setHomeCardSize(large ? 'large' : 'small')}
             />
           )}
+          <Row
+            title={t('settings.appearance.dataSaver.title')}
+            desc={t('settings.appearance.dataSaver.desc')}
+            checked={dataSaver}
+            onChange={(v) => setDataSaver(v)}
+          />
+          {/* Data saver keeps the previews off, whatever these say. */}
           {showPreviewSetting && (
             <Row
               title={t('settings.appearance.previews.title')}
               desc={t('settings.appearance.previews.desc')}
-              checked={previewEnabled !== false}
+              checked={previewEnabled !== false && !dataSaver}
+              disabled={dataSaver}
               onChange={(v) => setPreviewEnabled(v)}
             />
           )}
@@ -1289,7 +1300,8 @@ export default function SettingsModal({ isOpen, onClose, dropdown = null, leavin
             <Row
               title={t('settings.appearance.heroPreviews.title')}
               desc={t('settings.appearance.heroPreviews.desc')}
-              checked={heroPreviewEnabled !== false}
+              checked={heroPreviewEnabled !== false && !dataSaver}
+              disabled={dataSaver}
               onChange={(v) => setHeroPreviewEnabled(v)}
             />
           )}

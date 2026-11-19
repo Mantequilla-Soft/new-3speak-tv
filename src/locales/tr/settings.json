@@ -156,6 +156,10 @@
       "title": "Büyük kartlar",
       "desc": "Ana sayfa, profil ve oynatma listelerinde daha büyük video kartları"
     },
+    "dataSaver": {
+      "title": "Veri tasarrufu",
+      "desc": "Video önizlemesi yok ve videolar 360p ile başlar. Cihazın veri tasarrufu istediğinde veya bağlantı yavaş olduğunda kendiliğinden açılır."
+    },
     "previews": {
       "title": "Video önizlemeleri",
       "desc": "Üzerine gelince sessiz önizleme; mobilde ortadaki kart oynar"

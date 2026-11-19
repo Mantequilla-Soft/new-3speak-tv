@@ -156,6 +156,10 @@
       "title": "Thẻ lớn",
       "desc": "Thẻ video lớn hơn trên trang chủ, hồ sơ và danh sách phát"
     },
+    "dataSaver": {
+      "title": "Tiết kiệm dữ liệu",
+      "desc": "Không có xem trước video, và video bắt đầu ở 360p. Tự bật khi thiết bị của bạn yêu cầu tiết kiệm dữ liệu hoặc kết nối chậm."
+    },
     "previews": {
       "title": "Xem trước video",
       "desc": "Xem trước tắt tiếng khi di chuột; trên di động thẻ ở giữa sẽ tự phát"

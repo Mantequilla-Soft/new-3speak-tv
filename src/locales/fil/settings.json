@@ -156,6 +156,10 @@
       "title": "Malalaking card",
       "desc": "Mas malalaking video card sa home, profile at playlist"
     },
+    "dataSaver": {
+      "title": "Data saver",
+      "desc": "Walang video preview, at nagsisimula ang mga video sa 360p. Kusang bumubukas kapag gusto ng device mo na magtipid ng data o mabagal ang koneksyon."
+    },
     "previews": {
       "title": "Mga video preview",
       "desc": "Naka-mute na preview kapag nag-hover; sa mobile, nagpe-play ang card na nasa gitna"

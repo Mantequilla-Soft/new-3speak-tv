@@ -15,6 +15,7 @@ import { getFollowers } from "../../hive-api/api";
 import { formatNumber } from "../../i18n";
 import { holdForHero, releaseHero } from "../../lib/heroPriority";
 import { getPlayerUrl } from "../../utils/playerUrl";
+import { useDataSaver } from "../../lib/dataSaver";
 import "./HomeHero.scss";
 
 // Opened from the hero's Save / Share buttons only: not part of the first download.
@@ -96,11 +97,11 @@ if (typeof document !== "undefined") {
   } catch { /* no player URL: nothing to warm */ }
 }
 
-// Desktop only, never on a data saver or with reduced motion: a full-width
-// stream is a lot to pull on a phone plan.
+// Desktop only, never with reduced motion. Data saver (lib/dataSaver.js) is
+// checked live in the component: a full-width stream is a lot to pull on a
+// phone plan.
 const previewAllowed = () => HERO_PREVIEW
   && !!window.matchMedia?.("(min-width: 769px) and (hover: hover)").matches
-  && !navigator.connection?.saveData
   && !reducedMotion();
 
 const clock = (sec) => {
@@ -240,7 +241,8 @@ export default function HomeHero({ videos = [], pending = false }) {
   // Spotlight's clips off in Settings (live: off stops them at once).
   const [previewAllowedHere] = useState(previewAllowed);
   const heroPreviewSetting = useAppStore((s) => s.heroPreviewEnabled !== false);
-  const previewOn = previewAllowedHere && heroPreviewSetting;
+  const dataSaver = useDataSaver();
+  const previewOn = previewAllowedHere && heroPreviewSetting && !dataSaver;
   const elA = useRef(null);
   const elB = useRef(null);
   const players = useRef([null, null]);
