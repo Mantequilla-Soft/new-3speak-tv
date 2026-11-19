@@ -59,7 +59,10 @@
     flex-direction: column;
     b { font-size: 14px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     > span { font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    a { color: var(--muted); text-decoration: underline; }
   }
+  // "Show more" under the channel points movements (PointsHistory)
+  &__more { flex-shrink: 0; width: 100%; justify-content: center; }
   &__amt {
     @include v2.mono(14, 700);
     color: var(--text);

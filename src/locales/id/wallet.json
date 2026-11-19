@@ -76,7 +76,8 @@
       "all": "Semua",
       "rewards": "Reward",
       "received": "Diterima",
-      "sent": "Terkirim"
+      "sent": "Terkirim",
+      "points": "Poin"
     },
     "from": "Dari @{{user}}",
     "sentTo": "Dikirim ke @{{user}}",

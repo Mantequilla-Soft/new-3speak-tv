@@ -76,7 +76,8 @@
       "all": "Zote",
       "rewards": "Zawadi",
       "received": "Zilizopokelewa",
-      "sent": "Zilizotumwa"
+      "sent": "Zilizotumwa",
+      "points": "Pointi"
     },
     "from": "Kutoka kwa @{{user}}",
     "sentTo": "Imetumwa kwa @{{user}}",

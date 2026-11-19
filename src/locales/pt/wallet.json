@@ -76,7 +76,8 @@
       "all": "Tudo",
       "rewards": "Recompensas",
       "received": "Recebidas",
-      "sent": "Enviadas"
+      "sent": "Enviadas",
+      "points": "Pontos"
     },
     "from": "De @{{user}}",
     "sentTo": "Enviado para @{{user}}",

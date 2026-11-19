@@ -76,7 +76,8 @@
       "all": "전체",
       "rewards": "보상",
       "received": "받음",
-      "sent": "보냄"
+      "sent": "보냄",
+      "points": "포인트"
     },
     "from": "@{{user}}님에게서",
     "sentTo": "@{{user}}님에게 보냄",

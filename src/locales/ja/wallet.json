@@ -76,7 +76,8 @@
       "all": "すべて",
       "rewards": "報酬",
       "received": "受取",
-      "sent": "送金"
+      "sent": "送金",
+      "points": "ポイント"
     },
     "from": "@{{user}} から",
     "sentTo": "@{{user}} に送金",

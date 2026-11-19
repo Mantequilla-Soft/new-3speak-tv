@@ -76,7 +76,8 @@
       "all": "Lahat",
       "rewards": "Rewards",
       "received": "Natanggap",
-      "sent": "Naipadala"
+      "sent": "Naipadala",
+      "points": "Points"
     },
     "from": "Mula kay @{{user}}",
     "sentTo": "Ipinadala kay @{{user}}",

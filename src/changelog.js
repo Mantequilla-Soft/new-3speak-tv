@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.119',
+    category: 'live',
+    date: '2026-11-19',
+    summary: "Channel points movements now show in the wallet's Activity list under a new Points tab, opened from the points card.",
+  },
+  {
     version: '2.0.118',
     category: 'live',
     date: '2026-11-19',

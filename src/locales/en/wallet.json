@@ -76,7 +76,8 @@
       "all": "All",
       "rewards": "Rewards",
       "received": "Received",
-      "sent": "Sent"
+      "sent": "Sent",
+      "points": "Points"
     },
     "from": "From @{{user}}",
     "sentTo": "Sent to @{{user}}",

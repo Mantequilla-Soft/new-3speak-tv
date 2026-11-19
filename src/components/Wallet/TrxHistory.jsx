@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import { formatDate, formatTimeAgoCompact, formatNumber } from "../../i18n";
 import { Segmented, EmptyState, Icon } from "../v2/ui";
 import { cx } from "../v2/helpers";
+import PointsHistory from "./PointsHistory";
 
 const client = getHiveClient();
 
@@ -98,13 +99,19 @@ const MATCH = {
  * The wallet's Activity list (design 21e, 25c): transfers in and out and
  * claimed rewards, newest first, in a fixed-height panel that scrolls inside.
  * `onLoaded(list)` hands the loaded list to the page (the earnings chart).
+ * With `points` (usePointsInfo) a Points filter lists the channel points
+ * movements; the page can drive the filter (`filter`, `onFilter`) so the
+ * points card opens it.
  */
-function TrxHistory({ user, onLoaded }) {
+function TrxHistory({ user, onLoaded, points = null, filter: filterProp, onFilter }) {
   const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(true);
   const [transactions, setTransactions] = useState([]);
   const [error, setError] = useState(null);
-  const [filter, setFilter] = useState("all");
+  const [ownFilter, setOwnFilter] = useState("all");
+  const filter = filterProp ?? ownFilter;
+  const setFilter = onFilter ?? setOwnFilter;
+  const filters = points ? [...FILTERS, "points"] : FILTERS;
 
   useEffect(() => {
     const loadTransactions = async () => {
@@ -126,7 +133,7 @@ function TrxHistory({ user, onLoaded }) {
     loadTransactions();
   }, [user, t, onLoaded]);
 
-  const shown = useMemo(() => transactions.filter(MATCH[filter]), [transactions, filter]);
+  const shown = useMemo(() => transactions.filter(MATCH[filter] || MATCH.all), [transactions, filter]);
 
   return (
     <section className="trx" id="wallet-activity" aria-labelledby="wallet-activity-title">
@@ -139,11 +146,13 @@ function TrxHistory({ user, onLoaded }) {
           label={t('wallet.activity.title')}
           value={filter}
           onChange={setFilter}
-          options={FILTERS.map((f) => ({ value: f, label: t(`wallet.activity.filters.${f}`) }))}
+          options={filters.map((f) => ({ value: f, label: t(`wallet.activity.filters.${f}`) }))}
         />
       </div>
       <div className="trx__list">
-        {isLoading ? (
+        {filter === "points" && points ? (
+          <PointsHistory user={user} ttlDays={points.ttlDays} />
+        ) : isLoading ? (
           <Skeleton />
         ) : error ? (
           <div className="v2-failure" role="alert"><b>{error}</b></div>

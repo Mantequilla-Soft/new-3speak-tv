@@ -10,6 +10,7 @@ import ReceiveDialog from '../components/Wallet/ReceiveDialog';
 import WalletOpModal from '../components/Wallet/WalletOpModal';
 import WalletPending from '../components/Wallet/WalletPending';
 import PointsCard from '../components/Wallet/PointsCard';
+import { usePointsInfo } from '../components/Wallet/channelPoints';
 import { loadWalletState } from '../lib/walletOps';
 import { toastIn } from '../utils/toast';
 import { ENABLE_SUBS } from '../utils/config';
@@ -229,6 +230,12 @@ function Wallet() {
 
   const scrollTo = (id) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
+  // Channel points: the balance card on the side, the movements in Activity
+  // (its Points filter), which the card's button opens.
+  const pointsInfo = usePointsInfo(user);
+  const [activityFilter, setActivityFilter] = useState('all');
+  const showPointsHistory = () => { setActivityFilter('points'); scrollTo('wallet-activity'); };
+
   // Earnings, 30 days: rewards claimed and HIVE/HBD received, from the
   // activity the list below already loaded.
   const bars = useMemo(() => {
@@ -357,10 +364,10 @@ function Wallet() {
           </section>
 
           <div className="wallet-v2__grid">
-            <TrxHistory user={user} onLoaded={onLoaded} />
+            <TrxHistory user={user} onLoaded={onLoaded} points={pointsInfo} filter={activityFilter} onFilter={setActivityFilter} />
             <aside className="wallet-v2__side">
               {ops && <WalletPending user={user} state={ops} own={own} onChanged={refreshAll} />}
-              <PointsCard user={user} own={own} />
+              <PointsCard info={pointsInfo} own={own} onShowHistory={showPointsHistory} />
               <div className="wallet-v2__card">
                 <div className="wallet-v2__card-head">
                   <b>{t('wallet.earnings.title')}</b>

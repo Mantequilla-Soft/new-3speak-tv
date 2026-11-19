@@ -76,7 +76,8 @@
       "all": "Tất cả",
       "rewards": "Phần thưởng",
       "received": "Đã nhận",
-      "sent": "Đã gửi"
+      "sent": "Đã gửi",
+      "points": "Điểm"
     },
     "from": "Từ @{{user}}",
     "sentTo": "Đã gửi cho @{{user}}",

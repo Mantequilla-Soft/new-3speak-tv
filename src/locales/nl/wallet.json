@@ -76,7 +76,8 @@
       "all": "Alles",
       "rewards": "Beloningen",
       "received": "Ontvangen",
-      "sent": "Verstuurd"
+      "sent": "Verstuurd",
+      "points": "Punten"
     },
     "from": "Van @{{user}}",
     "sentTo": "Verstuurd naar @{{user}}",

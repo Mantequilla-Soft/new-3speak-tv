@@ -76,7 +76,8 @@
       "all": "全部",
       "rewards": "奖励",
       "received": "收到",
-      "sent": "已发送"
+      "sent": "已发送",
+      "points": "积分"
     },
     "from": "来自 @{{user}}",
     "sentTo": "已发送给 @{{user}}",

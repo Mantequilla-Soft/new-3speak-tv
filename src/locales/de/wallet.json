@@ -76,7 +76,8 @@
       "all": "Alle",
       "rewards": "Belohnungen",
       "received": "Erhalten",
-      "sent": "Gesendet"
+      "sent": "Gesendet",
+      "points": "Punkte"
     },
     "from": "Von @{{user}}",
     "sentTo": "An @{{user}} gesendet",
