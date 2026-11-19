@@ -40,6 +40,17 @@
       border-width: 1px 0 0;
       background: var(--bg);
     }
+
+    // A `fit` tab (the live chat): as tall as its content, up to the usual
+    // height, after which it scrolls inside as before.
+    &.is-fit {
+      height: auto;
+      min-height: 0;
+      max-height: min(72dvh, 640px);
+
+      .wv2-side__body { flex: 0 1 auto; }
+      .wv2-side__scroll:not([hidden]) { position: relative; inset: auto; max-height: 100%; }
+    }
   }
 }
 

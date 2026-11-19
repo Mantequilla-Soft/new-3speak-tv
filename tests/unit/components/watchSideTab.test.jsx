@@ -4,8 +4,8 @@
 // opens on its Live chat (also when the chat tab only appears once the page knows
 // the stream is live) and then keeps the viewer's own pick on that page.
 import { describe, it, expect, beforeEach } from 'vitest'
-import { renderHook, act } from '@testing-library/react'
-import { useSideTab } from '../../../src/components/playVideo/WatchTabs.jsx'
+import { renderHook, act, render } from '@testing-library/react'
+import WatchTabs, { useSideTab } from '../../../src/components/playVideo/WatchTabs.jsx'
 
 const KEY = '3speak-watch-side-tab'
 
@@ -45,5 +45,23 @@ describe('useSideTab', () => {
     expect(localStorage.getItem(KEY)).toBe('discussion')
     rerender({ ids: ['chat', 'discussion', 'transcript'] })
     expect(result.current[0]).toBe('discussion')
+  })
+})
+
+// A narrow panel keeps one fixed height, except while a `fit` tab (the live
+// chat) is open: then it is as tall as the conversation, up to that height.
+describe('WatchTabs fit', () => {
+  const tabs = [
+    { id: 'chat', label: 'Live chat', fit: true, keepMounted: true, content: <p>hi</p> },
+    { id: 'discussion', label: 'Discussion', content: <p>comments</p> },
+  ]
+  const panel = (active, wide = false) => render(<WatchTabs tabs={tabs} active={active} wide={wide} />).container.querySelector('.wv2-side')
+
+  it('fits the narrow panel to the live chat', () => {
+    expect(panel('chat').classList.contains('is-fit')).toBe(true)
+  })
+  it('keeps the fixed height for the other tabs and beside the player', () => {
+    expect(panel('discussion').classList.contains('is-fit')).toBe(false)
+    expect(panel('chat', true).classList.contains('is-fit')).toBe(false)
   })
 })

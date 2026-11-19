@@ -70,17 +70,21 @@ export function useSideTab(ids) {
  * a narrow one it is a row of chips above a fixed scroll area (STYLE_GUIDE §11,
  * "Mobile variant of any desktop panel").
  *
- * tabs: [{ id, label, count, icon, content, keepMounted, flush }]. A keepMounted tab
+ * tabs: [{ id, label, count, icon, content, keepMounted, flush, fit }]. A keepMounted tab
  * stays in the DOM while hidden: the discussion keeps its draft and the live
- * chat keeps the portal it is drawn into.
+ * chat keeps the portal it is drawn into. A `fit` tab is the exception to the
+ * fixed size on a narrow screen: the panel is as tall as what it shows, up to
+ * the usual height (a live chat with two lines should not leave half a phone
+ * screen empty).
  */
 export default function WatchTabs({ tabs, active, onChange, wide, label, className, panelRef }) {
   const list = useMemo(() => tabs.filter(Boolean), [tabs]);
   if (!list.length) return null;
   const current = list.some((tab) => tab.id === active) ? active : list[0].id;
+  const fit = !wide && list.find((tab) => tab.id === current)?.fit;
 
   return (
-    <section className={cx('wv2-side', wide ? 'is-wide' : 'is-narrow', className)} aria-label={label} ref={panelRef}>
+    <section className={cx('wv2-side', wide ? 'is-wide' : 'is-narrow', fit && 'is-fit', className)} aria-label={label} ref={panelRef}>
       <div className={cx('wv2-side__tabs', wide ? 'v2-seg is-block' : 'is-chips')} role="tablist" aria-label={label}>
         {list.map((tab) => {
           const on = tab.id === current;

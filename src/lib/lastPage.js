@@ -24,6 +24,10 @@ const SKIP = [
   /^\/(studio|draft|editvideo|edit-scheduled|firstupload|publish-backlog|upload)(\/|$)/,
   // Publishing a stream's recording: its state comes from the stream just ended.
   /^\/openpods\/publish(\/|$)/,
+  // A live stream (watching one, or the host's room): it is over by the next
+  // visit, and the host's room would open the studio again.
+  /^\/(watch|l)\/[^/]+/,
+  /^\/openpods\/[^/]+/,
 ];
 
 /** The path + query + hash to remember for a router location, or null when it is skipped. */

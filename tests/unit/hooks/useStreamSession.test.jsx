@@ -27,6 +27,11 @@ const wallet = vi.hoisted(() => ({ aioha: { id: 'aioha' }, user: null }))
 vi.mock('@aioha/react-ui', () => ({ useAioha: () => wallet }))
 const store = vi.hoisted(() => ({ authenticated: true, user: 'badadib' }))
 vi.mock('../../../src/lib/store', () => ({ useAppStore: (sel) => sel(store) }))
+const signing = vi.hoisted(() => ({ butrauth: false, transferWithAioha: vi.fn(async () => ({ success: true, result: 'tx' })) }))
+vi.mock('../../../src/hive-api/aioha', () => ({
+  isManteAuthLogin: () => signing.butrauth,
+  transferWithAioha: signing.transferWithAioha,
+}))
 const { useStreamSession } = await import('../../../src/hooks/useStreamSession.js')
 
 const advance = (ms) => act(async () => { await vi.advanceTimersByTimeAsync(ms) })
@@ -43,6 +48,9 @@ beforeEach(() => {
   hangout.state = { sessionToken: null, sessionLoading: false, hangoutsUser: null, retryLogin }
   Object.assign(store, { authenticated: true, user: 'badadib' })
   wallet.user = null
+  wallet.aioha = { id: 'aioha', transfer: vi.fn(async () => ({ success: false, error: 'Not logged in' })), getCurrentUser() { return this.id } }
+  signing.butrauth = false
+  signing.transferWithAioha.mockClear()
 })
 afterEach(() => vi.useRealTimers())
 
@@ -168,5 +176,25 @@ describe('signing in on demand', () => {
     hangout.state.retryLogin.mockRejectedValueOnce(new Error('cancelled'))
     await act(async () => { await expect(result.current.signIn()).rejects.toThrow('cancelled') })
     expect(result.current.signingIn).toBe(false)
+  })
+})
+
+describe('the wallet the SDK signs boosts with', () => {
+  it('is the Aioha instance itself for a wallet login', () => {
+    const { result } = renderHook(() => useStreamSession())
+    expect(result.current.aioha).toBe(wallet.aioha)
+  })
+
+  it('sends a Butter Auth login\'s transfer to the wallet prompt, not to Aioha', async () => {
+    signing.butrauth = true
+    const { result } = renderHook(() => useStreamSession())
+    const a = result.current.aioha
+    // The SDK calls transfer.call(aioha, ...).
+    const out = await a.transfer.call(a, 'threespeak', 1.5, 'HBD', '{"room":"badadib-x"}')
+    expect(out).toEqual({ success: true, result: 'tx' })
+    expect(signing.transferWithAioha).toHaveBeenCalledWith('threespeak', 1.5, 'HBD', '{"room":"badadib-x"}')
+    expect(wallet.aioha.transfer).not.toHaveBeenCalled()
+    // Everything else still reaches the real instance.
+    expect(a.getCurrentUser()).toBe('aioha')
   })
 })

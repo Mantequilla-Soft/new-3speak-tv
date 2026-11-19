@@ -1,5 +1,6 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useAioha } from '@aioha/react-ui';
+import { isManteAuthLogin, transferWithAioha } from '../hive-api/aioha';
 import { useHangout } from '../context/HangoutContext';
 import { useAppStore } from '../lib/store';
 
@@ -25,6 +26,24 @@ import { useAppStore } from '../lib/store';
  * is asked for a wallet signature only when they choose to chat or raise a
  * hand (`signIn`). Opening a stream used to pop a wallet prompt straight away.
  */
+/**
+ * The Aioha the Hangouts SDK signs with. A Butter Auth login has no Aioha
+ * account, so the SDK's boost dialog got "Not logged in" back from
+ * aioha.transfer. Its transfers go through transferWithAioha instead, which
+ * opens the active-key wallet prompt for a Butter Auth session (the same one the
+ * wallet page uses). Everything else is the real instance.
+ */
+function signerFor(aioha) {
+  if (!aioha || !isManteAuthLogin()) return aioha;
+  return new Proxy(aioha, {
+    get(target, key) {
+      if (key === 'transfer') return (to, amount, asset, memo) => transferWithAioha(to, amount, asset, memo);
+      const value = Reflect.get(target, key);
+      return typeof value === 'function' ? value.bind(target) : value;
+    },
+  });
+}
+
 export function useStreamSession() {
   const { sessionToken, sessionLoading, retryLogin, hangoutsUser } = useHangout();
   const { aioha, user: aiohaUser } = useAioha();
@@ -41,6 +60,8 @@ export function useStreamSession() {
   // account in the challenge made the @threespeak signer refuse it (400), so
   // a logged-in viewer was treated as a guest.
   const handoverUser = user || aiohaUser;
+  // Re-read on every login change: the Butter Auth flag lives in localStorage.
+  const signer = useMemo(() => signerFor(aioha), [aioha, user, authenticated]); // eslint-disable-line react-hooks/exhaustive-deps
   const canHandover = !!authenticated && !!handoverUser;
   // Two attempts, not one. The handover involves a server-side signature and
   // can lose a race on a cold load; giving up after a single failure left a
@@ -113,7 +134,7 @@ export function useStreamSession() {
   }, [likelyAuthed]);
 
   return {
-    aioha,
+    aioha: signer,
     authenticated,
     sessionToken,
     hangoutsUser,
