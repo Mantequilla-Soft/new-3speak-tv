@@ -313,6 +313,12 @@
         "chat": "Chat",
         "live": "Poll at raid",
         "boosts": "Boost"
+      },
+      "clips": {
+        "title": "Mga mungkahing clip",
+        "body": "Gumawa ang mga manonood mo ng mga clip mula sa huli mong stream: {{count}} clip mula sa {{viewers}} manonood. I-post ang pinakamaganda bilang Shorts.",
+        "open": "Tingnan ang mga mungkahing clip at i-post",
+        "hide": "Itago"
       }
     },
     "pro": {

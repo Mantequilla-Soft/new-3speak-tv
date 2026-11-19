@@ -314,6 +314,12 @@
         "chat": "Chat",
         "live": "Encuestas y raids",
         "boosts": "Boosts"
+      },
+      "clips": {
+        "title": "Sugerencias de clips",
+        "body": "Tus espectadores hicieron clips de tu último directo: {{count}} clips de {{viewers}} espectadores. Publica los mejores como Shorts.",
+        "open": "Ver las sugerencias de clips y publicarlas",
+        "hide": "Ocultar"
       }
     },
     "pro": {

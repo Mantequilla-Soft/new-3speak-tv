@@ -315,6 +315,12 @@
         "chat": "Czat",
         "live": "Ankiety i rajdy",
         "boosts": "Boosty"
+      },
+      "clips": {
+        "title": "Propozycje klipów",
+        "body": "Twoi widzowie zrobili klipy z twojej ostatniej transmisji: klipy: {{count}}, widzowie: {{viewers}}. Opublikuj najlepsze jako Shorts.",
+        "open": "Zobacz propozycje klipów i opublikuj je",
+        "hide": "Ukryj"
       }
     },
     "pro": {

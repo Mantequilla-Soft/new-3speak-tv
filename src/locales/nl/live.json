@@ -313,6 +313,12 @@
         "chat": "Chat",
         "live": "Polls en raids",
         "boosts": "Boosts"
+      },
+      "clips": {
+        "title": "Clipsuggesties",
+        "body": "Je kijkers maakten clips van je laatste stream: {{count}} clips van {{viewers}} kijkers. Plaats de beste als Shorts.",
+        "open": "Bekijk de clipsuggesties en plaats ze",
+        "hide": "Verbergen"
       }
     },
     "pro": {

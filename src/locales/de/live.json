@@ -313,6 +313,12 @@
         "chat": "Chat",
         "live": "Umfragen und Raids",
         "boosts": "Boosts"
+      },
+      "clips": {
+        "title": "Clip-Vorschläge",
+        "body": "Deine Zuschauer haben Clips von deinem letzten Stream gemacht: {{count}} Clips von {{viewers}} Zuschauern. Poste die besten als Shorts.",
+        "open": "Clip-Vorschläge ansehen und posten",
+        "hide": "Ausblenden"
       }
     },
     "pro": {

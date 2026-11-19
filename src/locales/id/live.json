@@ -312,6 +312,12 @@
         "chat": "Chat",
         "live": "Polling dan raid",
         "boosts": "Boost"
+      },
+      "clips": {
+        "title": "Saran klip",
+        "body": "Penontonmu membuat klip dari siaran terakhirmu: {{count}} klip dari {{viewers}} penonton. Unggah yang terbaik sebagai Shorts.",
+        "open": "Lihat saran klip dan unggah",
+        "hide": "Sembunyikan"
       }
     },
     "pro": {

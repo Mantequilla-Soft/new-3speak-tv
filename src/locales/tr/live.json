@@ -313,6 +313,12 @@
         "chat": "Sohbet",
         "live": "Anketler ve baskınlar",
         "boosts": "Boostlar"
+      },
+      "clips": {
+        "title": "Klip önerileri",
+        "body": "İzleyicilerin son yayınından klipler yaptı: {{viewers}} izleyiciden {{count}} klip. En iyilerini Shorts olarak paylaş.",
+        "open": "Klip önerilerini gör ve paylaş",
+        "hide": "Gizle"
       }
     },
     "pro": {

@@ -314,6 +314,12 @@
         "chat": "Chat",
         "live": "Sondaggi e raid",
         "boosts": "Boost"
+      },
+      "clips": {
+        "title": "Clip suggerite",
+        "body": "I tuoi spettatori hanno creato clip della tua ultima diretta: {{count}} clip da {{viewers}} spettatori. Pubblica le migliori come Shorts.",
+        "open": "Vedi le clip suggerite e pubblicale",
+        "hide": "Nascondi"
       }
     },
     "pro": {

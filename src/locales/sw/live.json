@@ -313,6 +313,12 @@
         "chat": "Gumzo",
         "live": "Kura na raid",
         "boosts": "Boost"
+      },
+      "clips": {
+        "title": "Mapendekezo ya klipu",
+        "body": "Watazamaji wako walitengeneza klipu za mtiririko wako wa mwisho: klipu {{count}} kutoka kwa watazamaji {{viewers}}. Chapisha bora kama Shorts.",
+        "open": "Ona mapendekezo ya klipu na uyachapishe",
+        "hide": "Ficha"
       }
     },
     "pro": {
