@@ -1,0 +1,153 @@
+// 🤖 /automations: the list of workflows and the run history. The editor's own
+// styles (and the designer theme) are in components/Automations/AutomationEditor.scss.
+.aut-page {
+  max-width: var(--content-max);
+  margin: 0 auto;
+  // The app column (.container, App.css) already gives the page padding.
+  padding: 0;
+  color: var(--text);
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  &.is-editor { max-width: none; }
+
+  &__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+
+    h1 {
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 24px;
+    }
+  }
+  &__sub {
+    margin: 6px 0 0;
+    color: var(--muted);
+    max-width: 60ch;
+  }
+  &__foot {
+    margin: 8px 0 0;
+    font-size: 13px;
+    color: var(--muted);
+    max-width: 70ch;
+  }
+  &__actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+  }
+  &__loading {
+    height: 480px;
+    border-radius: 16px;
+  }
+}
+
+// Small print, here and in the editor's side panel.
+.aut-note {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--muted);
+}
+
+.aut-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+  gap: 12px;
+}
+
+.aut-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  &.is-on { border-color: color-mix(in srgb, var(--accent) 45%, var(--border)); }
+
+  &__top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  &__text {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+  }
+  &__name {
+    font-size: 16px;
+    overflow-wrap: anywhere;
+  }
+  &__when {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  &__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 14px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  &__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  &__delete { margin-left: auto; }
+}
+
+.aut-starters {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
+    gap: 10px;
+  }
+}
+
+.aut-runs {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  &__row {
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  &__head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  &__when, &__meta { font-size: 13px; color: var(--muted); }
+  &__post {
+    font-weight: 600;
+    color: var(--text);
+    overflow-wrap: anywhere;
+  }
+  &__err { font-size: 13px; color: var(--accent); overflow-wrap: anywhere; }
+}

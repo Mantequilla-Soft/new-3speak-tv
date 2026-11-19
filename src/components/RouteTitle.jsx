@@ -40,7 +40,7 @@ const PRIVATE = [
   '/auth', '/callback', '/studio', '/embed-studio', '/draft', '/editvideo', '/edit-scheduled',
   '/profile', '/wallet', '/test', '/image', '/openpods/publish', '/chat', '/translate',
   '/invite-links', '/invite', '/home-feed', '/follow-feed', '/watched', '/egress-stream',
-  '/ad-wizard', '/curation',
+  '/ad-wizard', '/curation', '/automations',
 ];
 
 // First match wins. `titleKey` is an i18n key; `title` is a fn of the matched
@@ -82,6 +82,7 @@ const ROUTES = [
   { path: '/badge/:account', title: () => null, canonical: (p) => `/b/${String(p.account).toLowerCase()}` },
   { path: '/watched/:username', title: (p) => t('app.routes.watchHistory', { username: p.username }) },
   { path: '/curation/:user', title: (p) => `${t('curation.page.title')} · @${p.user}` },
+  { path: '/automations', titleKey: 'automations.title' },
   { path: '/post/:author/:permlink', title: (p) => t('app.routes.postBy', { author: p.author }) },
   { path: '/profile', titleKey: 'app.routes.myProfile' },
   { path: '/upload', titleKey: 'common.actions.upload' },

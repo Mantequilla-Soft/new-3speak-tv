@@ -1,0 +1,228 @@
+// 🤖 The workflow editor's look: Sequential Workflow Designer's own theme mixins
+// (sequential-workflow-designer/sass/designer-theme.scss) filled with 3Speak's
+// tokens, as the theme "3speak" (the designer's `theme` prop → .sqd-theme-3speak).
+// Every colour is a CSS variable, so light and dark follow the site by
+// themselves. Flat like the rest of 3Speak: borders, no shadows, no gradients.
+@use 'sequential-workflow-designer/sass/designer-theme.scss' as sqd;
+
+$t: '3speak';
+$flat: (0 0 0 transparent);
+
+@include sqd.sqd-theme-ui-toolbox($t,
+  $panelBackgroundColor: var(--surface), $panelBoxShadow: none, $panelBorderRadius: 16px, $panelBorder: (1px solid var(--border)),
+  $headerTextColor: var(--text), $filterBackground: var(--surface-2), $filterTextColor: var(--text),
+  $filterBorder: (1px solid var(--border)), $filterBorderColorFocused: var(--muted), $filterBorderRadius: 10px,
+  $groupTextColor: var(--muted), $groupBackgroundColor: transparent, $groupBorderRadius: 8px);
+@include sqd.sqd-theme-ui-toolbox-item($t,
+  $itemTextColor: var(--text), $itemBackgroundColor: var(--surface), $itemBorder: (1px solid var(--border)), $itemBoxShadow: none,
+  $itemBorderHovered: var(--accent), $itemBackgroundColorHovered: var(--surface), $itemBorderRadius: 10px,
+  $noIconBackgroundColor: var(--surface-2), $noIconBorderRadius: 6px);
+@include sqd.sqd-theme-ui-control-bar($t,
+  $panelBackgroundColor: var(--surface), $panelBoxShadow: none, $panelBorderRadius: 12px, $panelBorder: (1px solid var(--border)),
+  $buttonBackground: var(--surface), $buttonBackgroundHovered: var(--surface-2), $buttonBorder: (1px solid var(--border)),
+  $buttonBorderColorHovered: var(--muted), $buttonBorderRadius: 8px, $buttonIconPathFillColor: var(--text),
+  $buttonDeleteIconPathFillColor: var(--accent));
+@include sqd.sqd-theme-ui-editor($t,
+  $panelBackgroundColor: var(--surface), $panelBoxShadow: (-1px 0 0 var(--border)),
+  $toggleBackgroundColor: var(--surface), $toggleBoxShadow: (0 0 0 1px var(--border)));
+@include sqd.sqd-theme-ui-context-menu($t,
+  $panelBackgroundColor: var(--surface), $panelBoxShadow: none, $panelBorderRadius: 10px, $panelBorder: (1px solid var(--border)),
+  $groupTextColor: var(--muted), $itemTextColor: var(--text), $itemBackgroundColorHovered: var(--surface-2), $itemBorderRadius: 6px);
+
+@include sqd.sqd-theme-workspace($t, $backgroundColor: var(--bg));
+@include sqd.sqd-theme-line-grid($t, $strokeColor: var(--border), $strokeWidth: 1);
+@include sqd.sqd-theme-join($t, $joinStrokeColor: var(--muted), $joinStrokeWidth: 2);
+@include sqd.sqd-theme-region($t, $strokeColor: var(--border), $strokeColorSelected: var(--accent), $strokeWidth: 1.5, $strokeWidthSelected: 2);
+@include sqd.sqd-theme-placeholder($t,
+  $rectFillColor: var(--surface-2), $rectStrokeColor: var(--muted), $rectStrokeWidth: 1, $rectStrokeDasharray: 3,
+  $rectFillHovered: var(--accent), $iconPathFillColor: var(--text), $iconPathFillColorHovered: var(--on-accent));
+@include sqd.sqd-theme-validation-error-badge($t, $triangleFillColor: #f5a524, $iconFillColor: #111);
+// Start and end of the flow: dark dots in light mode, light dots in dark mode.
+@include sqd.sqd-theme-start-stop-root-component($t, $circleFillColor: var(--text), $iconFillColor: var(--bg));
+
+@include sqd.sqd-theme-task-step-component($t,
+  $rectFillColor: var(--surface), $rectStrokeColor: var(--border), $rectStrokeColorSelected: var(--accent),
+  $rectStrokeWidth: 1, $rectStrokeWidthSelected: 2, $rectShadow: $flat, $textColor: var(--text), $emptyIconColor: var(--surface-2),
+  $inputStrokeWidth: 2, $inputStrokeColor: var(--muted), $inputFillColor: var(--surface),
+  $outputFillColor: var(--muted), $outputStrokeWidth: 0, $outputStrokeColor: var(--muted));
+// The if-step: its condition label in cyan (choices are cyan on 3Speak), the
+// "Yes"/"No" branch labels quiet.
+@include sqd.sqd-theme-switch-step-component($t,
+  $labelPrimaryTextColor: #fff, $labelPrimaryFillColor: var(--cyan), $labelPrimaryStrokeWidth: 0,
+  $labelSecondaryTextColor: var(--text), $labelSecondaryFillColor: var(--surface-2), $labelSecondaryStrokeColor: var(--border),
+  $labelSecondaryStrokeWidth: 1,
+  $inputStrokeWidth: 2, $inputStrokeColor: var(--muted), $inputFillColor: var(--surface));
+
+.sqd-theme-3speak {
+  font-family: inherit;
+
+  .sqd-step-task-text,
+  .sqd-label-text,
+  .sqd-toolbox-item-text,
+  .sqd-toolbox-header-title {
+    font-family: inherit;
+  }
+  // Wider than the designer's 130px, and wrapping: "Send to Discord" in German or
+  // Portuguese would be cut off.
+  .sqd-toolbox { width: 184px; }
+  .sqd-toolbox-item-text { font-weight: 600; white-space: normal; line-height: 1.25; }
+  .sqd-toolbox-group-title { text-transform: uppercase; letter-spacing: var(--tracking-eyebrow, 0.06em); font-size: 11px; font-weight: 700; }
+  .sqd-smart-editor { color: var(--text); }
+  .sqd-smart-editor-toggle-icon path, .sqd-toolbox-toggle-icon path { fill: var(--text); }
+}
+
+// ── The page around it ───────────────────────────────────────────────────────
+.aut-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  &__bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+  }
+  &__name {
+    flex: 1 1 220px;
+    min-width: 0;
+    font-weight: 700;
+  }
+  &__switch {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  &__canvas {
+    position: relative;
+    height: max(480px, calc(100dvh - var(--topbar-h, 64px) - 190px));
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+
+    .sqd-designer-react,
+    .sqd-designer { height: 100%; }
+  }
+  &__hint {
+    position: absolute;
+    left: 50%;
+    bottom: 16px;
+    transform: translateX(-50%);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 13px;
+    pointer-events: none;
+    white-space: nowrap;
+    max-width: calc(100% - 32px);
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+// The side panel (rendered by the designer, in its own React root).
+.aut-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  font-size: 14px;
+
+  &__title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    font-size: 16px;
+  }
+  &__section {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .v2-field { margin: 0; }
+}
+
+.aut-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  b { display: block; font-size: 14px; }
+  span { display: block; font-size: 12px; color: var(--muted); }
+}
+
+.aut-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.aut-chip {
+  padding: 3px 8px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface-2);
+  color: var(--text);
+  font: 600 12px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace;
+  cursor: pointer;
+
+  &:hover { border-color: var(--cyan); }
+}
+
+.aut-placeholder-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+  color: var(--muted);
+
+  code { color: var(--text); font-weight: 600; }
+}
+
+.aut-test {
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  &__row {
+    margin-left: calc(var(--depth, 0) * 16px);
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    &.is-failed { border-color: var(--accent); }
+  }
+  &__head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  &__text {
+    margin: 0;
+    padding: 8px 10px;
+    border-radius: 8px;
+    background: var(--surface-2);
+    font: 13px/1.45 inherit;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  &__err { font-size: 13px; color: var(--accent); }
+}

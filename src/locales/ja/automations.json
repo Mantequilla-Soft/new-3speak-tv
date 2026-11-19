@@ -1,0 +1,288 @@
+{
+  "menuEntry": "オートメーション",
+  "title": "オートメーション",
+  "beta": "ベータ",
+  "subtitle": "チャンネルで何かが起きたら、その後の作業を 3Speak におまかせ。Snap やショートの投稿、コメント、Discord への通知ができます。",
+  "howItWorks": "3Speak は {{minutes}} 分ごとにあなたのチャンネルを確認します。新しい投稿があると、その投稿に合うオンのオートメーションが動きます。投稿はすべて、あなたが 3Speak に与えた投稿許可を使い、あなたの名前で行われます。オートメーションが作った投稿から、別のオートメーションが動くことはありません。",
+  "gate": {
+    "signIn": "オートメーションを設定するにはサインインしてください。",
+    "closedTitle": "利用できません",
+    "closed": "オートメーションはクローズドテスト中で、あなたのアカウントではまだ使えません。",
+    "unavailable": "現在このサーバーではオートメーションを利用できません。",
+    "proTitle": "3Speak Pro の機能",
+    "pro": "オートメーションは 3Speak Pro の機能です。",
+    "getPro": "3Speak Pro を利用する",
+    "skipPro": "Pro の確認をスキップ（テスター）",
+    "skipProHint": "テスト用アカウントは Pro なしで自動化を試せます。",
+    "proSkipped": "テストモード：このアカウントでは Pro の確認をスキップしています。",
+    "restorePro": "Pro の確認を元に戻す"
+  },
+  "grant": {
+    "needed": "オートメーションはあなたの代わりに投稿します。まず 3Speak にあなたのアカウントでの投稿を許可してください。",
+    "button": "3Speak に投稿を許可"
+  },
+  "list": {
+    "new": "新しいオートメーション",
+    "emptyTitle": "オートメーションはまだありません",
+    "empty": "例から始めるか、自分で作りましょう。きっかけを選んで、実行したいことをドラッグで追加します。",
+    "steps_other": "{{count}} ステップ",
+    "lastRun": "前回の実行：",
+    "edit": "編集",
+    "runs": "実行履歴",
+    "delete": "削除",
+    "cancel": "キャンセル",
+    "notFound": "このオートメーションは存在しないか、すでに削除されています。",
+    "deleteTitle": "「{{name}}」を削除しますか？",
+    "deleteBody": "オートメーションと実行履歴が削除されます。すでに投稿されたものは残ります。",
+    "on": "オン",
+    "off": "オフ"
+  },
+  "runs": {
+    "title": "「{{name}}」の実行履歴",
+    "empty": "まだ実行されていません",
+    "emptyHint": "オートメーションがオンのときに、条件に合う新しい投稿をすると実行されます。",
+    "steps": "{{count}} ステップ中 {{done}} 完了",
+    "attempts_other": "{{count}} 回試行",
+    "status": {
+      "queued": "待機列",
+      "running": "実行中",
+      "waiting": "待機中",
+      "done": "完了",
+      "failed": "失敗",
+      "cancelled": "停止"
+    }
+  },
+  "starters": {
+    "title": "新しいオートメーション",
+    "sub": "例から始めて自由に変えるか、空の状態から始めましょう。",
+    "discordLiveText": "{title} がライブ配信中：{url}",
+    "snap_video": {
+      "title": "新しい動画ごとに Snap",
+      "sub": "動画を公開すると、タイトルとリンク付きの Snap が投稿されます。"
+    },
+    "short_video": {
+      "title": "新しい動画ごとにショート",
+      "sub": "動画を公開すると、最初の 30 秒が縦型のショートになります。"
+    },
+    "discord_live": {
+      "title": "ライブ開始を Discord に通知",
+      "sub": "配信を始めると、あなたの Discord サーバーにメッセージが届きます。"
+    },
+    "blank": {
+      "title": "空の状態から始める",
+      "sub": "イベントを選び、ステップを自分で組み立てます。"
+    }
+  },
+  "editor": {
+    "back": "戻る",
+    "close": "閉じる",
+    "name": "名前",
+    "namePlaceholder": "このオートメーションの名前",
+    "enabled": "オートメーションをオン",
+    "test": "テスト",
+    "save": "保存",
+    "toolboxTasks": "実行する",
+    "toolboxLogic": "判断する",
+    "whenTitle": "これが起きたら",
+    "event": "イベント",
+    "eventChangeNote": "新しいイベントに合わないステップには警告バッジが付きます。",
+    "placeholders": "差し込み項目",
+    "insert": "挿入",
+    "howTo": "ツールボックスからステップを線の上にドラッグします。ステップを選ぶと変更でき、空いている所を選ぶとイベントを変更できます。",
+    "stepName": "ステップ名",
+    "optional": "任意",
+    "tagsHint": "タグは最大 {{max}} 個まで、スペースで区切ります。",
+    "emptyHint": "ツールボックスからステップを線の上にドラッグ"
+  },
+  "test": {
+    "title": "テスト実行",
+    "sample": "この種類の投稿がまだないため、テストでは例の値を使いました。",
+    "onPost": "条件に合う最新の投稿でテストしました：{{title}}",
+    "nothingPosted": "何も投稿されていません。各ステップの動作は次のとおりです。",
+    "shortDetail": "{{start}} 秒目から {{length}} 秒のショート。",
+    "noSteps": "この投稿で実行されるステップはありません。"
+  },
+  "events": {
+    "video_published": {
+      "label": "動画を公開したとき",
+      "desc": "自分でアップロードした動画。インポートした動画には別のイベントがあります。"
+    },
+    "short_published": {
+      "label": "ショートを公開したとき",
+      "desc": "アップローダー、エディター、クリップから投稿したショート。"
+    },
+    "video_imported": {
+      "label": "自分の動画がインポートされたとき",
+      "desc": "インポーターが YouTube、TikTok などから取り込んだ動画とショート。"
+    },
+    "podcast_published": {
+      "label": "ポッドキャストのエピソードを投稿したとき",
+      "desc": "アップロードした、またはフィードからインポートしたポッドキャストとインタビューのエピソード。"
+    },
+    "audio_published": {
+      "label": "音声を投稿したとき",
+      "desc": "すべての音声投稿：ポッドキャスト、音楽、オーディオブック、ボイスメッセージ。"
+    },
+    "stream_started": {
+      "label": "ライブ配信を始めたとき",
+      "desc": "ライブ配信の投稿が公開されたとき。"
+    }
+  },
+  "tasks": {
+    "post_snap": {
+      "label": "Snap を投稿",
+      "desc": "Snaps フィードに載る短いテキスト投稿。プロフィールのコミュニティタブに表示されます。",
+      "props": {
+        "text": "Snap のテキスト",
+        "tags": "タグ"
+      }
+    },
+    "post_short": {
+      "label": "ショートを投稿",
+      "desc": "新しい動画からクリップを切り出し、約 10 分後にショートとして投稿します。",
+      "props": {
+        "start": "開始位置（秒）",
+        "length": "長さ（秒）",
+        "vertical": "縦型",
+        "caption": "キャプション",
+        "tags": "タグ"
+      },
+      "hints": {
+        "start": "動画の中でクリップが始まる位置。",
+        "length": "5〜60 秒。",
+        "vertical": "横長の動画の中央を 9:16 に切り抜きます。"
+      }
+    },
+    "post_comment": {
+      "label": "投稿にコメント",
+      "desc": "新しい投稿の下にあなたのコメントを付けます。リンク、クレジット、質問などに。",
+      "props": {
+        "text": "コメント"
+      }
+    },
+    "send_discord": {
+      "label": "Discord に送信",
+      "desc": "Webhook を使って、あなたの Discord サーバーのチャンネルにメッセージを送ります。誰にもメンション通知は届きません。",
+      "props": {
+        "webhook": "Webhook アドレス",
+        "text": "メッセージ"
+      },
+      "hints": {
+        "webhook": "Discord で：チャンネルの設定、連携サービス、ウェブフック、ウェブフック URL をコピー。"
+      }
+    }
+  },
+  "if": {
+    "label": "もし",
+    "desc": "条件に合えば「はい」の道へ、合わなければ「いいえ」の道へ進みます。",
+    "field": "確認する項目",
+    "pickField": "確認する項目を選ぶ",
+    "operator": "条件",
+    "value": "値",
+    "seconds": "秒",
+    "branchesNote": "キャンバス上の「はい」と「いいえ」の道にステップをドラッグします。",
+    "branch": {
+      "yes": "はい",
+      "no": "いいえ"
+    }
+  },
+  "fields": {
+    "title": "タイトル",
+    "description": "説明",
+    "tags": "タグ",
+    "duration": "長さ",
+    "community": "コミュニティ",
+    "url": "リンク",
+    "platform": "インポート元",
+    "kind": "種類",
+    "audioType": "音声の種類",
+    "imported": "インポート済み"
+  },
+  "ops": {
+    "contains": "を含む",
+    "not_contains": "を含まない",
+    "equals": "と完全に一致",
+    "starts_with": "で始まる",
+    "has_tag": "のタグがある",
+    "not_has_tag": "のタグがない",
+    "gt": "より長い",
+    "lt": "より短い",
+    "is": "である",
+    "is_not": "ではない"
+  },
+  "choices": {
+    "youtube": "YouTube",
+    "tiktok": "TikTok",
+    "instagram": "Instagram",
+    "rumble": "Rumble",
+    "bitchute": "BitChute",
+    "rss": "ポッドキャストフィード",
+    "video": "動画",
+    "short": "ショート",
+    "podcast": "ポッドキャスト",
+    "interview": "インタビュー",
+    "audiobook": "オーディオブック",
+    "song": "音楽",
+    "voice_message": "ボイスメッセージ",
+    "yes": "はい",
+    "no": "いいえ"
+  },
+  "placeholders": {
+    "title": "投稿のタイトル",
+    "description": "説明の冒頭",
+    "url": "3Speak 上のリンク",
+    "author": "あなたのアカウント名",
+    "tags": "#ハッシュタグ形式のタグ",
+    "platform": "インポート元"
+  },
+  "problems": {
+    "required": "空欄にはできません。",
+    "too_long": "長すぎます。",
+    "over_limit": "多すぎます。",
+    "bad_tag": "タグは 2〜24 文字の英字、数字、ハイフンです。",
+    "bad_webhook": "Discord の Webhook アドレスではありません。",
+    "out_of_range": "この数値は範囲外です。",
+    "bad_field": "確認する項目を選んでください。",
+    "bad_operator": "条件を選んでください。",
+    "bad_value": "条件に合う値を入力してください。",
+    "unknown_step": "3Speak はこのステップを認識できません。",
+    "task_not_for_event": "このステップはイベントに合いません（ショートには動画が必要です）。",
+    "too_many_of_type": "このステップは 1 つのオートメーションにこれ以上入れられません。",
+    "too_many_steps": "1 つのオートメーションに入れられるステップは最大 12 個です。",
+    "too_deep": "「もし」ステップの入れ子は 3 段までです。",
+    "bad_id": "壊れたステップがあります。削除して追加し直してください。",
+    "bad_sequence": "このオートメーションは壊れています。新しく作り直してください。",
+    "empty": "ステップを 1 つ以上追加してください。",
+    "no_event": "きっかけになるイベントを選んでください。",
+    "no_name": "オートメーションに名前を付けてください。",
+    "no_grant": "まず 3Speak にあなたの代わりの投稿を許可してください。",
+    "pro_required": "一時停止中：オートメーションには 3Speak Pro が必要です。",
+    "not_found": "このオートメーションは存在しないか、すでに削除されています。",
+    "unknown": "これは使用できません。"
+  },
+  "designer": {
+    "contextMenu": {
+      "delete": "削除",
+      "duplicate": "複製",
+      "resetView": "表示をリセット",
+      "select": "選択",
+      "unselect": "選択を解除"
+    },
+    "controlBar": {
+      "deleteSelectedStep": "選択したステップを削除",
+      "redo": "やり直す",
+      "resetView": "表示をリセット",
+      "turnOnOffDragAndDrop": "ステップの移動をオン／オフ",
+      "undo": "元に戻す",
+      "zoomIn": "拡大",
+      "zoomOut": "縮小"
+    },
+    "smartEditor": {
+      "toggle": "パネルを表示／非表示"
+    },
+    "toolbox": {
+      "search": "検索…",
+      "title": "ステップ"
+    }
+  }
+}

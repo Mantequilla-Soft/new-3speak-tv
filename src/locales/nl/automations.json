@@ -1,0 +1,290 @@
+{
+  "menuEntry": "Automatiseringen",
+  "title": "Automatiseringen",
+  "beta": "Bèta",
+  "subtitle": "Laat 3Speak het vervolgwerk doen als er iets op je kanaal gebeurt: een snap of Short plaatsen, reageren of je Discord laten weten.",
+  "howItWorks": "3Speak kijkt elke {{minutes}} minuten naar je kanaal. Elke nieuwe post start de automatiseringen die ervoor aanstaan, en alles wat ze plaatsen gaat uit op jouw naam, via de plaatsingstoestemming die je 3Speak hebt gegeven. Posts van een automatisering starten nooit een andere.",
+  "gate": {
+    "signIn": "Log in om automatiseringen in te stellen.",
+    "closedTitle": "Niet beschikbaar",
+    "closed": "Automatiseringen zitten in een gesloten test en staan nog niet open voor je account.",
+    "unavailable": "Automatiseringen zijn nu niet beschikbaar op deze server.",
+    "proTitle": "Een functie van 3Speak Pro",
+    "pro": "Automatiseringen horen bij 3Speak Pro.",
+    "getPro": "Neem 3Speak Pro",
+    "skipPro": "Pro-controle overslaan (tester)",
+    "skipProHint": "Als testaccount kun je automatiseringen zonder Pro proberen.",
+    "proSkipped": "Testmodus: de Pro-controle wordt voor je account overgeslagen.",
+    "restorePro": "Pro-controle weer gebruiken"
+  },
+  "grant": {
+    "needed": "Automatiseringen plaatsen voor jou. Geef 3Speak eerst toestemming om op je account te publiceren.",
+    "button": "3Speak laten publiceren"
+  },
+  "list": {
+    "new": "Nieuwe automatisering",
+    "emptyTitle": "Nog geen automatiseringen",
+    "empty": "Begin met een voorbeeld of maak je eigen: kies wat hem start en sleep er dan in wat er moet gebeuren.",
+    "steps_one": "{{count}} stap",
+    "steps_other": "{{count}} stappen",
+    "lastRun": "Laatste run:",
+    "edit": "Bewerken",
+    "runs": "Runs",
+    "delete": "Verwijderen",
+    "cancel": "Annuleren",
+    "notFound": "Deze automatisering bestaat niet (meer).",
+    "deleteTitle": "\"{{name}}\" verwijderen?",
+    "deleteBody": "De automatisering en de geschiedenis van de runs worden verwijderd. Posts die hij al heeft gemaakt blijven staan.",
+    "on": "Aan",
+    "off": "Uit"
+  },
+  "runs": {
+    "title": "Runs van \"{{name}}\"",
+    "empty": "Nog geen runs",
+    "emptyHint": "Een run start als een nieuwe post van jou overeenkomt terwijl de automatisering aanstaat.",
+    "steps": "{{done}} van {{count}} stappen klaar",
+    "attempts_one": "{{count}} poging",
+    "attempts_other": "{{count}} pogingen",
+    "status": {
+      "queued": "In de wachtrij",
+      "running": "Bezig",
+      "waiting": "Wacht",
+      "done": "Klaar",
+      "failed": "Mislukt",
+      "cancelled": "Gestopt"
+    }
+  },
+  "starters": {
+    "title": "Nieuwe automatisering",
+    "sub": "Begin met een voorbeeld en pas het aan zoals je wilt, of begin leeg.",
+    "discordLiveText": "{title} is nu live: {url}",
+    "snap_video": {
+      "title": "Een snap bij elke nieuwe video",
+      "sub": "Als je een video publiceert, gaat er een snap uit met de titel en link."
+    },
+    "short_video": {
+      "title": "Een Short uit elke nieuwe video",
+      "sub": "Als je een video publiceert, worden de eerste 30 seconden een staande Short."
+    },
+    "discord_live": {
+      "title": "Discord laten weten als ik live ga",
+      "sub": "Als je een stream start, krijgt je Discord-server een bericht."
+    },
+    "blank": {
+      "title": "Leeg beginnen",
+      "sub": "Kies de gebeurtenis en bouw de stappen zelf."
+    }
+  },
+  "editor": {
+    "back": "Terug",
+    "close": "Sluiten",
+    "name": "Naam",
+    "namePlaceholder": "Geef deze automatisering een naam",
+    "enabled": "Automatisering aan",
+    "test": "Testen",
+    "save": "Opslaan",
+    "toolboxTasks": "Doe dit",
+    "toolboxLogic": "Beslis",
+    "whenTitle": "Als dit gebeurt",
+    "event": "Gebeurtenis",
+    "eventChangeNote": "Stappen die niet bij een nieuwe gebeurtenis passen, krijgen een waarschuwingsbadge.",
+    "placeholders": "Plaatshouders",
+    "insert": "Invoegen",
+    "howTo": "Sleep stappen uit de gereedschapskist op de lijn. Selecteer een stap om hem te wijzigen, of de lege ruimte om de gebeurtenis te wijzigen.",
+    "stepName": "Naam van de stap",
+    "optional": "optioneel",
+    "tagsHint": "Tot {{max}} tags, gescheiden door spaties.",
+    "emptyHint": "Sleep een stap uit de gereedschapskist op de lijn"
+  },
+  "test": {
+    "title": "Testrun",
+    "sample": "Je hebt nog geen post van deze soort, dus de test gebruikte voorbeeldwaarden.",
+    "onPost": "Getest op je nieuwste passende post: {{title}}",
+    "nothingPosted": "Er is niets geplaatst. Dit is wat elke stap zou doen.",
+    "shortDetail": "Een Short vanaf seconde {{start}}, {{length}} seconden lang.",
+    "noSteps": "Voor deze post zou geen enkele stap draaien."
+  },
+  "events": {
+    "video_published": {
+      "label": "Ik publiceer een video",
+      "desc": "Video's die je zelf uploadt. Geïmporteerde video's hebben een eigen gebeurtenis."
+    },
+    "short_published": {
+      "label": "Ik publiceer een Short",
+      "desc": "Shorts die je plaatst, vanuit de uploader, de editor of een clip."
+    },
+    "video_imported": {
+      "label": "Een video van mij wordt geïmporteerd",
+      "desc": "Video's en Shorts die de importer binnenhaalt van YouTube, TikTok en de andere."
+    },
+    "podcast_published": {
+      "label": "Ik plaats een podcastaflevering",
+      "desc": "Podcast- en interviewafleveringen, geüpload of geïmporteerd uit je feed."
+    },
+    "audio_published": {
+      "label": "Ik plaats audio, van welke soort ook",
+      "desc": "Elke audiopost: podcasts, muziek, luisterboeken en spraakberichten."
+    },
+    "stream_started": {
+      "label": "Ik ga live",
+      "desc": "Als de post voor je livestream uitgaat."
+    }
+  },
+  "tasks": {
+    "post_snap": {
+      "label": "Een snap plaatsen",
+      "desc": "Een korte tekstpost in de snaps-feed, op het tabblad Community van je profiel.",
+      "props": {
+        "text": "Snaptekst",
+        "tags": "Tags"
+      }
+    },
+    "post_short": {
+      "label": "Een Short plaatsen",
+      "desc": "Knipt een clip uit de nieuwe video en plaatst die ongeveer 10 minuten later als Short.",
+      "props": {
+        "start": "Starten bij seconde",
+        "length": "Lengte in seconden",
+        "vertical": "Staand",
+        "caption": "Bijschrift",
+        "tags": "Tags"
+      },
+      "hints": {
+        "start": "Waar de clip in de video begint.",
+        "length": "5 tot 60 seconden.",
+        "vertical": "Snijdt het midden van een brede video bij tot 9:16."
+      }
+    },
+    "post_comment": {
+      "label": "Reageren op de post",
+      "desc": "Een reactie van jou onder de nieuwe post, voor links, credits of een vraag.",
+      "props": {
+        "text": "Reactie"
+      }
+    },
+    "send_discord": {
+      "label": "Naar Discord sturen",
+      "desc": "Een bericht naar een kanaal van je Discord-server via een webhook. Niemand wordt gepingd.",
+      "props": {
+        "webhook": "Webhookadres",
+        "text": "Bericht"
+      },
+      "hints": {
+        "webhook": "In Discord: kanaalinstellingen, Integraties, Webhooks, Webhook-URL kopiëren."
+      }
+    }
+  },
+  "if": {
+    "label": "Als",
+    "desc": "Neemt het Ja-pad als de voorwaarde klopt, anders het Nee-pad.",
+    "field": "Controleren",
+    "pickField": "Kies wat je wilt controleren",
+    "operator": "Voorwaarde",
+    "value": "Waarde",
+    "seconds": "Seconden",
+    "branchesNote": "Sleep stappen in de Ja- en Nee-paden op het canvas.",
+    "branch": {
+      "yes": "Ja",
+      "no": "Nee"
+    }
+  },
+  "fields": {
+    "title": "Titel",
+    "description": "Beschrijving",
+    "tags": "Tags",
+    "duration": "Lengte",
+    "community": "Community",
+    "url": "Link",
+    "platform": "Geïmporteerd van",
+    "kind": "Soort",
+    "audioType": "Soort audio",
+    "imported": "Geïmporteerd"
+  },
+  "ops": {
+    "contains": "bevat",
+    "not_contains": "bevat niet",
+    "equals": "is precies",
+    "starts_with": "begint met",
+    "has_tag": "heeft de tag",
+    "not_has_tag": "heeft de tag niet",
+    "gt": "is langer dan",
+    "lt": "is korter dan",
+    "is": "is",
+    "is_not": "is niet"
+  },
+  "choices": {
+    "youtube": "YouTube",
+    "tiktok": "TikTok",
+    "instagram": "Instagram",
+    "rumble": "Rumble",
+    "bitchute": "BitChute",
+    "rss": "Podcastfeed",
+    "video": "Video",
+    "short": "Short",
+    "podcast": "Podcast",
+    "interview": "Interview",
+    "audiobook": "Luisterboek",
+    "song": "Muziek",
+    "voice_message": "Spraakbericht",
+    "yes": "Ja",
+    "no": "Nee"
+  },
+  "placeholders": {
+    "title": "de titel van de post",
+    "description": "het begin van de beschrijving",
+    "url": "de link op 3Speak",
+    "author": "je accountnaam",
+    "tags": "de tags als #hashtags",
+    "platform": "waar hij vandaan is geïmporteerd"
+  },
+  "problems": {
+    "required": "Dit mag niet leeg zijn.",
+    "too_long": "Dit is te lang.",
+    "over_limit": "Te veel.",
+    "bad_tag": "Tags zijn 2 tot 24 letters, cijfers of streepjes.",
+    "bad_webhook": "Dit is geen Discord-webhookadres.",
+    "out_of_range": "Dit getal valt buiten het bereik.",
+    "bad_field": "Kies wat je wilt controleren.",
+    "bad_operator": "Kies een voorwaarde.",
+    "bad_value": "Vul een waarde in die bij de voorwaarde past.",
+    "unknown_step": "3Speak kent deze stap niet.",
+    "task_not_for_event": "Deze stap past niet bij de gebeurtenis (een Short heeft een video nodig).",
+    "too_many_of_type": "Deze stap mag niet zo vaak in één automatisering voorkomen.",
+    "too_many_steps": "Een automatisering kan maximaal 12 stappen hebben.",
+    "too_deep": "Als-stappen kunnen maximaal 3 niveaus diep worden genest.",
+    "bad_id": "Een stap is kapot. Verwijder hem en voeg hem opnieuw toe.",
+    "bad_sequence": "De automatisering is kapot. Begin een nieuwe.",
+    "empty": "Voeg minstens één stap toe.",
+    "no_event": "Kies de gebeurtenis die hem start.",
+    "no_name": "Geef de automatisering een naam.",
+    "no_grant": "Geef 3Speak eerst toestemming om voor jou te publiceren.",
+    "pro_required": "Gepauzeerd: automatiseringen hebben 3Speak Pro nodig.",
+    "not_found": "Deze automatisering bestaat niet (meer).",
+    "unknown": "Dit kan niet worden gebruikt."
+  },
+  "designer": {
+    "contextMenu": {
+      "delete": "Verwijderen",
+      "duplicate": "Dupliceren",
+      "resetView": "Weergave herstellen",
+      "select": "Selecteren",
+      "unselect": "Deselecteren"
+    },
+    "controlBar": {
+      "deleteSelectedStep": "Geselecteerde stap verwijderen",
+      "redo": "Opnieuw",
+      "resetView": "Weergave herstellen",
+      "turnOnOffDragAndDrop": "Stappen verplaatsen aan- of uitzetten",
+      "undo": "Ongedaan maken",
+      "zoomIn": "Inzoomen",
+      "zoomOut": "Uitzoomen"
+    },
+    "smartEditor": {
+      "toggle": "Paneel tonen of verbergen"
+    },
+    "toolbox": {
+      "search": "Zoeken…",
+      "title": "Stappen"
+    }
+  }
+}

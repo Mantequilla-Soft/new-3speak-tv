@@ -1,0 +1,290 @@
+{
+  "menuEntry": "Automations",
+  "title": "Automations",
+  "beta": "Beta",
+  "subtitle": "Hayaan ang 3Speak na gawin ang kasunod na trabaho kapag may nangyari sa channel mo: mag-post ng snap o Short, mag-comment, o sabihan ang Discord mo.",
+  "howItWorks": "Tinitingnan ng 3Speak ang channel mo kada {{minutes}} minuto. Bawat bagong post ay nagsisimula ng mga automation na naka-on para dito, at lahat ng ipo-post nila ay lalabas bilang ikaw, gamit ang posting permission na ibinigay mo sa 3Speak. Hindi kailanman nagsisimula ng ibang automation ang mga post na gawa ng isang automation.",
+  "gate": {
+    "signIn": "Mag-sign in para mag-set up ng automations.",
+    "closedTitle": "Hindi available",
+    "closed": "Nasa closed test pa ang automations at hindi pa bukas para sa account mo.",
+    "unavailable": "Hindi available ang automations sa server na ito sa ngayon.",
+    "proTitle": "Isang feature ng 3Speak Pro",
+    "pro": "Bahagi ng 3Speak Pro ang automations.",
+    "getPro": "Kumuha ng 3Speak Pro",
+    "skipPro": "Laktawan ang Pro check (tester)",
+    "skipProHint": "Bilang test account, puwede mong subukan ang automations nang walang Pro.",
+    "proSkipped": "Tester mode: nilaktawan ang Pro check para sa account mo.",
+    "restorePro": "Gamitin ulit ang Pro check"
+  },
+  "grant": {
+    "needed": "Nagpo-post para sa iyo ang automations. Payagan muna ang 3Speak na mag-publish sa account mo.",
+    "button": "Payagan ang 3Speak na mag-publish"
+  },
+  "list": {
+    "new": "Bagong automation",
+    "emptyTitle": "Wala pang automation",
+    "empty": "Magsimula sa isang halimbawa o gumawa ng sarili mo: piliin kung ano ang magsisimula nito, tapos i-drag ang dapat mangyari.",
+    "steps_one": "{{count}} hakbang",
+    "steps_other": "{{count}} na hakbang",
+    "lastRun": "Huling takbo:",
+    "edit": "I-edit",
+    "runs": "Mga takbo",
+    "delete": "Burahin",
+    "cancel": "Kanselahin",
+    "notFound": "Wala (na) ang automation na ito.",
+    "deleteTitle": "Burahin ang \"{{name}}\"?",
+    "deleteBody": "Mabubura ang automation at ang history ng mga takbo nito. Mananatili ang mga post na nagawa na nito.",
+    "on": "On",
+    "off": "Off"
+  },
+  "runs": {
+    "title": "Mga takbo ng \"{{name}}\"",
+    "empty": "Wala pang takbo",
+    "emptyHint": "Nagsisimula ang isang takbo kapag tumugma ang bagong post mo habang naka-on ang automation.",
+    "steps": "{{done}} sa {{count}} na hakbang ang tapos",
+    "attempts_one": "{{count}} subok",
+    "attempts_other": "{{count}} na subok",
+    "status": {
+      "queued": "Nakapila",
+      "running": "Tumatakbo",
+      "waiting": "Naghihintay",
+      "done": "Tapos",
+      "failed": "Pumalya",
+      "cancelled": "Itinigil"
+    }
+  },
+  "starters": {
+    "title": "Bagong automation",
+    "sub": "Magsimula sa isang halimbawa at baguhin ayon sa gusto mo, o magsimula nang walang laman.",
+    "discordLiveText": "{title} ay live na ngayon: {url}",
+    "snap_video": {
+      "title": "Snap sa bawat bagong video",
+      "sub": "Kapag nag-publish ka ng video, may lalabas na snap na may pamagat at link nito."
+    },
+    "short_video": {
+      "title": "Short mula sa bawat bagong video",
+      "sub": "Kapag nag-publish ka ng video, ang unang 30 segundo nito ay magiging patayong Short."
+    },
+    "discord_live": {
+      "title": "Sabihan ang Discord kapag nag-live ako",
+      "sub": "Kapag nagsimula ka ng stream, makakatanggap ng mensahe ang Discord server mo."
+    },
+    "blank": {
+      "title": "Magsimula nang walang laman",
+      "sub": "Piliin ang event at ikaw mismo ang bumuo ng mga hakbang."
+    }
+  },
+  "editor": {
+    "back": "Bumalik",
+    "close": "Isara",
+    "name": "Pangalan",
+    "namePlaceholder": "Pangalanan ang automation na ito",
+    "enabled": "Naka-on ang automation",
+    "test": "Subukan",
+    "save": "I-save",
+    "toolboxTasks": "Gawin ito",
+    "toolboxLogic": "Magpasya",
+    "whenTitle": "Kapag nangyari ito",
+    "event": "Event",
+    "eventChangeNote": "Magkakaroon ng warning badge ang mga hakbang na hindi bagay sa bagong event.",
+    "placeholders": "Mga placeholder",
+    "insert": "Ilagay",
+    "howTo": "I-drag ang mga hakbang mula sa toolbox papunta sa linya. Pumili ng hakbang para baguhin ito, o ang bakanteng espasyo para baguhin ang event.",
+    "stepName": "Pangalan ng hakbang",
+    "optional": "opsyonal",
+    "tagsHint": "Hanggang {{max}} tags, pinaghihiwalay ng space.",
+    "emptyHint": "I-drag ang isang hakbang mula sa toolbox papunta sa linya"
+  },
+  "test": {
+    "title": "Test run",
+    "sample": "Wala ka pang post na ganitong uri, kaya mga halimbawang value ang ginamit ng test.",
+    "onPost": "Sinubukan sa pinakabago mong tumutugmang post: {{title}}",
+    "nothingPosted": "Walang na-post. Ito ang gagawin ng bawat hakbang.",
+    "shortDetail": "Isang Short mula sa segundo {{start}}, {{length}} segundo ang haba.",
+    "noSteps": "Walang hakbang na tatakbo para sa post na ito."
+  },
+  "events": {
+    "video_published": {
+      "label": "Nag-publish ako ng video",
+      "desc": "Mga video na ikaw mismo ang nag-upload. May sariling event ang mga imported na video."
+    },
+    "short_published": {
+      "label": "Nag-publish ako ng Short",
+      "desc": "Mga Shorts na pinost mo, mula sa uploader, editor o isang clip."
+    },
+    "video_imported": {
+      "label": "Na-import ang isang video ko",
+      "desc": "Mga video at Shorts na dinala ng importer mula sa YouTube, TikTok at iba pa."
+    },
+    "podcast_published": {
+      "label": "Nag-post ako ng podcast episode",
+      "desc": "Mga podcast at interview episode, in-upload o in-import mula sa feed mo."
+    },
+    "audio_published": {
+      "label": "Nag-post ako ng kahit anong audio",
+      "desc": "Bawat audio post: podcast, musika, audiobook at voice message."
+    },
+    "stream_started": {
+      "label": "Nag-live ako",
+      "desc": "Kapag lumabas na ang post para sa live stream mo."
+    }
+  },
+  "tasks": {
+    "post_snap": {
+      "label": "Mag-post ng snap",
+      "desc": "Isang maikling text post sa snaps feed, sa Community tab ng profile mo.",
+      "props": {
+        "text": "Text ng snap",
+        "tags": "Tags"
+      }
+    },
+    "post_short": {
+      "label": "Mag-post ng Short",
+      "desc": "Pumuputol ng clip mula sa bagong video at ipino-post ito bilang Short, mga 10 minuto pagkatapos.",
+      "props": {
+        "start": "Magsimula sa segundo",
+        "length": "Haba sa segundo",
+        "vertical": "Patayo",
+        "caption": "Caption",
+        "tags": "Tags"
+      },
+      "hints": {
+        "start": "Kung saan nagsisimula ang clip sa video.",
+        "length": "5 hanggang 60 segundo.",
+        "vertical": "Kino-crop ang gitna ng malapad na video sa 9:16."
+      }
+    },
+    "post_comment": {
+      "label": "Mag-comment sa post",
+      "desc": "Isang comment mo sa ilalim ng bagong post, para sa mga link, credits o tanong.",
+      "props": {
+        "text": "Comment"
+      }
+    },
+    "send_discord": {
+      "label": "Ipadala sa Discord",
+      "desc": "Isang mensahe sa isang channel ng Discord server mo sa pamamagitan ng webhook. Walang mapi-ping.",
+      "props": {
+        "webhook": "Webhook address",
+        "text": "Mensahe"
+      },
+      "hints": {
+        "webhook": "Sa Discord: channel settings, Integrations, Webhooks, Copy Webhook URL."
+      }
+    }
+  },
+  "if": {
+    "label": "Kung",
+    "desc": "Dadaan sa Oo kapag totoo ang kondisyon, kung hindi ay sa Hindi.",
+    "field": "Tingnan",
+    "pickField": "Piliin ang titingnan",
+    "operator": "Kondisyon",
+    "value": "Value",
+    "seconds": "Segundo",
+    "branchesNote": "I-drag ang mga hakbang sa mga daan ng Oo at Hindi sa canvas.",
+    "branch": {
+      "yes": "Oo",
+      "no": "Hindi"
+    }
+  },
+  "fields": {
+    "title": "Pamagat",
+    "description": "Description",
+    "tags": "Tags",
+    "duration": "Haba",
+    "community": "Komunidad",
+    "url": "Link",
+    "platform": "In-import mula sa",
+    "kind": "Uri",
+    "audioType": "Uri ng audio",
+    "imported": "In-import"
+  },
+  "ops": {
+    "contains": "naglalaman ng",
+    "not_contains": "hindi naglalaman ng",
+    "equals": "eksaktong",
+    "starts_with": "nagsisimula sa",
+    "has_tag": "may tag na",
+    "not_has_tag": "walang tag na",
+    "gt": "mas mahaba sa",
+    "lt": "mas maikli sa",
+    "is": "ay",
+    "is_not": "ay hindi"
+  },
+  "choices": {
+    "youtube": "YouTube",
+    "tiktok": "TikTok",
+    "instagram": "Instagram",
+    "rumble": "Rumble",
+    "bitchute": "BitChute",
+    "rss": "Podcast feed",
+    "video": "Video",
+    "short": "Short",
+    "podcast": "Podcast",
+    "interview": "Interview",
+    "audiobook": "Audiobook",
+    "song": "Musika",
+    "voice_message": "Voice message",
+    "yes": "Oo",
+    "no": "Hindi"
+  },
+  "placeholders": {
+    "title": "pamagat ng post",
+    "description": "simula ng description nito",
+    "url": "link nito sa 3Speak",
+    "author": "pangalan ng account mo",
+    "tags": "mga tag nito bilang #hashtags",
+    "platform": "kung saan ito in-import"
+  },
+  "problems": {
+    "required": "Hindi ito puwedeng walang laman.",
+    "too_long": "Masyadong mahaba ito.",
+    "over_limit": "Masyadong marami.",
+    "bad_tag": "Ang tags ay 2 hanggang 24 na letra, numero o gitling.",
+    "bad_webhook": "Hindi ito Discord webhook address.",
+    "out_of_range": "Wala sa saklaw ang numerong ito.",
+    "bad_field": "Piliin ang titingnan.",
+    "bad_operator": "Pumili ng kondisyon.",
+    "bad_value": "Maglagay ng value na bagay sa kondisyon.",
+    "unknown_step": "Hindi kilala ng 3Speak ang hakbang na ito.",
+    "task_not_for_event": "Hindi bagay ang hakbang na ito sa event (kailangan ng video para sa Short).",
+    "too_many_of_type": "Hindi puwedeng lumabas nang ganito kadalas ang hakbang na ito sa isang automation.",
+    "too_many_steps": "Hanggang 12 hakbang lang ang puwede sa isang automation.",
+    "too_deep": "Hanggang 3 patong lang puwedeng magpatong-patong ang mga Kung na hakbang.",
+    "bad_id": "May sirang hakbang. Burahin ito at idagdag ulit.",
+    "bad_sequence": "Sira ang automation. Gumawa ng bago.",
+    "empty": "Magdagdag ng kahit isang hakbang.",
+    "no_event": "Piliin ang event na magsisimula nito.",
+    "no_name": "Bigyan ng pangalan ang automation.",
+    "no_grant": "Payagan muna ang 3Speak na mag-publish para sa iyo.",
+    "pro_required": "Naka-pause: kailangan ng 3Speak Pro ang automations.",
+    "not_found": "Wala (na) ang automation na ito.",
+    "unknown": "Hindi ito magagamit."
+  },
+  "designer": {
+    "contextMenu": {
+      "delete": "Burahin",
+      "duplicate": "I-duplicate",
+      "resetView": "I-reset ang view",
+      "select": "Piliin",
+      "unselect": "Alisin sa pagpili"
+    },
+    "controlBar": {
+      "deleteSelectedStep": "Burahin ang napiling hakbang",
+      "redo": "Ulitin",
+      "resetView": "I-reset ang view",
+      "turnOnOffDragAndDrop": "I-on o i-off ang paglipat ng mga hakbang",
+      "undo": "I-undo",
+      "zoomIn": "Mag-zoom in",
+      "zoomOut": "Mag-zoom out"
+    },
+    "smartEditor": {
+      "toggle": "Ipakita o itago ang panel"
+    },
+    "toolbox": {
+      "search": "Maghanap…",
+      "title": "Mga hakbang"
+    }
+  }
+}

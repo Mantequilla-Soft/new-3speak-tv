@@ -1,0 +1,288 @@
+{
+  "menuEntry": "Otomatisasi",
+  "title": "Otomatisasi",
+  "beta": "Beta",
+  "subtitle": "Biarkan 3Speak mengerjakan tindak lanjut saat sesuatu terjadi di kanalmu: posting snap atau Shorts, berkomentar, atau memberi tahu Discord-mu.",
+  "howItWorks": "3Speak memeriksa kanalmu setiap {{minutes}} menit. Setiap postingan baru menjalankan otomatisasi yang aktif untuknya, dan semua yang diposting keluar atas namamu, lewat izin posting yang kamu berikan ke 3Speak. Postingan yang dibuat otomatisasi tidak pernah memicu otomatisasi lain.",
+  "gate": {
+    "signIn": "Masuk untuk menyiapkan otomatisasi.",
+    "closedTitle": "Belum tersedia",
+    "closed": "Otomatisasi sedang dalam uji tertutup dan belum dibuka untuk akunmu.",
+    "unavailable": "Otomatisasi sedang tidak tersedia di server ini.",
+    "proTitle": "Fitur 3Speak Pro",
+    "pro": "Otomatisasi adalah bagian dari 3Speak Pro.",
+    "getPro": "Dapatkan 3Speak Pro",
+    "skipPro": "Lewati pemeriksaan Pro (penguji)",
+    "skipProHint": "Sebagai akun uji, kamu bisa mencoba otomatisasi tanpa Pro.",
+    "proSkipped": "Mode uji: pemeriksaan Pro dilewati untuk akunmu.",
+    "restorePro": "Gunakan pemeriksaan Pro lagi"
+  },
+  "grant": {
+    "needed": "Otomatisasi memposting untukmu. Izinkan 3Speak memposting di akunmu terlebih dahulu.",
+    "button": "Izinkan 3Speak memposting"
+  },
+  "list": {
+    "new": "Otomatisasi baru",
+    "emptyTitle": "Belum ada otomatisasi",
+    "empty": "Mulai dari contoh atau buat sendiri: pilih pemicunya, lalu seret apa yang harus terjadi.",
+    "steps_other": "{{count}} langkah",
+    "lastRun": "Terakhir dijalankan:",
+    "edit": "Edit",
+    "runs": "Riwayat jalan",
+    "delete": "Hapus",
+    "cancel": "Batal",
+    "notFound": "Otomatisasi ini tidak ada (lagi).",
+    "deleteTitle": "Hapus \"{{name}}\"?",
+    "deleteBody": "Otomatisasi dan riwayat jalannya akan dihapus. Postingan yang sudah dibuat tetap ada.",
+    "on": "Aktif",
+    "off": "Nonaktif"
+  },
+  "runs": {
+    "title": "Riwayat jalan \"{{name}}\"",
+    "empty": "Belum pernah dijalankan",
+    "emptyHint": "Otomatisasi berjalan saat postingan barumu cocok dan otomatisasinya sedang aktif.",
+    "steps": "{{done}} dari {{count}} langkah selesai",
+    "attempts_other": "{{count}} kali coba",
+    "status": {
+      "queued": "Dalam antrean",
+      "running": "Berjalan",
+      "waiting": "Menunggu",
+      "done": "Selesai",
+      "failed": "Gagal",
+      "cancelled": "Dihentikan"
+    }
+  },
+  "starters": {
+    "title": "Otomatisasi baru",
+    "sub": "Mulai dari contoh lalu ubah sesukamu, atau mulai dari kosong.",
+    "discordLiveText": "{title} sedang live: {url}",
+    "snap_video": {
+      "title": "Snap untuk setiap video baru",
+      "sub": "Saat kamu menerbitkan video, sebuah snap berisi judul dan tautannya diposting."
+    },
+    "short_video": {
+      "title": "Shorts dari setiap video baru",
+      "sub": "Saat kamu menerbitkan video, 30 detik pertamanya menjadi Shorts vertikal."
+    },
+    "discord_live": {
+      "title": "Beri tahu Discord saat aku live",
+      "sub": "Saat kamu mulai siaran, server Discord-mu menerima pesan."
+    },
+    "blank": {
+      "title": "Mulai dari kosong",
+      "sub": "Pilih peristiwanya dan susun langkahnya sendiri."
+    }
+  },
+  "editor": {
+    "back": "Kembali",
+    "close": "Tutup",
+    "name": "Nama",
+    "namePlaceholder": "Beri nama otomatisasi ini",
+    "enabled": "Otomatisasi aktif",
+    "test": "Uji",
+    "save": "Simpan",
+    "toolboxTasks": "Lakukan ini",
+    "toolboxLogic": "Putuskan",
+    "whenTitle": "Saat ini terjadi",
+    "event": "Peristiwa",
+    "eventChangeNote": "Langkah yang tidak cocok dengan peristiwa baru akan diberi lencana peringatan.",
+    "placeholders": "Penanda isian",
+    "insert": "Sisipkan",
+    "howTo": "Seret langkah dari kotak alat ke garis. Pilih langkah untuk mengubahnya, atau pilih ruang kosong untuk mengubah peristiwa.",
+    "stepName": "Nama langkah",
+    "optional": "opsional",
+    "tagsHint": "Maksimal {{max}} tag, dipisahkan spasi.",
+    "emptyHint": "Seret langkah dari kotak alat ke garis"
+  },
+  "test": {
+    "title": "Uji coba",
+    "sample": "Kamu belum punya postingan jenis ini, jadi pengujian memakai nilai contoh.",
+    "onPost": "Diuji pada postingan cocok terbarumu: {{title}}",
+    "nothingPosted": "Tidak ada yang diposting. Ini yang akan dilakukan setiap langkah.",
+    "shortDetail": "Shorts mulai detik ke-{{start}}, sepanjang {{length}} detik.",
+    "noSteps": "Tidak ada langkah yang akan berjalan untuk postingan ini."
+  },
+  "events": {
+    "video_published": {
+      "label": "Aku menerbitkan video",
+      "desc": "Video yang kamu unggah sendiri. Video impor punya peristiwa sendiri."
+    },
+    "short_published": {
+      "label": "Aku menerbitkan Shorts",
+      "desc": "Shorts yang kamu posting, dari pengunggah, editor, atau klip."
+    },
+    "video_imported": {
+      "label": "Videoku diimpor",
+      "desc": "Video dan Shorts yang dibawa pengimpor dari YouTube, TikTok, dan lainnya."
+    },
+    "podcast_published": {
+      "label": "Aku memposting episode podcast",
+      "desc": "Episode podcast dan wawancara, diunggah atau diimpor dari feed-mu."
+    },
+    "audio_published": {
+      "label": "Aku memposting audio apa pun",
+      "desc": "Semua postingan audio: podcast, musik, buku audio, dan pesan suara."
+    },
+    "stream_started": {
+      "label": "Aku mulai live",
+      "desc": "Saat postingan untuk siaran langsungmu terbit."
+    }
+  },
+  "tasks": {
+    "post_snap": {
+      "label": "Posting snap",
+      "desc": "Postingan teks pendek di feed snaps, pada tab Komunitas di profilmu.",
+      "props": {
+        "text": "Teks snap",
+        "tags": "Tag"
+      }
+    },
+    "post_short": {
+      "label": "Posting Shorts",
+      "desc": "Memotong klip dari video baru dan mempostingnya sebagai Shorts, sekitar 10 menit kemudian.",
+      "props": {
+        "start": "Mulai di detik",
+        "length": "Durasi dalam detik",
+        "vertical": "Vertikal",
+        "caption": "Keterangan",
+        "tags": "Tag"
+      },
+      "hints": {
+        "start": "Titik awal klip di dalam video.",
+        "length": "5 sampai 60 detik.",
+        "vertical": "Memotong bagian tengah video lebar menjadi 9:16."
+      }
+    },
+    "post_comment": {
+      "label": "Komentari postingan",
+      "desc": "Komentarmu di bawah postingan baru, untuk tautan, kredit, atau pertanyaan.",
+      "props": {
+        "text": "Komentar"
+      }
+    },
+    "send_discord": {
+      "label": "Kirim ke Discord",
+      "desc": "Pesan ke salah satu kanal server Discord-mu lewat webhook. Tidak ada yang di-mention.",
+      "props": {
+        "webhook": "Alamat webhook",
+        "text": "Pesan"
+      },
+      "hints": {
+        "webhook": "Di Discord: pengaturan kanal, Integrasi, Webhook, Salin URL Webhook."
+      }
+    }
+  },
+  "if": {
+    "label": "Jika",
+    "desc": "Mengambil jalur Ya jika kondisinya terpenuhi, jika tidak jalur Tidak.",
+    "field": "Periksa",
+    "pickField": "Pilih yang akan diperiksa",
+    "operator": "Kondisi",
+    "value": "Nilai",
+    "seconds": "Detik",
+    "branchesNote": "Seret langkah ke jalur Ya dan Tidak di kanvas.",
+    "branch": {
+      "yes": "Ya",
+      "no": "Tidak"
+    }
+  },
+  "fields": {
+    "title": "Judul",
+    "description": "Deskripsi",
+    "tags": "Tag",
+    "duration": "Durasi",
+    "community": "Komunitas",
+    "url": "Tautan",
+    "platform": "Diimpor dari",
+    "kind": "Jenis",
+    "audioType": "Jenis audio",
+    "imported": "Diimpor"
+  },
+  "ops": {
+    "contains": "berisi",
+    "not_contains": "tidak berisi",
+    "equals": "sama persis dengan",
+    "starts_with": "diawali dengan",
+    "has_tag": "punya tag",
+    "not_has_tag": "tidak punya tag",
+    "gt": "lebih panjang dari",
+    "lt": "lebih pendek dari",
+    "is": "adalah",
+    "is_not": "bukan"
+  },
+  "choices": {
+    "youtube": "YouTube",
+    "tiktok": "TikTok",
+    "instagram": "Instagram",
+    "rumble": "Rumble",
+    "bitchute": "BitChute",
+    "rss": "Feed podcast",
+    "video": "Video",
+    "short": "Shorts",
+    "podcast": "Podcast",
+    "interview": "Wawancara",
+    "audiobook": "Buku audio",
+    "song": "Musik",
+    "voice_message": "Pesan suara",
+    "yes": "Ya",
+    "no": "Tidak"
+  },
+  "placeholders": {
+    "title": "judul postingan",
+    "description": "awal deskripsinya",
+    "url": "tautannya di 3Speak",
+    "author": "nama akunmu",
+    "tags": "tag-nya sebagai #hashtag",
+    "platform": "asal impornya"
+  },
+  "problems": {
+    "required": "Ini tidak boleh kosong.",
+    "too_long": "Ini terlalu panjang.",
+    "over_limit": "Terlalu banyak.",
+    "bad_tag": "Tag terdiri dari 2 sampai 24 huruf, angka, atau tanda hubung.",
+    "bad_webhook": "Ini bukan alamat webhook Discord.",
+    "out_of_range": "Angka ini di luar rentang.",
+    "bad_field": "Pilih yang akan diperiksa.",
+    "bad_operator": "Pilih kondisi.",
+    "bad_value": "Masukkan nilai yang sesuai dengan kondisinya.",
+    "unknown_step": "3Speak tidak mengenali langkah ini.",
+    "task_not_for_event": "Langkah ini tidak cocok dengan peristiwanya (Shorts butuh video).",
+    "too_many_of_type": "Langkah ini tidak boleh muncul sesering itu dalam satu otomatisasi.",
+    "too_many_steps": "Satu otomatisasi paling banyak punya 12 langkah.",
+    "too_deep": "Langkah Jika paling dalam bisa bersarang 3 tingkat.",
+    "bad_id": "Ada langkah yang rusak. Hapus lalu tambahkan lagi.",
+    "bad_sequence": "Otomatisasi ini rusak. Buat yang baru.",
+    "empty": "Tambahkan minimal satu langkah.",
+    "no_event": "Pilih peristiwa yang memicunya.",
+    "no_name": "Beri nama otomatisasinya.",
+    "no_grant": "Izinkan 3Speak memposting untukmu terlebih dahulu.",
+    "pro_required": "Dijeda: otomatisasi membutuhkan 3Speak Pro.",
+    "not_found": "Otomatisasi ini tidak ada (lagi).",
+    "unknown": "Ini tidak dapat digunakan."
+  },
+  "designer": {
+    "contextMenu": {
+      "delete": "Hapus",
+      "duplicate": "Duplikat",
+      "resetView": "Atur ulang tampilan",
+      "select": "Pilih",
+      "unselect": "Batalkan pilihan"
+    },
+    "controlBar": {
+      "deleteSelectedStep": "Hapus langkah terpilih",
+      "redo": "Ulangi",
+      "resetView": "Atur ulang tampilan",
+      "turnOnOffDragAndDrop": "Aktifkan atau nonaktifkan pemindahan langkah",
+      "undo": "Urungkan",
+      "zoomIn": "Perbesar",
+      "zoomOut": "Perkecil"
+    },
+    "smartEditor": {
+      "toggle": "Tampilkan atau sembunyikan panel"
+    },
+    "toolbox": {
+      "search": "Cari…",
+      "title": "Langkah"
+    }
+  }
+}

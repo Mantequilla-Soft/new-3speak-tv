@@ -11,7 +11,7 @@ import { useChat } from '../../context/ChatContext';
 import { useServerUnread } from '../../hooks/useServerUnread';
 import { getVotePower } from '../../utils/hiveUtils';
 import { getHiveUrl, ensureHealthyNode } from '../../utils/hiveNode';
-import { adsEnabledFor, VIDEO_IMPORT_ENABLED } from '../../utils/config';
+import { adsEnabledFor, automationsEnabledFor, VIDEO_IMPORT_ENABLED } from '../../utils/config';
 import useCanImportVideos from '../../hooks/useCanImportVideos';
 import MountWhenOpened from '../common/LazyMount';
 import { useAvatarUrl } from '../../utils/avatarCache';
@@ -305,6 +305,12 @@ function ProfileNav({ isVisible, pinned = true, leaving = false, hoverProps, onc
             {VIDEO_IMPORT_ENABLED && !isIncubating && canImport && (
               <Link to="/import" className="pn-item" role="menuitem" onClick={onclose}>
                 {row('move_to_inbox', t('ytimport.menuEntry'))}
+              </Link>
+            )}
+            {/* 🤖 Automations: closed beta, the same gate as the page. */}
+            {!isIncubating && automationsEnabledFor(user) && (
+              <Link to="/automations" className="pn-item" role="menuitem" onClick={onclose}>
+                {row('account_tree', t('automations.menuEntry'))}
               </Link>
             )}
             {/* Closed testing. Same gate as the /advertise page itself, so the menu can

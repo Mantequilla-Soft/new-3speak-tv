@@ -1014,4 +1014,4 @@ function batchSourcesFor(user) {
   return out
 }
 
-module.exports = { mountImportBatch, batchSourcesFor, buildPost, buildAudioPost, renderTemplate, renderText, uploadAudio, setAudioThumbnail, audioBatchReady, AUDIO_TYPES, beneficiariesFor, tagsFor, permlinkFor, scheduleOnChecker, cancelOnChecker }
+module.exports = { mountImportBatch, batchSourcesFor, buildPost, buildAudioPost, renderTemplate, renderText, uploadAudio, setAudioThumbnail, audioBatchReady, AUDIO_TYPES, beneficiariesFor, tagsFor, permlinkFor, scheduleOnChecker, cancelOnChecker, mintUploadToken, tusUpload, commissionEncode, snapsContainer }

@@ -117,6 +117,8 @@
     "react-router-dom": "^7.18.2",
     "react-toastify": "^11.1.0",
     "sass": "^1.102.0",
+    "sequential-workflow-designer": "0.40.4",
+    "sequential-workflow-designer-react": "0.40.4",
     "sonner": "^2.0.8",
     "stream-browserify": "^3.0.0",
     "three": "^0.181.2",

@@ -2665,6 +2665,48 @@ if (process.env.VIDEO_IMPORT_ENABLED === 'true') {
   console.log('[yt-import] video import is OFF (VIDEO_IMPORT_ENABLED is not true)')
 }
 
+// 🤖 Automations (closed beta, Pro): a creator's own workflows. See automations.cjs.
+// OFF unless AUTOMATIONS_ENABLED=true. Every post a task makes goes out as the
+// creator, signed by @threespeak under their posting grant, and only as a reply
+// (a snap, a comment) or a scheduled Short: `broadcastAutomation` refuses
+// anything else.
+{
+  const batch = require('./import-batch.cjs')
+  async function broadcastAutomation(user, ops) {
+    if (!POSTING_WIF) throw new Error('Server is not configured')
+    const ok = Array.isArray(ops) && ops.length > 0 && ops.length <= 2
+      && ops.every(([type, op]) => type === 'comment' && op.author === user && op.parent_author)
+    if (!ok) throw new Error('Operation not allowed')
+    if (!(await hasThreespeakPostingGrant(user))) throw Object.assign(new Error('3Speak may no longer publish for you'), { code: 'no_grant' })
+    return client.broadcast.sendOperations(ops, PrivateKey.fromString(POSTING_WIF))
+  }
+  require('./automations.cjs').mountAutomations(app, {
+    resolveUser: resolveProvenViewer,
+    limiter: baseLimiter,
+    isPro: (user) => isPro(user),
+    hasPostingGrant: hasThreespeakPostingGrant,
+    hiveCall: (method, params) => {
+      const [api, name] = method.split('.')
+      return client.call(api, name, params)
+    },
+    broadcast: broadcastAutomation,
+    indexSnap: (author, permlink) => fetch(`${CHECKER_URL}/snaps`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ author, permlink }),
+      signal: AbortSignal.timeout(10000),
+    }),
+    uploadImage: uploadImageAsThreespeak,
+    snapsContainer: batch.snapsContainer,
+    mintUploadToken: batch.mintUploadToken,
+    tusUpload: batch.tusUpload,
+    commissionEncode: batch.commissionEncode,
+    buildPost: batch.buildPost,
+    scheduleOnChecker: batch.scheduleOnChecker,
+    signScheduledPost: (fields) => (POSTING_WIF ? signScheduledPost(POSTING_WIF, fields) : null),
+  })
+}
+
 // === Teleprompter STT token minting ===
 // Hands the browser a short-lived SIGNED token for the self-hosted STT WebSocket,
 // so the browser never holds STT_SIGNING_SECRET. Token = "<exp>.<hexHMAC(exp)>";

@@ -1,0 +1,290 @@
+{
+  "menuEntry": "Automations",
+  "title": "Automations",
+  "beta": "Beta",
+  "subtitle": "Let 3Speak do the follow-up work when something happens on your channel: post a snap or a Short, comment, or tell your Discord.",
+  "howItWorks": "3Speak looks at your channel every {{minutes}} minutes. Each new post starts the automations that are switched on for it, and everything they post goes out as you, through the posting permission you gave 3Speak. Posts an automation makes never start another one.",
+  "gate": {
+    "signIn": "Sign in to set up automations.",
+    "closedTitle": "Not available",
+    "closed": "Automations are in a closed test and not open to your account yet.",
+    "unavailable": "Automations are not available on this server right now.",
+    "proTitle": "A 3Speak Pro feature",
+    "pro": "Automations are part of 3Speak Pro.",
+    "getPro": "Get 3Speak Pro",
+    "skipPro": "Skip the Pro check (tester)",
+    "skipProHint": "As a test account you can try automations without Pro.",
+    "proSkipped": "Tester mode: the Pro check is skipped for your account.",
+    "restorePro": "Use the Pro check again"
+  },
+  "grant": {
+    "needed": "Automations post for you. Allow 3Speak to publish on your account first.",
+    "button": "Allow 3Speak to publish"
+  },
+  "list": {
+    "new": "New automation",
+    "emptyTitle": "No automations yet",
+    "empty": "Start from an example or build your own: pick what starts it, then drag in what should happen.",
+    "steps_one": "{{count}} step",
+    "steps_other": "{{count}} steps",
+    "lastRun": "Last run:",
+    "edit": "Edit",
+    "runs": "Runs",
+    "delete": "Delete",
+    "cancel": "Cancel",
+    "notFound": "This automation does not exist (any more).",
+    "deleteTitle": "Delete \"{{name}}\"?",
+    "deleteBody": "The automation and its run history are deleted. Posts it already made stay.",
+    "on": "On",
+    "off": "Off"
+  },
+  "runs": {
+    "title": "Runs of \"{{name}}\"",
+    "empty": "No runs yet",
+    "emptyHint": "A run starts when a new post of yours matches while the automation is on.",
+    "steps": "{{done}} of {{count}} steps done",
+    "attempts_one": "{{count}} try",
+    "attempts_other": "{{count}} tries",
+    "status": {
+      "queued": "Queued",
+      "running": "Running",
+      "waiting": "Waiting",
+      "done": "Done",
+      "failed": "Failed",
+      "cancelled": "Stopped"
+    }
+  },
+  "starters": {
+    "title": "New automation",
+    "sub": "Start from an example and change it as you like, or start empty.",
+    "discordLiveText": "{title} is live now: {url}",
+    "snap_video": {
+      "title": "Snap every new video",
+      "sub": "When you publish a video, a snap with its title and link goes out."
+    },
+    "short_video": {
+      "title": "A Short from every new video",
+      "sub": "When you publish a video, its first 30 seconds become an upright Short."
+    },
+    "discord_live": {
+      "title": "Tell Discord when I go live",
+      "sub": "When you start a stream, your Discord server gets a message."
+    },
+    "blank": {
+      "title": "Start empty",
+      "sub": "Pick the event and build the steps yourself."
+    }
+  },
+  "editor": {
+    "back": "Back",
+    "close": "Close",
+    "name": "Name",
+    "namePlaceholder": "Name this automation",
+    "enabled": "Automation on",
+    "test": "Test",
+    "save": "Save",
+    "toolboxTasks": "Do this",
+    "toolboxLogic": "Decide",
+    "whenTitle": "When this happens",
+    "event": "Event",
+    "eventChangeNote": "Steps that don't fit a new event get a warning badge.",
+    "placeholders": "Placeholders",
+    "insert": "Insert",
+    "howTo": "Drag steps from the toolbox onto the line. Select a step to change it, or the empty space to change the event.",
+    "stepName": "Step name",
+    "optional": "optional",
+    "tagsHint": "Up to {{max}} tags, separated by spaces.",
+    "emptyHint": "Drag a step from the toolbox onto the line"
+  },
+  "test": {
+    "title": "Test run",
+    "sample": "You have no post of this kind yet, so the test used example values.",
+    "onPost": "Tested on your newest matching post: {{title}}",
+    "nothingPosted": "Nothing was posted. This is what each step would do.",
+    "shortDetail": "A Short from second {{start}}, {{length}} seconds long.",
+    "noSteps": "No step would run for this post."
+  },
+  "events": {
+    "video_published": {
+      "label": "I publish a video",
+      "desc": "Videos you upload yourself. Imported videos have their own event."
+    },
+    "short_published": {
+      "label": "I publish a Short",
+      "desc": "Shorts you post, from the uploader, the editor or a clip."
+    },
+    "video_imported": {
+      "label": "A video of mine is imported",
+      "desc": "Videos and Shorts that the importer brings in from YouTube, TikTok and the others."
+    },
+    "podcast_published": {
+      "label": "I post a podcast episode",
+      "desc": "Podcast and interview episodes, uploaded or imported from your feed."
+    },
+    "audio_published": {
+      "label": "I post any audio",
+      "desc": "Every audio post: podcasts, music, audiobooks and voice messages."
+    },
+    "stream_started": {
+      "label": "I go live",
+      "desc": "When the post for your live stream goes out."
+    }
+  },
+  "tasks": {
+    "post_snap": {
+      "label": "Post a snap",
+      "desc": "A short text post in the snaps feed, on your profile's Community tab.",
+      "props": {
+        "text": "Snap text",
+        "tags": "Tags"
+      }
+    },
+    "post_short": {
+      "label": "Post a Short",
+      "desc": "Cuts a clip from the new video and posts it as a Short, about 10 minutes later.",
+      "props": {
+        "start": "Start at second",
+        "length": "Length in seconds",
+        "vertical": "Upright",
+        "caption": "Caption",
+        "tags": "Tags"
+      },
+      "hints": {
+        "start": "Where the clip starts in the video.",
+        "length": "5 to 60 seconds.",
+        "vertical": "Crops the middle of a wide video to 9:16."
+      }
+    },
+    "post_comment": {
+      "label": "Comment on the post",
+      "desc": "A comment of yours under the new post, for links, credits or a question.",
+      "props": {
+        "text": "Comment"
+      }
+    },
+    "send_discord": {
+      "label": "Send to Discord",
+      "desc": "A message to a channel of your Discord server through a webhook. Nobody gets pinged.",
+      "props": {
+        "webhook": "Webhook address",
+        "text": "Message"
+      },
+      "hints": {
+        "webhook": "In Discord: channel settings, Integrations, Webhooks, Copy Webhook URL."
+      }
+    }
+  },
+  "if": {
+    "label": "If",
+    "desc": "Takes the Yes path when the condition holds, else the No path.",
+    "field": "Check",
+    "pickField": "Pick what to check",
+    "operator": "Condition",
+    "value": "Value",
+    "seconds": "Seconds",
+    "branchesNote": "Drag steps into the Yes and No paths on the canvas.",
+    "branch": {
+      "yes": "Yes",
+      "no": "No"
+    }
+  },
+  "fields": {
+    "title": "Title",
+    "description": "Description",
+    "tags": "Tags",
+    "duration": "Length",
+    "community": "Community",
+    "url": "Link",
+    "platform": "Imported from",
+    "kind": "Kind",
+    "audioType": "Kind of audio",
+    "imported": "Imported"
+  },
+  "ops": {
+    "contains": "contains",
+    "not_contains": "does not contain",
+    "equals": "is exactly",
+    "starts_with": "starts with",
+    "has_tag": "has the tag",
+    "not_has_tag": "does not have the tag",
+    "gt": "is longer than",
+    "lt": "is shorter than",
+    "is": "is",
+    "is_not": "is not"
+  },
+  "choices": {
+    "youtube": "YouTube",
+    "tiktok": "TikTok",
+    "instagram": "Instagram",
+    "rumble": "Rumble",
+    "bitchute": "BitChute",
+    "rss": "Podcast feed",
+    "video": "Video",
+    "short": "Short",
+    "podcast": "Podcast",
+    "interview": "Interview",
+    "audiobook": "Audiobook",
+    "song": "Music",
+    "voice_message": "Voice message",
+    "yes": "Yes",
+    "no": "No"
+  },
+  "placeholders": {
+    "title": "the post's title",
+    "description": "the start of its description",
+    "url": "its link on 3Speak",
+    "author": "your account name",
+    "tags": "its tags as #hashtags",
+    "platform": "where it was imported from"
+  },
+  "problems": {
+    "required": "This can't be empty.",
+    "too_long": "This is too long.",
+    "over_limit": "Too many.",
+    "bad_tag": "Tags are 2 to 24 letters, numbers or dashes.",
+    "bad_webhook": "This is not a Discord webhook address.",
+    "out_of_range": "This number is out of range.",
+    "bad_field": "Pick what to check.",
+    "bad_operator": "Pick a condition.",
+    "bad_value": "Enter a value that fits the condition.",
+    "unknown_step": "3Speak doesn't know this step.",
+    "task_not_for_event": "This step doesn't fit the event (a Short needs a video).",
+    "too_many_of_type": "This step can't appear that often in one automation.",
+    "too_many_steps": "An automation can have at most 12 steps.",
+    "too_deep": "If-steps can be nested 3 deep at most.",
+    "bad_id": "A step is broken. Delete it and add it again.",
+    "bad_sequence": "The automation is broken. Start a new one.",
+    "empty": "Add at least one step.",
+    "no_event": "Pick the event that starts it.",
+    "no_name": "Give the automation a name.",
+    "no_grant": "Allow 3Speak to publish for you first.",
+    "pro_required": "Paused: automations need 3Speak Pro.",
+    "not_found": "This automation does not exist (any more).",
+    "unknown": "This can't be used."
+  },
+  "designer": {
+    "contextMenu": {
+      "delete": "Delete",
+      "duplicate": "Duplicate",
+      "resetView": "Reset view",
+      "select": "Select",
+      "unselect": "Unselect"
+    },
+    "controlBar": {
+      "deleteSelectedStep": "Delete selected step",
+      "redo": "Redo",
+      "resetView": "Reset view",
+      "turnOnOffDragAndDrop": "Turn moving steps on or off",
+      "undo": "Undo",
+      "zoomIn": "Zoom in",
+      "zoomOut": "Zoom out"
+    },
+    "smartEditor": {
+      "toggle": "Show or hide the panel"
+    },
+    "toolbox": {
+      "search": "Search…",
+      "title": "Steps"
+    }
+  }
+}

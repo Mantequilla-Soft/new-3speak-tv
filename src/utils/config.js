@@ -334,6 +334,18 @@ const warmupRailEnabledFor = (user) => ENABLE_WARMUP_RAIL
   || isTestUser(user)
   || (!!user && WARMUP_BETA_USERS.has(String(user).toLowerCase()));
 
+// 🤖 Automations (/automations): a Pro creator's own workflows, "when I publish
+// a video, post a snap and a Short". A closed beta: the team accounts above plus
+// VITE_AUTOMATIONS_BETA_USERS see it, nobody else even gets the menu entry. The
+// server (server/automations.cjs) has its own list and also checks Pro, so this
+// only decides who sees the page.
+const AUTOMATIONS_BETA_USERS = new Set(
+  (import.meta.env.VITE_AUTOMATIONS_BETA_USERS || '')
+    .split(',').map((s) => s.trim().toLowerCase()).filter(Boolean),
+);
+const automationsEnabledFor = (user) => isTestUser(user)
+  || (!!user && AUTOMATIONS_BETA_USERS.has(String(user).toLowerCase()));
+
 // Advertising (the /advertise page and the creator's ad opt-out in Settings).
 // OFF by default — set VITE_ENABLE_ADS=true to open it to everyone. Until then the
 // team accounts above see it, plus anyone listed in VITE_ADS_BETA_USERS so testers
@@ -517,6 +529,7 @@ export {
   selfPromoEnabledFor,
   tickerEnabledFor,
   adsBetaUserFor,
+  automationsEnabledFor,
   warmupRailEnabledFor,
   ENABLE_THIRDPARTY_ADS,
   FEED_EXCLUDED_HOSTS,

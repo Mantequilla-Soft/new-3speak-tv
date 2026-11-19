@@ -1,0 +1,292 @@
+{
+  "menuEntry": "Automatizaciones",
+  "title": "Automatizaciones",
+  "beta": "Beta",
+  "subtitle": "Deja que 3Speak haga el trabajo de seguimiento cuando pasa algo en tu canal: publicar un snap o un Short, comentar o avisar a tu Discord.",
+  "howItWorks": "3Speak revisa tu canal cada {{minutes}} minutos. Cada publicación nueva inicia las automatizaciones que están activadas para ella, y todo lo que publican sale a tu nombre, con el permiso de publicación que le diste a 3Speak. Las publicaciones que hace una automatización nunca inician otra.",
+  "gate": {
+    "signIn": "Inicia sesión para configurar automatizaciones.",
+    "closedTitle": "No disponible",
+    "closed": "Las automatizaciones están en una prueba cerrada y todavía no están abiertas para tu cuenta.",
+    "unavailable": "Las automatizaciones no están disponibles en este servidor ahora mismo.",
+    "proTitle": "Una función de 3Speak Pro",
+    "pro": "Las automatizaciones son parte de 3Speak Pro.",
+    "getPro": "Obtener 3Speak Pro",
+    "skipPro": "Saltar la comprobación Pro (tester)",
+    "skipProHint": "Como cuenta de prueba puedes probar las automatizaciones sin Pro.",
+    "proSkipped": "Modo de prueba: la comprobación Pro está desactivada para tu cuenta.",
+    "restorePro": "Volver a usar la comprobación Pro"
+  },
+  "grant": {
+    "needed": "Las automatizaciones publican por ti. Primero permite que 3Speak publique en tu cuenta.",
+    "button": "Permitir que 3Speak publique"
+  },
+  "list": {
+    "new": "Nueva automatización",
+    "emptyTitle": "Aún no hay automatizaciones",
+    "empty": "Empieza con un ejemplo o crea la tuya: elige qué la inicia y luego arrastra lo que debe pasar.",
+    "steps_one": "{{count}} paso",
+    "steps_many": "{{count}} pasos",
+    "steps_other": "{{count}} pasos",
+    "lastRun": "Última ejecución:",
+    "edit": "Editar",
+    "runs": "Ejecuciones",
+    "delete": "Eliminar",
+    "cancel": "Cancelar",
+    "notFound": "Esta automatización no existe (o ya no existe).",
+    "deleteTitle": "¿Eliminar \"{{name}}\"?",
+    "deleteBody": "Se eliminan la automatización y su historial de ejecuciones. Las publicaciones que ya hizo se quedan.",
+    "on": "Activada",
+    "off": "Desactivada"
+  },
+  "runs": {
+    "title": "Ejecuciones de \"{{name}}\"",
+    "empty": "Aún no hay ejecuciones",
+    "emptyHint": "Una ejecución empieza cuando una publicación nueva tuya coincide mientras la automatización está activada.",
+    "steps": "{{done}} de {{count}} pasos hechos",
+    "attempts_one": "{{count}} intento",
+    "attempts_many": "{{count}} intentos",
+    "attempts_other": "{{count}} intentos",
+    "status": {
+      "queued": "En cola",
+      "running": "En curso",
+      "waiting": "Esperando",
+      "done": "Hecho",
+      "failed": "Falló",
+      "cancelled": "Detenida"
+    }
+  },
+  "starters": {
+    "title": "Nueva automatización",
+    "sub": "Empieza con un ejemplo y cámbialo a tu gusto, o empieza en blanco.",
+    "discordLiveText": "{title} está en directo ahora: {url}",
+    "snap_video": {
+      "title": "Un snap por cada video nuevo",
+      "sub": "Cuando publicas un video, sale un snap con su título y enlace."
+    },
+    "short_video": {
+      "title": "Un Short de cada video nuevo",
+      "sub": "Cuando publicas un video, sus primeros 30 segundos se convierten en un Short vertical."
+    },
+    "discord_live": {
+      "title": "Avisar a Discord cuando esté en directo",
+      "sub": "Cuando inicias un stream, tu servidor de Discord recibe un mensaje."
+    },
+    "blank": {
+      "title": "Empezar en blanco",
+      "sub": "Elige el evento y crea los pasos tú mismo."
+    }
+  },
+  "editor": {
+    "back": "Atrás",
+    "close": "Cerrar",
+    "name": "Nombre",
+    "namePlaceholder": "Ponle nombre a esta automatización",
+    "enabled": "Automatización activada",
+    "test": "Probar",
+    "save": "Guardar",
+    "toolboxTasks": "Hacer esto",
+    "toolboxLogic": "Decidir",
+    "whenTitle": "Cuando pase esto",
+    "event": "Evento",
+    "eventChangeNote": "Los pasos que no encajen con un evento nuevo reciben una marca de aviso.",
+    "placeholders": "Marcadores",
+    "insert": "Insertar",
+    "howTo": "Arrastra pasos de la caja de herramientas a la línea. Selecciona un paso para cambiarlo, o el espacio vacío para cambiar el evento.",
+    "stepName": "Nombre del paso",
+    "optional": "opcional",
+    "tagsHint": "Hasta {{max}} etiquetas, separadas por espacios.",
+    "emptyHint": "Arrastra un paso de la caja de herramientas a la línea"
+  },
+  "test": {
+    "title": "Ejecución de prueba",
+    "sample": "Aún no tienes ninguna publicación de este tipo, así que la prueba usó valores de ejemplo.",
+    "onPost": "Probado con tu publicación coincidente más reciente: {{title}}",
+    "nothingPosted": "No se publicó nada. Esto es lo que haría cada paso.",
+    "shortDetail": "Un Short desde el segundo {{start}}, de {{length}} segundos.",
+    "noSteps": "Ningún paso se ejecutaría para esta publicación."
+  },
+  "events": {
+    "video_published": {
+      "label": "Publico un video",
+      "desc": "Videos que subes tú. Los videos importados tienen su propio evento."
+    },
+    "short_published": {
+      "label": "Publico un Short",
+      "desc": "Shorts que publicas, desde el cargador, el editor o un clip."
+    },
+    "video_imported": {
+      "label": "Se importa un video mío",
+      "desc": "Videos y Shorts que el importador trae de YouTube, TikTok y los demás."
+    },
+    "podcast_published": {
+      "label": "Publico un episodio de podcast",
+      "desc": "Episodios de podcast y entrevistas, subidos o importados de tu feed."
+    },
+    "audio_published": {
+      "label": "Publico cualquier audio",
+      "desc": "Cada publicación de audio: podcasts, música, audiolibros y mensajes de voz."
+    },
+    "stream_started": {
+      "label": "Entro en directo",
+      "desc": "Cuando sale la publicación de tu transmisión en directo."
+    }
+  },
+  "tasks": {
+    "post_snap": {
+      "label": "Publicar un snap",
+      "desc": "Una publicación corta de texto en el feed de snaps, en la pestaña Comunidad de tu perfil.",
+      "props": {
+        "text": "Texto del snap",
+        "tags": "Etiquetas"
+      }
+    },
+    "post_short": {
+      "label": "Publicar un Short",
+      "desc": "Corta un clip del video nuevo y lo publica como Short unos 10 minutos después.",
+      "props": {
+        "start": "Empezar en el segundo",
+        "length": "Duración en segundos",
+        "vertical": "Vertical",
+        "caption": "Texto",
+        "tags": "Etiquetas"
+      },
+      "hints": {
+        "start": "Dónde empieza el clip en el video.",
+        "length": "De 5 a 60 segundos.",
+        "vertical": "Recorta el centro de un video ancho a 9:16."
+      }
+    },
+    "post_comment": {
+      "label": "Comentar la publicación",
+      "desc": "Un comentario tuyo bajo la publicación nueva, para enlaces, créditos o una pregunta.",
+      "props": {
+        "text": "Comentario"
+      }
+    },
+    "send_discord": {
+      "label": "Enviar a Discord",
+      "desc": "Un mensaje a un canal de tu servidor de Discord mediante un webhook. No se menciona a nadie.",
+      "props": {
+        "webhook": "Dirección del webhook",
+        "text": "Mensaje"
+      },
+      "hints": {
+        "webhook": "En Discord: ajustes del canal, Integraciones, Webhooks, Copiar URL del webhook."
+      }
+    }
+  },
+  "if": {
+    "label": "Si",
+    "desc": "Sigue el camino Sí cuando se cumple la condición; si no, el camino No.",
+    "field": "Comprobar",
+    "pickField": "Elige qué comprobar",
+    "operator": "Condición",
+    "value": "Valor",
+    "seconds": "Segundos",
+    "branchesNote": "Arrastra pasos a los caminos Sí y No en el lienzo.",
+    "branch": {
+      "yes": "Sí",
+      "no": "No"
+    }
+  },
+  "fields": {
+    "title": "Título",
+    "description": "Descripción",
+    "tags": "Etiquetas",
+    "duration": "Duración",
+    "community": "Comunidad",
+    "url": "Enlace",
+    "platform": "Importado de",
+    "kind": "Tipo",
+    "audioType": "Tipo de audio",
+    "imported": "Importado"
+  },
+  "ops": {
+    "contains": "contiene",
+    "not_contains": "no contiene",
+    "equals": "es exactamente",
+    "starts_with": "empieza por",
+    "has_tag": "tiene la etiqueta",
+    "not_has_tag": "no tiene la etiqueta",
+    "gt": "dura más de",
+    "lt": "dura menos de",
+    "is": "es",
+    "is_not": "no es"
+  },
+  "choices": {
+    "youtube": "YouTube",
+    "tiktok": "TikTok",
+    "instagram": "Instagram",
+    "rumble": "Rumble",
+    "bitchute": "BitChute",
+    "rss": "Feed de podcast",
+    "video": "Video",
+    "short": "Short",
+    "podcast": "Podcast",
+    "interview": "Entrevista",
+    "audiobook": "Audiolibro",
+    "song": "Música",
+    "voice_message": "Mensaje de voz",
+    "yes": "Sí",
+    "no": "No"
+  },
+  "placeholders": {
+    "title": "el título de la publicación",
+    "description": "el inicio de su descripción",
+    "url": "su enlace en 3Speak",
+    "author": "el nombre de tu cuenta",
+    "tags": "sus etiquetas como #hashtags",
+    "platform": "de dónde se importó"
+  },
+  "problems": {
+    "required": "Esto no puede estar vacío.",
+    "too_long": "Esto es demasiado largo.",
+    "over_limit": "Demasiados.",
+    "bad_tag": "Las etiquetas tienen de 2 a 24 letras, números o guiones.",
+    "bad_webhook": "Esta no es una dirección de webhook de Discord.",
+    "out_of_range": "Este número está fuera del rango.",
+    "bad_field": "Elige qué comprobar.",
+    "bad_operator": "Elige una condición.",
+    "bad_value": "Escribe un valor que encaje con la condición.",
+    "unknown_step": "3Speak no conoce este paso.",
+    "task_not_for_event": "Este paso no encaja con el evento (un Short necesita un video).",
+    "too_many_of_type": "Este paso no puede aparecer tantas veces en una automatización.",
+    "too_many_steps": "Una automatización puede tener como máximo 12 pasos.",
+    "too_deep": "Los pasos Si se pueden anidar como máximo 3 niveles.",
+    "bad_id": "Un paso está roto. Elimínalo y vuelve a añadirlo.",
+    "bad_sequence": "La automatización está rota. Empieza una nueva.",
+    "empty": "Añade al menos un paso.",
+    "no_event": "Elige el evento que la inicia.",
+    "no_name": "Ponle un nombre a la automatización.",
+    "no_grant": "Primero permite que 3Speak publique por ti.",
+    "pro_required": "En pausa: las automatizaciones necesitan 3Speak Pro.",
+    "not_found": "Esta automatización no existe (o ya no existe).",
+    "unknown": "Esto no se puede usar."
+  },
+  "designer": {
+    "contextMenu": {
+      "delete": "Eliminar",
+      "duplicate": "Duplicar",
+      "resetView": "Restablecer vista",
+      "select": "Seleccionar",
+      "unselect": "Deseleccionar"
+    },
+    "controlBar": {
+      "deleteSelectedStep": "Eliminar el paso seleccionado",
+      "redo": "Rehacer",
+      "resetView": "Restablecer vista",
+      "turnOnOffDragAndDrop": "Activar o desactivar mover pasos",
+      "undo": "Deshacer",
+      "zoomIn": "Acercar",
+      "zoomOut": "Alejar"
+    },
+    "smartEditor": {
+      "toggle": "Mostrar u ocultar el panel"
+    },
+    "toolbox": {
+      "search": "Buscar…",
+      "title": "Pasos"
+    }
+  }
+}

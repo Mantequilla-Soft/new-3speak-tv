@@ -1,0 +1,290 @@
+{
+  "menuEntry": "Otomasyonlar",
+  "title": "Otomasyonlar",
+  "beta": "Beta",
+  "subtitle": "Kanalında bir şey olduğunda gerisini 3Speak halletsin: bir snap ya da Short paylaşsın, yorum yapsın veya Discord'una haber versin.",
+  "howItWorks": "3Speak kanalına her {{minutes}} dakikada bir bakar. Her yeni gönderi, onun için açık olan otomasyonları başlatır ve paylaştıkları her şey, 3Speak'e verdiğin paylaşım izniyle senin adına yayınlanır. Bir otomasyonun yaptığı gönderiler asla başka bir otomasyonu başlatmaz.",
+  "gate": {
+    "signIn": "Otomasyon kurmak için giriş yap.",
+    "closedTitle": "Kullanılamıyor",
+    "closed": "Otomasyonlar kapalı testte ve hesabına henüz açık değil.",
+    "unavailable": "Otomasyonlar şu anda bu sunucuda kullanılamıyor.",
+    "proTitle": "Bir 3Speak Pro özelliği",
+    "pro": "Otomasyonlar 3Speak Pro'nun bir parçası.",
+    "getPro": "3Speak Pro al",
+    "skipPro": "Pro kontrolünü atla (testçi)",
+    "skipProHint": "Test hesabı olarak otomasyonları Pro olmadan deneyebilirsin.",
+    "proSkipped": "Test modu: Pro kontrolü hesabın için atlandı.",
+    "restorePro": "Pro kontrolünü yeniden kullan"
+  },
+  "grant": {
+    "needed": "Otomasyonlar senin yerine paylaşır. Önce 3Speak'in hesabında yayınlamasına izin ver.",
+    "button": "3Speak'in yayınlamasına izin ver"
+  },
+  "list": {
+    "new": "Yeni otomasyon",
+    "emptyTitle": "Henüz otomasyon yok",
+    "empty": "Bir örnekle başla ya da kendininkini kur: onu neyin başlatacağını seç, sonra ne olması gerektiğini sürükleyip bırak.",
+    "steps_one": "{{count}} adım",
+    "steps_other": "{{count}} adım",
+    "lastRun": "Son çalışma:",
+    "edit": "Düzenle",
+    "runs": "Çalışmalar",
+    "delete": "Sil",
+    "cancel": "İptal",
+    "notFound": "Bu otomasyon yok (artık yok).",
+    "deleteTitle": "\"{{name}}\" silinsin mi?",
+    "deleteBody": "Otomasyon ve çalışma geçmişi silinir. Daha önce yaptığı gönderiler kalır.",
+    "on": "Açık",
+    "off": "Kapalı"
+  },
+  "runs": {
+    "title": "\"{{name}}\" çalışmaları",
+    "empty": "Henüz çalışma yok",
+    "emptyHint": "Otomasyon açıkken yeni bir gönderin koşullara uyduğunda bir çalışma başlar.",
+    "steps": "{{count}} adımdan {{done}} tanesi tamam",
+    "attempts_one": "{{count}} deneme",
+    "attempts_other": "{{count}} deneme",
+    "status": {
+      "queued": "Sırada",
+      "running": "Çalışıyor",
+      "waiting": "Bekliyor",
+      "done": "Tamam",
+      "failed": "Başarısız",
+      "cancelled": "Durduruldu"
+    }
+  },
+  "starters": {
+    "title": "Yeni otomasyon",
+    "sub": "Bir örnekle başla ve istediğin gibi değiştir ya da boş başla.",
+    "discordLiveText": "{title} şimdi canlı: {url}",
+    "snap_video": {
+      "title": "Her yeni videoya bir snap",
+      "sub": "Bir video yayınladığında, başlığı ve bağlantısıyla bir snap paylaşılır."
+    },
+    "short_video": {
+      "title": "Her yeni videodan bir Short",
+      "sub": "Bir video yayınladığında, ilk 30 saniyesi dikey bir Short olur."
+    },
+    "discord_live": {
+      "title": "Canlı yayına geçince Discord'a haber ver",
+      "sub": "Bir yayın başlattığında, Discord sunucuna bir mesaj gider."
+    },
+    "blank": {
+      "title": "Boş başla",
+      "sub": "Olayı seç ve adımları kendin kur."
+    }
+  },
+  "editor": {
+    "back": "Geri",
+    "close": "Kapat",
+    "name": "Ad",
+    "namePlaceholder": "Bu otomasyona bir ad ver",
+    "enabled": "Otomasyon açık",
+    "test": "Test et",
+    "save": "Kaydet",
+    "toolboxTasks": "Bunu yap",
+    "toolboxLogic": "Karar ver",
+    "whenTitle": "Bu olduğunda",
+    "event": "Olay",
+    "eventChangeNote": "Yeni olaya uymayan adımlar bir uyarı rozeti alır.",
+    "placeholders": "Yer tutucular",
+    "insert": "Ekle",
+    "howTo": "Adımları araç kutusundan çizginin üzerine sürükle. Değiştirmek için bir adımı, olayı değiştirmek için boş alanı seç.",
+    "stepName": "Adım adı",
+    "optional": "isteğe bağlı",
+    "tagsHint": "Boşlukla ayrılmış en fazla {{max}} etiket.",
+    "emptyHint": "Araç kutusundan çizginin üzerine bir adım sürükle"
+  },
+  "test": {
+    "title": "Test çalışması",
+    "sample": "Henüz bu türde bir gönderin yok, bu yüzden test örnek değerler kullandı.",
+    "onPost": "Uyan en yeni gönderinde test edildi: {{title}}",
+    "nothingPosted": "Hiçbir şey paylaşılmadı. Her adımın yapacağı şey bu.",
+    "shortDetail": "{{start}}. saniyeden başlayan, {{length}} saniyelik bir Short.",
+    "noSteps": "Bu gönderi için hiçbir adım çalışmazdı."
+  },
+  "events": {
+    "video_published": {
+      "label": "Bir video yayınlıyorum",
+      "desc": "Kendin yüklediğin videolar. İçe aktarılan videoların kendi olayı var."
+    },
+    "short_published": {
+      "label": "Bir Short yayınlıyorum",
+      "desc": "Yükleyiciden, düzenleyiciden veya bir klipten paylaştığın Shorts."
+    },
+    "video_imported": {
+      "label": "Bir videom içe aktarılıyor",
+      "desc": "İçe aktarıcının YouTube, TikTok ve diğerlerinden getirdiği videolar ve Shorts."
+    },
+    "podcast_published": {
+      "label": "Bir podcast bölümü paylaşıyorum",
+      "desc": "Yüklenen ya da akışından içe aktarılan podcast ve röportaj bölümleri."
+    },
+    "audio_published": {
+      "label": "Herhangi bir ses paylaşıyorum",
+      "desc": "Her ses gönderisi: podcastler, müzik, sesli kitaplar ve sesli mesajlar."
+    },
+    "stream_started": {
+      "label": "Canlı yayına geçiyorum",
+      "desc": "Canlı yayınının gönderisi paylaşıldığında."
+    }
+  },
+  "tasks": {
+    "post_snap": {
+      "label": "Snap paylaş",
+      "desc": "Snaps akışında, profilinin Topluluk sekmesinde kısa bir metin gönderisi.",
+      "props": {
+        "text": "Snap metni",
+        "tags": "Etiketler"
+      }
+    },
+    "post_short": {
+      "label": "Short paylaş",
+      "desc": "Yeni videodan bir klip keser ve yaklaşık 10 dakika sonra Short olarak paylaşır.",
+      "props": {
+        "start": "Başlangıç saniyesi",
+        "length": "Saniye cinsinden uzunluk",
+        "vertical": "Dikey",
+        "caption": "Açıklama metni",
+        "tags": "Etiketler"
+      },
+      "hints": {
+        "start": "Klibin videoda başladığı yer.",
+        "length": "5 ile 60 saniye arası.",
+        "vertical": "Geniş bir videonun ortasını 9:16 olarak kırpar."
+      }
+    },
+    "post_comment": {
+      "label": "Gönderiye yorum yap",
+      "desc": "Yeni gönderinin altında senden bir yorum: bağlantılar, emeği geçenler veya bir soru için.",
+      "props": {
+        "text": "Yorum"
+      }
+    },
+    "send_discord": {
+      "label": "Discord'a gönder",
+      "desc": "Bir webhook üzerinden Discord sunucundaki bir kanala mesaj. Kimse etiketlenmez.",
+      "props": {
+        "webhook": "Webhook adresi",
+        "text": "Mesaj"
+      },
+      "hints": {
+        "webhook": "Discord'da: kanal ayarları, Entegrasyonlar, Webhook'lar, Webhook URL'sini Kopyala."
+      }
+    }
+  },
+  "if": {
+    "label": "Eğer",
+    "desc": "Koşul sağlanırsa Evet yolunu, sağlanmazsa Hayır yolunu izler.",
+    "field": "Kontrol et",
+    "pickField": "Neyin kontrol edileceğini seç",
+    "operator": "Koşul",
+    "value": "Değer",
+    "seconds": "Saniye",
+    "branchesNote": "Adımları tuvaldeki Evet ve Hayır yollarına sürükle.",
+    "branch": {
+      "yes": "Evet",
+      "no": "Hayır"
+    }
+  },
+  "fields": {
+    "title": "Başlık",
+    "description": "Açıklama",
+    "tags": "Etiketler",
+    "duration": "Uzunluk",
+    "community": "Topluluk",
+    "url": "Bağlantı",
+    "platform": "İçe aktarıldığı yer",
+    "kind": "Tür",
+    "audioType": "Ses türü",
+    "imported": "İçe aktarıldı"
+  },
+  "ops": {
+    "contains": "içerir",
+    "not_contains": "içermez",
+    "equals": "tam olarak şudur",
+    "starts_with": "şununla başlar",
+    "has_tag": "şu etikete sahip",
+    "not_has_tag": "şu etikete sahip değil",
+    "gt": "şundan uzun",
+    "lt": "şundan kısa",
+    "is": "şudur",
+    "is_not": "şu değildir"
+  },
+  "choices": {
+    "youtube": "YouTube",
+    "tiktok": "TikTok",
+    "instagram": "Instagram",
+    "rumble": "Rumble",
+    "bitchute": "BitChute",
+    "rss": "Podcast akışı",
+    "video": "Video",
+    "short": "Short",
+    "podcast": "Podcast",
+    "interview": "Röportaj",
+    "audiobook": "Sesli kitap",
+    "song": "Müzik",
+    "voice_message": "Sesli mesaj",
+    "yes": "Evet",
+    "no": "Hayır"
+  },
+  "placeholders": {
+    "title": "gönderinin başlığı",
+    "description": "açıklamasının başı",
+    "url": "3Speak'teki bağlantısı",
+    "author": "hesap adın",
+    "tags": "#hashtag olarak etiketleri",
+    "platform": "nereden içe aktarıldığı"
+  },
+  "problems": {
+    "required": "Bu boş olamaz.",
+    "too_long": "Bu çok uzun.",
+    "over_limit": "Çok fazla.",
+    "bad_tag": "Etiketler 2 ile 24 arası harf, rakam veya tireden oluşur.",
+    "bad_webhook": "Bu bir Discord webhook adresi değil.",
+    "out_of_range": "Bu sayı aralığın dışında.",
+    "bad_field": "Neyin kontrol edileceğini seç.",
+    "bad_operator": "Bir koşul seç.",
+    "bad_value": "Koşula uyan bir değer gir.",
+    "unknown_step": "3Speak bu adımı tanımıyor.",
+    "task_not_for_event": "Bu adım olaya uymuyor (bir Short için video gerekir).",
+    "too_many_of_type": "Bu adım bir otomasyonda bu kadar sık yer alamaz.",
+    "too_many_steps": "Bir otomasyonda en fazla 12 adım olabilir.",
+    "too_deep": "Eğer adımları en fazla 3 seviye iç içe olabilir.",
+    "bad_id": "Bir adım bozuk. Onu sil ve yeniden ekle.",
+    "bad_sequence": "Otomasyon bozuk. Yeni bir tane başlat.",
+    "empty": "En az bir adım ekle.",
+    "no_event": "Onu başlatan olayı seç.",
+    "no_name": "Otomasyona bir ad ver.",
+    "no_grant": "Önce 3Speak'in senin adına yayınlamasına izin ver.",
+    "pro_required": "Duraklatıldı: otomasyonlar için 3Speak Pro gerekir.",
+    "not_found": "Bu otomasyon yok (artık yok).",
+    "unknown": "Bu kullanılamaz."
+  },
+  "designer": {
+    "contextMenu": {
+      "delete": "Sil",
+      "duplicate": "Çoğalt",
+      "resetView": "Görünümü sıfırla",
+      "select": "Seç",
+      "unselect": "Seçimi kaldır"
+    },
+    "controlBar": {
+      "deleteSelectedStep": "Seçili adımı sil",
+      "redo": "Yinele",
+      "resetView": "Görünümü sıfırla",
+      "turnOnOffDragAndDrop": "Adımları taşımayı aç veya kapat",
+      "undo": "Geri al",
+      "zoomIn": "Yakınlaştır",
+      "zoomOut": "Uzaklaştır"
+    },
+    "smartEditor": {
+      "toggle": "Paneli göster veya gizle"
+    },
+    "toolbox": {
+      "search": "Ara…",
+      "title": "Adımlar"
+    }
+  }
+}
