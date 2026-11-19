@@ -35,6 +35,7 @@ import { fetchPlaySource } from "./lib/videoData";
 import { useQueryClient } from "@tanstack/react-query";
 import RouteTitle from "./components/RouteTitle";
 import ResumeLastPage from "./components/ResumeLastPage";
+import GlobalPullToRefresh from "./components/PullToRefresh/GlobalPullToRefresh";
 import RouteFallback from "./components/RouteFallback";
 // import TestingLogin from "./page/Login/TestingLogin";
 import { Toaster } from 'sonner';
@@ -837,6 +838,7 @@ function App() {
           <RouteTitle />
           {/* Continue where I left off: records each page (the jump back is in main.jsx). */}
           <ResumeLastPage />
+          <GlobalPullToRefresh />
           {/* <Toaster richColors position="top-right" /> */}
           {/* Every route below the index one is lazy, so the router needs a
               boundary. The fallback is deliberately EMPTY: the nav and

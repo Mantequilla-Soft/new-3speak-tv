@@ -412,6 +412,22 @@
   gap: 16px;
 }
 
+/* The editor's tabs (Details, Audience, Boosts, Recording): one form, the
+   hidden panes stay mounted so nothing typed is lost between tabs. */
+.st-tabs { flex: none; }
+.st-pane {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  &[hidden] { display: none; }
+}
+
+.st-hint {
+  @include v2.text(meta);
+  color: var(--muted);
+}
+
 .st-field__preview {
   display: block;
   padding: 6px 10px;

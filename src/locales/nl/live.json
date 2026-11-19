@@ -261,7 +261,14 @@
       "created": "Sjabloon aangemaakt",
       "liveConflict": "Dit sjabloon is nu live. Stop met streamen in OBS voordat je het hernoemt.",
       "invalid": "Sommige velden zijn ongeldig. Controleer ze en probeer het opnieuw.",
-      "saveFailed": "Het sjabloon kon niet worden opgeslagen."
+      "saveFailed": "Het sjabloon kon niet worden opgeslagen.",
+      "tabs": {
+        "label": "Onderdelen van het sjabloon",
+        "details": "Details",
+        "audience": "Publiek",
+        "boosts": "Boosts",
+        "recording": "Opname"
+      }
     },
     "unavailableNow": "Sjablonen zijn nu niet beschikbaar. Probeer het zo nog eens.",
     "tabs": {

@@ -261,7 +261,14 @@
       "created": "Nagawa ang template",
       "liveConflict": "Live ang template na ito ngayon. Itigil muna ang stream sa OBS bago ito palitan ng pangalan.",
       "invalid": "May mga field na hindi valid. Pakitingnan at subukan ulit.",
-      "saveFailed": "Hindi ma-save ang template."
+      "saveFailed": "Hindi ma-save ang template.",
+      "tabs": {
+        "label": "Mga bahagi ng template",
+        "details": "Detalye",
+        "audience": "Manonood",
+        "boosts": "Boost",
+        "recording": "Recording"
+      }
     },
     "unavailableNow": "Hindi available ang mga template ngayon. Subukan ulit maya-maya.",
     "tabs": {

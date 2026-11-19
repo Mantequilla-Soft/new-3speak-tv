@@ -262,7 +262,14 @@
       "created": "Modelo criado",
       "liveConflict": "Este modelo está ao vivo agora. Pare a transmissão no OBS antes de renomeá-lo.",
       "invalid": "Alguns campos não são válidos. Verifique-os e tente novamente.",
-      "saveFailed": "Não foi possível salvar o modelo."
+      "saveFailed": "Não foi possível salvar o modelo.",
+      "tabs": {
+        "label": "Seções do modelo",
+        "details": "Detalhes",
+        "audience": "Público",
+        "boosts": "Boosts",
+        "recording": "Gravação"
+      }
     },
     "unavailableNow": "Os modelos não estão disponíveis agora. Tente de novo em instantes.",
     "tabs": {

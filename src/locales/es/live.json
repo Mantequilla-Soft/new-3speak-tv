@@ -262,7 +262,14 @@
       "created": "Plantilla creada",
       "liveConflict": "Esta plantilla está en vivo ahora mismo. Detén la transmisión en OBS antes de cambiarle el nombre.",
       "invalid": "Algunos campos no son válidos. Revísalos e inténtalo de nuevo.",
-      "saveFailed": "No se pudo guardar la plantilla."
+      "saveFailed": "No se pudo guardar la plantilla.",
+      "tabs": {
+        "label": "Secciones de la plantilla",
+        "details": "Detalles",
+        "audience": "Público",
+        "boosts": "Boosts",
+        "recording": "Grabación"
+      }
     },
     "unavailableNow": "Las plantillas no están disponibles ahora. Vuelve a intentarlo en un momento.",
     "tabs": {

@@ -261,7 +261,14 @@
       "created": "Template created",
       "liveConflict": "This template is live right now. Stop streaming in OBS before renaming it.",
       "invalid": "Some fields are not valid. Please check them and try again.",
-      "saveFailed": "Could not save the template."
+      "saveFailed": "Could not save the template.",
+      "tabs": {
+        "label": "Template sections",
+        "details": "Details",
+        "audience": "Audience",
+        "boosts": "Boosts",
+        "recording": "Recording"
+      }
     },
     "unavailableNow": "Templates are not available right now. Please try again in a moment.",
     "tabs": {

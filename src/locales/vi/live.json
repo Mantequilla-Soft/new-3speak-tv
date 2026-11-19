@@ -260,7 +260,14 @@
       "created": "Đã tạo mẫu",
       "liveConflict": "Mẫu này đang phát trực tiếp. Hãy dừng phát trong OBS trước khi đổi tên.",
       "invalid": "Một số trường không hợp lệ. Vui lòng kiểm tra rồi thử lại.",
-      "saveFailed": "Không thể lưu mẫu."
+      "saveFailed": "Không thể lưu mẫu.",
+      "tabs": {
+        "label": "Các phần của mẫu",
+        "details": "Chi tiết",
+        "audience": "Người xem",
+        "boosts": "Boost",
+        "recording": "Ghi hình"
+      }
     },
     "unavailableNow": "Hiện không dùng được mẫu. Vui lòng thử lại sau giây lát.",
     "tabs": {

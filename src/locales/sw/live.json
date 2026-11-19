@@ -261,7 +261,14 @@
       "created": "Kiolezo kimeundwa",
       "liveConflict": "Kiolezo hiki kiko mubashara sasa hivi. Simamisha kutiririsha kwenye OBS kabla ya kukipa jina jipya.",
       "invalid": "Baadhi ya sehemu si sahihi. Tafadhali ziangalie na ujaribu tena.",
-      "saveFailed": "Imeshindwa kuhifadhi kiolezo."
+      "saveFailed": "Imeshindwa kuhifadhi kiolezo.",
+      "tabs": {
+        "label": "Sehemu za kiolezo",
+        "details": "Maelezo",
+        "audience": "Watazamaji",
+        "boosts": "Boost",
+        "recording": "Rekodi"
+      }
     },
     "unavailableNow": "Violezo havipatikani kwa sasa. Tafadhali jaribu tena baada ya muda mfupi.",
     "tabs": {
