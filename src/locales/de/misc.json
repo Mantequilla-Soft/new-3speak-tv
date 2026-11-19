@@ -338,7 +338,9 @@
     "pollMove": "Ziehen zum Verschieben",
     "pollHide": "Schließen",
     "pollShow": "Umfrage öffnen",
-    "predictionShow": "Vorhersage öffnen"
+    "predictionShow": "Vorhersage öffnen",
+    "chatHide": "Chat ausblenden",
+    "chatShow": "Chat einblenden"
   },
   "pullToRefresh": {
     "pull": "Zum Aktualisieren ziehen",

@@ -339,7 +339,9 @@
     "pollMove": "Arrastra para mover",
     "pollHide": "Cerrar",
     "pollShow": "Abrir la encuesta",
-    "predictionShow": "Abrir la predicción"
+    "predictionShow": "Abrir la predicción",
+    "chatHide": "Ocultar el chat",
+    "chatShow": "Mostrar el chat"
   },
   "pullToRefresh": {
     "pull": "Desliza para actualizar",

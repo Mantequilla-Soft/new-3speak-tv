@@ -337,7 +337,9 @@
     "pollMove": "ドラッグして移動",
     "pollHide": "閉じる",
     "pollShow": "投票を開く",
-    "predictionShow": "予想を開く"
+    "predictionShow": "予想を開く",
+    "chatHide": "チャットを隠す",
+    "chatShow": "チャットを表示"
   },
   "pullToRefresh": {
     "pull": "引っ張って更新",

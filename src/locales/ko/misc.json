@@ -337,7 +337,9 @@
     "pollMove": "드래그해서 이동",
     "pollHide": "닫기",
     "pollShow": "투표 열기",
-    "predictionShow": "예측 열기"
+    "predictionShow": "예측 열기",
+    "chatHide": "채팅 숨기기",
+    "chatShow": "채팅 보기"
   },
   "pullToRefresh": {
     "pull": "당겨서 새로고침",

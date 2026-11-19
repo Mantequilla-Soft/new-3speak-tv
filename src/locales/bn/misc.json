@@ -338,7 +338,9 @@
     "pollMove": "সরাতে টেনে আনুন",
     "pollHide": "বন্ধ করুন",
     "pollShow": "পোল খুলুন",
-    "predictionShow": "পূর্বাভাস খুলুন"
+    "predictionShow": "পূর্বাভাস খুলুন",
+    "chatHide": "চ্যাট লুকান",
+    "chatShow": "চ্যাট দেখান"
   },
   "pullToRefresh": {
     "pull": "রিফ্রেশ করতে টানুন",
