@@ -18,6 +18,42 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.137',
+    category: 'home',
+    date: '2026-11-19',
+    summary: 'On phones and tablets, the welcome for new visitors opens as a sheet over the page instead of hiding behind the Spotlight.',
+  },
+  {
+    version: '2.0.136',
+    category: 'live',
+    date: '2026-11-19',
+    summary: 'After a stream, the OBS chat dock leads you to the clips your viewers made, ready to post as Shorts.',
+  },
+  {
+    version: '2.0.135',
+    category: 'live',
+    date: '2026-11-19',
+    summary: 'The OBS chat dock has a 3Speak header, and its dropdowns are readable in the dark panel.',
+  },
+  {
+    version: '2.0.134',
+    category: 'live',
+    date: '2026-11-19',
+    summary: "A stream's boost goal shows in the corner the host chose, and on phones the stream title no longer hides under the chat box.",
+  },
+  {
+    version: '2.0.133',
+    category: 'live',
+    date: '2026-11-19',
+    summary: 'Stream volume sits in the bottom-right corner of the player again, and the slider appears when you hover over it.',
+  },
+  {
+    version: '2.0.132',
+    category: 'live',
+    date: '2026-11-19',
+    summary: 'On phones, polls and predictions float over the stream: drag them anywhere, close them to a chip, and they tuck away once you vote.',
+  },
+  {
     version: '2.0.131',
     category: 'general',
     date: '2026-11-19',
