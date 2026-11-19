@@ -175,9 +175,15 @@
     },
     "chatBox": {
       "title": "La tua chat in OBS",
-      "desc": "aggiungilo come dock del browser personalizzato",
+      "desc": "aggiungilo come dock del browser personalizzato: chat, sondaggi, previsioni, raid e impostazioni dei boost. Tieni privato il link.",
       "copy": "Copia URL della chat",
-      "copied": "URL della chat copiato"
+      "copied": "URL della chat copiato",
+      "resetTitle": "Reimpostare il link del dock?",
+      "resetConfirm": "I dock con il vecchio link smettono subito di gestire sondaggi, raid e impostazioni dei boost; la loro chat continua. Poi incolla il nuovo link in OBS.",
+      "resetButton": "Reimposta link",
+      "resetDone": "Nuovo link del dock creato e copiato. Incollalo in OBS.",
+      "resetDoneNoCopy": "Nuovo link del dock creato. Copialo di nuovo e incollalo in OBS.",
+      "resetFailed": "Impossibile reimpostare il link del dock."
     },
     "card": {
       "copyUrl": "Copia URL del server",
@@ -293,7 +299,14 @@
       "viewers": "Spettatori collegati",
       "liveFor": "Tempo in diretta",
       "timeLeft": "Tempo rimasto prima della fine della diretta",
-      "boosts": "Boost ricevuti in questa diretta"
+      "boosts": "Boost ricevuti in questa diretta",
+      "controlInvalid": "Questo link del dock è stato reimpostato: qui sondaggi, raid e impostazioni dei boost sono disattivati. Copia di nuovo l'URL della chat dalla scheda Modelli dello Stream Studio.",
+      "tabs": {
+        "label": "Dock",
+        "chat": "Chat",
+        "live": "Sondaggi e raid",
+        "boosts": "Boost"
+      }
     },
     "pro": {
       "title": "Trasmettere da OBS fa parte di 3Speak Pro",

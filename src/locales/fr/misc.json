@@ -332,7 +332,10 @@
     "topSupporters": "Meilleurs soutiens",
     "noSupporters": "Pas encore de boosts",
     "full": "Plein écran",
-    "loginToChat": "Connectez-vous pour discuter"
+    "loginToChat": "Connectez-vous pour discuter",
+    "ended": "Ce live est terminé.",
+    "volume": "Volume",
+    "sound": "Son"
   },
   "pullToRefresh": {
     "pull": "Tirez pour actualiser",

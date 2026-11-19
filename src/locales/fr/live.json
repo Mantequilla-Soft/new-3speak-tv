@@ -175,9 +175,15 @@
     },
     "chatBox": {
       "title": "Votre chat dans OBS",
-      "desc": "à ajouter comme dock de navigateur personnalisé",
+      "desc": "à ajouter comme dock de navigateur personnalisé : chat, sondages, prédictions, raids et réglages des boosts. Garde ce lien privé.",
       "copy": "Copier l'URL du chat",
-      "copied": "URL du chat copiée"
+      "copied": "URL du chat copiée",
+      "resetTitle": "Réinitialiser le lien du dock ?",
+      "resetConfirm": "Les docks avec l'ancien lien ne gèrent plus les sondages, raids et réglages des boosts, tout de suite ; leur chat continue. Colle ensuite le nouveau lien dans OBS.",
+      "resetButton": "Réinitialiser le lien",
+      "resetDone": "Nouveau lien du dock créé et copié. Colle-le dans OBS.",
+      "resetDoneNoCopy": "Nouveau lien du dock créé. Copie-le à nouveau et colle-le dans OBS.",
+      "resetFailed": "Impossible de réinitialiser le lien du dock."
     },
     "card": {
       "copyUrl": "Copier l'URL du serveur",
@@ -293,7 +299,14 @@
       "viewers": "Spectateurs en train de regarder",
       "liveFor": "Durée du live",
       "timeLeft": "Temps restant avant la fin du live",
-      "boosts": "Boosts reçus pendant ce live"
+      "boosts": "Boosts reçus pendant ce live",
+      "controlInvalid": "Ce lien de dock a été réinitialisé : sondages, raids et réglages des boosts sont désactivés ici. Copie à nouveau l'URL du chat depuis l'onglet Modèles du Stream Studio.",
+      "tabs": {
+        "label": "Dock",
+        "chat": "Chat",
+        "live": "Sondages et raids",
+        "boosts": "Boosts"
+      }
     },
     "pro": {
       "title": "Diffuser depuis OBS fait partie de 3Speak Pro",

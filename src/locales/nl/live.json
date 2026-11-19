@@ -174,9 +174,15 @@
     },
     "chatBox": {
       "title": "Je chat in OBS",
-      "desc": "toevoegen als aangepast browserdock",
+      "desc": "voeg toe als aangepast browserdock: chat, polls, voorspellingen, raids en boost-instellingen. Houd de link privé.",
       "copy": "Chat-URL kopiëren",
-      "copied": "Chat-URL gekopieerd"
+      "copied": "Chat-URL gekopieerd",
+      "resetTitle": "Docklink resetten?",
+      "resetConfirm": "Docks met de oude link kunnen meteen geen polls, raids en boost-instellingen meer regelen; hun chat blijft werken. Plak daarna de nieuwe link in OBS.",
+      "resetButton": "Link resetten",
+      "resetDone": "Nieuwe docklink gemaakt en gekopieerd. Plak hem in OBS.",
+      "resetDoneNoCopy": "Nieuwe docklink gemaakt. Kopieer hem opnieuw en plak hem in OBS.",
+      "resetFailed": "Docklink kon niet worden gereset."
     },
     "card": {
       "copyUrl": "Server-URL kopiëren",
@@ -292,7 +298,14 @@
       "viewers": "Kijkers nu",
       "liveFor": "Tijd live",
       "timeLeft": "Resterende tijd tot de stream stopt",
-      "boosts": "Boosts ontvangen in deze stream"
+      "boosts": "Boosts ontvangen in deze stream",
+      "controlInvalid": "Deze docklink is gereset, dus polls, raids en boost-instellingen staan hier uit. Kopieer de chat-URL opnieuw via het tabblad Sjablonen in de Stream Studio.",
+      "tabs": {
+        "label": "Dock",
+        "chat": "Chat",
+        "live": "Polls en raids",
+        "boosts": "Boosts"
+      }
     },
     "pro": {
       "title": "Streamen vanuit OBS hoort bij 3Speak Pro",

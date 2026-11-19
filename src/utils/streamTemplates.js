@@ -70,6 +70,9 @@ export const deleteTemplate = (token, id) => call(token, `/templates/${encodeURI
 export const getTemplateStatus = (token, id) => call(token, `/templates/${encodeURIComponent(id)}/status`);
 export const getStreamSecret = (token) => call(token, '/stream-secret');
 export const resetStreamSecret = (token) => call(token, '/stream-secret/reset', { method: 'POST', body: {} });
+// The OBS dock's control key: lets the dock run polls, raids and boost settings.
+export const getDockKey = (token) => call(token, '/dock-key');
+export const resetDockKey = (token) => call(token, '/dock-key/reset', { method: 'POST', body: {} });
 
 /**
  * The address part a template name becomes. Mirrors the server's rule

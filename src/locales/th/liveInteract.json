@@ -22,7 +22,9 @@
     "outcomeWon": "{option} ชนะ",
     "youWon": "คุณได้คืน {points} แต้ม",
     "cancelled": "ยกเลิกแล้ว ทุกคนได้แต้มคืนครบ",
-    "close": "ปิด"
+    "close": "ปิด",
+    "showResult": "ดูผล",
+    "hideResult": "ซ่อนผล"
   },
   "replay": {
     "tab": "แชทสดย้อนหลัง",

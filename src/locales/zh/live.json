@@ -173,9 +173,15 @@
     },
     "chatBox": {
       "title": "你在 OBS 中的聊天",
-      "desc": "作为自定义浏览器停靠窗口添加",
+      "desc": "添加为自定义浏览器停靠窗口：聊天、投票、预测、突袭和助推设置。请勿公开此链接。",
       "copy": "复制聊天链接",
-      "copied": "已复制聊天链接"
+      "copied": "已复制聊天链接",
+      "resetTitle": "重置停靠窗口链接？",
+      "resetConfirm": "使用旧链接的停靠窗口会立即无法管理投票、突袭和助推设置；聊天照常显示。之后把新链接粘贴到 OBS。",
+      "resetButton": "重置链接",
+      "resetDone": "已创建并复制新的停靠窗口链接，请粘贴到 OBS。",
+      "resetDoneNoCopy": "已创建新的停靠窗口链接，请重新复制并粘贴到 OBS。",
+      "resetFailed": "无法重置停靠窗口链接。"
     },
     "card": {
       "copyUrl": "复制服务器 URL",
@@ -291,7 +297,14 @@
       "viewers": "正在观看的人数",
       "liveFor": "直播时长",
       "timeLeft": "距离直播结束的剩余时间",
-      "boosts": "本场直播收到的助推"
+      "boosts": "本场直播收到的助推",
+      "controlInvalid": "此停靠窗口链接已被重置，这里的投票、突袭和助推设置已关闭。请在 Stream Studio 的模板标签页重新复制聊天 URL。",
+      "tabs": {
+        "label": "停靠窗口",
+        "chat": "聊天",
+        "live": "投票和突袭",
+        "boosts": "助推"
+      }
     },
     "pro": {
       "title": "通过 OBS 直播是 3Speak Pro 的功能",

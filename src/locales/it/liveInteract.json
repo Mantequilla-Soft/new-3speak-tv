@@ -22,7 +22,9 @@
     "outcomeWon": "Ha vinto {option}",
     "youWon": "Hai riavuto {points} punti",
     "cancelled": "Annullata, nessuno perde i suoi punti",
-    "close": "Chiudi"
+    "close": "Chiudi",
+    "showResult": "Mostra il risultato",
+    "hideResult": "Nascondi il risultato"
   },
   "replay": {
     "tab": "Replica della chat dal vivo",

@@ -10,7 +10,7 @@ import {
 } from '../../utils/postingAuthority';
 import {
   TEMPLATE_LIMITS, listTemplates, createTemplate, updateTemplate, deleteTemplate, getTemplateStatus,
-  getStreamSecret, resetStreamSecret, slugifyTemplateName, emptyTemplate, templateToForm, formToInput,
+  getStreamSecret, resetStreamSecret, getDockKey, resetDockKey, slugifyTemplateName, emptyTemplate, templateToForm, formToInput,
 } from '../../utils/streamTemplates';
 import AnnounceOptions from './AnnounceOptions';
 import MarkdownComposer from '../studio/MarkdownComposer';
@@ -185,14 +185,41 @@ function SecretBox({ token }) {
  * The user's chat URL for OBS: one link for all their streams (the server
  * finds whichever room they are live in), meant as a Custom Browser Dock. See
  * page/ObsChatOverlay; without dock=1 the same page is an overlay for the video.
+ *
+ * The dock link also carries the dock key (`control`), which lets the dock run
+ * polls, predictions, raids and the boost settings: a credential like the
+ * stream secret, so it can be reset here, which ends every dock that has it.
  */
-function ChatUrlBox({ overlayKey }) {
+function ChatUrlBox({ overlayKey, token }) {
   const { t } = useTranslation();
+  const [busy, setBusy] = useState(false);
+  const [confirmReset, setConfirmReset] = useState(false);
   if (!overlayKey) return null;
+  const urlWith = (dockKey) => `${window.location.origin}/obs/chat?key=${encodeURIComponent(overlayKey)}&dock=1`
+    + (dockKey ? `&control=${encodeURIComponent(dockKey)}` : '');
   const copy = async () => {
-    const url = `${window.location.origin}/obs/chat?key=${encodeURIComponent(overlayKey)}&dock=1`;
-    if (await copyText(url)) toast.success(t('live.obs.chatBox.copied'));
-    else toast.error(t('live.obs.copyFailed'));
+    setBusy(true);
+    try {
+      // Without the dock key (an older server) the dock still shows the chat.
+      const dockKey = await getDockKey(token).then((d) => d?.key || null).catch(() => null);
+      if (await copyText(urlWith(dockKey))) toast.success(t('live.obs.chatBox.copied'));
+      else toast.error(t('live.obs.copyFailed'));
+    } finally {
+      setBusy(false);
+    }
+  };
+  const reset = async () => {
+    setBusy(true);
+    try {
+      const d = await resetDockKey(token);
+      setConfirmReset(false);
+      if (d?.key && await copyText(urlWith(d.key))) toast.success(t('live.obs.chatBox.resetDone'));
+      else toast.success(t('live.obs.chatBox.resetDoneNoCopy'));
+    } catch {
+      toast.error(t('live.obs.chatBox.resetFailed'));
+    } finally {
+      setBusy(false);
+    }
   };
   return (
     <section className="st-chatbox">
@@ -201,7 +228,19 @@ function ChatUrlBox({ overlayKey }) {
         <b>{t('live.obs.chatBox.title')}</b>
         <span> · {t('live.obs.chatBox.desc')}</span>
       </p>
-      <Button variant="cyan" size={36} onClick={copy}>{t('live.obs.chatBox.copy')}</Button>
+      <Button variant="cyan" size={36} onClick={copy} disabled={busy}>{t('live.obs.chatBox.copy')}</Button>
+      <Button variant="danger" size={36} onClick={() => setConfirmReset(true)} disabled={busy}>{t('common.actions.reset')}</Button>
+      {confirmReset && (
+        <ConfirmSheet
+          title={t('live.obs.chatBox.resetTitle')}
+          text={t('live.obs.chatBox.resetConfirm')}
+          confirmLabel={t('live.obs.chatBox.resetButton')}
+          danger
+          busy={busy}
+          onConfirm={reset}
+          onCancel={() => setConfirmReset(false)}
+        />
+      )}
     </section>
   );
 }
@@ -906,7 +945,7 @@ export function StreamTemplatesPanel({ token, user, isPremium, premiumKnown = tr
         {premiumKnown && (isPremium ? (
           <>
             <SecretBox token={token} />
-            <ChatUrlBox overlayKey={data.chatOverlayKey} />
+            <ChatUrlBox overlayKey={data.chatOverlayKey} token={token} />
           </>
         ) : (
           <ObsProNotice user={user} />

@@ -331,7 +331,10 @@
     "topSupporters": "Mga top supporter",
     "noSupporters": "Wala pang boost",
     "full": "Buong screen",
-    "loginToChat": "Mag-log in para mag-chat"
+    "loginToChat": "Mag-log in para mag-chat",
+    "ended": "Tapos na ang stream na ito.",
+    "volume": "Lakas ng tunog",
+    "sound": "Tunog"
   },
   "pullToRefresh": {
     "pull": "Hilahin para mag-refresh",

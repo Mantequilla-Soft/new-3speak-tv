@@ -332,7 +332,10 @@
     "topSupporters": "Sostenitori principali",
     "noSupporters": "Ancora nessun boost",
     "full": "Schermo intero",
-    "loginToChat": "Accedi per chattare"
+    "loginToChat": "Accedi per chattare",
+    "ended": "Questa diretta è terminata.",
+    "volume": "Volume",
+    "sound": "Audio"
   },
   "pullToRefresh": {
     "pull": "Trascina per aggiornare",

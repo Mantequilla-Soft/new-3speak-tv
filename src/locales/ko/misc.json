@@ -330,7 +330,10 @@
     "topSupporters": "최고 후원자",
     "noSupporters": "아직 부스트가 없어요",
     "full": "전체 화면",
-    "loginToChat": "로그인하고 채팅하기"
+    "loginToChat": "로그인하고 채팅하기",
+    "ended": "이 방송은 종료되었습니다.",
+    "volume": "볼륨",
+    "sound": "소리"
   },
   "pullToRefresh": {
     "pull": "당겨서 새로고침",

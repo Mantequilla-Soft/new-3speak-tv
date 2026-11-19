@@ -224,9 +224,11 @@ export default function OpenPods() {
     openedDeepLinkRef.current = null;
     // Only rewrite the URL to the lobby if we're STILL on an /openpods route.
     // When the modal is closed by navigating elsewhere — e.g. the ended screen's
-    // "Back to Home" → '/' — leave that destination intact instead of yanking
-    // the user back to /openpods.
-    if (location.pathname.startsWith('/openpods')) {
+    // "Back home" → '/' — leave that destination intact instead of yanking
+    // the user back to /openpods. Read from the browser, not from `location`:
+    // React Router applies a navigation as a transition, so the room closing
+    // renders first with the OLD location, and this sent the host to the lobby.
+    if (window.location.pathname.startsWith('/openpods')) {
       navigate('/openpods', { replace: true });
     }
   }, [activeRoom, roomNameFromUrl, navigate, location.pathname]);

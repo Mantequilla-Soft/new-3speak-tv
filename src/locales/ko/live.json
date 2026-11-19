@@ -173,9 +173,15 @@
     },
     "chatBox": {
       "title": "OBS에서 보는 내 채팅",
-      "desc": "사용자 지정 브라우저 독으로 추가하세요",
+      "desc": "사용자 지정 브라우저 독으로 추가: 채팅, 투표, 예측, 레이드, 부스트 설정. 링크는 비공개로 두세요.",
       "copy": "채팅 URL 복사",
-      "copied": "채팅 URL을 복사했어요"
+      "copied": "채팅 URL을 복사했어요",
+      "resetTitle": "독 링크를 재설정할까요?",
+      "resetConfirm": "이전 링크의 독은 즉시 투표, 레이드, 부스트 설정을 쓸 수 없게 됩니다. 채팅은 계속 됩니다. 그다음 새 링크를 OBS에 붙여 넣으세요.",
+      "resetButton": "링크 재설정",
+      "resetDone": "새 독 링크를 만들고 복사했습니다. OBS에 붙여 넣으세요.",
+      "resetDoneNoCopy": "새 독 링크를 만들었습니다. 다시 복사해 OBS에 붙여 넣으세요.",
+      "resetFailed": "독 링크를 재설정하지 못했습니다."
     },
     "card": {
       "copyUrl": "서버 URL 복사",
@@ -291,7 +297,14 @@
       "viewers": "시청 중인 사람",
       "liveFor": "방송 시간",
       "timeLeft": "방송 종료까지 남은 시간",
-      "boosts": "이번 방송에서 받은 부스트"
+      "boosts": "이번 방송에서 받은 부스트",
+      "controlInvalid": "이 독 링크는 재설정되어 여기서는 투표, 레이드, 부스트 설정이 꺼져 있습니다. Stream Studio의 템플릿 탭에서 채팅 URL을 다시 복사하세요.",
+      "tabs": {
+        "label": "독",
+        "chat": "채팅",
+        "live": "투표와 레이드",
+        "boosts": "부스트"
+      }
     },
     "pro": {
       "title": "OBS 스트리밍은 3Speak Pro 기능입니다",

@@ -174,9 +174,15 @@
     },
     "chatBox": {
       "title": "Your chat in OBS",
-      "desc": "add as a custom browser dock",
+      "desc": "add as a custom browser dock: chat, polls, predictions, raids and boost settings. Keep the link private.",
       "copy": "Copy chat URL",
-      "copied": "Chat URL copied"
+      "copied": "Chat URL copied",
+      "resetTitle": "Reset your dock link?",
+      "resetConfirm": "Docks with the old link stop running polls, raids and boost settings right away; their chat keeps working. Paste the new link into OBS afterwards.",
+      "resetButton": "Reset link",
+      "resetDone": "New dock link created and copied. Paste it into OBS.",
+      "resetDoneNoCopy": "New dock link created. Copy it again and paste it into OBS.",
+      "resetFailed": "Could not reset your dock link."
     },
     "card": {
       "copyUrl": "Copy server URL",
@@ -292,7 +298,14 @@
       "viewers": "Viewers watching",
       "liveFor": "Time live",
       "timeLeft": "Time left before the stream ends",
-      "boosts": "Boosts received this stream"
+      "boosts": "Boosts received this stream",
+      "controlInvalid": "This dock link was reset, so polls, raids and boost settings are off here. Copy the chat URL again from the Templates tab of the Stream Studio.",
+      "tabs": {
+        "label": "Dock",
+        "chat": "Chat",
+        "live": "Polls and raids",
+        "boosts": "Boosts"
+      }
     },
     "pro": {
       "title": "Streaming from OBS is part of 3Speak Pro",

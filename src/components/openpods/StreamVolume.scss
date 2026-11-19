@@ -1,0 +1,58 @@
+/* Stream volume over a desktop stream player (StreamVolume.jsx): bottom left,
+   a scrim pill like the fullscreen button in the other corner. Above the ad
+   layer (30), under a pre-roll (45). */
+.stream-volume {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  z-index: 40;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 40px;
+  padding: 0 10px 0 0;
+  border-radius: var(--r-md);
+  background: var(--media-scrim);
+  color: var(--on-media);
+  opacity: .85;
+  transition: opacity var(--t-fast) var(--ease), background-color var(--t-fast) var(--ease);
+
+  &:hover,
+  &:focus-within {
+    opacity: 1;
+    background: var(--media-scrim-strong);
+  }
+}
+
+.stream-volume__btn {
+  display: inline-grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+.stream-volume__slider {
+  width: 84px;
+  margin: 0;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+/* Touch screens set the level with the device's buttons: mute only. */
+@media (hover: none) {
+  .stream-volume { padding: 0; }
+  .stream-volume__slider { display: none; }
+}
+
+/* The rewind chip shares the corner: it moves right of the volume pill. */
+.ws-player:has(.stream-volume) .stream-rewind-chip,
+.live-stream-player:has(.stream-volume) .stream-rewind-chip {
+  left: 150px;
+
+  @media (hover: none) { left: 58px; }
+}

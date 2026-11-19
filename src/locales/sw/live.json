@@ -174,9 +174,15 @@
     },
     "chatBox": {
       "title": "Gumzo lako ndani ya OBS",
-      "desc": "ongeza kama dock maalum ya kivinjari",
+      "desc": "ongeza kama custom browser dock: gumzo, kura, utabiri, raid na mipangilio ya boost. Weka kiungo kiwe siri.",
       "copy": "Nakili URL ya gumzo",
-      "copied": "URL ya gumzo imenakiliwa"
+      "copied": "URL ya gumzo imenakiliwa",
+      "resetTitle": "Weka upya kiungo cha dock?",
+      "resetConfirm": "Dock zenye kiungo cha zamani zinaacha mara moja kuendesha kura, raid na mipangilio ya boost; gumzo lake linaendelea. Kisha bandika kiungo kipya kwenye OBS.",
+      "resetButton": "Weka upya kiungo",
+      "resetDone": "Kiungo kipya cha dock kimetengenezwa na kunakiliwa. Kibandike kwenye OBS.",
+      "resetDoneNoCopy": "Kiungo kipya cha dock kimetengenezwa. Kinakili tena na ukibandike kwenye OBS.",
+      "resetFailed": "Imeshindwa kuweka upya kiungo cha dock."
     },
     "card": {
       "copyUrl": "Nakili URL ya seva",
@@ -292,7 +298,14 @@
       "viewers": "Watazamaji sasa",
       "liveFor": "Muda hewani",
       "timeLeft": "Muda uliobaki kabla mtiririko kuisha",
-      "boosts": "Boost zilizopokelewa katika mtiririko huu"
+      "boosts": "Boost zilizopokelewa katika mtiririko huu",
+      "controlInvalid": "Kiungo hiki cha dock kimewekwa upya, kwa hiyo kura, raid na mipangilio ya boost vimezimwa hapa. Nakili tena URL ya gumzo kutoka kichupo cha Violezo katika Stream Studio.",
+      "tabs": {
+        "label": "Dock",
+        "chat": "Gumzo",
+        "live": "Kura na raid",
+        "boosts": "Boost"
+      }
     },
     "pro": {
       "title": "Kutiririsha kutoka OBS ni sehemu ya 3Speak Pro",

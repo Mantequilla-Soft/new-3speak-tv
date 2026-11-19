@@ -1611,6 +1611,9 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
       icon: 'sensors',
       keepMounted: true,
       flush: true,
+      // On a phone the panel follows the conversation instead of keeping a
+      // fixed, mostly empty area under the stream.
+      fit: true,
       // The portal target <LiveStreamPlayer> draws the room's chat into, so it
       // shares the player's single LiveKit connection. Empty until it connects.
       content: <div className="wv2-chat" ref={setChatSlotEl} />,

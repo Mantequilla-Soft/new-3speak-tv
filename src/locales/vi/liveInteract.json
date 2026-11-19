@@ -22,7 +22,9 @@
     "outcomeWon": "{option} thắng",
     "youWon": "Bạn nhận lại {points} điểm",
     "cancelled": "Đã hủy, mọi người giữ nguyên điểm",
-    "close": "Đóng"
+    "close": "Đóng",
+    "showResult": "Xem kết quả",
+    "hideResult": "Ẩn kết quả"
   },
   "replay": {
     "tab": "Phát lại trò chuyện trực tiếp",

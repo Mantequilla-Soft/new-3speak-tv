@@ -35,10 +35,20 @@ describe('lib/lastPage', () => {
     for (const p of ['/upload', '/upload/details', '/openpods/publish']) {
       expect(rememberablePath({ pathname: p, search: '?room=x' })).toBeNull()
     }
-    // Only the publish step: the stream pages themselves are remembered.
     expect(rememberablePath({ pathname: '/openpods' })).toBe('/openpods')
-    expect(rememberablePath({ pathname: '/openpods/some-room' })).toBe('/openpods/some-room')
     expect(rememberablePath({ pathname: '/uploads-guide' })).toBe('/uploads-guide')
+  })
+
+  it('does not come back to a live stream, watching or hosting, and keeps the page before it', () => {
+    for (const p of ['/watch/badadib-svfcoyx', '/l/badadib-svfcoyx', '/openpods/badadib-svfcoyx']) {
+      expect(rememberablePath({ pathname: p })).toBeNull()
+    }
+    // A video's watch page and the live hubs are still remembered.
+    expect(rememberablePath({ pathname: '/watch', search: '?v=badadib/abc' })).toBe('/watch?v=badadib/abc')
+    expect(rememberablePath({ pathname: '/live' })).toBe('/live')
+    saveLastPage({ pathname: '/@badadib/videos' })
+    saveLastPage({ pathname: '/watch/badadib-svfcoyx' })
+    expect(readLastPage()).toBe('/@badadib/videos')
   })
 
   it('treats Home, a skipped page or blocked storage as nothing to resume', () => {

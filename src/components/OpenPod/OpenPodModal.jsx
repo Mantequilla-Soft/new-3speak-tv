@@ -257,13 +257,11 @@ export default function OpenPodModal({ isOpen, onClose, roomName, sessionToken, 
                 >
                   {t('live.modal.howWasStream')}
                 </Button>
-                <div className="openpod-ended__actions">
-                  {/* navigate('/') BEFORE onClose: OpenPods' URL-cleanup effect
-                      fires on room-close but now only rewrites to /openpods when
-                      the path is still /openpods, so going home first sticks. */}
-                  <Button variant="ghost" icon="home" className="openpod-ended__btn" onClick={() => { navigate('/'); onClose(); }}>{t('live.modal.backHome')}</Button>
-                  <Button variant="ghost" icon="podcasts" className="openpod-ended__btn" onClick={onClose}>{t('live.backToOpenPods')}</Button>
-                </div>
+                {/* Home, not the OpenPods lobby: a finished stream is done with
+                    OpenPods. navigate('/') BEFORE onClose: OpenPods' URL-cleanup
+                    effect fires on room-close and only rewrites to /openpods
+                    while the browser is still on an /openpods address. */}
+                <Button variant="primary" size={44} block icon="home" className="openpod-ended__home" onClick={() => { navigate('/'); onClose(); }}>{t('live.modal.backHome')}</Button>
               </div>
             </div>
           ) : (roomReady && roomStatus === 'exists') ? (

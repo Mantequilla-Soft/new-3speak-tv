@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState } from "react";
-import { LiveKitRoom, useParticipants } from "@livekit/components-react";
-import { useChat, resolveStreamCap, BoostAlerts } from "@snapie/hangouts-react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { LiveKitRoom, useParticipants, useRoomInfo } from "@livekit/components-react";
+import { useChat, resolveStreamCap, BoostAlerts, HangoutsProvider, StudioLivePanel, BoostSettingsPanel } from "@snapie/hangouts-react";
+import "@snapie/hangouts-react/src/styles/hangouts.css";
 import { useTranslation } from "react-i18next";
 import { getHangoutsEndpoints, defaultEndpoint } from "../utils/hangoutsEndpoints";
 import { CHECKER_URL } from "../utils/config";
@@ -23,6 +24,9 @@ import "./ObsChatOverlay.scss";
 //
 // Query options: fade (seconds before a message fades, 0 = never), max
 // (lines), size (text px). Defaults: dock 0 / 50 / 14, overlay 30 / 10 / 16.
+// control: the dock key (Templates tab), traded for a dock session that runs
+// the host's live controls here: polls and predictions, raids, boost settings
+// (not the payout account). Without it the dock is the chat only.
 // alerts (1/0): play the host's boost alerts (chime, read aloud, goal reached,
 // as set in the studio's Boost settings). On by default in the dock, the OBS
 // stand-in for the studio; off over the video, so a streamer running both does
@@ -52,7 +56,86 @@ function readOptions() {
     max: clampInt(p.get("max"), 1, 50, dock ? 50 : 10),
     size: clampInt(p.get("size"), 10, 64, dock ? 14 : 16),
     alerts: p.has("alerts") ? p.get("alerts") === "1" : dock,
+    control: dock ? p.get("control") || "" : "",
   };
+}
+
+// A dock session lasts 12 hours on the server; renew well before.
+const DOCK_SESSION_RENEW_MS = 6 * 60 * 60 * 1000;
+
+/**
+ * The dock's session for the live controls: null (none, or an older server),
+ * "invalid" (the key was reset), or { token, username }.
+ */
+function useDockSession(controlKey) {
+  const [session, setSession] = useState(null);
+  useEffect(() => {
+    if (!controlKey || !API) return undefined;
+    let alive = true;
+    const renew = async () => {
+      try {
+        const r = await fetch(`${API}/dock/session`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ key: controlKey }),
+        });
+        if (!alive) return;
+        if (r.status === 401) { setSession("invalid"); return; }
+        if (!r.ok) return;
+        const d = await r.json();
+        if (alive && d?.token) setSession({ token: d.token, username: d.username });
+      } catch { /* network blip: the next renewal tries again */ }
+    };
+    renew();
+    const id = setInterval(renew, DOCK_SESSION_RENEW_MS);
+    return () => { alive = false; clearInterval(id); };
+  }, [controlKey]);
+  return session;
+}
+
+const DOCK_TABS = ["chat", "live", "boosts"];
+
+/** The live controls as the studio has them: Polls (and predictions) and Raid, then Boosts. */
+function DockPanel({ room, session, tab }) {
+  const { t } = useTranslation();
+  const info = useRoomInfo();
+  const fromRoom = useMemo(() => {
+    if (!info.metadata) return undefined;
+    try { return JSON.parse(info.metadata).boost ?? null; } catch { return undefined; }
+  }, [info.metadata]);
+  // The boost form takes its values once, when it opens: it must not open on
+  // defaults (saving them would wipe the goal). Until the room's metadata
+  // arrives, the server's copy of the room.
+  const [fetched, setFetched] = useState(undefined);
+  useEffect(() => {
+    if (fromRoom !== undefined) return undefined;
+    let alive = true;
+    fetch(`${API}/rooms/${encodeURIComponent(room)}`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => { if (alive && d) setFetched(d.boost ?? null); })
+      .catch(() => { /* the room's metadata may still arrive */ });
+    return () => { alive = false; };
+  }, [room, fromRoom]);
+  const boost = fromRoom !== undefined ? fromRoom : fetched;
+  return (
+    <div className="obs-chat__panel" data-hh-theme="dark">
+      <HangoutsProvider apiBaseUrl={API} sessionToken={session.token} username={session.username} theme="dark">
+        {tab === "live" && <StudioLivePanel roomName={room} />}
+        {tab === "boosts" && boost === undefined && <p className="obs-chat__status">{t("common.status.loading")}</p>}
+        {tab === "boosts" && boost !== undefined && (
+          <BoostSettingsPanel
+            key={room}
+            roomName={room}
+            currentConfig={boost ?? undefined}
+            embedded
+            payoutLocked
+            onClose={() => {}}
+            onSaved={() => {}}
+          />
+        )}
+      </HangoutsProvider>
+    </div>
+  );
 }
 
 /** The LiveKit URL of the deployment the templates (and their rooms) live on. */
@@ -247,6 +330,9 @@ export default function ObsChatOverlay() {
   // change never pairs the new room with the old token for a render.
   const [grant, setGrant] = useState(null);
   const [invalid, setInvalid] = useState(false);
+  const dockSession = useDockSession(opts.control);
+  const controls = dockSession && dockSession !== "invalid" ? dockSession : null;
+  const [tab, setTab] = useState("chat");
 
   // OBS's Browser Source injects a transparent body, but the app's own CSS
   // paints one. Clear it; a dock gets its solid ground from .obs-chat--dock,
@@ -311,9 +397,34 @@ export default function ObsChatOverlay() {
   }
 
   return (
-    <div className={`${cls}${opts.dock ? " obs-chat--with-counters" : ""}`} style={style} data-theme="dark">
+    <div className={cls} style={style} data-theme="dark">
       <LiveKitRoom key={room} serverUrl={livekitUrl()} token={token} connect audio={false} video={false}>
-        {opts.dock && <DockCounters room={room} />}
+        {opts.dock ? (
+          <>
+            {/* Header and body: the chat stacks from the bottom and overflows
+                at the top, under the header, which stays put. */}
+            <div className="obs-chat__head">
+              <DockCounters room={room} />
+              {dockSession === "invalid" && <p className="obs-chat__notice">{t("live.obs.chatOverlay.controlInvalid")}</p>}
+              {controls && (
+                <div className="obs-chat__tabs" role="tablist" aria-label={t("live.obs.chatOverlay.tabs.label")}>
+                  {DOCK_TABS.map((k) => (
+                    <button key={k} type="button" role="tab" aria-selected={tab === k} className={tab === k ? "is-on" : ""} onClick={() => setTab(k)}>
+                      {t(`live.obs.chatOverlay.tabs.${k}`)}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+            <div className={`obs-chat__body${controls && tab !== "chat" ? " is-panel" : ""}`}>
+              {controls && tab !== "chat"
+                ? <DockPanel room={room} session={controls} tab={tab} />
+                : <ChatFeed fade={opts.fade} max={opts.max} dock />}
+            </div>
+          </>
+        ) : (
+          <ChatFeed fade={opts.fade} max={opts.max} dock={false} />
+        )}
         {/* The host's boost alerts, per their Boost settings: an OBS streamer
             has no studio to play them. */}
         {opts.alerts && (
@@ -322,7 +433,6 @@ export default function ObsChatOverlay() {
             speechLang={i18n.resolvedLanguage || i18n.language}
           />
         )}
-        <ChatFeed fade={opts.fade} max={opts.max} dock={opts.dock} />
       </LiveKitRoom>
     </div>
   );

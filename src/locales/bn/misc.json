@@ -331,7 +331,10 @@
     "topSupporters": "সেরা সমর্থক",
     "noSupporters": "এখনো কোনো বুস্ট নেই",
     "full": "ফুলস্ক্রিন",
-    "loginToChat": "চ্যাট করতে লগ ইন করুন"
+    "loginToChat": "চ্যাট করতে লগ ইন করুন",
+    "ended": "এই স্ট্রিম শেষ হয়েছে।",
+    "volume": "ভলিউম",
+    "sound": "শব্দ"
   },
   "pullToRefresh": {
     "pull": "রিফ্রেশ করতে টানুন",

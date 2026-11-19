@@ -10,12 +10,16 @@ const API = 'https://live.example'
 vi.mock('@livekit/components-react', () => ({
   LiveKitRoom: ({ children }) => <div data-testid="lk-room">{children}</div>,
   useParticipants: () => [],
+  useRoomInfo: () => ({ metadata: '{}' }),
 }))
 const alertsProps = []
 vi.mock('@snapie/hangouts-react', () => ({
   useChat: () => ({ messages: [] }),
   resolveStreamCap: () => ({ capMs: 4 * 3600 * 1000 }),
   BoostAlerts: (props) => { alertsProps.push(props); return <span data-testid="boost-alerts" /> },
+  HangoutsProvider: ({ children }) => children,
+  StudioLivePanel: () => null,
+  BoostSettingsPanel: () => null,
 }))
 
 const SUMMARY = {

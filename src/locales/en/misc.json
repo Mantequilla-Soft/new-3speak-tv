@@ -331,7 +331,10 @@
     "topSupporters": "Top supporters",
     "noSupporters": "No boosts yet",
     "full": "Full",
-    "loginToChat": "Log in to chat"
+    "loginToChat": "Log in to chat",
+    "ended": "This stream has ended.",
+    "volume": "Volume",
+    "sound": "Sound"
   },
   "pullToRefresh": {
     "pull": "Pull to refresh",

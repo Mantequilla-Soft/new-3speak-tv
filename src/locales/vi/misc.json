@@ -330,7 +330,10 @@
     "topSupporters": "Người ủng hộ hàng đầu",
     "noSupporters": "Chưa có boost nào",
     "full": "Toàn màn hình",
-    "loginToChat": "Đăng nhập để chat"
+    "loginToChat": "Đăng nhập để chat",
+    "ended": "Buổi phát trực tiếp này đã kết thúc.",
+    "volume": "Âm lượng",
+    "sound": "Âm thanh"
   },
   "pullToRefresh": {
     "pull": "Kéo để làm mới",
