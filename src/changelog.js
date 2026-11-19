@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.139',
+    category: 'audio',
+    date: '2026-11-19',
+    summary: 'With your phone locked, the audio queue moves on to the next episode by itself, and Play starts a track again if it failed to load.',
+  },
+  {
     version: '2.0.138',
     category: 'live',
     date: '2026-11-19',
