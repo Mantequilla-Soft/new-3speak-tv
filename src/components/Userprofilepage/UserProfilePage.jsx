@@ -12,7 +12,7 @@ import { Quantum } from 'ldrs/react'
 import 'ldrs/react/Quantum.css'
 import { useInfiniteQuery, useQuery, useQueryClient as useReactQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
-import { MY_VIDEOS_URL, CHECKER_URL, hidesHostStreams } from '../../utils/config';
+import { MY_VIDEOS_URL, CHECKER_URL } from '../../utils/config';
 import Card3 from '../Cards/Card3';
 import ReportModal, { isReported } from '../modal/ReportModal';
 import useGalaxyFits from '../../hooks/useGalaxyFits';
@@ -213,7 +213,7 @@ function UserProfilePage({ user: userProp }) {
             .get(`${MY_VIDEOS_URL}/api/my-videos?username=${encodeURIComponent(user)}&limit=50&status=published&openpod=1`)
             .then((r) => r.data?.data?.videos || [])
             .catch(() => []),
-          hangoutsApi && !hidesHostStreams(user, authenticatedUser)
+          hangoutsApi
             ? fetch(`${hangoutsApi}/streams`)
                 .then((r) => (r.ok ? r.json() : []))
                 .then((list) => (Array.isArray(list) ? list : []).filter(
