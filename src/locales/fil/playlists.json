@@ -140,6 +140,12 @@
     "fromShows": "Mula sa ibang show:",
     "video": "Video",
     "pending_one": "{{count}} show ang binabasa pa. Lalabas ang mga episode nito sa loob ng ilang minuto.",
-    "pending_other": "{{count}} show ang binabasa pa. Lalabas ang mga episode nila sa loob ng ilang minuto."
+    "pending_other": "{{count}} show ang binabasa pa. Lalabas ang mga episode nila sa loob ng ilang minuto.",
+    "filter": {
+      "label": "Palabas",
+      "all": "Lahat ng palabas",
+      "own": "Mga upload sa 3Speak",
+      "none": "Walang episode na tugma sa mga filter na ito."
+    }
   }
 }

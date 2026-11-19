@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.140',
+    category: 'playlists',
+    date: '2026-11-19',
+    summary: 'Playlists with outside podcast shows can now be filtered by show, and by season within a show.',
+  },
+  {
     version: '2.0.139',
     category: 'audio',
     date: '2026-11-19',

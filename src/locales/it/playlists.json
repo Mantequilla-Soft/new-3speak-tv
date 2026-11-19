@@ -147,6 +147,12 @@
     "video": "Video",
     "pending_one": "{{count}} programma è ancora in lettura. I suoi episodi compariranno entro pochi minuti.",
     "pending_many": "{{count}} programmi sono ancora in lettura. I loro episodi compariranno entro pochi minuti.",
-    "pending_other": "{{count}} programmi sono ancora in lettura. I loro episodi compariranno entro pochi minuti."
+    "pending_other": "{{count}} programmi sono ancora in lettura. I loro episodi compariranno entro pochi minuti.",
+    "filter": {
+      "label": "Programma",
+      "all": "Tutti i programmi",
+      "own": "Caricamenti 3Speak",
+      "none": "Nessun episodio corrisponde a questi filtri."
+    }
   }
 }

@@ -154,6 +154,12 @@
     "pending_one": "{{count}} program jest jeszcze wczytywany. Jego odcinki pojawią się za kilka minut.",
     "pending_few": "{{count}} programy są jeszcze wczytywane. Ich odcinki pojawią się za kilka minut.",
     "pending_many": "{{count}} programów jest jeszcze wczytywanych. Ich odcinki pojawią się za kilka minut.",
-    "pending_other": "{{count}} programu jest jeszcze wczytywane. Ich odcinki pojawią się za kilka minut."
+    "pending_other": "{{count}} programu jest jeszcze wczytywane. Ich odcinki pojawią się za kilka minut.",
+    "filter": {
+      "label": "Audycja",
+      "all": "Wszystkie audycje",
+      "own": "Materiały z 3Speak",
+      "none": "Żaden odcinek nie pasuje do tych filtrów."
+    }
   }
 }

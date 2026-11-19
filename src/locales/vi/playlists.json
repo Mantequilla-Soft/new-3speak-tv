@@ -133,6 +133,12 @@
     "saveFailed": "Không lưu được: {{error}}",
     "fromShows": "Từ chương trình khác:",
     "video": "Video",
-    "pending_other": "{{count}} chương trình vẫn đang được đọc. Các tập sẽ xuất hiện trong vài phút."
+    "pending_other": "{{count}} chương trình vẫn đang được đọc. Các tập sẽ xuất hiện trong vài phút.",
+    "filter": {
+      "label": "Chương trình",
+      "all": "Tất cả chương trình",
+      "own": "Nội dung tải lên 3Speak",
+      "none": "Không có tập nào khớp với các bộ lọc này."
+    }
   }
 }

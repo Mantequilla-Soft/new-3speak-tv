@@ -147,6 +147,12 @@
     "video": "Vídeo",
     "pending_one": "Todavía se está leyendo {{count}} programa. Sus episodios aparecerán en unos minutos.",
     "pending_many": "Todavía se están leyendo {{count}} programas. Sus episodios aparecerán en unos minutos.",
-    "pending_other": "Todavía se están leyendo {{count}} programas. Sus episodios aparecerán en unos minutos."
+    "pending_other": "Todavía se están leyendo {{count}} programas. Sus episodios aparecerán en unos minutos.",
+    "filter": {
+      "label": "Programa",
+      "all": "Todos los programas",
+      "own": "Subidas de 3Speak",
+      "none": "Ningún episodio coincide con estos filtros."
+    }
   }
 }

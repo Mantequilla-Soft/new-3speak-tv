@@ -147,6 +147,12 @@
     "video": "Vidéo",
     "pending_one": "{{count}} émission est encore en cours de lecture. Ses épisodes apparaissent d'ici quelques minutes.",
     "pending_many": "{{count}} émissions sont encore en cours de lecture. Leurs épisodes apparaissent d'ici quelques minutes.",
-    "pending_other": "{{count}} émissions sont encore en cours de lecture. Leurs épisodes apparaissent d'ici quelques minutes."
+    "pending_other": "{{count}} émissions sont encore en cours de lecture. Leurs épisodes apparaissent d'ici quelques minutes.",
+    "filter": {
+      "label": "Émission",
+      "all": "Toutes les émissions",
+      "own": "Mises en ligne 3Speak",
+      "none": "Aucun épisode ne correspond à ces filtres."
+    }
   }
 }

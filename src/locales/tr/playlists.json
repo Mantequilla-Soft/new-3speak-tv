@@ -140,6 +140,12 @@
     "fromShows": "Diğer programlardan:",
     "video": "Video",
     "pending_one": "{{count}} program hâlâ okunuyor. Bölümleri birkaç dakika içinde görünür.",
-    "pending_other": "{{count}} program hâlâ okunuyor. Bölümleri birkaç dakika içinde görünür."
+    "pending_other": "{{count}} program hâlâ okunuyor. Bölümleri birkaç dakika içinde görünür.",
+    "filter": {
+      "label": "Program",
+      "all": "Tüm programlar",
+      "own": "3Speak yüklemeleri",
+      "none": "Bu filtrelere uyan bölüm yok."
+    }
   }
 }
