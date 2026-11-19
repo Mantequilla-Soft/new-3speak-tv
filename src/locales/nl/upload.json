@@ -341,7 +341,13 @@
     "shareRewards": "Beloningen delen",
     "shareRewardsSub": "Verdelen met medewerkers",
     "advanced": "NSFW / uitbetaling",
-    "advancedSub": "Geavanceerd"
+    "advancedSub": "Geavanceerd",
+    "language": {
+      "label": "Taal",
+      "hint": "Gesproken in de video",
+      "info": "De taal die in de video gesproken wordt. Die wordt met de post op Hive opgeslagen, zodat kijkers later video's in hun taal kunnen vinden.",
+      "none": "Geen spraak (muziek, geluiden)"
+    }
   },
   "review": {
     "payoutDeclined": "Geweigerd (beloningen worden verbrand)",

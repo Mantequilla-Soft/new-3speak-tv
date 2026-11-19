@@ -341,7 +341,13 @@
     "shareRewards": "Ödülleri paylaş",
     "shareRewardsSub": "Ortak çalışanlarla bölüş",
     "advanced": "NSFW / ödeme",
-    "advancedSub": "Gelişmiş"
+    "advancedSub": "Gelişmiş",
+    "language": {
+      "label": "Dil",
+      "hint": "Videoda konuşulan",
+      "info": "Videoda konuşulan dil. Gönderiyle birlikte Hive'a kaydedilir, böylece izleyiciler ileride kendi dillerindeki videoları bulabilir.",
+      "none": "Konuşma yok (müzik, sesler)"
+    }
   },
   "review": {
     "payoutDeclined": "Reddedildi (ödüller yakılır)",

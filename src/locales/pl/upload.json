@@ -347,7 +347,13 @@
     "shareRewards": "Podziel nagrody",
     "shareRewardsSub": "Podziel ze współtwórcami",
     "advanced": "NSFW / wypłata",
-    "advancedSub": "Zaawansowane"
+    "advancedSub": "Zaawansowane",
+    "language": {
+      "label": "Język",
+      "hint": "Mówiony w filmie",
+      "info": "Język, którym mówi się w filmie. Zapisuje się go razem z postem na Hive, żeby widzowie mogli później znajdować filmy w swoim języku.",
+      "none": "Bez mowy (muzyka, dźwięki)"
+    }
   },
   "review": {
     "payoutDeclined": "Odrzucona (nagrody spalone)",

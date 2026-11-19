@@ -341,7 +341,13 @@
     "shareRewards": "Share rewards",
     "shareRewardsSub": "Split with collaborators",
     "advanced": "NSFW / payout",
-    "advancedSub": "Advanced"
+    "advancedSub": "Advanced",
+    "language": {
+      "label": "Language",
+      "hint": "Spoken in the video",
+      "info": "The language people speak in the video. It is saved with the post on Hive, so viewers can later find videos in their language.",
+      "none": "No speech (music, sounds)"
+    }
   },
   "review": {
     "payoutDeclined": "Declined (rewards burned)",

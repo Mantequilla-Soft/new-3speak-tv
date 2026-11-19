@@ -344,7 +344,13 @@
     "shareRewards": "Partager les récompenses",
     "shareRewardsSub": "Partager avec des collaborateurs",
     "advanced": "NSFW / gains",
-    "advancedSub": "Avancé"
+    "advancedSub": "Avancé",
+    "language": {
+      "label": "Langue",
+      "hint": "Parlée dans la vidéo",
+      "info": "La langue parlée dans la vidéo. Elle est enregistrée avec la publication sur Hive, pour que les spectateurs puissent plus tard trouver des vidéos dans leur langue.",
+      "none": "Pas de parole (musique, sons)"
+    }
   },
   "review": {
     "payoutDeclined": "Refusés (récompenses brûlées)",

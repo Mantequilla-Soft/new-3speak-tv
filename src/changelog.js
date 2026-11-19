@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.121',
+    category: 'upload',
+    date: '2026-11-19',
+    summary: "Pick the language spoken in your video when uploading. It's saved with the post so viewers can find videos in their language later.",
+  },
+  {
     version: '2.0.120',
     category: 'settings',
     date: '2026-11-19',

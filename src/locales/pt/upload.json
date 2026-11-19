@@ -344,7 +344,13 @@
     "shareRewards": "Dividir recompensas",
     "shareRewardsSub": "Dividir com colaboradores",
     "advanced": "NSFW / pagamento",
-    "advancedSub": "Avançado"
+    "advancedSub": "Avançado",
+    "language": {
+      "label": "Idioma",
+      "hint": "Falado no vídeo",
+      "info": "O idioma falado no vídeo. Ele é salvo com o post na Hive, para que depois os espectadores possam encontrar vídeos no idioma deles.",
+      "none": "Sem fala (música, sons)"
+    }
   },
   "review": {
     "payoutDeclined": "Recusado (recompensas queimadas)",

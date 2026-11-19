@@ -338,7 +338,13 @@
     "shareRewards": "報酬を分ける",
     "shareRewardsSub": "共同制作者と分配",
     "advanced": "NSFW / 報酬",
-    "advancedSub": "詳細設定"
+    "advancedSub": "詳細設定",
+    "language": {
+      "label": "言語",
+      "hint": "動画で話されている言語",
+      "info": "動画で話されている言語です。Hive の投稿と一緒に保存され、今後、視聴者が自分の言語の動画を見つけられるようになります。",
+      "none": "話し声なし（音楽・効果音）"
+    }
   },
   "review": {
     "payoutDeclined": "辞退（報酬はバーンされます）",

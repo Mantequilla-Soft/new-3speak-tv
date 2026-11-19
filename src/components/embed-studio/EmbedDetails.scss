@@ -343,6 +343,8 @@
   .opt-tile__spacer { flex: 1; }
   .opt-tile__chev { color: var(--muted); }
   .opt-tile__switch { display: inline-flex; }
+  // Language: the picker sits under the label
+  .opt-tile__select { margin-top: 8px; width: 100%; }
 
   .opt-tile__head + .wrap { margin-top: auto; }
   > .tile-value { margin-top: 2px; }

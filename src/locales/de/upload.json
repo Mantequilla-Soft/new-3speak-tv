@@ -341,7 +341,13 @@
     "shareRewards": "Belohnungen teilen",
     "shareRewardsSub": "Mit Mitwirkenden aufteilen",
     "advanced": "NSFW / Auszahlung",
-    "advancedSub": "Erweitert"
+    "advancedSub": "Erweitert",
+    "language": {
+      "label": "Sprache",
+      "hint": "Im Video gesprochen",
+      "info": "Die Sprache, die im Video gesprochen wird. Sie wird mit dem Beitrag auf Hive gespeichert, damit Zuschauer später Videos in ihrer Sprache finden können.",
+      "none": "Keine Sprache (Musik, Geräusche)"
+    }
   },
   "review": {
     "payoutDeclined": "Abgelehnt (Belohnungen werden verbrannt)",

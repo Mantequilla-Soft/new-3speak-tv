@@ -338,7 +338,13 @@
     "shareRewards": "分享奖励",
     "shareRewardsSub": "与合作者分成",
     "advanced": "NSFW / 收益",
-    "advancedSub": "高级"
+    "advancedSub": "高级",
+    "language": {
+      "label": "语言",
+      "hint": "视频中说的语言",
+      "info": "视频中所说的语言。它会和帖子一起保存在 Hive 上，以后观众就能找到自己语言的视频。",
+      "none": "无人声（音乐、声音）"
+    }
   },
   "review": {
     "payoutDeclined": "已放弃（奖励被销毁）",

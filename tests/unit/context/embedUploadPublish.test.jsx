@@ -162,6 +162,7 @@ describe('a regular video', () => {
       app: '3speak/embed',
       format: 'markdown',
       tags: ['hive-181335', 'travel'],
+      language: 'en',
       links: [h.EMBED_URL],
       video: {
         platform: '3speak',
@@ -355,6 +356,19 @@ describe('the post\'s community, tags and payout', () => {
     ] }]])
     await waitFor(() => expect(fetchTo('/collabs/register')).toHaveLength(1))
     expect(JSON.parse(fetchTo('/collabs/register')[0][1].body)).toEqual({ author: 'badadib', permlink: PERMLINK })
+  })
+
+  it('names the spoken language, remembered for the next upload', async () => {
+    const { result } = await ready((c) => c.setContentLanguage('de'))
+    await publish(result)
+    expect(meta().language).toBe('de')
+    expect(localStorage.getItem('3speak_content_language')).toBe('de')
+  })
+
+  it('a video without speech is marked zxx', async () => {
+    const { result } = await ready((c) => c.setContentLanguage('zxx'))
+    await publish(result)
+    expect(meta().language).toBe('zxx')
   })
 
   it('the creator can never be their own collaborator', async () => {

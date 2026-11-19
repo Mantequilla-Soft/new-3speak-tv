@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { toastIn } from '../../utils/toast';
 import OriginalContentNotice from '../OriginalContentNotice/OriginalContentNotice';
 import { StepProgress } from '../legacy-studio/StepProgress';
@@ -29,6 +29,7 @@ import { Button, Icon, IconButton, Toggle } from '../v2/ui';
 import PremiereSwitch from '../Premiere/PremiereSwitch';
 import ShortSeriesSelect from '../Episodes/ShortSeriesSelect';
 import PollEditor, { PollToggle } from '../Polls/PollEditor';
+import { CONTENT_LANGUAGES, NO_SPEECH, languageNamer } from '../../utils/contentLanguage';
 
 // Every toast from this module is headed "Upload"; the message becomes the
 // line under it. See utils/toast.js.
@@ -121,6 +122,7 @@ function EmbedDetails() {
     isStory,
     reusable, setReusable,
     isNsfw, setIsNsfw,
+    contentLanguage, setContentLanguage,
     addToBlog, setAddToBlog,
     videoAdsEnabled, setVideoAdsEnabled,
     videoRollsEnabled, setVideoRollsEnabled,
@@ -137,6 +139,12 @@ function EmbedDetails() {
   // hook returns null while loading, so the toggle stays hidden until we have a
   // definite yes rather than flashing in and out.
   const premiumStatus = usePremiumStatus(user);
+
+  // The spoken-language choices, by name in the site language.
+  const languageOptions = useMemo(() => {
+    const name = languageNamer();
+    return CONTENT_LANGUAGES.map((c) => [c, name(c)]).sort((a, b) => a[1].localeCompare(b[1]));
+  }, []);
   const isPro = premiumStatus?.premium === true;
 
   // Never leave a stale gated intent behind: if Pro lapses mid-session, or the
@@ -436,6 +444,25 @@ function EmbedDetails() {
         info={<Trans i18nKey="upload.details.nsfw.info" components={{ code: <code /> }} />}
         hint={t('upload.details.nsfw.hint')}
         control={tileSwitch(isNsfw, setIsNsfw, t('upload.details.nsfw.label'))}
+      />
+      <OptTile
+        icon="translate"
+        tone="cyan"
+        on
+        label={t('upload.details.language.label')}
+        info={t('upload.details.language.info')}
+        hint={t('upload.details.language.hint')}
+        extra={(
+          <select
+            className="v2-input is-select opt-tile__select"
+            value={contentLanguage}
+            onChange={(e) => setContentLanguage(e.target.value)}
+            aria-label={t('upload.details.language.label')}
+          >
+            {languageOptions.map(([code, name]) => <option key={code} value={code}>{name}</option>)}
+            <option value={NO_SPEECH}>{t('upload.details.language.none')}</option>
+          </select>
+        )}
       />
       {/* Regular videos only: a short is a reply, not a post, so there
           is nothing to put on a blog. */}

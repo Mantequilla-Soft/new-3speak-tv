@@ -338,7 +338,13 @@
     "shareRewards": "Bagikan reward",
     "shareRewardsSub": "Bagi dengan kolaborator",
     "advanced": "NSFW / payout",
-    "advancedSub": "Lanjutan"
+    "advancedSub": "Lanjutan",
+    "language": {
+      "label": "Bahasa",
+      "hint": "Yang diucapkan di video",
+      "info": "Bahasa yang diucapkan di video. Bahasa ini disimpan bersama postingan di Hive, agar nanti penonton bisa menemukan video dalam bahasa mereka.",
+      "none": "Tanpa ucapan (musik, suara)"
+    }
   },
   "review": {
     "payoutDeclined": "Ditolak (reward dibakar)",

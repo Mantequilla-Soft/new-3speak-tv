@@ -338,7 +338,13 @@
     "shareRewards": "보상 나누기",
     "shareRewardsSub": "협업자와 나누기",
     "advanced": "NSFW / 보상",
-    "advancedSub": "고급"
+    "advancedSub": "고급",
+    "language": {
+      "label": "언어",
+      "hint": "영상에서 쓰는 언어",
+      "info": "영상에서 말하는 언어입니다. Hive 게시물과 함께 저장되어, 나중에 시청자가 자기 언어로 된 영상을 찾을 수 있게 됩니다.",
+      "none": "말소리 없음(음악, 효과음)"
+    }
   },
   "review": {
     "payoutDeclined": "거절됨(보상 소각)",

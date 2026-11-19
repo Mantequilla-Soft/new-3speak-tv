@@ -341,7 +341,13 @@
     "shareRewards": "Gawana zawadi",
     "shareRewardsSub": "Gawana na washirika",
     "advanced": "NSFW / malipo",
-    "advancedSub": "Ya hali ya juu"
+    "advancedSub": "Ya hali ya juu",
+    "language": {
+      "label": "Lugha",
+      "hint": "Inayozungumzwa kwenye video",
+      "info": "Lugha inayozungumzwa kwenye video. Huhifadhiwa pamoja na chapisho kwenye Hive, ili baadaye watazamaji waweze kupata video kwa lugha yao.",
+      "none": "Hakuna mazungumzo (muziki, sauti)"
+    }
   },
   "review": {
     "payoutDeclined": "Imekataliwa (zawadi zinachomwa)",

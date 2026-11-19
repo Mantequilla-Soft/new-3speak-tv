@@ -27,6 +27,7 @@ import axios from 'axios';
 import { isWeakLinkForced } from '../utils/uploadFaults';
 import { useTranslation } from 'react-i18next';
 import { readAddToBlog, writeAddToBlog, reblogOp } from '../utils/addToBlog';
+import { readContentLanguage, writeContentLanguage } from '../utils/contentLanguage';
 import { timelineMeta, applyTimelineToDescription } from '../utils/videoTimeline';
 import { registerStory } from '../lib/stories';
 import { dataUrlToBlob } from '../utils/videoThumbnails';
@@ -192,6 +193,9 @@ export function EmbedUploadProvider({ children }) {
   const [declineRewards, SetDeclineRewards] = useState(false);
   const [rewardPowerup, setRewardPowerup] = useState(false);
   const [isNsfw, setIsNsfw] = useState(false);
+  // The language spoken in the video (utils/contentLanguage.js), remembered.
+  const [contentLanguage, setContentLanguageState] = useState(readContentLanguage);
+  const setContentLanguage = useCallback((code) => { setContentLanguageState(code); writeContentLanguage(code); }, []);
   // "Add to my blog" (utils/addToBlog.js): reblog a regular video right after
   // publishing so it reaches the creator's blog and followers' feeds. Never
   // for shorts, which are replies, not posts. On by default, remembered.
@@ -1879,6 +1883,8 @@ export function EmbedUploadProvider({ children }) {
         app: '3speak/embed',
         format: 'markdown',
         tags: [...baseTags, ...userTags],
+        // The language spoken in it (utils/contentLanguage.js).
+        ...(contentLanguage ? { language: contentLanguage } : {}),
         // Who made it with the author (routes/collabs.js on the checker reads it
         // back from the post and invites them). The split is a beneficiary below.
         ...(collab ? { collaborators: [collab.account] } : {}),
@@ -2459,6 +2465,7 @@ export function EmbedUploadProvider({ children }) {
     declineRewards, SetDeclineRewards,
     rewardPowerup, setRewardPowerup,
     isNsfw, setIsNsfw,
+    contentLanguage, setContentLanguage,
     videoAdsEnabled, setVideoAdsEnabled,
     videoRollsEnabled, setVideoRollsEnabled,
     isChannelTrailer, setIsChannelTrailer,

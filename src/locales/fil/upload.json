@@ -341,7 +341,13 @@
     "shareRewards": "Ibahagi ang rewards",
     "shareRewardsSub": "Hatiin sa mga collaborator",
     "advanced": "NSFW / payout",
-    "advancedSub": "Advanced"
+    "advancedSub": "Advanced",
+    "language": {
+      "label": "Wika",
+      "hint": "Sinasalita sa video",
+      "info": "Ang wikang sinasalita sa video. Naka-save ito kasama ng post sa Hive, para makahanap ang mga manonood ng mga video sa sarili nilang wika balang araw.",
+      "none": "Walang salita (musika, tunog)"
+    }
   },
   "review": {
     "payoutDeclined": "Tinanggihan (sinunog ang rewards)",
