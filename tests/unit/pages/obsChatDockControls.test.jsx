@@ -25,11 +25,16 @@ vi.mock('@snapie/hangouts-react', () => ({
 }))
 
 let sessionStatus
+let offline = false
+let clips = { room: null, count: 0, clippers: 0 }
+let vod = {}
 function installFetch() {
   globalThis.fetch = vi.fn(async (url, init) => {
     const u = String(url)
     const ok = (body) => ({ ok: true, status: 200, json: async () => body })
-    if (u.includes('/overlay/')) return ok({ live: true, room: 'badadib-live' })
+    if (u.includes('/overlay/')) return ok(offline ? { live: false, room: null } : { live: true, room: 'badadib-live' })
+    if (u.endsWith('/dock/clips')) { seen.clipsAuth = init?.headers?.Authorization; return ok(clips) }
+    if (u.includes('/api/embed?v=badadib/badadib-old')) return ok(vod)
     if (u.endsWith('/listen')) return ok({ token: 'tok' })
     if (u.endsWith('/dock/session')) {
       seen.sessionBody = JSON.parse(init.body)
@@ -52,7 +57,7 @@ async function renderDock(search) {
 }
 
 describe('OBS dock controls', () => {
-  beforeEach(() => { seen.provider.length = 0; seen.live.length = 0; seen.boost.length = 0; sessionStatus = 200; roomInfo.metadata = META; installFetch() })
+  beforeEach(() => { seen.provider.length = 0; seen.live.length = 0; seen.boost.length = 0; sessionStatus = 200; offline = false; clips = { room: null, count: 0, clippers: 0 }; vod = {}; localStorage.clear(); roomInfo.metadata = META; installFetch() })
   afterEach(() => { vi.unstubAllEnvs() })
 
   it('with the dock key: Chat, Polls and raids, Boosts, signed in as the dock', async () => {
@@ -99,4 +104,32 @@ describe('OBS dock controls', () => {
     await screen.findByTestId('lk-room')
     expect(globalThis.fetch.mock.calls.some(([u]) => String(u).endsWith('/dock/session'))).toBe(false)
   })
+
+  describe('after the stream', () => {
+    const PUBLISHED = { success: true, videoUrl: 'https://x/v.m3u8', status: 'published' }
+
+    it('leads to the viewers\' clips once the VOD is up', async () => {
+      offline = true
+      clips = { room: 'badadib-old', count: 3, clippers: 2 }
+      vod = PUBLISHED
+      await renderDock('?key=k1&dock=1&control=badadib.secret')
+      const link = await screen.findByRole('link', { name: /See the clip suggestions and post them/ })
+      expect(link.getAttribute('href')).toMatch(/\/live\/clips\/badadib-old$/)
+      expect(seen.clipsAuth).toBe('Bearer dock-tok')
+      expect(screen.getByText(/3 clips from 2 viewers/)).toBeInTheDocument()
+      fireEvent.click(screen.getByRole('button', { name: 'Hide' }))
+      expect(screen.queryByRole('link', { name: /See the clip suggestions/ })).toBeNull()
+    })
+
+    it('waits while the VOD is still processing, and shows nothing without viewer clips', async () => {
+      offline = true
+      clips = { room: 'badadib-old', count: 3, clippers: 2 }
+      vod = { ...PUBLISHED, isPlaceholder: true, status: 'processing' }
+      await renderDock('?key=k1&dock=1&control=badadib.secret')
+      await screen.findByText(/Not live right now/)
+      await new Promise((r) => setTimeout(r, 20))
+      expect(screen.queryByRole('link', { name: /See the clip suggestions/ })).toBeNull()
+    })
+  })
 })
+

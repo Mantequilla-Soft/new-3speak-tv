@@ -1,16 +1,16 @@
-/* Stream volume over a desktop stream player (StreamVolume.jsx): bottom left,
-   a scrim pill like the fullscreen button in the other corner. Above the ad
-   layer (30), under a pre-roll (45). */
+/* Stream volume over a desktop stream player (StreamVolume.jsx): bottom
+   right, where players keep it, left of the fullscreen button when that shows.
+   The mute button alone until the pointer is over it; then the level slider
+   slides out to its left. Above the ad layer (30), under a pre-roll (45). */
 .stream-volume {
   position: absolute;
-  left: 10px;
+  right: 10px;
   bottom: 10px;
   z-index: 40;
   display: inline-flex;
+  flex-direction: row-reverse;
   align-items: center;
-  gap: 4px;
   height: 40px;
-  padding: 0 10px 0 0;
   border-radius: var(--r-md);
   background: var(--media-scrim);
   color: var(--on-media);
@@ -27,6 +27,7 @@
 .stream-volume__btn {
   display: inline-grid;
   place-items: center;
+  flex: none;
   width: 40px;
   height: 40px;
   padding: 0;
@@ -37,22 +38,31 @@
 }
 
 .stream-volume__slider {
-  width: 84px;
+  width: 0;
   margin: 0;
+  opacity: 0;
   accent-color: var(--accent);
   cursor: pointer;
+  transition: width var(--t-fast) var(--ease), margin var(--t-fast) var(--ease), opacity var(--t-fast) var(--ease);
+
+  .stream-volume:hover &,
+  .stream-volume:focus-within & {
+    width: 84px;
+    margin: 0 2px 0 12px;
+    opacity: 1;
+  }
 }
 
 /* Touch screens set the level with the device's buttons: mute only. */
 @media (hover: none) {
-  .stream-volume { padding: 0; }
   .stream-volume__slider { display: none; }
 }
 
-/* The rewind chip shares the corner: it moves right of the volume pill. */
-.ws-player:has(.stream-volume) .stream-rewind-chip,
-.live-stream-player:has(.stream-volume) .stream-rewind-chip {
-  left: 150px;
-
-  @media (hover: none) { left: 58px; }
+/* The fullscreen button takes the corner: the volume sits left of it, and on
+   the watch page's player the boost chip and "Ask to join" step left again. */
+.ws-player:fullscreen .stream-volume,
+.live-stream-player:has(.stream-fs-btn) .stream-volume { right: 56px; }
+.live-stream-player:has(.stream-fs-btn):has(.stream-volume) {
+  .stream-boost-btn--overlay { right: calc(0.6rem + 88px); }
+  .live-stream-player__collab { right: calc(6.2rem + 88px); }
 }

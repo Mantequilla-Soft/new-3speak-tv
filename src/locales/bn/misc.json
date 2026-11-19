@@ -334,7 +334,11 @@
     "loginToChat": "চ্যাট করতে লগ ইন করুন",
     "ended": "এই স্ট্রিম শেষ হয়েছে।",
     "volume": "ভলিউম",
-    "sound": "শব্দ"
+    "sound": "শব্দ",
+    "pollMove": "সরাতে টেনে আনুন",
+    "pollHide": "বন্ধ করুন",
+    "pollShow": "পোল খুলুন",
+    "predictionShow": "পূর্বাভাস খুলুন"
   },
   "pullToRefresh": {
     "pull": "রিফ্রেশ করতে টানুন",

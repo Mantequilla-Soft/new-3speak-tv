@@ -299,6 +299,7 @@
     "pickTemplatePlaceholder": "Choose a template…",
     "templateLoaded": "Loaded “{{name}}” into New stream",
     "chatOverlay": {
+      "title": "Chat dock",
       "invalid": "This chat overlay link is not valid. Copy it again from your template in the Stream Studio.",
       "offline": "Not live right now. New chat messages show up here when you go live.",
       "empty": "You are live. New chat messages show up here.",
@@ -312,6 +313,12 @@
         "chat": "Chat",
         "live": "Polls and raids",
         "boosts": "Boosts"
+      },
+      "clips": {
+        "title": "Clip suggestions",
+        "body": "Your viewers made clips of your last stream: {{count}} clips from {{viewers}} viewers. Post the best ones as Shorts.",
+        "open": "See the clip suggestions and post them",
+        "hide": "Hide"
       }
     },
     "pro": {

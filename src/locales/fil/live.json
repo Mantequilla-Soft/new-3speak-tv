@@ -299,6 +299,7 @@
     "pickTemplatePlaceholder": "Pumili ng template…",
     "templateLoaded": "Na-load ang “{{name}}” sa Bagong stream",
     "chatOverlay": {
+      "title": "Chat dock",
       "invalid": "Hindi valid ang link ng chat overlay na ito. Kopyahin ulit mula sa template mo sa Stream Studio.",
       "offline": "Hindi ka live ngayon. Lalabas dito ang mga bagong mensahe sa chat kapag nag-live ka.",
       "empty": "Live ka na. Lalabas dito ang mga bagong mensahe sa chat.",
@@ -312,6 +313,12 @@
         "chat": "Chat",
         "live": "Poll at raid",
         "boosts": "Boost"
+      },
+      "clips": {
+        "title": "Mga mungkahing clip",
+        "body": "Gumawa ang mga manonood mo ng mga clip mula sa huli mong stream: {{count}} clip mula sa {{viewers}} manonood. I-post ang pinakamaganda bilang Shorts.",
+        "open": "Tingnan ang mga mungkahing clip at i-post",
+        "hide": "Itago"
       }
     },
     "pro": {

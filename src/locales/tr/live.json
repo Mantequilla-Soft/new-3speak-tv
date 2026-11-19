@@ -299,6 +299,7 @@
     "pickTemplatePlaceholder": "Şablon seç…",
     "templateLoaded": "“{{name}}” Yeni yayın'a yüklendi",
     "chatOverlay": {
+      "title": "Sohbet paneli",
       "invalid": "Bu sohbet katmanı bağlantısı geçerli değil. Stream Studio'daki şablonundan yeniden kopyala.",
       "offline": "Şu an canlı değilsin. Canlıya çıktığında yeni sohbet mesajları burada görünür.",
       "empty": "Canlıdasın. Yeni sohbet mesajları burada görünür.",
@@ -312,6 +313,12 @@
         "chat": "Sohbet",
         "live": "Anketler ve baskınlar",
         "boosts": "Boostlar"
+      },
+      "clips": {
+        "title": "Klip önerileri",
+        "body": "İzleyicilerin son yayınından klipler yaptı: {{viewers}} izleyiciden {{count}} klip. En iyilerini Shorts olarak paylaş.",
+        "open": "Klip önerilerini gör ve paylaş",
+        "hide": "Gizle"
       }
     },
     "pro": {

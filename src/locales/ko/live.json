@@ -298,6 +298,7 @@
     "pickTemplatePlaceholder": "템플릿 선택…",
     "templateLoaded": "“{{name}}”을(를) 새 스트림에 불러왔습니다",
     "chatOverlay": {
+      "title": "채팅 도크",
       "invalid": "이 채팅 오버레이 링크가 올바르지 않아요. Stream Studio의 템플릿에서 다시 복사하세요.",
       "offline": "지금은 방송 중이 아니에요. 방송을 시작하면 새 채팅 메시지가 여기에 표시돼요.",
       "empty": "방송 중이에요. 새 채팅 메시지가 여기에 표시돼요.",
@@ -311,6 +312,12 @@
         "chat": "채팅",
         "live": "투표와 레이드",
         "boosts": "부스트"
+      },
+      "clips": {
+        "title": "클립 제안",
+        "body": "시청자들이 지난 방송에서 클립을 만들었어요: 시청자 {{viewers}}명의 클립 {{count}}개. 가장 좋은 클립을 Shorts로 올려 보세요.",
+        "open": "클립 제안 보고 올리기",
+        "hide": "숨기기"
       }
     },
     "pro": {

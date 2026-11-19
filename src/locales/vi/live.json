@@ -298,6 +298,7 @@
     "pickTemplatePlaceholder": "Chọn mẫu…",
     "templateLoaded": "Đã tải “{{name}}” vào Buổi phát mới",
     "chatOverlay": {
+      "title": "Bảng trò chuyện",
       "invalid": "Liên kết lớp phủ trò chuyện này không hợp lệ. Hãy sao chép lại từ mẫu của bạn trong Stream Studio.",
       "offline": "Hiện bạn không phát trực tiếp. Tin nhắn trò chuyện mới sẽ hiện ở đây khi bạn phát trực tiếp.",
       "empty": "Bạn đang phát trực tiếp. Tin nhắn trò chuyện mới hiện ở đây.",
@@ -311,6 +312,12 @@
         "chat": "Trò chuyện",
         "live": "Bình chọn và raid",
         "boosts": "Boost"
+      },
+      "clips": {
+        "title": "Clip được đề xuất",
+        "body": "Người xem đã tạo clip từ buổi phát trực tiếp gần nhất của bạn: {{count}} clip từ {{viewers}} người xem. Đăng những clip hay nhất thành Shorts.",
+        "open": "Xem các clip được đề xuất và đăng",
+        "hide": "Ẩn"
       }
     },
     "pro": {

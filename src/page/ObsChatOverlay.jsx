@@ -6,8 +6,10 @@ import { useTranslation } from "react-i18next";
 import { getHangoutsEndpoints, defaultEndpoint } from "../utils/hangoutsEndpoints";
 import { CHECKER_URL } from "../utils/config";
 import { fetchBoostTotals } from "../utils/boostSummary";
+import { getPlayerUrl } from "../utils/playerUrl";
 import { Icon } from "../components/v2/Icon";
 import "./ObsChatOverlay.scss";
+import mark from "../assets/image/3S_mark.svg";
 
 // A streamer's live chat for OBS. The URL carries the user's chat overlay key
 // (copied from the Templates tab of the Stream Studio), so one link covers all
@@ -94,6 +96,73 @@ function useDockSession(controlKey) {
 }
 
 const DOCK_TABS = ["chat", "live", "boosts"];
+
+// After the stream: how often the dock looks for viewers' clips and the VOD.
+const CLIPS_POLL_MS = 60 * 1000;
+const CLIPS_SEEN_KEY = "3speak-dock-clips-hidden";
+
+/** Is the stream's recording up as its video? (the player's own answer) */
+async function vodPublished(host, room) {
+  try {
+    const r = await fetch(`${getPlayerUrl()}/api/embed?v=${encodeURIComponent(host)}/${encodeURIComponent(room)}`, { cache: "no-store" });
+    if (!r.ok) return false;
+    const d = await r.json();
+    return !!d?.videoUrl && d.success !== false && d.status === "published" && d.isPlaceholder !== true;
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * After a stream (dock link with the control key): once the VOD is up and
+ * viewers clipped moments of it, a card that leads to the stream's clips page,
+ * where the host picks them and posts them as Shorts. Hidden per stream.
+ */
+function DockClipSuggestions({ session }) {
+  const { t } = useTranslation();
+  const [found, setFound] = useState(null);
+  const [hidden, setHidden] = useState(() => {
+    try { return localStorage.getItem(CLIPS_SEEN_KEY) || ""; } catch { return ""; }
+  });
+  useEffect(() => {
+    let alive = true;
+    const look = async () => {
+      try {
+        const r = await fetch(`${API}/dock/clips`, { headers: { Authorization: `Bearer ${session.token}` }, cache: "no-store" });
+        if (!alive || !r.ok) return;
+        const d = await r.json();
+        if (!d?.room || !(d.count > 0)) { if (alive) setFound(null); return; }
+        const vod = await vodPublished(session.username, d.room);
+        if (alive) setFound(vod ? d : null);
+      } catch { /* the next look tries again */ }
+    };
+    look();
+    const id = setInterval(look, CLIPS_POLL_MS);
+    return () => { alive = false; clearInterval(id); };
+  }, [session.token, session.username]);
+
+  if (!found || hidden === found.room) return null;
+  const hide = () => {
+    setHidden(found.room);
+    try { localStorage.setItem(CLIPS_SEEN_KEY, found.room); } catch { /* this dock visit only */ }
+  };
+  return (
+    <section className="obs-chat__clips" aria-label={t("live.obs.chatOverlay.clips.title")}>
+      <div className="obs-chat__clips-head">
+        <Icon name="movie" size={18} />
+        <strong>{t("live.obs.chatOverlay.clips.title")}</strong>
+        <button type="button" className="obs-chat__clips-hide" onClick={hide} aria-label={t("live.obs.chatOverlay.clips.hide")} title={t("live.obs.chatOverlay.clips.hide")}>
+          <Icon name="close" size={16} />
+        </button>
+      </div>
+      <p>{t("live.obs.chatOverlay.clips.body", { count: found.count, viewers: found.clippers })}</p>
+      <a className="obs-chat__clips-open" href={`${window.location.origin}/live/clips/${encodeURIComponent(found.room)}`} target="_blank" rel="noopener noreferrer">
+        {t("live.obs.chatOverlay.clips.open")}
+        <Icon name="open_in_new" size={16} />
+      </a>
+    </section>
+  );
+}
 
 /** The live controls as the studio has them: Polls (and predictions) and Raid, then Boosts. */
 function DockPanel({ room, session, tab }) {
@@ -309,6 +378,17 @@ function DockCounters({ room }) {
   );
 }
 
+/** The dock's top line: the 3Speak mark and what this panel is. */
+function DockBrand() {
+  const { t } = useTranslation();
+  return (
+    <div className="obs-chat__brand">
+      <img src={mark} alt="3Speak" />
+      <span>{t("live.obs.chatOverlay.title")}</span>
+    </div>
+  );
+}
+
 function ChatFeed({ fade, max, dock }) {
   const { t } = useTranslation();
   const { messages } = useChat();
@@ -384,14 +464,16 @@ export default function ObsChatOverlay() {
   const cls = `obs-chat${opts.dock ? " obs-chat--dock" : ""}`;
 
   if (missingKey || invalid) {
-    return <div className={cls} style={style} data-theme="dark"><p className="obs-chat__invalid">{t("live.obs.chatOverlay.invalid")}</p></div>;
+    return <div className={cls} style={style} data-theme="dark">{opts.dock && <DockBrand />}<p className="obs-chat__invalid">{t("live.obs.chatOverlay.invalid")}</p></div>;
   }
   const token = grant && grant.room === room ? grant.token : null;
   if (!room || !token) {
     // Over the video: nothing at all. In a dock: say why it's empty.
     return (
       <div className={cls} style={style} data-theme="dark">
+        {opts.dock && <DockBrand />}
         {opts.dock && <p className="obs-chat__status">{t("live.obs.chatOverlay.offline")}</p>}
+        {opts.dock && controls && <DockClipSuggestions session={controls} />}
       </div>
     );
   }
@@ -404,6 +486,7 @@ export default function ObsChatOverlay() {
             {/* Header and body: the chat stacks from the bottom and overflows
                 at the top, under the header, which stays put. */}
             <div className="obs-chat__head">
+              <DockBrand />
               <DockCounters room={room} />
               {dockSession === "invalid" && <p className="obs-chat__notice">{t("live.obs.chatOverlay.controlInvalid")}</p>}
               {controls && (

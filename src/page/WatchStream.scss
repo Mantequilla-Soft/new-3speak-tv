@@ -166,17 +166,28 @@
   z-index: 9;
   max-width: min(420px, calc(100% - 36px));
 }
-/* The host's boost goal (SDK StreamBoostGoal via StreamVideo): bottom-left
-   under the boost toasts, which step up above it while a goal shows. */
+/* The host's boost goal (SDK StreamBoostGoal via StreamVideo), where the host
+   put it: a corner card or a band along the top or bottom. The top keeps clear
+   of the creator badge, the bottom right of the volume button; the boost
+   toasts (bottom left) step up above a goal under them. */
 .ws-player .hh-boost-goal--overlay {
-  left: 18px;
-  right: auto;
-  bottom: 18px;
-  width: min(360px, calc(100% - 36px));
   margin: 0;
   z-index: 7;
 }
-.ws-player:has(.hh-boost-goal--overlay) .hh-boost-overlay { bottom: 80px; }
+.ws-player .hh-boost-goal--pos-top,
+.ws-player .hh-boost-goal--pos-bottom {
+  left: 18px;
+  right: 18px;
+  margin: 0 auto;
+}
+.ws-player .hh-boost-goal--pos-top { top: 78px; bottom: auto; }
+.ws-player .hh-boost-goal--pos-top-right { top: 18px; right: 18px; }
+.ws-player .hh-boost-goal--pos-bottom,
+.ws-player .hh-boost-goal--pos-bottom-right { bottom: 60px; }
+.ws-player .hh-boost-goal--pos-bottom-right { right: 18px; }
+.ws-player .hh-boost-goal--pos-bottom-left { left: 18px; bottom: 18px; }
+.ws-player:has(.hh-boost-goal--pos-bottom-left) .hh-boost-overlay { bottom: 80px; }
+.ws-player:has(.hh-boost-goal--pos-bottom) .hh-boost-overlay { bottom: 122px; }
 
 .ws-page .hh-boost-overlay__item,
 .ws-shorts .hh-boost-overlay__item {
@@ -435,9 +446,11 @@
   @include hh.tokens;
   @include hh.boost-goal;
 
-  // Everything anchored to the bottom sits above the docked chat bar.
-  .bottomOverlay { padding-bottom: 72px; }
-  .actionSidebar { bottom: 80px; }
+  // Everything anchored to the bottom sits above the docked chat bar. Short.scss
+  // sets both at the same weight, and which stylesheet comes last depends on
+  // the order the chunks loaded: `&.short-main` makes these win either way.
+  &.short-main .bottomOverlay { padding-bottom: 72px; }
+  &.short-main .actionSidebar { bottom: 80px; }
 
   &__live {
     display: flex;
@@ -559,6 +572,23 @@
     }
     .hh-chat__msg-name { font-weight: 700; }
     .hh-chat__mention { color: var(--on-media); font-weight: 900; }
+    // The running poll is its own layer over the video (FloatingStreamPoll):
+    // in here taps would fall through to the video.
+    .hh-chat__poll { display: none; }
+    // A finished poll's results among the messages: see-through, so the
+    // stream shows, and its fold button takes taps.
+    .hh-chat__result .hh-poll,
+    .hh-chat__result .hh-poll-line {
+      border: 0;
+      background: color-mix(in srgb, var(--media-black) 50%, transparent);
+      color: var(--on-media);
+    }
+    .hh-chat__result .hh-poll__result {
+      background: color-mix(in srgb, var(--on-media) 12%, transparent);
+      color: var(--on-media);
+    }
+    .hh-chat__result .hh-poll__status,
+    .hh-chat__result .hh-poll__foot { color: color-mix(in srgb, var(--on-media) 75%, transparent); }
     // The composer moved to the docked bar; nothing input-shaped belongs here.
     .hh-chat__input-row,
     .hh-chat__compose,
@@ -701,6 +731,8 @@
   .actionSidebar,
   .ws-shorts__chat,
   .ws-shorts__next-hint,
+  .ws-poll,
+  .ws-poll-chip,
   .ws-shorts__quality,
   .ws-shorts__bar {
     visibility: hidden;
@@ -736,6 +768,8 @@
   .actionSidebar,
   .ws-shorts__chat,
   .ws-shorts__next-hint,
+  .ws-poll,
+  .ws-poll-chip,
   .ws-shorts__quality,
   .shortBackBtn {
     display: none;

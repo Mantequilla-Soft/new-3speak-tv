@@ -298,6 +298,7 @@
     "pickTemplatePlaceholder": "选择模板…",
     "templateLoaded": "已将“{{name}}”载入新直播",
     "chatOverlay": {
+      "title": "聊天面板",
       "invalid": "这个聊天叠加层链接无效。请从 Stream Studio 中的模板重新复制。",
       "offline": "当前未在直播。开播后，新的聊天消息会显示在这里。",
       "empty": "正在直播。新的聊天消息会显示在这里。",
@@ -311,6 +312,12 @@
         "chat": "聊天",
         "live": "投票和突袭",
         "boosts": "助推"
+      },
+      "clips": {
+        "title": "片段建议",
+        "body": "观众从你上次的直播中剪了片段：{{viewers}} 位观众的 {{count}} 个片段。把最好的发布为 Shorts。",
+        "open": "查看片段建议并发布",
+        "hide": "隐藏"
       }
     },
     "pro": {

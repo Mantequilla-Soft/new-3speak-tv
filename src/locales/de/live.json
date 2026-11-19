@@ -299,6 +299,7 @@
     "pickTemplatePlaceholder": "Vorlage wählen…",
     "templateLoaded": "„{{name}}“ in Neuer Stream geladen",
     "chatOverlay": {
+      "title": "Chat-Dock",
       "invalid": "Dieser Chat-Overlay-Link ist ungültig. Kopiere ihn erneut aus deiner Vorlage im Stream Studio.",
       "offline": "Gerade nicht live. Neue Chat-Nachrichten erscheinen hier, sobald du live gehst.",
       "empty": "Du bist live. Neue Chat-Nachrichten erscheinen hier.",
@@ -312,6 +313,12 @@
         "chat": "Chat",
         "live": "Umfragen und Raids",
         "boosts": "Boosts"
+      },
+      "clips": {
+        "title": "Clip-Vorschläge",
+        "body": "Deine Zuschauer haben Clips von deinem letzten Stream gemacht: {{count}} Clips von {{viewers}} Zuschauern. Poste die besten als Shorts.",
+        "open": "Clip-Vorschläge ansehen und posten",
+        "hide": "Ausblenden"
       }
     },
     "pro": {

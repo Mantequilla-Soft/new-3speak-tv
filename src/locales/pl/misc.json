@@ -336,7 +336,11 @@
     "loginToChat": "Zaloguj się, aby czatować",
     "ended": "Ta transmisja się zakończyła.",
     "volume": "Głośność",
-    "sound": "Dźwięk"
+    "sound": "Dźwięk",
+    "pollMove": "Przeciągnij, aby przesunąć",
+    "pollHide": "Zamknij",
+    "pollShow": "Otwórz ankietę",
+    "predictionShow": "Otwórz prognozę"
   },
   "pullToRefresh": {
     "pull": "Pociągnij, aby odświeżyć",

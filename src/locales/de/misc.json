@@ -334,7 +334,11 @@
     "loginToChat": "Zum Chatten anmelden",
     "ended": "Dieser Stream ist beendet.",
     "volume": "Lautstärke",
-    "sound": "Ton"
+    "sound": "Ton",
+    "pollMove": "Ziehen zum Verschieben",
+    "pollHide": "Schließen",
+    "pollShow": "Umfrage öffnen",
+    "predictionShow": "Vorhersage öffnen"
   },
   "pullToRefresh": {
     "pull": "Zum Aktualisieren ziehen",

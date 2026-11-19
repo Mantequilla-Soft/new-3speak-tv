@@ -334,7 +334,11 @@
     "loginToChat": "Log in om te chatten",
     "ended": "Deze stream is afgelopen.",
     "volume": "Volume",
-    "sound": "Geluid"
+    "sound": "Geluid",
+    "pollMove": "Sleep om te verplaatsen",
+    "pollHide": "Sluiten",
+    "pollShow": "Peiling openen",
+    "predictionShow": "Voorspelling openen"
   },
   "pullToRefresh": {
     "pull": "Trek om te vernieuwen",

@@ -301,6 +301,7 @@
     "pickTemplatePlaceholder": "Wybierz szablon…",
     "templateLoaded": "Wczytano „{{name}}” do Nowej transmisji",
     "chatOverlay": {
+      "title": "Panel czatu",
       "invalid": "Ten link do nakładki czatu jest nieprawidłowy. Skopiuj go ponownie ze swojego szablonu w Stream Studio.",
       "offline": "Nie jesteś teraz na żywo. Nowe wiadomości z czatu pojawią się tutaj, gdy wejdziesz na żywo.",
       "empty": "Jesteś na żywo. Nowe wiadomości z czatu pojawiają się tutaj.",
@@ -314,6 +315,12 @@
         "chat": "Czat",
         "live": "Ankiety i rajdy",
         "boosts": "Boosty"
+      },
+      "clips": {
+        "title": "Propozycje klipów",
+        "body": "Twoi widzowie zrobili klipy z twojej ostatniej transmisji: klipy: {{count}}, widzowie: {{viewers}}. Opublikuj najlepsze jako Shorts.",
+        "open": "Zobacz propozycje klipów i opublikuj je",
+        "hide": "Ukryj"
       }
     },
     "pro": {

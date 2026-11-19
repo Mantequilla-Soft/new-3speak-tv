@@ -299,6 +299,7 @@
     "pickTemplatePlaceholder": "Kies een sjabloon…",
     "templateLoaded": "“{{name}}” geladen in Nieuwe stream",
     "chatOverlay": {
+      "title": "Chatpaneel",
       "invalid": "Deze link naar de chat-overlay is ongeldig. Kopieer hem opnieuw vanuit je sjabloon in de Stream Studio.",
       "offline": "Je bent nu niet live. Nieuwe chatberichten verschijnen hier zodra je live gaat.",
       "empty": "Je bent live. Nieuwe chatberichten verschijnen hier.",
@@ -312,6 +313,12 @@
         "chat": "Chat",
         "live": "Polls en raids",
         "boosts": "Boosts"
+      },
+      "clips": {
+        "title": "Clipsuggesties",
+        "body": "Je kijkers maakten clips van je laatste stream: {{count}} clips van {{viewers}} kijkers. Plaats de beste als Shorts.",
+        "open": "Bekijk de clipsuggesties en plaats ze",
+        "hide": "Verbergen"
       }
     },
     "pro": {

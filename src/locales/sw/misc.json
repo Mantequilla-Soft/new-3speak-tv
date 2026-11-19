@@ -334,7 +334,11 @@
     "loginToChat": "Ingia ili upige gumzo",
     "ended": "Mtiririko huu umeisha.",
     "volume": "Sauti (kiwango)",
-    "sound": "Sauti"
+    "sound": "Sauti",
+    "pollMove": "Buruta ili kusogeza",
+    "pollHide": "Funga",
+    "pollShow": "Fungua kura ya maoni",
+    "predictionShow": "Fungua utabiri"
   },
   "pullToRefresh": {
     "pull": "Vuta ili kuonyesha upya",

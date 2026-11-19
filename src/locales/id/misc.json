@@ -333,7 +333,11 @@
     "loginToChat": "Masuk untuk chat",
     "ended": "Siaran ini sudah berakhir.",
     "volume": "Volume",
-    "sound": "Suara"
+    "sound": "Suara",
+    "pollMove": "Seret untuk memindahkan",
+    "pollHide": "Tutup",
+    "pollShow": "Buka polling",
+    "predictionShow": "Buka prediksi"
   },
   "pullToRefresh": {
     "pull": "Tarik untuk memuat ulang",

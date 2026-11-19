@@ -104,6 +104,78 @@
 .obs-chat--dock {
   justify-content: flex-start;
   padding: 0;
+  // Native controls (a select's open list, scrollbars) drawn dark too: the
+  // tokens are dark here, the browser's own popups follow color-scheme.
+  color-scheme: dark;
+
+  select option {
+    background: var(--surface);
+    color: var(--text);
+  }
+}
+
+// The dock's top line: the 3Speak mark and "Chat dock".
+.obs-chat__brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px 0;
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 700;
+
+  img {
+    width: 20px;
+    height: 20px;
+  }
+}
+.obs-chat--dock > .obs-chat__brand { padding-bottom: 8px; }
+.obs-chat--dock > .obs-chat__status { padding: 0 10px; }
+
+// After the stream: viewers' clips are ready to post (DockClipSuggestions).
+.obs-chat__clips {
+  margin: 12px 10px 0;
+  padding: 10px 12px 12px;
+  border-radius: var(--r-md);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 13px;
+
+  p { margin: 6px 0 10px; color: var(--muted); }
+}
+.obs-chat__clips-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  strong { flex: 1; }
+}
+.obs-chat__clips-hide {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--r-sm);
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+
+  &:hover { color: var(--text); }
+}
+.obs-chat__clips-open {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 36px;
+  padding: 0 12px;
+  border-radius: var(--r-md);
+  background: var(--accent);
+  color: var(--on-accent);
+  font-weight: 700;
+  text-decoration: none;
 }
 
 .obs-chat__head {

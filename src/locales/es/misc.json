@@ -335,7 +335,11 @@
     "loginToChat": "Inicia sesión para chatear",
     "ended": "Esta transmisión ha terminado.",
     "volume": "Volumen",
-    "sound": "Sonido"
+    "sound": "Sonido",
+    "pollMove": "Arrastra para mover",
+    "pollHide": "Cerrar",
+    "pollShow": "Abrir la encuesta",
+    "predictionShow": "Abrir la predicción"
   },
   "pullToRefresh": {
     "pull": "Desliza para actualizar",

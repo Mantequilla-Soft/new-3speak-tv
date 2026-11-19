@@ -335,7 +335,11 @@
     "loginToChat": "Connectez-vous pour discuter",
     "ended": "Ce live est terminé.",
     "volume": "Volume",
-    "sound": "Son"
+    "sound": "Son",
+    "pollMove": "Faites glisser pour déplacer",
+    "pollHide": "Fermer",
+    "pollShow": "Ouvrir le sondage",
+    "predictionShow": "Ouvrir la prédiction"
   },
   "pullToRefresh": {
     "pull": "Tirez pour actualiser",

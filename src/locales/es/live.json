@@ -300,6 +300,7 @@
     "pickTemplatePlaceholder": "Elige una plantilla…",
     "templateLoaded": "“{{name}}” cargada en Nueva transmisión",
     "chatOverlay": {
+      "title": "Panel de chat",
       "invalid": "Este enlace del overlay de chat no es válido. Vuelve a copiarlo desde tu plantilla en el Stream Studio.",
       "offline": "No estás en vivo ahora. Los mensajes nuevos del chat aparecerán aquí cuando salgas en vivo.",
       "empty": "Estás en vivo. Los mensajes nuevos del chat aparecen aquí.",
@@ -313,6 +314,12 @@
         "chat": "Chat",
         "live": "Encuestas y raids",
         "boosts": "Boosts"
+      },
+      "clips": {
+        "title": "Sugerencias de clips",
+        "body": "Tus espectadores hicieron clips de tu último directo: {{count}} clips de {{viewers}} espectadores. Publica los mejores como Shorts.",
+        "open": "Ver las sugerencias de clips y publicarlas",
+        "hide": "Ocultar"
       }
     },
     "pro": {
