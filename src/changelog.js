@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.117',
+    category: 'live',
+    date: '2026-11-19',
+    summary: "Smoother OBS streams: your OBS video now goes out as you send it, and viewers whose browser can't play it switch to a compatible player.",
+  },
+  {
     version: '2.0.116',
     category: 'general',
     date: '2026-11-18',
