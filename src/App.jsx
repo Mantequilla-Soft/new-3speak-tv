@@ -219,6 +219,8 @@ const PremiereReminders = lazy(() => import("./components/Premiere/PremiereRemin
 const AudioUploadModal = lazy(() => import("./components/AudioUploadModal/AudioUploadModal"));
 const AddAccount_modal = lazy(() => import("./components/modal/AddAccount_modal"));
 const EditorModal = lazy(() => import("./components/modal/EditorModal"));
+// 🔒 What a free account gets instead of the landscape video editor (SDK upsell, lazy)
+const LandscapeEditorUpsell = lazy(() => import("./components/ProUpsell/LandscapeEditorUpsell"));
 const ChangelogModal = lazy(() => import("./components/Changelog/ChangelogModal"));
 const GraduationPrompt = lazy(() => import("./components/Incubation/GraduationPrompt"));
 const BacklogPrompt = lazy(() => import("./components/Incubation/BacklogPrompt"));
@@ -1053,6 +1055,11 @@ function App() {
               aspect={editor.mode === 'video' ? editor.aspect : null}
               episode={editor.mode === 'audio' ? editor.episode : null}
             />
+          </MountWhenOpened>
+        )}
+        {FEATURE_EDITOR && (
+          <MountWhenOpened when={editor.upsell} name="editor pro upsell">
+            <LandscapeEditorUpsell open={editor.upsell} onClose={editor.closeUpsell} />
           </MountWhenOpened>
         )}
       </div>

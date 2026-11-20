@@ -25,9 +25,10 @@ const PREMIUM_API = (import.meta.env.VITE_HANGOUTS_PREMIUM_API_URL || '').replac
 // The SDK's perk tabs, plus what is Pro on 3Speak that the SDK cannot know:
 // live captions (components/openpods/studioCaptions.js, Pro since 2026-11-17),
 // the feed ranking boost (checker utils/premiumBoost.js, PREMIUM_BOOST on prod),
-// 1080p YouTube imports (server/youtube-import.cjs MAX_HEIGHT_PREMIUM) and no
+// 1080p YouTube imports (server/youtube-import.cjs MAX_HEIGHT_PREMIUM), no
 // daily upload limits (lib/uploadQuota.js, owner's rules 2026-11-20: free is
-// 1 video + 3 Shorts + 2 audio uploads a day, audio up to 15 minutes).
+// 1 video + 3 Shorts + 2 audio uploads a day, audio up to 15 minutes) and the
+// landscape video editor (the Shorts and audio editors stay free).
 // English like the rest of the SDK panel.
 const EXTRA_PERKS = {
   general: [{
@@ -47,6 +48,11 @@ const EXTRA_PERKS = {
     icon: '🎙️',
     title: 'Audio longer than 15 minutes',
     body: 'Upload long episodes and mixes. Free audio uploads stop at 15 minutes.',
+  }, {
+    // utils/editorFormat.js landscapeEditorAllowed (owner's call 2026-11-20)
+    icon: '🎬',
+    title: 'Landscape video editor',
+    body: 'Edit 16:9, 4:3 and square videos in the editor. The Shorts and audio editors stay free.',
   }],
   streaming: [{
     icon: '💬',

@@ -22,6 +22,9 @@ import { useTranslation, Trans } from 'react-i18next';
 import useUploadQuota from '../../hooks/useUploadQuota';
 import UploadQuotaNote from '../UploadQuota/UploadQuotaNote';
 import { isUsedUp, uploadLimitMessage, usedUpInfo } from '../../lib/uploadQuota';
+import { usePremiumStatus } from '../../hooks/usePremiumStatus';
+import { landscapeEditorAllowed } from '../../utils/editorFormat';
+import ProLockBadge from '../ProUpsell/ProLockBadge';
 
 // Every toast from this module is headed "Upload"; the message becomes the
 // line under it. See utils/toast.js.
@@ -61,6 +64,9 @@ function EmbedVideoUploadStep1() {
     && !(uploadLimit.nextAt && uploadLimit.nextAt <= Date.now())
     ? uploadLimit : null
   const quotaBlocked = !!quotaRefusal || isUsedUp(quotaEntry)
+  // 🔒 "Edit video" on a regular video opens the landscape editor: Pro only. A
+  // free account sees a Pro badge, the tap opens the upsell (useEditorLauncher).
+  const landscapeLocked = landscapeEditorAllowed(user, usePremiumStatus(user)) === false
 
   const [loading, setLoading] = useState(false)
   const [dragging, setDragging] = useState(false)
@@ -529,6 +535,7 @@ function EmbedVideoUploadStep1() {
                       size={44}
                       icon="content_cut"
                       disabled={videoDuration > EDITOR_VIDEO_MAX_SEC + 1}
+                      trailing={landscapeLocked ? <ProLockBadge /> : undefined}
                       title={videoDuration > EDITOR_VIDEO_MAX_SEC + 1 ? t('editorFormat.editorTooLong', { minutes: EDITOR_VIDEO_MAX_SEC / 60 }) : undefined}
                       onClick={() => window.dispatchEvent(new CustomEvent('open-video-editor', { detail: { file: videoFile } }))}
                     >

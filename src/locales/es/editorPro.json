@@ -1,0 +1,19 @@
+{
+  "heading": "El editor de video horizontal forma parte de 3Speak Pro",
+  "notNow": "Ahora no",
+  "badge": "Pro",
+  "perks": {
+    "landscape": {
+      "title": "Editor de video horizontal",
+      "body": "Edita videos 16:9, 4:3 y cuadrados. Los editores de Shorts y de audio siguen siendo gratis."
+    },
+    "uploads": {
+      "title": "Subidas diarias ilimitadas",
+      "body": "Sin límite diario de videos, Shorts y audio."
+    },
+    "longAudio": {
+      "title": "Audio de más de 15 minutos",
+      "body": "Las subidas de audio gratuitas llegan hasta 15 minutos."
+    }
+  }
+}

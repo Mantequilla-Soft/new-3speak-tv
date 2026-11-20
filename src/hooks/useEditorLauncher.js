@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
-import { editorAspect } from '../utils/editorFormat';
+import { editorAspect, landscapeEditorAllowed } from '../utils/editorFormat';
+import { useAppStore } from '../lib/store';
+import { usePremiumStatus } from './usePremiumStatus';
 
 /**
  * Which editor the global EditorModal (App.jsx) shows, driven by two window events:
@@ -18,7 +20,15 @@ import { editorAspect } from '../utils/editorFormat';
  * `sound` is the sound a new Short starts with (null: none); `aspect` the shape
  * the video editor starts in (null: a Short, utils/editorFormat.js); `episode`
  * the published episode a video podcast is made of (null: none).
+ *
+ * 🔒 The landscape video editor (open-video-editor) is 3Speak Pro (owner's call
+ * 2026-11-20); the Shorts and audio editors stay free for everyone, warm-up
+ * included. A free account (warm-up too: it is not Pro) gets `upsell` instead
+ * of the editor. While the Pro status is still loading the request waits, so
+ * neither the upsell nor the editor flashes up for the wrong account.
+ * `open-pro-upsell` (EditorModal's own guard) opens the upsell too.
  */
+
 // "Use this sound": what the editor needs, checked here (it comes in on an event).
 function soundOf(e) {
   const s = e?.detail?.sound;
@@ -42,11 +52,25 @@ export function episodeOf(e) {
 
 export function useEditorLauncher() {
   const [state, setState] = useState({ open: false, mode: 'video', file: null, audioTrackId: null, sound: null, aspect: null, episode: null });
+  // A landscape editor asked for, waiting for the Pro status: { file, aspect } | null
+  const [pendingVideo, setPendingVideo] = useState(null);
+  const [upsell, setUpsell] = useState(false);
+  const user = useAppStore((s) => s.user);
+  const allowed = landscapeEditorAllowed(user, usePremiumStatus(user));
+
+  useEffect(() => {
+    if (!pendingVideo || allowed === null) return;
+    if (allowed) setState({ open: true, mode: 'video', file: pendingVideo.file, audioTrackId: null, sound: null, aspect: pendingVideo.aspect, episode: null });
+    else setUpsell(true);
+    setPendingVideo(null);
+  }, [pendingVideo, allowed]);
 
   useEffect(() => {
     const fileOf = (e) => (e?.detail?.file instanceof Blob ? e.detail.file : null);
     const onShorts = (e) => setState({ open: true, mode: 'video', file: fileOf(e), audioTrackId: null, sound: soundOf(e), aspect: null, episode: null });
-    const onVideo = (e) => setState({ open: true, mode: 'video', file: fileOf(e), audioTrackId: null, sound: null, aspect: editorAspect(e?.detail?.aspect) || '16:9', episode: null });
+    // Pro only: decided by the effect above, once the Pro status is known
+    const onVideo = (e) => setPendingVideo({ file: fileOf(e), aspect: editorAspect(e?.detail?.aspect) || '16:9' });
+    const onUpsell = () => setUpsell(true);
     const onAudio = (e) => {
       const trackId = e?.detail?.trackId;
       setState({ open: true, mode: 'audio', file: fileOf(e), audioTrackId: typeof trackId === 'string' ? trackId : null, sound: null, aspect: null, episode: episodeOf(e) });
@@ -54,7 +78,9 @@ export function useEditorLauncher() {
     window.addEventListener('open-shorts-editor', onShorts);
     window.addEventListener('open-video-editor', onVideo);
     window.addEventListener('open-audio-editor', onAudio);
+    window.addEventListener('open-pro-upsell', onUpsell);
     return () => {
+      window.removeEventListener('open-pro-upsell', onUpsell);
       window.removeEventListener('open-shorts-editor', onShorts);
       window.removeEventListener('open-video-editor', onVideo);
       window.removeEventListener('open-audio-editor', onAudio);
@@ -64,5 +90,7 @@ export function useEditorLauncher() {
   // The mode stays, so the popup does not switch looks while it closes
   const close = useCallback(() => setState((s) => ({ ...s, open: false, file: null, audioTrackId: null, sound: null, episode: null })), []);
 
-  return { ...state, close };
+  const closeUpsell = useCallback(() => setUpsell(false), []);
+
+  return { ...state, close, upsell, closeUpsell };
 }

@@ -26,7 +26,8 @@ vi.mock('../../../src/utils/uploadFaults', () => ({
 vi.mock('../../../src/hooks/useCanImportVideos', () => ({ default: () => false }))
 // ⏳ The free plan's daily counters (hooks/useUploadQuota.js), steered per test
 vi.mock('../../../src/hooks/useUploadQuota', () => ({ default: () => m.quota, useUploadQuota: () => m.quota }))
-vi.mock('../../../src/utils/config', async (importOriginal) => ({ ...(await importOriginal()), ENABLE_SUBS: true }))
+vi.mock('../../../src/utils/config', async (importOriginal) => ({ ...(await importOriginal()), ENABLE_SUBS: true, FEATURE_EDITOR: true }))
+vi.mock('../../../src/hooks/usePremiumStatus', () => ({ usePremiumStatus: () => m.premium }))
 vi.mock('ldrs/react', () => ({ TailChase: () => <span role="status">Working</span> }))
 // The upload wizard's shared state, kept in this component so its updates render.
 vi.mock('../../../src/context/EmbedUploadContext', async () => {
@@ -106,6 +107,7 @@ beforeEach(() => {
     user: 'uploader', provider: null, fromStories: false, isStory: false,
     quota: { ready: true, exempt: false, video: null, short: null, audio: null },
     uploadLimit: null,
+    premium: { premium: false },
     meta: { duration: 42, width: 1920, height: 1080 },
     hasAuth: vi.fn(async () => true),
     addAuth: vi.fn(async () => {}),
@@ -431,5 +433,39 @@ describe('upload step 1: the free plan\'s daily limit', () => {
     await ready()
     expect(document.querySelector('.upload-quota-note')).toHaveTextContent("You have reached today's free video limit. Try again later.")
     expect(input()).toBeDisabled()
+  })
+})
+
+describe('upload step 1: Edit video opens the landscape editor, Pro only', () => {
+  const editButton = () => screen.getByRole('button', { name: /Edit this video/ })
+  it('a free account sees it with a Pro badge, and a tap asks the launcher (which shows the upsell)', async () => {
+    const asked = vi.fn()
+    window.addEventListener('open-video-editor', asked)
+    const { user } = mount()
+    await ready()
+    await user.upload(input(), video())
+    await screen.findByText('Video Selected. Proceed to upload thumbnail')
+    expect(editButton().querySelector('.pro-lock-badge')).not.toBeNull()
+    await user.click(editButton())
+    expect(asked).toHaveBeenCalledTimes(1)
+    window.removeEventListener('open-video-editor', asked)
+  })
+
+  it('Pro sees no badge; a Short\'s editor is free (no badge)', async () => {
+    m.premium = { premium: true }
+    const { user, unmount } = mount()
+    await ready()
+    await user.upload(input(), video())
+    await screen.findByText('Video Selected. Proceed to upload thumbnail')
+    expect(editButton().querySelector('.pro-lock-badge')).toBeNull()
+    unmount()
+    m.premium = { premium: false }
+    m.fromStories = true
+    m.meta = { duration: 20, width: 1080, height: 1920 }
+    const second = mount()
+    await ready()
+    await second.user.upload(input(), video())
+    await screen.findByText('Video Selected. Proceed to upload thumbnail')
+    expect(editButton().querySelector('.pro-lock-badge')).toBeNull()
   })
 })

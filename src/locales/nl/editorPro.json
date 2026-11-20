@@ -1,0 +1,19 @@
+{
+  "heading": "De video-editor voor liggend formaat hoort bij 3Speak Pro",
+  "notNow": "Nu niet",
+  "badge": "Pro",
+  "perks": {
+    "landscape": {
+      "title": "Video-editor voor liggend formaat",
+      "body": "Bewerk video's in 16:9, 4:3 en vierkant. De Shorts- en audio-editor blijven gratis."
+    },
+    "uploads": {
+      "title": "Onbeperkt uploaden per dag",
+      "body": "Geen daglimiet voor video's, Shorts en audio."
+    },
+    "longAudio": {
+      "title": "Audio langer dan 15 minuten",
+      "body": "Gratis audio-uploads stoppen bij 15 minuten."
+    }
+  }
+}

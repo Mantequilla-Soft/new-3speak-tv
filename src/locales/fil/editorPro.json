@@ -1,0 +1,19 @@
+{
+  "heading": "Bahagi ng 3Speak Pro ang landscape video editor",
+  "notNow": "Huwag muna",
+  "badge": "Pro",
+  "perks": {
+    "landscape": {
+      "title": "Landscape video editor",
+      "body": "Mag-edit ng 16:9, 4:3 at square na video. Libre pa rin ang Shorts at audio editor."
+    },
+    "uploads": {
+      "title": "Walang limit na upload bawat araw",
+      "body": "Walang araw-araw na limit sa video, Shorts at audio."
+    },
+    "longAudio": {
+      "title": "Audio na lampas 15 minuto",
+      "body": "Hanggang 15 minuto lang ang libreng audio upload."
+    }
+  }
+}

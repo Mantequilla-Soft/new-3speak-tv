@@ -24,6 +24,17 @@ export function editorPostKind(data) {
   return 'short';
 }
 
+/**
+ * 🔒 Whether an account may open the landscape video editor (16:9, 4:3, 1:1):
+ * it is 3Speak Pro (owner's call 2026-11-20). The Shorts editor (9:16) and the
+ * audio editor stay free. true | false | null (the Pro status is still loading).
+ */
+export function landscapeEditorAllowed(user, premiumStatus) {
+  if (!user) return false;            // no Hive account (signed out, warm-up): not Pro
+  if (premiumStatus === null || premiumStatus === undefined) return null;
+  return !!premiumStatus.premium;
+}
+
 /** A shape the editor knows, else null (the editor then opens as a Short). */
 export function editorAspect(value) {
   return EDITOR_ASPECTS.includes(value) ? value : null;

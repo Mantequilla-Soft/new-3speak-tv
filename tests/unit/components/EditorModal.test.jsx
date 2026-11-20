@@ -7,9 +7,10 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { act, screen, waitFor } from '@testing-library/react'
 import { renderWithProviders, stubMatchMedia, toastMessages } from './_render.jsx'
+import { useAppStore } from '../../../src/lib/store'
 
 const EDITOR = 'https://editor.test'
-const m = vi.hoisted(() => ({ stories: false, embed: [], stt: false }))
+const m = vi.hoisted(() => ({ stories: false, embed: [], stt: false, premium: { premium: false } }))
 vi.mock('sonner', async () => (await import('./_render.jsx')).sonnerModule())
 vi.mock('../../../src/hive-api/aioha', async () => (await import('./_render.jsx')).aiohaModule())
 vi.mock('../../../src/utils/config', async (importOriginal) => ({
@@ -21,7 +22,7 @@ vi.mock('../../../src/utils/config', async (importOriginal) => ({
   sttEnabledFor: () => m.stt,
 }))
 vi.mock('../../../src/utils/videoThumbnails', () => ({ generateVideoThumbnailsAt: async () => [] }))
-vi.mock('../../../src/hooks/usePremiumStatus', () => ({ usePremiumStatus: () => ({ premium: false }) }))
+vi.mock('../../../src/hooks/usePremiumStatus', () => ({ usePremiumStatus: () => m.premium }))
 vi.mock('../../../src/context/EmbedUploadContext', () => {
   const noop = () => {}
   return {
@@ -43,6 +44,7 @@ beforeEach(() => {
   m.stories = false
   m.embed = []
   m.stt = false
+  m.premium = { premium: false }
   stubMatchMedia(true)
   window.addEventListener('audio-editor-result', listen)
   window.addEventListener('open-audio-upload', listen)
@@ -486,10 +488,14 @@ describe('EditorModal: the shape the editor reports decides Short or normal vide
       get() { return this.getAttribute('src') || '' },
       set(v) { this.setAttribute('src', v); queueMicrotask(() => this.onloadedmetadata?.()) },
     })
+    // 🔒 The landscape editor is Pro only (see the Pro gate below)
+    m.premium = { premium: true }
+    useAppStore.setState({ user: 'badadib' })
   })
   afterEach(() => {
     const proto = HTMLMediaElement.prototype
     if (savedSrc) Object.defineProperty(proto, 'src', savedSrc); else delete proto.src
+    useAppStore.setState({ user: null })
   })
 
   it('opens a landscape project with ?aspect=, and nothing for a Short or a made-up shape', async () => {
@@ -537,5 +543,61 @@ describe('EditorModal: the shape the editor reports decides Short or normal vide
     expect(events).toHaveLength(0) // not handed to the audio upload
     expect(calls('setTitle')).toEqual([['Episode 12']])
     expect(calls('setChapters')[0][0].map(({ start, title }) => ({ start, title }))).toEqual([{ start: 0, title: 'Intro' }, { start: 600, title: 'The talk' }])
+  })
+})
+
+describe('EditorModal: the landscape video editor is Pro only', () => {
+  let upsells
+  const onUpsell = (e) => upsells.push(e.detail)
+  beforeEach(() => {
+    upsells = []
+    window.addEventListener('open-pro-upsell', onUpsell)
+    useAppStore.setState({ user: 'badadib' })
+  })
+  afterEach(() => {
+    window.removeEventListener('open-pro-upsell', onUpsell)
+    useAppStore.setState({ user: null, incubationHandle: null })
+  })
+
+  it('a free account never gets the landscape editor: closed out to the Pro upsell', async () => {
+    const onClose = vi.fn()
+    renderWithProviders(<EditorModal isOpen onClose={onClose} aspect="16:9" />)
+    await waitFor(() => expect(onClose).toHaveBeenCalled())
+    expect(upsells).toEqual([{ feature: 'landscape-editor' }])
+    expect(document.querySelector('iframe.editor-iframe')).toBeNull()
+  })
+
+  it('a warm-up account (no Hive account) is not Pro either', async () => {
+    useAppStore.setState({ user: null, incubationHandle: 'newbie' })
+    const onClose = vi.fn()
+    renderWithProviders(<EditorModal isOpen onClose={onClose} aspect="4:3" />)
+    await waitFor(() => expect(onClose).toHaveBeenCalled())
+    expect(upsells).toHaveLength(1)
+  })
+
+  it('while the Pro status loads, neither the editor nor the upsell shows', async () => {
+    m.premium = null
+    const onClose = vi.fn()
+    renderWithProviders(<EditorModal isOpen onClose={onClose} aspect="16:9" />)
+    await act(async () => { await new Promise((r) => setTimeout(r, 20)) })
+    expect(document.querySelector('iframe.editor-iframe')).toBeNull()
+    expect(onClose).not.toHaveBeenCalled()
+    expect(upsells).toEqual([])
+  })
+
+  it('Pro opens it', async () => {
+    m.premium = { premium: true }
+    const { iframe } = await open({ aspect: '1:1' })
+    expect(iframe.getAttribute('src')).toContain('aspect=1%3A1')
+    expect(upsells).toEqual([])
+  })
+
+  it('the Shorts editor and the audio editor stay free', async () => {
+    const shorts = await open({})
+    expect(shorts.iframe.getAttribute('src')).toBe(`${EDITOR}?compact=true&lang=en`)
+    shorts.unmount()
+    const audio = await open({ mode: 'audio', aspect: '16:9' })
+    expect(audio.iframe.getAttribute('src')).toContain('mode=audio')
+    expect(upsells).toEqual([])
   })
 })
