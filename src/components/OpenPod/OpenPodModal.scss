@@ -17,6 +17,8 @@
   animation: v2-fade var(--t-base) var(--ease);
 
   @include v2.mobile { padding: 0; }
+  // A sideways phone (wider than v2.mobile): the studio is full screen too.
+  @media (orientation: landscape) and (max-height: 500px) and (pointer: coarse) { padding: 0; }
 }
 
 .openpod-modal {
@@ -62,6 +64,10 @@
     border: 0;
     border-radius: 0;
     animation: v2-up var(--t-slow) var(--ease);
+  }
+  @media (orientation: landscape) and (max-height: 500px) and (pointer: coarse) {
+    border: 0;
+    border-radius: 0;
   }
 }
 
@@ -140,17 +146,52 @@
   .hh-studio__rail--left { left: 0.6rem; }
   .hh-studio__rail--right { right: 0.6rem; }
 
-  // A phone turned sideways (the studio's Rotate button), for a landscape
-  // stream: the picture keeps the middle and the left. The session controls
-  // stand in one column on the right edge (Start/End in the bottom corner),
-  // the camera controls in a row along the top next to it, as 40px icon tiles
+  // Phone studio, upright or sideways: the picture fills the screen and the
+  // header floats over it (the SDK's rules), restated where the studio skin
+  // above would win: no padding row, no rounded frame, the preview tag at the
+  // bottom (the header has the top corner) and a top goal under the header.
+  .hh-studio__header--mobile {
+    padding: 6px max(0.5rem, env(safe-area-inset-right, 0px)) 6px max(0.5rem, env(safe-area-inset-left, 0px));
+    gap: 6px;
+    background: transparent;
+  }
+  // The warning, written out between the state and ✕: compact, on a scrim
+  // (it sits over the picture), the skin's tone bar kept.
+  .hh-studio__header--mobile .hh-studio__warn {
+    padding: 4px 8px 4px 14px;
+    border-radius: var(--r-sm);
+    background: var(--media-scrim);
+    color: var(--on-media);
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1.3;
+    &::before { left: 5px; top: 5px; bottom: 5px; width: 3px; }
+  }
+  .hh-studio__body--mobile .hh-studio__frame { border-radius: 0; }
+  .hh-studio__body--mobile .hh-studio__preview-tag {
+    inset: auto auto max(3.75rem, calc(0.75rem + env(safe-area-inset-bottom, 0px))) 50%;
+    transform: translateX(-50%);
+  }
+  .hh-studio__body--mobile .hh-studio__boost-goal.hh-boost-goal--pos-top,
+  .hh-studio__body--mobile .hh-studio__boost-goal.hh-boost-goal--pos-top-right {
+    top: calc(var(--hh-phone-head, 3.25rem) + 8px);
+  }
+
+  // A phone turned sideways (the studio's View popup), for a landscape stream:
+  // the picture fills the screen and the header floats over it. The camera
+  // controls stand in a column on the left edge, the session controls in one
+  // on the right edge (Start/End in the bottom corner), as 40px icon tiles
   // (the label stays as the tooltip); their panels open as popups beside the
-  // column (the SDK's .hh-sheet rule). Restated here because the shorts rail
-  // above would otherwise win over the SDK's own landscape rules.
+  // right column (the SDK's .hh-sheet rule). Restated here because the shorts
+  // rail and the studio skin would otherwise win over the SDK's own landscape
+  // rules.
   @media (orientation: landscape) and (max-height: 500px) {
+    .hh-studio__body--mobile .hh-studio__preview-tag {
+      bottom: max(0.5rem, env(safe-area-inset-bottom, 0px));
+    }
     .hh-studio__body--mobile .hh-studio__rail { gap: 0.25rem; }
     .hh-studio__body--mobile .hh-studio__rail--right {
-      top: 0.5rem;
+      top: var(--hh-phone-head, 3.25rem);
       bottom: max(0.5rem, env(safe-area-inset-bottom, 0px));
       right: max(0.5rem, env(safe-area-inset-right, 0px));
       justify-content: flex-end;
@@ -158,11 +199,12 @@
       align-content: flex-start;
     }
     .hh-studio__body--mobile .hh-studio__rail--left {
-      top: 0.5rem;
-      bottom: auto;
-      left: auto;
-      right: calc(max(0.5rem, env(safe-area-inset-right, 0px)) + 3rem);
-      flex-direction: row;
+      top: var(--hh-phone-head, 3.25rem);
+      bottom: max(0.5rem, env(safe-area-inset-bottom, 0px));
+      left: max(0.5rem, env(safe-area-inset-left, 0px));
+      justify-content: flex-end;
+      flex-wrap: wrap; // more tiles than fit: a second column grows inward
+      align-content: flex-start;
     }
     .hh-studio__body--mobile .hh-studio__rbtn {
       width: 40px;

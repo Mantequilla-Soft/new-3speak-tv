@@ -18,6 +18,24 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.147',
+    category: 'live',
+    date: '2026-11-20',
+    summary: 'Streaming from a phone, the new Camera button lists your lenses (wide, main, zoom) and zoom out goes below 1× where your phone allows.',
+  },
+  {
+    version: '2.0.146',
+    category: 'live',
+    date: '2026-11-20',
+    summary: 'The phone stream studio is tidier: overlays sit with polls, Mirror and Rotate share one button, and the connection button opens quality.',
+  },
+  {
+    version: '2.0.145',
+    category: 'live',
+    date: '2026-11-20',
+    summary: 'On a phone, the stream studio picture now fills the whole screen, upright or sideways, with the controls floating over it.',
+  },
+  {
     version: '2.0.144',
     category: 'general',
     date: '2026-11-20',
