@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.148',
+    category: 'live',
+    date: '2026-11-20',
+    summary: 'In the phone studio, star your favourite cameras and name them yourself. Your phone also remembers whether you stream upright or sideways.',
+  },
+  {
     version: '2.0.147',
     category: 'live',
     date: '2026-11-20',

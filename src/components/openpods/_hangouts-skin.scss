@@ -814,6 +814,10 @@
     &:hover:not(:disabled) { background: color-mix(in srgb, var(--text) 6%, var(--bg)); }
   }
   .hh-optsheet__opt--on { border-color: var(--accent); background: var(--accent-tint-strong); }
+  // Camera popup: the star and rename buttons and the name field, like the options.
+  .hh-lens-row__btn,
+  .hh-lens-row__input { border: 2px solid transparent; border-radius: var(--r-lg); background: var(--bg); color: var(--text); }
+  .hh-lens-row__input:focus { border-color: var(--accent); outline: none; }
   .hh-optsheet__opt-label { font-size: 14px; font-weight: 700; color: var(--text); }
   .hh-optsheet__opt-desc { font-size: 12px; color: var(--muted); }
 
