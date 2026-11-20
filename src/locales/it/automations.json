@@ -143,6 +143,10 @@
     "someone_posted": {
       "label": "Pubblica qualcuno che scelgo",
       "desc": "Un post di un account che indichi qui sotto: un video, Short, audio, podcast, snap, diretta o post di testo."
+    },
+    "text_post_published": {
+      "label": "Pubblico un post scritto",
+      "desc": "I tuoi post solo testo: senza video, audio o diretta di 3Speak."
     }
   },
   "tasks": {
@@ -223,6 +227,17 @@
       "hints": {
         "webhook": "In Discord: impostazioni del canale, Integrazioni, Webhook, Copia URL del webhook."
       }
+    },
+    "narrate_post": {
+      "label": "Leggi il post ad alta voce",
+      "desc": "Una voce sintetica legge il nuovo post (senza immagini, link o emoji) e circa 10 minuti dopo esce come post audio con un link all'originale.",
+      "props": {
+        "voice": "Voce",
+        "music": "Musica di sottofondo",
+        "title": "Titolo",
+        "audioType": "Tipo di audio",
+        "tags": "Tag"
+      }
     }
   },
   "if": {
@@ -302,7 +317,11 @@
     "post": "Un post",
     "stream": "Una diretta",
     "audio": "Audio",
-    "snap": "Snap"
+    "snap": "Snap",
+    "off": "Nessuna musica",
+    "rain": "Pioggia",
+    "piano": "Piano notturno",
+    "fireplace": "Caminetto"
   },
   "placeholders": {
     "title": "il titolo del post",
@@ -454,6 +473,10 @@
       "blank": {
         "title": "Inizia da zero",
         "sub": "Scegli l'evento e crea tu i passaggi."
+      },
+      "narrate_posts": {
+        "title": "Versione audio di ogni post scritto",
+        "sub": "Quando pubblichi un post scritto, una voce sintetica lo legge come post audio."
       }
     },
     "texts": {
@@ -480,5 +503,9 @@
     "polls": "Sondaggi",
     "others": "Altri account",
     "more": "Altro"
+  },
+  "voiceGender": {
+    "female": "femminile",
+    "male": "maschile"
   }
 }

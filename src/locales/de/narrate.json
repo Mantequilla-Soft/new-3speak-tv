@@ -1,0 +1,102 @@
+{
+  "menuEntry": "Beitrag vorlesen lassen",
+  "eyebrow": "Vom Blog zum Podcast",
+  "title": "Beitrag vorlesen lassen",
+  "subtitle": "Eine synthetische Stimme liest deinen Textbeitrag vor, und du veröffentlichst ihn als Audio-Beitrag mit Link zum Original.",
+  "allowance": "Heute noch {{left}} von {{limit}} Vorlesezeit übrig",
+  "proHint": "Mehr Stimmen, Musik und Zeit mit Pro",
+  "optional": "optional",
+  "entry": {
+    "dock": "Vorlesen",
+    "title": "Diesen Beitrag als Audio-Beitrag vorlesen lassen"
+  },
+  "gate": {
+    "signIn": "Melde dich an, um deine Beiträge vorlesen zu lassen.",
+    "notOpen": "Das Vorlesen ist für dein Konto noch nicht freigeschaltet."
+  },
+  "pick": {
+    "title": "Wähle deinen Text",
+    "mine": "Meine Beiträge",
+    "write": "Neuen Beitrag schreiben",
+    "empty": "Du hast noch keine Beiträge. Schreib hier einen.",
+    "more": "Ältere Beiträge zeigen",
+    "narrated": "Vorgelesen",
+    "words_one": "{{count}} Wort",
+    "words_other": "{{count}} Wörter",
+    "kind": {
+      "video": "Video-Beitrag",
+      "audio": "Audio-Beitrag"
+    }
+  },
+  "write": {
+    "titleLabel": "Titel",
+    "placeholder": "Schreib deinen Beitrag. Der Fokusmodus ist in den Werkzeugen unten.",
+    "tags": "Tags",
+    "hint": "Der Beitrag wird zuerst auf Hive veröffentlicht, danach kannst du ihn vorlesen lassen.",
+    "publish": "Beitrag veröffentlichen",
+    "published": "Dein Beitrag ist online. Jetzt die Vorlesung erstellen.",
+    "missing": "Gib zuerst einen Titel und etwas Text ein."
+  },
+  "script": {
+    "title": "Das Skript",
+    "hint": "Das liest die Stimme vor: Bilder, Links und Emojis sind schon entfernt. Bearbeite es nach Belieben. Eine Leerzeile beginnt einen neuen Absatz, eine Zeile mit # am Anfang wird als Überschrift gelesen.",
+    "length_one": "{{count}} Wort, etwa {{time}}",
+    "length_other": "{{count}} Wörter, etwa {{time}}",
+    "tooLong": "länger als die {{left}}, die du heute noch hast",
+    "nothing": "In diesem Beitrag gibt es nichts vorzulesen. Versuch einen anderen oder schreib das Skript selbst."
+  },
+  "voice": {
+    "title": "Stimme",
+    "gender": {
+      "female": "Weiblich",
+      "male": "Männlich"
+    },
+    "accent": {
+      "British": "Britisch",
+      "Scottish": "Schottisch",
+      "American": "Amerikanisch"
+    }
+  },
+  "music": {
+    "title": "Hintergrundmusik",
+    "off": "Keine Musik",
+    "library": "Musikbibliothek",
+    "own": "Eigene Musik",
+    "proNote": "Die Musikbibliothek und eigene Musik gibt es mit 3Speak Pro.",
+    "listen": "Anhören",
+    "search": "Bibliothek durchsuchen",
+    "credit": "Der Song wird in deinem Beitrag genannt, wie es seine Lizenz verlangt.",
+    "choose": "Musikdatei wählen",
+    "replace": "Andere Datei wählen",
+    "uploading": "Wird hochgeladen…",
+    "ready": "Deine Musik ist bereit",
+    "ownHint": "Musik, an der du die Rechte hast, höchstens 15 Minuten. Sie läuft in Schleife unter der Stimme, deutlich leiser."
+  },
+  "make": {
+    "title": "Aufnahme erstellen",
+    "intro": "Gesprochenes Intro",
+    "introHint": "Die Stimme beginnt mit dem Titel, deinem Namen und dem Hinweis, dass eine synthetische Stimme vorliest.",
+    "preview": "Vorschau anhören",
+    "record": "Aufnahme erstellen",
+    "queued_one": "Wartet, {{count}} Aufnahme davor",
+    "queued_other": "Wartet, {{count}} Aufnahmen davor",
+    "rendering": "Wird aufgenommen…",
+    "done": "{{time}}, gelesen von {{name}}"
+  },
+  "publish": {
+    "button": "Als Audio-Beitrag veröffentlichen",
+    "done": "Dein Audio-Beitrag ist online.",
+    "open": "Öffnen",
+    "addLink": "Einen Anhören-Link zu deinem Textbeitrag hinzufügen",
+    "linked": "Dein Textbeitrag verlinkt jetzt auf das Audio.",
+    "listenLabel": "Diesen Beitrag anhören",
+    "writtenPost": "Der Textbeitrag:",
+    "readBy": "Gelesen von einer synthetischen Stimme ({{name}})."
+  },
+  "errors": {
+    "failed": "Die Aufnahme ist fehlgeschlagen, versuch es noch einmal.",
+    "dailyLimit": "Das ist länger als deine heute noch übrige Vorlesezeit ({{left}}). Kürze das Skript oder komm morgen wieder.",
+    "notFound": "Dieser Beitrag wurde nicht gefunden.",
+    "publishFailed": "Das Veröffentlichen hat nicht geklappt, versuch es noch einmal."
+  }
+}

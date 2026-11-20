@@ -139,6 +139,10 @@
     "someone_posted": {
       "label": "Orang yang kupilih memposting",
       "desc": "Postingan dari akun yang kamu daftarkan di bawah: video, Shorts, audio, podcast, snap, siaran, atau postingan teks."
+    },
+    "text_post_published": {
+      "label": "Saya menerbitkan postingan tulisan",
+      "desc": "Postinganmu yang hanya berisi teks: tanpa video, audio, atau siaran 3Speak."
     }
   },
   "tasks": {
@@ -219,6 +223,17 @@
       "hints": {
         "webhook": "Di Discord: pengaturan kanal, Integrasi, Webhook, Salin URL Webhook."
       }
+    },
+    "narrate_post": {
+      "label": "Bacakan postingan",
+      "desc": "Suara sintetis membacakan postingan baru (tanpa gambar, tautan, atau emoji) dan sekitar 10 menit kemudian terbit sebagai postingan audio yang menautkan ke aslinya.",
+      "props": {
+        "voice": "Suara",
+        "music": "Musik latar",
+        "title": "Judul",
+        "audioType": "Jenis audio",
+        "tags": "Tag"
+      }
     }
   },
   "if": {
@@ -298,7 +313,11 @@
     "post": "Postingan",
     "stream": "Siaran",
     "audio": "Audio",
-    "snap": "Snap"
+    "snap": "Snap",
+    "off": "Tanpa musik",
+    "rain": "Hujan",
+    "piano": "Piano malam",
+    "fireplace": "Perapian"
   },
   "placeholders": {
     "title": "judul postingan",
@@ -450,6 +469,10 @@
       "blank": {
         "title": "Mulai dari kosong",
         "sub": "Pilih peristiwanya dan susun langkahnya sendiri."
+      },
+      "narrate_posts": {
+        "title": "Versi audio setiap postingan tulisan",
+        "sub": "Saat kamu menerbitkan postingan tulisan, suara sintetis membacakannya sebagai postingan audio."
       }
     },
     "texts": {
@@ -476,5 +499,9 @@
     "polls": "Polling",
     "others": "Akun lain",
     "more": "Lainnya"
+  },
+  "voiceGender": {
+    "female": "perempuan",
+    "male": "laki-laki"
   }
 }

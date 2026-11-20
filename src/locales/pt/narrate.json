@@ -1,0 +1,105 @@
+{
+  "menuEntry": "Narrar um post",
+  "eyebrow": "Do blog ao podcast",
+  "title": "Narrar um post",
+  "subtitle": "Uma voz sintética lê o teu post escrito e publicas como post de áudio com link para o original.",
+  "allowance": "Restam {{left}} de {{limit}} de narração hoje",
+  "proHint": "Mais vozes, música e tempo com Pro",
+  "optional": "opcional",
+  "entry": {
+    "dock": "Narrar",
+    "title": "Ler este post como post de áudio"
+  },
+  "gate": {
+    "signIn": "Inicia sessão para narrar os teus posts.",
+    "notOpen": "A narração ainda não está aberta para a tua conta."
+  },
+  "pick": {
+    "title": "Escolhe o teu texto",
+    "mine": "Os meus posts",
+    "write": "Escrever um post novo",
+    "empty": "Ainda não tens posts. Escreve um aqui.",
+    "more": "Ver posts mais antigos",
+    "narrated": "Narrado",
+    "words_one": "{{count}} palavra",
+    "words_many": "{{count}} palavras",
+    "words_other": "{{count}} palavras",
+    "kind": {
+      "video": "post de vídeo",
+      "audio": "post de áudio"
+    }
+  },
+  "write": {
+    "titleLabel": "Título",
+    "placeholder": "Escreve o teu post. O modo foco está nas ferramentas abaixo.",
+    "tags": "Tags",
+    "hint": "O post é publicado primeiro no Hive, depois podes narrá-lo.",
+    "publish": "Publicar o post",
+    "published": "O teu post está publicado. Agora cria a narração.",
+    "missing": "Adiciona primeiro um título e algum texto."
+  },
+  "script": {
+    "title": "O guião",
+    "hint": "É isto que a voz lê: imagens, links e emojis já foram retirados. Edita como quiseres. Uma linha vazia começa um novo parágrafo, uma linha que começa com # é lida como título.",
+    "length_one": "{{count}} palavra, cerca de {{time}}",
+    "length_many": "{{count}} palavras, cerca de {{time}}",
+    "length_other": "{{count}} palavras, cerca de {{time}}",
+    "tooLong": "mais longo do que os {{left}} que te restam hoje",
+    "nothing": "Não há nada para ler neste post. Experimenta outro ou escreve tu o guião."
+  },
+  "voice": {
+    "title": "Voz",
+    "gender": {
+      "female": "Feminina",
+      "male": "Masculina"
+    },
+    "accent": {
+      "British": "Britânica",
+      "Scottish": "Escocesa",
+      "American": "Americana"
+    }
+  },
+  "music": {
+    "title": "Música de fundo",
+    "off": "Sem música",
+    "library": "Biblioteca de música",
+    "own": "A tua música",
+    "proNote": "A biblioteca de música e a tua própria música vêm com o 3Speak Pro.",
+    "listen": "Ouvir",
+    "search": "Pesquisar na biblioteca",
+    "credit": "A música é creditada no teu post, como a licença pede.",
+    "choose": "Escolher um ficheiro de música",
+    "replace": "Escolher outro ficheiro",
+    "uploading": "A enviar…",
+    "ready": "A tua música está pronta",
+    "ownHint": "Música de que tenhas os direitos, no máximo 15 minutos. Toca em ciclo por baixo da voz, bem mais baixa."
+  },
+  "make": {
+    "title": "Criar a gravação",
+    "intro": "Introdução falada",
+    "introHint": "A voz começa com o título, o teu nome e que é uma voz sintética a ler.",
+    "preview": "Ouvir uma amostra",
+    "record": "Criar a gravação",
+    "queued_one": "À espera, {{count}} gravação à frente",
+    "queued_many": "À espera, {{count}} gravações à frente",
+    "queued_other": "À espera, {{count}} gravações à frente",
+    "rendering": "A gravar…",
+    "done": "{{time}}, lido por {{name}}"
+  },
+  "publish": {
+    "button": "Publicar como post de áudio",
+    "done": "O teu post de áudio está publicado.",
+    "open": "Abrir",
+    "addLink": "Adicionar um link para ouvir ao teu post escrito",
+    "linked": "O teu post escrito já tem link para o áudio.",
+    "listenLabel": "Ouve este post",
+    "writtenPost": "O post escrito:",
+    "readBy": "Lido por uma voz sintética ({{name}})."
+  },
+  "errors": {
+    "failed": "A gravação falhou, tenta de novo.",
+    "dailyLimit": "É mais longo do que o tempo de narração que te resta hoje ({{left}}). Encurta o guião ou volta amanhã.",
+    "notFound": "Esse post não foi encontrado.",
+    "publishFailed": "A publicação não funcionou, tenta de novo."
+  }
+}

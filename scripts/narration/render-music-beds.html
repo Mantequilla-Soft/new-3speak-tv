@@ -1,0 +1,45 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Narration music beds</title>
+<script type="module">
+// Renders one focus-mode mood offline (src/components/common/FocusWriter/focusMusic.js)
+// for render-music-beds.mjs: `warmup` seconds thrown away (the room and the
+// drones settle), then `seconds` kept, whose first `crossfade` seconds are
+// blended with the `crossfade` seconds after the end, so the file loops
+// without a seam. Hands back 16-bit interleaved stereo in base64 chunks.
+import { renderFocusMusic } from '/focusMusic.js';
+
+let pcm = null;
+
+window.renderBed = async ({ mood, seconds, warmup, crossfade, sampleRate }) => {
+  const buf = await renderFocusMusic(mood, warmup + seconds + crossfade, { sampleRate });
+  const n = Math.round(seconds * sampleRate);
+  const w = Math.round(warmup * sampleRate);
+  const x = Math.round(crossfade * sampleRate);
+  pcm = new Int16Array(n * 2);
+  let peak = 0;
+  for (let ch = 0; ch < 2; ch += 1) {
+    const d = buf.getChannelData(ch);
+    for (let i = 0; i < n; i += 1) {
+      let v = d[w + i];
+      if (i < x) {
+        // Equal power: the two ends are unrelated sound, so their powers add.
+        const t = (i + 0.5) / x;
+        v = v * Math.sin(t * Math.PI / 2) + d[w + n + i] * Math.cos(t * Math.PI / 2);
+      }
+      peak = Math.max(peak, Math.abs(v));
+      pcm[i * 2 + ch] = Math.max(-32768, Math.min(32767, Math.round(v * 32767)));
+    }
+  }
+  return { frames: n, bytes: pcm.byteLength, peak };
+};
+
+window.chunk = (offset, length) => {
+  const bytes = new Uint8Array(pcm.buffer, offset, Math.min(length, pcm.byteLength - offset));
+  let s = '';
+  for (let i = 0; i < bytes.length; i += 0x8000) s += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+  return btoa(s);
+};
+
+window.ready = true;
+</script>

@@ -489,6 +489,33 @@ describe('AudioUploadModal: chapters from the editor', () => {
   })
 })
 
+describe('AudioUploadModal: a narrated written post (page/Narrate.jsx)', () => {
+  it('marks the post as read by a synthetic voice and reports it back to the narration page', async () => {
+    const seen = []
+    const onPublished = (e) => seen.push(e.detail)
+    window.addEventListener('narration-published', onPublished)
+    try {
+      const { user } = openModal({
+        initialTrack: {
+          blob: new File(['ID3'], 'holidays.mp3', { type: 'audio/mpeg' }), filename: 'holidays.mp3', type: 'podcast', source: 'editor',
+          prefill: { title: 'My holidays', description: 'We went to Dresden.\n\nRead by a synthetic voice (Alan).', tags: ['travel', 'narrated'], narration: { voice: 'en_GB-alan-medium', source: 'badadib/holidays' } },
+        },
+      })
+      await waitFor(() => row('holidays.mp3'))
+      await toPostStep(user, null)
+      await next(user)
+      await user.click(screen.getByRole('button', { name: 'Publish' }))
+      await waitFor(() => expect(seen).toHaveLength(1))
+      const post = aioha.broadcastWithAioha.mock.calls.map(([o]) => o).find((o) => o[0][0] === 'comment')[0][1]
+      expect(JSON.parse(post.json_metadata)['3speak'].tts).toEqual({ engine: 'piper', voice: 'en_GB-alan-medium', source: 'badadib/holidays' })
+      expect(post.body).toContain('Read by a synthetic voice (Alan).')
+      expect(seen[0]).toEqual({ source: 'badadib/holidays', author: expect.any(String), permlink: post.permlink })
+    } finally {
+      window.removeEventListener('narration-published', onPublished)
+    }
+  })
+})
+
 describe('AudioUploadModal: a podcast episode from the import page', () => {
   const prefill = {
     title: 'Episode 7: Hello', description: 'Full show notes [https://example.com/x]', tags: ['podcasting', 'hive'],

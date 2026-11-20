@@ -1,0 +1,102 @@
+{
+  "menuEntry": "Gönderiyi seslendir",
+  "eyebrow": "Blogdan podcaste",
+  "title": "Gönderiyi seslendir",
+  "subtitle": "Sentetik bir ses yazılı gönderini okur, sen de onu asıl gönderiye bağlantı veren bir ses gönderisi olarak yayınlarsın.",
+  "allowance": "Bugün {{limit}} seslendirme süresinden {{left}} kaldı",
+  "proHint": "Pro ile daha fazla ses, müzik ve süre",
+  "optional": "isteğe bağlı",
+  "entry": {
+    "dock": "Seslendir",
+    "title": "Bu gönderiyi ses gönderisi olarak seslendir"
+  },
+  "gate": {
+    "signIn": "Gönderilerini seslendirmek için giriş yap.",
+    "notOpen": "Seslendirme hesabın için henüz açık değil."
+  },
+  "pick": {
+    "title": "Metnini seç",
+    "mine": "Gönderilerim",
+    "write": "Yeni bir gönderi yaz",
+    "empty": "Henüz gönderin yok. Burada bir tane yaz.",
+    "more": "Daha eski gönderileri göster",
+    "narrated": "Seslendirildi",
+    "words_one": "{{count}} kelime",
+    "words_other": "{{count}} kelime",
+    "kind": {
+      "video": "video gönderisi",
+      "audio": "ses gönderisi"
+    }
+  },
+  "write": {
+    "titleLabel": "Başlık",
+    "placeholder": "Gönderini yaz. Odak modu aşağıdaki araçlarda.",
+    "tags": "Etiketler",
+    "hint": "Gönderi önce Hive’da yayınlanır, sonra onu seslendirebilirsin.",
+    "publish": "Gönderiyi yayınla",
+    "published": "Gönderin yayında. Şimdi seslendirmeyi oluştur.",
+    "missing": "Önce bir başlık ve biraz metin ekle."
+  },
+  "script": {
+    "title": "Metin",
+    "hint": "Sesin okuyacağı metin bu: resimler, bağlantılar ve emojiler zaten çıkarıldı. İstediğin gibi düzenle. Boş bir satır yeni bir paragraf başlatır, # ile başlayan bir satır başlık olarak okunur.",
+    "length_one": "{{count}} kelime, yaklaşık {{time}}",
+    "length_other": "{{count}} kelime, yaklaşık {{time}}",
+    "tooLong": "bugün kalan {{left}} süreden uzun",
+    "nothing": "Bu gönderide okunacak bir şey yok. Başka birini dene ya da metni kendin yaz."
+  },
+  "voice": {
+    "title": "Ses",
+    "gender": {
+      "female": "Kadın",
+      "male": "Erkek"
+    },
+    "accent": {
+      "British": "İngiliz",
+      "Scottish": "İskoç",
+      "American": "Amerikan"
+    }
+  },
+  "music": {
+    "title": "Arka plan müziği",
+    "off": "Müzik yok",
+    "library": "Müzik kütüphanesi",
+    "own": "Kendi müziğin",
+    "proNote": "Müzik kütüphanesi ve kendi müziğin 3Speak Pro ile gelir.",
+    "listen": "Dinle",
+    "search": "Kütüphanede ara",
+    "credit": "Şarkı, lisansının istediği gibi gönderinde belirtilir.",
+    "choose": "Bir müzik dosyası seç",
+    "replace": "Başka bir dosya seç",
+    "uploading": "Yükleniyor…",
+    "ready": "Müziğin hazır",
+    "ownHint": "Haklarına sahip olduğun müzik, en fazla 15 dakika. Sesin altında, çok daha kısık olarak döngüde çalar."
+  },
+  "make": {
+    "title": "Kaydı oluştur",
+    "intro": "Sesli giriş",
+    "introHint": "Ses başlık, adın ve metni sentetik bir sesin okuduğu bilgisiyle başlar.",
+    "preview": "Önizlemeyi dinle",
+    "record": "Kaydı oluştur",
+    "queued_one": "Bekliyor, önünde {{count}} kayıt var",
+    "queued_other": "Bekliyor, önünde {{count}} kayıt var",
+    "rendering": "Kaydediliyor…",
+    "done": "{{time}}, okuyan: {{name}}"
+  },
+  "publish": {
+    "button": "Ses gönderisi olarak yayınla",
+    "done": "Ses gönderin yayında.",
+    "open": "Aç",
+    "addLink": "Yazılı gönderine bir dinleme bağlantısı ekle",
+    "linked": "Yazılı gönderin artık sese bağlantı veriyor.",
+    "listenLabel": "Bu gönderiyi dinle",
+    "writtenPost": "Yazılı gönderi:",
+    "readBy": "Sentetik bir ses tarafından okundu ({{name}})."
+  },
+  "errors": {
+    "failed": "Kayıt başarısız oldu, tekrar dene.",
+    "dailyLimit": "Bu, bugün kalan seslendirme sürenden ({{left}}) uzun. Metni kısalt ya da yarın tekrar gel.",
+    "notFound": "Bu gönderi bulunamadı.",
+    "publishFailed": "Yayınlama olmadı, tekrar dene."
+  }
+}

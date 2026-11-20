@@ -141,6 +141,10 @@
     "someone_posted": {
       "label": "Someone I pick posts",
       "desc": "A post of an account you list below: a video, Short, audio, podcast, snap, stream or text post."
+    },
+    "text_post_published": {
+      "label": "I publish a written post",
+      "desc": "Posts of yours with text only: no 3Speak video, audio or stream in them."
     }
   },
   "tasks": {
@@ -221,6 +225,17 @@
       "hints": {
         "webhook": "In Discord: channel settings, Integrations, Webhooks, Copy Webhook URL."
       }
+    },
+    "narrate_post": {
+      "label": "Narrate the post",
+      "desc": "A synthetic voice reads the new post out (without pictures, links or emoji) and it goes out as an audio post that links back to it, about 10 minutes later.",
+      "props": {
+        "voice": "Voice",
+        "music": "Background music",
+        "title": "Title",
+        "audioType": "Kind of audio",
+        "tags": "Tags"
+      }
     }
   },
   "if": {
@@ -300,7 +315,11 @@
     "post": "A post",
     "stream": "A stream",
     "audio": "Audio",
-    "snap": "Snap"
+    "snap": "Snap",
+    "off": "No music",
+    "rain": "Rain",
+    "piano": "Night piano",
+    "fireplace": "Fireplace"
   },
   "placeholders": {
     "title": "the post's title",
@@ -452,6 +471,10 @@
       "blank": {
         "title": "Start empty",
         "sub": "Pick the event and build the steps yourself."
+      },
+      "narrate_posts": {
+        "title": "Audio version of every written post",
+        "sub": "When you publish a written post, a synthetic voice reads it out as an audio post."
       }
     },
     "texts": {
@@ -478,5 +501,9 @@
     "polls": "Polls",
     "others": "Other accounts",
     "more": "More"
+  },
+  "voiceGender": {
+    "female": "female",
+    "male": "male"
   }
 }

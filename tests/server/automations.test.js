@@ -87,11 +87,17 @@ describe('catalog: which posts start which events', () => {
     expect(catalog.classifyPost(videoPost('l1', at, { openpodRoom: 'room-1' })).events).toEqual(['stream_started'])
   })
 
-  it('ignores posts an automation made, ordinary replies and text posts', () => {
+  it('ignores posts an automation made and ordinary replies', () => {
     expect(catalog.classifyPost(videoPost('a1', at, { [catalog.MARKER]: { workflow: 'x' } }))).toBeNull()
     expect(catalog.classifyPost({ ...videoPost('r1', at), parent_author: 'bob' })).toBeNull()
-    expect(catalog.classifyPost({ ...videoPost('t1', at), json_metadata: '{"app":"peakd"}' })).toBeNull()
-    expect(catalog.classifyPost({ ...videoPost('t2', at), json_metadata: 'not json' })).toBeNull()
+  })
+
+  it('tells a written post (no 3Speak video, audio or stream) for narrate_post', () => {
+    expect(catalog.classifyPost({ ...videoPost('t1', at), json_metadata: '{"app":"peakd","tags":["travel"]}' })).toMatchObject({
+      events: ['text_post_published'], values: { title: 'Video t1', tags: ['travel'], url: 'https://3speak.tv/@alice/t1' },
+    })
+    expect(catalog.classifyPost({ ...videoPost('t2', at), json_metadata: 'not json' }).events).toEqual(['text_post_published'])
+    expect(catalog.classifyWatched({ ...videoPost('t3', at), json_metadata: '{}' }).values.postKind).toBe('post')
   })
 })
 

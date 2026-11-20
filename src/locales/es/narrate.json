@@ -1,0 +1,105 @@
+{
+  "menuEntry": "Narrar una publicación",
+  "eyebrow": "Del blog al pódcast",
+  "title": "Narrar una publicación",
+  "subtitle": "Una voz sintética lee tu publicación escrita y la publicas como audio con un enlace a ella.",
+  "allowance": "Te quedan {{left}} de {{limit}} de narración hoy",
+  "proHint": "Más voces, música y tiempo con Pro",
+  "optional": "opcional",
+  "entry": {
+    "dock": "Narrar",
+    "title": "Leer esta publicación como audio"
+  },
+  "gate": {
+    "signIn": "Inicia sesión para narrar tus publicaciones.",
+    "notOpen": "La narración aún no está abierta para tu cuenta."
+  },
+  "pick": {
+    "title": "Elige tu texto",
+    "mine": "Mis publicaciones",
+    "write": "Escribir una publicación nueva",
+    "empty": "Aún no tienes publicaciones. Escribe una aquí.",
+    "more": "Ver publicaciones anteriores",
+    "narrated": "Narrada",
+    "words_one": "{{count}} palabra",
+    "words_many": "{{count}} palabras",
+    "words_other": "{{count}} palabras",
+    "kind": {
+      "video": "publicación de vídeo",
+      "audio": "publicación de audio"
+    }
+  },
+  "write": {
+    "titleLabel": "Título",
+    "placeholder": "Escribe tu publicación. El modo concentración está en las herramientas de abajo.",
+    "tags": "Etiquetas",
+    "hint": "La publicación sale primero en Hive y después puedes narrarla.",
+    "publish": "Publicar",
+    "published": "Tu publicación ya está en línea. Ahora crea la narración.",
+    "missing": "Primero añade un título y algo de texto."
+  },
+  "script": {
+    "title": "El guion",
+    "hint": "Esto es lo que lee la voz: las imágenes, los enlaces y los emojis ya no están. Edítalo como quieras. Una línea vacía empieza un párrafo nuevo y una línea que empieza con # se lee como título.",
+    "length_one": "{{count}} palabra, unos {{time}}",
+    "length_many": "{{count}} palabras, unos {{time}}",
+    "length_other": "{{count}} palabras, unos {{time}}",
+    "tooLong": "más que los {{left}} que te quedan hoy",
+    "nothing": "No hay nada que leer en esta publicación. Prueba con otra o escribe tú el guion."
+  },
+  "voice": {
+    "title": "Voz",
+    "gender": {
+      "female": "Femenina",
+      "male": "Masculina"
+    },
+    "accent": {
+      "British": "Británica",
+      "Scottish": "Escocesa",
+      "American": "Estadounidense"
+    }
+  },
+  "music": {
+    "title": "Música de fondo",
+    "off": "Sin música",
+    "library": "Biblioteca de música",
+    "own": "Tu propia música",
+    "proNote": "La biblioteca de música y tu propia música vienen con 3Speak Pro.",
+    "listen": "Escuchar",
+    "search": "Buscar en la biblioteca",
+    "credit": "La canción se acredita en tu publicación, como pide su licencia.",
+    "choose": "Elegir un archivo de música",
+    "replace": "Elegir otro archivo",
+    "uploading": "Subiendo…",
+    "ready": "Tu música está lista",
+    "ownHint": "Música de la que tengas los derechos, de 15 minutos como máximo. Suena en bucle bajo la voz, mucho más baja."
+  },
+  "make": {
+    "title": "Crear la grabación",
+    "intro": "Introducción hablada",
+    "introHint": "La voz empieza con el título, tu nombre y que la lee una voz sintética.",
+    "preview": "Escuchar una muestra",
+    "record": "Crear la grabación",
+    "queued_one": "En espera, {{count}} grabación delante",
+    "queued_many": "En espera, {{count}} grabaciones delante",
+    "queued_other": "En espera, {{count}} grabaciones delante",
+    "rendering": "Grabando…",
+    "done": "{{time}}, leída por {{name}}"
+  },
+  "publish": {
+    "button": "Publicar como audio",
+    "done": "Tu publicación de audio ya está en línea.",
+    "open": "Abrir",
+    "addLink": "Añadir un enlace para escuchar a tu publicación escrita",
+    "linked": "Tu publicación escrita ya enlaza al audio.",
+    "listenLabel": "Escucha esta publicación",
+    "writtenPost": "La publicación escrita:",
+    "readBy": "Leída por una voz sintética ({{name}})."
+  },
+  "errors": {
+    "failed": "La grabación falló, inténtalo de nuevo.",
+    "dailyLimit": "Es más largo que el tiempo de narración que te queda hoy ({{left}}). Acorta el guion o vuelve mañana.",
+    "notFound": "No se encontró esa publicación.",
+    "publishFailed": "No se pudo publicar, inténtalo de nuevo."
+  }
+}

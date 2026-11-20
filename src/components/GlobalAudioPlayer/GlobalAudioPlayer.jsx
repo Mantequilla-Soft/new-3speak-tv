@@ -68,6 +68,7 @@ import { watchPath } from '../../utils/urls';
 import mantequillaLogo from '../../assets/mantequilla-logo.png';
 import { seekKeyTarget, timelineSliderProps } from '../../lib/sliderKeys';
 import useTimelineScrub from '../../hooks/useTimelineScrub';
+import useKeyboardInset from '../../hooks/useKeyboardInset';
 import ScrubOverlay from './ScrubOverlay';
 import '../../page/Audio.scss';
 import './GlobalAudioPlayer.scss';
@@ -1422,6 +1423,9 @@ function GlobalAudioPlayer() {
   // tab (docked) or the pop-out window. Otherwise the bar.
   const showExpanded = audioExpanded || docked;
   const overlay = showExpanded && !docked;
+  // Phones: the full player ends above the on-screen keyboard, so the comment
+  // box at its foot is never typed under the keys.
+  const keyboardGap = useKeyboardInset(overlay);
 
   // The full player's side panel: Queue, Comments, Chapters, Transcript or
   // Description (design 27a). `null` picks one from what the track has.
@@ -2109,6 +2113,7 @@ function GlobalAudioPlayer() {
       className={cx('audio-now-playing gap-full audio-np-expanded', docked && 'audio-np-docked is-docked', inPip && 'audio-np-in-pip', overlay && 'is-overlay', isLive && 'is-live')}
       onMouseDown={overlay ? (e) => { if (e.target === e.currentTarget) audioSetExpanded(false); } : undefined}
       onKeyDown={overlay ? (e) => { if (e.key === 'Escape' && !e.defaultPrevented) { e.stopPropagation(); audioSetExpanded(false); } } : undefined}
+      style={overlay && keyboardGap ? { bottom: keyboardGap } : undefined}
     >
       <div
         ref={fullRef}

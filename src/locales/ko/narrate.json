@@ -1,0 +1,99 @@
+{
+  "menuEntry": "게시물 읽어 주기",
+  "eyebrow": "블로그에서 팟캐스트로",
+  "title": "게시물 읽어 주기",
+  "subtitle": "합성 음성이 글 게시물을 읽어 주고, 원문으로 연결되는 오디오 게시물로 올릴 수 있어요.",
+  "allowance": "오늘 읽기 시간 {{limit}} 중 {{left}} 남음",
+  "proHint": "Pro로 더 많은 목소리, 음악, 시간",
+  "optional": "선택",
+  "entry": {
+    "dock": "읽어 주기",
+    "title": "이 게시물을 오디오 게시물로 읽어 주기"
+  },
+  "gate": {
+    "signIn": "게시물을 읽어 주려면 로그인하세요.",
+    "notOpen": "아직 내 계정에서는 읽어 주기를 쓸 수 없어요."
+  },
+  "pick": {
+    "title": "글 고르기",
+    "mine": "내 게시물",
+    "write": "새 게시물 쓰기",
+    "empty": "아직 게시물이 없어요. 여기서 써 보세요.",
+    "more": "이전 게시물 보기",
+    "narrated": "읽음",
+    "words_other": "{{count}}단어",
+    "kind": {
+      "video": "동영상 게시물",
+      "audio": "오디오 게시물"
+    }
+  },
+  "write": {
+    "titleLabel": "제목",
+    "placeholder": "게시물을 쓰세요. 집중 모드는 아래 도구에 있어요.",
+    "tags": "태그",
+    "hint": "게시물은 먼저 Hive에 올라가고, 그다음 읽어 줄 수 있어요.",
+    "publish": "게시물 올리기",
+    "published": "게시물이 올라갔어요. 이제 읽기를 만드세요.",
+    "missing": "먼저 제목과 내용을 입력하세요."
+  },
+  "script": {
+    "title": "대본",
+    "hint": "목소리가 읽을 내용이에요. 이미지, 링크, 이모지는 이미 빠졌어요. 원하는 대로 고치세요. 빈 줄은 새 문단, #으로 시작하는 줄은 제목으로 읽어요.",
+    "length_other": "{{count}}단어, 약 {{time}}",
+    "tooLong": "오늘 남은 {{left}}보다 길어요",
+    "nothing": "이 게시물에는 읽을 내용이 없어요. 다른 게시물을 고르거나 대본을 직접 쓰세요."
+  },
+  "voice": {
+    "title": "목소리",
+    "gender": {
+      "female": "여성",
+      "male": "남성"
+    },
+    "accent": {
+      "British": "영국식",
+      "Scottish": "스코틀랜드식",
+      "American": "미국식"
+    }
+  },
+  "music": {
+    "title": "배경 음악",
+    "off": "음악 없음",
+    "library": "음악 라이브러리",
+    "own": "내 음악",
+    "proNote": "음악 라이브러리와 내 음악은 3Speak Pro에 포함돼요.",
+    "listen": "듣기",
+    "search": "라이브러리 검색",
+    "credit": "라이선스에 따라 곡 정보가 게시물에 표시돼요.",
+    "choose": "음악 파일 선택",
+    "replace": "다른 파일 선택",
+    "uploading": "업로드 중…",
+    "ready": "음악이 준비됐어요",
+    "ownHint": "권리를 가진 음악, 최대 15분. 목소리 아래에서 훨씬 작게 반복 재생돼요."
+  },
+  "make": {
+    "title": "녹음 만들기",
+    "intro": "음성 소개",
+    "introHint": "제목, 내 이름, 합성 음성이 읽는다는 안내로 시작해요.",
+    "preview": "미리 듣기",
+    "record": "녹음 만들기",
+    "queued_other": "대기 중, 앞에 녹음 {{count}}개",
+    "rendering": "녹음 중…",
+    "done": "{{time}}, {{name}} 목소리"
+  },
+  "publish": {
+    "button": "오디오 게시물로 올리기",
+    "done": "오디오 게시물이 올라갔어요.",
+    "open": "열기",
+    "addLink": "글 게시물에 듣기 링크 추가",
+    "linked": "이제 글 게시물에서 오디오로 연결돼요.",
+    "listenLabel": "이 게시물 듣기",
+    "writtenPost": "글 게시물:",
+    "readBy": "합성 음성({{name}})이 읽었어요."
+  },
+  "errors": {
+    "failed": "녹음에 실패했어요. 다시 해 보세요.",
+    "dailyLimit": "오늘 남은 읽기 시간({{left}})보다 길어요. 대본을 줄이거나 내일 다시 오세요.",
+    "notFound": "그 게시물을 찾을 수 없어요.",
+    "publishFailed": "올리지 못했어요. 다시 해 보세요."
+  }
+}

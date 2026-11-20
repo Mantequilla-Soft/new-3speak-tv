@@ -363,6 +363,79 @@ async function postAudio(step, event, ctx, deps) {
   return { url: `${SITE}/@${ctx.user}/${done.permlink}`, ...done }
 }
 
+// ── Narrate a written post ───────────────────────────────────────────────────
+// The new written post read out by a synthetic voice (narration-text cleans the
+// markdown: no pictures, links or emoji), with an optional focus-mode music
+// bed, uploaded to the audio service and posted as an audio post that links
+// back to it. Same render queue and daily minutes as the /narrate page.
+const NARRATION_MAX_S = 60 * 60
+
+async function narratePost(step, event, ctx, deps) {
+  const title = renderTemplate(step.properties.title, event.values).slice(0, 250)
+  if (!title) throw failure('The title is empty for this post', 'empty_text')
+  const { voice, music: mood, audioType, tags } = step.properties
+  if (ctx.dryRun) return { would: 'narrate_post', title, voice, music: mood, audioType }
+  if (ctx.saved?.permlink) return { url: `${SITE}/@${ctx.user}/${ctx.saved.permlink}`, permlink: ctx.saved.permlink, scheduledOn: ctx.saved.scheduledOn }
+
+  const narration = deps.narration || {
+    text: require('./narration-text.cjs'),
+    render: require('./narration-render.cjs'),
+    usage: require('./narration.cjs'),
+  }
+  const sourceUrl = `${SITE}/@${event.author}/${event.permlink}`
+  let upload = ctx.saved?.upload || null
+  if (!upload) {
+    const post = await deps.hiveCall('bridge.get_post', { author: event.author, permlink: event.permlink })
+    if (!post?.body) throw retryable('The post is not readable yet', 'post_not_ready')
+    const { paragraphs, words } = narration.text.narrationScript(post.body)
+    if (!paragraphs.length) throw failure('This post has nothing to read out', 'empty_text')
+    const spoken = narration.usage.withIntro(paragraphs, { title: post.title, author: event.author })
+    const estimate = narration.text.estimateSeconds(words)
+    if (estimate > NARRATION_MAX_S) throw failure('The post is longer than an hour of narration', 'too_long')
+    const pro = await deps.isPro(ctx.user).catch(() => false)
+    const usage = deps.narrationUsage || narration.usage.sharedUsage()
+    const today = narration.usage.day(Date.now())
+    const left = await narration.usage.allowance(usage, ctx.user, pro, Date.now())
+    if (estimate > left.left) throw retryable('Not enough narration time left today', 'daily_limit')
+    const music = mood && mood !== 'off' ? narration.render.resolveMusic({ kind: 'focus', id: mood }, { user: ctx.user, pro }) : null
+    await usage.add(ctx.user, today, estimate)
+    try {
+      upload = await inTempDir(async (dir) => {
+        const file = path.join(dir, 'narration.mp3')
+        const out = await narration.render.renderQueue(() => narration.render.renderNarration({ paragraphs: spoken, voice, music, outFile: file }))
+        await usage.add(ctx.user, today, out.seconds - estimate).catch(() => {})
+        const up = await deps.uploadAudio({ file, user: ctx.user, title, duration: out.seconds, format: 'mp3', mime: 'audio/mpeg', category: audioType })
+        return { ...up, duration: out.seconds }
+      })
+    } catch (e) {
+      if (!upload) await usage.add(ctx.user, today, -estimate).catch(() => {})
+      throw e
+    }
+    await ctx.save({ upload })
+  }
+  const cover = event.values.image || null
+  if (cover) await deps.setAudioThumbnail(ctx.user, upload.permlink, cover).catch(() => false)
+  const premium = await deps.isPro(ctx.user).catch(() => false)
+  const voiceName = narrationVoiceName(voice)
+  const post = deps.buildAudioPost({
+    user: ctx.user,
+    source: { title, description: `${event.values.description || title}\n\nThe written post: ${sourceUrl}\n\nRead by a synthetic voice (${voiceName}).`, tags, platform: '3speak', sourceId: '', sourceUrl: '' },
+    playUrl: upload.playUrl,
+    thumbnailUrl: cover,
+    options: { audio: { type: audioType, target: 'post', fromSource: false, titleTemplate: title, useNotes: true, tags, hashtags: false }, community: event.values.community || SHORTS_COMMUNITY, payout: 'default', beneficiaries: [], ads: true },
+    premium,
+    duration: upload.duration,
+  })
+  post.jsonMetadata['3speak'] = { ...(post.jsonMetadata['3speak'] || {}), tts: { engine: 'piper', voice, source: `${event.author}/${event.permlink}` } }
+  const done = await schedulePost(ctx, deps, post, { permlink: permlinkFor(title, 'audio'), parent: { author: '', permlink: event.values.community || SHORTS_COMMUNITY }, thumbnail: cover })
+  await ctx.save({ upload, ...done })
+  return { url: `${SITE}/@${ctx.user}/${done.permlink}`, ...done }
+}
+
+function narrationVoiceName(voice) {
+  try { return require('./narration-render.cjs').VOICE_INFO[voice]?.name || voice } catch { return voice }
+}
+
 // ── Post a video of the audio ────────────────────────────────────────────────
 // The episode's cover held still over its sound (1280x720), uploaded and posted
 // like an imported video. The file comes from the audio service's IPFS copy
@@ -484,6 +557,7 @@ const HANDLERS = {
   send_discord: sendDiscord,
   post_short: postShort,
   post_audio: postAudio,
+  narrate_post: narratePost,
   post_video: postVideo,
   upvote_sender: upvoteSender,
   upvote_post: upvotePost,

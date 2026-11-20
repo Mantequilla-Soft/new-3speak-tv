@@ -53,21 +53,23 @@ function reverb(ctx, seconds = 3) {
   return node;
 }
 
-/**
- * The music player: `play(track)` fades the old track out and the new one in,
- * `play(0)` is off, `close()` lets go of the audio. Null where Web Audio is
- * missing. Create it from a click or a key (browsers start audio only then).
- */
-export function createFocusMusic() {
-  const Ctx = typeof window !== 'undefined' && (window.AudioContext || window.webkitAudioContext);
-  if (!Ctx) return null;
-  let ctx;
-  try { ctx = new Ctx(); } catch { return null; }
+// How far ahead of the audio clock the live player schedules, and how often it
+// tops that up. Notes are placed on the audio clock (never on a timer), so the
+// same moods also render offline (renderFocusMusic) for narrated posts.
+const LOOKAHEAD = 0.3;
+const TICK_MS = 100;
 
+/**
+ * The three moods on any audio context (live or offline), into `out`.
+ * `start(n, at, { fadeIn })` begins track n at audio time `at`; `pump(until)`
+ * places every note due before `until`; `stop(at)` fades the current track
+ * out and returns when its sources may be let go.
+ */
+function focusMusicGraph(ctx, out) {
   const master = ctx.createGain();
   master.gain.value = 0.5;
   const comp = ctx.createDynamicsCompressor();
-  master.connect(comp).connect(ctx.destination);
+  master.connect(comp).connect(out);
   const room = reverb(ctx, 3.2);
   const roomOut = ctx.createGain();
   roomOut.gain.value = 0.6;
@@ -75,21 +77,22 @@ export function createFocusMusic() {
   const white = noiseBuffer(ctx, 3);
   const brown = noiseBuffer(ctx, 4, true);
 
-  let current = null; // { bus, timers, nodes }
+  let current = null; // { bus, wet, loops, sources }
 
   // A track's own bus (faded in and out) and its loops, all stopped together.
-  function makeTrack() {
+  // A loop runs `fn(at)` first after one `delay()` (ms) and then every next
+  // `delay()`, at audio times.
+  function makeTrack(at, fadeIn) {
     const bus = ctx.createGain();
-    bus.gain.setValueAtTime(0, ctx.currentTime);
-    bus.gain.linearRampToValueAtTime(1, ctx.currentTime + FADE);
+    if (fadeIn) {
+      bus.gain.setValueAtTime(0, at);
+      bus.gain.linearRampToValueAtTime(1, at + FADE);
+    } else bus.gain.setValueAtTime(1, at);
     bus.connect(master);
     const wet = ctx.createGain();
     wet.connect(room);
-    const track = { bus, wet, timers: [], sources: [] };
-    track.loop = (fn, delay) => {
-      const run = () => { fn(); track.timers.push(setTimeout(run, delay())); };
-      track.timers.push(setTimeout(run, delay()));
-    };
+    const track = { bus, wet, loops: [], sources: [], at };
+    track.loop = (fn, delay) => { track.loops.push({ fn, delay, next: at + delay() / 1000 }); };
     track.source = (node) => { track.sources.push(node); return node; };
     return track;
   }
@@ -110,13 +113,12 @@ export function createFocusMusic() {
     const g = ctx.createGain();
     g.gain.value = gain;
     node.connect(g).connect(track.bus);
-    src.start();
+    src.start(track.at);
     return g;
   }
 
   // A short filtered burst (a drop, a crackle), placed left or right.
-  function burst(track, { freq, q, gain, length, type = 'bandpass' }) {
-    const at = ctx.currentTime;
+  function burst(track, at, { freq, q, gain, length, type = 'bandpass' }) {
     const src = ctx.createBufferSource();
     src.buffer = white;
     const f = ctx.createBiquadFilter();
@@ -135,8 +137,7 @@ export function createFocusMusic() {
   }
 
   // A chord held for `seconds`: soft oscillators, slow in and out, into the room.
-  function chord(track, notes, seconds, { type = 'triangle', cutoff = 900, gain = 0.035 } = {}) {
-    const at = ctx.currentTime;
+  function chord(track, at, notes, seconds, { type = 'triangle', cutoff = 900, gain = 0.035 } = {}) {
     const f = ctx.createBiquadFilter();
     f.type = 'lowpass';
     f.frequency.value = cutoff;
@@ -161,8 +162,7 @@ export function createFocusMusic() {
   }
 
   // A piano-ish note: a sine and its octave, struck and dying away.
-  function note(track, midi, gain, echo) {
-    const at = ctx.currentTime;
+  function note(track, at, midi, gain, echo) {
     const g = ctx.createGain();
     g.gain.setValueAtTime(0, at);
     g.gain.linearRampToValueAtTime(gain, at + 0.008);
@@ -197,8 +197,8 @@ export function createFocusMusic() {
       o.connect(g);
       g.connect(track.bus);
       g.connect(track.wet);
-      o.start();
-      lfo.start();
+      o.start(track.at);
+      lfo.start(track.at);
     }
   }
 
@@ -206,11 +206,11 @@ export function createFocusMusic() {
     1: (track) => {
       noise(track, white, [['highpass', 500], ['lowpass', 6500]], 0.07);
       noise(track, brown, [['lowpass', 380]], 0.18);
-      track.loop(() => burst(track, { freq: rand(1800, 5200), q: 4, gain: rand(0.02, 0.07), length: rand(0.02, 0.05) }), () => rand(40, 160));
+      track.loop((at) => burst(track, at, { freq: rand(1800, 5200), q: 4, gain: rand(0.02, 0.07), length: rand(0.02, 0.05) }), () => rand(40, 160));
       const chords = [[57, 60, 64, 67], [53, 57, 60, 64], [48, 55, 60, 64], [55, 59, 62, 64]];
       let i = 0;
-      const next = () => { chord(track, chords[i % chords.length], 9); i += 1; };
-      next();
+      const next = (at) => { chord(track, at, chords[i % chords.length], 9); i += 1; };
+      next(track.at);
       track.loop(next, () => 8000);
     },
     2: (track) => {
@@ -225,63 +225,128 @@ export function createFocusMusic() {
       echo.connect(echoOut).connect(track.bus);
       const scale = [62, 65, 67, 69, 72, 74, 77, 79, 81];
       let last = 69;
-      track.loop(() => {
+      track.loop((at) => {
         // Small steps mostly, so it sings rather than jumps.
         const near = scale.filter((m) => Math.abs(m - last) <= 5 && m !== last);
         last = pick(near.length ? near : scale);
-        note(track, last, rand(0.05, 0.09), echo);
-        if (Math.random() < 0.2) note(track, last - 12, 0.04, null);
+        note(track, at, last, rand(0.05, 0.09), echo);
+        if (Math.random() < 0.2) note(track, at, last - 12, 0.04, null);
       }, () => rand(700, 2200));
     },
     3: (track) => {
       const rumble = noise(track, brown, [['lowpass', 520]], 0.22);
-      track.loop(() => {
-        rumble.gain.linearRampToValueAtTime(rand(0.14, 0.28), ctx.currentTime + 0.8);
+      track.loop((at) => {
+        rumble.gain.linearRampToValueAtTime(rand(0.14, 0.28), at + 0.8);
       }, () => 900);
-      track.loop(() => {
+      track.loop((at) => {
         const pops = Math.random() < 0.15 ? Math.floor(rand(2, 5)) : 1;
         for (let k = 0; k < pops; k += 1) {
-          setTimeout(() => burst(track, { freq: rand(1500, 4000), q: 1, gain: rand(0.05, 0.25), length: rand(0.006, 0.025), type: 'highpass' }), k * rand(20, 70));
+          burst(track, at + (k * rand(20, 70)) / 1000, { freq: rand(1500, 4000), q: 1, gain: rand(0.05, 0.25), length: rand(0.006, 0.025), type: 'highpass' });
         }
       }, () => rand(60, 520));
       const chords = [[53, 57, 60, 64], [52, 55, 59, 62], [50, 53, 57, 60], [48, 52, 55, 59]];
       let i = 0;
-      const next = () => { chord(track, chords[i % chords.length], 11, { type: 'sawtooth', cutoff: 520, gain: 0.022 }); i += 1; };
-      next();
+      const next = (at) => { chord(track, at, chords[i % chords.length], 11, { type: 'sawtooth', cutoff: 520, gain: 0.022 }); i += 1; };
+      next(track.at);
       track.loop(next, () => 10000);
     },
   };
 
-  function stopTrack(track) {
-    if (!track) return;
-    for (const tm of track.timers) clearTimeout(tm);
-    track.timers.length = 0;
-    track.loop = () => {};
-    const at = ctx.currentTime;
-    track.bus.gain.cancelScheduledValues(at);
-    track.bus.gain.setValueAtTime(track.bus.gain.value, at);
-    track.bus.gain.linearRampToValueAtTime(0, at + FADE);
-    setTimeout(() => {
-      for (const s of track.sources) { try { s.stop(); } catch { /* already stopped */ } }
-      track.bus.disconnect();
-      track.wet.disconnect();
-    }, FADE * 1000 + 100);
-  }
+  return {
+    start(n, at, { fadeIn = true } = {}) {
+      current = null;
+      if (!TRACKS[n]) return;
+      current = makeTrack(at, fadeIn);
+      TRACKS[n](current);
+    },
+    pump(until) {
+      if (!current) return;
+      for (const lp of current.loops) {
+        while (lp.next < until) {
+          lp.fn(lp.next);
+          lp.next += lp.delay() / 1000;
+        }
+      }
+    },
+    /** Fades the current track out from `at`; the track to let go of later. */
+    stop(at) {
+      const track = current;
+      current = null;
+      if (!track) return null;
+      track.bus.gain.cancelScheduledValues(at);
+      track.bus.gain.setValueAtTime(track.bus.gain.value, at);
+      track.bus.gain.linearRampToValueAtTime(0, at + FADE);
+      return track;
+    },
+  };
+}
+
+function release(track) {
+  if (!track) return;
+  for (const s of track.sources) { try { s.stop(); } catch { /* already stopped */ } }
+  track.bus.disconnect();
+  track.wet.disconnect();
+}
+
+/**
+ * The music player: `play(track)` fades the old track out and the new one in,
+ * `play(0)` is off, `close()` lets go of the audio. Null where Web Audio is
+ * missing. Create it from a click or a key (browsers start audio only then).
+ */
+export function createFocusMusic() {
+  const Ctx = typeof window !== 'undefined' && (window.AudioContext || window.webkitAudioContext);
+  if (!Ctx) return null;
+  let ctx;
+  try { ctx = new Ctx(); } catch { return null; }
+  const graph = focusMusicGraph(ctx, ctx.destination);
+  let timer = null;
+
+  const fadeOut = () => {
+    const old = graph.stop(ctx.currentTime);
+    if (old) setTimeout(() => release(old), FADE * 1000 + 100);
+  };
+  const stopClock = () => { if (timer) { clearInterval(timer); timer = null; } };
 
   return {
     play(n) {
       if (ctx.state === 'suspended') ctx.resume().catch(() => {});
-      stopTrack(current);
-      current = null;
-      if (!TRACKS[n]) return;
-      current = makeTrack();
-      TRACKS[n](current);
+      fadeOut();
+      stopClock();
+      if (!MUSIC_TRACKS.includes(n)) return;
+      graph.start(n, ctx.currentTime);
+      const tick = () => graph.pump(ctx.currentTime + LOOKAHEAD);
+      tick();
+      timer = setInterval(tick, TICK_MS);
     },
     resume() { if (ctx.state === 'suspended') ctx.resume().catch(() => {}); },
     close() {
-      stopTrack(current);
-      current = null;
+      stopClock();
+      fadeOut();
       setTimeout(() => ctx.close().catch(() => {}), FADE * 1000 + 200);
     },
   };
+}
+
+/**
+ * One mood rendered offline: an AudioBuffer of `seconds` of track `n` (stereo),
+ * with no fade in, for the narrated-post music beds
+ * (scripts/narration/render-music-beds.mjs). `OfflineCtx` defaults to the
+ * browser's OfflineAudioContext. Notes are placed a stretch at a time while
+ * rendering (suspend, place, resume), like the live player, so finished notes
+ * leave the graph instead of thousands of waiting ones slowing every frame.
+ */
+export function renderFocusMusic(n, seconds, { sampleRate = 44100, OfflineCtx, step = 2 } = {}) {
+  const Ctx = OfflineCtx || (typeof window !== 'undefined' && (window.OfflineAudioContext || window.webkitOfflineAudioContext));
+  if (!Ctx || !MUSIC_TRACKS.includes(n) || !(seconds > 0)) return null;
+  const ctx = new Ctx(2, Math.ceil(seconds * sampleRate), sampleRate);
+  const graph = focusMusicGraph(ctx, ctx.destination);
+  graph.start(n, 0, { fadeIn: false });
+  graph.pump(Math.min(seconds, step + LOOKAHEAD));
+  if (typeof ctx.suspend === 'function') {
+    for (let t = step; t < seconds; t += step) {
+      const until = Math.min(seconds, t + step + LOOKAHEAD);
+      ctx.suspend(t).then(() => { graph.pump(until); return ctx.resume(); });
+    }
+  } else graph.pump(seconds);
+  return ctx.startRendering();
 }

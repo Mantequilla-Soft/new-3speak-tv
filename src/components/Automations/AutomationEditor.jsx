@@ -21,7 +21,7 @@ const fieldLabel = (t, id) => t(`automations.fields.${id}`);
 
 // The event picker's groups, in this order (labels in automations.eventGroups.*).
 const EVENT_GROUPS = [
-  ['channel', ['video_published', 'short_published', 'video_imported', 'podcast_published', 'audio_published', 'stream_started']],
+  ['channel', ['video_published', 'short_published', 'video_imported', 'podcast_published', 'audio_published', 'stream_started', 'text_post_published']],
   ['wallet', ['tip_received', 'boost_received', 'power_up']],
   ['polls', ['poll_ended', 'stream_poll_ended']],
   ['others', ['someone_posted']],
@@ -40,6 +40,14 @@ function PlaceholderChips({ catalog, event, onPick }) {
 }
 
 /** One task property, by its catalog type. */
+// A choice's words: the catalog can name its options itself (the narration
+// voices: a name and whether it is a female or male voice), else the locale.
+function choiceLabel(spec, option, t) {
+  const own = spec.labels?.[option];
+  if (own) return own.gender ? `${own.name} (${t(`automations.voiceGender.${own.gender}`)})` : own.name;
+  return t(`automations.choices.${option}`);
+}
+
 function PropertyField({ type, name, spec, value, onChange, readOnly }) {
   const { t, i18n } = useTranslation();
   const [tagText, setTagText] = useState(() => (Array.isArray(value) ? value.join(' ') : ''));
@@ -78,7 +86,7 @@ function PropertyField({ type, name, spec, value, onChange, readOnly }) {
       <div className="v2-field">
         <label className="v2-eyebrow" htmlFor={`aut-prop-${name}`}>{label}</label>
         <select id={`aut-prop-${name}`} className="v2-input is-select" value={value} disabled={readOnly} onChange={(e) => onChange(e.target.value)}>
-          {spec.options.map((o) => <option key={o} value={o}>{t(`automations.choices.${o}`)}</option>)}
+          {spec.options.map((o) => <option key={o} value={o}>{choiceLabel(spec, o, t)}</option>)}
         </select>
       </div>
     );

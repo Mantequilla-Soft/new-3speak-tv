@@ -2719,6 +2719,19 @@ if (process.env.VIDEO_IMPORT_ENABLED === 'true') {
   })
 }
 
+// === Blog to podcast (server/narration.cjs) ===
+// A creator's own written post read out by a Piper voice; the app publishes
+// the MP3 with the audio uploader. Off unless NARRATION_ENABLED=true.
+require('./narration.cjs').mountNarration(app, {
+  resolveUser: resolveProvenViewer,
+  limiter: baseLimiter,
+  isPro: (user) => isPro(user),
+  hiveCall: (method, params) => {
+    const [api, name] = method.split('.')
+    return client.call(api, name, params)
+  },
+})
+
 // === Teleprompter STT token minting ===
 // Hands the browser a short-lived SIGNED token for the self-hosted STT WebSocket,
 // so the browser never holds STT_SIGNING_SECRET. Token = "<exp>.<hexHMAC(exp)>";

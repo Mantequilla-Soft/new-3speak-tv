@@ -141,6 +141,10 @@
     "someone_posted": {
       "label": "Nag-post ang taong pinili ko",
       "desc": "Post ng account na nakalista mo sa ibaba: video, Short, audio, podcast, snap, stream o text post."
+    },
+    "text_post_published": {
+      "label": "Nag-publish ako ng nakasulat na post",
+      "desc": "Mga post mo na teksto lang: walang 3Speak na video, audio o stream."
     }
   },
   "tasks": {
@@ -221,6 +225,17 @@
       "hints": {
         "webhook": "Sa Discord: channel settings, Integrations, Webhooks, Copy Webhook URL."
       }
+    },
+    "narrate_post": {
+      "label": "Basahin nang malakas ang post",
+      "desc": "Babasahin ng isang synthetic na boses ang bagong post (walang larawan, link o emoji) at lalabas ito bilang audio post na naka-link sa orihinal, mga 10 minuto pagkatapos.",
+      "props": {
+        "voice": "Boses",
+        "music": "Background music",
+        "title": "Pamagat",
+        "audioType": "Uri ng audio",
+        "tags": "Mga tag"
+      }
     }
   },
   "if": {
@@ -300,7 +315,11 @@
     "post": "Isang post",
     "stream": "Isang stream",
     "audio": "Audio",
-    "snap": "Snap"
+    "snap": "Snap",
+    "off": "Walang musika",
+    "rain": "Ulan",
+    "piano": "Piano sa gabi",
+    "fireplace": "Fireplace"
   },
   "placeholders": {
     "title": "pamagat ng post",
@@ -452,6 +471,10 @@
       "blank": {
         "title": "Magsimula nang walang laman",
         "sub": "Piliin ang event at ikaw mismo ang bumuo ng mga hakbang."
+      },
+      "narrate_posts": {
+        "title": "Audio na bersyon ng bawat nakasulat na post",
+        "sub": "Kapag nag-publish ka ng nakasulat na post, babasahin ito ng synthetic na boses bilang audio post."
       }
     },
     "texts": {
@@ -478,5 +501,9 @@
     "polls": "Mga poll",
     "others": "Ibang account",
     "more": "Iba pa"
+  },
+  "voiceGender": {
+    "female": "babae",
+    "male": "lalaki"
   }
 }

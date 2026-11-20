@@ -143,6 +143,10 @@
     "someone_posted": {
       "label": "Quelqu'un que je choisis publie",
       "desc": "Une publication d'un compte que vous indiquez ci-dessous : une vidéo, un Short, un audio, un podcast, un snap, un stream ou un texte."
+    },
+    "text_post_published": {
+      "label": "Je publie un article écrit",
+      "desc": "Tes publications uniquement textuelles : sans vidéo, audio ni direct 3Speak."
     }
   },
   "tasks": {
@@ -223,6 +227,17 @@
       "hints": {
         "webhook": "Dans Discord : paramètres du salon, Intégrations, Webhooks, Copier l'URL du webhook."
       }
+    },
+    "narrate_post": {
+      "label": "Lire l'article à voix haute",
+      "desc": "Une voix de synthèse lit le nouvel article (sans images, liens ni emojis), publié environ 10 minutes plus tard comme audio avec un lien vers l'original.",
+      "props": {
+        "voice": "Voix",
+        "music": "Musique de fond",
+        "title": "Titre",
+        "audioType": "Type d'audio",
+        "tags": "Tags"
+      }
     }
   },
   "if": {
@@ -302,7 +317,11 @@
     "post": "Une publication",
     "stream": "Un stream",
     "audio": "Audio",
-    "snap": "Snap"
+    "snap": "Snap",
+    "off": "Sans musique",
+    "rain": "Pluie",
+    "piano": "Piano de nuit",
+    "fireplace": "Feu de cheminée"
   },
   "placeholders": {
     "title": "le titre de la publication",
@@ -454,6 +473,10 @@
       "blank": {
         "title": "Commencer à vide",
         "sub": "Choisissez l'événement et créez les étapes vous-même."
+      },
+      "narrate_posts": {
+        "title": "Version audio de chaque article écrit",
+        "sub": "Quand tu publies un article écrit, une voix de synthèse le lit et le publie en audio."
       }
     },
     "texts": {
@@ -480,5 +503,9 @@
     "polls": "Sondages",
     "others": "Autres comptes",
     "more": "Plus"
+  },
+  "voiceGender": {
+    "female": "féminine",
+    "male": "masculine"
   }
 }

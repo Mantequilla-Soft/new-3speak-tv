@@ -100,6 +100,7 @@ const EmbedStudioPage = lazyRoute(() => import("./components/embed-studio/EmbedS
 const EmbedThumbnail = lazyRoute(() => import("./components/embed-studio/EmbedThumbnail"), "./components/embed-studio/EmbedThumbnail");
 const YoutubeImportPage = lazyRoute(() => import("./page/YoutubeImportPage"), "./page/YoutubeImportPage");
 const Automations = lazyRoute(() => import("./page/Automations"), "./page/Automations");
+const Narrate = lazyRoute(() => import("./page/Narrate"), "./page/Narrate");
 // /youtube-import → /import, keeping ?platform= / ?mode=.
 function OldImportRedirect() {
   const { search } = useLocation();
@@ -878,6 +879,8 @@ function App() {
               {/* 🤖 Automations: closed beta, the page itself says so to anyone outside it. */}
               <Route path="/automations" element={<Automations />} />
               <Route path="/automations/:id" element={<Automations />} />
+              <Route path="/narrate" element={<Narrate />} />
+              <Route path="/narrate/:permlink" element={<Narrate />} />
               <Route path="/trend" element={<Trend />} />
               <Route path="/discover" element={<Discover />} />
               <Route path="/audio" element={<Audio />} />

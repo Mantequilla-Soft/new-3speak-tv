@@ -18,6 +18,54 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.148',
+    category: 'live',
+    date: '2026-11-20',
+    summary: 'In the phone studio, star your favourite cameras and name them yourself. Your phone also remembers whether you stream upright or sideways.',
+  },
+  {
+    version: '2.0.147',
+    category: 'live',
+    date: '2026-11-20',
+    summary: 'Streaming from a phone, the new Camera button lists your lenses (wide, main, zoom) and zoom out goes below 1× where your phone allows.',
+  },
+  {
+    version: '2.0.146',
+    category: 'live',
+    date: '2026-11-20',
+    summary: 'The phone stream studio is tidier: overlays sit with polls, Mirror and Rotate share one button, and the connection button opens quality.',
+  },
+  {
+    version: '2.0.145',
+    category: 'live',
+    date: '2026-11-20',
+    summary: 'On a phone, the stream studio picture now fills the whole screen, upright or sideways, with the controls floating over it.',
+  },
+  {
+    version: '2.0.144',
+    category: 'general',
+    date: '2026-11-20',
+    summary: 'Automations can now narrate every new written post and publish it as an audio post.',
+  },
+  {
+    version: '2.0.143',
+    category: 'podcasts',
+    date: '2026-11-20',
+    summary: 'New: Narrate a post. A synthetic voice reads your written post out, and you publish it as an audio post with a link back to the original.',
+  },
+  {
+    version: '2.0.142',
+    category: 'audio',
+    date: '2026-11-19',
+    summary: 'Writing a comment in the full audio player on a phone, the comment box now stays above the keyboard.',
+  },
+  {
+    version: '2.0.141',
+    category: 'live',
+    date: '2026-11-19',
+    summary: 'On a phone, the stream studio has a Rotate button to go live in landscape, with the controls on the right edge and their panels opening beside them.',
+  },
+  {
     version: '2.0.140',
     category: 'playlists',
     date: '2026-11-19',

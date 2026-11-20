@@ -145,6 +145,10 @@
     "someone_posted": {
       "label": "Ktoś, kogo wybiorę, publikuje",
       "desc": "Post konta, które podasz poniżej: film, Short, audio, podcast, snap, stream albo post tekstowy."
+    },
+    "text_post_published": {
+      "label": "Publikuję wpis tekstowy",
+      "desc": "Twoje wpisy tylko z tekstem: bez wideo, audio ani transmisji 3Speak."
     }
   },
   "tasks": {
@@ -225,6 +229,17 @@
       "hints": {
         "webhook": "W Discordzie: ustawienia kanału, Integracje, Webhooki, Kopiuj URL webhooka."
       }
+    },
+    "narrate_post": {
+      "label": "Przeczytaj wpis na głos",
+      "desc": "Syntetyczny głos czyta nowy wpis (bez obrazów, linków i emoji), a po około 10 minutach pojawia się on jako wpis audio z linkiem do oryginału.",
+      "props": {
+        "voice": "Głos",
+        "music": "Muzyka w tle",
+        "title": "Tytuł",
+        "audioType": "Rodzaj audio",
+        "tags": "Tagi"
+      }
     }
   },
   "if": {
@@ -304,7 +319,11 @@
     "post": "Post",
     "stream": "Stream",
     "audio": "Audio",
-    "snap": "Snap"
+    "snap": "Snap",
+    "off": "Bez muzyki",
+    "rain": "Deszcz",
+    "piano": "Nocne pianino",
+    "fireplace": "Kominek"
   },
   "placeholders": {
     "title": "tytuł posta",
@@ -456,6 +475,10 @@
       "blank": {
         "title": "Zacznij od zera",
         "sub": "Wybierz zdarzenie i sam zbuduj kroki."
+      },
+      "narrate_posts": {
+        "title": "Wersja audio każdego wpisu tekstowego",
+        "sub": "Gdy publikujesz wpis tekstowy, syntetyczny głos czyta go jako wpis audio."
       }
     },
     "texts": {
@@ -482,5 +505,9 @@
     "polls": "Ankiety",
     "others": "Inne konta",
     "more": "Więcej"
+  },
+  "voiceGender": {
+    "female": "kobiecy",
+    "male": "męski"
   }
 }

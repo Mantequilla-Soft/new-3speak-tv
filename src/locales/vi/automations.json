@@ -139,6 +139,10 @@
     "someone_posted": {
       "label": "Người tôi chọn đăng bài",
       "desc": "Bài đăng của một tài khoản bạn liệt kê bên dưới: video, Short, âm thanh, podcast, snap, buổi phát trực tiếp hoặc bài viết."
+    },
+    "text_post_published": {
+      "label": "Tôi đăng một bài viết",
+      "desc": "Bài đăng của bạn chỉ có chữ: không có video, âm thanh hay buổi phát trực tiếp 3Speak."
     }
   },
   "tasks": {
@@ -219,6 +223,17 @@
       "hints": {
         "webhook": "Trong Discord: cài đặt kênh, Tích hợp, Webhook, Sao chép URL Webhook."
       }
+    },
+    "narrate_post": {
+      "label": "Đọc to bài viết",
+      "desc": "Một giọng đọc tổng hợp đọc bài mới (bỏ hình ảnh, liên kết và emoji) và khoảng 10 phút sau nó được đăng thành bài âm thanh có liên kết về bài gốc.",
+      "props": {
+        "voice": "Giọng đọc",
+        "music": "Nhạc nền",
+        "title": "Tiêu đề",
+        "audioType": "Loại âm thanh",
+        "tags": "Thẻ"
+      }
     }
   },
   "if": {
@@ -298,7 +313,11 @@
     "post": "Một bài đăng",
     "stream": "Một buổi phát trực tiếp",
     "audio": "Âm thanh",
-    "snap": "Snap"
+    "snap": "Snap",
+    "off": "Không có nhạc",
+    "rain": "Mưa",
+    "piano": "Piano đêm",
+    "fireplace": "Lò sưởi"
   },
   "placeholders": {
     "title": "tiêu đề bài đăng",
@@ -450,6 +469,10 @@
       "blank": {
         "title": "Bắt đầu trống",
         "sub": "Tự chọn sự kiện và tạo các bước."
+      },
+      "narrate_posts": {
+        "title": "Bản âm thanh của mỗi bài viết",
+        "sub": "Khi bạn đăng một bài viết, giọng đọc tổng hợp sẽ đọc nó thành bài âm thanh."
       }
     },
     "texts": {
@@ -476,5 +499,9 @@
     "polls": "Bình chọn",
     "others": "Tài khoản khác",
     "more": "Thêm"
+  },
+  "voiceGender": {
+    "female": "nữ",
+    "male": "nam"
   }
 }

@@ -63,6 +63,8 @@ const EVENTS = {
   podcast_published: { source: 'posts', media: 'audio', post: 'always', fields: ['title', 'description', 'tags', 'duration', 'audioType', 'imported', 'url'], placeholders: POST_PLACEHOLDERS },
   audio_published: { source: 'posts', media: 'audio', post: 'always', fields: ['title', 'description', 'tags', 'duration', 'audioType', 'imported', 'url'], placeholders: POST_PLACEHOLDERS },
   stream_started: { source: 'posts', media: 'stream', post: 'always', fields: ['title', 'description', 'tags', 'url'], placeholders: POST_PLACEHOLDERS },
+  // A written post: top level, no 3Speak video, audio or stream in it.
+  text_post_published: { source: 'posts', media: 'text', post: 'always', fields: ['title', 'description', 'tags', 'community', 'url'], placeholders: POST_PLACEHOLDERS },
   tip_received: { source: 'history', media: 'none', post: 'maybe', fields: ['from', 'amount', 'asset', 'message', 'via', 'url'], placeholders: MONEY_PLACEHOLDERS },
   boost_received: { source: 'history', media: 'none', post: 'maybe', fields: ['from', 'amount', 'asset', 'message', 'boostKind', 'url'], placeholders: MONEY_PLACEHOLDERS },
   power_up: { source: 'history', media: 'none', post: 'none', fields: ['from', 'amount', 'self'], placeholders: ['from', 'amount', 'author'] },
@@ -73,6 +75,12 @@ const EVENTS = {
   someone_posted: { source: 'watched', media: 'none', post: 'always', accounts: true, fields: ['author', 'postKind', 'title', 'description', 'tags', 'url'], placeholders: POST_PLACEHOLDERS },
 }
 const eventsWhere = (test) => Object.keys(EVENTS).filter((id) => test(EVENTS[id], id))
+
+// The narration voices for narrate_post, with the names the editor shows
+// (automations are Pro, so every voice). Kept from narration-render's list.
+const NARRATION = require('./narration-render.cjs')
+const NARRATION_VOICES = Object.keys(NARRATION.VOICE_INFO)
+const NARRATION_VOICE_LABELS = Object.fromEntries(NARRATION_VOICES.map((id) => [id, { name: NARRATION.VOICE_INFO[id].name, gender: NARRATION.VOICE_INFO[id].gender }]))
 
 // ── Tasks ────────────────────────────────────────────────────────────────────
 // Property types: template (text with {placeholders}), text, tags, number,
@@ -107,6 +115,20 @@ const TASKS = {
     events: VIDEO_EVENTS,
     max: 1,
     props: {
+      title: { type: 'template', required: true, max: 250, default: '{title}' },
+      audioType: { type: 'choice', options: FIELD.audioType.options, default: 'podcast' },
+      tags: { type: 'tags', max: 8, default: [] },
+    },
+  },
+  // The written post read out by a synthetic voice, posted as an audio post
+  // that links back to it (server/narration*.cjs).
+  narrate_post: {
+    icon: 'record_voice_over',
+    events: ['text_post_published'],
+    max: 1,
+    props: {
+      voice: { type: 'choice', options: NARRATION_VOICES, labels: NARRATION_VOICE_LABELS, default: NARRATION.DEFAULT_VOICE },
+      music: { type: 'choice', options: ['off', ...Object.keys(NARRATION.FOCUS_BEDS)], default: 'off' },
       title: { type: 'template', required: true, max: 250, default: '{title}' },
       audioType: { type: 'choice', options: FIELD.audioType.options, default: 'podcast' },
       tags: { type: 'tags', max: 8, default: [] },
@@ -404,7 +426,11 @@ function classifyPost(post, site = 'https://3speak.tv') {
   }
 
   const video = meta.video && typeof meta.video === 'object' ? meta.video : null
-  if (!video) return null
+  if (!video) {
+    // A written post (not a text snap): narrate_post reads it out.
+    if (isReply) return null
+    return { events: ['text_post_published'], values: { ...base, description: firstText(post.body), url: `${site}/@${ref}` } }
+  }
   const surface = meta['threespeak.video']?.surface
   const isShort = underSnaps || surface === 'shorts'
   const values = {
@@ -425,6 +451,7 @@ function classifyPost(post, site = 'https://3speak.tv') {
 const KIND_OF_EVENT = {
   video_published: 'video', video_imported: 'video', short_published: 'short',
   podcast_published: 'podcast', audio_published: 'audio', stream_started: 'stream',
+  text_post_published: 'post',
 }
 function classifyWatched(post, site = 'https://3speak.tv') {
   if (!post?.author || !post?.permlink) return null

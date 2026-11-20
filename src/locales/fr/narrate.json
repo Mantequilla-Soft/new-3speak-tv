@@ -1,0 +1,105 @@
+{
+  "menuEntry": "Faire lire un article",
+  "eyebrow": "Du blog au podcast",
+  "title": "Faire lire un article",
+  "subtitle": "Une voix de synthèse lit ton article écrit, et tu le publies en audio avec un lien vers l’original.",
+  "allowance": "Il te reste {{left}} sur {{limit}} de lecture aujourd’hui",
+  "proHint": "Plus de voix, de musique et de temps avec Pro",
+  "optional": "facultatif",
+  "entry": {
+    "dock": "Faire lire",
+    "title": "Lire cet article en audio"
+  },
+  "gate": {
+    "signIn": "Connecte-toi pour faire lire tes articles.",
+    "notOpen": "La lecture n’est pas encore ouverte pour ton compte."
+  },
+  "pick": {
+    "title": "Choisis ton texte",
+    "mine": "Mes articles",
+    "write": "Écrire un nouvel article",
+    "empty": "Tu n’as pas encore d’article. Écris-en un ici.",
+    "more": "Voir les articles plus anciens",
+    "narrated": "Lu",
+    "words_one": "{{count}} mot",
+    "words_many": "{{count}} mots",
+    "words_other": "{{count}} mots",
+    "kind": {
+      "video": "publication vidéo",
+      "audio": "publication audio"
+    }
+  },
+  "write": {
+    "titleLabel": "Titre",
+    "placeholder": "Écris ton article. Le mode concentration est dans les outils ci-dessous.",
+    "tags": "Tags",
+    "hint": "L’article est d’abord publié sur Hive, ensuite tu peux le faire lire.",
+    "publish": "Publier l’article",
+    "published": "Ton article est en ligne. Crée maintenant la lecture.",
+    "missing": "Ajoute d’abord un titre et du texte."
+  },
+  "script": {
+    "title": "Le script",
+    "hint": "Voici ce que lit la voix : les images, les liens et les emojis sont déjà retirés. Modifie-le comme tu veux. Une ligne vide commence un nouveau paragraphe, une ligne qui commence par # est lue comme un titre.",
+    "length_one": "{{count}} mot, environ {{time}}",
+    "length_many": "{{count}} mots, environ {{time}}",
+    "length_other": "{{count}} mots, environ {{time}}",
+    "tooLong": "plus long que les {{left}} qu’il te reste aujourd’hui",
+    "nothing": "Il n’y a rien à lire dans cet article. Essaie-en un autre ou écris le script toi-même."
+  },
+  "voice": {
+    "title": "Voix",
+    "gender": {
+      "female": "Féminine",
+      "male": "Masculine"
+    },
+    "accent": {
+      "British": "Britannique",
+      "Scottish": "Écossaise",
+      "American": "Américaine"
+    }
+  },
+  "music": {
+    "title": "Musique de fond",
+    "off": "Sans musique",
+    "library": "Bibliothèque musicale",
+    "own": "Ta propre musique",
+    "proNote": "La bibliothèque musicale et ta propre musique sont incluses dans 3Speak Pro.",
+    "listen": "Écouter",
+    "search": "Chercher dans la bibliothèque",
+    "credit": "Le morceau est crédité dans ton article, comme sa licence le demande.",
+    "choose": "Choisir un fichier musical",
+    "replace": "Choisir un autre fichier",
+    "uploading": "Envoi…",
+    "ready": "Ta musique est prête",
+    "ownHint": "Une musique dont tu as les droits, 15 minutes au plus. Elle tourne en boucle sous la voix, bien plus bas."
+  },
+  "make": {
+    "title": "Créer l’enregistrement",
+    "intro": "Introduction parlée",
+    "introHint": "La voix commence par le titre, ton nom et le fait qu’une voix de synthèse lit le texte.",
+    "preview": "Écouter un aperçu",
+    "record": "Créer l’enregistrement",
+    "queued_one": "En attente, {{count}} enregistrement avant",
+    "queued_many": "En attente, {{count}} enregistrements avant",
+    "queued_other": "En attente, {{count}} enregistrements avant",
+    "rendering": "Enregistrement…",
+    "done": "{{time}}, lu par {{name}}"
+  },
+  "publish": {
+    "button": "Publier en audio",
+    "done": "Ta publication audio est en ligne.",
+    "open": "L’ouvrir",
+    "addLink": "Ajouter un lien d’écoute à ton article écrit",
+    "linked": "Ton article écrit renvoie maintenant vers l’audio.",
+    "listenLabel": "Écouter cet article",
+    "writtenPost": "L’article écrit :",
+    "readBy": "Lu par une voix de synthèse ({{name}})."
+  },
+  "errors": {
+    "failed": "L’enregistrement a échoué, réessaie.",
+    "dailyLimit": "C’est plus long que le temps de lecture qu’il te reste aujourd’hui ({{left}}). Raccourcis le script ou reviens demain.",
+    "notFound": "Cet article est introuvable.",
+    "publishFailed": "La publication n’a pas marché, réessaie."
+  }
+}

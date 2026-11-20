@@ -15,7 +15,7 @@ vi.mock('sonner', async () => (await import('./_render.jsx')).sonnerModule())
 vi.mock('../../../src/hive-api/aioha', async () => (await import('./_render.jsx')).aiohaModule())
 vi.mock('../../../src/utils/hiveUtils', () => ({ getVotePower: (...a) => m.votePower(...a) }))
 vi.mock('../../../src/utils/hiveNode', () => ({ getHiveUrl: () => 'https://api.hive.example/', ensureHealthyNode: async () => 'https://node.example/' }))
-vi.mock('../../../src/utils/config', async (importOriginal) => ({ ...(await importOriginal()), adsEnabledFor: () => m.ads, automationsEnabledFor: () => m.automations }))
+vi.mock('../../../src/utils/config', async (importOriginal) => ({ ...(await importOriginal()), adsEnabledFor: () => m.ads, automationsEnabledFor: () => m.automations, narrationEnabledFor: () => m.narration }))
 vi.mock('../../../src/hooks/useCanImportVideos', () => ({ default: () => false }))
 vi.mock('../../../src/hooks/getUserDetails', () => ({ useGetMyQuery: () => ({ data: null }) }))
 vi.mock('../../../src/utils/avatarCache', () => ({ useAvatarUrl: (u) => `/img/u/${u}/avatar` }))
@@ -53,7 +53,7 @@ function mount(props = {}) {
 beforeEach(() => {
   Object.assign(m, {
     votePower: vi.fn(async () => ({ vp: 8750, rcPercent: 64.321 })),
-    ads: false, automations: false, backlog: 0, invites: [], translator: false,
+    ads: false, automations: false, narration: false, backlog: 0, invites: [], translator: false,
     pwa: { canInstallPrompt: false, isIOS: false, showInstall: false, promptInstall: vi.fn() },
   })
   useAppStore.setState({ user: 'badadib', incubationHandle: null, LogOut: vi.fn() })
@@ -114,6 +114,12 @@ describe('the account menu', () => {
     m.automations = true
     const { menu } = mount()
     expect(within(menu()).getByRole('menuitem', { name: 'Automations' })).toHaveAttribute('href', '/automations')
+  })
+
+  it('adds Narrate a post (blog to podcast) only for the accounts it is open for', () => {
+    m.narration = true
+    const { menu } = mount()
+    expect(within(menu()).getByRole('menuitem', { name: 'Narrate a post' })).toHaveAttribute('href', '/narrate')
   })
 
   it('adds Advertise, invite links, the translation editor and the publish backlog for those who have them', async () => {

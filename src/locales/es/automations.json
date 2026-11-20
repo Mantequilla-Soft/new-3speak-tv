@@ -143,6 +143,10 @@
     "someone_posted": {
       "label": "Publica alguien que elijo",
       "desc": "Una publicación de una cuenta que pones abajo: un video, Short, audio, podcast, snap, stream o publicación de texto."
+    },
+    "text_post_published": {
+      "label": "Publico una entrada escrita",
+      "desc": "Tus entradas solo con texto: sin vídeo, audio ni directo de 3Speak."
     }
   },
   "tasks": {
@@ -223,6 +227,17 @@
       "hints": {
         "webhook": "En Discord: ajustes del canal, Integraciones, Webhooks, Copiar URL del webhook."
       }
+    },
+    "narrate_post": {
+      "label": "Narrar la entrada",
+      "desc": "Una voz sintética lee la nueva entrada (sin imágenes, enlaces ni emojis) y se publica como audio con un enlace a ella, unos 10 minutos después.",
+      "props": {
+        "voice": "Voz",
+        "music": "Música de fondo",
+        "title": "Título",
+        "audioType": "Tipo de audio",
+        "tags": "Etiquetas"
+      }
     }
   },
   "if": {
@@ -302,7 +317,11 @@
     "post": "Una publicación",
     "stream": "Un stream",
     "audio": "Audio",
-    "snap": "Snap"
+    "snap": "Snap",
+    "off": "Sin música",
+    "rain": "Lluvia",
+    "piano": "Piano nocturno",
+    "fireplace": "Chimenea"
   },
   "placeholders": {
     "title": "el título de la publicación",
@@ -454,6 +473,10 @@
       "blank": {
         "title": "Empezar en blanco",
         "sub": "Elige el evento y crea los pasos tú mismo."
+      },
+      "narrate_posts": {
+        "title": "Versión en audio de cada entrada escrita",
+        "sub": "Cuando publicas una entrada escrita, una voz sintética la lee como publicación de audio."
       }
     },
     "texts": {
@@ -480,5 +503,9 @@
     "polls": "Encuestas",
     "others": "Otras cuentas",
     "more": "Más"
+  },
+  "voiceGender": {
+    "female": "femenina",
+    "male": "masculina"
   }
 }

@@ -1,0 +1,99 @@
+{
+  "menuEntry": "朗读帖子",
+  "eyebrow": "从博客到播客",
+  "title": "朗读帖子",
+  "subtitle": "合成语音朗读你的文字帖子，你可以把它发布为链接回原帖的音频帖子。",
+  "allowance": "今天还剩 {{left}}，共 {{limit}} 朗读时长",
+  "proHint": "Pro 提供更多声音、音乐和时长",
+  "optional": "可选",
+  "entry": {
+    "dock": "朗读",
+    "title": "把这篇帖子朗读成音频帖子"
+  },
+  "gate": {
+    "signIn": "登录后即可朗读你的帖子。",
+    "notOpen": "你的账户暂未开放朗读功能。"
+  },
+  "pick": {
+    "title": "选择文本",
+    "mine": "我的帖子",
+    "write": "写新帖子",
+    "empty": "你还没有帖子，在这里写一篇吧。",
+    "more": "显示更早的帖子",
+    "narrated": "已朗读",
+    "words_other": "{{count}} 个词",
+    "kind": {
+      "video": "视频帖子",
+      "audio": "音频帖子"
+    }
+  },
+  "write": {
+    "titleLabel": "标题",
+    "placeholder": "写下你的帖子。专注模式在下方工具中。",
+    "tags": "标签",
+    "hint": "帖子会先发布到 Hive，然后才能朗读。",
+    "publish": "发布帖子",
+    "published": "帖子已发布，现在来制作朗读吧。",
+    "missing": "请先填写标题和正文。"
+  },
+  "script": {
+    "title": "朗读稿",
+    "hint": "这就是语音要读的内容：图片、链接和表情已去掉。可以随意修改。空行开始新段落，以 # 开头的行会作为标题朗读。",
+    "length_other": "{{count}} 个词，约 {{time}}",
+    "tooLong": "超过你今天剩余的 {{left}}",
+    "nothing": "这篇帖子没有可朗读的内容。换一篇试试，或者自己写朗读稿。"
+  },
+  "voice": {
+    "title": "声音",
+    "gender": {
+      "female": "女声",
+      "male": "男声"
+    },
+    "accent": {
+      "British": "英式",
+      "Scottish": "苏格兰",
+      "American": "美式"
+    }
+  },
+  "music": {
+    "title": "背景音乐",
+    "off": "无音乐",
+    "library": "音乐库",
+    "own": "你自己的音乐",
+    "proNote": "音乐库和自己的音乐需要 3Speak Pro。",
+    "listen": "试听",
+    "search": "搜索音乐库",
+    "credit": "按许可证要求，歌曲署名会写在你的帖子里。",
+    "choose": "选择音乐文件",
+    "replace": "选择其他文件",
+    "uploading": "上传中…",
+    "ready": "你的音乐已就绪",
+    "ownHint": "你拥有版权的音乐，最长 15 分钟。它会在语音下方以很低的音量循环播放。"
+  },
+  "make": {
+    "title": "制作录音",
+    "intro": "语音开场",
+    "introHint": "语音会先读出标题、你的名字，并说明由合成语音朗读。",
+    "preview": "试听片段",
+    "record": "制作录音",
+    "queued_other": "排队中，前面还有 {{count}} 个录音",
+    "rendering": "录制中…",
+    "done": "{{time}}，由 {{name}} 朗读"
+  },
+  "publish": {
+    "button": "发布为音频帖子",
+    "done": "你的音频帖子已发布。",
+    "open": "打开",
+    "addLink": "在文字帖子中添加收听链接",
+    "linked": "你的文字帖子现在已链接到音频。",
+    "listenLabel": "收听这篇帖子",
+    "writtenPost": "文字帖子：",
+    "readBy": "由合成语音朗读（{{name}}）。"
+  },
+  "errors": {
+    "failed": "录音失败，请重试。",
+    "dailyLimit": "这超过了你今天剩余的朗读时长（{{left}}）。请缩短朗读稿或明天再来。",
+    "notFound": "找不到这篇帖子。",
+    "publishFailed": "发布失败，请重试。"
+  }
+}

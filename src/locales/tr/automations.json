@@ -141,6 +141,10 @@
     "someone_posted": {
       "label": "Seçtiğim biri paylaşıyor",
       "desc": "Aşağıda listelediğin bir hesabın gönderisi: video, Short, ses, podcast, snap, yayın ya da metin gönderisi."
+    },
+    "text_post_published": {
+      "label": "Yazılı bir gönderi yayınlıyorum",
+      "desc": "Yalnızca metin içeren gönderilerin: içinde 3Speak videosu, sesi veya yayını yok."
     }
   },
   "tasks": {
@@ -221,6 +225,17 @@
       "hints": {
         "webhook": "Discord'da: kanal ayarları, Entegrasyonlar, Webhook'lar, Webhook URL'sini Kopyala."
       }
+    },
+    "narrate_post": {
+      "label": "Gönderiyi seslendir",
+      "desc": "Sentetik bir ses yeni gönderiyi okur (resimler, bağlantılar ve emojiler olmadan) ve yaklaşık 10 dakika sonra asıl gönderiye bağlantı veren bir ses gönderisi olarak yayınlanır.",
+      "props": {
+        "voice": "Ses",
+        "music": "Arka plan müziği",
+        "title": "Başlık",
+        "audioType": "Ses türü",
+        "tags": "Etiketler"
+      }
     }
   },
   "if": {
@@ -300,7 +315,11 @@
     "post": "Bir gönderi",
     "stream": "Bir yayın",
     "audio": "Ses",
-    "snap": "Snap"
+    "snap": "Snap",
+    "off": "Müzik yok",
+    "rain": "Yağmur",
+    "piano": "Gece piyanosu",
+    "fireplace": "Şömine"
   },
   "placeholders": {
     "title": "gönderinin başlığı",
@@ -452,6 +471,10 @@
       "blank": {
         "title": "Boş başla",
         "sub": "Olayı seç ve adımları kendin kur."
+      },
+      "narrate_posts": {
+        "title": "Her yazılı gönderinin sesli sürümü",
+        "sub": "Yazılı bir gönderi yayınladığında, sentetik bir ses onu ses gönderisi olarak okur."
       }
     },
     "texts": {
@@ -478,5 +501,9 @@
     "polls": "Anketler",
     "others": "Diğer hesaplar",
     "more": "Daha fazla"
+  },
+  "voiceGender": {
+    "female": "kadın",
+    "male": "erkek"
   }
 }

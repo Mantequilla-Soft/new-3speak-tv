@@ -139,6 +139,10 @@
     "someone_posted": {
       "label": "我选的人发帖",
       "desc": "你在下方列出的账号发布的帖子：视频、短视频、音频、播客、Snap、直播或文字帖。"
+    },
+    "text_post_published": {
+      "label": "我发布文字帖子",
+      "desc": "你只有文字的帖子：其中没有 3Speak 视频、音频或直播。"
     }
   },
   "tasks": {
@@ -219,6 +223,17 @@
       "hints": {
         "webhook": "在 Discord 中：频道设置、整合、Webhook、复制 Webhook URL。"
       }
+    },
+    "narrate_post": {
+      "label": "朗读帖子",
+      "desc": "合成语音朗读新帖子（不含图片、链接和表情），约 10 分钟后作为链接回原帖的音频帖子发布。",
+      "props": {
+        "voice": "声音",
+        "music": "背景音乐",
+        "title": "标题",
+        "audioType": "音频类型",
+        "tags": "标签"
+      }
     }
   },
   "if": {
@@ -298,7 +313,11 @@
     "post": "帖子",
     "stream": "直播",
     "audio": "音频",
-    "snap": "Snap"
+    "snap": "Snap",
+    "off": "无音乐",
+    "rain": "雨声",
+    "piano": "夜曲钢琴",
+    "fireplace": "壁炉"
   },
   "placeholders": {
     "title": "帖子的标题",
@@ -450,6 +469,10 @@
       "blank": {
         "title": "从空白开始",
         "sub": "选择事件，自己搭建步骤。"
+      },
+      "narrate_posts": {
+        "title": "每篇文字帖子的音频版",
+        "sub": "发布文字帖子时，合成语音会把它朗读成音频帖子。"
       }
     },
     "texts": {
@@ -476,5 +499,9 @@
     "polls": "投票",
     "others": "其他账号",
     "more": "更多"
+  },
+  "voiceGender": {
+    "female": "女声",
+    "male": "男声"
   }
 }
