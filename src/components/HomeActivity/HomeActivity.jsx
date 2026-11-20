@@ -9,7 +9,7 @@ import { useAppStore } from "../../lib/store";
 import { fetchCommunityFeed } from "../../lib/snaps";
 import { fetchPlaylistsFeed } from "../../lib/playlistsFeed";
 import { useLiveStreams } from "../../hooks/useLiveStreams";
-import { CHECKER_URL, FEED_URL, appendNsfw } from "../../utils/config";
+import { CHECKER_URL, FEED_URL, FEED_EXCLUDED_HOSTS, appendNsfw } from "../../utils/config";
 import { withViewer } from "../../utils/userFilters";
 import { getSubscriptions, bodyToPlaintext } from "../../hive-api/hiveApi";
 import { getCommunity } from "../../hive-api/api";
@@ -72,6 +72,21 @@ function useCommunityActivity(user) {
     return out.sort((a, b) => timeOf(b.at) - timeOf(a.at)).slice(0, ROWS);
   }, [snapsQ.data, audio, playlistsQ.data, user]);
   return { rows, audio, loading: snapsQ.isLoading && audioQ.isLoading && playlistsQ.isLoading };
+}
+
+// While nobody is live, the Live tab lists the newest stream recording of each
+// creator (owner 2026-11-20), from the checker's /feeds/stream-vods. Only asked
+// for once the tab is open and empty.
+function useRecentStreamVods(user, enabled) {
+  const showNsfw = useAppStore((s) => s.showNsfw);
+  return useQuery({
+    queryKey: ["home-activity-stream-vods", user || null, showNsfw],
+    enabled,
+    staleTime: 5 * 60 * 1000,
+    retry: 1,
+    queryFn: () => axios.get(appendNsfw(withViewer(`${FEED_URL}/feeds/stream-vods?limit=${ROWS}&hidewatched=0`, user), showNsfw))
+      .then((r) => (r.data?.videos || []).filter((v) => !FEED_EXCLUDED_HOSTS.has(String(v.author || "").toLowerCase()))),
+  });
 }
 
 // Groups: the ones you joined first, then the busiest this week, from the
@@ -235,6 +250,7 @@ export default function HomeActivity() {
   const live = useLiveStreams();
   // Only asked once the Groups tab is opened: a handful of Hive reads.
   const groups = useGroupActivity(user, tab === "groups");
+  const vods = useRecentStreamVods(user, tab === "live" && !live.length);
 
   const tabs = [
     ...(isWarmup ? [{ key: "warmup", label: t("feeds.activity.warmup") }] : []),
@@ -276,7 +292,19 @@ export default function HomeActivity() {
         who={s.author} verb={t("feeds.activity.verbs.live")} age={ageOf(s.created_at)} body={s.title}>
         <span className="home-activity__watching">{t("cards.watchingNow", { count: s.views || 0 })}</span>
       </Row>
-    )) : <p className="home-activity__empty">{t("feeds.activity.emptyLive")}</p>;
+    )) : (
+      <>
+        <p className="home-activity__empty">{t("feeds.activity.emptyLive")}</p>
+        {vods.data?.length > 0 && <h3 className="home-activity__subhead">{t("feeds.activity.recentStreams")}</h3>}
+        {(vods.data || []).map((v) => (
+          <Row key={`${v.author}/${v.permlink}`} to={`/watch?v=${v.author}/${v.permlink}`}
+            avatar={`/img/u/${v.author}/avatar/small`}
+            who={v.author} verb={t("feeds.activity.verbs.streamed")} age={ageOf(v.created)} body={v.title}>
+            {clock(v.duration) && <span className="home-activity__len home-activity__vod-len num">{clock(v.duration)}</span>}
+          </Row>
+        ))}
+      </>
+    );
   } else {
     list = groups.data?.length ? groups.data.map((g) => (
       <Row key={g.name} to={`/community/${g.name}`} avatar={`/img/u/${g.name}/avatar/small`}

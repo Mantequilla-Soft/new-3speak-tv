@@ -96,6 +96,19 @@ describe('uploadAudioTo3Speak', () => {
     await expect(uploadAudioTo3Speak({ blob, username: 'u' })).rejects.toMatchObject({ code: 'server' })
   })
 
+  it('⏳ codes the free plan\'s limits by their code, with the numbers; a plain 429 stays a rate limit', async () => {
+    const blob = new Blob([new Uint8Array([1])], { type: 'audio/webm' })
+    fetchMock.mockResolvedValueOnce({ ok: false, status: 429, json: async () => ({ error: 'Daily audio limit reached', code: 'daily_audio_limit', limit: 2, used: 2, next_at: '2026-11-21T10:00:00Z', upgrade_url: 'https://3speak.tv/wallet/u#pro' }) })
+    const daily = await uploadAudioTo3Speak({ blob, username: 'u' }).catch((e) => e)
+    expect(daily).toMatchObject({ code: 'daily_audio_limit', limit: { kind: 'audio', limit: 2, used: 2, nextAt: Date.parse('2026-11-21T10:00:00Z') } })
+    fetchMock.mockResolvedValueOnce({ ok: false, status: 413, json: async () => ({ error: 'Audio too long', code: 'audio_too_long', max_seconds: 900, duration: 1830 }) })
+    const long = await uploadAudioTo3Speak({ blob, username: 'u' }).catch((e) => e)
+    expect(long).toMatchObject({ code: 'audio_too_long', limit: { maxSeconds: 900, duration: 1830 } })
+    // The per-minute limiter sends no code
+    fetchMock.mockResolvedValueOnce({ ok: false, status: 429, json: async () => ({ error: 'Too many uploads' }) })
+    await expect(uploadAudioTo3Speak({ blob, username: 'u' })).rejects.toMatchObject({ code: 'rateLimited' })
+  })
+
   it('passes other errors through with the service message', async () => {
     const blob = new Blob([new Uint8Array([1])], { type: 'audio/webm' })
     fetchMock.mockResolvedValueOnce({ ok: false, status: 400, json: async () => ({ error: 'Invalid file format' }) })

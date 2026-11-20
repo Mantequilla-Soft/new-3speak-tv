@@ -169,10 +169,12 @@
       "playlist": "playlist",
       "live": "naka-live",
       "group_one": "{{count}} bagong video ngayong linggo",
-      "group_other": "{{count}} bagong video ngayong linggo"
+      "group_other": "{{count}} bagong video ngayong linggo",
+      "streamed": "nag-stream"
     },
     "emptyCommunity": "Walang bago mula sa komunidad nitong mga nakaraang araw.",
     "emptyLive": "Walang naka-live ngayon.",
+    "recentStreams": "Mga kamakailang stream",
     "emptyGroups": "Wala pang group activity ngayong linggo."
   }
 }

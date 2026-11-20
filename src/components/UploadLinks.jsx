@@ -6,6 +6,9 @@ import { creatorKey, getCreatorSettings, isUploadBlocked } from "../utils/creato
 import { useSupportBlock } from "../lib/supportBlockStore";
 import { useAppStore } from "../lib/store";
 import { useTranslation } from "react-i18next";
+import { usePremiumStatus } from "../hooks/usePremiumStatus";
+import { landscapeEditorAllowed } from "../utils/editorFormat";
+import ProLockBadge from "./ProUpsell/ProLockBadge";
 import "./UploadLinks.scss";
 
 function pauseAllMedia() {
@@ -25,10 +28,10 @@ function ItemIcon({ name, tone, className }) {
 }
 
 // Label plus a one-line subtitle saying what the entry makes.
-function ItemText({ label, sub }) {
+function ItemText({ label, sub, badge = null }) {
   return (
     <span className="share-menu-text">
-      <span className="share-menu-label">{label}</span>
+      <span className="share-menu-label">{label}{badge && <> {badge}</>}</span>
       <span className="share-menu-sub">{sub}</span>
     </span>
   );
@@ -51,6 +54,11 @@ export default function UploadLinks({ linkClass, iconClass = "icon", onClick, on
   const { t } = useTranslation();
   const navigate = useNavigate();
   const user = useAppStore((s) => s.user);
+  // 🔒 The landscape video editor is Pro: a free account sees it with a Pro
+  // badge, and a tap opens the upsell (hooks/useEditorLauncher.js). No badge
+  // while the Pro status loads.
+  const premiumStatus = usePremiumStatus(user);
+  const videoEditorLocked = landscapeEditorAllowed(user, premiumStatus) === false;
   const [open, setOpen] = useState(null);
   const backRef = useRef(null);
   const tileRefs = useRef({});
@@ -95,7 +103,7 @@ export default function UploadLinks({ linkClass, iconClass = "icon", onClick, on
         FEATURE_EDITOR && { key: 'shortsEditor', icon: 'movie_edit', ...sub('shortsEditor'), ...fire('open-shorts-editor') },
         // The same editor as a landscape project (up to 10 minutes), posted as a
         // normal video (hooks/useEditorLauncher.js, open-video-editor).
-        FEATURE_EDITOR && { key: 'videoEditor', icon: 'content_cut', label: t('editorFormat.videoEditor'), sub: t('editorFormat.videoEditorSub'), ...fire('open-video-editor') },
+        FEATURE_EDITOR && { key: 'videoEditor', icon: 'content_cut', label: t('editorFormat.videoEditor'), sub: t('editorFormat.videoEditorSub'), ...fire('open-video-editor'), proLocked: videoEditorLocked },
       ],
     },
     {
@@ -146,7 +154,7 @@ export default function UploadLinks({ linkClass, iconClass = "icon", onClick, on
 
   const entry = (it, tone) => {
     if (it.heading) return <span key={it.key} className="share-menu-heading share-menu-subheading">{it.heading}</span>;
-    const body = <><ItemIcon name={it.icon} tone={tone} className={iconClass} /><ItemText label={it.label} sub={it.sub} /></>;
+    const body = <><ItemIcon name={it.icon} tone={tone} className={iconClass} /><ItemText label={it.label} sub={it.sub} badge={it.proLocked ? <ProLockBadge /> : null} /></>;
     const className = `${linkClass} share-menu-tile`;
     if (it.event) {
       return (

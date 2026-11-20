@@ -9,6 +9,9 @@
   flex-direction: column;
   min-width: 0;
 
+  // ⏳ The free plan's daily limit, above the picker (UploadQuota/UploadQuotaNote).
+  .upload-quota-note--studio { margin: 0 0 16px; }
+
   // The 24h story switch above the picker (35b: "Post as a 24h story").
   .upload-story-card {
     display: flex;

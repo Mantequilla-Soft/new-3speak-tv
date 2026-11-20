@@ -1,0 +1,30 @@
+{
+  "free": {
+    "video_one": "Gratis abonnement: {{count}} video per dag.",
+    "video_other": "Gratis abonnement: {{count}} video's per dag.",
+    "short_one": "Gratis abonnement: {{count}} Short per dag.",
+    "short_other": "Gratis abonnement: {{count}} Shorts per dag.",
+    "audio_one": "Gratis abonnement: {{count}} audio-upload per dag, elk tot {{minutes}} minuten.",
+    "audio_other": "Gratis abonnement: {{count}} audio-uploads per dag, elk tot {{minutes}} minuten.",
+    "audioCount_one": "Gratis abonnement: {{count}} audio-upload per dag.",
+    "audioCount_other": "Gratis abonnement: {{count}} audio-uploads per dag."
+  },
+  "left_one": "Vandaag nog {{count}} over.",
+  "left_other": "Vandaag nog {{count}} over.",
+  "nextAt": "Volgende upload om {{time}}.",
+  "later": "Probeer het later opnieuw.",
+  "reached": {
+    "video": "Je hebt de gratis videolimiet voor vandaag bereikt.",
+    "short": "Je hebt de gratis Shorts-limiet voor vandaag bereikt.",
+    "audio": "Je hebt de gratis audiolimiet voor vandaag bereikt."
+  },
+  "goPro": "Neem 3Speak Pro",
+  "tooLong": "Deze audio duurt {{duration}}. Gratis audio-uploads mogen maximaal {{minutes}} minuten duren.",
+  "tooLongPlain": "Gratis audio-uploads mogen maximaal {{minutes}} minuten duren.",
+  "tooLongTracks": "Audio langer dan {{minutes}} minuten vraagt om 3Speak Pro.",
+  "tooLongBadge": "Meer dan {{minutes}} min",
+  "tooMany_one": "Vandaag past nog maar {{count}} audio-upload. Verwijder nummers om door te gaan.",
+  "tooMany_other": "Vandaag passen nog maar {{count}} audio-uploads. Verwijder nummers om door te gaan.",
+  "batchOver_one": "nog maar {{count}} past in de gratis uploads van vandaag",
+  "batchOver_other": "nog maar {{count}} passen in de gratis uploads van vandaag"
+}

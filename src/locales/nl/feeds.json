@@ -169,10 +169,12 @@
       "playlist": "playlist",
       "live": "is live",
       "group_one": "{{count}} nieuwe video deze week",
-      "group_other": "{{count}} nieuwe video's deze week"
+      "group_other": "{{count}} nieuwe video's deze week",
+      "streamed": "streamde"
     },
     "emptyCommunity": "Niets nieuws uit de community de afgelopen dagen.",
     "emptyLive": "Er is nu niemand live.",
+    "recentStreams": "Recente streams",
     "emptyGroups": "Nog geen groepsactiviteit deze week."
   }
 }

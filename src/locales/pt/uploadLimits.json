@@ -1,0 +1,37 @@
+{
+  "free": {
+    "video_many": "Plano gratuito: {{count}} vídeos por dia.",
+    "video_one": "Plano gratuito: {{count}} vídeo por dia.",
+    "video_other": "Plano gratuito: {{count}} vídeos por dia.",
+    "short_many": "Plano gratuito: {{count}} Shorts por dia.",
+    "short_one": "Plano gratuito: {{count}} Short por dia.",
+    "short_other": "Plano gratuito: {{count}} Shorts por dia.",
+    "audio_many": "Plano gratuito: {{count}} envios de áudio por dia, de até {{minutes}} minutos cada.",
+    "audio_one": "Plano gratuito: {{count}} envio de áudio por dia, de até {{minutes}} minutos cada.",
+    "audio_other": "Plano gratuito: {{count}} envios de áudio por dia, de até {{minutes}} minutos cada.",
+    "audioCount_many": "Plano gratuito: {{count}} envios de áudio por dia.",
+    "audioCount_one": "Plano gratuito: {{count}} envio de áudio por dia.",
+    "audioCount_other": "Plano gratuito: {{count}} envios de áudio por dia."
+  },
+  "left_many": "Restam {{count}} hoje.",
+  "left_one": "Resta {{count}} hoje.",
+  "left_other": "Restam {{count}} hoje.",
+  "nextAt": "Próximo envio às {{time}}.",
+  "later": "Tente novamente mais tarde.",
+  "reached": {
+    "video": "Você atingiu o limite gratuito de vídeos de hoje.",
+    "short": "Você atingiu o limite gratuito de Shorts de hoje.",
+    "audio": "Você atingiu o limite gratuito de áudio de hoje."
+  },
+  "goPro": "Assine o 3Speak Pro",
+  "tooLong": "Este áudio tem {{duration}}. Envios de áudio gratuitos podem ter até {{minutes}} minutos.",
+  "tooLongPlain": "Envios de áudio gratuitos podem ter até {{minutes}} minutos.",
+  "tooLongTracks": "Áudio com mais de {{minutes}} minutos requer o 3Speak Pro.",
+  "tooLongBadge": "Mais de {{minutes}} min",
+  "tooMany_many": "Hoje só cabem mais {{count}} envios de áudio. Remova faixas para continuar.",
+  "tooMany_one": "Hoje só cabe mais {{count}} envio de áudio. Remova faixas para continuar.",
+  "tooMany_other": "Hoje só cabem mais {{count}} envios de áudio. Remova faixas para continuar.",
+  "batchOver_many": "restam {{count}} envios gratuitos hoje",
+  "batchOver_one": "resta {{count}} envio gratuito hoje",
+  "batchOver_other": "restam {{count}} envios gratuitos hoje"
+}

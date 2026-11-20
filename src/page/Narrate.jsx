@@ -13,6 +13,9 @@ import {
   listenLine, musicPreviewUrl, narrationDescription, startNarration, uploadNarrationMusic,
 } from '../lib/narration';
 import { toastIn } from '../utils/toast';
+import useUploadQuota from '../hooks/useUploadQuota';
+import UploadQuotaNote from '../components/UploadQuota/UploadQuotaNote';
+import { isUsedUp } from '../lib/uploadQuota';
 import './Narrate.scss';
 
 // 🎙️ /narrate: blog to podcast. A creator's own written post (or one they write
@@ -132,6 +135,9 @@ export default function Narrate() {
   const [draftBody, setDraftBody] = useState('');
   const [draftTags, setDraftTags] = useState('');
   const player = usePlayer();
+  // ⏳ The recording goes out through the audio uploader, so it is one of the
+  // free plan's audio uploads (2 a day, 15 minutes each). null = no limit known.
+  const audioQuota = useUploadQuota({ video: false }).audio;
 
   const refreshOptions = useCallback(() => getNarrationOptions()
     .then((o) => { setOptions(o); setVoice((v) => v || o.defaultVoice); })
@@ -253,8 +259,10 @@ export default function Narrate() {
   };
 
   const voiceName = voices.find((v) => v.id === (audio?.voice || voice))?.name || '';
+  const audioTooLong = !!(audio && audioQuota?.maxSeconds && audio.seconds > audioQuota.maxSeconds + 0.5);
+  const publishBlocked = isUsedUp(audioQuota) || audioTooLong;
   const publishAudio = () => {
-    if (!audio) return;
+    if (!audio || publishBlocked) return;
     const postUrl = source?.permlink ? `${SITE}/@${source.author}/${source.permlink}` : '';
     const description = narrationDescription({
       excerpt: excerptOf(script),
@@ -471,6 +479,9 @@ export default function Narrate() {
           <Card className="narrate__card">
             <h2 className="narrate__step"><span>5</span>{t('narrate.make.title')}</h2>
             <SettingRow title={t('narrate.make.intro')} sub={t('narrate.make.introHint')} control={<Toggle checked={intro} onChange={setIntro} label={t('narrate.make.intro')} />} />
+            <UploadQuotaNote kind="audio" entry={audioQuota} user={user} warn={audioTooLong}>
+              {audioTooLong && t('uploadLimits.tooLongTracks', { minutes: Math.round(audioQuota.maxSeconds / 60) })}
+            </UploadQuotaNote>
             <div className="nar-actions">
               <Button variant="secondary" icon="hearing" disabled={!script.trim() || rendering || (music.kind !== 'off' && !music.id)} onClick={() => start(true)}>{t('narrate.make.preview')}</Button>
               <Button variant="primary" icon="graphic_eq" disabled={!script.trim() || rendering || estimate > left || (music.kind !== 'off' && !music.id)} onClick={() => start(false)}>{t('narrate.make.record')}</Button>
@@ -486,7 +497,7 @@ export default function Narrate() {
                 <audio controls src={audio.url} className="nar-result__audio" />
                 <p className="narrate__note num">{t('narrate.make.done', { time: clock(audio.seconds), name: voiceName })}</p>
                 {!published ? (
-                  <Button variant="primary" icon="podcasts" onClick={publishAudio}>{t('narrate.publish.button')}</Button>
+                  <Button variant="primary" icon="podcasts" onClick={publishAudio} disabled={publishBlocked}>{t('narrate.publish.button')}</Button>
                 ) : (
                   <div className="nar-published">
                     <Banner tone="info" icon="check_circle" title={t('narrate.publish.done')}>

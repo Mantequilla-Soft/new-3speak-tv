@@ -8,6 +8,15 @@ import Beneficiary_modal from "../components/modal/Beneficiary_modal";
 import { SettingSheet } from "../components/embed-studio/SettingInfo";
 import { createImportBatch, cancelImportBatch, fmtDuration } from "../lib/youtubeImport";
 import { PickTile, ToggleTile } from "./ImportTiles";
+
+// ⏳ A batch item the free plan's daily limit refused (server/import-batch.cjs
+// records the embed / audio API's code), in the creator's language; null otherwise.
+export function limitText(it, t) {
+  if (it?.errorCode === 'daily_upload_limit') return `${t(`uploadLimits.reached.${it.isShort ? 'short' : 'video'}`)} ${t('uploadLimits.later')}`;
+  if (it?.errorCode === 'daily_audio_limit') return `${t('uploadLimits.reached.audio')} ${t('uploadLimits.later')}`;
+  if (it?.errorCode === 'audio_too_long') return t('uploadLimits.tooLongPlain', { minutes: 15 });
+  return null;
+}
 import { AudioContentFields, audioContentState, audioContentSettings, audioContentMissingText } from "./PodcastAutoImport";
 import { addThreespeakToPostingAuth, waitForThreespeakPostingAuth } from "../utils/postingAuthority";
 import { getCurrentProvider, Providers } from "../hive-api/aioha";
@@ -410,7 +419,7 @@ export function BatchStatus({ batch, user, onChange }) {
               {RUNNING.has(it.status) && it.status !== 'queued' && (
                 <div className="v2-progress is-thin"><span className="is-cyan" style={{ width: `${it.progress}%` }} /></div>
               )}
-              {it.error && (it.status === 'failed' || it.status === 'publish_failed') && <span className="yt-import__error">{it.error}</span>}
+              {it.error && (it.status === 'failed' || it.status === 'publish_failed') && <span className="yt-import__error">{limitText(it, t) || it.error}</span>}
             </div>
           </li>
         ))}

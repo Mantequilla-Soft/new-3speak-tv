@@ -1,0 +1,19 @@
+{
+  "heading": "The landscape video editor is part of 3Speak Pro",
+  "notNow": "Not now",
+  "badge": "Pro",
+  "perks": {
+    "landscape": {
+      "title": "Landscape video editor",
+      "body": "Edit 16:9, 4:3 and square videos. The Shorts and audio editors stay free."
+    },
+    "uploads": {
+      "title": "Unlimited daily uploads",
+      "body": "No daily cap on videos, Shorts and audio."
+    },
+    "longAudio": {
+      "title": "Audio longer than 15 minutes",
+      "body": "Free audio uploads stop at 15 minutes."
+    }
+  }
+}

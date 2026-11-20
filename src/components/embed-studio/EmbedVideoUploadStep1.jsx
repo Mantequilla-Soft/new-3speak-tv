@@ -19,13 +19,19 @@ import { EDITOR_VIDEO_MAX_SEC } from '../../utils/editorFormat';
 import { SHORTS_MAX_DURATION_SEC, shortsMaxDurationLabel, cameraRecordEnabledFor, VIDEO_IMPORT_ENABLED, FEATURE_EDITOR, storiesEnabledFor } from '../../utils/config';
 import { isChromium } from '../../utils/browser';
 import { useTranslation, Trans } from 'react-i18next';
+import useUploadQuota from '../../hooks/useUploadQuota';
+import UploadQuotaNote from '../UploadQuota/UploadQuotaNote';
+import { isUsedUp, uploadLimitMessage, usedUpInfo } from '../../lib/uploadQuota';
+import { usePremiumStatus } from '../../hooks/usePremiumStatus';
+import { landscapeEditorAllowed } from '../../utils/editorFormat';
+import ProLockBadge from '../ProUpsell/ProLockBadge';
 
 // Every toast from this module is headed "Upload"; the message becomes the
 // line under it. See utils/toast.js.
 const toast = toastIn('Upload');
 
 function EmbedVideoUploadStep1() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const {
     setVideoDuration,
     videoDuration,
@@ -42,7 +48,25 @@ function EmbedVideoUploadStep1() {
     pickFirstThumbnail,
     user,
     step,
+    uploadLimit,
   } = useEmbedUpload()
+
+  // ⏳ The free plan's daily limit for what this studio uploads: a Short (a
+  // story is one too) or a regular video. Nothing is known for Pro, warm-up or
+  // while the backend has no limits (useUploadQuota fails open), so nothing shows
+  // and nothing is blocked then. A refusal the embed API already sent for this
+  // kind counts until the counter shows room again or its time has passed.
+  const quota = useUploadQuota({ audio: false })
+  const quotaKind = fromStories ? 'short' : 'video'
+  const quotaEntry = quota[quotaKind]
+  const quotaRefusal = uploadLimit && uploadLimit.kind === quotaKind
+    && !(quotaEntry && quotaEntry.remaining > 0)
+    && !(uploadLimit.nextAt && uploadLimit.nextAt <= Date.now())
+    ? uploadLimit : null
+  const quotaBlocked = !!quotaRefusal || isUsedUp(quotaEntry)
+  // 🔒 "Edit video" on a regular video opens the landscape editor: Pro only. A
+  // free account sees a Pro badge, the tap opens the upsell (useEditorLauncher).
+  const landscapeLocked = landscapeEditorAllowed(user, usePremiumStatus(user)) === false
 
   const [loading, setLoading] = useState(false)
   const [dragging, setDragging] = useState(false)
@@ -210,6 +234,11 @@ function EmbedVideoUploadStep1() {
       setRcModalOpen(true);
       return;
     }
+    // Nor once today's free uploads of this kind are used up.
+    if (quotaBlocked) {
+      toast.error(uploadLimitMessage(t, quotaRefusal || usedUpInfo(quotaEntry, quotaKind), i18n?.language));
+      return;
+    }
 
     if (!file.type.startsWith("video/")) {
       toast.error(t("upload.select.invalidVideo"));
@@ -289,6 +318,10 @@ function EmbedVideoUploadStep1() {
       toast.error(t("upload.select.selectFirst"));
       return;
     }
+    if (quotaBlocked) {
+      toast.error(uploadLimitMessage(t, quotaRefusal || usedUpInfo(quotaEntry, quotaKind), i18n?.language));
+      return;
+    }
 
     if (isStory && pickFirstThumbnail(generatedThumbnail)) {
       navigate("/embed-studio/preview");
@@ -304,18 +337,18 @@ function EmbedVideoUploadStep1() {
       key: 'proceed',
       label: t("upload.select.proceed"),
       onClick: uploadVideo,
-      disabled: !videoFile || loading,
+      disabled: !videoFile || loading || quotaBlocked,
       title: !videoFile ? t("upload.select.selectFirst") : undefined,
     }],
   };
 
   // The file input itself is hidden (display:none); these real buttons open it,
   // so the picker is reachable from the keyboard too.
-  const openPicker = () => videoInputRef.current?.click();
+  const openPicker = () => { if (!quotaBlocked) videoInputRef.current?.click(); };
 
   // Drag & drop onto the upload box (gated behind the same @threespeak auth check)
   const handleDragOver = (e) => {
-    if (needsAuth || rcInsufficient || loading) return;
+    if (needsAuth || rcInsufficient || loading || quotaBlocked) return;
     e.preventDefault();
     setDragging(true);
   };
@@ -326,7 +359,7 @@ function EmbedVideoUploadStep1() {
   const handleDrop = (e) => {
     e.preventDefault();
     setDragging(false);
-    if (needsAuth || rcInsufficient || loading) return;
+    if (needsAuth || rcInsufficient || loading || quotaBlocked) return;
     const file = e.dataTransfer?.files?.[0];
     if (file) processVideoFile(file);
   };
@@ -360,6 +393,9 @@ function EmbedVideoUploadStep1() {
         </div>
       )}
 
+      {/* ⏳ Before a file is picked: what the free plan allows today. */}
+      <UploadQuotaNote kind={quotaKind} entry={quotaEntry} refusal={quotaRefusal} user={user} className="upload-quota-note--studio" />
+
       <div className="upload-step">
         <div
           className={`file-upload${dragging ? ' is-dragging' : ''}${videoFile ? ' has-file' : ''}`}
@@ -375,7 +411,7 @@ function EmbedVideoUploadStep1() {
             className="input"
             id="embed-video-upload"
             tabIndex={-1}
-            disabled={needsAuth || rcInsufficient}
+            disabled={needsAuth || rcInsufficient || quotaBlocked}
           />
 
           {videoFile ? (
@@ -499,13 +535,14 @@ function EmbedVideoUploadStep1() {
                       size={44}
                       icon="content_cut"
                       disabled={videoDuration > EDITOR_VIDEO_MAX_SEC + 1}
+                      trailing={landscapeLocked ? <ProLockBadge /> : undefined}
                       title={videoDuration > EDITOR_VIDEO_MAX_SEC + 1 ? t('editorFormat.editorTooLong', { minutes: EDITOR_VIDEO_MAX_SEC / 60 }) : undefined}
                       onClick={() => window.dispatchEvent(new CustomEvent('open-video-editor', { detail: { file: videoFile } }))}
                     >
                       {t("upload.select.editVideo")}
                     </Button>
                   )}
-                  <Button variant="inverse" size={44} next onClick={uploadVideo}>
+                  <Button variant="inverse" size={44} next onClick={uploadVideo} disabled={quotaBlocked}>
                     {t("upload.select.proceed")}
                   </Button>
                 </div>
@@ -545,7 +582,7 @@ function EmbedVideoUploadStep1() {
                     className="icon"
                     onClick={() => {
                       if (rcInsufficient) { setRcModalOpen(true); return; }
-                      if (!needsAuth) videoInputRef.current?.click();
+                      if (!needsAuth) openPicker();
                     }}
                     title={t('upload.select.iconTitle')}
                   >
@@ -585,13 +622,14 @@ function EmbedVideoUploadStep1() {
                     // Mobile + Chromium only (Web Speech API): record straight from
                     // the front camera with a voice-driven teleprompter, or pick a file.
                     <div className="button-group">
-                      <Button variant="inverse" size={48} icon="video_library" onClick={openPicker}>
+                      <Button variant="inverse" size={48} icon="video_library" onClick={openPicker} disabled={quotaBlocked}>
                         {t("upload.select.selectVideo")}
                       </Button>
                       <Button
                         variant="secondary"
                         size={48}
                         icon="videocam"
+                        disabled={quotaBlocked}
                         onClick={() => navigate(fromStories ? `/embed-studio/record?from=${isStory ? 'story' : 'stories'}` : '/embed-studio/record')}
                         trailing={<StatusPill tone="cyan">{t("upload.select.beta")}</StatusPill>}
                       >
@@ -599,7 +637,7 @@ function EmbedVideoUploadStep1() {
                       </Button>
                     </div>
                   ) : (
-                    <Button variant="inverse" size={48} icon="video_library" onClick={openPicker}>
+                    <Button variant="inverse" size={48} icon="video_library" onClick={openPicker} disabled={quotaBlocked}>
                       {isMobile ? t("upload.select.selectVideo") : t("upload.select.browseFiles")}
                     </Button>
                   )}
@@ -613,6 +651,7 @@ function EmbedVideoUploadStep1() {
                       variant="secondary"
                       size={44}
                       icon="download"
+                      disabled={quotaBlocked}
                       className="yt-import-entry"
                       onClick={() => navigate(`/import?mode=${fromStories ? 'shorts' : 'videos'}`)}
                     >

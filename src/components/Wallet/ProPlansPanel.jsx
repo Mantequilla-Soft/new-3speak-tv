@@ -23,18 +23,44 @@ const toast = toastIn('Wallet');
 const PREMIUM_API = (import.meta.env.VITE_HANGOUTS_PREMIUM_API_URL || '').replace(/\/$/, '');
 
 // The SDK's perk tabs, plus what is Pro on 3Speak that the SDK cannot know:
-// live captions (components/openpods/studioCaptions.js, Pro since 2026-11-17).
+// live captions (components/openpods/studioCaptions.js, Pro since 2026-11-17),
+// the feed ranking boost (checker utils/premiumBoost.js, PREMIUM_BOOST on prod),
+// 1080p YouTube imports (server/youtube-import.cjs MAX_HEIGHT_PREMIUM), no
+// daily upload limits (lib/uploadQuota.js, owner's rules 2026-11-20: free is
+// 1 video + 3 Shorts + 2 audio uploads a day, audio up to 15 minutes) and the
+// landscape video editor (the Shorts and audio editors stay free).
 // English like the rest of the SDK panel.
-const PERK_GROUPS = PRO_PERK_GROUPS.map((g) => (g.id === 'streaming'
-  ? {
-    ...g,
-    perks: [...g.perks, {
-      icon: '💬',
-      title: 'Live captions',
-      body: 'Your words as captions while you are live, written by Whisper, and kept as subtitles on the replay.',
-    }],
-  }
-  : g));
+const EXTRA_PERKS = {
+  general: [{
+    icon: '📈',
+    title: 'Ranked higher',
+    body: 'Your videos rank higher in Discover, Trending, related videos, Shorts and Following.',
+  }],
+  uploads: [{
+    icon: '▶️',
+    title: 'YouTube imports in 1080p',
+    body: 'Free imports stop at 480p.',
+  }, {
+    icon: '♾️',
+    title: 'Unlimited daily uploads',
+    body: 'Post as many videos, Shorts and audio as you like each day. Free accounts get 1 video, 3 Shorts and 2 audio uploads a day.',
+  }, {
+    icon: '🎙️',
+    title: 'Audio longer than 15 minutes',
+    body: 'Upload long episodes and mixes. Free audio uploads stop at 15 minutes.',
+  }, {
+    // utils/editorFormat.js landscapeEditorAllowed (owner's call 2026-11-20)
+    icon: '🎬',
+    title: 'Landscape video editor',
+    body: 'Edit 16:9, 4:3 and square videos in the editor. The Shorts and audio editors stay free.',
+  }],
+  streaming: [{
+    icon: '💬',
+    title: 'Live captions',
+    body: 'Your words as captions while you are live, written by Whisper, and kept as subtitles on the replay.',
+  }],
+};
+const PERK_GROUPS = PRO_PERK_GROUPS.map((g) => (EXTRA_PERKS[g.id] ? { ...g, perks: [...g.perks, ...EXTRA_PERKS[g.id]] } : g));
 
 /**
  * The 3Speak Pro section of the wallet, now rendered by the SDK.

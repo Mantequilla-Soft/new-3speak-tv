@@ -14,7 +14,7 @@ import { sanitizeMusicCredits, soundAuthorsOf, withSoundCredit } from '../../uti
 import { sanitizeChapters } from '../../utils/audioChapters';
 import { sanitizeAudiograms, playlistCoversOf } from '../../utils/audiogramShorts';
 import { sanitizeEditorSubtitles } from '../../utils/editorSubtitles';
-import { editorPostKind, editorAspect, editorTitle, editorChapters } from '../../utils/editorFormat';
+import { editorPostKind, editorAspect, editorTitle, editorChapters, landscapeEditorAllowed } from '../../utils/editorFormat';
 import { editorUrlWithLang, useEditorLanguage } from '../../utils/editorLanguage';
 import ShortTextModal from './ShortTextModal';
 
@@ -721,7 +721,20 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
     handleClose();
   };
 
-  if (!isOpen) return null;
+  // 🔒 The landscape video editor is Pro only (hooks/useEditorLauncher.js decides
+  // before opening; this is the guard for any other way in). Shorts (no aspect)
+  // and audio stay free. Until the Pro status is known the editor is not loaded;
+  // a free account (warm-up too) is closed out to the Pro upsell.
+  const landscape = !audioMode && !!editorAspect(aspect);
+  const landscapeAllowed = landscapeEditorAllowed(user, premiumStatus);
+  const landscapeLocked = landscape && landscapeAllowed === false;
+  useEffect(() => {
+    if (!isOpen || !landscapeLocked) return;
+    onClose?.();
+    window.dispatchEvent(new CustomEvent('open-pro-upsell', { detail: { feature: 'landscape-editor' } }));
+  }, [isOpen, landscapeLocked, onClose]);
+
+  if (!isOpen || landscapeLocked) return null;
 
   // Portaled to <body> so nothing on the page behind (nav, shorts controls,
   // transformed containers) can sit above the backdrop and take the click.
@@ -742,7 +755,7 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
       <div className="editor-modal-content">
         <div className="editor-modal-body">
           {/* Show iframe only after a working URL is resolved */}
-          {resolvedUrl && (
+          {resolvedUrl && (!landscape || landscapeAllowed) && (
             <iframe
               ref={iframeRef}
               src={editorUrlWithLang(`${resolvedUrl}?compact=true${audioMode ? '&mode=audio' : editorAspect(aspect) ? `&aspect=${encodeURIComponent(editorAspect(aspect))}` : ''}`, openLang)}

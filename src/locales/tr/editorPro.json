@@ -1,0 +1,19 @@
+{
+  "heading": "Yatay video düzenleyici 3Speak Pro'ya dahil",
+  "notNow": "Şimdi değil",
+  "badge": "Pro",
+  "perks": {
+    "landscape": {
+      "title": "Yatay video düzenleyici",
+      "body": "16:9, 4:3 ve kare videoları düzenle. Shorts ve ses düzenleyicileri ücretsiz kalır."
+    },
+    "uploads": {
+      "title": "Sınırsız günlük yükleme",
+      "body": "Videolar, Shorts ve ses için günlük sınır yok."
+    },
+    "longAudio": {
+      "title": "15 dakikadan uzun ses",
+      "body": "Ücretsiz ses yüklemeleri 15 dakikada biter."
+    }
+  }
+}

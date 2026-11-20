@@ -169,10 +169,12 @@
       "playlist": "orodha ya kucheza",
       "live": "yuko mubashara",
       "group_one": "video mpya {{count}} wiki hii",
-      "group_other": "video mpya {{count}} wiki hii"
+      "group_other": "video mpya {{count}} wiki hii",
+      "streamed": "alirusha mubashara"
     },
     "emptyCommunity": "Hakuna jipya kutoka kwa jumuiya katika siku chache zilizopita.",
     "emptyLive": "Hakuna aliye mubashara sasa hivi.",
+    "recentStreams": "Matangazo ya hivi karibuni",
     "emptyGroups": "Bado hakuna shughuli za vikundi wiki hii."
   }
 }

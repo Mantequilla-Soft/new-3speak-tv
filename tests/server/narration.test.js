@@ -283,6 +283,8 @@ describe('automation task narrate_post', () => {
     expect(st.rendered.paragraphs.map((p) => p.text)).toEqual(['My holidays. By badadib. Read by a synthetic voice.', 'We went to Dresden.', 'It rained.'])
     expect(st.rendered).toMatchObject({ voice: 'en_GB-alan-medium', music: { file: '/beds/rain.mp3' } })
     expect(st.uploads[0]).toMatchObject({ user: 'badadib', title: 'My holidays', duration: 20, category: 'podcast' })
+    // An ordinary upload: counts against the free plan's audio limit (no RSS import marker)
+    expect(st.uploads[0].uploadSource).toBeUndefined()
     expect(st.scheduled.body).toContain('https://3speak.tv/@badadib/holidays')
     expect(st.scheduled.body).toContain('Read by a synthetic voice (Alan).')
     expect(st.scheduled.jsonMetadata['3speak'].tts).toEqual({ engine: 'piper', voice: 'en_GB-alan-medium', source: 'badadib/holidays' })

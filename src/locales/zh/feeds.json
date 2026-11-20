@@ -161,10 +161,12 @@
       "audio": "发布了新音频",
       "playlist": "播放列表",
       "live": "正在直播",
-      "group_other": "本周 {{count}} 个新视频"
+      "group_other": "本周 {{count}} 个新视频",
+      "streamed": "直播过"
     },
     "emptyCommunity": "最近几天社区里没有新内容。",
     "emptyLive": "现在没有人在直播。",
+    "recentStreams": "最近的直播",
     "emptyGroups": "本周还没有群组动态。"
   }
 }

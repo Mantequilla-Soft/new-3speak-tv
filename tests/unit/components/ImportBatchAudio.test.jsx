@@ -87,3 +87,15 @@ describe('batch form with podcast episodes', () => {
     expect(createImportBatch.mock.calls[0][1].audio).toBeUndefined()
   })
 })
+
+describe('batch items the daily limit refused', () => {
+  it('are worded in the creator\'s language by their code', async () => {
+    const { limitText } = await import('../../../src/page/ImportBatch.jsx')
+    const t = (k, o) => (o ? `${k} ${JSON.stringify(o)}` : k)
+    expect(limitText({ errorCode: 'daily_upload_limit', isShort: true }, t)).toBe('uploadLimits.reached.short uploadLimits.later')
+    expect(limitText({ errorCode: 'daily_upload_limit', isShort: false }, t)).toBe('uploadLimits.reached.video uploadLimits.later')
+    expect(limitText({ errorCode: 'daily_audio_limit' }, t)).toBe('uploadLimits.reached.audio uploadLimits.later')
+    expect(limitText({ errorCode: 'audio_too_long' }, t)).toBe('uploadLimits.tooLongPlain {"minutes":15}')
+    expect(limitText({ errorCode: 'download_failed' }, t)).toBeNull()
+  })
+})

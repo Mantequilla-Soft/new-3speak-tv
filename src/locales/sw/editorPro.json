@@ -1,0 +1,19 @@
+{
+  "heading": "Kihariri cha video za mlalo ni sehemu ya 3Speak Pro",
+  "notNow": "Si sasa",
+  "badge": "Pro",
+  "perks": {
+    "landscape": {
+      "title": "Kihariri cha video za mlalo",
+      "body": "Hariri video za 16:9, 4:3 na mraba. Vihariri vya Shorts na sauti vinabaki bure."
+    },
+    "uploads": {
+      "title": "Upakiaji usio na kikomo kila siku",
+      "body": "Hakuna kikomo cha kila siku kwa video, Shorts na sauti."
+    },
+    "longAudio": {
+      "title": "Sauti ndefu zaidi ya dakika 15",
+      "body": "Upakiaji wa sauti bila malipo unaishia dakika 15."
+    }
+  }
+}

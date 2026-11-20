@@ -24,6 +24,10 @@ vi.mock('../../../src/utils/uploadFaults', () => ({
   canUseUploadFaults: () => false, getUploadFaults: () => ({}), setUploadFaults: () => ({}), initUploadFaults: () => {},
 }))
 vi.mock('../../../src/hooks/useCanImportVideos', () => ({ default: () => false }))
+// ⏳ The free plan's daily counters (hooks/useUploadQuota.js), steered per test
+vi.mock('../../../src/hooks/useUploadQuota', () => ({ default: () => m.quota, useUploadQuota: () => m.quota }))
+vi.mock('../../../src/utils/config', async (importOriginal) => ({ ...(await importOriginal()), ENABLE_SUBS: true, FEATURE_EDITOR: true }))
+vi.mock('../../../src/hooks/usePremiumStatus', () => ({ usePremiumStatus: () => m.premium }))
 vi.mock('ldrs/react', () => ({ TailChase: () => <span role="status">Working</span> }))
 // The upload wizard's shared state, kept in this component so its updates render.
 vi.mock('../../../src/context/EmbedUploadContext', async () => {
@@ -36,6 +40,7 @@ vi.mock('../../../src/context/EmbedUploadContext', async () => {
       const spy = (name, fn) => (...a) => { m.calls[name]?.(...a); return fn?.(...a) }
       return {
         user: m.user,
+        uploadLimit: m.uploadLimit,
         fromStories: m.fromStories,
         isStory,
         setIsStory: spy('setIsStory', setIsStory),
@@ -92,13 +97,17 @@ function mount() {
   return renderWithProviders(<Step1 />, { route: '/embed-studio' })
 }
 async function ready() {
-  await waitFor(() => expect(screen.queryByRole('status')).not.toBeInTheDocument())
+  // A spinner is gone (an info banner is a status too, and stays)
+  await waitFor(() => expect(screen.queryAllByRole('status').filter((el) => !el.classList.contains('v2-banner'))).toEqual([]))
 }
 
 beforeEach(() => {
   stubMatchMedia(false)
   Object.assign(m, {
     user: 'uploader', provider: null, fromStories: false, isStory: false,
+    quota: { ready: true, exempt: false, video: null, short: null, audio: null },
+    uploadLimit: null,
+    premium: { premium: false },
     meta: { duration: 42, width: 1920, height: 1080 },
     hasAuth: vi.fn(async () => true),
     addAuth: vi.fn(async () => {}),
@@ -367,5 +376,96 @@ describe('upload step 1: keyboard access', () => {
     const browse = screen.getByRole('button', { name: /Browse Files/ })
     await user.tab()
     expect(browse).toHaveFocus()
+  })
+})
+
+describe('upload step 1: the free plan\'s daily limit', () => {
+  const at = (h, min) => { const d = new Date(); d.setHours(h, min, 0, 0); return d.getTime() }
+  const time = (ms) => new Date(ms).toLocaleString('en', { hour: '2-digit', minute: '2-digit' })
+
+  it('no limit known (off, not deployed, Pro, warm-up): no note, picking as usual', async () => {
+    mount()
+    await ready()
+    expect(document.querySelector('.upload-quota-note')).toBeNull()
+    expect(input()).toBeEnabled()
+  })
+
+  it('room left: says what the free plan allows, with Go Pro, and lets a video be picked', async () => {
+    m.quota.video = { limit: 1, used: 0, remaining: 1, nextAt: null }
+    const { user } = mount()
+    await ready()
+    const note = document.querySelector('.upload-quota-note')
+    expect(note).toHaveTextContent('Free plan: 1 video per day. 1 left today.')
+    expect(within(note).getByRole('link', { name: 'Get 3Speak Pro' })).toHaveAttribute('href', '/wallet/uploader#pro')
+    expect(input()).toBeEnabled()
+    await user.upload(input(), video())
+    expect(await screen.findByText('Video Selected. Proceed to upload thumbnail')).toBeInTheDocument()
+  })
+
+  it('used up: says when the next one frees up, and picking is off (button, input, drop)', async () => {
+    const nextAt = at(23, 59)
+    m.quota.video = { limit: 1, used: 1, remaining: 0, nextAt }
+    mount()
+    await ready()
+    expect(document.querySelector('.upload-quota-note')).toHaveTextContent(`You have reached today's free video limit. Next upload at ${time(nextAt)}.`)
+    expect(screen.getByRole('button', { name: 'Browse Files' })).toBeDisabled()
+    expect(input()).toBeDisabled()
+    const box = document.querySelector('.file-upload')
+    fireEvent.drop(box, { dataTransfer: { files: [video()] } })
+    await act(async () => { await Promise.resolve() })
+    expect(m.calls.setVideoFile).not.toHaveBeenCalled()
+  })
+
+  it('a Short reads the Short counter, not the video one', async () => {
+    m.fromStories = true
+    m.meta = { duration: 20, width: 1080, height: 1920 }
+    m.quota.video = { limit: 1, used: 1, remaining: 0, nextAt: null }
+    m.quota.short = { limit: 3, used: 1, remaining: 2, nextAt: null }
+    mount()
+    await ready()
+    expect(document.querySelector('.upload-quota-note')).toHaveTextContent('Free plan: 3 Shorts per day. 2 left today.')
+    expect(input()).toBeEnabled()
+  })
+
+  it('a refusal the embed API already sent holds picking back, even with no counter known', async () => {
+    m.uploadLimit = { code: 'daily_upload_limit', kind: 'video', limit: 1, used: 1, nextAt: null }
+    mount()
+    await ready()
+    expect(document.querySelector('.upload-quota-note')).toHaveTextContent("You have reached today's free video limit. Try again later.")
+    expect(input()).toBeDisabled()
+  })
+})
+
+describe('upload step 1: Edit video opens the landscape editor, Pro only', () => {
+  const editButton = () => screen.getByRole('button', { name: /Edit this video/ })
+  it('a free account sees it with a Pro badge, and a tap asks the launcher (which shows the upsell)', async () => {
+    const asked = vi.fn()
+    window.addEventListener('open-video-editor', asked)
+    const { user } = mount()
+    await ready()
+    await user.upload(input(), video())
+    await screen.findByText('Video Selected. Proceed to upload thumbnail')
+    expect(editButton().querySelector('.pro-lock-badge')).not.toBeNull()
+    await user.click(editButton())
+    expect(asked).toHaveBeenCalledTimes(1)
+    window.removeEventListener('open-video-editor', asked)
+  })
+
+  it('Pro sees no badge; a Short\'s editor is free (no badge)', async () => {
+    m.premium = { premium: true }
+    const { user, unmount } = mount()
+    await ready()
+    await user.upload(input(), video())
+    await screen.findByText('Video Selected. Proceed to upload thumbnail')
+    expect(editButton().querySelector('.pro-lock-badge')).toBeNull()
+    unmount()
+    m.premium = { premium: false }
+    m.fromStories = true
+    m.meta = { duration: 20, width: 1080, height: 1920 }
+    const second = mount()
+    await ready()
+    await second.user.upload(input(), video())
+    await screen.findByText('Video Selected. Proceed to upload thumbnail')
+    expect(editButton().querySelector('.pro-lock-badge')).toBeNull()
   })
 })

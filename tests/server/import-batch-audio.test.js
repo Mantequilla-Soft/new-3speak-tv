@@ -30,6 +30,10 @@ beforeAll(async () => {
       if (req.headers['x-api-key'] !== 'audio-test-key') { res.statusCode = 401; return res.end('{"error":"bad key"}') }
       if (req.headers['x-user'] === 'busy') { res.statusCode = 503; return res.end('{"error":"try later"}') }
       if (req.headers['x-user'] === 'refused') { res.statusCode = 400; return res.end('{"error":"bad file"}') }
+      // ⏳ The free plan's limits, told apart from the per-minute limiter by `code`
+      if (req.headers['x-user'] === 'ratelimited') { res.statusCode = 429; return res.end('{"error":"Too many uploads, slow down"}') }
+      if (req.headers['x-user'] === 'dailyfull') { res.statusCode = 429; return res.end('{"error":"Daily audio limit reached","code":"daily_audio_limit","limit":2,"used":2,"next_at":"2026-11-21T10:00:00Z","upgrade_url":"https://3speak.tv/wallet/dailyfull#pro"}') }
+      if (req.headers['x-user'] === 'toolong') { res.statusCode = 413; return res.end('{"error":"Audio too long","code":"audio_too_long","max_seconds":900,"duration":1800}') }
       res.end(JSON.stringify({ success: true, permlink: 'aud123', playUrl: 'http://audio.example/play?a=aud123' }))
     })
   })
@@ -115,6 +119,41 @@ describe('uploadAudio failures', () => {
     const up = (user) => batch.uploadAudio({ file, user, title: 'Ep', duration: 1, format: 'mp3', mime: 'audio/mpeg' })
     await expect(up('busy')).rejects.toMatchObject({ code: 'audio_service' })
     await expect(up('refused')).rejects.toMatchObject({ code: 'audio_rejected' })
+  })
+
+  it('the free plan\'s limits are final and named by their code; a plain 429 is still "busy"', async () => {
+    const file = path.join(work, 'ep3.mp3')
+    fs.writeFileSync(file, Buffer.from('ID3 fake mp3 bytes'))
+    const up = (user) => batch.uploadAudio({ file, user, title: 'Ep', duration: 1, format: 'mp3', mime: 'audio/mpeg' })
+    await expect(up('ratelimited')).rejects.toMatchObject({ code: 'audio_service' })
+    await expect(up('dailyfull')).rejects.toMatchObject({ code: 'daily_audio_limit' })
+    await expect(up('toolong')).rejects.toMatchObject({ code: 'audio_too_long' })
+  })
+})
+
+describe('uploadAudio source marker (X-Upload-Source)', () => {
+  const file = () => {
+    const f = path.join(work, 'ep4.mp3')
+    fs.writeFileSync(f, Buffer.from('ID3 fake mp3 bytes'))
+    return f
+  }
+  it('an RSS import says so', async () => {
+    await batch.uploadAudio({ file: file(), user: 'alice', title: 'Ep', duration: 1, format: 'mp3', mime: 'audio/mpeg', uploadSource: 'rss_import' })
+    expect(received.headers['x-upload-source']).toBe('rss_import')
+  })
+  it('nothing else sends it: no option, or one the service does not know', async () => {
+    await batch.uploadAudio({ file: file(), user: 'alice', title: 'Ep', duration: 1, format: 'mp3', mime: 'audio/mpeg' })
+    expect(received.headers['x-upload-source']).toBeUndefined()
+    await batch.uploadAudio({ file: file(), user: 'alice', title: 'Ep', duration: 1, format: 'mp3', mime: 'audio/mpeg', uploadSource: 'automation' })
+    expect(received.headers['x-upload-source']).toBeUndefined()
+  })
+  it('the batch and automatic RSS imports pass it; the automations (narrate_post, post_audio) never do', () => {
+    const batchSrc = fs.readFileSync(require.resolve('../../server/import-batch.cjs'), 'utf8')
+    const audioItem = batchSrc.slice(batchSrc.indexOf('async function processAudioItem'), batchSrc.indexOf('async function parseOptions'))
+    expect(audioItem).toMatch(/uploadAudio\(\{[^}]*uploadSource: 'rss_import'/s)
+    const tasksSrc = fs.readFileSync(require.resolve('../../server/automation-tasks.cjs'), 'utf8')
+    expect(tasksSrc).toContain('deps.uploadAudio(')
+    expect(tasksSrc).not.toMatch(/uploadSource|X-Upload-Source|rss_import/)
   })
 })
 

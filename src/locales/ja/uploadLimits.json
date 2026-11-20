@@ -1,0 +1,23 @@
+{
+  "free": {
+    "video_other": "無料プラン：1日{{count}}本の動画まで。",
+    "short_other": "無料プラン：1日{{count}}本のショートまで。",
+    "audio_other": "無料プラン：1日{{count}}件の音声アップロードまで（各{{minutes}}分以内）。",
+    "audioCount_other": "無料プラン：1日{{count}}件の音声アップロードまで。"
+  },
+  "left_other": "今日はあと{{count}}件。",
+  "nextAt": "次のアップロードは{{time}}から。",
+  "later": "しばらくしてからもう一度お試しください。",
+  "reached": {
+    "video": "今日の無料動画の上限に達しました。",
+    "short": "今日の無料ショートの上限に達しました。",
+    "audio": "今日の無料音声の上限に達しました。"
+  },
+  "goPro": "3Speak Proを利用する",
+  "tooLong": "この音声は{{duration}}です。無料の音声アップロードは{{minutes}}分までです。",
+  "tooLongPlain": "無料の音声アップロードは{{minutes}}分までです。",
+  "tooLongTracks": "{{minutes}}分を超える音声には3Speak Proが必要です。",
+  "tooLongBadge": "{{minutes}}分超",
+  "tooMany_other": "今日アップロードできる音声はあと{{count}}件です。続けるにはトラックを削除してください。",
+  "batchOver_other": "今日の無料アップロードに入るのは{{count}}件だけです"
+}

@@ -9,7 +9,9 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { screen, waitFor } from '@testing-library/react'
 import { renderWithProviders, stubMatchMedia } from './_render.jsx'
 
-const m = vi.hoisted(() => ({ editor: true, settings: {} }))
+const m = vi.hoisted(() => ({ editor: true, settings: {}, premium: { premium: false } }))
+// 🔒 The viewer's Pro status (the landscape video editor is Pro only)
+vi.mock('../../../src/hooks/usePremiumStatus', () => ({ usePremiumStatus: () => m.premium }))
 vi.mock('../../../src/hive-api/aioha', async () => (await import('./_render.jsx')).aiohaModule())
 vi.mock('../../../src/utils/config', async (importOriginal) => {
   const real = await importOriginal()
@@ -37,6 +39,7 @@ beforeEach(() => {
   stubMatchMedia(false)
   m.editor = true
   m.settings = {}
+  m.premium = { premium: false }
   events = []
   useSupportBlock.setState({ block: null })
   useAppStore.setState({ user: null, incubationHandle: null })
@@ -199,5 +202,54 @@ describe('UploadLinks: Audio editor entry', () => {
     } finally {
       window.removeEventListener('open-video-editor', onVideo)
     }
+  })
+})
+
+describe('UploadLinks: the landscape Video Editor is Pro only', () => {
+  const tile = (title) => screen.getByTitle(title)
+  async function renderVideo() {
+    const r = renderWithProviders(<UploadLinks linkClass="share-link" />)
+    await openCat(r.user, 'Video')
+    return r
+  }
+
+  it('a free account sees it with a Pro badge; the Shorts Editor has none', async () => {
+    useAppStore.setState({ user: 'badadib' })
+    await renderVideo()
+    expect(tile('Video Editor').querySelector('.pro-lock-badge')).toHaveTextContent('Pro')
+    expect(tile('Shorts Editor').querySelector('.pro-lock-badge')).toBeNull()
+  })
+
+  it('a tap still asks for it (open-video-editor): the launcher answers a free account with the upsell', async () => {
+    useAppStore.setState({ user: 'badadib' })
+    const asked = vi.fn()
+    window.addEventListener('open-video-editor', asked)
+    const { user } = await renderVideo()
+    await user.click(tile('Video Editor'))
+    await waitFor(() => expect(asked).toHaveBeenCalledTimes(1))
+    window.removeEventListener('open-video-editor', asked)
+  })
+
+  it('Pro sees no badge, and nor does anyone while the Pro status loads', async () => {
+    useAppStore.setState({ user: 'badadib' })
+    m.premium = { premium: true }
+    const { unmount } = await renderVideo()
+    expect(tile('Video Editor').querySelector('.pro-lock-badge')).toBeNull()
+    unmount()
+    m.premium = null
+    await renderVideo()
+    expect(tile('Video Editor').querySelector('.pro-lock-badge')).toBeNull()
+  })
+
+  it('a warm-up account (no Hive account) is not Pro: badge', async () => {
+    useAppStore.setState({ user: null, incubationHandle: 'newbie' })
+    await renderVideo()
+    expect(tile('Video Editor').querySelector('.pro-lock-badge')).not.toBeNull()
+  })
+
+  it('the Audio Editor stays free', async () => {
+    useAppStore.setState({ user: 'badadib' })
+    await renderAudio()
+    expect(entry().querySelector('.pro-lock-badge')).toBeNull()
   })
 })

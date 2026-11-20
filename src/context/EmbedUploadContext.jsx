@@ -4,7 +4,7 @@ import { creatorKey, getCreatorSettings, isUploadBlocked } from '../utils/creato
 import { useSupportBlock } from '../lib/supportBlockStore';
 import { useNavigate } from 'react-router-dom';
 import { toastIn } from '../utils/toast';
-import { EMBED_UPLOAD_URL, EMBED_API_URL, EMBED_API_KEY, HIVE_API_URL, EMBED_DEBUG, CHECKER_API_KEY } from '../utils/config';
+import { EMBED_UPLOAD_URL, EMBED_API_URL, EMBED_API_KEY, HIVE_API_URL, EMBED_DEBUG, CHECKER_API_KEY, ENABLE_SUBS } from '../utils/config';
 import { uploadThumbnail } from '../utils/uploadThumbnail';
 import { pickEmbedEndpoint } from '../utils/embedEndpoints';
 import { reloadIfStale } from '../utils/checkLatestVersion';
@@ -38,6 +38,7 @@ import { buildPollMeta, openPollFields, POLL_MIN_OPTIONS, POLL_MAX_OPTIONS } fro
 // The body of a story posted without a caption (see publishToEmbed).
 const STORY_FALLBACK_CAPTION = 'My 24-hour story on 3Speak.';
 import { withShortHeading, shortHeading } from '../utils/shortTitle';
+import { uploadLimitFromAxios, uploadLimitError, uploadLimitMessage, isUploadLimitError, refreshUploadQuota, proPlansPath } from '../lib/uploadQuota';
 
 // Every toast from this module is headed "Upload"; the message becomes the
 // line under it. See utils/toast.js.
@@ -111,7 +112,7 @@ export function useEmbedUpload() {
 }
 
 export function EmbedUploadProvider({ children }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { user, incubationHandle } = useAppStore();
   // Who the uploaded ASSET belongs to.
   //
@@ -334,6 +335,10 @@ export function EmbedUploadProvider({ children }) {
   }, []);
   const [statusMessages, setStatusMessages] = useState([]);
   const [embedUrl, setEmbedUrl] = useState('');
+  // ⏳ The free plan's daily limit, as the embed API last refused it
+  // (lib/uploadQuota.js parseUploadLimit): { code, kind, limit, used, nextAt },
+  // or null. Shown beside the picker; cleared with the video.
+  const [uploadLimit, setUploadLimit] = useState(null);
   // Hive permlink of the just-published post — used by the success screen to
   // offer promotion of the new video.
   const [publishedPermlink, setPublishedPermlink] = useState('');
@@ -371,6 +376,10 @@ export function EmbedUploadProvider({ children }) {
   // this exact File, so cancelling actually stops instead of being undone by the
   // details-step effect on its next run.
   const cancelledFileRef = useRef(null);
+  // The file the daily limit refused. Like a cancel, the background upload does
+  // not start it again by itself (each try would only be refused again); an
+  // explicit publish still asks the server once more.
+  const limitedFileRef = useRef(null);
 
   // Early/background video upload — the TUS upload starts while the user is still
   // on the "Add details" step (instead of only at final publish), so by the time
@@ -409,6 +418,24 @@ export function EmbedUploadProvider({ children }) {
   // the post-upload /video/*/hive + /thumbnail writes hit the same host as the
   // bytes (works whether or not the servers share a MongoDB).
   const chosenEmbedBaseRef = useRef('');
+
+  // A 429 `daily_upload_limit` from an upload-token mint, as an Error whose
+  // message the creator can read; null for any other failure. Every upload path
+  // calls this before deciding what a failed mint means: the limit is final, it
+  // must never fall through to another transport or to the API-key upload.
+  const limitErrorFrom = useCallback((err) => {
+    const info = uploadLimitFromAxios(err, fromStories ? 'short' : 'video');
+    return info ? uploadLimitError(info, uploadLimitMessage(t, info, i18n?.language)) : null;
+  }, [fromStories, t, i18n]);
+
+  // Say a limit refusal where the creator is looking, with the way out (Pro).
+  const reportUploadLimit = useCallback((err) => {
+    setUploadLimit(err.limit);
+    refreshUploadQuota();
+    toast.error(err.message, ENABLE_SUBS && user
+      ? { action: { label: t('uploadLimits.goPro'), onClick: () => navigate(proPlansPath(user)) } }
+      : undefined);
+  }, [navigate, user, t]);
 
   const addMessage = (msg, type = 'info') => {
     setStatusMessages(prev => [...prev, {
@@ -449,6 +476,7 @@ export function EmbedUploadProvider({ children }) {
       }
     }
     setStreamClip(null);
+    setUploadLimit(null);
     resetEarlyUpload();
   };
 
@@ -538,6 +566,7 @@ export function EmbedUploadProvider({ children }) {
     setPrefilledPermlink('');
     setPrefilledOwner('');
     setPrefilledEmbedUrl('');
+    setUploadLimit(null);
     resetEarlyUpload();
   };
 
@@ -668,6 +697,10 @@ export function EmbedUploadProvider({ children }) {
       tusToken = tokenRes.data?.token || null;
       tokenEmbedUrl = tokenRes.data?.embed_url || '';
     } catch (tokenErr) {
+      // 🚨 Over the free plan's daily limit: stop. The API-key fallback below
+      // would carry the same video past the limit the server just refused.
+      const limitErr = limitErrorFrom(tokenErr);
+      if (limitErr) throw limitErr;
       console.warn('Upload token mint failed — falling back to API-key upload (no deferral)', tokenErr);
       deferral = captureDeferral(null);
     }
@@ -831,7 +864,7 @@ export function EmbedUploadProvider({ children }) {
     upload.start();
     await done;
     return { embedUrl: capturedEmbedUrl, deferral };
-  }, [videoFile, user, fromStories, videoDuration, gated, gatedAllowlist, captureDeferral, t]);
+  }, [videoFile, user, fromStories, videoDuration, gated, gatedAllowlist, captureDeferral, limitErrorFrom, t]);
 
   // Preflight-free multipart POST helper for the chunked protocol. No custom
   // request headers (FormData sets multipart/form-data itself) so the browser
@@ -1069,11 +1102,16 @@ export function EmbedUploadProvider({ children }) {
 
     if (!sessionId) {
       chunkSize = await measureChunkSize();
-      const tokenRes = await axios.post(
-        `${base}/uploads/token`,
-        { owner: assetOwner, frontend_app: '3speak-tv', short: !!fromStories, gated: !!gated, defer_encode: true, ...(gated && gatedAllowlist.length ? { allowlist: gatedAllowlist } : {}) },
-        { headers: { 'X-API-Key': EMBED_API_KEY, 'Content-Type': 'application/json' } }
-      );
+      let tokenRes;
+      try {
+        tokenRes = await axios.post(
+          `${base}/uploads/token`,
+          { owner: assetOwner, frontend_app: '3speak-tv', short: !!fromStories, gated: !!gated, defer_encode: true, ...(gated && gatedAllowlist.length ? { allowlist: gatedAllowlist } : {}) },
+          { headers: { 'X-API-Key': EMBED_API_KEY, 'Content-Type': 'application/json' } }
+        );
+      } catch (tokenErr) {
+        throw limitErrorFrom(tokenErr) || tokenErr;
+      }
       const token = tokenRes.data?.token;
       embedFromServer = tokenRes.data?.embed_url || '';
       if (!token) throw new Error(t('upload.errors.noToken'));
@@ -1332,7 +1370,7 @@ export function EmbedUploadProvider({ children }) {
       deferral = { finalizeToken: null, permlink: finPermlink, gated: deferral.gated, lost: true };
     }
     return { embedUrl: fin.embed_url || embedFromServer || '', deferral };
-  }, [user, fromStories, gated, gatedAllowlist, videoFile, videoDuration, postForm, t]);
+  }, [user, fromStories, gated, gatedAllowlist, videoFile, videoDuration, postForm, limitErrorFrom, t]);
 
   // TIER 3, last resort: ONE multipart POST carrying the whole file.
   //
@@ -1367,11 +1405,16 @@ export function EmbedUploadProvider({ children }) {
       total: size,
     });
 
-    const tokenRes = await axios.post(
-      `${base}/uploads/token`,
-      { owner: assetOwner, frontend_app: '3speak-tv', short: !!fromStories, gated: !!gated, defer_encode: true, ...(gated && gatedAllowlist.length ? { allowlist: gatedAllowlist } : {}) },
-      { headers: { 'X-API-Key': EMBED_API_KEY, 'Content-Type': 'application/json' } },
-    );
+    let tokenRes;
+    try {
+      tokenRes = await axios.post(
+        `${base}/uploads/token`,
+        { owner: assetOwner, frontend_app: '3speak-tv', short: !!fromStories, gated: !!gated, defer_encode: true, ...(gated && gatedAllowlist.length ? { allowlist: gatedAllowlist } : {}) },
+        { headers: { 'X-API-Key': EMBED_API_KEY, 'Content-Type': 'application/json' } },
+      );
+    } catch (tokenErr) {
+      throw limitErrorFrom(tokenErr) || tokenErr;
+    }
     const token = tokenRes.data?.token;
     if (!token) throw new Error(t('upload.errors.noToken'));
     // 🔐 Refuse to continue if we asked for a gated upload and the embed
@@ -1411,7 +1454,7 @@ export function EmbedUploadProvider({ children }) {
 
     if (!res || !res.embed_url) throw new Error(t('upload.errors.singleNoEmbedUrl'));
     return { embedUrl: res.embed_url, deferral };
-  }, [user, fromStories, gated, gatedAllowlist, videoFile, videoDuration, postForm, t]);
+  }, [user, fromStories, gated, gatedAllowlist, videoFile, videoDuration, postForm, limitErrorFrom, t]);
 
   // Upload with automatic fallback. Primary path is TUS on the least-busy host;
   // if the user forced the reliable path (checkbox) or PATCH was already detected
@@ -1430,7 +1473,8 @@ export function EmbedUploadProvider({ children }) {
       try {
         return await runChunkedUpload();
       } catch (chunkErr) {
-        if (chunkErr?.code === 'ABORTED') throw chunkErr;
+        // A user reset, or the daily limit: neither is a transport failure.
+        if (chunkErr?.code === 'ABORTED' || isUploadLimitError(chunkErr)) throw chunkErr;
         console.warn('Chunked upload failed — trying single-request fallback', chunkErr);
         toast.message(t('upload.progress.stillStuck'));
         return await runSimpleUpload();
@@ -1478,6 +1522,8 @@ export function EmbedUploadProvider({ children }) {
     if (!videoFile) return;
     // Cancelled by hand. Only an explicit publish restarts this one.
     if (cancelledFileRef.current === videoFile) return;
+    // Refused by the daily limit: the same goes.
+    if (limitedFileRef.current === videoFile) return;
     // A different file is now selected (e.g. "Replace Video") → start fresh.
     if (earlyUploadStartedRef.current && earlyUploadedFileRef.current !== videoFile) {
       resetEarlyUpload();
@@ -1521,6 +1567,8 @@ export function EmbedUploadProvider({ children }) {
         setUploadProgress(100);
         setVideoUploadStatus('done');
         setStatusText('');
+        // This upload now counts against the day: the picker's note reads it again.
+        refreshUploadQuota();
         return { embedUrl: url, deferral };
       } catch (err) {
         // An abandoned attempt (video replaced, upload cancelled) fails quietly:
@@ -1536,12 +1584,18 @@ export function EmbedUploadProvider({ children }) {
         // last thing on screen stays "retrying…" forever, which is
         // indistinguishable from the hang these guards exist to prevent.
         setStatusText(err?.message || t('upload.errors.uploadFailedRetry'));
+        if (isUploadLimitError(err)) {
+          limitedFileRef.current = videoFile;
+          reportUploadLimit(err);
+          // Publish must not try again inline: the server has just said no.
+          return { embedUrl: '', deferral: null, limit: err };
+        }
         toast.error(err?.message || t('upload.errors.uploadFailedRetry'));
         return { embedUrl: '', deferral: null };
       }
     })();
     earlyUploadPromiseRef.current = p;
-  }, [prefilled, videoFile, runUploadWithFallback, resetEarlyUpload, patchUploadDetail, t]);
+  }, [prefilled, videoFile, runUploadWithFallback, resetEarlyUpload, patchUploadDetail, reportUploadLimit, t]);
 
   /**
    * publishToEmbed — the 3-step publish:
@@ -1617,11 +1671,18 @@ export function EmbedUploadProvider({ children }) {
     if (!prefilled && !earlyUrl && earlyUploadPromiseRef.current) {
       setUploading(true);
       setStatusText(t('upload.publishing.finishingUpload'));
+      let early = null;
       try {
-        const early = await earlyUploadPromiseRef.current;
+        early = await earlyUploadPromiseRef.current;
         earlyUrl = early?.embedUrl || '';
         deferral = early?.deferral || null;
       } catch { earlyUrl = ''; deferral = null; }
+      if (early?.limit) {
+        addMessage(early.limit.message, 'error');
+        setUploading(false);
+        setStatusText('');
+        return;
+      }
     }
     const alreadyUploaded = !prefilled && !!earlyUrl;
 
@@ -2422,11 +2483,19 @@ export function EmbedUploadProvider({ children }) {
       setPublishedPermlink(hivePermlink);
       setCompleted(true);
       setUploading(false);
+      refreshUploadQuota();
       addMessage(t('upload.publishing.log.published'), 'success');
       toast.success(t('upload.publishing.publishedToast'));
 
     } catch (err) {
       console.error('Publish error:', err);
+      if (isUploadLimitError(err)) {
+        addMessage(err.message, 'error');
+        reportUploadLimit(err);
+        setUploading(false);
+        setStatusText('');
+        return;
+      }
       addMessage(t('upload.errors.uploadFailedWith', { msg: err.message }), 'error');
       toast.error(t('upload.errors.uploadFailedWith', { msg: err.message }));
       setUploading(false);
@@ -2498,6 +2567,8 @@ export function EmbedUploadProvider({ children }) {
     embedUrl, setEmbedUrl,
     publishedPermlink,
     importSource, setImportSource,
+    // ⏳ The daily limit the embed API refused this video with, or null
+    uploadLimit,
     // Background ('early') video upload that starts on the details step
     videoUploadStatus,
     selectedEndpoint,

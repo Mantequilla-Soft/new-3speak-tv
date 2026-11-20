@@ -2,9 +2,19 @@
 // Which editor App.jsx's global popup shows (hooks/useEditorLauncher.js): the
 // shorts editor or the audio editor, with the file and the audio upload track
 // they came with.
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { act, renderHook } from '@testing-library/react'
-import { useEditorLauncher } from '../../../src/hooks/useEditorLauncher'
+
+// 🔒 The landscape video editor is Pro only: the Pro status, steered per test
+const m = vi.hoisted(() => ({ premium: { premium: true } }))
+vi.mock('../../../src/hooks/usePremiumStatus', () => ({ usePremiumStatus: () => m.premium }))
+const { useAppStore } = await import('../../../src/lib/store')
+const { useEditorLauncher } = await import('../../../src/hooks/useEditorLauncher')
+
+beforeEach(() => {
+  m.premium = { premium: true }
+  useAppStore.setState({ user: 'badadib', incubationHandle: null })
+})
 
 const fire = (type, detail) => act(() => { window.dispatchEvent(new CustomEvent(type, detail === undefined ? undefined : { detail })) })
 
@@ -102,5 +112,49 @@ describe('useEditorLauncher', () => {
     expect(result.current.episode).toBeNull()
     fire('open-shorts-editor')
     expect(result.current.episode).toBeNull()
+  })
+})
+
+describe('useEditorLauncher: the landscape video editor is Pro only', () => {
+  it('a free account gets the Pro upsell instead of the editor', () => {
+    m.premium = { premium: false }
+    const { result } = renderHook(() => useEditorLauncher())
+    fire('open-video-editor', { file: new File(['v'], 'talk.mp4', { type: 'video/mp4' }) })
+    expect(result.current).toMatchObject({ open: false, upsell: true, file: null })
+    act(() => result.current.closeUpsell())
+    expect(result.current.upsell).toBe(false)
+  })
+
+  it('a warm-up account is not Pro: upsell', () => {
+    useAppStore.setState({ user: null, incubationHandle: 'newbie' })
+    const { result } = renderHook(() => useEditorLauncher())
+    fire('open-video-editor')
+    expect(result.current).toMatchObject({ open: false, upsell: true })
+  })
+
+  it('waits for the Pro status, then opens the editor for Pro without the upsell flashing', () => {
+    m.premium = null
+    const { result, rerender } = renderHook(() => useEditorLauncher())
+    fire('open-video-editor', { aspect: '4:3' })
+    expect(result.current).toMatchObject({ open: false, upsell: false })
+    m.premium = { premium: true }
+    rerender()
+    expect(result.current).toMatchObject({ open: true, aspect: '4:3', upsell: false })
+  })
+
+  it('the Shorts and audio editors stay free, warm-up included', () => {
+    m.premium = { premium: false }
+    useAppStore.setState({ user: null, incubationHandle: 'newbie' })
+    const { result } = renderHook(() => useEditorLauncher())
+    fire('open-shorts-editor')
+    expect(result.current).toMatchObject({ open: true, mode: 'video', aspect: null, upsell: false })
+    fire('open-audio-editor')
+    expect(result.current).toMatchObject({ open: true, mode: 'audio', upsell: false })
+  })
+
+  it('EditorModal\'s guard (open-pro-upsell) opens the upsell', () => {
+    const { result } = renderHook(() => useEditorLauncher())
+    fire('open-pro-upsell', { feature: 'landscape-editor' })
+    expect(result.current.upsell).toBe(true)
   })
 })

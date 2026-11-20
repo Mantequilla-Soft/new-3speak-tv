@@ -1,0 +1,30 @@
+{
+  "free": {
+    "video_one": "Free plan: {{count}} video per day.",
+    "video_other": "Free plan: {{count}} videos per day.",
+    "short_one": "Free plan: {{count}} Short per day.",
+    "short_other": "Free plan: {{count}} Shorts per day.",
+    "audio_one": "Free plan: {{count}} audio upload per day, up to {{minutes}} minutes each.",
+    "audio_other": "Free plan: {{count}} audio uploads per day, up to {{minutes}} minutes each.",
+    "audioCount_one": "Free plan: {{count}} audio upload per day.",
+    "audioCount_other": "Free plan: {{count}} audio uploads per day."
+  },
+  "left_one": "{{count}} left today.",
+  "left_other": "{{count}} left today.",
+  "nextAt": "Next upload at {{time}}.",
+  "later": "Try again later.",
+  "reached": {
+    "video": "You have reached today's free video limit.",
+    "short": "You have reached today's free Shorts limit.",
+    "audio": "You have reached today's free audio limit."
+  },
+  "goPro": "Get 3Speak Pro",
+  "tooLong": "This audio is {{duration}} long. Free audio uploads can be up to {{minutes}} minutes.",
+  "tooLongPlain": "Free audio uploads can be up to {{minutes}} minutes.",
+  "tooLongTracks": "Audio longer than {{minutes}} minutes needs 3Speak Pro.",
+  "tooLongBadge": "Over {{minutes}} min",
+  "tooMany_one": "Only {{count}} more audio upload fits today. Remove tracks to go on.",
+  "tooMany_other": "Only {{count}} more audio uploads fit today. Remove tracks to go on.",
+  "batchOver_one": "only {{count}} fits in today's free uploads",
+  "batchOver_other": "only {{count}} fit in today's free uploads"
+}

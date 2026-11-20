@@ -1,0 +1,19 @@
+{
+  "heading": "Der Video-Editor für Querformat gehört zu 3Speak Pro",
+  "notNow": "Jetzt nicht",
+  "badge": "Pro",
+  "perks": {
+    "landscape": {
+      "title": "Video-Editor für Querformat",
+      "body": "Bearbeite Videos in 16:9, 4:3 und quadratisch. Der Shorts- und der Audio-Editor bleiben kostenlos."
+    },
+    "uploads": {
+      "title": "Unbegrenzte Uploads pro Tag",
+      "body": "Kein Tageslimit für Videos, Shorts und Audio."
+    },
+    "longAudio": {
+      "title": "Audio über 15 Minuten",
+      "body": "Kostenlose Audio-Uploads enden bei 15 Minuten."
+    }
+  }
+}

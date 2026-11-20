@@ -1,0 +1,19 @@
+{
+  "heading": "Trình chỉnh sửa video ngang thuộc 3Speak Pro",
+  "notNow": "Để sau",
+  "badge": "Pro",
+  "perks": {
+    "landscape": {
+      "title": "Trình chỉnh sửa video ngang",
+      "body": "Chỉnh sửa video 16:9, 4:3 và vuông. Trình chỉnh sửa Short và âm thanh vẫn miễn phí."
+    },
+    "uploads": {
+      "title": "Tải lên hằng ngày không giới hạn",
+      "body": "Không giới hạn hằng ngày cho video, Short và âm thanh."
+    },
+    "longAudio": {
+      "title": "Âm thanh dài hơn 15 phút",
+      "body": "Âm thanh tải lên miễn phí dài tối đa 15 phút."
+    }
+  }
+}

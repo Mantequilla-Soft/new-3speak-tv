@@ -161,10 +161,12 @@
       "audio": "새 오디오",
       "playlist": "재생목록",
       "live": "라이브 중",
-      "group_other": "이번 주 새 동영상 {{count}}개"
+      "group_other": "이번 주 새 동영상 {{count}}개",
+      "streamed": "님이 방송함"
     },
     "emptyCommunity": "최근 며칠 동안 커뮤니티에 새 소식이 없어요.",
     "emptyLive": "지금 라이브 중인 사람이 없어요.",
+    "recentStreams": "최근 방송",
     "emptyGroups": "이번 주 그룹 활동이 아직 없어요."
   }
 }

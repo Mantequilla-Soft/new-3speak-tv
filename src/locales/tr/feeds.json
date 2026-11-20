@@ -169,10 +169,12 @@
       "playlist": "oynatma listesi",
       "live": "canlı yayında",
       "group_one": "bu hafta {{count}} yeni video",
-      "group_other": "bu hafta {{count}} yeni video"
+      "group_other": "bu hafta {{count}} yeni video",
+      "streamed": "yayın yaptı"
     },
     "emptyCommunity": "Son birkaç günde topluluktan yeni bir şey yok.",
     "emptyLive": "Şu an kimse canlı yayında değil.",
+    "recentStreams": "Son yayınlar",
     "emptyGroups": "Bu hafta henüz grup etkinliği yok."
   }
 }

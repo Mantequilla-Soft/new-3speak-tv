@@ -1,0 +1,19 @@
+{
+  "heading": "L'editor video orizzontale fa parte di 3Speak Pro",
+  "notNow": "Non ora",
+  "badge": "Pro",
+  "perks": {
+    "landscape": {
+      "title": "Editor video orizzontale",
+      "body": "Modifica video 16:9, 4:3 e quadrati. Gli editor di Short e audio restano gratuiti."
+    },
+    "uploads": {
+      "title": "Caricamenti giornalieri illimitati",
+      "body": "Nessun limite giornaliero per video, Short e audio."
+    },
+    "longAudio": {
+      "title": "Audio oltre 15 minuti",
+      "body": "I caricamenti audio gratuiti si fermano a 15 minuti."
+    }
+  }
+}

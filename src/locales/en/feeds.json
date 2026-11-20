@@ -169,10 +169,12 @@
       "playlist": "playlist",
       "live": "is live",
       "group_one": "{{count}} new video this week",
-      "group_other": "{{count}} new videos this week"
+      "group_other": "{{count}} new videos this week",
+      "streamed": "streamed"
     },
     "emptyCommunity": "Nothing new from the community in the last few days.",
     "emptyLive": "Nobody is live right now.",
+    "recentStreams": "Recent streams",
     "emptyGroups": "No group activity this week yet."
   }
 }

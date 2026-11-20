@@ -1,0 +1,37 @@
+{
+  "free": {
+    "video_many": "Plan gratuito: {{count}} videos al día.",
+    "video_one": "Plan gratuito: {{count}} video al día.",
+    "video_other": "Plan gratuito: {{count}} videos al día.",
+    "short_many": "Plan gratuito: {{count}} Shorts al día.",
+    "short_one": "Plan gratuito: {{count}} Short al día.",
+    "short_other": "Plan gratuito: {{count}} Shorts al día.",
+    "audio_many": "Plan gratuito: {{count}} subidas de audio al día, de hasta {{minutes}} minutos cada una.",
+    "audio_one": "Plan gratuito: {{count}} subida de audio al día, de hasta {{minutes}} minutos cada una.",
+    "audio_other": "Plan gratuito: {{count}} subidas de audio al día, de hasta {{minutes}} minutos cada una.",
+    "audioCount_many": "Plan gratuito: {{count}} subidas de audio al día.",
+    "audioCount_one": "Plan gratuito: {{count}} subida de audio al día.",
+    "audioCount_other": "Plan gratuito: {{count}} subidas de audio al día."
+  },
+  "left_many": "Te quedan {{count}} hoy.",
+  "left_one": "Te queda {{count}} hoy.",
+  "left_other": "Te quedan {{count}} hoy.",
+  "nextAt": "Próxima subida a las {{time}}.",
+  "later": "Vuelve a intentarlo más tarde.",
+  "reached": {
+    "video": "Has alcanzado el límite gratuito de videos de hoy.",
+    "short": "Has alcanzado el límite gratuito de Shorts de hoy.",
+    "audio": "Has alcanzado el límite gratuito de audio de hoy."
+  },
+  "goPro": "Consigue 3Speak Pro",
+  "tooLong": "Este audio dura {{duration}}. Las subidas de audio gratuitas pueden durar hasta {{minutes}} minutos.",
+  "tooLongPlain": "Las subidas de audio gratuitas pueden durar hasta {{minutes}} minutos.",
+  "tooLongTracks": "El audio de más de {{minutes}} minutos requiere 3Speak Pro.",
+  "tooLongBadge": "Más de {{minutes}} min",
+  "tooMany_many": "Hoy solo caben {{count}} subidas de audio más. Quita pistas para continuar.",
+  "tooMany_one": "Hoy solo cabe {{count}} subida de audio más. Quita pistas para continuar.",
+  "tooMany_other": "Hoy solo caben {{count}} subidas de audio más. Quita pistas para continuar.",
+  "batchOver_many": "solo {{count}} caben en las subidas gratuitas de hoy",
+  "batchOver_one": "solo {{count}} cabe en las subidas gratuitas de hoy",
+  "batchOver_other": "solo {{count}} caben en las subidas gratuitas de hoy"
+}

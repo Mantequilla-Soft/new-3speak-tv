@@ -1,0 +1,30 @@
+{
+  "free": {
+    "video_one": "Libreng plan: {{count}} video bawat araw.",
+    "video_other": "Libreng plan: {{count}} video bawat araw.",
+    "short_one": "Libreng plan: {{count}} Short bawat araw.",
+    "short_other": "Libreng plan: {{count}} Short bawat araw.",
+    "audio_one": "Libreng plan: {{count}} audio upload bawat araw, hanggang {{minutes}} minuto bawat isa.",
+    "audio_other": "Libreng plan: {{count}} audio upload bawat araw, hanggang {{minutes}} minuto bawat isa.",
+    "audioCount_one": "Libreng plan: {{count}} audio upload bawat araw.",
+    "audioCount_other": "Libreng plan: {{count}} audio upload bawat araw."
+  },
+  "left_one": "{{count}} pa ang natitira ngayon.",
+  "left_other": "{{count}} pa ang natitira ngayon.",
+  "nextAt": "Susunod na upload sa {{time}}.",
+  "later": "Subukan ulit mamaya.",
+  "reached": {
+    "video": "Naabot mo na ang libreng limitasyon sa video ngayong araw.",
+    "short": "Naabot mo na ang libreng limitasyon sa Shorts ngayong araw.",
+    "audio": "Naabot mo na ang libreng limitasyon sa audio ngayong araw."
+  },
+  "goPro": "Kumuha ng 3Speak Pro",
+  "tooLong": "{{duration}} ang haba ng audio na ito. Hanggang {{minutes}} minuto lang ang libreng audio upload.",
+  "tooLongPlain": "Hanggang {{minutes}} minuto lang ang libreng audio upload.",
+  "tooLongTracks": "Kailangan ng 3Speak Pro para sa audio na lampas {{minutes}} minuto.",
+  "tooLongBadge": "Lampas {{minutes}} min",
+  "tooMany_one": "{{count}} audio upload na lang ang kasya ngayon. Mag-alis ng track para magpatuloy.",
+  "tooMany_other": "{{count}} audio upload na lang ang kasya ngayon. Mag-alis ng track para magpatuloy.",
+  "batchOver_one": "{{count}} na lang ang kasya sa libreng upload ngayon",
+  "batchOver_other": "{{count}} na lang ang kasya sa libreng upload ngayon"
+}

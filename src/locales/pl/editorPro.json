@@ -1,0 +1,19 @@
+{
+  "heading": "Edytor filmów poziomych należy do 3Speak Pro",
+  "notNow": "Nie teraz",
+  "badge": "Pro",
+  "perks": {
+    "landscape": {
+      "title": "Edytor filmów poziomych",
+      "body": "Edytuj filmy 16:9, 4:3 i kwadratowe. Edytory Shortów i audio pozostają darmowe."
+    },
+    "uploads": {
+      "title": "Bez dziennego limitu przesyłania",
+      "body": "Bez dziennego limitu filmów, Shortów i audio."
+    },
+    "longAudio": {
+      "title": "Audio dłuższe niż 15 minut",
+      "body": "Darmowe nagrania audio kończą się na 15 minutach."
+    }
+  }
+}

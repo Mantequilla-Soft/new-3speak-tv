@@ -199,6 +199,22 @@
   color: var(--muted);
 }
 
+// Live tab while nobody is live: the newest recording of each creator.
+.home-activity__subhead {
+  margin: 0;
+  padding: 4px 10px 6px;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.home-activity__vod-len {
+  display: block;
+  margin-top: 4px;
+}
+
 .home-activity__empty {
   margin: 0;
   padding: 16px 10px;

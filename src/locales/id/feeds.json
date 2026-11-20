@@ -161,10 +161,12 @@
       "audio": "audio baru",
       "playlist": "playlist",
       "live": "sedang live",
-      "group_other": "{{count}} video baru minggu ini"
+      "group_other": "{{count}} video baru minggu ini",
+      "streamed": "melakukan siaran"
     },
     "emptyCommunity": "Belum ada yang baru dari komunitas dalam beberapa hari terakhir.",
     "emptyLive": "Tidak ada yang sedang live saat ini.",
+    "recentStreams": "Siaran terbaru",
     "emptyGroups": "Belum ada aktivitas grup minggu ini."
   }
 }
