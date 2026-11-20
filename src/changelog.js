@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.149',
+    category: 'home',
+    date: '2026-11-20',
+    summary: 'Live tab on Home: while nobody is live, it shows the newest stream recording of each creator.',
+  },
+  {
     version: '2.0.148',
     category: 'live',
     date: '2026-11-20',

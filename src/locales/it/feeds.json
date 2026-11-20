@@ -177,10 +177,12 @@
       "live": "è in diretta",
       "group_one": "{{count}} nuovo video questa settimana",
       "group_many": "{{count}} nuovi video questa settimana",
-      "group_other": "{{count}} nuovi video questa settimana"
+      "group_other": "{{count}} nuovi video questa settimana",
+      "streamed": "ha trasmesso in diretta"
     },
     "emptyCommunity": "Niente di nuovo dalla community negli ultimi giorni.",
     "emptyLive": "Nessuno è in diretta in questo momento.",
+    "recentStreams": "Dirette recenti",
     "emptyGroups": "Ancora nessuna attività dei gruppi questa settimana."
   }
 }

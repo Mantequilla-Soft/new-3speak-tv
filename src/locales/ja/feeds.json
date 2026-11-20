@@ -161,10 +161,12 @@
       "audio": "新しい音声",
       "playlist": "再生リスト",
       "live": "ライブ中",
-      "group_other": "今週の新しい動画 {{count}} 本"
+      "group_other": "今週の新しい動画 {{count}} 本",
+      "streamed": "が配信しました"
     },
     "emptyCommunity": "ここ数日、コミュニティに新着はありません。",
     "emptyLive": "現在ライブ中の人はいません。",
+    "recentStreams": "最近の配信",
     "emptyGroups": "今週のグループのアクティビティはまだありません。"
   }
 }

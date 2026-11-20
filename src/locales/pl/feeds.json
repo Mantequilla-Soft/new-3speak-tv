@@ -185,10 +185,12 @@
       "group_one": "{{count}} nowy film w tym tygodniu",
       "group_few": "{{count}} nowe filmy w tym tygodniu",
       "group_many": "{{count}} nowych filmów w tym tygodniu",
-      "group_other": "{{count}} nowego filmu w tym tygodniu"
+      "group_other": "{{count}} nowego filmu w tym tygodniu",
+      "streamed": "nadawał(a) na żywo"
     },
     "emptyCommunity": "Nic nowego w społeczności w ostatnich dniach.",
     "emptyLive": "Nikt teraz nie nadaje na żywo.",
+    "recentStreams": "Ostatnie transmisje",
     "emptyGroups": "W tym tygodniu nie ma jeszcze aktywności grup."
   }
 }

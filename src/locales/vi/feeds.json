@@ -161,10 +161,12 @@
       "audio": "âm thanh mới",
       "playlist": "danh sách phát",
       "live": "đang phát trực tiếp",
-      "group_other": "{{count}} video mới tuần này"
+      "group_other": "{{count}} video mới tuần này",
+      "streamed": "đã phát trực tiếp"
     },
     "emptyCommunity": "Không có gì mới từ cộng đồng trong vài ngày qua.",
     "emptyLive": "Hiện không ai đang phát trực tiếp.",
+    "recentStreams": "Buổi phát gần đây",
     "emptyGroups": "Tuần này chưa có hoạt động nhóm nào."
   }
 }
