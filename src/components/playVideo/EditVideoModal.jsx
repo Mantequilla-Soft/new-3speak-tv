@@ -639,6 +639,10 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
       const asset = await uploadVideoAsset(file, {
         owner: author,
         duration,
+        // ⏳ Replacing media is free: the embed service must not count or refuse
+        // it under the daily upload limit, so it is told up front. No quota
+        // check or notice here either, whatever the counter says.
+        replaces: originalAssetPermlink,
         onProgress: setVideoUploadPct,
         onStart: (u) => { videoUploadRef.current = u; },
         onEndpoint: setUploadHost,

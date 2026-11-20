@@ -393,6 +393,12 @@ async function mintUploadToken(user, isShort) {
     signal: AbortSignal.timeout(20000),
   })
   const d = await r.json().catch(() => ({}))
+  // ⏳ Over the free plan's daily video / Short limit (embed API, behind its own
+  // flag): final for this item, recorded as `daily_upload_limit` so the batch
+  // status can say so in the creator's language (src/page/ImportBatch.jsx).
+  if (r.status === 429 && d.code === 'daily_upload_limit') {
+    throw Object.assign(new Error(`upload token: daily upload limit reached (${d.used ?? '?'} of ${d.limit ?? '?'})`), { code: 'daily_upload_limit' })
+  }
   if (!r.ok || !d.token) throw new Error(`upload token: HTTP ${r.status} ${d.error || ''}`.trim())
   return d
 }
@@ -430,7 +436,15 @@ function tusUpload({ file, token, user, isShort, duration, onProgress }) {
 // The audio service's upload (src/utils/audioUpload.js uploadAudioTo3Speak), from
 // the server: the file streamed as multipart, never read into memory whole (a
 // three-hour episode is a few hundred MB). → { permlink, playUrl }
-async function uploadAudio({ file, user, title, duration, format, mime, category = 'podcast', onProgress }) {
+//
+// `uploadSource: 'rss_import'` marks a podcast episode imported from the creator's
+// RSS feed (the batch import and the automatic import, processAudioItem below):
+// sent as X-Upload-Source, it keeps those out of the free plan's daily audio
+// limit (the audio service honours it only together with its private import
+// key). Never set for anything else: an automation's narrate_post / post_audio
+// is an ordinary upload and counts.
+const UPLOAD_SOURCES = new Set(['rss_import'])
+async function uploadAudio({ file, user, title, duration, format, mime, category = 'podcast', onProgress, uploadSource = null }) {
   const boundary = `----3speak-${crypto.randomBytes(12).toString('hex')}`
   const field = (name, value) => `--${boundary}\r\nContent-Disposition: form-data; name="${name}"\r\n\r\n${value}\r\n`
   const head = Buffer.from([
@@ -454,15 +468,20 @@ async function uploadAudio({ file, user, title, duration, format, mime, category
   }
   const r = await fetch(`${AUDIO_API_URL}/api/audio/upload`, {
     method: 'POST',
-    headers: { 'Content-Type': `multipart/form-data; boundary=${boundary}`, 'X-API-Key': AUDIO_API_KEY, 'X-User': user },
+    headers: {
+      'Content-Type': `multipart/form-data; boundary=${boundary}`, 'X-API-Key': AUDIO_API_KEY, 'X-User': user,
+      ...(UPLOAD_SOURCES.has(uploadSource) ? { 'X-Upload-Source': uploadSource } : {}),
+    },
     body: Readable.from(parts()),
     duplex: 'half',
     signal: AbortSignal.timeout(30 * 60 * 1000),
   })
   const d = await r.json().catch(() => ({}))
   if (!r.ok || !d.permlink || !d.playUrl) {
-    // Busy or down (429, 5xx): worth another go later; anything else it refused.
-    const code = r.status === 429 || r.status >= 500 ? 'audio_service' : 'audio_rejected'
+    // ⏳ The free plan's audio limits: not "busy", so never retried as such.
+    // Busy or down (other 429s, 5xx): worth another go later; anything else it refused.
+    const limit = (r.status === 429 && d.code === 'daily_audio_limit') || (r.status === 413 && d.code === 'audio_too_long') ? d.code : null
+    const code = limit || (r.status === 429 || r.status >= 500 ? 'audio_service' : 'audio_rejected')
     throw Object.assign(new Error(`audio upload: HTTP ${r.status} ${d.error || d.message || ''}`.trim()), { code })
   }
   return { permlink: d.permlink, playUrl: String(d.playUrl).replace(/^http:/, 'https:') }
@@ -620,6 +639,8 @@ function mountImportBatch(app, deps) {
         status,
         progress: Math.round(it.progress || 0),
         error: it.error || c?.lastError || null,
+        // A failure's cause, for the few the page words itself (the daily limits)
+        ...(it.status === 'failed' && it.errorCode ? { errorCode: it.errorCode } : {}),
         isShort: it.isShort ?? null,
         permlink: it.permlink || null,
         scheduledOn: it.scheduledOn || null,
@@ -778,6 +799,8 @@ function mountImportBatch(app, deps) {
       const draft = buildAudioPost({ user, source: it.source, playUrl: '', thumbnailUrl, options: b.options, premium: false, duration })
       const up = await uploadAudio({
         file: job.file, user, title: draft.title, duration, format, mime: job.mime, category: draft.type,
+        // An episode from the creator's own feed: not one of their daily audio uploads
+        uploadSource: 'rss_import',
         onProgress: (f) => { it.progress = 50 + f * 45 },
       })
       deps.removeJob(job)

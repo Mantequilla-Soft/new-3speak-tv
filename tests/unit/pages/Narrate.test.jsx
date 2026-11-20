@@ -32,6 +32,9 @@ const api = vi.hoisted(() => ({
   musicPreviewUrl: vi.fn(async () => 'blob:bed'),
 }))
 vi.mock('../../../src/lib/narration', async (orig) => ({ ...(await orig()), ...api }))
+// ⏳ The free plan's audio counter (the recording is one audio upload); null = no limit known
+const quota = vi.hoisted(() => ({ audio: null }))
+vi.mock('../../../src/hooks/useUploadQuota', () => ({ default: () => ({ ready: true, exempt: !quota.audio, video: null, short: null, audio: quota.audio }) }))
 
 const { useAppStore } = await import('../../../src/lib/store')
 const { default: Narrate } = await import('../../../src/page/Narrate.jsx')
@@ -58,6 +61,7 @@ beforeEach(() => {
   api.startNarration.mockResolvedValue({ id: 'job1' })
   api.getNarration.mockResolvedValue({ id: 'job1', status: 'done', progress: 1, seconds: 42, voice: 'en_GB-alan-medium', credit: null })
   useAppStore.setState({ user: 'badadib', authenticated: true })
+  quota.audio = null
 })
 
 const page = (route = '/narrate') => renderWithProviders(<Narrate />, { route, path: '/narrate/:permlink?' })
@@ -117,5 +121,38 @@ describe('Narrate page', () => {
     page('/narrate/holidays')
     fireEvent.click(await screen.findByRole('button', { name: 'Make the recording' }))
     expect(await screen.findByText(/narration time left today \(2:00\)/)).toBeTruthy()
+  })
+})
+
+describe('Narrate page: the free plan\'s audio limit', () => {
+  it('shows what is left and lets the recording go out', async () => {
+    quota.audio = { limit: 2, used: 1, remaining: 1, nextAt: null, maxSeconds: 900 }
+    page('/narrate/holidays')
+    expect(await screen.findByText(/Free plan: 2 audio uploads per day, up to 15 minutes each\. 1 left today\./)).toBeTruthy()
+    fireEvent.click(await screen.findByRole('button', { name: 'Make the recording' }))
+    expect((await screen.findByRole('button', { name: 'Publish as an audio post' })).disabled).toBe(false)
+  })
+
+  it('holds publishing back once today\'s free audio uploads are used up', async () => {
+    quota.audio = { limit: 2, used: 2, remaining: 0, nextAt: null, maxSeconds: 900 }
+    const opened = vi.fn()
+    window.addEventListener('open-audio-upload', opened)
+    page('/narrate/holidays')
+    expect(await screen.findByText(/You have reached today's free audio limit\. Try again later\./)).toBeTruthy()
+    fireEvent.click(await screen.findByRole('button', { name: 'Make the recording' }))
+    const publish = await screen.findByRole('button', { name: 'Publish as an audio post' })
+    expect(publish.disabled).toBe(true)
+    fireEvent.click(publish)
+    expect(opened).not.toHaveBeenCalled()
+    window.removeEventListener('open-audio-upload', opened)
+  })
+
+  it('holds back a recording longer than the free plan allows', async () => {
+    quota.audio = { limit: 2, used: 0, remaining: 2, nextAt: null, maxSeconds: 900 }
+    api.getNarration.mockResolvedValue({ id: 'job1', status: 'done', progress: 1, seconds: 1000, voice: 'en_GB-alan-medium', credit: null })
+    page('/narrate/holidays')
+    fireEvent.click(await screen.findByRole('button', { name: 'Make the recording' }))
+    expect((await screen.findByRole('button', { name: 'Publish as an audio post' })).disabled).toBe(true)
+    expect(screen.getByText(/Audio longer than 15 minutes needs 3Speak Pro\./)).toBeTruthy()
   })
 })

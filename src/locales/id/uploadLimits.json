@@ -1,0 +1,23 @@
+{
+  "free": {
+    "video_other": "Paket gratis: {{count}} video per hari.",
+    "short_other": "Paket gratis: {{count}} Short per hari.",
+    "audio_other": "Paket gratis: {{count}} unggahan audio per hari, masing-masing hingga {{minutes}} menit.",
+    "audioCount_other": "Paket gratis: {{count}} unggahan audio per hari."
+  },
+  "left_other": "Tersisa {{count}} hari ini.",
+  "nextAt": "Unggahan berikutnya pukul {{time}}.",
+  "later": "Coba lagi nanti.",
+  "reached": {
+    "video": "Batas video gratis hari ini sudah tercapai.",
+    "short": "Batas Shorts gratis hari ini sudah tercapai.",
+    "audio": "Batas audio gratis hari ini sudah tercapai."
+  },
+  "goPro": "Dapatkan 3Speak Pro",
+  "tooLong": "Audio ini berdurasi {{duration}}. Unggahan audio gratis maksimal {{minutes}} menit.",
+  "tooLongPlain": "Unggahan audio gratis maksimal {{minutes}} menit.",
+  "tooLongTracks": "Audio lebih dari {{minutes}} menit memerlukan 3Speak Pro.",
+  "tooLongBadge": "Lebih dari {{minutes}} mnt",
+  "tooMany_other": "Hari ini hanya bisa {{count}} unggahan audio lagi. Hapus trek untuk melanjutkan.",
+  "batchOver_other": "hanya {{count}} yang muat dalam unggahan gratis hari ini"
+}

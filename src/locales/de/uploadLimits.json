@@ -1,0 +1,30 @@
+{
+  "free": {
+    "video_one": "Kostenloser Plan: {{count}} Video pro Tag.",
+    "video_other": "Kostenloser Plan: {{count}} Videos pro Tag.",
+    "short_one": "Kostenloser Plan: {{count}} Short pro Tag.",
+    "short_other": "Kostenloser Plan: {{count}} Shorts pro Tag.",
+    "audio_one": "Kostenloser Plan: {{count}} Audio-Upload pro Tag, je bis zu {{minutes}} Minuten.",
+    "audio_other": "Kostenloser Plan: {{count}} Audio-Uploads pro Tag, je bis zu {{minutes}} Minuten.",
+    "audioCount_one": "Kostenloser Plan: {{count}} Audio-Upload pro Tag.",
+    "audioCount_other": "Kostenloser Plan: {{count}} Audio-Uploads pro Tag."
+  },
+  "left_one": "Heute noch {{count}} frei.",
+  "left_other": "Heute noch {{count}} frei.",
+  "nextAt": "Nächster Upload um {{time}}.",
+  "later": "Versuche es später noch einmal.",
+  "reached": {
+    "video": "Du hast das kostenlose Video-Limit für heute erreicht.",
+    "short": "Du hast das kostenlose Shorts-Limit für heute erreicht.",
+    "audio": "Du hast das kostenlose Audio-Limit für heute erreicht."
+  },
+  "goPro": "3Speak Pro holen",
+  "tooLong": "Dieses Audio ist {{duration}} lang. Kostenlose Audio-Uploads dürfen bis zu {{minutes}} Minuten lang sein.",
+  "tooLongPlain": "Kostenlose Audio-Uploads dürfen bis zu {{minutes}} Minuten lang sein.",
+  "tooLongTracks": "Audio über {{minutes}} Minuten braucht 3Speak Pro.",
+  "tooLongBadge": "Über {{minutes}} Min.",
+  "tooMany_one": "Heute passt nur noch {{count}} Audio-Upload. Entferne Titel, um weiterzumachen.",
+  "tooMany_other": "Heute passen nur noch {{count}} Audio-Uploads. Entferne Titel, um weiterzumachen.",
+  "batchOver_one": "nur {{count}} passt in die kostenlosen Uploads von heute",
+  "batchOver_other": "nur {{count}} passen in die kostenlosen Uploads von heute"
+}

@@ -1,5 +1,6 @@
 import { resolveSnapsContainer } from './snapsContainer';
 import { THREESPEAK_AUDIO_API_URL, THREESPEAK_API_KEY } from './config';
+import { parseUploadLimit, uploadLimitError, refreshUploadQuota } from '../lib/uploadQuota';
 
 /**
  * Resolve the latest peak.snaps container post — used as the parent for snap-style replies.
@@ -33,8 +34,8 @@ export function audioFormatFor(blob, filename) {
 }
 
 // Errors the upload modal turns into a translated line, keyed by `err.code`.
-function uploadError(code, message) {
-  const err = new Error(message);
+function uploadError(code, message, limit) {
+  const err = limit ? uploadLimitError(limit, message) : new Error(message);
   err.code = code;
   return err;
 }
@@ -70,7 +71,9 @@ async function inMemoryCopy(blob) {
  *   Podcasts tabs.
  *   Response: { success, permlink, cid, playUrl, apiUrl }
  * Throws with `err.code` 'unreadable' | 'rateLimited' | 'server' for the
- * failures the modal explains in the user's language.
+ * failures the modal explains in the user's language, and with the free plan's
+ * limits (lib/uploadQuota.js) as `err.code` 'daily_audio_limit' (429) or
+ * 'audio_too_long' (413), the server's numbers under `err.limit`.
  */
 const AUDIO_CATEGORIES = new Set(['voice_message', 'song', 'podcast', 'audiobook', 'interview']);
 
@@ -103,10 +106,18 @@ export async function uploadAudioTo3Speak({ blob, filename, durationSec, usernam
 
   if (!resp.ok) {
     let msg = `Upload failed (${resp.status})`;
+    let data = null;
     try {
-      const data = await resp.json();
+      data = await resp.json();
       msg = data.error || data.message || msg;
-    } catch {}
+    } catch { /* not JSON: keep the status line */ }
+    // ⏳ The free plan's daily count or length limit: final, and worded by the
+    // modal with the numbers the server sent.
+    const limit = parseUploadLimit(resp.status, data, 'audio');
+    if (limit) {
+      if (limit.code === 'daily_audio_limit') refreshUploadQuota();
+      throw uploadError(limit.code, msg, limit);
+    }
     // The service's 5xx body is a bare "Internal server error", and its 429
     // comes from the upload rate limiter: both read better translated.
     if (resp.status === 429) throw uploadError('rateLimited', msg);
@@ -115,6 +126,8 @@ export async function uploadAudioTo3Speak({ blob, filename, durationSec, usernam
   }
 
   const data = await resp.json();
+  // One of today's free audio uploads is used now: notes on screen read again.
+  refreshUploadQuota();
   // Normalize http→https on returned URLs (snapie does the same)
   const playUrl = data.playUrl?.replace(/^http:/, 'https:') || data.playUrl;
   const apiUrl = data.apiUrl?.replace(/^http:/, 'https:') || data.apiUrl;

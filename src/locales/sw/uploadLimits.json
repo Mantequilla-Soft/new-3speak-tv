@@ -1,0 +1,30 @@
+{
+  "free": {
+    "video_one": "Mpango wa bure: video {{count}} kwa siku.",
+    "video_other": "Mpango wa bure: video {{count}} kwa siku.",
+    "short_one": "Mpango wa bure: Short {{count}} kwa siku.",
+    "short_other": "Mpango wa bure: Short {{count}} kwa siku.",
+    "audio_one": "Mpango wa bure: upakiaji {{count}} wa sauti kwa siku, kila mmoja hadi dakika {{minutes}}.",
+    "audio_other": "Mpango wa bure: upakiaji {{count}} wa sauti kwa siku, kila mmoja hadi dakika {{minutes}}.",
+    "audioCount_one": "Mpango wa bure: upakiaji {{count}} wa sauti kwa siku.",
+    "audioCount_other": "Mpango wa bure: upakiaji {{count}} wa sauti kwa siku."
+  },
+  "left_one": "Zimebaki {{count}} leo.",
+  "left_other": "Zimebaki {{count}} leo.",
+  "nextAt": "Upakiaji unaofuata saa {{time}}.",
+  "later": "Jaribu tena baadaye.",
+  "reached": {
+    "video": "Umefikia kikomo cha video za bure cha leo.",
+    "short": "Umefikia kikomo cha Shorts za bure cha leo.",
+    "audio": "Umefikia kikomo cha sauti za bure cha leo."
+  },
+  "goPro": "Pata 3Speak Pro",
+  "tooLong": "Sauti hii ina urefu wa {{duration}}. Sauti za bure zinaweza kuwa hadi dakika {{minutes}}.",
+  "tooLongPlain": "Sauti za bure zinaweza kuwa hadi dakika {{minutes}}.",
+  "tooLongTracks": "Sauti ndefu zaidi ya dakika {{minutes}} zinahitaji 3Speak Pro.",
+  "tooLongBadge": "Zaidi ya dakika {{minutes}}",
+  "tooMany_one": "Leo zinaweza kupakiwa sauti {{count}} tu zaidi. Ondoa nyimbo ili kuendelea.",
+  "tooMany_other": "Leo zinaweza kupakiwa sauti {{count}} tu zaidi. Ondoa nyimbo ili kuendelea.",
+  "batchOver_one": "ni {{count}} tu zinazotosha katika upakiaji wa bure wa leo",
+  "batchOver_other": "ni {{count}} tu zinazotosha katika upakiaji wa bure wa leo"
+}

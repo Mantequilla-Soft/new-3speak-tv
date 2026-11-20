@@ -156,6 +156,10 @@ export const mocks = {
     CHECKER_API_KEY: 'checker-key',
     // lib/collabs.js (collab invites after a post goes out).
     CHECKER_URL: 'https://checker.test',
+    // lib/uploadQuota.js (the free plan's daily limits) and its Go Pro action.
+    THREESPEAK_AUDIO_API_URL: 'https://audio.test',
+    THREESPEAK_API_KEY: 'audio-key',
+    ENABLE_SUBS: true,
   },
   axios: { default: { post: call('axiosPost') } },
   tus: { Upload: FakeTusUpload },

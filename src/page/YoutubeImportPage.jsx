@@ -13,6 +13,9 @@ import {
 } from "../lib/youtubeImport";
 import { PodcastAutoCard } from "./PodcastAutoImport";
 import { uploadThumbnail } from "../utils/uploadThumbnail";
+import useUploadQuota from "../hooks/useUploadQuota";
+import UploadQuotaNote from "../components/UploadQuota/UploadQuotaNote";
+import { isUsedUp, proPlansPath, uploadLimitMessage, usedUpInfo } from "../lib/uploadQuota";
 import "./YoutubeImportPage.scss";
 
 const toast = toastIn('Upload');
@@ -58,7 +61,7 @@ const emptyGroups = () => Object.fromEntries(
  * metadata is prefilled all the same.
  */
 export default function YoutubeImportPage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   // ?mode= says which uploader sent the creator here, and filters what fits it:
   //   shorts → YouTube Shorts + TikTok + Instagram, always lands in the Shorts studio
@@ -98,6 +101,10 @@ export default function YoutubeImportPage() {
   const [failure, setFailure] = useState(null);   // { message, code }
   const pollRef = useRef(null);
   const fileInputRef = useRef(null);
+  // ⏳ Imports are uploads: a video or Short counts against the free plan's
+  // daily video / Short limit, a podcast episode against the audio one. null
+  // counters = no limit known (Pro, off, unreadable): nothing is held back.
+  const quota = useUploadQuota();
 
   // ---- Linked channels --------------------------------------------------------
   useEffect(() => {
@@ -192,6 +199,12 @@ export default function YoutubeImportPage() {
 
   const showBatch = (b) => setBatchInfo((info) => ({ ...(info || {}), batches: [b, ...((info?.batches || []).filter((x) => x.id !== b.id))] }));
   const batchMax = batchInfo?.max || 5;
+  // ⏳ How many of the ticked videos today's free uploads still take (null = no limit known)
+  const batchRoom = (() => {
+    const kinds = platform === 'rss' ? ['audio'] : mode === 'shorts' ? ['short'] : mode === 'videos' ? ['video'] : ['video', 'short'];
+    const known = kinds.map((k) => quota[k]).filter(Boolean);
+    return known.length === kinds.length ? known.reduce((n, e) => n + e.remaining, 0) : null;
+  })();
   const togglePick = (v) => setPicked((list) => (list.some((x) => x.id === v.id)
     ? list.filter((x) => x.id !== v.id)
     : list.length >= batchMax ? list : [...list, v]));
@@ -393,6 +406,22 @@ export default function YoutubeImportPage() {
     navigate(asShort ? '/embed-studio?from=shorts' : '/embed-studio');
   }, [navigate, mode, shortMinutes, t, user]);
 
+  // The counter an import of `video` uses up, as decided before it is downloaded
+  // (the studio checks again with the real file).
+  const quotaKindOf = (video) => (video?.platform === 'rss' ? 'audio'
+    : mode === 'shorts' ? 'short' : mode === 'videos' ? 'video'
+      : video?.type === 'shorts' ? 'short' : 'video');
+  // Today's free imports of that kind used up: say so (and how to go Pro), and
+  // download nothing. True when held back.
+  const heldByQuota = (video) => {
+    const kind = quotaKindOf(video);
+    if (!isUsedUp(quota[kind])) return false;
+    toast.error(uploadLimitMessage(t, usedUpInfo(quota[kind], kind), i18n?.language), ENABLE_SUBS && user
+      ? { action: { label: t('uploadLimits.goPro'), onClick: () => navigate(proPlansPath(user)) } }
+      : undefined);
+    return true;
+  };
+
   const fail = (message, code) => {
     clearInterval(pollRef.current);
     setFailure({ message, code });
@@ -400,6 +429,7 @@ export default function YoutubeImportPage() {
   };
 
   const startImport = async (video) => {
+    if (heldByQuota(video)) return;
     setFailure(null);
     setTransfer(0);
     setPhase('starting');
@@ -451,6 +481,7 @@ export default function YoutubeImportPage() {
       toast.error(t(audio ? 'ytimport.errors.notAudio' : 'ytimport.errors.notVideo'));
       return;
     }
+    if (heldByQuota(selected)) return;
     finish(file, selected);
   };
 
@@ -871,6 +902,12 @@ export default function YoutubeImportPage() {
           </>
         )}
 
+        {/* ⏳ What the free plan allows today, for what this page imports */}
+        {platform === 'rss'
+          ? <UploadQuotaNote kind="audio" entry={quota.audio} user={user} className="yt-import__quota" />
+          : (mode === 'shorts' ? ['short'] : mode === 'videos' ? ['video'] : ['video', 'short']).map((k) => (
+            <UploadQuotaNote key={k} kind={k} entry={quota[k]} user={user} className="yt-import__quota" />
+          ))}
         {status?.limits && platform === 'rss' && (
           <div className="yt-import__limits">
             <Icon name="info" size={20} />
@@ -898,6 +935,9 @@ export default function YoutubeImportPage() {
           <div className="yt-batch-bar" role="region" aria-label={t('ytimport.batch.selectedCount', { count: picked.length })}>
             <span className="yt-batch-bar__count">
               <b className="num">{t('ytimport.batch.selectedCount', { count: picked.length })}</b> · {t('ytimport.batch.maxHint', { max: batchMax })}
+              {batchRoom !== null && picked.length > batchRoom && (
+                <> · <span className="yt-batch-bar__quota">{t('uploadLimits.batchOver', { count: batchRoom })}</span></>
+              )}
             </span>
             <div className="yt-batch-bar__actions">
               <Button variant="ghost" size={40} onClick={() => setPicked([])} disabled={busy}>{t('ytimport.batch.clear')}</Button>

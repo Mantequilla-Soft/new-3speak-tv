@@ -26,11 +26,19 @@ vi.mock('../../../src/lib/youtubeImport', async (importOriginal) => ({
   getImportJob: vi.fn(async () => ({ id: 'job1', status: 'downloading', progress: 40 })),
 }))
 
+// ⏳ The free plan's counters (hooks/useUploadQuota.js); null = no limit known
+const quota = vi.hoisted(() => ({ video: null, short: null, audio: null }))
+vi.mock('../../../src/hooks/useUploadQuota', () => ({ default: () => ({ ready: true, exempt: false, ...quota }) }))
+
 const { useAppStore } = await import('../../../src/lib/store')
 const { startImportJob, getAutoImports } = await import('../../../src/lib/youtubeImport')
 const { default: YoutubeImportPage } = await import('../../../src/page/YoutubeImportPage.jsx')
 
-beforeEach(() => { vi.clearAllMocks(); useAppStore.setState({ user: 'alice', authenticated: true }) })
+beforeEach(() => {
+  vi.clearAllMocks()
+  Object.assign(quota, { video: null, short: null, audio: null })
+  useAppStore.setState({ user: 'alice', authenticated: true })
+})
 afterEach(() => useAppStore.setState({ user: null, authenticated: false }))
 
 const open = () => renderWithProviders(<YoutubeImportPage />, { route: '/import?platform=rss', path: '/import' })
@@ -99,5 +107,29 @@ describe('import tiles', () => {
     } finally {
       getAutoImports.mockImplementation(before)
     }
+  })
+})
+
+describe('import tiles: the free plan\'s daily limit', () => {
+  it('an episode is not even downloaded once today\'s free audio uploads are used up', async () => {
+    quota.audio = { limit: 2, used: 2, remaining: 0, nextAt: null, maxSeconds: 900 }
+    const { user } = open()
+    await screen.findByText('Episode 1')
+    expect(document.querySelector('.yt-import__quota')).toHaveTextContent("You have reached today's free audio limit.")
+    await user.click(tile('Episode 2'))
+    const bar = screen.getByRole('region', { name: '1 selected' })
+    expect(bar).toHaveTextContent("only 0 fit in today's free uploads")
+    await user.click(within(bar).getByRole('button', { name: 'Edit and publish' }))
+    expect(startImportJob).not.toHaveBeenCalled()
+  })
+
+  it('with room left the episode imports as before, and the note says what is left', async () => {
+    quota.audio = { limit: 2, used: 1, remaining: 1, nextAt: null, maxSeconds: 900 }
+    const { user } = open()
+    await screen.findByText('Episode 1')
+    expect(document.querySelector('.yt-import__quota')).toHaveTextContent('1 left today.')
+    await user.click(tile('Episode 2'))
+    await user.click(within(screen.getByRole('region', { name: '1 selected' })).getByRole('button', { name: 'Edit and publish' }))
+    expect(startImportJob).toHaveBeenCalled()
   })
 })

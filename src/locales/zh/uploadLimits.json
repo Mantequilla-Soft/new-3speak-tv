@@ -1,0 +1,23 @@
+{
+  "free": {
+    "video_other": "免费版：每天 {{count}} 个视频。",
+    "short_other": "免费版：每天 {{count}} 个短视频。",
+    "audio_other": "免费版：每天 {{count}} 次音频上传，每次最长 {{minutes}} 分钟。",
+    "audioCount_other": "免费版：每天 {{count}} 次音频上传。"
+  },
+  "left_other": "今天还剩 {{count}} 次。",
+  "nextAt": "下次可上传时间：{{time}}。",
+  "later": "请稍后再试。",
+  "reached": {
+    "video": "你已达到今天的免费视频上限。",
+    "short": "你已达到今天的免费短视频上限。",
+    "audio": "你已达到今天的免费音频上限。"
+  },
+  "goPro": "获取 3Speak Pro",
+  "tooLong": "这段音频时长 {{duration}}。免费音频上传最长 {{minutes}} 分钟。",
+  "tooLongPlain": "免费音频上传最长 {{minutes}} 分钟。",
+  "tooLongTracks": "超过 {{minutes}} 分钟的音频需要 3Speak Pro。",
+  "tooLongBadge": "超过 {{minutes}} 分钟",
+  "tooMany_other": "今天只能再上传 {{count}} 个音频。请移除曲目后继续。",
+  "batchOver_other": "今天的免费上传只能容纳 {{count}} 个"
+}

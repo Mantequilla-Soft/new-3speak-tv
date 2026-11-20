@@ -15,7 +15,9 @@ import { describe, it, expect, vi, beforeAll, afterAll, beforeEach, afterEach } 
 import { act, screen, waitFor, within, fireEvent } from '@testing-library/react'
 import { renderWithProviders, toastMessages } from './_render.jsx'
 
-const m = vi.hoisted(() => ({ editor: true, playlists: [], duration: 125, stt: false, transcribe: null }))
+const m = vi.hoisted(() => ({ editor: true, playlists: [], duration: 125, stt: false, transcribe: null, audioQuota: null }))
+// ⏳ The free plan's audio counter (hooks/useUploadQuota.js); null = no limit known (Pro, off)
+vi.mock('../../../src/hooks/useUploadQuota', () => ({ default: () => ({ ready: true, exempt: !m.audioQuota, video: null, short: null, audio: m.audioQuota }) }))
 vi.mock('sonner', async () => (await import('./_render.jsx')).sonnerModule())
 vi.mock('../../../src/hive-api/aioha', async () => (await import('./_render.jsx')).aiohaModule())
 vi.mock('../../../src/utils/config', async (importOriginal) => ({
@@ -133,6 +135,7 @@ beforeEach(() => {
   m.duration = 125
   m.stt = false
   m.transcribe = null
+  m.audioQuota = null
   m.playlists = [
     { id: 'p1', name: 'Show A', thumbnail: 'https://images.hive.blog/DQmA/a.jpg', items: [] },
     { id: 'p2', name: 'Show B', metadata: { album: { thumbnail: 'https://images.hive.blog/DQmB/b.jpg' } }, items: [] },
@@ -998,5 +1001,76 @@ describe('AudioUploadModal: recording', () => {
     expect(msg).toMatch(/^record-silent /)
     const d = JSON.parse(msg.slice('record-silent '.length))
     expect(d).toMatchObject({ opens: 1, ready: true, start: { track: { muted: false, state: 'live' }, ctx: 'running', settings: { sampleRate: 48000, noiseSuppression: true } } })
+  })
+})
+
+describe('AudioUploadModal: the free plan\'s audio limit', () => {
+  const FREE = { limit: 2, used: 0, remaining: 2, nextAt: null, maxSeconds: 900 }
+  const note = () => document.querySelector('.audio-upload-quota-note')
+
+  it('says what the free plan allows and how many are left', async () => {
+    m.audioQuota = { ...FREE, used: 1, remaining: 1 }
+    const { user } = openModal()
+    await addFile(user)
+    expect(note()).toHaveTextContent('Free plan: 2 audio uploads per day, up to 15 minutes each. 1 left today.')
+    expect(screen.getByRole('button', { name: /Next/ })).toBeEnabled()
+  })
+
+  it('refuses audio over 15 minutes before anything is uploaded', async () => {
+    m.audioQuota = FREE
+    m.duration = 15 * 60 + 30
+    const { user } = openModal()
+    await addFile(user)
+    expect(within(row('Episode 12.wav')).getByText('Over 15 min')).toBeInTheDocument()
+    expect(note()).toHaveTextContent('Audio longer than 15 minutes needs 3Speak Pro.')
+    expect(note()).toHaveClass('is-warn')
+    expect(screen.getByRole('button', { name: /Next/ })).toBeDisabled()
+  })
+
+  it('a 15-minute file is fine', async () => {
+    m.audioQuota = FREE
+    m.duration = 15 * 60
+    const { user } = openModal()
+    await addFile(user)
+    expect(document.querySelector('.audio-upload-track-toolong')).toBeNull()
+    expect(screen.getByRole('button', { name: /Next/ })).toBeEnabled()
+  })
+
+  it('holds back more tracks than uploads left today', async () => {
+    m.audioQuota = { ...FREE, used: 1, remaining: 1 }
+    const { user } = openModal()
+    await addFile(user, 'One.wav')
+    await addFile(user, 'Two.wav')
+    expect(note()).toHaveTextContent('Only 1 more audio upload fits today. Remove tracks to go on.')
+    expect(screen.getByRole('button', { name: /Next/ })).toBeDisabled()
+  })
+
+  it('used up: says when the next one frees up', async () => {
+    m.audioQuota = { ...FREE, used: 2, remaining: 0 }
+    const { user } = openModal()
+    await addFile(user)
+    expect(note()).toHaveTextContent("You have reached today's free audio limit. Try again later.")
+    expect(screen.getByRole('button', { name: /Next/ })).toBeDisabled()
+  })
+
+  it('no limit known (Pro, warm-up, limits off): long audio goes through as before', async () => {
+    m.duration = 3 * 3600
+    const { user } = openModal()
+    await addFile(user)
+    expect(note()).toBeNull()
+    expect(document.querySelector('.audio-upload-track-toolong')).toBeNull()
+    expect(screen.getByRole('button', { name: /Next/ })).toBeEnabled()
+  })
+})
+
+describe('audioQuotaCheck', () => {
+  it('lists the tracks too long and how many are over, ignoring tracks already out', async () => {
+    const { audioQuotaCheck } = await import('../../../src/components/AudioUploadModal/AudioUploadModal.jsx')
+    const tracks = [{ id: 'a', durationSec: 100 }, { id: 'b', durationSec: 901 }, { id: 'c', durationSec: 60 }]
+    expect(audioQuotaCheck(tracks, null)).toEqual({ tooLong: [], over: 0, blocked: false })
+    const q = { remaining: 1, maxSeconds: 900 }
+    expect(audioQuotaCheck(tracks, q)).toMatchObject({ tooLong: [tracks[1]], over: 2, blocked: true })
+    expect(audioQuotaCheck(tracks, q, (tr) => tr.id !== 'c')).toMatchObject({ tooLong: [], over: 0, blocked: false })
+    expect(audioQuotaCheck(tracks, { remaining: 5, maxSeconds: null })).toMatchObject({ tooLong: [], blocked: false })
   })
 })

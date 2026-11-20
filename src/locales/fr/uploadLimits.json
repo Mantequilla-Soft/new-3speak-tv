@@ -1,0 +1,37 @@
+{
+  "free": {
+    "video_many": "Offre gratuite : {{count}} vidéos par jour.",
+    "video_one": "Offre gratuite : {{count}} vidéo par jour.",
+    "video_other": "Offre gratuite : {{count}} vidéos par jour.",
+    "short_many": "Offre gratuite : {{count}} Shorts par jour.",
+    "short_one": "Offre gratuite : {{count}} Short par jour.",
+    "short_other": "Offre gratuite : {{count}} Shorts par jour.",
+    "audio_many": "Offre gratuite : {{count}} envois audio par jour, de {{minutes}} minutes maximum chacun.",
+    "audio_one": "Offre gratuite : {{count}} envoi audio par jour, de {{minutes}} minutes maximum chacun.",
+    "audio_other": "Offre gratuite : {{count}} envois audio par jour, de {{minutes}} minutes maximum chacun.",
+    "audioCount_many": "Offre gratuite : {{count}} envois audio par jour.",
+    "audioCount_one": "Offre gratuite : {{count}} envoi audio par jour.",
+    "audioCount_other": "Offre gratuite : {{count}} envois audio par jour."
+  },
+  "left_many": "Encore {{count}} aujourd'hui.",
+  "left_one": "Encore {{count}} aujourd'hui.",
+  "left_other": "Encore {{count}} aujourd'hui.",
+  "nextAt": "Prochain envoi à {{time}}.",
+  "later": "Réessayez plus tard.",
+  "reached": {
+    "video": "Vous avez atteint la limite gratuite de vidéos pour aujourd'hui.",
+    "short": "Vous avez atteint la limite gratuite de Shorts pour aujourd'hui.",
+    "audio": "Vous avez atteint la limite gratuite d'audio pour aujourd'hui."
+  },
+  "goPro": "Passer à 3Speak Pro",
+  "tooLong": "Cet audio dure {{duration}}. Les envois audio gratuits peuvent durer jusqu'à {{minutes}} minutes.",
+  "tooLongPlain": "Les envois audio gratuits peuvent durer jusqu'à {{minutes}} minutes.",
+  "tooLongTracks": "Un audio de plus de {{minutes}} minutes nécessite 3Speak Pro.",
+  "tooLongBadge": "Plus de {{minutes}} min",
+  "tooMany_many": "Plus que {{count}} envois audio possibles aujourd'hui. Retirez des pistes pour continuer.",
+  "tooMany_one": "Plus que {{count}} envoi audio possible aujourd'hui. Retirez des pistes pour continuer.",
+  "tooMany_other": "Plus que {{count}} envois audio possibles aujourd'hui. Retirez des pistes pour continuer.",
+  "batchOver_many": "il reste {{count}} envois gratuits aujourd'hui",
+  "batchOver_one": "il reste {{count}} envoi gratuit aujourd'hui",
+  "batchOver_other": "il reste {{count}} envois gratuits aujourd'hui"
+}

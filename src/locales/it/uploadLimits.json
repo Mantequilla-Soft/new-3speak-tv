@@ -1,0 +1,37 @@
+{
+  "free": {
+    "video_many": "Piano gratuito: {{count}} video al giorno.",
+    "video_one": "Piano gratuito: {{count}} video al giorno.",
+    "video_other": "Piano gratuito: {{count}} video al giorno.",
+    "short_many": "Piano gratuito: {{count}} Short al giorno.",
+    "short_one": "Piano gratuito: {{count}} Short al giorno.",
+    "short_other": "Piano gratuito: {{count}} Short al giorno.",
+    "audio_many": "Piano gratuito: {{count}} caricamenti audio al giorno, fino a {{minutes}} minuti ciascuno.",
+    "audio_one": "Piano gratuito: {{count}} caricamento audio al giorno, fino a {{minutes}} minuti ciascuno.",
+    "audio_other": "Piano gratuito: {{count}} caricamenti audio al giorno, fino a {{minutes}} minuti ciascuno.",
+    "audioCount_many": "Piano gratuito: {{count}} caricamenti audio al giorno.",
+    "audioCount_one": "Piano gratuito: {{count}} caricamento audio al giorno.",
+    "audioCount_other": "Piano gratuito: {{count}} caricamenti audio al giorno."
+  },
+  "left_many": "Ne restano {{count}} oggi.",
+  "left_one": "Ne resta {{count}} oggi.",
+  "left_other": "Ne restano {{count}} oggi.",
+  "nextAt": "Prossimo caricamento alle {{time}}.",
+  "later": "Riprova più tardi.",
+  "reached": {
+    "video": "Hai raggiunto il limite gratuito di video per oggi.",
+    "short": "Hai raggiunto il limite gratuito di Short per oggi.",
+    "audio": "Hai raggiunto il limite gratuito di audio per oggi."
+  },
+  "goPro": "Passa a 3Speak Pro",
+  "tooLong": "Questo audio dura {{duration}}. I caricamenti audio gratuiti possono durare fino a {{minutes}} minuti.",
+  "tooLongPlain": "I caricamenti audio gratuiti possono durare fino a {{minutes}} minuti.",
+  "tooLongTracks": "Gli audio oltre {{minutes}} minuti richiedono 3Speak Pro.",
+  "tooLongBadge": "Oltre {{minutes}} min",
+  "tooMany_many": "Oggi sono possibili ancora solo {{count}} caricamenti audio. Rimuovi delle tracce per continuare.",
+  "tooMany_one": "Oggi è possibile ancora solo {{count}} caricamento audio. Rimuovi delle tracce per continuare.",
+  "tooMany_other": "Oggi sono possibili ancora solo {{count}} caricamenti audio. Rimuovi delle tracce per continuare.",
+  "batchOver_many": "restano {{count}} caricamenti gratuiti oggi",
+  "batchOver_one": "resta {{count}} caricamento gratuito oggi",
+  "batchOver_other": "restano {{count}} caricamenti gratuiti oggi"
+}

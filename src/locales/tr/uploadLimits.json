@@ -1,0 +1,30 @@
+{
+  "free": {
+    "video_one": "Ücretsiz plan: günde {{count}} video.",
+    "video_other": "Ücretsiz plan: günde {{count}} video.",
+    "short_one": "Ücretsiz plan: günde {{count}} Short.",
+    "short_other": "Ücretsiz plan: günde {{count}} Short.",
+    "audio_one": "Ücretsiz plan: günde {{count}} ses yüklemesi, her biri en fazla {{minutes}} dakika.",
+    "audio_other": "Ücretsiz plan: günde {{count}} ses yüklemesi, her biri en fazla {{minutes}} dakika.",
+    "audioCount_one": "Ücretsiz plan: günde {{count}} ses yüklemesi.",
+    "audioCount_other": "Ücretsiz plan: günde {{count}} ses yüklemesi."
+  },
+  "left_one": "Bugün {{count}} hakkın kaldı.",
+  "left_other": "Bugün {{count}} hakkın kaldı.",
+  "nextAt": "Sonraki yükleme: {{time}}.",
+  "later": "Daha sonra tekrar dene.",
+  "reached": {
+    "video": "Bugünkü ücretsiz video sınırına ulaştın.",
+    "short": "Bugünkü ücretsiz Shorts sınırına ulaştın.",
+    "audio": "Bugünkü ücretsiz ses sınırına ulaştın."
+  },
+  "goPro": "3Speak Pro’ya geç",
+  "tooLong": "Bu ses {{duration}} uzunluğunda. Ücretsiz ses yüklemeleri en fazla {{minutes}} dakika olabilir.",
+  "tooLongPlain": "Ücretsiz ses yüklemeleri en fazla {{minutes}} dakika olabilir.",
+  "tooLongTracks": "{{minutes}} dakikadan uzun sesler için 3Speak Pro gerekir.",
+  "tooLongBadge": "{{minutes}} dk üzeri",
+  "tooMany_one": "Bugün yalnızca {{count}} ses yüklemesi daha yapabilirsin. Devam etmek için parça kaldır.",
+  "tooMany_other": "Bugün yalnızca {{count}} ses yüklemesi daha yapabilirsin. Devam etmek için parça kaldır.",
+  "batchOver_one": "bugünkü ücretsiz yüklemelere yalnızca {{count}} tanesi sığar",
+  "batchOver_other": "bugünkü ücretsiz yüklemelere yalnızca {{count}} tanesi sığar"
+}

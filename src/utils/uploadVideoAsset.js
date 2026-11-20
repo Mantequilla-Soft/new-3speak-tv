@@ -26,9 +26,13 @@ import { pickEmbedEndpoint, getEmbedHosts } from './embedEndpoints';
  * @param {(u:tus.Upload) => void} [opts.onStart]  receives the upload so callers can abort
  * @param {(host:string) => void} [opts.onEndpoint]  the chosen host, once picked
  * @param {boolean}  [opts.short]             a Short (the embed service's `short` flag)
+ * @param {string}   [opts.replaces]          the asset this upload will replace (EditVideoModal's
+ *                                            replace flow): sent as TUS metadata so the embed
+ *                                            service neither counts nor refuses it under the free
+ *                                            plan's daily limit. Never set for a new upload.
  * @returns {Promise<{embedUrl:string, owner:string, permlink:string, base:string}>}
  */
-export async function uploadVideoAsset(file, { owner, duration = 0, onProgress, onStart, onEndpoint, short = false } = {}) {
+export async function uploadVideoAsset(file, { owner, duration = 0, onProgress, onStart, onEndpoint, short = false, replaces = '' } = {}) {
   if (!file) throw new Error('No file given.');
   if (!owner) throw new Error('No owner given.');
   if (!EMBED_API_KEY) throw new Error('Uploads are not configured (missing embed API key).');
@@ -62,6 +66,8 @@ export async function uploadVideoAsset(file, { owner, duration = 0, onProgress, 
         owner,
         short: short ? 'true' : 'false',
         duration: String(Math.round(duration || 0)),
+        // ⏳ A replacement of an existing video is free (owner's call 2026-11-20)
+        ...(typeof replaces === 'string' && replaces ? { replaces } : {}),
         // Deliberately NO `permlink`: the service mints a fresh asset id. A
         // replacement must become its own asset — reusing the old permlink
         // would overwrite media that existing embeds still point at.

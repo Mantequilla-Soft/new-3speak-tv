@@ -90,6 +90,29 @@ describe('uploadVideoAsset', () => {
     expect(upload.start).toHaveBeenCalledTimes(1)
   })
 
+  it('⏳ a replacement tells the embed service which asset it replaces (free, never limited); a new upload never does', async () => {
+    await uploadVideoAsset(video(), { owner: 'alice', replaces: 'orig123' })
+    expect(tusState.uploads[0].options.metadata.replaces).toBe('orig123')
+    await uploadVideoAsset(video(), { owner: 'alice' })
+    expect(tusState.uploads[1].options.metadata).not.toHaveProperty('replaces')
+  })
+
+  it('⏳ a replacement goes ahead with today\'s free uploads used up: no quota is even read', async () => {
+    const fetchSpy = vi.fn(async () => ({ ok: true, json: async () => ({ enabled: true, exempt: false, video: { limit: 1, used: 1, remaining: 0 } }) }))
+    vi.stubGlobal('fetch', fetchSpy)
+    const out = await uploadVideoAsset(video(), { owner: 'alice', replaces: 'orig123' })
+    expect(out.permlink).toBe('abc123')
+    expect(fetchSpy.mock.calls.filter(([url]) => String(url).includes('/uploads/quota'))).toEqual([])
+    vi.unstubAllGlobals()
+  })
+
+  it('⏳ the replace flow (EditVideoModal) passes the original asset and has no daily-limit notice or check', async () => {
+    const fs = await import('node:fs')
+    const src = fs.readFileSync(`${process.cwd()}/src/components/playVideo/EditVideoModal.jsx`, 'utf8')
+    expect(src).toMatch(/uploadVideoAsset\(file, \{[^}]*replaces: originalAssetPermlink/s)
+    expect(src).not.toMatch(/useUploadQuota|UploadQuotaNote|uploadQuota/)
+  })
+
   it('never sends a permlink, so a replacement becomes a new asset', async () => {
     await uploadVideoAsset(video(), { owner: 'alice' })
     expect(tusState.uploads[0].options.metadata).not.toHaveProperty('permlink')

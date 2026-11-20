@@ -1,0 +1,23 @@
+{
+  "free": {
+    "video_other": "Gói miễn phí: {{count}} video mỗi ngày.",
+    "short_other": "Gói miễn phí: {{count}} Short mỗi ngày.",
+    "audio_other": "Gói miễn phí: {{count}} lượt tải âm thanh mỗi ngày, mỗi lượt tối đa {{minutes}} phút.",
+    "audioCount_other": "Gói miễn phí: {{count}} lượt tải âm thanh mỗi ngày."
+  },
+  "left_other": "Hôm nay còn {{count}} lượt.",
+  "nextAt": "Lượt tải tiếp theo lúc {{time}}.",
+  "later": "Vui lòng thử lại sau.",
+  "reached": {
+    "video": "Bạn đã dùng hết lượt tải video miễn phí hôm nay.",
+    "short": "Bạn đã dùng hết lượt tải Short miễn phí hôm nay.",
+    "audio": "Bạn đã dùng hết lượt tải âm thanh miễn phí hôm nay."
+  },
+  "goPro": "Nâng cấp lên 3Speak Pro",
+  "tooLong": "Âm thanh này dài {{duration}}. Âm thanh tải lên miễn phí dài tối đa {{minutes}} phút.",
+  "tooLongPlain": "Âm thanh tải lên miễn phí dài tối đa {{minutes}} phút.",
+  "tooLongTracks": "Âm thanh dài hơn {{minutes}} phút cần 3Speak Pro.",
+  "tooLongBadge": "Hơn {{minutes}} phút",
+  "tooMany_other": "Hôm nay chỉ còn tải được {{count}} âm thanh. Hãy bỏ bớt bản nhạc để tiếp tục.",
+  "batchOver_other": "lượt tải miễn phí hôm nay chỉ còn {{count}}"
+}

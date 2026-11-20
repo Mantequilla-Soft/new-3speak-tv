@@ -56,6 +56,9 @@ import { playlistTypeFields, trackCategoryToKind, storedPlaylistType } from '../
 import AudioClip from '../AudioClip/AudioClip';
 import { audioCategorySymbol } from '../AudioTile/audioSymbols';
 import Composer from '../common/Composer/Composer';
+import useUploadQuota from '../../hooks/useUploadQuota';
+import UploadQuotaNote from '../UploadQuota/UploadQuotaNote';
+import { AUDIO_LIMIT_CODE, AUDIO_TOO_LONG_CODE, isUsedUp, uploadLimitMessage, usedUpInfo } from '../../lib/uploadQuota';
 
 // Every toast from this module is headed "Upload"; the message becomes the
 // line under it. See utils/toast.js.
@@ -142,11 +145,27 @@ const UPLOAD_ERROR_KEYS = {
   rateLimited: 'audio.upload.errors.rateLimited',
   server: 'audio.upload.errors.server',
 };
-function uploadErrorText(err, t) {
+function uploadErrorText(err, t, lang) {
+  // ⏳ The free plan's limits (413 too long, 429 daily count), with the server's numbers
+  if ((err?.code === AUDIO_LIMIT_CODE || err?.code === AUDIO_TOO_LONG_CODE) && err.limit) return uploadLimitMessage(t, err.limit, lang);
   if (err?.code && UPLOAD_ERROR_KEYS[err.code]) return t(UPLOAD_ERROR_KEYS[err.code]);
   return err?.message || (typeof err === 'string' ? err : t('audio.upload.failed'));
 }
 const AUDIO_EXT_RE = /\.(mp3|wav|ogg|webm|m4a|flac|aac)$/i;
+
+/**
+ * ⏳ What the free plan's audio limit says about the tracks at hand
+ * (lib/uploadQuota.js; `quota` null = no limit known, nothing is held back):
+ * the tracks longer than allowed, and how many more there are than uploads left
+ * today. Tracks already out (`done`) no longer count.
+ */
+export function audioQuotaCheck(tracks, quota, done = () => false) {
+  if (!quota) return { tooLong: [], over: 0, blocked: false };
+  const pending = tracks.filter((tr) => !done(tr));
+  const tooLong = quota.maxSeconds ? pending.filter((tr) => Number(tr.durationSec) > quota.maxSeconds + 0.5) : [];
+  const over = Math.max(0, pending.length - quota.remaining);
+  return { tooLong, over, blocked: tooLong.length > 0 || over > 0 };
+}
 // iOS greys out audio files in the Files app when the picker only says
 // `audio/*` (WebKit bug 242110 reads it as video/*), so name the formats the
 // hint lists, by extension and MIME type. Desktop browsers read the same list.
@@ -308,7 +327,7 @@ function addNarration(metaObj, narration, trackId) {
 }
 
 function AudioUploadModal({ isOpen, onClose, initialTrack }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const titleId = useId();
   const [step, setStep] = useState(0); // index into the active flow
   const [tracks, setTracks] = useState([]);
@@ -438,6 +457,9 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     syncAudioAdChoice(user, hivePermlink).catch(() => {});
   }, [audioAds, user]);
   const isPremium = !!usePremiumStatus(user)?.premium;
+  // ⏳ The free plan's audio limit (2 a day, 15 minutes each); null for Pro,
+  // warm-up and whenever no limit is known (useUploadQuota fails open).
+  const audioQuota = useUploadQuota({ video: false }).audio;
 
   const patchTrack = useCallback((id, patch) => {
     setTracks(prev => prev.map(tr => (tr.id === id ? { ...tr, ...patch } : tr)));
@@ -1635,12 +1657,12 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
       markDoneIfComplete();
       if (playlistChoice) queryClient.invalidateQueries({ queryKey: ['myPlaylists', user] });
     } catch (err) {
-      const message = uploadErrorText(err, t);
+      const message = uploadErrorText(err, t, i18n?.language);
       setTrackStatus(trackId, { state: 'error', stage: undefined, message });
     } finally {
       setIsPublishing(false);
     }
-  }, [tracks, mode, resolveParent, publishOneTrack, postShortsOf, finishAlbum, markDoneIfComplete, playlistChoice, queryClient, user, t]);
+  }, [tracks, mode, resolveParent, publishOneTrack, postShortsOf, finishAlbum, markDoneIfComplete, playlistChoice, queryClient, user, t, i18n]);
 
   const retryAllFailed = useCallback(async () => {
     const failed = tracks.filter((tr) => publishStatus[tr.id]?.state === 'error');
@@ -1699,8 +1721,11 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
   const flow = warmup ? FLOWS.warmup : (FLOWS[mode] || FLOWS.snaps);
   const stepKey = flow[Math.min(step, flow.length - 1)];
   const isLastStep = step >= flow.length - 1;
+  // ⏳ Free plan: no track longer than allowed, no more tracks than uploads left today.
+  const quotaCheck = audioQuotaCheck(tracks, audioQuota, (tr) => publishStatus[tr.id]?.state === 'success');
+  const quotaMinutes = Math.round((audioQuota?.maxSeconds || 0) / 60);
   const canNext = (() => {
-    if (stepKey === 'source') return tracks.length > 0 && !isRecording && (!warmup || tracks.length === 1);
+    if (stepKey === 'source') return tracks.length > 0 && !isRecording && (!warmup || tracks.length === 1) && !quotaCheck.blocked;
     if (stepKey === 'post') {
       return (tracks[0]?.title || mainTitle || '').trim().length > 0 && !!tracks[0]?.type
         && (warmup || publishWhen !== 'schedule' || !scheduleTooSoon(scheduleAt));
@@ -1723,6 +1748,15 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     if (!gateSatisfied) return;
     if (tracks.length === 0) return;
     if (transcripts.running) { toast.error(t('audio.upload.transcript.waitPublish')); return; }
+    // ⏳ Never send what the free plan's limit would refuse (the source step
+    // already holds it back; a track edited since may have grown).
+    if (quotaCheck.blocked) {
+      toast.error(quotaCheck.tooLong.length
+        ? t('uploadLimits.tooLongTracks', { minutes: quotaMinutes })
+        : isUsedUp(audioQuota) ? uploadLimitMessage(t, usedUpInfo(audioQuota, 'audio'), i18n?.language)
+          : t('uploadLimits.tooMany', { count: audioQuota.remaining }));
+      return;
+    }
     setIsPublishing(true);
     setMainError(null);
     setPublished(null);
@@ -1759,7 +1793,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
         await publishOneTrack(track, parent);
       } catch (err) {
         allOk = false;
-        const message = uploadErrorText(err, t);
+        const message = uploadErrorText(err, t, i18n?.language);
         setTrackStatus(track.id, { state: 'error', stage: undefined, message });
       }
     }
@@ -1880,8 +1914,16 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
           {stepKey === 'source' && warmup && tracks.length > 1 && (
             <Banner tone="warn" className="audio-upload-warmup-note">{t('audio.upload.warmupOneTrack')}</Banner>
           )}
+          {stepKey === 'source' && audioQuota && (
+            <UploadQuotaNote kind="audio" entry={audioQuota} user={user} warn={quotaCheck.blocked} newTab className="audio-upload-quota-note">
+              {quotaCheck.tooLong.length > 0 && t('uploadLimits.tooLongTracks', { minutes: quotaMinutes })}
+              {quotaCheck.tooLong.length > 0 && quotaCheck.over > 0 && audioQuota.remaining > 0 && ' '}
+              {quotaCheck.over > 0 && audioQuota.remaining > 0 && t('uploadLimits.tooMany', { count: audioQuota.remaining })}
+            </UploadQuotaNote>
+          )}
           {stepKey === 'source' && (
             <SourceStep
+              maxSeconds={audioQuota?.maxSeconds || null}
               tracks={tracks}
               isRecording={isRecording}
               recordSec={recordSec}
@@ -2202,7 +2244,7 @@ function SourceStep({
   tracks, isRecording, recordSec, micPreparing = false, isDragging, fileInputRef,
   onDrop, onDragOver, onDragLeave, onPickFiles, onFilesSelected,
   onStart, onStop, onRemove, onEditTrack = null, editLocked = () => false,
-  teleprompter = null, recordWave = null,
+  teleprompter = null, recordWave = null, maxSeconds = null,
 }) {
   const { t } = useTranslation();
   const limit = t('audio.upload.source.recordLimit', { minutes: Math.round(MAX_RECORD_SEC / 60) });
@@ -2273,6 +2315,12 @@ function SourceStep({
                 {tr.source === 'record' ? t('audio.upload.recorded') : t('audio.upload.uploaded')}
               </span>
               <span className="audio-upload-track-meta">{fmtTime(tr.durationSec)}</span>
+              {/* ⏳ Longer than the free plan allows: trim it in the editor, or go Pro */}
+              {maxSeconds && Number(tr.durationSec) > maxSeconds + 0.5 && (
+                <StatusPill tone="accent" caps={false} className="audio-upload-track-toolong">
+                  {t('uploadLimits.tooLongBadge', { minutes: Math.round(maxSeconds / 60) })}
+                </StatusPill>
+              )}
               {onEditTrack && tr.blob && (
                 <EditAudioButton onClick={() => onEditTrack(tr)} disabled={editLocked(tr.id)} />
               )}
