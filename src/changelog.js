@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.150',
+    category: 'account',
+    date: '2026-11-20',
+    summary: '3Speak Pro is 30% off for Cyber Week, 22 to 30 November: every plan, the day pass included.',
+  },
+  {
     version: '2.0.149',
     category: 'home',
     date: '2026-11-20',
