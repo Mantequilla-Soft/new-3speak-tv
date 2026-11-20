@@ -1,0 +1,105 @@
+{
+  "menuEntry": "Fai leggere un post",
+  "eyebrow": "Dal blog al podcast",
+  "title": "Fai leggere un post",
+  "subtitle": "Una voce sintetica legge il tuo post scritto e tu lo pubblichi come post audio con un link all’originale.",
+  "allowance": "Ti restano {{left}} di {{limit}} di lettura oggi",
+  "proHint": "Più voci, musica e tempo con Pro",
+  "optional": "facoltativo",
+  "entry": {
+    "dock": "Fai leggere",
+    "title": "Leggi questo post come post audio"
+  },
+  "gate": {
+    "signIn": "Accedi per far leggere i tuoi post.",
+    "notOpen": "La lettura non è ancora aperta per il tuo account."
+  },
+  "pick": {
+    "title": "Scegli il tuo testo",
+    "mine": "I miei post",
+    "write": "Scrivi un nuovo post",
+    "empty": "Non hai ancora post. Scrivine uno qui.",
+    "more": "Mostra post meno recenti",
+    "narrated": "Letto",
+    "words_one": "{{count}} parola",
+    "words_many": "{{count}} parole",
+    "words_other": "{{count}} parole",
+    "kind": {
+      "video": "post video",
+      "audio": "post audio"
+    }
+  },
+  "write": {
+    "titleLabel": "Titolo",
+    "placeholder": "Scrivi il tuo post. La modalità concentrazione è negli strumenti qui sotto.",
+    "tags": "Tag",
+    "hint": "Il post viene pubblicato prima su Hive, poi puoi farlo leggere.",
+    "publish": "Pubblica il post",
+    "published": "Il tuo post è online. Ora crea la lettura.",
+    "missing": "Aggiungi prima un titolo e un po’ di testo."
+  },
+  "script": {
+    "title": "Il copione",
+    "hint": "Questo è ciò che legge la voce: immagini, link ed emoji sono già spariti. Modificalo come vuoi. Una riga vuota inizia un nuovo paragrafo, una riga che inizia con # viene letta come titolo.",
+    "length_one": "{{count}} parola, circa {{time}}",
+    "length_many": "{{count}} parole, circa {{time}}",
+    "length_other": "{{count}} parole, circa {{time}}",
+    "tooLong": "più lungo dei {{left}} che ti restano oggi",
+    "nothing": "In questo post non c’è niente da leggere. Provane un altro o scrivi tu il copione."
+  },
+  "voice": {
+    "title": "Voce",
+    "gender": {
+      "female": "Femminile",
+      "male": "Maschile"
+    },
+    "accent": {
+      "British": "Britannica",
+      "Scottish": "Scozzese",
+      "American": "Americana"
+    }
+  },
+  "music": {
+    "title": "Musica di sottofondo",
+    "off": "Nessuna musica",
+    "library": "Libreria musicale",
+    "own": "La tua musica",
+    "proNote": "La libreria musicale e la tua musica sono incluse in 3Speak Pro.",
+    "listen": "Ascolta",
+    "search": "Cerca nella libreria",
+    "credit": "Il brano viene citato nel tuo post, come chiede la sua licenza.",
+    "choose": "Scegli un file musicale",
+    "replace": "Scegli un altro file",
+    "uploading": "Caricamento…",
+    "ready": "La tua musica è pronta",
+    "ownHint": "Musica di cui hai i diritti, al massimo 15 minuti. Va in loop sotto la voce, molto più bassa."
+  },
+  "make": {
+    "title": "Crea la registrazione",
+    "intro": "Introduzione parlata",
+    "introHint": "La voce inizia con il titolo, il tuo nome e il fatto che legge una voce sintetica.",
+    "preview": "Ascolta un’anteprima",
+    "record": "Crea la registrazione",
+    "queued_one": "In attesa, {{count}} registrazione prima",
+    "queued_many": "In attesa, {{count}} registrazioni prima",
+    "queued_other": "In attesa, {{count}} registrazioni prima",
+    "rendering": "Registrazione…",
+    "done": "{{time}}, letto da {{name}}"
+  },
+  "publish": {
+    "button": "Pubblica come post audio",
+    "done": "Il tuo post audio è online.",
+    "open": "Aprilo",
+    "addLink": "Aggiungi un link di ascolto al tuo post scritto",
+    "linked": "Il tuo post scritto ora rimanda all’audio.",
+    "listenLabel": "Ascolta questo post",
+    "writtenPost": "Il post scritto:",
+    "readBy": "Letto da una voce sintetica ({{name}})."
+  },
+  "errors": {
+    "failed": "La registrazione non è riuscita, riprova.",
+    "dailyLimit": "È più lungo del tempo di lettura che ti resta oggi ({{left}}). Accorcia il copione o torna domani.",
+    "notFound": "Quel post non è stato trovato.",
+    "publishFailed": "La pubblicazione non è riuscita, riprova."
+  }
+}

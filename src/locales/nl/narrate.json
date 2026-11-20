@@ -1,0 +1,102 @@
+{
+  "menuEntry": "Post laten voorlezen",
+  "eyebrow": "Van blog naar podcast",
+  "title": "Post laten voorlezen",
+  "subtitle": "Een synthetische stem leest je geschreven post voor, en je publiceert hem als audiopost met een link naar het origineel.",
+  "allowance": "Nog {{left}} van {{limit}} voorleestijd over vandaag",
+  "proHint": "Meer stemmen, muziek en tijd met Pro",
+  "optional": "optioneel",
+  "entry": {
+    "dock": "Voorlezen",
+    "title": "Deze post voorlezen als audiopost"
+  },
+  "gate": {
+    "signIn": "Log in om je posts te laten voorlezen.",
+    "notOpen": "Voorlezen is nog niet open voor je account."
+  },
+  "pick": {
+    "title": "Kies je tekst",
+    "mine": "Mijn posts",
+    "write": "Nieuwe post schrijven",
+    "empty": "Je hebt nog geen posts. Schrijf er hier een.",
+    "more": "Oudere posts tonen",
+    "narrated": "Voorgelezen",
+    "words_one": "{{count}} woord",
+    "words_other": "{{count}} woorden",
+    "kind": {
+      "video": "videopost",
+      "audio": "audiopost"
+    }
+  },
+  "write": {
+    "titleLabel": "Titel",
+    "placeholder": "Schrijf je post. De focusmodus zit in de tools hieronder.",
+    "tags": "Tags",
+    "hint": "De post wordt eerst op Hive gepubliceerd, daarna kun je hem laten voorlezen.",
+    "publish": "Post publiceren",
+    "published": "Je post staat online. Maak nu de voorleesversie.",
+    "missing": "Voeg eerst een titel en wat tekst toe."
+  },
+  "script": {
+    "title": "Het script",
+    "hint": "Dit leest de stem voor: afbeeldingen, links en emoji zijn al weg. Pas het aan zoals je wilt. Een lege regel begint een nieuwe alinea, een regel die met # begint wordt als kop gelezen.",
+    "length_one": "{{count}} woord, ongeveer {{time}}",
+    "length_other": "{{count}} woorden, ongeveer {{time}}",
+    "tooLong": "langer dan de {{left}} die je vandaag nog hebt",
+    "nothing": "Er valt niets voor te lezen in deze post. Probeer een andere of schrijf het script zelf."
+  },
+  "voice": {
+    "title": "Stem",
+    "gender": {
+      "female": "Vrouw",
+      "male": "Man"
+    },
+    "accent": {
+      "British": "Brits",
+      "Scottish": "Schots",
+      "American": "Amerikaans"
+    }
+  },
+  "music": {
+    "title": "Achtergrondmuziek",
+    "off": "Geen muziek",
+    "library": "Muziekbibliotheek",
+    "own": "Je eigen muziek",
+    "proNote": "De muziekbibliotheek en je eigen muziek horen bij 3Speak Pro.",
+    "listen": "Luisteren",
+    "search": "Zoek in de bibliotheek",
+    "credit": "Het nummer wordt in je post vermeld, zoals de licentie vraagt.",
+    "choose": "Kies een muziekbestand",
+    "replace": "Kies een ander bestand",
+    "uploading": "Uploaden…",
+    "ready": "Je muziek is klaar",
+    "ownHint": "Muziek waarvan je de rechten hebt, hooguit 15 minuten. Ze speelt in een lus onder de stem, veel zachter."
+  },
+  "make": {
+    "title": "Opname maken",
+    "intro": "Gesproken intro",
+    "introHint": "De stem begint met de titel, je naam en dat een synthetische stem voorleest.",
+    "preview": "Voorbeeld beluisteren",
+    "record": "Opname maken",
+    "queued_one": "Wachten, {{count}} opname voor je",
+    "queued_other": "Wachten, {{count}} opnames voor je",
+    "rendering": "Opnemen…",
+    "done": "{{time}}, voorgelezen door {{name}}"
+  },
+  "publish": {
+    "button": "Publiceren als audiopost",
+    "done": "Je audiopost staat online.",
+    "open": "Openen",
+    "addLink": "Een luisterlink aan je geschreven post toevoegen",
+    "linked": "Je geschreven post linkt nu naar de audio.",
+    "listenLabel": "Luister naar deze post",
+    "writtenPost": "De geschreven post:",
+    "readBy": "Voorgelezen door een synthetische stem ({{name}})."
+  },
+  "errors": {
+    "failed": "De opname is mislukt, probeer het opnieuw.",
+    "dailyLimit": "Dat is langer dan je resterende voorleestijd van vandaag ({{left}}). Maak het script korter of kom morgen terug.",
+    "notFound": "Die post is niet gevonden.",
+    "publishFailed": "Publiceren is niet gelukt, probeer het opnieuw."
+  }
+}

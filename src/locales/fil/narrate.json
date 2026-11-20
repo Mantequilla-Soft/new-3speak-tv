@@ -1,0 +1,102 @@
+{
+  "menuEntry": "Ipabasa ang post",
+  "eyebrow": "Mula blog hanggang podcast",
+  "title": "Ipabasa ang post",
+  "subtitle": "Babasahin ng isang synthetic na boses ang nakasulat mong post, at ipa-publish mo ito bilang audio post na naka-link sa orihinal.",
+  "allowance": "May natitirang {{left}} sa {{limit}} na oras ng pagbasa ngayong araw",
+  "proHint": "Mas maraming boses, musika at oras sa Pro",
+  "optional": "opsyonal",
+  "entry": {
+    "dock": "Ipabasa",
+    "title": "Basahin ang post na ito bilang audio post"
+  },
+  "gate": {
+    "signIn": "Mag-sign in para maipabasa ang mga post mo.",
+    "notOpen": "Hindi pa bukas ang pagbasa para sa account mo."
+  },
+  "pick": {
+    "title": "Piliin ang teksto mo",
+    "mine": "Mga post ko",
+    "write": "Magsulat ng bagong post",
+    "empty": "Wala ka pang post. Magsulat ng isa rito.",
+    "more": "Ipakita ang mas lumang post",
+    "narrated": "Nabasa na",
+    "words_one": "{{count}} salita",
+    "words_other": "{{count}} salita",
+    "kind": {
+      "video": "video post",
+      "audio": "audio post"
+    }
+  },
+  "write": {
+    "titleLabel": "Pamagat",
+    "placeholder": "Isulat ang post mo. Nasa mga tool sa ibaba ang focus mode.",
+    "tags": "Mga tag",
+    "hint": "Ipa-publish muna ang post sa Hive, saka mo ito maipapabasa.",
+    "publish": "I-publish ang post",
+    "published": "Na-publish na ang post mo. Gawin na ang pagbasa.",
+    "missing": "Maglagay muna ng pamagat at kaunting teksto."
+  },
+  "script": {
+    "title": "Ang script",
+    "hint": "Ito ang babasahin ng boses: tinanggal na ang mga larawan, link at emoji. I-edit ito ayon sa gusto mo. Nagsisimula ng bagong talata ang blangkong linya, at binabasa bilang heading ang linyang nagsisimula sa #.",
+    "length_one": "{{count}} salita, mga {{time}}",
+    "length_other": "{{count}} salita, mga {{time}}",
+    "tooLong": "mas mahaba sa {{left}} na natitira sa iyo ngayong araw",
+    "nothing": "Walang mababasa sa post na ito. Subukan ang iba, o ikaw na ang sumulat ng script."
+  },
+  "voice": {
+    "title": "Boses",
+    "gender": {
+      "female": "Babae",
+      "male": "Lalaki"
+    },
+    "accent": {
+      "British": "British",
+      "Scottish": "Scottish",
+      "American": "Amerikano"
+    }
+  },
+  "music": {
+    "title": "Background music",
+    "off": "Walang musika",
+    "library": "Music library",
+    "own": "Sarili mong musika",
+    "proNote": "Kasama sa 3Speak Pro ang music library at ang sarili mong musika.",
+    "listen": "Pakinggan",
+    "search": "Maghanap sa library",
+    "credit": "Binabanggit ang kanta sa post mo, gaya ng hinihingi ng lisensya nito.",
+    "choose": "Pumili ng music file",
+    "replace": "Pumili ng ibang file",
+    "uploading": "Ina-upload…",
+    "ready": "Handa na ang musika mo",
+    "ownHint": "Musikang may karapatan ka, hanggang 15 minuto. Paulit-ulit itong tutugtog sa ilalim ng boses, mas mahina."
+  },
+  "make": {
+    "title": "Gawin ang recording",
+    "intro": "Panimulang binibigkas",
+    "introHint": "Nagsisimula ang boses sa pamagat, sa pangalan mo at na synthetic na boses ang bumabasa.",
+    "preview": "Pakinggan ang preview",
+    "record": "Gawin ang recording",
+    "queued_one": "Naghihintay, may {{count}} recording sa unahan",
+    "queued_other": "Naghihintay, may {{count}} recording sa unahan",
+    "rendering": "Nire-record…",
+    "done": "{{time}}, binasa ni {{name}}"
+  },
+  "publish": {
+    "button": "I-publish bilang audio post",
+    "done": "Na-publish na ang audio post mo.",
+    "open": "Buksan",
+    "addLink": "Magdagdag ng Listen link sa nakasulat mong post",
+    "linked": "Naka-link na sa audio ang nakasulat mong post.",
+    "listenLabel": "Pakinggan ang post na ito",
+    "writtenPost": "Ang nakasulat na post:",
+    "readBy": "Binasa ng isang synthetic na boses ({{name}})."
+  },
+  "errors": {
+    "failed": "Hindi nagtagumpay ang recording, subukan ulit.",
+    "dailyLimit": "Mas mahaba ito sa natitira mong oras ng pagbasa ngayong araw ({{left}}). Paikliin ang script o bumalik bukas.",
+    "notFound": "Hindi nahanap ang post na iyon.",
+    "publishFailed": "Hindi nag-publish, subukan ulit."
+  }
+}

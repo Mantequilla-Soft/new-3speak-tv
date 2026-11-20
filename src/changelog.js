@@ -18,6 +18,18 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.144',
+    category: 'general',
+    date: '2026-11-20',
+    summary: 'Automations can now narrate every new written post and publish it as an audio post.',
+  },
+  {
+    version: '2.0.143',
+    category: 'podcasts',
+    date: '2026-11-20',
+    summary: 'New: Narrate a post. A synthetic voice reads your written post out, and you publish it as an audio post with a link back to the original.',
+  },
+  {
     version: '2.0.142',
     category: 'audio',
     date: '2026-11-19',

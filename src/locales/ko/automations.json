@@ -139,6 +139,10 @@
     "someone_posted": {
       "label": "내가 고른 사람이 게시할 때",
       "desc": "아래에 적은 계정의 게시물이에요: 동영상, 쇼츠, 오디오, 팟캐스트, Snap, 스트림 또는 글."
+    },
+    "text_post_published": {
+      "label": "글 게시물을 올릴 때",
+      "desc": "텍스트만 있는 내 게시물: 3Speak 동영상, 오디오, 라이브가 없는 글."
     }
   },
   "tasks": {
@@ -219,6 +223,17 @@
       "hints": {
         "webhook": "Discord에서: 채널 설정, 연동, 웹후크, 웹후크 URL 복사."
       }
+    },
+    "narrate_post": {
+      "label": "게시물 읽어 주기",
+      "desc": "합성 음성이 새 게시물을 읽고(이미지, 링크, 이모지 제외) 약 10분 뒤 원문으로 연결되는 오디오 게시물로 올립니다.",
+      "props": {
+        "voice": "목소리",
+        "music": "배경 음악",
+        "title": "제목",
+        "audioType": "오디오 종류",
+        "tags": "태그"
+      }
     }
   },
   "if": {
@@ -298,7 +313,11 @@
     "post": "게시물",
     "stream": "스트림",
     "audio": "오디오",
-    "snap": "Snap"
+    "snap": "Snap",
+    "off": "음악 없음",
+    "rain": "빗소리",
+    "piano": "밤의 피아노",
+    "fireplace": "벽난로"
   },
   "placeholders": {
     "title": "게시물 제목",
@@ -450,6 +469,10 @@
       "blank": {
         "title": "빈 상태로 시작",
         "sub": "이벤트를 고르고 단계를 직접 만들어요."
+      },
+      "narrate_posts": {
+        "title": "모든 글 게시물의 오디오 버전",
+        "sub": "글 게시물을 올리면 합성 음성이 오디오 게시물로 읽어 줍니다."
       }
     },
     "texts": {
@@ -476,5 +499,9 @@
     "polls": "투표",
     "others": "다른 계정",
     "more": "더 보기"
+  },
+  "voiceGender": {
+    "female": "여성",
+    "male": "남성"
   }
 }

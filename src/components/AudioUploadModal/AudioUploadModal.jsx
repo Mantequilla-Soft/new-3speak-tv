@@ -300,6 +300,13 @@ function probeDuration(blob) {
 const trackCredits = (track) => (Array.isArray(track?.musicCredits) ? track.musicCredits : []);
 const withSound = (audioMeta, credits) => (credits.length ? { ...audioMeta, sound: primarySoundMetadata(credits) } : audioMeta);
 
+// A narrated post's track says so on the chain: `3speak.tts` { engine, voice,
+// source } next to the other 3Speak keys (the synthetic-voice label).
+function addNarration(metaObj, narration, trackId) {
+  if (!narration || narration.trackId !== trackId) return;
+  metaObj['3speak'] = { ...(metaObj['3speak'] || {}), tts: narration.tts };
+}
+
 function AudioUploadModal({ isOpen, onClose, initialTrack }) {
   const { t } = useTranslation();
   const titleId = useId();
@@ -655,10 +662,15 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
   // An imported podcast episode (the import page): its source id, reported back
   // once the post is out so the import grid marks it as on 3Speak.
   const importSourceRef = useRef(null);
+  // A narrated written post (page/Narrate.jsx): the voice and the post it reads,
+  // written into the track's json_metadata (`3speak.tts`) and reported back once
+  // it is out, so the narration page can offer the "Listen" link on the original.
+  const narrationRef = useRef(null);
   useEffect(() => {
     if (!isOpen) {
       consumedInitialRef.current = false;
       importSourceRef.current = null;
+      narrationRef.current = null;
       return;
     }
     if (consumedInitialRef.current) return;
@@ -686,6 +698,11 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
       // Reported back for this track, however it is published (post or snap).
       const sourceId = typeof pre.sourceId === 'string' ? pre.sourceId : null;
       if (sourceId) added.then((trackId) => { importSourceRef.current = { sourceId, trackId }; });
+      const n = pre.narration;
+      if (n && typeof n === 'object' && typeof n.voice === 'string') {
+        const tts = { engine: 'piper', voice: n.voice.slice(0, 80), source: typeof n.source === 'string' && /^[a-z0-9.-]{3,16}\/[a-z0-9-]{1,255}$/.test(n.source) ? n.source : null };
+        added.then((trackId) => { narrationRef.current = { tts, trackId }; });
+      }
     }
   }, [isOpen, initialTrack, addBlobAsTrack, setCoverFor]);
 
@@ -1184,6 +1201,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
       ...audioAdsMeta,
     };
     if (postThumb) metaObj.image = [postThumb];
+    addNarration(metaObj, narrationRef.current, track.id);
 
     // Later, or not yet: the built post goes to the checker's scheduled posts
     // (a draft has no time) and its cron publishes it as the creator under the
@@ -1396,6 +1414,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
       ...audioAdsMeta,
     };
     if (tThumb) metaObj.image = [tThumb];
+    addNarration(metaObj, narrationRef.current, track.id);
 
     const ops = [[
       'comment',
@@ -1440,6 +1459,11 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     // marks it as on 3Speak (server record + an event for an open import page).
     const imp = importSourceRef.current;
     const out = trackPostsRef.current[track.id];
+    const narr = narrationRef.current;
+    if (narr && narr.trackId === track.id && out?.permlink) {
+      narrationRef.current = null;
+      window.dispatchEvent(new CustomEvent('narration-published', { detail: { source: narr.tts.source, author: out.author, permlink: out.permlink } }));
+    }
     if (imp && imp.trackId === track.id && out?.permlink) {
       importSourceRef.current = null;
       markImportPublished(imp.sourceId, out.permlink)

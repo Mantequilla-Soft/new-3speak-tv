@@ -11,7 +11,7 @@ import { useChat } from '../../context/ChatContext';
 import { useServerUnread } from '../../hooks/useServerUnread';
 import { getVotePower } from '../../utils/hiveUtils';
 import { getHiveUrl, ensureHealthyNode } from '../../utils/hiveNode';
-import { adsEnabledFor, automationsEnabledFor, VIDEO_IMPORT_ENABLED } from '../../utils/config';
+import { adsEnabledFor, automationsEnabledFor, narrationEnabledFor, VIDEO_IMPORT_ENABLED } from '../../utils/config';
 import useCanImportVideos from '../../hooks/useCanImportVideos';
 import MountWhenOpened from '../common/LazyMount';
 import { useAvatarUrl } from '../../utils/avatarCache';
@@ -311,6 +311,12 @@ function ProfileNav({ isVisible, pinned = true, leaving = false, hoverProps, onc
             {!isIncubating && automationsEnabledFor(user) && (
               <Link to="/automations" className="pn-item" role="menuitem" onClick={onclose}>
                 {row('account_tree', t('automations.menuEntry'))}
+              </Link>
+            )}
+            {/* 🎙️ Blog to podcast: the same gate as the page. */}
+            {!isIncubating && narrationEnabledFor(user) && (
+              <Link to="/narrate" className="pn-item" role="menuitem" onClick={onclose}>
+                {row('record_voice_over', t('narrate.menuEntry'))}
               </Link>
             )}
             {/* Closed testing. Same gate as the /advertise page itself, so the menu can

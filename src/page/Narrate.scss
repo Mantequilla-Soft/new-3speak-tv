@@ -1,0 +1,240 @@
+@use "../styles/v2" as v2;
+
+// 🎙️ /narrate (page/Narrate.jsx): the five steps as cards in one column,
+// a phone-width list of the creator's posts, the editable script, the voices
+// as choice cards and the music as chips.
+.narrate {
+  max-width: 760px;
+  margin: 0 auto;
+  // The app column (.container, App.css) already gives the page padding.
+  padding: 0 0 32px;
+  color: var(--text);
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  &__head {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    h1 { margin: 0; font-size: 24px; }
+  }
+  &__sub { margin: 0; color: var(--muted); }
+  &__allowance {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 6px 0 0;
+    font-size: 13px;
+    color: var(--muted);
+
+    a { color: var(--accent); }
+  }
+
+  &__card {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  &__step {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+    font-size: 18px;
+
+    span {
+      display: inline-grid;
+      place-items: center;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: var(--on-accent);
+      font-size: 13px;
+      font-weight: 700;
+      flex: none;
+    }
+  }
+
+  &__note {
+    margin: 0;
+    font-size: 13px;
+    color: var(--muted);
+
+    &.is-over { color: var(--accent); }
+  }
+}
+
+.nar-posts {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 420px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.nar-post {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 56px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+
+  &:hover { background: var(--bg-hover); }
+  &.is-on { border-color: var(--accent); background: var(--accent-wash); }
+
+  &__text {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+
+    b {
+      font-size: 14px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+  &__meta { font-size: 12px; color: var(--muted); }
+}
+
+.nar-write {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  &__body { min-height: 220px; }
+}
+
+.nar-script {
+  width: 100%;
+  min-height: 260px;
+  height: auto;
+  padding: 12px;
+  line-height: 1.55;
+  resize: vertical;
+  font-family: inherit;
+}
+
+.nar-voices {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 8px;
+}
+
+.nar-music {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.nar-library {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  &__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    max-height: 320px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    li {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: var(--r-md);
+
+      &.is-on { background: var(--accent-wash); }
+    }
+  }
+
+  &__pick {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 8px 10px;
+    border: 0;
+    background: transparent;
+    color: var(--text);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+
+    b { font-size: 14px; }
+    span { font-size: 12px; color: var(--muted); }
+  }
+
+  &__play {
+    @include v2.control(36);
+    width: 36px;
+    padding: 0;
+    justify-content: center;
+    flex: none;
+  }
+}
+
+.nar-upload {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+
+  &__btn { cursor: pointer; }
+}
+
+.nar-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+
+  @media (max-width: 480px) {
+    .v2-btn { flex: 1 1 100%; justify-content: center; }
+  }
+}
+
+.nar-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.nar-result {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+
+  &__audio { width: 100%; }
+}
+
+.nar-published {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  width: 100%;
+}

@@ -141,6 +141,10 @@
     "someone_posted": {
       "label": "Iemand die ik kies plaatst iets",
       "desc": "Een post van een account dat je hieronder opgeeft: een video, Short, audio, podcast, snap, stream of tekstpost."
+    },
+    "text_post_published": {
+      "label": "Ik publiceer een geschreven post",
+      "desc": "Je posts met alleen tekst: geen 3Speak-video, -audio of -stream erin."
     }
   },
   "tasks": {
@@ -221,6 +225,17 @@
       "hints": {
         "webhook": "In Discord: kanaalinstellingen, Integraties, Webhooks, Webhook-URL kopiëren."
       }
+    },
+    "narrate_post": {
+      "label": "Post laten voorlezen",
+      "desc": "Een synthetische stem leest de nieuwe post voor (zonder afbeeldingen, links of emoji) en hij verschijnt zo'n 10 minuten later als audiopost met een link naar het origineel.",
+      "props": {
+        "voice": "Stem",
+        "music": "Achtergrondmuziek",
+        "title": "Titel",
+        "audioType": "Soort audio",
+        "tags": "Tags"
+      }
     }
   },
   "if": {
@@ -300,7 +315,11 @@
     "post": "Een post",
     "stream": "Een stream",
     "audio": "Audio",
-    "snap": "Snap"
+    "snap": "Snap",
+    "off": "Geen muziek",
+    "rain": "Regen",
+    "piano": "Nachtpiano",
+    "fireplace": "Haardvuur"
   },
   "placeholders": {
     "title": "de titel van de post",
@@ -452,6 +471,10 @@
       "blank": {
         "title": "Leeg beginnen",
         "sub": "Kies de gebeurtenis en bouw de stappen zelf."
+      },
+      "narrate_posts": {
+        "title": "Audioversie van elke geschreven post",
+        "sub": "Als je een geschreven post publiceert, leest een synthetische stem hem voor als audiopost."
       }
     },
     "texts": {
@@ -478,5 +501,9 @@
     "polls": "Peilingen",
     "others": "Andere accounts",
     "more": "Meer"
+  },
+  "voiceGender": {
+    "female": "vrouwelijk",
+    "male": "mannelijk"
   }
 }

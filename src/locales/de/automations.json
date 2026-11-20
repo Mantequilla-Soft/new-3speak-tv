@@ -141,6 +141,10 @@
     "someone_posted": {
       "label": "Jemand, den ich auswähle, postet",
       "desc": "Ein Post eines Kontos, das du unten einträgst: ein Video, Short, Audio, Podcast, Snap, Stream oder Textpost."
+    },
+    "text_post_published": {
+      "label": "Ich veröffentliche einen Textbeitrag",
+      "desc": "Deine Beiträge nur mit Text: ohne 3Speak-Video, -Audio oder -Stream."
     }
   },
   "tasks": {
@@ -221,6 +225,17 @@
       "hints": {
         "webhook": "In Discord: Kanaleinstellungen, Integrationen, Webhooks, Webhook-URL kopieren."
       }
+    },
+    "narrate_post": {
+      "label": "Beitrag vorlesen lassen",
+      "desc": "Eine synthetische Stimme liest den neuen Beitrag vor (ohne Bilder, Links und Emojis), und er erscheint etwa 10 Minuten später als Audio-Beitrag mit Link zum Original.",
+      "props": {
+        "voice": "Stimme",
+        "music": "Hintergrundmusik",
+        "title": "Titel",
+        "audioType": "Art des Audios",
+        "tags": "Tags"
+      }
     }
   },
   "if": {
@@ -300,7 +315,11 @@
     "post": "Ein Post",
     "stream": "Ein Stream",
     "audio": "Audio",
-    "snap": "Snap"
+    "snap": "Snap",
+    "off": "Keine Musik",
+    "rain": "Regen",
+    "piano": "Nachtklavier",
+    "fireplace": "Kaminfeuer"
   },
   "placeholders": {
     "title": "der Titel des Posts",
@@ -452,6 +471,10 @@
       "blank": {
         "title": "Leer anfangen",
         "sub": "Wähle das Ereignis und bau die Schritte selbst."
+      },
+      "narrate_posts": {
+        "title": "Audio-Version jedes Textbeitrags",
+        "sub": "Wenn du einen Textbeitrag veröffentlichst, liest eine synthetische Stimme ihn als Audio-Beitrag vor."
       }
     },
     "texts": {
@@ -478,5 +501,9 @@
     "polls": "Umfragen",
     "others": "Andere Konten",
     "more": "Mehr"
+  },
+  "voiceGender": {
+    "female": "weiblich",
+    "male": "männlich"
   }
 }

@@ -346,6 +346,18 @@ const AUTOMATIONS_BETA_USERS = new Set(
 const automationsEnabledFor = (user) => isTestUser(user)
   || (!!user && AUTOMATIONS_BETA_USERS.has(String(user).toLowerCase()));
 
+// Blog to podcast (/narrate): a written post read out by a synthetic voice. The
+// server (server/narration.cjs, NARRATION_USERS) has its own list, so this only
+// decides who sees the page: the team, plus VITE_NARRATION_USERS, or everyone
+// with VITE_ENABLE_NARRATION=true.
+const ENABLE_NARRATION = import.meta.env.VITE_ENABLE_NARRATION === 'true';
+const NARRATION_USERS = new Set(
+  (import.meta.env.VITE_NARRATION_USERS || '')
+    .split(',').map((s) => s.trim().toLowerCase()).filter(Boolean),
+);
+const narrationEnabledFor = (user) => !!user && (ENABLE_NARRATION || isTestUser(user)
+  || NARRATION_USERS.has(String(user).toLowerCase()));
+
 // Advertising (the /advertise page and the creator's ad opt-out in Settings).
 // OFF by default — set VITE_ENABLE_ADS=true to open it to everyone. Until then the
 // team accounts above see it, plus anyone listed in VITE_ADS_BETA_USERS so testers
@@ -524,6 +536,7 @@ export {
   tickerEnabledFor,
   adsBetaUserFor,
   automationsEnabledFor,
+  narrationEnabledFor,
   warmupRailEnabledFor,
   ENABLE_THIRDPARTY_ADS,
   FEED_EXCLUDED_HOSTS,

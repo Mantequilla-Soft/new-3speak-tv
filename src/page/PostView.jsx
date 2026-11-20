@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { getHiveUrl } from '../utils/hiveNode';
-import { useParams, Navigate, Link, useLocation } from 'react-router-dom';
+import { useParams, Navigate, Link, useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toastIn } from '../utils/toast';
 import { useAppStore } from '../lib/store';
@@ -12,7 +12,7 @@ import AuthorBadge from '../components/AuthorBadge/AuthorBadge';
 import PayoutAmount from '../components/PayoutAmount/PayoutAmount';
 import TipModal from '../components/tip-reward/TipModal';
 import ReportModal, { isReported } from '../components/modal/ReportModal';
-import { HIVE_API_URL } from '../utils/config';
+import { HIVE_API_URL, narrationEnabledFor } from '../utils/config';
 import { resolveRootPost, ensure3SpeakStatus } from '../utils/threeSpeakDetection';
 import { recordReshare, getResharesForVideo } from '../utils/reshares';
 import { isLoggedIn } from '../hive-api/aioha';
@@ -48,6 +48,7 @@ function PostView({ author: authorProp, permlink: permlinkProp }) {
   const { t } = useTranslation();
   const params = useParams();
   const { state } = useLocation();
+  const navigate = useNavigate();
   const { authenticated, user: currentUser } = useAppStore();
   // Reshares are 3Speak's own store, not a chain op, so a handle works. Kept
   // separate from requireLogin, which also gates voting and replying -- those
@@ -424,6 +425,11 @@ function PostView({ author: authorProp, permlink: permlinkProp }) {
       title: !authenticated ? t('common.hype.loginRequired') : hasReshared ? t('common.hype.hyped') : t('common.hype.title'), onClick: handleReshare,
     },
     { id: 'share', icon: 'share', label: t('common.actions.share'), title: t('common.actions.share'), onClick: handleShare },
+    // 🎙️ Your own written post read out as an audio post (page/Narrate.jsx).
+    isOwnPost && !isComment && narrationEnabledFor(currentUser) && {
+      id: 'narrate', icon: 'record_voice_over', label: t('narrate.entry.dock'), title: t('narrate.entry.title'),
+      onClick: () => navigate(`/narrate/${post.permlink}`),
+    },
     {
       id: 'report', icon: 'flag', label: t('common.actions.report'), title: t('posts.view.reportPost'),
       active: reported, onClick: () => setIsReportOpen(true),

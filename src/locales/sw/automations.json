@@ -141,6 +141,10 @@
     "someone_posted": {
       "label": "Mtu niliyemchagua anachapisha",
       "desc": "Chapisho la akaunti unayoorodhesha hapa chini: video, Short, sauti, podikasti, snap, mtiririko au chapisho la maandishi."
+    },
+    "text_post_published": {
+      "label": "Ninachapisha chapisho la maandishi",
+      "desc": "Machapisho yako yenye maandishi tu: bila video, sauti au mtiririko wa 3Speak."
     }
   },
   "tasks": {
@@ -221,6 +225,17 @@
       "hints": {
         "webhook": "Kwenye Discord: mipangilio ya chaneli, Integrations, Webhooks, Copy Webhook URL."
       }
+    },
+    "narrate_post": {
+      "label": "Soma chapisho kwa sauti",
+      "desc": "Sauti bandia inasoma chapisho jipya (bila picha, viungo wala emoji) na baada ya takriban dakika 10 linatoka kama chapisho la sauti linaloelekeza kwa asili.",
+      "props": {
+        "voice": "Sauti",
+        "music": "Muziki wa nyuma",
+        "title": "Kichwa",
+        "audioType": "Aina ya sauti",
+        "tags": "Lebo"
+      }
     }
   },
   "if": {
@@ -300,7 +315,11 @@
     "post": "Chapisho",
     "stream": "Mtiririko",
     "audio": "Sauti",
-    "snap": "Snap"
+    "snap": "Snap",
+    "off": "Bila muziki",
+    "rain": "Mvua",
+    "piano": "Piano ya usiku",
+    "fireplace": "Moto wa meko"
   },
   "placeholders": {
     "title": "kichwa cha chapisho",
@@ -452,6 +471,10 @@
       "blank": {
         "title": "Anza bila kitu",
         "sub": "Chagua tukio na ujenge hatua mwenyewe."
+      },
+      "narrate_posts": {
+        "title": "Toleo la sauti la kila chapisho la maandishi",
+        "sub": "Unapochapisha chapisho la maandishi, sauti bandia inalisoma kama chapisho la sauti."
       }
     },
     "texts": {
@@ -478,5 +501,9 @@
     "polls": "Kura za maoni",
     "others": "Akaunti nyingine",
     "more": "Zaidi"
+  },
+  "voiceGender": {
+    "female": "ya kike",
+    "male": "ya kiume"
   }
 }

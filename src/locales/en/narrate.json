@@ -1,0 +1,102 @@
+{
+  "menuEntry": "Narrate a post",
+  "eyebrow": "Blog to podcast",
+  "title": "Narrate a post",
+  "subtitle": "A synthetic voice reads your written post out, and you publish it as an audio post that links back to it.",
+  "allowance": "{{left}} of {{limit}} narration time left today",
+  "proHint": "More voices, music and time with Pro",
+  "optional": "optional",
+  "entry": {
+    "dock": "Narrate",
+    "title": "Read this post out as an audio post"
+  },
+  "gate": {
+    "signIn": "Sign in to narrate your posts.",
+    "notOpen": "Narration is not open for your account yet."
+  },
+  "pick": {
+    "title": "Pick your text",
+    "mine": "My posts",
+    "write": "Write a new post",
+    "empty": "You have no posts yet. Write one here.",
+    "more": "Show older posts",
+    "narrated": "Narrated",
+    "words_one": "{{count}} word",
+    "words_other": "{{count}} words",
+    "kind": {
+      "video": "video post",
+      "audio": "audio post"
+    }
+  },
+  "write": {
+    "titleLabel": "Title",
+    "placeholder": "Write your post. Focus mode is in the tools below.",
+    "tags": "Tags",
+    "hint": "The post is published on Hive first, then you can narrate it.",
+    "publish": "Publish the post",
+    "published": "Your post is out. Now make the narration.",
+    "missing": "Add a title and some text first."
+  },
+  "script": {
+    "title": "The script",
+    "hint": "This is what the voice reads: pictures, links and emoji are already gone. Edit it as you like. An empty line starts a new paragraph, a line starting with # is read as a heading.",
+    "length_one": "{{count}} word, about {{time}}",
+    "length_other": "{{count}} words, about {{time}}",
+    "tooLong": "longer than the {{left}} you have left today",
+    "nothing": "There is nothing to read in this post. Try another one, or write the script yourself."
+  },
+  "voice": {
+    "title": "Voice",
+    "gender": {
+      "female": "Female",
+      "male": "Male"
+    },
+    "accent": {
+      "British": "British",
+      "Scottish": "Scottish",
+      "American": "American"
+    }
+  },
+  "music": {
+    "title": "Background music",
+    "off": "No music",
+    "library": "Music library",
+    "own": "Your own music",
+    "proNote": "The music library and your own music come with 3Speak Pro.",
+    "listen": "Listen",
+    "search": "Search the library",
+    "credit": "The song is credited in your post, as its licence asks.",
+    "choose": "Choose a music file",
+    "replace": "Choose another file",
+    "uploading": "Uploading…",
+    "ready": "Your music is ready",
+    "ownHint": "Music you have the rights to, at most 15 minutes. It loops under the voice, well below it."
+  },
+  "make": {
+    "title": "Make the recording",
+    "intro": "Spoken intro",
+    "introHint": "The voice starts with the title, your name and that a synthetic voice reads it.",
+    "preview": "Listen to a preview",
+    "record": "Make the recording",
+    "queued_one": "Waiting, {{count}} recording ahead",
+    "queued_other": "Waiting, {{count}} recordings ahead",
+    "rendering": "Recording…",
+    "done": "{{time}}, read by {{name}}"
+  },
+  "publish": {
+    "button": "Publish as an audio post",
+    "done": "Your audio post is out.",
+    "open": "Open it",
+    "addLink": "Add a Listen link to your written post",
+    "linked": "Your written post links to the audio now.",
+    "listenLabel": "Listen to this post",
+    "writtenPost": "The written post:",
+    "readBy": "Read by a synthetic voice ({{name}})."
+  },
+  "errors": {
+    "failed": "The recording failed, try again.",
+    "dailyLimit": "That is longer than your narration time left today ({{left}}). Shorten the script or come back tomorrow.",
+    "notFound": "That post was not found.",
+    "publishFailed": "Publishing did not work, try again."
+  }
+}

@@ -1,0 +1,102 @@
+{
+  "menuEntry": "Soma chapisho kwa sauti",
+  "eyebrow": "Kutoka blogu hadi podikasti",
+  "title": "Soma chapisho kwa sauti",
+  "subtitle": "Sauti bandia inasoma chapisho lako la maandishi, nawe unalichapisha kama chapisho la sauti linaloelekeza kwa asili.",
+  "allowance": "Zimebaki {{left}} kati ya {{limit}} za kusoma leo",
+  "proHint": "Sauti, muziki na muda zaidi ukiwa na Pro",
+  "optional": "si lazima",
+  "entry": {
+    "dock": "Soma kwa sauti",
+    "title": "Soma chapisho hili kama chapisho la sauti"
+  },
+  "gate": {
+    "signIn": "Ingia ili usomewe machapisho yako.",
+    "notOpen": "Kusoma kwa sauti bado hakujafunguliwa kwa akaunti yako."
+  },
+  "pick": {
+    "title": "Chagua maandishi yako",
+    "mine": "Machapisho yangu",
+    "write": "Andika chapisho jipya",
+    "empty": "Bado huna machapisho. Andika moja hapa.",
+    "more": "Onyesha machapisho ya zamani",
+    "narrated": "Limesomwa",
+    "words_one": "neno {{count}}",
+    "words_other": "maneno {{count}}",
+    "kind": {
+      "video": "chapisho la video",
+      "audio": "chapisho la sauti"
+    }
+  },
+  "write": {
+    "titleLabel": "Kichwa",
+    "placeholder": "Andika chapisho lako. Hali ya kuzingatia iko kwenye zana zilizo chini.",
+    "tags": "Lebo",
+    "hint": "Chapisho linachapishwa kwanza kwenye Hive, kisha unaweza kulisoma kwa sauti.",
+    "publish": "Chapisha chapisho",
+    "published": "Chapisho lako limetoka. Sasa tengeneza usomaji.",
+    "missing": "Ongeza kichwa na maandishi kidogo kwanza."
+  },
+  "script": {
+    "title": "Hati",
+    "hint": "Hiki ndicho sauti itakachosoma: picha, viungo na emoji tayari vimeondolewa. Kihariri upendavyo. Mstari mtupu unaanza aya mpya, mstari unaoanza na # unasomwa kama kichwa.",
+    "length_one": "neno {{count}}, takriban {{time}}",
+    "length_other": "maneno {{count}}, takriban {{time}}",
+    "tooLong": "ni ndefu kuliko {{left}} ulizobaki nazo leo",
+    "nothing": "Hakuna cha kusoma katika chapisho hili. Jaribu jingine, au uandike hati mwenyewe."
+  },
+  "voice": {
+    "title": "Sauti",
+    "gender": {
+      "female": "Ya kike",
+      "male": "Ya kiume"
+    },
+    "accent": {
+      "British": "Ya Kiingereza",
+      "Scottish": "Ya Kiskoti",
+      "American": "Ya Kimarekani"
+    }
+  },
+  "music": {
+    "title": "Muziki wa nyuma",
+    "off": "Bila muziki",
+    "library": "Maktaba ya muziki",
+    "own": "Muziki wako mwenyewe",
+    "proNote": "Maktaba ya muziki na muziki wako mwenyewe vinakuja na 3Speak Pro.",
+    "listen": "Sikiliza",
+    "search": "Tafuta kwenye maktaba",
+    "credit": "Wimbo unatajwa katika chapisho lako, kama leseni yake inavyotaka.",
+    "choose": "Chagua faili la muziki",
+    "replace": "Chagua faili jingine",
+    "uploading": "Inapakia…",
+    "ready": "Muziki wako uko tayari",
+    "ownHint": "Muziki ambao una haki zake, dakika 15 zaidi. Unacheza mfululizo chini ya sauti, kwa sauti ya chini sana."
+  },
+  "make": {
+    "title": "Tengeneza rekodi",
+    "intro": "Utangulizi wa sauti",
+    "introHint": "Sauti inaanza na kichwa, jina lako na kwamba sauti bandia ndiyo inayosoma.",
+    "preview": "Sikiliza onyesho",
+    "record": "Tengeneza rekodi",
+    "queued_one": "Inasubiri, rekodi {{count}} iko mbele",
+    "queued_other": "Inasubiri, rekodi {{count}} ziko mbele",
+    "rendering": "Inarekodi…",
+    "done": "{{time}}, imesomwa na {{name}}"
+  },
+  "publish": {
+    "button": "Chapisha kama chapisho la sauti",
+    "done": "Chapisho lako la sauti limetoka.",
+    "open": "Lifungue",
+    "addLink": "Ongeza kiungo cha Sikiliza kwenye chapisho lako la maandishi",
+    "linked": "Chapisho lako la maandishi sasa linaelekeza kwa sauti.",
+    "listenLabel": "Sikiliza chapisho hili",
+    "writtenPost": "Chapisho la maandishi:",
+    "readBy": "Limesomwa na sauti bandia ({{name}})."
+  },
+  "errors": {
+    "failed": "Rekodi imeshindwa, jaribu tena.",
+    "dailyLimit": "Hii ni ndefu kuliko muda wa kusoma uliobaki nao leo ({{left}}). Fupisha hati au urudi kesho.",
+    "notFound": "Chapisho hilo halikupatikana.",
+    "publishFailed": "Kuchapisha hakukufanikiwa, jaribu tena."
+  }
+}

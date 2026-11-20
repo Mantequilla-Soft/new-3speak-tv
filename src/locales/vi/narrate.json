@@ -1,0 +1,99 @@
+{
+  "menuEntry": "Đọc to bài viết",
+  "eyebrow": "Từ blog thành podcast",
+  "title": "Đọc to bài viết",
+  "subtitle": "Một giọng đọc tổng hợp đọc bài viết của bạn, rồi bạn đăng nó thành bài âm thanh có liên kết về bài gốc.",
+  "allowance": "Hôm nay còn {{left}} trên {{limit}} thời gian đọc",
+  "proHint": "Thêm giọng đọc, nhạc và thời gian với Pro",
+  "optional": "không bắt buộc",
+  "entry": {
+    "dock": "Đọc to",
+    "title": "Đọc bài này thành bài âm thanh"
+  },
+  "gate": {
+    "signIn": "Đăng nhập để đọc to bài viết của bạn.",
+    "notOpen": "Tính năng đọc to chưa mở cho tài khoản của bạn."
+  },
+  "pick": {
+    "title": "Chọn văn bản",
+    "mine": "Bài viết của tôi",
+    "write": "Viết bài mới",
+    "empty": "Bạn chưa có bài viết nào. Hãy viết một bài ở đây.",
+    "more": "Xem bài cũ hơn",
+    "narrated": "Đã đọc",
+    "words_other": "{{count}} từ",
+    "kind": {
+      "video": "bài video",
+      "audio": "bài âm thanh"
+    }
+  },
+  "write": {
+    "titleLabel": "Tiêu đề",
+    "placeholder": "Viết bài của bạn. Chế độ tập trung nằm trong công cụ bên dưới.",
+    "tags": "Thẻ",
+    "hint": "Bài viết được đăng lên Hive trước, sau đó bạn có thể đọc to nó.",
+    "publish": "Đăng bài",
+    "published": "Bài của bạn đã đăng. Giờ hãy tạo bản đọc.",
+    "missing": "Hãy thêm tiêu đề và một ít nội dung trước."
+  },
+  "script": {
+    "title": "Kịch bản",
+    "hint": "Đây là nội dung giọng đọc sẽ đọc: hình ảnh, liên kết và emoji đã được bỏ đi. Hãy sửa tùy ý. Một dòng trống bắt đầu đoạn mới, dòng bắt đầu bằng # được đọc như tiêu đề.",
+    "length_other": "{{count}} từ, khoảng {{time}}",
+    "tooLong": "dài hơn {{left}} bạn còn lại hôm nay",
+    "nothing": "Không có gì để đọc trong bài này. Hãy thử bài khác hoặc tự viết kịch bản."
+  },
+  "voice": {
+    "title": "Giọng đọc",
+    "gender": {
+      "female": "Nữ",
+      "male": "Nam"
+    },
+    "accent": {
+      "British": "Anh",
+      "Scottish": "Scotland",
+      "American": "Mỹ"
+    }
+  },
+  "music": {
+    "title": "Nhạc nền",
+    "off": "Không có nhạc",
+    "library": "Thư viện nhạc",
+    "own": "Nhạc của riêng bạn",
+    "proNote": "Thư viện nhạc và nhạc của riêng bạn có trong 3Speak Pro.",
+    "listen": "Nghe",
+    "search": "Tìm trong thư viện",
+    "credit": "Bài hát được ghi công trong bài viết của bạn, theo yêu cầu của giấy phép.",
+    "choose": "Chọn tệp nhạc",
+    "replace": "Chọn tệp khác",
+    "uploading": "Đang tải lên…",
+    "ready": "Nhạc của bạn đã sẵn sàng",
+    "ownHint": "Nhạc bạn có bản quyền, tối đa 15 phút. Nhạc phát lặp dưới giọng đọc, nhỏ hơn nhiều."
+  },
+  "make": {
+    "title": "Tạo bản ghi",
+    "intro": "Lời giới thiệu",
+    "introHint": "Giọng đọc bắt đầu bằng tiêu đề, tên bạn và cho biết đây là giọng đọc tổng hợp.",
+    "preview": "Nghe thử",
+    "record": "Tạo bản ghi",
+    "queued_other": "Đang chờ, còn {{count}} bản ghi phía trước",
+    "rendering": "Đang ghi…",
+    "done": "{{time}}, do {{name}} đọc"
+  },
+  "publish": {
+    "button": "Đăng thành bài âm thanh",
+    "done": "Bài âm thanh của bạn đã đăng.",
+    "open": "Mở",
+    "addLink": "Thêm liên kết Nghe vào bài viết của bạn",
+    "linked": "Bài viết của bạn giờ đã liên kết tới bản âm thanh.",
+    "listenLabel": "Nghe bài viết này",
+    "writtenPost": "Bài viết gốc:",
+    "readBy": "Được đọc bởi giọng đọc tổng hợp ({{name}})."
+  },
+  "errors": {
+    "failed": "Ghi âm thất bại, hãy thử lại.",
+    "dailyLimit": "Bản này dài hơn thời gian đọc bạn còn lại hôm nay ({{left}}). Hãy rút ngắn kịch bản hoặc quay lại vào ngày mai.",
+    "notFound": "Không tìm thấy bài viết đó.",
+    "publishFailed": "Đăng không thành công, hãy thử lại."
+  }
+}

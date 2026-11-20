@@ -1,0 +1,108 @@
+{
+  "menuEntry": "Przeczytaj wpis na głos",
+  "eyebrow": "Z bloga do podcastu",
+  "title": "Przeczytaj wpis na głos",
+  "subtitle": "Syntetyczny głos czyta Twój wpis tekstowy, a Ty publikujesz go jako wpis audio z linkiem do oryginału.",
+  "allowance": "Zostało Ci dziś {{left}} z {{limit}} czasu czytania",
+  "proHint": "Więcej głosów, muzyki i czasu z Pro",
+  "optional": "opcjonalnie",
+  "entry": {
+    "dock": "Przeczytaj",
+    "title": "Przeczytaj ten wpis jako wpis audio"
+  },
+  "gate": {
+    "signIn": "Zaloguj się, aby czytać swoje wpisy na głos.",
+    "notOpen": "Czytanie nie jest jeszcze dostępne dla Twojego konta."
+  },
+  "pick": {
+    "title": "Wybierz tekst",
+    "mine": "Moje wpisy",
+    "write": "Napisz nowy wpis",
+    "empty": "Nie masz jeszcze wpisów. Napisz jeden tutaj.",
+    "more": "Pokaż starsze wpisy",
+    "narrated": "Przeczytany",
+    "words_one": "{{count}} słowo",
+    "words_few": "{{count}} słowa",
+    "words_many": "{{count}} słów",
+    "words_other": "{{count}} słowa",
+    "kind": {
+      "video": "wpis wideo",
+      "audio": "wpis audio"
+    }
+  },
+  "write": {
+    "titleLabel": "Tytuł",
+    "placeholder": "Napisz swój wpis. Tryb skupienia znajdziesz w narzędziach poniżej.",
+    "tags": "Tagi",
+    "hint": "Wpis zostanie najpierw opublikowany na Hive, potem możesz go przeczytać na głos.",
+    "publish": "Opublikuj wpis",
+    "published": "Twój wpis jest opublikowany. Teraz utwórz nagranie.",
+    "missing": "Najpierw dodaj tytuł i trochę tekstu."
+  },
+  "script": {
+    "title": "Skrypt",
+    "hint": "To czyta głos: obrazy, linki i emoji są już usunięte. Edytuj go dowolnie. Pusta linia zaczyna nowy akapit, linia zaczynająca się od # jest czytana jako nagłówek.",
+    "length_one": "{{count}} słowo, około {{time}}",
+    "length_few": "{{count}} słowa, około {{time}}",
+    "length_many": "{{count}} słów, około {{time}}",
+    "length_other": "{{count}} słowa, około {{time}}",
+    "tooLong": "dłuższy niż {{left}}, które zostało Ci dziś",
+    "nothing": "W tym wpisie nie ma nic do przeczytania. Spróbuj innego albo napisz skrypt sam."
+  },
+  "voice": {
+    "title": "Głos",
+    "gender": {
+      "female": "Kobiecy",
+      "male": "Męski"
+    },
+    "accent": {
+      "British": "Brytyjski",
+      "Scottish": "Szkocki",
+      "American": "Amerykański"
+    }
+  },
+  "music": {
+    "title": "Muzyka w tle",
+    "off": "Bez muzyki",
+    "library": "Biblioteka muzyki",
+    "own": "Twoja muzyka",
+    "proNote": "Biblioteka muzyki i własna muzyka są dostępne w 3Speak Pro.",
+    "listen": "Posłuchaj",
+    "search": "Szukaj w bibliotece",
+    "credit": "Utwór jest podpisany w Twoim wpisie, jak wymaga jego licencja.",
+    "choose": "Wybierz plik z muzyką",
+    "replace": "Wybierz inny plik",
+    "uploading": "Przesyłanie…",
+    "ready": "Twoja muzyka jest gotowa",
+    "ownHint": "Muzyka, do której masz prawa, najwyżej 15 minut. Gra w pętli pod głosem, dużo ciszej."
+  },
+  "make": {
+    "title": "Utwórz nagranie",
+    "intro": "Mówione wprowadzenie",
+    "introHint": "Głos zaczyna od tytułu, Twojej nazwy i informacji, że czyta go syntetyczny głos.",
+    "preview": "Posłuchaj próbki",
+    "record": "Utwórz nagranie",
+    "queued_one": "Czeka, przed nim {{count}} nagranie",
+    "queued_few": "Czeka, przed nim {{count}} nagrania",
+    "queued_many": "Czeka, przed nim {{count}} nagrań",
+    "queued_other": "Czeka, przed nim {{count}} nagrania",
+    "rendering": "Nagrywanie…",
+    "done": "{{time}}, czyta {{name}}"
+  },
+  "publish": {
+    "button": "Opublikuj jako wpis audio",
+    "done": "Twój wpis audio jest opublikowany.",
+    "open": "Otwórz",
+    "addLink": "Dodaj link do odsłuchu w swoim wpisie tekstowym",
+    "linked": "Twój wpis tekstowy prowadzi teraz do audio.",
+    "listenLabel": "Posłuchaj tego wpisu",
+    "writtenPost": "Wpis tekstowy:",
+    "readBy": "Czyta syntetyczny głos ({{name}})."
+  },
+  "errors": {
+    "failed": "Nagranie się nie udało, spróbuj ponownie.",
+    "dailyLimit": "To dłużej niż czas czytania, który został Ci dziś ({{left}}). Skróć skrypt albo wróć jutro.",
+    "notFound": "Nie znaleziono tego wpisu.",
+    "publishFailed": "Publikacja się nie udała, spróbuj ponownie."
+  }
+}

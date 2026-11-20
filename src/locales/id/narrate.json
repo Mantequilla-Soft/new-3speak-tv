@@ -1,0 +1,99 @@
+{
+  "menuEntry": "Bacakan postingan",
+  "eyebrow": "Dari blog ke podcast",
+  "title": "Bacakan postingan",
+  "subtitle": "Suara sintetis membacakan postingan tulisanmu, lalu kamu menerbitkannya sebagai postingan audio yang menautkan ke aslinya.",
+  "allowance": "Sisa {{left}} dari {{limit}} waktu narasi hari ini",
+  "proHint": "Lebih banyak suara, musik, dan waktu dengan Pro",
+  "optional": "opsional",
+  "entry": {
+    "dock": "Bacakan",
+    "title": "Bacakan postingan ini sebagai postingan audio"
+  },
+  "gate": {
+    "signIn": "Masuk untuk membacakan postinganmu.",
+    "notOpen": "Narasi belum dibuka untuk akunmu."
+  },
+  "pick": {
+    "title": "Pilih teksmu",
+    "mine": "Postinganku",
+    "write": "Tulis postingan baru",
+    "empty": "Kamu belum punya postingan. Tulis satu di sini.",
+    "more": "Tampilkan postingan lama",
+    "narrated": "Sudah dibacakan",
+    "words_other": "{{count}} kata",
+    "kind": {
+      "video": "postingan video",
+      "audio": "postingan audio"
+    }
+  },
+  "write": {
+    "titleLabel": "Judul",
+    "placeholder": "Tulis postinganmu. Mode fokus ada di alat di bawah.",
+    "tags": "Tag",
+    "hint": "Postingan diterbitkan di Hive dulu, lalu kamu bisa membacakannya.",
+    "publish": "Terbitkan postingan",
+    "published": "Postinganmu sudah terbit. Sekarang buat narasinya.",
+    "missing": "Tambahkan judul dan sedikit teks dulu."
+  },
+  "script": {
+    "title": "Naskah",
+    "hint": "Inilah yang dibaca suara: gambar, tautan, dan emoji sudah dihapus. Ubah sesukamu. Baris kosong memulai paragraf baru, baris yang diawali # dibaca sebagai judul.",
+    "length_other": "{{count}} kata, sekitar {{time}}",
+    "tooLong": "lebih lama dari sisa {{left}} hari ini",
+    "nothing": "Tidak ada yang bisa dibaca di postingan ini. Coba yang lain, atau tulis naskahnya sendiri."
+  },
+  "voice": {
+    "title": "Suara",
+    "gender": {
+      "female": "Perempuan",
+      "male": "Laki-laki"
+    },
+    "accent": {
+      "British": "Inggris",
+      "Scottish": "Skotlandia",
+      "American": "Amerika"
+    }
+  },
+  "music": {
+    "title": "Musik latar",
+    "off": "Tanpa musik",
+    "library": "Pustaka musik",
+    "own": "Musikmu sendiri",
+    "proNote": "Pustaka musik dan musikmu sendiri tersedia dengan 3Speak Pro.",
+    "listen": "Dengarkan",
+    "search": "Cari di pustaka",
+    "credit": "Lagunya dicantumkan di postinganmu, sesuai permintaan lisensinya.",
+    "choose": "Pilih file musik",
+    "replace": "Pilih file lain",
+    "uploading": "Mengunggah…",
+    "ready": "Musikmu sudah siap",
+    "ownHint": "Musik yang hak-haknya kamu miliki, paling lama 15 menit. Diputar berulang di bawah suara, jauh lebih pelan."
+  },
+  "make": {
+    "title": "Buat rekamannya",
+    "intro": "Pembuka lisan",
+    "introHint": "Suara diawali dengan judul, namamu, dan keterangan bahwa suara sintetis yang membacanya.",
+    "preview": "Dengarkan cuplikan",
+    "record": "Buat rekamannya",
+    "queued_other": "Menunggu, {{count}} rekaman di depan",
+    "rendering": "Merekam…",
+    "done": "{{time}}, dibacakan oleh {{name}}"
+  },
+  "publish": {
+    "button": "Terbitkan sebagai postingan audio",
+    "done": "Postingan audiomu sudah terbit.",
+    "open": "Buka",
+    "addLink": "Tambahkan tautan Dengarkan ke postingan tulisanmu",
+    "linked": "Postingan tulisanmu sekarang menautkan ke audionya.",
+    "listenLabel": "Dengarkan postingan ini",
+    "writtenPost": "Postingan tulisannya:",
+    "readBy": "Dibacakan oleh suara sintetis ({{name}})."
+  },
+  "errors": {
+    "failed": "Rekaman gagal, coba lagi.",
+    "dailyLimit": "Itu lebih lama dari sisa waktu narasimu hari ini ({{left}}). Persingkat naskahnya atau kembali besok.",
+    "notFound": "Postingan itu tidak ditemukan.",
+    "publishFailed": "Gagal menerbitkan, coba lagi."
+  }
+}
