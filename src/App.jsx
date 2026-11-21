@@ -150,6 +150,8 @@ const UserProfilePage = lazyRoute(() => import("./components/Userprofilepage/Use
 // rather than modifies UserProfilePage.
 const ProfileRouter = lazyRoute(() => import("./components/Incubation/ProfileRouter"), "./components/Incubation/ProfileRouter");
 const Wallet = lazyRoute(() => import("./page/Wallet"), "./page/Wallet");
+// /wallet with no name: the signed-in user's own wallet (keeps ?query and #hash).
+const OwnWalletRoute = lazyRoute(() => import("./components/Wallet/OwnWalletRoute"), "./components/Wallet/OwnWalletRoute");
 const Watch = lazyRoute(() => import("./page/Watch"), "./page/Watch");
 const WatchStream = lazyRoute(() => import("./page/WatchStream"), "./page/WatchStream");
 const StreamClipsPage = lazyRoute(() => import("./page/StreamClipsPage"), "./page/StreamClipsPage");
@@ -959,6 +961,7 @@ function App() {
               <Route path="/playlist/:playlistId" element={<PlaylistView />} />
               <Route path="/watched/:username" element={<WatchedView />} />
               <Route path="/curation/:user" element={<Curation />} />
+              <Route path="/wallet" element={<OwnWalletRoute openLoginModal={openLoginModal} />} />
               <Route path="/wallet/:user" element={<Wallet />} />
               <Route path="/test" element={<ProfileModal />} />
               <Route path="/image" element={<HiveImageUploader />} />
