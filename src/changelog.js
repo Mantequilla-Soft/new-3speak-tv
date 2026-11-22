@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.159',
+    category: 'home',
+    date: '2026-11-22',
+    summary: 'The Groups tab on Home now shows the busiest groups this week, as many as fit the panel, instead of filling up with quiet groups you joined.',
+  },
+  {
     version: '2.0.158',
     category: 'upload',
     date: '2026-11-22',

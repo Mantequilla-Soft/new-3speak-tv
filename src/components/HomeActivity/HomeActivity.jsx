@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useLayoutEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
@@ -19,6 +19,7 @@ import { progressFraction } from "../../lib/incubation";
 import useWarmupProgress from "../../hooks/useWarmupProgress";
 import { goalLabel, goalAmount, goalHint } from "../Incubation/IncubationProgressPanel";
 import { Progress } from "../v2/ui";
+import { rankGroups, fitCount } from "./rankGroups";
 import "./HomeActivity.scss";
 
 // Service accounts whose audio and playlists never show in the feed (the same
@@ -89,8 +90,8 @@ function useRecentStreamVods(user, enabled) {
   });
 }
 
-// Groups: the ones you joined first, then the busiest this week, from the
-// checker's community activity (counts and latest videos) with Hive's titles.
+// Groups: active ones you joined first, then the busiest this week (see
+// rankGroups), from the checker's community activity with Hive's titles.
 function useGroupActivity(user, enabled) {
   return useQuery({
     queryKey: ["home-activity-groups", user || null],
@@ -105,9 +106,7 @@ function useGroupActivity(user, enabled) {
         const subs = await getSubscriptions(user).catch(() => []);
         (subs || []).forEach((r) => titles.set(r[0], r[1]));
       }
-      const names = Object.keys(activity)
-        .sort((a, b) => (titles.has(b) - titles.has(a)) || ((activity[b]?.week || 0) - (activity[a]?.week || 0)))
-        .slice(0, 8);
+      const names = rankGroups(activity, titles);
       const missing = names.filter((n) => !titles.has(n));
       const found = await Promise.all(missing.map((n) => getCommunity(n).catch(() => null)));
       found.forEach((c, i) => { if (c?.title) titles.set(missing[i], c.title); });
@@ -252,6 +251,32 @@ export default function HomeActivity() {
   const groups = useGroupActivity(user, tab === "groups");
   const vods = useRecentStreamVods(user, tab === "live" && !live.length);
 
+  // Groups: up to 16 are fetched, but only the rows that fit whole are shown,
+  // no scrolling and no half row at the bottom (owner 2026-11-22). Measured
+  // after layout and again whenever the list changes size.
+  const listRef = useRef(null);
+  const fitGroups = tab === "groups" && groups.data?.length > 0;
+  useLayoutEffect(() => {
+    const el = listRef.current;
+    if (!fitGroups || !el) return undefined;
+    const rows = () => [...el.children].filter((c) => c.classList.contains("home-activity__row"));
+    const measure = () => {
+      const all = rows();
+      all.forEach((r) => { r.hidden = false; });
+      const top = el.getBoundingClientRect().top - el.scrollTop;
+      const n = fitCount(all.map((r) => r.getBoundingClientRect().bottom - top), el.clientHeight);
+      all.forEach((r, i) => { r.hidden = i >= n; });
+    };
+    measure();
+    const ro = typeof ResizeObserver !== "undefined" ? new ResizeObserver(measure) : null;
+    ro?.observe(el);
+    document.fonts?.ready?.then(measure).catch(() => {});
+    return () => {
+      ro?.disconnect();
+      rows().forEach((r) => { r.hidden = false; });
+    };
+  }, [fitGroups, groups.data]);
+
   const tabs = [
     ...(isWarmup ? [{ key: "warmup", label: t("feeds.activity.warmup") }] : []),
     { key: "community", label: t("feeds.activity.community") },
@@ -324,7 +349,7 @@ export default function HomeActivity() {
           </button>
         ))}
       </div>
-      <div className="home-activity__list" role="tabpanel">{list}</div>
+      <div ref={listRef} className={cx("home-activity__list", fitGroups && "is-fit")} role="tabpanel">{list}</div>
       {seeAll ? (
         <Link to={seeAll} className="home-activity__all">
           <span>{t("common.actions.seeAll")}</span>

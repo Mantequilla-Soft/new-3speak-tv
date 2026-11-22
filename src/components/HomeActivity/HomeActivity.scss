@@ -71,6 +71,11 @@
   @include v2.scroll-y;
 }
 
+// Groups show only the rows that fit whole (the rest get `hidden`), so the
+// list never scrolls there.
+.home-activity__list.is-fit { overflow: hidden; }
+.home-activity__row[hidden] { display: none; }
+
 // One row: a 36px rounded avatar (live rows: a 20px accent badge at its
 // corner), the "who did what · when" line (12, muted, the name in ink) and the
 // body (14, 1.4).
