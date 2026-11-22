@@ -58,6 +58,9 @@
 
   @include v2.mobile {
     flex-direction: column;
+    // One column as wide as the screen: a wrapping column grows to its widest
+    // strip's content (every creator chip in a row), pushing the strips off screen
+    flex-wrap: nowrap;
     align-items: stretch;
     gap: 12px;
     margin-bottom: 12px;
