@@ -16,5 +16,9 @@
   "preview": "Aperçu",
   "stop": "Arrêter",
   "makeShort": "Faire un Short",
-  "foot": "Vous seul voyez ceci. Les revisionnages sont comptés sans savoir qui a regardé."
+  "foot": "Vous seul voyez ceci. Les revisionnages sont comptés sans savoir qui a regardé.",
+  "chapters": {
+    "title": "Shorts de vos chapitres",
+    "foot": "La première minute de chaque chapitre. Coupez-la dans l'éditeur ; le Short cite cette vidéo et le moment."
+  }
 }

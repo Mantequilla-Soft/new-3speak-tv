@@ -1,0 +1,37 @@
+{
+  "title": "Made from this",
+  "sub_one": "{{count}} post made from this one",
+  "sub_other": "{{count}} posts made from this one",
+  "regionLabel": "Posts made from this one",
+  "cardLabel": "{{kind}}: {{title}}, by @{{author}}",
+  "from": "from {{time}}",
+  "untitled": "Untitled",
+  "kinds": {
+    "audiogram": "Audiogram",
+    "stream_clip": "Stream clip",
+    "clip": "Clip",
+    "remix": "Remix",
+    "reaction": "Reaction",
+    "narration": "Narration",
+    "recap": "Recap",
+    "audio_version": "Audio version",
+    "quote": "Quote",
+    "teaser": "Teaser"
+  },
+  "teaser": {
+    "label": "Tease as Story",
+    "title": "Make a 24h Story that teases this video and links to it",
+    "titlePremiere": "Make a 24h Story that counts down to this premiere"
+  },
+  "link": {
+    "fullVideo": "Full video",
+    "fullStream": "Full stream",
+    "premieresIn": "Premieres in {{time}}",
+    "hm": "{{h}} h {{m}} min",
+    "m": "{{m}} min",
+    "open": "{{label}}: {{title}}"
+  },
+  "series": {
+    "from": "from {{title}}"
+  }
+}

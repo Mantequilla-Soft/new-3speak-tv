@@ -73,13 +73,18 @@ describe('the Short', () => {
     expect(m.links).toEqual(['https://play.3speak.tv/embed?v=alice/abc', audioPageUrl(episode)])
     expect(m.video.info).toMatchObject({ author: 'alice', permlink: 'abc', duration: 30 })
     expect(m.image).toEqual(['https://img/t.jpg'])
-    expect(m['3speak']).toEqual({ audiogram: { author: 'alice', permlink: 'my-episode' } })
+    expect(m['3speak']).toEqual({
+      audiogram: { author: 'alice', permlink: 'my-episode' },
+      source: { kind: 'audiogram', author: 'alice', permlink: 'my-episode' },
+    })
     expect(audiogramShortMetadata({ embedUrl: 'e', owner: 'a', assetPermlink: 'p', duration: 3, episode }).image).toBeUndefined()
   })
 
   it('metadata: the piece of the episode (start, duration) for the podcast feed\'s soundbite', () => {
     const m = audiogramShortMetadata({ embedUrl: 'e', owner: 'badadib', assetPermlink: 'p', duration: 45.46, episode, start: 300 })
     expect(m['3speak'].audiogram).toEqual({ author: 'alice', permlink: 'my-episode', start: 300, duration: 45.5 })
+    // the shared "made from" link carries the same piece as start/end
+    expect(m['3speak'].source).toEqual({ kind: 'audiogram', author: 'alice', permlink: 'my-episode', start: 300, end: 345.5 })
   })
 
   it('permlinks: from the title, different per audiogram', () => {
@@ -97,6 +102,7 @@ describe('publishAudiogramShorts', () => {
     container: vi.fn(async () => ({ author: 'peak.snaps', permlink: 'snap-container-1' })),
     link: vi.fn(async () => ({ ok: true })),
     pause: vi.fn(async () => {}),
+    register: vi.fn(),
   })
 
   it('uploads each as a short, replies under the snaps container with beneficiaries, links the video', async () => {
@@ -115,6 +121,8 @@ describe('publishAudiogramShorts', () => {
     expect(d.link).toHaveBeenCalledWith('https://embed.example', 'abc', expect.objectContaining({ hive_author: 'alice', hive_permlink: comment[1].permlink }))
     expect(d.link).toHaveBeenCalledWith('https://embed.example', 'abc', { thumbnail_url: 'https://img/t.jpg' })
     expect(d.pause).toHaveBeenCalledTimes(1)
+    // each Short goes onto the episode's "Made from this" rail
+    expect(d.register.mock.calls).toEqual([['alice', res[0].permlink], ['alice', res[1].permlink]])
     expect(steps.map(s => `${s.index}:${s.step}`)).toEqual(['0:upload', '0:post', '0:done', '1:upload', '1:post', '1:done'])
     expect(steps[2]).toMatchObject({ ok: true, permlink: res[0].permlink })
   })

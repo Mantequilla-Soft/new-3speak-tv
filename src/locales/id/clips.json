@@ -14,5 +14,9 @@
   "preview": "Pratinjau",
   "stop": "Berhenti",
   "makeShort": "Buat Short",
-  "foot": "Hanya kamu yang melihat ini. Putar ulang dihitung tanpa mengetahui siapa yang menonton."
+  "foot": "Hanya kamu yang melihat ini. Putar ulang dihitung tanpa mengetahui siapa yang menonton.",
+  "chapters": {
+    "title": "Shorts dari babmu",
+    "foot": "Menit pertama setiap bab. Pangkas di editor; Short menyebut video ini dan momennya."
+  }
 }

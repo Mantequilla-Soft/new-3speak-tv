@@ -1,0 +1,39 @@
+{
+  "title": "Powstało z tego",
+  "sub_one": "{{count}} post powstał z tego",
+  "sub_few": "{{count}} posty powstały z tego",
+  "sub_many": "{{count}} postów powstało z tego",
+  "sub_other": "{{count}} posta powstało z tego",
+  "regionLabel": "Posty, które powstały z tego",
+  "cardLabel": "{{kind}}: {{title}}, od @{{author}}",
+  "from": "od {{time}}",
+  "untitled": "Bez tytułu",
+  "kinds": {
+    "audiogram": "Audiogram",
+    "stream_clip": "Klip ze streamu",
+    "clip": "Klip",
+    "remix": "Remiks",
+    "reaction": "Reakcja",
+    "narration": "Narracja",
+    "recap": "Podsumowanie",
+    "audio_version": "Wersja audio",
+    "quote": "Cytat",
+    "teaser": "Zapowiedź"
+  },
+  "teaser": {
+    "label": "Zapowiedź w relacji",
+    "title": "Utwórz 24-godzinną relację zapowiadającą ten film z linkiem do niego",
+    "titlePremiere": "Utwórz 24-godzinną relację z odliczaniem do tej premiery"
+  },
+  "link": {
+    "fullVideo": "Cały film",
+    "fullStream": "Cały stream",
+    "premieresIn": "Premiera za {{time}}",
+    "hm": "{{h}} godz. {{m}} min",
+    "m": "{{m}} min",
+    "open": "{{label}}: {{title}}"
+  },
+  "series": {
+    "from": "z {{title}}"
+  }
+}

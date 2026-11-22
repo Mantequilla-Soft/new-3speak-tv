@@ -39,6 +39,7 @@ import { prefetchVideoTagsV2 } from '../utils/tagsV2';
 import AiBadge from '../components/AiBadge/AiBadge';
 import AudiogramEpisodeLink from '../components/AudiogramEpisodeLink/AudiogramEpisodeLink';
 import ShortSeriesBar from '../components/Episodes/ShortSeriesBar';
+import SourceSeriesBar from '../components/Episodes/SourceSeriesBar';
 import ShortPollPill from '../components/Polls/ShortPollPill';
 import { useShortPolls, pollFromMeta, translatePollOptions } from '../lib/polls';
 import PollCard from '../components/Polls/PollCard';
@@ -110,6 +111,7 @@ import useLayoutMediaQuery from '../hooks/useLayoutMediaQuery';
 import { soundLabel } from '../utils/soundCredits';
 import { reportOpen } from '../lib/cardReach';
 import { soundPathOf } from '../lib/sounds';
+import SourceLink, { SOURCE_LINK_KINDS } from '../components/SourceLink/SourceLink';
 // Every toast from this module is headed "Shorts"; the message becomes the
 // line under it. See utils/toast.js.
 const toast = toastIn('Shorts');
@@ -1336,6 +1338,7 @@ const VideoShort = () => {
             hivePostMissing: enriched.hivePostMissing,
             // made from an audiogram: the episode (its card above the caption)
             audiogramOf: enriched.audiogramOf || null,
+            madeFrom: enriched.madeFrom || null, // made from another post (lib/derived.js)
             _enriched: true,
           };
         }));
@@ -1541,6 +1544,7 @@ const VideoShort = () => {
       caption: short.caption || short.title || '',
       heading: short.heading || '', // `## Title` (utils/shortTitle.js)
       audiogramOf: short.audiogramOf || null, // made from an audiogram (utils/audiogramLink.js)
+      madeFrom: short.madeFrom || null, // made from another post (lib/derived.js)
       storyExpiresAt: short.storyExpiresAt || null, // 24h story
       tags: short.tags || [],
       audio: soundLabel(short.sound, short.user.username),
@@ -1640,6 +1644,7 @@ const VideoShort = () => {
               caption: sharedVideoData.caption || sharedVideoData.title || '',
               heading: sharedVideoData.heading || '', // `## Title` (utils/shortTitle.js)
               audiogramOf: sharedVideoData.audiogramOf || null, // made from an audiogram (utils/audiogramLink.js)
+              madeFrom: sharedVideoData.madeFrom || null, // made from another post (lib/derived.js)
               storyExpiresAt: sharedVideoData.storyExpiresAt || null, // 24h story
               audio: soundLabel(sharedVideoData.sound, sharedVideoData.user.username),
               sound: sharedVideoData.sound || null, // for the sound chip's page (lib/sounds.js)
@@ -1844,6 +1849,7 @@ const VideoShort = () => {
               caption: shortData.caption || shortData.title || '',
               heading: shortData.heading || '', // `## Title` (utils/shortTitle.js)
               audiogramOf: shortData.audiogramOf || null, // made from an audiogram (utils/audiogramLink.js)
+              madeFrom: shortData.madeFrom || null, // made from another post (lib/derived.js)
               storyExpiresAt: shortData.storyExpiresAt || null, // 24h story
               audio: soundLabel(shortData.sound, shortData.user.username),
               sound: shortData.sound || null, // for the sound chip's page (lib/sounds.js)
@@ -1898,6 +1904,7 @@ const VideoShort = () => {
           caption: shortData.caption || shortData.title || '',
           heading: shortData.heading || '', // `## Title` (utils/shortTitle.js)
           audiogramOf: shortData.audiogramOf || null, // made from an audiogram (utils/audiogramLink.js)
+          madeFrom: shortData.madeFrom || null, // made from another post (lib/derived.js)
           storyExpiresAt: shortData.storyExpiresAt || null, // 24h story
           audio: soundLabel(shortData.sound, shortData.user.username),
           sound: shortData.sound || null, // for the sound chip's page (lib/sounds.js)
@@ -1960,6 +1967,7 @@ const VideoShort = () => {
           caption: short.caption || short.title || '',
           heading: short.heading || '', // `## Title` (utils/shortTitle.js)
           audiogramOf: short.audiogramOf || null, // made from an audiogram (utils/audiogramLink.js)
+          madeFrom: short.madeFrom || null, // made from another post (lib/derived.js)
           storyExpiresAt: short.storyExpiresAt || null, // 24h story
           tags: short.tags || [],
           audio: soundLabel(short.sound, short.user.username),
@@ -4233,13 +4241,26 @@ const VideoShort = () => {
               {currentVideo.audiogramOf && (
                 <AudiogramEpisodeLink author={currentVideo.audiogramOf.author} permlink={currentVideo.audiogramOf.permlink} />
               )}
+              {!currentVideo.audiogramOf && currentVideo.madeFrom && SOURCE_LINK_KINDS.has(currentVideo.madeFrom.kind) && (
+                <SourceLink source={currentVideo.madeFrom} />
+              )}
               {/* A poll on the Short (ours, or one made on PeakD or Ecency): a pill that opens it */}
               {currentPoll && (
                 <ShortPollPill author={currentVideo.author} permlink={currentVideo.hivePermlink || currentVideo.permlink} poll={currentPoll.poll} question={currentPoll.question} />
               )}
               {/* A part of its creator's series: "Part 3 of 7 · title" and Next part (lib/series.js) */}
               {currentVideo.author && (currentVideo.hivePermlink || currentVideo.permlink) && (
-                <ShortSeriesBar author={currentVideo.author} permlink={currentVideo.hivePermlink || currentVideo.permlink} />
+                <ShortSeriesBar
+                  author={currentVideo.author}
+                  permlink={currentVideo.hivePermlink || currentVideo.permlink}
+                  fallback={(currentVideo.madeFrom || currentVideo.audiogramOf) ? (
+                    <SourceSeriesBar
+                      author={currentVideo.author}
+                      permlink={currentVideo.hivePermlink || currentVideo.permlink}
+                      source={currentVideo.madeFrom || { kind: 'audiogram', ...currentVideo.audiogramOf }}
+                    />
+                  ) : null}
+                />
               )}
               {/* The creator's `## Title` (utils/shortTitle.js), above the caption. */}
               {currentVideo.heading && <p className="captionTitle">{currentVideo.heading}</p>}

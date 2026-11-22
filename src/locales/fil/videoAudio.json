@@ -3,5 +3,14 @@
   "listen": "Makinig",
   "label": "Video",
   "failed": "Hindi ma-play ang video na ito bilang audio ngayon.",
-  "unsupported": "Hindi kayang i-play ng browser na ito ang video bilang audio."
+  "unsupported": "Hindi kayang i-play ng browser na ito ang video bilang audio.",
+  "publish": {
+    "label": "I-publish bilang audio",
+    "title": "I-publish ang tunog ng video na ito bilang audio episode",
+    "making": "Kinukuha ang tunog mula sa video mo…",
+    "watchLine": "Ang video",
+    "dailyLimit": "Sapat na ang mga bersyong audio para ngayong araw. Subukan ulit bukas.",
+    "notReady": "Hindi pa magagawang audio ang video na ito. Subukan ulit kapag tapos na itong maproseso.",
+    "failed": "Hindi magawa ang bersyong audio."
+  }
 }

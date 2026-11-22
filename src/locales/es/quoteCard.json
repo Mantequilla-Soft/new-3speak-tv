@@ -1,0 +1,18 @@
+{
+  "button": "Tarjeta de cita",
+  "pickHint": "Toca una línea para hacer una tarjeta de cita.",
+  "cancelPick": "Cancelar",
+  "quoteLine": "Hacer una tarjeta de cita con esta línea",
+  "title": "Tarjeta de cita",
+  "sub": "La línea en {{time}}",
+  "previewLabel": "La tarjeta de cita",
+  "lineLabel": "La línea",
+  "lineHint": "Acórtala o corrige una palabra mal transcrita. Como máximo {{max}} caracteres.",
+  "commentLabel": "Tus palabras",
+  "optional": "opcional",
+  "post": "Publicar como snap",
+  "download": "Descargar",
+  "posted": "Tarjeta de cita publicada.",
+  "postFailed": "No se pudo publicar la tarjeta de cita.",
+  "downloadFailed": "No se pudo guardar la imagen."
+}

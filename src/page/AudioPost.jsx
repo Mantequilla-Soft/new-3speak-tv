@@ -36,6 +36,7 @@ import { seekKeyTarget, timelineSliderProps } from '../lib/sliderKeys';
 import './AudioPost.scss';
 import EpisodeBadge from '../components/Episodes/EpisodeBadge';
 import { episodeNumbersOfMeta } from '../utils/episodeNumbers';
+import MadeFromThis from '../components/MadeFromThis/MadeFromThis';
 
 // Only the creator ever opens it, so it loads on the first Edit.
 const EditAudioModal = lazy(() => import('../components/AudioEdit/EditAudioModal'));
@@ -562,6 +563,9 @@ function AudioPost() {
       <div className="audio-post-body">
         <BlogContent author={author} permlink={permlink} description={post.body} defaultExpanded />
       </div>
+
+      {/* Audiograms, clips and the like made from this episode (lib/derived.js). */}
+      <MadeFromThis author={author} permlink={permlink} />
 
       {/* The boost wall (lib/boosts.js): boosts with their messages, and sats
           streamed while people listened. */}

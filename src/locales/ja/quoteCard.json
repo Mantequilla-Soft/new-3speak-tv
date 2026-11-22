@@ -1,0 +1,18 @@
+{
+  "button": "引用カード",
+  "pickHint": "行をタップすると引用カードを作れます。",
+  "cancelPick": "キャンセル",
+  "quoteLine": "この行で引用カードを作る",
+  "title": "引用カード",
+  "sub": "{{time}} の行",
+  "previewLabel": "引用カード",
+  "lineLabel": "引用する行",
+  "lineHint": "短くしたり、書き起こしの誤りを直したりできます。最大 {{max}} 文字。",
+  "commentLabel": "あなたのひとこと",
+  "optional": "任意",
+  "post": "スナップとして投稿",
+  "download": "ダウンロード",
+  "posted": "引用カードを投稿しました。",
+  "postFailed": "引用カードを投稿できませんでした。",
+  "downloadFailed": "画像を保存できませんでした。"
+}

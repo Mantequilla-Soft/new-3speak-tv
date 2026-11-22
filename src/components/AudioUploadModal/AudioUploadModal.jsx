@@ -59,6 +59,7 @@ import Composer from '../common/Composer/Composer';
 import useUploadQuota from '../../hooks/useUploadQuota';
 import UploadQuotaNote from '../UploadQuota/UploadQuotaNote';
 import { AUDIO_LIMIT_CODE, AUDIO_TOO_LONG_CODE, isUsedUp, uploadLimitMessage, usedUpInfo } from '../../lib/uploadQuota';
+import { derivedSource, registerDerivedLater, splitRef } from '../../lib/derived';
 
 // Every toast from this module is headed "Upload"; the message becomes the
 // line under it. See utils/toast.js.
@@ -321,9 +322,19 @@ const withSound = (audioMeta, credits) => (credits.length ? { ...audioMeta, soun
 
 // A narrated post's track says so on the chain: `3speak.tts` { engine, voice,
 // source } next to the other 3Speak keys (the synthetic-voice label).
+// Anything else the track was made from (`prefill.madeFrom`, e.g. the video of an
+// audio version, lib/audioVersion.js) is named the same way.
+function addMadeFrom(metaObj, madeFrom, trackId) {
+  if (!madeFrom || madeFrom.trackId !== trackId) return;
+  metaObj['3speak'] = { ...(metaObj['3speak'] || {}), source: madeFrom.source };
+}
+
+// It also names the written post as its source, in the shape every derived post
+// shares (lib/derived.js), for that post's "Made from this" rail.
 function addNarration(metaObj, narration, trackId) {
   if (!narration || narration.trackId !== trackId) return;
-  metaObj['3speak'] = { ...(metaObj['3speak'] || {}), tts: narration.tts };
+  const source = derivedSource({ kind: 'narration', ...(splitRef(narration.tts.source) || {}) });
+  metaObj['3speak'] = { ...(metaObj['3speak'] || {}), tts: narration.tts, ...(source ? { source } : {}) };
 }
 
 function AudioUploadModal({ isOpen, onClose, initialTrack }) {
@@ -688,11 +699,14 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
   // written into the track's json_metadata (`3speak.tts`) and reported back once
   // it is out, so the narration page can offer the "Listen" link on the original.
   const narrationRef = useRef(null);
+  // { source, trackId }: what one track was made from (prefill.madeFrom).
+  const madeFromRef = useRef(null);
   useEffect(() => {
     if (!isOpen) {
       consumedInitialRef.current = false;
       importSourceRef.current = null;
       narrationRef.current = null;
+      madeFromRef.current = null;
       return;
     }
     if (consumedInitialRef.current) return;
@@ -720,6 +734,8 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
       // Reported back for this track, however it is published (post or snap).
       const sourceId = typeof pre.sourceId === 'string' ? pre.sourceId : null;
       if (sourceId) added.then((trackId) => { importSourceRef.current = { sourceId, trackId }; });
+      const from = pre.madeFrom ? derivedSource(pre.madeFrom) : null;
+      if (from) added.then((trackId) => { madeFromRef.current = { source: from, trackId }; });
       const n = pre.narration;
       if (n && typeof n === 'object' && typeof n.voice === 'string') {
         const tts = { engine: 'piper', voice: n.voice.slice(0, 80), source: typeof n.source === 'string' && /^[a-z0-9.-]{3,16}\/[a-z0-9-]{1,255}$/.test(n.source) ? n.source : null };
@@ -1224,6 +1240,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     };
     if (postThumb) metaObj.image = [postThumb];
     addNarration(metaObj, narrationRef.current, track.id);
+    addMadeFrom(metaObj, madeFromRef.current, track.id);
 
     // Later, or not yet: the built post goes to the checker's scheduled posts
     // (a draft has no time) and its cron publishes it as the creator under the
@@ -1437,6 +1454,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     };
     if (tThumb) metaObj.image = [tThumb];
     addNarration(metaObj, narrationRef.current, track.id);
+    addMadeFrom(metaObj, madeFromRef.current, track.id);
 
     const ops = [[
       'comment',
@@ -1481,9 +1499,15 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     // marks it as on 3Speak (server record + an event for an open import page).
     const imp = importSourceRef.current;
     const out = trackPostsRef.current[track.id];
+    const from = madeFromRef.current;
+    if (from && from.trackId === track.id && out?.permlink) {
+      madeFromRef.current = null;
+      registerDerivedLater(out.author, out.permlink);
+    }
     const narr = narrationRef.current;
     if (narr && narr.trackId === track.id && out?.permlink) {
       narrationRef.current = null;
+      if (narr.tts.source) registerDerivedLater(out.author, out.permlink);
       window.dispatchEvent(new CustomEvent('narration-published', { detail: { source: narr.tts.source, author: out.author, permlink: out.permlink } }));
     }
     if (imp && imp.trackId === track.id && out?.permlink) {

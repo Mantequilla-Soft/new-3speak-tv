@@ -1,0 +1,37 @@
+{
+  "title": "Daraus entstanden",
+  "sub_one": "{{count}} Beitrag ist daraus entstanden",
+  "sub_other": "{{count}} Beiträge sind daraus entstanden",
+  "regionLabel": "Beiträge, die daraus entstanden sind",
+  "cardLabel": "{{kind}}: {{title}}, von @{{author}}",
+  "from": "ab {{time}}",
+  "untitled": "Ohne Titel",
+  "kinds": {
+    "audiogram": "Audiogramm",
+    "stream_clip": "Stream-Clip",
+    "clip": "Clip",
+    "remix": "Remix",
+    "reaction": "Reaktion",
+    "narration": "Vorgelesen",
+    "recap": "Rückblick",
+    "audio_version": "Audiofassung",
+    "quote": "Zitat",
+    "teaser": "Teaser"
+  },
+  "teaser": {
+    "label": "Als Story anteasern",
+    "title": "Eine 24-h-Story, die dieses Video anteasert und darauf verlinkt",
+    "titlePremiere": "Eine 24-h-Story, die bis zu dieser Premiere herunterzählt"
+  },
+  "link": {
+    "fullVideo": "Ganzes Video",
+    "fullStream": "Ganzer Stream",
+    "premieresIn": "Premiere in {{time}}",
+    "hm": "{{h}} Std. {{m}} Min.",
+    "m": "{{m}} Min.",
+    "open": "{{label}}: {{title}}"
+  },
+  "series": {
+    "from": "aus {{title}}"
+  }
+}

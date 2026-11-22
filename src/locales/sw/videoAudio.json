@@ -3,5 +3,14 @@
   "listen": "Sikiliza",
   "label": "Video",
   "failed": "Video hii haiwezi kuchezwa kama sauti kwa sasa.",
-  "unsupported": "Kivinjari hiki hakiwezi kucheza video hii kama sauti."
+  "unsupported": "Kivinjari hiki hakiwezi kucheza video hii kama sauti.",
+  "publish": {
+    "label": "Chapisha kama sauti",
+    "title": "Chapisha sauti ya video hii kama kipindi cha sauti",
+    "making": "Inachukua sauti kutoka kwenye video yako…",
+    "watchLine": "Video",
+    "dailyLimit": "Matoleo ya sauti yanatosha kwa leo. Jaribu tena kesho.",
+    "notReady": "Video hii bado haiwezi kugeuzwa kuwa sauti. Jaribu tena ikimaliza kuchakatwa.",
+    "failed": "Toleo la sauti halikuweza kutengenezwa."
+  }
 }

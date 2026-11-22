@@ -1,0 +1,36 @@
+{
+  "title": "이 게시물로 만든 콘텐츠",
+  "sub_other": "이 게시물로 만든 콘텐츠 {{count}}개",
+  "regionLabel": "이 게시물로 만든 게시물",
+  "cardLabel": "{{kind}}: {{title}}, @{{author}}",
+  "from": "{{time}}부터",
+  "untitled": "제목 없음",
+  "kinds": {
+    "audiogram": "오디오그램",
+    "stream_clip": "방송 클립",
+    "clip": "클립",
+    "remix": "리믹스",
+    "reaction": "리액션",
+    "narration": "낭독",
+    "recap": "요약",
+    "audio_version": "오디오 버전",
+    "quote": "인용",
+    "teaser": "티저"
+  },
+  "teaser": {
+    "label": "스토리로 예고",
+    "title": "이 동영상을 예고하고 연결하는 24시간 스토리 만들기",
+    "titlePremiere": "이 프리미어까지 카운트다운하는 24시간 스토리 만들기"
+  },
+  "link": {
+    "fullVideo": "전체 동영상",
+    "fullStream": "전체 방송",
+    "premieresIn": "{{time}} 후 프리미어",
+    "hm": "{{h}}시간 {{m}}분",
+    "m": "{{m}}분",
+    "open": "{{label}}: {{title}}"
+  },
+  "series": {
+    "from": "{{title}}에서"
+  }
+}

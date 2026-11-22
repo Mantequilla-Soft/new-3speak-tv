@@ -17,5 +17,9 @@
   "preview": "Podgląd",
   "stop": "Zatrzymaj",
   "makeShort": "Zrób Shorta",
-  "foot": "Widzisz to tylko Ty. Powtórki są liczone bez wiedzy, kto oglądał."
+  "foot": "Widzisz to tylko Ty. Powtórki są liczone bez wiedzy, kto oglądał.",
+  "chapters": {
+    "title": "Shorty z twoich rozdziałów",
+    "foot": "Pierwsza minuta każdego rozdziału. Przytnij ją w edytorze; Short wskaże ten film i moment."
+  }
 }

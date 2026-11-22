@@ -15,5 +15,9 @@
   "preview": "Vorschau",
   "stop": "Stopp",
   "makeShort": "Short erstellen",
-  "foot": "Nur du siehst das. Wiederholungen werden gezählt, ohne zu wissen, wer zugesehen hat."
+  "foot": "Nur du siehst das. Wiederholungen werden gezählt, ohne zu wissen, wer zugesehen hat.",
+  "chapters": {
+    "title": "Shorts aus deinen Kapiteln",
+    "foot": "Die erste Minute jedes Kapitels. Kürze sie im Editor; der Short nennt dieses Video und die Stelle."
+  }
 }

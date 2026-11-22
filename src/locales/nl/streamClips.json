@@ -66,5 +66,22 @@
     "ofStream": "Stream van @{{host}}",
     "yours": "Jouw stream",
     "open": "Je streamclips"
+  },
+  "recap": {
+    "title": "Streamterugblik",
+    "sub": "Kies tot {{count}} clips: ze worden in streamvolgorde samengevoegd tot één Short van hooguit {{seconds}} seconden.",
+    "picked_one": "{{count}} clip gekozen · {{time}}",
+    "picked_other": "{{count}} clips gekozen · {{time}}",
+    "vertical": "Verticaal (9:16)",
+    "make": "Terugblik maken",
+    "inRecap": "In terugblik",
+    "failed": "De terugblik kon niet worden gemaakt."
+  },
+  "chapters": {
+    "title": "Hoofdstukken uit je stream",
+    "sub": "Gemaakt van de momenten waarop de chat opleefde, boosts binnenkwamen en mensen clips maakten. Je kunt ze hernoemen voordat je opslaat.",
+    "more_one": "en nog {{count}}",
+    "more_other": "en nog {{count}}",
+    "use": "Als hoofdstukken gebruiken"
   }
 }

@@ -1,0 +1,36 @@
+{
+  "title": "これから作られたもの",
+  "sub_other": "この投稿から作られた投稿 {{count}} 件",
+  "regionLabel": "この投稿から作られた投稿",
+  "cardLabel": "{{kind}}：{{title}}、@{{author}}",
+  "from": "{{time}} から",
+  "untitled": "無題",
+  "kinds": {
+    "audiogram": "オーディオグラム",
+    "stream_clip": "配信クリップ",
+    "clip": "クリップ",
+    "remix": "リミックス",
+    "reaction": "リアクション",
+    "narration": "朗読",
+    "recap": "まとめ",
+    "audio_version": "音声版",
+    "quote": "引用",
+    "teaser": "ティーザー"
+  },
+  "teaser": {
+    "label": "ストーリーで予告",
+    "title": "この動画を予告してリンクする 24 時間ストーリーを作る",
+    "titlePremiere": "このプレミアまでカウントダウンする 24 時間ストーリーを作る"
+  },
+  "link": {
+    "fullVideo": "動画全体",
+    "fullStream": "配信全体",
+    "premieresIn": "{{time}} 後にプレミア公開",
+    "hm": "{{h}} 時間 {{m}} 分",
+    "m": "{{m}} 分",
+    "open": "{{label}}：{{title}}"
+  },
+  "series": {
+    "from": "{{title}} より"
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "title": "Kilichotengenezwa kutokana na hiki",
+  "sub_one": "Chapisho {{count}} lilitengenezwa kutokana na hili",
+  "sub_other": "Machapisho {{count}} yalitengenezwa kutokana na hili",
+  "regionLabel": "Machapisho yaliyotengenezwa kutokana na hili",
+  "cardLabel": "{{kind}}: {{title}}, na @{{author}}",
+  "from": "kuanzia {{time}}",
+  "untitled": "Bila kichwa",
+  "kinds": {
+    "audiogram": "Audiogram",
+    "stream_clip": "Klipu ya mtiririko",
+    "clip": "Klipu",
+    "remix": "Remix",
+    "reaction": "Mwitikio",
+    "narration": "Usomaji",
+    "recap": "Muhtasari",
+    "audio_version": "Toleo la sauti",
+    "quote": "Nukuu",
+    "teaser": "Kionjo"
+  },
+  "teaser": {
+    "label": "Tangaza kwenye Story",
+    "title": "Tengeneza Story ya saa 24 inayotangaza video hii na kuiunganisha",
+    "titlePremiere": "Tengeneza Story ya saa 24 inayohesabu kuelekea onyesho hili la kwanza"
+  },
+  "link": {
+    "fullVideo": "Video nzima",
+    "fullStream": "Mtiririko mzima",
+    "premieresIn": "Onyesho la kwanza baada ya {{time}}",
+    "hm": "saa {{h}} dk {{m}}",
+    "m": "dk {{m}}",
+    "open": "{{label}}: {{title}}"
+  },
+  "series": {
+    "from": "kutoka {{title}}"
+  }
+}

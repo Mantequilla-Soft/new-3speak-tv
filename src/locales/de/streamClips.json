@@ -66,5 +66,22 @@
     "ofStream": "Stream von @{{host}}",
     "yours": "Dein Stream",
     "open": "Deine Stream-Clips"
+  },
+  "recap": {
+    "title": "Stream-Rückblick",
+    "sub": "Wähle bis zu {{count}} Clips: Sie werden in Stream-Reihenfolge zu einem Short von höchstens {{seconds}} Sekunden zusammengefügt.",
+    "picked_one": "{{count}} Clip gewählt · {{time}}",
+    "picked_other": "{{count}} Clips gewählt · {{time}}",
+    "vertical": "Hochformat (9:16)",
+    "make": "Rückblick erstellen",
+    "inRecap": "Im Rückblick",
+    "failed": "Der Rückblick konnte nicht erstellt werden."
+  },
+  "chapters": {
+    "title": "Kapitel aus deinem Stream",
+    "sub": "Aus den Momenten, in denen der Chat aufblühte, Boosts kamen und Leute Clips machten. Du kannst sie vor dem Speichern umbenennen.",
+    "more_one": "und {{count}} weiteres",
+    "more_other": "und {{count}} weitere",
+    "use": "Als Kapitel verwenden"
   }
 }

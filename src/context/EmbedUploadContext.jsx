@@ -21,6 +21,7 @@ import { saveCaptionEdit } from '../lib/captionEdit';
 import { registerCollab, collabWeight } from '../lib/collabs';
 import { enforceLockedBeneficiaries, getLockedBeneficiaries, chargesEncoder, LOCKED_FUND_ACCOUNT, LOCKED_ENCODER_ACCOUNT } from '../utils/beneficiaries';
 import { applyClipShare, streamClipMetadata } from '../lib/streamClips';
+import { derivedSource, registerDerivedLater } from '../lib/derived';
 import { remixChainAuthors, remixChainMarkdown } from '../utils/remixChain';
 import { oaEnvelope, threespeakVideo, probeVideoOrientation, OA_ARTICLE, OA_MICROPOST, OA_COMMENT } from '../utils/openAttribute';
 import axios from 'axios';
@@ -215,6 +216,12 @@ export function EmbedUploadProvider({ children }) {
   // A live-stream clip posted as a Short (lib/streamClips.js): { room, host,
   // clipper, offsetSec, share } or null. `share` is the other side's locked split.
   const [streamClip, setStreamClip] = useState(null);
+  // A Story or Short teasing one of the creator's videos or premieres
+  // (`?teaser=author/permlink`, "Tease as Story" on the watch page): { author, permlink } or null.
+  const [teaserOf, setTeaserOf] = useState(null);
+  // The piece of the source a clip or remix was opened on in the editor
+  // ({ start, end } seconds), for its 3speak.source (and "Part 2 of 4" order).
+  const [sourceRange, setSourceRange] = useState(null);
   const [isScheduled, setIsScheduled] = useState(false);
   const [scheduleDateTime, setScheduleDateTime] = useState('');
   // "List as a premiere" (opt-in, scheduled posts only): a public countdown page
@@ -517,6 +524,8 @@ export function EmbedUploadProvider({ children }) {
     setIsChannelTrailer(false);
     setCollaborator(null);
     setStreamClip(null);
+    setTeaserOf(null);
+    setSourceRange(null);
     SetDeclineRewards(false);
     setRewardPowerup(false);
     setIsScheduled(false);
@@ -1884,6 +1893,12 @@ export function EmbedUploadProvider({ children }) {
       }
       postBody += soundCreditsMarkdown(musicCredits);
 
+      // A teaser points at what it teases (other front ends read the line; the
+      // Shorts page shows a card from 3speak.source instead).
+      if (teaserOf && !streamClip && !(originalAuthor && originalPermlink)) {
+        postBody += `\n\n▶ Full video: https://3speak.tv/@${teaserOf.author}/${teaserOf.permlink}`;
+      }
+
       // "Watch on 3Speak" link at the bottom, pointing at the right page for the
       // content type: shorts → /shorts, regular videos → /watch. Always points at
       // the main instance (3speak.tv), never preview, regardless of where posted.
@@ -1940,6 +1955,21 @@ export function EmbedUploadProvider({ children }) {
       const collab = (!fromStories && !incubationHandle && collaborator?.account && collaborator.account !== user)
         ? collaborator : null;
 
+      // What this was made from (lib/derived.js): a live stream's clip (or the
+      // host's recap of it) names the stream's VOD (host/room); a teaser names the
+      // video or premiere it teases; a Short from a video names that video, a clip
+      // when it is the creator's own, a remix otherwise.
+      const madeFrom = streamClipMetadata(streamClip)
+        ? derivedSource({ kind: streamClip.recap ? 'recap' : 'stream_clip', author: streamClip.host, permlink: streamClip.room, start: streamClip.offsetSec })
+        : (originalAuthor && originalPermlink
+          ? derivedSource({
+            kind: String(originalAuthor).toLowerCase() === String(user).toLowerCase() ? 'clip' : 'remix',
+            author: originalAuthor,
+            permlink: originalPermlink,
+            start: sourceRange?.start,
+            end: sourceRange?.end,
+          })
+          : (teaserOf ? derivedSource({ kind: 'teaser', author: teaserOf.author, permlink: teaserOf.permlink }) : null));
       const jsonMetadata = {
         app: '3speak/embed',
         format: 'markdown',
@@ -2024,10 +2054,13 @@ export function EmbedUploadProvider({ children }) {
         // `story: true` lives in the same namespace: the post is the author's signed
         // claim that this short expires after 24h, which the checker reads back
         // (routes/stories.js) instead of asking for another signature.
-        ...((!videoAdsEnabled || !videoRollsEnabled || (isStory && fromStories)) ? {
+        // `source`: what this was made from, in the shape every derived post
+        // shares (lib/derived.js), for the source's "Made from this" rail.
+        ...((!videoAdsEnabled || !videoRollsEnabled || (isStory && fromStories) || madeFrom) ? {
           '3speak': {
             ...(!videoAdsEnabled ? { ads: false } : (!videoRollsEnabled ? { rolls: false } : {})),
             ...(isStory && fromStories ? { story: true } : {}),
+            ...(madeFrom ? { source: madeFrom } : {}),
           },
         } : {}),
         // ▶️ Where an imported video came from (/import): provenance on the
@@ -2443,6 +2476,10 @@ export function EmbedUploadProvider({ children }) {
         }
       }
 
+      // ─── Made from another post: onto its "Made from this" rail ───
+      // Best effort and not awaited: the post already says where it is from.
+      if (madeFrom && !result.incubation) registerDerivedLater(user, hivePermlink);
+
       // ─── A Short's series: the next part ───
       // After the post exists (the indexer checks the item). Non-fatal: the Short
       // is out either way and can be added from the series page.
@@ -2540,6 +2577,8 @@ export function EmbedUploadProvider({ children }) {
     isChannelTrailer, setIsChannelTrailer,
     collaborator, setCollaborator,
     streamClip, setStreamClip,
+    teaserOf, setTeaserOf,
+    sourceRange, setSourceRange,
     isScheduled, setIsScheduled,
     scheduleDateTime, setScheduleDateTime,
     isPremiere, setIsPremiere,

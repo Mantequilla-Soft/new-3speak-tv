@@ -3,5 +3,14 @@
   "listen": "Luisteren",
   "label": "Video",
   "failed": "Deze video kan nu niet als audio worden afgespeeld.",
-  "unsupported": "Deze browser kan deze video niet als audio afspelen."
+  "unsupported": "Deze browser kan deze video niet als audio afspelen.",
+  "publish": {
+    "label": "Als audio publiceren",
+    "title": "Het geluid van deze video publiceren als audio-aflevering",
+    "making": "Geluid uit je video halen…",
+    "watchLine": "De video",
+    "dailyLimit": "Genoeg audioversies voor vandaag. Probeer het morgen opnieuw.",
+    "notReady": "Van deze video kan nog geen audio gemaakt worden. Probeer het opnieuw als de verwerking klaar is.",
+    "failed": "De audioversie kon niet worden gemaakt."
+  }
 }

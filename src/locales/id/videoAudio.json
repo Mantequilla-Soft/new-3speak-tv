@@ -3,5 +3,14 @@
   "listen": "Dengarkan",
   "label": "Video",
   "failed": "Video ini tidak bisa diputar sebagai audio saat ini.",
-  "unsupported": "Browser ini tidak bisa memutar video ini sebagai audio."
+  "unsupported": "Browser ini tidak bisa memutar video ini sebagai audio.",
+  "publish": {
+    "label": "Terbitkan sebagai audio",
+    "title": "Terbitkan suara video ini sebagai episode audio",
+    "making": "Mengambil suara dari videomu…",
+    "watchLine": "Videonya",
+    "dailyLimit": "Versi audio untuk hari ini sudah cukup. Coba lagi besok.",
+    "notReady": "Video ini belum bisa dijadikan audio. Coba lagi setelah selesai diproses.",
+    "failed": "Versi audio tidak dapat dibuat."
+  }
 }

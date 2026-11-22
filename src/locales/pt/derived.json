@@ -1,0 +1,38 @@
+{
+  "title": "Feito a partir disto",
+  "sub_one": "{{count}} publicação feita a partir desta",
+  "sub_many": "{{count}} publicações feitas a partir desta",
+  "sub_other": "{{count}} publicações feitas a partir desta",
+  "regionLabel": "Publicações feitas a partir desta",
+  "cardLabel": "{{kind}}: {{title}}, por @{{author}}",
+  "from": "a partir de {{time}}",
+  "untitled": "Sem título",
+  "kinds": {
+    "audiogram": "Audiograma",
+    "stream_clip": "Clipe da live",
+    "clip": "Clipe",
+    "remix": "Remix",
+    "reaction": "Reação",
+    "narration": "Narração",
+    "recap": "Resumo",
+    "audio_version": "Versão em áudio",
+    "quote": "Citação",
+    "teaser": "Teaser"
+  },
+  "teaser": {
+    "label": "Teaser em story",
+    "title": "Crie um story de 24 h que antecipa este vídeo e leva até ele",
+    "titlePremiere": "Crie um story de 24 h com contagem regressiva para esta estreia"
+  },
+  "link": {
+    "fullVideo": "Vídeo completo",
+    "fullStream": "Live completa",
+    "premieresIn": "Estreia em {{time}}",
+    "hm": "{{h}} h {{m}} min",
+    "m": "{{m}} min",
+    "open": "{{label}}: {{title}}"
+  },
+  "series": {
+    "from": "de {{title}}"
+  }
+}

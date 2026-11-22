@@ -29,7 +29,9 @@ function fileDuration(file) {
  * unfinished one (title, schedule, another clip's share) carries over. While a
  * publish is still running it refuses instead, so that upload is not cut off.
  *
- * `post({ url, room, host, clipper, offsetSec })`; `busy` while fetching.
+ * `post({ url, room, host, clipper, offsetSec, recap })`; `busy` while fetching.
+ * `recap`: the host's recap of the stream (several clips, no share), which
+ * names the stream's VOD as a recap instead of a clip (lib/derived.js).
  */
 export function usePostClipAsShort() {
   const navigate = useNavigate();
@@ -42,7 +44,7 @@ export function usePostClipAsShort() {
   } = useEmbedUpload();
   const [busy, setBusy] = useState(false);
 
-  const post = useCallback(async ({ url, room, host, clipper, offsetSec = null }) => {
+  const post = useCallback(async ({ url, room, host, clipper, offsetSec = null, recap = false }) => {
     if (uploading) throw new Error('an upload is still publishing');
     setBusy(true);
     try {
@@ -69,8 +71,9 @@ export function usePostClipAsShort() {
       setFromStories(true);
       setIsStory(false);
       setVideoMode?.(null);
-      const share = clipShareFor({ poster: user, host, clipper });
-      setStreamClip({ room, host: host || null, clipper: clipper || null, offsetSec, share });
+      // A recap is the host's own: several clips joined, no one clipper to share with.
+      const share = recap ? null : clipShareFor({ poster: user, host, clipper });
+      setStreamClip({ room, host: host || null, clipper: recap ? null : (clipper || null), offsetSec, share, ...(recap ? { recap: true } : {}) });
       const locked = getLockedBeneficiaries({ isPremium, username: user, includeEncoder: true });
       if (share) locked.push({ account: share.account, percent: share.percent, locked: true, minPercent: share.percent });
       setList(locked);

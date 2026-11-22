@@ -143,6 +143,18 @@ describe('publishSnap', () => {
     expect(lastMeta().poll).toBeUndefined()
   })
 
+  it('extra metadata (a quote card): image, links and 3speak only; app, tags and type stay the snap\'s', async () => {
+    const source = { kind: 'quote', author: 'bob', permlink: 'v', start: 10 }
+    await run(publishSnap({ user: 'a', body: 'x', tags: ['quote'], meta: { image: ['https://img/q.png'], links: ['https://3speak.tv/watch?v=bob/v&t=10'], '3speak': { source }, app: 'evil', tags: ['nope'], type: 'post' } }))
+    const m = lastMeta()
+    expect(m.image).toEqual(['https://img/q.png'])
+    expect(m.links).toEqual(['https://3speak.tv/watch?v=bob/v&t=10'])
+    expect(m['3speak']).toEqual({ source })
+    expect(m.type).toBe('snap')
+    expect(m.tags).not.toContain('nope')
+    expect(m.app).not.toBe('evil')
+  })
+
   it('an NSFW snap keeps its nsfw tag even with the maximum number of user tags', async () => {
     const tags = Array.from({ length: 9 }, (_, i) => `t${i}`)
     await run(publishSnap({ user: 'a', body: 'x', tags, nsfw: true }))

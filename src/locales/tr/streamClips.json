@@ -66,5 +66,22 @@
     "ofStream": "@{{host}} yayını",
     "yours": "Senin yayının",
     "open": "Yayın kliplerin"
+  },
+  "recap": {
+    "title": "Yayın özeti",
+    "sub": "En fazla {{count}} klip seç: yayın sırasıyla en fazla {{seconds}} saniyelik tek bir Short'ta birleştirilir.",
+    "picked_one": "{{count}} klip seçildi · {{time}}",
+    "picked_other": "{{count}} klip seçildi · {{time}}",
+    "vertical": "Dikey (9:16)",
+    "make": "Özeti oluştur",
+    "inRecap": "Özette",
+    "failed": "Özet oluşturulamadı."
+  },
+  "chapters": {
+    "title": "Yayınından bölümler",
+    "sub": "Sohbetin canlandığı, boost'ların geldiği ve izleyicilerin klip aldığı anlardan oluşturuldu. Kaydetmeden önce adlarını değiştirebilirsin.",
+    "more_one": "ve {{count}} tane daha",
+    "more_other": "ve {{count}} tane daha",
+    "use": "Bölüm olarak kullan"
   }
 }

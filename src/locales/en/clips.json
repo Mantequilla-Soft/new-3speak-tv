@@ -15,5 +15,9 @@
   "preview": "Preview",
   "stop": "Stop",
   "makeShort": "Make a Short",
-  "foot": "Only you see these. Replays are counted without knowing who watched."
+  "foot": "Only you see these. Replays are counted without knowing who watched.",
+  "chapters": {
+    "title": "Shorts from your chapters",
+    "foot": "Each chapter's first minute. Trim it in the editor, it names this video and the moment."
+  }
 }

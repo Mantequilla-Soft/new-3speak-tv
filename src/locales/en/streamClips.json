@@ -66,5 +66,22 @@
     "ofStream": "@{{host}}'s stream",
     "yours": "Your stream",
     "open": "Your stream clips"
+  },
+  "recap": {
+    "title": "Stream recap",
+    "sub": "Pick up to {{count}} clips: they are joined in stream order into one Short of at most {{seconds}} seconds.",
+    "picked_one": "{{count}} clip picked · {{time}}",
+    "picked_other": "{{count}} clips picked · {{time}}",
+    "vertical": "Vertical (9:16)",
+    "make": "Make the recap",
+    "inRecap": "In recap",
+    "failed": "Could not make the recap."
+  },
+  "chapters": {
+    "title": "Chapters from your stream",
+    "sub": "Made from the moments chat lit up, boosts came in and people clipped. You can rename them before you save.",
+    "more_one": "and {{count}} more",
+    "more_other": "and {{count}} more",
+    "use": "Use as chapters"
   }
 }

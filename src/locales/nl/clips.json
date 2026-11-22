@@ -15,5 +15,9 @@
   "preview": "Voorbeeld",
   "stop": "Stop",
   "makeShort": "Maak een Short",
-  "foot": "Alleen jij ziet dit. Terugkijken wordt geteld zonder te weten wie er keek."
+  "foot": "Alleen jij ziet dit. Terugkijken wordt geteld zonder te weten wie er keek.",
+  "chapters": {
+    "title": "Shorts uit je hoofdstukken",
+    "foot": "De eerste minuut van elk hoofdstuk. Knip bij in de editor; de Short noemt deze video en het moment."
+  }
 }

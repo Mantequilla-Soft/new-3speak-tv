@@ -1,0 +1,18 @@
+{
+  "button": "Quote card",
+  "pickHint": "I-tap ang isang linya para gawing quote card.",
+  "cancelPick": "Kanselahin",
+  "quoteLine": "Gawing quote card ang linyang ito",
+  "title": "Quote card",
+  "sub": "Ang linya sa {{time}}",
+  "previewLabel": "Ang quote card",
+  "lineLabel": "Ang linya",
+  "lineHint": "Paikliin o itama ang salitang mali sa transcript. Hanggang {{max}} karakter.",
+  "commentLabel": "Mga salita mo",
+  "optional": "opsyonal",
+  "post": "I-post bilang snap",
+  "download": "I-download",
+  "posted": "Na-post ang quote card.",
+  "postFailed": "Hindi ma-post ang quote card.",
+  "downloadFailed": "Hindi ma-save ang larawan."
+}

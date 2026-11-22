@@ -1,0 +1,18 @@
+{
+  "button": "Carte citation",
+  "pickHint": "Touchez une ligne pour en faire une carte citation.",
+  "cancelPick": "Annuler",
+  "quoteLine": "Faire une carte citation de cette ligne",
+  "title": "Carte citation",
+  "sub": "La ligne à {{time}}",
+  "previewLabel": "La carte citation",
+  "lineLabel": "La ligne",
+  "lineHint": "Raccourcissez-la ou corrigez un mot mal transcrit. {{max}} caractères maximum.",
+  "commentLabel": "Vos mots",
+  "optional": "facultatif",
+  "post": "Publier en snap",
+  "download": "Télécharger",
+  "posted": "Carte citation publiée.",
+  "postFailed": "Impossible de publier la carte citation.",
+  "downloadFailed": "Impossible d'enregistrer l'image."
+}

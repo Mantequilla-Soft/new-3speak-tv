@@ -1,0 +1,18 @@
+{
+  "button": "引言卡片",
+  "pickHint": "点击一行即可制作引言卡片。",
+  "cancelPick": "取消",
+  "quoteLine": "用这一行制作引言卡片",
+  "title": "引言卡片",
+  "sub": "{{time}} 处的这一行",
+  "previewLabel": "引言卡片",
+  "lineLabel": "这一行",
+  "lineHint": "可以缩短，或修正转写错误的词。最多 {{max}} 个字符。",
+  "commentLabel": "你的话",
+  "optional": "可选",
+  "post": "以 snap 发布",
+  "download": "下载",
+  "posted": "引言卡片已发布。",
+  "postFailed": "无法发布引言卡片。",
+  "downloadFailed": "无法保存图片。"
+}

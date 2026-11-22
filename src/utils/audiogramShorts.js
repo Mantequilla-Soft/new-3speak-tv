@@ -17,6 +17,7 @@ import { enforceLockedBeneficiaries } from './beneficiaries';
 import { oaEnvelope, threespeakVideo, OA_MICROPOST } from './openAttribute';
 import { withShortHeading } from './shortTitle';
 import { EMBED_API_KEY, EMBED_API_URL } from './config';
+import { derivedSource, registerDerivedLater } from '../lib/derived';
 
 export const MAX_AUDIOGRAM_SHORTS = 5;
 export const MAX_SHORT_SECONDS = 120;
@@ -128,8 +129,21 @@ export function audiogramShortMetadata({ embedUrl, owner, assetPermlink, thumbna
         permlink: episode.permlink,
         ...(Number.isFinite(start) && start >= 0 ? { start, duration: Math.round((Number(duration) || 0) * 10) / 10 } : {}),
       },
+      // The same link in the shape every derived post shares (lib/derived.js),
+      // for the episode's "Made from this" rail.
+      ...sourceOf(episode, start, duration),
     },
   };
+}
+
+function sourceOf(episode, start, duration) {
+  const from = Number.isFinite(start) && start >= 0 ? start : null;
+  const len = Number(duration) || 0;
+  const source = derivedSource({
+    kind: 'audiogram', author: episode.author, permlink: episode.permlink,
+    start: from, end: from !== null && len > 0 ? from + len : null,
+  });
+  return source ? { source } : {};
 }
 
 /** A Hive permlink for the Short: from the title, unique enough per second. */
@@ -162,6 +176,7 @@ export async function publishAudiogramShorts({ audiograms, user, isPremium, epis
       body: JSON.stringify(body),
     }),
     pause: sleep,
+    register: registerDerivedLater,
     ...deps,
   };
   const results = [];
@@ -202,6 +217,8 @@ export async function publishAudiogramShorts({ audiograms, user, isPremium, epis
         await d.link(base, asset.permlink, { hive_author: user, hive_permlink: permlink, hive_title: title, hive_body: body, hive_tags: ['3speak', ...(tags || [])] }).catch(() => {});
         if (thumbnailUrl) await d.link(base, asset.permlink, { thumbnail_url: thumbnailUrl }).catch(() => {});
       }
+      // Onto the episode's "Made from this" rail (best effort, not awaited)
+      d.register(user, permlink);
       results.push({ ok: true, permlink });
       step('done', { ok: true, permlink });
     } catch (err) {

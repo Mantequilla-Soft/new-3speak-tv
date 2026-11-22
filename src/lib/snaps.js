@@ -112,14 +112,18 @@ function buildOptions(author, permlink, rewards, beneficiaries) {
   };
 }
 
+const EXTRA_META_KEYS = ['image', 'links', '3speak'];
+const pickExtraMeta = (meta) => Object.fromEntries(Object.entries(meta).filter(([k]) => EXTRA_META_KEYS.includes(k)));
+
 /**
  * Publish a written snap, then index it in the checker.
  * `community` (a hive-<digits> id) files the snap under that community's Discussion tab.
  * @param {{ user:string, body:string, tags?:string[], rewards?:'default'|'powerup'|'decline',
- *           beneficiaries?:{account:string,weight:number}[], nsfw?:boolean, community?:string }} opts
+ *           beneficiaries?:{account:string,weight:number}[], nsfw?:boolean, community?:string,
+ *           meta?:{image?:string[], links?:string[], '3speak'?:object} }} opts
  * @returns {{ author:string, permlink:string, indexed:object|null }}
  */
-export async function publishSnap({ user, body, tags = [], rewards = 'default', beneficiaries = [], nsfw = false, community = '', poll = null }) {
+export async function publishSnap({ user, body, tags = [], rewards = 'default', beneficiaries = [], nsfw = false, community = '', poll = null, meta = null }) {
   if (!user) throw new Error('Please log in first');
   const text = String(body || '').trim();
   if (!text) throw new Error('Write something first');
@@ -148,6 +152,9 @@ export async function publishSnap({ user, body, tags = [], rewards = 'default', 
     // A poll snap (lib/polls.js): the body is the question. Our block for the
     // checker, and the Hive Open Polls fields so PeakD and Ecency show it too.
     ...(poll && Array.isArray(poll.options) ? { poll, ...openPollFields(text, poll) } : {}),
+    // Extra keys a feature adds (a quote card's image, links and 3speak.source,
+    // lib/quoteCard.js); the snap's own app, tags and type always win.
+    ...(meta && typeof meta === 'object' ? pickExtraMeta(meta) : {}),
   };
 
   const options = buildOptions(user, permlink, rewards, beneficiaries);

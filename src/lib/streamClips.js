@@ -55,6 +55,8 @@ export function streamClipMetadata(streamClip) {
     host: streamClip.host ? lc(streamClip.host) : null,
     clipper: streamClip.clipper ? lc(streamClip.clipper) : null,
     ...(Number.isFinite(streamClip.offsetSec) ? { offset: streamClip.offsetSec } : {}),
+    // The host's recap: several clips joined (POST /rooms/:room/recap).
+    ...(streamClip.recap ? { recap: true } : {}),
   };
 }
 
@@ -206,4 +208,90 @@ export function writeClipQueue(list) {
     if (list && list.length) localStorage.setItem(QUEUE_KEY, JSON.stringify(list.slice(0, 40)));
     else localStorage.removeItem(QUEUE_KEY);
   } catch { /* storage off */ }
+}
+
+// ─── Stream recap (several clips in one Short) ──────────────────────────────
+
+/** Keep in step with hangouts routes/highlights.ts RECAP_MIN/MAX_CLIPS. */
+export const RECAP_MIN_CLIPS = 2;
+export const RECAP_MAX_CLIPS = 4;
+/** A Short holds 120 s. */
+export const RECAP_MAX_SEC = 120;
+
+const clipSecs = (c) => Number(c?.durationSec) || 30;
+
+/** The recap a host starts from: ready clips in stream order, as many as fit. */
+export function recapPick(clips) {
+  const ready = (clips || []).filter(isReadyClip)
+    .sort((a, b) => (a.offsetSec ?? 0) - (b.offsetSec ?? 0));
+  const out = [];
+  let total = 0;
+  for (const c of ready) {
+    if (out.length >= RECAP_MAX_CLIPS) break;
+    if (total + clipSecs(c) > RECAP_MAX_SEC) continue;
+    out.push(c.id);
+    total += clipSecs(c);
+  }
+  return out.length >= RECAP_MIN_CLIPS ? out : [];
+}
+
+/** Seconds of the picked clips together. */
+export const recapSeconds = (clips, ids) => (clips || []).filter((c) => ids.includes(c.id)).reduce((s, c) => s + clipSecs(c), 0);
+
+/**
+ * Join the host's clips into one recap video on the stream's server:
+ * { path, durationSec, vertical, offsetSec, clips }. `vertical` cuts it 9:16
+ * (every clip needs the phone crop).
+ */
+export async function makeRecap(api, room, token, ids, { vertical = false } = {}) {
+  const res = await fetch(`${base(api)}/rooms/${encodeURIComponent(room)}/recap`, {
+    method: 'POST',
+    headers: { ...auth(token), 'Content-Type': 'application/json' },
+    body: JSON.stringify({ ids, vertical: !!vertical }),
+  });
+  if (!res.ok) throw Object.assign(new Error(`recap: ${res.status}`), { status: res.status });
+  return res.json();
+}
+
+// ─── Chapters for the stream's VOD ──────────────────────────────────────────
+
+/** Two chapters are at least this far apart (the earlier one wins). */
+const CHAPTER_GAP_SEC = 60;
+const MAX_STREAM_CHAPTERS = 30;
+
+/**
+ * English on purpose: the titles are written into the post (Hive data stays
+ * English); the creator renames them in the editor before saving.
+ */
+function momentTitle(reasons = []) {
+  if (reasons.includes('big_boost')) return 'Big boost';
+  if (reasons.includes('boosts')) return 'Boosts came in';
+  if (reasons.includes('chat')) return 'Chat lit up';
+  return 'Highlight';
+}
+
+/**
+ * Chapters for a stream's recording from its highlights (moments and clips):
+ * "Start" at 0, then each moment (from where its range starts, like
+ * momentRanges) and each clip (its 30 s start), at least a minute apart, inside
+ * the video. [] when there are fewer than two to make chapters of.
+ */
+export function chaptersFromHighlights({ moments = [], clips = [] } = {}, duration = 0) {
+  const points = [];
+  for (const m of moments || []) {
+    if (Number.isFinite(m?.offsetSec)) points.push({ start: Math.max(0, Math.round(m.offsetSec - 45)), title: momentTitle(m.reasons) });
+  }
+  for (const c of clips || []) {
+    if (!Number.isFinite(c?.offsetSec) || c.source === 'auto') continue; // an auto clip is its moment
+    points.push({ start: Math.max(0, Math.round(c.offsetSec - clipSecs(c))), title: c.clipper ? `Clipped by @${lc(c.clipper)}` : 'Clipped' });
+  }
+  const end = Number(duration) > 0 ? Number(duration) - 10 : Infinity;
+  const out = [{ start: 0, title: 'Start' }];
+  for (const p of points.sort((a, b) => a.start - b.start)) {
+    if (p.start >= end) break;
+    if (p.start - out[out.length - 1].start < CHAPTER_GAP_SEC) continue;
+    out.push(p);
+    if (out.length >= MAX_STREAM_CHAPTERS) break;
+  }
+  return out.length >= 3 ? out : [];
 }

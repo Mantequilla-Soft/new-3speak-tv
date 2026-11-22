@@ -1,0 +1,21 @@
+@use "../../styles/v2" as v2;
+
+// A quote card from a transcript line: the square card on top, the fields under it.
+.quote-card-modal {
+  &__preview {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    margin-bottom: 12px;
+    border-radius: var(--r-md);
+    background: var(--bg);
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+}

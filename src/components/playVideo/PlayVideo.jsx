@@ -5,7 +5,7 @@ import { getHiveUrl } from '../../utils/hiveNode';
 import "./PlayVideo.scss";
 import VideoControls from "../VideoControls/VideoControls";
 import PayoutAmount from "../PayoutAmount/PayoutAmount";
-import { useEffect, useState, useCallback, useMemo, useRef } from "react";
+import { lazy, Suspense, useEffect, useState, useCallback, useMemo, useRef } from "react";
 import { fetchHiveProfile, fetchPlaySource } from "../../lib/videoData";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
@@ -41,7 +41,7 @@ import { useTranslation, Trans } from "react-i18next";
 import { formatTimeAgo } from "../../i18n";
 import mantequillaLogo from "../../assets/mantequilla-logo.png";
 import threespeakLogoDark from "../../assets/image/3S_logodark.png";
-import { HIVE_API_URL, CHECKER_URL, FEATURE_EDITOR } from '../../utils/config';
+import { HIVE_API_URL, CHECKER_URL, FEATURE_EDITOR, storiesEnabledFor } from '../../utils/config';
 import { getViewerTags, getMyViewerTag } from '../../utils/viewerTag';
 import { displayTag, saveInterestsToHive } from '../../utils/interests';
 import { ALL_TOPIC_SLUGS } from '../../utils/tagsV2';
@@ -88,6 +88,10 @@ import { cx } from '../v2/helpers';
 import { SUPPORTED_LANGUAGES } from '../../utils/translate';
 import KeyboardShortcuts from './KeyboardShortcuts';
 import { isTypingTarget, volumeAfter, percentSeekTarget, captionToggleTarget, arrowsSetVolume } from '../../lib/playerKeys';
+import MadeFromThis from "../MadeFromThis/MadeFromThis";
+import StreamChapters from "../openpods/StreamChapters";
+import { audioVersionUpload, makeAudioVersion } from "../../lib/audioVersion";
+const QuoteCardModal = lazy(() => import("../QuoteCard/QuoteCardModal"));
 
 // Every toast from this module is headed "Video"; the message becomes the
 // line under it. See utils/toast.js.
@@ -113,6 +117,12 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
   const postIsOffChain = !!videoDetails?._incubation;
   const videoMeta = videoDetails?.json_metadata ?? videoDetails?.jsonMetadata;
   const videoPoll = useMemo(() => pollFromMeta(videoMeta), [videoMeta]);
+  // A live stream's post (openpodAnnounce): its recording is the VOD here.
+  const isStreamPost = useMemo(() => {
+    let m = videoMeta;
+    if (typeof m === 'string') { try { m = JSON.parse(m); } catch { m = null; } }
+    return !!(m?.video?.live || m?.video?.info?.live || (Array.isArray(m?.tags) && m.tags.includes('openpod')));
+  }, [videoMeta]);
   const videoPollQuestion = useMemo(() => pollQuestionFromMeta(videoMeta), [videoMeta]);
   const lockedForIncubation = viewerHasNoAccount || postIsOffChain;
 
@@ -631,6 +641,12 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
   const [isPlaylistModalOpen, setIsPlaylistModalOpen] = useState(false);
   const [isReportOpen, setIsReportOpen] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
+  // The transcript line a quote card is being made of (components/QuoteCard).
+  const [quoteCue, setQuoteCue] = useState(null);
+  // "Publish as audio": the MP3 is being made on the server (lib/audioVersion.js).
+  const [audioVersionBusy, setAudioVersionBusy] = useState(false);
+  // Chapters the edit dialog starts from (a stream's highlights, StreamChapters).
+  const [suggestedChapters, setSuggestedChapters] = useState(null);
   const [promoteOpen, setPromoteOpen] = useState(false);
   const [isRemovingWatchLater, setIsRemovingWatchLater] = useState(false);
   const [communityData, setCommunityData] = useState(null);
@@ -1419,6 +1435,30 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
     title: reblog.reblogged ? t('common.reblog.reblogged') : t('common.reblog.title'),
     onClick: () => { reblog.press(); },
   };
+  const handlePublishAudio = async () => {
+    if (audioVersionBusy) return;
+    setAudioVersionBusy(true);
+    const id = toast.loading(t('videoAudio.publish.making'));
+    try {
+      const blob = await makeAudioVersion(author, permlink);
+      toast.dismiss(id);
+      window.dispatchEvent(new CustomEvent('open-audio-upload', {
+        detail: audioVersionUpload({
+          blob, author, permlink,
+          title: videoDetails?.title,
+          body: videoDetails?.body,
+          tags,
+          cover: fixVideoThumbnail(videoDetails),
+          watchLabel: t('videoAudio.publish.watchLine'),
+        }),
+      }));
+    } catch (err) {
+      toast.dismiss(id);
+      toast.error(err?.code === 'daily_limit' ? t('videoAudio.publish.dailyLimit') : err?.code === 'not_ready' ? t('videoAudio.publish.notReady') : t('videoAudio.publish.failed'));
+    } finally {
+      setAudioVersionBusy(false);
+    }
+  };
   const shareTile = { id: 'share', icon: 'share', label: t('common.actions.share'), onClick: () => setShareChooserOpen(true) };
   const tipTile = isOwner ? {
     id: 'edit',
@@ -1554,6 +1594,23 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
       tone: 'cyan',
       onClick: () => setVideoStatsOpen((o) => !o),
     },
+    // A Story (or Short) teasing this video or premiere, pointing back at it (lib/derived.js teaser).
+    isOwner && loggedInOnChain && !isLive && !postIsOffChain && storiesEnabledFor(user) && {
+      id: 'teaser',
+      icon: 'history_toggle_off',
+      label: t('derived.teaser.label'),
+      title: scheduled ? t('derived.teaser.titlePremiere') : t('derived.teaser.title'),
+      onClick: () => navigate(`/embed-studio?from=story&teaser=${author}/${permlink}`),
+    },
+    // The creator's own video again as an audio episode (lib/audioVersion.js).
+    isOwner && loggedInOnChain && !isLive && !scheduled && !postIsOffChain && {
+      id: 'audioVersion',
+      icon: 'podcasts',
+      label: t('videoAudio.publish.label'),
+      title: t('videoAudio.publish.title'),
+      disabled: audioVersionBusy,
+      onClick: handlePublishAudio,
+    },
     loggedInOnChain && isFollowingCreator === false && !isOwner && {
       id: 'follow',
       icon: 'person_add',
@@ -1667,6 +1724,7 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
           currentTime={videoControls?.currentTime || 0}
           onSeek={videoControls?.onSeek}
           embedded
+          onQuote={loggedInOnChain && !postIsOffChain && !scheduled && !isLive ? setQuoteCue : null}
         />
       ),
     },
@@ -2385,6 +2443,7 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                   onMakeShort={makeShortFrom}
                   canMake={FEATURE_EDITOR && !!videoUrlSelected}
                   previewing={clipPreview.previewing?.start ?? null}
+                  chapters={chapters}
                 />
               )}
             </div>
@@ -2415,6 +2474,19 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
               <PollCard snap={{ owner: author, permlink, poll: videoPoll }} question={videoPollQuestion} />
             </div>
           )}
+
+          {/* Clips, Shorts, remixes, reactions made from this video (lib/derived.js);
+              nothing can be made from a post that is not on Hive yet. */}
+          {/* The host's own stream recording without chapters: chapters from its highlights. */}
+          {isOwner && isStreamPost && !isLive && !scheduled && !postIsOffChain && !chapters.length && (
+            <StreamChapters
+              room={permlink}
+              duration={videoControls?.duration || 0}
+              onUse={(list) => { setSuggestedChapters(list); setIsEditOpen(true); }}
+            />
+          )}
+
+          {!postIsOffChain && !scheduled && <MadeFromThis author={author} permlink={permlink} />}
 
           {/* Cinema reaction size: the reactions run full width under the description. */}
           {cinemaReactionPanel && (
@@ -2527,11 +2599,25 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
 
       <EditVideoModal
         isOpen={isEditOpen}
-        onClose={() => setIsEditOpen(false)}
+        onClose={() => { setIsEditOpen(false); setSuggestedChapters(null); }}
         author={author}
         permlink={permlink}
+        suggestedChapters={suggestedChapters}
         onSaved={(changes) => onVideoEdited?.(changes)}
       />
+
+      {quoteCue && (
+        <Suspense fallback={null}>
+          <QuoteCardModal
+            open
+            onClose={() => setQuoteCue(null)}
+            author={author}
+            permlink={permlink}
+            title={videoDetails?.title}
+            cue={quoteCue}
+          />
+        </Suspense>
+      )}
 
       <PromoteModal
         open={promoteOpen}

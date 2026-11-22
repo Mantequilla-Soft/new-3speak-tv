@@ -66,5 +66,20 @@
     "ofStream": "@{{host}} 的直播",
     "yours": "你的直播",
     "open": "我的直播剪辑"
+  },
+  "recap": {
+    "title": "直播回顾",
+    "sub": "最多选择 {{count}} 个片段：它们会按直播顺序合成一个最长 {{seconds}} 秒的 Short。",
+    "picked_other": "已选 {{count}} 个片段 · {{time}}",
+    "vertical": "竖屏 (9:16)",
+    "make": "制作回顾",
+    "inRecap": "加入回顾",
+    "failed": "无法制作回顾。"
+  },
+  "chapters": {
+    "title": "来自你直播的章节",
+    "sub": "根据聊天热烈、收到助推和观众剪辑的时刻生成。保存前可以重命名。",
+    "more_other": "还有 {{count}} 个",
+    "use": "用作章节"
   }
 }

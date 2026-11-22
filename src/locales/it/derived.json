@@ -1,0 +1,38 @@
+{
+  "title": "Creato da questo",
+  "sub_one": "{{count}} post creato da questo",
+  "sub_many": "{{count}} post creati da questo",
+  "sub_other": "{{count}} post creati da questo",
+  "regionLabel": "Post creati da questo",
+  "cardLabel": "{{kind}}: {{title}}, di @{{author}}",
+  "from": "da {{time}}",
+  "untitled": "Senza titolo",
+  "kinds": {
+    "audiogram": "Audiogramma",
+    "stream_clip": "Clip della diretta",
+    "clip": "Clip",
+    "remix": "Remix",
+    "reaction": "Reazione",
+    "narration": "Narrazione",
+    "recap": "Riepilogo",
+    "audio_version": "Versione audio",
+    "quote": "Citazione",
+    "teaser": "Teaser"
+  },
+  "teaser": {
+    "label": "Teaser come storia",
+    "title": "Crea una storia di 24 ore che anticipa questo video e rimanda a esso",
+    "titlePremiere": "Crea una storia di 24 ore con il conto alla rovescia per questa première"
+  },
+  "link": {
+    "fullVideo": "Video completo",
+    "fullStream": "Diretta completa",
+    "premieresIn": "Première tra {{time}}",
+    "hm": "{{h}} h {{m}} min",
+    "m": "{{m}} min",
+    "open": "{{label}}: {{title}}"
+  },
+  "series": {
+    "from": "da {{title}}"
+  }
+}

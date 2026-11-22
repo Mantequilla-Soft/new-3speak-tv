@@ -42,7 +42,24 @@ function mmss(sec) {
  * The watch page is the Hive post: pass its permlink as `watchPermlink` when
  * `permlink` is 3Speak's own id; `title` names the clip in the editor.
  */
-export default function ShortsFromVideo({ owner, permlink, watchPermlink = null, title = '', onPreview = null, onMakeShort = null, previewing = null, canMake = true }) {
+/** A chapter's Short: its first minute, never past the next chapter. */
+export const CHAPTER_SHORT_SECONDS = 60;
+
+/**
+ * One Short per chapter ([{ start, end, title }], the watch page's chapters):
+ * [{ start, end, title }] of at least 5 s, at most CHAPTER_SHORT_SECONDS.
+ */
+export function chapterRanges(chapters) {
+  return (chapters || [])
+    .filter((c) => Number.isFinite(c?.start))
+    .map((c) => {
+      const end = Number.isFinite(c.end) && c.end > c.start ? Math.min(c.end, c.start + CHAPTER_SHORT_SECONDS) : c.start + CHAPTER_SHORT_SECONDS;
+      return { start: Math.floor(c.start), end: Math.floor(end), title: String(c.title || '') };
+    })
+    .filter((r) => r.end - r.start >= 5);
+}
+
+export default function ShortsFromVideo({ owner, permlink, watchPermlink = null, title = '', onPreview = null, onMakeShort = null, previewing = null, canMake = true, chapters = null }) {
   const { t, i18n } = useTranslation();
   const user = useAppStore((s) => s.user);
   const isOwner = !!user && !!owner && user.toLowerCase() === String(owner).toLowerCase();
@@ -82,6 +99,7 @@ export default function ShortsFromVideo({ owner, permlink, watchPermlink = null,
   if (!isOwner || !permlink) return null;
   // Not theirs after all, or a Short: nothing to suggest, no card.
   if (!state.loading && !state.error && (!state.data || state.data.short)) return null;
+  const byChapter = chapterRanges(chapters);
 
   const watchPath = `/@${owner}/${watchPermlink || permlink}`;
   const list = state.data?.suggestions || [];
@@ -95,7 +113,7 @@ export default function ShortsFromVideo({ owner, permlink, watchPermlink = null,
 
       {state.loading && <div className="sfv-skeleton v2-skeleton" />}
       {state.error && <p className="sfv-empty">{t('clips.error')}</p>}
-      {!state.loading && !state.error && list.length === 0 && <p className="sfv-empty">{t('clips.empty')}</p>}
+      {!state.loading && !state.error && list.length === 0 && !byChapter.length && <p className="sfv-empty">{t('clips.empty')}</p>}
 
       {list.length > 0 && (
         <ol className="sfv-list">
@@ -154,6 +172,53 @@ export default function ShortsFromVideo({ owner, permlink, watchPermlink = null,
         </ol>
       )}
       {list.length > 0 && <p className="sfv-foot">{t('clips.foot')}</p>}
+
+      {/* One Short per chapter: each chapter's first minute, ready to trim in the editor. */}
+      {byChapter.length > 0 && (
+        <div className="sfv-chapters">
+          <h4 className="sfv-chapters-title"><Icon name="format_list_numbered" size={16} />{t('clips.chapters.title')}</h4>
+          <ol className="sfv-list">
+            {byChapter.map((s) => {
+              const playing = previewing != null && previewing === s.start;
+              const range = t('clips.range', { start: mmss(s.start), end: mmss(s.end) });
+              return (
+                <li key={`ch-${s.start}`} className={`sfv-item${playing ? ' is-playing' : ''}`}>
+                  <div className="sfv-when">
+                    <b>{s.title || range}</b>
+                    <span>{range}</span>
+                  </div>
+                  <div className="sfv-actions">
+                    {onPreview ? (
+                      <button type="button" className="v2-btn v2-btn--secondary h32" onClick={() => onPreview(s)} aria-pressed={playing}>
+                        <Icon name={playing ? 'stop' : 'play_arrow'} size={16} />
+                        <span className="v2-btn__label">{playing ? t('clips.stop') : t('clips.preview')}</span>
+                      </button>
+                    ) : (
+                      <Link className="v2-btn v2-btn--secondary h32" to={`${watchPath}?t=${s.start}`} aria-label={`${t('clips.preview')} ${range}`}>
+                        <Icon name="play_arrow" size={16} />
+                        <span className="v2-btn__label">{t('clips.preview')}</span>
+                      </Link>
+                    )}
+                    {canMake && (
+                      <button
+                        type="button"
+                        className="v2-btn v2-btn--primary h32"
+                        onClick={() => (onMakeShort ? onMakeShort(s) : openEditorHere(s))}
+                        disabled={opening != null}
+                        aria-label={`${t('clips.makeShort')} ${s.title || range}`}
+                      >
+                        <Icon name={opening === s.start ? 'progress_activity' : 'content_cut'} size={16} className={opening === s.start ? 'v2-spin' : undefined} />
+                        <span className="v2-btn__label">{t('clips.makeShort')}</span>
+                      </button>
+                    )}
+                  </div>
+                </li>
+              );
+            })}
+          </ol>
+          <p className="sfv-foot">{t('clips.chapters.foot')}</p>
+        </div>
+      )}
       <MountWhenOpened when={!!editor} name="shorts editor">
         {editor && (
           <EditorModal

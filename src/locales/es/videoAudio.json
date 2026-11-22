@@ -3,5 +3,14 @@
   "listen": "Escuchar",
   "label": "Video",
   "failed": "Este video no se puede reproducir como audio ahora mismo.",
-  "unsupported": "Este navegador no puede reproducir este video como audio."
+  "unsupported": "Este navegador no puede reproducir este video como audio.",
+  "publish": {
+    "label": "Publicar como audio",
+    "title": "Publica el sonido de este video como episodio de audio",
+    "making": "Sacando el sonido de tu video…",
+    "watchLine": "El video",
+    "dailyLimit": "Ya hay suficientes versiones en audio por hoy. Vuelve a intentarlo mañana.",
+    "notReady": "Este video aún no se puede convertir en audio. Inténtalo cuando termine de procesarse.",
+    "failed": "No se pudo crear la versión en audio."
+  }
 }

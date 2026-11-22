@@ -10,6 +10,7 @@ import { useAppStore } from '../../lib/store';
 import { oaEnvelope, threespeakVideo, probeVideoOrientation, OA_COMMENT } from '../../utils/openAttribute';
 import './ReactVideoModal.scss';
 import Composer from '../common/Composer/Composer';
+import { registerDerivedLater, withSource } from '../../lib/derived';
 
 // Every toast from this module is headed "Video"; the message becomes the
 // line under it. See utils/toast.js.
@@ -394,7 +395,9 @@ function ReactVideoTab({ author, permlink, currentTime, onPosted, onRecordStart 
       // recorded blob when the reaction was filmed here rather than uploaded.
       const oaOrientation = await probeVideoOrientation(videoFile || recordedBlob);
 
-      const metadata = {
+      // `3speak.source` (lib/derived.js): the video it reacts to, for that video's
+      // "Made from this" rail; the Hive parent says the same to everyone else.
+      const metadata = withSource({
         app: '3speak/new-version',
         format: 'markdown',
         tags: ['3speak', 'reaction'],
@@ -409,7 +412,7 @@ function ReactVideoTab({ author, permlink, currentTime, onPosted, onRecordStart 
           orientation: oaOrientation,
           duration: videoDuration,
         }),
-      };
+      }, { kind: 'reaction', author, permlink, start: timestampSec > 0 ? timestampSec : null });
 
       // Broadcast the reaction. Every aioha login posts via @threespeak (the
       // server signs on the user's behalf); ButrAuth keeps its own cookie path
@@ -454,6 +457,7 @@ function ReactVideoTab({ author, permlink, currentTime, onPosted, onRecordStart 
           console.warn('Failed to link embed video to Hive post:', linkErr);
         }
 
+        registerDerivedLater(user, newPermlink);
         toast.success(t('player.reactionUpload.posted'));
         setStatusText(t('common.status.success'));
         if (onPosted) onPosted();

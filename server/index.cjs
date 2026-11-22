@@ -2754,6 +2754,14 @@ require('./narration.cjs').mountNarration(app, {
   },
 })
 
+// === Audio version of a video (server/audio-version.cjs) ===
+// A creator's own video as an MP3, which the app publishes with the audio
+// uploader ("Publish as audio" on the watch page). Off with AUDIO_VERSION_ENABLED=false.
+require('./audio-version.cjs').mountAudioVersion(app, {
+  resolveUser: resolveProvenViewer,
+  limiter: baseLimiter,
+})
+
 // === Teleprompter STT token minting ===
 // Hands the browser a short-lived SIGNED token for the self-hosted STT WebSocket,
 // so the browser never holds STT_SIGNING_SECRET. Token = "<exp>.<hexHMAC(exp)>";

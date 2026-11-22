@@ -1,0 +1,18 @@
+{
+  "button": "Kadi ya nukuu",
+  "pickHint": "Gusa mstari kutengeneza kadi ya nukuu.",
+  "cancelPick": "Ghairi",
+  "quoteLine": "Tengeneza kadi ya nukuu ya mstari huu",
+  "title": "Kadi ya nukuu",
+  "sub": "Mstari wa {{time}}",
+  "previewLabel": "Kadi ya nukuu",
+  "lineLabel": "Mstari",
+  "lineHint": "Ufupishe au urekebishe neno lililoandikwa vibaya. Herufi {{max}} kwa juu.",
+  "commentLabel": "Maneno yako",
+  "optional": "si lazima",
+  "post": "Chapisha kama snap",
+  "download": "Pakua",
+  "posted": "Kadi ya nukuu imechapishwa.",
+  "postFailed": "Kadi ya nukuu haikuweza kuchapishwa.",
+  "downloadFailed": "Picha haikuweza kuhifadhiwa."
+}

@@ -66,5 +66,24 @@
     "ofStream": "Direct de @{{host}}",
     "yours": "Ton direct",
     "open": "Tes clips de directs"
+  },
+  "recap": {
+    "title": "Récap du live",
+    "sub": "Choisissez jusqu'à {{count}} clips : ils sont assemblés dans l'ordre du live en un Short de {{seconds}} secondes maximum.",
+    "picked_one": "{{count}} clip choisi · {{time}}",
+    "picked_many": "{{count}} clips choisis · {{time}}",
+    "picked_other": "{{count}} clips choisis · {{time}}",
+    "vertical": "Vertical (9:16)",
+    "make": "Créer le récap",
+    "inRecap": "Dans le récap",
+    "failed": "Impossible de créer le récap."
+  },
+  "chapters": {
+    "title": "Chapitres de votre live",
+    "sub": "Créés à partir des moments où le chat s'est animé, où des boosts sont arrivés et où des gens ont fait des clips. Vous pouvez les renommer avant d'enregistrer.",
+    "more_one": "et {{count}} de plus",
+    "more_many": "et {{count}} de plus",
+    "more_other": "et {{count}} de plus",
+    "use": "Utiliser comme chapitres"
   }
 }

@@ -6,6 +6,7 @@
 
 import axios from "axios";
 import { audiogramOfMeta } from '../utils/audiogramLink';
+import { madeFromMeta } from '../lib/derived';
 import { t, formatTimeAgo, formatNumber as formatLocaleNumber } from '../i18n';
 import { getHiveUrl } from '../utils/hiveNode';
 import { isSnapsContainer } from '../utils/snapsContainer';
@@ -353,6 +354,8 @@ export async function fetchCompleteShortData(shortItem, loggedInUser = null) {
         if (jm.video?.sound && typeof jm.video.sound === 'object') base.sound = jm.video.sound;
         // A Short made from an audiogram: the episode it is a piece of (its card on the Shorts page)
         base.audiogramOf = audiogramOfMeta(jm);
+        // Any other post it was made from (a teaser's video, a clip's stream): lib/derived.js
+        base.madeFrom = madeFromMeta(jm);
 
         // Extract reusable flag from MongoDB via checker endpoint
         try {

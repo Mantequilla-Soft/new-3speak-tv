@@ -1,0 +1,37 @@
+{
+  "title": "Bundan yapılanlar",
+  "sub_one": "Bundan {{count}} gönderi yapıldı",
+  "sub_other": "Bundan {{count}} gönderi yapıldı",
+  "regionLabel": "Bundan yapılan gönderiler",
+  "cardLabel": "{{kind}}: {{title}}, @{{author}}",
+  "from": "{{time}} itibarıyla",
+  "untitled": "Başlıksız",
+  "kinds": {
+    "audiogram": "Audiogram",
+    "stream_clip": "Yayın klibi",
+    "clip": "Klip",
+    "remix": "Remiks",
+    "reaction": "Tepki",
+    "narration": "Seslendirme",
+    "recap": "Özet",
+    "audio_version": "Ses sürümü",
+    "quote": "Alıntı",
+    "teaser": "Tanıtım"
+  },
+  "teaser": {
+    "label": "Hikâyede tanıt",
+    "title": "Bu videoyu tanıtan ve ona bağlanan 24 saatlik bir hikâye oluştur",
+    "titlePremiere": "Bu prömiyere geri sayan 24 saatlik bir hikâye oluştur"
+  },
+  "link": {
+    "fullVideo": "Videonun tamamı",
+    "fullStream": "Yayının tamamı",
+    "premieresIn": "Prömiyere {{time}}",
+    "hm": "{{h}} sa {{m}} dk",
+    "m": "{{m}} dk",
+    "open": "{{label}}: {{title}}"
+  },
+  "series": {
+    "from": "{{title}} içinden"
+  }
+}

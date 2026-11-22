@@ -158,6 +158,21 @@
   }
   &__summary-who { color: var(--text); }
 
+  // The host's recap: picked clips joined into one Short.
+  &__recap {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px 16px;
+    padding: 10px 12px;
+    border-radius: var(--r-md);
+    background: var(--bg);
+  }
+  &__recap-text { flex: 1 1 220px; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+  &__recap-text .stream-highlights__moments-title { display: flex; align-items: center; gap: 6px; margin: 0; }
+  &__recap-picked { margin: 0; font-size: 12px; color: var(--text); }
+  &__recap-vertical { display: inline-flex; align-items: center; gap: 8px; @include v2.text(body-sm); cursor: pointer; }
+
   &__placeholder {
     display: flex;
     flex-direction: column;
@@ -200,5 +215,35 @@
     align-items: center;
     gap: 6px;
     @include v2.text(body-sm);
+  }
+}
+
+// The host's stream recording without chapters: chapters from its highlights.
+.stream-chapters {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 16px 0;
+  padding: 12px 14px;
+  border-radius: var(--r-md);
+  background: var(--bg);
+  color: var(--text);
+
+  &__text { display: flex; flex-direction: column; gap: 2px; }
+  &__title { display: flex; align-items: center; gap: 6px; margin: 0; @include v2.text(title-sm); line-height: 1.25; }
+  &__sub, &__more { margin: 0; font-size: 12px; line-height: 1.4; color: var(--muted); }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    @include v2.text(body-sm);
+
+    li { display: flex; gap: 10px; }
+    b { min-width: 52px; color: var(--muted); font-weight: 600; }
   }
 }

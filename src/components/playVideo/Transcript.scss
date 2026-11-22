@@ -338,3 +338,11 @@
     .transcript-line { min-height: 40px; align-items: center; }
   }
 }
+
+// Quote mode (components/QuoteCard): the lines are picked, not jumped to.
+.transcript {
+  .transcript-quote-hint { margin: 8px 0; display: flex; align-items: center; gap: 8px; }
+  .transcript-line.is-quoting { cursor: copy; }
+  .transcript-line.is-quoting:hover,
+  .transcript-line.is-quoting:focus-visible { box-shadow: inset 3px 0 0 var(--accent); }
+}

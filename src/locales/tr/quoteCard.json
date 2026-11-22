@@ -1,0 +1,18 @@
+{
+  "button": "Alıntı kartı",
+  "pickHint": "Alıntı kartı yapmak için bir satıra dokun.",
+  "cancelPick": "Vazgeç",
+  "quoteLine": "Bu satırdan alıntı kartı yap",
+  "title": "Alıntı kartı",
+  "sub": "{{time}} anındaki satır",
+  "previewLabel": "Alıntı kartı",
+  "lineLabel": "Satır",
+  "lineHint": "Kısalt ya da dökümün yanlış yazdığı bir kelimeyi düzelt. En fazla {{max}} karakter.",
+  "commentLabel": "Senin sözlerin",
+  "optional": "isteğe bağlı",
+  "post": "Snap olarak paylaş",
+  "download": "İndir",
+  "posted": "Alıntı kartı paylaşıldı.",
+  "postFailed": "Alıntı kartı paylaşılamadı.",
+  "downloadFailed": "Görsel kaydedilemedi."
+}

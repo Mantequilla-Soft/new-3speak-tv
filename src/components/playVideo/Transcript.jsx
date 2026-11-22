@@ -91,7 +91,9 @@ function languageName(code, uiLang) {
   } catch { return code; }
 }
 
-export default function Transcript({ author, permlink, currentTime = 0, onSeek, embedded = false }) {
+// `onQuote(cue)`: offered when the viewer may make a quote card (components/QuoteCard);
+// the quote button switches the lines from "jump here" to "quote this line".
+export default function Transcript({ author, permlink, currentTime = 0, onSeek, embedded = false, onQuote = null }) {
   const { t, i18n } = useTranslation();
   const [languages, setLanguages] = useState([]);
   const [lang, setLang] = useState(null);
@@ -265,7 +267,13 @@ export default function Transcript({ author, permlink, currentTime = 0, onSeek, 
     }
   };
 
+  const [quoting, setQuoting] = useState(false);
   const pick = useCallback((i) => {
+    if (quoting && onQuote) {
+      setQuoting(false);
+      onQuote(cues[i]);
+      return;
+    }
     onSeek?.(cues[i].start);
     if (matches) {
       // Hand the reader back the whole transcript, at the line they picked, so
@@ -274,7 +282,7 @@ export default function Transcript({ author, permlink, currentTime = 0, onSeek, 
       lastUserScrollRef.current = Date.now();
       closeSearch();
     }
-  }, [cues, matches, onSeek, closeSearch]);
+  }, [cues, matches, onSeek, closeSearch, quoting, onQuote]);
 
   const toggleTimes = useCallback(() => {
     setWithTimes((v) => {
@@ -407,6 +415,17 @@ export default function Transcript({ author, permlink, currentTime = 0, onSeek, 
             onClick={copy}
             label={copyLabel}
           />
+          {onQuote && !editing && (
+            <IconButton
+              icon="format_quote"
+              size={32}
+              variant={quoting ? 'secondary' : 'ghost'}
+              className={cx('transcript-quote-btn', quoting && 'active')}
+              onClick={() => { setQuoting((q) => !q); setExpanded(true); }}
+              aria-pressed={quoting}
+              label={t('quoteCard.button')}
+            />
+          )}
           {canEdit && !editing && (
             <IconButton
               icon="edit"
@@ -424,6 +443,13 @@ export default function Transcript({ author, permlink, currentTime = 0, onSeek, 
       {!embedded && timesToggle}
 
       {!embedded && searchField}
+
+      {quoting && (
+        <div className="v2-banner is-info transcript-quote-hint" role="status">
+          <span className="v2-banner__body">{t('quoteCard.pickHint')}</span>
+          <Button variant="ghost" size={28} onClick={() => setQuoting(false)}>{t('quoteCard.cancelPick')}</Button>
+        </div>
+      )}
 
       {editing && (
         <div className="transcript-edit-bar">
@@ -487,9 +513,9 @@ export default function Transcript({ author, permlink, currentTime = 0, onSeek, 
               key={`${cue.start}-${i}`}
               type="button"
               data-cue={i}
-              className={`transcript-line${i === activeIndex ? ' active' : ''}`}
+              className={`transcript-line${i === activeIndex ? ' active' : ''}${quoting ? ' is-quoting' : ''}`}
               onClick={() => pick(i)}
-              title={t('comments.transcript.jumpTo', { time: stamp(cue.start) })}
+              title={quoting ? t('quoteCard.quoteLine') : t('comments.transcript.jumpTo', { time: stamp(cue.start) })}
             >
               <span className="transcript-time">{stamp(cue.start)}</span>
               <span className="transcript-text">{matches ? highlight(cue.text, needle) : cue.text}</span>

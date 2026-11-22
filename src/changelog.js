@@ -18,6 +18,48 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.166',
+    category: 'shorts',
+    date: '2026-11-22',
+    summary: "Shorts from this video now offers one Short per chapter, each starting with the chapter's first minute.",
+  },
+  {
+    version: '2.0.165',
+    category: 'shorts',
+    date: '2026-11-22',
+    summary: 'Shorts cut from the same episode or video show "Part 2 of 4" and a Next part button, no playlist needed.',
+  },
+  {
+    version: '2.0.164',
+    category: 'stories',
+    date: '2026-11-22',
+    summary: 'Tease as Story: make a 24h Story that links to your video or counts down to your premiere.',
+  },
+  {
+    version: '2.0.163',
+    category: 'watch',
+    date: '2026-11-22',
+    summary: "Quote cards: tap a line in a video's transcript to post it as a picture snap that links to that moment.",
+  },
+  {
+    version: '2.0.162',
+    category: 'audio',
+    date: '2026-11-22',
+    summary: 'Publish as audio: creators can post their own video again as an audio episode, straight from the watch page.',
+  },
+  {
+    version: '2.0.161',
+    category: 'live',
+    date: '2026-11-22',
+    summary: "Stream hosts can turn their stream's highlights into chapters, and join up to four clips into one recap Short.",
+  },
+  {
+    version: '2.0.160',
+    category: 'watch',
+    date: '2026-11-22',
+    summary: 'Videos, episodes and posts now show a "Made from this" row with the clips, audiograms, remixes and reactions made from them.',
+  },
+  {
     version: '2.0.159',
     category: 'home',
     date: '2026-11-22',

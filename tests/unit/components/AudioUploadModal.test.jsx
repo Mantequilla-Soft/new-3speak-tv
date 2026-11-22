@@ -49,6 +49,7 @@ vi.mock('../../../src/utils/scheduledPosts', () => ({ saveScheduledPost: vi.fn(a
 vi.mock('../../../src/utils/postingAuthority', () => ({ hasThreespeakPostingAuth: async () => true, addThreespeakToPostingAuth: async () => {} }))
 vi.mock('../../../src/utils/rcCheck', async (importOriginal) => ({ ...(await importOriginal()), checkPostingRc: async () => ({ ok: true }) }))
 vi.mock('../../../src/utils/reportClientError', () => ({ reportClientError: vi.fn() }))
+vi.mock('../../../src/lib/derived', async (importOriginal) => ({ ...(await importOriginal()), registerDerivedLater: vi.fn(), registerDerived: vi.fn(async () => true) }))
 vi.mock('../../../src/lib/youtubeImport', () => ({ markImportPublished: vi.fn(async () => ({ ok: true })) }))
 vi.mock('../../../src/lib/advertiseData', () => ({ fetchCreatorAdPrefs: async () => ({}), syncAudioAdChoice: async () => {} }))
 vi.mock('../../../src/lib/uploadGate', () => ({ fetchUploadGateAd: async () => null, confirmUploadGatePost: () => {}, gateSessionId: () => null }))
@@ -102,6 +103,7 @@ const { markImportPublished } = await import('../../../src/lib/youtubeImport')
 const { saveScheduledPost } = await import('../../../src/utils/scheduledPosts')
 const { uploadAudioTo3Speak } = await import('../../../src/utils/audioUpload')
 const { reportClientError } = await import('../../../src/utils/reportClientError')
+const derived = await import('../../../src/lib/derived')
 
 // jsdom reads no media: every <audio> reports m.duration as soon as it gets a src.
 let savedSrc
@@ -492,6 +494,26 @@ describe('AudioUploadModal: chapters from the editor', () => {
   })
 })
 
+describe('AudioUploadModal: an audio version of a video (lib/audioVersion.js)', () => {
+  it('names the video as the source and registers it for its "Made from this" row', async () => {
+    derived.registerDerivedLater.mockClear()
+    const { user } = openModal({
+      initialTrack: {
+        blob: new File(['ID3'], 'my-video.mp3', { type: 'audio/mpeg' }), filename: 'my-video.mp3', type: 'podcast', source: 'import',
+        prefill: { title: 'My video', description: 'About it.', tags: ['music'], madeFrom: { kind: 'audio_version', author: 'badadib', permlink: 'my-video' } },
+      },
+    })
+    await waitFor(() => row('my-video.mp3'))
+    await toPostStep(user, null)
+    await next(user)
+    await user.click(screen.getByRole('button', { name: 'Publish' }))
+    await waitFor(() => expect(derived.registerDerivedLater).toHaveBeenCalled())
+    const post = aioha.broadcastWithAioha.mock.calls.map(([o]) => o).find((o) => o[0][0] === 'comment')[0][1]
+    expect(JSON.parse(post.json_metadata)['3speak'].source).toEqual({ kind: 'audio_version', author: 'badadib', permlink: 'my-video' })
+    expect(derived.registerDerivedLater).toHaveBeenCalledWith(post.author, post.permlink)
+  })
+})
+
 describe('AudioUploadModal: a narrated written post (page/Narrate.jsx)', () => {
   it('marks the post as read by a synthetic voice and reports it back to the narration page', async () => {
     const seen = []
@@ -511,6 +533,9 @@ describe('AudioUploadModal: a narrated written post (page/Narrate.jsx)', () => {
       await waitFor(() => expect(seen).toHaveLength(1))
       const post = aioha.broadcastWithAioha.mock.calls.map(([o]) => o).find((o) => o[0][0] === 'comment')[0][1]
       expect(JSON.parse(post.json_metadata)['3speak'].tts).toEqual({ engine: 'piper', voice: 'en_GB-alan-medium', source: 'badadib/holidays' })
+      // ...and names the written post as its source, registered for that post's "Made from this" rail
+      expect(JSON.parse(post.json_metadata)['3speak'].source).toEqual({ kind: 'narration', author: 'badadib', permlink: 'holidays' })
+      expect(derived.registerDerivedLater).toHaveBeenCalledWith(post.author, post.permlink)
       expect(post.body).toContain('Read by a synthetic voice (Alan).')
       expect(seen[0]).toEqual({ source: 'badadib/holidays', author: expect.any(String), permlink: post.permlink })
     } finally {

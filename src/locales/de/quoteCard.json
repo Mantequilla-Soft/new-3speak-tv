@@ -1,0 +1,18 @@
+{
+  "button": "Zitatkarte",
+  "pickHint": "Tippe auf eine Zeile, um daraus eine Zitatkarte zu machen.",
+  "cancelPick": "Abbrechen",
+  "quoteLine": "Aus dieser Zeile eine Zitatkarte machen",
+  "title": "Zitatkarte",
+  "sub": "Die Zeile bei {{time}}",
+  "previewLabel": "Die Zitatkarte",
+  "lineLabel": "Die Zeile",
+  "lineHint": "Kürze sie oder korrigiere ein falsch erkanntes Wort. Höchstens {{max}} Zeichen.",
+  "commentLabel": "Deine Worte",
+  "optional": "optional",
+  "post": "Als Snap posten",
+  "download": "Herunterladen",
+  "posted": "Zitatkarte gepostet.",
+  "postFailed": "Die Zitatkarte konnte nicht gepostet werden.",
+  "downloadFailed": "Das Bild konnte nicht gespeichert werden."
+}
