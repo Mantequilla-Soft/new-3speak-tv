@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.167',
+    category: 'upload',
+    date: '2026-11-22',
+    summary: 'Free plan batch imports now publish one video per day instead of failing, and the batch form explains how that works.',
+  },
+  {
     version: '2.0.166',
     category: 'shorts',
     date: '2026-11-22',

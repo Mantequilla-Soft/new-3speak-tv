@@ -134,7 +134,8 @@
       "posted": "Diterbitkan",
       "failed": "Gagal",
       "publish_failed": "Gagal menerbitkan",
-      "cancelled": "Dihentikan, tidak diterbitkan"
+      "cancelled": "Dihentikan, tidak diterbitkan",
+      "waitingQuota": "Menunggu unggahan gratismu berikutnya ({{time}})"
     },
     "stopConfirm": "Hentikan impor ini? Video yang belum diterbitkan akan dibatalkan, termasuk yang sudah dijadwalkan. Video yang sudah terbit tetap ada.",
     "stopYes": "Ya, hentikan",
@@ -148,6 +149,14 @@
       "canLeave": "Kamu sudah bisa menutup halaman ini. Episodemu diimpor dan dipublikasikan di server kami, juga saat kamu pergi.",
       "stopConfirm": "Hentikan impor ini? Episode yang belum diterbitkan akan dibatalkan, termasuk yang sudah dijadwalkan. Episode yang sudah terbit tetap ada.",
       "maxReached": "Kamu bisa memilih hingga {{max}} episode sekaligus"
+    },
+    "free": {
+      "title": "Paket gratis: satu video per hari",
+      "body": "Setiap video memakai satu hari dari unggahan gratismu, jadi batch ini menerbitkan satu video per hari (Shorts: hingga 3 per hari). Sampai batch selesai, unggahan gratismu terpakai olehnya, jadi selama itu kamu tidak bisa mengunggah video lain sendiri.",
+      "ends": "Yang terakhir terbit sekitar {{date}}.",
+      "pro": "Dengan 3Speak Pro semuanya terbit hari ini.",
+      "running": "Batch ini sedang memakai unggahan gratis harianmu. Sampai selesai, kamu tidak bisa mengunggah video lain sendiri.",
+      "bar": "paket gratis: satu per hari, sisanya menyusul"
     }
   },
   "bitchute": {

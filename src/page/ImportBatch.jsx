@@ -17,12 +17,48 @@ export function limitText(it, t) {
   if (it?.errorCode === 'audio_too_long') return t('uploadLimits.tooLongPlain', { minutes: 15 });
   return null;
 }
+
+const HOUR_MS = 60 * 60 * 1000;
+const DAY_MS = 24 * HOUR_MS;
+// Picked items that land in the Shorts feed (same guess as the form's Shorts note).
+const looksShort = (v) => v.type === 'shorts' || v.platform === 'tiktok' || v.platform === 'instagram';
+
+// When the last of `count` uploads of one kind can go, from its counter (ms).
+function lastUploadAt(count, entry, now) {
+  if (!count || !entry || !(entry.limit > 0)) return now;
+  const later = count - entry.remaining;
+  if (later <= 0) return now;
+  const first = entry.remaining > 0 || !(entry.nextAt > now) ? now + DAY_MS : entry.nextAt;
+  return first + (Math.ceil(later / entry.limit) - 1) * DAY_MS;
+}
+
+/**
+ * ⏳ A free account's batch under the daily upload limits (server/import-batch.cjs
+ * waits for each next free upload): null when no limit applies (Pro, warm-up,
+ * limits off or unknown, podcast episodes only), else { lastAt } with the rough
+ * time the last item uploads, or null when they all fit today.
+ */
+export function freeBatchPlan(videos, quota, now = Date.now()) {
+  if (!quota?.ready || quota.exempt || !quota.video) return null;
+  const items = (videos || []).filter((v) => v.platform !== 'rss');
+  if (!items.length) return null;
+  const shorts = items.filter(looksShort).length;
+  const end = Math.max(lastUploadAt(items.length - shorts, quota.video, now), lastUploadAt(shorts, quota.short, now));
+  return { lastAt: end > now + HOUR_MS ? end : null };
+}
+
+// A day and time a few days out, in the reader's language.
+export const fmtWhen = (ms, lang) => new Date(ms).toLocaleString(lang || undefined, {
+  weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit',
+});
 import { AudioContentFields, audioContentState, audioContentSettings, audioContentMissingText } from "./PodcastAutoImport";
 import { addThreespeakToPostingAuth, waitForThreespeakPostingAuth } from "../utils/postingAuthority";
 import { getCurrentProvider, Providers } from "../hive-api/aioha";
 import AccountImg from "../components/HiveAvatar/AccountImg";
 import ModalHeader from "../components/ModalHeader/ModalHeader";
 import { usePremiumStatus } from "../hooks/usePremiumStatus";
+import useUploadQuota from "../hooks/useUploadQuota";
+import { proPlansPath } from "../lib/uploadQuota";
 import { fetchCreatorAdPrefs } from "../lib/advertiseData";
 import { readAddToBlog, writeAddToBlog } from "../utils/addToBlog";
 import {
@@ -44,7 +80,9 @@ const PAYOUTS = ['default', 'powerup', 'decline'];
  * supporters-only, schedule: the batch spaces its own posts).
  */
 export function BatchForm({ user, videos, spacingMin, granted, onGranted, onClose, onStarted }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  // ⏳ Free plan: one video a day, and the batch takes the creator's own uploads meanwhile.
+  const freePlan = freeBatchPlan(videos, useUploadQuota({ video: true, audio: false }));
   // Podcast episodes: the kind of audio and where each post's content comes from.
   const audioItems = videos.filter((v) => v.platform === 'rss');
   const hasAudio = audioItems.length > 0;
@@ -253,6 +291,17 @@ export function BatchForm({ user, videos, spacingMin, granted, onGranted, onClos
 
             {hasShorts && <p className="yt-batch-modal__small"><Icon name="view_day" size={14} />{t('ytimport.batch.shortsNote')}</p>}
             <p className="yt-batch-modal__small"><Icon name="schedule" size={14} />{t(bk('spacing'), { minutes: spacingMin })}</p>
+            {freePlan && (
+              <div className="yt-batch-modal__free" role="note">
+                <p className="yt-batch-modal__free-title"><Icon name="hourglass_top" size={16} />{t('ytimport.batch.free.title')}</p>
+                <p>{t('ytimport.batch.free.body')}</p>
+                {freePlan.lastAt && <p>{t('ytimport.batch.free.ends', { date: fmtWhen(freePlan.lastAt, i18n?.language) })}</p>}
+                <p>
+                  {t('ytimport.batch.free.pro')}{' '}
+                  <Link to={proPlansPath(user)}>{t('uploadLimits.goPro')}</Link>
+                </p>
+              </div>
+            )}
 
             <SettingSheet title={t('upload.details.rewards.label')} open={rewardsOpen} onClose={() => setRewardsOpen(false)}>
               <div className="option-sheet">
@@ -343,7 +392,7 @@ const STATE_ICON = {
 
 /** The creator's newest batch: one row per video with its state. */
 export function BatchStatus({ batch, user, onChange }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   // A batch of podcast episodes only: say "episodes", not "videos".
   const audioBatch = batch.items.length > 0 && batch.items.every((it) => it.platform === 'rss');
   const statusKey = (key) => (audioBatch ? `ytimport.batch.audio.${key}` : `ytimport.batch.${key}`);
@@ -359,6 +408,8 @@ export function BatchStatus({ batch, user, onChange }) {
   if (!batch) return null;
   const stoppable = batch.items.some((it) => RUNNING.has(it.status) || it.status === 'scheduled');
   const doneCount = batch.items.filter((it) => it.status === 'posted').length;
+  // ⏳ Items waiting for the free plan's next upload (server/import-batch.cjs).
+  const waitingForQuota = batch.items.some((it) => it.status === 'queued' && it.waitUntil);
 
   const stop = async () => {
     setStopping(true);
@@ -373,6 +424,9 @@ export function BatchStatus({ batch, user, onChange }) {
       const minutes = Math.ceil((at.getTime() - Date.now()) / 60000);
       if (minutes <= 0) return t('ytimport.batch.status.publishingNow');
       return t('ytimport.batch.status.scheduledIn', { time: at.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), minutes });
+    }
+    if (it.status === 'queued' && it.waitUntil && Date.parse(it.waitUntil) > Date.now()) {
+      return t('ytimport.batch.status.waitingQuota', { time: fmtWhen(Date.parse(it.waitUntil), i18n?.language) });
     }
     return t(`ytimport.batch.status.${it.status}`);
   };
@@ -401,6 +455,12 @@ export function BatchStatus({ batch, user, onChange }) {
           otherwise keep the tab open for hours. */}
       {stoppable && (
         <p className="yt-batch-status__leave"><Icon name="check" size={16} /> {t(statusKey('canLeave'))}</p>
+      )}
+      {waitingForQuota && (
+        <p className="yt-batch-status__quota">
+          <Icon name="hourglass_top" size={16} />
+          <span>{t('ytimport.batch.free.running')} <Link to={proPlansPath(user)}>{t('uploadLimits.goPro')}</Link></span>
+        </p>
       )}
       <ul>
         {batch.items.map((it) => (

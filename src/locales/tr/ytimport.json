@@ -134,7 +134,8 @@
       "posted": "Yayınlandı",
       "failed": "Başarısız",
       "publish_failed": "Yayınlama başarısız",
-      "cancelled": "Durduruldu, yayınlanmadı"
+      "cancelled": "Durduruldu, yayınlanmadı",
+      "waitingQuota": "Bir sonraki ücretsiz yüklemeni bekliyor ({{time}})"
     },
     "stopConfirm": "Bu içe aktarma durdurulsun mu? Henüz yayınlanmamış videolar, zaten zamanlanmış olanlar dahil, iptal edilir. Yayınlanan videolar kalır.",
     "stopYes": "Evet, durdur",
@@ -148,6 +149,14 @@
       "canLeave": "Bu sayfayı artık kapatabilirsin. Bölümlerin sen yokken de sunucumuzda içe aktarılıp yayınlanır.",
       "stopConfirm": "Bu içe aktarma durdurulsun mu? Henüz yayınlanmamış bölümler, zaten zamanlanmış olanlar dahil, iptal edilir. Yayınlanan bölümler kalır.",
       "maxReached": "Tek seferde en fazla {{max}} bölüm seçebilirsin"
+    },
+    "free": {
+      "title": "Ücretsiz plan: günde bir video",
+      "body": "Her video ücretsiz yüklemelerinin bir gününü kullanır, bu yüzden toplu içe aktarma günde bir video yayınlar (Shorts: günde en fazla 3). Toplu işlem bitene kadar ücretsiz yüklemelerini kullanır, bu sürede kendin başka video yükleyemezsin.",
+      "ends": "Sonuncusu yaklaşık {{date}} tarihinde yayınlanır.",
+      "pro": "3Speak Pro ile hepsi bugün yayınlanır.",
+      "running": "Bu toplu işlem ücretsiz günlük yüklemelerini kullanıyor. Bitene kadar kendin başka video yükleyemezsin.",
+      "bar": "ücretsiz plan: günde bir, gerisi sonra gelir"
     }
   },
   "bitchute": {

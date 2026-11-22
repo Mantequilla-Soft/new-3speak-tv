@@ -134,7 +134,8 @@
       "posted": "Publicado",
       "failed": "Falló",
       "publish_failed": "Falló la publicación",
-      "cancelled": "Detenido, no publicado"
+      "cancelled": "Detenido, no publicado",
+      "waitingQuota": "Espera tu próxima subida gratuita ({{time}})"
     },
     "stopConfirm": "¿Detener esta importación? Los videos que aún no se han publicado se cancelan, incluidos los ya programados. Los publicados se quedan.",
     "stopYes": "Sí, detener",
@@ -148,6 +149,14 @@
       "canLeave": "Ya puedes cerrar esta página. Tus episodios se importan y publican en nuestro servidor, también mientras no estás.",
       "stopConfirm": "¿Detener esta importación? Los episodios que aún no se han publicado se cancelan, incluidos los ya programados. Los publicados se quedan.",
       "maxReached": "Puedes elegir hasta {{max}} episodios a la vez"
+    },
+    "free": {
+      "title": "Plan gratuito: un video por día",
+      "body": "Cada video usa un día de tus subidas gratuitas, así que el lote publica un video por día (Shorts: hasta 3 por día). Hasta que el lote termine ocupa tus subidas gratuitas, así que en ese tiempo no puedes subir otros videos tú mismo.",
+      "ends": "El último sale alrededor del {{date}}.",
+      "pro": "Con 3Speak Pro salen todos hoy.",
+      "running": "Este lote está usando tus subidas gratuitas diarias. Hasta que termine, no puedes subir otros videos tú mismo.",
+      "bar": "plan gratuito: uno por día, el resto sigue después"
     }
   },
   "bitchute": {

@@ -134,7 +134,8 @@
       "posted": "Gepubliceerd",
       "failed": "Mislukt",
       "publish_failed": "Publiceren mislukt",
-      "cancelled": "Gestopt, niet gepubliceerd"
+      "cancelled": "Gestopt, niet gepubliceerd",
+      "waitingQuota": "Wacht op je volgende gratis upload ({{time}})"
     },
     "stopConfirm": "Deze import stoppen? Video's die nog niet gepubliceerd zijn worden geannuleerd, ook als ze al ingepland zijn. Gepubliceerde video's blijven staan.",
     "stopYes": "Ja, stoppen",
@@ -148,6 +149,14 @@
       "canLeave": "Je kunt deze pagina nu sluiten. Je afleveringen worden op onze server geïmporteerd en gepubliceerd, ook als je weg bent.",
       "stopConfirm": "Deze import stoppen? Afleveringen die nog niet gepubliceerd zijn worden geannuleerd, ook als ze al ingepland zijn. Gepubliceerde afleveringen blijven staan.",
       "maxReached": "Je kunt tot {{max}} afleveringen tegelijk kiezen"
+    },
+    "free": {
+      "title": "Gratis abonnement: één video per dag",
+      "body": "Elke video gebruikt één dag van je gratis uploads, dus de batch publiceert één video per dag (Shorts: tot 3 per dag). Tot de batch klaar is, neemt hij je gratis uploads in beslag, dus in die tijd kun je zelf geen andere video's uploaden.",
+      "ends": "De laatste gaat rond {{date}} online.",
+      "pro": "Met 3Speak Pro gaan ze vandaag allemaal online.",
+      "running": "Deze batch gebruikt je gratis dagelijkse uploads. Tot hij klaar is, kun je zelf geen andere video's uploaden.",
+      "bar": "gratis abonnement: één per dag, de rest volgt later"
     }
   },
   "bitchute": {

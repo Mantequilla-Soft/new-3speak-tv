@@ -134,7 +134,8 @@
       "posted": "Opublikowano",
       "failed": "Niepowodzenie",
       "publish_failed": "Publikacja nie powiodła się",
-      "cancelled": "Zatrzymano, nie opublikowano"
+      "cancelled": "Zatrzymano, nie opublikowano",
+      "waitingQuota": "Czeka na twoje następne darmowe przesłanie ({{time}})"
     },
     "stopConfirm": "Zatrzymać ten import? Filmy jeszcze nieopublikowane zostaną anulowane, także te już zaplanowane. Opublikowane filmy zostają.",
     "stopYes": "Tak, zatrzymaj",
@@ -148,6 +149,14 @@
       "canLeave": "Możesz już zamknąć tę stronę. Twoje odcinki są importowane i publikowane na naszym serwerze, także pod twoją nieobecność.",
       "stopConfirm": "Zatrzymać ten import? Odcinki jeszcze nieopublikowane zostaną anulowane, także te już zaplanowane. Opublikowane odcinki zostają.",
       "maxReached": "Możesz wybrać naraz do {{max}} odcinków"
+    },
+    "free": {
+      "title": "Plan darmowy: jeden film dziennie",
+      "body": "Każdy film zużywa jeden dzień twoich darmowych przesyłań, więc pakiet publikuje jeden film dziennie (Shorts: do 3 dziennie). Dopóki pakiet się nie skończy, zajmuje twoje darmowe przesyłania, więc w tym czasie nie możesz sam przesyłać innych filmów.",
+      "ends": "Ostatni zostanie opublikowany około {{date}}.",
+      "pro": "Z 3Speak Pro wszystkie wyjdą dzisiaj.",
+      "running": "Ten pakiet korzysta z twoich darmowych dziennych przesyłań. Dopóki się nie skończy, nie możesz sam przesyłać innych filmów.",
+      "bar": "plan darmowy: jeden dziennie, reszta później"
     }
   },
   "bitchute": {
