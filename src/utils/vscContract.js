@@ -6,7 +6,7 @@
  * - buildTransferIntent: creates a transfer.allow intent for pay_offer
  */
 
-import aioha from '../hive-api/aioha';
+import aioha, { broadcastWithAioha, getOperationUser } from '../hive-api/aioha';
 import { KeyTypes } from '@aioha/aioha';
 import axios from 'axios';
 
@@ -65,7 +65,8 @@ const DEFAULT_RC_LIMIT = 10000;
  * @returns {{ success: boolean, result: string, error?: string }}
  */
 export async function callSubsContract(action, payload, intents = [], keyType = KeyTypes.Active) {
-  const user = aioha.getCurrentUser();
+  // A Butter Auth session has no aioha user; it is the user_id login.
+  const user = getOperationUser();
   if (!user) throw new Error('Not logged in');
 
   // Build the custom_json as a standard Hive L1 transaction
@@ -87,8 +88,10 @@ export async function callSubsContract(action, payload, intents = [], keyType = 
 
   console.log('[vsc] callSubsContract L1 tx', { action, payload, intents, keyType, user });
 
-  // Sign and broadcast as a normal Hive L1 transaction via aioha
-  const result = await aioha.signAndBroadcastTx([op], keyType);
+  // Sign and broadcast as a normal Hive L1 transaction. broadcastWithAioha
+  // hands a Butter Auth session's active op to the wallet sheet and shows
+  // HiveAuth's waiting toast; it throws when the wallet refuses.
+  const result = await broadcastWithAioha([op], keyType);
 
   if (!result?.success) {
     throw new Error(result?.error || 'Contract call failed');
@@ -285,8 +288,6 @@ export function buildDepositOp(amount, asset, username) {
  * @returns {{ success: boolean, result: string }}
  */
 export async function depositAndCallContract(depositAmount, depositAsset, username, action, payload, intents = []) {
-  const { broadcastWithAioha } = await import('../hive-api/aioha');
-
   const depositOp = buildDepositOp(depositAmount, depositAsset, username);
 
   const contractOp = ['custom_json', {

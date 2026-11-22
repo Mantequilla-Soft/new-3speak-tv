@@ -58,7 +58,12 @@
       "channel": "Kanal",
       "history": "Verlauf"
     },
-    "darkTheme": "Dunkles Design"
+    "darkTheme": "Dunkles Design",
+    "folders": {
+      "creator": "Creator-Tools",
+      "community": "Community",
+      "help": "Hilfe und 3Speak"
+    }
   },
   "notifications": {
     "pushOff": "Benachrichtigungen für dieses Gerät ausgeschaltet",

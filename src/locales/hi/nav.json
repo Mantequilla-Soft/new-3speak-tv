@@ -58,7 +58,12 @@
       "channel": "चैनल",
       "history": "हिस्ट्री"
     },
-    "darkTheme": "डार्क थीम"
+    "darkTheme": "डार्क थीम",
+    "folders": {
+      "creator": "क्रिएटर टूल",
+      "community": "समुदाय",
+      "help": "मदद और 3Speak"
+    }
   },
   "notifications": {
     "pushOff": "इस डिवाइस के लिए सूचनाएँ बंद कर दी गईं",

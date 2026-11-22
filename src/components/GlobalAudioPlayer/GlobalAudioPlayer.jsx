@@ -61,6 +61,7 @@ import { notifyMediaPlay, onMediaPlay } from '../../utils/mediaCoordinator';
 import { trackArtist } from '../../utils/audioTrack';
 import useListenTime from '../../hooks/useListenTime';
 import useAudioAd from '../../hooks/useAudioAd';
+import { traceEnded, traceStep, traceBad, tracePlaying, traceBack, traceDrop, traceOpen, traceTick } from './queueTrace';
 import TickerCrawl from '../ads/TickerCrawl';
 import { audioItemPath } from '../AudioItem/AudioItemView';
 import { mseAvailable, isVideoTrack } from '../../lib/videoAsAudio';
@@ -105,6 +106,8 @@ const HAS_AIRPLAY = typeof window !== 'undefined' && typeof window.WebKitPlaybac
 // whole audio tab down; the main Bunny zone is the fallback on a media error.
 const AUDIO_GATEWAYS = ['https://ipfs-audio.3speak.tv/ipfs', 'https://ipfs-3speak.b-cdn.net/ipfs'];
 const AUDIO_CDN = AUDIO_GATEWAYS[0];
+// With the screen off, the next track starts this close to the end (seconds).
+const EARLY_HANDOVER_S = 1.2;
 
 // Optional heartbeat obfuscation — AES-256-GCM with a key derived from the
 // shared LISTEN_BEAT_KEY (must match the checker's). Output is
@@ -270,6 +273,8 @@ function GlobalAudioPlayer() {
   // The next track, started on this element from the end of the last one
   // (startNextInPlace): { id, src, el }. The load effect then keeps that load.
   const preStartRef = useRef(null);
+  // This track was handed over early, with the screen off (see timeupdate).
+  const handedOverRef = useRef(false);
   // The saved copy's object URL for the current track, kept across a swap.
   const localUrlRef = useRef({ id: null, url: null });
   // Position and play state carried over to the next element.
@@ -288,6 +293,9 @@ function GlobalAudioPlayer() {
   useListenTime(audioRef, audioCurrent, elKey);
   // Spoken ticker spots on 3Speak audio (the checker decides which tracks).
   const audioAd = useAudioAd(audioRef, audioCurrent, elKey);
+  // For handlers bound once: a spot playing owns the track's element.
+  const audioAdActiveRef = useRef(false);
+  audioAdActiveRef.current = audioAd.active;
   const { toggle: toggleAudioAd } = audioAd;
 
   const switchElement = useCallback((toRouted) => {
@@ -517,18 +525,22 @@ function GlobalAudioPlayer() {
   // Only what can start at once: no saved copy or private feed to open first, no
   // HLS, no swap to or from the Web Audio element. The rest waits for the load
   // effect, as before.
+  // Each way out is noted for the hand-over trace (queueTrace.js).
   const startNextInPlace = (el) => {
     const next = nextTrackOf(useAppStore.getState())?.track;
-    if (!next || next.live || isVideoTrack(next)) return;
-    if (!(next.audio_cid || next.external) || (next.external && next.private)) return;
-    if (isDownloaded(next._id)) return;
+    const skip = (why) => { traceStep('inplace-skip', why); };
+    if (!next) { traceDrop(); return false; }
+    if (next.live || isVideoTrack(next)) { skip(next.live ? 'live' : 'video'); return false; }
+    if (!(next.audio_cid || next.external) || (next.external && next.private)) { skip('private or no source'); return false; }
+    if (isDownloaded(next._id)) { skip('downloaded'); return false; }
     const src = next.external ? next.src : `${AUDIO_CDN}/${next.audio_cid}`;
-    if (!src) return;
+    if (!src) { skip('no src'); return false; }
     const f = fxRef.current;
     let want = (f.boost || f.skip) && !fxBlockedRef.current && webAudioSupported()
       && corsKnown(src, { storage: lsStorage(), origin: window.location.origin }) === true;
     if (want && !routedRef.current && pageAway()) want = false;
-    if (want !== routedRef.current) return;
+    if (want !== routedRef.current) { skip(want ? 'needs Web Audio element' : 'needs plain element'); return false; }
+    traceStep('inplace', { next: next.permlink || next._id, routed: routedRef.current, ctx: graphRef.current?.state || null });
     preStartRef.current = { id: next._id, src, el };
     setAudioSrc(el, src, routedRef.current);
     el.defaultPlaybackRate = speedRef.current;
@@ -536,7 +548,8 @@ function GlobalAudioPlayer() {
     const startAt = next.external ? resumePosition(useAppStore.getState().user, next._id) : 0;
     if (startAt) el.addEventListener('loadedmetadata', () => { el.currentTime = startAt; }, { once: true });
     if (routedRef.current) graphRef.current?.resume();
-    el.play().catch(() => {});
+    el.play().then(() => traceStep('inplace-play-ok'), (err) => traceBad('inplace-play-refused', err));
+    return true;
   };
 
   // Wire <audio> element events to slice
@@ -549,6 +562,7 @@ function GlobalAudioPlayer() {
     // outside episodes resume from it, and a playlist cover leaves out the
     // 3Speak tracks already listened to.
     const live = !!audioCurrent?.live;
+    handedOverRef.current = false;
     const saveProgress = (pos) => {
       if (!audioCurrent?._id || live) return;
       recordProgress(useAppStore.getState().user, audioCurrent._id, pos, audioCurrent.duration || el.duration);
@@ -571,6 +585,36 @@ function GlobalAudioPlayer() {
         // The next track already plays here (started from `ended`) while this
         // binding still belongs to the last one: its times are not this track's.
         if (preStartRef.current && preStartRef.current.id !== audioCurrent?._id) return;
+        if (!el.paused) traceTick();
+        // Screen off and the track about to end: hand over now. `ended` can come
+        // through only when the phone wakes up (the owner's phone 2026-11-22: the
+        // next track began the moment the screen came on), while a tick like this
+        // one proves the page is awake and still playing. Costs at most the last
+        // EARLY_HANDOVER_S of the track, which listeners with the screen off
+        // don't see, and which is mostly the closing silence.
+        if (!live && !el.paused && !handedOverRef.current && sleepRef.current?.mode !== 'end'
+          && useAppStore.getState().audioClipEnd == null && pageAway()) {
+          const d = Number.isFinite(el.duration) && el.duration > 0 ? el.duration : Number(audioCurrent?.duration) || 0;
+          if (d > EARLY_HANDOVER_S * 4 && d - el.currentTime <= EARLY_HANDOVER_S) {
+            handedOverRef.current = true;
+            savePosition(0);
+            saveProgress(d);
+            flushProgress();
+            traceEnded({
+              track: audioCurrent?.permlink || audioCurrent?._id || null,
+              early: Math.round((d - el.currentTime) * 10) / 10,
+              at: [Math.round(el.currentTime), Math.round(d)],
+              away: true,
+              routed: routedRef.current,
+              fx: { boost: !!fxRef.current.boost, skip: !!fxRef.current.skip, blocked: !!fxBlockedRef.current },
+              ctx: graphRef.current?.state || null,
+            });
+            // Only when the next one could start on this element; otherwise the
+            // track plays out and `ended` goes on the usual way.
+            if (startNextInPlace(el)) { playNext(); return; }
+            handedOverRef.current = 'skipped';
+          }
+        }
         audioSetCurrentTime(el.currentTime);
         saveProgress(el.currentTime);
         saveHistory(el.currentTime);
@@ -594,7 +638,10 @@ function GlobalAudioPlayer() {
         notifyMediaPlay('audio');
         if (useAppStore.getState().audioRestoredAt != null) useAppStore.getState().audioClearRestored();
       },
-      pause: () => { audioSetIsPlaying(false); savePosition(); if (!live) flushProgress(); },
+      pause: () => {
+        if (traceOpen()) traceStep('pause', { t: Math.round(el.currentTime), ended: el.ended });
+        audioSetIsPlaying(false); savePosition(); if (!live) flushProgress();
+      },
       seeked: () => {
         savePosition();
         // Jumping past the end of a clip means listening on: the clip is over.
@@ -602,14 +649,31 @@ function GlobalAudioPlayer() {
         if (clipEnd != null && el.currentTime > clipEnd + 0.5) useAppStore.getState().audioClearClip();
       },
       ended: () => {
+        // Already handed over a moment before the end (timeupdate above).
+        if (handedOverRef.current === true) return;
         savePosition(0);
         if (!live) { saveProgress(audioCurrent?.duration || el.duration); flushProgress(); }
         audioSetIsPlaying(false);
+        traceEnded({
+          track: audioCurrent?.permlink || audioCurrent?._id || null,
+          at: [Math.round(el.currentTime), Math.round(el.duration)],
+          away: pageAway(),
+          routed: routedRef.current,
+          fx: { boost: !!fxRef.current.boost, skip: !!fxRef.current.skip, blocked: !!fxBlockedRef.current },
+          ctx: graphRef.current?.state || null,
+        });
         // "Sleep at the end of this episode": stop here, don't start the next one.
-        if (sleepRef.current?.mode === 'end') { endSleep(); return; }
+        if (sleepRef.current?.mode === 'end') { traceDrop(); endSleep(); return; }
         startNextInPlace(el);
         playNext();
       },
+      // The hand-over trace (queueTrace.js): what the element did until the next
+      // track played.
+      playing: () => { if (traceOpen()) tracePlaying({ track: useAppStore.getState().audioCurrent?.permlink || null, t: Math.round(el.currentTime) }); },
+      error: () => { if (traceOpen()) traceBad('element-error', { name: `code ${el.error?.code}`, message: el.error?.message || '' }); },
+      stalled: () => { if (traceOpen()) traceStep('stalled', { net: el.networkState, ready: el.readyState }); },
+      waiting: () => { if (traceOpen()) traceStep('waiting', { net: el.networkState, ready: el.readyState }); },
+      emptied: () => { if (traceOpen()) traceStep('emptied'); },
       // Outside podcast feeds don't always say how long an episode is; only then
       // does the element's own figure stand in for the stored one.
       loadedmetadata: () => {
@@ -707,6 +771,7 @@ function GlobalAudioPlayer() {
 
     const run = (src, local) => {
       if (cancelled || audioRef.current !== el) return;
+      if (traceOpen()) traceStep('load', { track: track.permlink || track._id, fresh, local, routed: routedRef.current, away: pageAway() });
       // A new track: decide first whether it goes through Web Audio, and swap the
       // element before anything loads (the next run, on the new element, loads it).
       if (fresh) {
@@ -720,6 +785,7 @@ function GlobalAudioPlayer() {
         // plain one plays the track; the effects come back with the listener.
         if (want && !routedRef.current && pageAway()) want = false;
         if (want !== routedRef.current) {
+          traceStep('load-swap', { toRouted: want });
           handoverRef.current = null;
           retiredEls.add(el);
           try { el.pause(); } catch { /* gone */ }
@@ -792,7 +858,8 @@ function GlobalAudioPlayer() {
         else el.addEventListener('loadedmetadata', () => { el.currentTime = audioStartAt; }, { once: true });
       }
       if (audioStartAt != null) useAppStore.setState({ audioStartAt: null });
-      if (play) el.play().catch(() => {});
+      if (traceOpen()) traceStep('load-play', { play, preStarted, paused: el.paused });
+      if (play) el.play().catch((err) => { if (traceOpen()) traceBad('load-play-refused', err); });
     };
 
     // A private feed's episode comes through the checker, which holds its password.
@@ -873,7 +940,18 @@ function GlobalAudioPlayer() {
   // Whether the listener is away (utils/pageAway.js): the swap below waits
   // for them to come back.
   const [away, setAway] = useState(pageAway);
-  useEffect(() => onPageAwayChange(() => setAway(pageAway())), []);
+  useEffect(() => onPageAwayChange(() => {
+    setAway(pageAway());
+    if (pageAway()) return;
+    // Back with the next track still not playing: the trace goes out now, and
+    // the track starts (the listener never paused it: it was handed over and
+    // never got going with the screen off).
+    if (traceOpen()) {
+      traceBack();
+      const el = audioRef.current;
+      if (el && el.paused && !audioAdActiveRef.current) sessionActionsRef.current.playOrReload(el);
+    }
+  }), []);
 
   // Effects switched on (or a new track) while the plain element plays: find
   // out whether the source allows CORS, and swap to a routed element if so.
@@ -919,6 +997,7 @@ function GlobalAudioPlayer() {
       clearTimeout(check);
       check = setTimeout(() => {
         if (audioRef.current === el && !el.paused && g.state !== 'running') {
+          if (traceOpen()) traceBad('webaudio-not-running', { name: g.state, message: 'back to a plain element' });
           fxBlockedRef.current = true;
           setFxBlocked(true);
           switchElement(false);
@@ -1194,6 +1273,8 @@ function GlobalAudioPlayer() {
     }));
   }, []);
   const playOrReload = useCallback((el) => {
+    // Pressed Play (button, lock screen, headphones) while the next track hadn't started.
+    if (traceOpen()) traceStep('user-play', { broken: sourceBroken(el), net: el.networkState, ready: el.readyState });
     if (sourceBroken(el)) { reloadCurrent(el.currentTime); return; }
     el.play().catch((err) => {
       // Cut off by a pause or a new load: nothing broken.

@@ -58,7 +58,12 @@
       "channel": "Chaneli",
       "history": "Historia"
     },
-    "darkTheme": "Mandhari ya giza"
+    "darkTheme": "Mandhari ya giza",
+    "folders": {
+      "creator": "Zana za mtayarishaji",
+      "community": "Jumuiya",
+      "help": "Msaada na 3Speak"
+    }
   },
   "notifications": {
     "pushOff": "Arifa zimezimwa kwa kifaa hiki",

@@ -36,3 +36,28 @@ describe('ActiveAuthModal: power down and delegation in HP', () => {
     expect(await screen.findByText('Power down 26000.000000 VESTS')).toBeInTheDocument()
   })
 })
+
+describe('ActiveAuthModal: HiveAuth', () => {
+  it('shows the QR to scan (and tap) while HiveAuth waits for the phone', async () => {
+    const user = (await import('@testing-library/user-event')).default.setup()
+    localStorage.setItem('user_id', 'badadib')
+    aioha.default.isProviderRegistered.mockImplementation((p) => p === 'hiveauth')
+    let finish
+    aioha.default.login.mockImplementationOnce((provider, name, opts) => new Promise((resolve) => {
+      opts.hiveauth.cbWait('has://auth_req/abc')
+      finish = resolve
+    }))
+    ask([['custom_json', { id: 'vsc.call', required_auths: ['badadib'], required_posting_auths: [], json: '{}' }]])
+    await user.click(screen.getByRole('button', { name: 'Sign with Hive Wallet' }))
+    await user.click(screen.getByRole('button', { name: /HiveAuth/ }))
+    expect(aioha.default.login).toHaveBeenCalledWith('hiveauth', 'badadib', expect.objectContaining({ keyType: 'active' }))
+    const qr = await screen.findByRole('link', { name: /Scan the QR code/ })
+    expect(qr).toHaveAttribute('href', 'has://auth_req/abc')
+    expect(qr.querySelector('svg')).not.toBeNull()
+    // Approved on the phone: the QR goes, the transaction is signed.
+    aioha.default.signAndBroadcastTx = vi.fn(async () => ({ success: true, result: 'tx' }))
+    await act(async () => { finish({ success: true }) })
+    expect(screen.queryByRole('link', { name: /Scan the QR code/ })).toBeNull()
+    expect(aioha.default.signAndBroadcastTx).toHaveBeenCalled()
+  })
+})

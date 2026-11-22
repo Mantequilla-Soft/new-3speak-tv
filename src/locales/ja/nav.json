@@ -58,7 +58,12 @@
       "channel": "チャンネル",
       "history": "履歴"
     },
-    "darkTheme": "ダークテーマ"
+    "darkTheme": "ダークテーマ",
+    "folders": {
+      "creator": "クリエイターツール",
+      "community": "コミュニティ",
+      "help": "ヘルプと3Speak"
+    }
   },
   "notifications": {
     "pushOff": "この端末の通知をオフにしました",

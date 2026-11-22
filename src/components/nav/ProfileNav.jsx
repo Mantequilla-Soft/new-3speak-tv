@@ -5,10 +5,10 @@ import { useAppStore } from '../../lib/store';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Icon } from '../v2/Icon';
-import { Toggle } from '../v2/ui';
 import { useGetMyQuery } from '../../hooks/getUserDetails';
 import { useChat } from '../../context/ChatContext';
 import { useServerUnread } from '../../hooks/useServerUnread';
+import useLayoutMediaQuery from '../../hooks/useLayoutMediaQuery';
 import { getVotePower } from '../../utils/hiveUtils';
 import { getHiveUrl, ensureHealthyNode } from '../../utils/hiveNode';
 import { adsEnabledFor, automationsEnabledFor, narrationEnabledFor, VIDEO_IMPORT_ENABLED } from '../../utils/config';
@@ -28,6 +28,14 @@ const SettingsModal = lazy(() => import('../SettingsModal/SettingsModal'));
 
 // Headed "Install", the same as the bottom bar's install hint.
 const installToast = toastIn('Install');
+
+// The folder last opened stays open next time (owner 2026-11-22: design 6,
+// "Folders"). Storage can be missing or blocked; the menu then starts on
+// Creator tools.
+const FOLDER_KEY = '3speak_menu_folder';
+function readFolder() {
+  try { return localStorage.getItem(FOLDER_KEY) || 'creator'; } catch { return 'creator'; }
+}
 
 // Unread chat messages, on the phone-only Chat row (the top bar has the
 // button from tablets up). Mounted only once chat is connected.
@@ -108,6 +116,17 @@ function ProfileNav({ isVisible, pinned = true, leaving = false, hoverProps, onc
   const [rc, setRc] = useState(0);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const { canInstallPrompt, isIOS, showInstall, promptInstall } = usePwaInstall();
+  // Where the bottom bar shows (below 1025px) the top bar has no section tabs,
+  // and on phones (below 768px) no chat button, so the menu carries those.
+  const hasBottomBar = useLayoutMediaQuery('(max-width: 1024px)');
+  const isPhone = useLayoutMediaQuery('(max-width: 767px)');
+  // One folder open at a time, or none.
+  const [folder, setFolder] = useState(readFolder);
+  const toggleFolder = (id) => {
+    const next = folder === id ? 'none' : id;
+    setFolder(next);
+    try { localStorage.setItem(FOLDER_KEY, next); } catch { /* not kept, that is all */ }
+  };
   // Currently chosen Hive RPC node (auto-picked by the session probe).
   const [rpcNode, setRpcNode] = useState(getHiveUrl());
   useEffect(() => {
@@ -166,11 +185,74 @@ function ProfileNav({ isVisible, pinned = true, leaving = false, hoverProps, onc
   // One tile of the control centre (07d): icon 24 in its tone over a 12/500 label.
   const tile = (icon, label, tone) => (<><Icon name={icon} size={24} className={`pn-tile-icon${tone ? ` is-${tone}` : ''}`} /><span className="pn-label">{label}</span></>);
 
+  // The three folders and what is in each, for this account on this screen.
+  const creatorItems = [
+    backlogPending > 0 && { key: 'backlog', to: '/publish-backlog', icon: 'inventory_2', label: t('nav.profile.publishBacklog'), extra: <span className="profilenav-count num">{backlogPending}</span> },
+    !isIncubating && { key: 'stats', to: '/profile?tab=stats', icon: 'monitoring', label: t('nav.profile.analytics') },
+    !isIncubating && { key: 'inbox', to: '/profile?tab=comments', icon: 'forum', label: t('creator.inbox.menu') },
+    // Your own videos from YouTube & co.: needs a Hive account to publish and
+    // a verified link to a platform we import from.
+    VIDEO_IMPORT_ENABLED && !isIncubating && canImport && { key: 'import', to: '/import', icon: 'move_to_inbox', label: t('ytimport.menuEntry') },
+    // Closed betas: the same gates as their pages, so no link ends in a 404.
+    !isIncubating && automationsEnabledFor(user) && { key: 'automations', to: '/automations', icon: 'account_tree', label: t('automations.menuEntry') },
+    !isIncubating && narrationEnabledFor(user) && { key: 'narrate', to: '/narrate', icon: 'record_voice_over', label: t('narrate.menuEntry') },
+    !isIncubating && adsEnabledFor(user) && { key: 'advertise', to: '/advertise', icon: 'campaign', label: t('nav.advertise') },
+    inviteLinkCount > 0 && { key: 'invites', to: '/invite-links', icon: 'link', label: t('nav.profile.inviteLinks') },
+    isTranslator && { key: 'translate', to: '/translate', icon: 'translate', label: t('translator.title') },
+  ].filter(Boolean);
+  const communityItems = [
+    hasBottomBar && { key: 'groups', to: '/groups', icon: 'groups', label: t('nav.bottom.groups') },
+    hasBottomBar && { key: 'live', to: '/live', icon: 'sensors', label: t('nav.tabs.live') },
+    isPhone && !(chat.warmup && !chat.ready) && { key: 'chat', to: '/chat', icon: 'chat_bubble', label: t('chat.button.label'), extra: chat.ready ? <ChatUnread /> : null },
+    { key: 'rankings', to: '/leaderboard', icon: 'leaderboard', label: t('app.routes.rankings') },
+  ].filter(Boolean);
+  const helpItems = [
+    { key: 'about', to: '/about', icon: 'info', label: t('nav.aboutLink') },
+    { key: 'faq', to: '/faq', icon: 'help', label: t('nav.faqLink') },
+    // Only where the app can actually be installed. iOS has no install
+    // prompt, so it gets the Share-sheet instructions.
+    hasBottomBar && showInstall && {
+      key: 'install', icon: 'install_mobile', label: t('nav.installApp'),
+      onClick: () => {
+        onclose();
+        if (canInstallPrompt) promptInstall();
+        else if (isIOS) installToast(t('nav.profile.iosInstallToast'), { icon: <Icon name="ios_share" size={18} /> });
+      },
+    },
+  ].filter(Boolean);
+  const helpAfter = (
+    <div className="pn-socials">
+      {/* Brand names, not words to translate; the aria labels say where they go. */}
+      <div className="support-wrap">
+        <a href="https://discord.com/invite/NSFS2VGj83" className="social-link" target="_blank" rel="noopener noreferrer" aria-label={t('nav.profile.onDiscord')}>
+          Discord
+        </a>
+        <a href="https://x.com/3speaktv?utm_source=3speak.tv " className="social-link" target="_blank" rel="noopener noreferrer" aria-label={t('nav.profile.onX')}>
+          X
+        </a>
+        <a href="https://t.me/threespeak?utm_source=3speak.tv" className="social-link" target="_blank" rel="noopener noreferrer" aria-label={t('nav.profile.onTelegram')}>
+          Telegram
+        </a>
+      </div>
+      <div className="rpc-node-line" title={rpcNode}>
+        <span className="rpc-node-dot" aria-hidden="true" />
+        <span className="rpc-node-host">{rpcHost}</span>
+      </div>
+    </div>
+  );
+  const listOf = (items) => items.map((it) => it.label).join(', ');
+  const folders = [
+    creatorItems.length > 0 && { id: 'creator', icon: 'construction', tone: 'accent', title: t('nav.profile.folders.creator'), items: creatorItems, summary: listOf(creatorItems) },
+    { id: 'community', icon: 'diversity_3', tone: 'cyan', title: t('nav.profile.folders.community'), items: communityItems, summary: listOf(communityItems) },
+    { id: 'help', icon: 'help', tone: 'plain', title: t('nav.profile.folders.help'), items: helpItems, summary: `${listOf(helpItems)}, Discord, X, Telegram`, after: helpAfter },
+  ].filter(Boolean);
+
   return (
-    // The account menu as a control centre (designs 07d, 42b): who you are with
-    // a Switch, your voting power and resource credits, your six places as
-    // tiles, the theme, then the rest as rows, 3Speak's socials, and Settings |
-    // Log out along the bottom. Desktop: a card hanging from the avatar.
+    // The account menu as a control centre (designs 07d, 42b, then 6 "Folders"
+    // 2026-11-22): who you are with the theme and a Switch, your voting power
+    // and resource credits, your six places as tiles, then three folders
+    // (Creator tools, Community, Help and 3Speak) and the Hive credit along the
+    // bottom. Desktop: a card hanging from the avatar.
     // Phones and tablets: the same card as a sheet above the bottom bar.
     <div className={`profilenav-container${isVisible ? ' visible' : ''}${pinned ? '' : ' peek'}${leaving ? ' leaving' : ''}`} onClick={onclose}>
       <div className="profile-wrap" role="menu" aria-label={t('nav.profile.accountMenu')} onClick={(e) => e.stopPropagation()} {...hoverProps}>
@@ -186,6 +268,18 @@ function ProfileNav({ isVisible, pinned = true, leaving = false, hoverProps, onc
           {/* For every login: wallet users get aioha's switcher (with their
               Butter Auth accounts added), Butter Auth users the login modal's
               own list (wallet accounts + other Butter Auth accounts). */}
+          {/* The theme as a moon button by Switch (owner 2026-11-22, design 6). */}
+          <button
+            type="button"
+            className="pn-theme-btn"
+            role="switch"
+            aria-checked={dark}
+            aria-label={t('nav.profile.darkTheme')}
+            title={dark ? t('nav.theme.switchToLight') : t('nav.theme.switchToDark')}
+            onClick={() => setTheme(dark ? 'light' : 'dark')}
+          >
+            <Icon name={dark ? 'dark_mode' : 'light_mode'} size={20} />
+          </button>
           <button type="button" className="pn-switch" role="menuitem" aria-label={t('nav.profile.changeAccount')} title={t('nav.profile.changeAccount')} onClick={() => { onclose(); openLoginModal(); }}>
             {t('nav.profile.switch')}
           </button>
@@ -244,7 +338,7 @@ function ProfileNav({ isVisible, pinned = true, leaving = false, hoverProps, onc
           )}
 
           {/* Your places, as tiles (07d): Channel, Studio, Wallet / Playlists,
-              History, Badges. */}
+              History, Settings (owner 2026-11-21: Settings in place of Badges). */}
           <div className="pn-tiles">
             <Link to="/profile" className="pn-tile" role="menuitem" aria-label={t('nav.profile.myChannel')} onClick={onclose}>
               {tile('person', t('nav.profile.tiles.channel'))}
@@ -265,149 +359,52 @@ function ProfileNav({ isVisible, pinned = true, leaving = false, hoverProps, onc
                 {tile('history', t('nav.profile.tiles.history'))}
               </Link>
             )}
-            {user && (
-              <Link to={`/b/${user}`} className="pn-tile" role="menuitem" onClick={onclose}>
-                {tile('military_tech', t('app.routes.badges'), 'accent')}
-              </Link>
-            )}
-          </div>
-
-          {/* The theme, as a switch on its own tile (07d) */}
-          <div className="pn-theme">
-            <Icon name="dark_mode" size={24} />
-            <span className="pn-theme-label">{t('nav.profile.darkTheme')}</span>
-            <Toggle
-              checked={dark}
-              label={dark ? t('nav.theme.switchToLight') : t('nav.theme.switchToDark')}
-              onChange={(on) => setTheme(on ? 'dark' : 'light')}
-            />
-          </div>
-
-          <div className="pn-section">
-            {backlogPending > 0 && (
-              <Link to="/publish-backlog" className="pn-item" role="menuitem" onClick={onclose}>
-                {row('inventory_2', t('nav.profile.publishBacklog'), <span className="profilenav-count num">{backlogPending}</span>)}
-              </Link>
-            )}
-            {!isIncubating && (
-              <Link to="/profile?tab=stats" className="pn-item" role="menuitem" onClick={onclose}>
-                {row('monitoring', t('nav.profile.analytics'))}
-              </Link>
-            )}
-            {!isIncubating && (
-              <Link to="/profile?tab=comments" className="pn-item" role="menuitem" onClick={onclose}>
-                {row('forum', t('creator.inbox.menu'))}
-              </Link>
-            )}
-            {/* ▶️ Import your own videos from YouTube & co. (moved here from the profile
-                header). Needs a Hive account to publish, so not for incubating users,
-                and a verified link to a platform we import from. */}
-            {VIDEO_IMPORT_ENABLED && !isIncubating && canImport && (
-              <Link to="/import" className="pn-item" role="menuitem" onClick={onclose}>
-                {row('move_to_inbox', t('ytimport.menuEntry'))}
-              </Link>
-            )}
-            {/* 🤖 Automations: closed beta, the same gate as the page. */}
-            {!isIncubating && automationsEnabledFor(user) && (
-              <Link to="/automations" className="pn-item" role="menuitem" onClick={onclose}>
-                {row('account_tree', t('automations.menuEntry'))}
-              </Link>
-            )}
-            {/* 🎙️ Blog to podcast: the same gate as the page. */}
-            {!isIncubating && narrationEnabledFor(user) && (
-              <Link to="/narrate" className="pn-item" role="menuitem" onClick={onclose}>
-                {row('record_voice_over', t('narrate.menuEntry'))}
-              </Link>
-            )}
-            {/* Closed testing. Same gate as the /advertise page itself, so the menu can
-                never offer a link to a page that would answer with a 404. */}
-            {!isIncubating && adsEnabledFor(user) && (
-              <Link to="/advertise" className="pn-item" role="menuitem" onClick={onclose}>
-                {row('campaign', t('nav.advertise'))}
-              </Link>
-            )}
-            {inviteLinkCount > 0 && (
-              <Link to="/invite-links" className="pn-item" role="menuitem" onClick={onclose}>
-                {row('link', t('nav.profile.inviteLinks'))}
-              </Link>
-            )}
-            {isTranslator && (
-              <Link to="/translate" className="pn-item" role="menuitem" onClick={onclose}>
-                {row('translate', t('translator.title'))}
-              </Link>
-            )}
-            {/* Phones and tablets only: the sections the top bar's tabs and the
-                bottom bar do not carry there. */}
-            <Link to="/groups" className="pn-item pn-phone-only" role="menuitem" onClick={onclose}>
-              {row('groups', t('nav.bottom.groups'))}
-            </Link>
-            <Link to="/live" className="pn-item pn-phone-only" role="menuitem" onClick={onclose}>
-              {row('sensors', t('nav.tabs.live'))}
-            </Link>
-            {!(chat.warmup && !chat.ready) && (
-              <Link to="/chat" className="pn-item pn-mobile-only" role="menuitem" onClick={onclose}>
-                {row('chat_bubble', t('chat.button.label'), chat.ready ? <ChatUnread /> : null)}
-              </Link>
-            )}
-            <Link to="/leaderboard" className="pn-item" role="menuitem" onClick={onclose}>
-              {row('leaderboard', t('app.routes.rankings'))}
-            </Link>
-            {/* Settings in the list, About and FAQ along the bottom (owner
-                2026-11-12: flipped; "Hide pages" removed, the sections always show). */}
-            <button type="button" className="pn-item" role="menuitem" onClick={() => { setSettingsOpen(true); onclose(); }}>
-              {row('settings', t('common.nav.settings'))}
+            <button type="button" className="pn-tile" role="menuitem" onClick={() => { setSettingsOpen(true); onclose(); }}>
+              {tile('settings', t('common.nav.settings'), 'accent')}
             </button>
-            {/* Phones and tablets only, and only where the app can actually be
-                installed. iOS has no install prompt, so it gets the Share-sheet
-                instructions. */}
-            {showInstall && (
+          </div>
+
+          {/* Everything else in three folders that open in place, one at a
+              time (owner 2026-11-22, design 6). A closed folder names what is
+              inside it. A folder with nothing in it for this account is left out. */}
+          {folders.map((f) => (
+            <div key={f.id} className={`pn-folder${folder === f.id ? ' is-open' : ''}`}>
               <button
                 type="button"
-                className="pn-item pn-phone-only"
-                role="menuitem"
-                onClick={() => {
-                  onclose();
-                  if (canInstallPrompt) promptInstall();
-                  else if (isIOS) installToast(t('nav.profile.iosInstallToast'), { icon: <Icon name="ios_share" size={18} /> });
-                }}
+                className="pn-folder-head"
+                aria-expanded={folder === f.id}
+                aria-controls={`pn-folder-${f.id}`}
+                onClick={() => toggleFolder(f.id)}
               >
-                {row('install_mobile', t('nav.installApp'))}
+                <Icon name={f.icon} size={20} className={`pn-folder-icon is-${f.tone}`} />
+                <span className="pn-folder-title">{f.title}</span>
+                {folder !== f.id && <span className="pn-folder-sum">{f.summary}</span>}
+                <Icon name={folder === f.id ? 'expand_less' : 'expand_more'} size={20} className="pn-folder-chev" />
               </button>
-            )}
-          </div>
+              {folder === f.id && (
+                <div className="pn-folder-body" id={`pn-folder-${f.id}`}>
+                  <div className="pn-folder-items">
+                    {f.items.map((it) => (it.to ? (
+                      <Link key={it.key} to={it.to} className="pn-item" role="menuitem" onClick={onclose}>
+                        {row(it.icon, it.label, it.extra)}
+                      </Link>
+                    ) : (
+                      <button key={it.key} type="button" className="pn-item" role="menuitem" onClick={it.onClick}>
+                        {row(it.icon, it.label, it.extra)}
+                      </button>
+                    )))}
+                  </div>
+                  {f.after}
+                </div>
+              )}
+            </div>
+          ))}
         </div>
 
-        {/* Along the bottom (owner 2026-11-12): About and FAQ, side by side and
-            styled like every other row of the menu, then 3Speak's channels and the
-            Hive node line under them. No Log out here (owner 2026-11-12): Switch at
-            the top covers changing account. */}
+        {/* Along the bottom: only the Hive credit. About, FAQ, 3Speak's channels
+            and the node line are in the Help folder (owner 2026-11-22). No Log
+            out (owner 2026-11-12): Switch at the top covers changing account. */}
         <div className="pn-footer">
-          <div className="pn-footer-row">
-            <Link to="/about" className="pn-item pn-foot-btn" role="menuitem" onClick={onclose}>
-              {row('info', t('nav.aboutLink'))}
-            </Link>
-            <Link to="/faq" className="pn-item pn-foot-btn" role="menuitem" onClick={onclose}>
-              {row('help', t('nav.faqLink'))}
-            </Link>
-          </div>
-          <div className="pn-socials">
-            {/* Brand names, not words to translate; the aria labels say where they go. */}
-            <div className="support-wrap">
-              <a href="https://discord.com/invite/NSFS2VGj83" className="social-link" target="_blank" rel="noopener noreferrer" aria-label={t('nav.profile.onDiscord')}>
-                Discord
-              </a>
-              <a href="https://x.com/3speaktv?utm_source=3speak.tv " className="social-link" target="_blank" rel="noopener noreferrer" aria-label={t('nav.profile.onX')}>
-                X
-              </a>
-              <a href="https://t.me/threespeak?utm_source=3speak.tv" className="social-link" target="_blank" rel="noopener noreferrer" aria-label={t('nav.profile.onTelegram')}>
-                Telegram
-              </a>
-            </div>
-            <div className="rpc-node-line" title={rpcNode}>
-              <span className="rpc-node-dot" aria-hidden="true" />
-              <span className="rpc-node-host">{rpcHost}</span>
-            </div>
-          </div>
           {/* A plain, followed link to hive.io, as the Hive ecosystem asked
               (issue #563): no nofollow / ugc / sponsored. The credit stays in
               English in every language, like the site footer (owner 2026-11-16). */}

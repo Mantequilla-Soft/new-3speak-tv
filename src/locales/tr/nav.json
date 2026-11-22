@@ -58,7 +58,12 @@
       "channel": "Kanal",
       "history": "Geçmiş"
     },
-    "darkTheme": "Koyu tema"
+    "darkTheme": "Koyu tema",
+    "folders": {
+      "creator": "Üretici araçları",
+      "community": "Topluluk",
+      "help": "Yardım ve 3Speak"
+    }
   },
   "notifications": {
     "pushOff": "Bu cihaz için bildirimler kapatıldı",

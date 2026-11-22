@@ -58,7 +58,12 @@
       "channel": "Canal",
       "history": "Historial"
     },
-    "darkTheme": "Tema oscuro"
+    "darkTheme": "Tema oscuro",
+    "folders": {
+      "creator": "Herramientas de creador",
+      "community": "Comunidad",
+      "help": "Ayuda y 3Speak"
+    }
   },
   "notifications": {
     "pushOff": "Notificaciones desactivadas en este dispositivo",

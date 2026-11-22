@@ -18,6 +18,30 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.157',
+    category: 'audio',
+    date: '2026-11-22',
+    summary: 'With the screen off, the audio queue now goes on to the next track by itself instead of stopping.',
+  },
+  {
+    version: '2.0.156',
+    category: 'upload',
+    date: '2026-11-22',
+    summary: 'Uploads that go up in several parts no longer crash the upload page while the progress bar fills.',
+  },
+  {
+    version: '2.0.155',
+    category: 'account',
+    date: '2026-11-22',
+    summary: 'Buying 3Speak Pro with HiveAuth after a Butter Auth login now shows the QR code to scan or tap.',
+  },
+  {
+    version: '2.0.154',
+    category: 'account',
+    date: '2026-11-22',
+    summary: 'The account menu is tidier: your places as tiles, everything else in three folders, and a moon button for the theme.',
+  },
+  {
     version: '2.0.150',
     category: 'account',
     date: '2026-11-20',

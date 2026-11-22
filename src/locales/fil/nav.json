@@ -58,7 +58,12 @@
       "channel": "Channel",
       "history": "History"
     },
-    "darkTheme": "Madilim na theme"
+    "darkTheme": "Madilim na theme",
+    "folders": {
+      "creator": "Mga tool ng creator",
+      "community": "Komunidad",
+      "help": "Tulong at 3Speak"
+    }
   },
   "notifications": {
     "pushOff": "Naka-off ang mga notification sa device na ito",

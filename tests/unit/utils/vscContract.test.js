@@ -6,9 +6,10 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 const h = vi.hoisted(() => ({
   aioha: { getCurrentUser: vi.fn(), signAndBroadcastTx: vi.fn(), vscSetNetId: vi.fn(), vscCallContract: vi.fn() },
   broadcastWithAioha: vi.fn(),
+  getOperationUser: vi.fn(),
   post: vi.fn(),
 }))
-vi.mock('../../../src/hive-api/aioha', () => ({ default: h.aioha, broadcastWithAioha: h.broadcastWithAioha }))
+vi.mock('../../../src/hive-api/aioha', () => ({ default: h.aioha, broadcastWithAioha: h.broadcastWithAioha, getOperationUser: h.getOperationUser }))
 vi.mock('@aioha/aioha', () => ({ KeyTypes: { Active: 'active', Posting: 'posting' } }))
 vi.mock('axios', () => ({ default: { post: h.post } }))
 
@@ -17,6 +18,7 @@ beforeEach(async () => {
   vi.resetModules()
   Object.values(h.aioha).forEach((f) => f.mockReset())
   h.broadcastWithAioha.mockReset()
+  h.getOperationUser.mockReset()
   h.post.mockReset()
   vi.spyOn(console, 'log').mockImplementation(() => {})
   mod = await import('../../../src/utils/vscContract.js')
@@ -67,16 +69,17 @@ describe('buildDepositOp', () => {
 
 describe('callSubsContract', () => {
   it('refuses when nobody is logged in', async () => {
-    h.aioha.getCurrentUser.mockReturnValue(null)
+    h.getOperationUser.mockReturnValue(null)
     await expect(mod.callSubsContract('pay_offer', 'x')).rejects.toThrow('Not logged in')
+    expect(h.broadcastWithAioha).not.toHaveBeenCalled()
   })
 
   it('signs a vsc.call custom_json with the active key by default', async () => {
-    h.aioha.getCurrentUser.mockReturnValue('alice')
-    h.aioha.signAndBroadcastTx.mockResolvedValue({ success: true, result: 'tx1' })
+    h.getOperationUser.mockReturnValue('alice')
+    h.broadcastWithAioha.mockResolvedValue({ success: true, result: 'tx1' })
     const intent = mod.buildTransferIntent(5, 'hbd')
     expect(await mod.callSubsContract('pay_offer', '5|monthly', [intent])).toEqual({ success: true, result: 'tx1' })
-    const [[op], key] = h.aioha.signAndBroadcastTx.mock.calls[0]
+    const [[op], key] = h.broadcastWithAioha.mock.calls[0]
     expect(key).toBe('active')
     expect(op[0]).toBe('custom_json')
     expect(op[1]).toMatchObject({ required_auths: ['alice'], required_posting_auths: [], id: 'vsc.call' })
@@ -90,17 +93,27 @@ describe('callSubsContract', () => {
     })
   })
 
+  it('works for a Butter Auth login, which has no aioha user (the wallet sheet signs it)', async () => {
+    h.aioha.getCurrentUser.mockReturnValue(null)
+    h.getOperationUser.mockReturnValue('badadib')
+    h.broadcastWithAioha.mockResolvedValue({ success: true, result: 'tx2' })
+    expect(await mod.callSubsContract('pay_offer', '4', [])).toEqual({ success: true, result: 'tx2' })
+    expect(h.broadcastWithAioha.mock.calls[0][0][0][1].required_auths).toEqual(['badadib'])
+    expect(h.aioha.signAndBroadcastTx).not.toHaveBeenCalled()
+  })
+
   it('puts the user in posting auths for a posting-key call', async () => {
-    h.aioha.getCurrentUser.mockReturnValue('alice')
-    h.aioha.signAndBroadcastTx.mockResolvedValue({ success: true })
+    h.getOperationUser.mockReturnValue('alice')
+    h.broadcastWithAioha.mockResolvedValue({ success: true })
     await mod.callSubsContract('cancel', '', [], 'posting')
-    const op = h.aioha.signAndBroadcastTx.mock.calls[0][0][0]
+    const [[op], key] = h.broadcastWithAioha.mock.calls[0]
+    expect(key).toBe('posting')
     expect(op[1]).toMatchObject({ required_auths: [], required_posting_auths: ['alice'] })
   })
 
   it('throws the wallet error on failure', async () => {
-    h.aioha.getCurrentUser.mockReturnValue('alice')
-    h.aioha.signAndBroadcastTx.mockResolvedValue({ success: false, error: 'rejected' })
+    h.getOperationUser.mockReturnValue('alice')
+    h.broadcastWithAioha.mockRejectedValue(new Error('rejected'))
     await expect(mod.callSubsContract('x', '')).rejects.toThrow('rejected')
   })
 })

@@ -58,7 +58,12 @@
       "channel": "Channel",
       "history": "Riwayat"
     },
-    "darkTheme": "Tema gelap"
+    "darkTheme": "Tema gelap",
+    "folders": {
+      "creator": "Alat kreator",
+      "community": "Komunitas",
+      "help": "Bantuan dan 3Speak"
+    }
   },
   "notifications": {
     "pushOff": "Notifikasi dimatikan untuk perangkat ini",
