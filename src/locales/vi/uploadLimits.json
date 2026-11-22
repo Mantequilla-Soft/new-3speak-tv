@@ -5,6 +5,10 @@
     "audio_other": "Gói miễn phí: {{count}} lượt tải âm thanh mỗi ngày, mỗi lượt tối đa {{minutes}} phút.",
     "audioCount_other": "Gói miễn phí: {{count}} lượt tải âm thanh mỗi ngày."
   },
+  "warmup": {
+    "video_other": "Trong giai đoạn khởi động: {{count}} video mỗi ngày.",
+    "short_other": "Trong giai đoạn khởi động: {{count}} Short mỗi ngày."
+  },
   "left_other": "Hôm nay còn {{count}} lượt.",
   "nextAt": "Lượt tải tiếp theo lúc {{time}}.",
   "later": "Vui lòng thử lại sau.",
@@ -12,6 +16,10 @@
     "video": "Bạn đã dùng hết lượt tải video miễn phí hôm nay.",
     "short": "Bạn đã dùng hết lượt tải Short miễn phí hôm nay.",
     "audio": "Bạn đã dùng hết lượt tải âm thanh miễn phí hôm nay."
+  },
+  "reachedWarmup": {
+    "video": "Bạn đã dùng hết lượt tải video hôm nay của giai đoạn khởi động.",
+    "short": "Bạn đã dùng hết lượt tải Short hôm nay của giai đoạn khởi động."
   },
   "goPro": "Nâng cấp lên 3Speak Pro",
   "tooLong": "Âm thanh này dài {{duration}}. Âm thanh tải lên miễn phí dài tối đa {{minutes}} phút.",

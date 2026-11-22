@@ -31,6 +31,8 @@ describe('freeBatchPlan', () => {
     expect(freeBatchPlan([vid('a')], { ready: true, exempt: false, video: null, short: null }, NOW)).toBeNull()
     expect(freeBatchPlan([vid('a')], { ready: false, exempt: false, video: { limit: 1, used: 0, remaining: 1 } }, NOW)).toBeNull()
     expect(freeBatchPlan([{ id: 'rss:x', platform: 'rss' }], free({ limit: 1, used: 0, remaining: 1, nextAt: null }), NOW)).toBeNull()
+    // A warm-up's counter is not the free plan's (and warm-ups do not batch import).
+    expect(freeBatchPlan([vid('a')], { ready: true, exempt: false, video: { limit: 3, used: 0, remaining: 3, nextAt: null, plan: 'warmup' }, short: null }, NOW)).toBeNull()
   })
 
   it('one video fits today: a plan without an end date', () => {

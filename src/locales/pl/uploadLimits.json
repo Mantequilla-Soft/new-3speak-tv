@@ -17,6 +17,16 @@
     "audioCount_one": "Plan darmowy: {{count}} przesłanie audio dziennie.",
     "audioCount_other": "Plan darmowy: {{count}} przesłania audio dziennie."
   },
+  "warmup": {
+    "video_few": "Podczas rozgrzewki: {{count}} filmy dziennie.",
+    "video_many": "Podczas rozgrzewki: {{count}} filmów dziennie.",
+    "video_one": "Podczas rozgrzewki: {{count}} film dziennie.",
+    "video_other": "Podczas rozgrzewki: {{count}} filmu dziennie.",
+    "short_few": "Podczas rozgrzewki: {{count}} Shorty dziennie.",
+    "short_many": "Podczas rozgrzewki: {{count}} Shortów dziennie.",
+    "short_one": "Podczas rozgrzewki: {{count}} Short dziennie.",
+    "short_other": "Podczas rozgrzewki: {{count}} Shorta dziennie."
+  },
   "left_few": "Pozostało na dziś: {{count}}.",
   "left_many": "Pozostało na dziś: {{count}}.",
   "left_one": "Pozostało na dziś: {{count}}.",
@@ -27,6 +37,10 @@
     "video": "Wykorzystano dzisiejszy darmowy limit filmów.",
     "short": "Wykorzystano dzisiejszy darmowy limit Shortów.",
     "audio": "Wykorzystano dzisiejszy darmowy limit audio."
+  },
+  "reachedWarmup": {
+    "video": "Wykorzystano dzisiejszy limit filmów na etapie rozgrzewki.",
+    "short": "Wykorzystano dzisiejszy limit Shortów na etapie rozgrzewki."
   },
   "goPro": "Wybierz 3Speak Pro",
   "tooLong": "To nagranie trwa {{duration}}. Darmowe nagrania audio mogą trwać do {{minutes}} minut.",

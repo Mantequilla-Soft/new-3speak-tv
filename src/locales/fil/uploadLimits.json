@@ -9,6 +9,12 @@
     "audioCount_one": "Libreng plan: {{count}} audio upload bawat araw.",
     "audioCount_other": "Libreng plan: {{count}} audio upload bawat araw."
   },
+  "warmup": {
+    "video_one": "Habang nasa warm-up ka: {{count}} video bawat araw.",
+    "video_other": "Habang nasa warm-up ka: {{count}} video bawat araw.",
+    "short_one": "Habang nasa warm-up ka: {{count}} Short bawat araw.",
+    "short_other": "Habang nasa warm-up ka: {{count}} Short bawat araw."
+  },
   "left_one": "{{count}} pa ang natitira ngayon.",
   "left_other": "{{count}} pa ang natitira ngayon.",
   "nextAt": "Susunod na upload sa {{time}}.",
@@ -17,6 +23,10 @@
     "video": "Naabot mo na ang libreng limitasyon sa video ngayong araw.",
     "short": "Naabot mo na ang libreng limitasyon sa Shorts ngayong araw.",
     "audio": "Naabot mo na ang libreng limitasyon sa audio ngayong araw."
+  },
+  "reachedWarmup": {
+    "video": "Naabot mo na ang limitasyon sa video ngayong araw habang nasa warm-up.",
+    "short": "Naabot mo na ang limitasyon sa Shorts ngayong araw habang nasa warm-up."
   },
   "goPro": "Kumuha ng 3Speak Pro",
   "tooLong": "{{duration}} ang haba ng audio na ito. Hanggang {{minutes}} minuto lang ang libreng audio upload.",

@@ -1,7 +1,8 @@
 // ⏳ useUploadQuota (src/hooks/useUploadQuota.js): the free plan's counters for
-// the logged-in Hive account. Never fetched for 3Speak Pro, a warm-up account
-// or while Pro is still loading; fails open (404 = nothing known); trusts the
-// server's `exempt`; reads again after refreshUploadQuota().
+// the logged-in Hive account, the warm-up's (video + Shorts only) for a warm-up
+// handle. Never fetched for 3Speak Pro or while Pro is still loading; fails
+// open (404 = nothing known); trusts the server's `exempt`; reads again after
+// refreshUploadQuota().
 // @vitest-environment jsdom
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { renderHook, waitFor, act } from '@testing-library/react'
@@ -59,12 +60,28 @@ describe('useUploadQuota', () => {
     expect(result.current).toMatchObject({ exempt: true, video: null, short: null, audio: null })
   })
 
-  it('is never fetched for a warm-up account (incubation handle, no Hive account)', async () => {
+  it('reads a warm-up account\'s video and Short counters under its handle, never audio', async () => {
+    useAppStore.setState({ user: null, incubationHandle: 'newbie' })
+    fetchMock.mockImplementation(async () => ok({
+      enabled: true, exempt: false, plan: 'warmup',
+      video: { limit: 3, used: 1, remaining: 2, next_at: null }, short: { limit: 3, used: 0, remaining: 3, next_at: null },
+    }))
+    const { result } = renderHook(() => useUploadQuota())
+    await waitFor(() => expect(result.current.video).not.toBeNull())
+    expect(fetchMock).toHaveBeenCalledTimes(1)
+    expect(fetchMock.mock.calls[0][0]).toBe('https://embed.test/uploads/quota?owner=newbie')
+    expect(result.current).toMatchObject({
+      exempt: false, video: { limit: 3, remaining: 2, plan: 'warmup' }, short: { limit: 3, plan: 'warmup' }, audio: null,
+    })
+  })
+
+  it('a warm-up ignores a free-plan answer (the server could not tell it is a warm-up and lets uploads through)', async () => {
     useAppStore.setState({ user: null, incubationHandle: 'newbie' })
     const { result } = renderHook(() => useUploadQuota())
     await waitFor(() => expect(result.current.ready).toBe(true))
-    expect(fetchMock).not.toHaveBeenCalled()
-    expect(result.current).toMatchObject({ exempt: true, video: null, audio: null })
+    await act(async () => { await Promise.resolve() })
+    expect(fetchMock).toHaveBeenCalledTimes(1)
+    expect(result.current).toMatchObject({ exempt: false, video: null, short: null, audio: null })
   })
 
   it('waits for the Pro lookup, so Pro never sees a free-plan note flash up', async () => {

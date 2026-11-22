@@ -123,7 +123,7 @@ beforeEach(() => {
       setVideoDuration: vi.fn(), setVideoMode: vi.fn(), clearVideoSelection: vi.fn(), setIsStory: vi.fn(),
     },
   })
-  useAppStore.setState({ user: 'uploader' })
+  useAppStore.setState({ user: 'uploader', incubationHandle: null })
 })
 
 describe('upload step 1: picking a video', () => {
@@ -442,6 +442,26 @@ describe('upload step 1: the free plan\'s daily limit', () => {
     await ready()
     expect(document.querySelector('.upload-quota-note')).toHaveTextContent('Free plan: 3 Shorts per day. 2 left today.')
     expect(input()).toBeEnabled()
+  })
+
+  it('a warm-up account: its own wording, no Go Pro link, and its used-up counter blocks picking', async () => {
+    m.user = null
+    useAppStore.setState({ user: null, incubationHandle: 'newbie' })
+    m.quota.video = { limit: 3, used: 1, remaining: 2, nextAt: null, plan: 'warmup' }
+    const { unmount } = mount()
+    await ready()
+    const note = document.querySelector('.upload-quota-note')
+    expect(note).toHaveTextContent('During your warm-up: 3 videos per day. 2 left today.')
+    expect(within(note).queryByRole('link')).toBeNull()
+    expect(input()).toBeEnabled()
+    unmount()
+
+    const nextAt = at(23, 59)
+    m.quota.video = { limit: 3, used: 3, remaining: 0, nextAt, plan: 'warmup' }
+    mount()
+    await ready()
+    expect(document.querySelector('.upload-quota-note')).toHaveTextContent(`You have reached today's video limit for the warm-up. Next upload at ${time(nextAt)}.`)
+    expect(input()).toBeDisabled()
   })
 
   it('a refusal the embed API already sent holds picking back, even with no counter known', async () => {

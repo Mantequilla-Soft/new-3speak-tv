@@ -39,7 +39,7 @@ function lastUploadAt(count, entry, now) {
  * time the last item uploads, or null when they all fit today.
  */
 export function freeBatchPlan(videos, quota, now = Date.now()) {
-  if (!quota?.ready || quota.exempt || !quota.video) return null;
+  if (!quota?.ready || quota.exempt || !quota.video || quota.video.plan === 'warmup') return null;
   const items = (videos || []).filter((v) => v.platform !== 'rss');
   if (!items.length) return null;
   const shorts = items.filter(looksShort).length;

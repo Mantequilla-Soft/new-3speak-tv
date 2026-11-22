@@ -9,6 +9,12 @@
     "audioCount_one": "Mpango wa bure: upakiaji {{count}} wa sauti kwa siku.",
     "audioCount_other": "Mpango wa bure: upakiaji {{count}} wa sauti kwa siku."
   },
+  "warmup": {
+    "video_one": "Wakati wa maandalizi: video {{count}} kwa siku.",
+    "video_other": "Wakati wa maandalizi: video {{count}} kwa siku.",
+    "short_one": "Wakati wa maandalizi: Short {{count}} kwa siku.",
+    "short_other": "Wakati wa maandalizi: Short {{count}} kwa siku."
+  },
   "left_one": "Zimebaki {{count}} leo.",
   "left_other": "Zimebaki {{count}} leo.",
   "nextAt": "Upakiaji unaofuata saa {{time}}.",
@@ -17,6 +23,10 @@
     "video": "Umefikia kikomo cha video za bure cha leo.",
     "short": "Umefikia kikomo cha Shorts za bure cha leo.",
     "audio": "Umefikia kikomo cha sauti za bure cha leo."
+  },
+  "reachedWarmup": {
+    "video": "Umefikia kikomo cha video cha leo kwa kipindi cha maandalizi.",
+    "short": "Umefikia kikomo cha Shorts cha leo kwa kipindi cha maandalizi."
   },
   "goPro": "Pata 3Speak Pro",
   "tooLong": "Sauti hii ina urefu wa {{duration}}. Sauti za bure zinaweza kuwa hadi dakika {{minutes}}.",

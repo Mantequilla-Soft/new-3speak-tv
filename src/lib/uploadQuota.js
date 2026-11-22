@@ -4,7 +4,13 @@
 // (stories count as Shorts, stream VODs never count), and 2 audio uploads per
 // rolling 24 hours, each at most 15 minutes. YouTube / TikTok imports count as
 // videos; Narrate and Audio Editor exports go out through the audio uploader, so
-// they count as audio. 3Speak Pro and warm-up accounts have no limits.
+// they count as audio. 3Speak Pro has no limits.
+//
+// Warm-up accounts (no Hive account yet, owner 2026-11-22): 3 regular videos +
+// 3 Shorts per rolling 24 hours, counted under the warm-up handle, and no audio
+// limit. The embed API answers `plan: 'warmup'` for them. Uploads made during
+// the warm-up never count for the Hive account it turns into (the embed API
+// leaves them out), so publishing the backlog after graduation is never held up.
 //
 // The backends decide and enforce; this module only reads their answer so the
 // UI can say so before a file is picked, and turns their refusals into a
@@ -54,14 +60,20 @@ function normEntry(raw) {
   return { limit, used, remaining, nextAt: toMs(raw.next_at ?? raw.nextAt) };
 }
 
+/** Which limit the embed API applied: 'warmup' for a warm-up account, else the free plan. */
+const planOf = (raw) => (raw === 'warmup' ? 'warmup' : 'free');
+
 /**
  * The embed API's quota answer → null (no limit known: off, unreadable) |
- * { exempt: true, reason } | { exempt: false, video, short }.
+ * { exempt: true, reason } | { exempt: false, plan, video, short }. Each
+ * counter carries the `plan` too, so its wording follows it.
  */
 export function normalizeVideoQuota(data) {
   if (!data || typeof data !== 'object' || data.enabled !== true) return null;
   if (data.exempt) return { exempt: true, reason: data.reason || null };
-  return { exempt: false, reason: null, video: normEntry(data.video), short: normEntry(data.short) };
+  const plan = planOf(data.plan);
+  const withPlan = (entry) => (entry ? { ...entry, plan } : null);
+  return { exempt: false, reason: null, plan, video: withPlan(normEntry(data.video)), short: withPlan(normEntry(data.short)) };
 }
 
 /** The audio API's quota answer, the same way; `audio` also carries `maxSeconds`. */
@@ -93,7 +105,7 @@ async function getJson(url, headers) {
   }
 }
 
-/** The free-plan video and Short counters for a Hive account. null = no limit known. */
+/** The video and Short counters for a Hive account or a warm-up handle. null = no limit known. */
 export async function fetchVideoQuota(owner) {
   const base = String(config.EMBED_API_URL || '').replace(/\/+$/, '');
   if (!owner || !base) return null;
@@ -169,6 +181,7 @@ export function parseUploadLimit(status, body, fallbackKind = 'video') {
     return {
       code: VIDEO_LIMIT_CODE,
       kind: b.kind === 'short' ? 'short' : (b.kind === 'video' ? 'video' : fallbackKind),
+      plan: planOf(b.plan),
       limit: Number.isFinite(num(b.limit)) ? num(b.limit) : null,
       used: Number.isFinite(num(b.used)) ? num(b.used) : null,
       nextAt: toMs(b.next_at),
@@ -255,13 +268,15 @@ export function uploadLimitMessage(t, info, lang, now) {
       : t('uploadLimits.tooLongPlain', { minutes });
   }
   const kind = info.kind === 'short' || info.kind === 'audio' ? info.kind : 'video';
-  return `${t(`uploadLimits.reached.${kind}`)} ${nextUploadText(t, info.nextAt, lang, now)}`;
+  const reached = info.plan === 'warmup' && kind !== 'audio' ? 'reachedWarmup' : 'reached';
+  return `${t(`uploadLimits.${reached}.${kind}`)} ${nextUploadText(t, info.nextAt, lang, now)}`;
 }
 
 /** A counter as a refusal-shaped object, for the same wording before anything is sent. */
 export const usedUpInfo = (entry, kind) => ({
   code: kind === 'audio' ? AUDIO_LIMIT_CODE : VIDEO_LIMIT_CODE,
   kind,
+  plan: entry?.plan === 'warmup' ? 'warmup' : 'free',
   limit: entry?.limit ?? null,
   used: entry?.used ?? null,
   nextAt: entry?.nextAt ?? null,

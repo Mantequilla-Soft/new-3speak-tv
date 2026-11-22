@@ -9,6 +9,12 @@
     "audioCount_one": "Free plan: {{count}} audio upload per day.",
     "audioCount_other": "Free plan: {{count}} audio uploads per day."
   },
+  "warmup": {
+    "video_one": "During your warm-up: {{count}} video per day.",
+    "video_other": "During your warm-up: {{count}} videos per day.",
+    "short_one": "During your warm-up: {{count}} Short per day.",
+    "short_other": "During your warm-up: {{count}} Shorts per day."
+  },
   "left_one": "{{count}} left today.",
   "left_other": "{{count}} left today.",
   "nextAt": "Next upload at {{time}}.",
@@ -17,6 +23,10 @@
     "video": "You have reached today's free video limit.",
     "short": "You have reached today's free Shorts limit.",
     "audio": "You have reached today's free audio limit."
+  },
+  "reachedWarmup": {
+    "video": "You have reached today's video limit for the warm-up.",
+    "short": "You have reached today's Shorts limit for the warm-up."
   },
   "goPro": "Get 3Speak Pro",
   "tooLong": "This audio is {{duration}} long. Free audio uploads can be up to {{minutes}} minutes.",

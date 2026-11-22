@@ -5,6 +5,10 @@
     "audio_other": "免费版：每天 {{count}} 次音频上传，每次最长 {{minutes}} 分钟。",
     "audioCount_other": "免费版：每天 {{count}} 次音频上传。"
   },
+  "warmup": {
+    "video_other": "预热阶段：每天 {{count}} 个视频。",
+    "short_other": "预热阶段：每天 {{count}} 个短视频。"
+  },
   "left_other": "今天还剩 {{count}} 次。",
   "nextAt": "下次可上传时间：{{time}}。",
   "later": "请稍后再试。",
@@ -12,6 +16,10 @@
     "video": "你已达到今天的免费视频上限。",
     "short": "你已达到今天的免费短视频上限。",
     "audio": "你已达到今天的免费音频上限。"
+  },
+  "reachedWarmup": {
+    "video": "你已达到预热阶段今天的视频上限。",
+    "short": "你已达到预热阶段今天的短视频上限。"
   },
   "goPro": "获取 3Speak Pro",
   "tooLong": "这段音频时长 {{duration}}。免费音频上传最长 {{minutes}} 分钟。",
