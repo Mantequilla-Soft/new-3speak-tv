@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.158',
+    category: 'upload',
+    date: '2026-11-22',
+    summary: 'Logging out of HiveSigner now really clears an expired login, so signing back in fixes the "session has expired" upload error.',
+  },
+  {
     version: '2.0.157',
     category: 'audio',
     date: '2026-11-22',

@@ -206,6 +206,16 @@ describe('HiveSigner session', () => {
     expect(r.status).toBe(401)
     expect(r.body).toEqual({ error: 'HiveSigner token is invalid or expired' })
   })
+
+  it('a token HiveSigner refuses is a 401, logged with the reason but never the token', async () => {
+    api.setFixtures({ ...FIXTURES, fetch: [{ url: 'https://hivesigner.com/api/me', method: 'POST', status: 401, json: { error: 'invalid_grant', error_description: 'The token has invalid role' } }] })
+    const r = await post('/api/auth/hivesigner/session', {}, { headers: { Authorization: 'Bearer secret-hs-token' } })
+    expect(r.status).toBe(401)
+    expect(r.body).toEqual({ error: 'HiveSigner token is invalid or expired' })
+    const out = api.output()
+    expect(out).toContain('[hivesigner] token refused: HTTP 401 The token has invalid role')
+    expect(out).not.toContain('secret-hs-token')
+  })
 })
 
 describe('ButrAuth session', () => {

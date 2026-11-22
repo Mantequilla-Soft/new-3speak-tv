@@ -8,6 +8,58 @@ const CHAIN_ID = IS_VSC_TESTNET
   ? '18dcf0a285365fc58b71f18b3d3fec954aa0c141c44e4e5cb4cf777b9eab274e'
   : 'beeab0de00000000000000000000000000000000000000000000000000000000'
 
+// Where aioha keeps a HiveSigner login (written by /hivesigner.html).
+const HIVESIGNER_KEYS = ['hivesignerToken', 'hivesignerExpiry', 'hivesignerUsername']
+
+// Drop the stored HiveSigner token, e.g. once the server says HiveSigner refused
+// it: the next HiveSigner login then has to bring a fresh one.
+export const forgetHiveSignerToken = () => {
+  for (const k of HIVESIGNER_KEYS) {
+    try { localStorage.removeItem(k) } catch { /* storage blocked */ }
+  }
+}
+
+// aioha's HiveSigner logout revokes the token FIRST and only then deletes it from
+// localStorage, in one try/catch. Revoking a token HiveSigner already refuses
+// throws, so the dead token stayed. Its login then reads localStorage when the
+// HiveSigner window closes and took that leftover token as a fresh login. Result:
+// "log out and back in" logged straight back in with the same dead token, and
+// every upload said the session had expired (@devid.araf, 2026-11-22).
+// Patched on the provider object because the HiveSigner login runs inside
+// @aioha/react-ui's AiohaModal, not through our own code.
+export function hardenHiveSignerLogin(client) {
+  const hs = client?.providers?.[Providers.HiveSigner]
+  if (!hs || hs.__threespeakHardened) return
+  hs.__threespeakHardened = true
+
+  const logout = hs.logout.bind(hs)
+  hs.logout = async () => {
+    try { await logout() } finally {
+      forgetHiveSignerToken()
+      try { hs.provider?.removeAccessToken?.() } catch { /* already gone */ }
+      delete hs.username
+    }
+  }
+
+  const login = hs.login.bind(hs)
+  hs.login = async (...args) => {
+    // Only a token the callback page writes during THIS login counts. Keep the
+    // old values to put back if the login does not complete, so cancelling an
+    // "add account" leaves the current HiveSigner login as it was.
+    const saved = HIVESIGNER_KEYS.map((k) => {
+      try { return [k, localStorage.getItem(k)] } catch { return [k, null] }
+    })
+    forgetHiveSignerToken()
+    const result = await login(...args)
+    if (!result?.success) {
+      for (const [k, v] of saved) {
+        try { if (v != null && localStorage.getItem(k) == null) localStorage.setItem(k, v) } catch { /* storage blocked */ }
+      }
+    }
+    return result
+  }
+}
+
 // Manual Aioha setup so we can conditionally register MetaMask Snap
 const aioha = new Aioha(HIVE_API)
 aioha.registerKeychain()
@@ -22,6 +74,7 @@ aioha.registerHiveSigner({
   callbackURL: window.location.origin + '/hivesigner.html',
   scope: ['login', 'vote', 'comment', 'follow', 'transfer'],
 })
+hardenHiveSignerLogin(aioha)
 aioha.setApi(HIVE_API)
 // Upgrade to the session's healthy node once the probe resolves.
 if (!IS_VSC_TESTNET) {
@@ -747,6 +800,8 @@ export const establishWalletSession = async (wantAccount = null) => {
         credentials: 'include',
         body: '{}',
       })
+      // 401 = HiveSigner refused the token (503 is HiveSigner being unreachable).
+      if (resp.status === 401) forgetHiveSignerToken()
       return resp.ok
     } catch {
       return false
@@ -910,6 +965,8 @@ export const broadcastViaThreespeak = async (operations) => {
     // here always means "this login has no usable server session" — say which
     // login and what to do about it.
     if (res.status === 401) {
+      // The token is dead: drop it so logging out and back in gets a fresh one.
+      if (provider === Providers.HiveSigner) forgetHiveSignerToken()
       throw new Error(
         provider === Providers.HiveSigner
           ? 'Your HiveSigner session has expired. Please reconnect HiveSigner (log out and back in) and try again.'

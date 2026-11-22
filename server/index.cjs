@@ -1102,9 +1102,12 @@ app.post('/api/manteauth/logout', baseLimiter, (req, res) => {
 // Auth via the httpOnly session cookie (no Bearer token, no localStorage)
 // =====================================================================
 // Verify a HiveSigner access token by asking hivesigner.com who it belongs to.
-// Returns the Hive username on success, or null on any failure/expiry.
-async function verifyHiveSignerToken(token) {
-  if (!token) return null
+// Returns { name } when HiveSigner confirms it, { rejected: true } when HiveSigner
+// says no (revoked, expired, wrong app), or { unavailable: true } when HiveSigner
+// could not be asked (timeout, network, 5xx). The client throws its stored token
+// away on a rejection, so an outage must not look like one.
+async function verifyHiveSignerTokenDetailed(token) {
+  if (!token) return { rejected: true }
   const ctrl = new AbortController()
   const t = setTimeout(() => ctrl.abort(), 4000)
   try {
@@ -1113,14 +1116,24 @@ async function verifyHiveSignerToken(token) {
       headers: { Authorization: token, 'Content-Type': 'application/json' },
       signal: ctrl.signal,
     })
-    if (!resp.ok) return null
-    const data = await resp.json()
-    return data && data.name ? data.name : null
+    if (resp.status >= 500) return { unavailable: true }
+    const data = await resp.json().catch(() => null)
+    if (!resp.ok) {
+      // The reason only, never the token: tells a revoked token from a wrong app.
+      console.warn(`[hivesigner] token refused: HTTP ${resp.status} ${String(data?.error_description || data?.error || '').slice(0, 120)}`)
+      return { rejected: true }
+    }
+    return data && data.name ? { name: data.name } : { rejected: true }
   } catch {
-    return null
+    return { unavailable: true }
   } finally {
     clearTimeout(t)
   }
+}
+
+// The Hive username a HiveSigner token belongs to, or null on any failure.
+async function verifyHiveSignerToken(token) {
+  return (await verifyHiveSignerTokenDetailed(token)).name || null
 }
 
 // Shared broadcast flow — given a username resolved from EITHER the ButrAuth
@@ -1302,7 +1315,11 @@ app.post('/api/auth/hivesigner/session', walletAuthLimiter, async (req, res) => 
     return res.status(400).json({ error: 'HiveSigner token required' })
   }
 
-  const username = await verifyHiveSignerToken(token)
+  const hs = await verifyHiveSignerTokenDetailed(token)
+  if (hs.unavailable) {
+    return res.status(503).json({ error: 'HiveSigner could not be reached. Please try again in a moment.' })
+  }
+  const username = hs.name
   if (!username || !HIVE_USER_RE.test(username)) {
     return res.status(401).json({ error: 'HiveSigner token is invalid or expired' })
   }
@@ -1507,9 +1524,11 @@ app.post('/api/broadcast', broadcastLimiter, async (req, res) => {
     if (walletUser) proven.push(walletUser)
     const authHeader = req.headers.authorization || ''
     const bearer = authHeader.startsWith('Bearer ') ? authHeader.slice(7).trim() : ''
+    let hivesignerUnavailable = false
     if (bearer) {
-      const hsUser = await verifyHiveSignerToken(bearer)
-      if (hsUser) proven.push(hsUser)
+      const hs = await verifyHiveSignerTokenDetailed(bearer)
+      if (hs.name) proven.push(hs.name)
+      hivesignerUnavailable = !!hs.unavailable
     }
     if (proven.length) {
       const wanted = actingAccount(req.body?.operations)
@@ -1539,6 +1558,9 @@ app.post('/api/broadcast', broadcastLimiter, async (req, res) => {
       }
     }
 
+    if (!hiveUsername && hivesignerUnavailable) {
+      return res.status(503).json({ error: 'HiveSigner could not be reached. Please try again in a moment.' })
+    }
     if (!hiveUsername) return res.status(401).json({ error: 'Unauthorized' })
 
     return await broadcastAsThreespeak(hiveUsername, req.body.operations, res)
