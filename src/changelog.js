@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.156',
+    category: 'upload',
+    date: '2026-11-22',
+    summary: 'Uploads that go up in several parts no longer crash the upload page while the progress bar fills.',
+  },
+  {
     version: '2.0.155',
     category: 'account',
     date: '2026-11-22',

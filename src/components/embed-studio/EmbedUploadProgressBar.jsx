@@ -148,9 +148,11 @@ export default function EmbedUploadProgressBar({ compact = false }) {
   // The chunk strip: confirmed chunks cyan, the one in flight accent, the rest
   // still to go. Capped at MAX_CELLS cells so a long upload stays one strip.
   const chunksTotal = Number.isFinite(d.chunksTotal) && d.chunksTotal > 0 ? d.chunksTotal : 0;
+  // Array.from hands its callback (value, index) only, unlike map: no array.
+  const cellCount = Math.min(chunksTotal, MAX_CELLS);
   const cells = !compact && chunksTotal > 1 && videoUploadStatus !== 'done'
-    ? Array.from({ length: Math.min(chunksTotal, MAX_CELLS) }, (_, i, arr) => {
-      const per = chunksTotal / arr.length;
+    ? Array.from({ length: cellCount }, (_, i) => {
+      const per = chunksTotal / cellCount;
       const done = Math.min(chunksTotal, d.chunksDone ?? 0);
       if ((i + 1) * per <= done) return 'is-done';
       if (i * per <= done && videoUploadStatus === 'uploading') return 'is-live';
