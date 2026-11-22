@@ -1,0 +1,18 @@
+{
+  "button": "Quote card",
+  "pickHint": "Tap a line to make a quote card of it.",
+  "cancelPick": "Cancel",
+  "quoteLine": "Make a quote card of this line",
+  "title": "Quote card",
+  "sub": "The line at {{time}}",
+  "previewLabel": "The quote card",
+  "lineLabel": "The line",
+  "lineHint": "Shorten it or fix a word the transcript got wrong. At most {{max}} characters.",
+  "commentLabel": "Your words",
+  "optional": "optional",
+  "post": "Post as snap",
+  "download": "Download",
+  "posted": "Quote card posted.",
+  "postFailed": "Could not post the quote card.",
+  "downloadFailed": "Could not save the picture."
+}

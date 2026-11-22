@@ -55,6 +55,26 @@ describe('StreamHighlightsPanel', () => {
     expect(fetch).toHaveBeenCalledWith(`${API}/clips/c1`, { method: 'DELETE', headers: { Authorization: 'Bearer tok' } })
   })
 
+  it('the host joins picked clips into a recap and posts it as a Short', async () => {
+    const recapCalls = []
+    vi.stubGlobal('fetch', vi.fn(async (url, init) => {
+      if (String(url).endsWith('/highlights')) return { ok: true, status: 200, json: async () => answer }
+      if (String(url).endsWith('/recap')) { recapCalls.push(JSON.parse(init.body)); return { ok: true, status: 200, json: async () => ({ path: '/dvr/clips/recap-x.mp4', durationSec: 60, offsetSec: 754 }) } }
+      return { ok: false, status: 404, json: async () => ({}) }
+    }))
+    const { user } = renderWithProviders(<StreamHighlightsPanel api={API} room="badadib-r1" token="tok" />)
+    expect(await screen.findByText('Stream recap')).toBeInTheDocument()
+    expect(screen.getByText('2 clips picked · 1:00')).toBeInTheDocument()
+    // Take one out: below two the recap can't be made
+    await user.click(screen.getAllByRole('button', { name: /In recap/ })[0])
+    expect(screen.getByText('1 clip picked · 0:30')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /Make the recap/ })).toBeDisabled()
+    await user.click(screen.getAllByRole('button', { name: /In recap/ })[0])
+    await user.click(screen.getByRole('button', { name: /Make the recap/ }))
+    await waitFor(() => expect(h.post).toHaveBeenCalledWith({ url: `${API}/dvr/clips/recap-x.mp4`, room: 'badadib-r1', host: 'badadib', clipper: null, offsetSec: 754, recap: true }))
+    expect(recapCalls[0]).toEqual({ ids: expect.arrayContaining(['c1', 'c2']), vertical: false })
+  })
+
   it('a viewer sees their own clip and the host\'s 50 %; compact hides an empty list', async () => {
     useAppStore.setState({ user: 'fan' })
     answer = { host: 'badadib', isHost: false, moments: [], clips: [clip()] }

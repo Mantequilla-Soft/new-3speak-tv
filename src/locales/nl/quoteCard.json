@@ -1,0 +1,18 @@
+{
+  "button": "Citaatkaart",
+  "pickHint": "Tik op een regel om er een citaatkaart van te maken.",
+  "cancelPick": "Annuleren",
+  "quoteLine": "Maak een citaatkaart van deze regel",
+  "title": "Citaatkaart",
+  "sub": "De regel op {{time}}",
+  "previewLabel": "De citaatkaart",
+  "lineLabel": "De regel",
+  "lineHint": "Maak hem korter of verbeter een verkeerd herkend woord. Hooguit {{max}} tekens.",
+  "commentLabel": "Jouw woorden",
+  "optional": "optioneel",
+  "post": "Als snap plaatsen",
+  "download": "Downloaden",
+  "posted": "Citaatkaart geplaatst.",
+  "postFailed": "De citaatkaart kon niet worden geplaatst.",
+  "downloadFailed": "De afbeelding kon niet worden opgeslagen."
+}

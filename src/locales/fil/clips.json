@@ -15,5 +15,9 @@
   "preview": "Silipin",
   "stop": "Ihinto",
   "makeShort": "Gumawa ng Short",
-  "foot": "Ikaw lang ang nakakakita nito. Binibilang ang mga pag-ulit nang hindi alam kung sino ang nanood."
+  "foot": "Ikaw lang ang nakakakita nito. Binibilang ang mga pag-ulit nang hindi alam kung sino ang nanood.",
+  "chapters": {
+    "title": "Shorts mula sa mga kabanata mo",
+    "foot": "Ang unang minuto ng bawat kabanata. I-trim sa editor; binabanggit ng Short ang video na ito at ang sandali."
+  }
 }

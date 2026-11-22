@@ -3,5 +3,14 @@
   "listen": "Słuchaj",
   "label": "Wideo",
   "failed": "Tego filmu nie można teraz odtworzyć jako audio.",
-  "unsupported": "Ta przeglądarka nie może odtworzyć tego filmu jako audio."
+  "unsupported": "Ta przeglądarka nie może odtworzyć tego filmu jako audio.",
+  "publish": {
+    "label": "Opublikuj jako audio",
+    "title": "Opublikuj dźwięk tego filmu jako odcinek audio",
+    "making": "Pobieranie dźwięku z twojego filmu…",
+    "watchLine": "Film",
+    "dailyLimit": "Wystarczy wersji audio na dziś. Spróbuj jutro.",
+    "notReady": "Z tego filmu nie da się jeszcze zrobić audio. Spróbuj, gdy przetwarzanie się zakończy.",
+    "failed": "Nie udało się utworzyć wersji audio."
+  }
 }

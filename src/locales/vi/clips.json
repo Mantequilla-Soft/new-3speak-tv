@@ -14,5 +14,9 @@
   "preview": "Xem trước",
   "stop": "Dừng",
   "makeShort": "Tạo Short",
-  "foot": "Chỉ bạn thấy những gợi ý này. Lượt xem lại được đếm mà không biết ai đã xem."
+  "foot": "Chỉ bạn thấy những gợi ý này. Lượt xem lại được đếm mà không biết ai đã xem.",
+  "chapters": {
+    "title": "Shorts từ các chương của bạn",
+    "foot": "Phút đầu tiên của mỗi chương. Cắt trong trình chỉnh sửa; Short ghi rõ video này và khoảnh khắc đó."
+  }
 }

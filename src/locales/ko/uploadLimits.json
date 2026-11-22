@@ -5,6 +5,10 @@
     "audio_other": "무료 플랜: 하루 오디오 업로드 {{count}}개, 각 {{minutes}}분까지.",
     "audioCount_other": "무료 플랜: 하루 오디오 업로드 {{count}}개."
   },
+  "warmup": {
+    "video_other": "워밍업 기간: 하루 동영상 {{count}}개.",
+    "short_other": "워밍업 기간: 하루 쇼츠 {{count}}개."
+  },
   "left_other": "오늘 {{count}}개 남음.",
   "nextAt": "다음 업로드: {{time}}.",
   "later": "나중에 다시 시도하세요.",
@@ -12,6 +16,10 @@
     "video": "오늘의 무료 동영상 한도에 도달했습니다.",
     "short": "오늘의 무료 쇼츠 한도에 도달했습니다.",
     "audio": "오늘의 무료 오디오 한도에 도달했습니다."
+  },
+  "reachedWarmup": {
+    "video": "오늘의 워밍업 동영상 한도에 도달했습니다.",
+    "short": "오늘의 워밍업 쇼츠 한도에 도달했습니다."
   },
   "goPro": "3Speak Pro 시작하기",
   "tooLong": "이 오디오의 길이는 {{duration}}입니다. 무료 오디오 업로드는 최대 {{minutes}}분입니다.",

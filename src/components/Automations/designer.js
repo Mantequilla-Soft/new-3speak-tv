@@ -180,6 +180,7 @@ export function templates(catalog, t) {
     { id: 'narrate_posts', group: 'audio', event: 'text_post_published', sequence: [step('narrate_post', 'text_post_published')] },
     { id: 'video_from_podcast', group: 'audio', event: 'podcast_published', sequence: [step('post_video', 'podcast_published')] },
     { id: 'podcast_snap', group: 'audio', event: 'podcast_published', sequence: [step('post_snap', 'podcast_published', { text: text('podcastSnap') })] },
+    { id: 'live_snap', group: 'live', event: 'stream_started', sequence: [step('post_snap', 'stream_started', { text: text('liveSnap') })] },
     { id: 'discord_live', group: 'live', event: 'stream_started', sequence: [step('send_discord', 'stream_started', { text: text('discordLive') })] },
     { id: 'stream_poll_snap', group: 'live', event: 'stream_poll_ended', sequence: [step('post_snap', 'stream_poll_ended', { text: text('streamPollSnap') })] },
     { id: 'poll_results', group: 'polls', event: 'poll_ended', sequence: [step('post_comment', 'poll_ended', { text: text('pollResults') })] },

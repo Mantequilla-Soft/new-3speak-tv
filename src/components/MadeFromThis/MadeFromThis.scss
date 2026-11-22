@@ -1,0 +1,96 @@
+@use "../../styles/v2" as v2;
+
+// "Made from this": one row of flat cards on bg wells, scrolling sideways when
+// it is wider than the column. Shorts get a portrait thumbnail, the rest 16:9.
+.made-from-this-probe { height: 1px; }
+
+.made-from-this {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+  margin: 16px 0;
+  color: var(--text);
+
+  .mft-head { display: flex; flex-direction: column; gap: 2px; }
+
+  .mft-title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0;
+    @include v2.text(title-sm);
+    line-height: 1.25;
+  }
+
+  .mft-sub { margin: 0; font-size: 11px; line-height: 1.4; color: var(--muted); }
+
+  .mft-row {
+    display: flex;
+    gap: 10px;
+    margin: 0;
+    padding: 0 0 4px;
+    list-style: none;
+    @include v2.scroll-x;
+    scroll-snap-type: x proximity;
+  }
+
+  .mft-card {
+    flex: 0 0 auto;
+    width: 192px;
+    scroll-snap-align: start;
+
+    &.is-short { width: 112px; }
+  }
+
+  .mft-link {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    color: inherit;
+    text-decoration: none;
+
+    &:hover .mft-name, &:focus-visible .mft-name { color: var(--accent); }
+    &:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: var(--r-md); }
+  }
+
+  .mft-thumb {
+    position: relative;
+    display: grid;
+    place-items: center;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border-radius: var(--r-md);
+    @include v2.thumb-placeholder;
+    color: var(--muted);
+
+    img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  }
+
+  .is-short .mft-thumb { aspect-ratio: 9 / 16; }
+
+  .mft-kind, .mft-len {
+    position: absolute;
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    @include v2.scrim-pill;
+    font-size: 10px;
+    line-height: 1.3;
+  }
+
+  .mft-kind { left: 6px; top: 6px; max-width: calc(100% - 12px); }
+  .mft-len { right: 6px; bottom: 6px; font-variant-numeric: tabular-nums; }
+
+  .mft-name {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    @include v2.text(body-sm);
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  .mft-meta { font-size: 11px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+}

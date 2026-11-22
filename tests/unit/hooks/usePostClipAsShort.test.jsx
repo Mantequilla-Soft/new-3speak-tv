@@ -68,6 +68,13 @@ describe('usePostClipAsShort', () => {
     expect(h.ctx.setRemaingPercent).toHaveBeenCalledWith(100)
   })
 
+  it('the host\'s recap: no clipper, no share, marked as a recap', async () => {
+    useAppStore.setState({ user: 'badadib' })
+    const { result } = renderHook(() => usePostClipAsShort())
+    await act(() => result.current.post({ url: 'u', room: 'badadib-r1', host: 'badadib', clipper: 'fan', offsetSec: 30, recap: true }))
+    expect(h.ctx.setStreamClip).toHaveBeenCalledWith({ room: 'badadib-r1', host: 'badadib', clipper: null, offsetSec: 30, share: null, recap: true })
+  })
+
   it('a clip that cannot be fetched throws and navigates nowhere', async () => {
     globalThis.fetch = vi.fn(async () => ({ ok: false, status: 404 }))
     const { result } = renderHook(() => usePostClipAsShort())

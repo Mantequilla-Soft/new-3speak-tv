@@ -3,5 +3,14 @@
   "listen": "Nghe",
   "label": "Video",
   "failed": "Hiện không thể phát video này dạng âm thanh.",
-  "unsupported": "Trình duyệt này không thể phát video này dạng âm thanh."
+  "unsupported": "Trình duyệt này không thể phát video này dạng âm thanh.",
+  "publish": {
+    "label": "Đăng dưới dạng âm thanh",
+    "title": "Đăng âm thanh của video này thành một tập âm thanh",
+    "making": "Đang lấy âm thanh từ video của bạn…",
+    "watchLine": "Video",
+    "dailyLimit": "Hôm nay đã đủ bản âm thanh rồi. Hãy thử lại vào ngày mai.",
+    "notReady": "Video này chưa thể chuyển thành âm thanh. Hãy thử lại khi xử lý xong.",
+    "failed": "Không thể tạo bản âm thanh."
+  }
 }

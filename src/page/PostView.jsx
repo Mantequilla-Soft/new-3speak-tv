@@ -23,6 +23,7 @@ import AccountImg from '../components/HiveAvatar/AccountImg';
 import { useTranslation } from 'react-i18next';
 import { formatTimeAgo } from '../i18n';
 import './PostView.scss';
+import MadeFromThis from '../components/MadeFromThis/MadeFromThis';
 
 // Every toast from this module is headed "Post"; the message becomes the
 // line under it. See utils/toast.js.
@@ -506,6 +507,9 @@ function PostView({ author: authorProp, permlink: permlinkProp }) {
               ))}
             </div>
           )}
+
+          {/* Its narration, clips, quote cards and the like (lib/derived.js). */}
+          {!post._prefilledBody && <MadeFromThis author={author} permlink={permlink} />}
         </article>
 
         <aside className="post-view-dock" aria-label={t('watch.side.label')}>

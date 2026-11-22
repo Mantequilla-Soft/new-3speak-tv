@@ -1,0 +1,36 @@
+{
+  "title": "Được tạo từ nội dung này",
+  "sub_other": "{{count}} bài được tạo từ bài này",
+  "regionLabel": "Các bài được tạo từ bài này",
+  "cardLabel": "{{kind}}: {{title}}, của @{{author}}",
+  "from": "từ {{time}}",
+  "untitled": "Không có tiêu đề",
+  "kinds": {
+    "audiogram": "Audiogram",
+    "stream_clip": "Clip phát trực tiếp",
+    "clip": "Clip",
+    "remix": "Remix",
+    "reaction": "Phản ứng",
+    "narration": "Bản đọc",
+    "recap": "Tóm tắt",
+    "audio_version": "Bản âm thanh",
+    "quote": "Trích dẫn",
+    "teaser": "Đoạn giới thiệu"
+  },
+  "teaser": {
+    "label": "Giới thiệu bằng Story",
+    "title": "Tạo Story 24 giờ giới thiệu và liên kết đến video này",
+    "titlePremiere": "Tạo Story 24 giờ đếm ngược đến buổi công chiếu này"
+  },
+  "link": {
+    "fullVideo": "Toàn bộ video",
+    "fullStream": "Toàn bộ buổi phát",
+    "premieresIn": "Công chiếu sau {{time}}",
+    "hm": "{{h}} giờ {{m}} phút",
+    "m": "{{m}} phút",
+    "open": "{{label}}: {{title}}"
+  },
+  "series": {
+    "from": "từ {{title}}"
+  }
+}

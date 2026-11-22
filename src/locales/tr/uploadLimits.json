@@ -9,6 +9,12 @@
     "audioCount_one": "Ücretsiz plan: günde {{count}} ses yüklemesi.",
     "audioCount_other": "Ücretsiz plan: günde {{count}} ses yüklemesi."
   },
+  "warmup": {
+    "video_one": "Isınma aşamasında: günde {{count}} video.",
+    "video_other": "Isınma aşamasında: günde {{count}} video.",
+    "short_one": "Isınma aşamasında: günde {{count}} Short.",
+    "short_other": "Isınma aşamasında: günde {{count}} Short."
+  },
   "left_one": "Bugün {{count}} hakkın kaldı.",
   "left_other": "Bugün {{count}} hakkın kaldı.",
   "nextAt": "Sonraki yükleme: {{time}}.",
@@ -17,6 +23,10 @@
     "video": "Bugünkü ücretsiz video sınırına ulaştın.",
     "short": "Bugünkü ücretsiz Shorts sınırına ulaştın.",
     "audio": "Bugünkü ücretsiz ses sınırına ulaştın."
+  },
+  "reachedWarmup": {
+    "video": "Isınma aşamasının bugünkü video sınırına ulaştın.",
+    "short": "Isınma aşamasının bugünkü Shorts sınırına ulaştın."
   },
   "goPro": "3Speak Pro’ya geç",
   "tooLong": "Bu ses {{duration}} uzunluğunda. Ücretsiz ses yüklemeleri en fazla {{minutes}} dakika olabilir.",

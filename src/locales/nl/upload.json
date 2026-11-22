@@ -440,7 +440,15 @@
     "videoPublished": "Je video is gepubliceerd. Hij wordt op de achtergrond gecodeerd, wat een paar minuten kan duren.",
     "promote": "Promoten",
     "goToProfile": "Mijn profiel",
-    "feedback": "Hoe ging je upload?"
+    "feedback": "Hoe ging je upload?",
+    "teaser": {
+      "title": "Maak een Short van deze video",
+      "text": "Shorts brengen nieuwe kijkers naar je lange video's. Je hele video opent in de editor: kies het moment dat je wilt delen, knip bij en plaats. De Short linkt naar de volledige video.",
+      "button": "Short maken",
+      "anotherTitle": "Maak nog een Short van dezelfde video",
+      "anotherText": "Je hele video opent opnieuw in de editor, zodat je een ander moment kunt kiezen.",
+      "anotherButton": "Nog een maken"
+    }
   },
   "record": {
     "speechErrors": {

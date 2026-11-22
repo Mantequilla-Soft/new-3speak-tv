@@ -10,7 +10,7 @@ import { renderWithProviders, stubMatchMedia, toastMessages } from './_render.js
 import { useAppStore } from '../../../src/lib/store'
 
 const EDITOR = 'https://editor.test'
-const m = vi.hoisted(() => ({ stories: false, embed: [], stt: false, premium: { premium: false } }))
+const m = vi.hoisted(() => ({ stories: false, embed: [], stt: false, premium: { premium: false }, uploading: false }))
 vi.mock('sonner', async () => (await import('./_render.jsx')).sonnerModule())
 vi.mock('../../../src/hive-api/aioha', async () => (await import('./_render.jsx')).aiohaModule())
 vi.mock('../../../src/utils/config', async (importOriginal) => ({
@@ -27,7 +27,7 @@ vi.mock('../../../src/context/EmbedUploadContext', () => {
   const noop = () => {}
   return {
     // every setter call is recorded (m.embed: [name, ...args])
-    useEmbedUpload: () => new Proxy({ pickFirstThumbnail: () => false }, { get: (t, k) => (k in t ? t[k] : (typeof k === 'string' && k.startsWith('set') ? (...args) => m.embed.push([k, ...args]) : noop)) }),
+    useEmbedUpload: () => new Proxy({ pickFirstThumbnail: () => false, get uploading() { return m.uploading }, resetUploadState: () => m.embed.push(['resetUploadState']) }, { get: (t, k) => (k in t ? t[k] : (typeof k === 'string' && k.startsWith('set') ? (...args) => m.embed.push([k, ...args]) : noop)) }),
   }
 })
 
@@ -45,6 +45,7 @@ beforeEach(() => {
   m.embed = []
   m.stt = false
   m.premium = { premium: false }
+  m.uploading = false
   stubMatchMedia(true)
   window.addEventListener('audio-editor-result', listen)
   window.addEventListener('open-audio-upload', listen)
@@ -599,5 +600,69 @@ describe('EditorModal: the landscape video editor is Pro only', () => {
     const audio = await open({ mode: 'audio', aspect: '16:9' })
     expect(audio.iframe.getAttribute('src')).toContain('mode=audio')
     expect(upsells).toEqual([])
+  })
+})
+
+describe('EditorModal: "Make a Short from this video" (teaser)', () => {
+  const calls = (name) => m.embed.filter((c) => c[0] === name).map((c) => c.slice(1))
+  const names = () => m.embed.map((c) => c[0])
+  const TEASER = { author: 'badadib', permlink: 'my-talk' }
+  let savedSrc
+  beforeEach(() => {
+    useAppStore.setState({ user: 'badadib' })
+    const proto = HTMLMediaElement.prototype
+    savedSrc = Object.getOwnPropertyDescriptor(proto, 'src')
+    Object.defineProperty(proto, 'src', {
+      configurable: true,
+      get() { return this.getAttribute('src') || '' },
+      set(v) { this.setAttribute('src', v); queueMicrotask(() => this.onloadedmetadata?.()) },
+    })
+  })
+  afterEach(() => {
+    const proto = HTMLMediaElement.prototype
+    if (savedSrc) Object.defineProperty(proto, 'src', savedSrc); else delete proto.src
+  })
+
+  it('puts the whole uploaded video on the track, so the creator picks the moment', async () => {
+    const file = new File(['v'], 'talk.mp4', { type: 'video/mp4' })
+    await open({ videoFile: file, teaser: TEASER })
+    await ready()
+    const load = posted.find((p) => p.type === 'load-media')
+    expect(load).toMatchObject({ mediaType: 'video', file })
+    expect(load).not.toHaveProperty('clipStart')
+    expect(load).not.toHaveProperty('clipEnd')
+  })
+
+  it('the Short starts clean and names the video it teases', async () => {
+    stubMp3({ type: 'video/mp4' })
+    await open({ videoFile: new File(['v'], 'talk.mp4', { type: 'video/mp4' }), teaser: TEASER })
+    await ready()
+    await fromEditor({ type: 'post-to-3speak', outputUrl: `${EDITOR}/rendered/v.mp4` })
+    await waitFor(() => expect(calls('setTeaserOf')).toEqual([[{ author: 'badadib', permlink: 'my-talk' }]]))
+    // reset first, so the clean state does not wipe the file or the teaser
+    expect(names().indexOf('resetUploadState')).toBeLessThan(names().indexOf('setVideoFile'))
+    expect(names().indexOf('setVideoFile')).toBeLessThan(names().indexOf('setTeaserOf'))
+    expect(calls('setFromStories')).toEqual([[true]])
+  })
+
+  it('someone else\'s video: no teaser and no reset', async () => {
+    stubMp3({ type: 'video/mp4' })
+    await open({ videoFile: new File(['v'], 'talk.mp4', { type: 'video/mp4' }), teaser: { ...TEASER, author: 'carol' } })
+    await ready()
+    await fromEditor({ type: 'post-to-3speak', outputUrl: `${EDITOR}/rendered/v.mp4` })
+    await waitFor(() => expect(calls('setFromStories')).toEqual([[true]]))
+    expect(names()).not.toContain('setTeaserOf')
+    expect(names()).not.toContain('resetUploadState')
+  })
+
+  it('an upload still publishing is not cut off', async () => {
+    m.uploading = true
+    stubMp3({ type: 'video/mp4' })
+    await open({ videoFile: new File(['v'], 'talk.mp4', { type: 'video/mp4' }), teaser: TEASER })
+    await ready()
+    await fromEditor({ type: 'post-to-3speak', outputUrl: `${EDITOR}/rendered/v.mp4` })
+    await waitFor(() => expect(calls('setFromStories')).toEqual([[true]]))
+    expect(names()).not.toContain('resetUploadState')
+    expect(names()).not.toContain('setTeaserOf')
   })
 })

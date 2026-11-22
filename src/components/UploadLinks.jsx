@@ -10,6 +10,7 @@ import { usePremiumStatus } from "../hooks/usePremiumStatus";
 import { landscapeEditorAllowed } from "../utils/editorFormat";
 import ProLockBadge from "./ProUpsell/ProLockBadge";
 import "./UploadLinks.scss";
+import { challengeText, useCurrentChallenge } from "../lib/shortsChallenge";
 
 function pauseAllMedia() {
   document.querySelectorAll('video, audio').forEach((el) => {
@@ -88,6 +89,7 @@ export default function UploadLinks({ linkClass, iconClass = "icon", onClick, on
   const fire = (name) => ({ event: name, gated: true });
   const sub = (key) => ({ label: t(`misc.uploadLinks.${key}`), sub: t(`misc.uploadLinks.subtitles.${key}`) });
 
+  const challenge = useCurrentChallenge();
   const categories = [
     {
       id: 'video', icon: 'smart_display', tone: 'accent', heading: 'video',
@@ -99,6 +101,8 @@ export default function UploadLinks({ linkClass, iconClass = "icon", onClick, on
         // Its own row under the uploads, the editors below under "Edit" (owner
         // 2026-11-18): the heading spans the grid, so it starts a new row.
         storiesEnabledFor(user) && { key: 'story', icon: 'history_toggle_off', ...sub('story'), ...toPage('/embed-studio?from=story') },
+        // This week's Shorts challenge (lib/shortsChallenge.js): its theme as the subtitle
+        challenge && { key: 'challenge', icon: 'emoji_events', label: t('challenges.menuEntry'), sub: challengeText(challenge, 'title'), to: '/challenge' },
         FEATURE_EDITOR && { key: 'editHeading', heading: t('misc.uploadLinks.headings.edit') },
         FEATURE_EDITOR && { key: 'shortsEditor', icon: 'movie_edit', ...sub('shortsEditor'), ...fire('open-shorts-editor') },
         // The same editor as a landscape project (up to 10 minutes), posted as a

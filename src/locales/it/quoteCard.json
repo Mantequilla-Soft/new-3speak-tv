@@ -1,0 +1,18 @@
+{
+  "button": "Card citazione",
+  "pickHint": "Tocca una riga per farne una card citazione.",
+  "cancelPick": "Annulla",
+  "quoteLine": "Fai una card citazione di questa riga",
+  "title": "Card citazione",
+  "sub": "La riga a {{time}}",
+  "previewLabel": "La card citazione",
+  "lineLabel": "La riga",
+  "lineHint": "Accorciala o correggi una parola trascritta male. Al massimo {{max}} caratteri.",
+  "commentLabel": "Le tue parole",
+  "optional": "facoltativo",
+  "post": "Pubblica come snap",
+  "download": "Scarica",
+  "posted": "Card citazione pubblicata.",
+  "postFailed": "Impossibile pubblicare la card citazione.",
+  "downloadFailed": "Impossibile salvare l'immagine."
+}

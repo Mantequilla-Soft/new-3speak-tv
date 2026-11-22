@@ -14,15 +14,16 @@ const SeriesPartsSheet = lazy(() => import('./SeriesPartsSheet'));
  * 7 · <series>", which opens the list of every part to jump to
  * (SeriesPartsSheet), and a "Next part" button while there is one. Read from
  * the public playlists that contain the Short; nothing while that loads or when
- * it is in no series.
+ * it is in no series (then `fallback`, the virtual series of its source).
  */
-export default function ShortSeriesBar({ author, permlink, className = '' }) {
+export default function ShortSeriesBar({ author, permlink, className = '', fallback = null }) {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
-  const { data: playlists } = useVideoPlaylists(author, permlink);
+  const { data: playlists, isLoading } = useVideoPlaylists(author, permlink);
   const series = seriesOf(playlists, author);
   const at = series ? seriesPosition(series, author, permlink) : null;
-  if (!series || !at) return null;
+  // In no series of its own: the `fallback` (SourceSeriesBar) once the playlists are known.
+  if (!series || !at) return isLoading ? null : fallback;
   const stop = (e) => e.stopPropagation();
   return (
     <div className={`short-series ${className}`.trim()} data-testid="short-series-bar" onClick={stop}>

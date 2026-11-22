@@ -7,6 +7,7 @@ import {
   makeClip, fetchStreamHighlights, deleteClip, fetchClipFile, clipFileUrl, shortUrlFor,
   fetchMyClips, clipSummary, isReadyClip, readClipQueue, writeClipQueue,
   CLIPPER_SHARE_PERCENT, HOST_SHARE_PERCENT,
+  recapPick, recapSeconds, makeRecap, chaptersFromHighlights, RECAP_MAX_CLIPS,
 } from '../../../src/lib/streamClips.js'
 
 const API = 'https://live.3speak.tv/'
@@ -153,5 +154,54 @@ describe('clipSummary, isReadyClip and the post queue', () => {
     expect(readClipQueue()).toEqual([{ id: 'a', api: API, path: '/p' }])
     writeClipQueue([])
     expect(readClipQueue()).toEqual([])
+  })
+})
+
+describe('stream recap', () => {
+  afterEach(() => vi.unstubAllGlobals())
+  const c = (id, offsetSec, over = {}) => ({ id, offsetSec, durationSec: 30, path: `/dvr/clips/${id}.mp4`, status: 'ready', ...over })
+
+  it('recapPick: ready clips in stream order, at most four and 120 s; none below two', () => {
+    const clips = [c('e', 500), c('a', 10), c('p', 20, { status: 'pending', path: null }), c('b', 30), c('c', 40), c('d', 50)]
+    expect(recapPick(clips)).toEqual(['a', 'b', 'c', 'd'])
+    expect(recapPick([c('a', 1, { durationSec: 70 }), c('b', 2, { durationSec: 70 }), c('c', 3)])).toEqual(['a', 'c'])
+    expect(recapPick([c('a', 1)])).toEqual([])
+    expect(RECAP_MAX_CLIPS).toBe(4)
+    expect(recapSeconds(clips, ['a', 'b'])).toBe(60)
+  })
+
+  it('makeRecap posts the ids to the room\'s recap route', async () => {
+    vi.stubGlobal('fetch', vi.fn(async () => ({ ok: true, json: async () => ({ path: '/dvr/clips/recap-r-1.mp4', durationSec: 60 }) })))
+    const r = await makeRecap(API, 'badadib-r1', 'tok', ['a', 'b'], { vertical: true })
+    expect(r.path).toBe('/dvr/clips/recap-r-1.mp4')
+    expect(fetch).toHaveBeenCalledWith('https://live.3speak.tv/rooms/badadib-r1/recap', {
+      method: 'POST', headers: { Authorization: 'Bearer tok', 'Content-Type': 'application/json' }, body: JSON.stringify({ ids: ['a', 'b'], vertical: true }),
+    })
+    vi.stubGlobal('fetch', vi.fn(async () => ({ ok: false, status: 409 })))
+    await expect(makeRecap(API, 'r', 'tok', ['a', 'b'])).rejects.toMatchObject({ status: 409 })
+  })
+
+  it('a recap is marked in the Short\'s streamClip block', () => {
+    expect(streamClipMetadata({ room: 'r', host: 'Bob', recap: true })).toEqual({ room: 'r', host: 'bob', clipper: null, recap: true })
+  })
+})
+
+describe('chaptersFromHighlights', () => {
+  it('Start, then moments and viewers\' clips a minute apart, inside the video', () => {
+    const ch = chaptersFromHighlights({
+      moments: [{ offsetSec: 600, reasons: ['chat'] }, { offsetSec: 1200, reasons: ['boosts', 'big_boost'] }, { offsetSec: 620, reasons: ['boosts'] }],
+      clips: [{ offsetSec: 900, clipper: 'Fan', durationSec: 30 }, { offsetSec: 1200, source: 'auto', clipper: null }, { offsetSec: 5000, clipper: 'late' }],
+    }, 3000)
+    expect(ch).toEqual([
+      { start: 0, title: 'Start' },
+      { start: 555, title: 'Chat lit up' },
+      { start: 870, title: 'Clipped by @fan' },
+      { start: 1155, title: 'Big boost' },
+    ])
+  })
+
+  it('[] when there is too little to make chapters of', () => {
+    expect(chaptersFromHighlights({ moments: [{ offsetSec: 600, reasons: ['chat'] }] }, 3000)).toEqual([])
+    expect(chaptersFromHighlights({}, 0)).toEqual([])
   })
 })

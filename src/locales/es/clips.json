@@ -16,5 +16,9 @@
   "preview": "Vista previa",
   "stop": "Detener",
   "makeShort": "Hacer un Short",
-  "foot": "Solo tú ves esto. Las repeticiones se cuentan sin saber quién miró."
+  "foot": "Solo tú ves esto. Las repeticiones se cuentan sin saber quién miró.",
+  "chapters": {
+    "title": "Shorts de tus capítulos",
+    "foot": "El primer minuto de cada capítulo. Recórtalo en el editor; el Short enlaza este video y el momento."
+  }
 }

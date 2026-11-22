@@ -436,6 +436,10 @@
         "title": "Snap sa bawat bagong episode",
         "sub": "Kapag nag-post ka ng podcast episode, may lalabas na snap na may link nito."
       },
+      "live_snap": {
+        "title": "Mag-snap kapag nag-live ako",
+        "sub": "Kapag nagsimula ka ng stream, may lalabas na snap na may pamagat at link nito."
+      },
       "discord_live": {
         "title": "Sabihan ang Discord kapag nag-live ako",
         "sub": "Kapag nagsimula ka ng stream, makakatanggap ng mensahe ang Discord server mo."
@@ -481,6 +485,7 @@
       "longerThan5": "Mas mahaba sa 5 minuto?",
       "importedDiscord": "Bago sa channel ko: {title}\n{url}",
       "podcastSnap": "Bagong episode: {title}\n\n{url}",
+      "liveSnap": "Live na ako: {title}\n\n{url}",
       "discordLive": "Live na ngayon ang {title}: {url}",
       "streamPollSnap": "Poll mula sa stream ko: {question}\n\n{results}\n\n{url}",
       "pollResults": "Sarado na ang poll. Mga resulta:\n\n{results}\n\nSalamat sa lahat ng {votes} na bumoto!",

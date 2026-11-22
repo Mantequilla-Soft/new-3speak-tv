@@ -438,6 +438,10 @@
         "title": "Un snap por cada episodio nuevo",
         "sub": "Cuando publicas un episodio de podcast, sale un snap con su enlace."
       },
+      "live_snap": {
+        "title": "Snap cuando empiezo un directo",
+        "sub": "Cuando empiezas un stream, sale un snap con su título y el enlace."
+      },
       "discord_live": {
         "title": "Avisar a Discord cuando esté en directo",
         "sub": "Cuando inicias un stream, tu servidor de Discord recibe un mensaje."
@@ -483,6 +487,7 @@
       "longerThan5": "¿Más de 5 minutos?",
       "importedDiscord": "Nuevo en mi canal: {title}\n{url}",
       "podcastSnap": "Nuevo episodio: {title}\n\n{url}",
+      "liveSnap": "Estoy en directo: {title}\n\n{url}",
       "discordLive": "{title} está en directo ahora: {url}",
       "streamPollSnap": "Encuesta de mi stream: {question}\n\n{results}\n\n{url}",
       "pollResults": "La encuesta ha terminado. Resultados:\n\n{results}\n\n¡Gracias a los {votes} que votaron!",

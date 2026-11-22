@@ -434,6 +434,10 @@
         "title": "Snap untuk setiap episode baru",
         "sub": "Saat kamu memposting episode podcast, snap berisi tautannya akan diposting."
       },
+      "live_snap": {
+        "title": "Snap saat aku mulai live",
+        "sub": "Saat kamu memulai siaran, snap berisi judul dan tautannya langsung terkirim."
+      },
       "discord_live": {
         "title": "Kabari Discord saat aku live",
         "sub": "Saat kamu memulai siaran, server Discord-mu menerima pesan."
@@ -479,6 +483,7 @@
       "longerThan5": "Lebih dari 5 menit?",
       "importedDiscord": "Baru di kanalku: {title}\n{url}",
       "podcastSnap": "Episode baru: {title}\n\n{url}",
+      "liveSnap": "Aku sedang live: {title}\n\n{url}",
       "discordLive": "{title} sedang live: {url}",
       "streamPollSnap": "Polling dari siaranku: {question}\n\n{results}\n\n{url}",
       "pollResults": "Polling sudah ditutup. Hasilnya:\n\n{results}\n\nTerima kasih untuk semua {votes} pemilih!",

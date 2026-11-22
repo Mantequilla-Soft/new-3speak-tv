@@ -1,0 +1,36 @@
+{
+  "title": "Dibuat dari ini",
+  "sub_other": "{{count}} postingan dibuat dari ini",
+  "regionLabel": "Postingan yang dibuat dari ini",
+  "cardLabel": "{{kind}}: {{title}}, oleh @{{author}}",
+  "from": "dari {{time}}",
+  "untitled": "Tanpa judul",
+  "kinds": {
+    "audiogram": "Audiogram",
+    "stream_clip": "Klip siaran",
+    "clip": "Klip",
+    "remix": "Remix",
+    "reaction": "Reaksi",
+    "narration": "Narasi",
+    "recap": "Rangkuman",
+    "audio_version": "Versi audio",
+    "quote": "Kutipan",
+    "teaser": "Cuplikan"
+  },
+  "teaser": {
+    "label": "Teaser di Story",
+    "title": "Buat Story 24 jam yang menggoda video ini dan menautkannya",
+    "titlePremiere": "Buat Story 24 jam yang menghitung mundur ke premier ini"
+  },
+  "link": {
+    "fullVideo": "Video lengkap",
+    "fullStream": "Siaran lengkap",
+    "premieresIn": "Tayang perdana dalam {{time}}",
+    "hm": "{{h}} j {{m}} mnt",
+    "m": "{{m}} mnt",
+    "open": "{{label}}: {{title}}"
+  },
+  "series": {
+    "from": "dari {{title}}"
+  }
+}

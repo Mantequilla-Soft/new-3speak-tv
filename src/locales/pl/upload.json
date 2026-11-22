@@ -446,7 +446,15 @@
     "videoPublished": "Twój film jest opublikowany. Jest kodowany w tle, co może potrwać kilka minut.",
     "promote": "Promuj",
     "goToProfile": "Mój profil",
-    "feedback": "Jak poszło przesyłanie?"
+    "feedback": "Jak poszło przesyłanie?",
+    "teaser": {
+      "title": "Zrób Shorta z tego filmu",
+      "text": "Shorty przyciągają nowych widzów do Twoich długich filmów. Cały film otworzy się w edytorze: wybierz moment, którym chcesz się podzielić, przytnij i opublikuj. Short prowadzi do całego filmu.",
+      "button": "Zrób Shorta",
+      "anotherTitle": "Zrób kolejnego Shorta z tego samego filmu",
+      "anotherText": "Cały film otworzy się ponownie w edytorze, żebyś mógł wybrać inny moment.",
+      "anotherButton": "Zrób kolejnego"
+    }
   },
   "record": {
     "speechErrors": {

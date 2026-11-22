@@ -9,6 +9,12 @@
     "audioCount_one": "Gratis abonnement: {{count}} audio-upload per dag.",
     "audioCount_other": "Gratis abonnement: {{count}} audio-uploads per dag."
   },
+  "warmup": {
+    "video_one": "Tijdens je warming-up: {{count}} video per dag.",
+    "video_other": "Tijdens je warming-up: {{count}} video's per dag.",
+    "short_one": "Tijdens je warming-up: {{count}} Short per dag.",
+    "short_other": "Tijdens je warming-up: {{count}} Shorts per dag."
+  },
   "left_one": "Vandaag nog {{count}} over.",
   "left_other": "Vandaag nog {{count}} over.",
   "nextAt": "Volgende upload om {{time}}.",
@@ -17,6 +23,10 @@
     "video": "Je hebt de gratis videolimiet voor vandaag bereikt.",
     "short": "Je hebt de gratis Shorts-limiet voor vandaag bereikt.",
     "audio": "Je hebt de gratis audiolimiet voor vandaag bereikt."
+  },
+  "reachedWarmup": {
+    "video": "Je hebt de videolimiet van je warming-up voor vandaag bereikt.",
+    "short": "Je hebt de Shorts-limiet van je warming-up voor vandaag bereikt."
   },
   "goPro": "Neem 3Speak Pro",
   "tooLong": "Deze audio duurt {{duration}}. Gratis audio-uploads mogen maximaal {{minutes}} minuten duren.",

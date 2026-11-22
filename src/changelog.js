@@ -18,6 +18,84 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.171',
+    category: 'shorts',
+    date: '2026-11-22',
+    summary: 'Shorts made for the weekly challenge now show the week\'s theme, and the challenge page lets you look back at earlier weeks.',
+  },
+  {
+    version: '2.0.169',
+    category: 'shorts',
+    date: '2026-11-22',
+    summary: 'Weekly Shorts challenge: a new theme every week, on Home and on the challenge page. Join with one switch; the team checks every entry.',
+  },
+  {
+    version: '2.0.168',
+    category: 'shorts',
+    date: '2026-11-22',
+    summary: 'After you post a video of 5 to 30 minutes, turn any moment of it into a Short in the Shorts editor. The Short links back to the full video.',
+  },
+  {
+    version: '2.0.167',
+    category: 'upload',
+    date: '2026-11-22',
+    summary: 'Free plan batch imports now publish one video per day instead of failing, and the batch form explains how that works.',
+  },
+  {
+    version: '2.0.166',
+    category: 'shorts',
+    date: '2026-11-22',
+    summary: "Shorts from this video now offers one Short per chapter, each starting with the chapter's first minute.",
+  },
+  {
+    version: '2.0.165',
+    category: 'shorts',
+    date: '2026-11-22',
+    summary: 'Shorts cut from the same episode or video show "Part 2 of 4" and a Next part button, no playlist needed.',
+  },
+  {
+    version: '2.0.164',
+    category: 'stories',
+    date: '2026-11-22',
+    summary: 'Tease as Story: make a 24h Story that links to your video or counts down to your premiere.',
+  },
+  {
+    version: '2.0.163',
+    category: 'watch',
+    date: '2026-11-22',
+    summary: "Quote cards: tap a line in a video's transcript to post it as a picture snap that links to that moment.",
+  },
+  {
+    version: '2.0.162',
+    category: 'audio',
+    date: '2026-11-22',
+    summary: 'Publish as audio: creators can post their own video again as an audio episode, straight from the watch page.',
+  },
+  {
+    version: '2.0.161',
+    category: 'live',
+    date: '2026-11-22',
+    summary: "Stream hosts can turn their stream's highlights into chapters, and join up to four clips into one recap Short.",
+  },
+  {
+    version: '2.0.160',
+    category: 'watch',
+    date: '2026-11-22',
+    summary: 'Videos, episodes and posts now show a "Made from this" row with the clips, audiograms, remixes and reactions made from them.',
+  },
+  {
+    version: '2.0.159',
+    category: 'home',
+    date: '2026-11-22',
+    summary: 'The Groups tab on Home now shows the busiest groups this week, as many as fit the panel, instead of filling up with quiet groups you joined.',
+  },
+  {
+    version: '2.0.158',
+    category: 'upload',
+    date: '2026-11-22',
+    summary: 'Logging out of HiveSigner now really clears an expired login, so signing back in fixes the "session has expired" upload error.',
+  },
+  {
     version: '2.0.157',
     category: 'audio',
     date: '2026-11-22',

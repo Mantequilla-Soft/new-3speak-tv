@@ -134,7 +134,8 @@
       "posted": "Đã đăng",
       "failed": "Thất bại",
       "publish_failed": "Đăng thất bại",
-      "cancelled": "Đã dừng, chưa đăng"
+      "cancelled": "Đã dừng, chưa đăng",
+      "waitingQuota": "Đang chờ lượt tải lên miễn phí tiếp theo của bạn ({{time}})"
     },
     "stopConfirm": "Dừng lần nhập này? Các video chưa đăng sẽ bị hủy, kể cả video đã lên lịch. Video đã đăng vẫn giữ nguyên.",
     "stopYes": "Có, dừng lại",
@@ -148,6 +149,14 @@
       "canLeave": "Bạn có thể đóng trang này. Các tập của bạn được nhập và đăng trên máy chủ của chúng tôi, kể cả khi bạn không ở đây.",
       "stopConfirm": "Dừng lần nhập này? Các tập chưa đăng sẽ bị hủy, kể cả tập đã lên lịch. Tập đã đăng vẫn giữ nguyên.",
       "maxReached": "Bạn có thể chọn tối đa {{max}} tập một lần"
+    },
+    "free": {
+      "title": "Gói miễn phí: một video mỗi ngày",
+      "body": "Mỗi video dùng một ngày tải lên miễn phí của bạn, nên lô này đăng một video mỗi ngày (Shorts: tối đa 3 mỗi ngày). Cho đến khi lô hoàn tất, nó chiếm lượt tải lên miễn phí của bạn, nên trong thời gian đó bạn không thể tự tải lên video khác.",
+      "ends": "Video cuối cùng sẽ được đăng vào khoảng {{date}}.",
+      "pro": "Với 3Speak Pro, tất cả sẽ được đăng ngay hôm nay.",
+      "running": "Lô này đang dùng lượt tải lên miễn phí hằng ngày của bạn. Cho đến khi hoàn tất, bạn không thể tự tải lên video khác.",
+      "bar": "gói miễn phí: mỗi ngày một video, phần còn lại đăng sau"
     }
   },
   "bitchute": {

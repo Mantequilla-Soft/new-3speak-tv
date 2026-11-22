@@ -1,0 +1,36 @@
+{
+  "title": "由此创作",
+  "sub_other": "由此创作的帖子 {{count}} 篇",
+  "regionLabel": "由此创作的帖子",
+  "cardLabel": "{{kind}}：{{title}}，作者 @{{author}}",
+  "from": "从 {{time}} 起",
+  "untitled": "无标题",
+  "kinds": {
+    "audiogram": "音频图",
+    "stream_clip": "直播片段",
+    "clip": "片段",
+    "remix": "混剪",
+    "reaction": "回应",
+    "narration": "朗读",
+    "recap": "回顾",
+    "audio_version": "音频版",
+    "quote": "引言",
+    "teaser": "预告"
+  },
+  "teaser": {
+    "label": "用快拍预告",
+    "title": "制作一个预告并链接到此视频的 24 小时快拍",
+    "titlePremiere": "制作一个倒数到此首映的 24 小时快拍"
+  },
+  "link": {
+    "fullVideo": "完整视频",
+    "fullStream": "完整直播",
+    "premieresIn": "{{time}} 后首映",
+    "hm": "{{h}} 小时 {{m}} 分钟",
+    "m": "{{m}} 分钟",
+    "open": "{{label}}：{{title}}"
+  },
+  "series": {
+    "from": "出自 {{title}}"
+  }
+}

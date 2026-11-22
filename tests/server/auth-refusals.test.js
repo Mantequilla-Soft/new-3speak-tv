@@ -108,9 +108,23 @@ describe('credentials that prove nothing', () => {
   })
 
   it('a HiveSigner token that HiveSigner does not confirm is refused', async () => {
-    const r = await post('/api/broadcast', { operations: [] }, { headers: { Authorization: 'Bearer not-a-real-token' } })
-    expect(r.status).toBe(401)
-    expect(networkCalls()).toContainEqual(expect.objectContaining({ kind: 'fetch', url: 'https://hivesigner.com/api/me' }))
+    api.setFixtures({ fetch: [{ url: 'https://hivesigner.com/api/me', method: 'POST', status: 401, json: { error: 'invalid_grant', error_description: 'The token has invalid role' } }] })
+    try {
+      const r = await post('/api/broadcast', { operations: [] }, { headers: { Authorization: 'Bearer not-a-real-token' } })
+      expect(r.status).toBe(401)
+      expect(networkCalls()).toContainEqual(expect.objectContaining({ kind: 'fetch', url: 'https://hivesigner.com/api/me' }))
+    } finally {
+      api.setFixtures({})
+    }
+  })
+
+  // An outage is not a refusal: the client throws its token away on a 401.
+  it('HiveSigner being unreachable is a 503, not a 401', async () => {
+    const r = await post('/api/broadcast', { operations: [] }, { headers: { Authorization: 'Bearer some-token' } })
+    expect(r.status).toBe(503)
+    expect(r.body).toEqual({ error: 'HiveSigner could not be reached. Please try again in a moment.' })
+    const s = await post('/api/auth/hivesigner/session', {}, { headers: { Authorization: 'Bearer some-token' } })
+    expect(s.status).toBe(503)
   })
 
   it('a wrong app key with a claimed username is refused', async () => {

@@ -944,6 +944,64 @@ const PAGE_CARDS = {
  * query string; `noindex` is for URLs that are not a page of their own (a
  * /watch with no video named, a lookup that failed).
  */
+// 🏁 /challenge and /challenge/<week> ('2026-W48'): the weekly Shorts challenge's
+// theme from the checker (shorts_challenges), in English for link previews, on
+// one fixed picture. Weeks run Sunday to Saturday (UTC). Cached for a few minutes;
+// the plain challenge card when the checker has no such week or does not answer.
+const CHALLENGE_IMAGE = '/og/challenge.jpg';
+const CHALLENGE_CARD = {
+  title: '3S | Weekly Shorts challenge',
+  description: 'A new theme for Shorts every week, Sunday to Saturday (UTC). Post a Short on the theme and join with one switch.',
+  image: CHALLENGE_IMAGE,
+};
+const CHALLENGE_PATH_RE = /^\/challenge(?:\/(\d{4}-W\d{2}))?\/?$/i;
+const CHALLENGE_CACHE_MS = 5 * 60 * 1000;
+const challengeCache = new Map(); // 'current' | week -> { at, card }
+
+function challengeDays(c) {
+  try {
+    const f = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' });
+    return `${f.format(new Date(c.starts_at))} to ${f.format(new Date(c.ends_at))} (UTC).`;
+  } catch (_) {
+    return '';
+  }
+}
+
+/** The card for a challenge path, or null when the path is not one. */
+async function challengeCard(pathname) {
+  const m = CHALLENGE_PATH_RE.exec(pathname);
+  if (!m) return null;
+  const week = m[1] ? m[1].toUpperCase() : null;
+  const key = week || 'current';
+  const hit = challengeCache.get(key);
+  if (hit && Date.now() - hit.at < CHALLENGE_CACHE_MS) return hit.card;
+  let card = CHALLENGE_CARD;
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), 3000);
+  try {
+    const res = await fetch(`${CHECKER_URL}/shorts-challenges${week ? `/${encodeURIComponent(week)}` : ''}`, { signal: ctrl.signal });
+    if (res.ok) {
+      const data = await res.json();
+      const c = week ? data && data.challenge : data && data.current;
+      const en = c && c.texts && c.texts.en;
+      if (en && en.title) {
+        card = {
+          title: `3S | Shorts challenge: ${en.title}`,
+          description: [en.prompt, challengeDays(c), 'Post a Short on the theme and join with one switch.'].filter(Boolean).join(' '),
+          image: CHALLENGE_IMAGE,
+        };
+      }
+    }
+  } catch (_) {
+    /* the plain card */
+  } finally {
+    clearTimeout(timer);
+  }
+  challengeCache.set(key, { at: Date.now(), card });
+  if (challengeCache.size > 200) challengeCache.delete(challengeCache.keys().next().value);
+  return card;
+}
+
 function buildGenericHtml(siteUrl, card = GENERIC_CARD, { canonical, noindex = false } = {}) {
   const url = escapeHtml(siteUrl);
   let canonicalUrl = canonical;
@@ -1419,6 +1477,12 @@ const server = http.createServer(async (req, res) => {
 
   // Before the page cards: a podcast or episode on the audio page has its own
   // card, the bare /audio keeps the page's (ogPages.match answers null there).
+  // The weekly Shorts challenge: this week's (or the asked week's) theme
+  const challenge = await challengeCard(url.pathname);
+  if (challenge) {
+    return sendHtml(req, res, 200, buildGenericHtml(origin + url.pathname, { ...challenge, image: origin + challenge.image }));
+  }
+
   const page = ogPages.match(url);
   const pageCard = !page && PAGE_CARDS[url.pathname.replace(/\/+$/, '')];
   if (pageCard) {

@@ -17,7 +17,7 @@ vi.mock('../../../src/components/modal/EditorModal', () => ({
 }))
 
 const { useAppStore } = await import('../../../src/lib/store')
-const { default: ShortsFromVideo } = await import('../../../src/components/ShortsFromVideo/ShortsFromVideo.jsx')
+const { default: ShortsFromVideo, chapterRanges } = await import('../../../src/components/ShortsFromVideo/ShortsFromVideo.jsx')
 
 const IDEAS = {
   duration: 600,
@@ -35,6 +35,34 @@ const IDEAS = {
 beforeEach(() => {
   fetchClipIdeas.mockReset()
   useAppStore.setState({ authenticated: true, user: 'badadib' })
+})
+
+describe('Shorts from the chapters', () => {
+  it('chapterRanges: each chapter\'s first minute, never past its end, none under 5 s', () => {
+    expect(chapterRanges([
+      { start: 0, end: 95.5, title: 'Intro' },
+      { start: 95.5, end: 120, title: 'Setup' },
+      { start: 120, end: 123, title: 'Blink' },
+      { start: 123, title: 'Last' },
+    ])).toEqual([
+      { start: 0, end: 60, title: 'Intro' },
+      { start: 95, end: 120, title: 'Setup' },
+      { start: 123, end: 183, title: 'Last' },
+    ])
+    expect(chapterRanges(null)).toEqual([])
+  })
+
+  it('lists a Short per chapter under the viewers\' picks; Make a Short hands back its range', async () => {
+    fetchClipIdeas.mockResolvedValue({ ...IDEAS, suggestions: [] })
+    const onMakeShort = vi.fn()
+    const { user } = renderWithProviders(
+      <ShortsFromVideo owner="badadib" permlink="my-video" onPreview={() => {}} onMakeShort={onMakeShort} chapters={[{ start: 0, end: 200, title: 'Intro' }, { start: 200, end: 600, title: 'The build' }]} />,
+    )
+    expect(await screen.findByText('Shorts from your chapters')).toBeInTheDocument()
+    expect(screen.queryByText(/No suggestions yet/)).not.toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: /Make a Short The build/ }))
+    expect(onMakeShort).toHaveBeenCalledWith({ start: 200, end: 260, title: 'The build' })
+  })
 })
 
 describe('Shorts from this video', () => {

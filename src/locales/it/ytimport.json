@@ -134,7 +134,8 @@
       "posted": "Pubblicato",
       "failed": "Non riuscito",
       "publish_failed": "Pubblicazione non riuscita",
-      "cancelled": "Interrotto, non pubblicato"
+      "cancelled": "Interrotto, non pubblicato",
+      "waitingQuota": "Attende il tuo prossimo caricamento gratuito ({{time}})"
     },
     "stopConfirm": "Interrompere questa importazione? I video non ancora pubblicati vengono annullati, anche quelli già programmati. I video pubblicati restano.",
     "stopYes": "Sì, interrompi",
@@ -148,6 +149,14 @@
       "canLeave": "Ora puoi chiudere questa pagina. I tuoi episodi vengono importati e pubblicati sul nostro server, anche mentre non ci sei.",
       "stopConfirm": "Interrompere questa importazione? Gli episodi non ancora pubblicati vengono annullati, anche quelli già programmati. Gli episodi pubblicati restano.",
       "maxReached": "Puoi scegliere fino a {{max}} episodi alla volta"
+    },
+    "free": {
+      "title": "Piano gratuito: un video al giorno",
+      "body": "Ogni video usa un giorno dei tuoi caricamenti gratuiti, quindi il gruppo pubblica un video al giorno (Shorts: fino a 3 al giorno). Finché il gruppo non è finito occupa i tuoi caricamenti gratuiti, quindi in quel periodo non puoi caricare altri video da solo.",
+      "ends": "L'ultimo esce verso {{date}}.",
+      "pro": "Con 3Speak Pro escono tutti oggi.",
+      "running": "Questo gruppo sta usando i tuoi caricamenti gratuiti giornalieri. Finché non è finito, non puoi caricare altri video da solo.",
+      "bar": "piano gratuito: uno al giorno, gli altri seguono dopo"
     }
   },
   "bitchute": {

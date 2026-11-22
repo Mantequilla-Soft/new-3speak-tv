@@ -443,7 +443,15 @@
     "videoPublished": "Votre vidéo est publiée. Elle est encodée en arrière-plan, ce qui peut prendre quelques minutes.",
     "promote": "Promouvoir",
     "goToProfile": "Mon profil",
-    "feedback": "Comment s'est passée votre mise en ligne ?"
+    "feedback": "Comment s'est passée votre mise en ligne ?",
+    "teaser": {
+      "title": "Créez un Short à partir de cette vidéo",
+      "text": "Les Shorts amènent de nouveaux spectateurs vers vos vidéos longues. Votre vidéo entière s'ouvre dans l'éditeur : choisissez le moment à partager, coupez et publiez. Le Short renvoie vers la vidéo complète.",
+      "button": "Créer un Short",
+      "anotherTitle": "Créez un autre Short de la même vidéo",
+      "anotherText": "Votre vidéo entière s'ouvre à nouveau dans l'éditeur pour choisir un autre moment.",
+      "anotherButton": "En créer un autre"
+    }
   },
   "record": {
     "speechErrors": {

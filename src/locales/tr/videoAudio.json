@@ -3,5 +3,14 @@
   "listen": "Dinle",
   "label": "Video",
   "failed": "Bu video şu anda ses olarak oynatılamıyor.",
-  "unsupported": "Bu tarayıcı bu videoyu ses olarak oynatamıyor."
+  "unsupported": "Bu tarayıcı bu videoyu ses olarak oynatamıyor.",
+  "publish": {
+    "label": "Ses olarak yayınla",
+    "title": "Bu videonun sesini bir ses bölümü olarak yayınla",
+    "making": "Videonun sesi alınıyor…",
+    "watchLine": "Video",
+    "dailyLimit": "Bugünlük yeterince ses sürümü yapıldı. Yarın yeniden dene.",
+    "notReady": "Bu video henüz sese dönüştürülemiyor. İşlenmesi bitince yeniden dene.",
+    "failed": "Ses sürümü oluşturulamadı."
+  }
 }

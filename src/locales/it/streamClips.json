@@ -66,5 +66,24 @@
     "ofStream": "Diretta di @{{host}}",
     "yours": "La tua diretta",
     "open": "I tuoi clip delle dirette"
+  },
+  "recap": {
+    "title": "Riepilogo della diretta",
+    "sub": "Scegli fino a {{count}} clip: vengono unite nell'ordine della diretta in uno Short di al massimo {{seconds}} secondi.",
+    "picked_one": "{{count}} clip scelta · {{time}}",
+    "picked_many": "{{count}} clip scelte · {{time}}",
+    "picked_other": "{{count}} clip scelte · {{time}}",
+    "vertical": "Verticale (9:16)",
+    "make": "Crea il riepilogo",
+    "inRecap": "Nel riepilogo",
+    "failed": "Impossibile creare il riepilogo."
+  },
+  "chapters": {
+    "title": "Capitoli dalla tua diretta",
+    "sub": "Creati dai momenti in cui la chat si è accesa, sono arrivati i boost e le persone hanno fatto clip. Puoi rinominarli prima di salvare.",
+    "more_one": "e altri {{count}}",
+    "more_many": "e altri {{count}}",
+    "more_other": "e altri {{count}}",
+    "use": "Usa come capitoli"
   }
 }

@@ -15,5 +15,9 @@
   "preview": "Önizle",
   "stop": "Durdur",
   "makeShort": "Short yap",
-  "foot": "Bunları yalnızca sen görürsün. Tekrar izlemeler kimin izlediği bilinmeden sayılır."
+  "foot": "Bunları yalnızca sen görürsün. Tekrar izlemeler kimin izlediği bilinmeden sayılır.",
+  "chapters": {
+    "title": "Bölümlerinden Short'lar",
+    "foot": "Her bölümün ilk dakikası. Düzenleyicide kırp; Short bu videoyu ve anı belirtir."
+  }
 }

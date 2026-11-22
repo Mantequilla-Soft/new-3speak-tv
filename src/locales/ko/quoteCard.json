@@ -1,0 +1,18 @@
+{
+  "button": "인용 카드",
+  "pickHint": "줄을 눌러 인용 카드를 만드세요.",
+  "cancelPick": "취소",
+  "quoteLine": "이 줄로 인용 카드 만들기",
+  "title": "인용 카드",
+  "sub": "{{time}}의 줄",
+  "previewLabel": "인용 카드",
+  "lineLabel": "문장",
+  "lineHint": "줄이거나 잘못 받아쓴 단어를 고치세요. 최대 {{max}}자.",
+  "commentLabel": "내 한마디",
+  "optional": "선택 사항",
+  "post": "스냅으로 게시",
+  "download": "다운로드",
+  "posted": "인용 카드를 게시했습니다.",
+  "postFailed": "인용 카드를 게시할 수 없습니다.",
+  "downloadFailed": "이미지를 저장할 수 없습니다."
+}

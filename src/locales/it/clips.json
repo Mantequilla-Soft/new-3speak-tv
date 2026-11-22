@@ -16,5 +16,9 @@
   "preview": "Anteprima",
   "stop": "Ferma",
   "makeShort": "Crea uno Short",
-  "foot": "Solo tu vedi questi suggerimenti. Le visioni ripetute sono contate senza sapere chi ha guardato."
+  "foot": "Solo tu vedi questi suggerimenti. Le visioni ripetute sono contate senza sapere chi ha guardato.",
+  "chapters": {
+    "title": "Short dai tuoi capitoli",
+    "foot": "Il primo minuto di ogni capitolo. Taglialo nell'editor; lo Short cita questo video e il momento."
+  }
 }

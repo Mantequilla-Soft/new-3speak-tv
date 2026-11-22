@@ -37,10 +37,23 @@ describe('reading the quotas', () => {
     expect(fetchMock.mock.calls[0][0]).toBe('https://embed.test/uploads/quota?owner=badadib')
     expect(fetchMock.mock.calls[0][1].headers).toEqual({ 'X-API-Key': 'embed-key' })
     expect(v).toEqual({
-      exempt: false, reason: null,
-      video: { limit: 1, used: 1, remaining: 0, nextAt: Date.parse('2026-11-21T14:32:00Z') },
-      short: { limit: 3, used: 1, remaining: 2, nextAt: null },
+      exempt: false, reason: null, plan: 'free',
+      video: { limit: 1, used: 1, remaining: 0, nextAt: Date.parse('2026-11-21T14:32:00Z'), plan: 'free' },
+      short: { limit: 3, used: 1, remaining: 2, nextAt: null, plan: 'free' },
     })
+  })
+
+  it('carries the warm-up plan onto both counters', async () => {
+    fetchMock.mockResolvedValueOnce(ok({
+      enabled: true, exempt: false, reason: null, plan: 'warmup',
+      video: { limit: 3, used: 1, remaining: 2, next_at: null },
+      short: { limit: 3, used: 3, remaining: 0, next_at: '2026-11-21T14:32:00Z' },
+    }))
+    const v = await q.fetchVideoQuota('newbie')
+    expect(fetchMock.mock.calls[0][0]).toBe('https://embed.test/uploads/quota?owner=newbie')
+    expect(v).toMatchObject({ plan: 'warmup', video: { limit: 3, remaining: 2, plan: 'warmup' }, short: { remaining: 0, plan: 'warmup' } })
+    expect(q.usedUpInfo(v.short, 'short')).toMatchObject({ code: 'daily_upload_limit', kind: 'short', plan: 'warmup' })
+    expect(q.usedUpInfo(null, 'video').plan).toBe('free')
   })
 
   it('asks the audio API with the user header', async () => {
@@ -93,7 +106,8 @@ describe('reading the quotas', () => {
 describe('refusals, told apart by code', () => {
   it('a 429 daily_upload_limit is the video / Short limit', () => {
     expect(q.parseUploadLimit(429, { code: 'daily_upload_limit', kind: 'short', limit: 3, used: 3, next_at: '2026-11-21T10:00:00Z' }))
-      .toEqual({ code: 'daily_upload_limit', kind: 'short', limit: 3, used: 3, nextAt: Date.parse('2026-11-21T10:00:00Z') })
+      .toEqual({ code: 'daily_upload_limit', kind: 'short', plan: 'free', limit: 3, used: 3, nextAt: Date.parse('2026-11-21T10:00:00Z') })
+    expect(q.parseUploadLimit(429, { code: 'daily_upload_limit', kind: 'video', plan: 'warmup', limit: 3, used: 3 }).plan).toBe('warmup')
   })
   it('a 429 daily_audio_limit and a 413 audio_too_long are the audio limits', () => {
     expect(q.parseUploadLimit(429, { code: 'daily_audio_limit', limit: 2, used: 2, next_at: null })).toMatchObject({ code: 'daily_audio_limit', kind: 'audio', nextAt: null })
@@ -116,6 +130,7 @@ describe('wording', () => {
     expect(q.uploadLimitMessage(t, { code: 'daily_upload_limit', kind: 'video', nextAt: at }, 'en-GB', now))
       .toBe('uploadLimits.reached.video uploadLimits.nextAt {"time":"14:32"}')
     expect(q.uploadLimitMessage(t, { code: 'daily_audio_limit', kind: 'audio', nextAt: null })).toBe('uploadLimits.reached.audio uploadLimits.later')
+    expect(q.uploadLimitMessage(t, { code: 'daily_upload_limit', kind: 'short', plan: 'warmup', nextAt: null })).toBe('uploadLimits.reachedWarmup.short uploadLimits.later')
     expect(q.uploadLimitMessage(t, { code: 'audio_too_long', maxSeconds: 900, duration: 1830 })).toBe('uploadLimits.tooLong {"duration":"30:30","minutes":15}')
   })
   it('Go Pro leads to the viewer\'s own wallet, like the servers\' upgrade_url', () => {

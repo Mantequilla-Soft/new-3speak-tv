@@ -11,6 +11,11 @@ import { renderWithProviders, stubMatchMedia, toastMessages } from './_render.js
 
 const m = vi.hoisted(() => ({}))
 vi.mock('sonner', async () => (await import('./_render.jsx')).sonnerModule())
+// The weekly Shorts challenge depends on the date: none unless a test sets one
+vi.mock('../../../src/lib/shortsChallenge', async (importOriginal) => ({
+  ...(await importOriginal()),
+  useCurrentChallenge: () => m.challenge || null,
+}))
 vi.mock('../../../src/hive-api/aioha', async () => (await import('./_render.jsx')).aiohaModule({
   getCurrentProvider: () => m.provider,
 }))
@@ -104,7 +109,7 @@ async function ready() {
 beforeEach(() => {
   stubMatchMedia(false)
   Object.assign(m, {
-    user: 'uploader', provider: null, fromStories: false, isStory: false,
+    user: 'uploader', provider: null, fromStories: false, isStory: false, challenge: null,
     quota: { ready: true, exempt: false, video: null, short: null, audio: null },
     uploadLimit: null,
     premium: { premium: false },
@@ -118,7 +123,7 @@ beforeEach(() => {
       setVideoDuration: vi.fn(), setVideoMode: vi.fn(), clearVideoSelection: vi.fn(), setIsStory: vi.fn(),
     },
   })
-  useAppStore.setState({ user: 'uploader' })
+  useAppStore.setState({ user: 'uploader', incubationHandle: null })
 })
 
 describe('upload step 1: picking a video', () => {
@@ -230,6 +235,18 @@ describe('upload step 1: picking a video', () => {
 
 describe('upload step 1: shorts and stories', () => {
   beforeEach(() => { m.fromStories = true })
+
+  it('points at this week\'s Shorts challenge, not for a Story or a normal video', async () => {
+    m.challenge = { week: '2026-W48', tag: 'challenge2026w48', theme: 'workspace', texts: { en: { title: 'Your workspace', prompt: 'Show where you create.' } } }
+    const { unmount } = mount()
+    await ready()
+    expect(screen.getByRole('link', { name: /This week's Shorts challenge: Your workspace/ })).toHaveAttribute('href', '/challenge')
+    unmount()
+    m.isStory = true
+    mount()
+    await ready()
+    expect(screen.queryByRole('link', { name: /Shorts challenge/ })).toBeNull()
+  })
 
   it('says shorts must be short and vertical', async () => {
     mount()
@@ -425,6 +442,26 @@ describe('upload step 1: the free plan\'s daily limit', () => {
     await ready()
     expect(document.querySelector('.upload-quota-note')).toHaveTextContent('Free plan: 3 Shorts per day. 2 left today.')
     expect(input()).toBeEnabled()
+  })
+
+  it('a warm-up account: its own wording, no Go Pro link, and its used-up counter blocks picking', async () => {
+    m.user = null
+    useAppStore.setState({ user: null, incubationHandle: 'newbie' })
+    m.quota.video = { limit: 3, used: 1, remaining: 2, nextAt: null, plan: 'warmup' }
+    const { unmount } = mount()
+    await ready()
+    const note = document.querySelector('.upload-quota-note')
+    expect(note).toHaveTextContent('During your warm-up: 3 videos per day. 2 left today.')
+    expect(within(note).queryByRole('link')).toBeNull()
+    expect(input()).toBeEnabled()
+    unmount()
+
+    const nextAt = at(23, 59)
+    m.quota.video = { limit: 3, used: 3, remaining: 0, nextAt, plan: 'warmup' }
+    mount()
+    await ready()
+    expect(document.querySelector('.upload-quota-note')).toHaveTextContent(`You have reached today's video limit for the warm-up. Next upload at ${time(nextAt)}.`)
+    expect(input()).toBeDisabled()
   })
 
   it('a refusal the embed API already sent holds picking back, even with no counter known', async () => {

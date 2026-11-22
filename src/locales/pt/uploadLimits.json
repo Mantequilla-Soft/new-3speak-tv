@@ -13,6 +13,14 @@
     "audioCount_one": "Plano gratuito: {{count}} envio de áudio por dia.",
     "audioCount_other": "Plano gratuito: {{count}} envios de áudio por dia."
   },
+  "warmup": {
+    "video_many": "Durante o seu aquecimento: {{count}} vídeos por dia.",
+    "video_one": "Durante o seu aquecimento: {{count}} vídeo por dia.",
+    "video_other": "Durante o seu aquecimento: {{count}} vídeos por dia.",
+    "short_many": "Durante o seu aquecimento: {{count}} Shorts por dia.",
+    "short_one": "Durante o seu aquecimento: {{count}} Short por dia.",
+    "short_other": "Durante o seu aquecimento: {{count}} Shorts por dia."
+  },
   "left_many": "Restam {{count}} hoje.",
   "left_one": "Resta {{count}} hoje.",
   "left_other": "Restam {{count}} hoje.",
@@ -22,6 +30,10 @@
     "video": "Você atingiu o limite gratuito de vídeos de hoje.",
     "short": "Você atingiu o limite gratuito de Shorts de hoje.",
     "audio": "Você atingiu o limite gratuito de áudio de hoje."
+  },
+  "reachedWarmup": {
+    "video": "Você atingiu o limite de vídeos de hoje durante o aquecimento.",
+    "short": "Você atingiu o limite de Shorts de hoje durante o aquecimento."
   },
   "goPro": "Assine o 3Speak Pro",
   "tooLong": "Este áudio tem {{duration}}. Envios de áudio gratuitos podem ter até {{minutes}} minutos.",

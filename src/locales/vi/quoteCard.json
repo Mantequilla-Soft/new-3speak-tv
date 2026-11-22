@@ -1,0 +1,18 @@
+{
+  "button": "Thẻ trích dẫn",
+  "pickHint": "Chạm vào một dòng để tạo thẻ trích dẫn.",
+  "cancelPick": "Hủy",
+  "quoteLine": "Tạo thẻ trích dẫn từ dòng này",
+  "title": "Thẻ trích dẫn",
+  "sub": "Dòng ở {{time}}",
+  "previewLabel": "Thẻ trích dẫn",
+  "lineLabel": "Dòng trích",
+  "lineHint": "Rút gọn hoặc sửa từ bị chép sai. Tối đa {{max}} ký tự.",
+  "commentLabel": "Lời của bạn",
+  "optional": "không bắt buộc",
+  "post": "Đăng dưới dạng snap",
+  "download": "Tải xuống",
+  "posted": "Đã đăng thẻ trích dẫn.",
+  "postFailed": "Không thể đăng thẻ trích dẫn.",
+  "downloadFailed": "Không thể lưu ảnh."
+}

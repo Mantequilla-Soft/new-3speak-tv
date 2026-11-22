@@ -66,5 +66,24 @@
     "ofStream": "Transmissão de @{{host}}",
     "yours": "Sua transmissão",
     "open": "Seus clipes de transmissões"
+  },
+  "recap": {
+    "title": "Resumo da live",
+    "sub": "Escolha até {{count}} clipes: eles são unidos na ordem da live em um Short de no máximo {{seconds}} segundos.",
+    "picked_one": "{{count}} clipe escolhido · {{time}}",
+    "picked_many": "{{count}} clipes escolhidos · {{time}}",
+    "picked_other": "{{count}} clipes escolhidos · {{time}}",
+    "vertical": "Vertical (9:16)",
+    "make": "Criar o resumo",
+    "inRecap": "No resumo",
+    "failed": "Não foi possível criar o resumo."
+  },
+  "chapters": {
+    "title": "Capítulos da sua live",
+    "sub": "Feitos a partir dos momentos em que o chat agitou, chegaram boosts e as pessoas fizeram clipes. Você pode renomeá-los antes de salvar.",
+    "more_one": "e mais {{count}}",
+    "more_many": "e mais {{count}}",
+    "more_other": "e mais {{count}}",
+    "use": "Usar como capítulos"
   }
 }

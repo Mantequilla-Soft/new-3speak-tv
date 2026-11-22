@@ -1,0 +1,37 @@
+{
+  "title": "Hiervan gemaakt",
+  "sub_one": "{{count}} bericht hiervan gemaakt",
+  "sub_other": "{{count}} berichten hiervan gemaakt",
+  "regionLabel": "Berichten die hiervan gemaakt zijn",
+  "cardLabel": "{{kind}}: {{title}}, door @{{author}}",
+  "from": "vanaf {{time}}",
+  "untitled": "Zonder titel",
+  "kinds": {
+    "audiogram": "Audiogram",
+    "stream_clip": "Streamclip",
+    "clip": "Clip",
+    "remix": "Remix",
+    "reaction": "Reactie",
+    "narration": "Voorgelezen",
+    "recap": "Terugblik",
+    "audio_version": "Audioversie",
+    "quote": "Citaat",
+    "teaser": "Teaser"
+  },
+  "teaser": {
+    "label": "Als story aankondigen",
+    "title": "Maak een story van 24 uur die deze video aankondigt en ernaar linkt",
+    "titlePremiere": "Maak een story van 24 uur die aftelt naar deze première"
+  },
+  "link": {
+    "fullVideo": "Hele video",
+    "fullStream": "Hele stream",
+    "premieresIn": "Première over {{time}}",
+    "hm": "{{h}} u {{m}} min",
+    "m": "{{m}} min",
+    "open": "{{label}}: {{title}}"
+  },
+  "series": {
+    "from": "uit {{title}}"
+  }
+}

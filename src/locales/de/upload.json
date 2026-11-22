@@ -440,7 +440,15 @@
     "videoPublished": "Dein Video ist veröffentlicht. Es wird im Hintergrund encodiert, was ein paar Minuten dauern kann.",
     "promote": "Bewerben",
     "goToProfile": "Mein Profil",
-    "feedback": "Wie lief dein Upload?"
+    "feedback": "Wie lief dein Upload?",
+    "teaser": {
+      "title": "Mach ein Short aus diesem Video",
+      "text": "Shorts bringen neue Zuschauer zu deinen langen Videos. Dein ganzes Video öffnet sich im Editor: Such dir den Moment aus, den du teilen willst, schneide ihn zu und poste. Das Short verlinkt auf das ganze Video.",
+      "button": "Short erstellen",
+      "anotherTitle": "Noch ein Short aus demselben Video",
+      "anotherText": "Dein ganzes Video öffnet sich wieder im Editor, damit du einen anderen Moment wählen kannst.",
+      "anotherButton": "Noch eins"
+    }
   },
   "record": {
     "speechErrors": {

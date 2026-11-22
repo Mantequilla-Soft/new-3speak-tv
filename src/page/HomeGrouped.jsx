@@ -19,6 +19,7 @@ import { getFeedSeed, refreshHomeFeeds } from "../utils/feedSeed";
 import ShortsStories from "../components/ShortsStories/ShortsStories";
 import WelcomeBanner from "../components/WelcomeTour/WelcomeBanner";
 import NewFromFollowing from "../components/NewFromFollowing/NewFromFollowing";
+import ChallengeStrip from "../components/ChallengeBanner/ChallengeStrip";
 import ContinueWatching from "../components/ContinueWatching/ContinueWatching";
 import LiveFromFollowing from "../components/LiveFromFollowing/LiveFromFollowing";
 import UpcomingPremieres from "../components/Premiere/UpcomingPremieres";
@@ -1208,11 +1209,14 @@ const HomeGrouped = () => {
       {/* Live now from people you follow: full width above the two strips,
           only while someone followed is live. */}
       <LiveFromFollowing />
-      {/* Logged-in only; each renders nothing when it has nothing to show.
-          Side by side from tablet width up, stacked on a phone. */}
+      {/* Logged-in only (the challenge strip: everyone); each renders nothing
+          when it has nothing to show. Side by side from tablet width up,
+          stacked on a phone. */}
       <div className="home-strips">
         <NewFromFollowing />
         <ContinueWatching />
+        {/* This week's Shorts challenge (lib/shortsChallenge.js): for everyone */}
+        <ChallengeStrip />
       </div>
       {/* Premieres coming up (and running), from every creator; nothing when none. */}
       <UpcomingPremieres />

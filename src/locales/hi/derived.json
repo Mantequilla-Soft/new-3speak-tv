@@ -1,0 +1,37 @@
+{
+  "title": "इससे बना",
+  "sub_one": "इससे {{count}} पोस्ट बनी",
+  "sub_other": "इससे {{count}} पोस्ट बनीं",
+  "regionLabel": "इससे बनी पोस्ट",
+  "cardLabel": "{{kind}}: {{title}}, @{{author}} द्वारा",
+  "from": "{{time}} से",
+  "untitled": "बिना शीर्षक",
+  "kinds": {
+    "audiogram": "ऑडियोग्राम",
+    "stream_clip": "स्ट्रीम क्लिप",
+    "clip": "क्लिप",
+    "remix": "रीमिक्स",
+    "reaction": "प्रतिक्रिया",
+    "narration": "वाचन",
+    "recap": "सारांश",
+    "audio_version": "ऑडियो संस्करण",
+    "quote": "उद्धरण",
+    "teaser": "टीज़र"
+  },
+  "teaser": {
+    "label": "स्टोरी में टीज़र",
+    "title": "इस वीडियो का टीज़र और उसका लिंक देने वाली 24 घंटे की स्टोरी बनाएँ",
+    "titlePremiere": "इस प्रीमियर तक उलटी गिनती वाली 24 घंटे की स्टोरी बनाएँ"
+  },
+  "link": {
+    "fullVideo": "पूरा वीडियो",
+    "fullStream": "पूरी स्ट्रीम",
+    "premieresIn": "{{time}} में प्रीमियर",
+    "hm": "{{h}} घं {{m}} मि",
+    "m": "{{m}} मि",
+    "open": "{{label}}: {{title}}"
+  },
+  "series": {
+    "from": "{{title}} से"
+  }
+}

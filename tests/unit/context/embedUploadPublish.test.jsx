@@ -37,6 +37,8 @@ vi.mock('../../../src/utils/playlistOperations', () => ({ addToPlaylist }))
 // The shorts editor's captions (lib/captionEdit.js): saved after the post is out.
 const saveCaptionEdit = vi.hoisted(() => vi.fn(async () => ({ cid: 'QmCaps', cues: [] })))
 vi.mock('../../../src/lib/captionEdit', () => ({ saveCaptionEdit }))
+const registerDerivedLater = vi.hoisted(() => vi.fn())
+vi.mock('../../../src/lib/derived', async (importOriginal) => ({ ...(await importOriginal()), registerDerivedLater }))
 // The owner's signature is a fake; the error wording is the real module's (its
 // t() is the same key-echo as the provider's).
 vi.mock('../../../src/i18n', () => h.mocks.appI18n)
@@ -460,6 +462,38 @@ describe('a short', () => {
     ] }]])
   })
 
+  it('a stream clip names the stream\'s VOD as its source and goes onto its "Made from this" row', async () => {
+    registerDerivedLater.mockClear()
+    const { result } = await ready((c) => { asShort(c); c.setStreamClip({ room: 'badadib-r1', host: 'badadib', clipper: 'fan', offsetSec: 754, share: null }) })
+    await publish(result)
+    expect(meta()['3speak'].source).toEqual({ kind: 'stream_clip', author: 'badadib', permlink: 'badadib-r1', start: 754 })
+    expect(registerDerivedLater).toHaveBeenCalledWith('badadib', postOp().permlink)
+  })
+
+  it('the host\'s recap of a stream is a recap of the VOD', async () => {
+    const { result } = await ready((c) => { asShort(c); c.setStreamClip({ room: 'badadib-r1', host: 'badadib', clipper: null, offsetSec: 60, share: null, recap: true }) })
+    await publish(result)
+    expect(meta().video.streamClip).toEqual({ room: 'badadib-r1', host: 'badadib', clipper: null, offset: 60, recap: true })
+    expect(meta()['3speak'].source).toEqual({ kind: 'recap', author: 'badadib', permlink: 'badadib-r1', start: 60 })
+  })
+
+  it('a teaser names the video it teases and links to it', async () => {
+    registerDerivedLater.mockClear()
+    const { result } = await ready((c) => { asShort(c); c.setTeaserOf({ author: 'badadib', permlink: 'my-premiere' }) })
+    await publish(result)
+    expect(meta()['3speak'].source).toEqual({ kind: 'teaser', author: 'badadib', permlink: 'my-premiere' })
+    expect(postOp().body).toContain('▶ Full video: https://3speak.tv/@badadib/my-premiere')
+    expect(registerDerivedLater).toHaveBeenCalledTimes(1)
+  })
+
+  it('a plain short names no source and registers nothing', async () => {
+    registerDerivedLater.mockClear()
+    const { result } = await ready(asShort)
+    await publish(result)
+    expect(meta()['3speak']?.source).toBeUndefined()
+    expect(registerDerivedLater).not.toHaveBeenCalled()
+  })
+
   it('a stream clip never pays the poster themselves', async () => {
     const { result } = await ready((c) => { asShort(c); c.setStreamClip({ room: 'r', host: 'badadib', clipper: 'badadib', share: { account: 'badadib', percent: 10 } }) })
     await publish(result)
@@ -535,6 +569,18 @@ describe('a remix of a regular video', () => {
       body: `I created a remix/clip from this video!\n\nCheck it out: [My First Video!](${window.location.origin}/@badadib/${PERMLINK})`,
       json_metadata: JSON.stringify({ app: '3speak/embed', tags: ['3speak'], oa: { v: 1, object: 'Comment' } }),
     })
+  })
+
+  it('names the video it remixes as its source (someone else\'s: a remix)', async () => {
+    const { result } = await ready(asRemix)
+    await publish(result)
+    expect(meta()['3speak'].source).toEqual({ kind: 'remix', author: 'alice', permlink: 'orig-video' })
+  })
+
+  it('a clip of the creator\'s own video names the piece it was opened on', async () => {
+    const { result } = await ready((c) => { c.setOriginalAuthor('badadib'); c.setOriginalPermlink('long-one'); c.setSourceRange({ start: 200, end: 260 }) })
+    await publish(result)
+    expect(meta()['3speak'].source).toEqual({ kind: 'clip', author: 'badadib', permlink: 'long-one', start: 200, end: 260 })
   })
 
   it('credits the whole chain in the body, the metadata and the splits', async () => {

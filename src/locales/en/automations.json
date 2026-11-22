@@ -436,6 +436,10 @@
         "title": "Snap every new episode",
         "sub": "When you post a podcast episode, a snap with its link goes out."
       },
+      "live_snap": {
+        "title": "Snap when I go live",
+        "sub": "When you start a stream, a snap with its title and link goes out."
+      },
       "discord_live": {
         "title": "Tell Discord when I go live",
         "sub": "When you start a stream, your Discord server gets a message."
@@ -481,6 +485,7 @@
       "longerThan5": "Longer than 5 minutes?",
       "importedDiscord": "New on my channel: {title}\n{url}",
       "podcastSnap": "New episode: {title}\n\n{url}",
+      "liveSnap": "I'm live now: {title}\n\n{url}",
       "discordLive": "{title} is live now: {url}",
       "streamPollSnap": "Poll from my stream: {question}\n\n{results}\n\n{url}",
       "pollResults": "The poll is closed. Results:\n\n{results}\n\nThanks to all {votes} voters!",

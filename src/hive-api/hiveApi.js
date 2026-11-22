@@ -6,6 +6,7 @@
 
 import axios from "axios";
 import { audiogramOfMeta } from '../utils/audiogramLink';
+import { madeFromMeta } from '../lib/derived';
 import { t, formatTimeAgo, formatNumber as formatLocaleNumber } from '../i18n';
 import { getHiveUrl } from '../utils/hiveNode';
 import { isSnapsContainer } from '../utils/snapsContainer';
@@ -272,7 +273,8 @@ export async function fetchCompleteShortData(shortItem, loggedInUser = null) {
     embed_url,
     embed_title,
     story,
-    story_expires_at
+    story_expires_at,
+    hive_tags
   } = shortItem;
 
   const { author: embedAuthor, permlink: hivePermlink } = parseEmbedUrl(embed_url);
@@ -293,6 +295,9 @@ export async function fetchCompleteShortData(shortItem, loggedInUser = null) {
     timeAgo: timeAgo(createdAt),
     title: embed_title || "",
     caption: embed_title || "",
+    // The checker's tags when the list had them; the Hive post's are added below
+    // (the weekly Shorts challenge pill reads its week tag from these).
+    tags: Array.isArray(hive_tags) ? hive_tags : [],
     // A 24h story: badged while live, an "expired" screen after (Short.jsx).
     storyExpiresAt: story === true ? story_expires_at || null : null,
     user: {
@@ -353,6 +358,12 @@ export async function fetchCompleteShortData(shortItem, loggedInUser = null) {
         if (jm.video?.sound && typeof jm.video.sound === 'object') base.sound = jm.video.sound;
         // A Short made from an audiogram: the episode it is a piece of (its card on the Shorts page)
         base.audiogramOf = audiogramOfMeta(jm);
+        // Any other post it was made from (a teaser's video, a clip's stream): lib/derived.js
+        base.madeFrom = madeFromMeta(jm);
+        // The post's own tags (a deep link carries none from a list)
+        if (Array.isArray(jm.tags)) {
+          base.tags = [...new Set([...base.tags, ...jm.tags.filter((t) => typeof t === 'string')])];
+        }
 
         // Extract reusable flag from MongoDB via checker endpoint
         try {

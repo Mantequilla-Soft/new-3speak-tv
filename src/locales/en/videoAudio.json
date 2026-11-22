@@ -3,5 +3,14 @@
   "listen": "Listen",
   "label": "Video",
   "failed": "This video can't be played as audio right now.",
-  "unsupported": "This browser can't play this video as audio."
+  "unsupported": "This browser can't play this video as audio.",
+  "publish": {
+    "label": "Publish as audio",
+    "title": "Publish this video's sound as an audio episode",
+    "making": "Taking the sound from your video…",
+    "watchLine": "The video",
+    "dailyLimit": "That is enough audio versions for today. Try again tomorrow.",
+    "notReady": "This video can't be turned into audio yet. Try again once it is fully processed.",
+    "failed": "Could not make the audio version."
+  }
 }

@@ -198,6 +198,24 @@ describe('signing in to the server with HiveSigner', () => {
     fakeApi(routes)
     await expect(establishWalletSession()).resolves.toBe(false)
   })
+
+  it('drops a token HiveSigner refused (401), so the next login has to bring a fresh one', async () => {
+    signedInAs(Providers.HiveSigner, 'alice')
+    localStorage.setItem('hivesignerToken', 'dead-token')
+    localStorage.setItem('hivesignerExpiry', '9999999999')
+    localStorage.setItem('hivesignerUsername', 'alice')
+    fakeApi({ [URL.hivesigner]: fail(401) })
+    await expect(establishWalletSession()).resolves.toBe(false)
+    expect(['hivesignerToken', 'hivesignerExpiry', 'hivesignerUsername'].map((k) => localStorage.getItem(k))).toEqual([null, null, null])
+  })
+
+  it('keeps the token when HiveSigner could not be reached (503)', async () => {
+    signedInAs(Providers.HiveSigner, 'alice')
+    localStorage.setItem('hivesignerToken', 'hs-token')
+    fakeApi({ [URL.hivesigner]: fail(503) })
+    await expect(establishWalletSession()).resolves.toBe(false)
+    expect(localStorage.getItem('hivesignerToken')).toBe('hs-token')
+  })
 })
 
 describe('keeping the server session on the account signed in now', () => {
@@ -310,6 +328,24 @@ describe('the @threespeak proxy', () => {
     const api = fakeApi({ [URL.broadcast]: fail(401, { error: 'Unauthorized' }) })
     await expect(broadcastViaThreespeak(OPS)).rejects.toThrow('Your HiveSigner session has expired')
     expect(urlsFetched(api)).toEqual([URL.broadcast])
+  })
+
+  it('a HiveSigner 401 drops the dead token, so logging out and back in gets a fresh one', async () => {
+    signedInAs(Providers.HiveSigner, 'alice')
+    localStorage.setItem('hivesignerToken', 'dead-token')
+    localStorage.setItem('hivesignerUsername', 'alice')
+    fakeApi({ [URL.broadcast]: fail(401, { error: 'Unauthorized' }) })
+    await expect(broadcastViaThreespeak(OPS)).rejects.toThrow('Your HiveSigner session has expired')
+    expect(localStorage.getItem('hivesignerToken')).toBeNull()
+    expect(localStorage.getItem('hivesignerUsername')).toBeNull()
+  })
+
+  it('HiveSigner being unreachable (503) keeps the token and passes the reason on', async () => {
+    signedInAs(Providers.HiveSigner, 'alice')
+    localStorage.setItem('hivesignerToken', 'hs-token')
+    fakeApi({ [URL.broadcast]: fail(503, { error: 'HiveSigner could not be reached. Please try again in a moment.' }) })
+    await expect(broadcastViaThreespeak(OPS)).rejects.toThrow('HiveSigner could not be reached')
+    expect(localStorage.getItem('hivesignerToken')).toBe('hs-token')
   })
 
   it('a wallet with no server session yet (401) signs in and retries ONCE', async () => {

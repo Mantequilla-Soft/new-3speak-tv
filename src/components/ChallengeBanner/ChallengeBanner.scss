@@ -1,0 +1,63 @@
+@use '../../styles/v2' as v2;
+
+.challenge-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: var(--r-xl);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  text-decoration: none;
+  min-width: 0;
+
+  &:hover { background: var(--surface-2); }
+}
+
+.challenge-banner__icon {
+  display: grid;
+  place-items: center;
+  color: var(--cyan);
+  flex: none;
+}
+
+.challenge-banner__text {
+  flex: 1;
+  min-width: 0;
+  @include v2.text(body-sm);
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.challenge-banner__action {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex: none;
+  @include v2.text(body-sm);
+  color: var(--cyan);
+}
+
+// The Home strip (ChallengeStrip): the follow strip's look, a trophy in place
+// of the avatar stack (36px, like the avatars).
+.challenge-strip {
+  .challenge-strip__icon {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--cyan) 18%, var(--surface));
+    color: var(--cyan);
+
+    @include v2.mobile { width: 32px; height: 32px; }
+  }
+
+  .challenge-strip__action {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+  }
+}

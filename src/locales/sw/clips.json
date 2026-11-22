@@ -15,5 +15,9 @@
   "preview": "Hakiki",
   "stop": "Simamisha",
   "makeShort": "Tengeneza Short",
-  "foot": "Ni wewe tu unayeona haya. Marudio yanahesabiwa bila kujua nani alitazama."
+  "foot": "Ni wewe tu unayeona haya. Marudio yanahesabiwa bila kujua nani alitazama.",
+  "chapters": {
+    "title": "Shorts kutoka sura zako",
+    "foot": "Dakika ya kwanza ya kila sura. Ipunguze kwenye kihariri; Short inataja video hii na wakati huo."
+  }
 }

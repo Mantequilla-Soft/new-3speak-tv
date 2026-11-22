@@ -66,5 +66,22 @@
     "ofStream": "Mtiririko wa @{{host}}",
     "yours": "Mtiririko wako",
     "open": "Klipu zako za mitiririko"
+  },
+  "recap": {
+    "title": "Muhtasari wa mtiririko",
+    "sub": "Chagua hadi klipu {{count}}: zitaunganishwa kwa mpangilio wa mtiririko kuwa Short moja ya hadi sekunde {{seconds}}.",
+    "picked_one": "Klipu {{count}} imechaguliwa · {{time}}",
+    "picked_other": "Klipu {{count}} zimechaguliwa · {{time}}",
+    "vertical": "Wima (9:16)",
+    "make": "Tengeneza muhtasari",
+    "inRecap": "Kwenye muhtasari",
+    "failed": "Muhtasari haukuweza kutengenezwa."
+  },
+  "chapters": {
+    "title": "Sura kutoka kwenye mtiririko wako",
+    "sub": "Zimetengenezwa kutokana na nyakati ambapo gumzo lilichangamka, boost zilifika na watu walikata klipu. Unaweza kubadilisha majina kabla ya kuhifadhi.",
+    "more_one": "na {{count}} zaidi",
+    "more_other": "na {{count}} zaidi",
+    "use": "Tumia kama sura"
   }
 }

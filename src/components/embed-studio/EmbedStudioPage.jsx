@@ -7,6 +7,7 @@ import VerifyAuthModal from "../modal/VerifyAuthModal";
 import axios from "axios";
 import { has3SpeakPostAuth } from "../../utils/hiveUtils";
 import { useEmbedUpload } from "../../context/EmbedUploadContext";
+import { splitRef } from "../../lib/derived";
 import { HIVE_API_URL, SHORTS_MAX_DURATION_SEC, storiesEnabledFor } from "../../utils/config";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useState } from "react";
@@ -42,6 +43,7 @@ function EmbedStudioPage() {
     setDescription,
     setTagsPreview,
     setImportSource,
+    setTeaserOf,
   } = useEmbedUpload();
 
   // `?trailer=1` — arrived from the "Upload a channel trailer" button on an own
@@ -69,6 +71,9 @@ function EmbedStudioPage() {
     }
     setFromStories(isShorts);
     setIsStory(from === "story" && storiesEnabledFor(user));
+    // "Tease as Story" (watch page): the Story or Short names the video it teases.
+    const teaser = isShorts ? splitRef(params.get("teaser") || "") : null;
+    setTeaserOf(teaser && user && teaser.author === String(user).toLowerCase() ? teaser : null);
   }, [location.search, user]);
 
   // Prefilled flow: an external uploader (e.g. Hangouts server-side recording)

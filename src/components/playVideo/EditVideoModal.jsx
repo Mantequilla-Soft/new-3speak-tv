@@ -142,12 +142,18 @@ function SecHead({ tone = 'accent', title: label, aside }) {
  * @param {string} permlink
  * @param {(changes: { title, body, tags, thumbnail }) => void} onSaved
  */
-export default function EditVideoModal({ isOpen, onClose, author, permlink, onSaved, isShort = false }) {
+// `suggestedChapters` ([{ start, title }]): chapters to start from when the post
+// has none yet (a stream VOD's highlights, components/StreamChapters); nothing is
+// saved until the creator saves.
+export default function EditVideoModal({ isOpen, onClose, author, permlink, onSaved, isShort = false, suggestedChapters = null }) {
   const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [loadError, setLoadError] = useState(null);
 
+  // Read when the post loads (the load effect runs per open, not per prop change).
+  const suggestedRef = useRef(suggestedChapters);
+  suggestedRef.current = suggestedChapters;
   // Original on-chain post — source of truth for round-trip fidelity.
   const [original, setOriginal] = useState(null);
   // Editing a short: its optional title is a `## Title` line in the body.
@@ -317,11 +323,15 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
         // the description, so the editor starts from what viewers see today.
         const metaDuration = Number(meta.video?.info?.duration) || 0;
         const tl = readTimeline(meta);
-        const startChapters = tl.chapters.length ? tl.chapters : chaptersFromText(middle);
+        const savedChapters = tl.chapters.length ? tl.chapters : chaptersFromText(middle);
+        // Suggested chapters only fill an empty timeline, and count as a change
+        // (the baseline stays what the post has), so Save writes them.
+        const suggested = suggestedRef.current;
+        const startChapters = !savedChapters.length && suggested?.length ? suggested : savedChapters;
         setTlDuration(metaDuration);
         setTlChapters(withTimelineKeys(startChapters));
         setTlLinks(withTimelineKeys(tl.links));
-        tlBaselineRef.current = timelineSnapshot(startChapters, tl.links);
+        tlBaselineRef.current = timelineSnapshot(savedChapters, tl.links);
         setLoading(false);
 
         // Pull checker-backed state (listing, NSFW flag, promotion) from the doc.

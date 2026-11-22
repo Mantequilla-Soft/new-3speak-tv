@@ -328,6 +328,14 @@ describe('enriching one short from Hive', () => {
     expect((await api.fetchCompleteShortData(listed())).audiogramOf).toBe(null)
   })
 
+  it('carries the tags: the list\'s and the post\'s own (a deep link has only the post\'s)', async () => {
+    hive.posts['bob/my-short'] = post({ json_metadata: { video: {}, tags: ['hive-181335', 'challenge2026w48', 42] } })
+    expect((await api.fetchCompleteShortData(listed())).tags).toEqual(['hive-181335', 'challenge2026w48'])
+    expect((await api.fetchCompleteShortData(listed({ hive_tags: ['3speak', 'challenge2026w48'] }))).tags)
+      .toEqual(['3speak', 'challenge2026w48', 'hive-181335'])
+    expect((await api.fetchCompleteShortData(listed({ embed_url: null, hive_tags: ['cats'] }))).tags).toEqual(['cats'])
+  })
+
   it('without the checker, the reusable flag comes from the post metadata', async () => {
     hive.posts['bob/my-short'] = post({ json_metadata: { video: { reusable: false } } })
     checker.failVideo = true

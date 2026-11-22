@@ -5,7 +5,7 @@ import { StepProgress } from '../legacy-studio/StepProgress';
 import CommunityModal from "../modal/Community_modal";
 import Beneficiary_modal from '../modal/Beneficiary_modal';
 import CollabModal from './CollabModal';
-import { Navigate } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { useEmbedUpload } from '../../context/EmbedUploadContext';
 import { useAppStore } from '../../lib/store';
 import MarkdownComposer from '../studio/MarkdownComposer';
@@ -30,6 +30,7 @@ import PremiereSwitch from '../Premiere/PremiereSwitch';
 import ShortSeriesSelect from '../Episodes/ShortSeriesSelect';
 import PollEditor, { PollToggle } from '../Polls/PollEditor';
 import { CONTENT_LANGUAGES, NO_SPEECH, languageNamer } from '../../utils/contentLanguage';
+import { challengeText, takeJoin, useCurrentChallenge, withChallengeTag } from '../../lib/shortsChallenge';
 
 // Every toast from this module is headed "Upload"; the message becomes the
 // line under it. See utils/toast.js.
@@ -253,6 +254,21 @@ function EmbedDetails() {
   useEffect(() => {
     startEarlyUpload();
   }, [startEarlyUpload]);
+
+  // 🏁 Weekly Shorts challenge (lib/shortsChallenge.js): a Short (not a 24h
+  // Story) joins this week's theme by carrying its tag. On when the creator came
+  // from /challenge's "Join with a Short"; the switch adds or removes the tag.
+  const thisWeek = useCurrentChallenge();
+  const challenge = fromStories && !isStory ? thisWeek : null;
+  const inChallenge = !!challenge && (tagsPreview || []).includes(challenge.tag);
+  const setInChallenge = (on) => {
+    if (challenge) setTagsPreview(withChallengeTag(tagsPreview, challenge.week, on));
+  };
+  useEffect(() => {
+    if (challenge && takeJoin(challenge.week) && !(tagsPreview || []).includes(challenge.tag)) {
+      setTagsPreview(withChallengeTag(tagsPreview, challenge.week, true));
+    }
+  }, [challenge?.week]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleDescriptionChange = (val) => {
     if (fromStories) {
@@ -676,6 +692,21 @@ function EmbedDetails() {
                   </div>
                 )}
               </section>
+
+              {/* 🏁 This week's Shorts challenge: on adds the week's tag (lib/shortsChallenge.js) */}
+              {challenge && (
+                <section className={`v2-card details-card input-group details-challenge${inChallenge ? ' is-on' : ''}`}>
+                  <div className="details-challenge__head">
+                    <Icon name="emoji_events" size={20} />
+                    <span className="details-challenge__label">{t('challenges.detailsSwitch')}</span>
+                    <Toggle checked={inChallenge} onChange={setInChallenge} label={t('challenges.detailsSwitch')} />
+                  </div>
+                  <p className="details-challenge__hint">
+                    {t('challenges.detailsSwitchHint', { title: challengeText(challenge, 'title'), tag: challenge.tag })}{' '}
+                    <Link to="/challenge" target="_blank" rel="noopener">{t('challenges.detailsSee')}</Link>
+                  </p>
+                </section>
+              )}
 
               {/* The series a Short continues. A regular video has no season
                   or episode numbers to set (owner 2026-11-16): only audio

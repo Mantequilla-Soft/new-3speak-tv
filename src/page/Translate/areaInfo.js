@@ -37,6 +37,8 @@ export const AREA_INFO = {
   shorts: 'Shorts (/shorts): the vertical video feed, its buttons, comments on shorts, and the Shorts row on the home page.',
   galaxy: 'The Hive galaxy (/galaxy/user, desktop only): a 3D map of an account\'s follows and the creators they lead to, with its scan levels, filters, circles, the selected-account card and the back/forward and music buttons.',
   recap: '"Your year on 3Speak": a creator\'s private slide-by-slide summary of the last 12 months (/recap), its loading steps and control tips.',
+  derived: 'The "Made from this" row under a video, an audio episode or a written post: audiograms, clips, remixes, reactions and narrations other posts made from it, each with a small label saying which kind it is.',
+  quoteCard: 'Quote cards: the quote button in a video\'s Transcript tab, the hint to tap a line, and the window that turns that line into a picture posted as a snap (the line, your own words, Post as snap, Download).',
   spotlight: 'Spotlight link pages: the page editor (blocks, themes, templates, fonts) and the public Spotlight page.',
   stats: 'Creator analytics (Profile → Analytics): views, watch time, traffic sources, countries, and per-video stats.',
   studio: 'Creator studio: drafts, scheduled posts, the schedule picker, and the markdown composer.',

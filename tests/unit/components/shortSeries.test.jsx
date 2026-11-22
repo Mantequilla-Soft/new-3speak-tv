@@ -39,6 +39,15 @@ beforeEach(() => {
 })
 
 describe('ShortSeriesBar', () => {
+  it('in no series: its fallback once the playlists are known, nothing while they load', () => {
+    h.videoPlaylists.mockReturnValue({ data: [], isLoading: false })
+    renderWithProviders(<ShortSeriesBar author="badadib" permlink="lonely" fallback={<span data-testid="fallback">virtual</span>} />)
+    expect(screen.getByTestId('fallback')).toBeInTheDocument()
+    h.videoPlaylists.mockReturnValue({ data: undefined, isLoading: true })
+    renderWithProviders(<ShortSeriesBar author="badadib" permlink="loading" fallback={<span data-testid="fallback2">virtual</span>} />)
+    expect(screen.queryByTestId('fallback2')).not.toBeInTheDocument()
+  })
+
   it('shows the part, the series and a Next part link to the following Short', () => {
     h.videoPlaylists.mockReturnValue({ data: [{ ...garden, id: 'pl-other', json_metadata: '{}' }, garden] })
     renderWithProviders(<ShortSeriesBar author="badadib" permlink="part-two" />)

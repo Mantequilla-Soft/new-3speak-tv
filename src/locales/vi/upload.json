@@ -437,7 +437,15 @@
     "videoPublished": "Video của bạn đã được xuất bản. Video đang được mã hóa trong nền, có thể mất vài phút.",
     "promote": "Quảng bá",
     "goToProfile": "Hồ sơ của tôi",
-    "feedback": "Lượt tải lên của bạn thế nào?"
+    "feedback": "Lượt tải lên của bạn thế nào?",
+    "teaser": {
+      "title": "Tạo Short từ video này",
+      "text": "Shorts đưa người xem mới đến các video dài của bạn. Toàn bộ video sẽ mở trong trình chỉnh sửa: chọn khoảnh khắc bạn muốn chia sẻ, cắt và đăng. Short sẽ liên kết đến video đầy đủ.",
+      "button": "Tạo Short",
+      "anotherTitle": "Tạo thêm một Short từ cùng video",
+      "anotherText": "Toàn bộ video sẽ mở lại trong trình chỉnh sửa để bạn chọn một khoảnh khắc khác.",
+      "anotherButton": "Tạo thêm"
+    }
   },
   "record": {
     "speechErrors": {

@@ -12,7 +12,8 @@
 //   → hand it to the checker's scheduled-posts service, which broadcasts it as
 //     @threespeak at its slot and links the video (same path as "schedule post").
 // Posts go out POST_SPACING_MS apart (owner's call 2026-10-05: 30 min), the first
-// a few minutes after it is ready. Publishing as @threespeak needs the creator's
+// a few minutes after it is ready. Free accounts get one video a day (the free
+// plan's daily upload limit, see quotaWaitUntil). Publishing as @threespeak needs the creator's
 // posting-authority grant, checked when the batch is created and again by the
 // checker. Batches live in Mongo (`import-batches` in the threespeak database,
 // next to the checker's `scheduled-posts`), one document per batch, written on
@@ -44,6 +45,15 @@ const ITEM_GAP_MS = [30 * 1000, 90 * 1000] // pause between two items, random in
 // room for download + upload + encode before the slot.
 const PREP_AHEAD_MS = Number(process.env.IMPORT_BATCH_PREP_AHEAD_MIN || 20) * 60 * 1000
 const SHORTS_MAX_DURATION_SEC = 120
+// ⏳ Free plan daily limits (owner 2026-11-22: the batch follows them). A free
+// account's next video waits until the embed service has room for it again
+// (1 video + 3 Shorts per rolling 24 h), so a batch of five goes out one video a
+// day instead of failing from the second on. Pro and warm-up accounts are exempt
+// on the embed service, so their batches keep POST_SPACING_MS. A waiting item
+// looks again at least every QUOTA_RECHECK_MS (someone who gets Pro meanwhile,
+// or an upload of theirs that failed and frees a slot).
+const QUOTA_RECHECK_MS = 60 * 60 * 1000
+const QUOTA_SLACK_MS = 60 * 1000 // past the embed service's next_at, so its window has really moved on
 const SHORT_DESCRIPTION_MAX = 240
 const EMBED_BASE = (process.env.EMBED_API_BASE || 'https://embed2.3speak.tv').replace(/\/+$/, '')
 const EMBED_API_KEY = process.env.EMBED_API_KEY || ''
@@ -397,11 +407,65 @@ async function mintUploadToken(user, isShort) {
   // flag): final for this item, recorded as `daily_upload_limit` so the batch
   // status can say so in the creator's language (src/page/ImportBatch.jsx).
   if (r.status === 429 && d.code === 'daily_upload_limit') {
-    throw Object.assign(new Error(`upload token: daily upload limit reached (${d.used ?? '?'} of ${d.limit ?? '?'})`), { code: 'daily_upload_limit' })
+    const nextAt = Date.parse(d.next_at)
+    throw Object.assign(new Error(`upload token: daily upload limit reached (${d.used ?? '?'} of ${d.limit ?? '?'})`), {
+      code: 'daily_upload_limit', nextAt: Number.isFinite(nextAt) ? nextAt : null,
+    })
   }
   if (!r.ok || !d.token) throw new Error(`upload token: HTTP ${r.status} ${d.error || ''}`.trim())
   return d
 }
+
+/** The embed service's GET /uploads/quota answer for `user`, or null (unreadable: fail open). */
+async function embedQuota(user) {
+  try {
+    const r = await fetch(`${EMBED_BASE}/uploads/quota?owner=${encodeURIComponent(user)}`, {
+      headers: { 'X-API-Key': EMBED_API_KEY },
+      signal: AbortSignal.timeout(10000),
+    })
+    if (!r.ok) return null
+    return await r.json()
+  } catch {
+    return null
+  }
+}
+
+/**
+ * ⏳ When the embed service will take this source from a free account again (ms),
+ * or null = now (room left, exempt, limits off, quota unknown). A source longer
+ * than a Short can only be a regular video; a shorter one may turn out either
+ * way once downloaded, so it only waits when both kinds are used up (a wrong
+ * guess is caught by the upload token's own 429, see processItem).
+ */
+function quotaWaitUntil(quota, source, now = Date.now()) {
+  if (!quota || quota.enabled !== true || quota.exempt) return null
+  const duration = Number(source?.duration) || 0
+  const kinds = duration > SHORTS_MAX_DURATION_SEC ? ['video'] : ['video', 'short']
+  const waits = []
+  for (const kind of kinds) {
+    const q = quota[kind]
+    if (!q || q.limit == null || !(Number(q.remaining) <= 0)) return null
+    const at = Date.parse(q.next_at)
+    waits.push(Number.isFinite(at) ? at : now + QUOTA_RECHECK_MS)
+  }
+  const at = Math.min(...waits)
+  return at > now ? at : null
+}
+
+/**
+ * Puts an item back in the queue until `at` (ms): `waitUntil` is what the page
+ * shows (the next free upload), `recheckAt` when the runner looks again.
+ */
+function holdItem(it, at, now = Date.now()) {
+  const until = Math.max(at || now + QUOTA_RECHECK_MS, now) + QUOTA_SLACK_MS
+  Object.assign(it, {
+    status: 'queued', progress: 0, jobId: null, error: null,
+    waitUntil: new Date(until).toISOString(),
+    recheckAt: new Date(Math.min(until, now + QUOTA_RECHECK_MS)).toISOString(),
+  })
+  return it
+}
+const isHeld = (it, now = Date.now()) => Date.parse(it.recheckAt) > now
 
 function tusUpload({ file, token, user, isShort, duration, onProgress }) {
   return new Promise((resolve, reject) => {
@@ -642,6 +706,8 @@ function mountImportBatch(app, deps) {
         // A failure's cause, for the few the page words itself (the daily limits)
         ...(it.status === 'failed' && it.errorCode ? { errorCode: it.errorCode } : {}),
         isShort: it.isShort ?? null,
+        // ⏳ Waiting for the free plan's next upload (server time, ISO).
+        ...(it.status === 'queued' && it.waitUntil ? { waitUntil: it.waitUntil } : {}),
         permlink: it.permlink || null,
         scheduledOn: it.scheduledOn || null,
       }
@@ -659,9 +725,12 @@ function mountImportBatch(app, deps) {
         if (!waiting.length) return
         // Items that can start now go first, so a paused (proxied) one does not
         // hold up everyone else's.
-        const ready = waiting.filter(({ b }) => lastSlotOf(b.user) - Date.now() <= PREP_AHEAD_MS)
+        const now = Date.now()
+        const ready = waiting.filter(({ b, it }) => !isHeld(it, now) && lastSlotOf(b.user) - now <= PREP_AHEAD_MS)
         const next = ready.find(({ it }) => deps.canStartDownload(it.source)) || ready[0]
         if (!next) { await sleep(60 * 1000); continue } // everyone's next post is still far off
+        // ⏳ A free account with no upload left today: wait, do not download for nothing.
+        if (await holdForQuota(next.b, next.it)) continue
         while (!deps.canStartDownload(next.it.source)) await sleep(15000)
         await processItem(next.b, next.it)
         await sleep(ITEM_GAP_MS[0] + crypto.randomInt(ITEM_GAP_MS[1] - ITEM_GAP_MS[0]))
@@ -680,6 +749,21 @@ function mountImportBatch(app, deps) {
       title: `Batch import failed (${it.source.platform})`, color: 0xe53935, user: b.user, platform: it.source.platform,
       videoId: it.source.sourceId, url: it.source.sourceUrl, code, message: it.error, fields: [{ name: 'Batch', value: b.id }],
     })
+  }
+
+  // ⏳ True when the item has to wait for the free plan's next upload (it is held
+  // then). Podcast episodes go through the audio service, not this limit.
+  async function holdForQuota(b, it) {
+    if (it.source.platform === 'rss') return false
+    const at = quotaWaitUntil(await embedQuota(b.user), it.source)
+    if (!at) {
+      if (it.waitUntil || it.recheckAt) { delete it.waitUntil; delete it.recheckAt; save(b) }
+      return false
+    }
+    holdItem(it, at)
+    save(b)
+    console.log(`[import-batch] @${b.user} ${it.source.sourceId} waits for the free plan's next upload (${it.waitUntil})`)
+    return true
   }
 
   async function processItem(b, it) {
@@ -709,8 +793,12 @@ function mountImportBatch(app, deps) {
     const workDir = path.dirname(job.file)
 
     try {
-      // 2. Thumbnail (non-fatal, like in the studio).
       it.status = 'uploading'; it.progress = 50; save(b)
+      // 2. The upload token first: over the free plan's daily limit it is refused,
+      // and then nothing else (thumbnail) should have been uploaded yet.
+      const tokenInfo = await mintUploadToken(user, isShort)
+
+      // 3. Thumbnail (non-fatal, like in the studio).
       let thumbnailUrl = null
       try {
         const t = await thumbnailBytes(it.source, job.file, isShort, workDir, deps.coverFor)
@@ -718,8 +806,7 @@ function mountImportBatch(app, deps) {
       } catch (e) { console.warn(`[import-batch] @${user} ${it.source.sourceId} thumbnail skipped: ${e.message}`) }
       it.thumbnailUrl = thumbnailUrl
 
-      // 3. Upload to the embed service; the encode starts right away.
-      const tokenInfo = await mintUploadToken(user, isShort)
+      // 4. Upload to the embed service; the encode starts right away.
       const embedUrl = await tusUpload({
         file: job.file, token: tokenInfo.token, user, isShort, duration: media.duration,
         onProgress: (f) => { it.progress = 50 + f * 45 },
@@ -729,7 +816,7 @@ function mountImportBatch(app, deps) {
       deps.removeJob(job)
       if (it.status === 'cancelled') return
 
-      // 4. Build the post and give it a slot.
+      // 5. Build the post and give it a slot.
       it.status = 'scheduling'; it.progress = 96; it.embedUrl = embedUrl; save(b)
       if (!(await deps.hasPostingGrant(user))) throw Object.assign(new Error('@threespeak no longer has posting authority on your account'), { code: 'no_grant' })
       const premium = await deps.isPremium(user).catch(() => false)
@@ -766,6 +853,14 @@ function mountImportBatch(app, deps) {
       console.log(`[import-batch] @${user} ${it.source.sourceId} → ${permlink} (${isShort ? 'short' : 'video'}) at ${it.scheduledOn}`)
     } catch (e) {
       deps.removeJob(job)
+      // ⏳ The free plan's daily limit (the quota looked free, or the source was
+      // guessed to be the other kind): not a failure, the item waits its turn.
+      if (e.code === 'daily_upload_limit' && it.status !== 'cancelled') {
+        holdItem(it, e.nextAt)
+        save(b)
+        console.log(`[import-batch] @${user} ${it.source.sourceId} (${isShort ? 'short' : 'video'}) refused by the daily limit, waits until ${it.waitUntil}`)
+        return
+      }
       return fail(b, it, e.code || 'upload_failed', e.message)
     }
   }
@@ -1037,4 +1132,4 @@ function batchSourcesFor(user) {
   return out
 }
 
-module.exports = { mountImportBatch, batchSourcesFor, buildPost, buildAudioPost, renderTemplate, renderText, uploadAudio, setAudioThumbnail, audioBatchReady, AUDIO_TYPES, beneficiariesFor, tagsFor, permlinkFor, scheduleOnChecker, cancelOnChecker, mintUploadToken, tusUpload, commissionEncode, snapsContainer }
+module.exports = { mountImportBatch, batchSourcesFor, embedQuota, quotaWaitUntil, holdItem, isHeld, buildPost, buildAudioPost, renderTemplate, renderText, uploadAudio, setAudioThumbnail, audioBatchReady, AUDIO_TYPES, beneficiariesFor, tagsFor, permlinkFor, scheduleOnChecker, cancelOnChecker, mintUploadToken, tusUpload, commissionEncode, snapsContainer }

@@ -434,6 +434,10 @@
         "title": "새 에피소드마다 Snap 올리기",
         "sub": "팟캐스트 에피소드를 올리면 링크가 담긴 Snap이 올라가요."
       },
+      "live_snap": {
+        "title": "라이브를 시작하면 스냅 올리기",
+        "sub": "스트림을 시작하면 제목과 링크가 담긴 스냅이 올라갑니다."
+      },
       "discord_live": {
         "title": "라이브를 시작하면 Discord에 알리기",
         "sub": "스트림을 시작하면 내 Discord 서버에 메시지가 가요."
@@ -479,6 +483,7 @@
       "longerThan5": "5분보다 긴가요?",
       "importedDiscord": "내 채널에 새로 올라왔어요: {title}\n{url}",
       "podcastSnap": "새 에피소드: {title}\n\n{url}",
+      "liveSnap": "지금 라이브 중이에요: {title}\n\n{url}",
       "discordLive": "{title} 지금 라이브 중: {url}",
       "streamPollSnap": "제 스트림 투표: {question}\n\n{results}\n\n{url}",
       "pollResults": "투표가 끝났어요. 결과는:\n\n{results}\n\n투표해 주신 {votes}분 모두 감사해요!",

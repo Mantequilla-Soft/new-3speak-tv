@@ -1,0 +1,37 @@
+{
+  "title": "Ginawa mula rito",
+  "sub_one": "{{count}} post na ginawa mula rito",
+  "sub_other": "{{count}} na post na ginawa mula rito",
+  "regionLabel": "Mga post na ginawa mula rito",
+  "cardLabel": "{{kind}}: {{title}}, ni @{{author}}",
+  "from": "mula {{time}}",
+  "untitled": "Walang pamagat",
+  "kinds": {
+    "audiogram": "Audiogram",
+    "stream_clip": "Clip ng stream",
+    "clip": "Clip",
+    "remix": "Remix",
+    "reaction": "Reaksyon",
+    "narration": "Pagbasa",
+    "recap": "Recap",
+    "audio_version": "Bersyong audio",
+    "quote": "Sipi",
+    "teaser": "Teaser"
+  },
+  "teaser": {
+    "label": "I-teaser sa Story",
+    "title": "Gumawa ng 24 oras na Story na nagte-teaser at nagli-link sa video na ito",
+    "titlePremiere": "Gumawa ng 24 oras na Story na nagbibilang pababa sa premiere na ito"
+  },
+  "link": {
+    "fullVideo": "Buong video",
+    "fullStream": "Buong stream",
+    "premieresIn": "Premiere sa loob ng {{time}}",
+    "hm": "{{h}} h {{m}} min",
+    "m": "{{m}} min",
+    "open": "{{label}}: {{title}}"
+  },
+  "series": {
+    "from": "mula sa {{title}}"
+  }
+}

@@ -141,6 +141,7 @@ const ShortsStoryFeed = lazyRoute(() => import("./page/ShortsStoryFeed"), "./pag
 const Spotlight = lazyRoute(() => import("./page/Spotlight"), "./page/Spotlight");
 const Surf = lazyRoute(() => import("./page/Surf"), "./page/Surf");
 const TagFeed = lazyRoute(() => import("./page/TagFeed"), "./page/TagFeed");
+const ShortsChallenge = lazyRoute(() => import("./page/ShortsChallenge"), "./page/ShortsChallenge");
 const Trend = lazyRoute(() => import("./page/Trend"), "./page/Trend");
 const UploadVideo = lazyRoute(() => import("./page/UploadVideo"), "./page/UploadVideo");
 const PublishBacklog = lazyRoute(() => import("./page/PublishBacklog"), "./page/PublishBacklog");
@@ -938,6 +939,9 @@ function App() {
               <Route path="/b/:account" element={<BadgePage />} />
               <Route path="/badge/:account" element={<BadgePage />} />
               <Route path="/t/:tag" element={<TagFeed />} />
+              {/* Weekly Shorts challenge (lib/shortsChallenge.js) */}
+              <Route path="/challenge" element={<ShortsChallenge />} />
+              <Route path="/challenge/:week" element={<ShortsChallenge />} />
               <Route path="/leaderboard" element={<Leaderboard />} />
               <Route path="/recap" element={<Recap />} />
               <Route path="/recap/:username" element={<Recap />} />
@@ -1057,6 +1061,7 @@ function App() {
               sound={editor.mode === 'video' ? editor.sound : null}
               aspect={editor.mode === 'video' ? editor.aspect : null}
               episode={editor.mode === 'audio' ? editor.episode : null}
+              teaser={editor.mode === 'video' ? editor.teaser : null}
             />
           </MountWhenOpened>
         )}

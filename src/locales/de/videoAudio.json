@@ -3,5 +3,14 @@
   "listen": "Anhören",
   "label": "Video",
   "failed": "Dieses Video kann gerade nicht als Audio abgespielt werden.",
-  "unsupported": "Dieser Browser kann dieses Video nicht als Audio abspielen."
+  "unsupported": "Dieser Browser kann dieses Video nicht als Audio abspielen.",
+  "publish": {
+    "label": "Als Audio veröffentlichen",
+    "title": "Den Ton dieses Videos als Audio-Episode veröffentlichen",
+    "making": "Ton wird aus deinem Video geholt…",
+    "watchLine": "Das Video",
+    "dailyLimit": "Für heute reicht es mit Audiofassungen. Versuch es morgen wieder.",
+    "notReady": "Aus diesem Video lässt sich noch kein Audio machen. Versuch es, sobald es fertig verarbeitet ist.",
+    "failed": "Die Audiofassung konnte nicht erstellt werden."
+  }
 }

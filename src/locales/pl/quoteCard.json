@@ -1,0 +1,18 @@
+{
+  "button": "Karta z cytatem",
+  "pickHint": "Dotknij linii, aby zrobić z niej kartę z cytatem.",
+  "cancelPick": "Anuluj",
+  "quoteLine": "Zrób kartę z cytatem z tej linii",
+  "title": "Karta z cytatem",
+  "sub": "Linia z {{time}}",
+  "previewLabel": "Karta z cytatem",
+  "lineLabel": "Linia",
+  "lineHint": "Skróć ją lub popraw źle rozpoznane słowo. Najwyżej {{max}} znaków.",
+  "commentLabel": "Twoje słowa",
+  "optional": "opcjonalnie",
+  "post": "Opublikuj jako snap",
+  "download": "Pobierz",
+  "posted": "Opublikowano kartę z cytatem.",
+  "postFailed": "Nie udało się opublikować karty z cytatem.",
+  "downloadFailed": "Nie udało się zapisać obrazu."
+}

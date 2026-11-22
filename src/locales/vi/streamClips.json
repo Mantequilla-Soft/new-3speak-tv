@@ -66,5 +66,20 @@
     "ofStream": "Buổi phát của @{{host}}",
     "yours": "Buổi phát của bạn",
     "open": "Clip phát trực tiếp của bạn"
+  },
+  "recap": {
+    "title": "Tóm tắt buổi phát",
+    "sub": "Chọn tối đa {{count}} clip: chúng được ghép theo thứ tự buổi phát thành một Short dài tối đa {{seconds}} giây.",
+    "picked_other": "Đã chọn {{count}} clip · {{time}}",
+    "vertical": "Dọc (9:16)",
+    "make": "Tạo bản tóm tắt",
+    "inRecap": "Trong bản tóm tắt",
+    "failed": "Không thể tạo bản tóm tắt."
+  },
+  "chapters": {
+    "title": "Chương từ buổi phát của bạn",
+    "sub": "Tạo từ những khoảnh khắc chat sôi nổi, có boost và người xem cắt clip. Bạn có thể đổi tên trước khi lưu.",
+    "more_other": "và {{count}} chương nữa",
+    "use": "Dùng làm chương"
   }
 }

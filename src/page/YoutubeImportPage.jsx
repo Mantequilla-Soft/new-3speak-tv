@@ -936,7 +936,8 @@ export default function YoutubeImportPage() {
             <span className="yt-batch-bar__count">
               <b className="num">{t('ytimport.batch.selectedCount', { count: picked.length })}</b> · {t('ytimport.batch.maxHint', { max: batchMax })}
               {batchRoom !== null && picked.length > batchRoom && (
-                <> · <span className="yt-batch-bar__quota">{t('uploadLimits.batchOver', { count: batchRoom })}</span></>
+                // ⏳ Videos wait for the next free upload (server/import-batch.cjs); podcast episodes do not.
+                <> · <span className="yt-batch-bar__quota">{platform === 'rss' ? t('uploadLimits.batchOver', { count: batchRoom }) : t('ytimport.batch.free.bar')}</span></>
               )}
             </span>
             <div className="yt-batch-bar__actions">

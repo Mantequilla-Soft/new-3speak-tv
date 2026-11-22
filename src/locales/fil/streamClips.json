@@ -66,5 +66,22 @@
     "ofStream": "Stream ni @{{host}}",
     "yours": "Stream mo",
     "open": "Mga stream clip mo"
+  },
+  "recap": {
+    "title": "Recap ng stream",
+    "sub": "Pumili ng hanggang {{count}} clip: pagsasamahin ang mga ito ayon sa pagkakasunod sa stream sa isang Short na hanggang {{seconds}} segundo.",
+    "picked_one": "{{count}} clip ang napili · {{time}}",
+    "picked_other": "{{count}} na clip ang napili · {{time}}",
+    "vertical": "Patayo (9:16)",
+    "make": "Gawin ang recap",
+    "inRecap": "Kasama sa recap",
+    "failed": "Hindi magawa ang recap."
+  },
+  "chapters": {
+    "title": "Mga kabanata mula sa stream mo",
+    "sub": "Ginawa mula sa mga sandaling sumigla ang chat, may dumating na boost at may nag-clip. Mapapalitan mo ang mga pangalan bago i-save.",
+    "more_one": "at {{count}} pa",
+    "more_other": "at {{count}} pa",
+    "use": "Gamitin bilang mga kabanata"
   }
 }

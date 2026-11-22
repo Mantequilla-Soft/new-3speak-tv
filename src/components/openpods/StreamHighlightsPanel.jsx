@@ -7,8 +7,9 @@ import { usePostClipAsShort } from '../../hooks/usePostClipAsShort';
 import { shortRangeParam } from '../../lib/clipIdeas';
 import {
   fetchStreamHighlights, deleteClip, clipFileUrl, clipShareFor, momentRanges, clipClock, downloadClip, shortUrlFor, clipSummary, isReadyClip,
+  makeRecap, recapPick, recapSeconds, RECAP_MIN_CLIPS, RECAP_MAX_CLIPS, RECAP_MAX_SEC,
 } from '../../lib/streamClips';
-import { Button, IconButton, Icon, StatusPill } from '../v2/ui';
+import { Button, Chip, IconButton, Icon, StatusPill, Toggle } from '../v2/ui';
 import './StreamClips.scss';
 
 const toast = toastIn('Live');
@@ -58,6 +59,29 @@ export default function StreamHighlightsPanel({ api, room, token, compact = fals
   const data = state.data;
   const clips = data?.clips || [];
   const ranges = data?.isHost ? momentRanges(data.moments, clips) : [];
+
+  // The host's recap: ready clips joined into one Short (POST /rooms/:room/recap),
+  // picked per clip; starts with as many as fit, in stream order.
+  const readyIds = clips.filter(isReadyClip).map((c) => c.id).join(',');
+  const [recapIds, setRecapIds] = useState([]);
+  const [recapVertical, setRecapVertical] = useState(false);
+  const [recapBusy, setRecapBusy] = useState(false);
+  useEffect(() => { setRecapIds(recapPick(state.data?.clips || [])); }, [readyIds]); // eslint-disable-line react-hooks/exhaustive-deps
+  const recapSecs = recapSeconds(clips, recapIds);
+  const recapPicked = clips.filter((c) => recapIds.includes(c.id));
+  const canVertical = recapPicked.length > 0 && recapPicked.every((c) => c.vertical?.available);
+  const toggleRecap = (c) => setRecapIds((ids) => (ids.includes(c.id)
+    ? ids.filter((id) => id !== c.id)
+    : (ids.length < RECAP_MAX_CLIPS ? [...ids, c.id] : ids)));
+  const postRecap = async () => {
+    setRecapBusy(true);
+    try {
+      const r = await makeRecap(api, room, token, recapIds, { vertical: recapVertical && canVertical });
+      await post({ url: clipFileUrl(api, r.path), room, host: data?.host, clipper: null, offsetSec: r.offsetSec ?? null, recap: true });
+    } catch {
+      toast.error(t('streamClips.recap.failed'));
+    } finally { setRecapBusy(false); }
+  };
   if (!state.loading && !state.error && !clips.length && !ranges.length && compact) return null;
 
   const postClip = async (c) => {
@@ -103,6 +127,34 @@ export default function StreamHighlightsPanel({ api, room, token, compact = fals
 
       {data?.isHost && clips.length > 0 && <ClipSummary clips={clips} t={t} />}
 
+      {data?.isHost && clips.filter(isReadyClip).length >= RECAP_MIN_CLIPS && (
+        <div className="stream-highlights__recap">
+          <div className="stream-highlights__recap-text">
+            <h4 className="stream-highlights__moments-title"><Icon name="video_library" size={16} />{t('streamClips.recap.title')}</h4>
+            <p className="stream-highlights__sub">{t('streamClips.recap.sub', { count: RECAP_MAX_CLIPS, seconds: RECAP_MAX_SEC })}</p>
+            <p className="stream-highlights__recap-picked num" aria-live="polite">
+              {t('streamClips.recap.picked', { count: recapIds.length, time: clipClock(recapSecs) })}
+            </p>
+          </div>
+          {canVertical && (
+            <label className="stream-highlights__recap-vertical">
+              <Toggle checked={recapVertical} onChange={setRecapVertical} label={t('streamClips.recap.vertical')} />
+              <span>{t('streamClips.recap.vertical')}</span>
+            </label>
+          )}
+          <Button
+            variant="primary"
+            size={40}
+            icon="video_library"
+            onClick={postRecap}
+            loading={recapBusy}
+            disabled={busy || recapBusy || recapIds.length < RECAP_MIN_CLIPS || recapSecs > RECAP_MAX_SEC}
+          >
+            {t('streamClips.recap.make')}
+          </Button>
+        </div>
+      )}
+
       {clips.length > 0 && (
         <ul className="stream-highlights__clips">
           {clips.map((c) => {
@@ -120,6 +172,17 @@ export default function StreamHighlightsPanel({ api, room, token, compact = fals
                 <div className="stream-highlights__meta">
                   <StatusPill tone={c.source === 'auto' ? 'accent' : 'muted'} caps={false}>{label(c)}</StatusPill>
                   {Number.isFinite(c.offsetSec) && <span className="stream-highlights__at num">{t('streamClips.at', { time: clipClock(c.offsetSec) })}</span>}
+                  {data?.isHost && isReadyClip(c) && clips.filter(isReadyClip).length >= RECAP_MIN_CLIPS && (
+                    <Chip
+                      size={28}
+                      icon={recapIds.includes(c.id) ? 'check' : 'add'}
+                      selected={recapIds.includes(c.id)}
+                      disabled={!recapIds.includes(c.id) && recapIds.length >= RECAP_MAX_CLIPS}
+                      onClick={() => toggleRecap(c)}
+                    >
+                      {t('streamClips.recap.inRecap')}
+                    </Chip>
+                  )}
                   {(c.reasons || []).map((r) => (
                     <span key={r} className="stream-highlights__reason"><Icon name={REASON_ICON[r] || 'star'} size={14} />{t(`streamClips.reasons.${r}`)}</span>
                   ))}

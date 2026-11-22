@@ -1,0 +1,18 @@
+{
+  "button": "Kartu kutipan",
+  "pickHint": "Ketuk satu baris untuk membuat kartu kutipan.",
+  "cancelPick": "Batal",
+  "quoteLine": "Buat kartu kutipan dari baris ini",
+  "title": "Kartu kutipan",
+  "sub": "Baris pada {{time}}",
+  "previewLabel": "Kartu kutipan",
+  "lineLabel": "Barisnya",
+  "lineHint": "Persingkat atau perbaiki kata yang salah ditranskripsi. Paling banyak {{max}} karakter.",
+  "commentLabel": "Kata-katamu",
+  "optional": "opsional",
+  "post": "Posting sebagai snap",
+  "download": "Unduh",
+  "posted": "Kartu kutipan diposting.",
+  "postFailed": "Kartu kutipan tidak dapat diposting.",
+  "downloadFailed": "Gambar tidak dapat disimpan."
+}

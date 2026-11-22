@@ -66,5 +66,20 @@
     "ofStream": "Siaran @{{host}}",
     "yours": "Siaranmu",
     "open": "Klip siaranmu"
+  },
+  "recap": {
+    "title": "Rangkuman siaran",
+    "sub": "Pilih hingga {{count}} klip: klip digabung sesuai urutan siaran menjadi satu Short paling lama {{seconds}} detik.",
+    "picked_other": "{{count}} klip dipilih · {{time}}",
+    "vertical": "Vertikal (9:16)",
+    "make": "Buat rangkuman",
+    "inRecap": "Dalam rangkuman",
+    "failed": "Rangkuman tidak dapat dibuat."
+  },
+  "chapters": {
+    "title": "Bab dari siaranmu",
+    "sub": "Dibuat dari momen saat chat ramai, boost masuk, dan orang membuat klip. Kamu bisa mengganti namanya sebelum menyimpan.",
+    "more_other": "dan {{count}} lainnya",
+    "use": "Gunakan sebagai bab"
   }
 }

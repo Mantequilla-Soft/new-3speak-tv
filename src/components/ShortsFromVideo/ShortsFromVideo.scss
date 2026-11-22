@@ -120,3 +120,7 @@
   padding-top: 16px;
   border-top: 1px solid var(--border);
 }
+
+// One Short per chapter, under the viewers' picks
+.shorts-from-video .sfv-chapters { display: flex; flex-direction: column; gap: 6px; margin-top: 6px; }
+.shorts-from-video .sfv-chapters-title { display: flex; align-items: center; gap: 6px; margin: 0; @include v2.text(body-sm); font-weight: 700; }

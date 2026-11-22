@@ -5,6 +5,10 @@
     "audio_other": "Paket gratis: {{count}} unggahan audio per hari, masing-masing hingga {{minutes}} menit.",
     "audioCount_other": "Paket gratis: {{count}} unggahan audio per hari."
   },
+  "warmup": {
+    "video_other": "Selama masa pemanasan: {{count}} video per hari.",
+    "short_other": "Selama masa pemanasan: {{count}} Short per hari."
+  },
   "left_other": "Tersisa {{count}} hari ini.",
   "nextAt": "Unggahan berikutnya pukul {{time}}.",
   "later": "Coba lagi nanti.",
@@ -12,6 +16,10 @@
     "video": "Batas video gratis hari ini sudah tercapai.",
     "short": "Batas Shorts gratis hari ini sudah tercapai.",
     "audio": "Batas audio gratis hari ini sudah tercapai."
+  },
+  "reachedWarmup": {
+    "video": "Batas video hari ini untuk masa pemanasan sudah tercapai.",
+    "short": "Batas Shorts hari ini untuk masa pemanasan sudah tercapai."
   },
   "goPro": "Dapatkan 3Speak Pro",
   "tooLong": "Audio ini berdurasi {{duration}}. Unggahan audio gratis maksimal {{minutes}} menit.",

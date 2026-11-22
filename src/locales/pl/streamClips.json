@@ -66,5 +66,26 @@
     "ofStream": "Transmisja @{{host}}",
     "yours": "Twoja transmisja",
     "open": "Twoje klipy z transmisji"
+  },
+  "recap": {
+    "title": "Podsumowanie streamu",
+    "sub": "Wybierz do {{count}} klipów: zostaną połączone w kolejności streamu w jeden Short o długości najwyżej {{seconds}} sekund.",
+    "picked_one": "Wybrano {{count}} klip · {{time}}",
+    "picked_few": "Wybrano {{count}} klipy · {{time}}",
+    "picked_many": "Wybrano {{count}} klipów · {{time}}",
+    "picked_other": "Wybrano {{count}} klipu · {{time}}",
+    "vertical": "Pionowo (9:16)",
+    "make": "Utwórz podsumowanie",
+    "inRecap": "W podsumowaniu",
+    "failed": "Nie udało się utworzyć podsumowania."
+  },
+  "chapters": {
+    "title": "Rozdziały z twojego streamu",
+    "sub": "Utworzone z momentów, gdy czat się ożywił, przyszły boosty i ludzie robili klipy. Możesz zmienić ich nazwy przed zapisaniem.",
+    "more_one": "i jeszcze {{count}}",
+    "more_few": "i jeszcze {{count}}",
+    "more_many": "i jeszcze {{count}}",
+    "more_other": "i jeszcze {{count}}",
+    "use": "Użyj jako rozdziałów"
   }
 }

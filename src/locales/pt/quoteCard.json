@@ -1,0 +1,18 @@
+{
+  "button": "Cartão de citação",
+  "pickHint": "Toque em uma linha para fazer um cartão de citação.",
+  "cancelPick": "Cancelar",
+  "quoteLine": "Fazer um cartão de citação desta linha",
+  "title": "Cartão de citação",
+  "sub": "A linha em {{time}}",
+  "previewLabel": "O cartão de citação",
+  "lineLabel": "A linha",
+  "lineHint": "Encurte ou corrija uma palavra que a transcrição errou. No máximo {{max}} caracteres.",
+  "commentLabel": "Suas palavras",
+  "optional": "opcional",
+  "post": "Publicar como snap",
+  "download": "Baixar",
+  "posted": "Cartão de citação publicado.",
+  "postFailed": "Não foi possível publicar o cartão de citação.",
+  "downloadFailed": "Não foi possível salvar a imagem."
+}

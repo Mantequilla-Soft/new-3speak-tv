@@ -436,6 +436,10 @@
         "title": "Snap kwa kila kipindi kipya",
         "sub": "Unapochapisha kipindi cha podikasti, snap yenye kiungo chake inatoka."
       },
+      "live_snap": {
+        "title": "Snap ninapoanza kurusha moja kwa moja",
+        "sub": "Unapoanza mtiririko, snap yenye kichwa chake na kiungo inatumwa."
+      },
       "discord_live": {
         "title": "Ijulishe Discord ninapoanza mubashara",
         "sub": "Unapoanza mtiririko, seva yako ya Discord inapokea ujumbe."
@@ -481,6 +485,7 @@
       "longerThan5": "Zaidi ya dakika 5?",
       "importedDiscord": "Mpya kwenye chaneli yangu: {title}\n{url}",
       "podcastSnap": "Kipindi kipya: {title}\n\n{url}",
+      "liveSnap": "Niko live sasa: {title}\n\n{url}",
       "discordLive": "{title} iko mubashara sasa: {url}",
       "streamPollSnap": "Kura ya maoni kutoka mtiririko wangu: {question}\n\n{results}\n\n{url}",
       "pollResults": "Kura ya maoni imefungwa. Matokeo:\n\n{results}\n\nAsanteni nyote {votes} mliopiga kura!",
