@@ -116,6 +116,10 @@ const FIXTURES = {
     hivePost('erin', 'gateway-thumb', {
       json_metadata: { app: '3speak/0.3.0', tags: ['music'], video: { info: { duration: 60 } }, image: ['https://ipfs.3speak.tv/ipfs/QmRqNYX1tghNHzKuXg5FmTajes8qwxc7FAMWSdFxJbvBY7'] },
     }),
+    // The weekly Shorts challenge (checker shorts_challenges)
+    { url: 'https://checker.test.invalid/shorts-challenges', json: { success: true, week: '2026-W48', current: { week: '2026-W48', tag: 'challenge2026w48', theme: 'workspace', texts: { en: { title: 'Your workspace', prompt: 'Show where you create.' }, de: { title: 'Dein Arbeitsplatz', prompt: 'x' } }, starts_at: '2026-11-22T00:00:00.000Z', ends_at: '2026-11-28T23:59:59.999Z' }, next: null, past: [] } },
+    { url: 'https://checker.test.invalid/shorts-challenges/2026-W49', json: { success: true, challenge: { week: '2026-W49', texts: { en: { title: 'One skill in 60 seconds', prompt: 'Teach one thing you know well.' } }, starts_at: '2026-11-29T00:00:00.000Z', ends_at: '2026-12-05T23:59:59.999Z' } } },
+    { url: 'https://checker.test.invalid/shorts-challenges/2031-W02', status: 404, json: { success: false } },
     // Every other video id: the checker has no such video.
     { url: 'https://checker.test.invalid/videodetails/', prefix: true, status: 404, json: { error: 'Video not found' } },
     // Anything else on Hive: no such post.
@@ -255,6 +259,23 @@ describe('more share cards', () => {
     expect(meta(r.text, 'og:title')).toBe('3S | Frequently asked questions')
     expect(meta(r.text, 'og:image')).toBe('https://preview.3speak.tv/og/faq.jpg')
     expect(meta((await crawl('/embed-studio', DISCORD)).text, 'og:image')).toBe('https://3speak.tv/og/upload.jpg')
+  })
+
+  it('the Shorts challenge is carded with the week\'s theme from the checker', async () => {
+    let r = await crawl('/challenge', DISCORD)
+    expect(r.status).toBe(200)
+    expect(meta(r.text, 'og:title')).toBe('3S | Shorts challenge: Your workspace')
+    expect(meta(r.text, 'og:description')).toBe('Show where you create. Nov 22 to Nov 28 (UTC). Post a Short on the theme and join with one switch.')
+    expect(meta(r.text, 'og:image')).toBe('https://3speak.tv/og/challenge.jpg')
+    r = await crawl('/challenge/2026-W49', DISCORD)
+    expect(meta(r.text, 'og:title')).toBe('3S | Shorts challenge: One skill in 60 seconds')
+    expect(meta(r.text, 'og:description')).toMatch(/^Teach one thing you know well\. Nov 29 to Dec 5 \(UTC\)\. Post a Short/)
+  })
+
+  it('a week the checker does not have gets the plain challenge card', async () => {
+    const r = await crawl('/challenge/2031-W02', DISCORD)
+    expect(meta(r.text, 'og:title')).toBe('3S | Weekly Shorts challenge')
+    expect(meta(r.text, 'og:image')).toBe('https://3speak.tv/og/challenge.jpg')
   })
 
   it('a badge has its own card, title and description', async () => {
