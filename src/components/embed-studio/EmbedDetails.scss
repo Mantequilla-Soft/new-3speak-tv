@@ -496,3 +496,28 @@
   }
   .snap-poll-editor { margin-top: 12px; }
 }
+
+// 🏁 The weekly Shorts challenge switch (a Short's details step)
+.details-challenge {
+  .details-challenge__head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--cyan);
+  }
+  .details-challenge__label {
+    flex: 1;
+    min-width: 0;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .details-challenge__hint {
+    margin: 8px 0 0;
+    font-size: 13px;
+    line-height: 1.45;
+    color: var(--muted);
+    overflow-wrap: anywhere;
+    a { color: var(--cyan); }
+  }
+}

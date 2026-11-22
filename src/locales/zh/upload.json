@@ -437,7 +437,15 @@
     "videoPublished": "你的视频已发布。它正在后台编码，可能需要几分钟。",
     "promote": "推广",
     "goToProfile": "我的主页",
-    "feedback": "这次上传体验如何？"
+    "feedback": "这次上传体验如何？",
+    "teaser": {
+      "title": "用这个视频制作短视频",
+      "text": "短视频能为你的长视频带来新观众。整个视频会在编辑器中打开：选出你想分享的片段，剪辑后发布。短视频会链接到完整视频。",
+      "button": "制作短视频",
+      "anotherTitle": "用同一个视频再做一个短视频",
+      "anotherText": "整个视频会再次在编辑器中打开，你可以选另一个片段。",
+      "anotherButton": "再做一个"
+    }
   },
   "record": {
     "speechErrors": {

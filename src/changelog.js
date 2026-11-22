@@ -18,6 +18,18 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.169',
+    category: 'shorts',
+    date: '2026-11-22',
+    summary: 'Weekly Shorts challenge: a new theme every week, on Home and on the challenge page. Join with one switch; the team checks every entry.',
+  },
+  {
+    version: '2.0.168',
+    category: 'shorts',
+    date: '2026-11-22',
+    summary: 'After you post a video of 5 to 30 minutes, turn any moment of it into a Short in the Shorts editor. The Short links back to the full video.',
+  },
+  {
     version: '2.0.167',
     category: 'upload',
     date: '2026-11-22',

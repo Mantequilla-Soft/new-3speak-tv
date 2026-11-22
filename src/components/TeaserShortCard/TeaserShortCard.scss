@@ -1,0 +1,43 @@
+@use '../../styles/v2' as v2;
+
+// Flat card on the finished upload's screen (3Speak identity: no gradients).
+.teaser-short-card {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  margin-top: 8px;
+  padding: 14px 16px;
+  border-radius: var(--r-xl);
+  border: 1px solid var(--border);
+  background: var(--surface);
+
+  @include v2.mobile {
+    grid-template-columns: auto minmax(0, 1fr);
+    .teaser-short-card__btn { grid-column: 1 / -1; width: 100%; }
+  }
+}
+
+.teaser-short-card__icon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--r-lg);
+  background: var(--surface-2);
+  color: var(--text);
+}
+
+.teaser-short-card__title {
+  @include v2.text(body);
+  font-weight: 600;
+  color: var(--text);
+}
+
+.teaser-short-card__text {
+  margin: 2px 0 0;
+  @include v2.text(meta);
+  color: var(--muted);
+  line-height: 1.45;
+}

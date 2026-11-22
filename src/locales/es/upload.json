@@ -443,7 +443,15 @@
     "videoPublished": "Tu video está publicado. Se está codificando en segundo plano, lo que puede tardar unos minutos.",
     "promote": "Promocionar",
     "goToProfile": "Mi perfil",
-    "feedback": "¿Qué tal tu subida?"
+    "feedback": "¿Qué tal tu subida?",
+    "teaser": {
+      "title": "Haz un Short con este video",
+      "text": "Los Shorts llevan nuevos espectadores a tus videos largos. Tu video completo se abre en el editor: elige el momento que quieres compartir, recórtalo y publícalo. El Short enlaza al video completo.",
+      "button": "Hacer un Short",
+      "anotherTitle": "Haz otro Short del mismo video",
+      "anotherText": "Tu video completo se abre de nuevo en el editor para que elijas otro momento.",
+      "anotherButton": "Hacer otro"
+    }
   },
   "record": {
     "speechErrors": {

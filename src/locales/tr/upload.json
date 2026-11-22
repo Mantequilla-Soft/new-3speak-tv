@@ -440,7 +440,15 @@
     "videoPublished": "Videon yayınlandı. Arka planda kodlanıyor, bu birkaç dakika sürebilir.",
     "promote": "Öne çıkar",
     "goToProfile": "Profilim",
-    "feedback": "Yüklemen nasıl geçti?"
+    "feedback": "Yüklemen nasıl geçti?",
+    "teaser": {
+      "title": "Bu videodan bir Short yap",
+      "text": "Shorts, uzun videolarına yeni izleyiciler getirir. Videonun tamamı editörde açılır: paylaşmak istediğin anı seç, kırp ve paylaş. Short, videonun tamamına bağlantı verir.",
+      "button": "Short yap",
+      "anotherTitle": "Aynı videodan bir Short daha yap",
+      "anotherText": "Videonun tamamı editörde yeniden açılır, böylece başka bir an seçebilirsin.",
+      "anotherButton": "Bir tane daha"
+    }
   },
   "record": {
     "speechErrors": {

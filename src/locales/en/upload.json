@@ -440,7 +440,15 @@
     "videoPublished": "Your video is published. It’s encoding in the background, which can take a few minutes.",
     "promote": "Promote",
     "goToProfile": "My profile",
-    "feedback": "How was your upload?"
+    "feedback": "How was your upload?",
+    "teaser": {
+      "title": "Make a Short from this video",
+      "text": "Shorts bring new viewers to your long videos. Your whole video opens in the editor: pick the moment you want to share, trim it and post. The Short links back to the full video.",
+      "button": "Make a Short",
+      "anotherTitle": "Make another Short from the same video",
+      "anotherText": "Your whole video opens in the editor again, so you can pick another moment.",
+      "anotherButton": "Make another"
+    }
   },
   "record": {
     "speechErrors": {

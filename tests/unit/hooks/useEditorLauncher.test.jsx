@@ -157,4 +157,24 @@ describe('useEditorLauncher: the landscape video editor is Pro only', () => {
     fire('open-pro-upsell', { feature: 'landscape-editor' })
     expect(result.current.upsell).toBe(true)
   })
+
+  it('opens the shorts editor with the whole video just published ("Make a Short from this video")', () => {
+    const { result } = renderHook(() => useEditorLauncher())
+    const video = new File(['v'], 'talk.mp4', { type: 'video/mp4' })
+    fire('open-shorts-editor', { file: video, teaser: { author: 'BadAdib', permlink: 'my-talk' } })
+    expect(result.current).toMatchObject({ open: true, mode: 'video', file: video, teaser: { author: 'badadib', permlink: 'my-talk' } })
+    act(() => result.current.close())
+    expect(result.current.teaser).toBeNull()
+  })
+
+  it('takes no teaser without the file, nor a malformed one', () => {
+    const { result } = renderHook(() => useEditorLauncher())
+    fire('open-shorts-editor', { teaser: { author: 'badadib', permlink: 'my-talk' } })
+    expect(result.current.teaser).toBeNull()
+    const video = new File(['v'], 'talk.mp4', { type: 'video/mp4' })
+    fire('open-shorts-editor', { file: video, teaser: { author: '<b>', permlink: '../x' } })
+    expect(result.current.teaser).toBeNull()
+    fire('open-shorts-editor', { file: video, teaser: { author: 'badadib', permlink: 'my-talk', extra: 'dropped' } })
+    expect(result.current.teaser).toEqual({ author: 'badadib', permlink: 'my-talk' })
+  })
 })

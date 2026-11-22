@@ -44,11 +44,11 @@ const audioToast = toastIn('Audio');
 // other than 9:16 is posted as a normal video, a 9:16 one as a Short.
 // `episode` ({ url, title, cover, durationSec }, the audio page's "Video podcast",
 // mode 'audio'): opens the editor's video podcast on that published episode.
-function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStart, clipEnd, originalAuthor, originalPermlink, originalShortPermlink, remixChain, videoFile, mode = 'video', audioFile = null, audioTrackId = null, sound = null, aspect = null, episode = null }) {
+function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStart, clipEnd, originalAuthor, originalPermlink, originalShortPermlink, remixChain, videoFile, mode = 'video', audioFile = null, audioTrackId = null, sound = null, aspect = null, episode = null, teaser = null }) {
   const audioMode = mode === 'audio';
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { setVideoFile, setPrevVideoFile, setGeneratedThumbnail, setVideoDuration, setOriginalAuthor, setOriginalPermlink, setOriginalShortPermlink, setRemixChain, setMusicCredits, setEditorSubtitles, setFromStories, setIsStory, setVideoMode, setTitle, setChapters, pickFirstThumbnail, setList, setRemaingPercent } = useEmbedUpload();
+  const { setVideoFile, setPrevVideoFile, setGeneratedThumbnail, setVideoDuration, setOriginalAuthor, setOriginalPermlink, setOriginalShortPermlink, setRemixChain, setSourceRange, setMusicCredits, setEditorSubtitles, setFromStories, setIsStory, setVideoMode, setTitle, setChapters, pickFirstThumbnail, setList, setRemaingPercent, setTeaserOf, resetUploadState, uploading } = useEmbedUpload();
   const iframeRef = useRef(null);
   const mediaLoadedRef = useRef(false);
   const [editorReady, setEditorReady] = useState(false);
@@ -269,6 +269,8 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
             // drop the file, so say so instead of opening an empty timeline in silence.
             mediaLoadedRef.current = true;
             if (data.canLoadFile) {
+              // "Make a Short from this video" too: the whole video on the track,
+              // the creator picks the moment (the editor renders once it fits a Short)
               sendToEditor({ type: 'load-media', file: videoFile, name: videoFile.name || 'Short Video', mediaType: 'video' });
             } else {
               toast.warning(t('modals.editor.fileNotSupported'));
@@ -591,6 +593,16 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
       if (pollIntervalRef.current) clearInterval(pollIntervalRef.current);
       onClose();
 
+      // "Make a Short from this video" (the finished upload's screen): the Short
+      // starts clean, so nothing of the video just posted (title, description,
+      // tags) carries over, and names the video it teases (EmbedUploadContext
+      // teaserOf: "Full video" link + source metadata). Only the uploader's own
+      // video, and never while another upload is still publishing.
+      const teaserSource = !asVideo && teaser && !uploading && user && teaser.author === String(user).toLowerCase()
+        ? { author: teaser.author, permlink: teaser.permlink }
+        : null;
+      if (teaserSource) resetUploadState();
+
       // Pre-set the file in embed context
       setVideoFile(file);
       setPrevVideoFile(file);
@@ -609,6 +621,8 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
         }])
         : [];
       setRemixChain(chain);
+      // The piece it was opened on (a clip of the creator's video, "Shorts from this video")
+      setSourceRange(remixAuthor && !fromEditor && clipStart != null ? { start: clipStart, end: clipEnd ?? null } : null);
 
       // Songs from the editor's music library: credited in the post body and
       // metadata, and 3Speak sound creators get a locked 5% like remix authors.
@@ -631,6 +645,7 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
         // Remix from shorts should use the short upload form (no title/tags)
         setFromStories(true);
         setIsStory(asStory);
+        if (teaserSource) setTeaserOf(teaserSource);
       }
 
       // Pre-populate beneficiary list with locked minimums. Pro

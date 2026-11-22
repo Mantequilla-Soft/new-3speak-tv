@@ -20,6 +20,9 @@ import AccountImg from "../HiveAvatar/AccountImg";
 import { timelineMeta, applyTimelineToDescription } from "../../utils/videoTimeline";
 import { getFollowers } from "../../hive-api/api";
 import { useStoryStreak, STREAK_MIN } from "../../lib/stories";
+import TeaserShortCard from "../TeaserShortCard/TeaserShortCard";
+import { FEATURE_EDITOR } from "../../utils/config";
+import { challengeText, useCurrentChallenge } from "../../lib/shortsChallenge";
 
 // Same cap as a short's description on the details step.
 const STORY_CAPTION_MAX = 240;
@@ -58,6 +61,7 @@ function EmbedPreview() {
     musicCredits,
     isNsfw,
     publishedPermlink,
+    teaserOf,
     isPremium,
     setStep,
     chapters,
@@ -186,6 +190,8 @@ function EmbedPreview() {
   // the popup automatically — see the "Give feedback" button below.
   const openReview = useReviewModal((s) => s.openReview);
   const [mood, setMood] = React.useState(null);
+  // This week's Shorts challenge (from the checker), for the review row below
+  const currentWeekChallenge = useCurrentChallenge();
 
   // `completed` first: once the upload has finished this screen is the
   // destination, not a half-filled form to bounce out of. Without that, anything
@@ -202,6 +208,9 @@ function EmbedPreview() {
     : { name: community.name, title: community.title || community.name };
 
   const yes = t("common.actions.yes");
+  // The weekly Shorts challenge this Short joins (its tag is on): lib/shortsChallenge.js
+  const thisChallenge = fromStories ? currentWeekChallenge : null;
+  const challengeOn = thisChallenge && (tagsPreview || []).includes(thisChallenge.tag) ? thisChallenge : null;
   const filledOptions = (pollOptions || []).filter((o) => String(o || '').trim()).length;
   const extraSettings = quickStory ? [] : [
     collaborator?.account && {
@@ -234,6 +243,7 @@ function EmbedPreview() {
       value: `${pollQuestion ? `${pollQuestion} · ` : ''}${filledOptions} · ${t("social.polls.days", { count: pollDays || 1 })}`,
     },
     fromStories && seriesId && { key: 'series', icon: 'video_library', label: t("episodes.series.kind"), value: yes },
+    fromStories && challengeOn && { key: 'challenge', icon: 'emoji_events', label: t("challenges.reviewRow"), value: challengeText(challengeOn, 'title') },
     gated && {
       key: 'gated',
       icon: 'lock',
@@ -677,6 +687,16 @@ function EmbedPreview() {
                   <Trans i18nKey="upload.done.videoPublished" components={{ br: <br /> }} />
                 )}
             </p>
+
+            {/* "Make a Short from this video": the file just uploaded, whole in the
+                Shorts editor; on the Short's own screen, again for another moment. */}
+            {FEATURE_EDITOR && (
+              fromStories
+                ? <TeaserShortCard teaserOf={teaserOf} />
+                : publishedPermlink && (
+                  <TeaserShortCard video={{ file: videoFile || prevVideoFile, author: user, permlink: publishedPermlink, duration: videoDuration }} />
+                )
+            )}
 
             {/* How was your upload (35d): five moods; any of them opens the review. */}
             <div className="ep-done__feedback">

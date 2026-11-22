@@ -443,7 +443,15 @@
     "videoPublished": "Il tuo video è pubblicato. È in codifica in background, il che può richiedere qualche minuto.",
     "promote": "Promuovi",
     "goToProfile": "Il mio profilo",
-    "feedback": "Com'è andato il caricamento?"
+    "feedback": "Com'è andato il caricamento?",
+    "teaser": {
+      "title": "Crea uno Short da questo video",
+      "text": "Gli Short portano nuovi spettatori ai tuoi video lunghi. Il video intero si apre nell'editor: scegli il momento che vuoi condividere, taglialo e pubblica. Lo Short rimanda al video completo.",
+      "button": "Crea uno Short",
+      "anotherTitle": "Crea un altro Short dallo stesso video",
+      "anotherText": "Il video intero si riapre nell'editor, così puoi scegliere un altro momento.",
+      "anotherButton": "Creane un altro"
+    }
   },
   "record": {
     "speechErrors": {

@@ -11,6 +11,11 @@ import { renderWithProviders, stubMatchMedia, toastMessages } from './_render.js
 
 const m = vi.hoisted(() => ({}))
 vi.mock('sonner', async () => (await import('./_render.jsx')).sonnerModule())
+// The weekly Shorts challenge depends on the date: none unless a test sets one
+vi.mock('../../../src/lib/shortsChallenge', async (importOriginal) => ({
+  ...(await importOriginal()),
+  useCurrentChallenge: () => m.challenge || null,
+}))
 vi.mock('../../../src/hive-api/aioha', async () => (await import('./_render.jsx')).aiohaModule({
   getCurrentProvider: () => m.provider,
 }))
@@ -104,7 +109,7 @@ async function ready() {
 beforeEach(() => {
   stubMatchMedia(false)
   Object.assign(m, {
-    user: 'uploader', provider: null, fromStories: false, isStory: false,
+    user: 'uploader', provider: null, fromStories: false, isStory: false, challenge: null,
     quota: { ready: true, exempt: false, video: null, short: null, audio: null },
     uploadLimit: null,
     premium: { premium: false },
@@ -230,6 +235,18 @@ describe('upload step 1: picking a video', () => {
 
 describe('upload step 1: shorts and stories', () => {
   beforeEach(() => { m.fromStories = true })
+
+  it('points at this week\'s Shorts challenge, not for a Story or a normal video', async () => {
+    m.challenge = { week: '2026-W48', tag: 'challenge2026w48', theme: 'workspace', texts: { en: { title: 'Your workspace', prompt: 'Show where you create.' } } }
+    const { unmount } = mount()
+    await ready()
+    expect(screen.getByRole('link', { name: /This week's Shorts challenge: Your workspace/ })).toHaveAttribute('href', '/challenge')
+    unmount()
+    m.isStory = true
+    mount()
+    await ready()
+    expect(screen.queryByRole('link', { name: /Shorts challenge/ })).toBeNull()
+  })
 
   it('says shorts must be short and vertical', async () => {
     mount()

@@ -440,7 +440,15 @@
     "videoPublished": "Na-publish na ang video mo. Ine-encode ito sa background, na puwedeng tumagal nang ilang minuto.",
     "promote": "I-promote",
     "goToProfile": "Profile ko",
-    "feedback": "Kumusta ang upload mo?"
+    "feedback": "Kumusta ang upload mo?",
+    "teaser": {
+      "title": "Gumawa ng Short mula sa video na ito",
+      "text": "Nagdadala ang Shorts ng bagong manonood sa mahahaba mong video. Bubukas ang buong video mo sa editor: piliin ang sandaling gusto mong ibahagi, i-trim, at i-post. Naka-link ang Short sa buong video.",
+      "button": "Gumawa ng Short",
+      "anotherTitle": "Gumawa ng isa pang Short mula sa parehong video",
+      "anotherText": "Bubukas ulit ang buong video mo sa editor para makapili ka ng ibang sandali.",
+      "anotherButton": "Gumawa pa"
+    }
   },
   "record": {
     "speechErrors": {

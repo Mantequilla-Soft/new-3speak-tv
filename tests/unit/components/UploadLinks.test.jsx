@@ -9,9 +9,14 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { screen, waitFor } from '@testing-library/react'
 import { renderWithProviders, stubMatchMedia } from './_render.jsx'
 
-const m = vi.hoisted(() => ({ editor: true, settings: {}, premium: { premium: false } }))
+const m = vi.hoisted(() => ({ editor: true, settings: {}, premium: { premium: false }, challenge: null }))
 // 🔒 The viewer's Pro status (the landscape video editor is Pro only)
 vi.mock('../../../src/hooks/usePremiumStatus', () => ({ usePremiumStatus: () => m.premium }))
+// The weekly Shorts challenge depends on the date: none unless a test sets one
+vi.mock('../../../src/lib/shortsChallenge', async (importOriginal) => ({
+  ...(await importOriginal()),
+  useCurrentChallenge: () => m.challenge,
+}))
 vi.mock('../../../src/hive-api/aioha', async () => (await import('./_render.jsx')).aiohaModule())
 vi.mock('../../../src/utils/config', async (importOriginal) => {
   const real = await importOriginal()
@@ -40,6 +45,7 @@ beforeEach(() => {
   m.editor = true
   m.settings = {}
   m.premium = { premium: false }
+  m.challenge = null
   events = []
   useSupportBlock.setState({ block: null })
   useAppStore.setState({ user: null, incubationHandle: null })
@@ -112,6 +118,16 @@ describe('UploadLinks: category tiles', () => {
     await user.click(screen.getByRole('button', { name: 'Back' }))
     await openCat(user, 'Others')
     expect(titles()).toEqual(['Community Snap', 'Playlist'])
+  })
+
+  it('this week\'s Shorts challenge sits after the uploads, with its theme under it, and links to /challenge', async () => {
+    m.challenge = { week: '2026-W48', tag: 'challenge2026w48', theme: 'workspace', texts: { en: { title: 'Your workspace', prompt: 'Show where you create.' } } }
+    useAppStore.setState({ user: 'badadib' })
+    const { user } = renderWithProviders(<UploadLinks linkClass="share-link" />)
+    await openCat(user, 'Video')
+    expect(titles()).toEqual(['Regular Video', 'Vertical Short', 'Story (24h)', 'Weekly challenge', 'Shorts Editor', 'Video Editor'])
+    expect(screen.getByTitle('Weekly challenge')).toHaveTextContent('Your workspace')
+    expect(screen.getByTitle('Weekly challenge').closest('a')).toHaveAttribute('href', '/challenge')
   })
 })
 

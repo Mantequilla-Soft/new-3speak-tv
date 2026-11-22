@@ -16,6 +16,7 @@ import { StepProgress } from '../legacy-studio/StepProgress';
 import EmbedUploadProgressBar from './EmbedUploadProgressBar';
 import { Button, Icon, StatusPill, Toggle } from '../v2/ui';
 import { EDITOR_VIDEO_MAX_SEC } from '../../utils/editorFormat';
+import ChallengeBanner from '../ChallengeBanner/ChallengeBanner';
 import { SHORTS_MAX_DURATION_SEC, shortsMaxDurationLabel, cameraRecordEnabledFor, VIDEO_IMPORT_ENABLED, FEATURE_EDITOR, storiesEnabledFor } from '../../utils/config';
 import { isChromium } from '../../utils/browser';
 import { useTranslation, Trans } from 'react-i18next';
@@ -392,6 +393,9 @@ function EmbedVideoUploadStep1() {
           <p className="upload-story-card__hint">{t("upload.select.asStoryHint")}</p>
         </div>
       )}
+
+      {/* 🏁 This week's Shorts challenge, for a Short (a Story lasts a day) */}
+      {fromStories && !isStory && <ChallengeBanner />}
 
       {/* ⏳ Before a file is picked: what the free plan allows today. */}
       <UploadQuotaNote kind={quotaKind} entry={quotaEntry} refusal={quotaRefusal} user={user} className="upload-quota-note--studio" />

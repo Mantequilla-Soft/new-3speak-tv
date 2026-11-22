@@ -440,7 +440,15 @@
     "videoPublished": "Video yako imechapishwa. Inasimbwa chinichini, jambo linaloweza kuchukua dakika chache.",
     "promote": "Tangaza",
     "goToProfile": "Wasifu wangu",
-    "feedback": "Upakiaji wako ulikuwaje?"
+    "feedback": "Upakiaji wako ulikuwaje?",
+    "teaser": {
+      "title": "Tengeneza Short kutoka video hii",
+      "text": "Shorts huleta watazamaji wapya kwenye video zako ndefu. Video yako yote inafunguka kwenye kihariri: chagua sehemu unayotaka kushiriki, ikate na uchapishe. Short inaunganisha na video kamili.",
+      "button": "Tengeneza Short",
+      "anotherTitle": "Tengeneza Short nyingine kutoka video ileile",
+      "anotherText": "Video yako yote inafunguka tena kwenye kihariri ili uchague sehemu nyingine.",
+      "anotherButton": "Tengeneza nyingine"
+    }
   },
   "record": {
     "speechErrors": {

@@ -437,7 +437,15 @@
     "videoPublished": "Videomu sudah diterbitkan. Sedang di-encode di latar belakang, yang bisa memakan waktu beberapa menit.",
     "promote": "Promosikan",
     "goToProfile": "Profilku",
-    "feedback": "Bagaimana unggahanmu?"
+    "feedback": "Bagaimana unggahanmu?",
+    "teaser": {
+      "title": "Buat Short dari video ini",
+      "text": "Shorts membawa penonton baru ke video panjangmu. Seluruh videomu terbuka di editor: pilih momen yang ingin kamu bagikan, potong, lalu posting. Short-nya menautkan ke video lengkap.",
+      "button": "Buat Short",
+      "anotherTitle": "Buat Short lain dari video yang sama",
+      "anotherText": "Seluruh videomu terbuka lagi di editor, jadi kamu bisa memilih momen lain.",
+      "anotherButton": "Buat lagi"
+    }
   },
   "record": {
     "speechErrors": {
