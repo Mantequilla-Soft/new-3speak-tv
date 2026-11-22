@@ -3,6 +3,7 @@ import { getHiveClient } from '../../utils/hiveNode';
 import { PrivateKey } from '@hiveio/dhive';
 import { KeyTypes, Providers } from '@aioha/aioha';
 import { useTranslation, Trans } from 'react-i18next';
+import { QRCodeSVG } from 'qrcode.react';
 import aioha, { setActiveAuthHandler } from '../../hive-api/aioha';
 import { hivePerVests, vestsWithHp } from '../../lib/walletOps';
 import { Dialog, Button, ChoiceCard, Field, Banner, Icon } from '../v2/ui';
@@ -73,6 +74,9 @@ export default function ActiveAuthModal() {
   const [method, setMethod] = useState(null); // null = the two ways to sign | 'wallet' | 'key'
   // The wallet being connected right now (its card shows as chosen).
   const [pendingProvider, setPendingProvider] = useState(null);
+  // HiveAuth's has:// request while it waits for the phone: shown as a QR to
+  // scan, and a tap opens the app when it is on this phone.
+  const [hiveAuthQr, setHiveAuthQr] = useState('');
   const [activeKey, setActiveKey] = useState('');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
@@ -106,6 +110,7 @@ export default function ActiveAuthModal() {
         setError('');
         setBusy(false);
         setPendingProvider(null);
+        setHiveAuthQr('');
       });
     });
     return () => setActiveAuthHandler(null);
@@ -187,11 +192,15 @@ export default function ActiveAuthModal() {
       const res = await aioha.login(provider, username, {
         msg: 'Authorize active transaction',
         keyType: KeyTypes.Active,
+        // Without this HiveAuth waits for a phone that was never shown a QR.
+        hiveauth: { cbWait: (payload) => setHiveAuthQr(payload) },
       });
+      setHiveAuthQr('');
       if (!res?.success) throw new Error(res?.error || t('auth.activeAuth.errors.connectFailed'));
       parked = null;
       await signWithAioha();
     } catch (e) {
+      setHiveAuthQr('');
       if (parked) {
         try { aioha.addOtherLogin(username, parked); } catch { /* ignore */ }
       }
@@ -308,6 +317,16 @@ export default function ActiveAuthModal() {
             ))}
           </div>
         </>
+      )}
+
+      {hiveAuthQr && method === 'wallet' && (
+        <a className="v2-well aauth-qr" href={hiveAuthQr} target="_blank" rel="noreferrer">
+          <span className="aauth-qr__code"><QRCodeSVG value={hiveAuthQr} size={140} /></span>
+          <span className="aauth-qr__text">
+            <b>{WALLET_LABELS[Providers.HiveAuth]}</b>
+            <span>{t('auth.loginModal.hiveAuthQrHint')}</span>
+          </span>
+        </a>
       )}
 
       {busy && method !== 'key' && (

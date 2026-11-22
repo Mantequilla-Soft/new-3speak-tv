@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.155',
+    category: 'account',
+    date: '2026-11-22',
+    summary: 'Buying 3Speak Pro with HiveAuth after a Butter Auth login now shows the QR code to scan or tap.',
+  },
+  {
     version: '2.0.154',
     category: 'account',
     date: '2026-11-22',
