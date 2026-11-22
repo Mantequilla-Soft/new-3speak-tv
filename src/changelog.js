@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.154',
+    category: 'account',
+    date: '2026-11-22',
+    summary: 'The account menu is tidier: your places as tiles, everything else in three folders, and a moon button for the theme.',
+  },
+  {
     version: '2.0.150',
     category: 'account',
     date: '2026-11-20',

@@ -58,7 +58,12 @@
       "channel": "Canale",
       "history": "Cronologia"
     },
-    "darkTheme": "Tema scuro"
+    "darkTheme": "Tema scuro",
+    "folders": {
+      "creator": "Strumenti creatore",
+      "community": "Community",
+      "help": "Aiuto e 3Speak"
+    }
   },
   "notifications": {
     "pushOff": "Notifiche disattivate su questo dispositivo",

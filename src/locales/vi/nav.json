@@ -58,7 +58,12 @@
       "channel": "Kênh",
       "history": "Lịch sử"
     },
-    "darkTheme": "Giao diện tối"
+    "darkTheme": "Giao diện tối",
+    "folders": {
+      "creator": "Công cụ nhà sáng tạo",
+      "community": "Cộng đồng",
+      "help": "Trợ giúp và 3Speak"
+    }
   },
   "notifications": {
     "pushOff": "Đã tắt thông báo trên thiết bị này",

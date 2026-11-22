@@ -58,7 +58,12 @@
       "channel": "Kanaal",
       "history": "Geschiedenis"
     },
-    "darkTheme": "Donker thema"
+    "darkTheme": "Donker thema",
+    "folders": {
+      "creator": "Creator-tools",
+      "community": "Community",
+      "help": "Hulp en 3Speak"
+    }
   },
   "notifications": {
     "pushOff": "Meldingen uitgeschakeld voor dit apparaat",

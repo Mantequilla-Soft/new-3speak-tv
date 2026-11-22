@@ -58,7 +58,12 @@
       "channel": "ช่อง",
       "history": "ประวัติ"
     },
-    "darkTheme": "ธีมมืด"
+    "darkTheme": "ธีมมืด",
+    "folders": {
+      "creator": "เครื่องมือครีเอเตอร์",
+      "community": "ชุมชน",
+      "help": "ความช่วยเหลือและ 3Speak"
+    }
   },
   "notifications": {
     "pushOff": "ปิดการแจ้งเตือนสำหรับอุปกรณ์นี้แล้ว",

@@ -1,13 +1,13 @@
 // @vitest-environment jsdom
 // The account menu the avatar opens (components/nav/ProfileNav.jsx, 07d + 42b):
-// who is signed in with a Switch (change account), their voting power and
-// resource credits, their places as tiles, the theme switch, the other pages
-// they can use, the small links with "Hide pages", Settings and Log out, and the
-// ways it closes (Escape, the backdrop, moving to another page).
+// who is signed in with the theme button and a Switch (change account), their
+// voting power and resource credits, their places as tiles, the folders that
+// hold everything else (Creator tools, Community, Help and 3Speak), and the ways
+// it closes (Escape, the backdrop, moving to another page).
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { act, screen, waitFor, within } from '@testing-library/react'
 import { useNavigate } from 'react-router-dom'
-import { renderWithProviders } from './_render.jsx'
+import { renderWithProviders, stubMatchMedia } from './_render.jsx'
 import i18n from '../../../src/i18n'
 
 const m = vi.hoisted(() => ({}))
@@ -57,7 +57,12 @@ beforeEach(() => {
     pwa: { canInstallPrompt: false, isIOS: false, showInstall: false, promptInstall: vi.fn() },
   })
   useAppStore.setState({ user: 'badadib', incubationHandle: null, LogOut: vi.fn() })
+  // A phone: the bottom bar shows, so the menu carries Groups, Live and Chat.
+  stubMatchMedia(true)
 })
+
+// Opens one of the folders by its title.
+const openFolder = (user, name) => user.click(screen.getByRole('button', { name: new RegExp(`^${name}`) }))
 afterEach(() => localStorage.clear())
 
 describe('the account menu', () => {
@@ -71,7 +76,8 @@ describe('the account menu', () => {
   })
 
   it('shows the Hive node in use, without the scheme', async () => {
-    mount()
+    const { user } = mount()
+    await openFolder(user, 'Help and 3Speak')
     expect(await screen.findByText('node.example')).toBeInTheDocument()
   })
 
@@ -99,10 +105,53 @@ describe('the account menu', () => {
     const label = (el) => (el.querySelector('.pn-label') || el).textContent.trim()
     const items = within(menu()).getAllByRole('menuitem').map(label)
     expect(items).toEqual([
-      'Switch', 'Channel', 'Studio', 'Wallet', 'Playlists', 'History', 'Badges',
-      // Settings as a row, About and FAQ along the bottom (owner 2026-11-12).
-      'Analytics', 'Comment inbox', 'Groups', 'Live', 'Chat', 'Rankings', 'Settings', 'About 3Speak', 'FAQ',
+      // Settings is the sixth tile, in place of Badges (owner 2026-11-21); then
+      // Creator tools, the folder open at first (owner 2026-11-22, design 6).
+      'Switch', 'Channel', 'Studio', 'Wallet', 'Playlists', 'History', 'Settings',
+      'Analytics', 'Comment inbox',
     ])
+  })
+
+  it('opens one folder at a time, and a closed one names what is inside', async () => {
+    const { user, menu } = mount()
+    const head = (name) => screen.getByRole('button', { name: new RegExp(`^${name}`) })
+    expect(head('Creator tools')).toHaveAttribute('aria-expanded', 'true')
+    expect(head('Community')).toHaveTextContent('Groups, Live, Chat, Rankings')
+    expect(head('Help and 3Speak')).toHaveTextContent('About 3Speak, FAQ, Discord, X, Telegram')
+    await openFolder(user, 'Community')
+    expect(head('Community')).toHaveAttribute('aria-expanded', 'true')
+    expect(head('Creator tools')).toHaveAttribute('aria-expanded', 'false')
+    expect(within(menu()).queryByRole('menuitem', { name: 'Analytics' })).toBeNull()
+    expect(within(menu()).getByRole('menuitem', { name: 'Rankings' })).toHaveAttribute('href', '/leaderboard')
+    expect(within(menu()).getByRole('menuitem', { name: 'Live' })).toHaveAttribute('href', '/live')
+    // Tapping the open one closes it.
+    await openFolder(user, 'Community')
+    expect(head('Community')).toHaveAttribute('aria-expanded', 'false')
+  })
+
+  it('keeps the folder last opened open the next time', async () => {
+    const first = mount()
+    await openFolder(first.user, 'Help and 3Speak')
+    first.unmount()
+    mount()
+    expect(screen.getByRole('button', { name: /^Help and 3Speak/ })).toHaveAttribute('aria-expanded', 'true')
+    expect(screen.getByRole('menuitem', { name: 'FAQ' })).toHaveAttribute('href', '/faq')
+  })
+
+  it('on a desktop Community holds only Rankings: the top bar has Groups, Live and Chat', async () => {
+    stubMatchMedia(false)
+    const { user, menu } = mount()
+    await openFolder(user, 'Community')
+    const names = within(menu()).getAllByRole('menuitem').map((el) => (el.querySelector('.pn-label') || el).textContent.trim())
+    expect(names).toContain('Rankings')
+    for (const gone of ['Groups', 'Live', 'Chat']) expect(names).not.toContain(gone)
+  })
+
+  it('an account with no creator pages has no Creator tools folder', () => {
+    useAppStore.setState({ user: null, incubationHandle: 'newbie' })
+    mount()
+    expect(screen.queryByRole('button', { name: /^Creator tools/ })).toBeNull()
+    expect(screen.getByRole('button', { name: /^Community/ })).toBeInTheDocument()
   })
 
   it('the comment inbox is the Comments tab of your own profile', () => {
@@ -207,6 +256,7 @@ describe('the account menu', () => {
   it('on an iPhone, Install explains the Share-sheet way', async () => {
     m.pwa = { canInstallPrompt: false, isIOS: true, showInstall: true, promptInstall: vi.fn() }
     const { user } = mount()
+    await openFolder(user, 'Help and 3Speak')
     await user.click(screen.getByRole('menuitem', { name: 'Install App' }))
     expect(toast).toHaveBeenCalledWith(expect.anything(), expect.objectContaining({ description: expect.stringMatching(/Add to Home Screen/) }))
     expect(m.pwa.promptInstall).not.toHaveBeenCalled()
@@ -215,6 +265,7 @@ describe('the account menu', () => {
   it('elsewhere, Install asks the browser to install the app', async () => {
     m.pwa = { canInstallPrompt: true, isIOS: false, showInstall: true, promptInstall: vi.fn() }
     const { user } = mount()
+    await openFolder(user, 'Help and 3Speak')
     await user.click(screen.getByRole('menuitem', { name: 'Install App' }))
     expect(m.pwa.promptInstall).toHaveBeenCalledTimes(1)
   })
@@ -224,15 +275,20 @@ describe('the account menu', () => {
     expect(screen.queryByRole('menuitem', { name: /Hide pages|Show pages/ })).toBeNull()
   })
 
-  it('the theme switch turns dark mode on and off', async () => {
+  it('the moon button by Switch turns dark mode on and off', async () => {
     act(() => useAppStore.getState().setTheme('dark'))
     const { user } = mount()
-    await user.click(screen.getByRole('switch', { name: 'Switch to light mode' }))
+    const moon = screen.getByRole('switch', { name: 'Dark theme' })
+    expect(moon).toHaveAttribute('aria-checked', 'true')
+    expect(moon).toHaveAttribute('title', 'Switch to light mode')
+    await user.click(moon)
     expect(useAppStore.getState().theme).toBe('light')
+    expect(screen.getByRole('switch', { name: 'Dark theme' })).toHaveAttribute('aria-checked', 'false')
   })
 
-  it('links to 3Speak on Discord, X and Telegram in new tabs', () => {
-    mount()
+  it('links to 3Speak on Discord, X and Telegram in new tabs, in the Help folder', async () => {
+    const { user } = mount()
+    await openFolder(user, 'Help and 3Speak')
     for (const name of ['3Speak on Discord', '3Speak on X', '3Speak on Telegram']) {
       expect(screen.getByRole('link', { name })).toHaveAttribute('target', '_blank')
     }

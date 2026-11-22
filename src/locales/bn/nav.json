@@ -58,7 +58,12 @@
       "channel": "চ্যানেল",
       "history": "ইতিহাস"
     },
-    "darkTheme": "ডার্ক থিম"
+    "darkTheme": "ডার্ক থিম",
+    "folders": {
+      "creator": "ক্রিয়েটর টুল",
+      "community": "কমিউনিটি",
+      "help": "সাহায্য ও 3Speak"
+    }
   },
   "notifications": {
     "pushOff": "এই ডিভাইসে নোটিফিকেশন বন্ধ করা হয়েছে",

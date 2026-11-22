@@ -32,6 +32,12 @@
   @media (max-width: 1024px) {
     bottom: var(--bottom-bar-clearance);
   }
+  // Phones: the sheet stands right on the bar, without the 8px of page the
+  // clearance leaves between them (owner 2026-11-22: "the padding at the
+  // bottom is off"). Shorts has no bar and a clearance of 0, so 0 there too.
+  @include v2.mobile {
+    bottom: max(0px, calc(var(--bottom-bar-clearance) - 8px));
+  }
   // Phones: the page behind the sheet dims, like every sheet.
   @include v2.mobile {
     &:not(.peek):not(.leaving) { background: var(--overlay); }
@@ -78,7 +84,9 @@
     max-height: 88dvh;
     border-radius: var(--r-3xl) var(--r-3xl) 0 0;
     border-bottom: 0;
-    padding: 0 0 env(safe-area-inset-bottom, 0px);
+    // The bottom bar already covers the phone's own bar (home indicator), so
+    // the sheet pads for it only where there is no bottom bar (Shorts).
+    padding: 0 0 max(0px, calc(env(safe-area-inset-bottom, 0px) - var(--bottom-bar-clearance)));
     box-shadow: var(--shadow-sheet);
     animation-name: pn-sheet-up;
     animation-duration: var(--t-slow);
@@ -237,7 +245,8 @@
   padding: 0 14px;
 }
 .pn-tile {
-  aspect-ratio: 1;
+  // 72 tall, not square, so an open folder fits on a laptop screen (design 6).
+  height: 72px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -259,41 +268,99 @@
   &:hover { background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); color: var(--text); }
   &:active { transform: scale(.98); }
   .pn-label { max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  // Phones: the sheet is full width, so square tiles grew to a third of the
+  // screen each (owner 2026-11-21: "much much smaller"). A fixed short tile
+  // keeps the six places in about 120px.
+  @include v2.mobile {
+    height: 56px;
+    gap: 2px;
+    border-radius: var(--r-lg);
+  }
   .pn-tile-icon.is-accent { color: var(--accent); }
   .pn-tile-icon.is-cyan { color: var(--cyan); }
 }
 
-// The theme on its own tile (07d): radius 20, padding 12/14, icon 24, 14/500,
-// and a 44 × 28 switch, cyan when on.
-.pn-theme {
+// The theme as a moon (or sun) button by Switch, the same size and wash.
+.pn-theme-btn {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--r-md);
+  background: color-mix(in srgb, var(--text) 12%, transparent);
+  color: var(--text);
+  cursor: pointer;
+  transition: background var(--t-fast) var(--ease);
+  &:hover { background: color-mix(in srgb, var(--text) 18%, transparent); }
+}
+
+// The folders (design 6): a 48px head on surface-2, radius 16, with the
+// folder's icon in its tone, the title, what is inside while closed, and a
+// chevron. Open, its rows follow in two columns (one on a desktop card).
+.pn-folder {
+  flex: none; // the list scrolls; a folder never shrinks and clips its rows
+  margin: 0 14px;
+  border-radius: var(--r-xl);
+  background: var(--surface-2);
+  overflow: hidden;
+}
+.pn-folder-head {
   display: flex;
   align-items: center;
   gap: 12px;
-  margin: 0 14px;
-  padding: 12px 14px;
-  border-radius: var(--r-xl);
-  background: var(--surface-2);
+  width: 100%;
+  min-height: 48px;
+  padding: 0 12px 0 14px;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  &:hover { background: color-mix(in srgb, var(--text) 6%, transparent); }
 
-  .pn-theme-label { flex: 1; min-width: 0; font-size: 14px; font-weight: 500; }
-
-  .v2-toggle {
-    height: 28px;
-    padding: 4px;
-    border-radius: var(--r-md);
-    box-shadow: none;
-    background: var(--bg);
-    .v2-toggle__thumb { background: var(--muted); }
-    &.is-on { background: var(--cyan); .v2-toggle__thumb { background: var(--on-media); transform: translateX(16px); } }
+  .pn-folder-icon.is-accent { color: var(--accent); }
+  .pn-folder-icon.is-cyan { color: var(--cyan); }
+  .pn-folder-title { flex: none; font-size: 14px; font-weight: 500; }
+  .pn-folder-sum {
+    flex: 1;
+    min-width: 0;
+    text-align: right;
+    font-size: 12px;
+    color: var(--muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
+  .pn-folder-chev { flex: none; margin-left: auto; color: var(--muted); }
+}
+.pn-folder-body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 0 6px 8px;
+  animation: pn-folder-open var(--t-base) var(--ease);
+  @media (prefers-reduced-motion: reduce) { animation: none; }
+
+  .pn-socials { padding: 2px 8px 0; }
+  // The folder is surface-2 already, so the channel chips step back to surface.
+  .social-link { background: var(--surface); }
+}
+.pn-folder-items {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  @include v2.mobile { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .pn-item .pn-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+}
+@keyframes pn-folder-open {
+  from { opacity: 0; transform: translateY(-4px); }
 }
 
 // Rows (42b: 40 tall, radius 12, icon 18 + a 13px label).
-.pn-section {
-  display: flex;
-  flex-direction: column;
-  padding: 0 8px;
-  &:empty { display: none; }
-}
 
 .pn-item {
   display: flex;
@@ -322,18 +389,6 @@
   @include v2.mobile { min-height: 44px; }
 }
 
-// Only where the top bar has no tabs (the bottom bar is showing).
-.pn-phone-only {
-  @media (min-width: 1025px) { display: none; }
-}
-// Only where the top bar has no chat button (phones).
-.pn-mobile-only {
-  @include v2.tablet-up { display: none; }
-}
-// Only where the top bar shows its section tabs.
-.pn-desktop-only {
-  @media (max-width: 1024px) { display: none; }
-}
 
 .profilenav-count {
   display: inline-grid;
@@ -435,24 +490,14 @@
   &:hover { background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); color: var(--text); }
 }
 
-// 07d footer: a 1px line, padding 14/18, Settings left and Log out right, 14 muted.
-// The bottom: About, FAQ (and Log out) on one row of 40px buttons like the
-// list's rows, then the channel links and the node line under them.
+// The bottom: only "Powered by Hive" (About, FAQ and the channels are in the
+// Help folder since 2026-11-22).
 .pn-footer {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  padding: 6px 8px 10px;
+  padding: 8px 8px 10px;
   border-top: 1px solid var(--border);
   flex: none;
-
-  .pn-footer-row { display: flex; align-items: center; gap: 10px; }
-  .pn-socials { padding-left: 2px; padding-right: 2px; }
-}
-// About and FAQ: menu rows (.pn-item), sharing the bottom row half and half.
-.pn-foot-btn {
-  flex: 1;
-  min-width: 0;
 }
 
 @keyframes pn-drop-in {
@@ -494,4 +539,10 @@
   .pn-warmup-link { font-size: 12px; font-weight: 700; color: var(--cyan); }
 
   &.is-choose .pn-meter-label { white-space: normal; line-height: 1.4; }
+}
+
+// Phones: while the sheet is open the bottom bar loses its round top corners,
+// so sheet and bar meet as one surface with no page showing at the corners.
+@include v2.mobile {
+  :root:has(.profilenav-container.visible:not(.peek)) .bottom-nav { border-radius: 0; }
 }

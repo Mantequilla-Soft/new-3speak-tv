@@ -58,7 +58,12 @@
       "channel": "Канал",
       "history": "Історія"
     },
-    "darkTheme": "Темна тема"
+    "darkTheme": "Темна тема",
+    "folders": {
+      "creator": "Інструменти автора",
+      "community": "Спільнота",
+      "help": "Допомога і 3Speak"
+    }
   },
   "notifications": {
     "pushOff": "Сповіщення на цьому пристрої вимкнено",

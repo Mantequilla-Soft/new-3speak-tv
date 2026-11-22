@@ -58,7 +58,12 @@
       "channel": "채널",
       "history": "기록"
     },
-    "darkTheme": "다크 테마"
+    "darkTheme": "다크 테마",
+    "folders": {
+      "creator": "크리에이터 도구",
+      "community": "커뮤니티",
+      "help": "도움말 및 3Speak"
+    }
   },
   "notifications": {
     "pushOff": "이 기기의 알림을 껐어요",

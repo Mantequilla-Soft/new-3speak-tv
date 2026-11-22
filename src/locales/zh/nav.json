@@ -58,7 +58,12 @@
       "channel": "频道",
       "history": "历史"
     },
-    "darkTheme": "深色主题"
+    "darkTheme": "深色主题",
+    "folders": {
+      "creator": "创作者工具",
+      "community": "社区",
+      "help": "帮助与 3Speak"
+    }
   },
   "notifications": {
     "pushOff": "已关闭此设备的通知",

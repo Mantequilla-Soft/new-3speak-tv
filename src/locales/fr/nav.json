@@ -58,7 +58,12 @@
       "channel": "Chaîne",
       "history": "Historique"
     },
-    "darkTheme": "Thème sombre"
+    "darkTheme": "Thème sombre",
+    "folders": {
+      "creator": "Outils créateur",
+      "community": "Communauté",
+      "help": "Aide et 3Speak"
+    }
   },
   "notifications": {
     "pushOff": "Notifications désactivées sur cet appareil",
