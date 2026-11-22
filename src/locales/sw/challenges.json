@@ -9,7 +9,7 @@
   "howTitle": "Jinsi inavyofanya kazi",
   "how1": "Kila wiki ina mada, kuanzia Jumapili 00:00 hadi Jumamosi 23:59 UTC.",
   "how2": "Chapisha Short na uwashe \"Jiunge na changamoto ya wiki hii\". Itaongeza #{{tag}}.",
-  "how3": "Maingizo yanaonekana hapa baada ya timu kuyakagua. Tumia video zako mwenyewe na sauti kutoka maktaba ya kihariri.",
+  "how3": "Maingizo yanaonekana hapa baada ya timu kuyakagua. Tumia video zako mwenyewe.",
   "entries": "Maingizo",
   "entriesCount_one": "Ingizo {{count}}",
   "entriesCount_other": "Maingizo {{count}}",
@@ -30,5 +30,10 @@
   "uploadBanner": "Changamoto ya Shorts ya wiki hii: {{title}}",
   "uploadBannerAction": "Tazama",
   "homeStrip": "<b>{{title}}</b> ndiyo changamoto ya Shorts ya wiki hii",
-  "reviewRow": "Changamoto"
+  "reviewRow": "Changamoto",
+  "pickWeek": "Chagua wiki",
+  "weekOption": "Wiki ya {{week}}: {{title}}",
+  "thisWeekOption": "Wiki ya {{week}}: {{title}} (wiki hii)",
+  "previousWeeks": "Wiki zilizopita",
+  "noPreviousWeeks": "Bado hakuna: hii ni wiki ya kwanza."
 }

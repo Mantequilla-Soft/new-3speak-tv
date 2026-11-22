@@ -8,7 +8,7 @@
   "howTitle": "Cách tham gia",
   "how1": "Mỗi tuần có một chủ đề, từ 00:00 Chủ nhật đến 23:59 thứ Bảy (UTC).",
   "how2": "Đăng một Shorts và bật “Tham gia thử thách tuần này”. Thẻ #{{tag}} sẽ được thêm vào.",
-  "how3": "Bài tham gia sẽ hiện ở đây sau khi đội ngũ kiểm tra. Hãy dùng cảnh quay của chính bạn và âm thanh từ thư viện của trình chỉnh sửa.",
+  "how3": "Bài tham gia sẽ hiện ở đây sau khi đội ngũ kiểm tra. Hãy dùng cảnh quay của chính bạn.",
   "entries": "Bài dự thi",
   "entriesCount_other": "{{count}} bài dự thi",
   "noEntries": "Chưa có bài dự thi nào. Hãy là người đầu tiên!",
@@ -28,5 +28,10 @@
   "uploadBanner": "Thử thách Shorts tuần này: {{title}}",
   "uploadBannerAction": "Xem ngay",
   "homeStrip": "<b>{{title}}</b> là thử thách Shorts tuần này",
-  "reviewRow": "Thử thách"
+  "reviewRow": "Thử thách",
+  "pickWeek": "Chọn tuần",
+  "weekOption": "Tuần {{week}}: {{title}}",
+  "thisWeekOption": "Tuần {{week}}: {{title}} (tuần này)",
+  "previousWeeks": "Các tuần trước",
+  "noPreviousWeeks": "Chưa có: đây là tuần đầu tiên."
 }

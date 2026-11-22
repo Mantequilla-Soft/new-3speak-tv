@@ -8,7 +8,7 @@
   "howTitle": "Cara kerjanya",
   "how1": "Setiap minggu punya tema, dari Minggu 00:00 sampai Sabtu 23:59 UTC.",
   "how2": "Unggah Shorts dan aktifkan \"Ikut tantangan minggu ini\". Tag #{{tag}} akan ditambahkan.",
-  "how3": "Karya muncul di sini setelah dicek oleh tim. Gunakan rekamanmu sendiri dan suara dari pustaka editor.",
+  "how3": "Karya muncul di sini setelah dicek oleh tim. Gunakan rekamanmu sendiri.",
   "entries": "Entri",
   "entriesCount_other": "{{count}} entri",
   "noEntries": "Belum ada entri. Jadilah yang pertama!",
@@ -28,5 +28,10 @@
   "uploadBanner": "Tantangan Shorts minggu ini: {{title}}",
   "uploadBannerAction": "Lihat",
   "homeStrip": "<b>{{title}}</b> adalah tantangan Shorts minggu ini",
-  "reviewRow": "Tantangan"
+  "reviewRow": "Tantangan",
+  "pickWeek": "Pilih minggu",
+  "weekOption": "Minggu {{week}}: {{title}}",
+  "thisWeekOption": "Minggu {{week}}: {{title}} (minggu ini)",
+  "previousWeeks": "Minggu sebelumnya",
+  "noPreviousWeeks": "Belum ada: ini minggu pertama."
 }

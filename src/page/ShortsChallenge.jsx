@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
@@ -43,15 +43,24 @@ export default function ShortsChallenge() {
   const thisWeek = weekIdOf(now);
   const weekId = weekParam ? String(weekParam).toUpperCase() : null;
 
-  const list = useShortsChallenges();
+  // Every earlier week too, for the week picker (the grid below shows 8)
+  const list = useShortsChallenges({ past: 104 });
   const one = useShortsChallenge(weekId, { enabled: !!weekId });
   const loading = list.isLoading || (!!weekId && one.isLoading);
   const challenge = weekId ? (one.data || null) : (list.data?.current || null);
   const isCurrent = !!challenge && challenge.week === thisWeek;
   const isPast = !!challenge && challenge.week < thisWeek;
   const next = list.data?.next || null;
-  const past = (list.data?.past || []).filter((c) => c.week !== challenge?.week);
+  const past = (list.data?.past || []).filter((c) => c.week !== challenge?.week).slice(0, 8);
   const thisWeeksChallenge = list.data?.current || null;
+  // The week picker: this week and every one before it (plus the week on screen,
+  // when it is a coming one)
+  // On this week's page: the earlier weeks, under "Pick a week". On another
+  // week's page: this week too, to get back, and the week on screen.
+  const pickable = [isCurrent ? null : thisWeeksChallenge, ...(list.data?.past || [])].filter(Boolean);
+  if (challenge && !isCurrent && !pickable.some((c) => c.week === challenge.week)) pickable.unshift(challenge);
+  useEffect(() => { setPage(1); }, [weekId]);
+  const pickWeek = (week) => { if (week) navigate(week === thisWeek ? '/challenge' : `/challenge/${week}`); };
 
   const { data, isFetching, isError } = useQuery({
     queryKey: ['shortsChallengeEntries', challenge?.week, page],
@@ -100,9 +109,9 @@ export default function ShortsChallenge() {
           )}
         </section>
         {next && (
-          <Link to={`/challenge/${next.week}`} className="challenge-next">
-            <span className="challenge-next__label">{t('challenges.eyebrow', { week: weekNumber(next.week) })}</span>
-            <span className="challenge-next__hint">{t('challenges.nextHint')}</span>
+          <Link to={`/challenge/${next.week}`} className="challenge-tile challenge-next">
+            <span className="challenge-tile__label">{t('challenges.eyebrow', { week: weekNumber(next.week) })}</span>
+            <span className="challenge-tile__hint">{t('challenges.nextHint')}</span>
             <span className="challenge-next__title">{challengeText(next, 'title')}</span>
           </Link>
         )}
@@ -117,47 +126,74 @@ export default function ShortsChallenge() {
 
   return (
     <div className="challenge-page">
+      {/* The week on the left; on the right (under it on a phone) the week
+          picker, next week's theme and how it works */}
       <header className="challenge-hero">
-        <span className="challenge-hero__eyebrow">{t('challenges.eyebrow', { week: weekNumber(challenge.week) })}</span>
-        <h1 className="challenge-hero__title">{challengeText(challenge, 'title')}</h1>
-        <p className="challenge-hero__prompt">{challengeText(challenge, 'prompt')}</p>
-        <p className="challenge-hero__meta">
-          {[
-            t('challenges.dates', { start: dayLabel(start), end: dayLabel(end) }),
-            isCurrent && (daysLeft <= 0 ? t('challenges.endsToday') : t('challenges.endsIn', { count: daysLeft })),
-          ].filter(Boolean).join(' · ')}
-        </p>
-        <div className="challenge-hero__actions">
-          {isCurrent && (
-            <Button variant="primary" size={48} icon="add" onClick={join}>{t('challenges.join')}</Button>
-          )}
-          <Link to={`/t/${challenge.tag}`} className="challenge-hero__tag">#{challenge.tag}</Link>
-        </div>
-        {!isCurrent && (
-          <p className="challenge-hero__note">
-            {t(isPast ? 'challenges.pastWeek' : 'challenges.upcomingWeek')}{' '}
-            {thisWeeksChallenge && <Link to="/challenge">{t('challenges.backToCurrent')}</Link>}
+        <div className="challenge-hero__main">
+          <span className="challenge-hero__eyebrow">{t('challenges.eyebrow', { week: weekNumber(challenge.week) })}</span>
+          <h1 className="challenge-hero__title">{challengeText(challenge, 'title')}</h1>
+          <p className="challenge-hero__prompt">{challengeText(challenge, 'prompt')}</p>
+          <p className="challenge-hero__meta">
+            {[
+              t('challenges.dates', { start: dayLabel(start), end: dayLabel(end) }),
+              isCurrent && (daysLeft <= 0 ? t('challenges.endsToday') : t('challenges.endsIn', { count: daysLeft })),
+            ].filter(Boolean).join(' · ')}
           </p>
-        )}
-      </header>
+          <div className="challenge-hero__actions">
+            {isCurrent && (
+              <Button variant="primary" size={48} icon="add" onClick={join}>{t('challenges.join')}</Button>
+            )}
+            <Link to={`/t/${challenge.tag}`} className="challenge-hero__tag">#{challenge.tag}</Link>
+          </div>
+          {!isCurrent && (
+            <p className="challenge-hero__note">
+              {t(isPast ? 'challenges.pastWeek' : 'challenges.upcomingWeek')}{' '}
+              {thisWeeksChallenge && <Link to="/challenge">{t('challenges.backToCurrent')}</Link>}
+            </p>
+          )}
+        </div>
 
-      <div className="challenge-info">
-        <section className="challenge-how">
-          <h2 className="challenge-section-title">{t('challenges.howTitle')}</h2>
-          <ol>
-            <li>{t('challenges.how1')}</li>
-            <li>{t('challenges.how2', { tag: challenge.tag })}</li>
-            <li>{t('challenges.how3')}</li>
-          </ol>
-        </section>
-        {isCurrent && next && (
-          <Link to={`/challenge/${next.week}`} className="challenge-next">
-            <span className="challenge-next__label">{t('challenges.next')}</span>
-            <span className="challenge-next__hint">{t('challenges.nextHint')}</span>
-            <span className="challenge-next__title">{challengeText(next, 'title')}</span>
-          </Link>
-        )}
-      </div>
+        <div className="challenge-hero__side">
+          <div className="challenge-hero__tiles">
+            {/* Previous weeks: the week picker (this week and every one before) */}
+            <div className="challenge-tile challenge-prev">
+              <span className="challenge-tile__label">{t('challenges.previousWeeks')}</span>
+              {pickable.some((c) => c.week !== challenge.week) ? (
+                <select
+                  className="v2-input is-select challenge-picker"
+                  value={isCurrent ? '' : challenge.week}
+                  onChange={(e) => pickWeek(e.target.value)}
+                  aria-label={t('challenges.pickWeek')}
+                >
+                  {isCurrent && <option value="" disabled>{t('challenges.pickWeek')}</option>}
+                  {pickable.map((c) => (
+                    <option key={c.week} value={c.week}>
+                      {t(c.week === thisWeek ? 'challenges.thisWeekOption' : 'challenges.weekOption', { week: weekNumber(c.week), title: challengeText(c, 'title') })}
+                    </option>
+                  ))}
+                </select>
+              ) : (
+                <span className="challenge-tile__hint">{t('challenges.noPreviousWeeks')}</span>
+              )}
+            </div>
+            {isCurrent && next && (
+              <Link to={`/challenge/${next.week}`} className="challenge-tile challenge-next">
+                <span className="challenge-tile__label">{t('challenges.next')}</span>
+                <span className="challenge-tile__hint">{t('challenges.nextHint')}</span>
+                <span className="challenge-next__title">{challengeText(next, 'title')}</span>
+              </Link>
+            )}
+          </div>
+          <section className="challenge-how">
+            <h2 className="challenge-section-title">{t('challenges.howTitle')}</h2>
+            <ol>
+              <li>{t('challenges.how1')}</li>
+              <li>{t('challenges.how2', { tag: challenge.tag })}</li>
+              <li>{t('challenges.how3')}</li>
+            </ol>
+          </section>
+        </div>
+      </header>
 
       {challenge.week <= thisWeek && (
         <section className="challenge-entries">

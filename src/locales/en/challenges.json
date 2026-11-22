@@ -9,7 +9,7 @@
   "howTitle": "How it works",
   "how1": "Every week has a theme, from Sunday 00:00 to Saturday 23:59 UTC.",
   "how2": "Post a Short and turn on \"Join this week's challenge\". It adds #{{tag}}.",
-  "how3": "Entries show up here once the team has checked them. Use your own footage, and sounds from the editor's library.",
+  "how3": "Entries show up here once the team has checked them. Use your own footage.",
   "entries": "Entries",
   "entriesCount_one": "{{count}} entry",
   "entriesCount_other": "{{count}} entries",
@@ -30,5 +30,10 @@
   "uploadBanner": "This week's Shorts challenge: {{title}}",
   "uploadBannerAction": "See it",
   "homeStrip": "<b>{{title}}</b> is this week's Shorts challenge",
-  "reviewRow": "Challenge"
+  "reviewRow": "Challenge",
+  "pickWeek": "Pick a week",
+  "weekOption": "Week {{week}}: {{title}}",
+  "thisWeekOption": "Week {{week}}: {{title}} (this week)",
+  "previousWeeks": "Previous weeks",
+  "noPreviousWeeks": "None yet: this is the first week."
 }

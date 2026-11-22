@@ -112,6 +112,7 @@ import { soundLabel } from '../utils/soundCredits';
 import { reportOpen } from '../lib/cardReach';
 import { soundPathOf } from '../lib/sounds';
 import SourceLink, { SOURCE_LINK_KINDS } from '../components/SourceLink/SourceLink';
+import ChallengeShortPill from '../components/ChallengeBanner/ChallengeShortPill';
 // Every toast from this module is headed "Shorts"; the message becomes the
 // line under it. See utils/toast.js.
 const toast = toastIn('Shorts');
@@ -1339,6 +1340,7 @@ const VideoShort = () => {
             // made from an audiogram: the episode (its card above the caption)
             audiogramOf: enriched.audiogramOf || null,
             madeFrom: enriched.madeFrom || null, // made from another post (lib/derived.js)
+            tags: v.tags?.length ? v.tags : (enriched.tags || []), // (the challenge pill reads these)
             _enriched: true,
           };
         }));
@@ -1645,6 +1647,7 @@ const VideoShort = () => {
               heading: sharedVideoData.heading || '', // `## Title` (utils/shortTitle.js)
               audiogramOf: sharedVideoData.audiogramOf || null, // made from an audiogram (utils/audiogramLink.js)
               madeFrom: sharedVideoData.madeFrom || null, // made from another post (lib/derived.js)
+              tags: sharedVideoData.tags || [], // the post's tags (the challenge pill reads these)
               storyExpiresAt: sharedVideoData.storyExpiresAt || null, // 24h story
               audio: soundLabel(sharedVideoData.sound, sharedVideoData.user.username),
               sound: sharedVideoData.sound || null, // for the sound chip's page (lib/sounds.js)
@@ -1850,6 +1853,7 @@ const VideoShort = () => {
               heading: shortData.heading || '', // `## Title` (utils/shortTitle.js)
               audiogramOf: shortData.audiogramOf || null, // made from an audiogram (utils/audiogramLink.js)
               madeFrom: shortData.madeFrom || null, // made from another post (lib/derived.js)
+              tags: shortData.tags || [], // the post's tags (the challenge pill reads these)
               storyExpiresAt: shortData.storyExpiresAt || null, // 24h story
               audio: soundLabel(shortData.sound, shortData.user.username),
               sound: shortData.sound || null, // for the sound chip's page (lib/sounds.js)
@@ -1905,6 +1909,7 @@ const VideoShort = () => {
           heading: shortData.heading || '', // `## Title` (utils/shortTitle.js)
           audiogramOf: shortData.audiogramOf || null, // made from an audiogram (utils/audiogramLink.js)
           madeFrom: shortData.madeFrom || null, // made from another post (lib/derived.js)
+          tags: shortData.tags || [], // the post's tags (the challenge pill reads these)
           storyExpiresAt: shortData.storyExpiresAt || null, // 24h story
           audio: soundLabel(shortData.sound, shortData.user.username),
           sound: shortData.sound || null, // for the sound chip's page (lib/sounds.js)
@@ -4244,6 +4249,8 @@ const VideoShort = () => {
               {!currentVideo.audiogramOf && currentVideo.madeFrom && SOURCE_LINK_KINDS.has(currentVideo.madeFrom.kind) && (
                 <SourceLink source={currentVideo.madeFrom} />
               )}
+              {/* 🏁 Posted for a weekly Shorts challenge (its week's tag): the theme, to that week's page */}
+              {currentVideo.tags?.length > 0 && <ChallengeShortPill tags={currentVideo.tags} />}
               {/* A poll on the Short (ours, or one made on PeakD or Ecency): a pill that opens it */}
               {currentPoll && (
                 <ShortPollPill author={currentVideo.author} permlink={currentVideo.hivePermlink || currentVideo.permlink} poll={currentPoll.poll} question={currentPoll.question} />

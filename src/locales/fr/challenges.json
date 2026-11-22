@@ -10,7 +10,7 @@
   "howTitle": "Comment ça marche",
   "how1": "Chaque semaine a un thème, du dimanche 00:00 au samedi 23:59 UTC.",
   "how2": "Publiez un Short et activez « Participer au défi de la semaine ». Cela ajoute #{{tag}}.",
-  "how3": "Les participations apparaissent ici une fois vérifiées par l'équipe. Utilisez vos propres images et les sons de la bibliothèque de l'éditeur.",
+  "how3": "Les participations apparaissent ici une fois vérifiées par l'équipe. Utilisez vos propres images.",
   "entries": "Participations",
   "entriesCount_one": "{{count}} participation",
   "entriesCount_other": "{{count}} participations",
@@ -32,5 +32,10 @@
   "uploadBanner": "Défi Shorts de la semaine : {{title}}",
   "uploadBannerAction": "Voir",
   "homeStrip": "<b>{{title}}</b> est le défi Shorts de la semaine",
-  "reviewRow": "Défi"
+  "reviewRow": "Défi",
+  "pickWeek": "Choisir une semaine",
+  "weekOption": "Semaine {{week}} : {{title}}",
+  "thisWeekOption": "Semaine {{week}} : {{title}} (cette semaine)",
+  "previousWeeks": "Semaines précédentes",
+  "noPreviousWeeks": "Aucune pour l'instant : c'est la première semaine."
 }

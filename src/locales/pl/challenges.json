@@ -11,7 +11,7 @@
   "howTitle": "Jak to działa",
   "how1": "Każdy tydzień ma swój temat, od niedzieli 00:00 do soboty 23:59 UTC.",
   "how2": "Opublikuj Shorta i włącz „Dołącz do wyzwania tygodnia”. To doda #{{tag}}.",
-  "how3": "Zgłoszenia pojawiają się tutaj, gdy zespół je sprawdzi. Używaj własnych nagrań i dźwięków z biblioteki edytora.",
+  "how3": "Zgłoszenia pojawiają się tutaj, gdy zespół je sprawdzi. Używaj własnych nagrań.",
   "entries": "Zgłoszenia",
   "entriesCount_one": "{{count}} zgłoszenie",
   "entriesCount_few": "{{count}} zgłoszenia",
@@ -34,5 +34,10 @@
   "uploadBanner": "Wyzwanie Shorts w tym tygodniu: {{title}}",
   "uploadBannerAction": "Zobacz",
   "homeStrip": "<b>{{title}}</b> to wyzwanie Shorts w tym tygodniu",
-  "reviewRow": "Wyzwanie"
+  "reviewRow": "Wyzwanie",
+  "pickWeek": "Wybierz tydzień",
+  "weekOption": "Tydzień {{week}}: {{title}}",
+  "thisWeekOption": "Tydzień {{week}}: {{title}} (ten tydzień)",
+  "previousWeeks": "Poprzednie tygodnie",
+  "noPreviousWeeks": "Jeszcze brak: to pierwszy tydzień."
 }

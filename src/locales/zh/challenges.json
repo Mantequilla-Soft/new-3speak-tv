@@ -8,7 +8,7 @@
   "howTitle": "参与方式",
   "how1": "每周一个主题，从周日 00:00 到周六 23:59（UTC）。",
   "how2": "发布短视频时打开“参加本周挑战”，系统会添加 #{{tag}}。",
-  "how3": "作品经团队审核后会显示在这里。请使用你自己拍摄的素材和编辑器音效库中的声音。",
+  "how3": "作品经团队审核后会显示在这里。请使用你自己拍摄的素材。",
   "entries": "参赛作品",
   "entriesCount_other": "{{count}} 个作品",
   "noEntries": "还没有作品，快来抢第一！",
@@ -28,5 +28,10 @@
   "uploadBanner": "本周短视频挑战：{{title}}",
   "uploadBannerAction": "查看",
   "homeStrip": "本周短视频挑战：<b>{{title}}</b>",
-  "reviewRow": "挑战"
+  "reviewRow": "挑战",
+  "pickWeek": "选择一周",
+  "weekOption": "第 {{week}} 周：{{title}}",
+  "thisWeekOption": "第 {{week}} 周：{{title}}（本周）",
+  "previousWeeks": "往期",
+  "noPreviousWeeks": "还没有：这是第一周。"
 }

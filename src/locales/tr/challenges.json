@@ -9,7 +9,7 @@
   "howTitle": "Nasıl çalışır?",
   "how1": "Her haftanın bir teması var, pazar 00:00'dan cumartesi 23:59'a (UTC) kadar.",
   "how2": "Bir Short paylaş ve \"Bu haftanın meydan okumasına katıl\" seçeneğini aç. Bu, #{{tag}} etiketini ekler.",
-  "how3": "Katılımlar ekip kontrol ettikten sonra burada görünür. Kendi görüntülerini ve editör kitaplığındaki sesleri kullan.",
+  "how3": "Katılımlar ekip kontrol ettikten sonra burada görünür. Kendi görüntülerini kullan.",
   "entries": "Katılımlar",
   "entriesCount_one": "{{count}} katılım",
   "entriesCount_other": "{{count}} katılım",
@@ -30,5 +30,10 @@
   "uploadBanner": "Bu haftanın Shorts meydan okuması: {{title}}",
   "uploadBannerAction": "Gör",
   "homeStrip": "Bu haftanın Shorts meydan okuması: <b>{{title}}</b>",
-  "reviewRow": "Meydan okuma"
+  "reviewRow": "Meydan okuma",
+  "pickWeek": "Bir hafta seç",
+  "weekOption": "{{week}}. hafta: {{title}}",
+  "thisWeekOption": "{{week}}. hafta: {{title}} (bu hafta)",
+  "previousWeeks": "Önceki haftalar",
+  "noPreviousWeeks": "Henüz yok: bu ilk hafta."
 }

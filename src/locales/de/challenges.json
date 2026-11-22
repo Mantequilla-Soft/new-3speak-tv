@@ -9,7 +9,7 @@
   "howTitle": "So funktioniert's",
   "how1": "Jede Woche hat ein Thema, von Sonntag 00:00 bis Samstag 23:59 UTC.",
   "how2": "Veröffentliche einen Short und aktiviere „Bei der Challenge dieser Woche mitmachen“. Dadurch wird #{{tag}} hinzugefügt.",
-  "how3": "Beiträge erscheinen hier, sobald das Team sie geprüft hat. Nutze eigenes Material und Sounds aus der Bibliothek des Editors.",
+  "how3": "Beiträge erscheinen hier, sobald das Team sie geprüft hat. Nutze eigenes Material.",
   "entries": "Beiträge",
   "entriesCount_one": "{{count}} Beitrag",
   "entriesCount_other": "{{count}} Beiträge",
@@ -30,5 +30,10 @@
   "uploadBanner": "Shorts-Challenge dieser Woche: {{title}}",
   "uploadBannerAction": "Ansehen",
   "homeStrip": "<b>{{title}}</b> ist die Shorts-Challenge dieser Woche",
-  "reviewRow": "Challenge"
+  "reviewRow": "Challenge",
+  "pickWeek": "Woche wählen",
+  "weekOption": "Woche {{week}}: {{title}}",
+  "thisWeekOption": "Woche {{week}}: {{title}} (diese Woche)",
+  "previousWeeks": "Frühere Wochen",
+  "noPreviousWeeks": "Noch keine: Das ist die erste Woche."
 }

@@ -8,7 +8,7 @@
   "howTitle": "参加方法",
   "how1": "テーマは毎週変わります。日曜 00:00 から土曜 23:59(UTC)まで。",
   "how2": "ショートを投稿して「今週のチャレンジに参加」をオンにしてください。#{{tag}} が追加されます。",
-  "how3": "参加作品はチームが確認した後にここに表示されます。自分で撮った映像と、エディターのライブラリのサウンドを使いましょう。",
+  "how3": "参加作品はチームが確認した後にここに表示されます。自分で撮った映像を使いましょう。",
   "entries": "参加作品",
   "entriesCount_other": "参加作品 {{count}} 件",
   "noEntries": "まだ参加作品はありません。一番乗りしましょう！",
@@ -28,5 +28,10 @@
   "uploadBanner": "今週のショートチャレンジ：{{title}}",
   "uploadBannerAction": "見る",
   "homeStrip": "今週のショートチャレンジは<b>{{title}}</b>",
-  "reviewRow": "チャレンジ"
+  "reviewRow": "チャレンジ",
+  "pickWeek": "週を選ぶ",
+  "weekOption": "第{{week}}週: {{title}}",
+  "thisWeekOption": "第{{week}}週: {{title}}(今週)",
+  "previousWeeks": "過去の週",
+  "noPreviousWeeks": "まだありません。今週が最初の週です。"
 }

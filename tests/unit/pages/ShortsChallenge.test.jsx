@@ -75,6 +75,37 @@ describe('ShortsChallenge page', () => {
     expect(m.entryCalls[0]).toEqual(['2026-W49', '1', '24'])
   })
 
+  it('Previous weeks: "Pick a week" and the earlier weeks; picking one opens it', async () => {
+    const { user } = renderWithProviders(<ShortsChallenge />, { route: '/challenge', path: '/challenge' })
+    const picker = await screen.findByRole('combobox', { name: 'Pick a week' })
+    expect([...picker.options].map((o) => o.textContent)).toEqual(['Pick a week', 'Week 48: Your workspace'])
+    expect(picker).toHaveValue('')
+    await user.selectOptions(picker, '2026-W48')
+    expect(screen.getByTestId('location').textContent).toBe('/challenge/2026-W48')
+  })
+
+  it('on an earlier week, the picker shows it and offers this week to get back', async () => {
+    const { user } = renderWithProviders(<ShortsChallenge />, { route: '/challenge/2026-W48', path: '/challenge/:week' })
+    const picker = await screen.findByRole('combobox', { name: 'Pick a week' })
+    expect([...picker.options].map((o) => o.textContent)).toEqual([
+      'Week 49: One skill in 60 seconds (this week)',
+      'Week 48: Your workspace',
+    ])
+    expect(picker).toHaveValue('2026-W48')
+    await user.selectOptions(picker, '2026-W49')
+    expect(screen.getByTestId('location').textContent).toBe('/challenge')
+  })
+
+  it('the Previous weeks tile says so while there is only this week, next to Next week', async () => {
+    m.list = { week: '2026-W49', current: W49, next: W50, past: [] }
+    renderWithProviders(<ShortsChallenge />, { route: '/challenge', path: '/challenge' })
+    expect(await screen.findByRole('heading', { level: 1, name: 'One skill in 60 seconds' })).toBeInTheDocument()
+    expect(screen.getByText('Previous weeks')).toBeInTheDocument()
+    expect(screen.getByText('None yet: this is the first week.')).toBeInTheDocument()
+    expect(screen.queryByRole('combobox', { name: 'Pick a week' })).toBeNull()
+    expect(screen.getByRole('link', { name: /Next week/ })).toHaveAttribute('href', '/challenge/2026-W50')
+  })
+
   it('"Join with a Short" remembers the week and opens the Shorts uploader', async () => {
     const { user } = renderWithProviders(<ShortsChallenge />, { route: '/challenge', path: '/challenge' })
     expect(await screen.findByText('No entries yet. Be the first!')).toBeInTheDocument()

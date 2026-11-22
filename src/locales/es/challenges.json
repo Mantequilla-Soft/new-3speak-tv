@@ -10,7 +10,7 @@
   "howTitle": "Cómo funciona",
   "how1": "Cada semana tiene un tema, del domingo a las 00:00 al sábado a las 23:59 UTC.",
   "how2": "Publica un Short y activa «Participar en el reto de esta semana». Se añade #{{tag}}.",
-  "how3": "Las participaciones aparecen aquí cuando el equipo las revisa. Usa tus propias imágenes y sonidos de la biblioteca del editor.",
+  "how3": "Las participaciones aparecen aquí cuando el equipo las revisa. Usa tus propias imágenes.",
   "entries": "Participaciones",
   "entriesCount_one": "{{count}} participación",
   "entriesCount_other": "{{count}} participaciones",
@@ -32,5 +32,10 @@
   "uploadBanner": "Reto de Shorts de esta semana: {{title}}",
   "uploadBannerAction": "Verlo",
   "homeStrip": "<b>{{title}}</b> es el reto de Shorts de esta semana",
-  "reviewRow": "Reto"
+  "reviewRow": "Reto",
+  "pickWeek": "Elige una semana",
+  "weekOption": "Semana {{week}}: {{title}}",
+  "thisWeekOption": "Semana {{week}}: {{title}} (esta semana)",
+  "previousWeeks": "Semanas anteriores",
+  "noPreviousWeeks": "Aún no hay: esta es la primera semana."
 }

@@ -4,7 +4,7 @@
 // and entries live in the checker's Mongo).
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import {
-  weekIdOf, tagOf, challengeText, rememberJoin, takeJoin, withChallengeTag,
+  weekIdOf, tagOf, challengeText, rememberJoin, takeJoin, withChallengeTag, challengeWeekOfTags,
   fetchChallenges, fetchChallenge, fetchChallengeEntries,
 } from '../../../src/lib/shortsChallenge'
 
@@ -33,6 +33,12 @@ describe('weeks and tags', () => {
   })
   it('gives each week its own tag', () => {
     expect(tagOf('2026-W48')).toBe('challenge2026w48')
+  })
+  it('reads the week back from a post\'s tags', () => {
+    expect(challengeWeekOfTags(['hive-181335', 'challenge2026w48'])).toBe('2026-W48')
+    expect(challengeWeekOfTags(['Challenge2027W01'])).toBe('2027-W01')
+    expect(challengeWeekOfTags(['challenge', 'challenges2026w48', 'x'])).toBeNull()
+    expect(challengeWeekOfTags(undefined)).toBeNull()
   })
 })
 
@@ -67,6 +73,11 @@ describe('checker calls', () => {
     const f = stubFetch(200, { success: true, week: '2026-W48', current: CH, next: null, past: [] })
     expect(await fetchChallenges()).toEqual({ week: '2026-W48', current: CH, next: null, past: [] })
     expect(f.mock.calls[0][0]).toMatch(/\/shorts-challenges$/)
+  })
+  it('asks for more earlier weeks when told to', async () => {
+    const f = stubFetch(200, { week: '2026-W48', current: CH, next: null, past: [] })
+    await fetchChallenges({ past: 104 })
+    expect(f.mock.calls[0][0]).toMatch(/\/shorts-challenges\?past=104$/)
   })
   it('one week; none that week is null, not an error', async () => {
     stubFetch(200, { success: true, challenge: CH })

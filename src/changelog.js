@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.171',
+    category: 'shorts',
+    date: '2026-11-22',
+    summary: 'Shorts made for the weekly challenge now show the week\'s theme, and the challenge page lets you look back at earlier weeks.',
+  },
+  {
     version: '2.0.169',
     category: 'shorts',
     date: '2026-11-22',

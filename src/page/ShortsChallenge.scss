@@ -10,16 +10,69 @@
 }
 
 .challenge-hero {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 8px;
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  align-items: start;
+  gap: 24px 32px;
   padding: 28px;
   border-radius: var(--r-3xl);
   background: var(--surface);
   border: 1px solid var(--border);
 
-  @include v2.mobile { padding: 20px; }
+  @media (max-width: 1000px) { grid-template-columns: minmax(0, 1fr); }
+  @include v2.mobile { padding: 20px; gap: 20px; }
+}
+
+.challenge-hero__main {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  min-width: 0;
+}
+
+.challenge-hero__side {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+
+.challenge-hero__tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+  gap: 12px;
+}
+
+// Previous weeks (the picker) and Next week, side by side
+.challenge-tile {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 6px;
+  min-width: 0;
+  padding: 14px 18px;
+  border-radius: var(--r-xl);
+  background: var(--surface-2);
+  color: var(--text);
+  text-decoration: none;
+}
+
+.challenge-tile__label {
+  @include v2.text(eyebrow);
+  color: var(--cyan);
+}
+
+.challenge-tile__hint {
+  @include v2.text(body-sm);
+  color: var(--muted);
+}
+
+.challenge-picker {
+  width: 100%;
+  min-height: 40px;
+  margin-top: 2px;
+  font-size: 14px;
 }
 
 .challenge-hero__eyebrow {
@@ -89,15 +142,10 @@
   color: var(--muted);
 }
 
-.challenge-info {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
-  gap: 16px;
-}
-
 .challenge-how {
-  @include v2.card(20);
-  padding: 18px 20px;
+  padding: 16px 18px;
+  border-radius: var(--r-xl);
+  background: var(--surface-2);
 
   ol {
     margin: 0;
@@ -111,26 +159,7 @@
   }
 }
 
-.challenge-next {
-  @include v2.card(20);
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  padding: 18px 20px;
-  text-decoration: none;
-  color: var(--text);
-  &:hover { background: var(--surface-2); }
-}
-
-.challenge-next__label {
-  @include v2.text(eyebrow);
-  color: var(--cyan);
-}
-
-.challenge-next__hint {
-  @include v2.text(body-sm);
-  color: var(--muted);
-}
+a.challenge-next:hover { background: color-mix(in srgb, var(--text) 8%, var(--surface-2)); }
 
 .challenge-next__title {
   @include v2.text(title-sm);

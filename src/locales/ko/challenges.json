@@ -8,7 +8,7 @@
   "howTitle": "참여 방법",
   "how1": "매주 테마가 있어요. 일요일 00:00부터 토요일 23:59(UTC)까지예요.",
   "how2": "쇼츠를 올리고 '이번 주 챌린지 참여'를 켜세요. #{{tag}} 태그가 추가돼요.",
-  "how3": "참가작은 팀이 확인한 뒤 여기에 표시돼요. 직접 찍은 영상과 편집기 라이브러리의 사운드를 사용하세요.",
+  "how3": "참가작은 팀이 확인한 뒤 여기에 표시돼요. 직접 찍은 영상을 사용하세요.",
   "entries": "참여작",
   "entriesCount_other": "참여작 {{count}}개",
   "noEntries": "아직 참여작이 없어요. 첫 번째 참여자가 되어 보세요!",
@@ -28,5 +28,10 @@
   "uploadBanner": "이번 주 쇼츠 챌린지: {{title}}",
   "uploadBannerAction": "보기",
   "homeStrip": "이번 주 쇼츠 챌린지는 <b>{{title}}</b>",
-  "reviewRow": "챌린지"
+  "reviewRow": "챌린지",
+  "pickWeek": "주 선택",
+  "weekOption": "{{week}}주차: {{title}}",
+  "thisWeekOption": "{{week}}주차: {{title}} (이번 주)",
+  "previousWeeks": "지난 주",
+  "noPreviousWeeks": "아직 없어요. 이번 주가 첫 주예요."
 }

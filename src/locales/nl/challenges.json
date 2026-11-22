@@ -9,7 +9,7 @@
   "howTitle": "Zo werkt het",
   "how1": "Elke week heeft een thema, van zondag 00:00 tot zaterdag 23:59 UTC.",
   "how2": "Plaats een Short en zet 'Doe mee met de challenge van deze week' aan. Dan wordt #{{tag}} toegevoegd.",
-  "how3": "Inzendingen verschijnen hier zodra het team ze heeft gecontroleerd. Gebruik je eigen beelden en geluiden uit de bibliotheek van de editor.",
+  "how3": "Inzendingen verschijnen hier zodra het team ze heeft gecontroleerd. Gebruik je eigen beelden.",
   "entries": "Inzendingen",
   "entriesCount_one": "{{count}} inzending",
   "entriesCount_other": "{{count}} inzendingen",
@@ -30,5 +30,10 @@
   "uploadBanner": "Shorts-challenge van deze week: {{title}}",
   "uploadBannerAction": "Bekijken",
   "homeStrip": "<b>{{title}}</b> is de Shorts-challenge van deze week",
-  "reviewRow": "Challenge"
+  "reviewRow": "Challenge",
+  "pickWeek": "Kies een week",
+  "weekOption": "Week {{week}}: {{title}}",
+  "thisWeekOption": "Week {{week}}: {{title}} (deze week)",
+  "previousWeeks": "Vorige weken",
+  "noPreviousWeeks": "Nog geen: dit is de eerste week."
 }

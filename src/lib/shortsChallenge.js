@@ -26,9 +26,9 @@ async function getJson(path) {
   return res.json();
 }
 
-/** This week, next week and the weeks before: { week, current, next, past }. */
-export async function fetchChallenges() {
-  const data = await getJson('/shorts-challenges');
+/** This week, next week and the weeks before (`past` of them, 8 by default): { week, current, next, past }. */
+export async function fetchChallenges({ past } = {}) {
+  const data = await getJson(`/shorts-challenges${past ? `?past=${past}` : ''}`);
   return { week: data?.week || null, current: data?.current || null, next: data?.next || null, past: data?.past || [] };
 }
 
@@ -44,9 +44,17 @@ export async function fetchChallengeEntries(weekId, { page = 1, limit = 24 } = {
   return { total: data?.total || 0, totalPages: data?.totalPages || 1, videos: data?.videos || [] };
 }
 
-/** This week, next week and the weeks before (react-query, shared by every caller). */
-export function useShortsChallenges() {
-  return useQuery({ queryKey: ['shortsChallenges'], queryFn: fetchChallenges, staleTime: STALE_MS, retry: 1 });
+/**
+ * This week, next week and the weeks before (react-query, shared by every caller).
+ * `past`: how many earlier weeks (the /challenge week picker asks for all of them).
+ */
+export function useShortsChallenges({ past } = {}) {
+  return useQuery({
+    queryKey: ['shortsChallenges', past || 8],
+    queryFn: () => fetchChallenges({ past }),
+    staleTime: STALE_MS,
+    retry: 1,
+  });
 }
 
 /** This week's challenge, or null (none this week, still loading, or the checker is down). */
@@ -90,6 +98,15 @@ export function weekIdOf(date = new Date()) {
 /** The Hive tag a week's entries carry: '2026-W48' -> 'challenge2026w48'. */
 export function tagOf(weekId) {
   return `challenge${String(weekId).replace('-W', 'w').toLowerCase()}`;
+}
+
+/** The challenge week a post's tags name ('challenge2026w48' -> '2026-W48'), or null. */
+export function challengeWeekOfTags(tags) {
+  for (const tag of tags || []) {
+    const m = /^challenge(\d{4})w(\d{2})$/.exec(String(tag).toLowerCase());
+    if (m) return `${m[1]}-W${m[2]}`;
+  }
+  return null;
 }
 
 // "Join with a Short" on /challenge: the Short's details step turns the switch on

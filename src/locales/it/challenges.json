@@ -10,7 +10,7 @@
   "howTitle": "Come funziona",
   "how1": "Ogni settimana ha un tema, da domenica alle 00:00 a sabato alle 23:59 UTC.",
   "how2": "Pubblica uno Short e attiva «Partecipa alla sfida di questa settimana». Aggiunge #{{tag}}.",
-  "how3": "Le partecipazioni compaiono qui dopo il controllo del team. Usa i tuoi filmati e i suoni della libreria dell'editor.",
+  "how3": "Le partecipazioni compaiono qui dopo il controllo del team. Usa i tuoi filmati.",
   "entries": "Partecipazioni",
   "entriesCount_one": "{{count}} partecipazione",
   "entriesCount_other": "{{count}} partecipazioni",
@@ -32,5 +32,10 @@
   "uploadBanner": "Sfida Short di questa settimana: {{title}}",
   "uploadBannerAction": "Scopri",
   "homeStrip": "<b>{{title}}</b> è la sfida Short di questa settimana",
-  "reviewRow": "Sfida"
+  "reviewRow": "Sfida",
+  "pickWeek": "Scegli una settimana",
+  "weekOption": "Settimana {{week}}: {{title}}",
+  "thisWeekOption": "Settimana {{week}}: {{title}} (questa settimana)",
+  "previousWeeks": "Settimane precedenti",
+  "noPreviousWeeks": "Ancora nessuna: questa è la prima settimana."
 }

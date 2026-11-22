@@ -9,7 +9,7 @@
   "howTitle": "Paano ito gumagana",
   "how1": "May tema ang bawat linggo, mula Linggo 00:00 hanggang Sabado 23:59 UTC.",
   "how2": "Mag-post ng Short at i-on ang \"Sumali sa challenge ngayong linggo\". Idadagdag nito ang #{{tag}}.",
-  "how3": "Lalabas dito ang mga entry kapag na-check na ng team. Gamitin ang sarili mong footage at mga tunog mula sa library ng editor.",
+  "how3": "Lalabas dito ang mga entry kapag na-check na ng team. Gamitin ang sarili mong footage.",
   "entries": "Mga entry",
   "entriesCount_one": "{{count}} entry",
   "entriesCount_other": "{{count}} na entry",
@@ -30,5 +30,10 @@
   "uploadBanner": "Shorts challenge ngayong linggo: {{title}}",
   "uploadBannerAction": "Tingnan",
   "homeStrip": "<b>{{title}}</b> ang Shorts challenge ngayong linggo",
-  "reviewRow": "Challenge"
+  "reviewRow": "Challenge",
+  "pickWeek": "Pumili ng linggo",
+  "weekOption": "Linggo {{week}}: {{title}}",
+  "thisWeekOption": "Linggo {{week}}: {{title}} (ngayong linggo)",
+  "previousWeeks": "Mga nakaraang linggo",
+  "noPreviousWeeks": "Wala pa: ito ang unang linggo."
 }
