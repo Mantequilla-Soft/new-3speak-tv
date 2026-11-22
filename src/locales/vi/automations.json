@@ -434,6 +434,10 @@
         "title": "Snap cho mỗi tập mới",
         "sub": "Khi bạn đăng một tập podcast, một snap kèm liên kết sẽ được đăng."
       },
+      "live_snap": {
+        "title": "Đăng snap khi tôi phát trực tiếp",
+        "sub": "Khi bạn bắt đầu phát trực tiếp, một snap kèm tiêu đề và đường dẫn sẽ được đăng."
+      },
       "discord_live": {
         "title": "Báo cho Discord khi tôi phát trực tiếp",
         "sub": "Khi bạn bắt đầu phát trực tiếp, máy chủ Discord của bạn nhận được một tin nhắn."
@@ -479,6 +483,7 @@
       "longerThan5": "Dài hơn 5 phút?",
       "importedDiscord": "Mới trên kênh của mình: {title}\n{url}",
       "podcastSnap": "Tập mới: {title}\n\n{url}",
+      "liveSnap": "Mình đang phát trực tiếp: {title}\n\n{url}",
       "discordLive": "{title} đang phát trực tiếp: {url}",
       "streamPollSnap": "Bình chọn từ buổi phát trực tiếp của mình: {question}\n\n{results}\n\n{url}",
       "pollResults": "Bình chọn đã kết thúc. Kết quả:\n\n{results}\n\nCảm ơn tất cả {votes} người đã bình chọn!",

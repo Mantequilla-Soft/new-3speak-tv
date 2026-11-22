@@ -434,6 +434,10 @@
         "title": "Snap ทุกตอนใหม่",
         "sub": "เมื่อคุณโพสต์ตอนพอดแคสต์ จะมี snap พร้อมลิงก์ถูกโพสต์ออกไป"
       },
+      "live_snap": {
+        "title": "โพสต์สแนปเมื่อฉันไลฟ์",
+        "sub": "เมื่อคุณเริ่มสตรีม จะมีสแนปพร้อมชื่อและลิงก์ส่งออกไป"
+      },
       "discord_live": {
         "title": "แจ้ง Discord เมื่อฉันไลฟ์",
         "sub": "เมื่อคุณเริ่มไลฟ์ เซิร์ฟเวอร์ Discord ของคุณจะได้รับข้อความ"
@@ -479,6 +483,7 @@
       "longerThan5": "ยาวกว่า 5 นาที?",
       "importedDiscord": "ใหม่ในช่องของฉัน: {title}\n{url}",
       "podcastSnap": "ตอนใหม่: {title}\n\n{url}",
+      "liveSnap": "ฉันกำลังไลฟ์อยู่: {title}\n\n{url}",
       "discordLive": "{title} กำลังไลฟ์อยู่: {url}",
       "streamPollSnap": "โพลจากไลฟ์ของฉัน: {question}\n\n{results}\n\n{url}",
       "pollResults": "ปิดโพลแล้ว ผลลัพธ์:\n\n{results}\n\nขอบคุณทั้ง {votes} คนที่มาโหวต!",

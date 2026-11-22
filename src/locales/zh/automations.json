@@ -434,6 +434,10 @@
         "title": "每个新单集都发一条 Snap",
         "sub": "你发布播客单集时，会发出一条带链接的 Snap。"
       },
+      "live_snap": {
+        "title": "开播时发一条快帖",
+        "sub": "开始直播时，会发出一条带标题和链接的快帖。"
+      },
       "discord_live": {
         "title": "开播时通知 Discord",
         "sub": "你开始直播时，你的 Discord 服务器会收到一条消息。"
@@ -479,6 +483,7 @@
       "longerThan5": "超过 5 分钟？",
       "importedDiscord": "我的频道有新视频：{title}\n{url}",
       "podcastSnap": "新单集：{title}\n\n{url}",
+      "liveSnap": "我正在直播：{title}\n\n{url}",
       "discordLive": "{title} 正在直播：{url}",
       "streamPollSnap": "我直播中的投票：{question}\n\n{results}\n\n{url}",
       "pollResults": "投票已结束。结果如下：\n\n{results}\n\n感谢全部 {votes} 位投票者！",

@@ -436,6 +436,10 @@
         "title": "প্রতিটি নতুন এপিসোডে Snap",
         "sub": "আপনি পডকাস্ট এপিসোড পোস্ট করলে তার লিংকসহ একটি Snap পোস্ট হয়।"
       },
+      "live_snap": {
+        "title": "লাইভে গেলে স্ন্যাপ",
+        "sub": "আপনি স্ট্রিম শুরু করলে, তার শিরোনাম আর লিঙ্কসহ একটি স্ন্যাপ যায়।"
+      },
       "discord_live": {
         "title": "আমি লাইভে গেলে Discord-কে জানান",
         "sub": "আপনি স্ট্রিম শুরু করলে আপনার Discord সার্ভার একটি মেসেজ পায়।"
@@ -481,6 +485,7 @@
       "longerThan5": "5 মিনিটের বেশি লম্বা?",
       "importedDiscord": "আমার চ্যানেলে নতুন: {title}\n{url}",
       "podcastSnap": "নতুন এপিসোড: {title}\n\n{url}",
+      "liveSnap": "আমি এখন লাইভে: {title}\n\n{url}",
       "discordLive": "{title} এখন লাইভে: {url}",
       "streamPollSnap": "আমার স্ট্রিমের পোল: {question}\n\n{results}\n\n{url}",
       "pollResults": "পোল বন্ধ হয়েছে। ফলাফল:\n\n{results}\n\nভোট দেওয়া সব {votes} জনকে ধন্যবাদ!",

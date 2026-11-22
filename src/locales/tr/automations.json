@@ -436,6 +436,10 @@
         "title": "Her yeni bölüme bir snap",
         "sub": "Bir podcast bölümü paylaştığında, bağlantısıyla bir snap paylaşılır."
       },
+      "live_snap": {
+        "title": "Canlı yayına geçince snap",
+        "sub": "Bir yayın başlattığında, başlığı ve bağlantısıyla bir snap paylaşılır."
+      },
       "discord_live": {
         "title": "Canlı yayına geçince Discord'a haber ver",
         "sub": "Bir yayın başlattığında, Discord sunucuna bir mesaj gider."
@@ -481,6 +485,7 @@
       "longerThan5": "5 dakikadan uzun mu?",
       "importedDiscord": "Kanalımda yeni: {title}\n{url}",
       "podcastSnap": "Yeni bölüm: {title}\n\n{url}",
+      "liveSnap": "Şu an canlıdayım: {title}\n\n{url}",
       "discordLive": "{title} şimdi canlı: {url}",
       "streamPollSnap": "Yayınımdan anket: {question}\n\n{results}\n\n{url}",
       "pollResults": "Anket kapandı. Sonuçlar:\n\n{results}\n\nOy veren {votes} kişinin hepsine teşekkürler!",

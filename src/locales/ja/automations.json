@@ -434,6 +434,10 @@
         "title": "新しいエピソードごとに Snap",
         "sub": "ポッドキャストのエピソードを投稿すると、リンク付きの Snap が投稿されます。"
       },
+      "live_snap": {
+        "title": "ライブ開始時にスナップを投稿",
+        "sub": "配信を始めると、タイトルとリンク付きのスナップが投稿されます。"
+      },
       "discord_live": {
         "title": "ライブ開始を Discord に通知",
         "sub": "配信を始めると、あなたの Discord サーバーにメッセージが届きます。"
@@ -479,6 +483,7 @@
       "longerThan5": "5 分より長い？",
       "importedDiscord": "チャンネルに新着：{title}\n{url}",
       "podcastSnap": "新しいエピソード：{title}\n\n{url}",
+      "liveSnap": "ライブ配信中です：{title}\n\n{url}",
       "discordLive": "{title} がライブ配信中：{url}",
       "streamPollSnap": "配信での投票：{question}\n\n{results}\n\n{url}",
       "pollResults": "投票を締め切りました。結果はこちら：\n\n{results}\n\n投票してくれた {votes} 人のみなさん、ありがとうございます！",

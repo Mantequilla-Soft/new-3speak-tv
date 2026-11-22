@@ -436,6 +436,10 @@
         "title": "Een snap bij elke nieuwe aflevering",
         "sub": "Als je een podcastaflevering plaatst, gaat er een snap uit met de link."
       },
+      "live_snap": {
+        "title": "Snap als ik live ga",
+        "sub": "Als je een stream start, gaat er een snap uit met de titel en de link."
+      },
       "discord_live": {
         "title": "Discord laten weten als ik live ga",
         "sub": "Als je een stream start, krijgt je Discord-server een bericht."
@@ -481,6 +485,7 @@
       "longerThan5": "Langer dan 5 minuten?",
       "importedDiscord": "Nieuw op mijn kanaal: {title}\n{url}",
       "podcastSnap": "Nieuwe aflevering: {title}\n\n{url}",
+      "liveSnap": "Ik ben nu live: {title}\n\n{url}",
       "discordLive": "{title} is nu live: {url}",
       "streamPollSnap": "Peiling uit mijn stream: {question}\n\n{results}\n\n{url}",
       "pollResults": "De peiling is gesloten. Resultaten:\n\n{results}\n\nBedankt aan alle {votes} stemmers!",

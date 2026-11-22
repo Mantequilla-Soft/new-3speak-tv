@@ -57,6 +57,17 @@ describe('toolbox', () => {
     }
   })
 
+  it('has "Snap when I go live": a snap with the stream title and link when a stream starts', async () => {
+    const tpl = templates(catalog, t).find((x) => x.id === 'live_snap')
+    expect(tpl).toMatchObject({ group: 'live', event: 'stream_started' })
+    expect(tpl.sequence).toHaveLength(1)
+    expect(tpl.sequence[0]).toMatchObject({ type: 'post_snap', properties: { text: 'automations.templates.texts.liveSnap' } })
+    // The English text only uses what a started stream offers.
+    const en = (await import('../../../src/locales/en/automations.json')).default
+    const text = (en.automations || en).templates.texts.liveSnap
+    for (const [, name] of text.matchAll(/\{(\w+)\}/g)) expect(placeholdersFor(catalog, 'stream_started')).toContain(name)
+  })
+
   it('offers each event its own placeholders', () => {
     expect(placeholdersFor(catalog, 'tip_received')).toContain('from')
     expect(placeholdersFor(catalog, 'poll_ended')).toEqual(expect.arrayContaining(['question', 'results', 'winner']))
