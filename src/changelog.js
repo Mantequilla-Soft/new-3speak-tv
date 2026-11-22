@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.157',
+    category: 'audio',
+    date: '2026-11-22',
+    summary: 'With the screen off, the audio queue now goes on to the next track by itself instead of stopping.',
+  },
+  {
     version: '2.0.156',
     category: 'upload',
     date: '2026-11-22',

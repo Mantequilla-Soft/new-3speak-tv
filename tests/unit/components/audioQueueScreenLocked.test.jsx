@@ -186,6 +186,136 @@ describe('the queue with the screen locked', () => {
     expect(session.metadata).toMatchObject({ title: 'Track 3' })
   })
 
+  // The owner's phone 2026-11-22 (listen sessions): track 1 -> 2 went on with the
+  // screen off, 2 -> 3 sat silent for a minute. Each end on its own, no Next.
+  it('the second and third ends start their next tracks too, in place', async () => {
+    await startQueueThenLock()
+    const el = audio()
+    const firstLoads = vi.spyOn(el, 'setAttribute')
+    await reachEnd()
+    expect(store().audioCurrent).toBe(B)
+    expect(firstLoads.mock.calls.filter(([name]) => name === 'src')).toHaveLength(1)
+    firstLoads.mockRestore()
+    await act(async () => { el._t = 60; el.dispatchEvent(new Event('timeupdate')) })
+    HTMLMediaElement.prototype.play.mockClear()
+    const loads = vi.spyOn(el, 'setAttribute')
+    await reachEnd()
+    expect(store().audioCurrent).toBe(C)
+    expect(audio()).toBe(el)
+    expect(el.getAttribute('src')).toBe('https://ipfs-audio.3speak.tv/ipfs/cid3')
+    // Loaded once, from the end of track 2; the load effect keeps that load.
+    expect(loads.mock.calls.filter(([name]) => name === 'src')).toHaveLength(1)
+    expect(HTMLMediaElement.prototype.play.mock.calls.length).toBeGreaterThanOrEqual(1)
+    expect(el.paused).toBe(false)
+  })
+
+  it('reports a hand-over that left the player silent (queueTrace)', async () => {
+    const beacon = vi.fn(() => true)
+    Object.defineProperty(navigator, 'sendBeacon', { value: beacon, configurable: true })
+    await startQueueThenLock()
+    const el = audio()
+    // The phone refuses the in-place start.
+    HTMLMediaElement.prototype.play.mockImplementationOnce(function refused() { return Promise.reject(Object.assign(new Error('play() can only be initiated by a user gesture'), { name: 'NotAllowedError' })) })
+    HTMLMediaElement.prototype.play.mockImplementationOnce(function refused() { return Promise.reject(Object.assign(new Error('again'), { name: 'NotAllowedError' })) })
+    await reachEnd()
+    await act(async () => {})
+    expect(el.paused).toBe(true)
+    // Back a minute later: what happened goes to the checker.
+    const now = Date.now()
+    vi.spyOn(Date, 'now').mockReturnValue(now + 61000)
+    await act(async () => { setHidden(false) })
+    Date.now.mockRestore()
+    expect(beacon).toHaveBeenCalledTimes(1)
+    const [url, blob] = beacon.mock.calls[0]
+    expect(url).toMatch(/\/client-errors$/)
+    const body = JSON.parse(await blob.text())
+    expect(body.message).toMatch(/^\[audio-queue\] back after 6\d s, next track not playing \(inplace-play-refused\)/)
+    const steps = JSON.parse(body.stack).map(([name]) => name)
+    expect(steps).toEqual(expect.arrayContaining(['ended', 'inplace', 'inplace-play-refused', 'back']))
+    expect(JSON.parse(body.stack)[0][2]).toMatchObject({ track: 'audio-1', vis: 'hidden' })
+    delete navigator.sendBeacon
+  })
+
+  // The page frozen at the end of the track: `ended` only comes through when the
+  // phone wakes up, and then the next track starts at once. Still worth a report.
+  it('reports an end that came through long after the track stopped moving', async () => {
+    const beacon = vi.fn(() => true)
+    Object.defineProperty(navigator, 'sendBeacon', { value: beacon, configurable: true })
+    await startQueueThenLock()
+    const el = audio()
+    await act(async () => { el._t = 100; el.dispatchEvent(new Event('timeupdate')) })
+    const now = Date.now()
+    vi.spyOn(Date, 'now').mockReturnValue(now + 61000)
+    await reachEnd()
+    Date.now.mockRestore()
+    expect(store().audioCurrent).toBe(B)
+    expect(beacon).toHaveBeenCalledTimes(1)
+    const body = JSON.parse(await beacon.mock.calls[0][1].text())
+    expect(body.message).toBe('[audio-queue] next track started despite ended 61 s late')
+    const ended = JSON.parse(body.stack)[0][2]
+    expect(ended).toMatchObject({ track: 'audio-1', at: [100, null] })
+    expect(ended.lateMs).toBeGreaterThanOrEqual(61000)
+    expect(ended.lateMs).toBeLessThan(62000)
+    delete navigator.sendBeacon
+  })
+
+  // The fix for that: with the screen off the next track starts in the last
+  // moment of this one, from a tick that proves the page is awake.
+  it('with the screen off, hands over in the last second, before `ended`', async () => {
+    await startQueueThenLock()
+    const el = audio()
+    HTMLMediaElement.prototype.play.mockClear()
+    await act(async () => { el._t = 110; el.dispatchEvent(new Event('timeupdate')) })
+    expect(store().audioCurrent).toBe(A)
+    await act(async () => { el._t = 119.2; el.dispatchEvent(new Event('timeupdate')) })
+    expect(store().audioCurrent).toBe(B)
+    expect(audio()).toBe(el)
+    expect(el.getAttribute('src')).toBe('https://ipfs-audio.3speak.tv/ipfs/cid2')
+    expect(el.paused).toBe(false)
+    expect(HTMLMediaElement.prototype.play).toHaveBeenCalled()
+    // Track 2 plays on (its own ticks are not track 1's end) ...
+    await act(async () => { el._t = 30; el.dispatchEvent(new Event('timeupdate')) })
+    expect(store().audioCurrent).toBe(B)
+    // ... and hands over to 3 the same way.
+    await act(async () => { el._t = 119.5; el.dispatchEvent(new Event('timeupdate')) })
+    expect(store().audioCurrent).toBe(C)
+    expect(el.getAttribute('src')).toBe('https://ipfs-audio.3speak.tv/ipfs/cid3')
+  })
+
+  it('never cuts a track short with the screen on', async () => {
+    await startQueueThenLock()
+    await act(async () => { setHidden(false) })
+    const el = audio()
+    await act(async () => { el._t = 119.5; el.dispatchEvent(new Event('timeupdate')) })
+    expect(store().audioCurrent).toBe(A)
+    await reachEnd()
+    expect(store().audioCurrent).toBe(B)
+  })
+
+  it('starts the next track on unlock when the phone left it paused', async () => {
+    await startQueueThenLock()
+    const el = audio()
+    HTMLMediaElement.prototype.play.mockImplementationOnce(function refused() { return Promise.reject(Object.assign(new Error('no'), { name: 'NotAllowedError' })) })
+    HTMLMediaElement.prototype.play.mockImplementationOnce(function refused() { return Promise.reject(Object.assign(new Error('no'), { name: 'NotAllowedError' })) })
+    await reachEnd()
+    await act(async () => {})
+    expect(store().audioCurrent).toBe(B)
+    expect(el.paused).toBe(true)
+    await act(async () => { setHidden(false) })
+    expect(el.paused).toBe(false)
+    expect(el.getAttribute('src')).toBe('https://ipfs-audio.3speak.tv/ipfs/cid2')
+  })
+
+  it('sends nothing for a hand-over that went on at once', async () => {
+    const beacon = vi.fn(() => true)
+    Object.defineProperty(navigator, 'sendBeacon', { value: beacon, configurable: true })
+    await startQueueThenLock()
+    await reachEnd()
+    await act(async () => { setHidden(false) })
+    expect(beacon).not.toHaveBeenCalled()
+    delete navigator.sendBeacon
+  })
+
   // A phone may still say "visible" right after the screen went off, but the
   // window has lost the focus: the old code held the next track's opening for the
   // spot there (paused, in the background) and played the spot on its own element.
