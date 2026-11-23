@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.173',
+    category: 'audio',
+    date: '2026-11-23',
+    summary: 'Free accounts can now upload audio up to 20 minutes long instead of 15, and Pro still has no length limit.',
+  },
+  {
     version: '2.0.172',
     category: 'watch',
     date: '2026-11-23',

@@ -12,8 +12,8 @@
       "body": "Bez dziennego limitu filmów, Shortów i audio."
     },
     "longAudio": {
-      "title": "Audio dłuższe niż 15 minut",
-      "body": "Darmowe nagrania audio kończą się na 15 minutach."
+      "title": "Audio dłuższe niż 20 minut",
+      "body": "Darmowe nagrania audio kończą się na 20 minutach."
     }
   }
 }

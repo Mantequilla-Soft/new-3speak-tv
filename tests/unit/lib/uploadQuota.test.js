@@ -112,6 +112,9 @@ describe('refusals, told apart by code', () => {
   it('a 429 daily_audio_limit and a 413 audio_too_long are the audio limits', () => {
     expect(q.parseUploadLimit(429, { code: 'daily_audio_limit', limit: 2, used: 2, next_at: null })).toMatchObject({ code: 'daily_audio_limit', kind: 'audio', nextAt: null })
     expect(q.parseUploadLimit(413, { code: 'audio_too_long', max_seconds: 900, duration: 1830 })).toEqual({ code: 'audio_too_long', kind: 'audio', maxSeconds: 900, duration: 1830 })
+    // no max_seconds from the server: the free plan's 20 minutes (owner 2026-11-23, was 15)
+    expect(q.parseUploadLimit(413, { code: 'audio_too_long', duration: 1830 }).maxSeconds).toBe(20 * 60)
+    expect(q.DEFAULT_AUDIO_MAX_SECONDS).toBe(1200)
   })
   it('a plain 429 (the per-minute limiter, no code) is not a limit', () => {
     expect(q.parseUploadLimit(429, { error: 'Too many requests' })).toBeNull()

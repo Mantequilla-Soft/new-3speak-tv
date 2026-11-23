@@ -12,8 +12,8 @@
       "body": "Geen daglimiet voor video's, Shorts en audio."
     },
     "longAudio": {
-      "title": "Audio langer dan 15 minuten",
-      "body": "Gratis audio-uploads stoppen bij 15 minuten."
+      "title": "Audio langer dan 20 minuten",
+      "body": "Gratis audio-uploads stoppen bij 20 minuten."
     }
   }
 }
