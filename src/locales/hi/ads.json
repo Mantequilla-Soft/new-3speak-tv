@@ -307,6 +307,7 @@
   },
   "promote": {
     "pricingFailed": "प्रमोशन की कीमत लोड नहीं हो सकी।",
+    "balanceFailed": "आपका बैलेंस लोड नहीं हो सका।",
     "loginRequired": "प्रमोट करने के लिए कृपया लॉग इन करें।",
     "notEnoughBalance": "काफ़ी {{currency}} नहीं है — आपका बैलेंस {{balance}} {{currency}} है।",
     "verifying": "भुगतान भेज दिया — चेन पर पुष्टि हो रही है…",

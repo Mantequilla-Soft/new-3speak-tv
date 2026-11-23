@@ -21,6 +21,13 @@ describe('the page-not-found page', () => {
     await waitFor(() => expect(document.head.querySelector('meta[name="robots"]')).toHaveAttribute('content', 'noindex'))
   })
 
+  it('is never remembered by Continue where I left off (issue #579)', () => {
+    localStorage.setItem('last-page', '/wallet-typo')
+    renderWithProviders(<NotFound />, { route: '/wallet-typo' })
+    expect(localStorage.getItem('last-page')).toBeNull()
+    expect(screen.getByTestId('location')).toHaveTextContent('/wallet-typo')
+  })
+
   it('takes the visitor back to the home page', async () => {
     const { user } = renderWithProviders(<NotFound />, { route: '/no/such/page' })
     await user.click(screen.getByRole('button', { name: 'Go to home page' }))

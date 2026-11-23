@@ -307,6 +307,7 @@
   },
   "promote": {
     "pricingFailed": "Tanıtım fiyatları yüklenemedi.",
+    "balanceFailed": "Bakiyen yüklenemedi.",
     "loginRequired": "Öne çıkarmak için lütfen giriş yap.",
     "notEnoughBalance": "Yeterli {{currency}} yok; bakiyen {{balance}} {{currency}}.",
     "verifying": "Ödeme gönderildi, zincirde doğrulanıyor…",

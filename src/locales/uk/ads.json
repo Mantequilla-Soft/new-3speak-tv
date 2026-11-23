@@ -313,6 +313,7 @@
   },
   "promote": {
     "pricingFailed": "Не вдалося завантажити ціни на просування.",
+    "balanceFailed": "Не вдалося завантажити баланс.",
     "loginRequired": "Увійдіть, щоб просувати.",
     "notEnoughBalance": "Недостатньо {{currency}} — ваш баланс {{balance}} {{currency}}.",
     "verifying": "Оплату надіслано — перевіряємо в блокчейні…",

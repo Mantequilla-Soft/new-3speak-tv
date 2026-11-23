@@ -167,6 +167,14 @@ describe('the top bar for a visitor', () => {
 describe('the top bar for a member', () => {
   beforeEach(() => signIn())
 
+  it('opens Settings when /settings sent the visit Home (issue #579), once', async () => {
+    const { user } = mount({}, { route: { pathname: '/', state: { openSettings: true } } })
+    expect(await screen.findByRole('dialog', { name: 'Settings' })).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Close settings' }))
+    expect(screen.queryByRole('dialog', { name: 'Settings' })).not.toBeInTheDocument()
+    expect(screen.getByTestId('location')).toHaveTextContent(/^\/$/)
+  })
+
   it('shows the Hive bell, or the incubation bell for an account still incubating', () => {
     const { unmount } = mount()
     expect(screen.getByText('Hive bell')).toBeInTheDocument()

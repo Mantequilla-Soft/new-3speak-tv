@@ -304,6 +304,7 @@
   },
   "promote": {
     "pricingFailed": "Harga promosi tidak dapat dimuat.",
+    "balanceFailed": "Saldo kamu tidak dapat dimuat.",
     "loginRequired": "Silakan masuk untuk promosi.",
     "notEnoughBalance": "{{currency}} tidak cukup — saldomu {{balance}} {{currency}}.",
     "verifying": "Pembayaran terkirim — memverifikasi di chain…",

@@ -304,6 +304,7 @@
   },
   "promote": {
     "pricingFailed": "プロモーションの料金を読み込めませんでした。",
+    "balanceFailed": "残高を読み込めませんでした。",
     "loginRequired": "プロモーションするにはログインしてください。",
     "notEnoughBalance": "{{currency}} が足りません。残高は {{balance}} {{currency}} です。",
     "verifying": "支払いを送信しました。オンチェーンで確認中…",

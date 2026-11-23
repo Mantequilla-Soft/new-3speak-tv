@@ -307,6 +307,7 @@
   },
   "promote": {
     "pricingFailed": "Die Preise für Promotions konnten nicht geladen werden.",
+    "balanceFailed": "Dein Guthaben konnte nicht geladen werden.",
     "loginRequired": "Bitte melde dich an, um zu bewerben.",
     "notEnoughBalance": "Nicht genug {{currency}} – dein Guthaben beträgt {{balance}} {{currency}}.",
     "verifying": "Zahlung gesendet – wird auf der Chain überprüft…",

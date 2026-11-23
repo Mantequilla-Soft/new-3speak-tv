@@ -966,6 +966,9 @@ function App() {
               <Route path="/watched/:username" element={<WatchedView />} />
               <Route path="/curation/:user" element={<Curation />} />
               <Route path="/wallet" element={<OwnWalletRoute openLoginModal={openLoginModal} />} />
+              {/* Settings is a dialog, not a page: a typed or bookmarked /settings goes
+                  Home and the nav opens Settings there (issue #579). */}
+              <Route path="/settings" element={<Navigate to="/" replace state={{ openSettings: true }} />} />
               <Route path="/wallet/:user" element={<Wallet />} />
               <Route path="/test" element={<ProfileModal />} />
               <Route path="/image" element={<HiveImageUploader />} />

@@ -310,6 +310,7 @@
   },
   "promote": {
     "pricingFailed": "Não foi possível carregar os preços de promoção.",
+    "balanceFailed": "Não foi possível carregar o seu saldo.",
     "loginRequired": "Entre na sua conta para promover.",
     "notEnoughBalance": "{{currency}} insuficiente — seu saldo é {{balance}} {{currency}}.",
     "verifying": "Pagamento enviado — verificando na blockchain…",

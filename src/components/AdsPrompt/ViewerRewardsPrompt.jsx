@@ -8,6 +8,7 @@ import { fetchAdAccess, fetchViewerAdPrefs, setViewerAdPrefs, setListenerAdPrefs
 import { resetViewerRewards } from '../../utils/viewerRewards';
 import { usePromptsActive, setPromptActive } from '../../utils/welcomeGate';
 import { isAdvertiserAccount } from '../../utils/advertiserAccount';
+import { blockedNow } from '../InstallAppPrompt/installGate';
 import { Dialog, Button } from '../v2/ui';
 import './AdsPrompt.scss';
 
@@ -15,17 +16,32 @@ import './AdsPrompt.scss';
 // line under it. See utils/toast.js.
 const toast = toastIn('Advertising');
 
+// "No thanks" is kept on this device, per account and per question ('both' or
+// 'listen'), and needs no signature (issue #578): saying no changes nothing on the
+// server, since an account that never answered is not paid and not identified. It
+// used to sign "off" twice (watching, then listening) just to stop the question.
+// Another device may ask once more; Settings switches it on any time.
+const DECLINED_KEY = (account) => `3speak-rewards-prompt-no:${String(account).toLowerCase()}`;
+const declinedHere = (account, ask) => {
+  try { return localStorage.getItem(DECLINED_KEY(account)) === ask; } catch { return false; }
+};
+const rememberDeclined = (account, ask) => {
+  try { localStorage.setItem(DECLINED_KEY(account), ask); } catch { /* asked again next visit */ }
+};
+// The X and Escape: not now, asked again on a later visit.
+const closedThisVisit = new Set();
+// Another dialog on screen: look again this much later.
+const RETRY_MS = 4000;
+
 /**
  * Asks a viewer, once, whether they want a share of ad revenue for what they watch.
  *
- * 🚨 THE SERVER DECIDES WHETHER TO ASK, NOT localStorage.
- * The answer is a consent record, so "have we asked?" has to be the same fact
- * everywhere: a localStorage flag would re-ask on every new device and, worse,
- * could show the prompt to somebody who already declined on their phone. The read
- * route returns `decided` precisely so this component never has to guess.
- *
- * Because the question is "may we store your username", declining is a real answer
- * that we record and then respect. There is no third showing.
+ * 🚨 A YES IS DECIDED BY THE SERVER, NOT localStorage. It is a consent record,
+ * signed and stored on the server, and the read route returns `decided` so someone
+ * who agreed on their phone is never asked again here. A no is the state the
+ * account is already in, so it is only remembered on this device (DECLINED_KEY
+ * above): someone who said no elsewhere, or answered before 2026-11-23 by signing
+ * "off", is `decided` on the server and not asked either.
  *
  * Listening (listener rewards) is its own consent record. Someone never asked gets
  * one question covering watching and listening; someone who already agreed to
@@ -70,43 +86,65 @@ export default function ViewerRewardsPrompt() {
   const allowed = !!user && access?.account === user && access.allowed === true;
 
   useEffect(() => {
-    if (!allowed || onAdvertise || promptsActive) return undefined;
+    if (!allowed || onAdvertise || promptsActive || open || closedThisVisit.has(user)) return undefined;
     let alive = true;
+    let retry = null;
     fetchViewerAdPrefs(user)
       .then((r) => {
-        // `decided` is the whole point: false means never asked. Someone who said
-        // no is decided, and is never asked again.
+        // `decided` false means never asked; someone who said yes is decided.
         if (!alive || !r) return;
         const ask = r.decided === false ? 'both'
           : r.rewardsEnabled === true && r.listenDecided === false ? 'listen'
             : null;
-        if (ask) {
+        if (!ask || declinedHere(user, ask)) return;
+        // Never on top of another dialog (the changelog, a login, the tour).
+        const tryOpen = () => {
+          if (!alive) return;
+          if (blockedNow()) { retry = setTimeout(tryOpen, RETRY_MS); return; }
           setOpen(ask);
           setPromptActive('viewer-rewards', true);
-        }
+        };
+        tryOpen();
       })
       .catch(() => { /* unreachable checker: ask another time, never guess */ });
-    return () => { alive = false; };
-  }, [allowed, onAdvertise, promptsActive, user]);
+    return () => { alive = false; clearTimeout(retry); };
+  }, [allowed, onAdvertise, promptsActive, open, user]);
 
   function close() {
     setOpen(null);
     setPromptActive('viewer-rewards', false);
   }
 
-  async function answer(yes) {
+  // The X and Escape, also while a wallet prompt is still waiting (a cancelled
+  // Keychain unlock never answers, which left the dialog stuck on "Saving…").
+  function closeForNow() {
+    closedThisVisit.add(user);
+    close();
+  }
+
+  function decline() {
+    rememberDeclined(user, open);
+    toast.success(t('ads.viewerPrompt.savedNo'));
+    close();
+  }
+
+  async function accept() {
     if (saving) return;
     setSaving(true);
+    const asked = open;
     try {
-      if (open === 'both') await setViewerAdPrefs(user, { rewardsEnabled: yes });
-      await setListenerAdPrefs(user, { listenEnabled: yes });
+      if (asked === 'both') {
+        await setViewerAdPrefs(user, { rewardsEnabled: true });
+        // Watching is recorded: a failed listening signature below only asks that again.
+        setOpen('listen');
+      }
+      await setListenerAdPrefs(user, { listenEnabled: true });
       resetViewerRewards();
-      toast.success(!yes ? t('ads.viewerPrompt.savedNo')
-        : open === 'listen' ? t('ads.listenPrompt.savedYes') : t('ads.viewerPrompt.savedYes'));
+      toast.success(asked === 'listen' ? t('ads.listenPrompt.savedYes') : t('ads.viewerPrompt.savedYes'));
       close();
     } catch (err) {
-      // Left open on failure: an unrecorded answer must not look like a recorded
-      // one, or we would never ask again and never pay them either.
+      // Left open on failure: an unrecorded yes must not look like a recorded one,
+      // or we would never pay them.
       toast.error(err.message || t('ads.viewerPrompt.saveFailed'));
     } finally {
       setSaving(false);
@@ -116,23 +154,25 @@ export default function ViewerRewardsPrompt() {
   if (!open) return null;
 
   const listen = open === 'listen';
-  // No X and no backdrop close: both ways out record an answer (yes or no), and
-  // closing without one would only bring the question back.
+  // The X and Escape close it for this visit; a click beside it does nothing, so a
+  // stray tap does not lose the question.
   // Design 47d: the title, one muted paragraph, then No thanks | Yes side by side
   // (cyan for listening). The consent fine print stays under the paragraph.
   return (
     <Dialog
       open
-      dismissible={false}
+      onClose={closeForNow}
+      closeLabel={t('common.actions.close')}
+      backdropClose={false}
       title={listen ? t('ads.listenPrompt.title') : t('ads.viewerPrompt.titleBoth')}
       width={460}
       className="ads-prompt-v2 ads-prompt-v2--answer"
       footer={(
         <>
-          <Button variant="secondary" size={44} onClick={() => answer(false)} disabled={saving}>
+          <Button variant="secondary" size={44} onClick={decline} disabled={saving}>
             {t('ads.viewerPrompt.noThanks')}
           </Button>
-          <Button variant={listen ? 'cyan' : 'primary'} size={44} className="ads-prompt-v2__main" onClick={() => answer(true)} disabled={saving} loading={saving}>
+          <Button variant={listen ? 'cyan' : 'primary'} size={44} className="ads-prompt-v2__main" onClick={accept} disabled={saving} loading={saving}>
             {saving ? t('common.actions.saving') : listen ? t('ads.listenPrompt.yes') : t('ads.viewerPrompt.yes')}
           </Button>
         </>

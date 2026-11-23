@@ -18,6 +18,24 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.176',
+    category: 'watch',
+    date: '2026-11-23',
+    summary: 'Promote this video now says when prices or your balance could not load, with a Retry button, instead of showing … forever.',
+  },
+  {
+    version: '2.0.175',
+    category: 'ads',
+    date: '2026-11-23',
+    summary: 'Saying No thanks to getting paid for watching no longer asks your wallet to sign, and the question now has a close button.',
+  },
+  {
+    version: '2.0.174',
+    category: 'settings',
+    date: '2026-11-23',
+    summary: 'Typing 3speak.tv/settings now opens Settings, and Continue where I left off never opens 3Speak on a page that does not exist.',
+  },
+  {
     version: '2.0.173',
     category: 'audio',
     date: '2026-11-23',

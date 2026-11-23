@@ -10,7 +10,7 @@ import ResumeLastPage from '../../../src/components/ResumeLastPage'
 import RouteFallback, { fallbackShowing } from '../../../src/components/RouteFallback'
 import { useAppStore } from '../../../src/lib/store'
 import {
-  readLastPage, rememberablePath, saveLastPage, resumeOnStart, isResuming, endResume,
+  readLastPage, rememberablePath, saveLastPage, resumeOnStart, isResuming, endResume, markNotFound,
 } from '../../../src/lib/lastPage'
 
 const setting = (on) => localStorage.setItem('user-store', JSON.stringify({ version: 5, state: { resumeLastPage: on } }))
@@ -24,6 +24,42 @@ beforeEach(() => {
 afterEach(() => { vi.useRealTimers() })
 
 describe('lib/lastPage', () => {
+  it('never comes back to /settings (it only opens the Settings dialog over Home)', () => {
+    expect(rememberablePath({ pathname: '/settings' })).toBeNull()
+    expect(rememberablePath({ pathname: '/settingsx' })).toBe('/settingsx')
+  })
+
+  it('forgets a page that showed the 404 and never saves it again (issue #579)', () => {
+    saveLastPage({ pathname: '/no-such-page' })
+    expect(readLastPage()).toBe('/no-such-page')
+    expect(markNotFound({ pathname: '/no-such-page' })).toBe(false)
+    expect(readLastPage()).toBeNull()
+    saveLastPage({ pathname: '/no-such-page', search: '?x=1' })
+    expect(readLastPage()).toBeNull()
+    saveLastPage({ pathname: '/@badadib/videos' })
+    expect(readLastPage()).toBe('/@badadib/videos')
+  })
+
+  it('says when the 404 is the page the visit was resumed to, so it can go Home', () => {
+    setting(true)
+    localStorage.setItem('last-page', '/gone-page?tab=x')
+    expect(resumeOnStart(window)).toBe('/gone-page?tab=x')
+    saveLastPage({ pathname: '/gone-page', search: '?tab=x' })
+    expect(markNotFound({ pathname: '/gone-page', search: '?tab=x' })).toBe(true)
+    expect(readLastPage()).toBeNull()
+    // Only once: a later 404 in the same visit is just a 404.
+    expect(markNotFound({ pathname: '/gone-page', search: '?tab=x' })).toBe(false)
+  })
+
+  it('a 404 later in the visit is not the resumed page', () => {
+    setting(true)
+    localStorage.setItem('last-page', '/@badadib/videos')
+    resumeOnStart(window)
+    saveLastPage({ pathname: '/@badadib/videos' })
+    saveLastPage({ pathname: '/typo-page' })
+    expect(markNotFound({ pathname: '/typo-page' })).toBe(false)
+  })
+
   it('remembers path, query and hash, but not sign-in, embeds or upload steps', () => {
     expect(rememberablePath({ pathname: '/watch', search: '?v=badadib/abc', hash: '#c' })).toBe('/watch?v=badadib/abc#c')
     for (const p of ['/login', '/auth/callback', '/callback', '/embed/badadib/abc', '/studio/details', '/invite/x', '//evil.example']) {

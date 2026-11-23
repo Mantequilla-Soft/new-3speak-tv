@@ -215,6 +215,7 @@ function Nav({ toggleProfileNav, profileMenuHover, openLoginModal }) {
   // hive proxy copy (utils/avatarCache).
   const myAvatar = useAvatarUrl(user, 'small');
   const location = useLocation();
+  const navigate = useNavigate();
   const [navHidden, setNavHidden] = useState(false);
   // The section tabs are out unless a member folded them away from the
   // account menu ("Hide pages", 42b). A visitor has no such menu, so always
@@ -222,6 +223,13 @@ function Nav({ toggleProfileNav, profileMenuHover, openLoginModal }) {
   const tabsPref = useNavTabsOpen();
   const tabsOpen = authenticated ? tabsPref : true;
   const [settingsOpen, setSettingsOpen] = useState(false);
+  // /settings lands here with { openSettings } in the router state (App.jsx). Opened
+  // once, then the state is dropped so Back or a reload does not open it again.
+  useEffect(() => {
+    if (!location.state?.openSettings) return;
+    setSettingsOpen(true);
+    navigate(`${location.pathname}${location.search}${location.hash}`, { replace: true, state: null });
+  }, [location.state, location.pathname, location.search, location.hash, navigate]);
   // A mouse resting on the gear peeks at Settings, hung under it (SettingsModal
   // `dropdown`); typing in it, or a click on the gear, keeps it there. A click on the gear with nothing
   // showing opens the usual centred dialog. Never at phone widths (bottom sheet).

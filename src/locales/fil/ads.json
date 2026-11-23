@@ -307,6 +307,7 @@
   },
   "promote": {
     "pricingFailed": "Hindi ma-load ang presyo ng promotion.",
+    "balanceFailed": "Hindi ma-load ang iyong balanse.",
     "loginRequired": "Mag-log in para mag-promote.",
     "notEnoughBalance": "Kulang ang {{currency}} — {{balance}} {{currency}} ang balance mo.",
     "verifying": "Naipadala ang bayad — vine-verify sa chain…",

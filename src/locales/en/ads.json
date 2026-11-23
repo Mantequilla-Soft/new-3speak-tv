@@ -307,6 +307,7 @@
   },
   "promote": {
     "pricingFailed": "Could not load promotion pricing.",
+    "balanceFailed": "Could not load your balance.",
     "loginRequired": "Please log in to promote.",
     "notEnoughBalance": "Not enough {{currency}} — your balance is {{balance}} {{currency}}.",
     "verifying": "Payment sent — verifying on-chain…",
