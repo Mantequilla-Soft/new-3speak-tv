@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.177',
+    category: 'shorts',
+    date: '2026-11-23',
+    summary: 'The comment box in Shorts comments now uses the full width while you type, with the emoji, GIF and other buttons below it.',
+  },
+  {
     version: '2.0.176',
     category: 'watch',
     date: '2026-11-23',

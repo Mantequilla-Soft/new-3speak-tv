@@ -2398,6 +2398,19 @@ body { --shorts-bottom-reserve: 0px; --shorts-panel-w: 400px; --shorts-top: var(
   .commentInput:focus-within .commentInputTools,
   .commentInput:has(.egp-btn.active) .commentInputTools { display: inline-flex; }
 
+  // With the tools out, the box takes the whole first line and the tools and send
+  // go under it: in one row the six tools squeezed it to a narrow column (owner
+  // 2026-11-23). Idle, it stays 18a's box and send.
+  .commentInput:has(.commentInputTools.is-shown),
+  .commentInput:has(.commentInputTools):focus-within,
+  .commentInput:has(.egp-btn.active) {
+    flex-wrap: wrap;
+    align-items: center;
+
+    .commentInputBox { flex-basis: 100%; }
+    .sendCommentBtn { margin-left: auto; }
+  }
+
   .commentInputAvatar {
     width: 32px;
     height: 32px;
