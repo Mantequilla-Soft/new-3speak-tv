@@ -8,8 +8,9 @@ import Card3 from '../components/Cards/Card3';
 import { useContentBatch } from '../hooks/useContentBatch';
 import { useSearchParams, useLocation, useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { fetchVideoDetails, fetchPlaySource, fetchTrendingFeed, fetchAuthorVideos, fetchRelatedFeed } from '../lib/videoData';
+import { useQuery, useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
+import { fetchVideoDetails, fetchPlaySource, fetchTrendingFeed, fetchAuthorVideos, fetchRelatedFeed, fetchDiscoverPage } from '../lib/videoData';
+import InfiniteSentinel from '../components/InfiniteSentinel/InfiniteSentinel';
 // BarLoader is intentionally not imported: this page renders immediately rather
 // than blocking on the post-metadata query (see the note above the render return).
 import { useAppStore } from '../lib/store';
@@ -75,6 +76,10 @@ const WATCH_SHORTS_LIMIT = 30;
 // Keeps the watch rail from being the same shorts, in the same order, as the home
 // feed's rails within one session.
 const WATCH_SHORTS_SEED_OFFSET = 4231;
+// "More videos" never ends: after the recommendations it keeps adding pages of
+// the discover feed as you scroll, in an order of its own (not Home's).
+const WATCH_MORE_PAGE = 24;
+const WATCH_MORE_SEED_OFFSET = 7919;
 
 // Build the videoDetails shape PlayVideo expects from a checker scheduled-post
 // doc (the post isn't on Hive yet, so there are no stats/payout/votes).
@@ -1865,9 +1870,43 @@ function Watch({ v2 = false, routeV = null }) {
     return [...promoted, ...authorVideos, ...recommendations];
   }, [authorItems, relatedItems, trendingItems, promotedVideos, author, permlink]);
 
+  // The rest of "More videos": discover pages, asked for only once the viewer
+  // scrolls to the end of the recommendations (the sentinel turns it on).
+  const [moreWanted, setMoreWanted] = useState(false);
+  useEffect(() => { setMoreWanted(false); }, [author, permlink]);
+  const moreQ = useInfiniteQuery({
+    queryKey: ['watch-more', author, permlink, showNsfw, user || null],
+    queryFn: ({ pageParam }) => fetchDiscoverPage(pageParam, {
+      limit: WATCH_MORE_PAGE, seed: getFeedSeed() + WATCH_MORE_SEED_OFFSET, nsfw: showNsfw,
+    }),
+    initialPageParam: 1,
+    // Keep paging while a page brings anything: filtering can trim a page short.
+    getNextPageParam: (lastPage, allPages) => (lastPage?.length ? allPages.length + 1 : undefined),
+    enabled: moreWanted && !!permlink,
+    staleTime: 5 * 60 * 1000,
+  });
+  const moreVideos = useMemo(() => {
+    const seen = new Set([permlink, ...suggestedVideos.map((v) => v.permlink)]);
+    const out = [...suggestedVideos];
+    for (const v of filterValidVideos(moreQ.data?.pages.flat())) {
+      if (seen.has(v.permlink)) continue;
+      seen.add(v.permlink);
+      out.push(v);
+    }
+    return out;
+  }, [suggestedVideos, moreQ.data, permlink]);
+  const moreHasNext = !moreWanted || !!moreQ.hasNextPage;
+  const moreLoading = moreQ.isFetching;
+  const fetchMorePage = moreQ.fetchNextPage;
+  const loadMore = useCallback(() => {
+    if (!moreWanted) setMoreWanted(true);
+    // A page already on its way is left alone, not cancelled and asked again
+    else fetchMorePage({ cancelRefetch: false });
+  }, [moreWanted, fetchMorePage]);
+
   // Batch the Hive content for the recommended list so the tiles can show the
   // real comment count (the feed payload's num_comments is a hardcoded 0).
-  const { getContentForVideo: getSuggestedContent } = useContentBatch(suggestedVideos);
+  const { getContentForVideo: getSuggestedContent } = useContentBatch(moreVideos);
 
   const suggestedVideosRef = useRef(suggestedVideos);
   suggestedVideosRef.current = suggestedVideos;
@@ -2354,9 +2393,10 @@ function Watch({ v2 = false, routeV = null }) {
         );
       })()}
 
-      {/* More videos (02 "what's next" shelf), with a shorts rail every few rows.
-          The wide grid and the phone grid are BOTH mounted (CSS picks one), so
-          each measures its own columns for the rails. */}
+      {/* More videos (02 "what's next" shelf), with a shorts rail every few rows,
+          growing as you scroll. The wide grid and the phone grid are BOTH mounted
+          (CSS picks one), so each measures its own columns for the rails; the
+          hidden one's sentinel never comes into view. */}
       {suggestedVideos.length > 0 && (
         <section className="watch-more watch-more--wide" ref={desktopRecRef} aria-label={t('watch.moreVideos')}>
           <div className="watch-more__head">
@@ -2364,13 +2404,14 @@ function Watch({ v2 = false, routeV = null }) {
             <span className="watch-more__rule" aria-hidden="true" />
           </div>
           <Card3
-            videos={suggestedVideos}
+            videos={moreVideos}
             loading={false}
             shortTimeAgo={false}
             getContentForVideo={getSuggestedContent}
             interleaveEvery={desktopCols > 0 && relatedShorts.length ? desktopCols * WATCH_ROWS_PER_SHORTS_RAIL : 0}
             renderInterleave={relatedShorts.length ? renderDesktopRail : null}
           />
+          <InfiniteSentinel hasMore={moreHasNext} loading={moreLoading} onLoadMore={loadMore} />
         </section>
       )}
 
@@ -2381,13 +2422,14 @@ function Watch({ v2 = false, routeV = null }) {
             <span className="watch-more__rule" aria-hidden="true" />
           </div>
           <Card3
-            videos={suggestedVideos.slice(0, 12)}
+            videos={moreVideos}
             loading={false}
             shortTimeAgo={false}
             getContentForVideo={getSuggestedContent}
             interleaveEvery={mobileCols > 0 && relatedShorts.length ? mobileCols * WATCH_ROWS_PER_SHORTS_RAIL : 0}
             renderInterleave={relatedShorts.length ? renderMobileRail : null}
           />
+          <InfiniteSentinel hasMore={moreHasNext} loading={moreLoading} onLoadMore={loadMore} />
         </section>
       )}
 

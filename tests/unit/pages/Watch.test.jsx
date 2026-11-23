@@ -19,7 +19,8 @@ vi.mock('../../../src/lib/videoData', () => ({
   fetchPlaySource: async (...a) => (m.playSource ? m.playSource(...a) : null),
   fetchTrendingFeed: async () => ({ videos: [] }),
   fetchAuthorVideos: async () => ({ videos: [] }),
-  fetchRelatedFeed: async () => ({ videos: [] }),
+  fetchRelatedFeed: async () => (m.related ? m.related() : { videos: [] }),
+  fetchDiscoverPage: async (...a) => (m.discover ? m.discover(...a) : []),
 }))
 vi.mock('@mantequilla-soft/3speak-player/react', () => {
   // Stable functions, as the SDK's hook hands out: the page's effects depend on them.
@@ -86,7 +87,7 @@ vi.mock('../../../src/components/playVideo/PlayVideo', () => ({
   ),
 }))
 vi.mock('../../../src/components/SEOHead', () => ({ default: ({ title }) => <meta name="test-title" content={title} /> }))
-vi.mock('../../../src/components/Cards/Card3', () => ({ default: () => null }))
+vi.mock('../../../src/components/Cards/Card3', () => ({ default: (p) => { m.cards = p.videos; return null } }))
 vi.mock('../../../src/components/ShortsRow/ShortsRow', () => ({ default: () => null }))
 vi.mock('../../../src/components/ReactionPlayer/ReactionPlayer', () => ({ default: () => null }))
 vi.mock('../../../src/components/playVideo/WatchTabs', () => ({ default: () => null }))
@@ -131,12 +132,47 @@ beforeEach(() => {
   m.hiveCall = null
   m.playSource = null
   m.muted = []
+  m.related = null
+  m.discover = null
+  m.cards = null
   m.sdkState.duration = 0
   vi.stubGlobal('fetch', vi.fn(async () => ({ ok: true, json: async () => ({}) })))
   useAppStore.setState({ user: null, incubationHandle: null, inlineShorts: false })
 })
 
 describe('the watch page', () => {
+  it('keeps adding discover pages to More videos as you scroll, skipping what is already there', async () => {
+    const vid = (permlink) => ({ author: 'badadib', permlink, created: '2026-11-01T00:00:00Z', video_v2: 'x' })
+    m.related = () => ({ videos: [vid('r1'), vid('r2')] })
+    m.discover = vi.fn(async (page) => (page === 1 ? [vid('r2'), vid('d1')] : page === 2 ? [vid('d2')] : []))
+    const observers = []
+    vi.stubGlobal('IntersectionObserver', class {
+      constructor(cb) { this.cb = cb; this.nodes = new Set(); observers.push(this) }
+      observe(n) { this.nodes.add(n) }
+      unobserve(n) { this.nodes.delete(n) }
+      disconnect() { this.nodes.clear() }
+    })
+    // Scroll to the end: every live sentinel comes into view
+    const reachEnd = () => act(() => {
+      for (const o of observers) {
+        const ends = [...o.nodes].filter((n) => n.classList?.contains('infinite-sentinel'))
+        if (ends.length) o.cb(ends.map((target) => ({ target, isIntersecting: true })))
+      }
+    })
+    mount()
+    await waitFor(() => expect(m.cards?.map((v) => v.permlink)).toEqual(['r1', 'r2']))
+    expect(m.discover).not.toHaveBeenCalled()
+    reachEnd()
+    await waitFor(() => expect(m.cards.map((v) => v.permlink)).toEqual(['r1', 'r2', 'd1']))
+    expect(m.discover.mock.calls[0][0]).toBe(1)
+    reachEnd()
+    await waitFor(() => expect(m.cards.map((v) => v.permlink)).toEqual(['r1', 'r2', 'd1', 'd2']))
+    // An empty page ends the list: the sentinel goes away
+    reachEnd()
+    await waitFor(() => expect(document.querySelector('.infinite-sentinel')).toBeNull())
+    expect(m.discover).toHaveBeenCalledTimes(3)
+  })
+
   it('shows the player at once while the post is still loading, with no error', async () => {
     m.details = vi.fn(() => new Promise(() => {}))
     mount()

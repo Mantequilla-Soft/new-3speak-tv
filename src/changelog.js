@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.172',
+    category: 'watch',
+    date: '2026-11-23',
+    summary: '"More videos" under a video now keeps loading as you scroll, on phones too, instead of stopping after a few rows.',
+  },
+  {
     version: '2.0.171',
     category: 'shorts',
     date: '2026-11-22',

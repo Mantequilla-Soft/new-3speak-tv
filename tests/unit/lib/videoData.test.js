@@ -22,7 +22,7 @@ vi.mock('../../../src/lib/incubation', () => ({ fetchIncubationPost: h.incubatio
 
 import {
   fetchHiveProfile, fetchPlaySource, fetchVideoDetails, fetchTrendingFeed, fetchRelatedFeed, fetchAuthorVideos,
-  isHiveNodeFailure,
+  fetchDiscoverPage, isHiveNodeFailure,
 } from '../../../src/lib/videoData.js'
 
 let fetchMock
@@ -214,6 +214,7 @@ describe('suggestion feeds', () => {
   it('a signed-out viewer sends no personal parameters', async () => {
     fetchMock.mockResolvedValue(ok({}))
     expect(await fetchTrendingFeed()).toEqual([])
+    expect(await fetchDiscoverPage(2)).toEqual([])
     expect(fetchMock.mock.calls[0][0]).toBe('https://checker.3speak.tv/feeds/trendingSorted?limit=20')
   })
 
@@ -222,6 +223,15 @@ describe('suggestion feeds', () => {
     fetchMock.mockResolvedValue(ok({ videos: [1, 2], currentTopic: 'music' }))
     expect(await fetchRelatedFeed('a b', 'p/q', 3)).toEqual({ videos: [1, 2], currentTopic: 'music' })
     expect(fetchMock.mock.calls[0][0]).toBe('https://checker.3speak.tv/feeds/related/a%20b/p%2Fq?limit=3&currentuser=me&hidewatched=0')
+  })
+
+  it('a discover page carries its page, seed and the NSFW choice', async () => {
+    h.state = { user: 'me', hideWatched: true }
+    fetchMock.mockResolvedValue(ok({ videos: [1, 2] }))
+    expect(await fetchDiscoverPage(3, { limit: 24, seed: 42, nsfw: true })).toEqual([1, 2])
+    expect(fetchMock.mock.calls[0][0]).toBe('https://checker.3speak.tv/feeds/discover?page=3&limit=24&seed=42&nsfw=true&currentuser=me&hidewatched=1')
+    expect(await fetchDiscoverPage()).toEqual([1, 2])
+    expect(fetchMock.mock.calls[1][0]).toBe('https://checker.3speak.tv/feeds/discover?page=1&limit=24&currentuser=me&hidewatched=1')
   })
 
   it('author videos read either answer shape', async () => {
