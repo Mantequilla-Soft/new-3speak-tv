@@ -10,6 +10,10 @@
     "upload": {
       "title": "Unggahan dinonaktifkan untuk akunmu",
       "body": "Akunmu saat ini tidak diizinkan mengunggah. Jika menurutmu ini kesalahan, hubungi dukungan 3Speak."
+    },
+    "paused": {
+      "title": "Unggahan dijeda",
+      "body": "Server kami sedang bermasalah, jadi unggahan dijeda untuk sementara. Cek Discord kami untuk kabar terbaru."
     }
   },
   "uploadBlock": {

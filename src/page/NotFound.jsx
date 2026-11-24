@@ -1,14 +1,23 @@
 import "./NotFound.scss"
-import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Helmet } from 'react-helmet-async';
 import { Icon } from '../components/v2/Icon';
+import { markNotFound } from '../lib/lastPage';
 
 // 404 (design 26d): one card, the big accent "404", what happened, and the one
 // way forward.
 function NotFound() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const location = useLocation();
+  // Never remembered by Continue where I left off; and when that is what opened
+  // this page, go Home instead of greeting the visit with a 404 (issue #579).
+  useEffect(() => {
+    if (markNotFound(location)) navigate('/', { replace: true });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.pathname, location.search, location.hash]);
   return (
     <div className="not-found-container">
       {/* Unknown URLs answer 200: the server cannot tell them from real routes, since

@@ -12,8 +12,8 @@
       "body": "No daily cap on videos, Shorts and audio."
     },
     "longAudio": {
-      "title": "Audio longer than 15 minutes",
-      "body": "Free audio uploads stop at 15 minutes."
+      "title": "Audio longer than 20 minutes",
+      "body": "Free audio uploads stop at 20 minutes."
     }
   }
 }

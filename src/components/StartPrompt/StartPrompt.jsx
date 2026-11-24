@@ -4,6 +4,7 @@ import { useAppStore } from '../../lib/store';
 import { hasDecided } from '../../lib/consent';
 import { markStartPromptAnswered } from '../../lib/lastPage';
 import { blockedNow } from '../InstallAppPrompt/installGate';
+import { isAnyPromptActive, setPromptActive } from '../../utils/welcomeGate';
 import { Button, Dialog } from '../v2/ui';
 import { Icon } from '../v2/Icon';
 import {
@@ -44,7 +45,7 @@ export default function StartPrompt() {
     if (!ask()) return undefined;
     let id = null;
     const tryShow = () => {
-      if (blockedNow({ consentDecided: hasDecided() })) {
+      if (blockedNow({ consentDecided: hasDecided() }) || isAnyPromptActive('start')) {
         id = setTimeout(tryShow, RETRY_MS);
         return;
       }
@@ -55,6 +56,12 @@ export default function StartPrompt() {
     tryShow();
     return () => clearTimeout(id);
   }, [armed, appUpdatedFrom]);
+
+  // Holds the one-prompt slot while open, so the ad and rewards prompts wait (issue #578).
+  useEffect(() => {
+    setPromptActive('start', open);
+    return () => setPromptActive('start', false);
+  }, [open]);
 
   if (!open) return null;
 

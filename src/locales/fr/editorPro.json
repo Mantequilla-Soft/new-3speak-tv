@@ -12,8 +12,8 @@
       "body": "Aucune limite quotidienne pour les vidéos, Shorts et audios."
     },
     "longAudio": {
-      "title": "Audio de plus de 15 minutes",
-      "body": "Les envois audio gratuits s'arrêtent à 15 minutes."
+      "title": "Audio de plus de 20 minutes",
+      "body": "Les envois audio gratuits s'arrêtent à 20 minutes."
     }
   }
 }

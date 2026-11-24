@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { editorAspect, landscapeEditorAllowed } from '../utils/editorFormat';
 import { useAppStore } from '../lib/store';
 import { usePremiumStatus } from './usePremiumStatus';
+import { blockIfUploadsPaused } from '../lib/uploadsPaused';
 
 /**
  * Which editor the global EditorModal (App.jsx) shows, driven by two window events:
@@ -85,15 +86,18 @@ export function useEditorLauncher() {
 
   useEffect(() => {
     const fileOf = (e) => (e?.detail?.file instanceof Blob ? e.detail.file : null);
+    // The editors end in an upload: none while uploads are paused (lib/uploadsPaused.jsx).
     const onShorts = (e) => {
+      if (blockIfUploadsPaused()) return;
       const file = fileOf(e);
       // A teaser needs the video's own file: without one it is just the Shorts editor
       setState({ open: true, mode: 'video', file, audioTrackId: null, sound: soundOf(e), aspect: null, episode: null, teaser: file ? teaserOf(e) : null });
     };
     // Pro only: decided by the effect above, once the Pro status is known
-    const onVideo = (e) => setPendingVideo({ file: fileOf(e), aspect: editorAspect(e?.detail?.aspect) || '16:9' });
+    const onVideo = (e) => !blockIfUploadsPaused() && setPendingVideo({ file: fileOf(e), aspect: editorAspect(e?.detail?.aspect) || '16:9' });
     const onUpsell = () => setUpsell(true);
     const onAudio = (e) => {
+      if (blockIfUploadsPaused()) return;
       const trackId = e?.detail?.trackId;
       setState({ open: true, mode: 'audio', file: fileOf(e), audioTrackId: typeof trackId === 'string' ? trackId : null, sound: null, aspect: null, episode: episodeOf(e), teaser: null });
     };

@@ -304,6 +304,7 @@
   },
   "promote": {
     "pricingFailed": "โหลดราคาโปรโมตไม่ได้",
+    "balanceFailed": "โหลดยอดคงเหลือของคุณไม่ได้",
     "loginRequired": "โปรดเข้าสู่ระบบเพื่อโปรโมต",
     "notEnoughBalance": "{{currency}} ไม่พอ — ยอดคงเหลือของคุณคือ {{balance}} {{currency}}",
     "verifying": "ส่งการชำระเงินแล้ว — กำลังตรวจสอบบนเชน…",

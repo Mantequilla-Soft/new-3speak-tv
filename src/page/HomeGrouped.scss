@@ -207,20 +207,6 @@
 
 .home-tab-empty { margin: 8px 0; }
 
-// Infinite-scroll sentinel + "loading more" indicator at the bottom of a tab.
-.home-tab-sentinel {
-  min-height: 24px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px 0;
-
-  .home-tab-loading {
-    @include v2.text(meta);
-    color: var(--muted);
-  }
-}
-
 // ── Customize Home dialog (34b) ──
 // 460 wide: a 4px accent bar before the 20/700 title, a 13px muted hint, rows
 // on the ground (padding 8/10, radius 16, a 2px border that turns accent while

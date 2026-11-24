@@ -1,0 +1,15 @@
+@use "../../styles/v2" as v2;
+
+// Infinite-scroll sentinel + "loading more" indicator at the bottom of a list.
+.infinite-sentinel {
+  min-height: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 0;
+
+  &__loading {
+    @include v2.text(meta);
+    color: var(--muted);
+  }
+}

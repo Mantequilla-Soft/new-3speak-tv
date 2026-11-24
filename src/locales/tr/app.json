@@ -10,6 +10,10 @@
     "upload": {
       "title": "Hesabın için yükleme devre dışı",
       "body": "Hesabının şu an yükleme yapmasına izin verilmiyor. Bunun bir hata olduğunu düşünüyorsan 3Speak destek ekibiyle iletişime geç."
+    },
+    "paused": {
+      "title": "Yüklemeler duraklatıldı",
+      "body": "Sunucularımızda bir sorun var, bu yüzden yüklemeler şimdilik duraklatıldı. Güncellemeler için Discord'umuza göz at."
     }
   },
   "uploadBlock": {

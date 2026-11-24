@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Icon } from "./v2/Icon";
 import { FEATURE_EDITOR, openpodsEnabledFor, storiesEnabledFor } from "../utils/config";
+import { blockIfUploadsPaused } from "../lib/uploadsPaused";
 import { creatorKey, getCreatorSettings, isUploadBlocked } from "../utils/creatorSettings";
 import { useSupportBlock } from "../lib/supportBlockStore";
 import { useAppStore } from "../lib/store";
@@ -76,6 +77,7 @@ export default function UploadLinks({ linkClass, iconClass = "icon", onClick, on
     e.preventDefault();
     pauseAllMedia();
     if (onClick) onClick(e); // close the dropdown/menu either way
+    if (blockIfUploadsPaused()) return;
     const { user: hiveUser, incubationHandle } = useAppStore.getState();
     const settings = await getCreatorSettings(creatorKey(hiveUser, incubationHandle));
     if (isUploadBlocked(settings)) {

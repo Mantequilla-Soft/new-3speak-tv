@@ -48,11 +48,11 @@ describe('Pro panel perks', () => {
     const sdk = PRO_PERK_GROUPS.find((g) => g.id === 'uploads')
     expect(uploads.perks.slice(0, sdk.perks.length)).toEqual(sdk.perks)
     const extra = uploads.perks.slice(sdk.perks.length + 1)   // after YouTube imports in 1080p
-    expect(extra.map((p) => p.title)).toEqual(['Unlimited daily uploads', 'Audio longer than 15 minutes', 'Landscape video editor'])
+    expect(extra.map((p) => p.title)).toEqual(['Unlimited daily uploads', 'Audio longer than 20 minutes', 'Landscape video editor'])
     expect(extra[2].body).toMatch(/Shorts and audio editors stay free/)
     expect(extra[0].body).toMatch(/videos, Shorts and audio/)
     expect(extra[0].body).toMatch(/1 video, 3 Shorts and 2 audio uploads a day/)
-    expect(extra[1].body).toMatch(/15 minutes/)
+    expect(extra[1].body).toMatch(/20 minutes/)
     // No em dashes in the copy
     for (const p of extra) expect(`${p.title} ${p.body}`).not.toMatch(/[\u2014\u2013]/)
   })

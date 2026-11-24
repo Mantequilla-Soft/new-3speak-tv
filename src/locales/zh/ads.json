@@ -304,6 +304,7 @@
   },
   "promote": {
     "pricingFailed": "无法加载推广价格。",
+    "balanceFailed": "无法加载你的余额。",
     "loginRequired": "请登录后再推广。",
     "notEnoughBalance": "{{currency}} 不足——你的余额为 {{balance}} {{currency}}。",
     "verifying": "已付款——正在链上验证…",

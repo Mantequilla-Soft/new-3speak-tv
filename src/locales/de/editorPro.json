@@ -12,8 +12,8 @@
       "body": "Kein Tageslimit für Videos, Shorts und Audio."
     },
     "longAudio": {
-      "title": "Audio über 15 Minuten",
-      "body": "Kostenlose Audio-Uploads enden bei 15 Minuten."
+      "title": "Audio über 20 Minuten",
+      "body": "Kostenlose Audio-Uploads enden bei 20 Minuten."
     }
   }
 }

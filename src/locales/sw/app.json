@@ -10,6 +10,10 @@
     "upload": {
       "title": "Upakiaji umezimwa kwa akaunti yako",
       "body": "Akaunti yako hairuhusiwi kupakia kwa sasa. Ukidhani hili ni kosa, wasiliana na huduma kwa wateja ya 3Speak."
+    },
+    "paused": {
+      "title": "Upakiaji umesitishwa",
+      "body": "Tuna tatizo kwenye seva zetu, kwa hiyo upakiaji umesitishwa kwa sasa. Angalia Discord yetu kwa taarifa mpya."
     }
   },
   "uploadBlock": {

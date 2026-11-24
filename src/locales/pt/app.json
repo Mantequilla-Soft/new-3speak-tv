@@ -10,6 +10,10 @@
     "upload": {
       "title": "Os envios estão desativados na sua conta",
       "body": "Sua conta não pode enviar conteúdo no momento. Se acha que é um engano, fale com o suporte do 3Speak."
+    },
+    "paused": {
+      "title": "Os envios estão pausados",
+      "body": "Estamos com um problema nos nossos servidores, então os envios estão pausados por enquanto. Confira nosso Discord para novidades."
     }
   },
   "uploadBlock": {

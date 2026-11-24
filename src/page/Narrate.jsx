@@ -136,7 +136,7 @@ export default function Narrate() {
   const [draftTags, setDraftTags] = useState('');
   const player = usePlayer();
   // ⏳ The recording goes out through the audio uploader, so it is one of the
-  // free plan's audio uploads (2 a day, 15 minutes each). null = no limit known.
+  // free plan's audio uploads (2 a day, 20 minutes each). null = no limit known.
   const audioQuota = useUploadQuota({ video: false }).audio;
 
   const refreshOptions = useCallback(() => getNarrationOptions()

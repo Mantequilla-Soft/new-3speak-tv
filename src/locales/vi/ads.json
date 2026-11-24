@@ -304,6 +304,7 @@
   },
   "promote": {
     "pricingFailed": "Không thể tải bảng giá quảng bá.",
+    "balanceFailed": "Không thể tải số dư của bạn.",
     "loginRequired": "Vui lòng đăng nhập để quảng bá.",
     "notEnoughBalance": "Không đủ {{currency}} — số dư của bạn là {{balance}} {{currency}}.",
     "verifying": "Đã gửi thanh toán — đang xác minh trên chuỗi…",

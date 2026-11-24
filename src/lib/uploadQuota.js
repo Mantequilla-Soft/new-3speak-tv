@@ -2,8 +2,8 @@
 //
 // Non-Pro Hive accounts: 1 regular video + 3 Shorts per rolling 24 hours
 // (stories count as Shorts, stream VODs never count), and 2 audio uploads per
-// rolling 24 hours, each at most 15 minutes. YouTube / TikTok imports count as
-// videos; Narrate and Audio Editor exports go out through the audio uploader, so
+// rolling 24 hours, each at most 20 minutes (the server sends max_seconds).
+// YouTube / TikTok imports count as videos; Narrate and Audio Editor exports go out through the audio uploader, so
 // they count as audio. 3Speak Pro has no limits.
 //
 // Warm-up accounts (no Hive account yet, owner 2026-11-22): 3 regular videos +
@@ -33,7 +33,7 @@ export const VIDEO_LIMIT_CODE = 'daily_upload_limit';
 export const AUDIO_LIMIT_CODE = 'daily_audio_limit';
 export const AUDIO_TOO_LONG_CODE = 'audio_too_long';
 /** Used for wording when a refusal or counter does not say how long a file may be. */
-export const DEFAULT_AUDIO_MAX_SECONDS = 15 * 60;
+export const DEFAULT_AUDIO_MAX_SECONDS = 20 * 60;
 
 const CACHE_TTL_MS = 60 * 1000;
 const FETCH_TIMEOUT_MS = 6000;

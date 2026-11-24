@@ -10,6 +10,10 @@
     "upload": {
       "title": "Il caricamento è disattivato per il tuo account",
       "body": "Al momento il tuo account non può caricare contenuti. Se pensi che sia un errore, contatta l'assistenza di 3Speak."
+    },
+    "paused": {
+      "title": "I caricamenti sono in pausa",
+      "body": "Abbiamo un problema con i nostri server, quindi i caricamenti sono in pausa per ora. Controlla il nostro Discord per gli aggiornamenti."
     }
   },
   "uploadBlock": {

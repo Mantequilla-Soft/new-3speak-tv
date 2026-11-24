@@ -328,6 +328,19 @@ export async function fetchRelatedFeed(author, permlink, limit = 24) {
   } catch (_) { return EMPTY_RELATED; }
 }
 
+// One page of the discover feed: what "More videos" on a watch page keeps loading
+// once the related videos run out (/feeds/related stops at 40 and has no pages).
+// A fixed seed keeps the order stable from page to page.
+export async function fetchDiscoverPage(page = 1, { limit = 24, seed, nsfw = false } = {}) {
+  try {
+    const r = await fetch(
+      `${CHECKER_URL}/feeds/discover?page=${page}&limit=${limit}${seed ? `&seed=${seed}` : ''}${nsfw ? '&nsfw=true' : ''}${feedParams()}`
+    );
+    const j = await r.json();
+    return j?.videos || [];
+  } catch { return []; }
+}
+
 export async function fetchAuthorVideos(author, limit = 10) {
   if (!author || author === 'unknown') return [];
   try {

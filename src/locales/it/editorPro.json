@@ -12,8 +12,8 @@
       "body": "Nessun limite giornaliero per video, Short e audio."
     },
     "longAudio": {
-      "title": "Audio oltre 15 minuti",
-      "body": "I caricamenti audio gratuiti si fermano a 15 minuti."
+      "title": "Audio oltre 20 minuti",
+      "body": "I caricamenti audio gratuiti si fermano a 20 minuti."
     }
   }
 }

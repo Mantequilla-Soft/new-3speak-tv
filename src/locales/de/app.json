@@ -10,6 +10,10 @@
     "upload": {
       "title": "Hochladen ist für dein Konto deaktiviert",
       "body": "Dein Konto darf gerade nichts hochladen. Wenn du glaubst, dass das ein Fehler ist, wende dich an den 3Speak-Support."
+    },
+    "paused": {
+      "title": "Uploads sind pausiert",
+      "body": "Wir haben ein Problem mit unseren Servern, deshalb sind Uploads vorerst pausiert. Neuigkeiten findest du auf unserem Discord."
     }
   },
   "uploadBlock": {

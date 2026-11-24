@@ -304,6 +304,7 @@
   },
   "promote": {
     "pricingFailed": "프로모션 가격을 불러오지 못했어요.",
+    "balanceFailed": "잔액을 불러오지 못했어요.",
     "loginRequired": "프로모션하려면 로그인해 주세요.",
     "notEnoughBalance": "{{currency}}가 부족해요. 잔액은 {{balance}} {{currency}}예요.",
     "verifying": "결제 전송 완료 — 온체인에서 확인 중…",

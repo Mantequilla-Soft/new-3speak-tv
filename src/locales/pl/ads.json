@@ -313,6 +313,7 @@
   },
   "promote": {
     "pricingFailed": "Nie udało się wczytać cennika promocji.",
+    "balanceFailed": "Nie udało się wczytać salda.",
     "loginRequired": "Zaloguj się, aby promować.",
     "notEnoughBalance": "Za mało {{currency}} — twoje saldo to {{balance}} {{currency}}.",
     "verifying": "Płatność wysłana — weryfikacja w blockchainie…",

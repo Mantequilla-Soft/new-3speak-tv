@@ -67,7 +67,7 @@ const BENEFITS = [
   'OpenPods audio & video session recordings (free tier is live-only)',
   'Higher upload limits (free tier remains capped)',
   'Unlimited daily video, Short and audio uploads (free: 1 video, 3 Shorts and 2 audio a day)',
-  'Audio uploads longer than 15 minutes',
+  'Audio uploads longer than 20 minutes',
   'Landscape video editor (16:9, 4:3 and square; the Shorts and audio editors stay free)',
   'No beneficiary fee on uploads — keep 100% of your post rewards. The standard 11% (3Speak platform + encoder fee) is waived for subscribers.',
   'Additional benefits will follow automatically',

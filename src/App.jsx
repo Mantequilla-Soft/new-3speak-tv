@@ -10,6 +10,7 @@ import HomeGrouped from "./page/HomeGrouped";
 // KeyChainLogin replaced by LoginRedirect (opens aioha modal)
 import { useAppStore } from "./lib/store";
 import { useSupportBlock } from "./lib/supportBlockStore";
+import { blockIfUploadsPaused, uploadRoute } from "./lib/uploadsPaused";
 import { creatorKey, getCreatorSettings, isBanned } from "./utils/creatorSettings";
 import SupportModal from "./components/SupportModal/SupportModal";
 import UploadBlockNotice from "./components/UploadBlockNotice/UploadBlockNotice";
@@ -412,6 +413,7 @@ function App() {
   // from the OpenPods modal) that the modal seeds as its first track.
   useEffect(() => {
     const handleOpenAudioUpload = (e) => {
+      if (blockIfUploadsPaused()) return;
       const detail = e?.detail;
       if (detail?.blob) {
         setPendingAudioTrack({
@@ -874,11 +876,11 @@ function App() {
               <Route path="/egress-stream" element={<EgressStream />} />
               <Route path="/notifications" element={<Notifications />} />
               <Route path="/post/:author/:permlink" element={<PostView />} />
-              <Route path="/upload" element={<UploadVideo />} />
+              <Route path="/upload" element={uploadRoute(<UploadVideo />)} />
               {/* Publish the backlog someone made before they had a Hive account. */}
               <Route path="/publish-backlog" element={<PublishBacklog />} />
               <Route path="/firstupload" element={<FirstUploads />} />
-              {VIDEO_IMPORT_ENABLED && <Route path="/import" element={<YoutubeImportPage />} />}
+              {VIDEO_IMPORT_ENABLED && <Route path="/import" element={uploadRoute(<YoutubeImportPage />)} />}
               {/* The importer's old address (until 2026-11-15): links keep working, query included. */}
               {VIDEO_IMPORT_ENABLED && <Route path="/youtube-import" element={<OldImportRedirect />} />}
               {/* 🤖 Automations: closed beta, the page itself says so to anyone outside it. */}
@@ -907,12 +909,12 @@ function App() {
               <Route path="/studio/details" element={<Navigate to="/embed-studio/details" replace />} />
               <Route path="/studio/preview" element={<Navigate to="/embed-studio/preview" replace />} />
               {/* Embed studio (uses embed.okinoko.io upload service) */}
-              <Route path="/embed-studio" element={<EmbedStudioPage />} />
-              <Route path="/embed-studio/record" element={<EmbedCameraRecord />} />
-              <Route path="/embed-studio/thumbnail" element={<EmbedThumbnail />} />
-              <Route path="/embed-studio/details" element={<EmbedDetails />} />
-              <Route path="/embed-studio/timeline" element={<EmbedTimeline />} />
-              <Route path="/embed-studio/preview" element={<EmbedPreview />} />
+              <Route path="/embed-studio" element={uploadRoute(<EmbedStudioPage />)} />
+              <Route path="/embed-studio/record" element={uploadRoute(<EmbedCameraRecord />)} />
+              <Route path="/embed-studio/thumbnail" element={uploadRoute(<EmbedThumbnail />)} />
+              <Route path="/embed-studio/details" element={uploadRoute(<EmbedDetails />)} />
+              <Route path="/embed-studio/timeline" element={uploadRoute(<EmbedTimeline />)} />
+              <Route path="/embed-studio/preview" element={uploadRoute(<EmbedPreview />)} />
               <Route path="/draft" element={<DraftStudio />} />
               <Route path="/editvideo/:d" element={<EditVideo />} />
               <Route path="/edit-scheduled/:permlink" element={<EditScheduledPost />} />
@@ -966,6 +968,9 @@ function App() {
               <Route path="/watched/:username" element={<WatchedView />} />
               <Route path="/curation/:user" element={<Curation />} />
               <Route path="/wallet" element={<OwnWalletRoute openLoginModal={openLoginModal} />} />
+              {/* Settings is a dialog, not a page: a typed or bookmarked /settings goes
+                  Home and the nav opens Settings there (issue #579). */}
+              <Route path="/settings" element={<Navigate to="/" replace state={{ openSettings: true }} />} />
               <Route path="/wallet/:user" element={<Wallet />} />
               <Route path="/test" element={<ProfileModal />} />
               <Route path="/image" element={<HiveImageUploader />} />

@@ -7,6 +7,7 @@ import { useAppStore } from '../../lib/store';
 import { APP_VERSION } from '../../version';
 import { CHANGELOG, changelogSince, groupChangelog } from '../../changelog';
 import { markVersionSeen } from '../../utils/appVersion';
+import { setPromptActive } from '../../utils/welcomeGate';
 import { formatDaysAgo } from '../../i18n';
 import logo from '../../assets/image/3S_logo.svg';
 import logoDark from '../../assets/image/3S_logodark.png';
@@ -77,6 +78,14 @@ export default function ChangelogModal() {
   // Must honour `silenced` too: a popup that is open but not rendered would
   // otherwise leave the page underneath unscrollable with nothing to close.
   // The page behind is locked by the Dialog while it is open.
+
+  // Holds the one-prompt slot while it is on screen, so the ad and rewards prompts
+  // wait for it instead of opening on top (issue #578).
+  const showing = open && !silenced && (DUMMY_MODE || changelogSince(appUpdatedFrom).length > 0);
+  useEffect(() => {
+    setPromptActive('changelog', showing);
+    return () => setPromptActive('changelog', false);
+  }, [showing]);
 
   // Escape closes it the same way, and records the version too.
   const close = () => {

@@ -22,6 +22,8 @@ const SKIP = [
   /^\/(login|newlogin|email|callback|auth)(\/|$)/,
   /^\/(embed|embed-studio|egress-stream|tip|invite|test|image)(\/|$)/,
   /^\/(studio|draft|editvideo|edit-scheduled|firstupload|publish-backlog|upload)(\/|$)/,
+  // Only opens the Settings dialog over Home: resuming there would open it on every visit.
+  /^\/settings(\/|$)/,
   // Publishing a stream's recording: its state comes from the stream just ended.
   /^\/openpods\/publish(\/|$)/,
   // A live stream (watching one, or the host's room): it is over by the next
@@ -38,7 +40,16 @@ export function rememberablePath(loc) {
   return path.length > MAX_LEN ? null : path;
 }
 
+// Addresses that showed the not-found page in this visit (page/NotFound). Never
+// remembered, so Continue where I left off cannot open 3Speak on a 404 (issue #579).
+const notFound = new Set();
+// The page resumeOnStart() jumped to, until the visit moves on from it.
+let startTarget = null;
+const fullPath = (loc) => `${loc?.pathname || ''}${loc?.search || ''}${loc?.hash || ''}`;
+
 export function saveLastPage(loc) {
+  if (startTarget && fullPath(loc) !== startTarget) startTarget = null;
+  if (notFound.has(loc?.pathname)) return;
   const path = rememberablePath(loc);
   if (!path) return;
   try { localStorage.setItem(STORE_KEY, path); } catch { /* storage blocked: nothing to resume */ }
@@ -55,6 +66,23 @@ export function readLastPage() {
 
 export function clearLastPage() {
   try { localStorage.removeItem(STORE_KEY); } catch { /* nothing stored */ }
+}
+
+/**
+ * The not-found page is showing for `loc`: forget it if it was saved. Returns true
+ * when it is the page this visit was resumed to, so the caller can go Home instead
+ * (a saved page that no longer exists, or one saved by an older build).
+ */
+export function markNotFound(loc) {
+  const pathname = loc?.pathname || '';
+  notFound.add(pathname);
+  try {
+    const saved = localStorage.getItem(STORE_KEY);
+    if (saved && saved.split(/[?#]/)[0] === pathname) localStorage.removeItem(STORE_KEY);
+  } catch { /* storage blocked: nothing saved */ }
+  const resumedHere = !!startTarget && fullPath(loc) === startTarget;
+  startTarget = null;
+  return resumedHere;
 }
 
 // True from resumeOnStart() until the resumed page has loaded (RouteFallback).
@@ -80,5 +108,6 @@ export function resumeOnStart(win = typeof window !== 'undefined' ? window : nul
   // runs in main.jsx before React, where a throw would leave a blank page.
   try { win.history.pushState(null, '', target); } catch { return null; }
   resuming = true;
+  startTarget = target;
   return target;
 }

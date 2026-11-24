@@ -10,6 +10,10 @@
     "upload": {
       "title": "Uploaden is uitgeschakeld voor je account",
       "body": "Je account mag op dit moment niet uploaden. Denk je dat dit een vergissing is? Neem dan contact op met 3Speak-support."
+    },
+    "paused": {
+      "title": "Uploads zijn gepauzeerd",
+      "body": "We hebben een probleem met onze servers, dus uploads zijn voorlopig gepauzeerd. Kijk op onze Discord voor updates."
     }
   },
   "uploadBlock": {

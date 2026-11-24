@@ -468,7 +468,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     syncAudioAdChoice(user, hivePermlink).catch(() => {});
   }, [audioAds, user]);
   const isPremium = !!usePremiumStatus(user)?.premium;
-  // ⏳ The free plan's audio limit (2 a day, 15 minutes each); null for Pro,
+  // ⏳ The free plan's audio limit (2 a day, 20 minutes each); null for Pro,
   // warm-up and whenever no limit is known (useUploadQuota fails open).
   const audioQuota = useUploadQuota({ video: false }).audio;
 

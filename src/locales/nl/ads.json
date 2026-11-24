@@ -307,6 +307,7 @@
   },
   "promote": {
     "pricingFailed": "Promotieprijzen konden niet worden geladen.",
+    "balanceFailed": "Je saldo kon niet worden geladen.",
     "loginRequired": "Log in om te promoten.",
     "notEnoughBalance": "Niet genoeg {{currency}} — je saldo is {{balance}} {{currency}}.",
     "verifying": "Betaling verstuurd — controleren op de chain…",

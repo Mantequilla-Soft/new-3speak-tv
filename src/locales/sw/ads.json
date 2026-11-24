@@ -307,6 +307,7 @@
   },
   "promote": {
     "pricingFailed": "Imeshindwa kupakia bei za utangazaji.",
+    "balanceFailed": "Imeshindwa kupakia salio lako.",
     "loginRequired": "Tafadhali ingia ili kutangaza.",
     "notEnoughBalance": "{{currency}} haitoshi — salio lako ni {{balance}} {{currency}}.",
     "verifying": "Malipo yametumwa — inathibitisha kwenye mnyororo…",

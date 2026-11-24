@@ -20,6 +20,13 @@ const toast = toastIn('Promotion');
 // The run-length tiles of 17c (1 day, 3 days, the longest allowed).
 const DAY_TILES = [1, 3, 7];
 
+// How long the price and the balance may take before the panel says they failed.
+const LOAD_TIMEOUT_MS = 12000;
+const withTimeout = (promise, ms) => new Promise((resolve, reject) => {
+  const id = setTimeout(() => reject(new Error('timeout')), ms);
+  promise.then((v) => { clearTimeout(id); resolve(v); }, (e) => { clearTimeout(id); reject(e); });
+});
+
 /**
  * Promote a video by transferring HBD (or the HIVE equivalent) to the promotion
  * account, signed with the user's front-facing wallet via aioha. After the
@@ -44,6 +51,12 @@ export default function PromoteModal({ open, onClose, author, permlink, promoted
   const [busy, setBusy] = useState(false);
   const [freshUntil, setFreshUntil] = useState(promotedUntil || null);
   const [balances, setBalances] = useState(null); // { hbd, hive }
+  // A price or balance that never arrives must not look like one still loading
+  // (issue #580: both sat at "…" for good). Each load gives up after LOAD_TIMEOUT_MS
+  // and the panel says so, with a Retry that bumps `attempt`.
+  const [quoteFailed, setQuoteFailed] = useState(false);
+  const [balanceFailed, setBalanceFailed] = useState(false);
+  const [attempt, setAttempt] = useState(0);
 
   const { user: me } = useAppStore();
   const post = usePostThumb(author, permlink, open);
@@ -55,26 +68,39 @@ export default function PromoteModal({ open, onClose, author, permlink, promoted
     if (!open) return;
     let cancelled = false;
     // With one thing to buy there is nothing to choose: straight to the boost.
-    setMode(selfPromoEnabledFor(me) ? null : 'boost');
     setFreshUntil(promotedUntil || null);
     setBalances(null);
-    axios.get(`${CHECKER_URL}/promote/quote`)
-      .then(res => { if (!cancelled && res.data?.success) setQuote(res.data); })
-      .catch(() => { if (!cancelled) toast.error(t('ads.promote.pricingFailed')); });
+    setQuoteFailed(false);
+    setBalanceFailed(false);
+    axios.get(`${CHECKER_URL}/promote/quote`, { timeout: LOAD_TIMEOUT_MS })
+      .then(res => {
+        if (cancelled) return;
+        if (res.data?.success) setQuote(res.data); else setQuoteFailed(true);
+      })
+      .catch(() => { if (!cancelled) setQuoteFailed(true); });
     // Authoritative current status (blocks promoting while still active everywhere).
     if (author && permlink) {
-      axios.get(`${CHECKER_URL}/promote/status/${author}/${permlink}`)
+      axios.get(`${CHECKER_URL}/promote/status/${author}/${permlink}`, { timeout: LOAD_TIMEOUT_MS })
         .then(res => { if (!cancelled && res.data?.success) setFreshUntil(res.data.promotedUntil || null); })
         .catch(() => {});
     }
-    // Wallet balance of the logged-in payer.
+    // Wallet balance of the logged-in payer. fetchBalances() answers undefined on
+    // an error and has no deadline of its own (dhive fails over node by node).
     if (me) {
-      fetchBalances(me)
-        .then(b => { if (!cancelled && b) setBalances({ hbd: b.hbd, hive: b.hive }); })
-        .catch(() => {});
+      withTimeout(fetchBalances(me), LOAD_TIMEOUT_MS)
+        .then(b => {
+          if (cancelled) return;
+          if (b) setBalances({ hbd: b.hbd, hive: b.hive }); else setBalanceFailed(true);
+        })
+        .catch(() => { if (!cancelled) setBalanceFailed(true); });
     }
     return () => { cancelled = true; };
-  }, [open, author, permlink, promotedUntil, me, t]);
+  }, [open, author, permlink, promotedUntil, me, attempt]);
+
+  // The chooser resets when the modal opens, not on a Retry.
+  useEffect(() => {
+    if (open) setMode(selfPromoEnabledFor(me) ? null : 'boost');
+  }, [open, me]);
 
   const maxDays = quote?.maxDays || 7;
   const costHbd = useMemo(() => (quote ? days * quote.costPer24hHbd : 0), [quote, days]);
@@ -134,7 +160,9 @@ export default function PromoteModal({ open, onClose, author, permlink, promoted
   };
 
   const showChoices = selfPromoEnabledFor(me);
-  const money = (n) => (n ? n.toFixed(3) : '…');
+  const money = (n) => (n ? n.toFixed(3) : quoteFailed ? '–' : '…');
+  const balanceText = walletBalance != null ? `${walletBalance.toFixed(3)} ${currency}` : balanceFailed ? '–' : '…';
+  const loadFailed = quoteFailed || (balanceFailed && !balances);
   const dayTiles = [...new Set(DAY_TILES.map((d) => Math.min(d, maxDays)))];
 
   return (
@@ -149,7 +177,7 @@ export default function PromoteModal({ open, onClose, author, permlink, promoted
       footer={mode === 'boost' && !isActive ? (
         <>
           <div className={cx('dlg-note promote-v2__balance', insufficient && 'is-low')}>
-            <span>{t('ads.promote.yourBalance')}: <span className="num">{walletBalance != null ? `${walletBalance.toFixed(3)} ${currency}` : '…'}</span></span>
+            <span>{t('ads.promote.yourBalance')}: <span className="num">{balanceText}</span></span>
             {currency === 'HBD' && costHive > 0 && <span className="num">≈ {costHive.toFixed(3)} HIVE</span>}
             {currency === 'HIVE' && costHbd > 0 && <span className="num">≈ {costHbd.toFixed(3)} HBD</span>}
           </div>
@@ -193,6 +221,14 @@ export default function PromoteModal({ open, onClose, author, permlink, promoted
         <Banner tone="info" icon="schedule" title={t('ads.promote.alreadyUntil')}>
           <span className="num">{new Date(activeUntil).toLocaleString()}</span>. {t('ads.promote.againLater')}
         </Banner>
+      )}
+
+      {mode === 'boost' && !isActive && loadFailed && (
+        <Banner
+          tone="warn"
+          title={quoteFailed ? t('ads.promote.pricingFailed') : t('ads.promote.balanceFailed')}
+          action={<Button variant="secondary" size={32} onClick={() => setAttempt((n) => n + 1)}>{t('common.actions.retry')}</Button>}
+        />
       )}
 
       {mode === 'boost' && !isActive && (
