@@ -18,6 +18,11 @@ const COPY = {
     titleKey: 'app.supportBlock.upload.title',
     bodyKey: 'app.supportBlock.upload.body',
   },
+  // Every upload paused for everyone (lib/uploadsPaused.jsx), not this account.
+  paused: {
+    titleKey: 'app.supportBlock.paused.title',
+    bodyKey: 'app.supportBlock.paused.body',
+  },
 };
 
 export default function SupportModal() {
@@ -56,7 +61,7 @@ export default function SupportModal() {
     >
       <div className="support-modal-lead">
         <span className="support-modal-icon" aria-hidden="true">
-          <Icon name={block.reason === 'upload' ? 'file_upload_off' : 'block'} size={24} />
+          <Icon name={block.reason === 'upload' || block.reason === 'paused' ? 'file_upload_off' : 'block'} size={24} />
         </span>
         <p className="support-modal-body">{t(copy.bodyKey)}</p>
       </div>

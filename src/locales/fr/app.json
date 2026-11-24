@@ -10,6 +10,10 @@
     "upload": {
       "title": "La mise en ligne est désactivée pour votre compte",
       "body": "Votre compte n'est pas autorisé à mettre en ligne pour le moment. Si vous pensez qu'il s'agit d'une erreur, contactez le support 3Speak."
+    },
+    "paused": {
+      "title": "Les mises en ligne sont en pause",
+      "body": "Nous avons un problème avec nos serveurs, les mises en ligne sont donc en pause pour le moment. Suis notre Discord pour les nouvelles."
     }
   },
   "uploadBlock": {

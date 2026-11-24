@@ -10,6 +10,10 @@
     "upload": {
       "title": "Naka-disable ang pag-upload sa account mo",
       "body": "Hindi pinapayagang mag-upload ang account mo ngayon. Kung sa tingin mo ay pagkakamali ito, kontakin ang 3Speak support."
+    },
+    "paused": {
+      "title": "Naka-pause ang mga upload",
+      "body": "May problema ang aming mga server, kaya naka-pause muna ang mga upload. Tingnan ang aming Discord para sa mga update."
     }
   },
   "uploadBlock": {

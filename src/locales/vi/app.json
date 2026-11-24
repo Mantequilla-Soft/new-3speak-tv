@@ -10,6 +10,10 @@
     "upload": {
       "title": "Tính năng tải lên đã bị tắt cho tài khoản của bạn",
       "body": "Tài khoản của bạn hiện không được phép tải lên. Nếu bạn nghĩ đây là nhầm lẫn, hãy liên hệ bộ phận hỗ trợ của 3Speak."
+    },
+    "paused": {
+      "title": "Tải lên đang tạm dừng",
+      "body": "Máy chủ của chúng tôi đang gặp sự cố nên việc tải lên tạm dừng. Hãy xem Discord của chúng tôi để biết cập nhật."
     }
   },
   "uploadBlock": {

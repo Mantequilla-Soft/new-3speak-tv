@@ -10,6 +10,10 @@
     "upload": {
       "title": "Las subidas están desactivadas para tu cuenta",
       "body": "Tu cuenta no puede subir contenido en este momento. Si crees que es un error, contacta al soporte de 3Speak."
+    },
+    "paused": {
+      "title": "Las subidas están en pausa",
+      "body": "Tenemos un problema con nuestros servidores, así que las subidas están en pausa por ahora. Revisa nuestro Discord para ver las novedades."
     }
   },
   "uploadBlock": {

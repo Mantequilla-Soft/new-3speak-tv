@@ -10,6 +10,10 @@
     "upload": {
       "title": "Przesyłanie jest wyłączone dla twojego konta",
       "body": "Twoje konto nie może teraz przesyłać treści. Jeśli uważasz, że to pomyłka, skontaktuj się z pomocą 3Speak."
+    },
+    "paused": {
+      "title": "Przesyłanie jest wstrzymane",
+      "body": "Mamy problem z naszymi serwerami, więc przesyłanie jest na razie wstrzymane. Sprawdzaj nasz Discord, aby być na bieżąco."
     }
   },
   "uploadBlock": {

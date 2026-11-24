@@ -10,6 +10,10 @@
     "upload": {
       "title": "Uploading is disabled for your account",
       "body": "Your account isn’t allowed to upload right now. If you think this is a mistake, contact 3Speak support."
+    },
+    "paused": {
+      "title": "Uploads are paused",
+      "body": "We have a problem with our servers, so uploads are paused for now. Check our Discord for updates."
     }
   },
   "uploadBlock": {

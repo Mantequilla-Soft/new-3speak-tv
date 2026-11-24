@@ -51,6 +51,9 @@ const SHORTS_ADS_ENABLED = String(import.meta.env.VITE_SHORTS_ADS || '').toLower
 // ▶️ Video import (/import and its entry buttons): OFF unless
 // VITE_VIDEO_IMPORT=true (owner's call 2026-10-06; on for develop/preview).
 const VIDEO_IMPORT_ENABLED = import.meta.env.VITE_VIDEO_IMPORT === 'true';
+// ⏸️ Every upload paused, for when the image or audio servers are down
+// (lib/uploadsPaused.js): VITE_UPLOADS_PAUSED=true, lifted with a rebuild.
+const UPLOADS_PAUSED = import.meta.env.VITE_UPLOADS_PAUSED === 'true';
 // Which platforms can be LINKED on a profile: one switch each,
 // VITE_SOCIAL_LINK_<NAME>=true|false. Default: YouTube + SoundCloud only. Existing
 // links of a switched-off platform still show (and can be removed).
@@ -550,5 +553,6 @@ export {
   THREESPEAK_API_KEY,
   SOCIAL_VERIFIER_URL,
   VIDEO_IMPORT_ENABLED,
+  UPLOADS_PAUSED,
   SOCIAL_LINK_ENABLED,
 };
