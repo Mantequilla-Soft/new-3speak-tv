@@ -37,6 +37,39 @@
     color: var(--cyan);
   }
 
+  // The Follow Feed's "Sort by" select, at the end of the header row. Same look
+  // as the comment sort on the watch page: icon inside, label for screen readers.
+  .feed-sort {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    flex: none;
+
+    > .material-symbols-rounded {
+      position: absolute;
+      left: 10px;
+      color: var(--muted);
+      pointer-events: none;
+    }
+
+    select {
+      width: auto;
+      padding-left: 32px;
+      font-size: 12px;
+      font-weight: 700;
+      background-color: var(--surface);
+    }
+  }
+
+  .feed-sort-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
   // "Loading more…" under the grid, and the fetch error
   .feed-loading-more {
     margin: 0;

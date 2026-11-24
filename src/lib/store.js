@@ -89,6 +89,11 @@ export const useAppStore = create(
       // Hide videos the user has already watched from discovery feeds (default ON).
       hideWatched: true,
       setHideWatched: (val) => a[0]({ hideWatched: typeof val === 'function' ? val(a[1]().hideWatched) : val }),
+      // The Follow Feed's order (page/FollowFeed): 'recommended' is the checker's
+      // ranking (recency, comments, interests, retention), 'newest' is strictly by
+      // date (?chrono=1). Hide-watched applies to both.
+      followFeedSort: 'recommended',
+      setFollowFeedSort: (val) => a[0]({ followFeedSort: val === 'newest' ? 'newest' : 'recommended' }),
       // Leave out videos + shorts the pipeline flagged AI-generated, in every feed
       // (Card3, the shorts rails, the shorts swipe feed). Default ON since store v2;
       // turned off, flagged content just carries an AI pill. Filtered client-side,
@@ -152,6 +157,7 @@ export const useAppStore = create(
         resumeLastPage: state.resumeLastPage,
         inlineShorts: state.inlineShorts,
         hideWatched: state.hideWatched,
+        followFeedSort: state.followFeedSort,
         hideAi: state.hideAi,
         privateMode: state.privateMode,
       }),

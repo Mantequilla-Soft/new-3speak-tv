@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.179',
+    category: 'home',
+    date: '2026-11-24',
+    summary: 'The Follow Feed has a Sort by menu: Recommended or Newest first, and it remembers your choice.',
+  },
+  {
     version: '2.0.177',
     category: 'shorts',
     date: '2026-11-23',

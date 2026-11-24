@@ -274,7 +274,10 @@
     "title": "Takip Akışı",
     "error": "Videolar alınırken hata oluştu",
     "emptyTitle": "Burada henüz kimse yok",
-    "emptyBody": "İçerik üreticilerini takip et; videoları, Snaps paylaşımları ve canlı yayınları ilk burada görünsün."
+    "emptyBody": "İçerik üreticilerini takip et; videoları, Snaps paylaşımları ve canlı yayınları ilk burada görünsün.",
+    "sortBy": "Sırala",
+    "sortRecommended": "Önerilen",
+    "sortNewest": "Önce en yeni"
   },
   "groups": {
     "title": "Gruplar",

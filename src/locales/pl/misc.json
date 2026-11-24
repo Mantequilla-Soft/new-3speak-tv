@@ -274,7 +274,10 @@
     "title": "Obserwowani",
     "error": "Błąd pobierania filmów",
     "emptyTitle": "Jeszcze nikogo tu nie ma",
-    "emptyBody": "Obserwuj twórców, a ich nowe filmy, Snaps i transmisje na żywo pojawią się tu jako pierwsze."
+    "emptyBody": "Obserwuj twórców, a ich nowe filmy, Snaps i transmisje na żywo pojawią się tu jako pierwsze.",
+    "sortBy": "Sortuj według",
+    "sortRecommended": "Polecane",
+    "sortNewest": "Najnowsze najpierw"
   },
   "groups": {
     "title": "Grupy",
