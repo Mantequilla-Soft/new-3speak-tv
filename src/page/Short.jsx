@@ -90,6 +90,7 @@ import { mergeOffChainReplies, applyOffChainLikes } from '../utils/offChainRepli
 import { fetchIncubationShorts, handleAvatar, postIncubationContent } from '../lib/incubation';
 import { timeAgo } from '../lib/creatorStats';
 import { warmupRailEnabledFor } from '../utils/config';
+import { settleWithin } from '../utils/settleWithin';
 import { commentWithAioha, isLoggedIn } from '../hive-api/aioha';
 import AmbientGlow, { useAmbientGlow } from '../components/AmbientGlow/AmbientGlow';
 import EditorModal from '../components/modal/EditorModal';
@@ -122,6 +123,10 @@ const toast = toastIn('Shorts');
 // anyway. Long enough that a healthy load always reports ready first, short enough
 // that a broken one barely delays the swipe-ahead warm-up.
 const PREFETCH_GRACE_MS = 4000;
+
+// How long the warm-up Shorts (mixed into the feed) may take, counted from the
+// start of the load. Later than that the feed shows without them.
+const WARMUP_SHORTS_WAIT_MS = 1500;
 
 // A 24h story past its time (checker routes/stories.js). It is never loaded into
 // the player: the expired screen stands in for it, so this does not depend on the
@@ -1518,15 +1523,20 @@ const VideoShort = () => {
      *
      * Failure is silent and non-blocking: the shorts feed is the product, and a
      * warm-up feed that is slow or down must never keep it from painting.
+     *
+     * So the request starts with the load (startWarmupShorts, from fetchShorts) and
+     * gets WARMUP_SHORTS_WAIT_MS from then: late or failed, the feed goes without
+     * it. Awaited after the main feed it held every refresh for as long as the
+     * checker took, seconds at times, up to its own 8 s timeout.
      */
+    let warmupPending = null;
+    const startWarmupShorts = () => {
+      if (!warmupRailEnabledFor(user || incubationHandle)) return Promise.resolve([]);
+      return settleWithin(fetchIncubationShorts(10).then((data) => data?.items || []), WARMUP_SHORTS_WAIT_MS, []);
+    };
     const withWarmupShorts = async (formatted) => {
-      if (!warmupRailEnabledFor(user || incubationHandle)) return formatted;
-      try {
-        const data = await fetchIncubationShorts(10);
-        return interleaveWarmup(formatted, formatIncubationShorts(data?.items), 5);
-      } catch {
-        return formatted;
-      }
+      const items = await (warmupPending || startWarmupShorts());
+      return interleaveWarmup(formatted, formatIncubationShorts(items), 5);
     };
 
     const formatShorts = (shorts) => shorts.map(short => ({
@@ -1576,6 +1586,100 @@ const VideoShort = () => {
       _enriched: short._enriched != null ? short._enriched : true,
     }));
 
+    /**
+     * The Short a link (?v=author/permlink) points at, ready for the feed. Started
+     * with the load (startSharedLookup, from fetchShorts) rather than after the
+     * feed answered: it is needed whenever that Short is not on the feed's first
+     * page, which with a shuffled feed is nearly always, and every refresh has a
+     * ?v= in the URL.
+     */
+    const resolveSharedShort = async (sharedVideo) => {
+      // Resolve by asset permlink first; if the URL carried the Hive permlink
+      // (wave-/snap-/3speak-… shares), resolve via embed_url instead. Either
+      // way `actualShort.permlink` is the embed asset id — what the player and
+      // the /api/view endpoint need (sending the Hive permlink 404s both).
+      let actualShort = await hiveApi.findShortByPermlink(sharedVideo.permlink);
+      if (!actualShort) {
+        actualShort = await hiveApi.findShortByEmbedUrl(sharedVideo.author, sharedVideo.permlink);
+      }
+      // findShort* only scans the shorts feed, so a direct-linked short that
+      // isn't in the feed (or is beyond the scanned pages) isn't found and we
+      // fall back to "@author/<assetId>" — which can't resolve the Hive post
+      // (breaks edit/vote). The checker's /videodetails authoritatively maps
+      // the asset id → embed_url + Hive permlink, so use it as a fallback.
+      if (!actualShort) {
+        try {
+          const d = await fetch(`${import.meta.env.VITE_CHECKER_URL}/videodetails/${sharedVideo.author}/${sharedVideo.permlink}`).then(r => (r.ok ? r.json() : null));
+          if (d && d.owner && d.embed_url) {
+            actualShort = {
+              owner: d.owner,
+              permlink: d.permlink,
+              embed_url: d.embed_url,
+              thumbnail_url: d.thumbnail_url || '',
+              views: d.views || 0,
+              createdAt: d.createdAt || new Date().toISOString(),
+              embed_title: d.embed_title || d.hive_title || '',
+              // An expired story is in no feed, so this is how a direct link learns it.
+              story: d.story === true,
+              story_expires_at: d.story_expires_at || null,
+            };
+          }
+        } catch { /* ignore — falls through to the minimal shortItem below */ }
+      }
+      const shortItem = actualShort || {
+        owner: sharedVideo.author,
+        permlink: sharedVideo.permlink,
+        embed_url: `@${sharedVideo.author}/${sharedVideo.permlink}`,
+        thumbnail_url: '',
+        views: 0,
+        createdAt: new Date().toISOString(),
+        embed_title: ''
+      };
+
+      const sharedVideoData = await hiveApi.fetchCompleteShortData(shortItem, user);
+      const formattedSharedVideo = {
+        id: sharedVideoData.id,
+        author: sharedVideoData.author,
+        permlink: sharedVideoData.permlink,
+        hivePermlink: sharedVideoData.hivePermlink,
+        hivePostMissing: sharedVideoData.hivePostMissing,
+        embedUrl: sharedVideoData.embedUrl,
+        user: sharedVideoData.user,
+        caption: sharedVideoData.caption || sharedVideoData.title || '',
+        heading: sharedVideoData.heading || '', // `## Title` (utils/shortTitle.js)
+        audiogramOf: sharedVideoData.audiogramOf || null, // made from an audiogram (utils/audiogramLink.js)
+        madeFrom: sharedVideoData.madeFrom || null, // made from another post (lib/derived.js)
+        tags: sharedVideoData.tags || [], // the post's tags (the challenge pill reads these)
+        storyExpiresAt: sharedVideoData.storyExpiresAt || null, // 24h story
+        audio: soundLabel(sharedVideoData.sound, sharedVideoData.user.username),
+        sound: sharedVideoData.sound || null, // for the sound chip's page (lib/sounds.js)
+        albumArt: sharedVideoData.user.avatar,
+        stats: sharedVideoData.stats,
+        isLiked: sharedVideoData.isLiked || false,
+        isDisliked: sharedVideoData.isDisliked || false,
+        comments: [],
+        commentsLoaded: false,
+        timeAgo: sharedVideoData.timeAgo,
+        createdAt: sharedVideoData.createdAt,
+        parentVideo: sharedVideoData.parentVideo || null,
+        parentTimestamp: sharedVideoData.parentTimestamp || null,
+        parentComment: sharedVideoData.parentComment || null,
+        parentShort: sharedVideoData.parentShort || null,
+        reactionChain: sharedVideoData.reactionChain || null,
+        childReactions: sharedVideoData.childReactions || null,
+        // Gates the Remix button; without it a directly opened short never shows Remix
+        reusable: sharedVideoData.reusable,
+      };
+      return formattedSharedVideo;
+    };
+    let sharedPending = null;
+    const startSharedLookup = () => {
+      const sharedVideo = getSharedVideoFromUrl();
+      if (!sharedVideo) return;
+      sharedPending = resolveSharedShort(sharedVideo);
+      sharedPending.catch(() => {}); // handled where it is awaited, below
+    };
+
     const applySharedVideoLogic = async (formattedVideos, data) => {
       const sharedVideo = getSharedVideoFromUrl();
 
@@ -1592,83 +1696,7 @@ const VideoShort = () => {
           setCurrentIndex(sharedIndex);
         } else {
           try {
-            // Resolve by asset permlink first; if the URL carried the Hive permlink
-            // (wave-/snap-/3speak-… shares), resolve via embed_url instead. Either
-            // way `actualShort.permlink` is the embed asset id — what the player and
-            // the /api/view endpoint need (sending the Hive permlink 404s both).
-            let actualShort = await hiveApi.findShortByPermlink(sharedVideo.permlink);
-            if (!actualShort) {
-              actualShort = await hiveApi.findShortByEmbedUrl(sharedVideo.author, sharedVideo.permlink);
-            }
-            // findShort* only scans the shorts feed, so a direct-linked short that
-            // isn't in the feed (or is beyond the scanned pages) isn't found and we
-            // fall back to "@author/<assetId>" — which can't resolve the Hive post
-            // (breaks edit/vote). The checker's /videodetails authoritatively maps
-            // the asset id → embed_url + Hive permlink, so use it as a fallback.
-            if (!actualShort) {
-              try {
-                const d = await fetch(`${import.meta.env.VITE_CHECKER_URL}/videodetails/${sharedVideo.author}/${sharedVideo.permlink}`).then(r => (r.ok ? r.json() : null));
-                if (d && d.owner && d.embed_url) {
-                  actualShort = {
-                    owner: d.owner,
-                    permlink: d.permlink,
-                    embed_url: d.embed_url,
-                    thumbnail_url: d.thumbnail_url || '',
-                    views: d.views || 0,
-                    createdAt: d.createdAt || new Date().toISOString(),
-                    embed_title: d.embed_title || d.hive_title || '',
-                    // An expired story is in no feed, so this is how a direct link learns it.
-                    story: d.story === true,
-                    story_expires_at: d.story_expires_at || null,
-                  };
-                }
-              } catch { /* ignore — falls through to the minimal shortItem below */ }
-            }
-            const shortItem = actualShort || {
-              owner: sharedVideo.author,
-              permlink: sharedVideo.permlink,
-              embed_url: `@${sharedVideo.author}/${sharedVideo.permlink}`,
-              thumbnail_url: '',
-              views: 0,
-              createdAt: new Date().toISOString(),
-              embed_title: ''
-            };
-
-            const sharedVideoData = await hiveApi.fetchCompleteShortData(shortItem, user);
-            const formattedSharedVideo = {
-              id: sharedVideoData.id,
-              author: sharedVideoData.author,
-              permlink: sharedVideoData.permlink,
-              hivePermlink: sharedVideoData.hivePermlink,
-              hivePostMissing: sharedVideoData.hivePostMissing,
-              embedUrl: sharedVideoData.embedUrl,
-              user: sharedVideoData.user,
-              caption: sharedVideoData.caption || sharedVideoData.title || '',
-              heading: sharedVideoData.heading || '', // `## Title` (utils/shortTitle.js)
-              audiogramOf: sharedVideoData.audiogramOf || null, // made from an audiogram (utils/audiogramLink.js)
-              madeFrom: sharedVideoData.madeFrom || null, // made from another post (lib/derived.js)
-              tags: sharedVideoData.tags || [], // the post's tags (the challenge pill reads these)
-              storyExpiresAt: sharedVideoData.storyExpiresAt || null, // 24h story
-              audio: soundLabel(sharedVideoData.sound, sharedVideoData.user.username),
-              sound: sharedVideoData.sound || null, // for the sound chip's page (lib/sounds.js)
-              albumArt: sharedVideoData.user.avatar,
-              stats: sharedVideoData.stats,
-              isLiked: sharedVideoData.isLiked || false,
-              isDisliked: sharedVideoData.isDisliked || false,
-              comments: [],
-              commentsLoaded: false,
-              timeAgo: sharedVideoData.timeAgo,
-              createdAt: sharedVideoData.createdAt,
-              parentVideo: sharedVideoData.parentVideo || null,
-              parentTimestamp: sharedVideoData.parentTimestamp || null,
-              parentComment: sharedVideoData.parentComment || null,
-              parentShort: sharedVideoData.parentShort || null,
-              reactionChain: sharedVideoData.reactionChain || null,
-              childReactions: sharedVideoData.childReactions || null,
-              // Gates the Remix button; without it a directly opened short never shows Remix
-              reusable: sharedVideoData.reusable,
-            };
-
+            const formattedSharedVideo = await (sharedPending || resolveSharedShort(sharedVideo));
             setVideos([formattedSharedVideo, ...formattedVideos]);
             setCurrentIndex(0);
           } catch (err) {
@@ -1692,6 +1720,9 @@ const VideoShort = () => {
     const fetchShorts = async () => {
       try {
         setError(null);
+        // Both run while the feed loads (see startWarmupShorts / resolveSharedShort).
+        startSharedLookup();
+        if (!feedUser) warmupPending = startWarmupShorts();
 
         // User-specific feed mode: skip preloading, fetch directly from user endpoint
         if (feedUser) {
