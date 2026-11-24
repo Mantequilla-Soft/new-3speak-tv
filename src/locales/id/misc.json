@@ -274,7 +274,10 @@
     "title": "Feed Diikuti",
     "error": "Gagal memuat video",
     "emptyTitle": "Belum ada siapa pun di sini",
-    "emptyBody": "Ikuti kreator, dan unggahan, Snaps, serta siaran langsung mereka akan muncul di sini lebih dulu."
+    "emptyBody": "Ikuti kreator, dan unggahan, Snaps, serta siaran langsung mereka akan muncul di sini lebih dulu.",
+    "sortBy": "Urutkan",
+    "sortRecommended": "Rekomendasi",
+    "sortNewest": "Terbaru dulu"
   },
   "groups": {
     "title": "Grup",

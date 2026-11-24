@@ -274,7 +274,10 @@
     "title": "Follow Feed",
     "error": "Error sa pagkuha ng mga video",
     "emptyTitle": "Wala pang tao rito",
-    "emptyBody": "Mag-follow ng mga creator at dito unang lalabas ang mga upload, Snaps at live nila."
+    "emptyBody": "Mag-follow ng mga creator at dito unang lalabas ang mga upload, Snaps at live nila.",
+    "sortBy": "Ayusin ayon sa",
+    "sortRecommended": "Inirerekomenda",
+    "sortNewest": "Pinakabago muna"
   },
   "groups": {
     "title": "Groups",

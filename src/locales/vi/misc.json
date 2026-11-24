@@ -274,7 +274,10 @@
     "title": "Bảng tin theo dõi",
     "error": "Lỗi khi tải video",
     "emptyTitle": "Chưa có ai ở đây",
-    "emptyBody": "Theo dõi các nhà sáng tạo để video, Snaps và buổi phát trực tiếp của họ hiện ở đây đầu tiên."
+    "emptyBody": "Theo dõi các nhà sáng tạo để video, Snaps và buổi phát trực tiếp của họ hiện ở đây đầu tiên.",
+    "sortBy": "Sắp xếp theo",
+    "sortRecommended": "Đề xuất",
+    "sortNewest": "Mới nhất trước"
   },
   "groups": {
     "title": "Nhóm",

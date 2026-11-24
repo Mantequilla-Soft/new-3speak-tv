@@ -15,20 +15,23 @@ import PullToRefresh from "../components/PullToRefresh/PullToRefresh";
 import PopularCreators from "../components/PopularCreators/PopularCreators";
 import { FeedPageHeader, FollowFeedIcon } from "../components/FeedIcons";
 import { useTranslation } from "react-i18next";
+import { Icon } from "../components/v2/Icon";
 
 const LIMIT = 50;
 
 const fetchVideos = async ({ pageParam = 1 }, username) => {
   const st = useAppStore.getState();
   // interests re-rank + hide-watched (when the setting is on) via the shared params.
-  const url = appendNsfw(`${FOLLOW_FEED_URL}/${username}?page=${pageParam}&limit=${LIMIT}${feedParams()}`, st.showNsfw);
+  // "Newest first" skips the ranking on the checker (?chrono=1), still hiding watched.
+  const chrono = st.followFeedSort === 'newest' ? '&chrono=1' : '';
+  const url = appendNsfw(`${FOLLOW_FEED_URL}/${username}?page=${pageParam}&limit=${LIMIT}${feedParams()}${chrono}`, st.showNsfw);
   const res = await axios.get(url);
   return res.data;
 };
 
 const FollowFeed = () => {
   const { t } = useTranslation();
-  const { user, showNsfw, hideWatched } = useAppStore();
+  const { user, showNsfw, hideWatched, followFeedSort, setFollowFeedSort } = useAppStore();
   const incubationHandle = useAppStore((s) => s.incubationHandle);
   // Whose follows this feed is of. A handle is not a Hive account, but the
   // checker resolves it against the off-chain follows, so it answers the same
@@ -44,7 +47,7 @@ const FollowFeed = () => {
     isLoading,
     isError,
   } = useInfiniteQuery({
-    queryKey: ["follow-feed-page", feedName, showNsfw, hideWatched],
+    queryKey: ["follow-feed-page", feedName, showNsfw, hideWatched, followFeedSort],
     queryFn: (ctx) => fetchVideos(ctx, feedName),
     getNextPageParam: (lastPage) => {
       if (!lastPage || lastPage.page >= lastPage.totalPages) return undefined;
@@ -84,7 +87,17 @@ const FollowFeed = () => {
   return (
     <PullToRefresh onRefresh={handleRefresh}>
     <div className="firstupload-container">
-      <FeedPageHeader icon={<FollowFeedIcon />} title={t('misc.followFeed.title')} />
+      <FeedPageHeader icon={<FollowFeedIcon />} title={t('misc.followFeed.title')}>
+        {/* Nothing to sort on the empty page (nobody followed yet). */}
+        {videos.length > 0 && <label className="feed-sort">
+          <Icon name="sort" size={16} />
+          <span className="feed-sort-label">{t('misc.followFeed.sortBy')}</span>
+          <select className="v2-input is-select h32" value={followFeedSort} onChange={(e) => setFollowFeedSort(e.target.value)}>
+            <option value="recommended">{t('misc.followFeed.sortRecommended')}</option>
+            <option value="newest">{t('misc.followFeed.sortNewest')}</option>
+          </select>
+        </label>}
+      </FeedPageHeader>
 
       {isLoading ? (
         <CardSkeleton />

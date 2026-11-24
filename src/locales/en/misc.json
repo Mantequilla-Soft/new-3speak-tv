@@ -274,7 +274,10 @@
     "title": "Follow Feed",
     "error": "Error fetching videos",
     "emptyTitle": "Nobody here yet",
-    "emptyBody": "Follow creators and their uploads, snaps and lives show up here first."
+    "emptyBody": "Follow creators and their uploads, snaps and lives show up here first.",
+    "sortBy": "Sort by",
+    "sortRecommended": "Recommended",
+    "sortNewest": "Newest first"
   },
   "groups": {
     "title": "Groups",

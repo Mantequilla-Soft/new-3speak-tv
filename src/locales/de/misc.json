@@ -274,7 +274,10 @@
     "title": "Folge-ich-Feed",
     "error": "Fehler beim Abrufen der Videos",
     "emptyTitle": "Noch niemand hier",
-    "emptyBody": "Folge Creatorn, dann erscheinen ihre Uploads, Snaps und Livestreams hier zuerst."
+    "emptyBody": "Folge Creatorn, dann erscheinen ihre Uploads, Snaps und Livestreams hier zuerst.",
+    "sortBy": "Sortieren nach",
+    "sortRecommended": "Empfohlen",
+    "sortNewest": "Neueste zuerst"
   },
   "groups": {
     "title": "Gruppen",

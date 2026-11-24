@@ -274,7 +274,10 @@
     "title": "Feed de seguidos",
     "error": "Error al cargar los videos",
     "emptyTitle": "Aún no hay nadie aquí",
-    "emptyBody": "Sigue a creadores y sus videos, Snaps y directos aparecerán aquí primero."
+    "emptyBody": "Sigue a creadores y sus videos, Snaps y directos aparecerán aquí primero.",
+    "sortBy": "Ordenar por",
+    "sortRecommended": "Recomendados",
+    "sortNewest": "Más recientes primero"
   },
   "groups": {
     "title": "Grupos",

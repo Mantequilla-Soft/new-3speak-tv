@@ -274,7 +274,10 @@
     "title": "Mlisho wa unaowafuata",
     "error": "Hitilafu katika kupata video",
     "emptyTitle": "Bado hakuna mtu hapa",
-    "emptyBody": "Fuata watayarishaji, na video zao, Snaps na matangazo yao mubashara yataonekana hapa kwanza."
+    "emptyBody": "Fuata watayarishaji, na video zao, Snaps na matangazo yao mubashara yataonekana hapa kwanza.",
+    "sortBy": "Panga kwa",
+    "sortRecommended": "Yanayopendekezwa",
+    "sortNewest": "Mapya kwanza"
   },
   "groups": {
     "title": "Vikundi",

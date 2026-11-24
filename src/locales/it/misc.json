@@ -274,7 +274,10 @@
     "title": "Feed Seguiti",
     "error": "Errore nel recupero dei video",
     "emptyTitle": "Ancora nessuno qui",
-    "emptyBody": "Segui dei creator e i loro video, Snaps e live compariranno qui per primi."
+    "emptyBody": "Segui dei creator e i loro video, Snaps e live compariranno qui per primi.",
+    "sortBy": "Ordina per",
+    "sortRecommended": "Consigliati",
+    "sortNewest": "Più recenti prima"
   },
   "groups": {
     "title": "Gruppi",

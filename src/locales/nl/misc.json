@@ -274,7 +274,10 @@
     "title": "Volgend-feed",
     "error": "Fout bij het ophalen van video's",
     "emptyTitle": "Nog niemand hier",
-    "emptyBody": "Volg makers en hun uploads, Snaps en livestreams verschijnen hier als eerste."
+    "emptyBody": "Volg makers en hun uploads, Snaps en livestreams verschijnen hier als eerste.",
+    "sortBy": "Sorteren op",
+    "sortRecommended": "Aanbevolen",
+    "sortNewest": "Nieuwste eerst"
   },
   "groups": {
     "title": "Groepen",
