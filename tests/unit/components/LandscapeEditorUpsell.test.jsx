@@ -26,7 +26,7 @@ describe('LandscapeEditorUpsell', () => {
     const onClose = vi.fn()
     renderWithProviders(<LandscapeEditorUpsell open onClose={onClose} />)
     expect(screen.getByRole('dialog')).toHaveTextContent('The landscape video editor is part of 3Speak Pro')
-    expect(m.props.perks.map((p) => p.title)).toEqual(['Landscape video editor', 'Unlimited daily uploads', 'Audio longer than 15 minutes'])
+    expect(m.props.perks.map((p) => p.title)).toEqual(['Landscape video editor', 'Unlimited daily uploads', 'Audio longer than 20 minutes'])
     expect(m.props.continueLabel).toBe('Not now')
     expect(m.props.labels).toMatchObject({ seePlans: 'See plans', tryFree: 'Try Pro free for {hours}h' })
     act(() => m.props.onSeePlans())

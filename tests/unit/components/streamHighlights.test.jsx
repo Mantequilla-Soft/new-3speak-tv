@@ -64,7 +64,8 @@ describe('StreamHighlightsPanel', () => {
     }))
     const { user } = renderWithProviders(<StreamHighlightsPanel api={API} room="badadib-r1" token="tok" />)
     expect(await screen.findByText('Stream recap')).toBeInTheDocument()
-    expect(screen.getByText('2 clips picked · 1:00')).toBeInTheDocument()
+    // The picks are set in an effect after the clips arrive, so wait for them
+    expect(await screen.findByText('2 clips picked · 1:00')).toBeInTheDocument()
     // Take one out: below two the recap can't be made
     await user.click(screen.getAllByRole('button', { name: /In recap/ })[0])
     expect(screen.getByText('1 clip picked · 0:30')).toBeInTheDocument()
