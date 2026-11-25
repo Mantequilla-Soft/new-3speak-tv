@@ -74,6 +74,18 @@ export function useShortsChallenge(weekId, { enabled = true } = {}) {
   });
 }
 
+// "Hide" on the Home strip (ChallengeStrip): it stays away for that week only,
+// and the next week's challenge shows again. Per browser; without storage the
+// strip simply shows.
+const HIDDEN_KEY = '3speak-challenge-hidden';
+/** The week whose strip was hidden, or null. */
+export function readHiddenChallengeWeek() {
+  try { return localStorage.getItem(HIDDEN_KEY); } catch { return null; }
+}
+export function hideChallengeWeek(weekId) {
+  try { localStorage.setItem(HIDDEN_KEY, String(weekId)); } catch { /* no storage */ }
+}
+
 /**
  * A challenge's title or prompt in the reader's language: the exact code, then
  * its base language ('pt-BR' -> 'pt'), then English.

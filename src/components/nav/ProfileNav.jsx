@@ -205,6 +205,8 @@ function ProfileNav({ isVisible, pinned = true, leaving = false, hoverProps, onc
     hasBottomBar && { key: 'live', to: '/live', icon: 'sensors', label: t('nav.tabs.live') },
     isPhone && !(chat.warmup && !chat.ready) && { key: 'chat', to: '/chat', icon: 'chat_bubble', label: t('chat.button.label'), extra: chat.ready ? <ChatUnread /> : null },
     { key: 'rankings', to: '/leaderboard', icon: 'leaderboard', label: t('app.routes.rankings') },
+    // Also the way back to the challenge once its Home strip is hidden
+    { key: 'challenge', to: '/challenge', icon: 'emoji_events', label: t('challenges.menuEntry') },
   ].filter(Boolean);
   const helpItems = [
     { key: 'about', to: '/about', icon: 'info', label: t('nav.aboutLink') },

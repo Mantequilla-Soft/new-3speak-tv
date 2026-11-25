@@ -30,6 +30,8 @@
   "uploadBanner": "এই সপ্তাহের শর্টস চ্যালেঞ্জ: {{title}}",
   "uploadBannerAction": "দেখুন",
   "homeStrip": "<b>{{title}}</b> এই সপ্তাহের Shorts চ্যালেঞ্জ",
+  "hide": "লুকান",
+  "hideTitle": "পরের সপ্তাহের চ্যালেঞ্জ পর্যন্ত লুকান",
   "reviewRow": "চ্যালেঞ্জ",
   "pickWeek": "সপ্তাহ বেছে নিন",
   "weekOption": "সপ্তাহ {{week}}: {{title}}",

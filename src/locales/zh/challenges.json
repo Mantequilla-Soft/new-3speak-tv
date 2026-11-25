@@ -28,6 +28,8 @@
   "uploadBanner": "本周短视频挑战：{{title}}",
   "uploadBannerAction": "查看",
   "homeStrip": "本周短视频挑战：<b>{{title}}</b>",
+  "hide": "隐藏",
+  "hideTitle": "隐藏到下周的挑战",
   "reviewRow": "挑战",
   "pickWeek": "选择一周",
   "weekOption": "第 {{week}} 周：{{title}}",

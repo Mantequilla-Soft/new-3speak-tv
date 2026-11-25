@@ -32,6 +32,8 @@
   "uploadBanner": "Sfida Short di questa settimana: {{title}}",
   "uploadBannerAction": "Scopri",
   "homeStrip": "<b>{{title}}</b> è la sfida Short di questa settimana",
+  "hide": "Nascondi",
+  "hideTitle": "Nascondi fino alla sfida della prossima settimana",
   "reviewRow": "Sfida",
   "pickWeek": "Scegli una settimana",
   "weekOption": "Settimana {{week}}: {{title}}",

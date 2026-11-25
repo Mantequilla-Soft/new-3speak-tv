@@ -6,6 +6,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import {
   weekIdOf, tagOf, challengeText, rememberJoin, takeJoin, withChallengeTag, challengeWeekOfTags,
   fetchChallenges, fetchChallenge, fetchChallengeEntries,
+  readHiddenChallengeWeek, hideChallengeWeek,
 } from '../../../src/lib/shortsChallenge'
 
 const CH = {
@@ -93,5 +94,14 @@ describe('checker calls', () => {
   it('a checker error is an error', async () => {
     stubFetch(500, {})
     await expect(fetchChallenges()).rejects.toThrow(/checker 500/)
+  })
+})
+
+describe('hidden (the Home strip)', () => {
+  it('remembers the one hidden week', () => {
+    localStorage.clear()
+    expect(readHiddenChallengeWeek()).toBeNull()
+    hideChallengeWeek('2026-W48')
+    expect(readHiddenChallengeWeek()).toBe('2026-W48')
   })
 })

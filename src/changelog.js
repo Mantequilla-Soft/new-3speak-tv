@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.181',
+    category: 'home',
+    date: '2026-11-25',
+    summary: "The Shorts challenge on Home can be hidden until next week's challenge, and is now in the account menu too.",
+  },
+  {
     version: '2.0.180',
     category: 'shorts',
     date: '2026-11-24',

@@ -28,6 +28,8 @@
   "uploadBanner": "Thử thách Shorts tuần này: {{title}}",
   "uploadBannerAction": "Xem ngay",
   "homeStrip": "<b>{{title}}</b> là thử thách Shorts tuần này",
+  "hide": "Ẩn",
+  "hideTitle": "Ẩn cho đến thử thách tuần sau",
   "reviewRow": "Thử thách",
   "pickWeek": "Chọn tuần",
   "weekOption": "Tuần {{week}}: {{title}}",

@@ -30,6 +30,8 @@
   "uploadBanner": "Shorts challenge ngayong linggo: {{title}}",
   "uploadBannerAction": "Tingnan",
   "homeStrip": "<b>{{title}}</b> ang Shorts challenge ngayong linggo",
+  "hide": "Itago",
+  "hideTitle": "Itago hanggang sa challenge sa susunod na linggo",
   "reviewRow": "Challenge",
   "pickWeek": "Pumili ng linggo",
   "weekOption": "Linggo {{week}}: {{title}}",

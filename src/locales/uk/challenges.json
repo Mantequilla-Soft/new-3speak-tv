@@ -34,6 +34,8 @@
   "uploadBanner": "Челендж Shorts цього тижня: {{title}}",
   "uploadBannerAction": "Дивитися",
   "homeStrip": "<b>{{title}}</b>: челендж Shorts цього тижня",
+  "hide": "Сховати",
+  "hideTitle": "Сховати до челенджу наступного тижня",
   "reviewRow": "Челендж",
   "pickWeek": "Оберіть тиждень",
   "weekOption": "Тиждень {{week}}: {{title}}",
