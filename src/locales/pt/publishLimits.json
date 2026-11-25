@@ -1,0 +1,27 @@
+{
+  "rule": {
+    "video_many": "No plano gratuito você pode publicar {{count}} vídeos a cada 24 horas.",
+    "video_one": "No plano gratuito você pode publicar {{count}} vídeo a cada 24 horas.",
+    "video_other": "No plano gratuito você pode publicar {{count}} vídeos a cada 24 horas.",
+    "short_many": "No plano gratuito você pode publicar {{count}} Shorts a cada 24 horas.",
+    "short_one": "No plano gratuito você pode publicar {{count}} Short a cada 24 horas.",
+    "short_other": "No plano gratuito você pode publicar {{count}} Shorts a cada 24 horas."
+  },
+  "conflict": {
+    "published": "\"{{title}}\" foi publicado em {{time}}.",
+    "scheduled": "\"{{title}}\" está agendado para {{time}}.",
+    "publishedUntitled": "Uma publicação saiu em {{time}}.",
+    "scheduledUntitled": "Há uma publicação agendada para {{time}}."
+  },
+  "nowTaken": "Você não pode publicar isto agora.",
+  "timeTaken": "Este horário já está ocupado.",
+  "earliest": "Primeiro horário livre: {{time}}.",
+  "later": "Escolha um horário mais tarde.",
+  "shortFrom": "Ele pode ser publicado a partir de {{time}}.",
+  "uploadSchedule": "Você ainda pode enviá-lo e agendá-lo. Primeiro horário livre: {{time}}.",
+  "uploadScheduleLater": "Você ainda pode enviá-lo e agendá-lo para mais tarde.",
+  "uploadShort": "Você ainda pode enviá-lo. Ele pode ser publicado a partir de {{time}}.",
+  "uploadShortLater": "Você ainda pode enviá-lo e publicá-lo mais tarde.",
+  "useTime": "Usar {{time}}",
+  "batchRefused": "Não agendado: o limite diário de publicação do plano gratuito não deixou nenhum horário livre. Tente de novo mais tarde."
+}

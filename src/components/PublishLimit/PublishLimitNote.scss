@@ -1,0 +1,14 @@
+// ⏳ The free plan's daily publish limit (PublishLimitNote.jsx): a v2 warn
+// banner; the one-tap "Schedule for <time>" sits on its own line under the text.
+.publish-limit-note {
+  .publish-limit-note__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-3);
+    margin-top: var(--sp-3);
+  }
+}
+
+// Placed in a sheet or dialog: under the picker, or above it.
+.publish-limit-note--below { margin-top: var(--sp-5); }
+.publish-limit-note--above { margin-bottom: var(--sp-5); }

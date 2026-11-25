@@ -1,0 +1,23 @@
+{
+  "rule": {
+    "video_other": "免费版每 24 小时可以发布 {{count}} 个视频。",
+    "short_other": "免费版每 24 小时可以发布 {{count}} 个短视频。"
+  },
+  "conflict": {
+    "published": "“{{title}}”已于 {{time}} 发布。",
+    "scheduled": "“{{title}}”已定时到 {{time}}。",
+    "publishedUntitled": "有一篇帖子已于 {{time}} 发布。",
+    "scheduledUntitled": "有一篇帖子已定时到 {{time}}。"
+  },
+  "nowTaken": "你现在无法发布这个内容。",
+  "timeTaken": "这个时间已被占用。",
+  "earliest": "最早的空闲时间：{{time}}。",
+  "later": "请选择更晚的时间。",
+  "shortFrom": "可从 {{time}} 起发布。",
+  "uploadSchedule": "你仍然可以上传并定时发布。最早的空闲时间：{{time}}。",
+  "uploadScheduleLater": "你仍然可以上传，并定时到更晚的时间。",
+  "uploadShort": "你仍然可以上传。可从 {{time}} 起发布。",
+  "uploadShortLater": "你仍然可以上传，稍后再发布。",
+  "useTime": "使用 {{time}}",
+  "batchRefused": "未能定时：免费版的每日发布上限没有留下空闲时间。请稍后再试。"
+}

@@ -1,0 +1,23 @@
+{
+  "rule": {
+    "video_other": "Với gói miễn phí, bạn có thể đăng {{count}} video mỗi 24 giờ.",
+    "short_other": "Với gói miễn phí, bạn có thể đăng {{count}} Short mỗi 24 giờ."
+  },
+  "conflict": {
+    "published": "\"{{title}}\" đã được đăng lúc {{time}}.",
+    "scheduled": "\"{{title}}\" đã được lên lịch vào {{time}}.",
+    "publishedUntitled": "Một bài đã được đăng lúc {{time}}.",
+    "scheduledUntitled": "Một bài đã được lên lịch vào {{time}}."
+  },
+  "nowTaken": "Bạn không thể đăng nội dung này ngay bây giờ.",
+  "timeTaken": "Thời điểm này đã có bài.",
+  "earliest": "Thời điểm trống sớm nhất: {{time}}.",
+  "later": "Hãy chọn một thời điểm muộn hơn.",
+  "shortFrom": "Có thể đăng từ {{time}}.",
+  "uploadSchedule": "Bạn vẫn có thể tải lên và lên lịch. Thời điểm trống sớm nhất: {{time}}.",
+  "uploadScheduleLater": "Bạn vẫn có thể tải lên và lên lịch vào thời điểm muộn hơn.",
+  "uploadShort": "Bạn vẫn có thể tải lên. Có thể đăng từ {{time}}.",
+  "uploadShortLater": "Bạn vẫn có thể tải lên và đăng sau.",
+  "useTime": "Dùng {{time}}",
+  "batchRefused": "Chưa lên lịch: giới hạn đăng hằng ngày của gói miễn phí không còn thời điểm trống. Hãy thử lại sau."
+}

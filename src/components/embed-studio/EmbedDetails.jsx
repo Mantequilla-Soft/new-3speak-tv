@@ -31,6 +31,8 @@ import ShortSeriesSelect from '../Episodes/ShortSeriesSelect';
 import PollEditor, { PollToggle } from '../Polls/PollEditor';
 import { CONTENT_LANGUAGES, NO_SPEECH, languageNamer } from '../../utils/contentLanguage';
 import { challengeText, takeJoin, useCurrentChallenge, withChallengeTag } from '../../lib/shortsChallenge';
+import usePublishQuota from '../../hooks/usePublishQuota';
+import PublishLimitNote from '../PublishLimit/PublishLimitNote';
 
 // Every toast from this module is headed "Upload"; the message becomes the
 // line under it. See utils/toast.js.
@@ -194,6 +196,24 @@ function EmbedDetails() {
   // Escape leaves the previously chosen time alone.
   const [scheduleDraft, setScheduleDraft] = useState('');
   const [premiereDraft, setPremiereDraft] = useState(false);
+
+  // ⏳ The free plan's daily publish limit (lib/publishQuota.js): may this go
+  // out when it is set to (now, or its scheduled time)? And, while the schedule
+  // sheet is open, the time being picked there (asked once the picking settles).
+  // A draft has no time and never counts; a warm-up account is never limited.
+  // Nothing is known (and nothing held back) for Pro or while the checker has
+  // no answer.
+  const publishKind = fromStories ? 'short' : 'video';
+  const limitOn = !(saveAsDraft && !fromStories) && !incubationHandle;
+  const publishAt = !fromStories && isScheduled && scheduleDateTime ? scheduleDateTime : null;
+  const publishCheck = usePublishQuota({ kind: publishKind, at: publishAt, enabled: limitOn });
+  const draftCheck = usePublishQuota({ kind: publishKind, at: scheduleDraft || null, enabled: limitOn && scheduleOpen && !!scheduleDraft, debounceMs: 400 });
+  // The one-tap way out of a taken time: schedule it on the next free one.
+  const scheduleOnFreeTime = (value) => {
+    setScheduleDateTime(value);
+    setIsScheduled(true);
+    setSaveAsDraft(false);
+  };
   const [rewardsOpen, setRewardsOpen] = useState(false);
   const [guestsOpen, setGuestsOpen] = useState(false);
   const [tagsOpen, setTagsOpen] = useState(false);
@@ -657,6 +677,17 @@ function EmbedDetails() {
         <div className="studio-page-content">
           <div className={`embed-details-layout${fromStories ? ' is-short' : ''}`}>
             <div className="embed-details-main">
+              {/* ⏳ Publishing now, or at the picked time, is over the free plan's
+                  daily limit: say what takes the slot and offer the next free time
+                  (a Short cannot be scheduled from here: it waits for it). */}
+              <PublishLimitNote
+                mode="publish"
+                now={!publishAt}
+                info={publishCheck.quota}
+                onUseTime={fromStories ? undefined : scheduleOnFreeTime}
+                user={user}
+                newTab
+              />
               {/* Original content only: copyrighted material declines its payout. */}
               <OriginalContentNotice declined={rewardChoice === 'decline'} onDecline={() => handleSelect('decline')} />
               {/* Shorts and stories: optional, posted as a `## Title` line on top of
@@ -925,7 +956,7 @@ function EmbedDetails() {
                   block
                   trailing="event"
                   className="dlg-main"
-                  disabled={!scheduleDraft}
+                  disabled={!scheduleDraft || draftCheck.blocked}
                   onClick={() => { setScheduleDateTime(scheduleDraft); setIsScheduled(true); setIsPremiere(premiereDraft); setSaveAsDraft(false); setScheduleOpen(false); }}
                 >
                   {t('upload.details.schedule.scheduleFor', { when: formatScheduleWhen(scheduleDraft) })}
@@ -942,6 +973,17 @@ function EmbedDetails() {
                     min={minFormatted}
                     max={maxFormatted}
                     onChange={setScheduleDraft}
+                  />
+                  {/* ⏳ The picked time is taken (the free plan's daily limit):
+                      what takes it, and the next free time to pick instead. */}
+                  <PublishLimitNote
+                    mode="publish"
+                    info={draftCheck.quota}
+                    onUseTime={setScheduleDraft}
+                    action="use"
+                    user={user}
+                    newTab
+                    className="publish-limit-note--below"
                   />
                   <p className="schedule-sheet__note">
                     {t('upload.details.schedule.note')}

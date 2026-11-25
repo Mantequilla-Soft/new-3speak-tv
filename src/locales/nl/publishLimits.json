@@ -1,0 +1,25 @@
+{
+  "rule": {
+    "video_one": "Met het gratis abonnement kun je {{count}} video per 24 uur publiceren.",
+    "video_other": "Met het gratis abonnement kun je {{count}} video's per 24 uur publiceren.",
+    "short_one": "Met het gratis abonnement kun je {{count}} Short per 24 uur publiceren.",
+    "short_other": "Met het gratis abonnement kun je {{count}} Shorts per 24 uur publiceren."
+  },
+  "conflict": {
+    "published": "\"{{title}}\" is gepubliceerd op {{time}}.",
+    "scheduled": "\"{{title}}\" staat ingepland voor {{time}}.",
+    "publishedUntitled": "Er is een bericht gepubliceerd op {{time}}.",
+    "scheduledUntitled": "Er staat een bericht ingepland voor {{time}}."
+  },
+  "nowTaken": "Je kunt dit nu niet publiceren.",
+  "timeTaken": "Dit tijdstip is al bezet.",
+  "earliest": "Eerste vrije tijdstip: {{time}}.",
+  "later": "Kies een later tijdstip.",
+  "shortFrom": "Hij kan vanaf {{time}} geplaatst worden.",
+  "uploadSchedule": "Je kunt hem toch uploaden en inplannen. Eerste vrije tijdstip: {{time}}.",
+  "uploadScheduleLater": "Je kunt hem toch uploaden en voor later inplannen.",
+  "uploadShort": "Je kunt hem toch uploaden. Hij kan vanaf {{time}} geplaatst worden.",
+  "uploadShortLater": "Je kunt hem toch uploaden en later plaatsen.",
+  "useTime": "{{time}} gebruiken",
+  "batchRefused": "Niet ingepland: de dagelijkse publicatielimiet van het gratis abonnement liet geen vrij tijdstip over. Probeer het later opnieuw."
+}

@@ -1,0 +1,25 @@
+{
+  "rule": {
+    "video_one": "On the free plan you can publish {{count}} video per 24 hours.",
+    "video_other": "On the free plan you can publish {{count}} videos per 24 hours.",
+    "short_one": "On the free plan you can publish {{count}} Short per 24 hours.",
+    "short_other": "On the free plan you can publish {{count}} Shorts per 24 hours."
+  },
+  "conflict": {
+    "published": "\"{{title}}\" was published at {{time}}.",
+    "scheduled": "\"{{title}}\" is scheduled for {{time}}.",
+    "publishedUntitled": "A post was published at {{time}}.",
+    "scheduledUntitled": "A post is scheduled for {{time}}."
+  },
+  "nowTaken": "You cannot publish this right now.",
+  "timeTaken": "This time is taken.",
+  "earliest": "Earliest free time: {{time}}.",
+  "later": "Pick a later time.",
+  "shortFrom": "It can be posted from {{time}}.",
+  "uploadSchedule": "You can still upload it and schedule it. Earliest free time: {{time}}.",
+  "uploadScheduleLater": "You can still upload it and schedule it for a later time.",
+  "uploadShort": "You can still upload it. It can be posted from {{time}}.",
+  "uploadShortLater": "You can still upload it and post it later.",
+  "useTime": "Use {{time}}",
+  "batchRefused": "Not scheduled: the free plan's daily publish limit left no free time. Try again later."
+}

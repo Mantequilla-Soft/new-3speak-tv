@@ -15,6 +15,9 @@ import { useTranslation } from 'react-i18next';
 import { Button, Icon } from '../v2/ui';
 import { cx } from '../v2/helpers';
 import { formatDate } from '../../i18n';
+import usePublishQuota from '../../hooks/usePublishQuota';
+import PublishLimitNote from '../PublishLimit/PublishLimitNote';
+import { publishLimitFromError, refreshPublishQuota } from '../../lib/publishQuota';
 // Edit scheduled post (44c): v2 cards, its own stylesheet. The calendar and
 // the payout choice sit inline instead of in sheets.
 import '../../page/EditScheduledPost.scss';
@@ -112,6 +115,8 @@ export default function ScheduledPostEditor({ permlink, onClose, onSaved, onCanc
   const [thumbnailUploading, setThumbnailUploading] = useState(false);
   const [payoutOptions, setPayoutOptions] = useState('default');
   const [scheduleDateTime, setScheduleDateTime] = useState('');
+  // The time the post had when it was loaded: only a new one is checked below.
+  const [loadedDateTime, setLoadedDateTime] = useState('');
   // "List as a premiere" (opt-in): routes/premieres.js on the checker.
   const [premiere, setPremiere] = useState(false);
 
@@ -123,6 +128,20 @@ export default function ScheduledPostEditor({ permlink, onClose, onSaved, onCanc
   const [remaingPercent, setRemaingPercent] = useState(100);
 
   const [saving, setSaving] = useState(false);
+
+  // ⏳ The free plan's daily publish limit (lib/publishQuota.js): a new time
+  // has to be free. The post itself is left out of the count (`exclude`), so
+  // moving it a few minutes never collides with where it was. An audio post is
+  // never limited; the list says 'short' for a Short, anything else is a video.
+  const publishKind = post?.kind === 'short' ? 'short' : 'video';
+  const timeChanged = !!post && !!scheduleDateTime && scheduleDateTime !== loadedDateTime;
+  const publishCheck = usePublishQuota({
+    kind: publishKind,
+    at: scheduleDateTime || null,
+    exclude: permlink,
+    enabled: timeChanged && post?.kind !== 'audio',
+    debounceMs: 400,
+  });
 
   useEffect(() => {
     if (!user || !permlink) return;
@@ -146,9 +165,9 @@ export default function ScheduledPostEditor({ permlink, onClose, onSaved, onCanc
         setThumbnail(found.thumbnail || null);
         setPayoutOptions(found.payoutOptions || 'default');
         setPremiere(found.premiere === true);
-        setScheduleDateTime(
-          found.scheduledOn ? formatDateTimeLocal(new Date(found.scheduledOn)) : '',
-        );
+        const loadedWhen = found.scheduledOn ? formatDateTimeLocal(new Date(found.scheduledOn)) : '';
+        setScheduleDateTime(loadedWhen);
+        setLoadedDateTime(loadedWhen);
         const benList = benesToList(found.beneficiaries);
         setList(benList);
         const used = benList.reduce((s, b) => s + (b.percent || 0), 0);
@@ -217,9 +236,13 @@ export default function ScheduledPostEditor({ permlink, onClose, onSaved, onCanc
       });
       if (!resp.data?.success) throw new Error(resp.data?.error || t('studio.scheduled.updateFailed'));
       toast.success(t('studio.scheduled.updated'));
+      if (timeChanged) refreshPublishQuota();
       onSaved?.({ title, description, thumbnail, scheduledOn: scheduledOnIso });
     } catch (err) {
       console.error('update scheduled post:', err);
+      // ⏳ A 429 over the daily publish limit is worded by scheduledPostWriteError;
+      // the note under the calendar reads the quota again and shows what takes it.
+      if (publishLimitFromError(err)) refreshPublishQuota();
       toast.error(scheduledPostWriteError(err, t('studio.scheduled.updateFailed')));
     } finally {
       setSaving(false);
@@ -381,6 +404,17 @@ export default function ScheduledPostEditor({ permlink, onClose, onSaved, onCanc
                   {t('studio.schedule.pastWarning')}
                 </p>
               )}
+              {/* ⏳ The new time is taken (the free plan's daily publish limit). */}
+              {!inPast && (
+                <PublishLimitNote
+                  mode="publish"
+                  info={publishCheck.quota}
+                  onUseTime={setScheduleDateTime}
+                  action="use"
+                  user={user}
+                  newTab
+                />
+              )}
               <p className="esp-note">{t('studio.scheduled.range')}</p>
             </section>
 
@@ -440,7 +474,7 @@ export default function ScheduledPostEditor({ permlink, onClose, onSaved, onCanc
             trailing="check"
             className="is-next"
             onClick={handleSave}
-            disabled={saving || thumbnailUploading}
+            disabled={saving || thumbnailUploading || publishCheck.blocked}
           >
             {saving ? t('common.actions.saving') : t('studio.scheduled.saveChanges')}
           </Button>

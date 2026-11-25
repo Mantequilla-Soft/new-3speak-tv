@@ -23,12 +23,22 @@ import { useStoryStreak, STREAK_MIN } from "../../lib/stories";
 import TeaserShortCard from "../TeaserShortCard/TeaserShortCard";
 import { FEATURE_EDITOR } from "../../utils/config";
 import { challengeText, useCurrentChallenge } from "../../lib/shortsChallenge";
+import { useAppStore } from "../../lib/store";
+import { toastIn } from "../../utils/toast";
+import usePublishQuota from "../../hooks/usePublishQuota";
+import PublishLimitNote from "../PublishLimit/PublishLimitNote";
+import { isPublishBlocked, loadPublishQuota, publishLimitMessage, refreshPublishQuota } from "../../lib/publishQuota";
+
+// Every toast from this module is headed "Upload"; the message becomes the
+// line under it. See utils/toast.js.
+const toast = toastIn('Upload');
 
 // Same cap as a short's description on the details step.
 const STORY_CAPTION_MAX = 240;
 
 function EmbedPreview() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const incubationHandle = useAppStore((s) => s.incubationHandle);
   const {
     step,
     title,
@@ -69,7 +79,10 @@ function EmbedPreview() {
     videoDuration,
     collaborator,
     isScheduled,
+    setIsScheduled,
     scheduleDateTime,
+    setScheduleDateTime,
+    setSaveAsDraft,
     isPremiere,
     seriesId,
     pollOn,
@@ -121,6 +134,22 @@ function EmbedPreview() {
       state: i === todayIdx ? 'today' : i > todayIdx ? 'next' : (todayIdx - i <= before ? 'done' : 'missed'),
     }));
   })();
+
+  // ⏳ The free plan's daily publish limit (lib/publishQuota.js): the post goes
+  // out now or at its scheduled time, and that time has to be free. A draft has
+  // no time and never counts; a warm-up account is never limited; nothing is
+  // known (and nothing held back) for Pro or while the checker has no answer.
+  // The checker refuses a taken scheduled time itself (429); "publish now" is
+  // held back here, so it is asked once more right before the post goes out.
+  const publishKind = fromStories ? 'short' : 'video';
+  const limitOn = !(saveAsDraft && !fromStories) && !incubationHandle && !completed;
+  const publishAt = !fromStories && isScheduled && scheduleDateTime ? scheduleDateTime : null;
+  const publishCheck = usePublishQuota({ kind: publishKind, at: publishAt, enabled: limitOn });
+  const scheduleOnFreeTime = (value) => {
+    setScheduleDateTime(value);
+    setIsScheduled(true);
+    setSaveAsDraft(false);
+  };
 
   const [promoteOpen, setPromoteOpen] = React.useState(false);
   const [publishing, setPublishing] = React.useState(false);
@@ -343,9 +372,21 @@ function EmbedPreview() {
     // awaits a creator-settings read before it flips `uploading`; a second
     // press in that window would start a second publish. One at a time.
     if (publishingRef.current) return;
+    if (limitOn && publishCheck.blocked) return;
     publishingRef.current = true;
     setPublishing(true);
     try {
+      // ⏳ The time has to be free right now, not only when this screen read it.
+      // Only while a limit is known: Pro (never asked) and a checker without
+      // the route post with no extra round trip.
+      if (limitOn && user && publishCheck.quota && !publishCheck.quota.exempt) {
+        const fresh = await loadPublishQuota(user, { kind: publishKind, at: publishAt, fresh: true });
+        if (isPublishBlocked(fresh)) {
+          toast.error(publishLimitMessage(t, fresh, i18n?.language, { now: !publishAt }));
+          refreshPublishQuota();
+          return;
+        }
+      }
       await publishToEmbed();
     } finally {
       publishingRef.current = false;
@@ -378,7 +419,7 @@ function EmbedPreview() {
           ? t(isStory ? 'upload.review.postStory' : 'upload.review.postShort')
           : (saveAsDraft ? t('episodes.drafts.saveButton') : t('upload.review.postVideo')),
         onClick: handlePostVideo,
-        disabled: !gateSatisfied || publishing,
+        disabled: !gateSatisfied || publishing || (limitOn && publishCheck.blocked),
         title: gateSatisfied ? undefined : t('upload.review.watchSponsorFirst'),
       },
     ],
@@ -438,6 +479,19 @@ function EmbedPreview() {
           <EmbedUploadProgressBar />
 
           <div className="studio-page-content">
+            {/* ⏳ Over the free plan's daily publish limit: Post stays off until
+                the time is free; a video gets the one-tap way to the next free time. */}
+            {limitOn && (
+              <PublishLimitNote
+                mode="publish"
+                now={!publishAt}
+                info={publishCheck.quota}
+                onUseTime={fromStories ? undefined : scheduleOnFreeTime}
+                user={user}
+                newTab
+                className="ep-publish-limit"
+              />
+            )}
             {failedMessage && (
               <div className="v2-failure ep-failed" role="alert">
                 <div className="ep-failed__head">

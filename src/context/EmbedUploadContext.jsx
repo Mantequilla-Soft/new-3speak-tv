@@ -40,6 +40,7 @@ import { buildPollMeta, openPollFields, POLL_MIN_OPTIONS, POLL_MAX_OPTIONS } fro
 const STORY_FALLBACK_CAPTION = 'My 24-hour story on 3Speak.';
 import { withShortHeading, shortHeading } from '../utils/shortTitle';
 import { uploadLimitFromAxios, uploadLimitError, uploadLimitMessage, isUploadLimitError, refreshUploadQuota, proPlansPath } from '../lib/uploadQuota';
+import { publishLimitFromError, refreshPublishQuota } from '../lib/publishQuota';
 
 // Every toast from this module is headed "Upload"; the message becomes the
 // line under it. See utils/toast.js.
@@ -2260,9 +2261,15 @@ export function EmbedUploadProvider({ children }) {
           setCompleted(true);
           setUploading(false);
           setUploadProgress(100);
+          // ⏳ The scheduled time is taken now: every publish quota on screen reads again.
+          if (!asDraft) refreshPublishQuota();
           return;
         } catch (schedErr) {
           console.error('Scheduled-post error:', schedErr);
+          // ⏳ The checker refused the time (the free plan's daily publish
+          // limit, 429): the studio's notes read the quota again and show what
+          // takes it. The message below says the same (scheduledPostWriteError).
+          if (publishLimitFromError(schedErr)) refreshPublishQuota();
           const msg = scheduledPostWriteError(schedErr, t('upload.errors.couldNotSchedule'));
           const failKey = asDraft ? 'episodes.drafts.saveFailed' : 'upload.errors.scheduleFailed';
           addMessage(t(failKey, { msg }), 'error');
@@ -2521,6 +2528,7 @@ export function EmbedUploadProvider({ children }) {
       setCompleted(true);
       setUploading(false);
       refreshUploadQuota();
+      refreshPublishQuota();
       addMessage(t('upload.publishing.log.published'), 'success');
       toast.success(t('upload.publishing.publishedToast'));
 
@@ -2529,6 +2537,13 @@ export function EmbedUploadProvider({ children }) {
       if (isUploadLimitError(err)) {
         addMessage(err.message, 'error');
         reportUploadLimit(err);
+        setUploading(false);
+        setStatusText('');
+        return;
+      }
+      // ⏳ A scheduled time the checker refused (daily publish limit): already
+      // worded by the scheduled-post branch, and the review shows what takes it.
+      if (publishLimitFromError(err)) {
         setUploading(false);
         setStatusText('');
         return;
