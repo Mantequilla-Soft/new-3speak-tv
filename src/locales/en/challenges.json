@@ -30,6 +30,8 @@
   "uploadBanner": "This week's Shorts challenge: {{title}}",
   "uploadBannerAction": "See it",
   "homeStrip": "<b>{{title}}</b> is this week's Shorts challenge",
+  "hide": "Hide",
+  "hideTitle": "Hide until next week's challenge",
   "reviewRow": "Challenge",
   "pickWeek": "Pick a week",
   "weekOption": "Week {{week}}: {{title}}",

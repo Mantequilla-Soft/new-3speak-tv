@@ -28,6 +28,8 @@
   "uploadBanner": "今週のショートチャレンジ：{{title}}",
   "uploadBannerAction": "見る",
   "homeStrip": "今週のショートチャレンジは<b>{{title}}</b>",
+  "hide": "非表示",
+  "hideTitle": "来週のチャレンジまで非表示にする",
   "reviewRow": "チャレンジ",
   "pickWeek": "週を選ぶ",
   "weekOption": "第{{week}}週: {{title}}",

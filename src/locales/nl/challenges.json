@@ -30,6 +30,8 @@
   "uploadBanner": "Shorts-challenge van deze week: {{title}}",
   "uploadBannerAction": "Bekijken",
   "homeStrip": "<b>{{title}}</b> is de Shorts-challenge van deze week",
+  "hide": "Verbergen",
+  "hideTitle": "Verbergen tot de challenge van volgende week",
   "reviewRow": "Challenge",
   "pickWeek": "Kies een week",
   "weekOption": "Week {{week}}: {{title}}",

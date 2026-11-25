@@ -30,6 +30,8 @@
   "uploadBanner": "Changamoto ya Shorts ya wiki hii: {{title}}",
   "uploadBannerAction": "Tazama",
   "homeStrip": "<b>{{title}}</b> ndiyo changamoto ya Shorts ya wiki hii",
+  "hide": "Ficha",
+  "hideTitle": "Ficha hadi changamoto ya wiki ijayo",
   "reviewRow": "Changamoto",
   "pickWeek": "Chagua wiki",
   "weekOption": "Wiki ya {{week}}: {{title}}",

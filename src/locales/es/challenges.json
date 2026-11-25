@@ -32,6 +32,8 @@
   "uploadBanner": "Reto de Shorts de esta semana: {{title}}",
   "uploadBannerAction": "Verlo",
   "homeStrip": "<b>{{title}}</b> es el reto de Shorts de esta semana",
+  "hide": "Ocultar",
+  "hideTitle": "Ocultar hasta el reto de la próxima semana",
   "reviewRow": "Reto",
   "pickWeek": "Elige una semana",
   "weekOption": "Semana {{week}}: {{title}}",

@@ -34,6 +34,8 @@
   "uploadBanner": "Wyzwanie Shorts w tym tygodniu: {{title}}",
   "uploadBannerAction": "Zobacz",
   "homeStrip": "<b>{{title}}</b> to wyzwanie Shorts w tym tygodniu",
+  "hide": "Ukryj",
+  "hideTitle": "Ukryj do wyzwania w przyszłym tygodniu",
   "reviewRow": "Wyzwanie",
   "pickWeek": "Wybierz tydzień",
   "weekOption": "Tydzień {{week}}: {{title}}",

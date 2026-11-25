@@ -28,6 +28,8 @@
   "uploadBanner": "Tantangan Shorts minggu ini: {{title}}",
   "uploadBannerAction": "Lihat",
   "homeStrip": "<b>{{title}}</b> adalah tantangan Shorts minggu ini",
+  "hide": "Sembunyikan",
+  "hideTitle": "Sembunyikan sampai tantangan minggu depan",
   "reviewRow": "Tantangan",
   "pickWeek": "Pilih minggu",
   "weekOption": "Minggu {{week}}: {{title}}",

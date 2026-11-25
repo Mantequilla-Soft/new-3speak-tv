@@ -30,6 +30,8 @@
   "uploadBanner": "इस हफ़्ते का शॉर्ट्स चैलेंज: {{title}}",
   "uploadBannerAction": "देखें",
   "homeStrip": "<b>{{title}}</b> इस हफ़्ते का Shorts चैलेंज है",
+  "hide": "छिपाएँ",
+  "hideTitle": "अगले हफ़्ते के चैलेंज तक छिपाएँ",
   "reviewRow": "चैलेंज",
   "pickWeek": "हफ़्ता चुनें",
   "weekOption": "हफ़्ता {{week}}: {{title}}",

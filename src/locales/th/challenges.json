@@ -28,6 +28,8 @@
   "uploadBanner": "ชาเลนจ์ Shorts สัปดาห์นี้: {{title}}",
   "uploadBannerAction": "ดูเลย",
   "homeStrip": "<b>{{title}}</b> คือชาเลนจ์ Shorts ประจำสัปดาห์นี้",
+  "hide": "ซ่อน",
+  "hideTitle": "ซ่อนจนถึงชาเลนจ์สัปดาห์หน้า",
   "reviewRow": "ชาเลนจ์",
   "pickWeek": "เลือกสัปดาห์",
   "weekOption": "สัปดาห์ที่ {{week}}: {{title}}",

@@ -30,6 +30,8 @@
   "uploadBanner": "Bu haftanın Shorts meydan okuması: {{title}}",
   "uploadBannerAction": "Gör",
   "homeStrip": "Bu haftanın Shorts meydan okuması: <b>{{title}}</b>",
+  "hide": "Gizle",
+  "hideTitle": "Gelecek haftanın meydan okumasına kadar gizle",
   "reviewRow": "Meydan okuma",
   "pickWeek": "Bir hafta seç",
   "weekOption": "{{week}}. hafta: {{title}}",

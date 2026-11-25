@@ -1,21 +1,34 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 import { Icon } from '../v2/ui';
-import { challengeText, useCurrentChallenge } from '../../lib/shortsChallenge';
+import {
+  challengeText, hideChallengeWeek, readHiddenChallengeWeek, useCurrentChallenge,
+} from '../../lib/shortsChallenge';
 import '../NewFromFollowing/NewFromFollowing.scss';
 import './ChallengeBanner.scss';
 
 /**
  * This week's Shorts challenge as a Home strip, beside "New from following" and
- * "Continue watching" (HomeGrouped .home-strips): the same cyan strip, a trophy
- * where they show avatars, the theme, and "See it" to /challenge. For everyone,
- * signed in or not; nothing in a week without a challenge (lib/shortsChallenge.js,
- * from the checker).
+ * "Continue watching" (HomeGrouped .home-strips): the follow strip's shape in
+ * brand red, a trophy where they show avatars, the theme, "See it" to
+ * /challenge and "Hide". For everyone, signed in or not; nothing in a week
+ * without a challenge (lib/shortsChallenge.js, from the checker).
+ *
+ * "Hide" keeps it away for the rest of that week only (owner 2026-11-25: the
+ * next week's challenge shows again).
  */
 export default function ChallengeStrip() {
   const { t } = useTranslation();
   const challenge = useCurrentChallenge();
-  if (!challenge) return null;
+  const [hiddenWeek, setHiddenWeek] = useState(readHiddenChallengeWeek);
+  if (!challenge || hiddenWeek === challenge.week) return null;
+
+  const hide = () => {
+    hideChallengeWeek(challenge.week);
+    setHiddenWeek(challenge.week);
+  };
+
   return (
     <section className="new-from-following challenge-strip" aria-label={t('challenges.menuEntry')}>
       <div className="nff-head">
@@ -27,6 +40,16 @@ export default function ChallengeStrip() {
             components={{ b: <b /> }}
           />
         </p>
+        <button
+          type="button"
+          className="nff-seen"
+          onClick={hide}
+          title={t('challenges.hideTitle')}
+          aria-label={t('challenges.hideTitle')}
+        >
+          <Icon name="visibility_off" size={18} />
+          <span className="nff-seen-label">{t('challenges.hide')}</span>
+        </button>
         <Link to="/challenge" className="nff-toggle challenge-strip__action">{t('challenges.uploadBannerAction')}</Link>
       </div>
     </section>

@@ -28,6 +28,8 @@
   "uploadBanner": "이번 주 쇼츠 챌린지: {{title}}",
   "uploadBannerAction": "보기",
   "homeStrip": "이번 주 쇼츠 챌린지는 <b>{{title}}</b>",
+  "hide": "숨기기",
+  "hideTitle": "다음 주 챌린지까지 숨기기",
   "reviewRow": "챌린지",
   "pickWeek": "주 선택",
   "weekOption": "{{week}}주차: {{title}}",

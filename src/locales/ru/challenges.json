@@ -34,6 +34,8 @@
   "uploadBanner": "Челлендж Shorts этой недели: {{title}}",
   "uploadBannerAction": "Смотреть",
   "homeStrip": "<b>{{title}}</b>: челлендж Shorts этой недели",
+  "hide": "Скрыть",
+  "hideTitle": "Скрыть до челленджа следующей недели",
   "reviewRow": "Челлендж",
   "pickWeek": "Выберите неделю",
   "weekOption": "Неделя {{week}}: {{title}}",
