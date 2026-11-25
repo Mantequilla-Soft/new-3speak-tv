@@ -8,6 +8,11 @@ import { getMinMaxDates } from '../../utils/schedulingHelpers';
 import { publishDraft, deleteDraft } from '../../utils/scheduledPosts';
 import { scheduledPostWriteError } from '../../utils/scheduledPostProof';
 import { toastIn } from '../../utils/toast';
+import usePublishQuota from '../../hooks/usePublishQuota';
+import PublishLimitNote from '../PublishLimit/PublishLimitNote';
+import {
+  isPublishBlocked, loadPublishQuota, nextFreeLocalValue, publishLimitFromError, refreshPublishQuota,
+} from '../../lib/publishQuota';
 import fallbackImg from '../../assets/image/speak.jpg';
 import './VideoCard.scss';
 
@@ -27,29 +32,63 @@ export default function DraftCard({ draft, owner, onChanged }) {
   const audio = draft.kind === 'audio';
   const saved = draft.updatedAt || draft.createdAt;
 
-  const run = async (fn, done) => {
+  // ⏳ The free plan's daily publish limit (lib/publishQuota.js): publishing a
+  // video draft now, or at a picked time, takes a slot. Audio is never limited.
+  // "Publish now" on a taken slot opens the schedule dialog on the next free
+  // time instead (`nowTaken` says why there).
+  const limited = !audio;
+  const publishKind = draft.kind === 'short' ? 'short' : 'video';
+  const [nowTaken, setNowTaken] = useState(null);
+  const whenCheck = usePublishQuota({
+    kind: publishKind, at: when || null, exclude: draft.permlink, enabled: limited && scheduleOpen && !!when, debounceMs: 400,
+  });
+  const offerFreeTime = (info) => {
+    const { minFormatted, minDate } = getMinMaxDates();
+    setNowTaken(info);
+    setWhen(nextFreeLocalValue(info.nextFreeAt, minDate.getTime()) || minFormatted);
+    setScheduleOpen(true);
+  };
+
+  const run = async (fn, done, { now = false } = {}) => {
     setBusy(true);
     try {
       await fn();
       toast.success(done);
+      if (limited) refreshPublishQuota();
       onChanged?.();
     } catch (err) {
+      // A 429 over the daily publish limit: worded by scheduledPostWriteError,
+      // and a refused "publish now" gets the schedule dialog on the next free time.
+      const limit = publishLimitFromError(err);
+      if (limit) refreshPublishQuota();
       toast.error(scheduledPostWriteError(err, t('episodes.drafts.actionFailed')));
+      if (limit && now) offerFreeTime(limit);
     } finally {
       setBusy(false);
     }
   };
-  const publishNow = () => run(
-    () => publishDraft({ owner, permlink: draft.permlink }),
-    t('episodes.drafts.publishing'),
-  );
+  const publishNow = async () => {
+    if (limited) {
+      setBusy(true);
+      const quota = await loadPublishQuota(owner, { kind: publishKind, fresh: true });
+      setBusy(false);
+      if (isPublishBlocked(quota)) { offerFreeTime(quota); return; }
+    }
+    run(
+      () => publishDraft({ owner, permlink: draft.permlink }),
+      t('episodes.drafts.publishing'),
+      { now: true },
+    );
+  };
   const openSchedule = () => {
+    setNowTaken(null);
     setWhen(getMinMaxDates().minFormatted);
     setScheduleOpen(true);
   };
+  const closeSchedule = () => { setScheduleOpen(false); setNowTaken(null); };
   const schedule = () => run(async () => {
     await publishDraft({ owner, permlink: draft.permlink, scheduledOn: new Date(when).toISOString() });
-    setScheduleOpen(false);
+    closeSchedule();
   }, t('upload.publishing.scheduled'));
   const remove = () => {
     if (!window.confirm(t('episodes.drafts.deleteConfirm'))) return;
@@ -90,16 +129,21 @@ export default function DraftCard({ draft, owner, onChanged }) {
 
       <DialogShell
         open={scheduleOpen}
-        onClose={() => setScheduleOpen(false)}
+        onClose={closeSchedule}
         busy={busy}
         title={t('episodes.drafts.scheduleTitle')}
         footer={(
-          <Button variant="primary" size={48} trailing="event" disabled={!when || busy} loading={busy} onClick={schedule}>
+          <Button variant="primary" size={48} trailing="event" disabled={!when || busy || whenCheck.blocked} loading={busy} onClick={schedule}>
             {t('upload.details.schedule.scheduleFor', { when: formatScheduleWhen(when) })}
           </Button>
         )}
       >
+        {/* ⏳ Why "Publish now" landed here: the slot now is taken, the picker
+            starts on the next free time. */}
+        {nowTaken && !whenCheck.blocked && <PublishLimitNote mode="publish" now info={nowTaken} user={owner} newTab className="publish-limit-note--above" />}
         <ScheduleDayStrip value={when} min={minFormatted} max={maxFormatted} onChange={setWhen} />
+        {/* ⏳ The picked time is taken: what takes it, and the next free time. */}
+        <PublishLimitNote mode="publish" info={whenCheck.quota} onUseTime={setWhen} action="use" user={owner} newTab className="publish-limit-note--below" />
         <p className="schedule-sheet__note">{t('upload.details.schedule.note')}</p>
       </DialogShell>
     </article>

@@ -135,7 +135,7 @@
       "failed": "Falhou",
       "publish_failed": "Falha ao publicar",
       "cancelled": "Parado, não publicado",
-      "waitingQuota": "Aguarda seu próximo envio gratuito ({{time}})"
+      "waitingQuota": "Aguarda seu próximo horário livre para publicar ({{time}})"
     },
     "stopConfirm": "Parar esta importação? Os vídeos ainda não publicados são cancelados, incluindo os já agendados. Os vídeos publicados ficam.",
     "stopYes": "Sim, parar",
@@ -152,10 +152,10 @@
     },
     "free": {
       "title": "Plano gratuito: um vídeo por dia",
-      "body": "Cada vídeo usa um dia dos seus envios gratuitos, então o lote publica um vídeo por dia (Shorts: até 3 por dia). Até o lote terminar ele ocupa seus envios gratuitos, então nesse período você não pode enviar outros vídeos por conta própria.",
+      "body": "No plano gratuito você pode publicar um vídeo por dia (Shorts: até 3 por dia), então o lote publica um vídeo por dia. Se você publicar ou agendar um vídeo seu nesse meio-tempo, o lote passa para o próximo dia livre.",
       "ends": "O último sai por volta de {{date}}.",
       "pro": "Com o 3Speak Pro todos saem hoje.",
-      "running": "Este lote está usando seus envios gratuitos diários. Até ele terminar, você não pode enviar outros vídeos por conta própria.",
+      "running": "Este lote usa suas publicações gratuitas diárias. Se você publicar ou agendar um vídeo seu nesse meio-tempo, o lote passa para o próximo dia livre.",
       "bar": "plano gratuito: um por dia, o resto vem depois"
     }
   },

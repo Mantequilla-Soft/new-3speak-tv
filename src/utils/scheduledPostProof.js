@@ -29,7 +29,8 @@ import {
   KeyTypes,
   Providers,
 } from '../hive-api/aioha';
-import { t } from '../i18n';
+import { t, getLanguage } from '../i18n';
+import { publishLimitFromError, publishLimitMessage } from '../lib/publishQuota';
 
 /**
  * 🚧 TEMPORARY, remove once the checker runs with SCHEDULED_POSTS_REQUIRE_SIGNATURE=true.
@@ -162,10 +163,14 @@ export async function proveScheduledPost(args) {
 
 /**
  * The message to show for a failed write: the checker's 401 (a missing or refused
- * signature, once it enforces them) as a sentence a person can act on.
+ * signature, once it enforces them) as a sentence a person can act on, and its
+ * 429 over the free plan's daily publish limit (lib/publishQuota.js) as what
+ * takes the time and the earliest free one, in the reader's language.
  */
 export function scheduledPostWriteError(err, fallback) {
   if (err instanceof ScheduledPostProofError) return err.message;
   if (err?.response?.status === 401) return t('studio.scheduled.proof.refused');
+  const limit = publishLimitFromError(err);
+  if (limit) return publishLimitMessage(t, limit, getLanguage());
   return err?.response?.data?.error || err?.message || fallback;
 }

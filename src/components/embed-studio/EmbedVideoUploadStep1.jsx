@@ -23,6 +23,8 @@ import { useTranslation, Trans } from 'react-i18next';
 import useUploadQuota from '../../hooks/useUploadQuota';
 import UploadQuotaNote from '../UploadQuota/UploadQuotaNote';
 import { isUsedUp, uploadLimitMessage, usedUpInfo } from '../../lib/uploadQuota';
+import usePublishQuota from '../../hooks/usePublishQuota';
+import PublishLimitNote from '../PublishLimit/PublishLimitNote';
 import { usePremiumStatus } from '../../hooks/usePremiumStatus';
 import { landscapeEditorAllowed } from '../../utils/editorFormat';
 import ProLockBadge from '../ProUpsell/ProLockBadge';
@@ -65,6 +67,12 @@ function EmbedVideoUploadStep1() {
     && !(uploadLimit.nextAt && uploadLimit.nextAt <= Date.now())
     ? uploadLimit : null
   const quotaBlocked = !!quotaRefusal || isUsedUp(quotaEntry)
+  // ⏳ The free plan's daily PUBLISH limit (1 video, 3 Shorts per 24 hours) is
+  // never a block here: uploading is not limited. When publishing this kind
+  // right now is taken, a warning says so and that it can still be uploaded and
+  // scheduled (a Short: posted from its free time). The kind is known from the
+  // path already (the Shorts studio or the video one).
+  const publishQuota = usePublishQuota({ kind: quotaKind, enabled: !!user })
   // 🔒 "Edit video" on a regular video opens the landscape editor: Pro only. A
   // free account sees a Pro badge, the tap opens the upsell (useEditorLauncher).
   const landscapeLocked = landscapeEditorAllowed(user, usePremiumStatus(user)) === false
@@ -399,6 +407,9 @@ function EmbedVideoUploadStep1() {
 
       {/* ⏳ Before a file is picked: what the free plan allows today. */}
       <UploadQuotaNote kind={quotaKind} entry={quotaEntry} refusal={quotaRefusal} user={user} className="upload-quota-note--studio" />
+      {!quotaBlocked && (
+        <PublishLimitNote mode="upload" info={publishQuota.quota} user={user} className="publish-limit-note--studio" />
+      )}
 
       <div className="upload-step">
         <div

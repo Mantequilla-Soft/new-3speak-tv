@@ -1,0 +1,25 @@
+{
+  "rule": {
+    "video_one": "Sa libreng plan, makakapag-publish ka ng {{count}} video bawat 24 oras.",
+    "video_other": "Sa libreng plan, makakapag-publish ka ng {{count}} na video bawat 24 oras.",
+    "short_one": "Sa libreng plan, makakapag-publish ka ng {{count}} Short bawat 24 oras.",
+    "short_other": "Sa libreng plan, makakapag-publish ka ng {{count}} na Shorts bawat 24 oras."
+  },
+  "conflict": {
+    "published": "Na-publish ang \"{{title}}\" noong {{time}}.",
+    "scheduled": "Naka-schedule ang \"{{title}}\" sa {{time}}.",
+    "publishedUntitled": "May post na na-publish noong {{time}}.",
+    "scheduledUntitled": "May post na naka-schedule sa {{time}}."
+  },
+  "nowTaken": "Hindi mo ito mapa-publish ngayon.",
+  "timeTaken": "May nakakuha na sa oras na ito.",
+  "earliest": "Pinakamaagang bakanteng oras: {{time}}.",
+  "later": "Pumili ng mas huling oras.",
+  "shortFrom": "Maipo-post ito simula {{time}}.",
+  "uploadSchedule": "Puwede mo pa rin itong i-upload at i-schedule. Pinakamaagang bakanteng oras: {{time}}.",
+  "uploadScheduleLater": "Puwede mo pa rin itong i-upload at i-schedule sa mas huling oras.",
+  "uploadShort": "Puwede mo pa rin itong i-upload. Maipo-post ito simula {{time}}.",
+  "uploadShortLater": "Puwede mo pa rin itong i-upload at i-post mamaya.",
+  "useTime": "Gamitin ang {{time}}",
+  "batchRefused": "Hindi na-schedule: walang naiwang bakanteng oras dahil sa araw-araw na limit sa pag-publish ng libreng plan. Subukan ulit mamaya."
+}

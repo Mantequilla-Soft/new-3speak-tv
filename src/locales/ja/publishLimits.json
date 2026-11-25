@@ -1,0 +1,23 @@
+{
+  "rule": {
+    "video_other": "無料プランでは24時間に動画を{{count}}本まで公開できます。",
+    "short_other": "無料プランでは24時間にショートを{{count}}本まで公開できます。"
+  },
+  "conflict": {
+    "published": "「{{title}}」は{{time}}に公開されました。",
+    "scheduled": "「{{title}}」は{{time}}に予約されています。",
+    "publishedUntitled": "{{time}}に投稿が公開されました。",
+    "scheduledUntitled": "{{time}}に投稿が予約されています。"
+  },
+  "nowTaken": "今はこれを公開できません。",
+  "timeTaken": "この時間はすでに埋まっています。",
+  "earliest": "最も早い空き時間：{{time}}。",
+  "later": "もっと後の時間を選んでください。",
+  "shortFrom": "{{time}}から投稿できます。",
+  "uploadSchedule": "それでもアップロードして予約できます。最も早い空き時間：{{time}}。",
+  "uploadScheduleLater": "それでもアップロードして、後の時間に予約できます。",
+  "uploadShort": "それでもアップロードできます。{{time}}から投稿できます。",
+  "uploadShortLater": "それでもアップロードして、後で投稿できます。",
+  "useTime": "{{time}}にする",
+  "batchRefused": "予約されませんでした：無料プランの1日の公開上限で空き時間がありませんでした。後でもう一度お試しください。"
+}

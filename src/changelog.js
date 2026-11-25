@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.182',
+    category: 'upload',
+    date: '2026-11-25',
+    summary: 'Free accounts can upload as much as they like; past the daily publish limit the studio suggests the next free time to schedule.',
+  },
+  {
     version: '2.0.181',
     category: 'home',
     date: '2026-11-25',

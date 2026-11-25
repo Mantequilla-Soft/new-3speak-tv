@@ -1,0 +1,23 @@
+{
+  "rule": {
+    "video_other": "Dengan paket gratis kamu bisa menerbitkan {{count}} video per 24 jam.",
+    "short_other": "Dengan paket gratis kamu bisa menerbitkan {{count}} Shorts per 24 jam."
+  },
+  "conflict": {
+    "published": "\"{{title}}\" diterbitkan pada {{time}}.",
+    "scheduled": "\"{{title}}\" dijadwalkan pada {{time}}.",
+    "publishedUntitled": "Sebuah postingan diterbitkan pada {{time}}.",
+    "scheduledUntitled": "Sebuah postingan dijadwalkan pada {{time}}."
+  },
+  "nowTaken": "Kamu tidak bisa menerbitkan ini sekarang.",
+  "timeTaken": "Waktu ini sudah terisi.",
+  "earliest": "Waktu kosong paling awal: {{time}}.",
+  "later": "Pilih waktu yang lebih lambat.",
+  "shortFrom": "Bisa diposting mulai {{time}}.",
+  "uploadSchedule": "Kamu tetap bisa mengunggah dan menjadwalkannya. Waktu kosong paling awal: {{time}}.",
+  "uploadScheduleLater": "Kamu tetap bisa mengunggah dan menjadwalkannya untuk waktu yang lebih lambat.",
+  "uploadShort": "Kamu tetap bisa mengunggahnya. Bisa diposting mulai {{time}}.",
+  "uploadShortLater": "Kamu tetap bisa mengunggahnya dan mempostingnya nanti.",
+  "useTime": "Pakai {{time}}",
+  "batchRefused": "Tidak dijadwalkan: batas terbit harian paket gratis tidak menyisakan waktu kosong. Coba lagi nanti."
+}

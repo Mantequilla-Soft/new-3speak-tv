@@ -31,6 +31,10 @@ vi.mock('../../../src/utils/uploadFaults', () => ({
 vi.mock('../../../src/hooks/useCanImportVideos', () => ({ default: () => false }))
 // ⏳ The free plan's daily counters (hooks/useUploadQuota.js), steered per test
 vi.mock('../../../src/hooks/useUploadQuota', () => ({ default: () => m.quota, useUploadQuota: () => m.quota }))
+// ⏳ The free plan's daily publish limit (hooks/usePublishQuota.js), steered per test
+vi.mock('../../../src/hooks/usePublishQuota', () => ({
+  default: (opts) => { m.publishAsked?.(opts); return { ready: true, quota: m.publish?.[opts.kind] ?? null, blocked: !!m.publish?.[opts.kind] } },
+}))
 vi.mock('../../../src/utils/config', async (importOriginal) => ({ ...(await importOriginal()), ENABLE_SUBS: true, FEATURE_EDITOR: true }))
 vi.mock('../../../src/hooks/usePremiumStatus', () => ({ usePremiumStatus: () => m.premium }))
 vi.mock('ldrs/react', () => ({ TailChase: () => <span role="status">Working</span> }))
@@ -112,6 +116,8 @@ beforeEach(() => {
     user: 'uploader', provider: null, fromStories: false, isStory: false, challenge: null,
     quota: { ready: true, exempt: false, video: null, short: null, audio: null },
     uploadLimit: null,
+    publish: {},
+    publishAsked: vi.fn(),
     premium: { premium: false },
     meta: { duration: 42, width: 1920, height: 1080 },
     hasAuth: vi.fn(async () => true),
@@ -469,6 +475,71 @@ describe('upload step 1: the free plan\'s daily limit', () => {
     mount()
     await ready()
     expect(document.querySelector('.upload-quota-note')).toHaveTextContent("You have reached today's free video limit. Try again later.")
+    expect(input()).toBeDisabled()
+  })
+})
+
+describe('upload step 1: the free plan\'s daily publish limit is a warning, never a block', () => {
+  const fmt = (ms) => new Date(ms).toLocaleString('en', { dateStyle: 'medium', timeStyle: 'short' })
+  const DAY = 24 * 3600 * 1000
+  const taken = (kind, limit, conflicts, nextFreeAt) => ({ exempt: false, kind, limit, allowed: false, conflicts, nextFreeAt })
+
+  it('nothing known (route not deployed, Pro, warm-up): no warning', async () => {
+    mount()
+    await ready()
+    expect(document.querySelector('.publish-limit-note')).toBeNull()
+  })
+
+  it('a video published in the last 24 hours: warns, says it can still be uploaded and scheduled, and lets a file be picked', async () => {
+    const publishedAt = Date.now() - 3 * 3600 * 1000
+    const nextFreeAt = publishedAt + DAY
+    m.publish.video = taken('video', 1, [{ permlink: 'my-trip', title: 'My trip', at: publishedAt, scheduled: false }], nextFreeAt)
+    const { user } = mount()
+    await ready()
+    const note = document.querySelector('.publish-limit-note')
+    expect(note).toHaveTextContent(`On the free plan you can publish 1 video per 24 hours. "My trip" was published at ${fmt(publishedAt)}. You can still upload it and schedule it. Earliest free time: ${fmt(nextFreeAt)}.`)
+    expect(within(note).getByRole('link', { name: 'Get 3Speak Pro' })).toHaveAttribute('href', '/wallet/uploader#pro')
+    expect(m.publishAsked).toHaveBeenCalledWith(expect.objectContaining({ kind: 'video' }))
+    // Not a block: picking and proceeding work as usual.
+    expect(screen.getByRole('button', { name: 'Browse Files' })).toBeEnabled()
+    expect(input()).toBeEnabled()
+    await user.upload(input(), video())
+    expect(await screen.findByText('Video Selected. Proceed to upload thumbnail')).toBeInTheDocument()
+    expect(proceed()).toBeEnabled()
+  })
+
+  it('a video scheduled within a day of now names it too', async () => {
+    const scheduledAt = Date.now() + 5 * 3600 * 1000
+    m.publish.video = taken('video', 1, [{ permlink: 'soon', title: 'Soon', at: scheduledAt, scheduled: true }], scheduledAt + DAY)
+    mount()
+    await ready()
+    expect(document.querySelector('.publish-limit-note')).toHaveTextContent(`"Soon" is scheduled for ${fmt(scheduledAt)}.`)
+  })
+
+  it('a Short reads the Short limit, and says when it can be posted (Shorts are not scheduled here)', async () => {
+    m.fromStories = true
+    m.meta = { duration: 20, width: 1080, height: 1920 }
+    const at = Date.now() - 3600 * 1000
+    m.publish.short = taken('short', 3, [1, 2, 3].map((i) => ({ permlink: `s${i}`, title: '', at: at - i * 60000, scheduled: false })), at - 3 * 60000 + DAY)
+    mount()
+    await ready()
+    const note = document.querySelector('.publish-limit-note')
+    expect(note).toHaveTextContent('On the free plan you can publish 3 Shorts per 24 hours.')
+    expect(note).toHaveTextContent(`A post was published at ${fmt(at - 60000)}.`)
+    expect(note).toHaveTextContent(`You can still upload it. It can be posted from ${fmt(at - 3 * 60000 + DAY)}.`)
+    expect(m.publishAsked).toHaveBeenCalledWith(expect.objectContaining({ kind: 'short' }))
+    expect(input()).toBeEnabled()
+  })
+
+  it('the warm-up upload cap still blocks, and then the publish warning stays out of the way', async () => {
+    m.user = null
+    useAppStore.setState({ user: null, incubationHandle: 'newbie' })
+    m.quota.video = { limit: 3, used: 3, remaining: 0, nextAt: null, plan: 'warmup' }
+    m.publish.video = taken('video', 1, [], Date.now() + DAY)
+    mount()
+    await ready()
+    expect(document.querySelector('.upload-quota-note')).toHaveTextContent("You have reached today's video limit for the warm-up.")
+    expect(document.querySelector('.publish-limit-note')).toBeNull()
     expect(input()).toBeDisabled()
   })
 })

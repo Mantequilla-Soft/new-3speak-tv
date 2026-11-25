@@ -1,0 +1,27 @@
+{
+  "rule": {
+    "video_many": "Con el plan gratuito puedes publicar {{count}} videos cada 24 horas.",
+    "video_one": "Con el plan gratuito puedes publicar {{count}} video cada 24 horas.",
+    "video_other": "Con el plan gratuito puedes publicar {{count}} videos cada 24 horas.",
+    "short_many": "Con el plan gratuito puedes publicar {{count}} Shorts cada 24 horas.",
+    "short_one": "Con el plan gratuito puedes publicar {{count}} Short cada 24 horas.",
+    "short_other": "Con el plan gratuito puedes publicar {{count}} Shorts cada 24 horas."
+  },
+  "conflict": {
+    "published": "\"{{title}}\" se publicó el {{time}}.",
+    "scheduled": "\"{{title}}\" está programado para el {{time}}.",
+    "publishedUntitled": "Una publicación salió el {{time}}.",
+    "scheduledUntitled": "Hay una publicación programada para el {{time}}."
+  },
+  "nowTaken": "No puedes publicar esto ahora mismo.",
+  "timeTaken": "Este horario ya está ocupado.",
+  "earliest": "Primer horario libre: {{time}}.",
+  "later": "Elige un horario más tarde.",
+  "shortFrom": "Se puede publicar a partir del {{time}}.",
+  "uploadSchedule": "Aun así puedes subirlo y programarlo. Primer horario libre: {{time}}.",
+  "uploadScheduleLater": "Aun así puedes subirlo y programarlo para más tarde.",
+  "uploadShort": "Aun así puedes subirlo. Se puede publicar a partir del {{time}}.",
+  "uploadShortLater": "Aun así puedes subirlo y publicarlo más tarde.",
+  "useTime": "Usar {{time}}",
+  "batchRefused": "No programado: el límite diario de publicación del plan gratuito no dejó ningún horario libre. Inténtalo de nuevo más tarde."
+}

@@ -9,9 +9,11 @@ import { SettingSheet } from "../components/embed-studio/SettingInfo";
 import { createImportBatch, cancelImportBatch, fmtDuration } from "../lib/youtubeImport";
 import { PickTile, ToggleTile } from "./ImportTiles";
 
-// ⏳ A batch item the free plan's daily limit refused (server/import-batch.cjs
-// records the embed / audio API's code), in the creator's language; null otherwise.
+// ⏳ A batch item the free plan's daily limits refused (server/import-batch.cjs
+// records the embed / audio API's or the checker's code), in the creator's
+// language; null otherwise.
 export function limitText(it, t) {
+  if (it?.errorCode === 'daily_publish_limit') return t('publishLimits.batchRefused');
   if (it?.errorCode === 'daily_upload_limit') return `${t(`uploadLimits.reached.${it.isShort ? 'short' : 'video'}`)} ${t('uploadLimits.later')}`;
   if (it?.errorCode === 'daily_audio_limit') return `${t('uploadLimits.reached.audio')} ${t('uploadLimits.later')}`;
   if (it?.errorCode === 'audio_too_long') return t('uploadLimits.tooLongPlain', { minutes: 15 });
@@ -23,27 +25,29 @@ const DAY_MS = 24 * HOUR_MS;
 // Picked items that land in the Shorts feed (same guess as the form's Shorts note).
 const looksShort = (v) => v.type === 'shorts' || v.platform === 'tiktok' || v.platform === 'instagram';
 
-// When the last of `count` uploads of one kind can go, from its counter (ms).
-function lastUploadAt(count, entry, now) {
-  if (!count || !entry || !(entry.limit > 0)) return now;
-  const later = count - entry.remaining;
-  if (later <= 0) return now;
-  const first = entry.remaining > 0 || !(entry.nextAt > now) ? now + DAY_MS : entry.nextAt;
-  return first + (Math.ceil(later / entry.limit) - 1) * DAY_MS;
+// When the last of `count` publishes of one kind can go, from its publish quota
+// for now (ms): from now when it is free, else from its next free time, then
+// `limit` a day.
+function lastPublishAt(count, q, now) {
+  if (!count || !q || q.exempt || !(q.limit > 0)) return now;
+  const first = q.allowed ? now : (q.nextFreeAt > now ? q.nextFreeAt : now + DAY_MS);
+  return first + (Math.ceil(count / q.limit) - 1) * DAY_MS;
 }
 
 /**
- * ⏳ A free account's batch under the daily upload limits (server/import-batch.cjs
- * waits for each next free upload): null when no limit applies (Pro, warm-up,
- * limits off or unknown, podcast episodes only), else { lastAt } with the rough
- * time the last item uploads, or null when they all fit today.
+ * ⏳ A free account's batch under the daily publish limit (server/import-batch.cjs
+ * schedules each item on the next free publish time): null when no limit
+ * applies (Pro, limits off or unknown, podcast episodes only), else { lastAt }
+ * with the rough time the last item goes out, or null when they all go today.
+ * `quotas` is { video, short }: usePublishQuota()'s answers for now.
  */
-export function freeBatchPlan(videos, quota, now = Date.now()) {
-  if (!quota?.ready || quota.exempt || !quota.video || quota.video.plan === 'warmup') return null;
+export function freeBatchPlan(videos, quotas, now = Date.now()) {
+  const video = quotas?.video;
+  if (!video || video.exempt) return null;
   const items = (videos || []).filter((v) => v.platform !== 'rss');
   if (!items.length) return null;
   const shorts = items.filter(looksShort).length;
-  const end = Math.max(lastUploadAt(items.length - shorts, quota.video, now), lastUploadAt(shorts, quota.short, now));
+  const end = Math.max(lastPublishAt(items.length - shorts, video, now), lastPublishAt(shorts, quotas.short, now));
   return { lastAt: end > now + HOUR_MS ? end : null };
 }
 
@@ -57,7 +61,7 @@ import { getCurrentProvider, Providers } from "../hive-api/aioha";
 import AccountImg from "../components/HiveAvatar/AccountImg";
 import ModalHeader from "../components/ModalHeader/ModalHeader";
 import { usePremiumStatus } from "../hooks/usePremiumStatus";
-import useUploadQuota from "../hooks/useUploadQuota";
+import usePublishQuota from "../hooks/usePublishQuota";
 import { proPlansPath } from "../lib/uploadQuota";
 import { fetchCreatorAdPrefs } from "../lib/advertiseData";
 import { readAddToBlog, writeAddToBlog } from "../utils/addToBlog";
@@ -81,8 +85,13 @@ const PAYOUTS = ['default', 'powerup', 'decline'];
  */
 export function BatchForm({ user, videos, spacingMin, granted, onGranted, onClose, onStarted }) {
   const { t, i18n } = useTranslation();
-  // ⏳ Free plan: one video a day, and the batch takes the creator's own uploads meanwhile.
-  const freePlan = freeBatchPlan(videos, useUploadQuota({ video: true, audio: false }));
+  // ⏳ Free plan: one video a day (the daily publish limit), and the batch takes
+  // the creator's free publish times meanwhile.
+  const hasVideos = videos.some((v) => v.platform !== 'rss');
+  const freePlan = freeBatchPlan(videos, {
+    video: usePublishQuota({ kind: 'video', enabled: hasVideos }).quota,
+    short: usePublishQuota({ kind: 'short', enabled: hasVideos }).quota,
+  });
   // Podcast episodes: the kind of audio and where each post's content comes from.
   const audioItems = videos.filter((v) => v.platform === 'rss');
   const hasAudio = audioItems.length > 0;
@@ -408,7 +417,7 @@ export function BatchStatus({ batch, user, onChange }) {
   if (!batch) return null;
   const stoppable = batch.items.some((it) => RUNNING.has(it.status) || it.status === 'scheduled');
   const doneCount = batch.items.filter((it) => it.status === 'posted').length;
-  // ⏳ Items waiting for the free plan's next upload (server/import-batch.cjs).
+  // ⏳ Items waiting for the free plan's next publish time (server/import-batch.cjs).
   const waitingForQuota = batch.items.some((it) => it.status === 'queued' && it.waitUntil);
 
   const stop = async () => {

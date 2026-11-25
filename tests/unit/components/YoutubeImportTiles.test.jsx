@@ -29,6 +29,15 @@ vi.mock('../../../src/lib/youtubeImport', async (importOriginal) => ({
 // ⏳ The free plan's counters (hooks/useUploadQuota.js); null = no limit known
 const quota = vi.hoisted(() => ({ video: null, short: null, audio: null }))
 vi.mock('../../../src/hooks/useUploadQuota', () => ({ default: () => ({ ready: true, exempt: false, ...quota }) }))
+// ⏳ The daily publish limit (hooks/usePublishQuota.js), for "now"; null = nothing known
+const publish = vi.hoisted(() => ({ video: null, short: null, asked: [] }))
+vi.mock('../../../src/hooks/usePublishQuota', () => ({
+  default: (opts) => {
+    publish.asked.push(opts)
+    const q = opts.enabled === false ? null : publish[opts.kind]
+    return { ready: true, quota: q, blocked: !!q }
+  },
+}))
 
 const { useAppStore } = await import('../../../src/lib/store')
 const { startImportJob, getAutoImports } = await import('../../../src/lib/youtubeImport')
@@ -37,6 +46,7 @@ const { default: YoutubeImportPage } = await import('../../../src/page/YoutubeIm
 beforeEach(() => {
   vi.clearAllMocks()
   Object.assign(quota, { video: null, short: null, audio: null })
+  Object.assign(publish, { video: null, short: null, asked: [] })
   useAppStore.setState({ user: 'alice', authenticated: true })
 })
 afterEach(() => useAppStore.setState({ user: null, authenticated: false }))
@@ -131,5 +141,29 @@ describe('import tiles: the free plan\'s daily limit', () => {
     await user.click(tile('Episode 2'))
     await user.click(within(screen.getByRole('region', { name: '1 selected' })).getByRole('button', { name: 'Edit and publish' }))
     expect(startImportJob).toHaveBeenCalled()
+  })
+})
+
+describe('import page: the daily publish limit is a warning, never a block', () => {
+  const fmt = (ms) => new Date(ms).toLocaleString('en', { dateStyle: 'medium', timeStyle: 'short' })
+
+  it('videos: publishing one now is taken, so it says it can still be imported and scheduled', async () => {
+    const publishedAt = Date.now() - 3600 * 1000
+    const nextFreeAt = publishedAt + 24 * 3600 * 1000
+    publish.video = { exempt: false, kind: 'video', limit: 1, allowed: false, conflicts: [{ permlink: 'p', title: 'Last one', at: publishedAt, scheduled: false }], nextFreeAt }
+    renderWithProviders(<YoutubeImportPage />, { route: '/import?mode=videos', path: '/import' })
+    const note = await screen.findByText(/You can still upload it and schedule it\./)
+    expect(note).toHaveTextContent(`"Last one" was published at ${fmt(publishedAt)}.`)
+    expect(note).toHaveTextContent(`Earliest free time: ${fmt(nextFreeAt)}.`)
+    // Only the kind this page imports is asked about.
+    expect(publish.asked.some((o) => o.kind === 'video' && o.enabled)).toBe(true)
+    expect(publish.asked.some((o) => o.kind === 'short' && o.enabled)).toBe(false)
+  })
+
+  it('podcast episodes are not limited: no publish warning', async () => {
+    publish.video = { exempt: false, kind: 'video', limit: 1, allowed: false, conflicts: [], nextFreeAt: Date.now() + 3600 * 1000 }
+    open()
+    await screen.findByText('Episode 1')
+    expect(document.querySelector('.publish-limit-note')).toBeNull()
   })
 })

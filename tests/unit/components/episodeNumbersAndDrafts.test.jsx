@@ -10,13 +10,18 @@ import { renderWithProviders } from './_render.jsx'
 const h = vi.hoisted(() => ({ publishDraft: vi.fn(), deleteDraft: vi.fn() }))
 vi.mock('../../../src/hive-api/aioha', async () => (await import('./_render.jsx')).aiohaModule())
 vi.mock('sonner', async () => (await import('./_render.jsx')).sonnerModule())
-vi.mock('../../../src/utils/scheduledPosts', () => ({ publishDraft: h.publishDraft, deleteDraft: h.deleteDraft }))
+vi.mock('../../../src/utils/scheduledPosts', () => ({ publishDraft: h.publishDraft, deleteDraft: h.deleteDraft, SCHEDULED_CHECKER_BASE: 'https://checker.test' }))
+vi.mock('../../../src/hooks/usePremiumStatus', () => ({ usePremiumStatus: () => ({ premium: false }) }))
 
 const { default: EpisodeNumberFields } = await import('../../../src/components/Episodes/EpisodeNumberFields.jsx')
 const { default: EpisodeBadge } = await import('../../../src/components/Episodes/EpisodeBadge.jsx')
 const { default: AudioPublishWhen, scheduleTooSoon, SCHEDULE_MIN_LEAD_MIN } = await import('../../../src/components/AudioUploadModal/AudioPublishWhen.jsx')
 const { formatDateTimeLocal } = await import('../../../src/utils/schedulingHelpers')
 const { default: DraftCard } = await import('../../../src/components/Draft/DraftCard.jsx')
+const { useAppStore } = await import('../../../src/lib/store')
+const { refreshPublishQuota } = await import('../../../src/lib/publishQuota.js')
+const { toast } = await import('sonner')
+const { toastMessages } = await import('./_render.jsx')
 
 function Numbers() {
   const [season, setSeason] = useState('')
@@ -111,5 +116,79 @@ describe('DraftCard', () => {
     await user.click(screen.getByRole('button', { name: 'Delete' }))
     await waitFor(() => expect(h.deleteDraft).toHaveBeenCalledWith({ owner: 'badadib', permlink: 'ep-5' }))
     confirm.mockRestore()
+  })
+})
+
+// ⏳ The free plan's daily publish limit (lib/publishQuota.js) on a video draft:
+// "Publish now" on a taken slot opens the schedule dialog on the next free time
+// instead, and a picked time that is taken holds Schedule back. The checker's
+// GET /publish-quota is a fake (fetch).
+describe('DraftCard: the daily publish limit', () => {
+  const DAY = 24 * 3600 * 1000
+  const draft = { id: 'd2', permlink: 'trip-2', title: 'Trip part 2', kind: 'video', updatedAt: '2026-11-14T10:00:00Z' }
+  const fmt = (ms) => new Date(ms).toLocaleString('en', { dateStyle: 'medium', timeStyle: 'short' })
+  let publishedAt, freeAt, quotaCalls
+  beforeEach(() => {
+    publishedAt = Date.now() - 2 * 3600 * 1000
+    freeAt = Math.ceil((publishedAt + DAY) / 60000) * 60000
+    quotaCalls = []
+    useAppStore.setState({ user: 'badadib' })
+    refreshPublishQuota()
+    vi.stubGlobal('fetch', vi.fn(async (url) => {
+      const u = new URL(String(url))
+      quotaCalls.push(u)
+      const at = u.searchParams.get('at') ? Date.parse(u.searchParams.get('at')) : Date.now()
+      const taken = at < freeAt
+      return { ok: true, json: async () => ({
+        success: true, enabled: true, exempt: false, kind: 'video', limit: 1, at: new Date(at).toISOString(), allowed: !taken,
+        conflicts: taken ? [{ permlink: 'trip-1', title: 'Trip part 1', at: new Date(publishedAt).toISOString(), scheduled: false }] : [],
+        next_free_at: new Date(taken ? freeAt : at).toISOString(),
+      }) }
+    }))
+  })
+
+  it('"Publish now" on a taken slot publishes nothing and offers the next free time', async () => {
+    const { user } = renderWithProviders(<DraftCard draft={draft} owner="badadib" onChanged={() => {}} />)
+    await user.click(screen.getByRole('button', { name: 'Publish' }))
+    const dialog = await screen.findByRole('dialog')
+    expect(h.publishDraft).not.toHaveBeenCalled()
+    expect(dialog).toHaveTextContent(`You cannot publish this right now. On the free plan you can publish 1 video per 24 hours. "Trip part 1" was published at ${fmt(publishedAt)}. Earliest free time: ${fmt(freeAt)}.`)
+    const schedule = screen.getByRole('button', { name: /^Schedule for / })
+    await waitFor(() => expect(quotaCalls.some((u) => Date.parse(u.searchParams.get('at')) === freeAt)).toBe(true))
+    await waitFor(() => expect(schedule).toBeEnabled())
+    await user.click(schedule)
+    await waitFor(() => expect(h.publishDraft).toHaveBeenCalledTimes(1))
+    expect(Date.parse(h.publishDraft.mock.calls[0][0].scheduledOn)).toBe(freeAt)
+  })
+
+  it('a picked time that is taken: Schedule is off until "Use <time>"', async () => {
+    const { user } = renderWithProviders(<DraftCard draft={draft} owner="badadib" onChanged={() => {}} />)
+    await user.click(screen.getByRole('button', { name: 'Schedule' }))
+    const dialog = await screen.findByRole('dialog')
+    await waitFor(() => expect(dialog).toHaveTextContent('This time is taken.'))
+    expect(screen.getByRole('button', { name: /^Schedule for / })).toBeDisabled()
+    expect(quotaCalls.at(-1).searchParams.get('exclude')).toBe('trip-2')
+    await user.click(screen.getByRole('button', { name: `Use ${fmt(freeAt)}` }))
+    await waitFor(() => expect(screen.getByRole('button', { name: /^Schedule for / })).toBeEnabled())
+  })
+
+  it('the checker refusing "Publish now" (429) says why and opens the schedule dialog', async () => {
+    vi.stubGlobal('fetch', vi.fn(async () => ({ ok: false, status: 404, json: async () => ({}) })))
+    h.publishDraft.mockRejectedValueOnce(Object.assign(new Error('Request failed with status code 429'), { response: { status: 429, data: {
+      error: 'Daily publish limit reached', code: 'daily_publish_limit', kind: 'video', limit: 1,
+      conflicts: [{ permlink: 'trip-1', title: 'Trip part 1', at: new Date(publishedAt).toISOString(), scheduled: false }],
+      next_free_at: new Date(freeAt).toISOString(),
+    } } }))
+    const { user } = renderWithProviders(<DraftCard draft={draft} owner="badadib" onChanged={() => {}} />)
+    await user.click(screen.getByRole('button', { name: 'Publish' }))
+    await waitFor(() => expect(toastMessages(toast.error).join(' ')).toContain(`"Trip part 1" was published at ${fmt(publishedAt)}.`))
+    expect(await screen.findByRole('dialog')).toHaveTextContent('You cannot publish this right now.')
+  })
+
+  it('an audio draft is never checked', async () => {
+    const { user } = renderWithProviders(<DraftCard draft={{ ...draft, kind: 'audio' }} owner="badadib" onChanged={() => {}} />)
+    await user.click(screen.getByRole('button', { name: 'Publish' }))
+    await waitFor(() => expect(h.publishDraft).toHaveBeenCalledTimes(1))
+    expect(quotaCalls).toEqual([])
   })
 })

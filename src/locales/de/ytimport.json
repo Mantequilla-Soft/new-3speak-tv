@@ -135,7 +135,7 @@
       "failed": "Fehlgeschlagen",
       "publish_failed": "Veröffentlichen fehlgeschlagen",
       "cancelled": "Gestoppt, nicht veröffentlicht",
-      "waitingQuota": "Wartet auf deinen nächsten kostenlosen Upload ({{time}})"
+      "waitingQuota": "Wartet auf deine nächste freie Veröffentlichungszeit ({{time}})"
     },
     "stopConfirm": "Diesen Import stoppen? Noch nicht veröffentlichte Videos werden abgebrochen, auch bereits eingeplante. Veröffentlichte Videos bleiben.",
     "stopYes": "Ja, stoppen",
@@ -152,10 +152,10 @@
     },
     "free": {
       "title": "Kostenloser Plan: ein Video pro Tag",
-      "body": "Jedes Video verbraucht einen Tag deiner kostenlosen Uploads, daher veröffentlicht der Stapel ein Video pro Tag (Shorts: bis zu 3 pro Tag). Bis der Stapel fertig ist, belegt er deine kostenlosen Uploads, du kannst in dieser Zeit also keine anderen Videos selbst hochladen.",
+      "body": "Im kostenlosen Plan kannst du ein Video pro Tag veröffentlichen (Shorts: bis zu 3 pro Tag), daher veröffentlicht der Stapel ein Video pro Tag. Wenn du in der Zwischenzeit selbst ein Video veröffentlichst oder planst, rückt der Stapel auf den nächsten freien Tag.",
       "ends": "Das letzte geht etwa am {{date}} raus.",
       "pro": "Mit 3Speak Pro gehen alle noch heute raus.",
-      "running": "Dieser Stapel nutzt deine kostenlosen täglichen Uploads. Bis er fertig ist, kannst du keine anderen Videos selbst hochladen.",
+      "running": "Dieser Stapel nutzt deine kostenlosen täglichen Veröffentlichungen. Wenn du in der Zwischenzeit selbst ein Video veröffentlichst oder planst, rückt der Stapel auf den nächsten freien Tag.",
       "bar": "kostenloser Plan: eins pro Tag, der Rest folgt später"
     }
   },

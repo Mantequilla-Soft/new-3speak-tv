@@ -135,7 +135,7 @@
       "failed": "Échec",
       "publish_failed": "Échec de la publication",
       "cancelled": "Arrêté, non publié",
-      "waitingQuota": "Attend ton prochain envoi gratuit ({{time}})"
+      "waitingQuota": "Attend ton prochain créneau de publication libre ({{time}})"
     },
     "stopConfirm": "Arrêter cet import ? Les vidéos pas encore publiées sont annulées, y compris celles déjà programmées. Les vidéos publiées restent.",
     "stopYes": "Oui, arrêter",
@@ -152,10 +152,10 @@
     },
     "free": {
       "title": "Offre gratuite : une vidéo par jour",
-      "body": "Chaque vidéo utilise une journée de tes envois gratuits, le lot publie donc une vidéo par jour (Shorts : jusqu'à 3 par jour). Tant que le lot n'est pas terminé, il occupe tes envois gratuits : pendant ce temps, tu ne peux pas envoyer d'autres vidéos toi-même.",
+      "body": "Avec l'offre gratuite, tu peux publier une vidéo par jour (Shorts : jusqu'à 3 par jour), donc le lot publie une vidéo par jour. Si tu publies ou programmes une de tes vidéos entre-temps, le lot passe au jour libre suivant.",
       "ends": "La dernière sort vers le {{date}}.",
       "pro": "Avec 3Speak Pro, elles sortent toutes aujourd'hui.",
-      "running": "Ce lot utilise tes envois gratuits du jour. Tant qu'il n'est pas terminé, tu ne peux pas envoyer d'autres vidéos toi-même.",
+      "running": "Ce lot utilise tes publications gratuites du jour. Si tu publies ou programmes une de tes vidéos entre-temps, le lot passe au jour libre suivant.",
       "bar": "offre gratuite : une par jour, les autres suivent"
     }
   },

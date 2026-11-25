@@ -26,8 +26,9 @@ const PREMIUM_API = (import.meta.env.VITE_HANGOUTS_PREMIUM_API_URL || '').replac
 // live captions (components/openpods/studioCaptions.js, Pro since 2026-11-17),
 // the feed ranking boost (checker utils/premiumBoost.js, PREMIUM_BOOST on prod),
 // 1080p YouTube imports (server/youtube-import.cjs MAX_HEIGHT_PREMIUM), no
-// daily upload limits (lib/uploadQuota.js, owner's rules 2026-11-20: free is
-// 1 video + 3 Shorts + 2 audio uploads a day, audio up to 20 minutes, owner 2026-11-23) and the
+// daily publish limit (lib/publishQuota.js, owner 2026-11-25: free publishes
+// 1 video + 3 Shorts a day) nor daily audio upload limit (lib/uploadQuota.js:
+// free is 2 audio uploads a day, up to 20 minutes, owner 2026-11-23) and the
 // landscape video editor (the Shorts and audio editors stay free).
 // English like the rest of the SDK panel.
 const EXTRA_PERKS = {
@@ -42,8 +43,8 @@ const EXTRA_PERKS = {
     body: 'Free imports stop at 480p.',
   }, {
     icon: '♾️',
-    title: 'Unlimited daily uploads',
-    body: 'Post as many videos, Shorts and audio as you like each day. Free accounts get 1 video, 3 Shorts and 2 audio uploads a day.',
+    title: 'Publish as often as you like',
+    body: 'Publish as many videos and Shorts as you like each day, and upload as much audio. Free accounts publish 1 video and 3 Shorts a day and upload 2 audio a day.',
   }, {
     icon: '🎙️',
     title: 'Audio longer than 20 minutes',

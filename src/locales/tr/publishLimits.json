@@ -1,0 +1,25 @@
+{
+  "rule": {
+    "video_one": "Ücretsiz planda 24 saatte {{count}} video yayınlayabilirsin.",
+    "video_other": "Ücretsiz planda 24 saatte {{count}} video yayınlayabilirsin.",
+    "short_one": "Ücretsiz planda 24 saatte {{count}} Short yayınlayabilirsin.",
+    "short_other": "Ücretsiz planda 24 saatte {{count}} Shorts yayınlayabilirsin."
+  },
+  "conflict": {
+    "published": "\"{{title}}\" {{time}} tarihinde yayınlandı.",
+    "scheduled": "\"{{title}}\" {{time}} için planlandı.",
+    "publishedUntitled": "Bir gönderi {{time}} tarihinde yayınlandı.",
+    "scheduledUntitled": "Bir gönderi {{time}} için planlandı."
+  },
+  "nowTaken": "Bunu şu anda yayınlayamazsın.",
+  "timeTaken": "Bu zaman dolu.",
+  "earliest": "En erken boş zaman: {{time}}.",
+  "later": "Daha sonraki bir zaman seç.",
+  "shortFrom": "{{time}} itibarıyla paylaşılabilir.",
+  "uploadSchedule": "Yine de yükleyip planlayabilirsin. En erken boş zaman: {{time}}.",
+  "uploadScheduleLater": "Yine de yükleyip daha sonraki bir zamana planlayabilirsin.",
+  "uploadShort": "Yine de yükleyebilirsin. {{time}} itibarıyla paylaşılabilir.",
+  "uploadShortLater": "Yine de yükleyip daha sonra paylaşabilirsin.",
+  "useTime": "{{time}} kullan",
+  "batchRefused": "Planlanmadı: ücretsiz planın günlük yayın sınırı boş zaman bırakmadı. Daha sonra tekrar dene."
+}

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useSearchParams, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Banner, Button, Icon, Progress, Segmented } from "../components/v2/ui";
@@ -16,6 +16,8 @@ import { uploadThumbnail } from "../utils/uploadThumbnail";
 import useUploadQuota from "../hooks/useUploadQuota";
 import UploadQuotaNote from "../components/UploadQuota/UploadQuotaNote";
 import { isUsedUp, proPlansPath, uploadLimitMessage, usedUpInfo } from "../lib/uploadQuota";
+import usePublishQuota from "../hooks/usePublishQuota";
+import PublishLimitNote from "../components/PublishLimit/PublishLimitNote";
 import "./YoutubeImportPage.scss";
 
 const toast = toastIn('Upload');
@@ -105,6 +107,15 @@ export default function YoutubeImportPage() {
   // daily video / Short limit, a podcast episode against the audio one. null
   // counters = no limit known (Pro, off, unreadable): nothing is held back.
   const quota = useUploadQuota();
+  // ⏳ The free plan's daily PUBLISH limit (1 video, 3 Shorts per 24 hours): an
+  // import is never held back by it (uploading is not limited), but when
+  // publishing a kind right now is taken, a warning says it can still be
+  // imported and scheduled in the studio. Podcast episodes are not limited.
+  const importsKind = (k) => platform !== 'rss' && (mode === 'shorts' ? k === 'short' : mode === 'videos' ? k === 'video' : true);
+  const publishCheck = {
+    video: usePublishQuota({ kind: 'video', enabled: !!user && importsKind('video') }),
+    short: usePublishQuota({ kind: 'short', enabled: !!user && importsKind('short') }),
+  };
 
   // ---- Linked channels --------------------------------------------------------
   useEffect(() => {
@@ -906,7 +917,10 @@ export default function YoutubeImportPage() {
         {platform === 'rss'
           ? <UploadQuotaNote kind="audio" entry={quota.audio} user={user} className="yt-import__quota" />
           : (mode === 'shorts' ? ['short'] : mode === 'videos' ? ['video'] : ['video', 'short']).map((k) => (
-            <UploadQuotaNote key={k} kind={k} entry={quota[k]} user={user} className="yt-import__quota" />
+            <Fragment key={k}>
+              <UploadQuotaNote kind={k} entry={quota[k]} user={user} className="yt-import__quota" />
+              {!isUsedUp(quota[k]) && <PublishLimitNote mode="upload" info={publishCheck[k].quota} user={user} className="yt-import__quota" />}
+            </Fragment>
           ))}
         {status?.limits && platform === 'rss' && (
           <div className="yt-import__limits">

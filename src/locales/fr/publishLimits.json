@@ -1,0 +1,27 @@
+{
+  "rule": {
+    "video_many": "Avec l'offre gratuite, tu peux publier {{count}} vidéos par 24 heures.",
+    "video_one": "Avec l'offre gratuite, tu peux publier {{count}} vidéo par 24 heures.",
+    "video_other": "Avec l'offre gratuite, tu peux publier {{count}} vidéos par 24 heures.",
+    "short_many": "Avec l'offre gratuite, tu peux publier {{count}} Shorts par 24 heures.",
+    "short_one": "Avec l'offre gratuite, tu peux publier {{count}} Short par 24 heures.",
+    "short_other": "Avec l'offre gratuite, tu peux publier {{count}} Shorts par 24 heures."
+  },
+  "conflict": {
+    "published": "« {{title}} » a été publiée le {{time}}.",
+    "scheduled": "« {{title}} » est programmée pour le {{time}}.",
+    "publishedUntitled": "Une publication est sortie le {{time}}.",
+    "scheduledUntitled": "Une publication est programmée pour le {{time}}."
+  },
+  "nowTaken": "Tu ne peux pas publier ceci maintenant.",
+  "timeTaken": "Ce créneau est déjà pris.",
+  "earliest": "Premier créneau libre : {{time}}.",
+  "later": "Choisis un créneau plus tard.",
+  "shortFrom": "Il pourra être publié à partir du {{time}}.",
+  "uploadSchedule": "Tu peux quand même l'envoyer et le programmer. Premier créneau libre : {{time}}.",
+  "uploadScheduleLater": "Tu peux quand même l'envoyer et le programmer pour plus tard.",
+  "uploadShort": "Tu peux quand même l'envoyer. Il pourra être publié à partir du {{time}}.",
+  "uploadShortLater": "Tu peux quand même l'envoyer et le publier plus tard.",
+  "useTime": "Prendre {{time}}",
+  "batchRefused": "Non programmé : la limite quotidienne de publication de l'offre gratuite n'a laissé aucun créneau libre. Réessaie plus tard."
+}

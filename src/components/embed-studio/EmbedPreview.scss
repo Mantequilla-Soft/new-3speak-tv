@@ -360,6 +360,9 @@
   .ep-gate__text { @include v2.text(meta); line-height: 1.4; color: var(--text); }
 }
 
+// ⏳ Over the free plan's daily publish limit (PublishLimit/PublishLimitNote).
+.ep-publish-limit { margin-bottom: 16px; }
+
 // The failed publish (31b, accent wash).
 .ep-failed {
   display: flex;

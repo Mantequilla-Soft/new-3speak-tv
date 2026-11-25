@@ -1,0 +1,29 @@
+{
+  "rule": {
+    "video_few": "W planie darmowym możesz opublikować {{count}} filmy na 24 godziny.",
+    "video_many": "W planie darmowym możesz opublikować {{count}} filmów na 24 godziny.",
+    "video_one": "W planie darmowym możesz opublikować {{count}} film na 24 godziny.",
+    "video_other": "W planie darmowym możesz opublikować {{count}} filmu na 24 godziny.",
+    "short_few": "W planie darmowym możesz opublikować {{count}} Shorty na 24 godziny.",
+    "short_many": "W planie darmowym możesz opublikować {{count}} Shortów na 24 godziny.",
+    "short_one": "W planie darmowym możesz opublikować {{count}} Shorta na 24 godziny.",
+    "short_other": "W planie darmowym możesz opublikować {{count}} Shorta na 24 godziny."
+  },
+  "conflict": {
+    "published": "„{{title}}” opublikowano {{time}}.",
+    "scheduled": "„{{title}}” zaplanowano na {{time}}.",
+    "publishedUntitled": "Wpis opublikowano {{time}}.",
+    "scheduledUntitled": "Wpis zaplanowano na {{time}}."
+  },
+  "nowTaken": "Nie możesz teraz tego opublikować.",
+  "timeTaken": "Ten termin jest już zajęty.",
+  "earliest": "Najwcześniejszy wolny termin: {{time}}.",
+  "later": "Wybierz późniejszy termin.",
+  "shortFrom": "Można go opublikować od {{time}}.",
+  "uploadSchedule": "Nadal możesz go przesłać i zaplanować. Najwcześniejszy wolny termin: {{time}}.",
+  "uploadScheduleLater": "Nadal możesz go przesłać i zaplanować na później.",
+  "uploadShort": "Nadal możesz go przesłać. Można go opublikować od {{time}}.",
+  "uploadShortLater": "Nadal możesz go przesłać i opublikować później.",
+  "useTime": "Wybierz {{time}}",
+  "batchRefused": "Nie zaplanowano: dzienny limit publikacji w planie darmowym nie zostawił wolnego terminu. Spróbuj ponownie później."
+}

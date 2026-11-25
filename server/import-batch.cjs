@@ -13,7 +13,7 @@
 //     @threespeak at its slot and links the video (same path as "schedule post").
 // Posts go out POST_SPACING_MS apart (owner's call 2026-10-05: 30 min), the first
 // a few minutes after it is ready. Free accounts get one video a day (the free
-// plan's daily upload limit, see quotaWaitUntil). Publishing as @threespeak needs the creator's
+// plan's daily publish limit, see publishWaitUntil). Publishing as @threespeak needs the creator's
 // posting-authority grant, checked when the batch is created and again by the
 // checker. Batches live in Mongo (`import-batches` in the threespeak database,
 // next to the checker's `scheduled-posts`), one document per batch, written on
@@ -45,15 +45,22 @@ const ITEM_GAP_MS = [30 * 1000, 90 * 1000] // pause between two items, random in
 // room for download + upload + encode before the slot.
 const PREP_AHEAD_MS = Number(process.env.IMPORT_BATCH_PREP_AHEAD_MIN || 20) * 60 * 1000
 const SHORTS_MAX_DURATION_SEC = 120
-// ⏳ Free plan daily limits (owner 2026-11-22: the batch follows them). A free
-// account's next video waits until the embed service has room for it again
-// (1 video + 3 Shorts per rolling 24 h), so a batch of five goes out one video a
-// day instead of failing from the second on. Pro and warm-up accounts are exempt
-// on the embed service, so their batches keep POST_SPACING_MS. A waiting item
-// looks again at least every QUOTA_RECHECK_MS (someone who gets Pro meanwhile,
-// or an upload of theirs that failed and frees a slot).
+// ⏳ Free plan daily PUBLISH limit (owner 2026-11-25; the batch follows it since
+// 2026-11-22). A free Hive account publishes at most 1 video + 3 Shorts per
+// rolling 24 hours, compared by publish time (the checker's GET /publish-quota
+// answers when the next one may go out). Uploading is not limited any more, so
+// the batch no longer waits for the embed service's upload quota: each item is
+// scheduled on the checker's next free publish time, and (just in time, like
+// PREP_AHEAD_MS) only fetched once that time is less than PREP_AHEAD_MS away.
+// A batch of five goes out one video a day. Pro is exempt on the checker, so
+// its batches keep POST_SPACING_MS. A waiting item looks again at least every
+// QUOTA_RECHECK_MS (someone who gets Pro meanwhile, or a scheduled post of
+// theirs that was cancelled and frees the time). Fail open: an unreadable
+// quota holds nothing back, and the checker's own 429 at the create names the
+// next free time to schedule on instead.
 const QUOTA_RECHECK_MS = 60 * 60 * 1000
-const QUOTA_SLACK_MS = 60 * 1000 // past the embed service's next_at, so its window has really moved on
+const QUOTA_SLACK_MS = 60 * 1000 // past the next free time, so its window has really moved on
+const PUBLISH_LIMIT_ATTEMPTS = 3 // creates refused by the daily limit before the item fails
 const SHORT_DESCRIPTION_MAX = 240
 const EMBED_BASE = (process.env.EMBED_API_BASE || 'https://embed2.3speak.tv').replace(/\/+$/, '')
 const EMBED_API_KEY = process.env.EMBED_API_KEY || ''
@@ -142,6 +149,12 @@ const batchesOf = (user) => store.batches.filter((b) => b.user === user)
 // The latest publish slot among this user's imports still waiting to go out (0 = none).
 const lastSlotOf = (user) => Math.max(0, ...batchesOf(user).flatMap((x) => x.items)
   .filter((x) => x.status === 'scheduled' && x.scheduledOn).map((x) => Date.parse(x.scheduledOn)))
+// The earliest slot the user's next import can take (ms): a few minutes from
+// now, and POST_SPACING_MS after their last one still waiting to go out.
+const nextSlotOf = (user, now = Date.now()) => {
+  const lastSlot = lastSlotOf(user)
+  return Math.max(now + FIRST_POST_LEAD_MS, lastSlot ? lastSlot + POST_SPACING_MS : 0)
+}
 // ── Post building (mirrors EmbedUploadContext's publish step) ────────────────
 function slugOf(text) {
   return String(text || '').toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '').slice(0, 27).replace(/-+$/, '')
@@ -416,6 +429,54 @@ async function mintUploadToken(user, isShort) {
   return d
 }
 
+/**
+ * The checker's GET /publish-quota answer: may `user` publish a `kind` at `at`
+ * (ms)? null when unreadable (fail open: not deployed yet, down).
+ */
+async function publishQuota(user, kind, at) {
+  try {
+    const q = new URLSearchParams({ kind, at: new Date(at).toISOString() })
+    const r = await fetch(`${CHECKER_BASE}/publish-quota/${encodeURIComponent(user)}?${q}`, { signal: AbortSignal.timeout(10000) })
+    if (!r.ok) return null
+    return await r.json()
+  } catch {
+    return null
+  }
+}
+
+/**
+ * ⏳ The kinds a source may turn out to be: longer than a Short it can only be a
+ * regular video; a shorter (or unmeasured) one may be either until downloaded.
+ */
+const kindsOf = (source) => ((Number(source?.duration) || 0) > SHORTS_MAX_DURATION_SEC ? ['video'] : ['video', 'short'])
+
+/**
+ * ⏳ The earliest time (ms) one of these answers (one per kind the source may
+ * be, asked for the same time) lets a publish go out, or null = at the time
+ * asked for (a kind is free then, exempt, limits off, quota unknown). Taken
+ * without a next free time: looks again in QUOTA_RECHECK_MS.
+ */
+function publishWaitUntil(answers, now = Date.now()) {
+  const list = Array.isArray(answers) ? answers : [answers]
+  if (!list.length) return null
+  const waits = []
+  for (const q of list) {
+    if (!q || q.success === false || q.enabled !== true || q.exempt || q.allowed !== false) return null
+    const at = Date.parse(q.next_free_at)
+    waits.push(Number.isFinite(at) ? at : now + QUOTA_RECHECK_MS)
+  }
+  return Math.min(...waits)
+}
+
+/**
+ * ⏳ The time to schedule a `kind` on: `slot` (ms) when it is free, else the
+ * checker's next free time (a little past it). Fail open: unreadable = `slot`.
+ */
+async function freePublishSlot(user, kind, slot) {
+  const at = publishWaitUntil([await publishQuota(user, kind, slot)], slot)
+  return at && at > slot ? at + QUOTA_SLACK_MS : slot
+}
+
 /** The embed service's GET /uploads/quota answer for `user`, or null (unreadable: fail open). */
 async function embedQuota(user) {
   try {
@@ -431,16 +492,17 @@ async function embedQuota(user) {
 }
 
 /**
- * ⏳ When the embed service will take this source from a free account again (ms),
- * or null = now (room left, exempt, limits off, quota unknown). A source longer
- * than a Short can only be a regular video; a shorter one may turn out either
- * way once downloaded, so it only waits when both kinds are used up (a wrong
- * guess is caught by the upload token's own 429, see processItem).
+ * ⏳ When the embed service will take this source again (ms), or null = now
+ * (room left, exempt, limits off, quota unknown). Free Hive accounts have no
+ * daily upload cap any more (the embed service answers exempt, reason
+ * 'publish_limit'), so this only still holds anything back on an embed service
+ * that keeps the old cap: there the batch would otherwise download for
+ * nothing. A source that may be either kind only waits when both are used up
+ * (a wrong guess is caught by the upload token's own 429, see processItem).
  */
 function quotaWaitUntil(quota, source, now = Date.now()) {
   if (!quota || quota.enabled !== true || quota.exempt) return null
-  const duration = Number(source?.duration) || 0
-  const kinds = duration > SHORTS_MAX_DURATION_SEC ? ['video'] : ['video', 'short']
+  const kinds = kindsOf(source)
   const waits = []
   for (const kind of kinds) {
     const q = quota[kind]
@@ -454,14 +516,16 @@ function quotaWaitUntil(quota, source, now = Date.now()) {
 
 /**
  * Puts an item back in the queue until `at` (ms): `waitUntil` is what the page
- * shows (the next free upload), `recheckAt` when the runner looks again.
+ * shows (the next free publish time), `recheckAt` when the runner looks again:
+ * within the hour, and `lead` ms before `at` at the latest (the just-in-time
+ * download ahead of a publish time).
  */
-function holdItem(it, at, now = Date.now()) {
+function holdItem(it, at, now = Date.now(), { lead = 0 } = {}) {
   const until = Math.max(at || now + QUOTA_RECHECK_MS, now) + QUOTA_SLACK_MS
   Object.assign(it, {
     status: 'queued', progress: 0, jobId: null, error: null,
     waitUntil: new Date(until).toISOString(),
-    recheckAt: new Date(Math.min(until, now + QUOTA_RECHECK_MS)).toISOString(),
+    recheckAt: new Date(Math.max(now, Math.min(until - lead, now + QUOTA_RECHECK_MS))).toISOString(),
   })
   return it
 }
@@ -627,8 +691,34 @@ async function scheduleOnChecker(doc, sign) {
     signal: AbortSignal.timeout(20000),
   })
   const d = await r.json().catch(() => ({}))
+  // ⏳ The time is taken (the free plan's daily publish limit): the caller picks
+  // the checker's next free time and tries again.
+  if (r.status === 429 && d.code === 'daily_publish_limit') {
+    const nextAt = Date.parse(d.next_free_at)
+    throw Object.assign(new Error(`schedule: daily publish limit (${d.kind || '?'}, ${d.limit ?? '?'} per 24 h)`), {
+      code: 'daily_publish_limit', nextAt: Number.isFinite(nextAt) ? nextAt : null,
+    })
+  }
   if (!r.ok) throw new Error(`schedule: HTTP ${r.status} ${d.error || ''}`.trim())
   return d
+}
+
+/**
+ * ⏳ Schedules `doc` at `slot` (ms) or, when the checker refuses that time over
+ * the daily publish limit, on the next free time it names, up to
+ * PUBLISH_LIMIT_ATTEMPTS times. Resolves the time it went on.
+ */
+async function scheduleOnFreeTime(doc, slot, sign) {
+  let at = slot
+  for (let attempt = 1; ; attempt++) {
+    try {
+      await scheduleOnChecker({ ...doc, scheduledOn: new Date(at).toISOString() }, sign)
+      return at
+    } catch (e) {
+      if (e.code !== 'daily_publish_limit' || !e.nextAt || attempt >= PUBLISH_LIMIT_ATTEMPTS) throw e
+      at = Math.max(at, e.nextAt + QUOTA_SLACK_MS)
+    }
+  }
 }
 
 async function cancelOnChecker(owner, permlink, sign) {
@@ -729,7 +819,8 @@ function mountImportBatch(app, deps) {
         const ready = waiting.filter(({ b, it }) => !isHeld(it, now) && lastSlotOf(b.user) - now <= PREP_AHEAD_MS)
         const next = ready.find(({ it }) => deps.canStartDownload(it.source)) || ready[0]
         if (!next) { await sleep(60 * 1000); continue } // everyone's next post is still far off
-        // ⏳ A free account with no upload left today: wait, do not download for nothing.
+        // ⏳ A free account whose next free publish time is still far off: wait,
+        // do not download long before it.
         if (await holdForQuota(next.b, next.it)) continue
         while (!deps.canStartDownload(next.it.source)) await sleep(15000)
         await processItem(next.b, next.it)
@@ -751,18 +842,26 @@ function mountImportBatch(app, deps) {
     })
   }
 
-  // ⏳ True when the item has to wait for the free plan's next upload (it is held
-  // then). Podcast episodes go through the audio service, not this limit.
+  // ⏳ True when the item has to wait (it is held then): its next free publish
+  // time (the checker, for each kind it may turn out to be, at the slot it
+  // would get) is more than PREP_AHEAD_MS away, or an embed service that still
+  // caps uploads has none left. Podcast episodes are not limited.
   async function holdForQuota(b, it) {
     if (it.source.platform === 'rss') return false
-    const at = quotaWaitUntil(await embedQuota(b.user), it.source)
-    if (!at) {
+    const now = Date.now()
+    const slot = nextSlotOf(b.user, now)
+    const answers = await Promise.all(kindsOf(it.source).map((kind) => publishQuota(b.user, kind, slot)))
+    const freeAt = publishWaitUntil(answers, now)
+    const publishAt = freeAt && freeAt - now > PREP_AHEAD_MS ? freeAt : null
+    const uploadAt = quotaWaitUntil(await embedQuota(b.user), it.source, now)
+    if (!publishAt && !uploadAt) {
       if (it.waitUntil || it.recheckAt) { delete it.waitUntil; delete it.recheckAt; save(b) }
       return false
     }
-    holdItem(it, at)
+    if (publishAt && publishAt >= (uploadAt || 0)) holdItem(it, publishAt, now, { lead: PREP_AHEAD_MS })
+    else holdItem(it, uploadAt, now)
     save(b)
-    console.log(`[import-batch] @${b.user} ${it.source.sourceId} waits for the free plan's next upload (${it.waitUntil})`)
+    console.log(`[import-batch] @${b.user} ${it.source.sourceId} waits for the free plan's next ${publishAt ? 'publish' : 'upload'} (${it.waitUntil})`)
     return true
   }
 
@@ -824,13 +923,12 @@ function mountImportBatch(app, deps) {
       const permlink = permlinkFor(isShort ? it.source.description : it.source.title)
       const post = buildPost({ user, source: it.source, media, embedUrl, thumbnailUrl, options: b.options, isShort, permlink, premium })
       const parent = isShort ? await snapsContainer() : { author: '', permlink: b.options.community }
-      // Spaced against ALL of this user's scheduled imports, not just this batch.
-      const lastSlot = lastSlotOf(user)
-      const slot = Math.max(Date.now() + FIRST_POST_LEAD_MS, lastSlot ? lastSlot + POST_SPACING_MS : 0)
-      await scheduleOnChecker({
+      // Spaced against ALL of this user's scheduled imports, not just this batch,
+      // and ⏳ on a free publish time (the free plan's daily publish limit).
+      const freeSlot = await freePublishSlot(user, isShort ? 'short' : 'video', nextSlotOf(user))
+      const slot = await scheduleOnFreeTime({
         owner: user,
         permlink,
-        scheduledOn: new Date(slot).toISOString(),
         title: post.title,
         description: post.description,
         body: post.body,
@@ -845,7 +943,8 @@ function mountImportBatch(app, deps) {
         // "Add to my blog": the checker reblogs it once posted. Not for Shorts,
         // which are replies (nothing to put on a blog).
         reblog: !isShort && b.options.reblog === true,
-      }, deps.signScheduledPost)
+      }, freeSlot, deps.signScheduledPost)
+      delete it.waitUntil; delete it.recheckAt
       it.status = 'scheduled'; it.progress = 100; it.permlink = permlink; it.scheduledOn = new Date(slot).toISOString()
       save(b)
       // The importer's "already on 3Speak" record (and its duplicate check).
@@ -912,8 +1011,7 @@ function mountImportBatch(app, deps) {
       // A snap replies to the newest @peak.snaps container (they rotate every
       // 8-13 h and older ones keep taking replies, so a slot hours away is fine).
       const parent = post.snap ? await snapsContainer() : { author: '', permlink: b.options.community }
-      const lastSlot = lastSlotOf(user)
-      const slot = Math.max(Date.now() + FIRST_POST_LEAD_MS, lastSlot ? lastSlot + POST_SPACING_MS : 0)
+      const slot = nextSlotOf(user)
       await scheduleOnChecker({
         owner: user,
         permlink,
@@ -1132,4 +1230,4 @@ function batchSourcesFor(user) {
   return out
 }
 
-module.exports = { mountImportBatch, batchSourcesFor, embedQuota, quotaWaitUntil, holdItem, isHeld, buildPost, buildAudioPost, renderTemplate, renderText, uploadAudio, setAudioThumbnail, audioBatchReady, AUDIO_TYPES, beneficiariesFor, tagsFor, permlinkFor, scheduleOnChecker, cancelOnChecker, mintUploadToken, tusUpload, commissionEncode, snapsContainer }
+module.exports = { mountImportBatch, batchSourcesFor, embedQuota, quotaWaitUntil, publishQuota, publishWaitUntil, freePublishSlot, scheduleOnFreeTime, holdItem, isHeld, buildPost, buildAudioPost, renderTemplate, renderText, uploadAudio, setAudioThumbnail, audioBatchReady, AUDIO_TYPES, beneficiariesFor, tagsFor, permlinkFor, scheduleOnChecker, cancelOnChecker, mintUploadToken, tusUpload, commissionEncode, snapsContainer }

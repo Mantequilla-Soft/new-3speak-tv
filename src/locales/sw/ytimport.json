@@ -135,7 +135,7 @@
       "failed": "Imeshindwa",
       "publish_failed": "Kuchapisha kumeshindwa",
       "cancelled": "Imesimamishwa, haijachapishwa",
-      "waitingQuota": "Inasubiri upakiaji wako ujao wa bure ({{time}})"
+      "waitingQuota": "Inasubiri muda wako ujao ulio wazi wa kuchapisha ({{time}})"
     },
     "stopConfirm": "Usimamishe uingizaji huu? Video ambazo bado hazijachapishwa zitaghairiwa, zikiwemo zilizopangwa tayari. Video zilizochapishwa zitabaki.",
     "stopYes": "Ndiyo, simamisha",
@@ -152,10 +152,10 @@
     },
     "free": {
       "title": "Mpango wa bure: video moja kwa siku",
-      "body": "Kila video inatumia siku moja ya upakiaji wako wa bure, kwa hiyo kundi hili linachapisha video moja kwa siku (Shorts: hadi 3 kwa siku). Hadi kundi likamilike linatumia upakiaji wako wa bure, kwa hiyo katika muda huo huwezi kupakia video nyingine mwenyewe.",
+      "body": "Kwenye mpango wa bure unaweza kuchapisha video moja kwa siku (Shorts: hadi 3 kwa siku), kwa hiyo kundi huchapisha video moja kwa siku. Ukichapisha au kuratibu video yako mwenyewe katika muda huo, kundi husogea hadi siku ijayo iliyo wazi.",
       "ends": "Ya mwisho itatoka karibu {{date}}.",
       "pro": "Ukiwa na 3Speak Pro zote zinatoka leo.",
-      "running": "Kundi hili linatumia upakiaji wako wa bure wa kila siku. Hadi likamilike, huwezi kupakia video nyingine mwenyewe.",
+      "running": "Kundi hili linatumia uchapishaji wako wa bure wa kila siku. Ukichapisha au kuratibu video yako mwenyewe katika muda huo, kundi husogea hadi siku ijayo iliyo wazi.",
       "bar": "mpango wa bure: moja kwa siku, nyingine zitafuata"
     }
   },

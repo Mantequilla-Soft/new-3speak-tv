@@ -1,0 +1,25 @@
+{
+  "rule": {
+    "video_one": "Im kostenlosen Plan kannst du {{count}} Video pro 24 Stunden veröffentlichen.",
+    "video_other": "Im kostenlosen Plan kannst du {{count}} Videos pro 24 Stunden veröffentlichen.",
+    "short_one": "Im kostenlosen Plan kannst du {{count}} Short pro 24 Stunden veröffentlichen.",
+    "short_other": "Im kostenlosen Plan kannst du {{count}} Shorts pro 24 Stunden veröffentlichen."
+  },
+  "conflict": {
+    "published": "„{{title}}“ wurde am {{time}} veröffentlicht.",
+    "scheduled": "„{{title}}“ ist für {{time}} geplant.",
+    "publishedUntitled": "Ein Beitrag wurde am {{time}} veröffentlicht.",
+    "scheduledUntitled": "Ein Beitrag ist für {{time}} geplant."
+  },
+  "nowTaken": "Du kannst das gerade nicht veröffentlichen.",
+  "timeTaken": "Diese Zeit ist schon belegt.",
+  "earliest": "Früheste freie Zeit: {{time}}.",
+  "later": "Wähle eine spätere Zeit.",
+  "shortFrom": "Er kann ab {{time}} gepostet werden.",
+  "uploadSchedule": "Du kannst es trotzdem hochladen und planen. Früheste freie Zeit: {{time}}.",
+  "uploadScheduleLater": "Du kannst es trotzdem hochladen und für eine spätere Zeit planen.",
+  "uploadShort": "Du kannst ihn trotzdem hochladen. Er kann ab {{time}} gepostet werden.",
+  "uploadShortLater": "Du kannst ihn trotzdem hochladen und später posten.",
+  "useTime": "{{time}} nehmen",
+  "batchRefused": "Nicht geplant: Das tägliche Veröffentlichungslimit des kostenlosen Plans ließ keine freie Zeit. Versuche es später noch einmal."
+}

@@ -19,7 +19,7 @@ vi.mock('../../../src/hive-api/aioha', () => ({
   KeyTypes: { Posting: 'posting' },
   Providers: { Keychain: 'keychain', HiveAuth: 'hiveauth', PeakVault: 'peakvault', Ledger: 'ledger', HiveSigner: 'hivesigner' },
 }))
-vi.mock('../../../src/i18n', () => ({ t: (k, o) => (o ? `${k} ${JSON.stringify(o)}` : k) }))
+vi.mock('../../../src/i18n', () => ({ t: (k, o) => (o ? `${k} ${JSON.stringify(o)}` : k), getLanguage: () => 'en' }))
 
 const {
   scheduledPostMessage, scheduledPostProof, proveScheduledPost, scheduledPostWriteError,
@@ -182,5 +182,19 @@ describe('scheduledPostWriteError', () => {
     expect(scheduledPostWriteError({ response: { status: 422, data: { error: 'too soon' } } }, 'x')).toBe('too soon')
     expect(scheduledPostWriteError(new Error('boom'), 'x')).toBe('boom')
     expect(scheduledPostWriteError(null, 'fallback')).toBe('fallback')
+  })
+
+  it('a 429 over the daily publish limit says what takes the time and the earliest free one', () => {
+    const err = { response: { status: 429, data: {
+      error: 'Daily publish limit reached', code: 'daily_publish_limit', kind: 'video', limit: 1,
+      conflicts: [{ permlink: 'trip', title: 'Trip', at: AT, scheduled: true }], next_free_at: '2026-12-02T10:00:00.000Z',
+    } } }
+    const msg = scheduledPostWriteError(err, 'x')
+    expect(msg).toContain('publishLimits.timeTaken')
+    expect(msg).toContain('publishLimits.rule.video {"count":1}')
+    expect(msg).toContain('publishLimits.conflict.scheduled {"title":"Trip"')
+    expect(msg).toContain('publishLimits.earliest')
+    // A plain 429 (a rate limit) keeps the server's words.
+    expect(scheduledPostWriteError({ response: { status: 429, data: { error: 'Too many requests' } } }, 'x')).toBe('Too many requests')
   })
 })

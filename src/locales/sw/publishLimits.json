@@ -1,0 +1,25 @@
+{
+  "rule": {
+    "video_one": "Kwenye mpango wa bure unaweza kuchapisha video {{count}} kwa kila saa 24.",
+    "video_other": "Kwenye mpango wa bure unaweza kuchapisha video {{count}} kwa kila saa 24.",
+    "short_one": "Kwenye mpango wa bure unaweza kuchapisha Short {{count}} kwa kila saa 24.",
+    "short_other": "Kwenye mpango wa bure unaweza kuchapisha Shorts {{count}} kwa kila saa 24."
+  },
+  "conflict": {
+    "published": "\"{{title}}\" ilichapishwa {{time}}.",
+    "scheduled": "\"{{title}}\" imeratibiwa {{time}}.",
+    "publishedUntitled": "Chapisho lilichapishwa {{time}}.",
+    "scheduledUntitled": "Chapisho limeratibiwa {{time}}."
+  },
+  "nowTaken": "Huwezi kuchapisha hili sasa hivi.",
+  "timeTaken": "Muda huu tayari umechukuliwa.",
+  "earliest": "Muda wa mapema ulio wazi: {{time}}.",
+  "later": "Chagua muda wa baadaye.",
+  "shortFrom": "Inaweza kuchapishwa kuanzia {{time}}.",
+  "uploadSchedule": "Bado unaweza kuipakia na kuiratibu. Muda wa mapema ulio wazi: {{time}}.",
+  "uploadScheduleLater": "Bado unaweza kuipakia na kuiratibu kwa muda wa baadaye.",
+  "uploadShort": "Bado unaweza kuipakia. Inaweza kuchapishwa kuanzia {{time}}.",
+  "uploadShortLater": "Bado unaweza kuipakia na kuichapisha baadaye.",
+  "useTime": "Tumia {{time}}",
+  "batchRefused": "Haikuratibiwa: kikomo cha kila siku cha kuchapisha kwenye mpango wa bure hakikuacha muda ulio wazi. Jaribu tena baadaye."
+}
