@@ -135,7 +135,7 @@
       "failed": "Gagal",
       "publish_failed": "Gagal menerbitkan",
       "cancelled": "Dihentikan, tidak diterbitkan",
-      "waitingQuota": "Menunggu unggahan gratismu berikutnya ({{time}})"
+      "waitingQuota": "Menunggu waktu terbit kosongmu berikutnya ({{time}})"
     },
     "stopConfirm": "Hentikan impor ini? Video yang belum diterbitkan akan dibatalkan, termasuk yang sudah dijadwalkan. Video yang sudah terbit tetap ada.",
     "stopYes": "Ya, hentikan",
@@ -152,10 +152,10 @@
     },
     "free": {
       "title": "Paket gratis: satu video per hari",
-      "body": "Setiap video memakai satu hari dari unggahan gratismu, jadi batch ini menerbitkan satu video per hari (Shorts: hingga 3 per hari). Sampai batch selesai, unggahan gratismu terpakai olehnya, jadi selama itu kamu tidak bisa mengunggah video lain sendiri.",
+      "body": "Dengan paket gratis kamu bisa menerbitkan satu video per hari (Shorts: hingga 3 per hari), jadi batch menerbitkan satu video per hari. Jika kamu menerbitkan atau menjadwalkan videomu sendiri sementara itu, batch pindah ke hari kosong berikutnya.",
       "ends": "Yang terakhir terbit sekitar {{date}}.",
       "pro": "Dengan 3Speak Pro semuanya terbit hari ini.",
-      "running": "Batch ini sedang memakai unggahan gratis harianmu. Sampai selesai, kamu tidak bisa mengunggah video lain sendiri.",
+      "running": "Batch ini memakai jatah terbit gratis harianmu. Jika kamu menerbitkan atau menjadwalkan videomu sendiri sementara itu, batch pindah ke hari kosong berikutnya.",
       "bar": "paket gratis: satu per hari, sisanya menyusul"
     }
   },

@@ -135,7 +135,7 @@
       "failed": "Nabigo",
       "publish_failed": "Nabigo ang pag-publish",
       "cancelled": "Inihinto, hindi naipo-post",
-      "waitingQuota": "Naghihintay sa susunod mong libreng upload ({{time}})"
+      "waitingQuota": "Naghihintay sa susunod mong bakanteng oras para mag-publish ({{time}})"
     },
     "stopConfirm": "Ihinto ang import na ito? Kakanselahin ang mga video na hindi pa naipo-post, pati ang mga naka-schedule na. Mananatili ang mga naipo-post na.",
     "stopYes": "Oo, ihinto",
@@ -152,10 +152,10 @@
     },
     "free": {
       "title": "Libreng plan: isang video bawat araw",
-      "body": "Bawat video ay gumagamit ng isang araw ng iyong libreng upload, kaya isang video bawat araw ang inilalathala ng batch (Shorts: hanggang 3 bawat araw). Hangga't hindi pa tapos ang batch, ginagamit nito ang iyong libreng upload, kaya hindi ka makakapag-upload ng ibang video nang mag-isa sa panahong iyon.",
+      "body": "Sa libreng plan, makakapag-publish ka ng isang video bawat araw (Shorts: hanggang 3 bawat araw), kaya isang video bawat araw ang pina-publish ng batch. Kapag nag-publish o nag-schedule ka ng sarili mong video habang tumatakbo ito, lilipat ang batch sa susunod na bakanteng araw.",
       "ends": "Ilalabas ang huli bandang {{date}}.",
       "pro": "Sa 3Speak Pro, lahat ay ilalabas ngayong araw.",
-      "running": "Ginagamit ng batch na ito ang iyong libreng upload sa araw-araw. Hangga't hindi pa ito tapos, hindi ka makakapag-upload ng ibang video nang mag-isa.",
+      "running": "Ginagamit ng batch na ito ang iyong libreng pag-publish sa araw-araw. Kapag nag-publish o nag-schedule ka ng sarili mong video habang tumatakbo ito, lilipat ang batch sa susunod na bakanteng araw.",
       "bar": "libreng plan: isa bawat araw, susunod ang iba"
     }
   },

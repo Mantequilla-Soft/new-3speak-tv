@@ -135,7 +135,7 @@
       "failed": "Failed",
       "publish_failed": "Publishing failed",
       "cancelled": "Stopped, not published",
-      "waitingQuota": "Waits for your next free upload ({{time}})"
+      "waitingQuota": "Waits for your next free publish time ({{time}})"
     },
     "stopConfirm": "Stop this import? Videos that are not published yet are cancelled, including ones already scheduled. Published videos stay.",
     "stopYes": "Yes, stop",
@@ -152,10 +152,10 @@
     },
     "free": {
       "title": "Free plan: one video per day",
-      "body": "Each video uses one day of your free uploads, so the batch publishes one video per day (Shorts: up to 3 per day). Until the batch is done it takes your free uploads, so you cannot upload other videos yourself in that time.",
+      "body": "On the free plan you can publish one video per day (Shorts: up to 3 per day), so the batch publishes one video per day. If you publish or schedule a video of your own meanwhile, the batch moves on to the next free day.",
       "ends": "The last one goes out around {{date}}.",
       "pro": "With 3Speak Pro they all go out today.",
-      "running": "This batch is using your free daily uploads. Until it is done, you cannot upload other videos yourself.",
+      "running": "This batch uses your free daily publishing. If you publish or schedule a video of your own meanwhile, the batch moves on to the next free day.",
       "bar": "free plan: one per day, the rest follow later"
     }
   },

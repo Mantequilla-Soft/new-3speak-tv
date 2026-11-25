@@ -135,7 +135,7 @@
       "failed": "Mislukt",
       "publish_failed": "Publiceren mislukt",
       "cancelled": "Gestopt, niet gepubliceerd",
-      "waitingQuota": "Wacht op je volgende gratis upload ({{time}})"
+      "waitingQuota": "Wacht op je volgende vrije publicatietijd ({{time}})"
     },
     "stopConfirm": "Deze import stoppen? Video's die nog niet gepubliceerd zijn worden geannuleerd, ook als ze al ingepland zijn. Gepubliceerde video's blijven staan.",
     "stopYes": "Ja, stoppen",
@@ -152,10 +152,10 @@
     },
     "free": {
       "title": "Gratis abonnement: één video per dag",
-      "body": "Elke video gebruikt één dag van je gratis uploads, dus de batch publiceert één video per dag (Shorts: tot 3 per dag). Tot de batch klaar is, neemt hij je gratis uploads in beslag, dus in die tijd kun je zelf geen andere video's uploaden.",
+      "body": "Met het gratis abonnement kun je één video per dag publiceren (Shorts: tot 3 per dag), dus de batch publiceert één video per dag. Publiceer of plan je intussen zelf een video, dan schuift de batch door naar de volgende vrije dag.",
       "ends": "De laatste gaat rond {{date}} online.",
       "pro": "Met 3Speak Pro gaan ze vandaag allemaal online.",
-      "running": "Deze batch gebruikt je gratis dagelijkse uploads. Tot hij klaar is, kun je zelf geen andere video's uploaden.",
+      "running": "Deze batch gebruikt je gratis dagelijkse publicaties. Publiceer of plan je intussen zelf een video, dan schuift de batch door naar de volgende vrije dag.",
       "bar": "gratis abonnement: één per dag, de rest volgt later"
     }
   },
