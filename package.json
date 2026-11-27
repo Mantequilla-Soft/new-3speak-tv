@@ -55,7 +55,7 @@
     "@fontsource/roboto-mono": "^5.3.0",
     "@fontsource/titan-one": "^5.3.0",
     "@fortawesome/fontawesome-free": "^7.3.1",
-    "@hiveio/content-renderer": "^2.3.1",
+    "@hiveio/content-renderer": "file:vendor/hiveio-content-renderer-2.3.1-3speak.1.tgz",
     "@hiveio/dhive": "^1.3.6",
     "@livekit/components-react": "^2.9.24",
     "@livekit/egress-sdk": "^0.2.1",

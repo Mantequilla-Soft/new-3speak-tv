@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.183',
+    category: 'general',
+    date: '2026-11-27',
+    summary: 'Descriptions and comments with @mentions, #hashtags or links now read in the order they were written.',
+  },
+  {
     version: '2.0.182',
     category: 'upload',
     date: '2026-11-25',

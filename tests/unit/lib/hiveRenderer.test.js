@@ -287,6 +287,26 @@ describe('links, mentions and hashtags', () => {
     expect(links).toEqual([['@alice', '/@alice'], ['#hive', '/t/hive']])
   })
 
+  // Upstream 2.3.1 appended a linkified text node to the END of its parent, so
+  // "models that @steddyman [printed for me](...) some years ago" read
+  // "printed for me some years ago models that @steddyman" (vendor patch
+  // 2.3.1-3speak.1 replaces the node in place).
+  it.each([
+    ['I have these little models that @steddyman [printed for me](/@steevc/p) some years ago.', 'I have these little models that @steddyman printed for me some years ago.'],
+    ['Thanks @alice for **this** and #hive, see https://example.com/page too.', 'Thanks @alice for this and #hive, see https://example.com/page too.'],
+    ['Text @alice middle [link](/x) end.', 'Text @alice middle link end.'],
+  ])('keeps a paragraph in order when a mention, hashtag or URL comes before other markup: %s', (input, text) => {
+    const p = dom(render(input)).querySelector('p')
+    expect(p.textContent.replace(/\s+/g, ' ').trim()).toBe(text)
+    expect([...p.querySelectorAll('a')].map((a) => a.textContent)[0]).toMatch(/^[@]alice$|^@steddyman$/)
+  })
+
+  it('keeps text around an embedded player in order', () => {
+    const out = render('Intro text\n\n<iframe src="https://audio.3speak.tv/play?a=abc"></iframe>\n\nOutro text')
+    const text = dom(out).textContent.replace(/\s+/g, ' ').trim()
+    expect(text.indexOf('Intro text')).toBeLessThan(text.indexOf('Outro text'))
+  })
+
   it('falls back to /@user and /trending/tag', () => {
     const r = createHiveRenderer()
     expect([...dom(r('@bob #art')).querySelectorAll('a')].map((a) => a.getAttribute('href'))).toEqual(['/@bob', '/trending/art'])
