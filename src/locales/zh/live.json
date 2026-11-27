@@ -74,7 +74,8 @@
       "pointsHint": "积分会被消耗，主播不会收到钱。观看、聊天、直播和助力都能赚取积分。",
       "errPointsMinimum": "积分助力至少需要 {min} 积分。",
       "errPointsBalance": "你只有 {points} 积分。",
-      "errSignIn": "登录后即可用积分助力。"
+      "errSignIn": "登录后即可用积分助力。",
+      "pointsConfirming": "正在确认你的积分..."
     }
   },
   "clip": {

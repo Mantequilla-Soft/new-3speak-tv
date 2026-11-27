@@ -63,7 +63,9 @@
       "creator": "เครื่องมือครีเอเตอร์",
       "community": "ชุมชน",
       "help": "ความช่วยเหลือและ 3Speak"
-    }
+    },
+    "points": "แต้ม",
+    "pointsTooltip": "3Speak Points ของคุณ: เปิดกระเป๋าเงิน"
   },
   "notifications": {
     "pushOff": "ปิดการแจ้งเตือนสำหรับอุปกรณ์นี้แล้ว",

@@ -1,5 +1,5 @@
 // POST /api/broadcast (posting ops signed with @threespeak's key under the user's
-// grant), the legacy app-key path and ALLOW_APPKEY_AUTH=0, and the server-to-server
+// grant), the legacy app-key path (broadcast only, ALLOW_APPKEY_AUTH=1) and ALLOW_APPKEY_AUTH=0, and the server-to-server
 // stream announcer /api/openpods/announce. Broadcasts go to a fake Hive node that
 // only records them (see helpers/preload.cjs).
 import { describe, it, expect, beforeAll, afterAll, beforeEach } from 'vitest'
@@ -222,6 +222,44 @@ describe('with ALLOW_APPKEY_AUTH=1 (the rollback switch)', () => {
     const r = await legacy.request('/api/broadcast', { method: 'POST', headers: key(), json: { username: 'bob', operations: [op] } })
     expect(r.status).toBe(403)
     expect(r.body).toEqual({ error: 'Operation not allowed for app-key auth' })
+  })
+
+  it('refuses a Magi contract call (a 3Speak Points burn) as the claimed user', async () => {
+    const burn = ['custom_json', {
+      required_auths: [], required_posting_auths: ['bob'], id: 'vsc.call',
+      json: JSON.stringify({ net_id: 'vsc-mainnet', contract_id: 'vsc1x', action: 'burn', payload: '{"amount":"5000"}', rc_limit: 1000, intents: [] }),
+    }]
+    const before = legacy.broadcasts().length
+    const r = await legacy.request('/api/broadcast', { method: 'POST', headers: key(), json: { username: 'bob', operations: [burn] } })
+    expect(r.status).toBe(403)
+    expect(legacy.broadcasts().length).toBe(before)
+  })
+
+  it('the delegated signers still refuse the app key (it only ever applied to broadcasting)', async () => {
+    for (const [route, json] of APPKEY_CASES.filter(([route]) => route !== '/api/broadcast')) {
+      const r = await legacy.request(route, { method: 'POST', headers: key(), json })
+      expect(r.status, route).toBe(401)
+    }
+  })
+})
+
+describe('with no wallet session secret configured', () => {
+  let bare
+  beforeAll(async () => {
+    const env = { ...configuredEnv() }
+    delete env.SESSION_SIGNING_SECRET
+    delete env.MANTEAUTH_CLIENT_SECRET
+    bare = await startApi({ env, fixtures: FIXTURES })
+  })
+  afterAll(async () => { await bare?.stop() })
+
+  it('the app key does not switch itself back on', async () => {
+    const headers = { 'X-API-Key': bare.env.EMBED_API_KEY }
+    for (const [route, json] of APPKEY_CASES) {
+      const r = await bare.request(route, { method: 'POST', headers, json })
+      expect(r.status, route).toBe(401)
+    }
+    expect(bare.broadcasts()).toEqual([])
   })
 })
 

@@ -120,7 +120,7 @@ describe('signing in', () => {
     const [url, init] = signCalls()[0]
     expect(url).toBe('https://api.test/openpods/sign-challenge')
     expect(init).toMatchObject({ method: 'POST', credentials: 'include' })
-    expect(init.headers).toEqual({ 'Content-Type': 'application/json', 'X-API-Key': 'app-key' })
+    expect(init.headers).toEqual({ 'Content-Type': 'application/json' })
     expect(JSON.parse(init.body)).toEqual({ challenge: 'challenge-1', username: 'badadib' })
   })
 

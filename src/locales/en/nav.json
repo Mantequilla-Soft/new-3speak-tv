@@ -63,7 +63,9 @@
       "creator": "Creator tools",
       "community": "Community",
       "help": "Help and 3Speak"
-    }
+    },
+    "points": "Points",
+    "pointsTooltip": "Your 3Speak Points: open the wallet"
   },
   "notifications": {
     "pushOff": "Notifications turned off for this device",

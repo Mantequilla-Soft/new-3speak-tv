@@ -341,7 +341,19 @@
     "yourBalance": "Ваш баланс",
     "notEnough": "Недостатньо {{currency}}",
     "promoteFor": "Просувати за {{amount}} {{currency}}",
-    "signNote": "Ви підпишете переказ на @{{account}} своїм гаманцем (active-ключ)."
+    "signNote": "Ви підпишете переказ на @{{account}} своїм гаманцем (active-ключ).",
+    "pointsOption": "Бали",
+    "pointsAmount_one": "{{n}} бал",
+    "pointsAmount_few": "{{n}} бали",
+    "pointsAmount_many": "{{n}} балів",
+    "pointsAmount_other": "{{n}} бала",
+    "promoteForPoints": "Просунути за {{amount}}",
+    "notEnoughPoints": "Недостатньо балів",
+    "pointsNote": "Оплата балами 3Speak. Гаманець може один раз попросити підпис.",
+    "pointsPending": "Списуємо ваші бали. Це може зайняти хвилину.",
+    "pointsIneligible": "Це відео зараз не можна просунути.",
+    "pointsTimeout": "Ще не підтверджено. Перевірте бали за кілька хвилин.",
+    "pointsSignInFailed": "Не вдалося увійти в бали 3Speak. Спробуйте ще раз."
   },
   "wizard": {
     "optionsFailed": "Зараз не вдалося завантажити варіанти реклами.",

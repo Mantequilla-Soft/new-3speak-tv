@@ -3,7 +3,8 @@ import { HangoutsApiClient, loginWithAioha, loginWithSignFn } from '@snapie/hang
 import { Providers } from '@aioha/aioha';
 import { useAppStore } from '../lib/store';
 import aioha, { isManteAuthLogin } from '../hive-api/aioha';
-import { EMBED_API_KEY } from '../utils/config';
+import useDailyPoints from '../hooks/useDailyPoints';
+import usePwaPoints from '../hooks/usePwaPoints';
 
 const HangoutContext = createContext(undefined);
 
@@ -87,8 +88,9 @@ async function signOpenPodsChallengeViaThreespeak(challenge, username) {
     if (!token) throw new Error('HiveSigner session expired — reconnect and try again');
     headers.Authorization = `Bearer ${token}`;
   } else if (!isManteAuthLogin()) {
-    // Wallet login: no server-side credential → app key + claimed username.
-    headers['X-API-Key'] = EMBED_API_KEY;
+    // Wallet login: the wallet session cookie (credentials: 'include') proves
+    // the account; the name only says which signed-in account is meant. The
+    // public app key identifies nobody, so it is not sent.
     body.username = username;
   }
   // ManteAuth: httpOnly cookie travels via credentials:'include'.
@@ -356,6 +358,12 @@ export function HangoutContextProvider({ children, tokenStorage = 'none' }) {
     }
   }, [authenticated, user]);
 
+  // The day's sign-in point (hangouts /points/daily), silently, once a day.
+  const silentToken = useCallback((u) => loginToHangouts(u, { interactive: false }), [loginToHangouts]);
+  useDailyPoints({ apiUrl: OPENPODS_ENABLED ? HANGOUTS_API_URL : '', user, authenticated, getToken: silentToken });
+  // The once-ever points for using the installed app (hangouts /points/pwa).
+  usePwaPoints({ apiUrl: OPENPODS_ENABLED ? HANGOUTS_API_URL : '', user, authenticated, getToken: silentToken });
+
   return (
     <HangoutContext.Provider value={{
       activeRoom,
@@ -375,4 +383,9 @@ export function useHangout() {
   const ctx = useContext(HangoutContext);
   if (!ctx) throw new Error('useHangout must be used within HangoutContextProvider');
   return ctx;
+}
+
+/** The same context, or null outside the provider (a modal rendered on its own). */
+export function useHangoutOptional() {
+  return useContext(HangoutContext) || null;
 }

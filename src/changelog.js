@@ -18,6 +18,24 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.186',
+    category: 'tips',
+    date: '2026-11-27',
+    summary: 'See what you can do with your 3Speak Points in your wallet, and your points balance right in the account menu.',
+  },
+  {
+    version: '2.0.185',
+    category: 'tips',
+    date: '2026-11-27',
+    summary: 'Earn 3Speak Points in many new ways, like watching, streaks and weekly quests, all shown in your wallet.',
+  },
+  {
+    version: '2.0.184',
+    category: 'home',
+    date: '2026-11-27',
+    summary: 'You can now promote any video with 3Speak Points, and every promoted video takes turns at the top of Discover.',
+  },
+  {
     version: '2.0.183',
     category: 'general',
     date: '2026-11-27',

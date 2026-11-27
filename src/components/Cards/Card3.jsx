@@ -517,7 +517,7 @@ function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0
               {/* Status pills, stacked at the top-left (the options button owns
                   the top-right). LIVE and PRO are solid accent; the rest are
                   scrim pills with the tone on their icon (43c). */}
-              {(video._liveStream || gatedBadge || vodBadge || newBadge || badgeLabel || video.status || video.publish_type || video.unlisted) && (
+              {(video._liveStream || video.promoted || gatedBadge || vodBadge || newBadge || badgeLabel || video.status || video.publish_type || video.unlisted) && (
                 <div className="card-badges">
                   {/* Live tile. A group-chat (conference) room reads "LIVE CHAT";
                       a standalone stream reads "LIVE". */}
@@ -537,6 +537,12 @@ function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0
                   {/* The recording of a live stream (the checker's `streamVod`). */}
                   {vodBadge && (
                     <span className="card-pill card-vod-badge" title={t('cards.badges.vodTitle')}>{t('cards.badges.vod')}</span>
+                  )}
+
+                  {/* Paid for (HBD, HIVE or 3Speak Points): the checker's feeds mark
+                      it `promoted`, e.g. the Discover #1 card and the Promoted row. */}
+                  {video.promoted && (
+                    <span className="card-pill card-promoted-badge"><Icon name="campaign" size={12} fill /> {t('feeds.promoted')}</span>
                   )}
 
                   {/* A page-wide label, cyan (First Uploads: "First", 49c) */}

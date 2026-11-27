@@ -63,7 +63,9 @@
       "creator": "Инструменты автора",
       "community": "Сообщество",
       "help": "Помощь и 3Speak"
-    }
+    },
+    "points": "Баллы",
+    "pointsTooltip": "Ваши 3Speak Points: открыть кошелёк"
   },
   "notifications": {
     "pushOff": "Уведомления на этом устройстве выключены",

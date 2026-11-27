@@ -1,10 +1,41 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 import { Button, EmptyState, Icon } from '../v2/ui';
 import { cx } from '../v2/helpers';
 import { formatDate, formatNumber, formatTimeAgoCompact } from '../../i18n';
-import { POINTS_KIND, fetchPointsHistory } from './channelPoints';
+import { POINTS_KIND, fetchPointsHistory, pointsPromoteRef, pointsRefLink, pointsRefUser } from './channelPoints';
+import { questTitle } from './pointsEarn';
 import Skeleton from './Skeleton';
+
+const FIRST_TYPES = ['video', 'short', 'story', 'podcast', 'stream'];
+const isCount = (v) => /^\d{1,7}$/.test(String(v ?? ''));
+
+/** The label key and values of a movement whose label needs its ref. */
+function kindLabel(t, i18n, it, k, ttlDays) {
+  const base = `wallet.points.history.${k.key}`;
+  const ref = String(it.ref ?? '');
+  switch (it.kind) {
+    case 'streak': return isCount(ref) ? t(base, { n: formatNumber(Number(ref)) }) : t('wallet.points.history.streakAny');
+    case 'anniv': return isCount(ref) ? t(base, { n: formatNumber(Number(ref)) }) : t('wallet.points.history.annivAny');
+    case 'followers': return isCount(ref) ? t(base, { n: formatNumber(Number(ref)) }) : t('wallet.points.history.followersAny');
+    case 'first': return t(FIRST_TYPES.includes(ref) ? `wallet.points.history.firstOf.${ref}` : 'wallet.points.history.firstOf.any');
+    case 'quest': return t(base, { title: questTitle(t, i18n, { id: ref }) });
+    default: break;
+  }
+  return t(base, { user: pointsRefUser(it), days: ttlDays });
+}
+
+/** The link under a movement whose ref is a post, an account, a playlist or a community. */
+function RefLink({ link }) {
+  const { t } = useTranslation();
+  if (!link) return null;
+  if (link.type === 'post') return <Link to={`/watch?v=${link.author}/${link.permlink}`}>{t('wallet.points.openVideo')}</Link>;
+  if (link.type === 'user') return <Link to={`/@${link.user}`}>{t('wallet.points.openProfile')}</Link>;
+  if (link.type === 'playlist') return <Link to={`/playlist/${encodeURIComponent(link.id)}`}>{t('wallet.points.openPlaylist')}</Link>;
+  if (link.type === 'community') return <Link to={`/community/${link.id}`}>{t('wallet.points.openCommunity')}</Link>;
+  return null;
+}
 
 /**
  * The channel points movements, as the wallet's Activity list draws them (its
@@ -12,7 +43,7 @@ import Skeleton from './Skeleton';
  * on Hive, "Show more" paging back.
  */
 export default function PointsHistory({ user, ttlDays }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [items, setItems] = useState(null);
   const [next, setNext] = useState(null);
   const [failed, setFailed] = useState(false);
@@ -52,15 +83,25 @@ export default function PointsHistory({ user, ttlDays }) {
         const k = POINTS_KIND[it.kind] || POINTS_KIND.watch;
         const up = it.delta > 0;
         const at = new Date(it.at);
+        // Points spent on promoting a video (or given back when that failed).
+        const promo = pointsPromoteRef(it);
+        const label = promo
+          ? t(it.kind === 'refund' ? 'wallet.points.history.promoteRefund' : 'wallet.points.history.promote', { user: promo.author })
+          : kindLabel(t, i18n, it, k, ttlDays);
+        const link = promo ? null : pointsRefLink(it);
         return (
           <div key={it.id} className="trx__row">
-            <span className={cx('trx__icon', up && 'is-in')}><Icon name={k.icon} size={24} /></span>
+            <span className={cx('trx__icon', up && 'is-in')}><Icon name={promo && it.kind !== 'refund' ? 'campaign' : k.icon} size={24} /></span>
             <div className="trx__body">
-              <b>{t(`wallet.points.history.${k.key}`, { user: it.ref || '', days: ttlDays })}</b>
+              <b>{label}</b>
               <span>
                 <time dateTime={at.toISOString()} title={formatDate(at, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}>
                   {formatTimeAgoCompact(at)}
                 </time>
+                {promo && (
+                  <> · <Link to={`/watch?v=${promo.author}/${promo.permlink}`}>{t('wallet.points.openVideo')}</Link></>
+                )}
+                {link && <> · <RefLink link={link} /></>}
                 {it.tx && (
                   <> · <a href={`https://hivehub.dev/tx/${it.tx}`} target="_blank" rel="noopener noreferrer">{t('wallet.points.onHive')}</a></>
                 )}

@@ -331,7 +331,17 @@
     "yourBalance": "आपका बैलेंस",
     "notEnough": "काफ़ी {{currency}} नहीं है",
     "promoteFor": "{{amount}} {{currency}} में प्रमोट करें",
-    "signNote": "आप अपने वॉलेट (एक्टिव की) से @{{account}} को एक ट्रांसफ़र साइन करेंगे।"
+    "signNote": "आप अपने वॉलेट (एक्टिव की) से @{{account}} को एक ट्रांसफ़र साइन करेंगे।",
+    "pointsOption": "पॉइंट",
+    "pointsAmount_one": "{{n}} पॉइंट",
+    "pointsAmount_other": "{{n}} पॉइंट",
+    "promoteForPoints": "{{amount}} में प्रमोट करें",
+    "notEnoughPoints": "पर्याप्त पॉइंट नहीं हैं",
+    "pointsNote": "आपके 3Speak पॉइंट से भुगतान होगा। आपका वॉलेट एक बार साइन करने को कह सकता है।",
+    "pointsPending": "आपके पॉइंट खर्च हो रहे हैं। इसमें एक मिनट लग सकता है।",
+    "pointsIneligible": "यह वीडियो अभी प्रमोट नहीं किया जा सकता।",
+    "pointsTimeout": "अभी पुष्टि नहीं हुई। कुछ मिनट बाद अपने पॉइंट देखें।",
+    "pointsSignInFailed": "3Speak पॉइंट में साइन इन नहीं हो सका। फिर से कोशिश करें।"
   },
   "wizard": {
     "optionsFailed": "अभी विज्ञापन के विकल्प लोड नहीं हो सके।",

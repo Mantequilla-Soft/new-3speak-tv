@@ -76,7 +76,8 @@
       "pointsHint": "I punti vengono spesi, lo streamer non riceve denaro. Guadagna punti guardando, chattando, facendo stream e inviando boost.",
       "errPointsMinimum": "Un boost in punti è di almeno {min} punti.",
       "errPointsBalance": "Hai solo {points} punti.",
-      "errSignIn": "Accedi per inviare un boost con i punti."
+      "errSignIn": "Accedi per inviare un boost con i punti.",
+      "pointsConfirming": "Conferma dei tuoi punti in corso..."
     }
   },
   "clip": {

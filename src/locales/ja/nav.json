@@ -63,7 +63,9 @@
       "creator": "クリエイターツール",
       "community": "コミュニティ",
       "help": "ヘルプと3Speak"
-    }
+    },
+    "points": "ポイント",
+    "pointsTooltip": "あなたの3Speak Points: ウォレットを開く"
   },
   "notifications": {
     "pushOff": "この端末の通知をオフにしました",

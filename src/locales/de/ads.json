@@ -331,7 +331,17 @@
     "yourBalance": "Dein Guthaben",
     "notEnough": "Nicht genug {{currency}}",
     "promoteFor": "Für {{amount}} {{currency}} bewerben",
-    "signNote": "Du signierst mit deiner Wallet eine Überweisung an @{{account}} (Active Key)."
+    "signNote": "Du signierst mit deiner Wallet eine Überweisung an @{{account}} (Active Key).",
+    "pointsOption": "Punkte",
+    "pointsAmount_one": "{{n}} Punkt",
+    "pointsAmount_other": "{{n}} Punkte",
+    "promoteForPoints": "Für {{amount}} bewerben",
+    "notEnoughPoints": "Nicht genug Punkte",
+    "pointsNote": "Bezahlt mit deinen 3Speak-Punkten. Deine Wallet fragt eventuell einmal nach einer Signatur.",
+    "pointsPending": "Deine Punkte werden ausgegeben. Das kann eine Minute dauern.",
+    "pointsIneligible": "Dieses Video kann gerade nicht beworben werden.",
+    "pointsTimeout": "Noch nicht bestätigt. Sieh in ein paar Minuten nach deinen Punkten.",
+    "pointsSignInFailed": "Anmeldung bei 3Speak-Punkten fehlgeschlagen. Bitte versuche es noch einmal."
   },
   "wizard": {
     "optionsFailed": "Die Werbeoptionen konnten gerade nicht geladen werden.",

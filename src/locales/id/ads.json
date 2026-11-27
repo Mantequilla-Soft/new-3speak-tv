@@ -326,7 +326,16 @@
     "yourBalance": "Saldomu",
     "notEnough": "{{currency}} tidak cukup",
     "promoteFor": "Promosikan seharga {{amount}} {{currency}}",
-    "signNote": "Kamu akan menandatangani transfer ke @{{account}} dengan dompetmu (active key)."
+    "signNote": "Kamu akan menandatangani transfer ke @{{account}} dengan dompetmu (active key).",
+    "pointsOption": "Poin",
+    "pointsAmount_other": "{{n}} poin",
+    "promoteForPoints": "Promosikan dengan {{amount}}",
+    "notEnoughPoints": "Poin tidak cukup",
+    "pointsNote": "Dibayar dengan Poin 3Speak kamu. Dompetmu mungkin meminta tanda tangan sekali.",
+    "pointsPending": "Poinmu sedang dipakai. Ini bisa memakan waktu satu menit.",
+    "pointsIneligible": "Video ini tidak bisa dipromosikan sekarang.",
+    "pointsTimeout": "Belum dikonfirmasi. Cek poinmu dalam beberapa menit.",
+    "pointsSignInFailed": "Tidak bisa masuk ke Poin 3Speak. Silakan coba lagi."
   },
   "wizard": {
     "optionsFailed": "Opsi iklan tidak dapat dimuat saat ini.",

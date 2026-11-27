@@ -75,7 +75,8 @@
       "pointsHint": "Points are spent, the streamer gets no money. Earn points by watching, chatting, streaming and boosting.",
       "errPointsMinimum": "A points boost is at least {min} points.",
       "errPointsBalance": "You only have {points} points.",
-      "errSignIn": "Sign in to boost with points."
+      "errSignIn": "Sign in to boost with points.",
+      "pointsConfirming": "Confirming your points..."
     }
   },
   "clip": {

@@ -725,13 +725,19 @@ const HomeGrouped = () => {
   // section is prefixed with them and deduped, so a promoted video that also
   // shows up organically further down that feed isn't rendered twice. The
   // warm-up videos are mixed in by the caller (placeByDate / mixWarmup).
+  // `first`: the promoted video the checker put at Discover #1. It rotates
+  // between the promotions on every load, so it leads that section.
   const leadWithPromoted = useCallback(
-    (videos) => {
-      const lead = promotedData || [];
+    (videos, first = null) => {
+      const lead = first ? [first, ...(promotedData || [])] : (promotedData || []);
       return lead.length ? deduplicateVideos([...lead, ...(videos || [])]) : (videos || []);
     },
     [promotedData],
   );
+  const discoverPick = useMemo(() => {
+    const top = discoverQ.data?.pages?.[0]?.[0];
+    return top?.promoted ? top : null;
+  }, [discoverQ.data]);
   // Warm-up videos spread through a ranked feed (lib/spreadIn.js), at spots
   // that stay put while the page is open (the feed's session seed).
   const warmupSeed = getFeedSeed();
@@ -780,7 +786,7 @@ const HomeGrouped = () => {
 
   // ── Build the section list (natural order), then apply the user's saved order ──
   const baseSections = [
-    { key: 'discover', title: 'Discover', label: t('feeds.home.sections.discover'), tab: t('feeds.home.sections.discover'), videos: withFeatured(withLive(liveAll, leadWithPromoted(mixWarmup(discoverData, discoverQ.hasNextPage === false)))), isLoading: discoverLoading, priority: true },
+    { key: 'discover', title: 'Discover', label: t('feeds.home.sections.discover'), tab: t('feeds.home.sections.discover'), videos: withFeatured(withLive(liveAll, leadWithPromoted(mixWarmup(discoverData, discoverQ.hasNextPage === false), discoverPick))), isLoading: discoverLoading, priority: true },
     { key: 'home', title: authenticated ? 'Follow Feed' : 'Home Feed', label: authenticated ? t('feeds.home.sections.follow') : t('feeds.home.sections.home'), tab: authenticated ? t('feeds.home.tabFollowing') : t('common.nav.trending'), videos: withLive(authenticated ? liveFollowing : liveAll, authenticated ? leadWithPromoted(placeByDate(homeData, followedWarmupVideos, homeQ.hasNextPage === false)) : leadWithPromoted(mixWarmup(homeData, homeQ.hasNextPage === false))), linkTo: authenticated ? '/follow-feed' : '/home-feed', isLoading: homeLoading, priority: true },
     { key: 'new', title: 'New Content', label: t('feeds.home.sections.new'), tab: t('common.nav.new'), videos: withLive(liveAll, leadWithPromoted(placeByDate(newContentData, warmupVideos, newQ.hasNextPage === false))), linkTo: '/new', isLoading: newContentLoading },
   ];

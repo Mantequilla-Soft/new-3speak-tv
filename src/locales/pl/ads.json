@@ -341,7 +341,19 @@
     "yourBalance": "Twoje saldo",
     "notEnough": "Za mało {{currency}}",
     "promoteFor": "Promuj za {{amount}} {{currency}}",
-    "signNote": "Podpiszesz w portfelu przelew do @{{account}} (klucz active)."
+    "signNote": "Podpiszesz w portfelu przelew do @{{account}} (klucz active).",
+    "pointsOption": "Punkty",
+    "pointsAmount_one": "{{n}} punkt",
+    "pointsAmount_few": "{{n}} punkty",
+    "pointsAmount_many": "{{n}} punktów",
+    "pointsAmount_other": "{{n}} punktu",
+    "promoteForPoints": "Promuj za {{amount}}",
+    "notEnoughPoints": "Za mało punktów",
+    "pointsNote": "Płacisz punktami 3Speak. Portfel może raz poprosić o podpis.",
+    "pointsPending": "Wydajemy Twoje punkty. To może potrwać minutę.",
+    "pointsIneligible": "Tego filmu nie można teraz promować.",
+    "pointsTimeout": "Jeszcze niepotwierdzone. Sprawdź punkty za kilka minut.",
+    "pointsSignInFailed": "Nie udało się zalogować do punktów 3Speak. Spróbuj ponownie."
   },
   "wizard": {
     "optionsFailed": "Nie udało się teraz wczytać opcji reklam.",

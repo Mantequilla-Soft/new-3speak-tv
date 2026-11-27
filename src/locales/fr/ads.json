@@ -336,7 +336,18 @@
     "yourBalance": "Votre solde",
     "notEnough": "Pas assez de {{currency}}",
     "promoteFor": "Promouvoir pour {{amount}} {{currency}}",
-    "signNote": "Vous signerez un transfert vers @{{account}} avec votre portefeuille (clé active)."
+    "signNote": "Vous signerez un transfert vers @{{account}} avec votre portefeuille (clé active).",
+    "pointsOption": "Points",
+    "pointsAmount_one": "{{n}} point",
+    "pointsAmount_many": "{{n}} points",
+    "pointsAmount_other": "{{n}} points",
+    "promoteForPoints": "Promouvoir pour {{amount}}",
+    "notEnoughPoints": "Pas assez de points",
+    "pointsNote": "Payé avec vos points 3Speak. Votre portefeuille peut vous demander de signer une fois.",
+    "pointsPending": "Vos points sont en cours de dépense. Cela peut prendre une minute.",
+    "pointsIneligible": "Cette vidéo ne peut pas être promue pour le moment.",
+    "pointsTimeout": "Pas encore confirmé. Vérifiez vos points dans quelques minutes.",
+    "pointsSignInFailed": "Connexion aux points 3Speak impossible. Veuillez réessayer."
   },
   "wizard": {
     "optionsFailed": "Impossible de charger les options de pub pour le moment.",

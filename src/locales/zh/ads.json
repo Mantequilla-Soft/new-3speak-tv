@@ -326,7 +326,16 @@
     "yourBalance": "你的余额",
     "notEnough": "{{currency}} 不足",
     "promoteFor": "支付 {{amount}} {{currency}} 推广",
-    "signNote": "你需要用钱包（active 密钥）签署一笔转给 @{{account}} 的转账。"
+    "signNote": "你需要用钱包（active 密钥）签署一笔转给 @{{account}} 的转账。",
+    "pointsOption": "积分",
+    "pointsAmount_other": "{{n}} 积分",
+    "promoteForPoints": "花费 {{amount}} 推广",
+    "notEnoughPoints": "积分不足",
+    "pointsNote": "使用你的 3Speak 积分支付。钱包可能会请你签名一次。",
+    "pointsPending": "正在使用你的积分，可能需要一分钟。",
+    "pointsIneligible": "这个视频现在无法推广。",
+    "pointsTimeout": "尚未确认。请几分钟后查看你的积分。",
+    "pointsSignInFailed": "无法登录 3Speak 积分，请重试。"
   },
   "wizard": {
     "optionsFailed": "暂时无法加载广告选项。",

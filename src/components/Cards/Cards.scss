@@ -419,6 +419,8 @@ html[data-card-size="large"] .card-container .card {
   &.card-new-badge { --pill-tone: var(--accent); text-transform: uppercase; }
   // A stream recording (VOD): light words on the scrim, quieter than LIVE
   &.card-vod-badge { --pill-tone: var(--on-media); }
+  // Paid promotion: accent words on the scrim, like NEW
+  &.card-promoted-badge { --pill-tone: var(--accent); }
   // A page-wide label (49c "FIRST"): solid cyan
   &.card-page-badge { background: var(--cyan); color: var(--bg); text-transform: uppercase; }
 }

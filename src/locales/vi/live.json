@@ -74,7 +74,8 @@
       "pointsHint": "Điểm sẽ bị trừ, người phát không nhận được tiền. Kiếm điểm bằng cách xem, trò chuyện, phát trực tiếp và gửi boost.",
       "errPointsMinimum": "Boost bằng điểm tối thiểu là {min} điểm.",
       "errPointsBalance": "Bạn chỉ có {points} điểm.",
-      "errSignIn": "Đăng nhập để gửi boost bằng điểm."
+      "errSignIn": "Đăng nhập để gửi boost bằng điểm.",
+      "pointsConfirming": "Đang xác nhận điểm của bạn..."
     }
   },
   "clip": {

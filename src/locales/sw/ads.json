@@ -331,7 +331,17 @@
     "yourBalance": "Salio lako",
     "notEnough": "{{currency}} haitoshi",
     "promoteFor": "Tangaza kwa {{amount}} {{currency}}",
-    "signNote": "Utasaini uhamisho kwenda @{{account}} kwa pochi yako (active key)."
+    "signNote": "Utasaini uhamisho kwenda @{{account}} kwa pochi yako (active key).",
+    "pointsOption": "Pointi",
+    "pointsAmount_one": "pointi {{n}}",
+    "pointsAmount_other": "pointi {{n}}",
+    "promoteForPoints": "Tangaza kwa {{amount}}",
+    "notEnoughPoints": "Pointi hazitoshi",
+    "pointsNote": "Unalipa kwa pointi zako za 3Speak. Pochi yako inaweza kukuomba kusaini mara moja.",
+    "pointsPending": "Tunatumia pointi zako. Hii inaweza kuchukua dakika moja.",
+    "pointsIneligible": "Video hii haiwezi kutangazwa kwa sasa.",
+    "pointsTimeout": "Bado haijathibitishwa. Angalia pointi zako baada ya dakika chache.",
+    "pointsSignInFailed": "Imeshindwa kuingia kwenye pointi za 3Speak. Tafadhali jaribu tena."
   },
   "wizard": {
     "optionsFailed": "Hatukuweza kupakia chaguo za matangazo kwa sasa.",

@@ -63,7 +63,9 @@
       "creator": "Alat kreator",
       "community": "Komunitas",
       "help": "Bantuan dan 3Speak"
-    }
+    },
+    "points": "Poin",
+    "pointsTooltip": "3Speak Points kamu: buka dompet"
   },
   "notifications": {
     "pushOff": "Notifikasi dimatikan untuk perangkat ini",

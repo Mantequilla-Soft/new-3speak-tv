@@ -177,6 +177,17 @@ describe('a grid of video cards', () => {
     expect(within(card('Title on-air')).queryByText('VOD')).not.toBeInTheDocument()
   })
 
+  it('labels a promoted video, like the Discover #1 card, and no other', () => {
+    mount({
+      videos: [
+        video('badadib', 'promo', { promoted: true, promotedUntil: '2026-12-01T00:00:00Z' }),
+        video('badadib', 'organic'),
+      ],
+    })
+    expect(within(card('Title promo')).getByText('Promoted')).toBeInTheDocument()
+    expect(within(card('Title organic')).queryByText('Promoted')).not.toBeInTheDocument()
+  })
+
   it('a scheduled video opens in scheduled mode', () => {
     mount({ videos: [video('badadib', 'later', { _scheduled: true })] })
     expect(card('Title later')).toHaveAttribute('href', '/@badadib/later?scheduled=1')

@@ -331,7 +331,17 @@
     "yourBalance": "Bakiyen",
     "notEnough": "Yeterli {{currency}} yok",
     "promoteFor": "{{amount}} {{currency}} karşılığında öne çıkar",
-    "signNote": "Cüzdanınla (active anahtar) @{{account}} hesabına bir transfer imzalayacaksın."
+    "signNote": "Cüzdanınla (active anahtar) @{{account}} hesabına bir transfer imzalayacaksın.",
+    "pointsOption": "Puan",
+    "pointsAmount_one": "{{n}} puan",
+    "pointsAmount_other": "{{n}} puan",
+    "promoteForPoints": "{{amount}} karşılığında öne çıkar",
+    "notEnoughPoints": "Yeterli puan yok",
+    "pointsNote": "3Speak puanlarınla ödenir. Cüzdanın bir kez imza isteyebilir.",
+    "pointsPending": "Puanların harcanıyor. Bu bir dakika sürebilir.",
+    "pointsIneligible": "Bu video şu anda öne çıkarılamaz.",
+    "pointsTimeout": "Henüz onaylanmadı. Birkaç dakika sonra puanlarına bak.",
+    "pointsSignInFailed": "3Speak puanlarına giriş yapılamadı. Lütfen tekrar dene."
   },
   "wizard": {
     "optionsFailed": "Reklam seçenekleri şu an yüklenemedi.",

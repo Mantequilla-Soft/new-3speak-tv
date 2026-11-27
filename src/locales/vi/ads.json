@@ -326,7 +326,16 @@
     "yourBalance": "Số dư của bạn",
     "notEnough": "Không đủ {{currency}}",
     "promoteFor": "Quảng bá với giá {{amount}} {{currency}}",
-    "signNote": "Bạn sẽ ký một giao dịch chuyển tiền cho @{{account}} bằng ví của mình (active key)."
+    "signNote": "Bạn sẽ ký một giao dịch chuyển tiền cho @{{account}} bằng ví của mình (active key).",
+    "pointsOption": "Điểm",
+    "pointsAmount_other": "{{n}} điểm",
+    "promoteForPoints": "Quảng bá với {{amount}}",
+    "notEnoughPoints": "Không đủ điểm",
+    "pointsNote": "Thanh toán bằng điểm 3Speak của bạn. Ví có thể yêu cầu bạn ký một lần.",
+    "pointsPending": "Đang dùng điểm của bạn. Việc này có thể mất một phút.",
+    "pointsIneligible": "Hiện không thể quảng bá video này.",
+    "pointsTimeout": "Chưa được xác nhận. Hãy kiểm tra điểm của bạn sau vài phút.",
+    "pointsSignInFailed": "Không thể đăng nhập vào điểm 3Speak. Vui lòng thử lại."
   },
   "wizard": {
     "optionsFailed": "Hiện chúng tôi không thể tải các tùy chọn quảng cáo.",

@@ -331,7 +331,17 @@
     "yourBalance": "আপনার ব্যালেন্স",
     "notEnough": "যথেষ্ট {{currency}} নেই",
     "promoteFor": "{{amount}} {{currency}}-এ প্রমোট করুন",
-    "signNote": "আপনি আপনার ওয়ালেট (active key) দিয়ে @{{account}}-এ একটি ট্রান্সফার সাইন করবেন।"
+    "signNote": "আপনি আপনার ওয়ালেট (active key) দিয়ে @{{account}}-এ একটি ট্রান্সফার সাইন করবেন।",
+    "pointsOption": "পয়েন্ট",
+    "pointsAmount_one": "{{n}} পয়েন্ট",
+    "pointsAmount_other": "{{n}} পয়েন্ট",
+    "promoteForPoints": "{{amount}} দিয়ে প্রমোট করুন",
+    "notEnoughPoints": "যথেষ্ট পয়েন্ট নেই",
+    "pointsNote": "আপনার 3Speak পয়েন্ট দিয়ে পরিশোধ হবে। আপনার ওয়ালেট একবার সই করতে বলতে পারে।",
+    "pointsPending": "আপনার পয়েন্ট খরচ হচ্ছে। এতে এক মিনিট লাগতে পারে।",
+    "pointsIneligible": "এই ভিডিওটি এখন প্রমোট করা যাবে না।",
+    "pointsTimeout": "এখনও নিশ্চিত হয়নি। কয়েক মিনিট পরে আপনার পয়েন্ট দেখুন।",
+    "pointsSignInFailed": "3Speak পয়েন্টে সাইন ইন করা গেল না। আবার চেষ্টা করুন।"
   },
   "wizard": {
     "optionsFailed": "এই মুহূর্তে বিজ্ঞাপনের অপশন লোড করা যায়নি।",

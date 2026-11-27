@@ -5,6 +5,26 @@
 .points-card {
   &__balance { @include v2.mono(18, 700); color: var(--cyan); }
 
+  &__token { margin-top: 8px; font-size: 12px; color: var(--muted); }
+  &__note { margin: 6px 0 0; font-size: 12px; color: var(--muted); }
+
+  // What you can do with your points: a button where the balance covers it.
+  &__spend {
+    margin-top: 12px;
+    h4 { margin: 0; font-size: 13px; font-weight: 700; color: var(--text); }
+    ul { margin: 8px 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    li { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 12px; }
+  }
+  &__spend-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+    > span:first-child { color: var(--text); }
+    .num { color: var(--muted); font-weight: 700; }
+  }
+  &__spend-missing { flex-shrink: 0; color: var(--muted); text-align: right; }
+
   &__earn {
     margin-top: 12px;
     summary {
@@ -17,11 +37,52 @@
       &::after { content: " ▾"; color: var(--muted); }
     }
     &[open] summary::after { content: " ▴"; }
-    dl { margin: 8px 0 0; display: flex; flex-direction: column; gap: 6px; }
+    dl { margin: 6px 0 0; display: flex; flex-direction: column; gap: 6px; }
     dl > div { display: flex; justify-content: space-between; gap: 8px; font-size: 12px; }
-    dt { color: var(--muted); }
-    dd { margin: 0; font-weight: 700; color: var(--text); }
+    dt { color: var(--muted); min-width: 0; }
+    dd { margin: 0; font-weight: 700; color: var(--text); text-align: right; flex-shrink: 0; max-width: 55%; }
+  }
+
+  // One group of ways to earn (habits, watching and listening, ...).
+  &__group {
+    margin-top: 12px;
+    h4 {
+      margin: 0;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
   }
 
   &__more { margin-top: 12px; width: 100%; justify-content: center; }
+}
+
+// The weekly quests (PointsQuests.jsx): a progress bar each, a check when done.
+.points-quests {
+  &__list { margin: 12px 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 12px; }
+  &__row {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    &.is-done .points-quests__title { color: var(--muted); }
+  }
+  &__line { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+  &__title { flex: 1; min-width: 0; color: var(--text); font-weight: 700; }
+  &__check { color: var(--cyan); flex-shrink: 0; }
+  &__pts { font-weight: 700; color: var(--cyan); flex-shrink: 0; }
+  &__count { font-size: 12px; color: var(--muted); }
+}
+
+// Double points: the wallet banner and the one-line hint (PointsDouble.jsx).
+// In the wallet side column; on a phone it spans the whole row.
+.points-double { grid-column: 1 / -1; }
+.points-double-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--cyan);
 }

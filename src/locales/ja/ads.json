@@ -326,7 +326,16 @@
     "yourBalance": "残高",
     "notEnough": "{{currency}} が足りません",
     "promoteFor": "{{amount}} {{currency}} でプロモーション",
-    "signNote": "ウォレット（アクティブキー）で @{{account}} への送金に署名します。"
+    "signNote": "ウォレット（アクティブキー）で @{{account}} への送金に署名します。",
+    "pointsOption": "ポイント",
+    "pointsAmount_other": "{{n}} ポイント",
+    "promoteForPoints": "{{amount}}でプロモーション",
+    "notEnoughPoints": "ポイントが足りません",
+    "pointsNote": "3Speak ポイントで支払います。ウォレットで一度署名を求められることがあります。",
+    "pointsPending": "ポイントを使用中です。1分ほどかかることがあります。",
+    "pointsIneligible": "この動画は今はプロモーションできません。",
+    "pointsTimeout": "まだ確認されていません。数分後にポイントを確認してください。",
+    "pointsSignInFailed": "3Speak ポイントにサインインできませんでした。もう一度お試しください。"
   },
   "wizard": {
     "optionsFailed": "現在、広告のオプションを読み込めません。",

@@ -75,7 +75,8 @@
       "pointsHint": "Punten worden uitgegeven, de streamer krijgt geen geld. Verdien punten door te kijken, te chatten, te streamen en te boosten.",
       "errPointsMinimum": "Een puntenboost is minstens {min} punten.",
       "errPointsBalance": "Je hebt maar {points} punten.",
-      "errSignIn": "Log in om met punten te boosten."
+      "errSignIn": "Log in om met punten te boosten.",
+      "pointsConfirming": "Je punten worden bevestigd..."
     }
   },
   "clip": {

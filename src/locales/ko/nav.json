@@ -63,7 +63,9 @@
       "creator": "크리에이터 도구",
       "community": "커뮤니티",
       "help": "도움말 및 3Speak"
-    }
+    },
+    "points": "포인트",
+    "pointsTooltip": "내 3Speak Points: 지갑 열기"
   },
   "notifications": {
     "pushOff": "이 기기의 알림을 껐어요",

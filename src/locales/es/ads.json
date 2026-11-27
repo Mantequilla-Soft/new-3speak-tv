@@ -336,7 +336,18 @@
     "yourBalance": "Tu saldo",
     "notEnough": "No tienes suficiente {{currency}}",
     "promoteFor": "Promocionar por {{amount}} {{currency}}",
-    "signNote": "Firmarás una transferencia a @{{account}} con tu billetera (clave activa)."
+    "signNote": "Firmarás una transferencia a @{{account}} con tu billetera (clave activa).",
+    "pointsOption": "Puntos",
+    "pointsAmount_one": "{{n}} punto",
+    "pointsAmount_many": "{{n}} puntos",
+    "pointsAmount_other": "{{n}} puntos",
+    "promoteForPoints": "Promocionar por {{amount}}",
+    "notEnoughPoints": "No tienes suficientes puntos",
+    "pointsNote": "Se paga con tus puntos de 3Speak. Tu billetera puede pedirte firmar una vez.",
+    "pointsPending": "Gastando tus puntos. Puede tardar un minuto.",
+    "pointsIneligible": "Este video no se puede promocionar ahora.",
+    "pointsTimeout": "Aún no está confirmado. Revisa tus puntos en unos minutos.",
+    "pointsSignInFailed": "No se pudo iniciar sesión en los puntos de 3Speak. Inténtalo de nuevo."
   },
   "wizard": {
     "optionsFailed": "No pudimos cargar las opciones de anuncios en este momento.",

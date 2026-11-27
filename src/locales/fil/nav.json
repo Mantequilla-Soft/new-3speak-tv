@@ -63,7 +63,9 @@
       "creator": "Mga tool ng creator",
       "community": "Komunidad",
       "help": "Tulong at 3Speak"
-    }
+    },
+    "points": "Points",
+    "pointsTooltip": "Ang iyong 3Speak Points: buksan ang wallet"
   },
   "notifications": {
     "pushOff": "Naka-off ang mga notification sa device na ito",

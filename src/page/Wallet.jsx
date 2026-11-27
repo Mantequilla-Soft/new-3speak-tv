@@ -10,6 +10,8 @@ import ReceiveDialog from '../components/Wallet/ReceiveDialog';
 import WalletOpModal from '../components/Wallet/WalletOpModal';
 import WalletPending from '../components/Wallet/WalletPending';
 import PointsCard from '../components/Wallet/PointsCard';
+import PointsQuests from '../components/Wallet/PointsQuests';
+import PointsDoubleBanner from '../components/Wallet/PointsDouble';
 import { usePointsInfo } from '../components/Wallet/channelPoints';
 import { loadWalletState } from '../lib/walletOps';
 import { toastIn } from '../utils/toast';
@@ -367,7 +369,10 @@ function Wallet() {
             <TrxHistory user={user} onLoaded={onLoaded} points={pointsInfo} filter={activityFilter} onFilter={setActivityFilter} />
             <aside className="wallet-v2__side">
               {ops && <WalletPending user={user} state={ops} own={own} onChanged={refreshAll} />}
+              {pointsInfo && <PointsDoubleBanner />}
               <PointsCard info={pointsInfo} own={own} onShowHistory={showPointsHistory} />
+              {/* The weekly quests are the signed-in account's own. */}
+              {own && pointsInfo && <PointsQuests user={user} />}
               <div className="wallet-v2__card">
                 <div className="wallet-v2__card-head">
                   <b>{t('wallet.earnings.title')}</b>

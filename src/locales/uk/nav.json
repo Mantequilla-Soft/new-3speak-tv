@@ -63,7 +63,9 @@
       "creator": "Інструменти автора",
       "community": "Спільнота",
       "help": "Допомога і 3Speak"
-    }
+    },
+    "points": "Бали",
+    "pointsTooltip": "Ваші 3Speak Points: відкрити гаманець"
   },
   "notifications": {
     "pushOff": "Сповіщення на цьому пристрої вимкнено",

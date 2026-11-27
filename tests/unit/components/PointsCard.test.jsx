@@ -32,7 +32,7 @@ beforeEach(() => {
       return { ok: true, json: async () => ({ items: [row('c', -2500, 'spend'), row('d', -700, 'expire')], next: null }) }
     }
     if (url.includes('/points/history')) {
-      return { ok: true, json: async () => ({ items: [row('a', 100, 'watch', { tx: 'abc123' }), row('b', 500, 'raid', { ref: 'fan2' })], next: 1795000000000 }) }
+      return { ok: true, json: async () => ({ items: [row('a', 100, 'watch', { tx: 'abc123' }), row('b', 500, 'raid', { ref: 'fan2' }), row('e', 100, 'remix', { ref: 'bob/some-video' }), row('f', 1, 'login'), row('g', 100, 'rank', { ref: '2026-11:streams' })], next: 1795000000000 }) }
     }
     return { ok: false, json: async () => ({}) }
   }))
@@ -53,6 +53,24 @@ describe('PointsCard', () => {
     renderWithProviders(<PointsCard info={info} own onShowHistory={onShowHistory} />)
     fireEvent.click(screen.getByRole('button', { name: 'Points history' }))
     expect(onShowHistory).toHaveBeenCalled()
+  })
+
+  it('lists the award earnings and the 3SP on Magi when the server has them', () => {
+    const token = { contract: 'vsc1x', netId: 'vsc-mainnet', symbol: '3SP', onChain: 3000, unminted: 250 }
+    const earn = { ...info.earn, login: 1, rank: 100, remix: 100, remixPerDay: 3 }
+    renderWithProviders(<PointsCard info={{ ...info, earn, token }} own />)
+    expect(screen.getByText('Signing in, once a day')).toBeTruthy()
+    expect(screen.getByText('1 a day')).toBeTruthy()
+    expect(screen.getByText('100 per board')).toBeTruthy()
+    expect(screen.getByText('100 each, up to 3 a day')).toBeTruthy()
+    expect(screen.getByText(/3,000 of them are on Magi as 3SP\./)).toBeTruthy()
+    expect(screen.getByText(/250 more arrive within the hour\./)).toBeTruthy()
+  })
+
+  it('no award rows or 3SP line from an older server', () => {
+    renderWithProviders(<PointsCard info={info} own />)
+    expect(screen.queryByText('Signing in, once a day')).toBeNull()
+    expect(screen.queryByText(/on Magi/)).toBeNull()
   })
 
   it('draws nothing without points info', () => {
@@ -93,6 +111,10 @@ describe('Activity > Points', () => {
     renderWithProviders(<TrxHistory user="badadib" points={info} filter="points" onFilter={() => {}} />)
     expect(await screen.findByText('Watched streams')).toBeTruthy()
     expect(screen.getByText('Raided @fan2')).toBeTruthy()
+    // A remix names the source post's author; login and rank name nobody.
+    expect(screen.getByText('Remix or reaction of @bob')).toBeTruthy()
+    expect(screen.getByText('Signed in')).toBeTruthy()
+    expect(screen.getByText('#1 on a leaderboard')).toBeTruthy()
     expect(screen.getByText('+500')).toBeTruthy()
     expect(screen.getByRole('link', { name: 'on Hive' }).getAttribute('href')).toBe('https://hivehub.dev/tx/abc123')
     fireEvent.click(screen.getByRole('button', { name: 'Show more' }))

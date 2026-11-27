@@ -6,7 +6,6 @@ import aioha, {
   KeyTypes,
   Providers,
 } from '../hive-api/aioha'
-import { EMBED_API_KEY } from '../utils/config'
 
 // preview-3speak's own backend (broadcast/manteauth/sign). Same base aioha uses.
 const THREESPEAK_API = import.meta.env.VITE_THREESPEAK_API || '/api'
@@ -58,9 +57,10 @@ export function chatAuthUnavailableReason() {
 
 // Sign a chat challenge (a UUID) via @threespeak through the preview backend, so
 // the background service signs for ALL logins — no wallet popup. Backend auth:
-// HiveSigner → Bearer token; ManteAuth → httpOnly cookie; wallet → public app
-// key + claimed username (same trust as /api/broadcast). Throws on failure so
-// the caller may fall back to a client-side signature.
+// HiveSigner → Bearer token; ManteAuth → httpOnly cookie; wallet → the wallet
+// session cookie (the username only says which signed-in account is meant; the
+// public app key identifies nobody). Throws on failure so the caller may fall
+// back to a client-side signature.
 async function signChatChallengeViaThreespeak(challenge, username) {
   const provider = getCurrentProvider()
   const headers = { 'Content-Type': 'application/json' }
@@ -70,7 +70,6 @@ async function signChatChallengeViaThreespeak(challenge, username) {
     if (!token) throw new Error('HiveSigner session expired — reconnect and try again')
     headers.Authorization = `Bearer ${token}`
   } else if (!isManteAuthLogin()) {
-    headers['X-API-Key'] = EMBED_API_KEY
     body.username = username
   }
   const res = await fetch(`${THREESPEAK_API}/snapie-chat/sign-challenge`, {

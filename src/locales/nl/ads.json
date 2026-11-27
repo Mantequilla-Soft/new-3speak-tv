@@ -331,7 +331,17 @@
     "yourBalance": "Je saldo",
     "notEnough": "Niet genoeg {{currency}}",
     "promoteFor": "Promoten voor {{amount}} {{currency}}",
-    "signNote": "Je ondertekent een overboeking naar @{{account}} met je wallet (active key)."
+    "signNote": "Je ondertekent een overboeking naar @{{account}} met je wallet (active key).",
+    "pointsOption": "Punten",
+    "pointsAmount_one": "{{n}} punt",
+    "pointsAmount_other": "{{n}} punten",
+    "promoteForPoints": "Promoot voor {{amount}}",
+    "notEnoughPoints": "Niet genoeg punten",
+    "pointsNote": "Betaald met je 3Speak-punten. Je wallet kan je één keer vragen om te ondertekenen.",
+    "pointsPending": "Je punten worden uitgegeven. Dit kan een minuut duren.",
+    "pointsIneligible": "Deze video kan nu niet gepromoot worden.",
+    "pointsTimeout": "Nog niet bevestigd. Kijk over een paar minuten naar je punten.",
+    "pointsSignInFailed": "Inloggen bij 3Speak-punten is mislukt. Probeer het opnieuw."
   },
   "wizard": {
     "optionsFailed": "We konden de advertentieopties nu niet laden.",

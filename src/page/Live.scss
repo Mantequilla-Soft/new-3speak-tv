@@ -37,6 +37,9 @@
   @include v2.mobile { height: 48px; border-radius: v2.radius-for(48); font-size: 14px; padding: 0 12px 0 16px; gap: 12px; }
 }
 
+// Double points while they run (PointsDoubleHint), one line under the title.
+.live-page-double { align-self: flex-start; margin-top: 8px; }
+
 // The tab track sits on the page, so it is a surface pill (radius 16).
 .live-page-tabs.v2-seg {
   align-self: flex-start;

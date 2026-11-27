@@ -22,6 +22,8 @@ import { usePwaInstall } from '../../utils/pwaInstall';
 import { toastIn } from '../../utils/toast';
 import { isTranslatorName } from '../../lib/translatorApi';
 import hiveMark from '../../assets/image/hive-mark.png';
+import { usePointsInfo } from '../Wallet/channelPoints';
+import { formatNumber } from '../../i18n';
 
 // Opened from the menu's Settings row: not part of the first download.
 const SettingsModal = lazy(() => import('../SettingsModal/SettingsModal'));
@@ -55,6 +57,8 @@ function ProfileNav({ isVisible, pinned = true, leaving = false, hoverProps, onc
   const location = useLocation();
   const navigate = useNavigate()
   const { user } = useAppStore();
+  // The 3Speak Points balance beside the meters, read while the menu shows.
+  const pointsInfo = usePointsInfo(isVisible ? user : null);
   const effectiveTheme = useAppStore((s) => s.getEffectiveTheme?.() || s.theme);
   const setTheme = useAppStore((s) => s.setTheme);
   const chat = useChat();
@@ -321,7 +325,7 @@ function ProfileNav({ isVisible, pinned = true, leaving = false, hoverProps, onc
           )}
 
           {!isIncubating && (
-            <div className="pn-meters">
+            <div className={`pn-meters${pointsInfo ? ' has-points' : ''}`}>
               <div className="pn-meter" title={t('nav.profile.vpTooltip')}>
                 <div className="pn-meter-head">
                   <span className="pn-meter-label">{t('nav.profile.votingPower')}</span>
@@ -336,6 +340,12 @@ function ProfileNav({ isVisible, pinned = true, leaving = false, hoverProps, onc
                 </div>
                 <div className="pn-meter-track"><div className="pn-meter-fill" style={{ width: `${Math.min(100, Number(rc) || 0)}%` }} /></div>
               </div>
+              {pointsInfo && (
+                <Link to="/wallet" className="pn-meter is-points" title={t('nav.profile.pointsTooltip')} onClick={onclose}>
+                  <span className="pn-meter-label">{t('nav.profile.points')}</span>
+                  <strong className="num">{formatNumber(pointsInfo.balance)}</strong>
+                </Link>
+              )}
             </div>
           )}
 

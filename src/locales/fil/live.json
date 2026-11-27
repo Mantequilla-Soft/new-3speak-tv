@@ -75,7 +75,8 @@
       "pointsHint": "Nagagastos ang points, walang natatanggap na pera ang streamer. Kumita ng points sa panonood, pag-chat, pag-stream at pagpapadala ng boost.",
       "errPointsMinimum": "Ang boost gamit ang points ay hindi bababa sa {min} points.",
       "errPointsBalance": "{points} points lang ang mayroon ka.",
-      "errSignIn": "Mag-sign in para mag-boost gamit ang points."
+      "errSignIn": "Mag-sign in para mag-boost gamit ang points.",
+      "pointsConfirming": "Kinukumpirma ang iyong points..."
     }
   },
   "clip": {

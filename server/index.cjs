@@ -82,13 +82,17 @@ const SESSION_SIGNING_SECRET = process.env.SESSION_SIGNING_SECRET
     ? crypto.createHash('sha256').update('3speak-wallet-session|' + MANTEAUTH_CLIENT_SECRET).digest('hex')
     : '')
 
-// Legacy app-key auth on /api/broadcast and the delegated signers: the PUBLIC app
-// key + a CLAIMED username, so anyone holding the key could act as any account
-// that granted @threespeak. OFF by default wherever wallet sessions work (the
-// secure path, see /api/auth/wallet/*); the frontend falls back to minting a
-// session on the 401. ALLOW_APPKEY_AUTH=1 turns it back on, =0 forces it off.
+// Legacy app-key auth on /api/broadcast: the PUBLIC app key + a CLAIMED
+// username, so anyone holding the key could act as any account that granted
+// @threespeak. OFF unless ALLOW_APPKEY_AUTH=1 is set on purpose (a rollback
+// switch for broadcasting only). It no longer turns itself on when the wallet
+// session secret is missing: a lost secret now means "wallet logins sign in
+// again", never "anyone can act as anyone". The delegated signers (OpenPods,
+// Snapie chat, ad signatures) never take the app key, whatever this says.
 const ALLOW_APPKEY_AUTH = process.env.ALLOW_APPKEY_AUTH === '1'
-  || (process.env.ALLOW_APPKEY_AUTH !== '0' && !SESSION_SIGNING_SECRET)
+if (ALLOW_APPKEY_AUTH) {
+  console.warn('[appkey-auth] ALLOW_APPKEY_AUTH=1: /api/broadcast accepts the public app key + a claimed username')
+}
 
 // Allowed origins for CORS — only the trusted 3speak frontends
 const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || 'https://3speak.tv,https://3speak.okinoko.io,http://localhost:5173')
@@ -1548,7 +1552,10 @@ app.post('/api/broadcast', broadcastLimiter, async (req, res) => {
         const postingOpsOnly = ops.length > 0 && ops.every(
           ([t]) => t === 'comment' || t === 'comment_options' || t === 'custom_json' || t === 'vote' || t === 'account_update2'
         )
-        if (claimed && !postingOpsOnly) {
+        // Never a Magi contract call (3Speak Points burns and transfers): with
+        // a claimed name that would spend someone else's points.
+        const contractCall = ops.some(([t, o]) => t === 'custom_json' && /^vsc\./.test(String(o?.id || '')))
+        if (claimed && (!postingOpsOnly || contractCall)) {
           return res.status(403).json({ error: 'Operation not allowed for app-key auth' })
         }
         if (claimed) {
@@ -1591,17 +1598,16 @@ function hiveRejection(err) {
 // how /api/broadcast already acts for users on 3speak.
 //
 // SECURITY — these are signing oracles for @threespeak's posting key, so:
-//   • username is resolved from a server-side credential where possible
-//     (ManteAuth cookie / verified HiveSigner token). Wallet logins
-//     (Keychain/HiveAuth/PeakVault/Ledger) have no server credential, so they
-//     use the public app key + claimed username — the SAME trust model as
-//     /api/broadcast (worst case: act as a user who opted into @threespeak).
+//   • username comes ONLY from a server-side credential: the ManteAuth cookie,
+//     the wallet session cookie (Keychain/HiveAuth/PeakVault/Ledger logins prove
+//     posting-key control once at sign-in), or a verified HiveSigner token.
+//     Never the public app key + a claimed name.
 //   • each endpoint validates the challenge shape so the signed bytes can never
 //     be a serialized Hive transaction (no on-chain replay as @threespeak).
 //   • the user must currently grant @threespeak posting authority.
 // ---------------------------------------------------------------------------
 
-// Resolve the acting Hive user from cookie → HiveSigner token → app-key+username.
+// Resolve the acting Hive user from cookie → wallet session → HiveSigner token.
 async function resolveDelegatedSignUser(req, res) {
   // Same auto-refresh as /api/broadcast — otherwise the OpenPods / chat handover
   // silently broke an hour after login while broadcasting still worked.
@@ -1626,21 +1632,11 @@ async function resolveDelegatedSignUser(req, res) {
     if (u) return u.toLowerCase()
   }
 
-  // LEGACY app-key path, now gated by the same ALLOW_APPKEY_AUTH as /api/broadcast.
-  // It trusts the PUBLIC app key (it ships in the frontend bundle) plus a CLAIMED
-  // username, so anyone holding the key could ask for a signature as any account
-  // that opted into @threespeak. Setting ALLOW_APPKEY_AUTH=0 now closes it here too,
-  // instead of closing it on broadcast while leaving the signing oracles open.
-  if (ALLOW_APPKEY_AUTH) {
-    const apiKey = req.headers['x-api-key'] || ''
-    if (EMBED_API_KEY && apiKey === EMBED_API_KEY) {
-      const claimed = typeof req.body?.username === 'string' ? req.body.username.trim().toLowerCase() : ''
-      if (claimed) {
-        console.warn(`[appkey-auth] delegated signing as @${claimed} via legacy public-app-key path (no SIWH session)`)
-        return claimed
-      }
-    }
-  }
+  // No app-key path here: these sign with @threespeak's posting key, and the
+  // public app key plus a claimed name would let anyone sign in to Hangouts (and
+  // spend points there) as any account that granted @threespeak. Wallet logins
+  // use the wallet session cookie above; without one the page signs with the
+  // wallet itself.
   return null
 }
 
@@ -1660,7 +1656,6 @@ async function resolveDelegatedSignUsers(req, res) {
   const authHeader = req.headers.authorization || ''
   const bearer = authHeader.startsWith('Bearer ') ? authHeader.slice(7).trim() : ''
   if (bearer) add(await verifyHiveSignerToken(bearer))
-  if (!out.length) add(await resolveDelegatedSignUser(req, res))   // the gated legacy app-key path
   return out
 }
 
@@ -1672,8 +1667,8 @@ async function resolveDelegatedSignUsers(req, res) {
 // log in again on every click. With no name given, the first verified account.
 // Returns null when the named account has no verified session in this request;
 // callers answer 401 with reason 'not_signed_in_as' so the page knows a wallet
-// login (and only that) can fix it. Callers must drop the app key first, so the
-// claimed-name path can never be the one that matches.
+// login (and only that) can fix it. `body.username` only picks among accounts
+// this request has proven; it never identifies anyone on its own.
 async function resolveRequestedSignUser(req, res) {
   const requested = typeof req.body?.username === 'string' ? req.body.username.trim().toLowerCase() : ''
   const signedInAs = await resolveDelegatedSignUsers(req, res)

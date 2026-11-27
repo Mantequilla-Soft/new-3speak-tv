@@ -76,7 +76,8 @@
       "pointsHint": "Los puntos se gastan, el streamer no recibe dinero. Gana puntos viendo, chateando, transmitiendo y enviando impulsos.",
       "errPointsMinimum": "Un impulso con puntos es de al menos {min} puntos.",
       "errPointsBalance": "Solo tienes {points} puntos.",
-      "errSignIn": "Inicia sesión para enviar un impulso con puntos."
+      "errSignIn": "Inicia sesión para enviar un impulso con puntos.",
+      "pointsConfirming": "Confirmando tus puntos..."
     }
   },
   "clip": {

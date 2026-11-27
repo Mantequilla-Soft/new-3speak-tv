@@ -15,7 +15,7 @@ export const BOOST_LABEL_KEYS = [
   'errConfig', 'errTransfer', 'approveHiveAuth', 'goalDefaultTitle',
   'goalProgress', 'goalReached', 'topSupporters', 'supporterAmount',
   'assetPoints', 'pointsAmount', 'pointsBalance', 'pointsHint',
-  'errPointsMinimum', 'errPointsBalance', 'errSignIn',
+  'errPointsMinimum', 'errPointsBalance', 'errSignIn', 'pointsConfirming',
 ];
 
 /** The labels object for `t`, keys whose text is missing left out. */

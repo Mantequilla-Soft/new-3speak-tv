@@ -63,7 +63,9 @@
       "creator": "Creator-tools",
       "community": "Community",
       "help": "Hulp en 3Speak"
-    }
+    },
+    "points": "Punten",
+    "pointsTooltip": "Je 3Speak Points: open de wallet"
   },
   "notifications": {
     "pushOff": "Meldingen uitgeschakeld voor dit apparaat",

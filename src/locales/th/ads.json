@@ -326,7 +326,16 @@
     "yourBalance": "ยอดคงเหลือของคุณ",
     "notEnough": "{{currency}} ไม่พอ",
     "promoteFor": "โปรโมตด้วย {{amount}} {{currency}}",
-    "signNote": "คุณจะลงนามการโอนไปยัง @{{account}} ด้วยกระเป๋าเงินของคุณ (active key)"
+    "signNote": "คุณจะลงนามการโอนไปยัง @{{account}} ด้วยกระเป๋าเงินของคุณ (active key)",
+    "pointsOption": "แต้ม",
+    "pointsAmount_other": "{{n}} แต้ม",
+    "promoteForPoints": "โปรโมตด้วย {{amount}}",
+    "notEnoughPoints": "แต้มไม่พอ",
+    "pointsNote": "จ่ายด้วยแต้ม 3Speak ของคุณ กระเป๋าเงินอาจขอให้คุณลงนามหนึ่งครั้ง",
+    "pointsPending": "กำลังใช้แต้มของคุณ อาจใช้เวลาประมาณหนึ่งนาที",
+    "pointsIneligible": "ตอนนี้ยังโปรโมตวิดีโอนี้ไม่ได้",
+    "pointsTimeout": "ยังไม่ได้รับการยืนยัน ตรวจดูแต้มของคุณอีกครั้งในอีกไม่กี่นาที",
+    "pointsSignInFailed": "เข้าสู่ระบบแต้ม 3Speak ไม่สำเร็จ โปรดลองอีกครั้ง"
   },
   "wizard": {
     "optionsFailed": "ขณะนี้เราโหลดตัวเลือกโฆษณาไม่ได้",

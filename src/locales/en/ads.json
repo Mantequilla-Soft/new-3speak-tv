@@ -331,7 +331,17 @@
     "yourBalance": "Your balance",
     "notEnough": "Not enough {{currency}}",
     "promoteFor": "Promote for {{amount}} {{currency}}",
-    "signNote": "You'll sign a transfer to @{{account}} with your wallet (active key)."
+    "signNote": "You'll sign a transfer to @{{account}} with your wallet (active key).",
+    "pointsOption": "Points",
+    "pointsAmount_one": "{{n}} point",
+    "pointsAmount_other": "{{n}} points",
+    "promoteForPoints": "Promote for {{amount}}",
+    "notEnoughPoints": "Not enough points",
+    "pointsNote": "Paid with your 3Speak Points. Your wallet may ask you to sign once.",
+    "pointsPending": "Spending your points. This can take a minute.",
+    "pointsIneligible": "This video cannot be promoted right now.",
+    "pointsTimeout": "Still not confirmed. Check your points in a few minutes.",
+    "pointsSignInFailed": "Could not sign in to 3Speak Points. Please try again."
   },
   "wizard": {
     "optionsFailed": "We could not load ad options right now.",

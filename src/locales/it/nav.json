@@ -63,7 +63,9 @@
       "creator": "Strumenti creatore",
       "community": "Community",
       "help": "Aiuto e 3Speak"
-    }
+    },
+    "points": "Punti",
+    "pointsTooltip": "I tuoi 3Speak Points: apri il wallet"
   },
   "notifications": {
     "pushOff": "Notifiche disattivate su questo dispositivo",

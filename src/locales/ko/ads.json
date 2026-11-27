@@ -326,7 +326,16 @@
     "yourBalance": "내 잔액",
     "notEnough": "{{currency}} 부족",
     "promoteFor": "{{amount}} {{currency}}로 프로모션",
-    "signNote": "지갑(액티브 키)으로 @{{account}}에게 송금하는 트랜잭션에 서명하게 돼요."
+    "signNote": "지갑(액티브 키)으로 @{{account}}에게 송금하는 트랜잭션에 서명하게 돼요.",
+    "pointsOption": "포인트",
+    "pointsAmount_other": "{{n}} 포인트",
+    "promoteForPoints": "{{amount}}로 홍보하기",
+    "notEnoughPoints": "포인트가 부족해요",
+    "pointsNote": "3Speak 포인트로 결제돼요. 지갑에서 한 번 서명을 요청할 수 있어요.",
+    "pointsPending": "포인트를 사용하는 중이에요. 1분 정도 걸릴 수 있어요.",
+    "pointsIneligible": "이 동영상은 지금 홍보할 수 없어요.",
+    "pointsTimeout": "아직 확인되지 않았어요. 몇 분 뒤에 포인트를 확인해 주세요.",
+    "pointsSignInFailed": "3Speak 포인트에 로그인하지 못했어요. 다시 시도해 주세요."
   },
   "wizard": {
     "optionsFailed": "지금은 광고 옵션을 불러올 수 없어요.",

@@ -31,6 +31,7 @@ vi.mock('../../../src/lib/translatorApi', () => ({ isTranslatorName: async () =>
 vi.mock('../../../src/components/LeaderboardBadges/LeaderboardBadges', () => ({ default: () => <a href="/leaderboard?board=views">Top 10 views</a> }))
 vi.mock('../../../src/utils/pwaInstall', () => ({ usePwaInstall: () => m.pwa }))
 vi.mock('../../../src/context/ChatContext', () => ({ useChat: () => ({ ready: false, warmup: false }) }))
+vi.mock('../../../src/components/Wallet/channelPoints', () => ({ usePointsInfo: (u) => (u && m.points != null ? { balance: m.points } : null) }))
 vi.mock('../../../src/hooks/useServerUnread', () => ({ useServerUnread: () => ({ unreadCount: 0 }) }))
 vi.mock('../../../src/components/SettingsModal/SettingsModal', () => ({ default: ({ isOpen }) => (isOpen ? <div role="dialog" aria-label="Settings" /> : null) }))
 
@@ -53,7 +54,7 @@ function mount(props = {}) {
 beforeEach(() => {
   Object.assign(m, {
     votePower: vi.fn(async () => ({ vp: 8750, rcPercent: 64.321 })),
-    ads: false, automations: false, narration: false, backlog: 0, invites: [], translator: false,
+    ads: false, automations: false, narration: false, backlog: 0, invites: [], translator: false, points: null,
     pwa: { canInstallPrompt: false, isIOS: false, showInstall: false, promptInstall: vi.fn() },
   })
   useAppStore.setState({ user: 'badadib', incubationHandle: null, LogOut: vi.fn() })
@@ -73,6 +74,20 @@ describe('the account menu', () => {
     expect(await within(menu()).findByText('87.50%')).toBeInTheDocument()
     expect(within(menu()).getByText('64.32%')).toBeInTheDocument()
     expect(m.votePower).toHaveBeenCalledWith('badadib')
+  })
+
+  it('shows the 3Speak Points balance beside the meters, linking to the wallet', async () => {
+    m.points = 4209
+    const { menu } = mount()
+    const link = within(menu()).getByRole('link', { name: /Points\s*4,209/ })
+    expect(link).toHaveAttribute('href', '/wallet')
+    expect(link.closest('.pn-meters')).toHaveClass('has-points')
+  })
+
+  it('without a points balance there is no third column', () => {
+    const { menu } = mount()
+    expect(within(menu()).queryByRole('link', { name: /^Points/ })).toBeNull()
+    expect(menu().querySelector('.pn-meters')).not.toHaveClass('has-points')
   })
 
   it('shows the Hive node in use, without the scheme', async () => {

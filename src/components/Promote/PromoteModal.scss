@@ -64,6 +64,7 @@
     .num { font-family: var(--font-mono); }
   }
   &__dot { color: var(--muted); }
+  &__total { flex-basis: 100%; }
   &__pay {
     display: inline-flex;
     align-items: center;

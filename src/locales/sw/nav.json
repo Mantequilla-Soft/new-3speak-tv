@@ -63,7 +63,9 @@
       "creator": "Zana za mtayarishaji",
       "community": "Jumuiya",
       "help": "Msaada na 3Speak"
-    }
+    },
+    "points": "Pointi",
+    "pointsTooltip": "3Speak Points zako: fungua pochi"
   },
   "notifications": {
     "pushOff": "Arifa zimezimwa kwa kifaa hiki",

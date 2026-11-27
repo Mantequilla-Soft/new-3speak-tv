@@ -63,7 +63,9 @@
       "creator": "创作者工具",
       "community": "社区",
       "help": "帮助与 3Speak"
-    }
+    },
+    "points": "积分",
+    "pointsTooltip": "你的 3Speak Points：打开钱包"
   },
   "notifications": {
     "pushOff": "已关闭此设备的通知",

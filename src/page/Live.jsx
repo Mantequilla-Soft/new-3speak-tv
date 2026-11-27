@@ -6,6 +6,7 @@ import { Icon } from "../components/v2/Icon";
 import { useLiveStreams } from "../hooks/useLiveStreams";
 import { useAppStore } from "../lib/store";
 import { openpodsEnabledFor } from "../utils/config";
+import { PointsDoubleHint } from "../components/Wallet/PointsDouble";
 import "./Live.scss";
 
 /** One stream as a tile (26b): the thumbnail with the LIVE pill and the number
@@ -89,6 +90,8 @@ export default function Live() {
           </Button>
         )}
       </header>
+      {/* Double points while they run (hangouts /points/events); nothing otherwise. */}
+      <PointsDoubleHint className="live-page-double" />
 
       <Segmented
         block={false}

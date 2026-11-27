@@ -63,7 +63,9 @@
       "creator": "ক্রিয়েটর টুল",
       "community": "কমিউনিটি",
       "help": "সাহায্য ও 3Speak"
-    }
+    },
+    "points": "পয়েন্ট",
+    "pointsTooltip": "আপনার 3Speak Points: ওয়ালেট খুলুন"
   },
   "notifications": {
     "pushOff": "এই ডিভাইসে নোটিফিকেশন বন্ধ করা হয়েছে",

@@ -331,7 +331,17 @@
     "yourBalance": "Ang balance mo",
     "notEnough": "Kulang ang {{currency}}",
     "promoteFor": "I-promote sa halagang {{amount}} {{currency}}",
-    "signNote": "Magsa-sign ka ng transfer kay @{{account}} gamit ang wallet mo (active key)."
+    "signNote": "Magsa-sign ka ng transfer kay @{{account}} gamit ang wallet mo (active key).",
+    "pointsOption": "Points",
+    "pointsAmount_one": "{{n}} point",
+    "pointsAmount_other": "{{n}} points",
+    "promoteForPoints": "I-promote sa halagang {{amount}}",
+    "notEnoughPoints": "Kulang ang points",
+    "pointsNote": "Babayaran gamit ang iyong 3Speak Points. Maaaring hilingin ng wallet mo na pumirma nang isang beses.",
+    "pointsPending": "Ginagastos ang iyong points. Maaaring tumagal ito nang isang minuto.",
+    "pointsIneligible": "Hindi mapo-promote ang video na ito sa ngayon.",
+    "pointsTimeout": "Hindi pa kumpirmado. Tingnan ang iyong points pagkalipas ng ilang minuto.",
+    "pointsSignInFailed": "Hindi makapag-sign in sa 3Speak Points. Pakisubukang muli."
   },
   "wizard": {
     "optionsFailed": "Hindi namin ma-load ang mga opsyon sa ad ngayon.",

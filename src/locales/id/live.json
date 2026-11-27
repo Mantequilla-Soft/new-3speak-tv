@@ -74,7 +74,8 @@
       "pointsHint": "Poin akan terpakai, streamer tidak mendapat uang. Kumpulkan poin dengan menonton, mengobrol, streaming, dan mengirim boost.",
       "errPointsMinimum": "Boost dengan poin minimal {min} poin.",
       "errPointsBalance": "Kamu hanya punya {points} poin.",
-      "errSignIn": "Masuk untuk mengirim boost dengan poin."
+      "errSignIn": "Masuk untuk mengirim boost dengan poin.",
+      "pointsConfirming": "Mengonfirmasi poin kamu..."
     }
   },
   "clip": {

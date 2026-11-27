@@ -118,7 +118,7 @@ describe('authenticateChat with the background signer', () => {
     expect(fetch).not.toHaveBeenCalled()
   })
 
-  it('signs for a wallet login with the public app key and the claimed username', async () => {
+  it('signs for a wallet login with the session cookie and the account name, never the app key', async () => {
     const f = vi.fn().mockResolvedValue(json(200, { signature: 'bg-sig' }))
     vi.stubGlobal('fetch', f)
     client.authenticate.mockImplementation(async (user, signer) => {
@@ -127,7 +127,7 @@ describe('authenticateChat with the background signer', () => {
     expect(await authenticateChat('alice')).toBe(client)
     const [url, init] = f.mock.calls[0]
     expect(url).toBe('/api/snapie-chat/sign-challenge')
-    expect(init.headers).toEqual({ 'Content-Type': 'application/json', 'X-API-Key': 'public-app-key' })
+    expect(init.headers).toEqual({ 'Content-Type': 'application/json' })
     expect(JSON.parse(init.body)).toEqual({ challenge: 'uuid-1', username: 'alice' })
     expect(init.credentials).toBe('include')
   })

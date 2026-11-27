@@ -75,7 +75,8 @@
       "pointsHint": "Pointi zinatumika, mtiririshaji hapati pesa. Pata pointi kwa kutazama, kuchati, kutiririsha na kutuma boost.",
       "errPointsMinimum": "Boost ya pointi ni angalau pointi {min}.",
       "errPointsBalance": "Una pointi {points} tu.",
-      "errSignIn": "Ingia ili utume boost kwa pointi."
+      "errSignIn": "Ingia ili utume boost kwa pointi.",
+      "pointsConfirming": "Inathibitisha pointi zako..."
     }
   },
   "clip": {

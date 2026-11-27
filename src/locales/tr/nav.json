@@ -63,7 +63,9 @@
       "creator": "Üretici araçları",
       "community": "Topluluk",
       "help": "Yardım ve 3Speak"
-    }
+    },
+    "points": "Puanlar",
+    "pointsTooltip": "3Speak Points’in: cüzdanı aç"
   },
   "notifications": {
     "pushOff": "Bu cihaz için bildirimler kapatıldı",
